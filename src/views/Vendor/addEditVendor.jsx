@@ -20,10 +20,22 @@ import {
 } from '../../public/endpoins';
 import ws from '../../variables/websocket';
 import ShippingTerm from '../ShippingTerm/shippingTerm';
-
+import vendor from '../../assets/img/Vendot.png';
+import Header from '../../components/Header/Header';
+import Add_New from '../../assets/img/Add_New.png';
 const styles = {
   inputContainer: {
-    marginTop: '2%'
+    marginTop: 25,
+    // backgroundColor: 'white',
+    borderRadius: 5,
+    paddingTop: 5,
+    paddingBottom: 5,
+    // marginLeft: 5,
+    // marginRight: 5
+  },
+
+  buttonContainer: {
+    marginTop: 25
   }
 };
 
@@ -335,441 +347,467 @@ function AddEditVendor(props) {
   };
 
   return (
-    <div className="container">
-      <h1>
-        <span> {comingFor === 'add' ? 'Add' : 'Edit'}</span>
-      </h1>
-      <div className="row">
-        <div className="col-md-6" style={styles.inputContainer}>
-          <TextField
-            fullWidth
-            id="englishName"
-            name="englishName"
-            label="English Name"
-            type="text"
-            variant="outlined"
-            value={englishName}
-            onChange={onChangeValue}
-            error={!englishName && isFormSubmitted}
-          />
+    <section
+      style={{
+        backgroundColor: '#60d69f',
+        // position: 'fixed',
+        display: 'flex',
+        width: '100%',
+        height: '100%',
+        flexDirection: 'column',
+        flex: 1
+      }}
+    >
+      <div className="container">
+        <div style={{ alignItems: 'center', flex: 1, display: 'flex' }}>
+          <Header />
         </div>
-
-        <div className="col-md-6" style={styles.inputContainer}>
-          <TextField
-            fullWidth
-            id="arabicName"
-            name="arabicName"
-            label="Arabic Name"
-            type="text"
-            variant="outlined"
-            value={arabicName}
-            onChange={onChangeValue}
-            // error={!englishName && isFormSubmitted}
-          />
-        </div>
-      </div>
-
-      <div className="row">
-        <div className="col-md-4" style={styles.inputContainer}>
-          <TextField
-            fullWidth
-            id="telephone1"
-            name="telephone1"
-            label="Telephone 1"
-            type="number"
-            variant="outlined"
-            value={telephone1}
-            onChange={onChangeValue}
-            error={!telephone1 && isFormSubmitted}
-          />
-        </div>
-
-        <div className="col-md-4" style={styles.inputContainer}>
-          <TextField
-            fullWidth
-            id="telephone2"
-            name="telephone2"
-            label="Telephone 2"
-            type="number"
-            variant="outlined"
-            value={telephone2}
-            onChange={onChangeValue}
-          />
-        </div>
-
-        <div className="col-md-4" style={styles.inputContainer}>
-          <TextField
-            fullWidth
-            id="contactEmail"
-            name="contactEmail"
-            label="Contact Email"
-            type="email"
-            variant="outlined"
-            value={contactEmail}
-            onChange={onChangeValue}
-          />
-        </div>
-      </div>
-
-      <div className="row">
-        <div className="col-md-12" style={styles.inputContainer}>
-          <TextField
-            fullWidth
-            id="address"
-            name="address"
-            label="Address"
-            type="text"
-            variant="outlined"
-            value={address}
-            onChange={onChangeValue}
-            error={!address && isFormSubmitted}
-          />
-        </div>
-      </div>
-
-      <div className="row">
-        <div className="col-md-4" style={styles.inputContainer}>
-          <TextField
-            fullWidth
-            id="zipcode"
-            name="zipcode"
-            label="Zip Code"
-            type="number"
-            variant="outlined"
-            value={zipcode}
-            onChange={onChangeValue}
-            error={!zipcode && isFormSubmitted}
-          />
-        </div>
-        <div className="col-md-4" style={styles.inputContainer}>
-          <TextField
-            fullWidth
-            id="city"
-            name="city"
-            label="City"
-            type="text"
-            variant="outlined"
-            value={city}
-            onChange={onChangeValue}
-          />
-        </div>
-        <div className="col-md-4" style={styles.inputContainer}>
-          <TextField
-            fullWidth
-            id="country"
-            name="country"
-            label="Country"
-            type="text"
-            variant="outlined"
-            value={country}
-            onChange={onChangeValue}
-          />
-        </div>
-      </div>
-
-      <div className="row">
-        <div className="col-md-4" style={styles.inputContainer}>
-          <TextField
-            fullWidth
-            id="pobox"
-            name="pobox"
-            label="PO BOX"
-            type="number"
-            variant="outlined"
-            value={pobox}
-            onChange={onChangeValue}
-            error={!pobox && isFormSubmitted}
-          />
-        </div>
-
-        <div className="col-md-4" style={styles.inputContainer}>
-          <TextField
-            fullWidth
-            id="faxno"
-            name="faxno"
-            label="Fax No"
-            type="number"
-            variant="outlined"
-            value={faxno}
-            onChange={onChangeValue}
-          />
-        </div>
-
-        <div className="col-md-4" style={styles.inputContainer}>
-          <TextField
-            fullWidth
-            id="taxno"
-            name="taxno"
-            label="Tax No"
-            type="number"
-            variant="outlined"
-            value={taxno}
-            onChange={onChangeValue}
-            error={!taxno && isFormSubmitted}
-          />
-        </div>
-      </div>
-
-      <div className="row">
-        <div className="col-md-4" style={styles.inputContainer}>
-          <TextField
-            fullWidth
-            id="contactPersonName"
-            name="contactPersonName"
-            label="Contact Person Name"
-            type="text"
-            variant="outlined"
-            value={contactPersonName}
-            onChange={onChangeValue}
-            error={!contactPersonName && isFormSubmitted}
-          />
-        </div>
-
-        <div className="col-md-4" style={styles.inputContainer}>
-          <TextField
-            fullWidth
-            id="contactPersonTelephone"
-            name="contactPersonTelephone"
-            label="Contact Person TelePhone"
-            type="number"
-            variant="outlined"
-            value={contactPersonTelephone}
-            onChange={onChangeValue}
-            error={!contactPersonTelephone && isFormSubmitted}
-          />
-        </div>
-
-        <div className="col-md-4" style={styles.inputContainer}>
-          <TextField
-            fullWidth
-            id="contactPersonEmail"
-            name="contactPersonEmail"
-            label="Contact Person Email"
-            type="email"
-            variant="outlined"
-            value={contactPersonEmail}
-            onChange={onChangeValue}
-            error={!contactPersonEmail && isFormSubmitted}
-          />
-        </div>
-      </div>
-
-      <div className="row">
-        <div className="col-md-6" style={styles.inputContainer}>
-          <InputLabel id="buHead-label">Class</InputLabel>
-          <Select
-            fullWidth
-            id="cls"
-            name="cls"
-            value={cls}
-            onChange={onChangeValue}
-            label="Class"
-            error={!cls && isFormSubmitted}
+        <div style={{ alignItems: 'center', flex: 0.5, display: 'flex' }}>
+          <div
+            style={{
+              flex: 0.5,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {mainClasses &&
-              mainClasses.map(val => {
-                return (
-                  <MenuItem key={val.key} value={val.key}>
-                    {val.value}
-                  </MenuItem>
-                );
-              })}
-          </Select>
+            <img src={vendor} style={{ maxWidth: '100%', height: 'auto' }} />
+          </div>
+
+          <div style={{ flex: 4, display: 'flex', alignItems: 'center' }}>
+            <h3
+              style={{
+                color: 'white',
+                fontFamily: 'Ubuntu',
+                fontWeight: '700'
+              }}
+            >
+              {comingFor === 'add'
+                ? ' Add Business Unit'
+                : ' Edit Business Unit'}
+            </h3>
+          </div>
+
+          <div
+            style={{
+              display: 'flex',
+              flex: 0.8,
+              justifyContent: 'flex-end',
+              alignItems: 'center'
+            }}
+          >
+            <div style={{ flex: 1.5, display: 'flex' }}>
+              <img
+                onClick={() => props.history.goBack()}
+                src={Add_New}
+                style={{ width: '100%', height: '100%', cursor: 'pointer' }}
+              />
+            </div>
+          </div>
         </div>
 
-        <div className="col-md-6" style={styles.inputContainer}>
-          <InputLabel id="buName-label">Sub Class</InputLabel>
-          <Select
-            fullWidth
-            id="subClass"
-            name="subClass"
-            value={subClass}
-            onChange={onChangeValue}
-            label="Sub Class"
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {subClasses &&
-              subClasses.map(val => {
-                if (val.parent === cls)
+        <div className="row">
+          <div className="col-md-4" style={styles.inputContainer}>
+            <TextField
+              fullWidth
+              id="telephone1"
+              name="telephone1"
+              label="Telephone 1"
+              type="number"
+              variant="outlined"
+              value={telephone1}
+              onChange={onChangeValue}
+              error={!telephone1 && isFormSubmitted}
+            />
+          </div>
+
+          <div className="col-md-4" style={styles.inputContainer}>
+            <TextField
+              fullWidth
+              id="telephone2"
+              name="telephone2"
+              label="Telephone 2"
+              type="number"
+              variant="outlined"
+              value={telephone2}
+              onChange={onChangeValue}
+            />
+          </div>
+
+          <div className="col-md-4" style={styles.inputContainer}>
+            <TextField
+              fullWidth
+              id="contactEmail"
+              name="contactEmail"
+              label="Contact Email"
+              type="email"
+              variant="outlined"
+              value={contactEmail}
+              onChange={onChangeValue}
+            />
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-md-12" style={styles.inputContainer}>
+            <TextField
+              fullWidth
+              id="address"
+              name="address"
+              label="Address"
+              type="text"
+              variant="outlined"
+              value={address}
+              onChange={onChangeValue}
+              error={!address && isFormSubmitted}
+            />
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-md-4" style={styles.inputContainer}>
+            <TextField
+              fullWidth
+              id="zipcode"
+              name="zipcode"
+              label="Zip Code"
+              type="number"
+              variant="outlined"
+              value={zipcode}
+              onChange={onChangeValue}
+              error={!zipcode && isFormSubmitted}
+            />
+          </div>
+          <div className="col-md-4" style={styles.inputContainer}>
+            <TextField
+              fullWidth
+              id="city"
+              name="city"
+              label="City"
+              type="text"
+              variant="outlined"
+              value={city}
+              onChange={onChangeValue}
+            />
+          </div>
+          <div className="col-md-4" style={styles.inputContainer}>
+            <TextField
+              fullWidth
+              id="country"
+              name="country"
+              label="Country"
+              type="text"
+              variant="outlined"
+              value={country}
+              onChange={onChangeValue}
+            />
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-md-4" style={styles.inputContainer}>
+            <TextField
+              fullWidth
+              id="pobox"
+              name="pobox"
+              label="PO BOX"
+              type="number"
+              variant="outlined"
+              value={pobox}
+              onChange={onChangeValue}
+              error={!pobox && isFormSubmitted}
+            />
+          </div>
+
+          <div className="col-md-4" style={styles.inputContainer}>
+            <TextField
+              fullWidth
+              id="faxno"
+              name="faxno"
+              label="Fax No"
+              type="number"
+              variant="outlined"
+              value={faxno}
+              onChange={onChangeValue}
+            />
+          </div>
+
+          <div className="col-md-4" style={styles.inputContainer}>
+            <TextField
+              fullWidth
+              id="taxno"
+              name="taxno"
+              label="Tax No"
+              type="number"
+              variant="outlined"
+              value={taxno}
+              onChange={onChangeValue}
+              error={!taxno && isFormSubmitted}
+            />
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-md-4" style={styles.inputContainer}>
+            <TextField
+              fullWidth
+              id="contactPersonName"
+              name="contactPersonName"
+              label="Contact Person Name"
+              type="text"
+              variant="outlined"
+              value={contactPersonName}
+              onChange={onChangeValue}
+              error={!contactPersonName && isFormSubmitted}
+            />
+          </div>
+
+          <div className="col-md-4" style={styles.inputContainer}>
+            <TextField
+              fullWidth
+              id="contactPersonTelephone"
+              name="contactPersonTelephone"
+              label="Contact Person TelePhone"
+              type="number"
+              variant="outlined"
+              value={contactPersonTelephone}
+              onChange={onChangeValue}
+              error={!contactPersonTelephone && isFormSubmitted}
+            />
+          </div>
+
+          <div className="col-md-4" style={styles.inputContainer}>
+            <TextField
+              fullWidth
+              id="contactPersonEmail"
+              name="contactPersonEmail"
+              label="Contact Person Email"
+              type="email"
+              variant="outlined"
+              value={contactPersonEmail}
+              onChange={onChangeValue}
+              error={!contactPersonEmail && isFormSubmitted}
+            />
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-md-6" style={styles.inputContainer}>
+            <InputLabel id="buHead-label">Class</InputLabel>
+            <Select
+              fullWidth
+              id="cls"
+              name="cls"
+              value={cls}
+              onChange={onChangeValue}
+              label="Class"
+              error={!cls && isFormSubmitted}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {mainClasses &&
+                mainClasses.map(val => {
                   return (
                     <MenuItem key={val.key} value={val.key}>
                       {val.value}
                     </MenuItem>
                   );
-              })}
-          </Select>
-        </div>
-      </div>
-
-      <div className="row">
-        <div className="col-md-6" style={styles.inputContainer}>
-          <TextField
-            fullWidth
-            id="paymentTerms"
-            name="paymentTerms"
-            label="Payment Terms"
-            type="text"
-            variant="outlined"
-            value={paymentTerms}
-            onChange={onChangeValue}
-          />
-        </div>
-        <div className="col-md-6" style={styles.inputContainer}>
-          <TextField
-            fullWidth
-            id="rating"
-            name="rating"
-            label="Rating"
-            type="text"
-            variant="outlined"
-            value={rating}
-            onChange={onChangeValue}
-          />
-        </div>
-      </div>
-
-      <div className="row">
-        <div className="col-md-6" style={styles.inputContainer}>
-          <InputLabel id="buName-label">Status</InputLabel>
-          <Select
-            fullWidth
-            id="status"
-            name="status"
-            value={status}
-            onChange={onChangeValue}
-            label="Status"
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {statues &&
-              statues.map(val => {
-                return (
-                  <MenuItem key={val.key} value={val.key}>
-                    {val.value}
-                  </MenuItem>
-                );
-              })}
-          </Select>
-        </div>
-      </div>
-
-      {/* shipping terms modal */}
-      <Modal
-        open={openShippingTermModal}
-        // open={true}
-        style={modalStyle}
-        onClose={() => setOpenShippingTermModal(false)}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-      >
-        <div
-          style={{
-            backgroundColor: '#e2e2e2',
-            height: '100%',
-            display: 'flex',
-            flex: 1,
-            flexDirection: 'column'
-          }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              flex: 1,
-              justifyContent: 'flex-start',
-              marginLeft: 40,
-              alignItems: 'center'
-            }}
-          >
-            <h3 className="modal-heading" style={{ color: 'black' }}>
-              Shipping Term(s)
-            </h3>
+                })}
+            </Select>
           </div>
 
-          <div
-            className="popup-body"
-            style={{ display: 'flex', flex: 7, flexDirection: 'column' }}
-          >
-            <ShippingTerm
-              hideShippingModel={hideShippingModel}
-              modeForShippingTerms={modeForShippingTerms}
-              selectedVendor={_id}
-              shippingTermsData={shippingTermsData}
-              hideModel={hideModel}
+          <div className="col-md-6" style={styles.inputContainer}>
+            <InputLabel id="buName-label">Sub Class</InputLabel>
+            <Select
+              fullWidth
+              id="subClass"
+              name="subClass"
+              value={subClass}
+              onChange={onChangeValue}
+              label="Sub Class"
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {subClasses &&
+                subClasses.map(val => {
+                  if (val.parent === cls)
+                    return (
+                      <MenuItem key={val.key} value={val.key}>
+                        {val.value}
+                      </MenuItem>
+                    );
+                })}
+            </Select>
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-md-6" style={styles.inputContainer}>
+            <TextField
+              fullWidth
+              id="paymentTerms"
+              name="paymentTerms"
+              label="Payment Terms"
+              type="text"
+              variant="outlined"
+              value={paymentTerms}
+              onChange={onChangeValue}
+            />
+          </div>
+          <div className="col-md-6" style={styles.inputContainer}>
+            <TextField
+              fullWidth
+              id="rating"
+              name="rating"
+              label="Rating"
+              type="text"
+              variant="outlined"
+              value={rating}
+              onChange={onChangeValue}
             />
           </div>
         </div>
-      </Modal>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div style={styles.inputContainer}>
-          <Button onClick={handleCancel} variant="contained">
-            Cancel
-          </Button>
+        <div className="row">
+          <div className="col-md-6" style={styles.inputContainer}>
+            <InputLabel id="buName-label">Status</InputLabel>
+            <Select
+              fullWidth
+              id="status"
+              name="status"
+              value={status}
+              onChange={onChangeValue}
+              label="Status"
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {statues &&
+                statues.map(val => {
+                  return (
+                    <MenuItem key={val.key} value={val.key}>
+                      {val.value}
+                    </MenuItem>
+                  );
+                })}
+            </Select>
+          </div>
         </div>
 
-        <div className="addEditBtnDiv">
-          {comingFor === 'add' ? (
-            <>
-              <Button
-                className="mr10"
-                onClick={addShippingTerm}
-                variant="contained"
-              >
-                Add Shipping Term(s)
-              </Button>
-              <Button
-                className="mr10"
-                onClick={addPaymetTerm}
-                variant="contained"
-              >
-                Add Payment Term(s)
-              </Button>
-              <Button
-                className="pl30 pr30"
-                disabled={!validateForm()}
-                onClick={handleAdd}
-                variant="contained"
-                color="primary"
-              >
-                Add
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button
-                className="mr10"
-                onClick={editShippingTerm}
-                variant="contained"
-              >
-                Edit Shipping Term(s)
-              </Button>
-              <Button
-                className="mr10"
-                onClick={addPaymetTerm}
-                variant="contained"
-              >
-                Edit Payment Term(s)
-              </Button>
-              <Button
-                className="pl30 pr30"
-                disabled={!validateForm()}
-                onClick={handleEdit}
-                variant="contained"
-                color="primary"
-              >
-                Edit
-              </Button>
-            </>
-          )}
+        {/* shipping terms modal */}
+        <Modal
+          open={openShippingTermModal}
+          // open={true}
+          style={modalStyle}
+          onClose={() => setOpenShippingTermModal(false)}
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+        >
+          <div
+            style={{
+              backgroundColor: '#e2e2e2',
+              height: '100%',
+              display: 'flex',
+              flex: 1,
+              flexDirection: 'column'
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                flex: 1,
+                justifyContent: 'flex-start',
+                marginLeft: 40,
+                alignItems: 'center'
+              }}
+            >
+              <h3 className="modal-heading" style={{ color: 'black' }}>
+                Shipping Term(s)
+              </h3>
+            </div>
+
+            <div
+              className="popup-body"
+              style={{ display: 'flex', flex: 7, flexDirection: 'column' }}
+            >
+              <ShippingTerm
+                hideShippingModel={hideShippingModel}
+                modeForShippingTerms={modeForShippingTerms}
+                selectedVendor={_id}
+                shippingTermsData={shippingTermsData}
+                hideModel={hideModel}
+              />
+            </div>
+          </div>
+        </Modal>
+
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div style={styles.inputContainer}>
+            <Button onClick={handleCancel} variant="contained">
+              Cancel
+            </Button>
+          </div>
+
+          <div className="addEditBtnDiv">
+            {comingFor === 'add' ? (
+              <>
+                <Button
+                  className="mr10"
+                  onClick={addShippingTerm}
+                  variant="contained"
+                >
+                  Add Shipping Term(s)
+                </Button>
+                <Button
+                  className="mr10"
+                  onClick={addPaymetTerm}
+                  variant="contained"
+                >
+                  Add Payment Term(s)
+                </Button>
+                <Button
+                  className="pl30 pr30"
+                  disabled={!validateForm()}
+                  onClick={handleAdd}
+                  variant="contained"
+                  color="primary"
+                >
+                  Add
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  className="mr10"
+                  onClick={editShippingTerm}
+                  variant="contained"
+                >
+                  Edit Shipping Term(s)
+                </Button>
+                <Button
+                  className="mr10"
+                  onClick={addPaymetTerm}
+                  variant="contained"
+                >
+                  Edit Payment Term(s)
+                </Button>
+                <Button
+                  className="pl30 pr30"
+                  disabled={!validateForm()}
+                  onClick={handleEdit}
+                  variant="contained"
+                  color="primary"
+                >
+                  Edit
+                </Button>
+              </>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 export default AddEditVendor;

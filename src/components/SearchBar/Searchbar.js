@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
 
 // core components
-import styles from 'assets/jss/material-dashboard-react/components/tableStyle.js';
+import styles from '../../assets/jss/material-dashboard-react/components/tableStyle.js';
 
 const useStyles = makeStyles(styles);
 

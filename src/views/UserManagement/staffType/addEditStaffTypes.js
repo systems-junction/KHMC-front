@@ -10,12 +10,12 @@ import tableStyles from 'assets/jss/material-dashboard-react/components/tableSty
 import axios from 'axios';
 import Notification from 'components/Snackbar/Notification.js';
 import DateFnsUtils from '@date-io/date-fns';
-import {
-  DateTimePicker,
-  MuiPickersUtilsProvider
-} from '@material-ui/pickers';
+import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import cookie from 'react-cookies';
 import { addStaffTypeUrl, updateStaffTypeUrl } from '../../../public/endpoins';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const styles = {
   inputContainer: {
@@ -27,6 +27,24 @@ const useStyles = makeStyles(tableStyles);
 const DATE = new Date();
 
 const time = DATE.getHours();
+
+const staffTypeArray = [
+  'Admin',
+  'Staff',
+  'Warehouse Keeper',
+  'Warehouse Manager'
+];
+
+const statues = [
+  {
+    key: 'active',
+    value: 'Active'
+  },
+  {
+    key: 'in_active',
+    value: 'In Active'
+  }
+];
 
 function AddEditStaffTypes(props) {
   const classes = useStyles();
@@ -74,7 +92,7 @@ function AddEditStaffTypes(props) {
       accessLevel.length > 0 &&
       description.length > 0 &&
       type.length > 0 &&
-      timeStamp.length !== ''
+      timeStamp !== ''
     );
   }
 
@@ -193,7 +211,7 @@ function AddEditStaffTypes(props) {
 
       <div className="row" style={styles.inputContainer}>
         <div className="col-md-6" style={styles.inputContainer}>
-          <TextField
+          {/* <TextField
             fullWidth
             name="type"
             label="Type"
@@ -201,7 +219,29 @@ function AddEditStaffTypes(props) {
             variant="outlined"
             value={type}
             onChange={onChangeValue}
-          />
+          /> */}
+
+          <InputLabel id="staffType-label">Staff Type</InputLabel>
+          <Select
+            fullWidth
+            id="type"
+            name="type"
+            value={type}
+            onChange={onChangeValue}
+            label="Staff Type"
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            {staffTypeArray &&
+              staffTypeArray.map(val => {
+                return (
+                  <MenuItem key={val} value={val}>
+                    {val}
+                  </MenuItem>
+                );
+              })}
+          </Select>
         </div>
 
         <div className="col-md-6" style={styles.inputContainer}>
@@ -219,7 +259,7 @@ function AddEditStaffTypes(props) {
 
       <div className="row" style={styles.inputContainer}>
         <div className="col-md-6" style={styles.inputContainer}>
-          <TextField
+          {/* <TextField
             fullWidth
             name="status"
             label="Status"
@@ -227,7 +267,29 @@ function AddEditStaffTypes(props) {
             variant="outlined"
             value={status}
             onChange={onChangeValue}
-          />
+          /> */}
+
+          <InputLabel id="status-label">Status</InputLabel>
+          <Select
+            fullWidth
+            id="status"
+            name="status"
+            value={status}
+            onChange={onChangeValue}
+            label="Status"
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            {statues &&
+              statues.map(val => {
+                return (
+                  <MenuItem key={val.key} value={val.key}>
+                    {val.value}
+                  </MenuItem>
+                );
+              })}
+          </Select>
         </div>
 
         <div className="col-md-6" style={styles.inputContainer}>

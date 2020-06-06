@@ -25,6 +25,7 @@ export default function SystemAdmin(props) {
   const [openNotification, setOpenNotification] = useState(false);
 
   const [systemAdmin, setSystemAdminArray] = useState('');
+  const [staffTypeArray, setStaffTypesArray] = useState('');
 
   if (openNotification) {
     setTimeout(() => {
@@ -38,7 +39,9 @@ export default function SystemAdmin(props) {
       .get(getSystemAdminUrl)
       .then(res => {
         if (res.data.success) {
+          console.log(res.data.data.systemAdmin)
           setSystemAdminArray(res.data.data);
+          setStaffTypesArray(res.data.data.staffType);
         } else if (!res.data.success) {
           setErrorMsg(res.data.error);
           setOpenNotification(true);
@@ -58,7 +61,7 @@ export default function SystemAdmin(props) {
     let path = `systemadmin/next/add`;
     props.history.push({
       pathname: path,
-      state: { comingFor: 'add', systemAdmin }
+      state: { comingFor: 'add', systemAdmin, staffTypeArray }
     });
   };
 
@@ -66,7 +69,7 @@ export default function SystemAdmin(props) {
     let path = `systemadmin/next/edit`;
     props.history.push({
       pathname: path,
-      state: { comingFor: 'edit', selectedItem: rec, systemAdmin }
+      state: { comingFor: 'edit', selectedItem: rec, systemAdmin, staffTypeArray }
     });
   }
 

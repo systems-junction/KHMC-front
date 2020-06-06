@@ -6,16 +6,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 // @material-ui/core components
 import { makeStyles } from '@material-ui/core/styles';
+
+import Box from '@material-ui/core/Box';
+
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 // core components
-import styles from 'assets/jss/material-dashboard-react/components/tableStyle.js';
+import styles from '../../assets/jss/material-dashboard-react/components/tableStyle';
 import TablePagination from '@material-ui/core/TablePagination';
 import RcIf from 'rc-if';
 import { dateOptions } from '../../variables/public';
+
+import Active from '../../assets/img/Active.png';
+import In_Active from '../../assets/img/Inactive.png';
 
 const useStyles = makeStyles(styles);
 
@@ -32,9 +38,11 @@ export default function CustomTable(props) {
 
   const replaceSlugToTitle = val => {
     if (val === 'in_active') {
-      return 'In Active';
+      // return 'In Active';
+      return <img src={In_Active} style={{ width: 80, height: 35 }} />;
     } else if (val === 'active') {
-      return 'Active';
+      // return "Active";
+      return <img src={Active} style={{ width: 80, height: 35 }} />;
     }
 
     return val;
@@ -66,14 +74,26 @@ export default function CustomTable(props) {
 
   return (
     <div className={classes.tableResponsive}>
-      <Table className={classes.table}>
+      <Table>
         {tableHeading !== undefined ? (
-          <TableHead className={classes[tableHeaderColor + 'TableHeader']}>
+          <TableHead
+            className={classes[tableHeaderColor + 'TableHeader']}
+            style={{
+              backgroundColor: '#2873cf'
+            }}
+          >
             <TableRow className={classes.tableHeadRow}>
               {tableHeading.map((prop, key) => {
                 return (
                   <TableCell
-                    className={classes.tableCell + ' ' + classes.tableHeadCell}
+                    className={classes.tableHeadCell}
+                    style={{
+                      color: 'white',
+                      fontFamily: 'Open Sans,sans-serif',
+                      fontWeight: '700',
+                      paddingTop: 20,
+                      paddingBottom: 20
+                    }}
                     key={key}
                   >
                     {prop}
@@ -83,13 +103,22 @@ export default function CustomTable(props) {
             </TableRow>
           </TableHead>
         ) : null}
-        <TableBody>
+
+        <div style={{ height: 20, width: '100%' }}></div>
+
+        <TableBody style={{ marginTop: 20 }}>
           {tableData &&
             tableData
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((prop, index) => {
                 return (
-                  <TableRow key={index} className={classes.tableBodyRow}>
+                  <TableRow
+                    key={index}
+                    className={classes.tableBodyRow}
+                    style={{
+                      backgroundColor: 'white'
+                    }}
+                  >
                     {tableDataKeys
                       ? tableDataKeys.map((val, key) => {
                           if (val === 'date') {
@@ -97,6 +126,13 @@ export default function CustomTable(props) {
                               <TableCell
                                 className={classes.tableCell}
                                 key={key}
+                                style={{
+                                  borderBottomWidth: props.borderBottomWidth,
+                                  borderBottomColor: props.borderBottomColor,
+                                  borderLeftWidth: 0,
+                                  borderRightWidth: 0,
+                                  borderTopWidth: 0
+                                }}
                               >
                                 {formatDate(prop[val])}
                               </TableCell>
@@ -110,7 +146,12 @@ export default function CustomTable(props) {
                                 style={{
                                   cursor: props.handleModelMaterialReceiving
                                     ? 'pointer'
-                                    : ''
+                                    : '',
+                                  borderBottomWidth: props.borderBottomWidth,
+                                  borderBottomColor: props.borderBottomColor,
+                                  borderLeftWidth: 0,
+                                  borderRightWidth: 0,
+                                  borderTopWidth: 0
                                 }}
                               >
                                 {Array.isArray(val)
@@ -122,7 +163,8 @@ export default function CustomTable(props) {
                                       'en-US',
                                       dateOptions
                                     ).format(Date.parse(prop[val]))
-                                  : `${replaceSlugToTitle(prop[val])}`}
+                                  : // : `${replaceSlugToTitle(prop[val])}`}
+                                    replaceSlugToTitle(prop[val])}
                               </TableCell>
                             );
                           }
@@ -130,13 +172,18 @@ export default function CustomTable(props) {
                       : null}
                     <TableCell
                       style={{
-                        cursor: 'pointer'
+                        cursor: 'pointer',
+                        borderBottomWidth: props.borderBottomWidth,
+                        borderBottomColor: props.borderBottomColor,
+                        borderLeftWidth: 0,
+                        borderRightWidth: 0,
+                        borderTopWidth: 0
                       }}
                       className={classes.tableCell}
                       colSpan="2"
                     >
                       {props.action ? (
-                        <>
+                        <div style={{display:"flex", justifyContent:'space-evenly'}}>
                           <RcIf if={props.action.edit}>
                             <span onClick={() => props.handleEdit(prop)}>
                               <i className="zmdi zmdi-edit zmdi-hc-2x" />
@@ -159,7 +206,7 @@ export default function CustomTable(props) {
                               <i className=" ml-10 zmdi zmdi-check zmdi-hc-2x" />
                             </span>
                           </RcIf>
-                        </>
+                        </div>
                       ) : null}
                     </TableCell>
                   </TableRow>

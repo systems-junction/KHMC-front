@@ -173,7 +173,6 @@ function AddEditBuReturn(props) {
                     <InputLabel id="buId-label">Business Unit</InputLabel>
                     <Select
                         fullWidth
-                        labelId="buId-label"
                         id="buId"
                         name="buId"
                         value={buId}
@@ -193,7 +192,6 @@ function AddEditBuReturn(props) {
                     <InputLabel id="itemId-label">Item</InputLabel>
                     <Select
                         fullWidth
-                        labelId="itemId-label"
                         id="itemId"
                         name="itemId"
                         value={itemId}
@@ -254,7 +252,6 @@ function AddEditBuReturn(props) {
                     <InputLabel id="staff-label">Staff</InputLabel>
                     <Select
                         fullWidth
-                        labelId="staff-label"
                         id="staffId"
                         name="staffId"
                         value={staffId}

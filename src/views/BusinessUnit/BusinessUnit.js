@@ -1,8 +1,7 @@
 /*eslint-disable*/
 import React, { useState, useEffect } from 'react';
 // core components
-import GridItem from 'components/Grid/GridItem.js';
-import GridContainer from 'components/Grid/GridContainer.js';
+
 import Button from '@material-ui/core/Button';
 import Table from '../../components/Table/Table.js';
 import ConfirmationModal from '../../components/Modal/confirmationModal';
@@ -14,10 +13,38 @@ import {
   updateBusinessUnitUrl
 } from '../../public/endpoins';
 
+import Header from '../../components/Header/Header';
+
+import Add_New from '../../assets/img/Add_New.png';
+import business_Unit from '../../assets/img/business_Unit.png';
+
+import Search from '../../assets/img/Search.png';
+import Control_Room from '../../assets/img/Control_Room.png';
+
+import Edit from '../../assets/img/Edit.png';
+
+import Inactive from '../../assets/img/Inactive.png';
+
+import Active from '../../assets/img/Active.png';
+
 import cookie from 'react-cookies';
+import BusinessUnit from '../../subRoutes/business_unit.js';
+
+import {
+  SwipeableList,
+  SwipeableListItem
+} from '@sandstreamdev/react-swipeable-list';
+import '@sandstreamdev/react-swipeable-list/dist/styles.css';
+
+import { useSwipeable, Swipeable } from 'react-swipeable';
 
 const tableHeading = ['BU Name', 'Description', 'Bu Head', 'Status', 'Actions'];
-const tableDataKeys = ['buName', 'description', ['buHead', 'firstName'], 'status'];
+const tableDataKeys = [
+  'buName',
+  'description',
+  ['buHead', 'firstName'],
+  'status'
+];
 const actions = { edit: true, active: true };
 
 export default function Items(props) {
@@ -52,7 +79,7 @@ export default function Items(props) {
   }, []);
 
   const addNewItem = () => {
-    let path = `businessunit/next/add`;
+    let path = `bus/add`;
     props.history.push({
       pathname: path,
       state: {
@@ -65,7 +92,7 @@ export default function Items(props) {
   };
 
   function handleEdit(rec) {
-    let path = `businessunit/next/edit`;
+    let path = `bus/edit`;
     props.history.push({
       pathname: path,
       state: {
@@ -149,21 +176,76 @@ export default function Items(props) {
   }
 
   return (
-    <GridContainer>
-      <GridItem xs={12} sm={12} md={12}>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Button
-              onClick={addNewItem}
-              style={{ width: 65, height: 65, borderRadius: 65 / 2 }}
-              variant="contained"
-              color="primary"
-            >
-              <i className="zmdi zmdi-plus zmdi-hc-3x"></i>
-            </Button>
-          </div>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        flex: 1,
+        position: 'fixed',
+        width: '100%',
+        height: '100%',
+        backgroundColor: '#60d69f',
+        overflowY: 'scroll'
+      }}
+    >
+      <div style={{ alignItems: 'center', flex: 1, display: 'flex' }}>
+        <Header />
+      </div>
+
+      <div style={{ alignItems: 'center', flex: 0.5, display: 'flex' }}>
+        <div
+          style={{
+            flex: 0.5,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+        >
+          <img
+            src={business_Unit}
+            style={{ maxWidth: '100%', height: 'auto' }}
+          />
         </div>
 
+        <div style={{ flex: 4, display: 'flex', alignItems: 'center' }}>
+          <h4
+            style={{ color: 'white', fontFamily: 'Ubuntu', fontWeight: '500' }}
+          >
+            Business Unit
+          </h4>
+        </div>
+
+        <div
+          style={{
+            display: 'flex',
+            flex: 1.5,
+            justifyContent: 'flex-end',
+            alignItems: 'center'
+          }}
+        >
+          <div style={{ flex: 1.5, display: 'flex' }}>
+            <img
+              onClick={addNewItem}
+              src={Add_New}
+              style={{ width: '100%', height: '100%', cursor: 'pointer' }}
+            />
+          </div>
+
+          <div style={{ flex: 1, display: 'flex' }}>
+            <img src={Search} style={{ width: '60%', height: '60%' }} />
+          </div>
+        </div>
+      </div>
+
+      <div
+        style={{
+          flex: 4,
+          display: 'flex',
+          flexDirection: 'column',
+          marginLeft: '3%',
+          marginRight: '3%'
+        }}
+      >
         {businessUnits ? (
           <Table
             tableData={businessUnits}
@@ -174,19 +256,13 @@ export default function Items(props) {
             action={actions}
             handleEdit={handleEdit}
             handleStatus={handleStatus}
+            borderBottomColor={'#60d69f'}
+            borderBottomWidth={20}
           />
         ) : (
           undefined
         )}
-      </GridItem>
-
-      {/* <ConfirmationModal
-        modalVisible={modalVisible}
-        msg="Are you sure want to delete the record?"
-        hideconfirmationModal={() => setModalVisible(false)}
-        onConfirmDelete={() => deleteBusinessUnit()}
-        setdeleteItem={() => setdeleteItem('')}
-      /> */}
+      </div>
 
       <ConfirmationModal
         modalVisible={modalVisible}
@@ -195,6 +271,163 @@ export default function Items(props) {
         onConfirmDelete={() => activeBuReturn()}
         setdeleteItem={() => setdeleteItem('')}
       />
-    </GridContainer>
+
+      {/* <div
+        style={{
+          height: 60,
+          display: 'flex',
+          backgroundColor: 'blue',
+          borderRadius: 15,
+          marginLeft: '2%',
+          marginRight: '2%',
+         
+        }}
+      >
+        {tableHeading.map((prop, key) => {
+          return (
+            <div
+              style={{
+                flex: 1,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <h6
+                style={{
+                  color: 'white',
+                  fontFamily: 'Ubuntu',
+                  fontWeight: '700',
+                }}
+                key={key}
+              >
+                {prop}
+              </h6>
+            </div>
+          );
+        })}
+      </div>
+
+      <div
+        style={{
+          marginLeft: '2%',
+          marginRight: '2%',
+          display: 'flex',
+          flex: 4,
+          paddingTop: 20
+        }}
+      >
+        {businessUnits ? (
+          <SwipeableList style={{}}>
+            {businessUnits.map(item => {
+              return (
+                <div style={{}}>
+                  <SwipeableListItem
+                    scrollStartThreshold={1}
+                    threshold={0.25}
+                    swipeLeft={{
+                      content: (
+                        <div style={{  }}>
+                          Revealed content during swipe
+                        </div>
+                      ),
+                      action: () => console.info('swipe action triggered')
+                    }}
+                    swipeRight={{
+                      content: <div>Revealed content during swipe</div>,
+                      action: () => console.info('swipe action triggered')
+                    }}
+                    onSwipeProgress={progress =>{}
+                      // console.info(`Swipe progress: ${progress}%`)
+                    }
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        flex: 1, borderRadius: 20,
+                      }}
+                
+                    >
+                      <div
+                        style={{
+                          display: 'flex',
+                          flex: 1,
+                          justifyContent: 'center',
+                          alignItems: 'center'
+                        }}
+                      >
+                        {item.buName}
+                      </div>
+
+                      <div
+                        style={{
+                          display: 'flex',
+                          flex: 1,
+                          justifyContent: 'center',
+                          alignItems: 'center'
+                        }}
+                      >
+                        {item.description}
+                      </div>
+
+                      <div
+                        style={{
+                          display: 'flex',
+                          flex: 1,
+                          justifyContent: 'center',
+                          alignItems: 'center'
+                        }}
+                      >
+                        {item.buHead.firstName}
+                      </div>
+
+                      <div
+                        style={{
+                          display: 'flex',
+                          flex: 1,
+                          justifyContent: 'center',
+                          alignItems: 'center'
+                        }}
+                      >
+                        {item.status === 'active' ? (
+                          <img
+                            src={Active}
+                            style={{ width: '40%', height: '80%' }}
+                          />
+                        ) : (
+                          <img
+                            src={Inactive}
+                            style={{ width: '40%', height: '80%' }}
+                          />
+                        )}
+                      </div>
+
+                      <div
+                        style={{
+                          display: 'flex',
+                          flex: 1,
+                          justifyContent: 'center',
+                          alignItems: 'center'
+                        }}
+                      >
+                        <img
+                          onClick={() => handleEdit(item)}
+                          src={Edit}
+                          style={{ width: 50, height: 50 }}
+                        />
+                      </div>
+                    </div>
+                  </SwipeableListItem>
+
+                  <div style={{ height: 20, width: '100%' }} />
+                </div>
+              );
+            })}
+          </SwipeableList>
+        ) : (
+          <h3>Not found</h3>
+        )}
+      </div> */}
+    </div>
   );
 }

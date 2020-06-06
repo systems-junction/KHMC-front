@@ -11,14 +11,11 @@ import Button from '@material-ui/core/Button';
 import tableStyles from 'assets/jss/material-dashboard-react/components/tableStyle.js';
 import axios from 'axios';
 import Notification from 'components/Snackbar/Notification.js';
-
+import cookie from 'react-cookies';
 import {
   addSystemAdminUrl,
   updateSystemAdminUrl
 } from '../../../public/endpoins';
-
-import cookie from 'react-cookies';
-
 import validateEmail from '../../../public/emailValidator';
 
 const styles = {
@@ -38,7 +35,8 @@ function AddEditSystemAdmin(props) {
   const initialState = {
     _id: '',
     username: '',
-    password: ''
+    password: '',
+    staffTypeId: '5ec138f621374a760fd0a23d'
   };
 
   function reducer(state, { field, value }) {
@@ -50,7 +48,7 @@ function AddEditSystemAdmin(props) {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const { _id, username, password } = state;
+  const { _id, username, password, staffTypeId} = state;
 
   const onChangeValue = e => {
     dispatch({ field: e.target.name, value: e.target.value });
@@ -59,7 +57,7 @@ function AddEditSystemAdmin(props) {
   function validateForm() {
   
     return (
-      username.length > 0 && password.length >= 8 && validateEmail(username)
+      username.length > 0 && (password && password.length >= 6) && validateEmail(username)
     );
   }
 
@@ -68,7 +66,7 @@ function AddEditSystemAdmin(props) {
   const [systemAdminArray, setSystemAdminArray] = useState('');
 
   const [currentUser, setCurrentUser] = useState('');
-
+  const [staffTypeArray, setStaffTypesArray] = useState('');
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
   const [errorMsg, setErrorMsg] = useState('');
@@ -79,6 +77,7 @@ function AddEditSystemAdmin(props) {
     setCurrentUser(cookie.load('current_user'));
     setcomingFor(props.history.location.state.comingFor);
     setSystemAdminArray(props.history.location.state.systemAdmin);
+    setStaffTypesArray(props.history.location.state.staffTypeArray);
 
     const selectedRec = props.history.location.state.selectedItem;
 
@@ -99,9 +98,10 @@ function AddEditSystemAdmin(props) {
 
   const handleAdd = () => {
     if (validateForm()) {
-      let params = {
+      const params = {
         username,
-        password
+        password,
+        staffTypeId
       };
       axios
         .post(addSystemAdminUrl, params)
@@ -123,10 +123,11 @@ function AddEditSystemAdmin(props) {
   const handleEdit = () => {
     setIsFormSubmitted(true);
     if (validateForm()) {
-      let params = {
+      const params = {
         _id,
         username,
         password,
+        staffTypeId,
         updatedAt: new Date()
       };
       axios
@@ -160,28 +161,53 @@ function AddEditSystemAdmin(props) {
       </h1>
 
       <div className="row" style={styles.inputContainer}>
-        <div className="col-md-6" style={styles.inputContainer}>
+        <div className="col-md-4" style={styles.inputContainer}>
           <TextField
             fullWidth
             name="username"
             label="User Name"
-            type="text"
+            type="email"
             variant="outlined"
             value={username}
             onChange={onChangeValue}
           />
         </div>
 
-        <div className="col-md-6" style={styles.inputContainer}>
+        <div className="col-md-4" style={styles.inputContainer}>
           <TextField
             fullWidth
             name="password"
             label="Password"
-            type="text"
+            type="password"
             variant="outlined"
             value={password}
             onChange={onChangeValue}
           />
+        </div>
+
+        <div className="col-md-4" style={styles.inputContainer}>
+            <InputLabel id="staff_type_label">Staff Type</InputLabel>
+            <Select
+              fullWidth
+              id="staffTypeId"
+              name="staffTypeId"
+              value={staffTypeId}
+              onChange={onChangeValue}
+              label="Staff Type"
+              disabled={true}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {staffTypeArray &&
+                staffTypeArray.map(val => {
+                  return (
+                    <MenuItem key={val._id} value={val._id}>
+                      {val.type}
+                    </MenuItem>
+                  );
+                })}
+            </Select>
         </div>
       </div>
 

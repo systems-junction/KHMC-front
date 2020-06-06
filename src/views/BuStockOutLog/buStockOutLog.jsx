@@ -18,14 +18,12 @@ const useStyles = makeStyles(styles);
 const tableHeading = [
   'Quantity',
   'Item Name',
-  'Time Stamp',
   'Sale Price',
   'Action'
 ];
 const tableDataKeys = [
     'qty',
     ['itemId', 'name'],
-    'timeStamp',
     'salePrice'
 ];
 const actions = {edit: true, delete: true};

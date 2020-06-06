@@ -1,40 +1,35 @@
-/*!
-
-=========================================================
-* Material Dashboard React - v1.8.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/material-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { createBrowserHistory } from 'history';
-import { Router, Route, Redirect } from 'react-router-dom';
+import React from "react";
+import ReactDOM from "react-dom";
+import { createBrowserHistory } from "history";
+import { Router, Route, Redirect } from "react-router-dom";
 // core components
-import Admin from 'layouts/Admin.js';
-import 'assets/css/material-dashboard-react.css?v=1.8.0';
-import { ConnectedRouter } from 'connected-react-router';
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
-import axios from 'axios';
-import cookie from 'react-cookies';
-import { ToastsContainer, ToastsStore } from 'react-toasts';
-import * as serviceWorker from './serviceWorker';
-import Login from './layouts/Login';
-import configureStore, { history } from './store';
+import { ConnectedRouter } from "connected-react-router";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import axios from "axios";
+import cookie from "react-cookies";
+import { ToastsContainer, ToastsStore } from "react-toasts";
+import * as serviceWorker from "./serviceWorker";
+import Login from "./layouts/Login";
+
+import ForgetPassword from "./layouts/ForgetPassword";
+
+import ResetPasswordStatus from "./layouts/ResetPasswordStatus";
+
+import purchaseRequest from "../src/views/PurchaseRequest/purchaseRequest";
+import addEditPurchaseRequest from "../src/views/PurchaseRequest/addEditPurchaseRequest";
+
+import configureStore, { history } from "./store";
+
+import HomeRoutes from "../src/subRoutes/home";
+
+import MaterialReceiving from "../src/views/BuReturn/buReturn";
+import AddEditMaterialReceiving from "../src/views/BuReturn/addEditBuReturn";
 
 export const { persistor, store } = configureStore();
 
 const hist = createBrowserHistory();
+
 function SecuredRoute(props) {
   const { component: Component, path } = props;
   return (
@@ -45,7 +40,7 @@ function SecuredRoute(props) {
           // document.cookie = 'loggedInUser=';
 
           // console.log(document.cookie.split('=')[1]);
-          const token = cookie.load('token') || '';
+          const token = cookie.load("token") || "";
 
           if (token) {
             return <Component />;
@@ -61,13 +56,13 @@ function SecuredRoute(props) {
 function interceptor() {
   axios.interceptors.request.use(
     function(config) {
-      const token = cookie.load('token') || '';
-      const currentUser = cookie.load('current_user') || '';
-      console.log('token: ', token);
+      const token = cookie.load("token") || "";
+      const currentUser = cookie.load("current_user") || "";
+      console.log("token: ", token);
       // Do something before request is sent
-      if(token) {
+      if (token) {
         config.headers.Authorization = `Bearer ${token}`;
-        if(currentUser && currentUser.staffTypeId){
+        if (currentUser && currentUser.staffTypeId) {
           config.headers.role = currentUser.staffTypeId.type;
         }
       }
@@ -83,11 +78,10 @@ function interceptor() {
       return response;
     },
     function(error) {
-      if(error.response){
-        console.log('error: ', error.response.data);
-      }
-      else{
-        console.log('error: ', error);
+      if (error.response) {
+        console.log("error: ", error.response.data);
+      } else {
+        console.log("error: ", error);
       }
       return error;
     }
@@ -109,9 +103,40 @@ const MainApp = () => {
 
             {/* <SecuredRoute path="/admin" component={Admin} /> */}
             {/* <SecuredRoute exact path="/login" component={Login} /> */}
-            <SecuredRoute path="/admin" component={Admin} />
+
+            {/* <SecuredRoute path="/admin" component={Admin} /> */}
+
+            <SecuredRoute exact path="/home" component={HomeRoutes} />
+
+            <Route path="/mr" component={MaterialReceiving} />
+            <Route path="/mr/edit" component={AddEditMaterialReceiving} />
+
             <Route path="/login" component={Login} />
+
             <Route exact path="/" component={Login} />
+            <Route exact path="/forgetpassword" component={ForgetPassword} />
+
+            <Route
+              exact
+              path="/emailsendstatus"
+              component={ResetPasswordStatus}
+            />
+            {/* <Route  path="/home/controlroom" component={ControlRoom} /> */}
+
+            {/* <Route path="/home/controlroom/wms/bus" component={BusinessUnit} /> */}
+
+            {/* <Route exact path="/home/controlroom/wms" component={WMS} /> */}
+
+            {/* 
+            <Route path="/businessunit/next/add" component={AddBusinessUnit} />
+            <Route path="/businessunit/next/edit" component={AddBusinessUnit} />
+            <Route
+              path="/bus/next/success"
+              component={SuccessScreen}
+            /> */}
+
+            {/* <Route exact path="/home" component={HomeScreen} /> */}
+
             {/* <Route path="*" component={NotFound} /> */}
 
             {/* <SecuredRoute path="/" component={Login} /> */}
@@ -123,7 +148,7 @@ const MainApp = () => {
   );
 };
 
-ReactDOM.render(<MainApp />, document.getElementById('root'));
+ReactDOM.render(<MainApp />, document.getElementById("root"));
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: http://bit.ly/CRA-PWA

@@ -1,98 +1,111 @@
 /*eslint-disable*/
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 // @material-ui/core components
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from "@material-ui/core/styles";
 // table
-import CustomTable from '../../components/Table/Table';
+import CustomTable from "../../components/Table/Table";
 
+import Button from "@material-ui/core/Button";
+import Notification from "../../components/Snackbar/Notification.js";
 
-import Button from '@material-ui/core/Button';
-import Notification from 'components/Snackbar/Notification.js';
+import ConfirmationModal from "../../components/Modal/confirmationModal";
 
-import ConfirmationModal from '../../components/Modal/confirmationModal';
+import Header from "../../components/Header/Header";
 
-import axios from 'axios';
+import Add_New from "../../assets/img/Add_New.png";
+import business_Unit from "../../assets/img/business_Unit.png";
+
+import Search from "../../assets/img/Search.png";
+import Control_Room from "../../assets/img/Control_Room.png";
+
+import Edit from "../../assets/img/Edit.png";
+
+import Inactive from "../../assets/img/Inactive.png";
+
+import Active from "../../assets/img/Active.png";
+
+import axios from "axios";
 import {
   getBuRepRequestUrl,
-  deleteBuRepRequestUrl
-} from '../../public/endpoins';
+  deleteBuRepRequestUrl,
+} from "../../public/endpoins";
 
-import Loader from 'react-loader-spinner';
-
-const useStyles = makeStyles(styles);
+import Loader from "react-loader-spinner";
 
 const styles = {
   cardCategoryWhite: {
-    '&,& a,& a:hover,& a:focus': {
-      color: 'rgba(255,255,255,.62)',
-      margin: '0',
-      fontSize: '14px',
-      marginTop: '0',
-      marginBottom: '0'
+    "&,& a,& a:hover,& a:focus": {
+      color: "rgba(255,255,255,.62)",
+      margin: "0",
+      fontSize: "14px",
+      marginTop: "0",
+      marginBottom: "0",
     },
-    '& a,& a:hover,& a:focus': {
-      color: '#FFFFFF'
-    }
+    "& a,& a:hover,& a:focus": {
+      color: "#FFFFFF",
+    },
   },
   cardTitleWhite: {
-    color: '#FFFFFF',
-    marginTop: '0px',
-    minHeight: 'auto',
-    fontWeight: '300',
+    color: "#FFFFFF",
+    marginTop: "0px",
+    minHeight: "auto",
+    fontWeight: "300",
     fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-    marginBottom: '3px',
-    textDecoration: 'none',
-    '& small': {
-      color: '#777',
-      fontSize: '65%',
-      fontWeight: '400',
-      lineHeight: '1'
-    }
+    marginBottom: "3px",
+    textDecoration: "none",
+    "& small": {
+      color: "#777",
+      fontSize: "65%",
+      fontWeight: "400",
+      lineHeight: "1",
+    },
   },
 
   tableData: {
-    fontSize: '0.8125rem',
-    fontWeight: '400',
-    fontFamily: 'Ubuntu'
-  }
+    fontSize: "0.8125rem",
+    fontWeight: "400",
+    fontFamily: "Ubuntu",
+  },
 };
 
+const useStyles = makeStyles(styles);
+
 const tableHeading = [
-  'Business Unit',
-  'Staff Name',
-  'Time stamp',
-  'Status',
-  'Actions'
+  "Business Unit",
+  "Staff Name",
+  "Time stamp",
+  "Status",
+  "Actions",
 ];
 const tableDataKeys = [
-  ['buId', 'buName'],
-  ['requesterStaffId', 'firstName'],
-  'timeStamp',
-  'status'
+  ["buId", "buName"],
+  ["requesterStaffId", "firstName"],
+  "timeStamp",
+  "status",
 ];
-const actions = {edit: true, delete: true};
+const actions = { edit: true, delete: true };
 
 export default function BuRepRequest(props) {
   const classes = useStyles();
-  const [buRepRequests, setBuRepRequests] = useState('');
-  const [businessUnit, setBusinessUnit] = useState('');
-  const [staff, setStaff] = useState('');
-  const [deleteItem, setdeleteItem] = useState('');
+  const [buRepRequests, setBuRepRequests] = useState("");
+  const [businessUnit, setBusinessUnit] = useState("");
+  const [staff, setStaff] = useState("");
+  const [deleteItem, setdeleteItem] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState("");
   const [openNotification, setOpenNotification] = useState(false);
 
   if (openNotification) {
     setTimeout(() => {
       setOpenNotification(false);
-      setErrorMsg('');
+      setErrorMsg("");
     }, 2000);
   }
 
   function getBuRepRequest() {
     axios
       .get(getBuRepRequestUrl)
-      .then(res => {
+      .then((res) => {
         if (res.data.success) {
           setBuRepRequests(res.data.data.buRepRequest);
           setBusinessUnit(res.data.data.businessUnit);
@@ -103,8 +116,8 @@ export default function BuRepRequest(props) {
         }
         return res;
       })
-      .catch(e => {
-        console.log('error: ', e);
+      .catch((e) => {
+        console.log("error: ", e);
       });
   }
 
@@ -113,18 +126,18 @@ export default function BuRepRequest(props) {
   }, []);
 
   const addNewItem = () => {
-    let path = `bureprequest/next/add`;
+    let path = `mr/add`;
     props.history.push({
       pathname: path,
-      state: { comingFor: 'add', businessUnit, staff }
+      state: { comingFor: "add", businessUnit, staff },
     });
   };
 
   function handleEdit(rec) {
-    let path = `bureprequest/next/edit`;
+    let path = `mr/edit`;
     props.history.push({
       pathname: path,
-      state: { comingFor: 'edit', selectedItem: rec, businessUnit, staff }
+      state: { comingFor: "edit", selectedItem: rec, businessUnit, staff },
     });
   }
 
@@ -135,14 +148,14 @@ export default function BuRepRequest(props) {
 
   function deleteBuRepRequest() {
     const params = {
-      _id: deleteItem
+      _id: deleteItem,
     };
 
     axios
-      .delete(deleteBuRepRequestUrl + '/' + params._id)
-      .then(res => {
+      .delete(deleteBuRepRequestUrl + "/" + params._id)
+      .then((res) => {
         if (res.data.success) {
-          setdeleteItem('');
+          setdeleteItem("");
           setModalVisible(false);
           window.location.reload(false);
         } else if (!res.data.success) {
@@ -151,68 +164,129 @@ export default function BuRepRequest(props) {
         }
         return res;
       })
-      .catch(e => {
-        console.log('error while deletion ', e);
+      .catch((e) => {
+        console.log("error while deletion ", e);
       });
   }
 
   return (
-    <div>
-      {buRepRequests ? (
-        <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <Button
-                onClick={addNewItem}
-                style={{ width: 65, height: 65, borderRadius: 65 / 2 }}
-                variant="contained"
-                color="primary"
-              >
-                <i className="zmdi zmdi-plus zmdi-hc-3x"></i>
-              </Button>
-            </div>
-          </div>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        flex: 1,
+        position: "fixed",
+        width: "100%",
+        height: "100%",
+        backgroundColor: "#60d69f",
+        overflowY: "scroll",
+      }}
+    >
+      <div
+        style={{ alignItems: "center", flex: 1, display: "flex", marginTop: 5 }}
+      >
+        <Header />
+      </div>
 
-          {/* table */}
-          <div>
-            {buRepRequests ? (
-              <CustomTable
-                tableData={buRepRequests}
-                tableDataKeys={tableDataKeys}
-                tableHeading={tableHeading}
-                action={actions}
-                handleEdit={handleEdit}
-                handleDelete={handleDelete}
-              />
-            ) : (
-              undefined
-            )}
-          </div>
-          {/* end table */}
-
-          <ConfirmationModal
-            modalVisible={modalVisible}
-            msg="Are you sure want to delete the record?"
-            hideconfirmationModal={() => setModalVisible(false)}
-            onConfirmDelete={() => deleteBuRepRequest()}
-            setdeleteItem={() => setdeleteItem('')}
-          />
-
-          <Notification msg={errorMsg} open={openNotification} />
-        </div>
-      ) : (
+      <div style={{ alignItems: "center", flex: 0.5, display: "flex" }}>
         <div
           style={{
-            width: '70%',
-            height: '100%',
-            position: 'fixed',
-            display: 'flex',
-            justifyContent: 'center'
+            flex: 0.5,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          <Loader type="TailSpin" color="red" height={50} width={50} />
+          <img
+            src={business_Unit}
+            style={{ maxWidth: "100%", height: "auto" }}
+          />
         </div>
-      )}
+
+        <div style={{ flex: 4, display: "flex", alignItems: "center" }}>
+          <h4
+            style={{ color: "white", fontFamily: "Ubuntu", fontWeight: "500" }}
+          >
+            BU Rep Request
+          </h4>
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            flex: 1.5,
+            justifyContent: "flex-end",
+            alignItems: "center",
+          }}
+        >
+          <div style={{ flex: 1.5, display: "flex" }}>
+            <img
+              onClick={addNewItem}
+              src={Add_New}
+              style={{ width: "100%", height: "100%", cursor: "pointer" }}
+            />
+          </div>
+
+          <div style={{ flex: 1, display: "flex" }}>
+            <img src={Search} style={{ width: "60%", height: "60%" }} />
+          </div>
+        </div>
+      </div>
+
+      <div
+        style={{
+          flex: 4,
+          display: "flex",
+          flexDirection: "column",
+          marginLeft: "3%",
+          marginRight: "3%",
+        }}
+      >
+        {buRepRequests ? (
+          <div>
+            {/* table */}
+            <div>
+              {buRepRequests ? (
+                <CustomTable
+                  tableData={buRepRequests}
+                  tableDataKeys={tableDataKeys}
+                  tableHeading={tableHeading}
+                  action={actions}
+                  handleEdit={handleEdit}
+                  handleDelete={handleDelete}
+                  borderBottomColor={"#60d69f"}
+                  borderBottomWidth={20}
+                />
+              ) : (
+                undefined
+              )}
+            </div>
+            {/* end table */}
+
+            <ConfirmationModal
+              modalVisible={modalVisible}
+              msg="Are you sure want to delete the record?"
+              hideconfirmationModal={() => setModalVisible(false)}
+              onConfirmDelete={() => deleteBuRepRequest()}
+              setdeleteItem={() => setdeleteItem("")}
+            />
+
+            <Notification msg={errorMsg} open={openNotification} />
+          </div>
+        ) : (
+          <div
+            style={{
+              width: "70%",
+              height: "100%",
+              position: "fixed",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Loader type="TailSpin" color="red" height={50} width={50} />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

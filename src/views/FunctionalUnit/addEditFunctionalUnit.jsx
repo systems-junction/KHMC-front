@@ -16,15 +16,38 @@ import TableRow from '@material-ui/core/TableRow';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TablePagination from '@material-ui/core/TablePagination';
-import { addFunctionalUnitUrl, updateFunctionalUnitUrl, getFunctionalUnitLogsUrl } from '../../public/endpoins';
+import {
+  addFunctionalUnitUrl,
+  updateFunctionalUnitUrl,
+  getFunctionalUnitLogsUrl
+} from '../../public/endpoins';
 
-const useStyles = makeStyles(styles);
+import Header from '../../components/Header/Header';
+
+import Add_New from '../../assets/img/Add_New.png';
+import business_Unit from '../../assets/img/business_Unit.png';
+
+import Back_Arrow from '../../assets/img/Back_Arrow.png';
+
 
 const styles = {
   inputContainer: {
-    marginTop: '2%'
+    marginTop: 25,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    paddingTop: 5,
+    paddingBottom: 5,
+    marginLeft: 5,
+    marginRight: 5
+  },
+
+  buttonContainer: {
+    marginTop: 25
   }
 };
+
+const useStyles = makeStyles(styles);
+
 
 function AddEditBuReturn(props) {
   const [comingFor, setcomingFor] = useState('');
@@ -53,7 +76,7 @@ function AddEditBuReturn(props) {
     fuLogId: '',
     statusArray: [],
     businessUnits: [],
-    staffArray:[]
+    staffArray: []
   };
 
   function reducer(state, { field, value }) {
@@ -87,24 +110,32 @@ function AddEditBuReturn(props) {
   };
 
   function validateForm() {
-    return fuHead.length> 0 && fuName.length> 0 && status.length> 0 && description.length > 0;
+    return (
+      fuHead &&
+      fuHead.length > 0 &&
+      (fuName && fuName.length > 0) &&
+      (status && status.length > 0) &&
+      (description && description.length > 0)
+    );
   }
 
-  function getFunctionalUnitLogs(id){
-    const param ={
+  function getFunctionalUnitLogs(id) {
+    const param = {
       _id: id
-    } 
-    
-    axios.get(getFunctionalUnitLogsUrl+'/'+param._id).then(res => {
-      if(res.data.success){
-        setFuLogs(res.data.data);
-      } else if (!res.data.success) {
-        ToastsStore.error(res.data.error);
-      }
-    })
-    .catch(e => {
-      console.log('error is ', e);
-    });
+    };
+
+    axios
+      .get(getFunctionalUnitLogsUrl + '/' + param._id)
+      .then(res => {
+        if (res.data.success) {
+          setFuLogs(res.data.data);
+        } else if (!res.data.success) {
+          ToastsStore.error(res.data.error);
+        }
+      })
+      .catch(e => {
+        console.log('error is ', e);
+      });
   }
 
   useEffect(() => {
@@ -116,8 +147,9 @@ function AddEditBuReturn(props) {
           dispatch({ field: key, value: val._id });
           dispatch({ field: 'reason', value: val.reason });
         } else {
-          dispatch({field: key, value: val});
-          if(key === "_id"){ // get all logs related to this id
+          dispatch({ field: key, value: val });
+          if (key === '_id') {
+            // get all logs related to this id
             getFunctionalUnitLogs(val);
           }
         }
@@ -166,7 +198,9 @@ function AddEditBuReturn(props) {
       .post(addFunctionalUnitUrl, params)
       .then(res => {
         if (res.data.success) {
-          props.history.goBack();
+          // props.history.goBack();
+          props.history.push('success');
+
         } else if (!res.data.success) {
           ToastsStore.error(res.data.error);
         }
@@ -205,219 +239,303 @@ function AddEditBuReturn(props) {
       });
   };
 
-
   return (
-    <div className="container">
-      <h1>
-        <span> {comingFor === 'add' ? 'Add' : 'Edit'}</span>
-      </h1>
-      <div className="row">
-        <div className="col-md-12" style={styles.inputContainer}>
-          <TextField
-            fullWidth
-            id="fuName"
-            name="fuName"
-            label="Functional Unit Name"
-            variant="outlined"
-            value={fuName}
-            onChange={onChangeValue}
+    <div
+      style={{
+        backgroundColor: '#60d69f',
+        position: 'fixed',
+        display: 'flex',
+        width: '100%',
+        height: '100%',
+        flexDirection: 'column',
+        flex: 1,
+        overflowY: 'scroll'
+      }}
+    >
+      <div style={{ alignItems: 'center', flex: 1, display: 'flex' }}>
+        <Header />
+      </div>
+
+      <div style={{ alignItems: 'center', flex: 0.5, display: 'flex' }}>
+        <div
+          style={{
+            flex: 0.5,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+        >
+          <img
+            src={business_Unit}
+            style={{ maxWidth: '100%', height: 'auto' }}
           />
         </div>
-      </div>
 
-      <div className="row">
-        <div className="col-md-12" style={styles.inputContainer}>
-          <TextField
-            fullWidth
-            id="description"
-            name="description"
-            label="Description"
-            variant="outlined"
-            value={description}
-            multiline
-            rows={5}
-            onChange={onChangeValue}
-          />
-        </div>
-      </div>
-
-      <div className="row">
-        <div className="col-md-6" style={styles.inputContainer}>
-          <InputLabel id="buHead-label">FU Head</InputLabel>
-          <Select
-            fullWidth
-            id="fuHead"
-            name="fuHead"
-            value={fuHead}
-            onChange={onChangeValue}
-            label="FU Head"
-            error={!fuHead && isFormSubmitted}
+        <div style={{ flex: 4, display: 'flex', alignItems: 'center' }}>
+          <h3
+            style={{ color: 'white', fontFamily: 'Ubuntu', fontWeight: '700' }}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {staffArray &&
-              staffArray.map(val => {
-                return (
-                  <MenuItem key={val._id} value={val._id}>
-                    {val.firstName} {val.lastName}
-                  </MenuItem>
-                );
-              })}
-          </Select>
-        </div>
-
-        <div className="col-md-6" style={styles.inputContainer}>
-          <InputLabel id="buName-label">BU Name</InputLabel>
-          <Select
-            fullWidth
-            id="buId"
-            name="buId"
-            value={buId}
-            onChange={onChangeValue}
-            label="BU Name"
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {businessUnits &&
-              businessUnits.map(val => {
-                return (
-                  <MenuItem key={val._id} value={val._id}>
-                    {val.buName}
-                  </MenuItem>
-                );
-              })}
-          </Select>
-        </div>
-      </div>
-
-      <div className="row">
-        <div className="col-md-6" style={styles.inputContainer}>
-          <InputLabel id="buHead-label">Status</InputLabel>
-          <Select
-            fullWidth
-            id="status"
-            name="status"
-            value={status}
-            onChange={onChangeValue}
-            label="Status"
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {statusArray &&
-              statusArray.map(val => {
-                return (
-                  <MenuItem key={val.key} value={val.key}>
-                    {val.value}
-                  </MenuItem>
-                );
-              })}
-          </Select>
-        </div>
-
-        <div className="col-md-6" style={styles.inputContainer}>
-          {status === 'in_active' ? (
-            <TextField
-              fullWidth
-              id="reason"
-              name="reason"
-              label="Resaon"
-              variant="outlined"
-              value={reason}
-              onChange={onChangeValue}
-            />
-          ) : (
-            undefined
-          )}
-        </div>
-      </div>
-
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div style={styles.inputContainer}>
-          <Button onClick={handleCancel} variant="contained">
-            Cancel
-          </Button>
+            {comingFor === 'add'
+              ? ' Add Functional Unit'
+              : ' Edit Functional Unit'}
+          </h3>
         </div>
 
         <div
           style={{
             display: 'flex',
+            flex: 0.8,
             justifyContent: 'flex-end',
-            marginTop: '2%'
+            alignItems: 'center'
           }}
         >
-          {comingFor === 'add' ? (
-            <Button
-              style={{ paddingLeft: 30, paddingRight: 30 }}
-              disabled={!validateForm()}
-              onClick={handleAdd}
-              variant="contained"
-              color="primary"
-            >
-              Add
-            </Button>
-          ) : (
-            <Button
-              style={{ paddingLeft: 30, paddingRight: 30 }}
-              disabled={!validateForm()}
-              onClick={handleEdit}
-              variant="contained"
-              color="primary"
-            >
-              Edit
-            </Button>
-          )}
+          <div style={{ flex: 1.5, display: 'flex' }}>
+            <img
+              onClick={() => props.history.goBack()}
+              src={Add_New}
+              style={{ width: '100%', height: '100%', cursor: 'pointer' }}
+            />
+          </div>
         </div>
       </div>
 
-      <div>
-        {comingFor === 'edit' ? (
-          <>
-            <Table className="mt20">
-              <TableHead>
-                <TableRow>
-                <TableCell>Status</TableCell>
-                  <TableCell>Reason</TableCell>
-                  <TableCell>Last Updated By</TableCell>
-                  <TableCell>Last Updated at</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {fuLogs && fuLogs.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((prop, index)=>{
-                    return(
-                      <TableRow key={index}>
-                        <TableCell>{prop.status === 'active' ? 'Active' : 'In Active'}</TableCell>
-                        <TableCell>{prop.reason ? prop.reason : 'N/A'}</TableCell>
-                        <TableCell>{prop.updatedBy}</TableCell>
-                        <TableCell>
-                          {new Date(prop.updatedAt).getDate()}/
-                          {new Date(prop.updatedAt).getMonth() + 1}/
-                          {new Date(prop.updatedAt).getFullYear()}{' '}
-                          {new Date(prop.updatedAt).getHours()}
-                          {':'}
-                          {new Date(prop.updatedAt).getMinutes()}
-                        </TableCell>
-                      </TableRow>
-                    )
-                })}
-              </TableBody>
-            </Table>
-            <TablePagination
-              rowsPerPageOptions={[5, 10]}
-              component="div"
-              count={fuLogs && fuLogs.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onChangePage={handleChangePage}
-              onChangeRowsPerPage={handleChangeRowsPerPage}
+      <div
+        style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+        className="container"
+      >
+        {/* <h1>
+        <span> {comingFor === 'add' ? 'Add' : 'Edit'}</span>
+      </h1> */}
+        <div className="row">
+          <div className="col-md-12" style={styles.inputContainer}>
+            <TextField
+              fullWidth
+              id="fuName"
+              name="fuName"
+              label="Functional Unit Name"
+              // variant="outlined"
+              value={fuName}
+              onChange={onChangeValue}
             />
-          </>
-        ) : (
-          undefined
-        )}
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-md-12" style={styles.inputContainer}>
+            <TextField
+              fullWidth
+              id="description"
+              name="description"
+              label="Description"
+              // variant="outlined"
+              value={description}
+              multiline
+              rows={5}
+              onChange={onChangeValue}
+            />
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-md-12" style={styles.inputContainer}>
+            <InputLabel id="buHead-label">FU Head</InputLabel>
+            <Select
+              fullWidth
+              id="fuHead"
+              name="fuHead"
+              value={fuHead}
+              onChange={onChangeValue}
+              label="FU Head"
+              error={!fuHead && isFormSubmitted}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {staffArray &&
+                staffArray.map(val => {
+                  return (
+                    <MenuItem key={val._id} value={val._id}>
+                      {val.firstName} {val.lastName}
+                    </MenuItem>
+                  );
+                })}
+            </Select>
+          </div>
+
+          <div className="col-md-12" style={styles.inputContainer}>
+            <InputLabel id="buName-label">BU Name</InputLabel>
+            <Select
+              fullWidth
+              id="buId"
+              name="buId"
+              value={buId}
+              onChange={onChangeValue}
+              label="BU Name"
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {businessUnits &&
+                businessUnits.map(val => {
+                  return (
+                    <MenuItem key={val._id} value={val._id}>
+                      {val.buName}
+                    </MenuItem>
+                  );
+                })}
+            </Select>
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-md-12" style={styles.inputContainer}>
+            <InputLabel id="buHead-label">Status</InputLabel>
+            <Select
+              fullWidth
+              id="status"
+              name="status"
+              value={status}
+              onChange={onChangeValue}
+              label="Status"
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {statusArray &&
+                statusArray.map(val => {
+                  return (
+                    <MenuItem key={val.key} value={val.key}>
+                      {val.value}
+                    </MenuItem>
+                  );
+                })}
+            </Select>
+          </div>
+
+          {status === 'in_active' ? (
+            <div className="col-md-12" style={styles.inputContainer}>
+              <TextField
+                fullWidth
+                id="reason"
+                name="reason"
+                label="Resaon"
+                // variant="outlined"
+                value={reason}
+                onChange={onChangeValue}
+              />
+            </div>
+          ) : (
+            undefined
+          )}
+        </div>
+
+        <div style={{ display: 'flex', flex: 1, justifyContent: 'center' }}>
+          {/* <div style={styles.buttonContainer}>
+            <Button onClick={handleCancel} variant="contained">
+              Cancel
+            </Button>
+          </div> */}
+
+          <div
+            style={{
+              display: 'flex',
+              flex: 1,
+              height: 50,
+              justifyContent: 'center',
+              marginTop: '2%',
+              marginBottom: '2%'
+            }}
+          >
+            {comingFor === 'add' ? (
+              <Button
+                style={{ width: '60%' }}
+                disabled={!validateForm()}
+                onClick={handleAdd}
+                variant="contained"
+                color="primary"
+              >
+                Add Functional Unit
+              </Button>
+            ) : (
+              <Button
+                style={{ width: '60%' }}
+                disabled={!validateForm()}
+                onClick={handleEdit}
+                variant="contained"
+                color="primary"
+              >
+                Edit Functional Unit
+              </Button>
+            )}
+          </div>
+        </div>
+
+        <div>
+          {comingFor === 'edit' ? (
+            <>
+              <Table className="mt20">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Status</TableCell>
+                    <TableCell>Reason</TableCell>
+                    <TableCell>Last Updated By</TableCell>
+                    <TableCell>Last Updated at</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {fuLogs &&
+                    fuLogs
+                      .slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                      .map((prop, index) => {
+                        return (
+                          <TableRow key={index}>
+                            <TableCell>
+                              {prop.status === 'active'
+                                ? 'Active'
+                                : 'In Active'}
+                            </TableCell>
+                            <TableCell>
+                              {prop.reason ? prop.reason : 'N/A'}
+                            </TableCell>
+                            <TableCell>{prop.updatedBy}</TableCell>
+                            <TableCell>
+                              {new Date(prop.updatedAt).getDate()}/
+                              {new Date(prop.updatedAt).getMonth() + 1}/
+                              {new Date(prop.updatedAt).getFullYear()}{' '}
+                              {new Date(prop.updatedAt).getHours()}
+                              {':'}
+                              {new Date(prop.updatedAt).getMinutes()}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                </TableBody>
+              </Table>
+              <TablePagination
+                rowsPerPageOptions={[5, 10]}
+                component="div"
+                count={fuLogs && fuLogs.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
+              />
+            </>
+          ) : (
+            undefined
+          )}
+        </div>
+
+        <div style={{ marginBottom: 20 }}>
+          <img
+            onClick={() => props.history.goBack()}
+            src={Back_Arrow}
+            style={{ width: 60, height: 40, cursor: 'pointer' }}
+          />
+        </div>
       </div>
     </div>
   );

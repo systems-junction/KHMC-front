@@ -1,4 +1,4 @@
-const baseUrl = 'http://localhost:8080/api';
+const baseUrl = 'http://167.172.148.139:4000/api';
 export const socketUrl = 'ws://localhost:8080';
 
 // auth endpoints

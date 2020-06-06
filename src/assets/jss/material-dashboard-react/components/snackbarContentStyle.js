@@ -1,45 +1,45 @@
-import {
-  defaultFont,
-  primaryBoxShadow,
-  infoBoxShadow,
-  successBoxShadow,
-  warningBoxShadow,
-  dangerBoxShadow,
-  roseBoxShadow,
-  whiteColor,
-  blackColor,
-  grayColor,
-  infoColor,
-  successColor,
-  dangerColor,
-  roseColor,
-  primaryColor,
-  warningColor,
-  hexToRgb
-} from "assets/jss/material-dashboard-react.js";
+// import {
+//   defaultFont,
+//   primaryBoxShadow,
+//   infoBoxShadow,
+//   successBoxShadow,
+//   warningBoxShadow,
+//   dangerBoxShadow,
+//   roseBoxShadow,
+//   whiteColor,
+//   blackColor,
+//   grayColor,
+//   infoColor,
+//   successColor,
+//   dangerColor,
+//   roseColor,
+//   primaryColor,
+//   warningColor,
+//   hexToRgb
+// } from "assets/jss/material-dashboard-react.js";
 
 const snackbarContentStyle = {
   root: {
-    ...defaultFont,
+    // ...defaultFont,
     flexWrap: "unset",
     position: "relative",
     padding: "20px 15px",
     lineHeight: "20px",
     marginBottom: "20px",
     fontSize: "14px",
-    backgroundColor: whiteColor,
-    color: grayColor[7],
+    backgroundColor: 'white',
+    color: 'grey',
     borderRadius: "3px",
     minWidth: "unset",
     maxWidth: "unset",
-    boxShadow:
-      "0 12px 20px -10px rgba(" +
-      hexToRgb(whiteColor) +
-      ", 0.28), 0 4px 20px 0px rgba(" +
-      hexToRgb(blackColor) +
-      ", 0.12), 0 7px 8px -5px rgba(" +
-      hexToRgb(whiteColor) +
-      ", 0.2)"
+    // boxShadow:
+    //   "0 12px 20px -10px rgba(" +
+    //   hexToRgb(whiteColor) +
+    //   ", 0.28), 0 4px 20px 0px rgba(" +
+    //   hexToRgb(blackColor) +
+    //   ", 0.12), 0 7px 8px -5px rgba(" +
+    //   hexToRgb(whiteColor) +
+    //   ", 0.2)"
   },
   top20: {
     top: "20px"
@@ -48,34 +48,34 @@ const snackbarContentStyle = {
     top: "40px"
   },
   info: {
-    backgroundColor: infoColor[3],
-    color: whiteColor,
-    ...infoBoxShadow
+    backgroundColor: 'blue',
+    color: 'white',
+    // ...infoBoxShadow
   },
   success: {
-    backgroundColor: successColor[3],
-    color: whiteColor,
-    ...successBoxShadow
+    backgroundColor: "green",
+    color: 'white',
+    // ...successBoxShadow
   },
   warning: {
-    backgroundColor: warningColor[3],
-    color: whiteColor,
-    ...warningBoxShadow
+    backgroundColor: 'yellow',
+    color: 'white',
+    // ...warningBoxShadow
   },
   danger: {
-    backgroundColor: dangerColor[3],
-    color: whiteColor,
-    ...dangerBoxShadow
+    backgroundColor: 'red',
+    color: 'white',
+    // ...dangerBoxShadow
   },
   primary: {
-    backgroundColor: primaryColor[3],
-    color: whiteColor,
-    ...primaryBoxShadow
+    backgroundColor: 'blue',
+    color: 'white',
+    // ...primaryBoxShadow
   },
   rose: {
-    backgroundColor: roseColor[3],
-    color: whiteColor,
-    ...roseBoxShadow
+    backgroundColor: 'red',
+    color: 'white',
+    // ...roseBoxShadow
   },
   message: {
     padding: "0",
@@ -100,24 +100,7 @@ const snackbarContentStyle = {
     width: "30px",
     height: "30px"
   },
-  infoIcon: {
-    color: infoColor[3]
-  },
-  successIcon: {
-    color: successColor[3]
-  },
-  warningIcon: {
-    color: warningColor[3]
-  },
-  dangerIcon: {
-    color: dangerColor[3]
-  },
-  primaryIcon: {
-    color: primaryColor[3]
-  },
-  roseIcon: {
-    color: roseColor[3]
-  },
+ 
   iconMessage: {
     paddingLeft: "50px",
     display: "block"

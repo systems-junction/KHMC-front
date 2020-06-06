@@ -15,15 +15,13 @@ const tableHeading = [
   'Description',
   'Access Level',
   'Status',
-  'Created By',
   'Actions'
 ];
 const tableDataKeys = [
   'type',
   'description',
   'accessLevel',
-  'status',
-  'createdBySystemAdminStaffId'
+  'status'
 ];
 
 const actions = { edit: true, delete: true };

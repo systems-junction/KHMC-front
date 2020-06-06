@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
-import styles from 'assets/jss/material-dashboard-react/components/tableStyle.js';
+import styles from '../../assets/jss/material-dashboard-react/components/tableStyle.js';
 import CustomTable from '../../components/Table/Table';
 import ConfirmationModal from '../../components/Modal/confirmationModal';
 import axios from 'axios';

@@ -8,9 +8,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
-import tableStyles from 'assets/jss/material-dashboard-react/components/tableStyle.js';
+import tableStyles from '../../assets/jss/material-dashboard-react/components/tableStyle.js';
 import axios from 'axios';
-import Notification from 'components/Snackbar/Notification.js';
+import Notification from '../../components/Snackbar/Notification.js';
 import DateFnsUtils from '@date-io/date-fns';
 import {
   DateTimePicker,
@@ -25,13 +25,28 @@ import {
   updatePurchaseOrderUrl
 } from '../../public/endpoins';
 
-
 import cookie from 'react-cookies';
 
+import Header from '../../components/Header/Header';
+
+import Add_New from '../../assets/img/Add_New.png';
+import business_Unit from '../../assets/img/business_Unit.png';
+
+import Back_Arrow from '../../assets/img/Back_Arrow.png';
 
 const styles = {
   inputContainer: {
-    marginTop: '2%'
+    marginTop: 25,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    paddingTop: 5,
+    paddingBottom: 5,
+    marginLeft: 5,
+    marginRight: 5
+  },
+
+  buttonContainer: {
+    marginTop: 25
   }
 };
 const useStyles = makeStyles(tableStyles);
@@ -41,9 +56,8 @@ const DATE = new Date();
 const time = DATE.getHours();
 
 function AddEditPurchaseRequest(props) {
-  
-    const classes = useStyles();
-  
+  const classes = useStyles();
+
   const initialState = {
     _id: '',
     purchaseOrderNo: '',
@@ -58,7 +72,7 @@ function AddEditPurchaseRequest(props) {
     description: '',
     comments: '',
     vendors: [],
-    statues: [],
+    statues: []
   };
 
   function reducer(state, { field, value }) {
@@ -270,30 +284,92 @@ function AddEditPurchaseRequest(props) {
   }
 
   return (
-    <div className="container">
-      <h1>
-        <span> {comingFor === 'add' ? 'Add' : 'Edit'}</span>
-      </h1>
-      <div className="row">
-        <div className="col-md-12" style={styles.inputContainer}>
-          <TextField
-            fullWidth
-            name="purchaseOrderNo"
-            label="PO No"
-            type="text"
-            variant="outlined"
-            disabled={true}
-            value={purchaseOrderNo}
-            onChange={onChangeValue}
-            error={!purchaseOrderNo && isFormSubmitted}
+    <div
+      style={{
+        backgroundColor: '#60d69f',
+        position: 'fixed',
+        display: 'flex',
+        width: '100%',
+        height: '100%',
+        flexDirection: 'column',
+        flex: 1,
+        overflowY: 'scroll'
+      }}
+    >
+      <div style={{ alignItems: 'center', flex: 1, display: 'flex', marginTop:10 }}>
+        <Header />
+      </div>
+
+      <div style={{ alignItems: 'center', flex: 0.5, display: 'flex' }}>
+        <div
+          style={{
+            flex: 0.5,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+        >
+          <img
+            src={business_Unit}
+            style={{ maxWidth: '100%', height: 'auto' }}
           />
+        </div>
+
+        <div style={{ flex: 4, display: 'flex', alignItems: 'center' }}>
+          <h3
+            style={{ color: 'white', fontFamily: 'Ubuntu', fontWeight: '700' }}
+          >
+            {comingFor === 'add'
+              ? ' Add Functional Unit'
+              : ' Edit Functional Unit'}
+          </h3>
+        </div>
+
+        <div
+          style={{
+            display: 'flex',
+            flex: 0.8,
+            justifyContent: 'flex-end',
+            alignItems: 'center'
+          }}
+        >
+          <div style={{ flex: 1.5, display: 'flex' }}>
+            <img
+              onClick={() => props.history.goBack()}
+              src={Add_New}
+              style={{ width: '100%', height: '100%', cursor: 'pointer' }}
+            />
+          </div>
         </div>
       </div>
 
-      <div className="row">
-        <div className="col-md-6" style={styles.inputContainer}>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            {/* <DateTimePicker
+      <div
+        style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+        className="container"
+      >
+        {/* <h1>
+        <span> {comingFor === 'add' ? 'Add' : 'Edit'}</span>
+      </h1> */}
+        <div className="row">
+          <div className="col-md-12" style={styles.inputContainer}>
+            <TextField
+              fullWidth
+              name="purchaseOrderNo"
+              label="PO No"
+              type="text"
+              // variant="outlined"
+              disabled={true}
+              value={purchaseOrderNo}
+              onChange={onChangeValue}
+              error={!purchaseOrderNo && isFormSubmitted}
+            />
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-md-12" style={styles.inputContainer}>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              {/* <DateTimePicker
               inputVariant="outlined"
               onChange={onChangeDate}
               fullWidth
@@ -301,133 +377,134 @@ function AddEditPurchaseRequest(props) {
               disabled={true}
               value={comingFor === 'add' ? DATE : date}
             /> */}
-            <DatePicker
-              //   openTo="year"
-              inputVariant="outlined"
-              disabled={true}
-              format="dd/MM/yyyy"
-              label="Select Date"
-              views={['year', 'month', 'date']}
-              value={comingFor === 'add' ? DATE : date}
-              onChange={onChangeDate}
-            />
-          </MuiPickersUtilsProvider>
+              <DatePicker
+                //   openTo="year"
+                // inputVariant="outlined"
+                fullWidth
+                disabled={true}
+                format="dd/MM/yyyy"
+                label="Select Date"
+                views={['year', 'month', 'date']}
+                value={comingFor === 'add' ? DATE : date}
+                onChange={onChangeDate}
+              />
+            </MuiPickersUtilsProvider>
+          </div>
+
+          <div className="col-md-12" style={styles.inputContainer}>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <TimePicker
+                // inputVariant="outlined"
+                fullWidth={true}
+                autoOk
+                label="Select time"
+                onChange={onChangeDate}
+                disabled={true}
+                value={comingFor === 'add' ? DATE : date}
+              />
+            </MuiPickersUtilsProvider>
+          </div>
         </div>
 
-        <div className="col-md-6" style={styles.inputContainer}>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <TimePicker
-              inputVariant="outlined"
-              fullWidth={true}
-              autoOk
-              label="Select time"
-              onChange={onChangeDate}
-              disabled={true}
-              value={comingFor === 'add' ? DATE : date}
-            />
-          </MuiPickersUtilsProvider>
-        </div>
-      </div>
+        <div className="row">
+          <div className="col-md-12" style={styles.inputContainer}>
+            <InputLabel id="generated-label">Generated</InputLabel>
+            <Select
+              fullWidth
+              id="generated"
+              name="generated"
+              value={generated}
+              onChange={onChangeValue}
+              label="Generated"
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {generatedArray &&
+                generatedArray.map(val => {
+                  return (
+                    <MenuItem key={val.key} value={val.key}>
+                      {val.value}
+                    </MenuItem>
+                  );
+                })}
+            </Select>
+          </div>
 
-      <div className="row">
-        <div className="col-md-4" style={styles.inputContainer}>
-          <InputLabel id="generated-label">Generated</InputLabel>
-          <Select
-            fullWidth
-            id="generated"
-            name="generated"
-            value={generated}
-            onChange={onChangeValue}
-            label="Generated"
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {generatedArray &&
-              generatedArray.map(val => {
+          <div className="col-md-12" style={styles.inputContainer}>
+            <InputLabel id="Payment-label">Payment Terms</InputLabel>
+            <Select
+              fullWidth
+              id="paymentTerm"
+              name="paymentTerm"
+              value={paymentTerm}
+              onChange={onChangeValue}
+              label="Payment Terms"
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {paymentTermsArray &&
+                paymentTermsArray.map(val => {
+                  return (
+                    <MenuItem key={val.key} value={val.key}>
+                      {val.value}
+                    </MenuItem>
+                  );
+                })}
+            </Select>
+          </div>
+
+          <div className="col-md-12" style={styles.inputContainer}>
+            <InputLabel id="status-label">Status</InputLabel>
+            <Select
+              fullWidth
+              id="status"
+              name="status"
+              value={status}
+              onChange={onChangeValue}
+              label="Status"
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {statues.map(val => {
                 return (
-                  <MenuItem key={val.key} value={val.key}>
+                  <MenuItem key={val.key} value={val.value}>
                     {val.value}
                   </MenuItem>
                 );
               })}
-          </Select>
+            </Select>
+          </div>
         </div>
 
-        <div className="col-md-4" style={styles.inputContainer}>
-          <InputLabel id="Payment-label">Payment Terms</InputLabel>
-          <Select
-            fullWidth
-            id="paymentTerm"
-            name="paymentTerm"
-            value={paymentTerm}
-            onChange={onChangeValue}
-            label="Payment Terms"
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {paymentTermsArray &&
-              paymentTermsArray.map(val => {
-                return (
-                  <MenuItem key={val.key} value={val.key}>
-                    {val.value}
-                  </MenuItem>
-                );
-              })}
-          </Select>
-        </div>
-
-        <div className="col-md-4" style={styles.inputContainer}>
-          <InputLabel id="status-label">Status</InputLabel>
-          <Select
-            fullWidth
-            id="status"
-            name="status"
-            value={status}
-            onChange={onChangeValue}
-            label="Status"
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {statues.map(val => {
-              return (
-                <MenuItem key={val.key} value={val.value}>
-                  {val.value}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </div>
-      </div>
-
-      <div className="row" style={styles.inputContainer}>
-        <div className="col-md-6" style={styles.inputContainer}>
-          <InputLabel id="vendorId-label">Vendor</InputLabel>
-          <Select
-            fullWidth
-            id="vendorId"
-            name="vendorId"
-            value={vendorId}
-            onChange={onChangeValue}
-            label="Vendor"
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {vendorsArray &&
-              vendorsArray.map(val => {
-                return (
-                  <MenuItem key={val._id} value={val._id}>
-                    {val.englishName}
-                  </MenuItem>
-                );
-              })}
-          </Select>
-        </div>
-
-        <div className="col-md-6" style={styles.inputContainer}>
+        <div className="row" >
+          <div className="col-md-12" style={styles.inputContainer}>
+            <InputLabel id="vendorId-label">Vendor</InputLabel>
+            <Select
+              fullWidth
+              id="vendorId"
+              name="vendorId"
+              value={vendorId}
+              onChange={onChangeValue}
+              label="Vendor"
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {vendorsArray &&
+                vendorsArray.map(val => {
+                  return (
+                    <MenuItem key={val._id} value={val._id}>
+                      {val.englishName}
+                    </MenuItem>
+                  );
+                })}
+            </Select>
+          </div>
+   
+          <div className="col-md-12"  style={styles.inputContainer}>
           <InputLabel id="shippingTerms-label">Shipping Terms</InputLabel>
           <Select
             fullWidth
@@ -450,49 +527,62 @@ function AddEditPurchaseRequest(props) {
               })}
           </Select>
         </div>
-      </div>
-
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div style={styles.inputContainer}>
-          <Button onClick={handleCancel} variant="contained">
-            Cancel
-          </Button>
         </div>
 
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            marginTop: '2%'
-          }}
-        >
-          {comingFor === 'add' ? (
-            <Button
-              style={{ paddingLeft: 30, paddingRight: 30 }}
-              disabled={!validateForm()}
-              onClick={handleAdd}
-              variant="contained"
-              color="primary"
-            >
-              {' '}
-              Add{' '}
-            </Button>
-          ) : (
-            <Button
-              style={{ paddingLeft: 30, paddingRight: 30 }}
-              disabled={!validateForm()}
-              onClick={handleEdit}
-              variant="contained"
-              color="primary"
-            >
-              {' '}
-              Edit{' '}
-            </Button>
-          )}
-        </div>
-      </div>
+   
 
-      <Notification msg={errorMsg} open={openNotification} />
+        <div style={{ display: 'flex', flex: 1, justifyContent: 'center' }}>
+          {/* <div style={styles.buttonContainer}>
+            <Button onClick={handleCancel} variant="contained">
+              Cancel
+            </Button>
+          </div> */}
+
+          <div
+            style={{
+              display: 'flex',
+              flex: 1,
+              height: 50,
+              justifyContent: 'center',
+              marginTop: '2%',
+              marginBottom: '2%'
+            }}
+          >
+            {comingFor === 'add' ? (
+              <Button
+                style={{ width: '60%' }}
+                disabled={!validateForm()}
+                onClick={handleAdd}
+                variant="contained"
+                color="primary"
+              >
+                Add Purchase Order
+              </Button>
+            ) : (
+              <Button
+                style={{ width: '60%' }}
+                disabled={!validateForm()}
+                onClick={handleEdit}
+                variant="contained"
+                color="primary"
+              >
+                Edit Purchase Order
+              </Button>
+            )}
+          </div>
+        </div>
+
+        <Notification msg={errorMsg} open={openNotification} />
+      
+        <div style={{ marginBottom: 20 }}>
+          <img
+            onClick={() => props.history.goBack()}
+            src={Back_Arrow}
+            style={{ width: 60, height: 40, cursor: 'pointer' }}
+          />
+        </div>
+      
+      </div>
     </div>
   );
 }
