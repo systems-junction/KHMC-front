@@ -1,65 +1,87 @@
 /* eslint-disable react/jsx-indent */
 /* eslint-disable array-callback-return */
-import React, { useEffect, useState, useReducer } from 'react';
-import TextField from '@material-ui/core/TextField';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
+import React, { useEffect, useState, useReducer } from "react";
+import TextField from "@material-ui/core/TextField";
+import Select from "@material-ui/core/Select";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
 // import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import axios from 'axios';
-import { ToastsStore } from 'react-toasts';
-import cookie from 'react-cookies';
-import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TablePagination from '@material-ui/core/TablePagination';
-import { dateOptions } from '../../variables/public';
+import Button from "@material-ui/core/Button";
+import axios from "axios";
+import { ToastsStore } from "react-toasts";
+import cookie from "react-cookies";
+import { makeStyles } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TablePagination from "@material-ui/core/TablePagination";
+import { dateOptions } from "../../variables/public";
 import {
   addBusinessUnitUrl,
   updateBusinessUnitUrl,
-  getBusinessUnitLogsUrl
-} from '../../public/endpoins';
+  getBusinessUnitLogsUrl,
+} from "../../public/endpoins";
 
-import Header from '../../components/Header/Header';
+import Header from "../../components/Header/Header";
 
-import Add_New from '../../assets/img/Add_New.png';
-import business_Unit from '../../assets/img/business_Unit.png';
+import Add_New from "../../assets/img/Add_New.png";
+import business_Unit from "../../assets/img/business_Unit.png";
+import view_all from "../../assets/img/view_all.png";
+import Back_Arrow from "../../assets/img/Back_Arrow.png";
 
-import Back_Arrow from '../../assets/img/Back_Arrow.png';
+import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
 
 const styles = {
-  inputContainer: {
+  inputContainerForTextField: {
     marginTop: 25,
-    backgroundColor: 'white',
-    borderRadius: 5,
-    paddingTop: 5,
-    paddingBottom: 5,
-    marginLeft: 5,
-    marginRight: 5
+  },
+
+  inputContainerForDropDown: {
+    marginTop: 25,
+    backgroundColor: "white",
+    borderRadius: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+
+    paddingTop: 2,
+    // paddingBottom: 5,
+    // marginLeft: 10,
+    // marginRight: 50,
   },
 
   buttonContainer: {
-    marginTop: 25
-  }
+    marginTop: 25,
+  },
 };
 
+const useStyles = makeStyles({
+  underline: {
+    "&&&:before": {
+      borderBottom: "none",
+    },
+    "&&:after": {
+      borderBottom: "none",
+    },
+  },
+});
+
 function AddBusinessUnit(props) {
+  const classes = useStyles();
+
   const initialState = {
-    _id: '',
-    buName: '',
-    description: '',
-    buHead: '',
-    division: '',
-    status: '',
-    reason: '',
-    buLogsId: '',
+    _id: "",
+    buName: "",
+    description: "",
+    buHead: "",
+    division: "",
+    status: "",
+    reason: "",
+    buLogsId: "",
     statues: [],
     buHeads: [],
-    divisions: []
+    divisions: [],
   };
 
   function reducer(state, { field, value }) {
@@ -79,12 +101,12 @@ function AddBusinessUnit(props) {
     buLogsId,
     statues,
     buHeads,
-    divisions
+    divisions,
   } = state;
 
-  const [comingFor, setcomingFor] = useState('');
+  const [comingFor, setcomingFor] = useState("");
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-  const [currentUser, setCurrentUser] = useState('');
+  const [currentUser, setCurrentUser] = useState("");
   const [buLogs, setBuLogs] = useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -93,43 +115,43 @@ function AddBusinessUnit(props) {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = event => {
+  const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
   function getBusinessUnitLogs(id) {
     const param = {
-      _id: id
+      _id: id,
     };
 
     axios
-      .get(getBusinessUnitLogsUrl + '/' + param._id)
-      .then(res => {
+      .get(getBusinessUnitLogsUrl + "/" + param._id)
+      .then((res) => {
         if (res.data.success) {
           setBuLogs(res.data.data);
         } else if (!res.data.success) {
           ToastsStore.error(res.data.error);
         }
       })
-      .catch(e => {
-        console.log('error is ', e);
+      .catch((e) => {
+        console.log("error is ", e);
       });
   }
 
   useEffect(() => {
-    setCurrentUser(cookie.load('current_user'));
+    setCurrentUser(cookie.load("current_user"));
     setcomingFor(props.history.location.state.comingFor);
 
     const selectedRec = props.history.location.state.selectedItem;
     if (selectedRec) {
       Object.entries(selectedRec).map(([key, val]) => {
-        if (val && typeof val === 'object') {
+        if (val && typeof val === "object") {
           dispatch({ field: key, value: val._id });
-          dispatch({ field: 'reason', value: val.reason });
+          dispatch({ field: "reason", value: val.reason });
         } else {
           dispatch({ field: key, value: val });
-          if (key === '_id') {
+          if (key === "_id") {
             // get all logs related to this id
             getBusinessUnitLogs(val);
           }
@@ -139,20 +161,20 @@ function AddBusinessUnit(props) {
     // all array dispatch
     if (props.history.location.state.buHeads) {
       dispatch({
-        field: 'buHeads',
-        value: props.history.location.state.buHeads
+        field: "buHeads",
+        value: props.history.location.state.buHeads,
       });
     }
     if (props.history.location.state.status) {
       dispatch({
-        field: 'statues',
-        value: props.history.location.state.status
+        field: "statues",
+        value: props.history.location.state.status,
       });
     }
     if (props.history.location.state.divisions) {
       dispatch({
-        field: 'divisions',
-        value: props.history.location.state.divisions
+        field: "divisions",
+        value: props.history.location.state.divisions,
       });
     }
   }, []);
@@ -171,29 +193,28 @@ function AddBusinessUnit(props) {
         division,
         status,
         reason,
-        updatedBy: currentUser.name
+        updatedBy: currentUser.name,
       };
       axios
         .post(addBusinessUnitUrl, params)
-        .then(res => {
+        .then((res) => {
           if (res.data.success) {
-            // props.history.goBack();
-            props.history.push('/bus/success');
-
+            props.history.goBack();
+            // props.history.push("/bus/success");
           } else if (!res.data.success) {
             ToastsStore.error(res.data.error);
           }
         })
-        .catch(e => {
-          console.log('error after adding bu inventory', e);
+        .catch((e) => {
+          console.log("error after adding bu inventory", e);
         });
     }
   };
 
-  const onChangeValue = e => {
+  const onChangeValue = (e) => {
     dispatch({ field: e.target.name, value: e.target.value });
-    if (e.target.name === 'status') {
-      dispatch({ field: 'reason', value: '' });
+    if (e.target.name === "status") {
+      dispatch({ field: "reason", value: "" });
     }
   };
 
@@ -201,9 +222,12 @@ function AddBusinessUnit(props) {
     return (
       buName &&
       buName.length > 0 &&
-      (description && description.length > 0) &&
-      (buHead && buHead.length > 0) &&
-      (status && status.length > 0)
+      description &&
+      description.length > 0 &&
+      buHead &&
+      buHead.length > 0 &&
+      status &&
+      status.length > 0
     );
   }
 
@@ -219,20 +243,20 @@ function AddBusinessUnit(props) {
         status,
         updatedBy: currentUser.name,
         buLogsId,
-        reason
+        reason,
       };
 
       axios
         .put(updateBusinessUnitUrl, params)
-        .then(res => {
+        .then((res) => {
           if (res.data.success) {
             props.history.goBack();
           } else if (!res.data.success) {
             ToastsStore.error(res.data.error);
           }
         })
-        .catch(e => {
-          console.log('error after adding bu inventory', e);
+        .catch((e) => {
+          console.log("error after adding bu inventory", e);
         });
     }
   };
@@ -240,70 +264,50 @@ function AddBusinessUnit(props) {
   return (
     <div
       style={{
-        backgroundColor: '#60d69f',
-        position: 'fixed',
-        display: 'flex',
-        width: '100%',
-        height: '100%',
-        flexDirection: 'column',
+        backgroundColor: "#60d69f",
+        position: "fixed",
+        display: "flex",
+        width: "100%",
+        height: "100%",
+        flexDirection: "column",
         flex: 1,
-        overflowY: 'scroll'
+        overflowY: "scroll",
       }}
     >
-      <div style={{ alignItems: 'center', flex: 1, display: 'flex' }}>
-        <Header />
-      </div>
+      <Header />
 
-      <div style={{ alignItems: 'center', flex: 0.5, display: 'flex' }}>
-        <div
-          style={{
-            flex: 0.5,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}
-        >
-          <img
-            src={business_Unit}
-            style={{ maxWidth: '100%', height: 'auto' }}
-          />
-        </div>
+      <div className="cPadding">
+        <div className="subheader">
+          <div>
+            <img src={business_Unit} />
+            <h4>
+              {comingFor === "add"
+                ? " Add Business Unit"
+                : " Edit Business Unit"}
+            </h4>
+          </div>
 
-        <div style={{ flex: 4, display: 'flex', alignItems: 'center' }}>
-          <h3
-            style={{ color: 'white', fontFamily: 'Ubuntu', fontWeight: '700' }}
-          >
-            {comingFor === 'add' ? ' Add Business Unit' : ' Edit Business Unit'}
-          </h3>
-        </div>
-
-        <div
-          style={{
-            display: 'flex',
-            flex: 0.8,
-            justifyContent: 'flex-end',
-            alignItems: 'center'
-          }}
-        >
-          <div style={{ flex: 1.5, display: 'flex' }}>
-            <img
-              onClick={() => props.history.goBack()}
-              src={Add_New}
-              style={{ width: '100%', height: '100%', cursor: 'pointer' }}
-            />
+          <div>
+            <img onClick={() => props.history.goBack()} src={view_all} />
+            {/* <img src={Search} /> */}
           </div>
         </div>
-      </div>
 
-      <div
-        style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-        className="container"
-      >
-        {/* <h1>{comingFor === 'add' ? 'Add' : 'Edit'}</h1> */}
+        <div
+          style={{
+            flex: 4,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          {/* <h1>{comingFor === 'add' ? 'Add' : 'Edit'}</h1> */}
 
-        <div className="row">
-          <div className="col-md-12" style={styles.inputContainer}>
-            <TextField
+          <div className="row">
+            <div
+              className="col-md-12"
+              style={styles.inputContainerForTextField}
+            >
+              {/* <TextField
               fullWidth
               name="buName"
               label="Business Unit Name"
@@ -311,63 +315,80 @@ function AddBusinessUnit(props) {
               value={buName}
               onChange={onChangeValue}
               error={!buName && isFormSubmitted}
-            />
-          </div>
-        </div>
+              InputProps={{ classes }}
+            /> */}
 
-        <div className="row">
-          <div className="col-md-12" style={styles.inputContainer}>
-            <InputLabel id="buHead-label">BU Head</InputLabel>
-            <Select
-              fullWidth
-              name="buHead"
-              value={buHead}
-              onChange={onChangeValue}
-              label="Business Unit Head"
-              error={!buHead && isFormSubmitted}
+              <input
+                type="text"
+                placeholder="BU Name"
+                name={"buName"}
+                value={buName}
+                onChange={onChangeValue}
+                className="textInputStyle"
+              />
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-md-12">
+              <div style={styles.inputContainerForDropDown}>
+                <InputLabel id="buHead-label">BU Head</InputLabel>
+                <Select
+                  fullWidth
+                  name="buHead"
+                  value={buHead}
+                  onChange={onChangeValue}
+                  label="Business Unit Head"
+                  error={!buHead && isFormSubmitted}
+                >
+                  <MenuItem value="">
+                    <em>BU Head</em>
+                  </MenuItem>
+                  {buHeads &&
+                    buHeads.map((val) => {
+                      return (
+                        <MenuItem key={val._id} value={val._id}>
+                          {val.firstName} {val.lastName}
+                        </MenuItem>
+                      );
+                    })}
+                </Select>
+              </div>
+            </div>
+
+            <div className="col-md-12">
+              <div style={styles.inputContainerForDropDown}>
+                <InputLabel id="division-label">Division</InputLabel>
+                <Select
+                  fullWidth
+                  name="division"
+                  value={division}
+                  onChange={onChangeValue}
+                  label="Division"
+                  error={!division && isFormSubmitted}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  {divisions &&
+                    divisions.map((val) => {
+                      return (
+                        <MenuItem key={val.key} value={val.key}>
+                          {val.value}
+                        </MenuItem>
+                      );
+                    })}
+                </Select>
+              </div>
+            </div>
+          </div>
+
+          <div className="row">
+            <div
+              className="col-md-12"
+              style={styles.inputContainerForTextField}
             >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {buHeads &&
-                buHeads.map(val => {
-                  return (
-                    <MenuItem key={val._id} value={val._id}>
-                      {val.firstName} {val.lastName}
-                    </MenuItem>
-                  );
-                })}
-            </Select>
-          </div>
-
-          <div className="col-md-12" style={styles.inputContainer}>
-            <InputLabel id="division-label">Division</InputLabel>
-            <Select
-              fullWidth
-              name="division"
-              value={division}
-              onChange={onChangeValue}
-              label="Division"
-              error={!division && isFormSubmitted}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {divisions &&
-                divisions.map(val => {
-                  return (
-                    <MenuItem key={val.key} value={val.key}>
-                      {val.value}
-                    </MenuItem>
-                  );
-                })}
-            </Select>
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-md-12" style={styles.inputContainer}>
-            <TextField
+              {/* <TextField
               fullWidth
               multiline
               rows={4}
@@ -378,12 +399,23 @@ function AddBusinessUnit(props) {
               value={description}
               onChange={onChangeValue}
               error={!description && isFormSubmitted}
-            />
-          </div>
-        </div>
+              InputProps={{ classes }}
+            /> */}
 
-        <div className="row">
-          {/* <div className="col-md-12" style={styles.inputContainer}>
+              <textarea
+                type="text"
+                placeholder="Description"
+                name={"description"}
+                rows="4"
+                value={description}
+                onChange={onChangeValue}
+                className="textInputStyle"
+              />
+            </div>
+          </div>
+
+          <div className="row">
+            {/* <div className="col-md-12" style={styles.inputContainer}>
             <InputLabel id="status-label">Status</InputLabel>
             <Select
               fullWidth
@@ -407,75 +439,79 @@ function AddBusinessUnit(props) {
             </Select>
           </div> */}
 
-          <div
-            style={{
-              display: 'flex',
-              marginTop: 25,
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}
-          >
             <div
               style={{
-                textAlign: 'center',
-                flex: 0.5,
-                display: 'flex',
-                justifyContent: 'center',
-                height: '100%'
+                display: "flex",
+                marginTop: 25,
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
-              <h5
+              <div
                 style={{
-                  color: 'white',
-                  fontWeight: '700',
-                  fontFamily: 'Ubuntu'
+                  textAlign: "center",
+                  flex: 0.5,
+                  display: "flex",
+                  justifyContent: "center",
+                  height: "100%",
                 }}
               >
-                Status
-              </h5>
-            </div>
+                <h5
+                  style={{
+                    color: "white",
+                    fontWeight: "700",
+                    fontFamily: "Ubuntu",
+                  }}
+                >
+                  Status
+                </h5>
+              </div>
 
-            <div
-              style={{
-                display: 'flex',
-                flex: 1,
-                justifyContent: 'center'
-              }}
-            >
-              <Button
-                onClick={() => dispatch({ field: 'status', value: 'active' })}
-                variant={status === 'active' ? 'contained' : 'outlined'}
-                color={status === 'active' ? 'primary' : 'outlined'}
-                style={{ color: 'white' }}
+              <div
+                style={{
+                  display: "flex",
+                  flex: 1,
+                  justifyContent: "center",
+                }}
               >
-                Active
-              </Button>
-            </div>
+                <Button
+                  onClick={() => dispatch({ field: "status", value: "active" })}
+                  variant={status === "active" ? "contained" : "outlined"}
+                  color={status === "active" ? "primary" : "outlined"}
+                  style={{ color: "white" }}
+                >
+                  Active
+                </Button>
+              </div>
 
-            <div
-              style={{
-                display: 'flex',
-                flex: 1,
-                justifyContent: 'center'
-              }}
-            >
-              <Button
-                onClick={() =>
-                  dispatch({ field: 'status', value: 'in_active' })
-                }
-                variant={status === 'in_active' ? 'contained' : 'outlined'}
-                color={status === 'in_active' ? 'primary' : 'outlined'}
-                style={{ color: 'white' }}
+              <div
+                style={{
+                  display: "flex",
+                  flex: 1,
+                  justifyContent: "center",
+                }}
               >
-                In Active
-              </Button>
+                <Button
+                  onClick={() =>
+                    dispatch({ field: "status", value: "in_active" })
+                  }
+                  variant={status === "in_active" ? "contained" : "outlined"}
+                  color={status === "in_active" ? "primary" : "outlined"}
+                  style={{ color: "white" }}
+                >
+                  In Active
+                </Button>
+              </div>
             </div>
-          </div>
 
-          {status === 'in_active' ? (
-            <div className="col-md-12" style={styles.inputContainer}>
-              <TextField
+            {status === "in_active" ? (
+              <div
+                className="col-md-12"
+                style={styles.inputContainerForTextField}
+
+              >
+                {/* <TextField
                 fullWidth
                 id="reason"
                 name="reason"
@@ -483,60 +519,71 @@ function AddBusinessUnit(props) {
                 variant="outlined"
                 value={reason}
                 onChange={onChangeValue}
-              />
-            </div>
-          ) : (
-            undefined
-          )}
-        </div>
+              /> */}
 
-        <div style={{ display: 'flex', flex: 1, justifyContent: 'center' }}>
-          {/* <div style={styles.buttonContainer}>
+                <input
+                  type="text"
+                  placeholder="Reason"
+                  name={"reason"}
+                  value={reason}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                  style={{borderColor:'red', borderWidth:4}}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
+          </div>
+
+          <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
+            {/* <div style={styles.buttonContainer}>
             <Button onClick={handleCancel} variant="contained">
               Cancel
             </Button>
           </div> */}
 
-          <div
-            style={{
-              display: 'flex',
-              flex: 1,
-              height:50,
-              justifyContent: 'center',
-              marginTop: '2%',
-              marginBottom: '2%'
-            }}
-          >
-            {comingFor === 'add' ? (
-              <Button
-                style={{ width:'60%'  }}
-                disabled={!validateForm()}
-                onClick={handleAdd}
-                variant="contained"
-                color="primary"
-              >
-                Add Business Unit
-              </Button>
-            ) : (
-              <Button
-                style={{  width:'60%' }}
-                disabled={!validateForm()}
-                onClick={handleEdit}
-                variant="contained"
-                color="primary"
-              >
-                Edit Business Unit
-              </Button>
-            )}
+            <div
+              style={{
+                display: "flex",
+                flex: 1,
+                height: 50,
+                justifyContent: "center",
+                marginTop: "2%",
+                marginBottom: "2%",
+              }}
+            >
+              {comingFor === "add" ? (
+                <Button
+                  style={{ width: "60%" }}
+                  disabled={!validateForm()}
+                  onClick={handleAdd}
+                  variant="contained"
+                  color="primary"
+                >
+                  Add Business Unit
+                </Button>
+              ) : (
+                <Button
+                  style={{ width: "60%" }}
+                  disabled={!validateForm()}
+                  onClick={handleEdit}
+                  variant="contained"
+                  color="primary"
+                >
+                  Edit Business Unit
+                </Button>
+              )}
+            </div>
           </div>
-        </div>
 
-        <div style={{ marginBottom:20 }}>
-          <img
-            onClick={() => props.history.goBack()}
-            src={Back_Arrow}
-            style={{ width: 60, height: 40, cursor: 'pointer' }}
-          />
+          <div style={{ marginBottom: 20 }}>
+            <img
+              onClick={() => props.history.goBack()}
+              src={Back_Arrow}
+              style={{ width: 60, height: 40, cursor: "pointer" }}
+            />
+          </div>
         </div>
       </div>
     </div>

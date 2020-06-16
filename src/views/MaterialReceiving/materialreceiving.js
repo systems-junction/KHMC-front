@@ -223,13 +223,16 @@ export default function PurchaseRequest(props) {
         overflowY: "scroll",
       }}
     >
-      <div
-        style={{ alignItems: "center", flex: 1, display: "flex", marginTop: 5 }}
-      >
         <Header />
-      </div>
-
-      <div style={{ alignItems: "center", flex: 0.5, display: "flex" }}>
+      
+      <div
+        style={{
+          alignItems: "center",
+          // flex: 0.5,
+          display: "flex",
+          marginTop: "1rem",
+        }}
+      >
         <div
           style={{
             flex: 0.5,
@@ -245,10 +248,8 @@ export default function PurchaseRequest(props) {
         </div>
 
         <div style={{ flex: 4, display: "flex", alignItems: "center" }}>
-          <h4
-            style={{ color: "white", fontFamily: "Ubuntu", fontWeight: "500" }}
-          >
-           Material Receiving
+          <h4 style={{ color: "white", fontWeight: "700" }}>
+            Material Receiving
           </h4>
         </div>
 
@@ -307,7 +308,7 @@ export default function PurchaseRequest(props) {
                 handleEdit={handleEdit}
                 handleDelete={handleDelete}
                 handleModelMaterialReceiving={handleModelMaterialReceiving}
-                borderBottomColor={'#60d69f'}
+                borderBottomColor={"#60d69f"}
                 borderBottomWidth={20}
               />
             </div>

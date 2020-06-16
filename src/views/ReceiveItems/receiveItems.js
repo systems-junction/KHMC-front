@@ -25,7 +25,10 @@ import Edit from "../../assets/img/Edit.png";
 
 import Inactive from "../../assets/img/Inactive.png";
 
-import Active from "../../assets/img/Active.png";
+import Back_Arrow from "../../assets/img/Back_Arrow.png";
+
+import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
+
 
 const tableHeading = [
   "Item Code",
@@ -150,105 +153,110 @@ export default function PurchaseRequest(props) {
         overflowY: "scroll",
       }}
     >
-      <div
-        style={{ alignItems: "center", flex: 1, display: "flex", marginTop: 5 }}
-      >
-        <Header />
-      </div>
+      <Header />
+      <div className="cPadding">
+        <div className="subheader">
+          <div>
+            <img src={business_Unit} />
+            <h4>Receive Items</h4>
+          </div>
 
-      <div style={{ alignItems: "center", flex: 0.5, display: "flex" }}>
-        <div
-          style={{
-            flex: 0.5,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <img
-            src={business_Unit}
-            style={{ maxWidth: "100%", height: "auto" }}
-          />
+          <div>
+            <img onClick={addNewItem} src={Add_New} />
+            {/* <img src={Search} /> */}
+          </div>
         </div>
 
-        <div style={{ flex: 4, display: "flex", alignItems: "center" }}>
-          <h4
-            style={{ color: "white", fontFamily: "Ubuntu", fontWeight: "500" }}
+        {/* <div
+          style={{ alignItems: "center", display: "flex", marginTop: "1rem" }}
+        >
+          <div
+            style={{
+              flex: 0.5,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
           >
-            Receive Items
-          </h4>
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            flex: 1.5,
-            justifyContent: "flex-end",
-            alignItems: "center",
-          }}
-        >
-          <div style={{ flex: 1.5, display: "flex" }}>
             <img
-              onClick={addNewItem}
-              src={Add_New}
-              style={{ width: "100%", height: "100%", cursor: "pointer" }}
+              src={business_Unit}
+              style={{ maxWidth: "100%", height: "auto" }}
             />
           </div>
 
-          <div style={{ flex: 1, display: "flex" }}>
-            <img src={Search} style={{ width: "60%", height: "60%" }} />
+          <div style={{ flex: 4, display: "flex", alignItems: "center" }}>
+            <h4 style={{ color: "white", fontWeight: "700" }}>Receive Items</h4>
           </div>
-        </div>
-      </div>
 
-      <div
-        style={{
-          flex: 4,
-          display: "flex",
-          flexDirection: "column",
-          marginLeft: "3%",
-          marginRight: "3%",
-        }}
-      >
-        {purchaseRequests ? (
-          <div>
-
-            <div>
-              <CustomTable
-                tableData={purchaseRequests}
-                tableDataKeys={tableDataKeys}
-                tableHeading={tableHeading}
-                action={actions}
-                handleEdit={handleEdit}
-                handleDelete={handleDelete}
-                borderBottomColor={"#60d69f"}
-                borderBottomWidth={20}
+          <div
+            style={{
+              display: "flex",
+              flex: 1.5,
+              justifyContent: "flex-end",
+              alignItems: "center",
+            }}
+          >
+            <div style={{ flex: 1.5, display: "flex" }}>
+              <img
+                onClick={addNewItem}
+                src={Add_New}
+                style={{ width: "100%", height: "100%", cursor: "pointer" }}
               />
             </div>
 
-            <ConfirmationModal
-              modalVisible={modalVisible}
-              msg="Are you sure want to delete the record?"
-              hideconfirmationModal={() => setModalVisible(false)}
-              onConfirmDelete={() => deleteVendor()}
-              setdeleteItem={() => setdeleteItem("")}
-            />
+            <div style={{ flex: 1, display: "flex" }}>
+              <img src={Search} style={{ width: "60%", height: "60%" }} />
+            </div>
+          </div>
+        </div> */}
 
-            <Notification msg={errorMsg} open={openNotification} />
-          </div>
-        ) : (
-          <div
-            style={{
-              width: "70%",
-              height: "100%",
-              position: "fixed",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <Loader type="TailSpin" color="red" height={50} width={50} />
-          </div>
-        )}
+        <div
+          style={{
+            flex: 4,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          {purchaseRequests ? (
+            <div>
+              <div>
+                <CustomTable
+                  tableData={purchaseRequests}
+                  tableDataKeys={tableDataKeys}
+                  tableHeading={tableHeading}
+                  action={actions}
+                  handleEdit={handleEdit}
+                  handleDelete={handleDelete}
+                  borderBottomColor={"#60d69f"}
+                  borderBottomWidth={20}
+                />
+              </div>
+
+              <ConfirmationModal
+                modalVisible={modalVisible}
+                msg="Are you sure want to delete the record?"
+                hideconfirmationModal={() => setModalVisible(false)}
+                onConfirmDelete={() => deleteVendor()}
+                setdeleteItem={() => setdeleteItem("")}
+              />
+
+              <Notification msg={errorMsg} open={openNotification} />
+            </div>
+          ) : (
+            <div
+            className="LoaderStyle"
+            >
+              <Loader type="TailSpin" color="red" height={50} width={50} />
+            </div>
+          )}
+        </div>
+        <div style={{ marginBottom: 20 }}>
+          <img
+            onClick={() => props.history.goBack()}
+            src={Back_Arrow}
+            style={{ width: 60, height: 40, cursor: "pointer" }}
+          />
+        </div>
       </div>
     </div>
   );

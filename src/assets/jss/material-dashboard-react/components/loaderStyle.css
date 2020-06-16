@@ -1,0 +1,9 @@
+.LoaderStyle{
+    width: 90%;
+    height: 55%;
+    flex: 4;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

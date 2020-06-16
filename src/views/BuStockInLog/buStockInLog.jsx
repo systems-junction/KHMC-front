@@ -148,12 +148,16 @@ export default function BuReturn(props) {
       }}
     >
       <div
-        style={{ alignItems: "center", flex: 1, display: "flex", marginTop: 5 }}
+        style={{
+          alignItems: "center",
+          marginTop: "2rem",
+          display: "flex",
+        }}
       >
         <Header />
       </div>
 
-      <div style={{ alignItems: "center", flex: 0.5, display: "flex" }}>
+      <div style={{ alignItems: "center", marginTop: "1rem", display: "flex" }}>
         <div
           style={{
             flex: 0.5,
@@ -170,7 +174,7 @@ export default function BuReturn(props) {
 
         <div style={{ flex: 4, display: "flex", alignItems: "center" }}>
           <h4
-            style={{ color: "white", fontFamily: "Ubuntu", fontWeight: "500" }}
+            style={{ color: "white",  fontWeight: "700" }}
           >
             BU Stock In Log
           </h4>
@@ -209,8 +213,6 @@ export default function BuReturn(props) {
       >
         {buStockInLog ? (
           <div>
-         
-
             <div>
               <CustomTable
                 tableData={buStockInLog}

@@ -7,22 +7,22 @@ import Table from "../../components/Table/Table.js";
 import axios from "axios";
 import { getItemsUrl, deleteItemUrl } from "../../public/endpoins";
 import Loader from "react-loader-spinner";
-
+import Back_Arrow from "../../assets/img/Back_Arrow.png";
 import SearchBar from "../../components/SearchBar/Searchbar.js";
-
 import Header from "../../components/Header/Header";
-
 import Add_New from "../../assets/img/Add_New.png";
-import business_Unit from "../../assets/img/business_Unit.png";
-
+import items from "../../assets/img/Items Mgmt.png";
 import Search from "../../assets/img/Search.png";
 import Control_Room from "../../assets/img/Control_Room.png";
-
 import Edit from "../../assets/img/Edit.png";
-
 import Inactive from "../../assets/img/Inactive.png";
-
 import Active from "../../assets/img/Active.png";
+
+import ConfirmationModal from "../../components/Modal/confirmationModal";
+
+import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
+
+
 
 const tableHeading = [
   "Name",
@@ -157,64 +157,25 @@ export default function Items(props) {
         overflowY: "scroll",
       }}
     >
-      <div
-        style={{ alignItems: "center", flex: 1, display: "flex", marginTop: 5 }}
-      >
         <Header />
-      </div>
-
-      <div style={{ alignItems: "center", flex: 0.5, display: "flex" }}>
-        <div
-          style={{
-            flex: 0.5,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <img
-            src={business_Unit}
-            style={{ maxWidth: "100%", height: "auto" }}
-          />
-        </div>
-
-        <div style={{ flex: 4, display: "flex", alignItems: "center" }}>
-          <h4
-            style={{ color: "white", fontFamily: "Ubuntu", fontWeight: "500" }}
-          >
-            Items
-          </h4>
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            flex: 1.5,
-            justifyContent: "flex-end",
-            alignItems: "center",
-          }}
-        >
-          <div style={{ flex: 1.5, display: "flex" }}>
-            <img
-              onClick={addNewItem}
-              src={Add_New}
-              style={{ width: "100%", height: "100%", cursor: "pointer" }}
-            />
+        <div className="cPadding">
+        <div className="subheader">
+          <div>
+            <img src={items} />
+            <h4>Items</h4>
           </div>
 
-          <div style={{ flex: 1, display: "flex" }}>
-            <img src={Search} style={{ width: "60%", height: "60%" }} />
+          <div>
+            <img onClick={addNewItem} src={Add_New} />
+            {/* <img src={Search} /> */}
           </div>
         </div>
-      </div>
-
+    
       <div
         style={{
           flex: 4,
           display: "flex",
           flexDirection: "column",
-          marginLeft: "3%",
-          marginRight: "3%",
         }}
       >
         <div>
@@ -262,7 +223,7 @@ export default function Items(props) {
                 borderBottomWidth={20}
               />
 
-              <Modal
+              {/* <Modal
                 open={modalVisible}
                 style={{
                   backgroundColor: "#72101e",
@@ -324,23 +285,34 @@ export default function Items(props) {
                     </Button>
                   </div>
                 </div>
-              </Modal>
+              </Modal> */}
+
+<ConfirmationModal
+        modalVisible={modalVisible}
+        msg="Are you sure want to delete the record?"
+        hideconfirmationModal={() => setModalVisible(false)}
+        onConfirmDelete={() => onConfirmDelete()}
+        setdeleteItem={() => setdeleteItem("")}
+      />
+      <div style={{ marginBottom: 20 }}>
+          <img
+            onClick={() => props.history.goBack()}
+            src={Back_Arrow}
+            style={{ width: 60, height: 40, cursor: "pointer" }}
+          />
+        </div>
             </div>
           ) : (
             <div
-              style={{
-                width: "70%",
-                height: "100%",
-                position: "fixed",
-                display: "flex",
-                justifyContent: "center",
-              }}
+            className="LoaderStyle"
+             
             >
               <Loader type="TailSpin" color="red" height={50} width={50} />
             </div>
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 }

@@ -22,9 +22,57 @@ import WMS from "../../assets/img/WMS.png";
 import FIN from "../../assets/img/FIN.png";
 import Control_Room from "../../assets/img/Control_Room.png";
 
+import BU from "../../assets/img/business_Unit.png";
+import FunctionalUnit from "../../assets/img/Functional Unit.png";
+import Items from "../../assets/img/Items.png";
+
 import React, { useEffect } from "react";
 import "./MenuPage.css";
 import { render } from "react-dom";
+
+import Back from "../../assets/img/Back_Arrow.png";
+
+import KHMC_White from "../../assets/img/KHMC_White.png";
+
+import Influence_white from "../../assets/img/Influence_white.png";
+
+import MenuTree from "../../components/MenuTree/MenuTree";
+
+const admin = [
+  { img: Control_Room, text: "Control Room" },
+  { img: RCM, text: "RCM" },
+  { img: WMS, text: "WMS", path: "controlroom/wms" },
+  { img: FIN, text: "FIN" },
+  { img: BU, text: "BU Mgmt", path: "controlroom/bus" },
+  { img: FunctionalUnit, text: "FU Mgmt", path: "controlroom/fus" },
+  { img: Items, text: "Items", path: "controlroom/items" },
+  { img: "", text: "Staff", path: "controlroom/staff" },
+  { img: Control_Room, text: "ControlRoom" },
+];
+
+const buHead = [
+  { img: Control_Room, text: "Control Room" },
+  { img: RCM, text: "RCM" },
+  { img: "", text: "" },
+  { img: "", text: "" },
+  { img: BU, text: "BU Mgmt", path: "controlroom/bus" },
+  { img: FunctionalUnit, text: "FU Mgmt", path: "controlroom/fus" },
+  { img: "", text: "" },
+  { img: "", text: "" },
+  // { img: Control_Room, text: "ControlRoom" },
+];
+
+const committeeMember = [
+  { img: Control_Room, text: "Control Room" },
+  { img: RCM, text: "RCM" },
+  { img: WMS, text: "WMS", path: "controlroom/wms" },
+  { img: "", text: "" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "" },
+  { img: "", text: "" },
+  // { img: Control_Room, text: "ControlRoom" },
+];
 
 class HomeScreen extends React.Component {
   constructor(props) {
@@ -32,11 +80,39 @@ class HomeScreen extends React.Component {
 
     this.state = {
       openApps: false,
+      goBack: false,
+
+      currentUser: "",
     };
+  }
+
+  componentDidMount() {
+    this.setState({ currentUser: cookie.load("current_user") });
+  }
+
+  checkForUserType() {
+    const userType = this.state.currentUser.staffTypeId;
+
+    if (userType && userType.type === "BU Head") {
+      return buHead;
+    } else if (userType && userType.type === "admin") {
+      return admin;
+    } else if (userType && userType.type === "Committee Member") {
+      return buHead;
+    }
   }
 
   render() {
     // if (this.state.openApps) {
+
+    const userType = this.state.currentUser.staffTypeId;
+
+    if (this.state.goBack) {
+      return <Redirect to={"/home"} />;
+    }
+
+    console.log("current user", this.state.currentUser);
+
     return (
       <div
         style={{
@@ -49,245 +125,334 @@ class HomeScreen extends React.Component {
           backgroundColor: "#2B62CC",
         }}
       >
-        <div
-          style={{
-            alignItems: "center",
-            flex: 1,
-            display: "flex",
-            minHeight: "15%",
-            width: "100%",
-            position: "fixed",
-            zIndex: 1,
-          }}
-        >
-          <Header />
-        </div>
+        <Header />
 
         <div
           className="menupage"
           style={{
             display: "flex",
             flex: 4,
-            minHeight: "85%",
+            minHeight: "100%",
             alignItems: "center",
+            justifyContent: "center",
+            position: "fixed",
+            left: "45%",
           }}
         >
-          {this.state.openApps ? (
-            <section>
+          {/* <nav className="menu">
+            <input
+              type="checkbox"
+              href="#"
+              className="menu-open"
+              name="menu-open"
+              id="menu-open"
+            />
+            <label
+              className="menu-open-button"
+              for="menu-open"
+              style={{
+                boxShadow: "5px 5px 5px #2433a5",
+              }}
+            >
               <div
-                className="mainmenu circle lightBlue"
-                style={{ cursor: "pointer" }}
-                onClick={() => this.setState({ openApps: false })}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                }}
+                onClick={() => this.props.history.push("/home/controlroom")}
               >
-                <h5
-                  style={{
-                    position: "absolute",
-                    top: 15,
-                    color: "white",
-                    fontWeight: "700",
-                    textAlign: "center",
-                  }}
-                >
-                  Control Room
-                </h5>
                 <img
                   src={Control_Room}
                   style={{
-                    maxWidth: "40%",
+                    maxWidth: "30%",
                     height: "auto",
                     position: "absolute",
-                    top: 60,
-                    bottom: -20,
+                    top: 12,
                   }}
-                />{" "}
-              </div>
-
-              <div
-                className="submenu circle orange"
-                style={{ cursor: "pointer" }}
-              >
-                <h5
+                />
+                <h6
                   style={{
                     position: "absolute",
-                    top: 20,
+                    top: 40,
                     color: "white",
                     fontWeight: "700",
                   }}
                 >
-                  RCM
-                </h5>
+                  Control Room
+                </h6>
+              </div>
+            </label>
+
+            <a className="menu-item item-1">
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                }}
+              >
                 <img
                   src={RCM}
                   style={{
                     maxWidth: "40%",
                     height: "auto",
                     position: "absolute",
-                    top: 50,
-                    bottom: -20,
+                    top: 20,
                   }}
-                />{" "}
-              </div>
-
-              <div
-                className="submenu1 circle gray"
-                onClick={() => this.props.history.push("/home/bureturn")}
-              >
-                <h5 style={{ textAlign: "center" }}>BU Return</h5>
-              </div>
-
-              <div
-                className="submenu2 circle orange"
-                onClick={() =>
-                  this.props.history.push("/home/materialreceiving")
-                }
-              >
-                <h5 style={{ textAlign: "center" }}>Material Receiving</h5>
-              </div>
-
-              <div
-                className="submenu3 circle green"
-                onClick={() => this.props.history.push("/home/bustockinlog")}
-              >
-                <h5 style={{ textAlign: "center", maxWidth: "60%" }}>
-                  BU Stock In Log
-                </h5>
-              </div>
-
-              <div
-                className="submenu4 circle lightBlue"
-                style={{ cursor: "pointer" }}
-                onClick={() => this.props.history.push("/home/receiveitems")}
-              >
-                <h5 style={{ textAlign: "center", maxWidth: "60%" }}>
-                  Receive Items
-                </h5>
-              </div>
-
-              <div
-                className="submenu5 circle yellow"
-                style={{ cursor: "pointer" }}
-              >
-                <h5
+                />
+                <h6
                   style={{
                     position: "absolute",
-                    top: 20,
+                    top: 60,
                     color: "white",
                     fontWeight: "700",
                   }}
                 >
-                  FIN
-                </h5>
-                <img
-                  src={FIN}
-                  style={{
-                    maxWidth: "40%",
-                    height: "auto",
-                    position: "absolute",
-                    top: 50,
-                    bottom: -20,
-                  }}
-                />{" "}
+                  RCM
+                </h6>
               </div>
-
+            </a>
+            <a className="menu-item item-2">
               <div
-                className="submenu6 circle gray"
-                style={{ cursor: "pointer" }}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                }}
                 onClick={() => this.props.history.push("controlroom/wms")}
               >
-                <h5
-                  style={{
-                    position: "absolute",
-                    top: 20,
-                    color: "white",
-                    fontWeight: "700",
-                  }}
-                >
-                  WMS
-                </h5>
                 <img
                   src={WMS}
                   style={{
                     maxWidth: "40%",
                     height: "auto",
                     position: "absolute",
-                    top: 50,
-                    bottom: -20,
+                    top: 20,
                   }}
-                />{" "}
-              </div>
-            </section>
-          ) : (
-            <div
-              style={{
-                flex: 4,
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Button
-                onClick={() =>
-                  this.setState({ openApps: !this.state.openApps })
-                }
-                style={{
-                  borderRadius: 110 / 2,
-                  backgroundColor: "#4e84db",
-                  width: 110,
-                  height: 110,
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
+                />
                 <h6
                   style={{
                     position: "absolute",
-                    top: 20,
+                    top: 55,
                     color: "white",
                     fontWeight: "700",
-                    textAlign: "center",
-                    color: "white",
-                    maxWidth: "90%",
                   }}
                 >
-                  Control Room
+                  WMS
                 </h6>
+              </div>
+            </a>
+            <a className="menu-item item-3">
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                }}
+              >
                 <img
-                  src={Control_Room}
+                  src={FIN}
                   style={{
-                    maxWidth: "50%",
+                    maxWidth: "40%",
                     height: "auto",
                     position: "absolute",
-                    top: 55,
-                    // bottom: -30
+                    top: 20,
                   }}
-                />{" "}
-              </Button>
-            </div>
-          )}
+                />
+                <h6
+                  style={{
+                    position: "absolute",
+                    top: 55,
+                    color: "white",
+                    fontWeight: "700",
+                  }}
+                >
+                  FIN
+                </h6>
+              </div>
+            </a>
+            <a className="menu-item item-4">
+           
+
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                }}
+                onClick={() => this.props.history.push("/home/controlroom/bus")}
+              >
+                <img
+                  src={BU}
+                  style={{
+                    maxWidth: "35%",
+                    height: "auto",
+                    position: "absolute",
+                    top: 12,
+                  }}
+                />
+                <h6
+                  style={{
+                    position: "absolute",
+                    top: 45,
+                    color: "white",
+                    fontWeight: "700",
+                    maxWidth: "50%",
+                  }}
+                >
+                  BU Mgmt
+                </h6>
+              </div>
+            </a>
+            <a className="menu-item item-5">
+          
+
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                }}
+                onClick={() => this.props.history.push("/home/controlroom/fus")}
+              >
+                <img
+                  src={FunctionalUnit}
+                  style={{
+                    maxWidth: "38%",
+                    height: "auto",
+                    position: "absolute",
+                    top: 20,
+                  }}
+                />
+                <h6
+                  style={{
+                    position: "absolute",
+                    top: 55,
+                    color: "white",
+                    fontWeight: "700",
+                  }}
+                >
+                  FU Mgmt
+                </h6>
+              </div>
+            </a>
+            <a className="menu-item item-6">
+             
+
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                }}
+                onClick={() =>
+                  this.props.history.push("/home/controlroom/items")
+                }
+              >
+                <img
+                  src={Items}
+                  style={{
+                    maxWidth: "35%",
+                    height: "auto",
+                    position: "absolute",
+                    top: 9,
+                  }}
+                />
+                <h6
+                  style={{
+                    position: "absolute",
+                    top: 45,
+                    color: "white",
+                    fontWeight: "700",
+                    maxWidth: "80%",
+                  }}
+                >
+                  Items Mgmt
+                </h6>
+              </div>
+            </a>
+            <a className="menu-item item-7">
+              {userType &&  userType.type !== "BU Head" ? (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100%",
+                  }}
+                  onClick={() =>
+                    this.props.history.push("/home/controlroom/staff")
+                  }
+                >
+                  <h6
+                    style={{
+                      position: "absolute",
+                      // top: 30,
+                      color: "white",
+                      width: "80%",
+                      fontWeight: "700",
+                    }}
+                  >
+                    Staff
+                  </h6>
+                </div>
+              ) : (
+                undefined
+              )}
+            </a>
+          </nav> */}
+
+          <MenuTree
+            history={this.props.history}
+            options={
+              userType && userType.type === "BU Head"
+                ? buHead
+                : userType && userType.type === "admin"
+                ? admin
+                : userType && userType.type === "Committe Member"
+                ? committeeMember
+                : admin
+            }
+          />
+        </div>
+
+        <div
+          style={{
+            position: "fixed",
+            width: "100%",
+            height: "10%",
+            top: "90%",
+          }}
+        >
+          <img
+            onClick={() => this.props.history.goBack()}
+            src={Back}
+            style={{
+              width: 45,
+              height: 35,
+              marginLeft: "5%",
+              cursor: "pointer",
+            }}
+          />
         </div>
       </div>
     );
-    //   } else {
-    //     return (
-    //       <div
-    //         style={{
-    //           display: "flex",
-    //           flexDirection: "column",
-    //           flex: 1,
-    //           position: "fixed",
-    //           width: "100%",
-    //           height: "100%",
-    //           backgroundColor: "#2B62CC",
-    //         }}
-    //       >
-    //         <div style={{ alignItems: "center", flex: 0.7, display: "flex" }}>
-    //           <Header />
-    //         </div>
-    //       </div>
-    //     );
-    //   }
   }
 }
 

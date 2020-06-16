@@ -9,14 +9,19 @@ import styles from "../../assets/jss/material-dashboard-react/components/tableSt
 import CustomTable from "../../components/Table/Table";
 import ConfirmationModal from "../../components/Modal/confirmationModal";
 import axios from "axios";
-import { getBuReturnUrl, deleteBuReturnUrl } from "../../public/endpoins";
+import {
+  getWhInventoryUrl,
+  deleteWhInventoryUrl,
+  getItemsUrl,
+} from "../../public/endpoins";
+import Back_Arrow from "../../assets/img/Back_Arrow.png";
 
 import Loader from "react-loader-spinner";
 
 import Header from "../../components/Header/Header";
 
 import Add_New from "../../assets/img/Add_New.png";
-import business_Unit from "../../assets/img/business_Unit.png";
+import wh_inventory from "../../assets/img/WH Inventory.png";
 
 import Search from "../../assets/img/Search.png";
 import Control_Room from "../../assets/img/Control_Room.png";
@@ -27,26 +32,18 @@ import Inactive from "../../assets/img/Inactive.png";
 
 import Active from "../../assets/img/Active.png";
 
+import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
+
 const useStyles = makeStyles(styles);
 
 const tableHeading = ["Item Name", "Quantity", "Action"];
 const tableDataKeys = [["itemId", "name"], "qty"];
 const actions = { edit: true, delete: true };
 
-const dummyData = [
-  {
-    itemId: { _id: 1, name: "First Item" },
-    qty: "23",
-  },
-  {
-    itemId: { _id: 2, name: "Second Item" },
-    qty: "20",
-  },
-];
 
 export default function WareHouseInventory(props) {
   const classes = useStyles();
-  const [buReturn, setBuReturn] = useState("");
+  const [whInventory, setWHInventory] = useState("");
   const [items, setItems] = useState("");
   const [staff, setStaff] = useState("");
   const [businessUnit, setBusinessUnit] = useState("");
@@ -62,28 +59,47 @@ export default function WareHouseInventory(props) {
     }, 2000);
   }
 
-  // function getFunctionalUnit() {
-  //     axios.get(getBuReturnUrl).then(res => {
-  //         if(res.data.success) {
-  //             setBuReturn(res.data.data.buReturn);
-  //             setItems(res.data.data.items);
-  //             setStaff(res.data.data.staff);
-  //             setBusinessUnit(res.data.data.businessUnit);
-  //         }
-  //         else if (!res.data.success) {
-  //             setErrorMsg(res.data.error)
-  //             setOpenNotification(true);
-  //         }
-  //         return res;
-  //     })
-  //     .catch(e => {
-  //         console.log('error: ', e);
-  //     });
-  // }
+  function getFunctionalUnit() {
+    axios
+      .get(getWhInventoryUrl)
+      .then((res) => {
+        if (res.data.success) {
+          setWHInventory(res.data.data);
+          // setItems(res.data.data.items);
+          // setStaff(res.data.data.staff);
+          // setBusinessUnit(res.data.data.businessUnit);
+        } else if (!res.data.success) {
+          setErrorMsg(res.data.error);
+          setOpenNotification(true);
+        }
+        return res;
+      })
+      .catch((e) => {
+        console.log("error: ", e);
+      });
+  }
 
-  // useEffect(() => {
-  //     getFunctionalUnit();
-  // }, []);
+  function getItems() {
+    axios
+      .get(getItemsUrl)
+      .then((res) => {
+        if (res.data.success) {
+          setItems(res.data.data.items);
+        } else if (!res.data.success) {
+          setErrorMsg(res.data.error);
+          setOpenNotification(true);
+        }
+        return res;
+      })
+      .catch((e) => {
+        console.log("error: ", e);
+      });
+  }
+
+  useEffect(() => {
+    getFunctionalUnit();
+    getItems();
+  }, []);
 
   const addNewItem = () => {
     let path = `warehouseinventory/add`;
@@ -118,7 +134,7 @@ export default function WareHouseInventory(props) {
     };
 
     axios
-      .delete(deleteBuReturnUrl + "/" + params._id)
+      .delete(deleteWhInventoryUrl + "/" + params._id)
       .then((res) => {
         if (res.data.success) {
           setdeleteItem("");
@@ -141,111 +157,73 @@ export default function WareHouseInventory(props) {
         display: "flex",
         flexDirection: "column",
         flex: 1,
-        position: "fixed",
         width: "100%",
-        height: "100%",
+        position: "fixed",
+        height: "100vh",
         backgroundColor: "#60d69f",
-        overflowY: "scroll",
       }}
     >
-      <div
-        style={{ alignItems: "center", flex: 1, display: "flex", marginTop: 5 }}
-      >
-        <Header />
-      </div>
+      <Header />
 
-      <div style={{ alignItems: "center", flex: 0.5, display: "flex" }}>
+      <div className="cPadding">
+        <div className="subheader">
+          <div>
+            <img src={wh_inventory} />
+            <h4>WareHouse Inventory</h4>
+          </div>
+
+          <div>
+            <img onClick={addNewItem} src={Add_New} />
+            {/* <img src={Search} /> */}
+          </div>
+        </div>
+
         <div
           style={{
-            flex: 0.5,
+            flex: 4,
             display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
+            flexDirection: "column",
           }}
         >
+          {whInventory ? (
+            <div>
+              <div>
+                <CustomTable
+                  tableData={whInventory}
+                  tableDataKeys={tableDataKeys}
+                  tableHeading={tableHeading}
+                  action={actions}
+                  handleEdit={handleEdit}
+                  handleDelete={handleDelete}
+                  borderBottomColor={"#60d69f"}
+                  borderBottomWidth={20}
+                />
+              </div>
+
+              <ConfirmationModal
+                modalVisible={modalVisible}
+                msg="Are you sure want to delete the record?"
+                hideconfirmationModal={() => setModalVisible(false)}
+                onConfirmDelete={() => deleteBuReturn()}
+                setdeleteItem={() => setdeleteItem("")}
+              />
+
+              <Notification msg={errorMsg} open={openNotification} />
+            </div>
+          ) : (
+            <div className="LoaderStyle">
+              <Loader type="TailSpin" color="red" height={50} width={50} />
+            </div>
+          )}
+        </div>
+
+        <div style={{ marginBottom: 20 }}>
           <img
-            src={business_Unit}
-            style={{ maxWidth: "100%", height: "auto" }}
+            onClick={() => props.history.goBack()}
+            src={Back_Arrow}
+            style={{ width: 60, height: 40, cursor: "pointer" }}
           />
         </div>
-
-        <div style={{ flex: 4, display: "flex", alignItems: "center" }}>
-          <h4
-            style={{ color: "white",  fontWeight: "700" }}
-          >
-            WareHouse Inventory
-          </h4>
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            flex: 1.5,
-            justifyContent: "flex-end",
-            alignItems: "center",
-          }}
-        >
-          <div style={{ flex: 1.5, display: "flex" }}>
-            <img
-              onClick={addNewItem}
-              src={Add_New}
-              style={{ width: "100%", height: "100%", cursor: "pointer" }}
-            />
-          </div>
-
-          <div style={{ flex: 1, display: "flex" }}>
-            <img src={Search} style={{ width: "60%", height: "60%" }} />
-          </div>
-        </div>
-      </div>
-
-      <div
-        style={{
-          flex: 4,
-          display: "flex",
-          flexDirection: "column",
-          marginLeft: "3%",
-          marginRight: "3%",
-        }}
-      >
-        {dummyData ? (
-          <div>
-            <div>
-              <CustomTable
-                tableData={dummyData}
-                tableDataKeys={tableDataKeys}
-                tableHeading={tableHeading}
-                action={actions}
-                handleEdit={handleEdit}
-                handleDelete={handleDelete}
-                borderBottomColor={"#60d69f"}
-                borderBottomWidth={20}
-              />
-            </div>
-
-            <ConfirmationModal
-              modalVisible={modalVisible}
-              msg="Are you sure want to delete the record?"
-              hideconfirmationModal={() => setModalVisible(false)}
-              onConfirmDelete={() => deleteBuReturn()}
-              setdeleteItem={() => setdeleteItem("")}
-            />
-
-            <Notification msg={errorMsg} open={openNotification} />
-          </div>
-        ) : (
-          <div
-            style={{
-              width: "70%",
-              height: "100%",
-              position: "fixed",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <Loader type="TailSpin" color="red" height={50} width={50} />
-          </div>
-        )}
       </div>
     </div>
   );

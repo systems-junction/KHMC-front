@@ -32,15 +32,34 @@ import business_Unit from "../../assets/img/business_Unit.png";
 
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 
+import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
+
 const styles = {
-  inputContainer: {
+  // inputContainer: {
+  //   marginTop: 25,
+  //   backgroundColor: "white",
+  //   borderRadius: 5,
+  //   paddingTop: 5,
+  //   paddingBottom: 5,
+  //   paddingLeft: 5,
+  //   paddingRight: 5,
+  // },
+
+  // buttonContainer: {
+  //   marginTop: 25,
+  // },
+
+  inputContainerForTextField: {
+    marginTop: 25,
+  },
+
+  inputContainerForDropDown: {
     marginTop: 25,
     backgroundColor: "white",
-    borderRadius: 5,
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingLeft: 5,
-    paddingRight: 5,
+    borderRadius: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 2,
   },
 
   buttonContainer: {
@@ -247,11 +266,10 @@ function AddEditPurchaseRequest(props) {
         overflowY: "scroll",
       }}
     >
-      <div style={{ alignItems: "center", flex: 1, display: "flex", marginTop:15 }}>
+      
         <Header />
-      </div>
-
-      <div style={{ alignItems: "center", flex: 0.5, display: "flex" }}>
+      
+      <div style={{ alignItems: "center", marginTop: "1rem", display: "flex" }}>
         <div
           style={{
             flex: 0.5,
@@ -267,9 +285,7 @@ function AddEditPurchaseRequest(props) {
         </div>
 
         <div style={{ flex: 4, display: "flex", alignItems: "center" }}>
-          <h3
-            style={{ color: "white", fontFamily: "Ubuntu", fontWeight: "700" }}
-          >
+          <h3 style={{ color: "white", fontWeight: "700" }}>
             {comingFor === "add"
               ? " Add Material Receiving"
               : " Edit Material Receiving"}
@@ -303,8 +319,8 @@ function AddEditPurchaseRequest(props) {
       </h1> */}
         <div className="row">
           <div className="col-md-6">
-            <div style={styles.inputContainer}>
-              <TextField
+            <div style={styles.inputContainerForTextField}>
+              {/* <TextField
                 fullWidth
                 name="itemName"
                 label="Item Name"
@@ -312,13 +328,22 @@ function AddEditPurchaseRequest(props) {
                 // variant="outlined"
                 value={itemName}
                 onChange={onChangeValue}
+              /> */}
+
+              <input
+                type="text"
+                placeholder="Item Name"
+                name={"itemName"}
+                value={itemName}
+                onChange={onChangeValue}
+                className="textInputStyle"
               />
             </div>
           </div>
 
           <div className="col-md-6">
-            <div style={styles.inputContainer}>
-              <TextField
+            <div style={styles.inputContainerForTextField}>
+              {/* <TextField
                 fullWidth
                 name="itemCode"
                 label="Item Code"
@@ -326,6 +351,14 @@ function AddEditPurchaseRequest(props) {
                 // variant="outlined"
                 value={itemCode}
                 onChange={onChangeValue}
+              /> */}
+                 <input
+                type="number"
+                placeholder="itemCode"
+                name={"Item Code"}
+                value={itemCode}
+                onChange={onChangeValue}
+                className="textInputStyle"
               />
             </div>
           </div>
@@ -333,12 +366,13 @@ function AddEditPurchaseRequest(props) {
 
         <div className="row">
           <div className="col-md-6">
-            <div style={styles.inputContainer}>
+            <div style={styles.inputContainerForTextField}>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DateTimePicker
                   inputVariant="outlined"
                   onChange={onChangeDate}
                   fullWidth
+                  style={{borderRadius:10, backgroundColor:"white"}}
                   value={
                     comingFor === "add"
                       ? poSentDate
@@ -352,7 +386,7 @@ function AddEditPurchaseRequest(props) {
           </div>
 
           <div className="col-md-6">
-            <div style={styles.inputContainer}>
+            <div style={styles.inputContainerForDropDown}>
               <InputLabel id="status-label">Status</InputLabel>
               <Select
                 fullWidth
@@ -380,7 +414,7 @@ function AddEditPurchaseRequest(props) {
 
         <div className="row">
           <div className="col-md-6">
-            <div style={styles.inputContainer}>
+            <div style={styles.inputContainerForDropDown}>
               <InputLabel id="generated-label">Purchase Orders</InputLabel>
               <Select
                 fullWidth
@@ -406,7 +440,7 @@ function AddEditPurchaseRequest(props) {
           </div>
 
           <div className="col-md-6">
-            <div style={styles.inputContainer}>
+            <div style={styles.inputContainerForDropDown}>
               <InputLabel id="generated-label">Purchase Requests</InputLabel>
               <Select
                 fullWidth
@@ -434,7 +468,7 @@ function AddEditPurchaseRequest(props) {
 
         <div className="row">
           <div className="col-md-12">
-            <div style={styles.inputContainer}>
+            <div style={styles.inputContainerForDropDown}>
               <InputLabel id="vendorId-label">Vendor</InputLabel>
               <Select
                 fullWidth
@@ -503,12 +537,11 @@ function AddEditPurchaseRequest(props) {
 
         <Notification msg={errorMsg} open={openNotification} />
 
-
         <div style={{ marginBottom: 20 }}>
           <img
             onClick={() => props.history.goBack()}
             src={Back_Arrow}
-            style={{ width: 60, height: 40, cursor: 'pointer' }}
+            style={{ width: 60, height: 40, cursor: "pointer" }}
           />
         </div>
       </div>

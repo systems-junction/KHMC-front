@@ -23,15 +23,34 @@ import business_Unit from "../../assets/img/business_Unit.png";
 
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 
+import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
+
 const styles = {
-  inputContainer: {
+  // inputContainer: {
+  //   marginTop: 25,
+  //   backgroundColor: "white",
+  //   borderRadius: 5,
+  //   paddingTop: 5,
+  //   paddingBottom: 5,
+  //   paddingLeft: 5,
+  //   paddingRight: 5,
+  // },
+
+  // buttonContainer: {
+  //   marginTop: 25,
+  // },
+
+  inputContainerForTextField: {
     marginTop: 25,
+  },
+
+  inputContainerForDropDown: {
+    marginTop: 35,
     backgroundColor: "white",
-    borderRadius: 5,
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingLeft: 5,
-    paddingRight: 5,
+    borderRadius: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 2,
   },
 
   buttonContainer: {
@@ -215,11 +234,11 @@ function AddEditBuReturn(props) {
         overflowY: "scroll",
       }}
     >
-      <div style={{ alignItems: "center", flex: 1, display: "flex" }}>
+      <div style={{ alignItems: "center", marginTop: "2rem", display: "flex" }}>
         <Header />
       </div>
 
-      <div style={{ alignItems: "center", flex: 0.5, display: "flex" }}>
+      <div style={{ alignItems: "center", marginTop: "1rem", display: "flex" }}>
         <div
           style={{
             flex: 0.5,
@@ -235,9 +254,7 @@ function AddEditBuReturn(props) {
         </div>
 
         <div style={{ flex: 4, display: "flex", alignItems: "center" }}>
-          <h3
-            style={{ color: "white", fontFamily: "Ubuntu", fontWeight: "700" }}
-          >
+          <h3 style={{ color: "white", fontWeight: "700" }}>
             {comingFor === "add"
               ? "Add BU Stock In Log"
               : "Edit BU Stock In Log"}
@@ -267,8 +284,8 @@ function AddEditBuReturn(props) {
         className="container"
       >
         <div className="row">
-          <div className="col-md-4">
-            <div style={styles.inputContainer}>
+          <div className="col-md-12">
+            <div style={styles.inputContainerForDropDown}>
               <InputLabel id="buRepRequestId-label">Business Unit</InputLabel>
               <Select
                 fullWidth
@@ -293,8 +310,8 @@ function AddEditBuReturn(props) {
             </div>
           </div>
 
-          <div className="col-md-4">
-            <div style={styles.inputContainer}>
+          <div className="col-md-12">
+            <div style={styles.inputContainerForDropDown}>
               <InputLabel id="itemId-label">Item</InputLabel>
               <Select
                 fullWidth
@@ -319,9 +336,9 @@ function AddEditBuReturn(props) {
             </div>
           </div>
 
-          <div className="col-md-4">
-            <div style={styles.inputContainer}>
-              <TextField
+          <div className="col-md-12">
+            <div style={styles.inputContainerForTextField}>
+              {/* <TextField
                 fullWidth
                 id="qty"
                 name="qty"
@@ -332,28 +349,43 @@ function AddEditBuReturn(props) {
                 value={qty}
                 onChange={onChangeValue}
                 error={!qty && isFormSubmitted}
+              /> */}
+
+              <input
+                type="number"
+                placeholder="Quantity"
+                name={"qty"}
+                value={qty}
+                onChange={onChangeValue}
+                className="textInputStyle"
               />
             </div>
           </div>
         </div>
 
         <div className="row">
-          <div className="col-md-4">
-            <div style={styles.inputContainer}>
+          <div className="col-md-12">
+            <div style={{
+               marginTop: 35,
+               backgroundColor: "white",
+               borderRadius: 10,
+               paddingTop: 2,
+            }}>
               <MuiPickersUtilsProvider fullWidth utils={DateFnsUtils}>
                 <DateTimePicker
                   fullWidth
                   inputVariant="outlined"
                   onChange={onChangeDate}
                   value={timeStamp ? timeStamp : new Date()}
+                  style={{ borderRadius: 10, backgroundColor: "white" }}
                 />
               </MuiPickersUtilsProvider>
             </div>
           </div>
 
-          <div className="col-md-4">
-            <div style={styles.inputContainer}>
-              <TextField
+          <div className="col-md-12">
+            <div style={styles.inputContainerForTextField}>
+              {/* <TextField
                 fullWidth
                 id="buPrice"
                 name="buPrice"
@@ -362,13 +394,21 @@ function AddEditBuReturn(props) {
                 // variant="outlined"
                 value={buPrice}
                 onChange={onChangeValue}
+              /> */}
+              <input
+                type="number"
+                placeholder="BU Price"
+                name={"buPrice"}
+                value={buPrice}
+                onChange={onChangeValue}
+                className="textInputStyle"
               />
             </div>
           </div>
 
-          <div className="col-md-4">
-            <div style={styles.inputContainer}>
-              <TextField
+          <div className="col-md-12">
+            <div style={styles.inputContainerForTextField}>
+              {/* <TextField
                 fullWidth
                 id="batchNo"
                 name="batchNo"
@@ -377,13 +417,21 @@ function AddEditBuReturn(props) {
                 // variant="outlined"
                 value={batchNo}
                 onChange={onChangeValue}
+              /> */}
+              <input
+                type="number"
+                placeholder="Batch No"
+                name={"batchNo"}
+                value={batchNo}
+                onChange={onChangeValue}
+                className="textInputStyle"
               />
             </div>
           </div>
         </div>
         <div className="row">
-          <div className="col-md-4">
-            <div style={styles.inputContainer}>
+          <div className="col-md-12">
+            <div style={styles.inputContainerForDropDown}>
               <InputLabel id="staff-label">Staff</InputLabel>
               <Select
                 fullWidth
@@ -408,9 +456,9 @@ function AddEditBuReturn(props) {
             </div>
           </div>
 
-          <div className="col-md-4">
-            <div style={styles.inputContainer}>
-              <TextField
+          <div className="col-md-12">
+            <div style={styles.inputContainerForTextField}>
+              {/* <TextField
                 fullWidth
                 id="salePrice"
                 name="salePrice"
@@ -419,6 +467,15 @@ function AddEditBuReturn(props) {
                 // variant="outlined"
                 value={salePrice}
                 onChange={onChangeValue}
+              /> */}
+
+              <input
+                type="number"
+                placeholder="salePrice"
+                name={"Sale Price"}
+                value={salePrice}
+                onChange={onChangeValue}
+                className="textInputStyle"
               />
             </div>
           </div>

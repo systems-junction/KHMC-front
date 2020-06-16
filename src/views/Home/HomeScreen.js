@@ -19,6 +19,8 @@ import Header from "../../components/Header/Header";
 import RCM from "../../assets/img/RCM.png";
 import WMS from "../../assets/img/WMS.png";
 
+import Back from "../../assets/img/Back_Arrow.png";
+
 import FIN from "../../assets/img/FIN.png";
 import Control_Room from "../../assets/img/Control_Room.png";
 
@@ -48,264 +50,220 @@ class HomeScreen extends React.Component {
           backgroundColor: "#2B62CC",
         }}
       >
-        <div style={{ alignItems: "center", flex: 1, display: "flex", minHeight:'15%',width:'100%', position:"fixed", zIndex:1 }}>
-          <Header />
-        </div>
-
-        <div className="menupage" style={{ display: "flex", flex: 4, minHeight:'85%', alignItems:"center" }}>
-          {this.state.openApps ? (
-            <section>
+        <Header />
+        <div
+          className="menupage"
+          style={{
+            display: "flex",
+            flex: 4,
+            minHeight: "100%",
+            alignItems: "center",
+            justifyContent: "center",
+            position: "fixed",
+            left: "45%",
+          }}
+        >
+          <nav className="menu">
+            <input
+              type="checkbox"
+              href="#"
+              className="menu-open"
+              name="menu-open"
+              id="menu-open"
+            />
+            <label
+              className="menu-open-button"
+              for="menu-open"
+              style={{
+                boxShadow: "5px 5px 5px #2433a5",
+              }}
+            >
               <div
-                className="mainmenu circle lightBlue"
                 style={{
-                  cursor: "pointer",
                   display: "flex",
+                  flexDirection: "column",
                   justifyContent: "center",
-                  alignItems: "center",
+                  height: "100%",
                 }}
-                onClick={() => this.setState({ openApps: false })}
+                onClick={() => this.setState({ openApps: true })}
               >
                 <h5
                   style={{
-                    position: "absolute",
                     color: "white",
                     fontWeight: "700",
+                    position: "absolute",
+                    textAlign: "center",
+                    left: 17,
+                    top: 27,
                   }}
                 >
                   KHMC
                 </h5>
-                <p
+                <h6
                   style={{
+                    color: "white",
+                    top: 50,
                     position: "absolute",
-                    top: 60,
-                    fontWeight: "700",
+                    left: 30,
+                    textAlign: "center",
                   }}
                 >
                   Apps
-                </p>
+                </h6>
               </div>
+            </label>
 
+            <a className="menu-item item-1">
               <div
-                className="submenu circle orange"
-                style={{ cursor: "pointer" }}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                }}
               >
-                <h5
-                  style={{
-                    position: "absolute",
-                    top: 20,
-                    color: "white",
-                    fontWeight: "700",
-                  }}
-                >
-                  RCM
-                </h5>
                 <img
                   src={RCM}
                   style={{
                     maxWidth: "40%",
                     height: "auto",
                     position: "absolute",
-                    top: 50,
-                    bottom: -20,
+                    top: 20,
                   }}
-                />{" "}
-              </div>
-
-              <div
-                className="submenu1 circle gray"
-                style={{ cursor: "pointer" }}
-                // onClick={() => this.props.history.push("/home/pr")}
-              >
-                <h5 style={{ textAlign: "center" }}></h5>
-              </div>
-
-              <div
-                className="submenu2 circle orange"
-                style={{ cursor: "pointer" }}
-                // onClick={() => this.props.history.push("/home/po")}
-              >
-                <h5 style={{ textAlign: "center" }}></h5>
-              </div>
-
-              <div className="submenu3 circle green"></div>
-
-              <div
-                className="submenu4 circle lightBlue"
-                style={{ cursor: "pointer" }}
-                onClick={() => this.props.history.push("/home/controlroom")}
-              >
-                <h5
+                />
+                <h6
                   style={{
-                    position: "absolute",
-                    top: 15,
-                    color: "white",
-                    fontWeight: "700",
-                    textAlign: "center",
-                  }}
-                >
-                  Control Room
-                </h5>
-                <img
-                  src={Control_Room}
-                  style={{
-                    maxWidth: "45%",
-                    height: "auto",
                     position: "absolute",
                     top: 60,
-                    bottom: -20,
-                  }}
-                />{" "}
-              </div>
-
-              <div
-                className="submenu5 circle yellow"
-                style={{ cursor: "pointer" }}
-              >
-                <h5
-                  style={{
-                    position: "absolute",
-                    top: 20,
                     color: "white",
                     fontWeight: "700",
                   }}
                 >
-                  FIN
-                </h5>
-                <img
-                  src={FIN}
-                  style={{
-                    maxWidth: "40%",
-                    height: "auto",
-                    position: "absolute",
-                    top: 50,
-                    bottom: -20,
-                  }}
-                />{" "}
+                  RCM
+                </h6>
               </div>
-
+            </a>
+            <a className="menu-item item-2">
               <div
-                className="submenu6 circle gray"
-                style={{ cursor: "pointer" }}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                }}
               >
-                <h5
-                  style={{
-                    position: "absolute",
-                    top: 20,
-                    color: "white",
-                    fontWeight: "700",
-                  }}
-                >
-                  WMS
-                </h5>
                 <img
                   src={WMS}
                   style={{
                     maxWidth: "40%",
                     height: "auto",
                     position: "absolute",
-                    top: 50,
-                    bottom: -20,
+                    top: 20,
                   }}
-                />{" "}
+                />
+                <h6
+                  style={{
+                    position: "absolute",
+                    top: 55,
+                    color: "white",
+                    fontWeight: "700",
+                  }}
+                >
+                  WMS
+                </h6>
               </div>
-            </section>
-          ) : (
-            <div
-              style={{
-                flex: 4,
-                display: "flex",
-                flexDirection: "column",
-                backgroundColor: "#2B62CC",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-                height: "100%",
-                position: "absolute",
-              }}
-            >
-              <Button
-                onClick={() =>
-                  this.setState({ openApps: !this.state.openApps })
-                }
+            </a>
+            <a className="menu-item item-3">
+              <div
                 style={{
-                  borderRadius: 100 / 2,
-                  color: "white",
-                  backgroundColor: "#4e84db",
-                  fontWeight: "700",
-                  width: 100,
-                  height: 100,
-                  textAlign: "center",
-                  alignSelf: "center",
-                  boxShadow: "10px 10px  4px #2A5EC4",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
                 }}
               >
-                KHMC Apps
-              </Button>
-            </div>
-          )}
+                <img
+                  src={FIN}
+                  style={{
+                    maxWidth: "40%",
+                    height: "auto",
+                    position: "absolute",
+                    top: 20,
+                  }}
+                />
+                <h6
+                  style={{
+                    position: "absolute",
+                    top: 55,
+                    color: "white",
+                    fontWeight: "700",
+                  }}
+                >
+                  FIN
+                </h6>
+              </div>
+            </a>
+            <a className="menu-item item-4">
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                }}
+                onClick={() => this.props.history.push("/home/controlroom")}
+              >
+                <img
+                  src={Control_Room}
+                  style={{
+                    maxWidth: "30%",
+                    height: "auto",
+                    position: "absolute",
+                    top: 11,
+                  }}
+                />
+                <h6
+                  style={{
+                    position: "absolute",
+                    top: 40,
+                    color: "white",
+                    fontWeight: "700",
+                  }}
+                >
+                  Control Room
+                </h6>
+              </div>
+            </a>
+            <a className="menu-item item-5"></a>
+            <a className="menu-item item-6"></a>
+            <a className="menu-item item-7"></a>
+          </nav>
         </div>
+
+        {/* <div
+          style={{
+            position: "fixed",
+            width: "100%",
+            height: "20%",
+            backgroundColor: "red",
+            top: "90%",
+          }}
+        >
+          {this.state.openApps ? (
+            <img
+              src={Back}
+              style={{ width: 40, height: 30, marginLeft: "5%" }}
+            />
+          ) : (
+            undefined
+          )}
+        </div> */}
       </div>
     );
-    // } else {
-    //   return (
-    //     <div
-    //       style={{
-    //         display: "flex",
-    //         flexDirection: "column",
-    //         flex: 1,
-    //         position: "fixed",
-    //         width: "100%",
-    //         height: "100%",
-    //         backgroundColor: "#2B62CC",
-    //       }}
-    //     >
-    //       <div
-    //         style={{
-    //           alignItems: "center",
-    //           flex: 0.7,
-    //           display: "flex",
-    //           position: "fixed",
-    //           width: "100%",
-    //           height: "10%",
-    //           zIndex: 1,
-    //         }}
-    //       >
-    //         <Header />
-    //       </div>
-
-    //       <div
-    //         style={{
-    //           flex: 4,
-    //           display: "flex",
-    //           flexDirection: "column",
-    //           backgroundColor: "#2B62CC",
-    //           justifyContent: "center",
-    //           alignItems: "center",
-    //           width: "100%",
-    //           height: "100%",
-    //           position: "absolute",
-    //         }}
-    //       >
-    //         <Button
-    //           onClick={() => this.setState({ openApps: !this.state.openApps })}
-    //           style={{
-    //             borderRadius: 100 / 2,
-    //             color: "white",
-    //             backgroundColor: "#4e84db",
-    //             fontWeight: "700",
-    //             width: 100,
-    //             height: 100,
-    //             textAlign: "center",
-    //             alignSelf: "center",
-    //             boxShadow: "10px 10px  4px #2A5EC4",
-    //           }}
-    //         >
-    //           KHMC Apps
-    //         </Button>
-    //       </div>
-    //     </div>
-    //   );
-    // }
   }
 }
 

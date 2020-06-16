@@ -1,5 +1,9 @@
-const baseUrl = 'http://167.172.148.139:4000/api';
-export const socketUrl = 'ws://localhost:8080';
+const local = "http://localhost:8080/api";
+const live = "http://167.172.148.139:4000/api";
+// const baseUrl = 'http://localhost:4000/api';
+const baseUrl = live;
+
+export const socketUrl = "ws://localhost:8080";
 
 // auth endpoints
 export const loginUrl = `${baseUrl}/auth/login`;
@@ -10,6 +14,16 @@ export const addItemUrl = `${baseUrl}/item/additem`;
 export const updateItemUrl = `${baseUrl}/item/updateitem`;
 export const deleteItemUrl = `${baseUrl}/item/deleteitem`;
 export const getSearchedItemUrl = `${baseUrl}/item/getsearcheditems`;
+
+
+
+
+// warehouse endpoints
+export const getWhInventoryUrl = `${baseUrl}/warehouseinventory/getWhInventory`;
+export const addWhInventoryUrl = `${baseUrl}/warehouseinventory/addWhInventory`;
+export const updateWhInventoryUrl = `${baseUrl}/warehouseinventory/updateWhInventory`;
+export const deleteWhInventoryUrl = `${baseUrl}/warehouseinventory/deleteWhInventory`;
+
 
 // bu inventory endpoints
 export const getBuInventoryUrl = `${baseUrl}/buinventory/getbuinventory`;
@@ -41,6 +55,8 @@ export const getBusinessUnitLogsUrl = `${baseUrl}/businessunit/getbusinessunitlo
 export const addBusinessUnitUrl = `${baseUrl}/businessunit/addbusinessunit`;
 export const updateBusinessUnitUrl = `${baseUrl}/businessunit/updatebusinessunit`;
 export const deleteBusinessUnitUrl = `${baseUrl}/businessunit/deletebusinessunit`;
+export const getBusinessUnitUrlWithHead = `${baseUrl}/businessunit/gethead`;
+
 
 // functional unit
 export const getFunctionalUnitUrl = `${baseUrl}/functionalunit/getfunctionalunits`;
@@ -72,6 +88,8 @@ export const getPurchaseRequestUrl = `${baseUrl}/purchaserequest/getpurchaserequ
 export const addPurchaseRequestUrl = `${baseUrl}/purchaserequest/addpurchaserequest`;
 export const updatePurchaseRequestUrl = `${baseUrl}/purchaserequest/updatepurchaserequest`;
 export const deletePurchaseRequestUrl = `${baseUrl}/purchaserequest/deletepurchaserequest`;
+export const getPurchaseRequestItemQtyUrl = `${baseUrl}/purchaserequest/getcurrqty`;
+
 
 // shipping term
 export const getShippingTermUrl = `${baseUrl}/shippingterm/getshippingterms`;
@@ -115,6 +133,12 @@ export const getStaffUrl = `${baseUrl}/staff/getstaff`;
 export const addStaffUrl = `${baseUrl}/staff/addstaff`;
 export const deleteStaffUrl = `${baseUrl}/staff/deletestaff`;
 export const updateStaffTUrl = `${baseUrl}/staff/updatestaff`;
+
+// accessLevel
+export const getAccessLevelUrl = `${baseUrl}/accesslevel/getaccesslevel`;
+export const addAccessLevelUrl = `${baseUrl}/accesslevel/addaccesslevel`;
+export const deleteAccessLevelUrl = `${baseUrl}/accesslevel/deleteaccesslevel`;
+export const updateAccessLevelUrl = `${baseUrl}/accesslevel/updateaccesslevel`;
 
 // system admin
 export const getSystemAdminUrl = `${baseUrl}/systemadmin/getsystemadmin`;

@@ -1,87 +1,106 @@
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable array-callback-return */
 /* eslint-disable react/jsx-indent */
-import React, { useEffect, useState, useReducer } from 'react';
-import TextField from '@material-ui/core/TextField';
-import Checkbox from '@material-ui/core/Checkbox';
-import Modal from '@material-ui/core/Modal';
-import Button from '@material-ui/core/Button';
-import axios from 'axios';
-
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import { ToastsStore } from 'react-toasts';
+import React, { useEffect, useState, useReducer } from "react";
+import TextField from "@material-ui/core/TextField";
+import Checkbox from "@material-ui/core/Checkbox";
+import Modal from "@material-ui/core/Modal";
+import Button from "@material-ui/core/Button";
+import axios from "axios";
+import Select from "@material-ui/core/Select";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import { ToastsStore } from "react-toasts";
 import {
   addVendorUrl,
   updateVendorUrl,
   addShippingTermUrl,
-  updateShippingTermUrl
-} from '../../public/endpoins';
-import ws from '../../variables/websocket';
-import ShippingTerm from '../ShippingTerm/shippingTerm';
-import vendor from '../../assets/img/Vendot.png';
-import Header from '../../components/Header/Header';
-import Add_New from '../../assets/img/Add_New.png';
+  updateShippingTermUrl,
+} from "../../public/endpoins";
+import ws from "../../variables/websocket";
+import ShippingTerm from "../ShippingTerm/shippingTerm";
+import vendor from "../../assets/img/Vendot.png";
+import Header from "../../components/Header/Header";
+import view_all from "../../assets/img/view_all.png";
+import Back_Arrow from "../../assets/img/Back_Arrow.png";
+import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
+
 const styles = {
-  inputContainer: {
+  // inputContainer: {
+  //   marginTop: 25,
+  //   backgroundColor: 'white',
+  //   borderRadius: 5,
+  //   paddingTop: 5,
+  //   paddingBottom: 5,
+  //   // marginLeft: 5,
+  //   // marginRight: 5
+  // },
+
+  // buttonContainer: {
+  //   marginTop: 25
+  // }
+
+  inputContainerForTextField: {
     marginTop: 25,
-    // backgroundColor: 'white',
-    borderRadius: 5,
-    paddingTop: 5,
-    paddingBottom: 5,
-    // marginLeft: 5,
-    // marginRight: 5
+  },
+
+  inputContainerForDropDown: {
+    marginTop: 25,
+    backgroundColor: "white",
+    borderRadius: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 2,
   },
 
   buttonContainer: {
-    marginTop: 25
-  }
+    marginTop: 25,
+  },
 };
 
 function AddEditVendor(props) {
   const modalStyle = {
-    backgroundColor: '#5074f4',
+    backgroundColor: "#5074f4",
     borderRadius: 30,
-    height: '80%',
-    marginLeft: '15%',
-    marginRight: '15%',
-    marginTop: '5%',
-    display: 'flex',
-    justifyContent: 'center',
-    flexDirection: 'column',
+    height: "80%",
+    marginLeft: "15%",
+    marginRight: "15%",
+    marginTop: "5%",
+    display: "flex",
+    justifyContent: "center",
+    flexDirection: "column",
     flex: 1,
-    position: 'fixed'
+    position: "fixed",
   };
 
   const initialState = {
-    _id: '',
-    englishName: '',
-    arabicName: '',
-    telephone1: '',
-    telephone2: '',
-    contactEmail: '',
-    address: '',
-    country: '',
-    city: '',
-    zipcode: '',
-    pobox: '',
-    faxno: '',
-    taxno: '',
-    contactPersonName: '',
-    contactPersonTelephone: '',
-    contactPersonEmail: '',
-    paymentTerms: '',
-    rating: '',
-    status: '',
-    cls: '',
-    subClass: ''
+    _id: "",
+    englishName: "",
+    arabicName: "",
+    telephone1: "",
+    telephone2: "",
+    contactEmail: "",
+    address: "",
+    country: "",
+    city: "",
+    zipcode: "",
+    pobox: "",
+    faxno: "",
+    taxno: "",
+    contactPersonName: "",
+    contactPersonTelephone: "",
+    contactPersonEmail: "",
+    paymentTerms: "",
+    rating: "",
+    status: "",
+    cls: "",
+    subClass: "",
   };
 
   function reducer(state, { field, value }) {
     return {
       ...state,
-      [field]: value
+      [field]: value,
     };
   }
 
@@ -108,10 +127,10 @@ function AddEditVendor(props) {
     rating,
     status,
     subClass,
-    cls
+    cls,
   } = state;
 
-  const onChangeValue = e => {
+  const onChangeValue = (e) => {
     dispatch({ field: e.target.name, value: e.target.value });
   };
 
@@ -131,9 +150,9 @@ function AddEditVendor(props) {
       cls.length > 0 &&
       status.length > 0;
 
-    if (contactEmail && contactPersonEmail === '') {
+    if (contactEmail && contactPersonEmail === "") {
       return x && re.test(contactEmail);
-    } else if (contactPersonEmail && contactEmail === '') {
+    } else if (contactPersonEmail && contactEmail === "") {
       return x && re.test(contactPersonEmail);
     } else if (contactPersonEmail && contactEmail) {
       return x && re.test(contactPersonEmail) && re.test(contactEmail);
@@ -144,17 +163,17 @@ function AddEditVendor(props) {
     }
   }
 
-  const [comingFor, setcomingFor] = useState('');
+  const [comingFor, setcomingFor] = useState("");
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [openShippingTermModal, setOpenShippingTermModal] = useState(false);
   const [shippingTermsData, setShippingTermsData] = useState([]);
-  const [modeForShippingTerms, setModeForShippingTerms] = useState('add');
+  const [modeForShippingTerms, setModeForShippingTerms] = useState("add");
 
-  const [mainClasses, setClasses] = useState('');
+  const [mainClasses, setClasses] = useState("");
 
-  const [statues, setStatuses] = useState('');
+  const [statues, setStatuses] = useState("");
 
-  const [subClasses, setSubClasses] = useState('');
+  const [subClasses, setSubClasses] = useState("");
 
   useEffect(() => {
     setcomingFor(props.history.location.state.comingFor);
@@ -165,7 +184,7 @@ function AddEditVendor(props) {
     const selectedRec = props.history.location.state.selectedItem;
     if (selectedRec) {
       Object.entries(selectedRec).map(([key, val]) => {
-        if (val && typeof val === 'object') {
+        if (val && typeof val === "object") {
           dispatch({ field: key, value: val._id });
         } else {
           dispatch({ field: key, value: val });
@@ -201,25 +220,25 @@ function AddEditVendor(props) {
         rating,
         status,
         cls,
-        subClass
+        subClass,
       };
       axios
         .post(addVendorUrl, params)
-        .then(res => {
+        .then((res) => {
           if (res.data.success) {
-            console.log('response is', res.data.data._id);
+            console.log("response is", res.data.data._id);
             if (shippingTermsData.length > 0) {
               addShippingTerms(res.data.data._id);
             } else {
               props.history.goBack();
             }
-            ws.send('add_vendor');
+            ws.send("add_vendor");
           } else if (!res.data.success) {
             ToastsStore.error(res.data.error);
           }
         })
-        .catch(e => {
-          console.log('error after adding vendor', e);
+        .catch((e) => {
+          console.log("error after adding vendor", e);
         });
     }
   };
@@ -229,11 +248,11 @@ function AddEditVendor(props) {
     // for (let i = 0; i < shippingTermsData.length; i++) {
     var data = {
       shippingTermsData: data,
-      vendorId: id
+      vendorId: id,
     };
     axios
       .post(addShippingTermUrl, data)
-      .then(res => {
+      .then((res) => {
         if (res.data.success) {
           console.log(res.data.data);
           props.history.goBack();
@@ -241,8 +260,8 @@ function AddEditVendor(props) {
           ToastsStore.error(res.data.error);
         }
       })
-      .catch(e => {
-        console.log('error while adding shipping term ', e);
+      .catch((e) => {
+        console.log("error while adding shipping term ", e);
       });
   };
 
@@ -270,11 +289,11 @@ function AddEditVendor(props) {
         rating,
         status,
         cls,
-        subClass
+        subClass,
       };
       axios
         .put(updateVendorUrl, params)
-        .then(res => {
+        .then((res) => {
           if (res.data.success) {
             // console.log('response is', res.data.data._id);
             if (shippingTermsData.length > 0) {
@@ -297,8 +316,8 @@ function AddEditVendor(props) {
             ToastsStore.error(res.data.error);
           }
         })
-        .catch(e => {
-          console.log('error after updating vendor', e);
+        .catch((e) => {
+          console.log("error after updating vendor", e);
         });
     }
   };
@@ -308,11 +327,11 @@ function AddEditVendor(props) {
     // for (let i = 0; i < shippingTermsData.length; i++) {
     var data = {
       shippingTermsData: withId,
-      vendorId: id
+      vendorId: id,
     };
     axios
       .put(updateShippingTermUrl, data)
-      .then(res => {
+      .then((res) => {
         if (res.data.success) {
           console.log(res.data.data);
           //   props.history.goBack();
@@ -320,8 +339,8 @@ function AddEditVendor(props) {
           ToastsStore.error(res.data.error);
         }
       })
-      .catch(e => {
-        console.log('error while adding shipping term ', e);
+      .catch((e) => {
+        console.log("error while adding shipping term ", e);
       });
   };
 
@@ -331,7 +350,7 @@ function AddEditVendor(props) {
 
   const editShippingTerm = () => {
     setOpenShippingTermModal(true);
-    setModeForShippingTerms('edit');
+    setModeForShippingTerms("edit");
   };
 
   const addPaymetTerm = () => {};
@@ -349,66 +368,37 @@ function AddEditVendor(props) {
   return (
     <section
       style={{
-        backgroundColor: '#60d69f',
-        // position: 'fixed',
-        display: 'flex',
-        width: '100%',
-        height: '100%',
-        flexDirection: 'column',
-        flex: 1
+        backgroundColor: "#60d69f",
+        position: "fixed",
+        display: "flex",
+        width: "100%",
+        height: "100%",
+        flexDirection: "column",
+        flex: 1,
+        overflowY: "scroll",
       }}
     >
-      <div className="container">
-        <div style={{ alignItems: 'center', flex: 1, display: 'flex' }}>
-          <Header />
-        </div>
-        <div style={{ alignItems: 'center', flex: 0.5, display: 'flex' }}>
-          <div
-            style={{
-              flex: 0.5,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}
-          >
-            <img src={vendor} style={{ maxWidth: '100%', height: 'auto' }} />
+      <Header />
+      <div className="cPadding">
+        <div className="subheader">
+          <div>
+            <img src={vendor} />
+            <h4>{comingFor === "add" ? " Add Vender" : " Edit Vender"}</h4>
           </div>
 
-          <div style={{ flex: 4, display: 'flex', alignItems: 'center' }}>
-            <h3
-              style={{
-                color: 'white',
-                fontFamily: 'Ubuntu',
-                fontWeight: '700'
-              }}
+          <div>
+            <img onClick={() => props.history.goBack()} src={view_all} />
+            {/* <img src={Search} /> */}
+          </div>
+        </div>
+
+        <div className="">
+          <div className="row">
+            <div
+              className="col-md-12"
+              style={styles.inputContainerForTextField}
             >
-              {comingFor === 'add'
-                ? ' Add Business Unit'
-                : ' Edit Business Unit'}
-            </h3>
-          </div>
-
-          <div
-            style={{
-              display: 'flex',
-              flex: 0.8,
-              justifyContent: 'flex-end',
-              alignItems: 'center'
-            }}
-          >
-            <div style={{ flex: 1.5, display: 'flex' }}>
-              <img
-                onClick={() => props.history.goBack()}
-                src={Add_New}
-                style={{ width: '100%', height: '100%', cursor: 'pointer' }}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-md-4" style={styles.inputContainer}>
-            <TextField
+              {/* <TextField
               fullWidth
               id="telephone1"
               name="telephone1"
@@ -418,11 +408,42 @@ function AddEditVendor(props) {
               value={telephone1}
               onChange={onChangeValue}
               error={!telephone1 && isFormSubmitted}
-            />
-          </div>
+            /> */}
 
-          <div className="col-md-4" style={styles.inputContainer}>
-            <TextField
+              <input
+                type="text"
+                placeholder="English Name"
+                name={"englishName"}
+                value={englishName}
+                onChange={onChangeValue}
+                className="textInputStyle"
+              />
+            </div>
+            <div className="col-md-4" style={styles.inputContainerForTextField}>
+              {/* <TextField
+              fullWidth
+              id="telephone1"
+              name="telephone1"
+              label="Telephone 1"
+              type="number"
+              variant="outlined"
+              value={telephone1}
+              onChange={onChangeValue}
+              error={!telephone1 && isFormSubmitted}
+            /> */}
+
+              <input
+                type="number"
+                placeholder="Telephone1"
+                name={"telephone1"}
+                value={telephone1}
+                onChange={onChangeValue}
+                className="textInputStyle"
+              />
+            </div>
+
+            <div className="col-md-4" style={styles.inputContainerForTextField}>
+              {/* <TextField
               fullWidth
               id="telephone2"
               name="telephone2"
@@ -431,11 +452,19 @@ function AddEditVendor(props) {
               variant="outlined"
               value={telephone2}
               onChange={onChangeValue}
-            />
-          </div>
+            /> */}
+              <input
+                type="number"
+                placeholder="telephone2"
+                name={"telephone2"}
+                value={telephone2}
+                onChange={onChangeValue}
+                className="textInputStyle"
+              />
+            </div>
 
-          <div className="col-md-4" style={styles.inputContainer}>
-            <TextField
+            <div className="col-md-4" style={styles.inputContainerForTextField}>
+              {/* <TextField
               fullWidth
               id="contactEmail"
               name="contactEmail"
@@ -444,13 +473,24 @@ function AddEditVendor(props) {
               variant="outlined"
               value={contactEmail}
               onChange={onChangeValue}
-            />
+            /> */}
+              <input
+                type="email"
+                placeholder="Contact Email"
+                name={"contactEmail"}
+                value={contactEmail}
+                onChange={onChangeValue}
+                className="textInputStyle"
+              />
+            </div>
           </div>
-        </div>
 
-        <div className="row">
-          <div className="col-md-12" style={styles.inputContainer}>
-            <TextField
+          <div className="row">
+            <div
+              className="col-md-12"
+              style={styles.inputContainerForTextField}
+            >
+              {/* <TextField
               fullWidth
               id="address"
               name="address"
@@ -460,13 +500,22 @@ function AddEditVendor(props) {
               value={address}
               onChange={onChangeValue}
               error={!address && isFormSubmitted}
-            />
-          </div>
-        </div>
+            /> */}
 
-        <div className="row">
-          <div className="col-md-4" style={styles.inputContainer}>
-            <TextField
+              <input
+                type="text"
+                placeholder="Address"
+                name={"address"}
+                value={address}
+                onChange={onChangeValue}
+                className="textInputStyle"
+              />
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-md-4" style={styles.inputContainerForTextField}>
+              {/* <TextField
               fullWidth
               id="zipcode"
               name="zipcode"
@@ -476,10 +525,18 @@ function AddEditVendor(props) {
               value={zipcode}
               onChange={onChangeValue}
               error={!zipcode && isFormSubmitted}
-            />
-          </div>
-          <div className="col-md-4" style={styles.inputContainer}>
-            <TextField
+            /> */}
+              <input
+                type="number"
+                placeholder="Zip Code"
+                name={"zipcode"}
+                value={zipcode}
+                onChange={onChangeValue}
+                className="textInputStyle"
+              />
+            </div>
+            <div className="col-md-4" style={styles.inputContainerForTextField}>
+              {/* <TextField
               fullWidth
               id="city"
               name="city"
@@ -488,10 +545,18 @@ function AddEditVendor(props) {
               variant="outlined"
               value={city}
               onChange={onChangeValue}
-            />
-          </div>
-          <div className="col-md-4" style={styles.inputContainer}>
-            <TextField
+            /> */}
+              <input
+                type="text"
+                placeholder="City"
+                name={"city"}
+                value={city}
+                onChange={onChangeValue}
+                className="textInputStyle"
+              />
+            </div>
+            <div className="col-md-4" style={styles.inputContainerForTextField}>
+              {/* <TextField
               fullWidth
               id="country"
               name="country"
@@ -500,13 +565,21 @@ function AddEditVendor(props) {
               variant="outlined"
               value={country}
               onChange={onChangeValue}
-            />
+            /> */}
+              <input
+                type="text"
+                placeholder="Country"
+                name={"country"}
+                value={country}
+                onChange={onChangeValue}
+                className="textInputStyle"
+              />
+            </div>
           </div>
-        </div>
 
-        <div className="row">
-          <div className="col-md-4" style={styles.inputContainer}>
-            <TextField
+          <div className="row">
+            <div className="col-md-4" style={styles.inputContainerForTextField}>
+              {/* <TextField
               fullWidth
               id="pobox"
               name="pobox"
@@ -516,11 +589,19 @@ function AddEditVendor(props) {
               value={pobox}
               onChange={onChangeValue}
               error={!pobox && isFormSubmitted}
-            />
-          </div>
+            /> */}
+              <input
+                type="number"
+                placeholder="PO Box"
+                name={"pobox"}
+                value={pobox}
+                onChange={onChangeValue}
+                className="textInputStyle"
+              />
+            </div>
 
-          <div className="col-md-4" style={styles.inputContainer}>
-            <TextField
+            <div className="col-md-4" style={styles.inputContainerForTextField}>
+              {/* <TextField
               fullWidth
               id="faxno"
               name="faxno"
@@ -529,11 +610,20 @@ function AddEditVendor(props) {
               variant="outlined"
               value={faxno}
               onChange={onChangeValue}
-            />
-          </div>
+            /> */}
 
-          <div className="col-md-4" style={styles.inputContainer}>
-            <TextField
+              <input
+                type="number"
+                placeholder="Fax No"
+                name={"faxno"}
+                value={faxno}
+                onChange={onChangeValue}
+                className="textInputStyle"
+              />
+            </div>
+
+            <div className="col-md-4" style={styles.inputContainerForTextField}>
+              {/* <TextField
               fullWidth
               id="taxno"
               name="taxno"
@@ -543,13 +633,21 @@ function AddEditVendor(props) {
               value={taxno}
               onChange={onChangeValue}
               error={!taxno && isFormSubmitted}
-            />
+            /> */}
+              <input
+                type="number"
+                placeholder="Tax No"
+                name={"taxno"}
+                value={taxno}
+                onChange={onChangeValue}
+                className="textInputStyle"
+              />
+            </div>
           </div>
-        </div>
 
-        <div className="row">
-          <div className="col-md-4" style={styles.inputContainer}>
-            <TextField
+          <div className="row">
+            <div className="col-md-4" style={styles.inputContainerForTextField}>
+              {/* <TextField
               fullWidth
               id="contactPersonName"
               name="contactPersonName"
@@ -559,11 +657,19 @@ function AddEditVendor(props) {
               value={contactPersonName}
               onChange={onChangeValue}
               error={!contactPersonName && isFormSubmitted}
-            />
-          </div>
+            /> */}
+              <input
+                type="text"
+                placeholder="Contact Person Name"
+                name={"contactPersonName"}
+                value={contactPersonName}
+                onChange={onChangeValue}
+                className="textInputStyle"
+              />
+            </div>
 
-          <div className="col-md-4" style={styles.inputContainer}>
-            <TextField
+            <div className="col-md-4" style={styles.inputContainerForTextField}>
+              {/* <TextField
               fullWidth
               id="contactPersonTelephone"
               name="contactPersonTelephone"
@@ -573,11 +679,19 @@ function AddEditVendor(props) {
               value={contactPersonTelephone}
               onChange={onChangeValue}
               error={!contactPersonTelephone && isFormSubmitted}
-            />
-          </div>
+            /> */}
+              <input
+                type="number"
+                placeholder="Contact Person Telephone"
+                name={"contactPersonTelephone"}
+                value={contactPersonTelephone}
+                onChange={onChangeValue}
+                className="textInputStyle"
+              />
+            </div>
 
-          <div className="col-md-4" style={styles.inputContainer}>
-            <TextField
+            <div className="col-md-4" style={styles.inputContainerForTextField}>
+              {/* <TextField
               fullWidth
               id="contactPersonEmail"
               name="contactPersonEmail"
@@ -587,65 +701,77 @@ function AddEditVendor(props) {
               value={contactPersonEmail}
               onChange={onChangeValue}
               error={!contactPersonEmail && isFormSubmitted}
-            />
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-md-6" style={styles.inputContainer}>
-            <InputLabel id="buHead-label">Class</InputLabel>
-            <Select
-              fullWidth
-              id="cls"
-              name="cls"
-              value={cls}
-              onChange={onChangeValue}
-              label="Class"
-              error={!cls && isFormSubmitted}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {mainClasses &&
-                mainClasses.map(val => {
-                  return (
-                    <MenuItem key={val.key} value={val.key}>
-                      {val.value}
-                    </MenuItem>
-                  );
-                })}
-            </Select>
+            /> */}
+              <input
+                type="email"
+                placeholder="Contact Person Email"
+                name={"contactPersonEmail"}
+                value={contactPersonEmail}
+                onChange={onChangeValue}
+                className="textInputStyle"
+              />
+            </div>
           </div>
 
-          <div className="col-md-6" style={styles.inputContainer}>
-            <InputLabel id="buName-label">Sub Class</InputLabel>
-            <Select
-              fullWidth
-              id="subClass"
-              name="subClass"
-              value={subClass}
-              onChange={onChangeValue}
-              label="Sub Class"
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {subClasses &&
-                subClasses.map(val => {
-                  if (val.parent === cls)
-                    return (
-                      <MenuItem key={val.key} value={val.key}>
-                        {val.value}
-                      </MenuItem>
-                    );
-                })}
-            </Select>
-          </div>
-        </div>
+          <div className="row">
+            <div className="col-md-6">
+              <div style={styles.inputContainerForDropDown}>
+                <InputLabel id="buHead-label">Class</InputLabel>
+                <Select
+                  fullWidth
+                  id="cls"
+                  name="cls"
+                  value={cls}
+                  onChange={onChangeValue}
+                  label="Class"
+                  error={!cls && isFormSubmitted}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  {mainClasses &&
+                    mainClasses.map((val) => {
+                      return (
+                        <MenuItem key={val.key} value={val.key}>
+                          {val.value}
+                        </MenuItem>
+                      );
+                    })}
+                </Select>
+              </div>
+            </div>
 
-        <div className="row">
-          <div className="col-md-6" style={styles.inputContainer}>
-            <TextField
+            <div className="col-md-6">
+              <div style={styles.inputContainerForDropDown}>
+                <InputLabel id="buName-label">Sub Class</InputLabel>
+                <Select
+                  fullWidth
+                  id="subClass"
+                  name="subClass"
+                  value={subClass}
+                  onChange={onChangeValue}
+                  label="Sub Class"
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  {subClasses &&
+                    subClasses.map((val) => {
+                      if (val.parent === cls)
+                        return (
+                          <MenuItem key={val.key} value={val.key}>
+                            {val.value}
+                          </MenuItem>
+                        );
+                    })}
+                </Select>
+              </div>
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-md-6" style={styles.inputContainerForTextField}>
+              {/* <TextField
               fullWidth
               id="paymentTerms"
               name="paymentTerms"
@@ -654,10 +780,18 @@ function AddEditVendor(props) {
               variant="outlined"
               value={paymentTerms}
               onChange={onChangeValue}
-            />
-          </div>
-          <div className="col-md-6" style={styles.inputContainer}>
-            <TextField
+            /> */}
+              <input
+                type="text"
+                placeholder="Payment Terms"
+                name={"paymentTerms"}
+                value={paymentTerms}
+                onChange={onChangeValue}
+                className="textInputStyle"
+              />
+            </div>
+            <div className="col-md-6" style={styles.inputContainerForTextField}>
+              {/* <TextField
               fullWidth
               id="rating"
               name="rating"
@@ -666,145 +800,177 @@ function AddEditVendor(props) {
               variant="outlined"
               value={rating}
               onChange={onChangeValue}
-            />
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-md-6" style={styles.inputContainer}>
-            <InputLabel id="buName-label">Status</InputLabel>
-            <Select
-              fullWidth
-              id="status"
-              name="status"
-              value={status}
-              onChange={onChangeValue}
-              label="Status"
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {statues &&
-                statues.map(val => {
-                  return (
-                    <MenuItem key={val.key} value={val.key}>
-                      {val.value}
-                    </MenuItem>
-                  );
-                })}
-            </Select>
-          </div>
-        </div>
-
-        {/* shipping terms modal */}
-        <Modal
-          open={openShippingTermModal}
-          // open={true}
-          style={modalStyle}
-          onClose={() => setOpenShippingTermModal(false)}
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-        >
-          <div
-            style={{
-              backgroundColor: '#e2e2e2',
-              height: '100%',
-              display: 'flex',
-              flex: 1,
-              flexDirection: 'column'
-            }}
-          >
-            <div
-              style={{
-                display: 'flex',
-                flex: 1,
-                justifyContent: 'flex-start',
-                marginLeft: 40,
-                alignItems: 'center'
-              }}
-            >
-              <h3 className="modal-heading" style={{ color: 'black' }}>
-                Shipping Term(s)
-              </h3>
-            </div>
-
-            <div
-              className="popup-body"
-              style={{ display: 'flex', flex: 7, flexDirection: 'column' }}
-            >
-              <ShippingTerm
-                hideShippingModel={hideShippingModel}
-                modeForShippingTerms={modeForShippingTerms}
-                selectedVendor={_id}
-                shippingTermsData={shippingTermsData}
-                hideModel={hideModel}
+            /> */}
+              <input
+                type="text"
+                placeholder="Rating"
+                name={"rating"}
+                value={rating}
+                onChange={onChangeValue}
+                className="textInputStyle"
               />
             </div>
           </div>
-        </Modal>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <div style={styles.inputContainer}>
+          <div className="row">
+            <div className="col-md-6">
+              <div style={styles.inputContainerForDropDown}>
+                <InputLabel id="buName-label">Status</InputLabel>
+                <Select
+                  fullWidth
+                  id="status"
+                  name="status"
+                  value={status}
+                  onChange={onChangeValue}
+                  label="Status"
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  {statues &&
+                    statues.map((val) => {
+                      return (
+                        <MenuItem key={val.key} value={val.key}>
+                          {val.value}
+                        </MenuItem>
+                      );
+                    })}
+                </Select>
+              </div>
+            </div>
+          </div>
+
+          {/* shipping terms modal */}
+          <Modal
+            open={openShippingTermModal}
+            // open={true}
+            style={modalStyle}
+            onClose={() => setOpenShippingTermModal(false)}
+            aria-labelledby="simple-modal-title"
+            aria-describedby="simple-modal-description"
+          >
+            <div
+              style={{
+                backgroundColor: "#e2e2e2",
+                height: "100%",
+                display: "flex",
+                flex: 1,
+                flexDirection: "column",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flex: 1,
+                  justifyContent: "flex-start",
+                  marginLeft: 40,
+                  alignItems: "center",
+                }}
+              >
+                <h3 className="modal-heading" style={{ color: "black" }}>
+                  Shipping Term(s)
+                </h3>
+              </div>
+
+              <div
+                className="popup-body"
+                style={{ display: "flex", flex: 7, flexDirection: "column" }}
+              >
+                <ShippingTerm
+                  hideShippingModel={hideShippingModel}
+                  modeForShippingTerms={modeForShippingTerms}
+                  selectedVendor={_id}
+                  shippingTermsData={shippingTermsData}
+                  hideModel={hideModel}
+                />
+              </div>
+            </div>
+          </Modal>
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginTop: "1rem",
+              marginBottom: "1rem",
+            }}
+          >
+            {/* <div style={styles.inputContainer}>
             <Button onClick={handleCancel} variant="contained">
               Cancel
             </Button>
-          </div>
+          </div> */}
 
-          <div className="addEditBtnDiv">
-            {comingFor === 'add' ? (
-              <>
-                <Button
-                  className="mr10"
-                  onClick={addShippingTerm}
-                  variant="contained"
+            <div className="addEditBtnDiv">
+              {comingFor === "add" ? (
+                <div
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "space-between",
+                  }}
                 >
-                  Add Shipping Term(s)
-                </Button>
-                <Button
-                  className="mr10"
-                  onClick={addPaymetTerm}
-                  variant="contained"
-                >
-                  Add Payment Term(s)
-                </Button>
-                <Button
-                  className="pl30 pr30"
-                  disabled={!validateForm()}
-                  onClick={handleAdd}
-                  variant="contained"
-                  color="primary"
-                >
-                  Add
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button
-                  className="mr10"
-                  onClick={editShippingTerm}
-                  variant="contained"
-                >
-                  Edit Shipping Term(s)
-                </Button>
-                <Button
-                  className="mr10"
-                  onClick={addPaymetTerm}
-                  variant="contained"
-                >
-                  Edit Payment Term(s)
-                </Button>
-                <Button
-                  className="pl30 pr30"
-                  disabled={!validateForm()}
-                  onClick={handleEdit}
-                  variant="contained"
-                  color="primary"
-                >
-                  Edit
-                </Button>
-              </>
-            )}
+                  <Button
+                    className="mr10"
+                    onClick={addShippingTerm}
+                    variant="contained"
+                  >
+                    Add Shipping Term(s)
+                  </Button>
+                  <Button
+                    className="mr10"
+                    onClick={addPaymetTerm}
+                    variant="contained"
+                  >
+                    Add Payment Term(s)
+                  </Button>
+                  <Button
+                    className="pl30 pr30"
+                    disabled={!validateForm()}
+                    onClick={handleAdd}
+                    variant="contained"
+                    color="primary"
+                  >
+                    Add
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <Button
+                    className="mr10"
+                    onClick={editShippingTerm}
+                    variant="contained"
+                  >
+                    Edit Shipping Term(s)
+                  </Button>
+                  <Button
+                    className="mr10"
+                    onClick={addPaymetTerm}
+                    variant="contained"
+                  >
+                    Edit Payment Term(s)
+                  </Button>
+                  <Button
+                    className="pl30 pr30"
+                    disabled={!validateForm()}
+                    onClick={handleEdit}
+                    variant="contained"
+                    color="primary"
+                  >
+                    Edit
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
+        </div>
+
+        <div style={{ marginBottom: 20 }}>
+          <img
+            onClick={() => props.history.goBack()}
+            src={Back_Arrow}
+            style={{ width: 60, height: 40, cursor: "pointer" }}
+          />
         </div>
       </div>
     </section>

@@ -20,15 +20,34 @@ import business_Unit from "../../assets/img/business_Unit.png";
 
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 
+import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
+
 const styles = {
-  inputContainer: {
+  // inputContainer: {
+  //   marginTop: 25,
+  //   backgroundColor: "white",
+  //   borderRadius: 5,
+  //   paddingTop: 5,
+  //   paddingBottom: 5,
+  //   paddingLeft: 5,
+  //   paddingRight: 5,
+  // },
+
+  // buttonContainer: {
+  //   marginTop: 25,
+  // },
+
+  inputContainerForTextField: {
+    marginTop: 25,
+  },
+
+  inputContainerForDropDown: {
     marginTop: 25,
     backgroundColor: "white",
-    borderRadius: 5,
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingLeft: 5,
-    paddingRight: 5,
+    borderRadius: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 2,
   },
 
   buttonContainer: {
@@ -204,11 +223,11 @@ function AddEditBuReturn(props) {
         overflowY: "scroll",
       }}
     >
-      <div style={{ alignItems: "center", flex: 1, display: "flex" }}>
+      <div style={{ alignItems: "center", marginTop:"2rem", display: "flex" }}>
         <Header />
       </div>
 
-      <div style={{ alignItems: "center", flex: 0.5, display: "flex" }}>
+      <div style={{ alignItems: "center", flex: 0.5, display: "flex", marginTop:"1rem" }}>
         <div
           style={{
             flex: 0.5,
@@ -256,8 +275,8 @@ function AddEditBuReturn(props) {
       </h1>
        */}
         <div className="row">
-          <div className="col-md-4">
-            <div style={styles.inputContainer}>
+          <div className="col-md-12">
+            <div style={styles.inputContainerForDropDown}>
               <InputLabel id="buId-label">Business Unit</InputLabel>
               <Select
                 fullWidth
@@ -281,8 +300,8 @@ function AddEditBuReturn(props) {
             </div>
           </div>
 
-          <div className="col-md-4">
-            <div style={styles.inputContainer}>
+          <div className="col-md-12">
+            <div style={styles.inputContainerForDropDown}>
               <InputLabel id="itemId-label">Item</InputLabel>
               <Select
                 fullWidth
@@ -306,9 +325,9 @@ function AddEditBuReturn(props) {
             </div>
           </div>
 
-          <div className="col-md-4">
-            <div style={styles.inputContainer}>
-              <TextField
+          <div className="col-md-12">
+            <div style={styles.inputContainerForTextField}>
+              {/* <TextField
                 fullWidth
                 id="qty"
                 name="qty"
@@ -318,14 +337,23 @@ function AddEditBuReturn(props) {
                 // variant="outlined"
                 value={qty}
                 onChange={onChangeValue}
+              /> */}
+
+              <input
+                type="number"
+                placeholder="Quantity"
+                name={"qty"}
+                value={qty}
+                onChange={onChangeValue}
+                className="textInputStyle"
               />
             </div>
           </div>
         </div>
 
         <div className="row">
-          <div className="col-md-4">
-            <div style={styles.inputContainer}>
+          <div className="col-md-12">
+            <div style={styles.inputContainerForTextField}>
               {/* <TextField
                         fullWidth
                         id="timeStamp"
@@ -353,14 +381,15 @@ function AddEditBuReturn(props) {
                   fullWidth
                   onChange={onChangeDate}
                   value={timeStamp ? timeStamp : new Date()}
+                  style={{ borderRadius: 10, backgroundColor: "white" }}
                 />
               </MuiPickersUtilsProvider>
             </div>
           </div>
 
-          <div className="col-md-4">
-            <div style={styles.inputContainer}>
-              <TextField
+          <div className="col-md-12">
+            <div style={styles.inputContainerForTextField}>
+              {/* <TextField
                 fullWidth
                 id="returnReason"
                 name="returnReason"
@@ -369,13 +398,22 @@ function AddEditBuReturn(props) {
                 // variant="outlined"
                 value={returnReason}
                 onChange={onChangeValue}
+              /> */}
+
+              <input
+                type="text"
+                placeholder="returnReason"
+                name={"returnReason"}
+                value={returnReason}
+                onChange={onChangeValue}
+                className="textInputStyle"
               />
             </div>
           </div>
 
-          <div className="col-md-4">
-            <div style={styles.inputContainer}>
-              <TextField
+          <div className="col-md-12">
+            <div style={styles.inputContainerForTextField}>
+              {/* <TextField
                 fullWidth
                 id="batchNo"
                 name="batchNo"
@@ -384,6 +422,15 @@ function AddEditBuReturn(props) {
                 // variant="outlined"
                 value={batchNo}
                 onChange={onChangeValue}
+              /> */}
+
+              <input
+                type="number"
+                placeholder="batchNo"
+                name={"batchNo"}
+                value={batchNo}
+                onChange={onChangeValue}
+                className="textInputStyle"
               />
             </div>
           </div>
@@ -391,7 +438,7 @@ function AddEditBuReturn(props) {
 
         <div className="row">
           <div className="col-md-12">
-            <div style={styles.inputContainer}>
+            <div style={styles.inputContainerForDropDown}>
               <InputLabel id="staff-label">Staff</InputLabel>
               <Select
                 fullWidth

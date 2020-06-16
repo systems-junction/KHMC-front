@@ -32,15 +32,34 @@ import business_Unit from "../../assets/img/business_Unit.png";
 
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 
+import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
+
 const styles = {
-  inputContainer: {
+  // inputContainer: {
+  //   marginTop: 25,
+  //   backgroundColor: "white",
+  //   borderRadius: 5,
+  //   paddingTop: 5,
+  //   paddingBottom: 5,
+  //   paddingLeft: 5,
+  //   paddingRight: 5,
+  // },
+
+  // buttonContainer: {
+  //   marginTop: 25,
+  // },
+
+  inputContainerForTextField: {
     marginTop: 25,
+  },
+
+  inputContainerForDropDown: {
+    marginTop: 35,
     backgroundColor: "white",
-    borderRadius: 5,
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingLeft: 5,
-    paddingRight: 5,
+    borderRadius: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 2,
   },
 
   buttonContainer: {
@@ -302,59 +321,25 @@ function ReceiveItems(props) {
         overflowY: "scroll",
       }}
     >
-      <div style={{ alignItems: "center", flex: 1, display: "flex", marginTop:10 }}>
-        <Header />
-      </div>
+      <Header />
+      <div className="cPadding">
+        <div className="subheader">
+          <div>
+            <img src={business_Unit} />
+            <h4>{comingFor === "add" ? "Receive Items" : "Receive Items"}</h4>
+          </div>
 
-      <div style={{ alignItems: "center", flex: 0.5, display: "flex" }}>
-        <div
-          style={{
-            flex: 0.5,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <img
-            src={business_Unit}
-            style={{ maxWidth: "100%", height: "auto" }}
-          />
-        </div>
-
-        <div style={{ flex: 4, display: "flex", alignItems: "center" }}>
-          <h3
-            style={{ color: "white", fontFamily: "Ubuntu", fontWeight: "700" }}
-          >
-            {comingFor === "add" ? "Receive Items" : "Receive Items"}
-          </h3>
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            flex: 0.8,
-            justifyContent: "flex-end",
-            alignItems: "center",
-          }}
-        >
-          <div style={{ flex: 1.5, display: "flex" }}>
-            <img
-              onClick={() => props.history.goBack()}
-              src={Add_New}
-              style={{ width: "100%", height: "100%", cursor: "pointer" }}
-            />
+          <div>
+            <img onClick={() => props.history.goBack()} src={Add_New} />
+            {/* <img src={Search} /> */}
           </div>
         </div>
-      </div>
 
-      <div
-        style={{ flex: 4, display: "flex", flexDirection: "column" }}
-        className="container"
-      >
-        <div className="row">
-          <div className="col-md-6">
-            <div style={styles.inputContainer}>
-              <TextField
+        <div style={{ flex: 4, display: "flex", flexDirection: "column" }}>
+          <div className="row">
+            <div className="col-md-6">
+              <div style={styles.inputContainerForTextField}>
+                {/* <TextField
                 fullWidth
                 name="itemCode"
                 label="Item Code"
@@ -362,13 +347,22 @@ function ReceiveItems(props) {
                 // variant="outlined"
                 value={itemCode}
                 onChange={onChangeValue}
-              />
-            </div>
-          </div>
+              /> */}
 
-          <div className="col-md-6">
-            <div style={styles.inputContainer}>
-              <TextField
+                <input
+                  type="number"
+                  placeholder="Item Code"
+                  name={"itemCode"}
+                  value={itemCode}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                />
+              </div>
+            </div>
+
+            <div className="col-md-6">
+              <div style={styles.inputContainerForTextField}>
+                {/* <TextField
                 fullWidth
                 name="itemName"
                 label="Item Name"
@@ -376,15 +370,24 @@ function ReceiveItems(props) {
                 // variant="outlined"
                 value={itemName}
                 onChange={onChangeValue}
-              />
+              /> */}
+
+                <input
+                  type="number"
+                  placeholder="Item Name"
+                  name={"itemName"}
+                  value={itemName}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="row">
-          <div className="col-md-6">
-            <div style={styles.inputContainer}>
-              <TextField
+          <div className="row">
+            <div className="col-md-6">
+              <div style={styles.inputContainerForTextField}>
+                {/* <TextField
                 fullWidth
                 name="currentQty"
                 label="Current Qty"
@@ -392,13 +395,22 @@ function ReceiveItems(props) {
                 // variant="outlined"
                 value={currentQty}
                 onChange={onChangeValue}
-              />
-            </div>
-          </div>
+              /> */}
 
-          <div className="col-md-6">
-            <div style={styles.inputContainer}>
-              <TextField
+                <input
+                  type="number"
+                  placeholder="Current Qty"
+                  name={"currentQty"}
+                  value={currentQty}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                />
+              </div>
+            </div>
+
+            <div className="col-md-6">
+              <div style={styles.inputContainerForTextField}>
+                {/* <TextField
                 fullWidth
                 name="requiredQty"
                 label="Required Qty"
@@ -406,15 +418,24 @@ function ReceiveItems(props) {
                 // variant="outlined"
                 value={requiredQty}
                 onChange={onChangeValue}
-              />
+              /> */}
+
+                <input
+                  type="number"
+                  placeholder="Required Qty"
+                  name={"requiredQty"}
+                  value={requiredQty}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="row">
-          <div className="col-md-6">
-            <div style={styles.inputContainer}>
-              <TextField
+          <div className="row">
+            <div className="col-md-6">
+              <div style={styles.inputContainerForTextField}>
+                {/* <TextField
                 fullWidth
                 name="receivedQty"
                 label="Received Qty"
@@ -422,13 +443,22 @@ function ReceiveItems(props) {
                 // variant="outlined"
                 value={receivedQty}
                 onChange={onChangeValue}
-              />
-            </div>
-          </div>
+              /> */}
 
-          <div className="col-md-6">
-            <div style={styles.inputContainer}>
-              <TextField
+                <input
+                  type="number"
+                  placeholder="Received Qty"
+                  name={"receivedQty"}
+                  value={receivedQty}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                />
+              </div>
+            </div>
+
+            <div className="col-md-6">
+              <div style={styles.inputContainerForTextField}>
+                {/* <TextField
                 fullWidth
                 name="bonusQty"
                 label="Bonus Qty"
@@ -436,15 +466,24 @@ function ReceiveItems(props) {
                 // variant="outlined"
                 value={bonusQty}
                 onChange={onChangeValue}
-              />
+              /> */}
+
+                <input
+                  type="number"
+                  placeholder="Bonus Qty"
+                  name={"bonusQty"}
+                  value={bonusQty}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="row">
-          <div className="col-md-6">
-            <div style={styles.inputContainer}>
-              <TextField
+          <div className="row">
+            <div className="col-md-6">
+              <div style={styles.inputContainerForTextField}>
+                {/* <TextField
                 fullWidth
                 name="batchNumber"
                 label="Batch No"
@@ -452,12 +491,23 @@ function ReceiveItems(props) {
                 // variant="outlined"
                 value={batchNumber}
                 onChange={onChangeValue}
-              />
-            </div>
-          </div>
+              /> */}
 
-          <div className="col-md-6">
-            <div style={styles.inputContainer}>
+                <input
+                  type="number"
+                  placeholder="Batch Number"
+                  name={"batchNumber"}
+                  value={batchNumber}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                />
+              </div>
+            </div>
+
+            <div
+              className="col-md-6"
+              style={(styles.inputContainerForTextField, { marginTop: 35 })}
+            >
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DatePicker
                   inputVariant="outlined"
@@ -465,6 +515,7 @@ function ReceiveItems(props) {
                   format="dd/MM/yyyy"
                   label="Expiry Date"
                   onChange={(val) => onChangeDate(val, "expiryDate")}
+                  style={{ borderRadius: 10, backgroundColor: "white" }}
                   value={
                     comingFor === "add"
                       ? expiryDate
@@ -476,12 +527,11 @@ function ReceiveItems(props) {
               </MuiPickersUtilsProvider>
             </div>
           </div>
-        </div>
 
-        <div className="row" >
-          <div className="col-md-6">
-            <div style={styles.inputContainer}>
-              <TextField
+          <div className="row">
+            <div className="col-md-6">
+              <div style={styles.inputContainerForTextField}>
+                {/* <TextField
                 fullWidth
                 name="unit"
                 label="Unit"
@@ -489,13 +539,22 @@ function ReceiveItems(props) {
                 // variant="outlined"
                 value={unit}
                 onChange={onChangeValue}
-              />
-            </div>
-          </div>
+              /> */}
 
-          <div className="col-md-6">
-            <div style={styles.inputContainer}>
-              <TextField
+                <input
+                  type="text"
+                  placeholder="Unit"
+                  name={"unit"}
+                  value={unit}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                />
+              </div>
+            </div>
+
+            <div className="col-md-6">
+              <div style={styles.inputContainerForTextField}>
+                {/* <TextField
                 fullWidth
                 name="discount"
                 label="Discount"
@@ -503,15 +562,24 @@ function ReceiveItems(props) {
                 // variant="outlined"
                 value={discount}
                 onChange={onChangeValue}
-              />
+              /> */}
+
+                <input
+                  type="number"
+                  placeholder="Discount"
+                  name={"discount"}
+                  value={discount}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="row">
-          <div className="col-md-12">
-            <div style={styles.inputContainer}>
-              <TextField
+          <div className="row">
+            <div className="col-md-12">
+              <div style={styles.inputContainerForTextField}>
+                {/* <TextField
                 fullWidth
                 name="uniyDiscount"
                 label="Unit Discount"
@@ -519,11 +587,19 @@ function ReceiveItems(props) {
                 // variant="outlined"
                 value={uniyDiscount}
                 onChange={onChangeValue}
-              />
+              /> */}
+                <input
+                  type="number"
+                  placeholder="Unit Discount"
+                  name={"uniyDiscount"}
+                  value={uniyDiscount}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                />
+              </div>
             </div>
-          </div>
 
-          {/* <div className="col-md-6" style={styles.inputContainer}>
+            {/* <div className="col-md-6" style={styles.inputContainer}>
           <TextField
             fullWidth
             name="discountAmount"
@@ -534,12 +610,12 @@ function ReceiveItems(props) {
             onChange={onChangeValue}
           />
         </div> */}
-        </div>
+          </div>
 
-        <div className="row">
-          <div className="col-md-6">
-            <div style={styles.inputContainer}>
-              <TextField
+          <div className="row">
+            <div className="col-md-6">
+              <div style={styles.inputContainerForTextField}>
+                {/* <TextField
                 fullWidth
                 name="tax"
                 label="Tax"
@@ -547,13 +623,22 @@ function ReceiveItems(props) {
                 // variant="outlined"
                 value={tax}
                 onChange={onChangeValue}
-              />
-            </div>
-          </div>
+              /> */}
 
-          <div className="col-md-6">
-            <div style={styles.inputContainer}>
-              <TextField
+                <input
+                  type="number"
+                  placeholder="Tax"
+                  name={"tax"}
+                  value={tax}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                />
+              </div>
+            </div>
+
+            <div className="col-md-6">
+              <div style={styles.inputContainerForTextField}>
+                {/* <TextField
                 fullWidth
                 name="taxAmount"
                 label="Tax Amount"
@@ -561,15 +646,24 @@ function ReceiveItems(props) {
                 // variant="outlined"
                 value={taxAmount}
                 onChange={onChangeValue}
-              />
+              /> */}
+
+                <input
+                  type="number"
+                  placeholder="Tax Amount"
+                  name={"taxAmount"}
+                  value={taxAmount}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="row">
-          <div className="col-md-6">
-            <div style={styles.inputContainer}>
-              <TextField
+          <div className="row">
+            <div className="col-md-6">
+              <div style={styles.inputContainerForTextField}>
+                {/* <TextField
                 fullWidth
                 name="finalUnitPrice"
                 label="Final Unit Price"
@@ -577,13 +671,22 @@ function ReceiveItems(props) {
                 // variant="outlined"
                 value={finalUnitPrice}
                 onChange={onChangeValue}
-              />
-            </div>
-          </div>
+              /> */}
 
-          <div className="col-md-6">
-            <div style={styles.inputContainer}>
-              <TextField
+                <input
+                  type="number"
+                  placeholder="Final Unit Price"
+                  name={"finalUnitPrice"}
+                  value={finalUnitPrice}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                />
+              </div>
+            </div>
+
+            <div className="col-md-6">
+              <div style={styles.inputContainerForTextField}>
+                {/* <TextField
                 fullWidth
                 name="subTotal"
                 label="Sub Total"
@@ -591,15 +694,23 @@ function ReceiveItems(props) {
                 // variant="outlined"
                 value={subTotal}
                 onChange={onChangeValue}
-              />
+              /> */}
+                <input
+                  type="number"
+                  placeholder="Sub Total"
+                  name={"subTotal"}
+                  value={subTotal}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="row">
-          <div className="col-md-6">
-            <div style={styles.inputContainer}>
-              <TextField
+          <div className="row">
+            <div className="col-md-6">
+              <div style={styles.inputContainerForTextField}>
+                {/* <TextField
                 fullWidth
                 name="discountAmount"
                 label="Discunt Amount"
@@ -607,13 +718,22 @@ function ReceiveItems(props) {
                 // variant="outlined"
                 value={discountAmount}
                 onChange={onChangeValue}
-              />
-            </div>
-          </div>
+              /> */}
 
-          <div className="col-md-6">
-            <div style={styles.inputContainer}>
-              <TextField
+                <input
+                  type="number"
+                  placeholder="Discount Amount"
+                  name={"discountAmount"}
+                  value={discountAmount}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                />
+              </div>
+            </div>
+
+            <div className="col-md-6">
+              <div style={styles.inputContainerForTextField}>
+                {/* <TextField
                 fullWidth
                 name="totalPrice"
                 label="Total Price"
@@ -621,15 +741,24 @@ function ReceiveItems(props) {
                 // variant="outlined"
                 value={totalPrice}
                 onChange={onChangeValue}
-              />
+              /> */}
+
+                <input
+                  type="number"
+                  placeholder="Total Price"
+                  name={"totalPrice"}
+                  value={totalPrice}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="row">
-          <div className="col-md-6">
-            <div style={styles.inputContainer}>
-              <TextField
+          <div className="row">
+            <div className="col-md-12">
+              <div style={styles.inputContainerForTextField}>
+                {/* <TextField
                 fullWidth
                 name="invoice"
                 label="Invoice"
@@ -637,31 +766,41 @@ function ReceiveItems(props) {
                 // variant="outlined"
                 value={invoice}
                 onChange={onChangeValue}
-              />
-            </div>
-          </div>
+              /> */}
 
-          <div className="col-md-6">
-            <div style={styles.inputContainer}>
-              <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <DateTimePicker
-                  inputVariant="outlined"
-                  fullWidth={true}
-                  label="Select Date"
-                  onChange={(val) => onChangeDate(val, "date")}
-                  value={
-                    comingFor === "add" ? (date ? date : new Date()) : date
-                  }
+                <input
+                  type="number"
+                  placeholder="Invoice"
+                  name={"invoice"}
+                  value={invoice}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
                 />
-              </MuiPickersUtilsProvider>
+              </div>
+            </div>
+
+            <div className="col-md-12">
+              <div style={styles.inputContainerForTextField}>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <DateTimePicker
+                    inputVariant="outlined"
+                    fullWidth={true}
+                    label="Select Date"
+                    onChange={(val) => onChangeDate(val, "date")}
+                    style={{ backgroundColor: "white", borderRadius: 10 }}
+                    value={
+                      comingFor === "add" ? (date ? date : new Date()) : date
+                    }
+                  />
+                </MuiPickersUtilsProvider>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="row">
-          <div className="col-md-12">
-            <div style={styles.inputContainer}>
-              <TextField
+          <div className="row">
+            <div className="col-md-12">
+              <div style={styles.inputContainerForTextField}>
+                {/* <TextField
                 fullWidth
                 name="comments"
                 label="Notes"
@@ -669,60 +808,70 @@ function ReceiveItems(props) {
                 // variant="outlined"
                 value={comments}
                 onChange={onChangeValue}
-              />
+              /> */}
+
+                <input
+                  type="number"
+                  placeholder="Comments"
+                  name={"comments"}
+                  value={comments}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
-          {/* <div style={styles.buttonContainer}>
+          <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
+            {/* <div style={styles.buttonContainer}>
             <Button onClick={handleCancel} variant="contained">
               Cancel
             </Button>
           </div> */}
 
-          <div
-            style={{
-              display: "flex",
-              flex: 1,
-              height: 50,
-              justifyContent: "center",
-              marginTop: "2%",
-              marginBottom: "2%",
-            }}
-          >
-            {comingFor === "add" ? (
-              <Button
-                style={{ width: "60%" }}
-                disabled={!validateForm()}
-                onClick={handleAdd}
-                variant="contained"
-                color="primary"
-              >
-                Add Receive Items
-              </Button>
-            ) : (
-              <Button
-                style={{ width: "60%" }}
-                disabled={!validateForm()}
-                onClick={handleEdit}
-                variant="contained"
-                color="primary"
-              >
-                Edit Receive Items
-              </Button>
-            )}
+            <div
+              style={{
+                display: "flex",
+                flex: 1,
+                height: 50,
+                justifyContent: "center",
+                marginTop: "2%",
+                marginBottom: "2%",
+              }}
+            >
+              {comingFor === "add" ? (
+                <Button
+                  style={{ width: "60%" }}
+                  disabled={!validateForm()}
+                  onClick={handleAdd}
+                  variant="contained"
+                  color="primary"
+                >
+                  Add Receive Items
+                </Button>
+              ) : (
+                <Button
+                  style={{ width: "60%" }}
+                  disabled={!validateForm()}
+                  onClick={handleEdit}
+                  variant="contained"
+                  color="primary"
+                >
+                  Edit Receive Items
+                </Button>
+              )}
+            </div>
           </div>
-        </div>
 
-        <Notification msg={errorMsg} open={openNotification} />
+          <Notification msg={errorMsg} open={openNotification} />
 
-        <div style={{ marginBottom: 20 }}>
-          <img
-            onClick={() => props.history.goBack()}
-            src={Back_Arrow}
-            style={{ width: 60, height: 40, cursor: "pointer" }}
-          />
+          <div style={{ marginBottom: 20 }}>
+            <img
+              onClick={() => props.history.goBack()}
+              src={Back_Arrow}
+              style={{ width: 60, height: 40, cursor: "pointer" }}
+            />
+          </div>
         </div>
       </div>
     </div>

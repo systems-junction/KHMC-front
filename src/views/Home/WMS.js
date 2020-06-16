@@ -18,7 +18,9 @@ import Header from "../../components/Header/Header";
 
 import RCM from "../../assets/img/business_Unit.png";
 import WMS from "../../assets/img/WMS.png";
-
+import wh_inventory from "../../assets/img/WH Inventory.png";
+import purchase_order from "../../assets/img/Purchase Order.png";
+import purchase_request from "../../assets/img/purchase request.png";
 import FIN from "../../assets/img/FIN.png";
 import Control_Room from "../../assets/img/Control_Room.png";
 
@@ -33,6 +35,121 @@ import Items from "../../assets/img/Items.png";
 import React, { useEffect } from "react";
 import "./MenuPage.css";
 import { render } from "react-dom";
+import Back from "../../assets/img/Back_Arrow.png";
+
+import KHMC_White from "../../assets/img/KHMC_White.png";
+
+import Influence_white from "../../assets/img/Influence_white.png";
+
+import MenuTree from "../../components/MenuTree/MenuTree";
+
+const admin = [
+  { img: WMS, text: "WMS" },
+  {
+    img: "",
+    text: "Receive Items",
+    path: "/home/controlroom/wms/receiveitems",
+  },
+
+  { img: Vendor, text: "Vendor Mgmt", path: "/home/controlroom/wms/vendor" },
+
+  {
+    img: "",
+    text: "",
+    path: "",
+  },
+
+  {
+    img: "",
+    text: "",
+    path: "",
+  },
+
+  {
+    img: purchase_request,
+    text: "Purchase Request",
+    path: "/home/controlroom/wms/pr",
+  },
+
+  {
+    img: purchase_order,
+    text: "Purchase Order",
+    path: "/home/controlroom/wms/po",
+  },
+
+  {
+    img: wh_inventory,
+    text: "WH Inventory",
+    path: "/home/controlroom/wms/warehouseinventory",
+  },
+
+  // { img: Items, text: "Items", path: "controlroom/items" },
+  // { img: "", text: "Staff", path: "controlroom/staff" },
+  // { img: Control_Room, text: "ControlRoom" },
+];
+
+const buHead = [
+  { img: WMS, text: "WMS" },
+  {
+    img: "",
+    text: "Receive Items",
+    path: "/home/controlroom/wms/receiveitems",
+  },
+
+  { img: Vendor, text: "Vendor Mgmt", path: "/home/controlroom/wms/vendor" },
+
+  {
+    img: "",
+    text: "",
+    path: "",
+  },
+
+  {
+    img: "",
+    text: "",
+    path: "",
+  },
+
+  {
+    img: purchase_request,
+    text: "Purchase Request",
+    path: "/home/controlroom/wms/pr",
+  },
+
+  {
+    img: purchase_order,
+    text: "Purchase Order",
+    path: "/home/controlroom/wms/po",
+  },
+
+  {
+    img: wh_inventory,
+    text: "WH Inventory",
+    path: "/home/controlroom/wms/warehouseinventory",
+  },
+];
+
+const committeeMember = [
+  { img: WMS, text: "WMS" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+
+  { img: "", text: "", path: "" },
+  {
+    img: purchase_request,
+    text: "Purchase Request",
+    path: "/home/controlroom/wms/pr",
+  },
+  {
+    img: purchase_order,
+    text: "Purchase Order",
+    path: "/home/controlroom/wms/po",
+  },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+  // { img: Control_Room, text: "ControlRoom" },
+];
 
 class HomeScreen extends React.Component {
   constructor(props) {
@@ -40,11 +157,23 @@ class HomeScreen extends React.Component {
 
     this.state = {
       openApps: false,
+      goBack: false,
+
+      currentUser: "",
     };
   }
 
+  componentDidMount() {
+    this.setState({ currentUser: cookie.load("current_user") });
+  }
+
   render() {
-    // if (this.state.openApps) {
+    if (this.state.goBack) {
+      return <Redirect to={"/home"} />;
+    }
+
+    const userType = this.state.currentUser.staffTypeId;
+
     return (
       <div
         style={{
@@ -54,330 +183,277 @@ class HomeScreen extends React.Component {
           position: "fixed",
           width: "100%",
           height: "100%",
-          // backgroundColor: '#0154E8'
+          backgroundColor: "#2B62CC",
           backgroundImage: `url("${WMS_Back}")`,
           backgroundSize: "100%",
         }}
       >
-        <div
-          style={{
-            alignItems: "center",
-            flex: 1,
-            display: "flex",
-            minHeight: "15%",
-            width: "100%",
-            position: "fixed",
-            zIndex: 1,
-          }}
-        >
-          <Header />
-        </div>
+        <Header />
 
-        <div
+        {/* <div
           className="menupage"
           style={{
             display: "flex",
             flex: 4,
-            minHeight: "85%",
+            minHeight: "100%",
             alignItems: "center",
+            justifyContent: "center",
+            position: "fixed",
+            left: "45%",
           }}
         >
-          {this.state.openApps ? (
-            <section>
+          <nav className="menu">
+            <input
+              type="checkbox"
+              href="#"
+              className="menu-open"
+              name="menu-open"
+              id="menu-open"
+            />
+            <label
+              className="menu-open-button"
+              for="menu-open"
+              style={{
+                boxShadow: "5px 5px 5px #2433a5",
+              }}
+            >
               <div
-                className="mainmenu circle lightBlue"
-                style={{ cursor: "pointer" }}
-                onClick={() => this.setState({ openApps: false })}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                }}
+                // onClick={() => this.props.history.push("/home/controlroom")}
               >
-                <h4
-                  style={{
-                    position: "absolute",
-                    top: 20,
-                    color: "white",
-                    fontWeight: "700",
-                    textAlign: "center",
-                  }}
-                >
-                  WMS
-                </h4>
                 <img
                   src={WMS}
                   style={{
                     maxWidth: "40%",
                     height: "auto",
                     position: "absolute",
-                    top: 50,
-                    bottom: -40,
-                  }}
-                />{" "}
-              </div>
-
-              <div
-                className="submenu circle orange"
-                style={{ cursor: "pointer" }}
-                onClick={() =>
-                  this.props.history.push("/home/controlroom/wms/bus")
-                }
-              >
-                <h5
-                  style={{
-                    position: "absolute",
                     top: 20,
+                  }}
+                />
+                <h6
+                  style={{
+                    position: "absolute",
+                    top: 60,
                     color: "white",
                     fontWeight: "700",
                   }}
                 >
-                  BU Mgmt
-                </h5>
-                <img
-                  src={RCM}
-                  style={{
-                    maxWidth: "40%",
-                    height: "auto",
-                    position: "absolute",
-                    top: 50,
-                    bottom: -20,
-                  }}
-                />{" "}
+                  WMS
+                </h6>
               </div>
+            </label>
 
-              <div className="submenu1 circle gray"
-                style={{ cursor: "pointer" }}
-                onClick={() => this.props.history.push("/home/warehouseinventory")}
-              >
-                <h5 style={{ textAlign: "center", fontWeight: "700", maxWidth:'80%' }}>
-                  WH Inventory
-                </h5>
-              </div>
+            <a className="menu-item item-1">
 
-              <div
-                className="submenu2 circle orange"
-                style={{ cursor: "pointer" }}
-                onClick={() => this.props.history.push("/home/pr")}
+<div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                }}
+                onClick={() => this.props.history.push("/home/controlroom/wms/receiveitems")}
               >
-                <h5 style={{ textAlign: "center", fontWeight: "700" }}>
-                  Purchase Request
-                </h5>
-              </div>
-
-              <div
-                className="submenu3 circle green"
-                style={{ cursor: "pointer" }}
-                onClick={() => this.props.history.push("/home/po")}
-              >
-                <h5 style={{ textAlign: "center", fontWeight: "700" }}>
-                  Purchase Order
-                </h5>
-              </div>
-
-              <div
-                className="submenu4 circle lightBlue"
-                style={{ cursor: "pointer" }}
-                onClick={() =>
-                  this.props.history.push("/home/controlroom/wms/items")
-                }
-              >
-                <h5
+                <h6
                   style={{
                     position: "absolute",
-                    top: 15,
+                    top: 30,
                     color: "white",
+                    width: "80%",
                     fontWeight: "700",
-                    textAlign: "center",
-                    maxWidth: "90%",
                   }}
                 >
-                  Items Mgmt
-                </h5>
-                <img
-                  src={Items}
-                  style={{
-                    maxWidth: "30%",
-                    height: "auto",
-                    position: "absolute",
-                    top: 65,
-                    bottom: -20,
-                  }}
-                />{" "}
+                  Receive Items
+                </h6>
               </div>
-
+            </a>
+            <a className="menu-item item-2">
+         
+            </a>
+            <a className="menu-item item-3">
               <div
-                className="submenu5 circle yellow"
-                style={{ cursor: "pointer", textAlign: "center" }}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                }}
                 onClick={() =>
                   this.props.history.push("/home/controlroom/wms/vendor")
                 }
               >
-                <h5
-                  style={{
-                    position: "absolute",
-                    top: 20,
-                    color: "white",
-                    fontWeight: "700",
-                    maxWidth: "90%",
-                  }}
-                >
-                  Vendors Mgmt
-                </h5>
                 <img
                   src={Vendor}
                   style={{
-                    maxWidth: "40%",
+                    maxWidth: "50%",
                     height: "auto",
                     position: "absolute",
-                    top: 70,
-                    bottom: -20,
+                    top: 13,
                   }}
-                />{" "}
+                />
+                <h6
+                  style={{
+                    position: "absolute",
+                    top: 45,
+                    color: "white",
+                    fontWeight: "700",
+                    maxWidth: "80%",
+                  }}
+                >
+                  Vendor Mgmt
+                </h6>
               </div>
-
+            </a>
+            <a className="menu-item item-4">
+      
+            </a>
+            <a className="menu-item item-5">
               <div
-                className="submenu6 circle gray"
-                style={{ cursor: "pointer" }}
-                onClick={() =>
-                  this.props.history.push("/home/controlroom/wms/fus")
-                }
-              >
-                <h5
-                  style={{
-                    position: "absolute",
-                    top: 20,
-                    color: "white",
-                    fontWeight: "700",
-                  }}
-                >
-                  FU Mgmt
-                </h5>
-                <img
-                  src={FunctionalUnit}
-                  style={{
-                    maxWidth: "40%",
-                    height: "auto",
-                    position: "absolute",
-                    top: 50,
-                    bottom: -20,
-                  }}
-                />{" "}
-              </div>
-            </section>
-          ) : (
-            <div
-              style={{
-                flex: 4,
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Button
-                onClick={() =>
-                  this.setState({ openApps: !this.state.openApps })
-                }
                 style={{
-                  borderRadius: 100 / 2,
-                  color: "white",
-                  backgroundColor: "#4e84db",
-                  fontWeight: "700",
-                  width: 100,
-                  height: 100,
-                  textAlign: "center",
-                  alignSelf: "center",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
                 }}
+                onClick={() => this.props.history.push("/home/controlroom/wms/pr")}
               >
-                <h5
-                  style={{
-                    position: "absolute",
-                    top: 15,
-                    color: "white",
-                    fontWeight: "700",
-                    textAlign: "center",
-                  }}
-                >
-                  WMS
-                </h5>{" "}
-                <img
-                  src={WMS}
+                 <img
+                  src={purchase_request}
                   style={{
                     maxWidth: "40%",
                     height: "auto",
                     position: "absolute",
-                    top: 50,
-                    bottom: -20,
+                    top: 7,
                   }}
-                />{" "}
-              </Button>
-            </div>
-          )}
+                />
+                <h6
+                  style={{
+                    position: "absolute",
+                    top: 47,
+                    color: "white",
+                    fontWeight: "700",
+                    maxWidth: "80%",
+                  }}
+                >
+                  Purchase Request
+                </h6>
+              </div>
+            </a>
+            <a className="menu-item item-6">
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                }}
+                onClick={() => this.props.history.push("/home/controlroom/wms/po")}
+              >
+                 <img
+                  src={purchase_order}
+                  style={{
+                    maxWidth: "35%",
+                    height: "auto",
+                    position: "absolute",
+                    top: 8,
+                  }}
+                />
+                <h6
+                  style={{
+                    position: "absolute",
+                    top: 50,
+                    color: "white",
+                    fontWeight: "700",
+                    maxWidth: "80%",
+                  }}
+                >
+                  Purchase Order
+                </h6>
+              </div>
+            </a>
+           
+            <a className="menu-item item-7">
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                }}
+                onClick={() =>
+                  this.props.history.push("/home/controlroom/wms/warehouseinventory")
+                }
+              >
+                 <img
+                  src={wh_inventory}
+                  style={{
+                    maxWidth: "40%",
+                    height: "auto",
+                    position: "absolute",
+                    top: 10,
+                  }}
+                />
+                <h6
+                  style={{
+                    position: "absolute",
+                    top: 40,
+                    color: "white",
+                    fontWeight: "700",
+                    maxWidth: "80%",
+                  }}
+                >
+                  WH Inventory
+                </h6>
+              </div>
+            </a>
+          </nav>
+        </div> */}
+
+        <MenuTree
+          history={this.props.history}
+          options={
+            userType && userType.type === "BU Head"
+              ? buHead
+              : userType && userType.type === "admin"
+              ? admin
+              : userType && userType.type === "Committe Member"
+              ? committeeMember
+              : admin
+          }
+        />
+
+        <div
+          style={{
+            position: "fixed",
+            width: "100%",
+            height: "10%",
+            top: "90%",
+          }}
+        >
+          <img
+            onClick={() => this.props.history.goBack()}
+            src={Back}
+            style={{
+              width: 45,
+              height: 35,
+              marginLeft: "5%",
+              cursor: "pointer",
+            }}
+          />
         </div>
       </div>
     );
-    // } else {
-    //   return (
-    //     <div
-    //       style={{
-    //         display: "flex",
-    //         flexDirection: "column",
-    //         flex: 1,
-    //         position: "fixed",
-    //         width: "100%",
-    //         height: "100%",
-    //         backgroundImage: `url("${WMS_Back}")`,
-    //         backgroundSize: "100%",
-    //       }}
-    //     >
-    //       <div style={{ alignItems: "center", flex: 0.7, display: "flex" }}>
-    //         <Header />
-    //       </div>
-
-    //       <div
-    //         style={{
-    //           flex: 4,
-    //           display: "flex",
-    //           flexDirection: "column",
-    //           justifyContent: "center",
-    //           alignItems: "center",
-    //         }}
-    //       >
-    //         <Button
-    //           onClick={() => this.setState({ openApps: !this.state.openApps })}
-    //           style={{
-    //             borderRadius: 100 / 2,
-    //             color: "white",
-    //             backgroundColor: "#4e84db",
-    //             fontWeight: "700",
-    //             width: 100,
-    //             height: 100,
-    //             textAlign: "center",
-    //             alignSelf: "center",
-    //           }}
-    //         >
-    //           <h5
-    //             style={{
-    //               position: "absolute",
-    //               top: 15,
-    //               color: "white",
-    //               fontWeight: "700",
-    //               textAlign: "center",
-    //             }}
-    //           >
-    //             WMS
-    //           </h5>{" "}
-    //           <img
-    //             src={WMS}
-    //             style={{
-    //               maxWidth: "40%",
-    //               height: "auto",
-    //               position: "absolute",
-    //               top: 50,
-    //               bottom: -20,
-    //             }}
-    //           />{" "}
-    //         </Button>
-    //       </div>
-    //     </div>
-    //   );
-    // }
   }
 }
 

@@ -1,39 +1,40 @@
-import React from 'react';
+import React from "react";
 
-import TextField from '@material-ui/core/TextField';
+import TextField from "@material-ui/core/TextField";
 
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
+import Button from "@material-ui/core/Button";
+import Card from "@material-ui/core/Card";
 
 // import Notification from 'components/Snackbar/Notification.js';
 
-import AddAlert from '@material-ui/icons/AddAlert';
+import AddAlert from "@material-ui/icons/AddAlert";
 
-import { Redirect } from 'react-router-dom';
-import axios from 'axios';
-import cookie from 'react-cookies';
-import { loginUrl } from '../public/endpoins';
+import { Redirect } from "react-router-dom";
+import axios from "axios";
+import cookie from "react-cookies";
+import { loginUrl } from "../public/endpoins";
 
-import KHMC_White from '../assets/img/KHMC_White.png';
+import KHMC_White from "../assets/img/KHMC_White.png";
 
-import Influence_white from '../assets/img/Influence_white.png';
+import Influence_white from "../assets/img/Influence_white.png";
+import Header from "../components/Header/Header";
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      userName: '',
+      userName: "",
       null_userName: false,
 
-      password: '',
-      null_password: '',
+      password: "",
+      null_password: "",
 
       tr: false,
 
       verifiedUser: false,
 
-      msg: ''
+      msg: "",
     };
   }
 
@@ -50,7 +51,6 @@ class Login extends React.Component {
     //   this.setState({ null_password: true });
     // } else {
     //   var re = /\S+@\S+\.\S+/;
-
     //   if (!re.test(this.state.userName)) {
     //     this.setState({ tr: true, msg: 'Enter the valid email address' });
     //   } else {
@@ -58,7 +58,6 @@ class Login extends React.Component {
     //       email: this.state.userName,
     //       password: this.state.password
     //     };
-
     //     axios
     //       .post(loginUrl, params)
     //       .then(res => {
@@ -80,7 +79,6 @@ class Login extends React.Component {
     //       });
     //   }
     // }
-
     // this.props.history.push('/emailsendstatus');
   }
 
@@ -91,7 +89,7 @@ class Login extends React.Component {
   render() {
     if (this.state.tr) {
       setTimeout(() => {
-        this.setState({ tr: false, msg: '' });
+        this.setState({ tr: false, msg: "" });
       }, 2000);
     }
     if (this.state.verifiedUser) {
@@ -101,108 +99,91 @@ class Login extends React.Component {
     return (
       <div
         style={{
-          display: 'flex',
-          flexDirection: 'column',
+          display: "flex",
+          flexDirection: "column",
           flex: 1,
-          position: 'fixed',
-          width: '100%',
-          height: '100%',
-          backgroundColor: '#0154E8'
+          position: "fixed",
+          width: "100%",
+          height: "100%",
+          backgroundColor: "#0154E8",
         }}
       >
-        <div
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            display: 'flex',
-            flexDirection: 'row',
-            marginLeft: '4%',
-            marginRight: '4%'
-            // backgroundColor: 'red'
-          }}
-        >
-        <div style={{ flex: 1, display: "flex" }}>
-            <img src={KHMC_White} style={{ maxWidth: "50%", height: "auto" }} />
-          </div>
-          <div style={{ display: "flex", flex: 1, justifyContent: "flex-end" }}>
-            <img
-              src={Influence_white}
-              style={{ maxWidth: "60%", height: "auto" }}
-            />
-          </div>
-        </div>
-
-        <div
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            display: 'flex',
-            flexDirection: 'column'
-          }}
-        >
-          <p
-            style={{
-              textAlign: 'center',
-              maxWidth: '40%',
-              minWidth: '40%',
-              fontSize: 20,
-              // fontFamily: 'Ubuntu',
-              color: 'white'
-            }}
-          >
-            Pleas check your email and follow the instructions to proceed
-          </p>
-        </div>
+        <Header />
 
         <div
           style={{
             flex: 3.5,
-            display: 'flex',
-            flexDirection: 'column'
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
           }}
         >
-          <div style={{ marginLeft: '1%', marginRight: '1%' }}>
+          <div style={{ marginLeft: "1%", marginRight: "1%" }}>
             {/* <Notification msg={this.state.msg} open={this.state.tr} /> */}
 
             <div
               style={{
-                marginTop: '1rem',
-                width: '100%',
-                display: 'flex',
-                justifyContent: 'center',
-                flexDirection: 'column'
+                display: "flex",
+                justifyContent: "center",
+                width: "100%",
+              }}
+            >
+              <h6
+                style={{
+                  textAlign: "center",
+                  maxWidth: "50%",
+                  minWidth: "50%",
+                  // fontSize: 20,
+                  // fontFamily: 'Ubuntu',
+                  color: "white",
+                }}
+              >
+                Pleas check your email and follow the instructions given in the
+                mail
+              </h6>
+            </div>
+
+            <div
+              style={{
+                marginTop: "2rem",
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+                flexDirection: "column",
               }}
             >
               <div style={{}}>
                 <h4
                   style={{
-                    cursor: 'pointer',
-                    marginTop: '5%',
-                    color: 'white',
-                    textAlign: 'center',
-                    fontWeight: '500',
+                    cursor: "pointer",
+                    color: "white",
+                    textAlign: "center",
+                    // fontWeight: '500',
                     // fontFamily: 'Ubuntu'
                   }}
                   onClick={() => {
                     this.props.history.goBack();
                   }}
                 >
-                  Email received or not?
+                  Email not received?
                 </h4>
               </div>
               <div
-                style={{ display: 'flex', flex: 1, justifyContent: 'center' }}
+                style={{
+                  display: "flex",
+                  flex: 1,
+                  justifyContent: "center",
+                  marginTop: "1.2rem",
+                }}
                 className="container"
               >
                 <Button
                   style={{
-                    width: '50%',
-                    paddingTop: '1%',
-                    paddingBottom: '1%',
-                    backgroundColor: '#002164',
-                    borderRadius: 10
+                    width: "50%",
+                    paddingTop: 12,
+                    paddingBottom: 12,
+                    backgroundColor: "#002164",
+                    borderRadius: 10,
                   }}
                   onClick={() => this.handleLogin()}
                   variant="contained"
@@ -214,27 +195,29 @@ class Login extends React.Component {
 
               <div
                 style={{
-                  display: 'flex',
+                  display: "flex",
                   flex: 1,
-                  justifyContent: 'center',
-                  marginTop: '3%'
+                  justifyContent: "center",
+                  marginTop: "3%",
                 }}
                 className="container"
               >
                 <Button
                   style={{
-                    width: '50%',
+                    width: "50%",
                     // marginLeft:'40%',
                     // marginRight:'20%',
-                    paddingTop: '1%',
-                    paddingBottom: '1%',
+                    paddingTop: 12,
+                    paddingBottom: 12,
                     // backgroundColor: '#1562e8',
                     borderRadius: 10,
-                     borderColor:'white', borderWidth:2, color:'white'
+                    borderColor: "white",
+                    borderWidth: 2,
+                    color: "white",
                   }}
                   onClick={() => this.props.history.goBack()}
                   variant="outlined"
-                //   color="outlined"
+                  //   color="outlined"
                 >
                   Back
                 </Button>

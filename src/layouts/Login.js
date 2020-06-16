@@ -20,12 +20,17 @@ import Influence_white from "../assets/img/Influence_white.png";
 
 import Splash from "./Splash";
 
+import "../assets/jss/material-dashboard-react/components/TextInputStyle.css";
+
+import Loader from "react-loader-spinner";
+import Header from "../components/Header/Header";
+
 class Login extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      userName: "saqibkhan7866@gmail.com",
+      userName: "superadmin@khmc.com",
       null_userName: false,
 
       password: "123456",
@@ -39,6 +44,8 @@ class Login extends React.Component {
       forgetPassword: false,
 
       splash: true,
+
+      buttonPressed: false,
     };
   }
 
@@ -64,6 +71,7 @@ class Login extends React.Component {
           password: this.state.password,
         };
 
+        this.setState({ buttonPressed: true });
         axios
           .post(loginUrl, params)
           .then((res) => {
@@ -73,6 +81,7 @@ class Login extends React.Component {
               cookie.save("current_user", res.data.data.user, { path: "/" });
               this.setState({
                 verifiedUser: true,
+                buttonPressed: false,
               });
             }
             // else if (!res.data.success) {
@@ -81,7 +90,11 @@ class Login extends React.Component {
           })
           .catch((e) => {
             console.log("error is ", e);
-            this.setState({ tr: true, msg: "Login failed" });
+            this.setState({
+              tr: true,
+              msg: "Login failed",
+              buttonPressed: false,
+            });
           });
       }
     }
@@ -126,68 +139,49 @@ class Login extends React.Component {
           backgroundColor: "#0154E8",
         }}
       >
-        <div
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            display: "flex",
-            flexDirection: "row",
-            marginLeft: "5%",
-            marginRight: "5%",
-            // backgroundColor: 'red'
-          }}
-        >
-          <div style={{ flex: 1, display: "flex" }}>
-            <img src={KHMC_White} style={{ maxWidth: "50%", height: "auto" }} />
-          </div>
-          <div style={{ display: "flex", flex: 1, justifyContent: "flex-end" }}>
-            <img
-              src={Influence_white}
-              style={{ maxWidth: "60%", height: "auto" }}
-            />
-          </div>
-        </div>
+        <Header />
 
         <div
           style={{
-            flex: 1,
+            // flex: 7,
+            display: "flex",
+            flexDirection: "column",
             justifyContent: "center",
-            alignItems: "center",
-            display: "flex",
-            flexDirection: "column",
+            height: "100%",
+            position: "absolute",
+            width: "100%",
           }}
         >
-          <h1
+          <div
             style={{
-              textAlign: "center",
-              color: "white",
-              fontWeight: "700",
+              justifyContent: "center",
+              alignItems: "center",
+              display: "flex",
+              flexDirection: "column",
             }}
           >
-            Login
-          </h1>
-          <p
-            style={{
-              textAlign: "center",
-              maxWidth: "40%",
-              minWidth: "40%",
-              fontSize: 20,
-              color: "white",
-            }}
-          >
-            Please enter your username and password to access the features
-          </p>
-        </div>
+            <h1
+              style={{
+                textAlign: "center",
+                color: "white",
+                fontWeight: "700",
+                // fontFamily:"Open Sans"
+              }}
+            >
+              Login
+            </h1>
+            <h6
+              style={{
+                textAlign: "center",
+                maxWidth: "60%",
+                minWidth: "40%",
+                color: "white",
+              }}
+            >
+              Please enter your username and password to access the features
+            </h6>
+          </div>
 
-        <div
-          style={{
-            flex: 3.5,
-            display: "flex",
-            flexDirection: "column",
-            marginTop: 20,
-          }}
-        >
           <div style={{ marginLeft: "1%", marginRight: "1%" }}>
             {/* <Notification msg={this.state.msg} open={this.state.tr} /> */}
 
@@ -199,25 +193,23 @@ class Login extends React.Component {
                 <div
                   className="row"
                   style={{
-                    marginTop: 40,
-                    paddingLeft: 5,
-                    paddingRight: 5,
-                    backgroundColor: "white",
-                    borderRadius: 10,
-                    width: "75%",
+                    marginTop: 20,
+                    width: "70%",
                   }}
                 >
-                  <TextField
-                    style={{
-                      paddingTop: 5,
-                      paddingBottom: 5,
-                    }}
-                    fullWidth
-                    label="User Name"
-                    // variant="outlined"
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    name={"email"}
                     value={this.state.userName}
                     onChange={(e) => this.handleInput(e, "userName")}
-                    error={!this.state.userName && this.state.null_userName}
+                    className="textInputStyle"
+                    style={{
+                      borderColor:
+                        !this.state.userName && this.state.null_userName
+                          ? "red"
+                          : "white",
+                    }}
                   />
                 </div>
               </div>
@@ -229,28 +221,26 @@ class Login extends React.Component {
                 <div
                   className="row"
                   style={{
-                    marginTop: 40,
-                    paddingLeft: 5,
-                    paddingRight: 5,
-                    backgroundColor: "white",
-                    borderRadius: 10,
-                    width: "75%",
+                    marginTop: 25,
+                    width: "70%",
                   }}
                 >
-                  <TextField
-                    style={{
-                      paddingTop: 5,
-                      paddingBottom: 5,
-                    }}
+                  <input
                     type="password"
-                    fullWidth
-                    label="Password"
-                    // variant="outlined"
-                    color="secondary"
+                    placeholder="Password"
+                    name={"password"}
                     value={this.state.password}
                     onChange={(e) => this.handleInput(e, "password")}
-                    error={!this.state.password && this.state.null_password}
+                    className="textInputStyle"
+                    style={{
+                      borderColor:
+                        !this.state.password && this.state.null_password
+                          ? "red"
+                          : "white",
+                    }}
                   />
+
+                  <div className="Button" />
                 </div>
               </div>
 
@@ -258,38 +248,55 @@ class Login extends React.Component {
                 className="col-sm-12"
                 style={{ display: "flex", justifyContent: "center" }}
               >
-                <div
-                  className="row"
-                  style={{
-                    marginTop: 40,
-                    width: "75%",
-                  }}
-                >
-                  <div style={{}} className="container">
-                    <Button
-                      style={{
-                        width: "100%",
-                        paddingTop: "2%",
-                        paddingBottom: "2%",
-                        backgroundColor: "#002164",
-                        borderRadius: 10,
-                      }}
-                      onClick={() => this.handleLogin()}
-                      variant="contained"
-                      color="primary"
-                    >
-                      Login
-                    </Button>
+                {!this.state.buttonPressed ? (
+                  <div
+                    className="row"
+                    style={{
+                      marginTop: 25,
+                      width: "70%",
+                    }}
+                  >
+                    <div style={{}} className="container">
+                      <Button
+                        style={{
+                          width: "100%",
+                          paddingTop: 12,
+                          paddingBottom: 12,
+                          backgroundColor: "#002164",
+                          borderRadius: 10,
+                        }}
+                        onClick={() => this.handleLogin()}
+                        variant="contained"
+                        color="primary"
+                      >
+                        Login
+                      </Button>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div
+                    className="row"
+                    style={{
+                      marginTop: 25,
+                      width: "100%", display:'flex',justifyContent:'center'
+                    }}
+                  >
+                    <Loader
+                      type="TailSpin"
+                      color="white"
+                      height={50}
+                      width={50}
+                    />
+                  </div>
+                )}
               </div>
             </div>
 
             <div style={{}}>
-              <h5
+              <h6
                 style={{
                   cursor: "pointer",
-                  marginTop: "3%",
+                  marginTop: "2%",
                   color: "white",
                   textAlign: "center",
                   // fontWeight: "500",
@@ -297,7 +304,7 @@ class Login extends React.Component {
                 onClick={() => this.handleForgetPassword()}
               >
                 Forgot Password?
-              </h5>
+              </h6>
             </div>
           </div>
         </div>

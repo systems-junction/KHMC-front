@@ -2,26 +2,29 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable no-shadow */
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect } from "react";
+import PropTypes from "prop-types";
 // @material-ui/core components
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from "@material-ui/core/styles";
 
-import Box from '@material-ui/core/Box';
+import Box from "@material-ui/core/Box";
 
-import Table from '@material-ui/core/Table';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
+import Table from "@material-ui/core/Table";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
 // core components
-import styles from '../../assets/jss/material-dashboard-react/components/tableStyle';
-import TablePagination from '@material-ui/core/TablePagination';
-import RcIf from 'rc-if';
-import { dateOptions } from '../../variables/public';
+import styles from "../../assets/jss/material-dashboard-react/components/tableStyle";
+import TablePagination from "@material-ui/core/TablePagination";
+import RcIf from "rc-if";
+import { dateOptions } from "../../variables/public";
 
-import Active from '../../assets/img/Active.png';
-import In_Active from '../../assets/img/Inactive.png';
+import Active from "../../assets/img/Active.png";
+import In_Active from "../../assets/img/Inactive.png";
+
+import EditIcon from "../../assets/img/Edit.png";
+import cookie from "react-cookies";
 
 const useStyles = makeStyles(styles);
 
@@ -32,36 +35,88 @@ export default function CustomTable(props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+  const [selectedRow, setSelectedRow] = React.useState("");
+
+  const [currentUser, setCurrentUser] = React.useState(
+    cookie.load("current_user")
+  );
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
-  const replaceSlugToTitle = val => {
-    if (val === 'in_active') {
-      // return 'In Active';
-      return <img src={In_Active} style={{ width: 80, height: 35 }} />;
-    } else if (val === 'active') {
-      // return "Active";
-      return <img src={Active} style={{ width: 80, height: 35 }} />;
+  useEffect(() => {
+    props.tableData.reverse();
+  }, []);
+
+  const replaceSlugToTitle = (val) => {
+    if (val === "in_active") {
+      return <img src={In_Active} style={{ width: "45%", height: "auto" }} />;
+    } else if (val === "active") {
+      return (
+        <img
+          src={Active}
+          style={{ maxWidth: "60%", height: "auto", alignSelf: "center" }}
+        />
+      );
+    }
+    if (val === "pending" || val === "to_do" || val === "po_created") {
+      if (currentUser && currentUser.staffTypeId.type === "Committe Member") {
+        return (
+          <h6 style={{ fontWeight: "700", color: "#2C73D2" }}>
+            {val === "to_do"
+              ? "To Do"
+              : val === "pending"
+              ? "Pending"
+              : "po_created"
+              ? "PO Created"
+              : ""}
+          </h6>
+        );
+      } else {
+        return (
+          <h6 style={{ fontWeight: "700", color: "#2C73D2" }}>
+            {val === "to_do"
+              ? "To Do"
+              : val === "pending"
+              ? "Pending"
+              : "po_created"
+              ? "PO Created"
+              : ""}
+          </h6>
+        );
+      }
+    } else if (val === "in_progress" || val === "po_sent") {
+      return (
+        <h6 style={{ fontWeight: "700", color: "#FF6F91" }}>
+          {val === "in_progress" ? "In Progress" : "Po Sent"}
+        </h6>
+      );
+    } else if (val === "complete" || val === "approved") {
+      return (
+        <h6 style={{ color: "white", fontWeight: "700", color: "#845EC2" }}>
+          {val === "complete" ? "Complete" : "Approved"}
+        </h6>
+      );
     }
 
     return val;
   };
 
-  const handleChangeRowsPerPage = event => {
+  const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
-  const formatDate = date => {
+  const formatDate = (date) => {
     const d = new Date(date);
     return (
       d.getDate() +
-      '/' +
+      "/" +
       (d.getMonth() + 1) +
-      '/' +
+      "/" +
       d.getFullYear() +
-      ' ' +
+      " " +
       d.toLocaleTimeString()
     );
   };
@@ -72,39 +127,54 @@ export default function CustomTable(props) {
     }
   };
 
+  function setRow(prop) {
+    if (prop._id === selectedRow._id) {
+      setSelectedRow("");
+    } else {
+      setSelectedRow(prop);
+    }
+  }
+
+  // console.log(tableDataKeys.length)
+
   return (
     <div className={classes.tableResponsive}>
       <Table>
         {tableHeading !== undefined ? (
           <TableHead
-            className={classes[tableHeaderColor + 'TableHeader']}
+            className={classes[tableHeaderColor + "TableHeader"]}
             style={{
-              backgroundColor: '#2873cf'
+              backgroundColor: "#2873cf",
             }}
           >
             <TableRow className={classes.tableHeadRow}>
-              {tableHeading.map((prop, key) => {
+              {tableHeading.map((prop, index) => {
                 return (
-                  <TableCell
-                    className={classes.tableHeadCell}
-                    style={{
-                      color: 'white',
-                      fontFamily: 'Open Sans,sans-serif',
-                      fontWeight: '700',
-                      paddingTop: 20,
-                      paddingBottom: 20
-                    }}
-                    key={key}
-                  >
-                    {prop}
-                  </TableCell>
+                  <>
+                    <TableCell
+                      className={classes.tableHeadCell}
+                      style={{
+                        color: "white",
+                        fontWeight: "700",
+                        paddingTop: 30,
+                        paddingBottom: 30,
+                        textAlign: "center",
+                        borderTopLeftRadius: index === 0 ? 45 : 0,
+                        borderTopRightRadius:
+                          index === tableHeading.length - 1 ? 45 : 0,
+                      }}
+                      key={prop}
+                    >
+                      {prop}
+                    </TableCell>
+                  </>
                 );
               })}
             </TableRow>
           </TableHead>
         ) : null}
 
-        <div style={{ height: 20, width: '100%' }}></div>
+        <div style={{ height: 25, width: "100%" }}></div>
 
         <TableBody style={{ marginTop: 20 }}>
           {tableData &&
@@ -112,104 +182,156 @@ export default function CustomTable(props) {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((prop, index) => {
                 return (
-                  <TableRow
-                    key={index}
-                    className={classes.tableBodyRow}
-                    style={{
-                      backgroundColor: 'white'
-                    }}
-                  >
-                    {tableDataKeys
-                      ? tableDataKeys.map((val, key) => {
-                          if (val === 'date') {
-                            return (
-                              <TableCell
-                                className={classes.tableCell}
-                                key={key}
-                                style={{
-                                  borderBottomWidth: props.borderBottomWidth,
-                                  borderBottomColor: props.borderBottomColor,
-                                  borderLeftWidth: 0,
-                                  borderRightWidth: 0,
-                                  borderTopWidth: 0
-                                }}
-                              >
-                                {formatDate(prop[val])}
-                              </TableCell>
-                            );
-                          } else {
-                            return (
-                              <TableCell
-                                className={classes.tableCell}
-                                key={key}
-                                onClick={() => handleClick(prop, val)}
-                                style={{
-                                  cursor: props.handleModelMaterialReceiving
-                                    ? 'pointer'
-                                    : '',
-                                  borderBottomWidth: props.borderBottomWidth,
-                                  borderBottomColor: props.borderBottomColor,
-                                  borderLeftWidth: 0,
-                                  borderRightWidth: 0,
-                                  borderTopWidth: 0
-                                }}
-                              >
-                                {Array.isArray(val)
-                                  ? prop[val[0]]
-                                    ? prop[val[0]][val[1]]
-                                    : null
-                                  : val.toLowerCase() === 'timestamp'
-                                  ? new Intl.DateTimeFormat(
-                                      'en-US',
-                                      dateOptions
-                                    ).format(Date.parse(prop[val]))
-                                  : // : `${replaceSlugToTitle(prop[val])}`}
-                                    replaceSlugToTitle(prop[val])}
-                              </TableCell>
-                            );
-                          }
-                        })
-                      : null}
-                    <TableCell
+                  <>
+                    <TableRow
+                      key={index}
+                      className={classes.tableBodyRow}
                       style={{
-                        cursor: 'pointer',
-                        borderBottomWidth: props.borderBottomWidth,
-                        borderBottomColor: props.borderBottomColor,
-                        borderLeftWidth: 0,
-                        borderRightWidth: 0,
-                        borderTopWidth: 0
+                        backgroundColor: "white",
+                        cursor: "pointer",
                       }}
-                      className={classes.tableCell}
-                      colSpan="2"
+                      onClick={() => {
+                        setRow(prop);
+                      }}
                     >
-                      {props.action ? (
-                        <div style={{display:"flex", justifyContent:'space-evenly'}}>
-                          <RcIf if={props.action.edit}>
-                            <span onClick={() => props.handleEdit(prop)}>
-                              <i className="zmdi zmdi-edit zmdi-hc-2x" />
-                            </span>
-                          </RcIf>
-                          <RcIf if={props.action.delete}>
-                            <span onClick={() => props.handleDelete(prop._id)}>
-                              <i className=" ml-10 zmdi zmdi-delete zmdi-hc-2x" />
-                            </span>
-                          </RcIf>
-                          <RcIf
-                            if={
-                              props.action.active && prop.status === 'in_active'
+                      {tableDataKeys
+                        ? tableDataKeys.map((val, key) => {
+                            // console.log(key);
+                            if (val === "date") {
+                              return (
+                                <TableCell
+                                  className={classes.tableCell}
+                                  key={key}
+                                  style={{
+                                    textAlign: "center",
+                                    // borderBottomWidth: props.borderBottomWidth,
+                                    // borderBottomColor: props.borderBottomColor,
+                                    // borderLeftWidth: 0,
+                                    // borderRightWidth: 0,
+                                    // borderTopWidth: 0,
+                                  }}
+                                >
+                                  {formatDate(prop[val])}
+                                </TableCell>
+                              );
+                            } else {
+                              return (
+                                <TableCell
+                                  className={classes.tableCell}
+                                  key={key}
+                                  onClick={() => handleClick(prop, val)}
+                                  style={{
+                                    textAlign: "center",
+                                    cursor: props.handleModelMaterialReceiving
+                                      ? "pointer"
+                                      : "",
+                                    // borderBottomWidth: props.borderBottomWidth,
+                                    // borderBottomColor: props.borderBottomColor,
+
+                                    borderTopLeftRadius: key === 0 ? 15 : 0,
+                                    borderBottomLeftRadius: key === 0 ? 15 : 0,
+
+                                    borderWidth: 0,
+                                  }}
+                                >
+                                  {Array.isArray(val)
+                                    ? prop[val[0]]
+                                      ? prop[val[0]][val[1]]
+                                      : null
+                                    : val.toLowerCase() === "timestamp"
+                                    ? new Intl.DateTimeFormat(
+                                        "en-US",
+                                        dateOptions
+                                      ).format(Date.parse(prop[val]))
+                                    : // : `${replaceSlugToTitle(prop[val])}`}
+                                      replaceSlugToTitle(prop[val])}
+                                </TableCell>
+                              );
                             }
+                          })
+                        : null}
+                      <TableCell
+                        style={{
+                          cursor: "pointer",
+                          // borderBottomWidth: props.borderBottomWidth,
+                          // borderBottomColor: props.borderBottomColor,
+
+                          borderTopRightRadius: 15,
+                          borderBottomRightRadius: 15,
+
+                          borderWidth: 0,
+                        }}
+                        className={classes.tableCell}
+                        colSpan="2"
+                      >
+                        {props.action ? (
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-evenly",
+                            }}
                           >
-                            <span
-                              onClick={() => props.handleStatus(prop._id)}
-                              title="Active"
+                            <RcIf if={props.action.edit}>
+                              <span onClick={() => props.handleEdit(prop)}>
+                                <i className="zmdi zmdi-edit zmdi-hc-2x" />
+                              </span>
+                            </RcIf>
+                            <RcIf if={props.action.delete}>
+                              <span
+                                onClick={() => props.handleDelete(prop._id)}
+                              >
+                                <i className=" ml-10 zmdi zmdi-delete zmdi-hc-2x" />
+                              </span>
+                            </RcIf>
+
+                            <RcIf if={props.action.add}>
+                              <span onClick={() => props.handleAdd(prop)}>
+                                <i className=" ml-10 zmdi zmdi-plus-circle zmdi-hc-3x" />
+                              </span>
+                            </RcIf>
+
+                            <RcIf
+                              if={
+                                props.action.active &&
+                                prop.status === "in_active"
+                              }
                             >
-                              <i className=" ml-10 zmdi zmdi-check zmdi-hc-2x" />
-                            </span>
-                          </RcIf>
-                        </div>
-                      ) : null}
-                    </TableCell>
-                  </TableRow>
+                              <span
+                                onClick={() => props.handleStatus(prop._id)}
+                                title="Active"
+                              >
+                                <i className=" ml-10 zmdi zmdi-check zmdi-hc-2x" />
+                              </span>
+                            </RcIf>
+                          </div>
+                        ) : null}
+                      </TableCell>
+
+                      {/* {selectedRow && selectedRow._id === prop._id ? (
+                        <TableCell
+                          // className={classes.tableCell}
+                          style={{
+                            // display: "flex",
+                            // justifyContent: "center",
+                            // backgroundColor: props.borderBottomColor,
+                            backgroundColor: "red",
+                            textAlign: "center",
+                          }}
+                        >
+                          <span>
+                            <img
+                            src={EditIcon}
+                            style={{ width: 50, height: 50 }}
+                          />
+                          </span>
+                        </TableCell>
+                      ) : (
+                        undefined
+                      )} */}
+                    </TableRow>
+
+                    <TableRow style={{ height: 20 }} />
+                  </>
                 );
               })}
         </TableBody>
@@ -228,19 +350,19 @@ export default function CustomTable(props) {
 }
 
 CustomTable.defaultProps = {
-  tableHeaderColor: 'gray'
+  tableHeaderColor: "gray",
 };
 
 CustomTable.propTypes = {
   tableHeaderColor: PropTypes.oneOf([
-    'warning',
-    'primary',
-    'danger',
-    'success',
-    'info',
-    'rose',
-    'gray'
-  ])
+    "warning",
+    "primary",
+    "danger",
+    "success",
+    "info",
+    "rose",
+    "gray",
+  ]),
   // tableHead: PropTypes.arrayOf(PropTypes.string),
   // tableData: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string))
 };

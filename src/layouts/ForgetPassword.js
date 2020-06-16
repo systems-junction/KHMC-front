@@ -15,8 +15,10 @@ import cookie from "react-cookies";
 import { loginUrl } from "../public/endpoins";
 
 import KHMC_White from "../assets/img/KHMC_White.png";
+import Header from "../components/Header/Header";
 
 import Influence_white from "../assets/img/Influence_white.png";
+import "../assets/jss/material-dashboard-react/components/TextInputStyle.css";
 
 class Login extends React.Component {
   constructor(props) {
@@ -108,69 +110,48 @@ class Login extends React.Component {
           backgroundColor: "#0154E8",
         }}
       >
-        <div
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            display: "flex",
-            flexDirection: "row",
-            marginLeft: "5%",
-            marginRight: "5%",
-            // backgroundColor: 'red'
-          }}
-        >
-          <div style={{ flex: 1, display: "flex" }}>
-            <img src={KHMC_White} style={{ maxWidth: "50%", height: "auto" }} />
-          </div>
-          <div style={{ display: "flex", flex: 1, justifyContent: "flex-end" }}>
-            <img
-              src={Influence_white}
-              style={{ maxWidth: "60%", height: "auto" }}
-            />
-          </div>
-        </div>
+        <Header />
 
         <div
           style={{
-            flex: 1,
+            // flex: 7,
+            display: "flex",
+            flexDirection: "column",
             justifyContent: "center",
-            alignItems: "center",
-            display: "flex",
-            flexDirection: "column",
+            width: "100%",
+            height: "100%",
           }}
         >
-          <h1
+          <div
             style={{
-              textAlign: "center",
-              color: "white",
-              fontWeight: "700",
+              justifyContent: "center",
+              alignItems: "center",
+              display: "flex",
+              flexDirection: "column",
             }}
           >
-            Reset Password
-          </h1>
-          <p
-            style={{
-              textAlign: "center",
-              maxWidth: "50%",
-              minWidth: "50%",
-              fontSize: 20,
-              color: "white",
-            }}
-          >
-            You forgot your passowrd? No problem just add your email address to
-            get it back
-          </p>
-        </div>
+            <h1
+              style={{
+                textAlign: "center",
+                color: "white",
+                fontWeight: "700",
+              }}
+            >
+              Reset Password
+            </h1>
+            <h6
+              style={{
+                textAlign: "center",
+                maxWidth: "60%",
+                minWidth: "50%",
+                color: "white",
+              }}
+            >
+              You forgot your passowrd? No problem just add your email address
+              to get it back
+            </h6>
+          </div>
 
-        <div
-          style={{
-            flex: 3.5,
-            display: "flex",
-            flexDirection: "column",
-            marginTop: 20,
-          }}
-        >
           <div style={{ marginLeft: "1%", marginRight: "1%" }}>
             {/* <Notification msg={this.state.msg} open={this.state.tr} /> */}
 
@@ -178,36 +159,41 @@ class Login extends React.Component {
               <div className="row">
                 <div
                   className="col-sm-12"
-                  style={{ display: "flex", justifyContent: "center" }}
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
                 >
                   <div
                     style={{
-                      marginTop: 40,
-                      backgroundColor: "white",
-                      borderRadius: 10,
+                      marginTop: 30,
+
                       minWidth: "70%",
-                      paddingLeft: 5,
-                      paddingRight: 5,
                     }}
                   >
-                    <TextField
-                      style={{
-                        paddingTop: 5,
-                        paddingBottom: 5,
-                      }}
-                      label="Email address"
-                      fullWidth
-                      // variant="outlined"
+                
+                    <input
+                      type="email"
+                      placeholder="Email"
+                      name={"email"}
                       value={this.state.userName}
                       onChange={(e) => this.handleInput(e, "userName")}
-                      error={!this.state.userName && this.state.null_userName}
+                      className="textInputStyle"
+                      style={{
+                        borderColor:
+                          !this.state.userName && this.state.null_userName
+                            ? "red"
+                            : "white",
+                      }}
                     />
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="container" style={{marginTop:'5%'}}>
+            <div className="container" style={{ marginTop: 30 }}>
               <div className="row">
                 <div
                   className="col-sm-12"
@@ -216,8 +202,8 @@ class Login extends React.Component {
                   <Button
                     style={{
                       width: "70%",
-                      paddingTop: "1%",
-                      paddingBottom: "1%",
+                      paddingTop: 13,
+                      paddingBottom: 13,
                       backgroundColor: "#002164",
                       borderRadius: 10,
                     }}
@@ -232,20 +218,19 @@ class Login extends React.Component {
             </div>
 
             <div style={{}}>
-              <h4
+              <h6
                 style={{
                   cursor: "pointer",
-                  marginTop: "5%",
+                  marginTop: 15,
                   color: "white",
                   textAlign: "center",
-                  fontWeight: "500",
                 }}
                 onClick={() => {
                   this.props.history.goBack();
                 }}
               >
                 Have an account? Login
-              </h4>
+              </h6>
             </div>
           </div>
         </div>

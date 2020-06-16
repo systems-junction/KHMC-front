@@ -178,10 +178,8 @@ function AddEditBuRepRequest(props) {
         overflowY: "scroll",
       }}
     >
-      <div style={{ alignItems: "center", flex: 1, display: "flex" }}>
         <Header />
-      </div>
-
+      
       <div style={{ alignItems: "center", flex: 0.5, display: "flex" }}>
         <div
           style={{

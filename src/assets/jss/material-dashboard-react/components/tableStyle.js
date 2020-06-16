@@ -28,14 +28,18 @@ const tableStyle = theme => ({
     backgroundColor: 'transparent',
     borderSpacing: "0",
     borderCollapse: "collapse",
-    border: '1px solid rgb(165, 165, 165)',
+    // border: '1px solid rgb(165, 165, 165)',
+    fontFamily:'Open Sans,sans-serif',
+
   },
   tableHeadCell: {
     // color: "inherit",
     // ...defaultFont,
     '&, &$tableCell': {
-      fontSize: '1em',
-      fontWeight: '400'
+      fontSize: '1rem',
+      fontWeight: '400',
+    fontFamily:'Open Sans,sans-serif',
+
     },
     textAlign: 'center'
   },
@@ -44,11 +48,11 @@ const tableStyle = theme => ({
     lineHeight: '1.42857143',
     padding: '12px 8px',
     verticalAlign: 'middle',
-    fontSize: '0.8125rem',
-    border: '1px solid rgb(165, 165, 165)',
+    // fontSize: '0.8125rem',
+    // border: '1px solid rgb(165, 165, 165)',
     fontFamily:'Open Sans,sans-serif',
 
-    textAlign:"center"
+    textAlign:"center",
   },
 
   tableResponsive: {
@@ -71,13 +75,14 @@ const tableStyle = theme => ({
     color: 'inherit',
     display: 'table-row',
     outline: 'none',
-    verticalAlign: 'middle'
+    verticalAlign: 'middle',
+
   },
   
   tableData: {
     fontSize: '0.8125rem',
     fontWeight: '400',
-    fontFamily: 'Ubuntu'
+    // fontFamily: 'Ubuntu'
   },
   pointer: {
     cursor: 'pointer'
