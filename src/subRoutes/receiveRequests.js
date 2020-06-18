@@ -2,20 +2,26 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import NotFound from "../components/NotFound/NotFound";
-import AddEditMaterialReceiving from "../views/MaterialReceiving/addEditMaterialReceiving";
-import materialreceiving from "../views/MaterialReceiving/materialreceiving";
-import viewPO from "../views/MaterialReceiving/viewPO";
+import AddEditReceiveItems from "../views/ReceiveRequests/addEditReceiveRequests";
 
-class PurchaseRequest extends React.PureComponent {
+import ReceiveItems from "../views/ReceiveRequests/receiveRequests";
+
+import viewPO from "../views/ReceiveRequests/viewPO";
+
+class ReceiveItemsRoutes extends React.PureComponent {
   render() {
     return (
       <Switch>
         <Route
           exact
           path={`${this.props.match.url}`}
-          component={materialreceiving}
+          component={ReceiveItems}
         />
 
+        <Route
+          path={`${this.props.match.url}/add`}
+          component={AddEditReceiveItems}
+        />
         <Route
           exact
           path={`${this.props.match.url}/viewpo`}
@@ -23,12 +29,8 @@ class PurchaseRequest extends React.PureComponent {
         />
 
         <Route
-          path={`${this.props.match.url}/add`}
-          component={AddEditMaterialReceiving}
-        />
-        <Route
           path={`${this.props.match.url}/edit`}
-          component={AddEditMaterialReceiving}
+          component={AddEditReceiveItems}
         />
         <Route path="*" component={NotFound} />
       </Switch>
@@ -36,4 +38,4 @@ class PurchaseRequest extends React.PureComponent {
   }
 }
 
-export default PurchaseRequest;
+export default ReceiveItemsRoutes;

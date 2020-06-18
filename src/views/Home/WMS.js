@@ -23,11 +23,10 @@ import purchase_order from "../../assets/img/Purchase Order.png";
 import purchase_request from "../../assets/img/purchase request.png";
 import FIN from "../../assets/img/FIN.png";
 import Control_Room from "../../assets/img/Control_Room.png";
-
 import FunctionalUnit from "../../assets/img/Functional Unit.png";
-
 import Vendor from "../../assets/img/Vendot.png";
-
+import ReceiveItem from "../../assets/img/Receive Item.png";
+import MaterialReceiving from "../../assets/img/Material Receiving.png";
 import WMS_Back from "../../assets/img/WMS_Back.png";
 
 import Items from "../../assets/img/Items.png";
@@ -46,7 +45,7 @@ import MenuTree from "../../components/MenuTree/MenuTree";
 const admin = [
   { img: WMS, text: "WMS" },
   {
-    img: "",
+    img: ReceiveItem,
     text: "Receive Items",
     path: "/home/controlroom/wms/receiveitems",
   },
@@ -55,14 +54,14 @@ const admin = [
 
   {
     img: "",
-    text: "",
-    path: "",
+    text: "Rep Request",
+    path: "/home/controlroom/wms/replenishment",
   },
 
   {
-    img: "",
-    text: "",
-    path: "",
+    img: MaterialReceiving,
+    text: "Material Receiving",
+    path: "/home/controlroom/wms/materialreceiving",
   },
 
   {
@@ -92,8 +91,8 @@ const buHead = [
   { img: WMS, text: "WMS" },
   {
     img: "",
-    text: "Receive Items",
-    path: "/home/controlroom/wms/receiveitems",
+    text: "",
+    path: "",
   },
 
   { img: Vendor, text: "Vendor Mgmt", path: "/home/controlroom/wms/vendor" },
@@ -134,7 +133,6 @@ const committeeMember = [
   { img: "", text: "", path: "" },
   { img: "", text: "", path: "" },
   { img: "", text: "", path: "" },
-
   { img: "", text: "", path: "" },
   {
     img: purchase_request,
@@ -147,8 +145,48 @@ const committeeMember = [
     path: "/home/controlroom/wms/po",
   },
   { img: "", text: "", path: "" },
+];
+
+const accountsMember = [
+  { img: WMS, text: "WMS" },
+  {
+    img: ReceiveItem,
+    text: "Receive Requests",
+    path: "/home/controlroom/wms/receiverequests",
+  },
   { img: "", text: "", path: "" },
-  // { img: Control_Room, text: "ControlRoom" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+
+  { img: "", text: "", path: "" },
+
+  {
+    img: "",
+    text: "",
+    path: "",
+  },
+  { img: "", text: "", path: "" },
+];
+
+const warehouseMember = [
+  { img: WMS, text: "WMS" },
+  {
+    img: "",
+    text: "Rep Requests",
+    path: "/home/controlroom/wms/replenishment",
+  },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+
+  { img: "", text: "", path: "" },
+
+  {
+    img: "",
+    text: "",
+    path: "",
+  },
+  { img: "", text: "", path: "" },
 ];
 
 class HomeScreen extends React.Component {
@@ -190,236 +228,6 @@ class HomeScreen extends React.Component {
       >
         <Header />
 
-        {/* <div
-          className="menupage"
-          style={{
-            display: "flex",
-            flex: 4,
-            minHeight: "100%",
-            alignItems: "center",
-            justifyContent: "center",
-            position: "fixed",
-            left: "45%",
-          }}
-        >
-          <nav className="menu">
-            <input
-              type="checkbox"
-              href="#"
-              className="menu-open"
-              name="menu-open"
-              id="menu-open"
-            />
-            <label
-              className="menu-open-button"
-              for="menu-open"
-              style={{
-                boxShadow: "5px 5px 5px #2433a5",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                }}
-                // onClick={() => this.props.history.push("/home/controlroom")}
-              >
-                <img
-                  src={WMS}
-                  style={{
-                    maxWidth: "40%",
-                    height: "auto",
-                    position: "absolute",
-                    top: 20,
-                  }}
-                />
-                <h6
-                  style={{
-                    position: "absolute",
-                    top: 60,
-                    color: "white",
-                    fontWeight: "700",
-                  }}
-                >
-                  WMS
-                </h6>
-              </div>
-            </label>
-
-            <a className="menu-item item-1">
-
-<div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                }}
-                onClick={() => this.props.history.push("/home/controlroom/wms/receiveitems")}
-              >
-                <h6
-                  style={{
-                    position: "absolute",
-                    top: 30,
-                    color: "white",
-                    width: "80%",
-                    fontWeight: "700",
-                  }}
-                >
-                  Receive Items
-                </h6>
-              </div>
-            </a>
-            <a className="menu-item item-2">
-         
-            </a>
-            <a className="menu-item item-3">
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                }}
-                onClick={() =>
-                  this.props.history.push("/home/controlroom/wms/vendor")
-                }
-              >
-                <img
-                  src={Vendor}
-                  style={{
-                    maxWidth: "50%",
-                    height: "auto",
-                    position: "absolute",
-                    top: 13,
-                  }}
-                />
-                <h6
-                  style={{
-                    position: "absolute",
-                    top: 45,
-                    color: "white",
-                    fontWeight: "700",
-                    maxWidth: "80%",
-                  }}
-                >
-                  Vendor Mgmt
-                </h6>
-              </div>
-            </a>
-            <a className="menu-item item-4">
-      
-            </a>
-            <a className="menu-item item-5">
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                }}
-                onClick={() => this.props.history.push("/home/controlroom/wms/pr")}
-              >
-                 <img
-                  src={purchase_request}
-                  style={{
-                    maxWidth: "40%",
-                    height: "auto",
-                    position: "absolute",
-                    top: 7,
-                  }}
-                />
-                <h6
-                  style={{
-                    position: "absolute",
-                    top: 47,
-                    color: "white",
-                    fontWeight: "700",
-                    maxWidth: "80%",
-                  }}
-                >
-                  Purchase Request
-                </h6>
-              </div>
-            </a>
-            <a className="menu-item item-6">
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                }}
-                onClick={() => this.props.history.push("/home/controlroom/wms/po")}
-              >
-                 <img
-                  src={purchase_order}
-                  style={{
-                    maxWidth: "35%",
-                    height: "auto",
-                    position: "absolute",
-                    top: 8,
-                  }}
-                />
-                <h6
-                  style={{
-                    position: "absolute",
-                    top: 50,
-                    color: "white",
-                    fontWeight: "700",
-                    maxWidth: "80%",
-                  }}
-                >
-                  Purchase Order
-                </h6>
-              </div>
-            </a>
-           
-            <a className="menu-item item-7">
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                }}
-                onClick={() =>
-                  this.props.history.push("/home/controlroom/wms/warehouseinventory")
-                }
-              >
-                 <img
-                  src={wh_inventory}
-                  style={{
-                    maxWidth: "40%",
-                    height: "auto",
-                    position: "absolute",
-                    top: 10,
-                  }}
-                />
-                <h6
-                  style={{
-                    position: "absolute",
-                    top: 40,
-                    color: "white",
-                    fontWeight: "700",
-                    maxWidth: "80%",
-                  }}
-                >
-                  WH Inventory
-                </h6>
-              </div>
-            </a>
-          </nav>
-        </div> */}
-
         <MenuTree
           history={this.props.history}
           options={
@@ -429,6 +237,10 @@ class HomeScreen extends React.Component {
               ? admin
               : userType && userType.type === "Committe Member"
               ? committeeMember
+              : userType && userType.type === "Accounts Member"
+              ? accountsMember
+              : userType && userType.type === "Warehouse Member"
+              ? warehouseMember
               : admin
           }
         />

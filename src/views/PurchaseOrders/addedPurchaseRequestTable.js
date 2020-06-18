@@ -163,28 +163,29 @@ export default function PurchaseRequest(props) {
               }}
             >
               <TableRow>
-                {tableHeading.map((prop, index) => {
-                  return (
-                    <>
-                      <TableCell
-                        className={classes.tableHeadCell}
-                        style={{
-                          color: "white",
-                          fontWeight: "700",
-                          paddingTop: 30,
-                          paddingBottom: 30,
-                          textAlign: "center",
-                          borderTopLeftRadius: index === 0 ? 45 : 0,
-                          borderTopRightRadius:
-                            index === tableHeading.length - 1 ? 45 : 0,
-                        }}
-                        key={prop}
-                      >
-                        {prop}
-                      </TableCell>
-                    </>
-                  );
-                })}
+                {props.tableHeading &&
+                  props.tableHeading.map((prop, index) => {
+                    return (
+                      <>
+                        <TableCell
+                          className={classes.tableHeadCell}
+                          style={{
+                            color: "white",
+                            fontWeight: "700",
+                            paddingTop: 30,
+                            paddingBottom: 30,
+                            textAlign: "center",
+                            borderTopLeftRadius: index === 0 ? 45 : 0,
+                            borderTopRightRadius:
+                              index === props.tableHeading.length - 1 ? 45 : 0,
+                          }}
+                          key={prop}
+                        >
+                          {prop}
+                        </TableCell>
+                      </>
+                    );
+                  })}
               </TableRow>
             </TableHead>
           ) : null}
@@ -204,8 +205,8 @@ export default function PurchaseRequest(props) {
                         cursor: "pointer",
                       }}
                     >
-                      {tableDataKeys
-                        ? tableDataKeys.map((val, key) => {
+                      {props.tableDataKeys
+                        ? props.tableDataKeys.map((val, key) => {
                             // console.log(key);
                             if (val === "date") {
                               return (
@@ -220,7 +221,7 @@ export default function PurchaseRequest(props) {
                                 </TableCell>
                               );
                             }
-                            if (val === "vendorId") {
+                          else  if (val === "vendorId") {
                               return (
                                 <TableCell
                                   className={classes.tableCell}
@@ -240,7 +241,8 @@ export default function PurchaseRequest(props) {
                                   {/* {prop[val]} */}
                                 </TableCell>
                               );
-                            } else {
+                            }
+                             else {
                               return (
                                 <TableCell
                                   className={classes.tableCell}
@@ -285,7 +287,7 @@ export default function PurchaseRequest(props) {
                         className={classes.tableCell}
                         colSpan="2"
                       >
-                        <span onClick={() => props.viewItem(prop.item)}>
+                        <span onClick={() => props.viewItem(prop)}>
                           <i className=" ml-10 zmdi zmdi-eye zmdi-hc-3x" />
                         </span>
                       </TableCell>

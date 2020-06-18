@@ -8,9 +8,10 @@ import CustomTable from "../../components/Table/Table";
 import ConfirmationModal from "../../components/Modal/confirmationModal";
 import axios from "axios";
 import {
-  getReceiveItemsUrl,
-  deleteReceiveItemsUrl,
+  getReplenishmentRequestUrl,
+  deleteReplenishmentRequestUrl,
 } from "../../public/endpoins";
+
 import Loader from "react-loader-spinner";
 
 import Header from "../../components/Header/Header";
@@ -18,7 +19,10 @@ import Header from "../../components/Header/Header";
 import Add_New from "../../assets/img/Add_New.png";
 import business_Unit from "../../assets/img/business_Unit.png";
 
+import cookie from "react-cookies";
+
 import Search from "../../assets/img/Search.png";
+
 import Control_Room from "../../assets/img/Control_Room.png";
 
 import Edit from "../../assets/img/Edit.png";
@@ -29,29 +33,25 @@ import Back_Arrow from "../../assets/img/Back_Arrow.png";
 
 import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 
-
-
-const dummyData=[{
-    replenishmentRequestNo:123,
-generated:"System",
-date:'20/10/2005',
-status:"Pending",}]
+const dummyData = [
+  {
+    replenishmentRequestNo: 123,
+    generated: "System",
+    date: "20/10/2005",
+    status: "Pending",
+  },
+];
 
 const tableHeading = [
   "Replenishment Request No",
   "Generated",
-  "Date/Time",
+  "Date/Time Generated",
   "Status",
   "Actions",
 ];
-const tableDataKeys = [
-  'replenishmentRequestNo',
-  'generated',
-'date',
-  'status',
-];
+const tableDataKeys = ["requestNo", "generated", "dateGenerated", "status"];
 
-const actions = { edit: true };
+const actions = { edit: true, view: true };
 
 export default function ReplenishmentRequest(props) {
   const [purchaseRequests, setPurchaseRequest] = useState("");
@@ -63,6 +63,8 @@ export default function ReplenishmentRequest(props) {
   const [errorMsg, setErrorMsg] = useState("");
   const [openNotification, setOpenNotification] = useState(false);
 
+  const [currentUser, setCurrentUser] = useState(cookie.load("current_user"));
+
   if (openNotification) {
     setTimeout(() => {
       setOpenNotification(false);
@@ -72,11 +74,11 @@ export default function ReplenishmentRequest(props) {
 
   function getPurchaseRequests() {
     axios
-      .get(getReceiveItemsUrl)
+      .get(getReplenishmentRequestUrl)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data.receiveItems);
-          setPurchaseRequest(res.data.data.receiveItems);
+          console.log(res.data.data);
+          setPurchaseRequest(res.data.data);
           //   setVendor(res.data.data.vendor);
           //   setStatus(res.data.data.status);
           //   setItems(res.data.data.items);
@@ -139,6 +141,10 @@ export default function ReplenishmentRequest(props) {
       });
   }
 
+  const handleView = (obj) => {
+    console.log("item clicked", obj);
+  };
+
   return (
     <div
       style={{
@@ -160,54 +166,15 @@ export default function ReplenishmentRequest(props) {
             <h4>Replenishment Request</h4>
           </div>
 
-          <div>
-            <img onClick={addNewItem} src={Add_New} />
-            {/* <img src={Search} /> */}
-          </div>
+          {currentUser && currentUser.staffTypeId.type !== "Warehouse Member" ? (
+            <div>
+              <img onClick={addNewItem} src={Add_New} />
+              {/* <img src={Search} /> */}
+            </div>
+          ) : (
+            undefined
+          )}
         </div>
-
-        {/* <div
-          style={{ alignItems: "center", display: "flex", marginTop: "1rem" }}
-        >
-          <div
-            style={{
-              flex: 0.5,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <img
-              src={business_Unit}
-              style={{ maxWidth: "100%", height: "auto" }}
-            />
-          </div>
-
-          <div style={{ flex: 4, display: "flex", alignItems: "center" }}>
-            <h4 style={{ color: "white", fontWeight: "700" }}>Receive Items</h4>
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              flex: 1.5,
-              justifyContent: "flex-end",
-              alignItems: "center",
-            }}
-          >
-            <div style={{ flex: 1.5, display: "flex" }}>
-              <img
-                onClick={addNewItem}
-                src={Add_New}
-                style={{ width: "100%", height: "100%", cursor: "pointer" }}
-              />
-            </div>
-
-            <div style={{ flex: 1, display: "flex" }}>
-              <img src={Search} style={{ width: "60%", height: "60%" }} />
-            </div>
-          </div>
-        </div> */}
 
         <div
           style={{
@@ -220,12 +187,13 @@ export default function ReplenishmentRequest(props) {
             <div>
               <div>
                 <CustomTable
-                  tableData={dummyData}
+                  tableData={purchaseRequests}
                   tableDataKeys={tableDataKeys}
                   tableHeading={tableHeading}
                   action={actions}
                   handleEdit={handleEdit}
                   handleDelete={handleDelete}
+                  handleView={handleView}
                   borderBottomColor={"#60d69f"}
                   borderBottomWidth={20}
                 />
@@ -242,9 +210,7 @@ export default function ReplenishmentRequest(props) {
               <Notification msg={errorMsg} open={openNotification} />
             </div>
           ) : (
-            <div
-            className="LoaderStyle"
-            >
+            <div className="LoaderStyle">
               <Loader type="TailSpin" color="red" height={50} width={50} />
             </div>
           )}

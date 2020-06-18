@@ -15,15 +15,11 @@ export const updateItemUrl = `${baseUrl}/item/updateitem`;
 export const deleteItemUrl = `${baseUrl}/item/deleteitem`;
 export const getSearchedItemUrl = `${baseUrl}/item/getsearcheditems`;
 
-
-
-
 // warehouse endpoints
 export const getWhInventoryUrl = `${baseUrl}/warehouseinventory/getWhInventory`;
 export const addWhInventoryUrl = `${baseUrl}/warehouseinventory/addWhInventory`;
 export const updateWhInventoryUrl = `${baseUrl}/warehouseinventory/updateWhInventory`;
 export const deleteWhInventoryUrl = `${baseUrl}/warehouseinventory/deleteWhInventory`;
-
 
 // bu inventory endpoints
 export const getBuInventoryUrl = `${baseUrl}/buinventory/getbuinventory`;
@@ -57,7 +53,6 @@ export const updateBusinessUnitUrl = `${baseUrl}/businessunit/updatebusinessunit
 export const deleteBusinessUnitUrl = `${baseUrl}/businessunit/deletebusinessunit`;
 export const getBusinessUnitUrlWithHead = `${baseUrl}/businessunit/gethead`;
 
-
 // functional unit
 export const getFunctionalUnitUrl = `${baseUrl}/functionalunit/getfunctionalunits`;
 export const getFunctionalUnitLogsUrl = `${baseUrl}/functionalunit/getfunctionalunitlogs`;
@@ -90,7 +85,6 @@ export const updatePurchaseRequestUrl = `${baseUrl}/purchaserequest/updatepurcha
 export const deletePurchaseRequestUrl = `${baseUrl}/purchaserequest/deletepurchaserequest`;
 export const getPurchaseRequestItemQtyUrl = `${baseUrl}/purchaserequest/getcurrqty`;
 
-
 // shipping term
 export const getShippingTermUrl = `${baseUrl}/shippingterm/getshippingterms`;
 export const addShippingTermUrl = `${baseUrl}/shippingterm/addshippingterm`;
@@ -116,11 +110,12 @@ export const addReceiveItemsUrl = `${baseUrl}/receiveitem/addreceiveitem`;
 export const deleteReceiveItemsUrl = `${baseUrl}/receiveitem/deletereceiveitem`;
 export const updateReceiveItemsUrl = `${baseUrl}/receiveitem/updatereceiveitem`;
 
-// receive items
+// material receivings
 export const getMaterialReceivingUrl = `${baseUrl}/materialreceiving/getmaterialreceivings`;
 export const addMaterialReceivingUrl = `${baseUrl}/materialreceiving/addmaterialreceiving`;
 export const deleteMaterialReceivingUrl = `${baseUrl}/materialreceiving/deletematerialreceiving`;
 export const updateMaterialReceivingUrl = `${baseUrl}/materialreceiving/updatematerialreceiving`;
+export const getSingleMaterialReceivingUrl = `${baseUrl}/materialReceiving/getmaterialreceivings`;
 
 // staff Types
 export const getStaffTypeUrl = `${baseUrl}/stafftype/getstafftype`;
@@ -145,3 +140,20 @@ export const getSystemAdminUrl = `${baseUrl}/systemadmin/getsystemadmin`;
 export const addSystemAdminUrl = `${baseUrl}/systemadmin/addsystemadmin`;
 export const deleteSystemAdminUrl = `${baseUrl}/systemadmin/deletesystemadmin`;
 export const updateSystemAdminUrl = `${baseUrl}/systemadmin/updatesystemadmin`;
+
+//receive items requests for accounts
+export const getReceiveRequestsUrl = `${baseUrl}/account/getaccounts`;
+// export const addSystemAdminUrl = `${baseUrl}/systemadmin/addsystemadmin`;
+// export const deleteSystemAdminUrl = `${baseUrl}/systemadmin/deletesystemadmin`;
+export const updateReceiveRequestsUrl = `${baseUrl}/account/updateaccounts`;
+
+
+
+// replenishment request
+export const getReplenishmentRequestUrl = `${baseUrl}/replenishmentRequest/getreplenishmentrequests`;
+export const addReplenishmentRequestUrl = `${baseUrl}/replenishmentRequest/addreplenishmentrequests`;
+export const deleteReplenishmentRequestUrl = `${baseUrl}/replenishmentRequest/deletereplenishmentrequests`;
+export const updateReplenishmentRequestUrl = `${baseUrl}/replenishmentRequest/updatereplenishmentrequests`;
+export const getSingleReplenishmentRequestUrl = `${baseUrl}/replenishmentRequest/getreplenishmentrequests`;
+
+

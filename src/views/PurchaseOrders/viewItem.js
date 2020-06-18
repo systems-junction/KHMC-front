@@ -73,6 +73,10 @@ const styles = {
     buttonContainer: {
       marginTop: 25,
     },
+
+    styleForLabel:{
+      fontWeight:'700'
+    }
   };
 
 const useStyles = makeStyles(styles);
@@ -95,11 +99,11 @@ export default function PurchaseRequest(props) {
       open={props.openItemDialog}
     >
       <DialogContent style={{ backgroundColor: "#31e2aa" }}>
-        <DialogTitle id="simple-dialog-title">Item Details</DialogTitle>
+        <DialogTitle id="simple-dialog-title" style={{color:'white'}}>Item Details</DialogTitle>
         <div className="container-fluid">
           <div className="row">
             <div className="col-md-6" style={styles.inputContainerForTextField}>
-              <InputLabel id="generated-label">Item Code</InputLabel>
+              <InputLabel style={styles.styleForLabel} id="generated-label">Item Code</InputLabel>
 
               <input
                 type="text"
@@ -112,7 +116,7 @@ export default function PurchaseRequest(props) {
               />
             </div>
             <div className="col-md-6" style={styles.inputContainerForTextField}>
-              <InputLabel id="generated-label">Item Name</InputLabel>
+              <InputLabel style={styles.styleForLabel} id="generated-label">Item Name</InputLabel>
 
               <input
                 type="text"
@@ -128,7 +132,7 @@ export default function PurchaseRequest(props) {
 
           <div className="row">
             <div className="col-md-6" style={styles.inputContainerForTextField}>
-              <InputLabel id="generated-label">Current Quatity</InputLabel>
+              <InputLabel style={styles.styleForLabel} id="generated-label">Current Quantity</InputLabel>
               <input
                 type="number"
                 disabled={true}
@@ -141,7 +145,7 @@ export default function PurchaseRequest(props) {
             </div>
 
             <div className="col-md-6" style={styles.inputContainerForTextField}>
-              <InputLabel id="generated-label">Required Quantity</InputLabel>
+              <InputLabel style={styles.styleForLabel} id="generated-label">Required Quantity</InputLabel>
               <input
                 disabled={true}
                 type="number"
@@ -159,7 +163,7 @@ export default function PurchaseRequest(props) {
               className="col-md-12"
               style={styles.inputContainerForTextField}
             >
-              <InputLabel id="generated-label">Description</InputLabel>
+              <InputLabel style={styles.styleForLabel} id="generated-label">Description</InputLabel>
               <input
                 type="text"
                 disabled={true}
@@ -177,7 +181,7 @@ export default function PurchaseRequest(props) {
               className="col-md-12"
               style={styles.inputContainerForTextField}
             >
-              <InputLabel id="generated-label">Comments</InputLabel>
+              <InputLabel style={styles.styleForLabel} id="generated-label">Comments</InputLabel>
 
               <input
                 disabled={true}

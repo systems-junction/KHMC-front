@@ -17,6 +17,8 @@ import WarehouseInventoryRoutes from "../subRoutes/warehouseInventory";
 import StaffRoutes from "../subRoutes/staff";
 import FuInventoryRoutes from "./fuInventory";
 import ReplenishmentRoutes from "./replenishmentRoutes";
+import MaterialReceivingRoutes from "./materialReceiving";
+import ReceiveRequestsRoutes from "./receiveRequests";
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const [currentUser, setCurrentUser] = React.useState(
@@ -28,7 +30,9 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
       {...rest}
       render={(props) =>
         currentUser.staffTypeId.type === "admin" ||
-        currentUser.staffTypeId.type === "Committe Member" ? (
+        currentUser.staffTypeId.type === "Committe Member" ||
+        currentUser.staffTypeId.type === "Accounts Member" ||
+        currentUser.staffTypeId.type === "Warehouse Member" ? (
           <Component {...props} />
         ) : (
           <Redirect to="notfound" />
@@ -70,14 +74,14 @@ class ControlRoomRoutes extends React.PureComponent {
         />
 
         <Route
-          path={`${this.props.match.url}/replenishment`}
+          path={`${this.props.match.url}/wms/replenishment`}
           component={ReplenishmentRoutes}
         />
 
-          <PrivateRoute
-            path={`${this.props.match.url}/items`}
-            component={ItemRoutes}
-          />
+        <PrivateRoute
+          path={`${this.props.match.url}/items`}
+          component={ItemRoutes}
+        />
 
         <PrivateRoute
           path={`${this.props.match.url}/wms/vendor`}
@@ -103,6 +107,17 @@ class ControlRoomRoutes extends React.PureComponent {
           path={`${this.props.match.url}/wms/warehouseinventory`}
           component={WarehouseInventoryRoutes}
         />
+
+        <Route
+          path={`${this.props.match.url}/wms/materialreceiving`}
+          component={MaterialReceivingRoutes}
+        />
+
+        <Route
+          path={`${this.props.match.url}/wms/receiverequests`}
+          component={ReceiveRequestsRoutes}
+        />
+
         {/* <Route
           path={"/home/receiveitems/add"}
           component={AddEditReceiveItems}

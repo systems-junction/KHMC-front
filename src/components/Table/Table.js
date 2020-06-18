@@ -86,16 +86,28 @@ export default function CustomTable(props) {
           </h6>
         );
       }
-    } else if (val === "in_progress" || val === "po_sent") {
+    } else if (
+      val === "in_progress" ||
+      val === "po_sent" ||
+      val === "items_in_transit"
+    ) {
       return (
         <h6 style={{ fontWeight: "700", color: "#FF6F91" }}>
-          {val === "in_progress" ? "In Progress" : "Po Sent"}
+          {val === "in_progress"
+            ? "In Progress"
+            : val === "items_in_transit"
+            ? "Items in Transit"
+            : "Po Sent"}
         </h6>
       );
-    } else if (val === "complete" || val === "approved") {
+    } else if (val === "complete" || val === "approved" || val === "approve") {
       return (
         <h6 style={{ color: "white", fontWeight: "700", color: "#845EC2" }}>
-          {val === "complete" ? "Complete" : "Approved"}
+          {val === "complete"
+            ? "Complete"
+            : val === "approved"
+            ? "Approved"
+            : "Approve"}
         </h6>
       );
     }
@@ -190,9 +202,9 @@ export default function CustomTable(props) {
                         backgroundColor: "white",
                         cursor: "pointer",
                       }}
-                      onClick={() => {
-                        setRow(prop);
-                      }}
+                      // onClick={() => {
+                      //   setRow(prop);
+                      // }}
                     >
                       {tableDataKeys
                         ? tableDataKeys.map((val, key) => {
@@ -253,12 +265,8 @@ export default function CustomTable(props) {
                       <TableCell
                         style={{
                           cursor: "pointer",
-                          // borderBottomWidth: props.borderBottomWidth,
-                          // borderBottomColor: props.borderBottomColor,
-
                           borderTopRightRadius: 15,
                           borderBottomRightRadius: 15,
-
                           borderWidth: 0,
                         }}
                         className={classes.tableCell}
@@ -273,20 +281,55 @@ export default function CustomTable(props) {
                           >
                             <RcIf if={props.action.edit}>
                               <span onClick={() => props.handleEdit(prop)}>
-                                <i className="zmdi zmdi-edit zmdi-hc-2x" />
+                                <i
+                                  style={{ color: "blue" }}
+                                  className="zmdi zmdi-edit zmdi-hc-2x"
+                                />
                               </span>
                             </RcIf>
                             <RcIf if={props.action.delete}>
                               <span
                                 onClick={() => props.handleDelete(prop._id)}
                               >
-                                <i className=" ml-10 zmdi zmdi-delete zmdi-hc-2x" />
+                                <i
+                                  style={{ color: "red" }}
+                                  className=" ml-10 zmdi zmdi-delete zmdi-hc-2x"
+                                />
                               </span>
                             </RcIf>
 
                             <RcIf if={props.action.add}>
                               <span onClick={() => props.handleAdd(prop)}>
-                                <i className=" ml-10 zmdi zmdi-plus-circle zmdi-hc-3x" />
+                                <i
+                                  style={{ color: "blue" }}
+                                  className=" ml-10 zmdi zmdi-plus-circle zmdi-hc-2x"
+                                />
+                              </span>
+                            </RcIf>
+
+                            <RcIf if={props.action.view}>
+                              <span onClick={() => props.handleView(prop)}>
+                                <i
+                                  style={{ color: "blue" }}
+                                  className=" ml-10 zmdi zmdi-eye zmdi-hc-2x"
+                                />
+                              </span>
+                            </RcIf>
+
+                            <RcIf if={props.action.receiveItem}>
+                              <span
+                                style={{
+                                  backgroundColor: "blue",
+                                  color: "white",
+                                  paddingLeft: 10,
+                                  paddingTop: 5,
+                                  paddingBottom: 5,
+                                  paddingRight: 10,
+                                  borderRadius: 20,
+                                }}
+                                onClick={() => props.receiveItem(prop)}
+                              >
+                                Receive Item
                               </span>
                             </RcIf>
 

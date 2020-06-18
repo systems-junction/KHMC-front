@@ -63,19 +63,6 @@ class HomeScreenRoutes extends React.PureComponent {
         <Route path={"/home/bureturn/add"} component={AddEditBuReturn} />
         <Route path={"/home/bureturn/edit"} component={AddEditBuReturn} />
 
-        <Route
-          exact
-          path={"/home/materialreceiving"}
-          component={MaterialReceiving}
-        />
-        <Route
-          path={"/home/materialreceiving/add"}
-          component={AddEditMaterialReceiving}
-        />
-        <Route
-          path={"/home/materialreceiving/edit"}
-          component={AddEditMaterialReceiving}
-        />
 
         <Route exact path={"/home/bustockinlog"} component={BuStockInLog} />
         <Route

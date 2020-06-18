@@ -40,334 +40,136 @@ class MenuTree extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-   
-    };
+    this.state = {};
   }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   render() {
-
-
     return (
-    
+      <div
+        className="menupage"
+        style={{
+          display: "flex",
+          flex: 4,
+          minHeight: "100%",
+          alignItems: "center",
+          justifyContent: "center",
+          position: "fixed",
+          left: "45%",
+        }}
+      >
+        <nav className="menu">
+          <input
+            type="checkbox"
+            href="#"
+            className="menu-open"
+            name="menu-open"
+            id="menu-open"
+          />
 
-        <div
-          className="menupage"
-          style={{
-            display: "flex",
-            flex: 4,
-            minHeight: "100%",
-            alignItems: "center",
-            justifyContent: "center",
-            position: "fixed",
-            left: "45%",
-          }}
-        >
-          <nav className="menu">
-            <input
-              type="checkbox"
-              href="#"
-              className="menu-open"
-              name="menu-open"
-              id="menu-open"
-            />
-            <label
-              className="menu-open-button"
-              for="menu-open"
-              style={{
-                boxShadow: "5px 5px 5px #2433a5",
-              }}
+          <label
+            className="menu-open-button"
+            for="menu-open"
+            style={{
+              boxShadow: "3px 3px 3px #2433a5",
+            }}
+          >
+            <div className="containerStyle" onClick={() => {}}>
+              <img src={this.props.options[0].img} className="imageStyle" />
+              <h6 className="headingStyle">{this.props.options[0].text}</h6>
+            </div>
+          </label>
+
+          <a className="menu-item item-1">
+            <div
+              className="containerStyle"
+              onClick={() =>
+                this.props.history.push(this.props.options[1].path)
+              }
             >
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%"
-                }}
-                onClick={() => {}}
-              >
-                <img
-                  src={this.props.options[0].img}
-                  style={{
-                    maxWidth: "35%",
-                    height: "auto",
-                    position: "absolute",
-                    top: 12,
-                  }}
-                />
-                <h6
-                  style={{
-                    position: "absolute",
-                    top: 50,
-                    color: "white",
-                    fontWeight: "700"
-                  }}
-                >
-                 {this.props.options[0].text}
-                </h6>
-              </div>
-            </label>
+              <img src={this.props.options[1].img} className="imageStyle" />
+              <h6 className="headingStyle">{this.props.options[1].text}</h6>
+            </div>
+          </a>
+          <a className="menu-item item-2">
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%",
+                width: "100%",
+              }}
+              onClick={() =>
+                this.props.history.push(this.props.options[2].path)
+              }
+            >
+              <img src={this.props.options[2].img} className="imageStyle" />
+              <h6 className="headingStyle">{this.props.options[2].text}</h6>
+            </div>
+          </a>
+          <a className="menu-item item-3">
+            <div
+              className="containerStyle"
+              onClick={() =>
+                this.props.history.push(this.props.options[3].path)
+              }
+            >
+              <img src={this.props.options[3].img} className="imageStyle" />
+              <h6 className="headingStyle">{this.props.options[3].text}</h6>
+            </div>
+          </a>
 
-            <a className="menu-item item-1">
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                  width:'100%',
-                }}
-              >
-                <img
-                  src={this.props.options[1].img}
-                  style={{
-                    maxWidth: "40%",
-                    height: "auto",
-                    // position: "absolute",
-                    // top: 20,
-                  }}
-                />
-                <h6
-                  style={{
-                    // position: "absolute",
-                    // top: 60,
-                    color: "white",
-                    fontWeight: "700",
-                  }}
-                >
-                  {this.props.options[1].text}
-                </h6>
-              </div>
+          <a className="menu-item item-4">
+            <div
+              className="containerStyle"
+              onClick={() =>
+                this.props.history.push(this.props.options[4].path)
+              }
+            >
+              <img src={this.props.options[4].img} className="imageStyle" />
+              <h6 className="headingStyle">{this.props.options[4].text}</h6>
+            </div>
+          </a>
+          <a className="menu-item item-5">
+            <div
+              className="containerStyle"
+              onClick={() =>
+                this.props.history.push(this.props.options[5].path)
+              }
+            >
+              <img src={this.props.options[5].img} className="imageStyle" />
 
-            </a>
-            <a className="menu-item item-2">
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                  width:'100%'
-                }}
-                onClick={() => this.props.history.push(this.props.options[2].path)}
-              >
-                <img
-                  src={this.props.options[2].img}
-                  style={{
-                    maxWidth: "40%",
-                    height: "auto",
-                    // position: "absolute",
-                    // top: 20,
-                  }}
-                />
-                <h6
-                  style={{
-                    // position: "absolute",
-                    // top: 55,
-                    color: "white",
-                    fontWeight: "700",
-                  }}
-                >
-                  {this.props.options[2].text}
-                </h6>
-              </div>
-            </a>
-            <a className="menu-item item-3">
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                  width:"100%",
-                   position:'fixed'
-                }}
-              >
-                <img
-                  src={this.props.options[3].img}
-                  style={{
-                  maxWidth: '40%',
-                    height: 'auto',
-                    position: "absolute",
-                    left:30,
-                    top: 20,
-                  }}
-                />
-                <h6
-                  style={{
-                    position: "absolute",
-                    top: 60,
-                    color: "white",
-                    fontWeight: "700",
-                  }}
-                >
-                  {this.props.options[3].text}
-                </h6>
-              </div>
-            </a>
+              <h6 className="headingStyle">{this.props.options[5].text}</h6>
+            </div>
+          </a>
 
-            <a className="menu-item item-4">
-
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                }}
-                onClick={() => this.props.history.push(this.props.options[4].path)}
-              >
-                <img
-                  src={this.props.options[4].img}
-                  style={{
-                    maxWidth: "35%",
-                    height: "auto",
-                    position: "absolute",
-                    top: 12,
-                  }}
-                />
-                <h6
-                  style={{
-                    position: "absolute",
-                    top: 45,
-                    color: "white",
-                    fontWeight: "700",
-                    maxWidth: "50%",
-                  }}
-                >
-                  {this.props.options[4].text}
-                </h6>
-              </div>
-            </a>
-            <a className="menu-item item-5">
-              {/* <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                }}
-                onClick={() => this.props.history.push("/home/bureturn")}
-              >
-                <h6
-                  style={{
-                    position: "absolute",
-                    top: 40,
-                    color: "white",
-                    fontWeight: "700",
-                  }}
-                >
-                  BU Return
-                </h6>
-              </div> */}
-
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                }}
-                onClick={() => this.props.history.push(this.props.options[5].path)}
-              >
-                <img
-                  src={this.props.options[5].img}
-                  style={{
-                    maxWidth: "38%",
-                    height: "auto",
-                    position: "absolute",
-                    top: 10,
-                  }}
-                />
-                <h6
-                  style={{
-                    position: "absolute",
-                    top: 47,
-                    color: "white",
-                    fontWeight: "700",
-                  }}
-                >
-                 {this.props.options[5].text}
-                </h6>
-              </div>
-            </a>
-
-            <a className="menu-item item-6">
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                }}
-                onClick={() =>
-                  this.props.history.push(this.props.options[6].path)
-                }
-              >
-                <img
-                  src={this.props.options[6].img}
-                  style={{
-                    maxWidth: "35%",
-                    height: "auto",
-                    position: "absolute",
-                    top: 10,
-                  }}
-                />
-                <h6
-                  style={{
-                    position: "absolute",
-                    top: 55,
-                    color: "white",
-                    fontWeight: "700",
-                    maxWidth: "80%",
-                  }}
-                >
-{this.props.options[6].text}
-                </h6>
-              </div>
-            </a>
-            <a className="menu-item item-7">
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: "100%",
-                  }}
-                  onClick={() =>
-                    this.props.history.push(this.props.options[7].path)
-                  }
-                >
-                  <h6
-                    style={{
-                      position: "absolute",
-                      // top: 30,
-                      color: "white",
-                      width: "80%",
-                      fontWeight: "700",
-                    }}
-                  >
-                    {this.props.options[7].text}
-                  </h6>
-                </div>
-            
-            </a>
-          </nav>
-        </div>
-
+          <a className="menu-item item-6">
+            <div
+              className="containerStyle"
+              onClick={() =>
+                this.props.history.push(this.props.options[6].path)
+              }
+            >
+              <img src={this.props.options[6].img} className="imageStyle" />
+              <h6 className="headingStyle">{this.props.options[6].text}</h6>
+            </div>
+          </a>
+          <a className="menu-item item-7">
+            <div
+              className="containerStyle"
+              onClick={() =>
+                this.props.history.push(this.props.options[7].path)
+              }
+            >
+              <img src={this.props.options[7].img} className="imageStyle" />
+              <h6 className="headingStyle">{this.props.options[7].text}</h6>
+            </div>
+          </a>
+        </nav>
+      </div>
     );
   }
 }
