@@ -177,7 +177,7 @@ function AddEditPurchaseRequest(props) {
     }
   }, []);
 
-  function handleView(rec) {
+  function handleReceive(rec) {
     console.log("rec", rec);
     let path = `/home/controlroom/wms/receiveitems/add`;
     props.history.push({
@@ -203,7 +203,7 @@ function AddEditPurchaseRequest(props) {
         tableDataKeys={tableDataKeys}
         tableHeading={tableHeading}
         action={actions}
-        receiveItem={handleView}
+        receiveItem={handleReceive}
         borderBottomColor={"#60d69f"}
         borderBottomWidth={20}
       />

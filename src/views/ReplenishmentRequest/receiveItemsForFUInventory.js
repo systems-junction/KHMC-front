@@ -21,6 +21,8 @@ import {
 import {
   addReceiveItemsUrl,
   updateReceiveItemsUrl,
+  addReceiveRequestFUUrl,
+  updateReceiveRequestFUUrl,
 } from "../../public/endpoins";
 
 import cookie from "react-cookies";
@@ -33,6 +35,11 @@ import business_Unit from "../../assets/img/business_Unit.png";
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 
 import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
+
+const statusArray = [
+  { key: "Partially Recieved", value: "Partially Received" },
+  { key: "Received", value: "Received" },
+];
 
 const styles = {
   // inputContainer: {
@@ -54,7 +61,7 @@ const styles = {
   },
 
   inputContainerForDropDown: {
-    marginTop: 35,
+    marginTop: 55,
     backgroundColor: "white",
     borderRadius: 10,
     paddingLeft: 10,
@@ -79,10 +86,6 @@ function ReceiveItems(props) {
   const classes = useStyles();
 
   const initialState = {
-    _id: "",
-    itemCode: "",
-    itemName: "",
-    currentQty: "",
     requiredQty: "",
     receivedQty: "",
     bonusQty: "",
@@ -101,9 +104,52 @@ function ReceiveItems(props) {
     invoice: "",
     date: "",
     receivedDate: "",
-    comments: "",
     expiryDate: "",
     discountPercentage: "",
+
+    _id: "",
+    requestNo: "",
+    generatedBy: "",
+    dateGenerated: "",
+    vendorId: "",
+    status: "to_do",
+    itemId: "",
+    itemCode: "",
+    itemName: "",
+    description: "",
+    currentQty: "",
+    requestedQty: "",
+    comments: "",
+    vendors: [],
+    statues: [],
+    items: [],
+    selectedRow: "",
+    reason: "",
+
+    generated: "Manual",
+
+    requesterName: "",
+    department: "",
+    orderType: "",
+    maximumLevel: "",
+
+    committeeStatus: "",
+
+    vendorsArray: [],
+
+    recieptUnit: "",
+    issueUnit: "",
+    fuItemCost: "",
+    fuId: "",
+    to: "",
+    from: "",
+    approvedBy: "",
+    commentNote: "",
+    secondStatus: "",
+
+    notes: "",
+
+    replensihmentRequestStatus: "",
   };
 
   function reducer(state, { field, value }) {
@@ -116,10 +162,6 @@ function ReceiveItems(props) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const {
-    _id,
-    itemCode,
-    itemName,
-    currentQty,
     requiredQty,
     receivedQty,
     bonusQty,
@@ -138,21 +180,52 @@ function ReceiveItems(props) {
     invoice,
     date,
     receivedDate,
-    comments,
     expiryDate,
     discountPercentage,
+
+    _id,
+    requestNo,
+    generatedBy,
+    generated,
+    dateGenerated,
+    vendorId,
+    status,
+    itemCode,
+    itemId,
+    itemName,
+    description,
+    currentQty,
+    requestedQty,
+    comments,
+    vendors,
+    statues,
+    items,
+    selectedRow,
+    reason,
+    requesterName,
+    department,
+    orderType,
+
+    maximumLevel,
+
+    committeeStatus,
+
+    vendorsArrayForItems,
+
+    recieptUnit,
+    issueUnit,
+    fuItemCost,
+    fuId,
+    to,
+    from,
+    approvedBy,
+    commentNote,
+    secondStatus,
+    notes,
+    replensihmentRequestStatus,
   } = state;
 
   const onChangeValue = (e) => {
-    console.log(e.target.value);
-    // if (e.target.type === "number") {
-    //   if (!e.target.value) {
-    //     return;
-    //   } else {
-    //     dispatch({ field: e.target.name, value: e.target.value });
-    //   }
-    // }
-
     dispatch({ field: e.target.name, value: e.target.value });
   };
 
@@ -229,7 +302,9 @@ function ReceiveItems(props) {
       invoice.length > 0 &&
       date !== "" &&
       receivedDate !== "" &&
-      comments.length > 0
+      notes.length > 0 &&
+      replensihmentRequestStatus !== "" &&
+      receivedQty <= requestedQty
       // discountPercentage.length > 0
     );
   }
@@ -237,9 +312,9 @@ function ReceiveItems(props) {
   const handleAdd = () => {
     if (validateForm()) {
       let params = {
-        itemId: selectedItem.item.itemId._id,
-        currentQty: selectedItem.item.currQty,
-        requestedQty: selectedItem.item.reqQty,
+        itemId: selectedItem.itemId._id,
+        currentQty: currentQty,
+        requestedQty: requestedQty,
         receivedQty,
         bonusQty,
         batchNumber,
@@ -258,16 +333,16 @@ function ReceiveItems(props) {
         invoice,
         dateInvoice: date,
         dateReceived: receivedDate,
-        notes: comments,
-        materialId: props.history.location.state.materialReceivingId,
-        vendorId: selectedItem.vendorId,
-        prId: selectedItem._id,
+        notes,
+        replensihmentRequestId: _id,
+        replensihmentRequestStatus,
+        fuId: fuId._id,
       };
 
       console.log("params", params);
 
       axios
-        .post(addReceiveItemsUrl, params)
+        .post(addReceiveRequestFUUrl, params)
         .then((res) => {
           if (res.data.success) {
             props.history.goBack();
@@ -310,9 +385,11 @@ function ReceiveItems(props) {
         comments,
         expiryDate,
         discountPercentage,
+        replensihmentRequestId: _id,
+        replensihmentRequestStatus,
       };
       axios
-        .put(updateReceiveItemsUrl, params)
+        .put(updateReceiveRequestFUUrl, params)
         .then((res) => {
           if (res.data.success) {
             props.history.goBack();
@@ -377,7 +454,7 @@ function ReceiveItems(props) {
                   disabled={true}
                   placeholder="Item Code"
                   name={"itemCode"}
-                  value={selectedItem && selectedItem.item.itemCode}
+                  value={selectedItem && selectedItem.itemId.itemCode}
                   onChange={onChangeValue}
                   className="textInputStyle"
                 />
@@ -394,7 +471,7 @@ function ReceiveItems(props) {
                   disabled={true}
                   placeholder="Item Name"
                   name={"itemName"}
-                  value={selectedItem && selectedItem.item.name}
+                  value={selectedItem && selectedItem.itemId.name}
                   onChange={onChangeValue}
                   className="textInputStyle"
                 />
@@ -414,11 +491,10 @@ function ReceiveItems(props) {
                   type="number"
                   placeholder="Current Qty"
                   name={"currentQty"}
-                  value={selectedItem && selectedItem.item.currQty}
+                  value={selectedItem && currentQty}
                   onChange={onChangeValue}
                   className="textInputStyle"
-                  onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault()}
-
+                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 />
               </div>
             </div>
@@ -433,11 +509,10 @@ function ReceiveItems(props) {
                   disabled={true}
                   placeholder="Required Qty"
                   name={"requiredQty"}
-                  value={selectedItem && selectedItem.item.reqQty}
+                  value={selectedItem && selectedItem.requestedQty}
                   onChange={onChangeValue}
                   className="textInputStyle"
-                  onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault()}
-
+                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 />
               </div>
             </div>
@@ -454,8 +529,23 @@ function ReceiveItems(props) {
                   value={receivedQty}
                   onChange={onChangeValue}
                   className="textInputStyle"
-                  onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault()}
-                  // error={receivedQty.includes("e", 0)}
+                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                  style={{
+                    borderColor:
+                      receivedQty > requestedQty ||
+                      (replensihmentRequestStatus &&
+                        replensihmentRequestStatus === "Received" &&
+                        receivedQty !== requestedQty)
+                        ? "red"
+                        : null,
+                    borderWidth:
+                      receivedQty > requestedQty ||
+                      (replensihmentRequestStatus &&
+                        replensihmentRequestStatus === "Received" &&
+                        receivedQty !== requestedQty)
+                        ? 2.5
+                        : null,
+                  }}
                 />
               </div>
             </div>
@@ -472,7 +562,7 @@ function ReceiveItems(props) {
                   value={bonusQty}
                   onChange={onChangeValue}
                   className="textInputStyle"
-                  onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault()}
+                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 />
               </div>
             </div>
@@ -491,8 +581,7 @@ function ReceiveItems(props) {
                   value={batchNumber}
                   onChange={onChangeValue}
                   className="textInputStyle"
-                  onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault()}
-
+                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 />
               </div>
             </div>
@@ -509,8 +598,7 @@ function ReceiveItems(props) {
                   value={lotNo}
                   onChange={onChangeValue}
                   className="textInputStyle"
-                  onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault()}
-
+                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 />
               </div>
             </div>
@@ -571,8 +659,7 @@ function ReceiveItems(props) {
                   value={discount}
                   onChange={onChangeValue}
                   className="textInputStyle"
-                  onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault()}
-
+                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 />
               </div>
             </div>
@@ -588,8 +675,7 @@ function ReceiveItems(props) {
                   value={uniyDiscount}
                   onChange={onChangeValue}
                   className="textInputStyle"
-                  onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault()}
-
+                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 />
               </div>
             </div>
@@ -606,8 +692,7 @@ function ReceiveItems(props) {
                   value={discountAmount}
                   onChange={onChangeValue}
                   className="textInputStyle"
-                  onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault()}
-
+                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 />
               </div>
             </div>
@@ -627,8 +712,7 @@ function ReceiveItems(props) {
                   value={tax}
                   onChange={onChangeValue}
                   className="textInputStyle"
-                  onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault()}
-
+                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 />
               </div>
             </div>
@@ -645,8 +729,7 @@ function ReceiveItems(props) {
                   value={taxAmount}
                   onChange={onChangeValue}
                   className="textInputStyle"
-                  onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault()}
-
+                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 />
               </div>
             </div>
@@ -665,8 +748,7 @@ function ReceiveItems(props) {
                   value={finalUnitPrice}
                   onChange={onChangeValue}
                   className="textInputStyle"
-                  onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault()}
-
+                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 />
               </div>
             </div>
@@ -683,8 +765,7 @@ function ReceiveItems(props) {
                   value={subTotal}
                   onChange={onChangeValue}
                   className="textInputStyle"
-                  onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault()}
-
+                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 />
               </div>
             </div>
@@ -701,8 +782,7 @@ function ReceiveItems(props) {
                   value={totalPrice}
                   onChange={onChangeValue}
                   className="textInputStyle"
-                  onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault()}
-
+                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 />
               </div>
             </div>
@@ -719,8 +799,7 @@ function ReceiveItems(props) {
                   value={discountAmount2}
                   onChange={onChangeValue}
                   className="textInputStyle"
-                  onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault()}
-
+                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 />
               </div>
             </div>
@@ -739,8 +818,7 @@ function ReceiveItems(props) {
                   value={invoice}
                   onChange={onChangeValue}
                   className="textInputStyle"
-                  onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault()}
-
+                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 />
               </div>
             </div>
@@ -793,18 +871,55 @@ function ReceiveItems(props) {
           </div>
 
           <div className="row">
-            <div className="col-md-12">
+            <div className="col-md-6">
               <div style={styles.inputContainerForTextField}>
                 <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Comments
+                  Notes
                 </InputLabel>
                 <input
-                  placeholder="Comments"
-                  name={"comments"}
-                  value={comments}
+                  placeholder="Notes"
+                  name={"notes"}
+                  value={notes}
                   onChange={onChangeValue}
                   className="textInputStyle"
                 />
+              </div>
+            </div>
+
+            <div className="col-md-6">
+              <div style={styles.inputContainerForDropDown}>
+                <InputLabel id="status-label" style={styles.styleForLabel}>
+                  Status
+                </InputLabel>
+                <Select
+                  fullWidth
+                  id="replensihmentRequestStatus"
+                  name="replensihmentRequestStatus"
+                  value={replensihmentRequestStatus}
+                  onChange={onChangeValue}
+                  label="Status"
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  {statusArray.map((val) => {
+                    return (
+                      <MenuItem
+                        disabled={
+                          receivedQty &&
+                          ((val.key === "Received" &&
+                            receivedQty < requestedQty) ||
+                            (val.key === "Partially Recieved" &&
+                              receivedQty >= requestedQty))
+                        }
+                        key={val.key}
+                        value={val.key}
+                      >
+                        {val.value}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
               </div>
             </div>
           </div>
@@ -831,14 +946,14 @@ function ReceiveItems(props) {
                     flexDirection: "row",
                   }}
                 >
-                  <Button
+                  {/* <Button
                     style={{ minWidth: "20%", marginRight: 30 }}
                     disabled={true}
                     // onClick={handleAdd}
                     variant="contained"
                   >
                     Upload Invoice
-                  </Button>
+                  </Button> */}
 
                   <Button
                     style={{ minWidth: "10%" }}

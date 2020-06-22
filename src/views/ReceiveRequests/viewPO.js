@@ -144,9 +144,8 @@ function AddEditPurchaseRequest(props) {
   };
 
   function validateForm() {
-    return status.length > 0 && comments.length > 0;
+    return status.length > 0;
 
-    return true;
   }
 
   const [comingFor, setcomingFor] = useState("");
@@ -484,19 +483,14 @@ function AddEditPurchaseRequest(props) {
             <div className="row">
               <div className="col-md-6">
                 <div style={styles.inputContainerForDropDown}>
-                  <InputLabel
-                    style={styles.stylesForLabel}
-                    id="generated-label"
-                  >
-                    Status
-                  </InputLabel>
+                  <InputLabel id="label-for-status">Status</InputLabel>
                   <Select
                     fullWidth
                     id="status"
                     name="status"
                     value={status}
                     onChange={onChangeValue}
-                    label="Status"
+                    // label="Status"
                   >
                     <MenuItem value="">
                       <em>None</em>

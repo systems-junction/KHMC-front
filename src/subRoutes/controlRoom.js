@@ -64,6 +64,11 @@ class ControlRoomRoutes extends React.PureComponent {
         />
 
         <Route
+          path={`${this.props.match.url}/fus/replenishment`}
+          component={ReplenishmentRoutes}
+        />
+
+        <Route
           path={`${this.props.match.url}/fus`}
           component={FunctionalUnitRoutes}
         />

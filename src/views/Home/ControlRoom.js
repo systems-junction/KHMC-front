@@ -84,11 +84,60 @@ const accountsMember = [
 
 const warehouseMember = [
   { img: Control_Room, text: "Control Room", path: "" },
-  { img: RCM, text: "RCM", path: "" },
-  { img: WMS, text: "WMS", path: "controlroom/wms" },
   { img: "", text: "", path: "" },
   { img: "", text: "", path: "" },
   { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+  {
+    img: FunctionalUnit,
+    text: "FU Mgmt",
+    path: "controlroom/fus/replenishment",
+  },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+];
+
+const warehouseDeliveryMan = [
+  { img: Control_Room, text: "Control Room", path: "" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+  {
+    img: FunctionalUnit,
+    text: "FU Mgmt",
+    path: "controlroom/fus/replenishment",
+  },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+];
+
+const fuHead = [
+  { img: Control_Room, text: "Control Room" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+  {
+    img: FunctionalUnit,
+    text: "FU Mgmt",
+    path: "controlroom/fus/replenishment",
+  },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+];
+
+const fuInventoryKeeper = [
+  { img: Control_Room, text: "Control Room" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+  {
+    img: FunctionalUnit,
+    text: "FU Mgmt",
+    path: "controlroom/fus/replenishment",
+  },
   { img: "", text: "", path: "" },
   { img: "", text: "", path: "" },
 ];
@@ -172,6 +221,12 @@ class HomeScreen extends React.Component {
               ? accountsMember
               : userType && userType.type === "Warehouse Member"
               ? warehouseMember
+              : userType && userType.type === "FU Member"
+              ? fuHead
+              : userType && userType.type === "Warehouse Incharge"
+              ? warehouseDeliveryMan
+              : userType && userType.type === "FU Inventory Keeper"
+              ? fuInventoryKeeper
               : admin
           }
         />

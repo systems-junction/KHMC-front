@@ -85,7 +85,9 @@ class MenuTree extends React.Component {
             <div
               className="containerStyle"
               onClick={() =>
-                this.props.history.push(this.props.options[1].path)
+                this.props.options[1].path
+                  ? this.props.history.push(this.props.options[1].path)
+                  : {}
               }
             >
               <img src={this.props.options[1].img} className="imageStyle" />
@@ -103,7 +105,9 @@ class MenuTree extends React.Component {
                 width: "100%",
               }}
               onClick={() =>
-                this.props.history.push(this.props.options[2].path)
+                this.props.options[2].path
+                  ? this.props.history.push(this.props.options[2].path)
+                  : {}
               }
             >
               <img src={this.props.options[2].img} className="imageStyle" />
@@ -114,7 +118,9 @@ class MenuTree extends React.Component {
             <div
               className="containerStyle"
               onClick={() =>
-                this.props.history.push(this.props.options[3].path)
+                this.props.options[3].path
+                  ? this.props.history.push(this.props.options[3].path)
+                  : {}
               }
             >
               <img src={this.props.options[3].img} className="imageStyle" />
@@ -126,7 +132,9 @@ class MenuTree extends React.Component {
             <div
               className="containerStyle"
               onClick={() =>
-                this.props.history.push(this.props.options[4].path)
+                this.props.options[4].path
+                  ? this.props.history.push(this.props.options[4].path)
+                  : {}
               }
             >
               <img src={this.props.options[4].img} className="imageStyle" />
@@ -137,7 +145,9 @@ class MenuTree extends React.Component {
             <div
               className="containerStyle"
               onClick={() =>
-                this.props.history.push(this.props.options[5].path)
+                this.props.options[5].path
+                  ? this.props.history.push(this.props.options[5].path)
+                  : {}
               }
             >
               <img src={this.props.options[5].img} className="imageStyle" />
@@ -150,7 +160,9 @@ class MenuTree extends React.Component {
             <div
               className="containerStyle"
               onClick={() =>
-                this.props.history.push(this.props.options[6].path)
+                this.props.options[6].path
+                  ? this.props.history.push(this.props.options[6].path)
+                  : {}
               }
             >
               <img src={this.props.options[6].img} className="imageStyle" />
@@ -161,7 +173,9 @@ class MenuTree extends React.Component {
             <div
               className="containerStyle"
               onClick={() =>
-                this.props.history.push(this.props.options[7].path)
+                this.props.options[7].path
+                  ? this.props.history.push(this.props.options[7].path)
+                  : {}
               }
             >
               <img src={this.props.options[7].img} className="imageStyle" />

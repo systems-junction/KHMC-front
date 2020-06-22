@@ -8,8 +8,9 @@ import CustomTable from "../../components/Table/Table";
 import ConfirmationModal from "../../components/Modal/confirmationModal";
 import axios from "axios";
 import {
-  getReplenishmentRequestUrl,
+  getReplenishmentRequestUrlFU,
   deleteReplenishmentRequestUrl,
+  getFunctionalUnitFromHeadIdUrl,
 } from "../../public/endpoins";
 
 import Loader from "react-loader-spinner";
@@ -33,25 +34,40 @@ import Back_Arrow from "../../assets/img/Back_Arrow.png";
 
 import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 
-const dummyData = [
-  {
-    replenishmentRequestNo: 123,
-    generated: "System",
-    date: "20/10/2005",
-    status: "Pending",
-  },
-];
-
-const tableHeading = [
-  "Replenishment Request No",
+const tableHeadingForFUHead = [
+  "Rep Request No",
   "Generated",
   "Date/Time Generated",
   "Status",
   "Actions",
 ];
-const tableDataKeys = ["requestNo", "generated", "dateGenerated", "status"];
+const tableDataKeysForFUHead = [
+  "requestNo",
+  "generated",
+  "dateGenerated",
+  "status",
+];
 
-const actions = { edit: true, view: true };
+const tableHeading = [
+  "Rep Request No",
+  "Generated",
+  "Date/Time Generated",
+  "FU Name",
+  "Approved By",
+  "Status",
+  "Actions",
+];
+const tableDataKeys = [
+  "requestNo",
+  "generated",
+  "dateGenerated",
+  ["fuId", "fuName"],
+  ["approvedBy", "firstName"],
+  "secondStatus",
+];
+
+const actions = { edit: true };
+const actionsForFUInventoryKeeper = { receiveItem: true };
 
 export default function ReplenishmentRequest(props) {
   const [purchaseRequests, setPurchaseRequest] = useState("");
@@ -64,6 +80,7 @@ export default function ReplenishmentRequest(props) {
   const [openNotification, setOpenNotification] = useState(false);
 
   const [currentUser, setCurrentUser] = useState(cookie.load("current_user"));
+  const [fuObj, setFUObj] = useState("");
 
   if (openNotification) {
     setTimeout(() => {
@@ -74,11 +91,53 @@ export default function ReplenishmentRequest(props) {
 
   function getPurchaseRequests() {
     axios
-      .get(getReplenishmentRequestUrl)
+      .get(getReplenishmentRequestUrlFU)
       .then((res) => {
         if (res.data.success) {
           console.log(res.data.data);
-          setPurchaseRequest(res.data.data);
+
+          if (currentUser.staffTypeId.type === "FU Member") {
+            let repRequest = res.data.data;
+            let temp = [];
+            for (let i = 0; i < repRequest.length; i++) {
+              if (repRequest[i].fuId.fuHead === currentUser.staffId) {
+                temp.push(repRequest[i]);
+              }
+            }
+            console.log("rep array after filter", temp);
+            setPurchaseRequest(temp.reverse());
+          } else {
+            if (currentUser.staffTypeId.type === "Warehouse Incharge") {
+              let repRequest = res.data.data;
+              let temp = [];
+              for (let i = 0; i < repRequest.length; i++) {
+                if (
+                  repRequest[i].status === "Fulfillment Initiated" ||
+                  repRequest[i].status === "Delivery in Progress" ||
+                  repRequest[i].status === "Received"
+                ) {
+                  temp.push(repRequest[i]);
+                }
+              }
+              // console.log("rep array after filter", temp);
+              setPurchaseRequest(temp);
+            } else if (currentUser.staffTypeId.type === "FU Inventory Keeper") {
+              let repRequest = res.data.data;
+              let temp = [];
+              for (let i = 0; i < repRequest.length; i++) {
+                if (
+                  repRequest[i].status === "Delivery in Progress" ||
+                  repRequest[i].status === "Received"
+                ) {
+                  temp.push(repRequest[i]);
+                }
+              }
+              // console.log("rep array after filter", temp);
+              setPurchaseRequest(temp);
+            } else {
+              setPurchaseRequest(res.data.data);
+            }
+          }
           //   setVendor(res.data.data.vendor);
           //   setStatus(res.data.data.status);
           //   setItems(res.data.data.items);
@@ -93,15 +152,37 @@ export default function ReplenishmentRequest(props) {
       });
   }
 
+  function getFUFromHeadId() {
+    axios
+      .get(getFunctionalUnitFromHeadIdUrl + "/" + currentUser.staffId)
+      .then((res) => {
+        if (res.data.success) {
+          console.log("FU Obj", res.data.data[0]);
+          setFUObj(res.data.data[0]);
+        } else if (!res.data.success) {
+          setErrorMsg(res.data.error);
+          setOpenNotification(true);
+        }
+        return res;
+      })
+      .catch((e) => {
+        console.log("error: ", e);
+      });
+  }
+
   useEffect(() => {
     getPurchaseRequests();
+
+    if (currentUser.staffTypeId.type === "FU Member") {
+      getFUFromHeadId();
+    }
   }, []);
 
   const addNewItem = () => {
     let path = `replenishment/add`;
     props.history.push({
       pathname: path,
-      state: { comingFor: "add", vendors, statues, items },
+      state: { comingFor: "add", vendors, statues, items, fuObj },
     });
   };
 
@@ -109,7 +190,14 @@ export default function ReplenishmentRequest(props) {
     let path = `replenishment/edit`;
     props.history.push({
       pathname: path,
-      state: { comingFor: "edit", selectedItem: rec, vendors, statues, items },
+      state: {
+        comingFor: "edit",
+        selectedItem: rec,
+        vendors,
+        statues,
+        items,
+        fuObj,
+      },
     });
   }
 
@@ -145,6 +233,22 @@ export default function ReplenishmentRequest(props) {
     console.log("item clicked", obj);
   };
 
+  function handleReceive(rec) {
+    console.log("rec", rec);
+    let path = `replenishment/receive`;
+    props.history.push({
+      pathname: path,
+      state: {
+        comingFor: "add",
+        selectedItem: rec,
+        // vendors,
+        // statues,
+        // purchaseOrders,
+        // materialReceivingId: props.materialReceivingId,
+      },
+    });
+  }
+
   return (
     <div
       style={{
@@ -166,7 +270,7 @@ export default function ReplenishmentRequest(props) {
             <h4>Replenishment Request</h4>
           </div>
 
-          {currentUser && currentUser.staffTypeId.type !== "Warehouse Member" ? (
+          {currentUser && currentUser.staffTypeId.type === "FU Member" ? (
             <div>
               <img onClick={addNewItem} src={Add_New} />
               {/* <img src={Search} /> */}
@@ -188,11 +292,26 @@ export default function ReplenishmentRequest(props) {
               <div>
                 <CustomTable
                   tableData={purchaseRequests}
-                  tableDataKeys={tableDataKeys}
-                  tableHeading={tableHeading}
-                  action={actions}
+                  tableDataKeys={
+                    currentUser.staffTypeId.type === "FU Member" ||
+                    currentUser.staffTypeId.type === "FU Inventory Keeper"
+                      ? tableDataKeysForFUHead
+                      : tableDataKeys
+                  }
+                  tableHeading={
+                    currentUser.staffTypeId.type === "FU Member" ||
+                    currentUser.staffTypeId.type === "FU Inventory Keeper"
+                      ? tableHeadingForFUHead
+                      : tableHeading
+                  }
+                  action={
+                    currentUser.staffTypeId.type === "FU Inventory Keeper"
+                      ? actionsForFUInventoryKeeper
+                      : actions
+                  }
                   handleEdit={handleEdit}
                   handleDelete={handleDelete}
+                  receiveItem={handleReceive}
                   handleView={handleView}
                   borderBottomColor={"#60d69f"}
                   borderBottomWidth={20}

@@ -60,7 +60,12 @@ export default function CustomTable(props) {
         />
       );
     }
-    if (val === "pending" || val === "to_do" || val === "po_created") {
+    if (
+      val === "pending" ||
+      val === "to_do" ||
+      val === "po_created" ||
+      val === "Can be fulfilled"
+    ) {
       if (currentUser && currentUser.staffTypeId.type === "Committe Member") {
         return (
           <h6 style={{ fontWeight: "700", color: "#2C73D2" }}>
@@ -80,8 +85,10 @@ export default function CustomTable(props) {
               ? "To Do"
               : val === "pending"
               ? "Pending"
-              : "po_created"
+              : val === "po_created"
               ? "PO Created"
+              : val === "Can be fulfilled"
+              ? "Can be fulfilled"
               : ""}
           </h6>
         );
@@ -89,7 +96,10 @@ export default function CustomTable(props) {
     } else if (
       val === "in_progress" ||
       val === "po_sent" ||
-      val === "items_in_transit"
+      val === "items_in_transit" ||
+      val === "pending_approval_from_accounts" ||
+      val === "Delivery in Progress" ||
+      val === "FulFillment Initiated"
     ) {
       return (
         <h6 style={{ fontWeight: "700", color: "#FF6F91" }}>
@@ -97,16 +107,33 @@ export default function CustomTable(props) {
             ? "In Progress"
             : val === "items_in_transit"
             ? "Items in Transit"
-            : "Po Sent"}
+            : val === "pending_approval_from_accounts"
+            ? "Pending Approval From Accounts"
+            : val === "Delivery in Progress"
+            ? "Delivery in Progress" 
+            : val === "FulFillment Initiated"
+            ? "FulFillment Initiated" 
+            : "Po Sent"
+            }
         </h6>
       );
-    } else if (val === "complete" || val === "approved" || val === "approve") {
+    } else if (
+      val === "complete" ||
+      val === "approved" ||
+      val === "approve" ||
+      val === "reject" ||
+      val === "Received"
+    ) {
       return (
         <h6 style={{ color: "white", fontWeight: "700", color: "#845EC2" }}>
           {val === "complete"
             ? "Complete"
             : val === "approved"
             ? "Approved"
+            : val === "reject"
+            ? "Reject"
+            : val === "Received"
+            ? "Received"
             : "Approve"}
         </h6>
       );
@@ -216,11 +243,6 @@ export default function CustomTable(props) {
                                   key={key}
                                   style={{
                                     textAlign: "center",
-                                    // borderBottomWidth: props.borderBottomWidth,
-                                    // borderBottomColor: props.borderBottomColor,
-                                    // borderLeftWidth: 0,
-                                    // borderRightWidth: 0,
-                                    // borderTopWidth: 0,
                                   }}
                                 >
                                   {formatDate(prop[val])}
@@ -237,9 +259,6 @@ export default function CustomTable(props) {
                                     cursor: props.handleModelMaterialReceiving
                                       ? "pointer"
                                       : "",
-                                    // borderBottomWidth: props.borderBottomWidth,
-                                    // borderBottomColor: props.borderBottomColor,
-
                                     borderTopLeftRadius: key === 0 ? 15 : 0,
                                     borderBottomLeftRadius: key === 0 ? 15 : 0,
 

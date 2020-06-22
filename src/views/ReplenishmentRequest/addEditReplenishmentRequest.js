@@ -59,11 +59,19 @@ const reasonArray = [
   },
 ];
 
-const statusArray = [
-  { key: "reject", value: "Reject" },
-  { key: "hold", value: "Hold" },
-  { key: "modify", value: "Modify" },
-  { key: "approved", value: "Approved" },
+const statusArrayForWareHouseMember = [
+  { key: "Fulfillment Initiated", value: "Fulfillment Initiated" },
+  { key: "Unfulfillment Initiated", value: "Unfulfillment Initiated" },
+];
+
+const statusArrayForWareHouseDeliveryMan = [
+  { key: "Delivery in Progress", value: "Delivery in Progress" },
+  // { key: "Unfulfillment Initiated", value: "Unfulfillment Initiated" },
+];
+
+const statusArrayForFUInventoryKeeper = [
+  { key: "Recieved", value: "Recieved" },
+  { key: "Partially Recieved", value: "Partially Recieved" },
 ];
 
 const orderArray = [
@@ -143,6 +151,11 @@ function AddEditPurchaseRequest(props) {
     issueUnit: "",
     fuItemCost: "",
     fuId: "",
+    to: "",
+    from: "",
+    approvedBy: "",
+    commentNote: "",
+    secondStatus: "",
   };
 
   function reducer(state, { field, value }) {
@@ -188,6 +201,11 @@ function AddEditPurchaseRequest(props) {
     issueUnit,
     fuItemCost,
     fuId,
+    to,
+    from,
+    approvedBy,
+    commentNote,
+    secondStatus,
   } = state;
 
   const [comingFor, setcomingFor] = useState("");
@@ -214,24 +232,27 @@ function AddEditPurchaseRequest(props) {
 
   const [selectItemToEditId, setSelectItemToEditId] = useState("");
 
+  const [fuObj, setFUObj] = useState("");
+
   useEffect(() => {
     setCurrentUser(cookie.load("current_user"));
 
     setcomingFor(props.history.location.state.comingFor);
     setVendors(props.history.location.state.vendors);
+    setFUObj(props.history.location.state.fuObj);
 
     const selectedRec = props.history.location.state.selectedItem;
     console.log(selectedRec);
     if (selectedRec) {
       Object.entries(selectedRec).map(([key, val]) => {
         if (val && typeof val === "object") {
-          if (key === "item") {
-            dispatch({ field: "itemId", value: val.itemId });
-            dispatch({ field: "currentQty", value: val.currQty });
-            dispatch({ field: "requestedQty", value: val.requestedQty });
-            dispatch({ field: "comments", value: val.comments });
-            dispatch({ field: "description", value: val.description });
-            dispatch({ field: "itemName", value: val.itemName });
+          if (key === "itemId") {
+            dispatch({ field: "itemId", value: val._id });
+            // dispatch({ field: "currentQty", value: val.currQty });
+            // dispatch({ field: "requestedQty", value: val.requestedQty });
+            // dispatch({ field: "comments", value: val.comments });
+            // dispatch({ field: "description", value: val.description });
+            dispatch({ field: "itemName", value: val.name });
             dispatch({ field: "itemCode", value: val.itemCode });
           } else if (key === "vendorId") {
             dispatch({ field: "vendorId", value: val._id });
@@ -272,9 +293,9 @@ function AddEditPurchaseRequest(props) {
       comments !== "" &&
       dateGenerated !== "" &&
       fuItemCost !== "" &&
-      itemCode.length > 0 &&
-      description.length > 0 &&
-      itemName.length > 0 &&
+      itemCode !== "" &&
+      description !== "" &&
+      itemName !== "" &&
       requestedQty !== "" &&
       currentQty !== "" &&
       recieptUnit !== "" &&
@@ -294,8 +315,6 @@ function AddEditPurchaseRequest(props) {
         reason,
         comments,
 
-        itemCode,
-        itemName,
         itemId: itemId,
         currentQty,
         requestedQty,
@@ -303,23 +322,23 @@ function AddEditPurchaseRequest(props) {
         issueUnit,
         recieptUnit,
         fuItemCost,
-
-        fuId,
+        to: "Warehouse",
+        from: "FU",
+        commentNote: "",
+        fuId: fuObj._id,
       };
 
+      console.log("params", params);
+
       axios
-        .post(addReplenishmentRequestUrl, params)
+        .post(
+          "http://localhost:4000/api/replenishmentRequest/addreplenishmentrequest",
+          params
+        )
         .then((res) => {
           if (res.data.success) {
-            if (props.history.location.state.manualAddPO) {
-              console.log("res after addng pr", res.data.data);
-              props.history.replace({
-                pathname: "/home/controlroom/wms/po/add",
-                state: { pr: res.data.data, comingFor: "add" },
-              });
-            } else {
-              props.history.goBack();
-            }
+            console.log("response after adding RR", res.data);
+            props.history.goBack();
           } else if (!res.data.success) {
             setOpenNotification(true);
           }
@@ -327,37 +346,64 @@ function AddEditPurchaseRequest(props) {
         .catch((e) => {
           console.log("error after adding purchase request", e);
           setOpenNotification(true);
-          setErrorMsg("Error while adding the purchase request");
+          setErrorMsg("Error while adding the replenishment request");
         });
     }
   };
 
+  console.log("fu obj in add rep request", fuObj);
+
   const handleEdit = () => {
     setIsFormSubmitted(true);
     if (validateForm()) {
-      const params = {
+      const obj = {
         _id,
         requestNo,
-        generatedBy: generatedBy,
+        generatedBy,
         dateGenerated,
-        vendorId: vendorId,
         generated,
-        status,
-        item: {
-          itemId: itemId,
-          currQty: currentQty,
-          requestedQty: requestedQty,
-          comments: comments,
-          itemCode: itemCode,
-          description: description,
-          itemName: itemName,
-        },
-        reason: reason,
-        committeeStatus:
-          currentUser.staffTypeId.type === "Committe Member"
-            ? committeeStatus
-            : "to_do",
+        status:
+          currentUser.staffTypeId.type === "Warehouse Member" &&
+          status === "pending"
+            ? "Fulfillment Initiated"
+            : currentUser.staffTypeId.type === "Warehouse Incharge" &&
+              status === "Fulfillment Initiated"
+            ? "Delivery in Progress"
+            : currentUser.staffTypeId.type === "FU Inventory Keeper" &&
+              status === "Delivery in Progress"
+            ? "Received"
+            : status,
+        reason,
+        comments,
+
+        itemId,
+        currentQty,
+        requestedQty,
+        description,
+        issueUnit,
+        recieptUnit,
+        fuItemCost,
+        to: to,
+        from: from,
+        commentNote,
+        fuId: fuId._id,
+        secondStatus,
       };
+
+      let params;
+
+      if (currentUser.staffTypeId.type === "Warehouse Member") {
+        params = {
+          ...obj,
+          approvedBy: approvedBy === "" ? currentUser.staffId : approvedBy,
+        };
+      } else {
+        params = {
+          ...obj,
+          approvedBy: approvedBy === "" ? currentUser.staffId : approvedBy,
+        };
+      }
+
       axios
         .put(updateReplenishmentRequestUrl, params)
         .then((res) => {
@@ -449,14 +495,13 @@ function AddEditPurchaseRequest(props) {
 
   function validateItemsForm() {
     return (
-      itemCode.length > 0 &&
-      description.length > 0 &&
-      itemName.length > 0 &&
-      requestedQty.length > 0 &&
-      fuItemCost.length > 0 &&
+      itemCode !== "" &&
+      description !== "" &&
+      itemName !== "" &&
+      requestedQty !== "" &&
+      fuItemCost !== ""
       // currentQty.length > 0 &&
-      maximumLevel >= requestedQty &&
-      currentQty >= requestedQty
+      // maximumLevel >= requestedQty &&
     );
   }
 
@@ -470,45 +515,7 @@ function AddEditPurchaseRequest(props) {
     setDialogOpen(false);
   };
 
-  const editSelectedItem = () => {
-    // if (validateItemsForm()) {
-    //   const params = {
-    //     _id: selectItemToEditId,
-    //     purchaseRequestId: _id,
-    //     itemCode,
-    //     vendorId,
-    //     name,
-    //     description,
-    //     currentQty,
-    //     reqQty,
-    //     comments,
-    //   };
-    //   axios
-    //     .put(updatePurchasingRequestItemUrl, params)
-    //     .then((res) => {
-    //       if (res.data.success) {
-    //         dispatch({ field: "description", value: "" });
-    //         dispatch({ field: "currentQty", value: "" });
-    //         dispatch({ field: "comments", value: "" });
-    //         dispatch({ field: "reqQty", value: "" });
-    //         dispatch({ field: "name", value: "" });
-    //         dispatch({ field: "itemCode", value: "" });
-    //         setDialogOpen(false);
-    //         setSelectedItem("");
-    //         setSelectItemToEditId("");
-    //         // window.location.reload(false);
-    //         // getPurchasingRequestItems(_id);
-    //       } else if (!res.data.success) {
-    //         setOpenNotification(true);
-    //       }
-    //     })
-    //     .catch((e) => {
-    //       console.log("error after adding purchase request", e);
-    //       setOpenNotification(true);
-    //       setErrorMsg("Error while adding the purchase request");
-    //     });
-    // }
-  };
+  const editSelectedItem = () => {};
 
   return (
     <div
@@ -606,13 +613,25 @@ function AddEditPurchaseRequest(props) {
                 <DateTimePicker
                   inputVariant="outlined"
                   onChange={onChangeDate}
+                  disabled={
+                    currentUser && currentUser.staffTypeId.type === "FU Member"
+                      ? false
+                      : true
+                  }
                   fullWidth
                   style={{
                     backgroundColor: "white",
                     borderRadius: 10,
                     borderWidth: 0,
                   }}
-                  value={comingFor === "add" ? new Date() : dateGenerated}
+                  value={
+                    comingFor === "add"
+                      ? dateGenerated
+                        ? dateGenerated
+                        : null
+                      : dateGenerated
+                  }
+                  label={"Date Generated"}
                 />
               </MuiPickersUtilsProvider>
             </div>
@@ -621,6 +640,11 @@ function AddEditPurchaseRequest(props) {
               <div style={styles.inputContainerForDropDown}>
                 <InputLabel id="status-label">Manual RR Reason</InputLabel>
                 <Select
+                  disabled={
+                    currentUser && currentUser.staffTypeId.type === "FU Member"
+                      ? false
+                      : true
+                  }
                   fullWidth
                   id="reason"
                   name="reason"
@@ -650,6 +674,11 @@ function AddEditPurchaseRequest(props) {
             >
               <input
                 type="text"
+                disabled={
+                  currentUser && currentUser.staffTypeId.type === "FU Member"
+                    ? false
+                    : true
+                }
                 rows={4}
                 placeholder="Notes/Comments"
                 name={"comments"}
@@ -660,12 +689,7 @@ function AddEditPurchaseRequest(props) {
             </div>
           </div>
 
-          {currentQty &&
-          requestedQty &&
-          description &&
-          fuItemCost &&
-          issueUnit &&
-          recieptUnit ? (
+          {currentQty && description && issueUnit && recieptUnit ? (
             <div>
               <h4 style={{ color: "white", fontWeight: "700", marginTop: 30 }}>
                 Item details
@@ -676,6 +700,7 @@ function AddEditPurchaseRequest(props) {
                   style={styles.inputContainerForTextField}
                 >
                   <input
+                    disabled={true}
                     type="text"
                     placeholder="Item Code"
                     name={"itemCode"}
@@ -690,6 +715,7 @@ function AddEditPurchaseRequest(props) {
                 >
                   <input
                     type="text"
+                    disabled={true}
                     placeholder="Item Name"
                     name={"itemName"}
                     value={itemName}
@@ -706,6 +732,7 @@ function AddEditPurchaseRequest(props) {
                 >
                   <input
                     type="number"
+                    disabled={true}
                     placeholder="Current Qty"
                     name={"currentQty"}
                     value={currentQty}
@@ -719,6 +746,12 @@ function AddEditPurchaseRequest(props) {
                   style={styles.inputContainerForTextField}
                 >
                   <input
+                    disabled={
+                      currentUser &&
+                      currentUser.staffTypeId.type === "FU Member"
+                        ? false
+                        : true
+                    }
                     type="number"
                     placeholder="Requested Qty"
                     name={"requestedQty"}
@@ -763,6 +796,12 @@ function AddEditPurchaseRequest(props) {
                   style={styles.inputContainerForTextField}
                 >
                   <input
+                    disabled={
+                      currentUser &&
+                      currentUser.staffTypeId.type === "FU Member"
+                        ? false
+                        : true
+                    }
                     type="number"
                     placeholder="FU Item Cost"
                     name={"fuItemCost"}
@@ -779,6 +818,7 @@ function AddEditPurchaseRequest(props) {
                   style={styles.inputContainerForTextField}
                 >
                   <input
+                    disabled={true}
                     type="text"
                     placeholder="Description"
                     name={"description"}
@@ -787,6 +827,100 @@ function AddEditPurchaseRequest(props) {
                     className="textInputStyle"
                   />
                 </div>
+              </div>
+            </div>
+          ) : (
+            undefined
+          )}
+
+          {comingFor === "edit" &&
+          (currentUser.staffTypeId.type === "admin" ||
+            currentUser.staffTypeId.type === "Warehouse Member" ||
+            currentUser.staffTypeId.type === "Warehouse Incharge" ||
+            currentUser.staffTypeId.type === "FU Inventory Keeper") ? (
+            <div className="row">
+              <div className="col-md-6">
+                <div style={styles.inputContainerForDropDown}>
+                  <InputLabel id="status-label">Status</InputLabel>
+                  {currentUser.staffTypeId.type === "Warehouse Member" ? (
+                    <Select
+                      fullWidth
+                      id="secondStatus"
+                      name="secondStatus"
+                      value={secondStatus}
+                      onChange={onChangeValue}
+                      label="Status"
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+
+                      {statusArrayForWareHouseMember.map((val) => {
+                        return (
+                          <MenuItem key={val.key} value={val.key}>
+                            {val.value}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  ) : currentUser.staffTypeId.type === "Warehouse Incharge" ? (
+                    <Select
+                      fullWidth
+                      id="secondStatus"
+                      name="secondStatus"
+                      value={secondStatus}
+                      onChange={onChangeValue}
+                      label="Status"
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+
+                      {statusArrayForWareHouseDeliveryMan.map((val) => {
+                        return (
+                          <MenuItem key={val.key} value={val.key}>
+                            {val.value}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  ) : (
+                    <Select
+                      fullWidth
+                      id="secondStatus"
+                      name="secondStatus"
+                      value={secondStatus}
+                      onChange={onChangeValue}
+                      label="Status"
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+
+                      {statusArrayForFUInventoryKeeper.map((val) => {
+                        return (
+                          <MenuItem key={val.key} value={val.key}>
+                            {val.value}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  )}
+                </div>
+              </div>
+
+              <div
+                className="col-md-6"
+                style={styles.inputContainerForTextField}
+              >
+                <input
+                  type="text"
+                  placeholder="Comment Note"
+                  name={"commentNote"}
+                  value={commentNote}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                />
               </div>
             </div>
           ) : (
@@ -815,61 +949,6 @@ function AddEditPurchaseRequest(props) {
               )}
             </div>
           </div>
-
-          {comingFor === "edit" &&
-          (currentUser.staffTypeId.type === "admin" ||
-            currentUser.staffTypeId.type === "Warehouse Member") ? (
-            <div className="col-md-12">
-              <div style={styles.inputContainerForDropDown}>
-                <InputLabel id="status-label">Status</InputLabel>
-                {currentUser.staffTypeId.type === "Warehouse Member" ? (
-                  <Select
-                    fullWidth
-                    id="committeeStatus"
-                    name="committeeStatus"
-                    value={committeeStatus}
-                    onChange={onChangeValue}
-                    label="Status"
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-
-                    {statusArray.map((val) => {
-                      return (
-                        <MenuItem key={val.key} value={val.key}>
-                          {val.value}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                ) : (
-                  <Select
-                    fullWidth
-                    id="status"
-                    name="status"
-                    value={status}
-                    onChange={onChangeValue}
-                    label="Status"
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-
-                    {statues.map((val) => {
-                      return (
-                        <MenuItem key={val.key} value={val.key}>
-                          {val.value}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                )}
-              </div>
-            </div>
-          ) : (
-            undefined
-          )}
 
           <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
             <div

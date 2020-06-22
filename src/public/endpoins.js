@@ -1,6 +1,6 @@
 const local = "http://localhost:8080/api";
 const live = "http://167.172.148.139:4000/api";
-// const baseUrl = 'http://localhost:4000/api';
+// const baseUrl = "http://localhost:4000/api";
 const baseUrl = live;
 
 export const socketUrl = "ws://localhost:8080";
@@ -59,6 +59,7 @@ export const getFunctionalUnitLogsUrl = `${baseUrl}/functionalunit/getfunctional
 export const addFunctionalUnitUrl = `${baseUrl}/functionalunit/addfunctionalunit`;
 export const updateFunctionalUnitUrl = `${baseUrl}/functionalunit/updatefunctionalunit`;
 export const deleteFunctionalUnitUrl = `${baseUrl}/functionalunit/deletefunctionalunit`;
+export const getFunctionalUnitFromHeadIdUrl = `${baseUrl}/functionalunit/gethead`;
 
 // bu stock in log
 export const getBuStockInLogUrl = `${baseUrl}/bustockinlog/getbustockinlog`;
@@ -147,13 +148,15 @@ export const getReceiveRequestsUrl = `${baseUrl}/account/getaccounts`;
 // export const deleteSystemAdminUrl = `${baseUrl}/systemadmin/deletesystemadmin`;
 export const updateReceiveRequestsUrl = `${baseUrl}/account/updateaccounts`;
 
-
-
 // replenishment request
-export const getReplenishmentRequestUrl = `${baseUrl}/replenishmentRequest/getreplenishmentrequests`;
+export const getReplenishmentRequestUrlFU = `${baseUrl}/replenishmentRequest/getreplenishmentrequestsFU`;
 export const addReplenishmentRequestUrl = `${baseUrl}/replenishmentRequest/addreplenishmentrequests`;
 export const deleteReplenishmentRequestUrl = `${baseUrl}/replenishmentRequest/deletereplenishmentrequests`;
-export const updateReplenishmentRequestUrl = `${baseUrl}/replenishmentRequest/updatereplenishmentrequests`;
+export const updateReplenishmentRequestUrl = `${baseUrl}/replenishmentRequest/updatereplenishmentrequest`;
 export const getSingleReplenishmentRequestUrl = `${baseUrl}/replenishmentRequest/getreplenishmentrequests`;
 
-
+// receive item for FU
+export const getReceiveRequestFUUrl = `${baseUrl}/receiveitemfu/getreceiveitemsfu`;
+export const addReceiveRequestFUUrl = `${baseUrl}/receiveitemfu/addreceiveitemfu`;
+export const deleteReceiveRequestFUUrl = `${baseUrl}/receiveitemfu/deletereceiveitemfu`;
+export const updateReceiveRequestFUUrl = `${baseUrl}/receiveitemfu/updatereceiveitemfu`;

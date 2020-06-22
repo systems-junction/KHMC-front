@@ -54,8 +54,8 @@ const admin = [
 
   {
     img: "",
-    text: "Rep Request",
-    path: "/home/controlroom/wms/replenishment",
+    text: "",
+    path: "",
   },
 
   {
@@ -172,8 +172,8 @@ const warehouseMember = [
   { img: WMS, text: "WMS" },
   {
     img: "",
-    text: "Rep Requests",
-    path: "/home/controlroom/wms/replenishment",
+    text: "",
+    path: "",
   },
   { img: "", text: "", path: "" },
   { img: "", text: "", path: "" },
