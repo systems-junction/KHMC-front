@@ -3,10 +3,13 @@ const live = "http://167.172.148.139:4000/api";
 // const baseUrl = "http://localhost:4000/api";
 const baseUrl = live;
 
-export const socketUrl = "ws://localhost:8080";
+// export const socketUrl = "ws://localhost:8080";
+export const socketUrl = "ws://localhost:4000";
 
 // auth endpoints
 export const loginUrl = `${baseUrl}/auth/login`;
+
+export const addSubscriber = `${baseUrl}/subscriber/postsubscriber`;
 
 // items endpoints
 export const getItemsUrl = `${baseUrl}/item/getitems`;
@@ -148,9 +151,9 @@ export const getReceiveRequestsUrl = `${baseUrl}/account/getaccounts`;
 // export const deleteSystemAdminUrl = `${baseUrl}/systemadmin/deletesystemadmin`;
 export const updateReceiveRequestsUrl = `${baseUrl}/account/updateaccounts`;
 
-// replenishment request
+// replenishment request for FU
 export const getReplenishmentRequestUrlFU = `${baseUrl}/replenishmentRequest/getreplenishmentrequestsFU`;
-export const addReplenishmentRequestUrl = `${baseUrl}/replenishmentRequest/addreplenishmentrequests`;
+export const addReplenishmentRequestUrl = `${baseUrl}/replenishmentRequest/addreplenishmentrequest`;
 export const deleteReplenishmentRequestUrl = `${baseUrl}/replenishmentRequest/deletereplenishmentrequests`;
 export const updateReplenishmentRequestUrl = `${baseUrl}/replenishmentRequest/updatereplenishmentrequest`;
 export const getSingleReplenishmentRequestUrl = `${baseUrl}/replenishmentRequest/getreplenishmentrequests`;
@@ -160,3 +163,31 @@ export const getReceiveRequestFUUrl = `${baseUrl}/receiveitemfu/getreceiveitemsf
 export const addReceiveRequestFUUrl = `${baseUrl}/receiveitemfu/addreceiveitemfu`;
 export const deleteReceiveRequestFUUrl = `${baseUrl}/receiveitemfu/deletereceiveitemfu`;
 export const updateReceiveRequestFUUrl = `${baseUrl}/receiveitemfu/updatereceiveitemfu`;
+
+// replenishment request for BU
+export const getReplenishmentRequestUrlBU = `${baseUrl}/replenishmentRequestBU/getreplenishmentrequestsbu`;
+export const addReplenishmentRequestUrlBU = `${baseUrl}/replenishmentRequestBU/addreplenishmentrequestbu`;
+export const deleteReplenishmentRequestUrlBU = `${baseUrl}/replenishmentRequestBU/deletereplenishmentrequestbu`;
+export const updateReplenishmentRequestUrlBU = `${baseUrl}/replenishmentRequestBU/updatereplenishmentrequestbu`;
+export const getSingleReplenishmentRequestUrlBU = `${baseUrl}/replenishmentRequestBU/getreplenishmentrequestsbu`;
+
+// receive item for BU
+export const getReceiveRequestBUUrl = `${baseUrl}/receiveitembu/getreceiveitemsbu`;
+export const addReceiveRequestBUUrl = `${baseUrl}/receiveitembu/addreceiveitembu`;
+export const deleteReceiveRequestBUUrl = `${baseUrl}/receiveitembu/deletereceiveitembu`;
+export const updateReceiveRequestBUUrl = `${baseUrl}/receiveitembu/updatereceiveitembu`;
+
+// internal items return
+export const getInternalReturnRequestsBU = `${baseUrl}/internalreturnrequest/getinternalreturnrequestsbu`;
+export const getInternalReturnRequestsFU = `${baseUrl}/internalreturnrequest/getinternalreturnrequestsfu`;
+export const getInternalReturnRequestById = `${baseUrl}/internalreturnrequest/getinternalreturnrequest`;
+export const addInternalReturnRequest = `${baseUrl}/internalreturnrequest/addinternalreturnrequest`;
+export const deleteInternalReturnRequest = `${baseUrl}/internalreturnrequest/deleteinternalreturnrequest`;
+export const updateInternalReturnRequest = `${baseUrl}/internalreturnrequest/updateinternalrequest`;
+
+// external Retunrs
+export const getExternalReturnRequests = `${baseUrl}/externalreturnrequest/getexternalreturnrequests`;
+export const getExternalReturnRequestById = `${baseUrl}/externalreturnrequest/getexternalreturnrequest`;
+export const addExternalReturnRequest = `${baseUrl}/externalreturnrequest/addexternalreturnrequest`;
+export const deleteExternalReturnRequest = `${baseUrl}/externalreturnrequest/deleteexternalreturnrequest`;
+export const updateExternalReturnRequest = `${baseUrl}/externalreturnrequest/updateexternalrequest`;

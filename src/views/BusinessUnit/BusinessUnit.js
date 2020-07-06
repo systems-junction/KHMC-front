@@ -67,6 +67,7 @@ export default function Items(props) {
       .get(url)
       .then((res) => {
         if (res.data.success) {
+          console.log(res.data.data)
           setBusinessUnits(res.data.data.businessUnit);
           setBUHeads(res.data.data.buHeads);
           setStatus(res.data.data.statues);

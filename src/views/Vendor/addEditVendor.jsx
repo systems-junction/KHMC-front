@@ -139,13 +139,13 @@ function AddEditVendor(props) {
 
     let x =
       englishName.length > 0 &&
-      telephone1.length > 10 &&
+      telephone1.length > 6 &&
       address.length > 0 &&
       pobox.length > 0 &&
       zipcode.length > 0 &&
       taxno.length > 0 &&
       contactPersonName.length > 0 &&
-      contactPersonTelephone.length > 10 &&
+      contactPersonTelephone.length > 6 &&
       subClass.length > 0 &&
       cls.length > 0 &&
       status.length > 0;
@@ -157,7 +157,7 @@ function AddEditVendor(props) {
     } else if (contactPersonEmail && contactEmail) {
       return x && re.test(contactPersonEmail) && re.test(contactEmail);
     } else if (telephone2) {
-      return x && telephone2.length > 10;
+      return x && telephone2.length > 6;
     } else {
       return x;
     }
@@ -398,18 +398,6 @@ function AddEditVendor(props) {
               className="col-md-12"
               style={styles.inputContainerForTextField}
             >
-              {/* <TextField
-              fullWidth
-              id="telephone1"
-              name="telephone1"
-              label="Telephone 1"
-              type="number"
-              variant="outlined"
-              value={telephone1}
-              onChange={onChangeValue}
-              error={!telephone1 && isFormSubmitted}
-            /> */}
-
               <input
                 type="text"
                 placeholder="English Name"
@@ -420,18 +408,6 @@ function AddEditVendor(props) {
               />
             </div>
             <div className="col-md-4" style={styles.inputContainerForTextField}>
-              {/* <TextField
-              fullWidth
-              id="telephone1"
-              name="telephone1"
-              label="Telephone 1"
-              type="number"
-              variant="outlined"
-              value={telephone1}
-              onChange={onChangeValue}
-              error={!telephone1 && isFormSubmitted}
-            /> */}
-
               <input
                 type="number"
                 placeholder="Telephone1"
@@ -439,20 +415,11 @@ function AddEditVendor(props) {
                 value={telephone1}
                 onChange={onChangeValue}
                 className="textInputStyle"
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
               />
             </div>
 
             <div className="col-md-4" style={styles.inputContainerForTextField}>
-              {/* <TextField
-              fullWidth
-              id="telephone2"
-              name="telephone2"
-              label="Telephone 2"
-              type="number"
-              variant="outlined"
-              value={telephone2}
-              onChange={onChangeValue}
-            /> */}
               <input
                 type="number"
                 placeholder="telephone2"
@@ -460,20 +427,11 @@ function AddEditVendor(props) {
                 value={telephone2}
                 onChange={onChangeValue}
                 className="textInputStyle"
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
               />
             </div>
 
             <div className="col-md-4" style={styles.inputContainerForTextField}>
-              {/* <TextField
-              fullWidth
-              id="contactEmail"
-              name="contactEmail"
-              label="Contact Email"
-              type="email"
-              variant="outlined"
-              value={contactEmail}
-              onChange={onChangeValue}
-            /> */}
               <input
                 type="email"
                 placeholder="Contact Email"
@@ -490,18 +448,6 @@ function AddEditVendor(props) {
               className="col-md-12"
               style={styles.inputContainerForTextField}
             >
-              {/* <TextField
-              fullWidth
-              id="address"
-              name="address"
-              label="Address"
-              type="text"
-              variant="outlined"
-              value={address}
-              onChange={onChangeValue}
-              error={!address && isFormSubmitted}
-            /> */}
-
               <input
                 type="text"
                 placeholder="Address"
@@ -515,17 +461,6 @@ function AddEditVendor(props) {
 
           <div className="row">
             <div className="col-md-4" style={styles.inputContainerForTextField}>
-              {/* <TextField
-              fullWidth
-              id="zipcode"
-              name="zipcode"
-              label="Zip Code"
-              type="number"
-              variant="outlined"
-              value={zipcode}
-              onChange={onChangeValue}
-              error={!zipcode && isFormSubmitted}
-            /> */}
               <input
                 type="number"
                 placeholder="Zip Code"
@@ -533,19 +468,10 @@ function AddEditVendor(props) {
                 value={zipcode}
                 onChange={onChangeValue}
                 className="textInputStyle"
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
               />
             </div>
             <div className="col-md-4" style={styles.inputContainerForTextField}>
-              {/* <TextField
-              fullWidth
-              id="city"
-              name="city"
-              label="City"
-              type="text"
-              variant="outlined"
-              value={city}
-              onChange={onChangeValue}
-            /> */}
               <input
                 type="text"
                 placeholder="City"
@@ -556,16 +482,6 @@ function AddEditVendor(props) {
               />
             </div>
             <div className="col-md-4" style={styles.inputContainerForTextField}>
-              {/* <TextField
-              fullWidth
-              id="country"
-              name="country"
-              label="Country"
-              type="text"
-              variant="outlined"
-              value={country}
-              onChange={onChangeValue}
-            /> */}
               <input
                 type="text"
                 placeholder="Country"
@@ -579,17 +495,6 @@ function AddEditVendor(props) {
 
           <div className="row">
             <div className="col-md-4" style={styles.inputContainerForTextField}>
-              {/* <TextField
-              fullWidth
-              id="pobox"
-              name="pobox"
-              label="PO BOX"
-              type="number"
-              variant="outlined"
-              value={pobox}
-              onChange={onChangeValue}
-              error={!pobox && isFormSubmitted}
-            /> */}
               <input
                 type="number"
                 placeholder="PO Box"
@@ -597,21 +502,11 @@ function AddEditVendor(props) {
                 value={pobox}
                 onChange={onChangeValue}
                 className="textInputStyle"
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
               />
             </div>
 
             <div className="col-md-4" style={styles.inputContainerForTextField}>
-              {/* <TextField
-              fullWidth
-              id="faxno"
-              name="faxno"
-              label="Fax No"
-              type="number"
-              variant="outlined"
-              value={faxno}
-              onChange={onChangeValue}
-            /> */}
-
               <input
                 type="number"
                 placeholder="Fax No"
@@ -619,21 +514,11 @@ function AddEditVendor(props) {
                 value={faxno}
                 onChange={onChangeValue}
                 className="textInputStyle"
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
               />
             </div>
 
             <div className="col-md-4" style={styles.inputContainerForTextField}>
-              {/* <TextField
-              fullWidth
-              id="taxno"
-              name="taxno"
-              label="Tax No"
-              type="number"
-              variant="outlined"
-              value={taxno}
-              onChange={onChangeValue}
-              error={!taxno && isFormSubmitted}
-            /> */}
               <input
                 type="number"
                 placeholder="Tax No"
@@ -641,23 +526,13 @@ function AddEditVendor(props) {
                 value={taxno}
                 onChange={onChangeValue}
                 className="textInputStyle"
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
               />
             </div>
           </div>
 
           <div className="row">
             <div className="col-md-4" style={styles.inputContainerForTextField}>
-              {/* <TextField
-              fullWidth
-              id="contactPersonName"
-              name="contactPersonName"
-              label="Contact Person Name"
-              type="text"
-              variant="outlined"
-              value={contactPersonName}
-              onChange={onChangeValue}
-              error={!contactPersonName && isFormSubmitted}
-            /> */}
               <input
                 type="text"
                 placeholder="Contact Person Name"
@@ -669,17 +544,6 @@ function AddEditVendor(props) {
             </div>
 
             <div className="col-md-4" style={styles.inputContainerForTextField}>
-              {/* <TextField
-              fullWidth
-              id="contactPersonTelephone"
-              name="contactPersonTelephone"
-              label="Contact Person TelePhone"
-              type="number"
-              variant="outlined"
-              value={contactPersonTelephone}
-              onChange={onChangeValue}
-              error={!contactPersonTelephone && isFormSubmitted}
-            /> */}
               <input
                 type="number"
                 placeholder="Contact Person Telephone"
@@ -687,21 +551,11 @@ function AddEditVendor(props) {
                 value={contactPersonTelephone}
                 onChange={onChangeValue}
                 className="textInputStyle"
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
               />
             </div>
 
             <div className="col-md-4" style={styles.inputContainerForTextField}>
-              {/* <TextField
-              fullWidth
-              id="contactPersonEmail"
-              name="contactPersonEmail"
-              label="Contact Person Email"
-              type="email"
-              variant="outlined"
-              value={contactPersonEmail}
-              onChange={onChangeValue}
-              error={!contactPersonEmail && isFormSubmitted}
-            /> */}
               <input
                 type="email"
                 placeholder="Contact Person Email"
@@ -771,16 +625,6 @@ function AddEditVendor(props) {
 
           <div className="row">
             <div className="col-md-6" style={styles.inputContainerForTextField}>
-              {/* <TextField
-              fullWidth
-              id="paymentTerms"
-              name="paymentTerms"
-              label="Payment Terms"
-              type="text"
-              variant="outlined"
-              value={paymentTerms}
-              onChange={onChangeValue}
-            /> */}
               <input
                 type="text"
                 placeholder="Payment Terms"
@@ -791,16 +635,6 @@ function AddEditVendor(props) {
               />
             </div>
             <div className="col-md-6" style={styles.inputContainerForTextField}>
-              {/* <TextField
-              fullWidth
-              id="rating"
-              name="rating"
-              label="Rating"
-              type="text"
-              variant="outlined"
-              value={rating}
-              onChange={onChangeValue}
-            /> */}
               <input
                 type="text"
                 placeholder="Rating"

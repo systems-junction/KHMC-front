@@ -21,8 +21,8 @@ import {
 import {
   addReceiveItemsUrl,
   updateReceiveItemsUrl,
-  addReceiveRequestFUUrl,
-  updateReceiveRequestFUUrl,
+  addReceiveRequestBUUrl,
+  updateReceiveRequestBUUrl,
 } from "../../public/endpoins";
 
 import cookie from "react-cookies";
@@ -37,8 +37,8 @@ import Back_Arrow from "../../assets/img/Back_Arrow.png";
 import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
 
 const statusArray = [
-  { key: "Partially Recieved", value: "Partially Received" },
-  { key: "Received", value: "Received" },
+  { key: "pending_administration", value: "Pending Administration" },
+  // { key: "Received", value: "Received" },
 ];
 
 const styles = {
@@ -141,6 +141,7 @@ function ReceiveItems(props) {
     issueUnit: "",
     fuItemCost: "",
     fuId: "",
+    buId: "",
     to: "",
     from: "",
     approvedBy: "",
@@ -149,7 +150,7 @@ function ReceiveItems(props) {
 
     notes: "",
 
-    replensihmentRequestStatus: "",
+    replenishmentRequestStatus: "",
   };
 
   function reducer(state, { field, value }) {
@@ -216,13 +217,14 @@ function ReceiveItems(props) {
     issueUnit,
     fuItemCost,
     fuId,
+    buId,
     to,
     from,
     approvedBy,
     commentNote,
     secondStatus,
     notes,
-    replensihmentRequestStatus,
+    replenishmentRequestStatus,
   } = state;
 
   const onChangeValue = (e) => {
@@ -303,7 +305,7 @@ function ReceiveItems(props) {
       date !== "" &&
       receivedDate !== "" &&
       notes.length > 0 &&
-      replensihmentRequestStatus !== "" &&
+      replenishmentRequestStatus !== "" &&
       receivedQty <= requestedQty
       // discountPercentage.length > 0
     );
@@ -334,15 +336,16 @@ function ReceiveItems(props) {
         dateInvoice: date,
         dateReceived: receivedDate,
         notes,
-        replensihmentRequestId: _id,
-        replensihmentRequestStatus,
-        fuId: fuId._id,
+        replenishmentRequestId: _id,
+        replenishmentRequestStatus,
+        fuId: fuId,
+        buId: buId,
       };
 
       console.log("params", params);
 
       axios
-        .post(addReceiveRequestFUUrl, params)
+        .post(addReceiveRequestBUUrl, params)
         .then((res) => {
           if (res.data.success) {
             props.history.goBack();
@@ -385,11 +388,11 @@ function ReceiveItems(props) {
         comments,
         expiryDate,
         discountPercentage,
-        replensihmentRequestId: _id,
-        replensihmentRequestStatus,
+        replenishmentRequestId: _id,
+        replenishmentRequestStatus,
       };
       axios
-        .put(updateReceiveRequestFUUrl, params)
+        .put(updateReceiveRequestBUUrl, params)
         .then((res) => {
           if (res.data.success) {
             props.history.goBack();
@@ -412,7 +415,7 @@ function ReceiveItems(props) {
     }, 2000);
   }
 
-  console.log("vendor id in receive items", selectedItem);
+  // console.log("vendor id in receive items", selectedItem);
 
   return (
     <div
@@ -533,15 +536,15 @@ function ReceiveItems(props) {
                   style={{
                     borderColor:
                       receivedQty > requestedQty ||
-                      (replensihmentRequestStatus &&
-                        replensihmentRequestStatus === "Received" &&
+                      (replenishmentRequestStatus &&
+                        replenishmentRequestStatus === "Received" &&
                         receivedQty !== requestedQty)
                         ? "red"
                         : null,
                     borderWidth:
                       receivedQty > requestedQty ||
-                      (replensihmentRequestStatus &&
-                        replensihmentRequestStatus === "Received" &&
+                      (replenishmentRequestStatus &&
+                        replenishmentRequestStatus === "Received" &&
                         receivedQty !== requestedQty)
                         ? 2.5
                         : null,
@@ -893,9 +896,9 @@ function ReceiveItems(props) {
                 </InputLabel>
                 <Select
                   fullWidth
-                  id="replensihmentRequestStatus"
-                  name="replensihmentRequestStatus"
-                  value={replensihmentRequestStatus}
+                  id="replenishmentRequestStatus"
+                  name="replenishmentRequestStatus"
+                  value={replenishmentRequestStatus}
                   onChange={onChangeValue}
                   label="Status"
                 >
@@ -946,14 +949,14 @@ function ReceiveItems(props) {
                     flexDirection: "row",
                   }}
                 >
-                  {/* <Button
+                  <Button
                     style={{ minWidth: "20%", marginRight: 30 }}
-                    disabled={true}
+                    // disabled={true}
                     // onClick={handleAdd}
                     variant="contained"
                   >
                     Upload Invoice
-                  </Button> */}
+                  </Button>
 
                   <Button
                     style={{ minWidth: "10%" }}
@@ -979,10 +982,10 @@ function ReceiveItems(props) {
                 >
                   <Button
                     style={{ minWidth: "20%" }}
-                    disabled={true}
+                    // disabled={true}
                     // onClick={handleAdd}
                     variant="contained"
-                    color="primary"
+                    // color="primary"
                   >
                     Upload Invoice
                   </Button>

@@ -77,7 +77,7 @@ export default function PurchaseRequest(props) {
       .get(getReceiveRequestsUrl)
       .then((res) => {
         if (res.data.success) {
-          // console.log(res.data.data);
+          console.log(res.data.data);
 
           let temp = [];
           for (let i = 0; i < res.data.data.length; i++) {

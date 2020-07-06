@@ -35,6 +35,7 @@ import Back_Arrow from "../../assets/img/Back_Arrow.png";
 
 import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
 
+
 const styles = {
   // inputContainer: {
   //   marginTop: 25,
@@ -267,9 +268,8 @@ function AddEditPurchaseRequest(props) {
         overflowY: "scroll",
       }}
     >
-      
-        <Header />
-      
+      <Header />
+
       <div style={{ alignItems: "center", marginTop: "1rem", display: "flex" }}>
         <div
           style={{
@@ -353,7 +353,7 @@ function AddEditPurchaseRequest(props) {
                 value={itemCode}
                 onChange={onChangeValue}
               /> */}
-                 <input
+              <input
                 type="number"
                 placeholder="itemCode"
                 name={"Item Code"}
@@ -373,7 +373,7 @@ function AddEditPurchaseRequest(props) {
                   inputVariant="outlined"
                   onChange={onChangeDate}
                   fullWidth
-                  style={{borderRadius:10, backgroundColor:"white"}}
+                  style={{ borderRadius: 10, backgroundColor: "white" }}
                   value={
                     comingFor === "add"
                       ? poSentDate
@@ -466,34 +466,8 @@ function AddEditPurchaseRequest(props) {
             </div>
           </div>
         </div>
+                    
 
-        <div className="row">
-          <div className="col-md-12">
-            <div style={styles.inputContainerForDropDown}>
-              <InputLabel id="vendorId-label">Vendor</InputLabel>
-              <Select
-                fullWidth
-                id="vendorId"
-                name="vendorId"
-                value={vendorId}
-                onChange={onChangeValue}
-                label="Vendor"
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                {vendorsArray &&
-                  vendorsArray.map((val) => {
-                    return (
-                      <MenuItem key={val._id} value={val._id}>
-                        {val.englishName}
-                      </MenuItem>
-                    );
-                  })}
-              </Select>
-            </div>
-          </div>
-        </div>
 
         <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
           {/* <div style={styles.buttonContainer}>

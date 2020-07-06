@@ -615,7 +615,7 @@ function AddEditPurchaseRequest(props) {
                   variant="contained"
                   color="primary"
                 >
-                  Edit Purchase Order
+                 Update Purchase Order
                 </Button>
               )}
             </div>

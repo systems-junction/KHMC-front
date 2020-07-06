@@ -1,9 +1,9 @@
 import React from "react";
 import { Router, Route, Switch, Redirect } from "react-router-dom";
 import NotFound from "../components/NotFound/NotFound";
-import replenishmentRequest from "../views/ReplenishmentRequest/replenishmentRequest";
-import addEditReplenishmentRequest from "../views/ReplenishmentRequest/addEditReplenishmentRequest";
-import receiveItemsForFUInventory from "../views/ReplenishmentRequest/receiveItemsForFUInventory";
+import replenishmentRequest from "../views/ReplenishmentRequestForBU/replenishmentRequestForBU";
+import addEditReplenishmentRequest from "../views/ReplenishmentRequestForBU/addEditReplenishmentRequestForBU";
+import receiveItemsForBUInventory from "../views/ReplenishmentRequestForBU/receiveItemsForBUInventory";
 
 import SuccessScreen from "../components/SuccessScreen/SuccessScreen";
 
@@ -30,7 +30,7 @@ class ItemRoutes extends React.Component {
 
         <Route
           path={`${this.props.match.url}/receive`}
-          component={receiveItemsForFUInventory}
+          component={receiveItemsForBUInventory}
         />
 
         <Route

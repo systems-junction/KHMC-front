@@ -145,7 +145,6 @@ function AddEditPurchaseRequest(props) {
 
   function validateForm() {
     return status.length > 0;
-
   }
 
   const [comingFor, setcomingFor] = useState("");
@@ -258,7 +257,8 @@ function AddEditPurchaseRequest(props) {
 
   const handleEdit = () => {
     setIsFormSubmitted(true);
-    // console.log("purchase request", purchaseRequest);
+    console.log("purchase request", purchaseRequest);
+
     if (validateForm()) {
       let params = {
         _id,
@@ -274,6 +274,7 @@ function AddEditPurchaseRequest(props) {
         .put(updateReceiveRequestsUrl, params)
         .then((res) => {
           if (res.data.success) {
+            console.log(res.data);
             props.history.goBack();
           } else if (!res.data.success) {
             setOpenNotification(true);

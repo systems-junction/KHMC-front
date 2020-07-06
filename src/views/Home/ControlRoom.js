@@ -97,10 +97,10 @@ const warehouseMember = [
   { img: "", text: "", path: "" },
 ];
 
-const warehouseDeliveryMan = [
+const warehouseIncharge = [
   { img: Control_Room, text: "Control Room", path: "" },
   { img: "", text: "", path: "" },
-  { img: "", text: "", path: "" },
+  { img: WMS, text: "WMS", path: "controlroom/wms" },
   { img: "", text: "", path: "" },
   { img: "", text: "", path: "" },
   {
@@ -117,7 +117,8 @@ const fuHead = [
   { img: "", text: "", path: "" },
   { img: "", text: "", path: "" },
   { img: "", text: "", path: "" },
-  { img: "", text: "", path: "" },
+  { img: BU, text: "BU Mgmt", path: "controlroom/bus/replenishment" },
+
   {
     img: FunctionalUnit,
     text: "FU Mgmt",
@@ -133,6 +134,81 @@ const fuInventoryKeeper = [
   { img: "", text: "", path: "" },
   { img: "", text: "", path: "" },
   { img: "", text: "", path: "" },
+  {
+    img: FunctionalUnit,
+    text: "FU Mgmt",
+    path: "controlroom/fus/replenishment",
+  },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+];
+
+const fuReturnRequestApprovalMember = [
+  { img: Control_Room, text: "Control Room" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+  {
+    img: FunctionalUnit,
+    text: "FU Return Request",
+    path: "controlroom/fus/replenishment/returnitems/view",
+  },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+];
+
+// const fuMemberForBUManagement = [
+//   { img: Control_Room, text: "Control Room", path: "" },
+//   { img: "", text: "", path: "" },
+//   { img: "", text: "", path: "" },
+//   { img: BU, text: "BU Mgmt", path: "controlroom/bus/replenishment" },
+//   { img: "", text: "", path: "" },
+//   { img: "", text: "", path: "" },
+//   { img: "", text: "", path: "" },
+//   { img: "", text: "", path: "" },
+// ];
+
+// const warehouseIncharge = [
+//   { img: Control_Room, text: "Control Room", path: "" },
+//   { img: "", text: "", path: "" },
+//   { img: "", text: "", path: "" },
+//   { img: BU, text: "BU Mgmt", path: "controlroom/bus/replenishment" },
+//   { img: "", text: "", path: "" },
+//   { img: "", text: "", path: "" },
+//   { img: "", text: "", path: "" },
+//   { img: "", text: "", path: "" },
+// ];
+
+const buMember = [
+  { img: Control_Room, text: "Control Room", path: "" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+  { img: BU, text: "BU Mgmt", path: "controlroom/bus/replenishment" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+];
+
+// const fuInventoryKeeper = [
+//   { img: Control_Room, text: "Control Room", path: "" },
+//   { img: "", text: "", path: "" },
+//   { img: "", text: "", path: "" },
+//   { img: BU, text: "BU Mgmt", path: "controlroom/bus/replenishment" },
+//   { img: "", text: "", path: "" },
+//   { img: "", text: "", path: "" },
+//   { img: "", text: "", path: "" },
+//   { img: "", text: "", path: "" },
+// ];
+
+const fuIncharge = [
+  { img: Control_Room, text: "Control Room" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+  { img: BU, text: "BU Mgmt", path: "controlroom/bus/replenishment" },
+
   {
     img: FunctionalUnit,
     text: "FU Mgmt",
@@ -224,10 +300,24 @@ class HomeScreen extends React.Component {
               : userType && userType.type === "FU Member"
               ? fuHead
               : userType && userType.type === "Warehouse Incharge"
-              ? warehouseDeliveryMan
+              ? warehouseIncharge
               : userType && userType.type === "FU Inventory Keeper"
               ? fuInventoryKeeper
-              : admin
+              : userType &&
+                userType.type === "FU Internal Request Return Approval Member"
+              ? fuReturnRequestApprovalMember
+              : userType && userType.type === "FU Incharge"
+              ? fuIncharge
+              : (userType && userType.type === "BU Member") ||
+                (userType && userType.type === "BU Nurse") ||
+                (userType && userType.type === "BU Inventory Keeper") ||
+                (userType && userType.type === "BU Doctor")
+              ? buMember
+              : // : userType && userType.type === "Warehouse Incharge"
+                // ? warehouseIncharge
+                // : userType && userType.type === "FU Inventory Keeper"
+                // ? fuInventoryKeeper
+                admin
           }
         />
         {/* </div> */}

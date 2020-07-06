@@ -28,6 +28,7 @@ import Vendor from "../../assets/img/Vendot.png";
 import ReceiveItem from "../../assets/img/Receive Item.png";
 import MaterialReceiving from "../../assets/img/Material Receiving.png";
 import WMS_Back from "../../assets/img/WMS_Back.png";
+import ReturnItem from "../../assets/img/Return Item.png";
 
 import Items from "../../assets/img/Items.png";
 
@@ -189,6 +190,17 @@ const warehouseMember = [
   { img: "", text: "", path: "" },
 ];
 
+const warehouseIncharge = [
+  { img: WMS, text: "WMS" },
+  { img: ReturnItem, text: "Return Request", path: "wms/materialreceiving/viewpo/externalreturn" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+];
+
 class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -241,6 +253,8 @@ class HomeScreen extends React.Component {
               ? accountsMember
               : userType && userType.type === "Warehouse Member"
               ? warehouseMember
+              : userType && userType.type === "Warehouse Incharge"
+              ? warehouseIncharge
               : admin
           }
         />

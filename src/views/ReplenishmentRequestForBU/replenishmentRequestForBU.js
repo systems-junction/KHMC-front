@@ -8,9 +8,10 @@ import CustomTable from "../../components/Table/Table";
 import ConfirmationModal from "../../components/Modal/confirmationModal";
 import axios from "axios";
 import {
-  getReplenishmentRequestUrlFU,
+  getReplenishmentRequestUrlBU,
   deleteReplenishmentRequestUrl,
   getFunctionalUnitFromHeadIdUrl,
+  getBusinessUnitUrlWithHead,
 } from "../../public/endpoins";
 
 import Loader from "react-loader-spinner";
@@ -34,40 +35,57 @@ import Back_Arrow from "../../assets/img/Back_Arrow.png";
 
 import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 
-const tableHeadingForFUHead = [
+const tableHeadingForBUMember = [
   "Rep Request No",
-  "Generated",
-  "Date/Time Generated",
+  "Item Code",
+  "Item Type",
+  "Requested Qty",
   "Status",
   "Actions",
 ];
-const tableDataKeysForFUHead = [
+const tableDataKeysForBUMember = [
   "requestNo",
-  "generated",
-  "dateGenerated",
+  ["itemId", "itemCode"],
+  ["itemId", "cls"],
+  "requestedQty",
   "status",
 ];
 
-const tableHeading = [
+const tableHeadingForDoctorAndNursing = [
   "Rep Request No",
-  "Generated",
-  "Date/Time Generated",
-  "FU Name",
-  "Approved By",
+  "Item Name",
+  "Item Type",
+  "Functional Unit",
   "Status",
   "Actions",
 ];
-const tableDataKeys = [
+const tableDataKeysForDoctorAndNursing = [
   "requestNo",
-  "generated",
-  "dateGenerated",
+  ["itemId", "name"],
+  ["itemId", "cls"],
   ["fuId", "fuName"],
-  ["approvedBy", "firstName"],
+  "status",
+];
+
+const tableHeadingForFUMember = [
+  "Rep Request No",
+  "Item Code",
+  "Item Type",
+  "Date/Time Generated",
+  "Status",
+  "Actions",
+];
+const tableDataKeysForFUMember = [
+  "requestNo",
+  ["itemId", "itemCode"],
+  ["itemId", "cls"],
+  "dateGenerated",
   "secondStatus",
 ];
 
-const actions = { edit: true };
-const actionsForFUInventoryKeeper = { receiveItem: true };
+const actions = { edit: true, view: true };
+const actionsForBUNurse = { receiveItem: true };
+const actionsForBUDoctor = { view: true };
 
 export default function ReplenishmentRequest(props) {
   const [purchaseRequests, setPurchaseRequest] = useState("");
@@ -80,7 +98,7 @@ export default function ReplenishmentRequest(props) {
   const [openNotification, setOpenNotification] = useState(false);
 
   const [currentUser, setCurrentUser] = useState(cookie.load("current_user"));
-  const [fuObj, setFUObj] = useState("");
+  const [buObj, setBUObj] = useState("");
 
   if (openNotification) {
     setTimeout(() => {
@@ -91,51 +109,82 @@ export default function ReplenishmentRequest(props) {
 
   function getPurchaseRequests() {
     axios
-      .get(getReplenishmentRequestUrlFU)
+      .get(getReplenishmentRequestUrlBU)
       .then((res) => {
         if (res.data.success) {
           console.log(res.data.data);
 
-          if (currentUser.staffTypeId.type === "FU Member") {
+          if (currentUser.staffTypeId.type === "BU Member") {
             let repRequest = res.data.data;
             let temp = [];
             for (let i = 0; i < repRequest.length; i++) {
-              if (repRequest[i].fuId.fuHead === currentUser.staffId) {
+              if (repRequest[i].buId.buHead === currentUser.staffId) {
                 temp.push(repRequest[i]);
               }
             }
             console.log("rep array after filter", temp);
             setPurchaseRequest(temp.reverse());
           } else {
-            if (currentUser.staffTypeId.type === "Warehouse Incharge") {
+            if (currentUser.staffTypeId.type === "FU Member") {
               let repRequest = res.data.data;
               let temp = [];
               for (let i = 0; i < repRequest.length; i++) {
-                if (
-                  repRequest[i].status === "Fulfillment Initiated" ||
-                  repRequest[i].status === "Delivery in Progress" ||
-                  repRequest[i].status === "Received"
-                ) {
+                // if (
+                //   repRequest[i].status === "pending" ||
+                //   repRequest[i].status === "in_progress"
+                //    || repRequest[i].status === "Received"
+                // )
+                {
                   temp.push(repRequest[i]);
                 }
               }
               // console.log("rep array after filter", temp);
-              setPurchaseRequest(temp);
-            } else if (currentUser.staffTypeId.type === "FU Inventory Keeper") {
+              setPurchaseRequest(temp.reverse());
+            } else if (currentUser.staffTypeId.type === "FU Incharge") {
               let repRequest = res.data.data;
               let temp = [];
               for (let i = 0; i < repRequest.length; i++) {
-                if (
-                  repRequest[i].status === "Delivery in Progress" ||
-                  repRequest[i].status === "Received"
-                ) {
+                // if (
+                //   repRequest[i].status === "Delivery in Progress" ||
+                //   repRequest[i].status === "in_progress"
+                // )
+
+                {
                   temp.push(repRequest[i]);
                 }
               }
               // console.log("rep array after filter", temp);
-              setPurchaseRequest(temp);
+              setPurchaseRequest(temp.reverse());
+            } else if (currentUser.staffTypeId.type === "BU Nurse") {
+              let repRequest = res.data.data;
+              let temp = [];
+              for (let i = 0; i < repRequest.length; i++) {
+                // if (
+                //   repRequest[i].status === "Delivery in Progress" ||
+                //   repRequest[i].status === "pending_administration"
+                // )
+                {
+                  temp.push(repRequest[i]);
+                }
+              }
+              // console.log("rep array after filter", temp);
+              setPurchaseRequest(temp.reverse());
+            } else if (currentUser.staffTypeId.type === "BU Inventory Keeper") {
+              let repRequest = res.data.data;
+              let temp = [];
+              for (let i = 0; i < repRequest.length; i++) {
+                // if (
+                //   repRequest[i].status === "complete" ||
+                //   repRequest[i].status === "pending_administration"
+                // )
+                {
+                  temp.push(repRequest[i]);
+                }
+              }
+              // console.log("rep array after filter", temp);
+              setPurchaseRequest(temp.reverse());
             } else {
-              setPurchaseRequest(res.data.data);
+              setPurchaseRequest(res.data.data.reverse());
             }
           }
           //   setVendor(res.data.data.vendor);
@@ -152,13 +201,13 @@ export default function ReplenishmentRequest(props) {
       });
   }
 
-  function getFUFromHeadId() {
+  function getBUFromHeadId() {
     axios
-      .get(getFunctionalUnitFromHeadIdUrl + "/" + currentUser.staffId)
+      .get(getBusinessUnitUrlWithHead + "/" + currentUser.staffId)
       .then((res) => {
         if (res.data.success) {
-          console.log("FU Obj", res.data.data[0]);
-          setFUObj(res.data.data[0]);
+          console.log("BU Obj", res.data.data[0]);
+          setBUObj(res.data.data[0]);
         } else if (!res.data.success) {
           setErrorMsg(res.data.error);
           setOpenNotification(true);
@@ -173,8 +222,8 @@ export default function ReplenishmentRequest(props) {
   useEffect(() => {
     getPurchaseRequests();
 
-    if (currentUser.staffTypeId.type === "FU Member") {
-      getFUFromHeadId();
+    if (currentUser.staffTypeId.type === "BU Member") {
+      getBUFromHeadId();
     }
   }, []);
 
@@ -182,7 +231,7 @@ export default function ReplenishmentRequest(props) {
     let path = `replenishment/add`;
     props.history.push({
       pathname: path,
-      state: { comingFor: "add", vendors, statues, items, fuObj },
+      state: { comingFor: "add", vendors, statues, items, buObj },
     });
   };
 
@@ -196,7 +245,7 @@ export default function ReplenishmentRequest(props) {
         vendors,
         statues,
         items,
-        fuObj,
+        buObj,
       },
     });
   }
@@ -230,7 +279,18 @@ export default function ReplenishmentRequest(props) {
   }
 
   const handleView = (obj) => {
-    console.log("item clicked", obj);
+    let path = `replenishment/edit`;
+    props.history.push({
+      pathname: path,
+      state: {
+        comingFor: "view",
+        selectedItem: obj,
+        vendors,
+        statues,
+        items,
+        buObj,
+      },
+    });
   };
 
   function handleReceive(rec) {
@@ -267,10 +327,10 @@ export default function ReplenishmentRequest(props) {
         <div className="subheader">
           <div>
             <img src={business_Unit} />
-            <h4>Replenishment Request</h4>
+            <h4>Replenishment Request for BU</h4>
           </div>
 
-          {currentUser && currentUser.staffTypeId.type === "FU Member" ? (
+          {currentUser && currentUser.staffTypeId.type === "BU Member" ? (
             <div>
               <img onClick={addNewItem} src={Add_New} />
               {/* <img src={Search} /> */}
@@ -293,20 +353,30 @@ export default function ReplenishmentRequest(props) {
                 <CustomTable
                   tableData={purchaseRequests}
                   tableDataKeys={
-                    currentUser.staffTypeId.type === "FU Member" ||
-                    currentUser.staffTypeId.type === "FU Inventory Keeper"
-                      ? tableDataKeysForFUHead
-                      : tableDataKeys
+                    currentUser.staffTypeId.type === "BU Member"
+                      ? tableDataKeysForBUMember
+                      : currentUser.staffTypeId.type === "BU Nurse" ||
+                        currentUser.staffTypeId.type === "BU Doctor"
+                      ? tableDataKeysForDoctorAndNursing
+                      : currentUser.staffTypeId.type === "FU Member"
+                      ? tableDataKeysForFUMember
+                      : tableDataKeysForBUMember
                   }
                   tableHeading={
-                    currentUser.staffTypeId.type === "FU Member" ||
-                    currentUser.staffTypeId.type === "FU Inventory Keeper"
-                      ? tableHeadingForFUHead
-                      : tableHeading
+                    currentUser.staffTypeId.type === "BU Member"
+                      ? tableHeadingForBUMember
+                      : currentUser.staffTypeId.type === "BU Nurse" ||
+                        currentUser.staffTypeId.type === "BU Doctor"
+                      ? tableHeadingForDoctorAndNursing
+                      : currentUser.staffTypeId.type === "FU Member"
+                      ? tableHeadingForFUMember
+                      : tableHeadingForBUMember
                   }
                   action={
-                    currentUser.staffTypeId.type === "FU Inventory Keeper"
-                      ? actionsForFUInventoryKeeper
+                    currentUser.staffTypeId.type === "BU Nurse"
+                      ? actionsForBUNurse
+                      : currentUser.staffTypeId.type === "BU Doctor"
+                      ? actionsForBUDoctor
                       : actions
                   }
                   handleEdit={handleEdit}

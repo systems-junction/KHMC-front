@@ -38,21 +38,20 @@ const tableHeading = [
   "Received Qty",
   "Batch No",
   "Unit",
-  "Date",
-  "Actions",
+  "Date Received",
 ];
 const tableDataKeys = [
-  "itemCode",
-  "itemName",
+   ['itemId', 'itemCode'],
+   ['itemId', 'name'],
   "currentQty",
-  "requiredQty",
+  "requestedQty",
   "receivedQty",
   "batchNumber",
   "unit",
-  "date",
+  "dateReceived",
 ];
 
-const actions = { edit: true, delete: true };
+const actions = { edit: false, delete: false };
 
 export default function PurchaseRequest(props) {
   const [purchaseRequests, setPurchaseRequest] = useState("");
@@ -161,10 +160,10 @@ export default function PurchaseRequest(props) {
             <h4>Receive Items</h4>
           </div>
 
-          <div>
+          {/* <div>
             <img onClick={addNewItem} src={Add_New} />
-            {/* <img src={Search} /> */}
-          </div>
+            <img src={Search} />
+          </div> */}
         </div>
 
         {/* <div

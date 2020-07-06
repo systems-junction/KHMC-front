@@ -25,6 +25,8 @@ import "../assets/jss/material-dashboard-react/components/TextInputStyle.css";
 import Loader from "react-loader-spinner";
 import Header from "../components/Header/Header";
 
+import { subscribeUser } from "../subscription";
+
 class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -79,10 +81,23 @@ class Login extends React.Component {
               console.log(res.data);
               cookie.save("token", res.data.data.token, { path: "/" });
               cookie.save("current_user", res.data.data.user, { path: "/" });
+              subscribeUser(res.data.data.user);
               this.setState({
                 verifiedUser: true,
                 buttonPressed: false,
               });
+              // const jsonResponse = new Response(
+              //   JSON.stringify(res.data.data.user),
+              //   {
+              //     headers: {
+              //       "content-type": "application/json",
+              //     },
+              //   }
+              // );
+
+              // window.caches
+              //   .open("pwa-task-manager-cache")
+              //   .then((cache) => cache.put("data.json", jsonResponse));
             }
             // else if (!res.data.success) {
             //   this.setState({ tr: true });
@@ -112,6 +127,7 @@ class Login extends React.Component {
     this.setState({ splash: false });
   }
 
+
   render() {
     if (this.state.tr) {
       setTimeout(() => {
@@ -140,6 +156,7 @@ class Login extends React.Component {
         }}
       >
         <Header />
+
 
         <div
           style={{
@@ -278,7 +295,9 @@ class Login extends React.Component {
                     className="row"
                     style={{
                       marginTop: 25,
-                      width: "100%", display:'flex',justifyContent:'center'
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "center",
                     }}
                   >
                     <Loader

@@ -12,6 +12,7 @@ import axios from "axios";
 import {
   getPurchaseRequestUrl,
   deletePurchaseRequestUrl,
+  socketUrl,
 } from "../../public/endpoins";
 import Loader from "react-loader-spinner";
 
@@ -31,6 +32,8 @@ import Inactive from "../../assets/img/Inactive.png";
 import Active from "../../assets/img/Active.png";
 
 import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
+
+import socketIOClient from "socket.io-client";
 
 const tableHeading = [
   "Request No",
@@ -107,7 +110,16 @@ export default function PurchaseRequest(props) {
   }
 
   useEffect(() => {
+    // const socket = socketIOClient(socketUrl);
+    // socket.emit("connection");
+    // socket.on("send", (data) => {
+    //   // setPurchaseRequest(res.data.data.purchaseRequest);
+    //   console.log(data);
+    // });
+
     getPurchaseRequests();
+
+    // return () => socket.disconnect();
   }, []);
 
   const addNewItem = () => {
@@ -176,7 +188,8 @@ export default function PurchaseRequest(props) {
           </div>
 
           <div>
-            {currentUser && currentUser.staffTypeId.type !== "Committe Member" ? (
+            {currentUser &&
+            currentUser.staffTypeId.type !== "Committe Member" ? (
               <img onClick={addNewItem} src={Add_New} />
             ) : (
               undefined

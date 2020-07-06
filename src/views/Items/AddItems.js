@@ -192,17 +192,17 @@ function AddItems(props) {
       subClass.length > 0 &&
       itemCode.length > 0 &&
       receiptUnit.length > 0 &&
-      receiptUnitCost.length > 0 &&
+      receiptUnitCost !== "" &&
       issueUnit.length > 0 &&
-      issueUnitCost.length > 0 &&
+      issueUnitCost !== "" &&
       vendorId.length > 0 &&
-      purchasePrice > 0 &&
-      maximumLevel.length > 0 &&
-      minimumLevel.length > 0 &&
-      reorderLevel.length > 0 &&
+      purchasePrice !== "" &&
+      maximumLevel !== "" &&
+      minimumLevel !== "" &&
+      reorderLevel !== "" &&
       cls.length > 0 &&
-      tax.length > 0 &&
-      grandSubClass.length > 0;
+      tax !== "" &&
+    grandSubClass.length > 0;
 
     return res;
   }
@@ -381,7 +381,7 @@ function AddItems(props) {
                 /> */}
 
                 <input
-                  type="number"
+                  // type="number"
                   placeholder="Item Code"
                   name={"itemCode"}
                   value={itemCode}

@@ -18,16 +18,11 @@ import {
   TimePicker,
   DatePicker,
 } from "@material-ui/pickers";
-
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-
 import {
   addReceiveItemsUrl,
   updateReceiveItemsUrl,
+  addReceiveRequestFUUrl,
+  updateReceiveRequestFUUrl,
 } from "../../public/endpoins";
 
 import cookie from "react-cookies";
@@ -42,17 +37,31 @@ import Back_Arrow from "../../assets/img/Back_Arrow.png";
 import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
 
 const statusArray = [
-  { key: "received", value: "Received" },
-  { key: "rejected", value: "Rejected" },
+  { key: "Partially Recieved", value: "Partially Received" },
+  { key: "Received", value: "Received" },
 ];
 
 const styles = {
+  // inputContainer: {
+  //   marginTop: 25,
+  //   backgroundColor: "white",
+  //   borderRadius: 5,
+  //   paddingTop: 5,
+  //   paddingBottom: 5,
+  //   paddingLeft: 5,
+  //   paddingRight: 5,
+  // },
+
+  // buttonContainer: {
+  //   marginTop: 25,
+  // },
+
   inputContainerForTextField: {
     marginTop: 25,
   },
 
   inputContainerForDropDown: {
-    marginTop: 35,
+    marginTop: 55,
     backgroundColor: "white",
     borderRadius: 10,
     paddingLeft: 10,
@@ -77,10 +86,6 @@ function ReceiveItems(props) {
   const classes = useStyles();
 
   const initialState = {
-    _id: "",
-    itemCode: "",
-    itemName: "",
-    currentQty: "",
     requiredQty: "",
     receivedQty: "",
     bonusQty: "",
@@ -99,10 +104,52 @@ function ReceiveItems(props) {
     invoice: "",
     date: "",
     receivedDate: "",
-    comments: "",
     expiryDate: "",
     discountPercentage: "",
-    statusForReceivingItem: "",
+
+    _id: "",
+    requestNo: "",
+    generatedBy: "",
+    dateGenerated: "",
+    vendorId: "",
+    status: "to_do",
+    itemId: "",
+    itemCode: "",
+    itemName: "",
+    description: "",
+    currentQty: "",
+    requestedQty: "",
+    comments: "",
+    vendors: [],
+    statues: [],
+    items: [],
+    selectedRow: "",
+    reason: "",
+
+    generated: "Manual",
+
+    requesterName: "",
+    department: "",
+    orderType: "",
+    maximumLevel: "",
+
+    committeeStatus: "",
+
+    vendorsArray: [],
+
+    recieptUnit: "",
+    issueUnit: "",
+    fuItemCost: "",
+    fuId: "",
+    to: "",
+    from: "",
+    approvedBy: "",
+    commentNote: "",
+    secondStatus: "",
+
+    notes: "",
+
+    replenishmentRequestStatus: "",
   };
 
   function reducer(state, { field, value }) {
@@ -115,10 +162,6 @@ function ReceiveItems(props) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const {
-    _id,
-    itemCode,
-    itemName,
-    currentQty,
     requiredQty,
     receivedQty,
     bonusQty,
@@ -137,10 +180,49 @@ function ReceiveItems(props) {
     invoice,
     date,
     receivedDate,
-    comments,
     expiryDate,
     discountPercentage,
-    statusForReceivingItem,
+
+    _id,
+    requestNo,
+    generatedBy,
+    generated,
+    dateGenerated,
+    vendorId,
+    status,
+    itemCode,
+    itemId,
+    itemName,
+    description,
+    currentQty,
+    requestedQty,
+    comments,
+    vendors,
+    statues,
+    items,
+    selectedRow,
+    reason,
+    requesterName,
+    department,
+    orderType,
+
+    maximumLevel,
+
+    committeeStatus,
+
+    vendorsArrayForItems,
+
+    recieptUnit,
+    issueUnit,
+    fuItemCost,
+    fuId,
+    to,
+    from,
+    approvedBy,
+    commentNote,
+    secondStatus,
+    notes,
+    replenishmentRequestStatus,
   } = state;
 
   const onChangeValue = (e) => {
@@ -171,9 +253,6 @@ function ReceiveItems(props) {
   const [openNotification, setOpenNotification] = useState(false);
 
   const [selectedItem, setSelectedItem] = useState("");
-
-  const [addRetrunRequest, setAddReturnRequest] = useState(false);
-  const [receivedExceeds, setReceivedExceeds] = useState(false);
 
   useEffect(() => {
     setCurrentUser(cookie.load("current_user"));
@@ -223,17 +302,19 @@ function ReceiveItems(props) {
       invoice.length > 0 &&
       date !== "" &&
       receivedDate !== "" &&
-      comments.length > 0 &&
-      statusForReceivingItem.length > 0
+      notes.length > 0 &&
+      replenishmentRequestStatus !== "" &&
+      receivedQty <= requestedQty
+      // discountPercentage.length > 0
     );
   }
 
   const handleAdd = () => {
     if (validateForm()) {
       let params = {
-        itemId: selectedItem.item.itemId._id,
-        currentQty: selectedItem.item.currQty,
-        requestedQty: selectedItem.item.reqQty,
+        itemId: selectedItem.itemId._id,
+        currentQty: currentQty,
+        requestedQty: requestedQty,
         receivedQty,
         bonusQty,
         batchNumber,
@@ -252,24 +333,19 @@ function ReceiveItems(props) {
         invoice,
         dateInvoice: date,
         dateReceived: receivedDate,
-        notes: comments,
-        materialId: props.history.location.state.materialReceivingId,
-        vendorId: selectedItem.vendorId,
-        prId: selectedItem._id,
-        status: statusForReceivingItem,
+        notes,
+        replenishmentRequestId: _id,
+        replenishmentRequestStatus,
+        fuId: fuId._id,
       };
 
-      console.log("params", params);
+      console.log("params for add", params);
 
       axios
-        .post(addReceiveItemsUrl, params)
+        .post(addReceiveRequestFUUrl, params)
         .then((res) => {
           if (res.data.success) {
-            if (statusForReceivingItem === "rejected") {
-              setAddReturnRequest(true);
-            } else {
-              props.history.goBack();
-            }
+            props.history.goBack();
           } else if (!res.data.success) {
             setOpenNotification(true);
           }
@@ -309,10 +385,11 @@ function ReceiveItems(props) {
         comments,
         expiryDate,
         discountPercentage,
-        status: statusForReceivingItem,
+        replenishmentRequestId: _id,
+        replenishmentRequestStatus,
       };
       axios
-        .put(updateReceiveItemsUrl, params)
+        .put(updateReceiveRequestFUUrl, params)
         .then((res) => {
           if (res.data.success) {
             props.history.goBack();
@@ -336,24 +413,6 @@ function ReceiveItems(props) {
   }
 
   console.log("vendor id in receive items", selectedItem);
-
-  const handleAddReturnRequest = () => {
-    console.log("rec", selectedItem);
-    let path = `/home/controlroom/wms/materialreceiving/viewpo/externalreturn/add`;
-    props.history.push({
-      pathname: path,
-      state: {
-        comingFor: "add",
-        selectedItem: selectedItem,
-      },
-    });
-  };
-
-  const handleExtraQty = () => {
-    if (receivedQty > selectedItem.item.reqQty) {
-      setReceivedExceeds(true);
-    }
-  };
 
   return (
     <div
@@ -395,7 +454,7 @@ function ReceiveItems(props) {
                   disabled={true}
                   placeholder="Item Code"
                   name={"itemCode"}
-                  value={selectedItem && selectedItem.item.itemCode}
+                  value={selectedItem && selectedItem.itemId.itemCode}
                   onChange={onChangeValue}
                   className="textInputStyle"
                 />
@@ -412,7 +471,7 @@ function ReceiveItems(props) {
                   disabled={true}
                   placeholder="Item Name"
                   name={"itemName"}
-                  value={selectedItem && selectedItem.item.name}
+                  value={selectedItem && selectedItem.itemId.name}
                   onChange={onChangeValue}
                   className="textInputStyle"
                 />
@@ -432,7 +491,7 @@ function ReceiveItems(props) {
                   type="number"
                   placeholder="Current Qty"
                   name={"currentQty"}
-                  value={selectedItem && selectedItem.item.currQty}
+                  value={selectedItem && currentQty}
                   onChange={onChangeValue}
                   className="textInputStyle"
                   onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
@@ -450,7 +509,7 @@ function ReceiveItems(props) {
                   disabled={true}
                   placeholder="Required Qty"
                   name={"requiredQty"}
-                  value={selectedItem && selectedItem.item.reqQty}
+                  value={selectedItem && selectedItem.requestedQty}
                   onChange={onChangeValue}
                   className="textInputStyle"
                   onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
@@ -471,7 +530,22 @@ function ReceiveItems(props) {
                   onChange={onChangeValue}
                   className="textInputStyle"
                   onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                  // error={receivedQty.includes("e", 0)}
+                  style={{
+                    borderColor:
+                      receivedQty > requestedQty ||
+                      (replenishmentRequestStatus &&
+                        replenishmentRequestStatus === "Received" &&
+                        receivedQty !== requestedQty)
+                        ? "red"
+                        : null,
+                    borderWidth:
+                      receivedQty > requestedQty ||
+                      (replenishmentRequestStatus &&
+                        replenishmentRequestStatus === "Received" &&
+                        receivedQty !== requestedQty)
+                        ? 2.5
+                        : null,
+                  }}
                 />
               </div>
             </div>
@@ -797,43 +871,50 @@ function ReceiveItems(props) {
           </div>
 
           <div className="row">
-            <div className="col-md-12">
+            <div className="col-md-6">
               <div style={styles.inputContainerForTextField}>
                 <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Comments
+                  Notes
                 </InputLabel>
                 <input
-                  placeholder="Comments"
-                  name={"comments"}
-                  value={comments}
+                  placeholder="Notes"
+                  name={"notes"}
+                  value={notes}
                   onChange={onChangeValue}
                   className="textInputStyle"
                 />
               </div>
             </div>
-          </div>
 
-          <div className="row">
-            <div className="col-md-12">
+            <div className="col-md-6">
               <div style={styles.inputContainerForDropDown}>
-                <InputLabel id="statusForReceivingItem-label">
+                <InputLabel id="status-label" style={styles.styleForLabel}>
                   Status
                 </InputLabel>
                 <Select
                   fullWidth
-                  id="statusForReceivingItem"
-                  name="statusForReceivingItem"
-                  value={statusForReceivingItem}
+                  id="replenishmentRequestStatus"
+                  name="replenishmentRequestStatus"
+                  value={replenishmentRequestStatus}
                   onChange={onChangeValue}
                   label="Status"
                 >
                   <MenuItem value="">
                     <em>None</em>
                   </MenuItem>
-
                   {statusArray.map((val) => {
                     return (
-                      <MenuItem key={val.key} value={val.key}>
+                      <MenuItem
+                        disabled={
+                          receivedQty &&
+                          ((val.key === "Received" &&
+                            receivedQty < requestedQty) ||
+                            (val.key === "Partially Recieved" &&
+                              receivedQty >= requestedQty))
+                        }
+                        key={val.key}
+                        value={val.key}
+                      >
                         {val.value}
                       </MenuItem>
                     );
@@ -867,7 +948,7 @@ function ReceiveItems(props) {
                 >
                   <Button
                     style={{ minWidth: "20%", marginRight: 30 }}
-                    disabled={true}
+                    // disabled={true}
                     // onClick={handleAdd}
                     variant="contained"
                   >
@@ -877,11 +958,7 @@ function ReceiveItems(props) {
                   <Button
                     style={{ minWidth: "10%" }}
                     disabled={!validateForm()}
-                    onClick={
-                      receivedQty <= selectedItem.item.reqQty
-                        ? handleAdd
-                        : handleExtraQty
-                    }
+                    onClick={handleAdd}
                     variant="contained"
                     color="primary"
                   >
@@ -902,10 +979,10 @@ function ReceiveItems(props) {
                 >
                   <Button
                     style={{ minWidth: "20%" }}
-                    disabled={true}
+                    // disabled={true}
                     // onClick={handleAdd}
                     variant="contained"
-                    color="primary"
+                    // color="primary"
                   >
                     Upload Invoice
                   </Button>
@@ -932,62 +1009,6 @@ function ReceiveItems(props) {
               style={{ width: 60, height: 40, cursor: "pointer" }}
             />
           </div>
-
-          <Dialog
-            open={addRetrunRequest}
-            onClose={() => {}}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogTitle id="alert-dialog-title">
-              {"Rejected Receiving Item?"}
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                While rejecting the return request you need to create the return
-                request for that.
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button
-                onClick={handleAddReturnRequest}
-                color="primary"
-                autoFocus
-              >
-                Genrate Return Request
-              </Button>
-            </DialogActions>
-          </Dialog>
-
-          <Dialog
-            open={receivedExceeds}
-            onClose={() => {}}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogTitle id="alert-dialog-title">
-              {"Received quantity exceeds than requested?"}
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                Received quantity is greater than the requested quantity. Return
-                request for the additional quantity will be automatically
-                created.
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button
-                onClick={() => setReceivedExceeds(false)}
-                color="primary"
-                autoFocus
-              >
-                Cancel
-              </Button>
-              <Button onClick={handleAdd} color="primary" autoFocus>
-                OK
-              </Button>
-            </DialogActions>
-          </Dialog>
         </div>
       </div>
     </div>

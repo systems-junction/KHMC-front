@@ -22,9 +22,13 @@ import { dateOptions } from "../../variables/public";
 
 import Active from "../../assets/img/Active.png";
 import In_Active from "../../assets/img/Inactive.png";
+import ReturnItem from "../../assets/img/Return Item.png";
+import ReceiveItem from "../../assets/img/Receive Item.png";
 
 import EditIcon from "../../assets/img/Edit.png";
 import cookie from "react-cookies";
+
+import Tooltip from "@material-ui/core/Tooltip";
 
 const useStyles = makeStyles(styles);
 
@@ -64,7 +68,8 @@ export default function CustomTable(props) {
       val === "pending" ||
       val === "to_do" ||
       val === "po_created" ||
-      val === "Can be fulfilled"
+      val === "Can be fulfilled" ||
+      val === "hold"
     ) {
       if (currentUser && currentUser.staffTypeId.type === "Committe Member") {
         return (
@@ -73,8 +78,10 @@ export default function CustomTable(props) {
               ? "To Do"
               : val === "pending"
               ? "Pending"
-              : "po_created"
+              :val==="po_created"
               ? "PO Created"
+              :val==="hold"
+              ? "Hold"
               : ""}
           </h6>
         );
@@ -98,8 +105,10 @@ export default function CustomTable(props) {
       val === "po_sent" ||
       val === "items_in_transit" ||
       val === "pending_approval_from_accounts" ||
+      val === "pending_approval" ||
       val === "Delivery in Progress" ||
-      val === "FulFillment Initiated"
+      val === "Fulfillment Initiated" ||
+      val === "pending_administration"
     ) {
       return (
         <h6 style={{ fontWeight: "700", color: "#FF6F91" }}>
@@ -109,12 +118,15 @@ export default function CustomTable(props) {
             ? "Items in Transit"
             : val === "pending_approval_from_accounts"
             ? "Pending Approval From Accounts"
+            : val === "pending_approval"
+            ? "Pending Approval"
             : val === "Delivery in Progress"
-            ? "Delivery in Progress" 
-            : val === "FulFillment Initiated"
-            ? "FulFillment Initiated" 
-            : "Po Sent"
-            }
+            ? "Delivery in Progress"
+            : val === "Fulfillment Initiated"
+            ? "Fulfillment Initiated"
+            : val === "pending_administration"
+            ? "Pending Administration"
+            : "Po Sent"}
         </h6>
       );
     } else if (
@@ -336,20 +348,33 @@ export default function CustomTable(props) {
                             </RcIf>
 
                             <RcIf if={props.action.receiveItem}>
-                              <span
-                                style={{
-                                  backgroundColor: "blue",
-                                  color: "white",
-                                  paddingLeft: 10,
-                                  paddingTop: 5,
-                                  paddingBottom: 5,
-                                  paddingRight: 10,
-                                  borderRadius: 20,
-                                }}
-                                onClick={() => props.receiveItem(prop)}
-                              >
-                                Receive Item
-                              </span>
+                              <Tooltip title="Receive Item">
+                                <img
+                                  src={ReceiveItem}
+                                  onClick={() => props.receiveItem(prop)}
+                                  style={{
+                                    maxWidth: 60,
+                                    height: 50,
+                                    backgroundColor: "blue",
+                                    borderRadius: 30,
+                                  }}
+                                />
+                              </Tooltip>
+                            </RcIf>
+
+                            <RcIf if={props.action.returnRequest}>
+                              <Tooltip title="FU Return">
+                                <img
+                                  src={ReturnItem}
+                                  onClick={() => props.addReturnRequest(prop)}
+                                  style={{
+                                    maxWidth: 60,
+                                    height: 50,
+                                    backgroundColor: "blue",
+                                    borderRadius: 30,
+                                  }}
+                                />
+                              </Tooltip>
                             </RcIf>
 
                             <RcIf

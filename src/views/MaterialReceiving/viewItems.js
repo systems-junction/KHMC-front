@@ -179,22 +179,38 @@ function AddEditPurchaseRequest(props) {
 
   function handleReceive(rec) {
     console.log("rec", rec);
-    let path = `/home/controlroom/wms/receiveitems/add`;
-    props.history.push({
-      pathname: path,
-      state: {
-        comingFor: "add",
-        selectedItem: rec,
-        vendors,
-        statues,
-        purchaseRequest,
-        purchaseOrders,
-        materialReceivingId: props.materialReceivingId,
-      },
-    });
+
+    if (rec.status === "pending_approval_from_accounts") {
+      alert("Item Already Received")
+      return;
+    } else {
+      let path = `/home/controlroom/wms/receiveitems/add`;
+      props.history.push({
+        pathname: path,
+        state: {
+          comingFor: "add",
+          selectedItem: rec,
+          vendors,
+          statues,
+          purchaseRequest,
+          purchaseOrders,
+          materialReceivingId: props.materialReceivingId,
+        },
+      });
+    }
   }
 
-  console.log("po details in items", props.items);
+  // function handleAddReturnRequest(rec) {
+  //   console.log("rec", rec);
+  //   let path = `viewpo/externalreturn/add`;
+  //   props.history.push({
+  //     pathname: path,
+  //     state: {
+  //       comingFor: "add",
+  //       selectedItem: rec,
+  //     },
+  //   });
+  // }
 
   return (
     <div>
@@ -204,6 +220,7 @@ function AddEditPurchaseRequest(props) {
         tableHeading={tableHeading}
         action={actions}
         receiveItem={handleReceive}
+        // addReturnRequest={handleAddReturnRequest}
         borderBottomColor={"#60d69f"}
         borderBottomWidth={20}
       />

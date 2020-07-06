@@ -6,6 +6,9 @@ import AddEditMaterialReceiving from "../views/MaterialReceiving/addEditMaterial
 import materialreceiving from "../views/MaterialReceiving/materialreceiving";
 import viewPO from "../views/MaterialReceiving/viewPO";
 
+import externalRetrunRequestTable from "../views/externalReturnRequest/externalRetrunRequestTable";
+import addEditExternalReturnRequest from "../views/externalReturnRequest/addEditExternalReturnRequest";
+
 class PurchaseRequest extends React.PureComponent {
   render() {
     return (
@@ -15,7 +18,6 @@ class PurchaseRequest extends React.PureComponent {
           path={`${this.props.match.url}`}
           component={materialreceiving}
         />
-
         <Route
           exact
           path={`${this.props.match.url}/viewpo`}
@@ -26,10 +28,27 @@ class PurchaseRequest extends React.PureComponent {
           path={`${this.props.match.url}/add`}
           component={AddEditMaterialReceiving}
         />
+
         <Route
           path={`${this.props.match.url}/edit`}
           component={AddEditMaterialReceiving}
         />
+
+        <Route
+          path={`${this.props.match.url}/viewpo/externalreturn/add`}
+          component={addEditExternalReturnRequest}
+        />
+
+        <Route
+          path={`${this.props.match.url}/viewpo/externalreturn/edit`}
+          component={addEditExternalReturnRequest}
+        />
+
+        <Route
+          path={`${this.props.match.url}/viewpo/externalreturn`}
+          component={externalRetrunRequestTable}
+        />
+
         <Route path="*" component={NotFound} />
       </Switch>
     );

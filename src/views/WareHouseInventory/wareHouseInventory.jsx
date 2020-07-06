@@ -159,8 +159,9 @@ export default function WareHouseInventory(props) {
         flex: 1,
         width: "100%",
         position: "fixed",
-        height: "100vh",
+        height: "100%",
         backgroundColor: "#60d69f",
+        overflowY:"scroll"
       }}
     >
       <Header />

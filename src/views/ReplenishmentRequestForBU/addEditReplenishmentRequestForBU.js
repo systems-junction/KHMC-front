@@ -1,7 +1,3 @@
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-/* eslint-disable react/jsx-wrap-multilines */
-/* eslint-disable array-callback-return */
-/* eslint-disable react/jsx-indent */
 import React, { useEffect, useState, useReducer } from "react";
 import TextField from "@material-ui/core/TextField";
 import Select from "@material-ui/core/Select";
@@ -20,8 +16,8 @@ import Notification from "../../components/Snackbar/Notification.js";
 import DateFnsUtils from "@date-io/date-fns";
 import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import {
-  addReplenishmentRequestUrl,
-  updateReplenishmentRequestUrl,
+  addReplenishmentRequestUrlBU,
+  updateReplenishmentRequestUrlBU,
   getSearchedItemUrl,
   addPurchasingRequestItemUrl,
   getPurchasingRequestItemUrl,
@@ -49,34 +45,34 @@ import Add_New from "../../assets/img/Add_New.png";
 
 import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
 
-const reasonArray = [
-  { key: "jit", value: "JIT" },
-  { key: "new_item", value: "New Item" },
-  { key: "Reactivated Items", value: "Reactivated Items" },
-  {
-    key: "The System is Malfunctioning",
-    value: "The System is Malfunctioning",
-  },
+// const reasonArray = [
+//   { key: "jit", value: "JIT" },
+//   { key: "new_item", value: "New Item" },
+//   { key: "Reactivated Items", value: "Reactivated Items" },
+//   {
+//     key: "The System is Malfunctioning",
+//     value: "The System is Malfunctioning",
+//   },
+// ];
+
+const statusArrayForFUMember = [
+  { key: "in_progress", value: "In Progress" },
+  // { key: "Unfulfillment Initiated", value: "Unfulfillment Initiated" },
 ];
 
-const statusArrayForWareHouseMember = [
-  { key: "Fulfillment Initiated", value: "Fulfillment Initiated" },
-  { key: "Unfulfillment Initiated", value: "Unfulfillment Initiated" },
-];
-
-const statusArrayForWareHouseDeliveryMan = [
+const statusArrayForFUIncharge = [
   { key: "Delivery in Progress", value: "Delivery in Progress" },
   // { key: "Unfulfillment Initiated", value: "Unfulfillment Initiated" },
 ];
 
-const statusArrayForFUInventoryKeeper = [
-  { key: "Recieved", value: "Recieved" },
-  { key: "Partially Recieved", value: "Partially Recieved" },
+const statusArrayForBUNurse = [
+  { key: "pending_administration", value: "Pending Administration" },
+  // { key: "Unfulfillment Initiated", value: "Unfulfillment Initiated" },
 ];
 
-const orderArray = [
-  { key: "maintance_order", value: "Maintance Order" },
-  { key: "doctor_order", value: "Doctor Order" },
+const statusArrayForBUInventoryKeeper = [
+  { key: "complete", value: "Complete" },
+  // { key: "Partially Recieved", value: "Partially Recieved" },
 ];
 
 const generatedArray = [
@@ -108,8 +104,9 @@ const styles = {
     paddingTop: 2,
   },
 
-  buttonContainer: {
-    marginTop: 25,
+  stylesForLabel: {
+    fontWeight: "700",
+    color: "white",
   },
 };
 const useStyles = makeStyles(tableStyles);
@@ -151,11 +148,13 @@ function AddEditPurchaseRequest(props) {
     issueUnit: "",
     fuItemCost: "",
     fuId: "",
+    buId: "",
     to: "",
     from: "",
     approvedBy: "",
     commentNote: "",
     secondStatus: "",
+    itemType: "",
   };
 
   function reducer(state, { field, value }) {
@@ -201,11 +200,13 @@ function AddEditPurchaseRequest(props) {
     issueUnit,
     fuItemCost,
     fuId,
+    buId,
     to,
     from,
     approvedBy,
     commentNote,
     secondStatus,
+    itemType,
   } = state;
 
   const [comingFor, setcomingFor] = useState("");
@@ -228,18 +229,16 @@ function AddEditPurchaseRequest(props) {
 
   const [selectedItem, setSelectedItem] = useState("");
 
-  const [purchaseRequestItems, setPurchaseRequestItems] = useState("");
-
   const [selectItemToEditId, setSelectItemToEditId] = useState("");
 
-  const [fuObj, setFUObj] = useState("");
+  const [buObj, setBUObj] = useState("");
 
   useEffect(() => {
     setCurrentUser(cookie.load("current_user"));
 
     setcomingFor(props.history.location.state.comingFor);
     setVendors(props.history.location.state.vendors);
-    setFUObj(props.history.location.state.fuObj);
+    setBUObj(props.history.location.state.buObj);
 
     const selectedRec = props.history.location.state.selectedItem;
     console.log(selectedRec);
@@ -254,28 +253,17 @@ function AddEditPurchaseRequest(props) {
             // dispatch({ field: "description", value: val.description });
             dispatch({ field: "itemName", value: val.name });
             dispatch({ field: "itemCode", value: val.itemCode });
-          } else if (key === "vendorId") {
-            dispatch({ field: "vendorId", value: val._id });
+            dispatch({ field: "itemType", value: val.cls });
+
+          } else if (key === "fuId") {
+            dispatch({ field: "fuId", value: val._id });
+          } else if (key === "buId") {
+            dispatch({ field: "buId", value: val._id });
           }
         } else {
           dispatch({ field: key, value: val });
         }
       });
-    }
-    if (props.history.location.state.vendors) {
-      dispatch({
-        field: "vendors",
-        value: props.history.location.state.vendors,
-      });
-    }
-    if (props.history.location.state.statues) {
-      dispatch({
-        field: "statues",
-        value: props.history.location.state.statues,
-      });
-    }
-    if (props.history.location.state.items) {
-      dispatch({ field: "items", value: props.history.location.state.items });
     }
   }, []);
 
@@ -289,17 +277,17 @@ function AddEditPurchaseRequest(props) {
 
   function validateForm() {
     return (
-      reason !== "" &&
-      comments !== "" &&
-      dateGenerated !== "" &&
-      fuItemCost !== "" &&
+      // comments !== "" &&
+      // dateGenerated !== "" &&
       itemCode !== "" &&
       description !== "" &&
       itemName !== "" &&
       requestedQty !== "" &&
-      currentQty !== "" &&
-      recieptUnit !== "" &&
-      issueUnit !== ""
+      currentQty !== ""
+      //  && recieptUnit !== ""
+      // && issueUnit !== ""
+      // && fuItemCost !== ""
+      //  && reason !== ""
     );
   }
 
@@ -309,32 +297,23 @@ function AddEditPurchaseRequest(props) {
       const params = {
         requestNo,
         generatedBy: currentUser.name,
-        dateGenerated,
+        dateGenerated: new Date(),
         generated,
         status: "pending",
-        reason,
         comments,
-
         itemId: itemId,
         currentQty,
         requestedQty,
         description,
-        issueUnit,
-        recieptUnit,
-        fuItemCost,
-        to: "Warehouse",
-        from: "FU",
         commentNote: "",
-        fuId: fuObj._id,
+        buId: buObj._id,
+        secondStatus: "pending",
       };
 
       console.log("params", params);
 
       axios
-        .post(
-          "http://localhost:4000/api/replenishmentRequest/addreplenishmentrequest",
-          params
-        )
+        .post(addReplenishmentRequestUrlBU, params)
         .then((res) => {
           if (res.data.success) {
             console.log("response after adding RR", res.data);
@@ -351,7 +330,7 @@ function AddEditPurchaseRequest(props) {
     }
   };
 
-  console.log("fu obj in add rep request", fuObj);
+  console.log("bu obj in add rep request", buObj);
 
   const handleEdit = () => {
     setIsFormSubmitted(true);
@@ -363,49 +342,46 @@ function AddEditPurchaseRequest(props) {
         dateGenerated,
         generated,
         status:
-          currentUser.staffTypeId.type === "Warehouse Member" &&
-          status === "pending"
-            ? "Fulfillment Initiated"
-            : currentUser.staffTypeId.type === "Warehouse Incharge" &&
-              status === "Fulfillment Initiated"
+          currentUser.staffTypeId.type === "FU Member" && status === "pending"
+            ? "in_progress"
+            : currentUser.staffTypeId.type === "FU Incharge" &&
+              status === "in_progress"
             ? "Delivery in Progress"
-            : currentUser.staffTypeId.type === "FU Inventory Keeper" &&
+            : currentUser.staffTypeId.type === "BU Nurse" &&
               status === "Delivery in Progress"
-            ? "Received"
+            ? "pending_administration"
+            : currentUser.staffTypeId.type === "BU Inventory Keeper" &&
+              status === "pending_administration"
+            ? "complete"
             : status,
-        reason,
         comments,
-
         itemId,
         currentQty,
         requestedQty,
         description,
-        issueUnit,
-        recieptUnit,
-        fuItemCost,
-        to: to,
-        from: from,
         commentNote,
-        fuId: fuId._id,
+        fuId: fuId,
         secondStatus,
+        buId: buId,
       };
 
-      let params;
+      // let params;
 
-      if (currentUser.staffTypeId.type === "Warehouse Member") {
-        params = {
-          ...obj,
-          approvedBy: approvedBy === "" ? currentUser.staffId : approvedBy,
-        };
-      } else {
-        params = {
-          ...obj,
-          approvedBy: approvedBy === "" ? currentUser.staffId : approvedBy,
-        };
-      }
+      // if (currentUser.staffTypeId.type === "Warehouse Member") {
+      //   params = {
+      //     ...obj,
+      //     approvedBy: approvedBy === "" ? currentUser.staffId : approvedBy,
+      //   };
+      // } else {
+      //   params = {
+      //     ...obj,
+      //     approvedBy: approvedBy === "" ? currentUser.staffId : approvedBy,
+      //   };
+      // }
+      console.log(obj);
 
       axios
-        .put(updateReplenishmentRequestUrl, params)
+        .put(updateReplenishmentRequestUrlBU, obj)
         .then((res) => {
           if (res.data.success) {
             props.history.goBack();
@@ -479,6 +455,7 @@ function AddEditPurchaseRequest(props) {
     dispatch({ field: "itemId", value: i._id });
     dispatch({ field: "itemCode", value: i.itemCode });
     dispatch({ field: "itemName", value: i.name });
+    dispatch({ field: "itemType", value: i.cls });
     dispatch({ field: "vendorId", value: i.vendorId });
     dispatch({ field: "description", value: i.description });
     dispatch({ field: "maximumLevel", value: i.maximumLevel });
@@ -498,8 +475,8 @@ function AddEditPurchaseRequest(props) {
       itemCode !== "" &&
       description !== "" &&
       itemName !== "" &&
-      requestedQty !== "" &&
-      fuItemCost !== ""
+      requestedQty !== ""
+      // && fuItemCost !== ""
       // currentQty.length > 0 &&
       // maximumLevel >= requestedQty &&
     );
@@ -537,8 +514,12 @@ function AddEditPurchaseRequest(props) {
             <img src={purchase_request} />
             <h4>
               {comingFor === "add"
-                ? " Add Replenishment Request"
-                : " Edit Replenishment Request"}
+                ? " Add Replenishment Request For BU"
+                : comingFor === "edit"
+                ? " Edit Replenishment Request For BU"
+                : comingFor === "view"
+                ? "Replenishment Request Details"
+                : undefined}
             </h4>
           </div>
 
@@ -588,7 +569,36 @@ function AddEditPurchaseRequest(props) {
               </div>
             </div>
 
-            <div className="col-md-4" style={styles.inputContainerForTextField}>
+            <div className="col-md-4" style={{ marginTop: 35 }}>
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <DateTimePicker
+                  inputVariant="outlined"
+                  onChange={onChangeDate}
+                  disabled={
+                    // currentUser && currentUser.staffTypeId.type === "BU Member"
+                    //   ? false
+                    //   : true
+                    true
+                  }
+                  fullWidth
+                  style={{
+                    backgroundColor: "white",
+                    borderRadius: 10,
+                    borderWidth: 0,
+                  }}
+                  value={
+                    comingFor === "add"
+                      ? dateGenerated
+                        ? dateGenerated
+                        : new Date()
+                      : dateGenerated
+                  }
+                  label={"Date Generated"}
+                />
+              </MuiPickersUtilsProvider>
+            </div>
+
+            {/* <div className="col-md-4" style={styles.inputContainerForTextField}>
               <input
                 disabled={true}
                 type="text"
@@ -604,39 +614,11 @@ function AddEditPurchaseRequest(props) {
                 onChange={onChangeValue}
                 className="textInputStyle"
               />
-            </div>
+            </div> */}
           </div>
 
           <div className="row">
-            <div className="col-md-6" style={{ marginTop: 35 }}>
-              <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <DateTimePicker
-                  inputVariant="outlined"
-                  onChange={onChangeDate}
-                  disabled={
-                    currentUser && currentUser.staffTypeId.type === "FU Member"
-                      ? false
-                      : true
-                  }
-                  fullWidth
-                  style={{
-                    backgroundColor: "white",
-                    borderRadius: 10,
-                    borderWidth: 0,
-                  }}
-                  value={
-                    comingFor === "add"
-                      ? dateGenerated
-                        ? dateGenerated
-                        : null
-                      : dateGenerated
-                  }
-                  label={"Date Generated"}
-                />
-              </MuiPickersUtilsProvider>
-            </div>
-
-            <div className="col-md-6">
+            {/* <div className="col-md-6">
               <div style={styles.inputContainerForDropDown}>
                 <InputLabel id="status-label">Manual RR Reason</InputLabel>
                 <Select
@@ -664,7 +646,7 @@ function AddEditPurchaseRequest(props) {
                   })}
                 </Select>
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className="row">
@@ -675,7 +657,7 @@ function AddEditPurchaseRequest(props) {
               <input
                 type="text"
                 disabled={
-                  currentUser && currentUser.staffTypeId.type === "FU Member"
+                  currentUser && currentUser.staffTypeId.type === "BU Member"
                     ? false
                     : true
                 }
@@ -689,14 +671,14 @@ function AddEditPurchaseRequest(props) {
             </div>
           </div>
 
-          {currentQty && description && issueUnit && recieptUnit ? (
+          {currentQty && description ? (
             <div>
               <h4 style={{ color: "white", fontWeight: "700", marginTop: 30 }}>
                 Item details
               </h4>
               <div className="row">
                 <div
-                  className="col-md-6"
+                  className="col-md-4"
                   style={styles.inputContainerForTextField}
                 >
                   <input
@@ -710,7 +692,7 @@ function AddEditPurchaseRequest(props) {
                   />
                 </div>
                 <div
-                  className="col-md-6"
+                  className="col-md-4"
                   style={styles.inputContainerForTextField}
                 >
                   <input
@@ -719,6 +701,21 @@ function AddEditPurchaseRequest(props) {
                     placeholder="Item Name"
                     name={"itemName"}
                     value={itemName}
+                    onChange={onChangeValue}
+                    className="textInputStyle"
+                  />
+                </div>
+
+                <div
+                  className="col-md-4"
+                  style={styles.inputContainerForTextField}
+                >
+                  <input
+                    type="text"
+                    disabled={true}
+                    placeholder="Item Type"
+                    name={"itemType"}
+                    value={itemType}
                     onChange={onChangeValue}
                     className="textInputStyle"
                   />
@@ -748,7 +745,7 @@ function AddEditPurchaseRequest(props) {
                   <input
                     disabled={
                       currentUser &&
-                      currentUser.staffTypeId.type === "FU Member"
+                      currentUser.staffTypeId.type === "BU Member"
                         ? false
                         : true
                     }
@@ -762,7 +759,7 @@ function AddEditPurchaseRequest(props) {
                 </div>
               </div>
 
-              <div className="row">
+              {/* <div className="row">
                 <div
                   className="col-md-4"
                   style={styles.inputContainerForTextField}
@@ -810,7 +807,7 @@ function AddEditPurchaseRequest(props) {
                     className="textInputStyle"
                   />
                 </div>
-              </div>
+              </div> */}
 
               <div className="row">
                 <div
@@ -835,14 +832,15 @@ function AddEditPurchaseRequest(props) {
 
           {comingFor === "edit" &&
           (currentUser.staffTypeId.type === "admin" ||
-            currentUser.staffTypeId.type === "Warehouse Member" ||
-            currentUser.staffTypeId.type === "Warehouse Incharge" ||
-            currentUser.staffTypeId.type === "FU Inventory Keeper") ? (
+            currentUser.staffTypeId.type === "FU Member" ||
+            currentUser.staffTypeId.type === "FU Incharge" ||
+            currentUser.staffTypeId.type === "BU Nurse" ||
+            currentUser.staffTypeId.type === "BU Inventory Keeper") ? (
             <div className="row">
               <div className="col-md-6">
                 <div style={styles.inputContainerForDropDown}>
                   <InputLabel id="status-label">Status</InputLabel>
-                  {currentUser.staffTypeId.type === "Warehouse Member" ? (
+                  {currentUser.staffTypeId.type === "FU Member" ? (
                     <Select
                       fullWidth
                       id="secondStatus"
@@ -855,7 +853,7 @@ function AddEditPurchaseRequest(props) {
                         <em>None</em>
                       </MenuItem>
 
-                      {statusArrayForWareHouseMember.map((val) => {
+                      {statusArrayForFUMember.map((val) => {
                         return (
                           <MenuItem key={val.key} value={val.key}>
                             {val.value}
@@ -863,7 +861,7 @@ function AddEditPurchaseRequest(props) {
                         );
                       })}
                     </Select>
-                  ) : currentUser.staffTypeId.type === "Warehouse Incharge" ? (
+                  ) : currentUser.staffTypeId.type === "FU Incharge" ? (
                     <Select
                       fullWidth
                       id="secondStatus"
@@ -876,7 +874,49 @@ function AddEditPurchaseRequest(props) {
                         <em>None</em>
                       </MenuItem>
 
-                      {statusArrayForWareHouseDeliveryMan.map((val) => {
+                      {statusArrayForFUIncharge.map((val) => {
+                        return (
+                          <MenuItem key={val.key} value={val.key}>
+                            {val.value}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  ) : currentUser.staffTypeId.type === "BU Nurse" ? (
+                    <Select
+                      fullWidth
+                      id="secondStatus"
+                      name="secondStatus"
+                      value={secondStatus}
+                      onChange={onChangeValue}
+                      label="Status"
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+
+                      {statusArrayForBUNurse.map((val) => {
+                        return (
+                          <MenuItem key={val.key} value={val.key}>
+                            {val.value}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  ) : currentUser.staffTypeId.type === "BU Inventory Keeper" ? (
+                    <Select
+                      fullWidth
+                      id="secondStatus"
+                      name="secondStatus"
+                      value={secondStatus}
+                      onChange={onChangeValue}
+                      label="Status"
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+
+                      {statusArrayForBUInventoryKeeper.map((val) => {
                         return (
                           <MenuItem key={val.key} value={val.key}>
                             {val.value}
@@ -885,26 +925,7 @@ function AddEditPurchaseRequest(props) {
                       })}
                     </Select>
                   ) : (
-                    <Select
-                      fullWidth
-                      id="secondStatus"
-                      name="secondStatus"
-                      value={secondStatus}
-                      onChange={onChangeValue}
-                      label="Status"
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-
-                      {statusArrayForFUInventoryKeeper.map((val) => {
-                        return (
-                          <MenuItem key={val.key} value={val.key}>
-                            {val.value}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
+                    undefined
                   )}
                 </div>
               </div>
@@ -971,7 +992,7 @@ function AddEditPurchaseRequest(props) {
                 >
                   Generate Replenishment Request
                 </Button>
-              ) : (
+              ) : comingFor === "edit" ? (
                 <Button
                   style={{ width: "60%" }}
                   disabled={!validateForm()}
@@ -979,8 +1000,12 @@ function AddEditPurchaseRequest(props) {
                   variant="contained"
                   color="primary"
                 >
-                  Edit Replenishment Request
+                  Update Replenishment Request
                 </Button>
+              ) : comingFor === "view" ? (
+                undefined
+              ) : (
+                undefined
               )}
             </div>
           </div>
@@ -995,13 +1020,22 @@ function AddEditPurchaseRequest(props) {
             // fullScreen
           >
             <DialogContent style={{ backgroundColor: "#31e2aa" }}>
-              <DialogTitle id="simple-dialog-title">Add Item</DialogTitle>
+              <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
+                Add Item
+              </DialogTitle>
               <div className="container-fluid">
                 <div className="row">
                   <div
                     className="col-md-12"
                     style={styles.inputContainerForTextField}
                   >
+                    <InputLabel
+                      id="generated-label"
+                      style={styles.stylesForLabel}
+                    >
+                      Search
+                    </InputLabel>
+
                     <input
                       type="text"
                       placeholder="Search Items by name or code"
@@ -1065,9 +1099,16 @@ function AddEditPurchaseRequest(props) {
 
                 <div className="row">
                   <div
-                    className="col-md-6"
+                    className="col-md-4"
                     style={styles.inputContainerForTextField}
                   >
+                    <InputLabel
+                      id="generated-label"
+                      style={styles.stylesForLabel}
+                    >
+                      Item Code
+                    </InputLabel>
+
                     <input
                       type="text"
                       disabled={true}
@@ -1079,15 +1120,44 @@ function AddEditPurchaseRequest(props) {
                     />
                   </div>
                   <div
-                    className="col-md-6"
+                    className="col-md-4"
                     style={styles.inputContainerForTextField}
                   >
+                    <InputLabel
+                      id="generated-label"
+                      style={styles.stylesForLabel}
+                    >
+                      Item Name
+                    </InputLabel>
+
                     <input
                       type="text"
                       disabled={true}
                       placeholder="Item Name"
                       name={"itemName"}
                       value={itemName}
+                      onChange={onChangeValue}
+                      className="textInputStyle"
+                    />
+                  </div>
+
+                  <div
+                    className="col-md-4"
+                    style={styles.inputContainerForTextField}
+                  >
+                    <InputLabel
+                      id="generated-label"
+                      style={styles.stylesForLabel}
+                    >
+                      Item Type
+                    </InputLabel>
+
+                    <input
+                      type="text"
+                      disabled={true}
+                      placeholder="Item Type"
+                      name={"itemType"}
+                      value={itemType}
                       onChange={onChangeValue}
                       className="textInputStyle"
                     />
@@ -1099,6 +1169,13 @@ function AddEditPurchaseRequest(props) {
                     className="col-md-6"
                     style={styles.inputContainerForTextField}
                   >
+                    <InputLabel
+                      id="generated-label"
+                      style={styles.stylesForLabel}
+                    >
+                      Current Qty
+                    </InputLabel>
+
                     <input
                       type="number"
                       disabled={true}
@@ -1114,6 +1191,12 @@ function AddEditPurchaseRequest(props) {
                     className="col-md-6"
                     style={styles.inputContainerForTextField}
                   >
+                    <InputLabel
+                      id="generated-label"
+                      style={styles.stylesForLabel}
+                    >
+                      Requested Qty
+                    </InputLabel>
                     <input
                       type="number"
                       placeholder="Req Qty"
@@ -1125,7 +1208,7 @@ function AddEditPurchaseRequest(props) {
                   </div>
                 </div>
 
-                <div className="row">
+                {/* <div className="row">
                   <div
                     className="col-md-4"
                     style={styles.inputContainerForTextField}
@@ -1167,13 +1250,19 @@ function AddEditPurchaseRequest(props) {
                       className="textInputStyle"
                     />
                   </div>
-                </div>
+                </div> */}
 
                 <div className="row">
                   <div
                     className="col-md-12"
                     style={styles.inputContainerForTextField}
                   >
+                    <InputLabel
+                      id="generated-label"
+                      style={styles.stylesForLabel}
+                    >
+                      Description
+                    </InputLabel>
                     <input
                       type="text"
                       disabled={true}

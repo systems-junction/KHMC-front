@@ -79,7 +79,7 @@ function AddEditWareHouseInventory(props) {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const {_id, itemId, qty, items } = state;
+  const { _id, itemId, qty, items } = state;
 
   const onChangeValue = (e) => {
     dispatch({ field: e.target.name, value: e.target.value });
@@ -202,7 +202,7 @@ function AddEditWareHouseInventory(props) {
             <h4>
               {comingFor === "add"
                 ? " Add Warehouse Inventory"
-                : " Edit Warehouse Inventory"}
+                : "Update Warehouse Inventory"}
             </h4>
           </div>
 
@@ -278,6 +278,10 @@ function AddEditWareHouseInventory(props) {
                 value={qty}
                 onChange={onChangeValue}
                 className="textInputStyle"
+                onKeyDown={(evt) =>
+                  (evt.key === "e" || evt.key === "+" || evt.key === "-") &&
+                  evt.preventDefault()
+                }
               />
             </div>
           </div>
@@ -345,7 +349,7 @@ function AddEditWareHouseInventory(props) {
                   variant="contained"
                   color="primary"
                 >
-                  Edit WareHouse Inventory
+                  Update WareHouse Inventory
                 </Button>
               )}
             </div>

@@ -16,7 +16,9 @@ import PurchaseRequestRoutes from "../subRoutes/purchaseRequest";
 import WarehouseInventoryRoutes from "../subRoutes/warehouseInventory";
 import StaffRoutes from "../subRoutes/staff";
 import FuInventoryRoutes from "./fuInventory";
-import ReplenishmentRoutes from "./replenishmentRoutes";
+import ReplenishmentRoutesForFU from "./replenishmentRoutesForFU";
+import ReplenishmentRoutesForBU from "./replenishmentRoutesForBU";
+
 import MaterialReceivingRoutes from "./materialReceiving";
 import ReceiveRequestsRoutes from "./receiveRequests";
 
@@ -47,11 +49,7 @@ class ControlRoomRoutes extends React.PureComponent {
     return (
       <Switch>
         <Route exact path={`${this.props.match.url}`} component={ControlRoom} />
-        <PrivateRoute
-          exact
-          path={`${this.props.match.url}/wms`}
-          component={WMS}
-        />
+        <Route exact path={`${this.props.match.url}/wms`} component={WMS} />
 
         <PrivateRoute
           path={`${this.props.match.url}/staff`}
@@ -59,13 +57,18 @@ class ControlRoomRoutes extends React.PureComponent {
         />
 
         <Route
-          path={`${this.props.match.url}/bus`}
-          component={BusinessUnitRoutes}
+          path={`${this.props.match.url}/fus/replenishment`}
+          component={ReplenishmentRoutesForFU}
         />
 
         <Route
-          path={`${this.props.match.url}/fus/replenishment`}
-          component={ReplenishmentRoutes}
+          path={`${this.props.match.url}/bus/replenishment`}
+          component={ReplenishmentRoutesForBU}
+        />
+
+        <Route
+          path={`${this.props.match.url}/bus`}
+          component={BusinessUnitRoutes}
         />
 
         <Route
@@ -80,7 +83,7 @@ class ControlRoomRoutes extends React.PureComponent {
 
         <Route
           path={`${this.props.match.url}/wms/replenishment`}
-          component={ReplenishmentRoutes}
+          component={ReplenishmentRoutesForFU}
         />
 
         <PrivateRoute
