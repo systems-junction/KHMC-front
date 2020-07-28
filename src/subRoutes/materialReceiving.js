@@ -8,6 +8,7 @@ import viewPO from "../views/MaterialReceiving/viewPO";
 
 import externalRetrunRequestTable from "../views/externalReturnRequest/externalRetrunRequestTable";
 import addEditExternalReturnRequest from "../views/externalReturnRequest/addEditExternalReturnRequest";
+import ReceiveItemRoutes from "./receiveItems";
 
 class PurchaseRequest extends React.PureComponent {
   render() {
@@ -17,11 +18,6 @@ class PurchaseRequest extends React.PureComponent {
           exact
           path={`${this.props.match.url}`}
           component={materialreceiving}
-        />
-        <Route
-          exact
-          path={`${this.props.match.url}/viewpo`}
-          component={viewPO}
         />
 
         <Route
@@ -47,6 +43,17 @@ class PurchaseRequest extends React.PureComponent {
         <Route
           path={`${this.props.match.url}/viewpo/externalreturn`}
           component={externalRetrunRequestTable}
+        />
+
+        <Route
+          exact
+          path={`${this.props.match.url}/viewpo`}
+          component={viewPO}
+        />
+
+        <Route
+          path={`${this.props.match.url}/viewpo/receiveitems`}
+          component={ReceiveItemRoutes}
         />
 
         <Route path="*" component={NotFound} />

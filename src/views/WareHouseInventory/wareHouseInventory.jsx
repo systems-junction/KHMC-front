@@ -13,9 +13,10 @@ import {
   getWhInventoryUrl,
   deleteWhInventoryUrl,
   getItemsUrl,
+  deleteRadiologyServiceUrl,
 } from "../../public/endpoins";
-import Back_Arrow from "../../assets/img/Back_Arrow.png";
-
+import Back from "../../assets/img/Back_Arrow.png";
+import plus_icon from "../../assets/img/Plus.png";
 import Loader from "react-loader-spinner";
 
 import Header from "../../components/Header/Header";
@@ -36,10 +37,21 @@ import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 
 const useStyles = makeStyles(styles);
 
+const stylesB = {
+  stylesForButton: {
+    color: "white",
+    cursor: "pointer",
+    borderRadius: 10,
+    background: "#2c6ddd",
+    width: "110px",
+    height: "40px",
+    outline: "none",
+  },
+};
+
 const tableHeading = ["Item Name", "Quantity", "Action"];
 const tableDataKeys = [["itemId", "name"], "qty"];
 const actions = { edit: true, delete: true };
-
 
 export default function WareHouseInventory(props) {
   const classes = useStyles();
@@ -130,11 +142,11 @@ export default function WareHouseInventory(props) {
 
   function deleteBuReturn() {
     const params = {
-      _id: deleteItem,
+      _id: deleteItem._id,
     };
 
     axios
-      .delete(deleteWhInventoryUrl + "/" + params._id)
+      .delete(deleteWhInventoryUrl + "/" + deleteItem._id)
       .then((res) => {
         if (res.data.success) {
           setdeleteItem("");
@@ -161,7 +173,7 @@ export default function WareHouseInventory(props) {
         position: "fixed",
         height: "100%",
         backgroundColor: "#60d69f",
-        overflowY:"scroll"
+        overflowY: "scroll",
       }}
     >
       <Header />
@@ -174,7 +186,16 @@ export default function WareHouseInventory(props) {
           </div>
 
           <div>
-            <img onClick={addNewItem} src={Add_New} />
+            <Button
+              onClick={addNewItem}
+              style={stylesB.stylesForButton}
+              variant="contained"
+              color="primary"
+            >
+              <img className="icon-style" src={plus_icon} />
+              &nbsp;&nbsp;
+              <strong style={{ fontSize: "12px" }}>Add New</strong>
+            </Button>
             {/* <img src={Search} /> */}
           </div>
         </div>
@@ -221,8 +242,8 @@ export default function WareHouseInventory(props) {
         <div style={{ marginBottom: 20 }}>
           <img
             onClick={() => props.history.goBack()}
-            src={Back_Arrow}
-            style={{ width: 60, height: 40, cursor: "pointer" }}
+            src={Back}
+            style={{ width: 45, height: 35, cursor: "pointer" }}
           />
         </div>
       </div>

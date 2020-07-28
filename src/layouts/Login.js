@@ -48,6 +48,8 @@ class Login extends React.Component {
       splash: true,
 
       buttonPressed: false,
+
+      current_user: "",
     };
   }
 
@@ -79,13 +81,18 @@ class Login extends React.Component {
           .then((res) => {
             if (res.data.success) {
               console.log(res.data);
+
               cookie.save("token", res.data.data.token, { path: "/" });
               cookie.save("current_user", res.data.data.user, { path: "/" });
               subscribeUser(res.data.data.user);
               this.setState({
                 verifiedUser: true,
                 buttonPressed: false,
+                current_user: res.data.data.user,
               });
+
+              // this.props.history.push('/home'+ '/'+res.data.data.user.staffTypeId.routeAccess);
+
               // const jsonResponse = new Response(
               //   JSON.stringify(res.data.data.user),
               //   {
@@ -125,7 +132,12 @@ class Login extends React.Component {
 
   hideSplash() {
     this.setState({ splash: false });
+
+    if(cookie.load("current_user")){
+      this.props.history.push('home')
+    }
   }
+
 
 
   render() {
@@ -156,7 +168,6 @@ class Login extends React.Component {
         }}
       >
         <Header />
-
 
         <div
           style={{
@@ -270,7 +281,7 @@ class Login extends React.Component {
                     className="row"
                     style={{
                       marginTop: 25,
-                      width: "70%",
+                      width: "73%",
                     }}
                   >
                     <div style={{}} className="container">
@@ -279,6 +290,7 @@ class Login extends React.Component {
                           width: "100%",
                           paddingTop: 12,
                           paddingBottom: 12,
+
                           backgroundColor: "#002164",
                           borderRadius: 10,
                         }}

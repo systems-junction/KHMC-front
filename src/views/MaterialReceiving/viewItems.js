@@ -21,6 +21,7 @@ import {
 import {
   addMaterialReceivingUrl,
   updateMaterialReceivingUrl,
+  getReceiveItemsUrl,
 } from "../../public/endpoins";
 
 import cookie from "react-cookies";
@@ -139,7 +140,29 @@ function AddEditPurchaseRequest(props) {
   const [openItemDialog, setOpenItemDialog] = useState(false);
   const [item, setItem] = useState("");
 
+  const [receivedItems, setReceivedItems] = useState("");
+
+  function getReceivedItems() {
+    axios
+      .get(getReceiveItemsUrl)
+      .then((res) => {
+        if (res.data.success) {
+          console.log(res.data.data.receiveItems);
+          setReceivedItems(res.data.data.receiveItems);
+        } else if (!res.data.success) {
+          setErrorMsg(res.data.error);
+          setOpenNotification(true);
+        }
+        return res;
+      })
+      .catch((e) => {
+        console.log("error: ", e);
+      });
+  }
+
   useEffect(() => {
+    getReceivedItems();
+
     setCurrentUser(cookie.load("current_user"));
 
     setcomingFor(props.history.location.state.comingFor);
@@ -178,13 +201,22 @@ function AddEditPurchaseRequest(props) {
   }, []);
 
   function handleReceive(rec) {
-    console.log("rec", rec);
+    let found = false;
+    // console.log("received item in function", receivedItems);
 
-    if (rec.status === "pending_approval_from_accounts") {
-      alert("Item Already Received")
+    for (let i = 0; i < receivedItems.length; i++) {
+      if (receivedItems[i].prId._id === rec._id) {
+        found = true;
+        break;
+      }
+    }
+
+    if (found) {
+      setErrorMsg("Item has already been received");
+      setOpenNotification(true);
       return;
     } else {
-      let path = `/home/controlroom/wms/receiveitems/add`;
+      let path = `viewpo/receiveitems/add`;
       props.history.push({
         pathname: path,
         state: {
@@ -212,6 +244,13 @@ function AddEditPurchaseRequest(props) {
   //   });
   // }
 
+  if (openNotification) {
+    setTimeout(() => {
+      setOpenNotification(false);
+      setErrorMsg("");
+    }, 2000);
+  }
+
   return (
     <div>
       <CustomTable
@@ -229,9 +268,10 @@ function AddEditPurchaseRequest(props) {
         <img
           onClick={() => props.history.goBack()}
           src={Back_Arrow}
-          style={{ width: 60, height: 40, cursor: "pointer" }}
+          style={{ width: 45, height: 35, cursor: "pointer" }}
         />
       </div>
+      <Notification msg={errorMsg} open={openNotification} />
     </div>
   );
 }

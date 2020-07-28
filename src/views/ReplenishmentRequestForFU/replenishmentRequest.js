@@ -11,6 +11,9 @@ import {
   getReplenishmentRequestUrlFU,
   deleteReplenishmentRequestUrl,
   getFunctionalUnitFromHeadIdUrl,
+  getReceiveRequestFUUrl,
+  getInternalReturnRequestsFU,
+  getFunctionalUnitByIdUrl,
 } from "../../public/endpoins";
 
 import Loader from "react-loader-spinner";
@@ -74,6 +77,12 @@ const actionsForFUInventoryKeeper = {
   returnRequest: true,
 };
 
+const actionsForAdmin = {
+  receiveItem: true,
+  returnRequest: true,
+  edit: true,
+};
+
 export default function ReplenishmentRequest(props) {
   const [purchaseRequests, setPurchaseRequest] = useState("");
   const [vendors, setVendor] = useState("");
@@ -86,34 +95,38 @@ export default function ReplenishmentRequest(props) {
 
   const [currentUser, setCurrentUser] = useState(cookie.load("current_user"));
   const [fuObj, setFUObj] = useState("");
+  const [receiveRequests, setReceiveRequests] = useState("");
 
-  if (openNotification) {
-    setTimeout(() => {
-      setOpenNotification(false);
-      setErrorMsg("");
-    }, 2000);
-  }
+  const [returnRequests, setReturnRequests] = useState("");
 
   function getPurchaseRequests() {
     axios
       .get(getReplenishmentRequestUrlFU)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data);
+          console.log(
+            "respose for rep request for warehouse member",
+            res.data.data
+          );
+
+          let repRequest = res.data.data;
+          // repRequest = res.data.data.filter(
+          //   (order) => order.fuId._id === props.match.params.fuName
+          // );
 
           if (currentUser.staffTypeId.type === "FU Member") {
-            let repRequest = res.data.data;
+            // let repRequest = res.data.data;
             let temp = [];
             for (let i = 0; i < repRequest.length; i++) {
-              if (repRequest[i].fuId.fuHead === currentUser.staffId) {
-                temp.push(repRequest[i]);
-              }
+              // if (repRequest[i].fuId.fuHead === currentUser.staffId) {
+              temp.push(repRequest[i]);
+              // }
             }
             console.log("rep array after filter", temp);
             setPurchaseRequest(temp.reverse());
           } else {
             if (currentUser.staffTypeId.type === "Warehouse Incharge") {
-              let repRequest = res.data.data;
+              // let repRequest = res.data.data;
               let temp = [];
               for (let i = 0; i < repRequest.length; i++) {
                 if (
@@ -127,20 +140,25 @@ export default function ReplenishmentRequest(props) {
               // console.log("rep array after filter", temp);
               setPurchaseRequest(temp.reverse());
             } else if (currentUser.staffTypeId.type === "FU Inventory Keeper") {
-              let repRequest = res.data.data;
+              // let repRequest = res.data.data;
               let temp = [];
               for (let i = 0; i < repRequest.length; i++) {
                 if (
                   repRequest[i].status === "Delivery in Progress" ||
-                  repRequest[i].status === "Received"
+                  repRequest[i].status === "Received" ||
+                  repRequest[i].status === "Returned because of Issue" ||
+                  repRequest[i].status === "Partially Received"
                 ) {
                   temp.push(repRequest[i]);
                 }
               }
-              // console.log("rep array after filter", temp);
+              console.log(
+                "rep array after filter for fu inventory keeper",
+                temp
+              );
               setPurchaseRequest(temp.reverse());
             } else {
-              setPurchaseRequest(res.data.data.reverse());
+              setPurchaseRequest(repRequest.reverse());
             }
           }
           //   setVendor(res.data.data.vendor);
@@ -173,14 +191,69 @@ export default function ReplenishmentRequest(props) {
       .catch((e) => {
         console.log("error: ", e);
       });
+
+    // axios
+    //   .get(getFunctionalUnitByIdUrl + "/" + props.match.params.fuName)
+    //   .then((res) => {
+    //     if (res.data.success) {
+    //       console.log("FU Obj", res.data.data);
+    //       setFUObj(res.data.data);
+    //     } else if (!res.data.success) {
+    //       setErrorMsg(res.data.error);
+    //       setOpenNotification(true);
+    //     }
+    //     return res;
+    //   })
+    //   .catch((e) => {
+    //     console.log("error: ", e);
+    //   });
+  }
+
+  function getReceiveRequestsForFU() {
+    axios
+      .get(getReceiveRequestFUUrl)
+      .then((res) => {
+        if (res.data.success) {
+          console.log("receive requests", res.data.data.receiveItems);
+          setReceiveRequests(res.data.data.receiveItems);
+        } else if (!res.data.success) {
+          setErrorMsg(res.data.error);
+          setOpenNotification(true);
+        }
+        return res;
+      })
+      .catch((e) => {
+        console.log("error: ", e);
+      });
+  }
+
+  function getReturnRequestsForFU() {
+    axios
+      .get(getInternalReturnRequestsFU)
+      .then((res) => {
+        if (res.data.success) {
+          console.log("return requests", res.data.data);
+          setReturnRequests(res.data.data);
+        } else if (!res.data.success) {
+          setErrorMsg(res.data.error);
+          setOpenNotification(true);
+        }
+        return res;
+      })
+      .catch((e) => {
+        console.log("error: ", e);
+      });
   }
 
   useEffect(() => {
     getPurchaseRequests();
+    getReceiveRequestsForFU();
+    getReturnRequestsForFU();
 
     if (
       currentUser.staffTypeId.type === "FU Member" ||
-      currentUser.staffTypeId.type === "FU Inventory Keeper"
+      currentUser.staffTypeId.type === "FU Inventory Keeper" ||
+      currentUser.staffTypeId.type === "admin"
     ) {
       getFUFromHeadId();
     }
@@ -243,31 +316,78 @@ export default function ReplenishmentRequest(props) {
 
   function handleReceive(rec) {
     console.log("rec", rec);
-    let path = `replenishment/receive`;
-    props.history.push({
-      pathname: path,
-      state: {
-        comingFor: "add",
-        selectedItem: rec,
-      },
-    });
+
+    let found = false;
+    for (let i = 0; i < receiveRequests.length; i++) {
+      if (receiveRequests[i].replenishmentRequestId === rec._id) {
+        console.log("found");
+        found = true;
+        break;
+      }
+    }
+    if (found) {
+      setOpenNotification(true);
+      setErrorMsg("Item has already been received");
+    } else {
+      let path = `receive/add`;
+      props.history.push({
+        pathname: path,
+        state: {
+          comingFor: "add",
+          selectedItem: rec,
+        },
+      });
+    }
   }
 
   function handleAddReturnRequest(rec) {
     console.log("rec", rec);
-    let path = `replenishment/returnitems`;
-    props.history.push({
-      pathname: path,
-      state: {
-        comingFor: "add",
-        selectedItem: rec,
-      },
-    });
+
+    // console.log("rec", returnRequests);
+
+    let alreadyReturned = false;
+    let alreadyReceived = false;
+
+    for (let i = 0; i < returnRequests.length; i++) {
+      if (
+        returnRequests[i].replenishmentRequestFU &&
+        returnRequests[i].replenishmentRequestFU._id === rec._id
+      ) {
+        alreadyReturned = true;
+        break;
+      }
+    }
+
+    for (let i = 0; i < receiveRequests.length; i++) {
+      if (receiveRequests[i].replenishmentRequestId === rec._id) {
+        alreadyReceived = true;
+        break;
+      }
+    }
+
+    if (alreadyReturned) {
+      setOpenNotification(true);
+      setErrorMsg("Item has already been returned");
+    }
+
+    if (!alreadyReceived) {
+      setOpenNotification(true);
+      setErrorMsg("Item has not been received yet");
+    } else if (alreadyReturned === false && alreadyReceived === true) {
+      let path = `receive/returnitems`;
+      props.history.push({
+        pathname: path,
+        state: {
+          comingFor: "add",
+          selectedItem: rec,
+        },
+      });
+    }
   }
 
   function viewReturnRequests() {
     // console.log("rec", rec);
-    let path = `replenishment/returnitems/view`;
+    let path = `/home/wms/fus/returnitems`;
     props.history.push({
       pathname: path,
       state: {
@@ -275,6 +395,13 @@ export default function ReplenishmentRequest(props) {
         selectedItem: fuObj,
       },
     });
+  }
+
+  if (openNotification) {
+    setTimeout(() => {
+      setOpenNotification(false);
+      setErrorMsg("");
+    }, 2500);
   }
 
   return (
@@ -298,7 +425,9 @@ export default function ReplenishmentRequest(props) {
             <h4>Replenishment Request</h4>
           </div>
 
-          {currentUser && currentUser.staffTypeId.type === "FU Member" ? (
+          {currentUser &&
+          (currentUser.staffTypeId.type === "FU Member" ||
+            currentUser.staffTypeId.type === "admin") ? (
             <div>
               <img onClick={addNewItem} src={Add_New} />
               {/* <img src={Search} /> */}
@@ -307,14 +436,14 @@ export default function ReplenishmentRequest(props) {
             undefined
           )}
 
-          {currentUser &&
+          {/* {currentUser &&
           currentUser.staffTypeId.type === "FU Inventory Keeper" ? (
             <div>
               <img onClick={() => viewReturnRequests()} src={view_all} />
             </div>
           ) : (
             undefined
-          )}
+          )} */}
         </div>
 
         <div
@@ -341,9 +470,19 @@ export default function ReplenishmentRequest(props) {
                       ? tableHeadingForFUHead
                       : tableHeading
                   }
+                  // action={
+                  //   currentUser.staffTypeId.type === "FU Inventory Keeper"
+                  //     ? actionsForFUInventoryKeeper
+                  //     : currentUser.staffTypeId.type === "admin"
+                  //     ? actionsForAdmin
+                  //     : actions
+                  // }
+
                   action={
-                    currentUser.staffTypeId.type === "FU Inventory Keeper"
+                    props.match.path === "/home/wms/fus/receive"
                       ? actionsForFUInventoryKeeper
+                      : props.match.path === "/home/wms/fus/receive"
+                      ? actionsForAdmin
                       : actions
                   }
                   handleEdit={handleEdit}

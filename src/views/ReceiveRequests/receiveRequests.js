@@ -5,7 +5,7 @@ import Notification from "../../components/Snackbar/Notification.js";
 import CustomTable from "../../components/Table/Table";
 import ConfirmationModal from "../../components/Modal/confirmationModal";
 import axios from "axios";
-import { getReceiveRequestsUrl } from "../../public/endpoins";
+import { getReceiveRequestsUrl, socketUrl } from "../../public/endpoins";
 import Loader from "react-loader-spinner";
 
 import Header from "../../components/Header/Header";
@@ -26,6 +26,8 @@ import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 
 import AddedPurchaseRequestTable from "../PurchaseOrders/addedPurchaseRequestTable";
 
+import socketIOClient from "socket.io-client";
+
 const tableHeading = [
   "PO No",
   "Date/Time Send",
@@ -37,9 +39,9 @@ const tableHeading = [
 ];
 
 const tableDataKeys = [
-  ['poId', 'purchaseOrderNo'],
-  ['poId', 'sentAt'],
-  ['poId', 'generated'],
+  ["poId", "purchaseOrderNo"],
+  ["poId", "sentAt"],
+  ["poId", "generated"],
   ["vendorId", "englishName"],
   "updatedAt",
   "status",
@@ -81,15 +83,15 @@ export default function PurchaseRequest(props) {
 
           let temp = [];
           for (let i = 0; i < res.data.data.length; i++) {
-            let obj={
+            let obj = {
               ...res.data.data[i],
-             poId: res.data.data[i].mrId.poId
-            }
-            temp = [...temp,obj];
+              poId: res.data.data[i].mrId.poId,
+            };
+            temp = [...temp, obj];
           }
 
-          console.log('temp',temp)
-          setMaterialReceivings(temp);
+          console.log("temp", temp);
+          setMaterialReceivings(temp.reverse());
           setVendor(res.data.data.vendors);
           setStatus(res.data.data.statues);
           setPurchaseOrders(res.data.data.purchaseOrders);
@@ -106,7 +108,24 @@ export default function PurchaseRequest(props) {
   }
 
   useEffect(() => {
+    const socket = socketIOClient(socketUrl);
+    socket.emit("connection");
+    socket.on("get_data", (data) => {
+      let temp = [];
+      for (let i = 0; i < data.length; i++) {
+        let obj = {
+          ...data[i],
+          poId: data[i].mrId.poId,
+        };
+        temp = [...temp, obj];
+      }
+      setMaterialReceivings(temp.reverse());
+      console.log("res after adding through socket", data);
+    });
+
     getPurchaseRequests();
+
+    return () => socket.disconnect();
   }, []);
 
   const addNewItem = () => {
@@ -134,7 +153,7 @@ export default function PurchaseRequest(props) {
         statues,
         purchaseRequests,
         purchaseOrders,
-        mrId: rec.mrId._id
+        mrId: rec.mrId._id,
       },
     });
   }

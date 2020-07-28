@@ -8,6 +8,7 @@ import axios from "axios";
 import {
   getPurchaseOrderUrl,
   deletePurchaseOrderUrl,
+  socketUrl,
 } from "../../public/endpoins";
 import Loader from "react-loader-spinner";
 
@@ -15,7 +16,8 @@ import Header from "../../components/Header/Header";
 
 import Add_New from "../../assets/img/Add_New.png";
 import purchase_order from "../../assets/img/Purchase Order.png";
-import Back_Arrow from "../../assets/img/Back_Arrow.png";
+import plus_icon from "../../assets/img/Plus.png";
+import Back from "../../assets/img/Back_Arrow.png";
 import Search from "../../assets/img/Search.png";
 import Control_Room from "../../assets/img/Control_Room.png";
 
@@ -28,6 +30,20 @@ import Active from "../../assets/img/Active.png";
 import cookie from "react-cookies";
 
 import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
+
+import socketIOClient from "socket.io-client";
+
+const styles = {
+  stylesForButton: {
+    color: "white",
+    cursor: "pointer",
+    borderRadius: 10,
+    background: "#2c6ddd",
+    width: "110px",
+    height: "40px",
+    outline: "none",
+  },
+};
 
 const tableHeading = [
   "PO No",
@@ -67,7 +83,15 @@ const tableDataKeysForCommittee = [
   "committeeStatus",
 ];
 
-const actions = { edit: true, delete: true };
+const actionsForCommitteeMemeber = {
+  edit: true,
+  delete: false,
+};
+
+const actions = {
+  edit: true,
+  delete: true,
+};
 
 export default function PurchaseRequest(props) {
   const [currentUser, setCurrentUser] = useState(cookie.load("current_user"));
@@ -97,7 +121,7 @@ export default function PurchaseRequest(props) {
       .then((res) => {
         if (res.data.success) {
           console.log(res.data.data);
-          setPurchaseOrders(res.data.data.purchaseOrder);
+          setPurchaseOrders(res.data.data.purchaseOrder.reverse());
           setVendor(res.data.data.vendor);
           setStatus(res.data.data.status);
           setGenerated(res.data.data.generated);
@@ -114,7 +138,16 @@ export default function PurchaseRequest(props) {
   }
 
   useEffect(() => {
+    const socket = socketIOClient(socketUrl);
+    socket.emit("connection");
+    socket.on("get_data", (data) => {
+      setPurchaseOrders(data.reverse());
+      console.log("res after adding through socket", data);
+    });
+
     getPurchaseRequests();
+
+    return () => socket.disconnect();
   }, []);
 
   const addNewItem = () => {
@@ -197,12 +230,23 @@ export default function PurchaseRequest(props) {
 
           <div>
             {currentUser &&
-            currentUser.staffTypeId.type !== "Committe Member" ? (
-              <img onClick={addNewItem} src={Add_New} />
+            currentUser.staffTypeId.type !== 'Committe Member' ? (
+            // {currentUser && currentUser.permission.add ? (
+              <Button
+                onClick={addNewItem}
+                style={styles.stylesForButton}
+                //className='addButton'
+                variant="contained"
+                color="primary"
+              >
+                <img className="icon-style" src={plus_icon} />
+                &nbsp;&nbsp;
+                <strong style={{ fontSize: "12px" }}>Add New</strong>
+              </Button>
             ) : (
               undefined
             )}
-            <img src={Search} style={{ maxWidth: "35%", height: "auto" }} />
+            <img className="img-style" src={Search} />
           </div>
         </div>
 
@@ -218,11 +262,13 @@ export default function PurchaseRequest(props) {
             <div>
               <div>
                 {currentUser.staffTypeId.type === "Committe Member" ? (
+                  // {currentUser.permission.add === false &&
+                  // currentUser.permission.edit === true ? (
                   <CustomTable
                     tableData={purchaseOrders}
                     tableDataKeys={tableDataKeysForCommittee}
                     tableHeading={tableHeadingForCommittee}
-                    action={actions}
+                    action={actionsForCommitteeMemeber}
                     handleEdit={handleEdit}
                     handleDelete={handleDelete}
                     borderBottomColor={"#60d69f"}
@@ -253,8 +299,8 @@ export default function PurchaseRequest(props) {
               <div style={{ marginBottom: 20 }}>
                 <img
                   onClick={() => props.history.goBack()}
-                  src={Back_Arrow}
-                  style={{ width: 60, height: 40, cursor: "pointer" }}
+                  src={Back}
+                  style={{ width: 45, height: 35, cursor: "pointer" }}
                 />
               </div>
               <Notification msg={errorMsg} open={openNotification} />

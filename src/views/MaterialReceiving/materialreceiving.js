@@ -8,9 +8,10 @@ import axios from "axios";
 import {
   getMaterialReceivingUrl,
   deleteMaterialReceivingUrl,
+  socketUrl,
 } from "../../public/endpoins";
 import Loader from "react-loader-spinner";
-
+import Back from "../../assets/img/Back_Arrow.png";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -33,18 +34,20 @@ import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 
 import AddedPurchaseRequestTable from "../PurchaseOrders/addedPurchaseRequestTable";
 
+import socketIOClient from "socket.io-client";
+
 const tableHeading = [
   "Purchase Orders",
-  "Status",
   "Vendor",
   "PO Sent Date",
+  "Status",
   "Action",
 ];
 const tableDataKeys = [
   ["poId", "purchaseOrderNo"],
-  "status",
   ["vendorId", "englishName"],
   ["poId", "sentAt"],
+  "status",
 ];
 
 const keysForOrder = [
@@ -112,7 +115,7 @@ export default function PurchaseRequest(props) {
       .then((res) => {
         if (res.data.success) {
           console.log(res.data.data);
-          setMaterialReceivings(res.data.data.materialReceivings);
+          setMaterialReceivings(res.data.data.materialReceivings.reverse());
           setVendor(res.data.data.vendors);
           setStatus(res.data.data.statues);
           setPurchaseOrders(res.data.data.purchaseOrders);
@@ -129,7 +132,16 @@ export default function PurchaseRequest(props) {
   }
 
   useEffect(() => {
+    const socket = socketIOClient(socketUrl);
+    socket.emit("connection");
+    socket.on("get_data", (data) => {
+      setMaterialReceivings(data.reverse());
+      console.log("res after adding through socket", data);
+    });
+
     getPurchaseRequests();
+
+    return () => socket.disconnect();
   }, []);
 
   // const addNewItem = () => {
@@ -281,7 +293,17 @@ export default function PurchaseRequest(props) {
                 onConfirmDelete={() => deleteVendor()}
                 setdeleteItem={() => setdeleteItem("")}
               />
-
+              <div style={{ marginBottom: 20 }}>
+                <img
+                  onClick={() => props.history.goBack()}
+                  src={Back}
+                  style={{
+                    width: 45,
+                    height: 35,
+                    cursor: "pointer",
+                  }}
+                />
+              </div>
               <Notification msg={errorMsg} open={openNotification} />
             </div>
           ) : (

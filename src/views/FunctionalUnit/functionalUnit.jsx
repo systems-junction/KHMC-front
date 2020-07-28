@@ -17,6 +17,7 @@ import {
 import Loader from "react-loader-spinner";
 
 import cookie from "react-cookies";
+import plus_icon from "../../assets/img/Plus.png";
 
 import Header from "../../components/Header/Header";
 
@@ -33,25 +34,31 @@ import Inactive from "../../assets/img/Inactive.png";
 import Active from "../../assets/img/Active.png";
 
 import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
+import add_new from "../../assets/img/Plus.png";
 
 const useStyles = makeStyles(styles);
 
-const tableHeading = [
-  "Functional Unit Name",
-  "FU Head",
-  "Business Unit",
-  "Status",
-  "Action",
-];
+const stylesB = {
+  stylesForButton: {
+    color: "white",
+    cursor: "pointer",
+    borderRadius: 10,
+    background: "#2c6ddd",
+    width: Button.name === "add" ? "110px" : "auto",
+    height: "40px",
+    outline: "none",
+  },
+};
+const tableHeading = ["FU Name", "FU Head", "BU Name", "Status", "Action"];
 const tableDataKeys = [
   "fuName",
   ["fuHead", "firstName"],
   ["buId", "buName"],
   "status",
 ];
-const actions = { edit: true, active: true };
+const actions = { edit: true, active: true, view: true };
 
-export default function FunctionalUnit(props) {
+function FunctionalUnit(props) {
   const classes = useStyles();
   const [functionalUnits, setFunctionalUnits] = useState("");
   const [businessUnits, setBusinessUnits] = useState("");
@@ -101,6 +108,21 @@ export default function FunctionalUnit(props) {
       pathname: path,
       state: {
         comingFor: "edit",
+        selectedItem: rec,
+        statues,
+        staff,
+        businessUnits,
+      },
+    });
+  }
+
+  function handleView(rec) {
+    console.log(rec);
+    let path = `fus/fuinventory/${rec._id}`;
+    props.history.push({
+      pathname: path,
+      state: {
+        comingFor: "view",
         selectedItem: rec,
         statues,
         staff,
@@ -190,27 +212,34 @@ export default function FunctionalUnit(props) {
             <h4>Functional Unit</h4>
           </div>
 
-          <div>
-            <Button
-              onClick={() =>
-                props.history.push("/home/controlroom/fuinventory")
-              }
-              color={"primary"}
-              variant="outlined"
-            >
-              View Inventory
-            </Button>
-          </div>
-
-          <div>
-            <img
-              onClick={addNewItem}
-              src={Add_New}
-              style={{ maxWidth: "60%", height: "auto" }}
-            />
-            <img src={Search} style={{ width: "35%", height: "auto" }} />
-          </div>
+          <Button
+            name="inventry"
+            onClick={() => addNewItem()}
+            style={stylesB.stylesForButton}
+            variant="contained"
+            color="primary"
+          >
+            <img src={add_new} style={styles.stylesForIcon} />
+            &nbsp;&nbsp;
+            <strong>Add New</strong>
+          </Button>
         </div>
+        {/* 
+        <div>
+          <img
+            onClick={addNewItem}
+            style={stylesB.stylesForButton}
+            variant="contained"
+            color="primary"
+          >
+            <Button>
+              <img src={plus_icon} />
+              &nbsp;&nbsp;
+              <strong>Add New</strong>
+            </Button>
+            <img src={Search} style={{ width: "22.5%", height: "auto" }} />
+          </img>
+        </div> */}
 
         <div
           style={{
@@ -228,6 +257,7 @@ export default function FunctionalUnit(props) {
                 action={actions}
                 handleEdit={handleEdit}
                 handleStatus={handleStatus}
+                handleView={handleView}
                 borderBottomColor={"#60d69f"}
                 borderBottomWidth={20}
               />
@@ -243,7 +273,7 @@ export default function FunctionalUnit(props) {
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back_Arrow}
-                  style={{ width: 60, height: 40, cursor: "pointer" }}
+                  style={{ width: 45, height: 35, cursor: "pointer" }}
                 />
               </div>
             </div>
@@ -257,3 +287,5 @@ export default function FunctionalUnit(props) {
     </div>
   );
 }
+
+export default FunctionalUnit;

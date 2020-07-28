@@ -1,73 +1,72 @@
 /*eslint-disable*/
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react'
 // @material-ui/core components
-import Button from "@material-ui/core/Button";
-import Notification from "../../components/Snackbar/Notification.js";
-import Paper from "@material-ui/core/Paper";
-import CustomTable from "../../components/Table/Table";
-import ConfirmationModal from "../../components/Modal/confirmationModal";
-import axios from "axios";
+import Button from '@material-ui/core/Button'
+import Notification from '../../components/Snackbar/Notification.js'
+import Paper from '@material-ui/core/Paper'
+import CustomTable from '../../components/Table/Table'
+import ConfirmationModal from '../../components/Modal/confirmationModal'
+import axios from 'axios'
 import {
   getReceiveItemsUrl,
   deleteReceiveItemsUrl,
-} from "../../public/endpoins";
-import Loader from "react-loader-spinner";
+} from '../../public/endpoins'
+import Loader from 'react-loader-spinner'
 
-import Header from "../../components/Header/Header";
+import Header from '../../components/Header/Header'
 
-import Add_New from "../../assets/img/Add_New.png";
-import business_Unit from "../../assets/img/business_Unit.png";
+import Add_New from '../../assets/img/Add_New.png'
+import business_Unit from '../../assets/img/business_Unit.png'
 
-import Search from "../../assets/img/Search.png";
-import Control_Room from "../../assets/img/Control_Room.png";
+import Search from '../../assets/img/Search.png'
+import Control_Room from '../../assets/img/Control_Room.png'
 
-import Edit from "../../assets/img/Edit.png";
+import Edit from '../../assets/img/Edit.png'
 
-import Inactive from "../../assets/img/Inactive.png";
+import Inactive from '../../assets/img/Inactive.png'
 
-import Back_Arrow from "../../assets/img/Back_Arrow.png";
+import Back from '../../assets/img/Back_Arrow.png'
 
-import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
-
+import '../../assets/jss/material-dashboard-react/components/loaderStyle.css'
 
 const tableHeading = [
-  "Item Code",
-  "Item Name",
-  "Current Qty",
-  "Required Qty",
-  "Received Qty",
-  "Batch No",
-  "Unit",
-  "Date Received",
-];
+  'Item Code',
+  'Item Name',
+  'Current Qty',
+  'Required Qty',
+  'Received Qty',
+  'Batch No',
+  'Unit',
+  'Date Received',
+]
 const tableDataKeys = [
-   ['itemId', 'itemCode'],
-   ['itemId', 'name'],
-  "currentQty",
-  "requestedQty",
-  "receivedQty",
-  "batchNumber",
-  "unit",
-  "dateReceived",
-];
+  ['itemId', 'itemCode'],
+  ['itemId', 'name'],
+  'currentQty',
+  'requestedQty',
+  'receivedQty',
+  'batchNumber',
+  'unit',
+  'dateReceived',
+]
 
-const actions = { edit: false, delete: false };
+const actions = { edit: false, delete: false }
 
 export default function PurchaseRequest(props) {
-  const [purchaseRequests, setPurchaseRequest] = useState("");
-  const [vendors, setVendor] = useState("");
-  const [statues, setStatus] = useState("");
-  const [items, setItems] = useState("");
-  const [deleteItem, setdeleteItem] = useState("");
-  const [modalVisible, setModalVisible] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
-  const [openNotification, setOpenNotification] = useState(false);
+  const [purchaseRequests, setPurchaseRequest] = useState('')
+  const [vendors, setVendor] = useState('')
+  const [statues, setStatus] = useState('')
+  const [items, setItems] = useState('')
+  const [deleteItem, setdeleteItem] = useState('')
+  const [modalVisible, setModalVisible] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
+  const [openNotification, setOpenNotification] = useState(false)
 
   if (openNotification) {
     setTimeout(() => {
-      setOpenNotification(false);
-      setErrorMsg("");
-    }, 2000);
+      setOpenNotification(false)
+      setErrorMsg('')
+    }, 2000)
   }
 
   function getPurchaseRequests() {
@@ -75,86 +74,86 @@ export default function PurchaseRequest(props) {
       .get(getReceiveItemsUrl)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data.receiveItems);
-          setPurchaseRequest(res.data.data.receiveItems);
+          console.log(res.data.data.receiveItems)
+          setPurchaseRequest(res.data.data.receiveItems)
           //   setVendor(res.data.data.vendor);
           //   setStatus(res.data.data.status);
           //   setItems(res.data.data.items);
         } else if (!res.data.success) {
-          setErrorMsg(res.data.error);
-          setOpenNotification(true);
+          setErrorMsg(res.data.error)
+          setOpenNotification(true)
         }
-        return res;
+        return res
       })
       .catch((e) => {
-        console.log("error: ", e);
-      });
+        console.log('error: ', e)
+      })
   }
 
   useEffect(() => {
-    getPurchaseRequests();
-  }, []);
+    getPurchaseRequests()
+  }, [])
 
   const addNewItem = () => {
-    let path = `receiveitems/add`;
+    let path = `receiveitems/add`
     props.history.push({
       pathname: path,
-      state: { comingFor: "add", vendors, statues, items },
-    });
-  };
+      state: { comingFor: 'add', vendors, statues, items },
+    })
+  }
 
   function handleEdit(rec) {
-    let path = `receiveitems/edit`;
+    let path = `receiveitems/edit`
     props.history.push({
       pathname: path,
-      state: { comingFor: "edit", selectedItem: rec, vendors, statues, items },
-    });
+      state: { comingFor: 'edit', selectedItem: rec, vendors, statues, items },
+    })
   }
 
   function handleDelete(id) {
-    setModalVisible(true);
-    setdeleteItem(id);
+    setModalVisible(true)
+    setdeleteItem(id)
   }
 
   function deleteVendor() {
     const params = {
       _id: deleteItem,
-    };
+    }
 
     axios
-      .delete(deleteReceiveItemsUrl + "/" + params._id)
+      .delete(deleteReceiveItemsUrl + '/' + params._id)
       .then((res) => {
         if (res.data.success) {
-          setdeleteItem("");
-          setModalVisible(false);
-          window.location.reload(false);
+          setdeleteItem('')
+          setModalVisible(false)
+          window.location.reload(false)
         } else if (!res.data.success) {
-          setErrorMsg(res.data.error);
-          setOpenNotification(true);
+          setErrorMsg(res.data.error)
+          setOpenNotification(true)
         }
-        return res;
+        return res
       })
       .catch((e) => {
-        console.log("error while deletion ", e);
-      });
+        console.log('error while deletion ', e)
+      })
   }
 
   return (
     <div
       style={{
-        display: "flex",
-        flexDirection: "column",
+        display: 'flex',
+        flexDirection: 'column',
         flex: 1,
-        position: "fixed",
-        width: "100%",
-        height: "100%",
-        backgroundColor: "#60d69f",
-        overflowY: "scroll",
+        position: 'fixed',
+        width: '100%',
+        height: '100%',
+        backgroundColor: '#60d69f',
+        overflowY: 'scroll',
       }}
     >
       <Header />
-      <div className="cPadding">
-        <div className="subheader">
+      <div className='cPadding'>
+        <div className='subheader'>
           <div>
             <img src={business_Unit} />
             <h4>Receive Items</h4>
@@ -212,8 +211,8 @@ export default function PurchaseRequest(props) {
         <div
           style={{
             flex: 4,
-            display: "flex",
-            flexDirection: "column",
+            display: 'flex',
+            flexDirection: 'column',
           }}
         >
           {purchaseRequests ? (
@@ -226,37 +225,35 @@ export default function PurchaseRequest(props) {
                   action={actions}
                   handleEdit={handleEdit}
                   handleDelete={handleDelete}
-                  borderBottomColor={"#60d69f"}
+                  borderBottomColor={'#60d69f'}
                   borderBottomWidth={20}
                 />
               </div>
 
               <ConfirmationModal
                 modalVisible={modalVisible}
-                msg="Are you sure want to delete the record?"
+                msg='Are you sure want to delete the record?'
                 hideconfirmationModal={() => setModalVisible(false)}
                 onConfirmDelete={() => deleteVendor()}
-                setdeleteItem={() => setdeleteItem("")}
+                setdeleteItem={() => setdeleteItem('')}
               />
 
               <Notification msg={errorMsg} open={openNotification} />
             </div>
           ) : (
-            <div
-            className="LoaderStyle"
-            >
-              <Loader type="TailSpin" color="red" height={50} width={50} />
+            <div className='LoaderStyle'>
+              <Loader type='TailSpin' color='red' height={50} width={50} />
             </div>
           )}
         </div>
         <div style={{ marginBottom: 20 }}>
           <img
             onClick={() => props.history.goBack()}
-            src={Back_Arrow}
-            style={{ width: 60, height: 40, cursor: "pointer" }}
+            src={Back}
+            style={{ width: 45, height: 35, cursor: 'pointer' }}
           />
         </div>
       </div>
     </div>
-  );
+  )
 }

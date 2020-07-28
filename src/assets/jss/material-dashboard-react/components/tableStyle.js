@@ -1,5 +1,4 @@
-
-const tableStyle = theme => ({
+const tableStyle = (theme) => ({
   // warningTableHeader: {
   //   color: warningColor[0]
   // },
@@ -26,11 +25,10 @@ const tableStyle = theme => ({
     width: '100%',
     maxWidth: '100%',
     backgroundColor: 'transparent',
-    borderSpacing: "0",
-    borderCollapse: "collapse",
+    borderSpacing: '0',
+    borderCollapse: 'collapse',
     // border: '1px solid rgb(165, 165, 165)',
-    fontFamily:'Open Sans,sans-serif',
-
+    fontFamily: 'Open Sans,sans-serif',
   },
   tableHeadCell: {
     // color: "inherit",
@@ -38,10 +36,9 @@ const tableStyle = theme => ({
     '&, &$tableCell': {
       fontSize: '1rem',
       fontWeight: '400',
-    fontFamily:'Open Sans,sans-serif',
-
+      fontFamily: 'Open Sans,sans-serif',
     },
-    textAlign: 'center'
+    textAlign: 'center',
   },
   tableCell: {
     // ...defaultFont,
@@ -50,17 +47,17 @@ const tableStyle = theme => ({
     verticalAlign: 'middle',
     // fontSize: '0.8125rem',
     // border: '1px solid rgb(165, 165, 165)',
-    fontFamily:'Open Sans,sans-serif',
+    fontFamily: 'Open Sans,sans-serif',
 
-    textAlign:"center",
+    textAlign: 'center',
   },
 
   tableResponsive: {
     width: '100%',
     marginTop: theme.spacing(3),
-    overflowX: 'auto'
+    overflowX: 'auto',
   },
-  
+
   tableHeadRow: {
     height: '56px',
     color: 'inherit',
@@ -69,24 +66,23 @@ const tableStyle = theme => ({
     verticalAlign: 'middle',
     // backgroundColor: '#2873CF'
   },
-  
+
   tableBodyRow: {
     height: '48px',
     color: 'inherit',
     display: 'table-row',
     outline: 'none',
     verticalAlign: 'middle',
-
   },
-  
+
   tableData: {
     fontSize: '0.8125rem',
     fontWeight: '400',
     // fontFamily: 'Ubuntu'
   },
   pointer: {
-    cursor: 'pointer'
-  }
-});
+    cursor: 'pointer',
+  },
+})
 
-export default tableStyle;
+export default tableStyle

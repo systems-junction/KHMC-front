@@ -1,60 +1,60 @@
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable array-callback-return */
 /* eslint-disable react/jsx-indent */
-import React, { useEffect, useState, useReducer } from "react";
-import TextField from "@material-ui/core/TextField";
-import Select from "@material-ui/core/Select";
-import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import Button from "@material-ui/core/Button";
-import tableStyles from "../../assets/jss/material-dashboard-react/components/tableStyle.js";
-import axios from "axios";
-import Notification from "../../components/Snackbar/Notification.js";
-import DateFnsUtils from "@date-io/date-fns";
+import React, { useEffect, useState, useReducer } from 'react'
+import TextField from '@material-ui/core/TextField'
+import Select from '@material-ui/core/Select'
+import { makeStyles } from '@material-ui/core/styles'
+import InputLabel from '@material-ui/core/InputLabel'
+import MenuItem from '@material-ui/core/MenuItem'
+import Button from '@material-ui/core/Button'
+import tableStyles from '../../assets/jss/material-dashboard-react/components/tableStyle.js'
+import axios from 'axios'
+import Notification from '../../components/Snackbar/Notification.js'
+import DateFnsUtils from '@date-io/date-fns'
 import {
   DateTimePicker,
   MuiPickersUtilsProvider,
   TimePicker,
   DatePicker,
-} from "@material-ui/pickers";
+} from '@material-ui/pickers'
 import {
   addMaterialReceivingUrl,
   updateMaterialReceivingUrl,
   getSingleMaterialReceivingUrl,
-} from "../../public/endpoins";
+} from '../../public/endpoins'
 
-import cookie from "react-cookies";
+import cookie from 'react-cookies'
 
-import Header from "../../components/Header/Header";
+import Header from '../../components/Header/Header'
 
-import VIewAll from "../../assets/img/view_all.png";
-import business_Unit from "../../assets/img/Purchase Order.png";
+import VIewAll from '../../assets/img/view_all.png'
+import business_Unit from '../../assets/img/Purchase Order.png'
+import view_all from '../../assets/img/Eye.png'
+import Back from '../../assets/img/Back_Arrow.png'
 
-import Back_Arrow from "../../assets/img/Back_Arrow.png";
+import '../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
 
-import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
+import Paper from '@material-ui/core/Paper'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
 
-import Paper from "@material-ui/core/Paper";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
+import AddedPurchaseRequestTable from '../PurchaseOrders/addedPurchaseRequestTable'
+import ViewItems from './viewItems'
 
-import AddedPurchaseRequestTable from "../PurchaseOrders/addedPurchaseRequestTable";
-import ViewItems from "./viewItems";
-
-import ViewSingleItem from "../PurchaseOrders/viewItem";
+import ViewSingleItem from '../PurchaseOrders/viewItem'
 
 const tableHeadingForPR = [
-  "Purchase Request No",
-  "Date/Time",
-  "Status",
-  "Action",
-];
+  'Purchase Request No',
+  'Date/Time',
+  'Status',
+  'Action',
+]
 const tableDataKeysForPR = [
-  ["id", "requestNo"],
-  ["id", "createdAt"],
-  "statusForPR",
-];
+  ['id', 'requestNo'],
+  ['id', 'createdAt'],
+  'statusForPR',
+]
 
 const styles = {
   // inputContainer: {
@@ -77,11 +77,20 @@ const styles = {
 
   inputContainerForDropDown: {
     marginTop: 25,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 10,
     paddingLeft: 10,
     paddingRight: 10,
     paddingTop: 2,
+  },
+  stylesForButton: {
+    color: 'white',
+    cursor: 'pointer',
+    borderRadius: 15,
+    backgroundColor: '#2c6ddd',
+    width: '140px',
+    height: '50px',
+    outline: 'none',
   },
 
   buttonContainer: {
@@ -89,46 +98,46 @@ const styles = {
   },
 
   stylesForLabel: {
-    fontWeight: "700",
-    color: "white",
+    fontWeight: '700',
+    color: 'white',
   },
-};
+}
 
 const useStylesForTabs = makeStyles({
   root: {
     flexGrow: 1,
   },
-});
+})
 
-const useStyles = makeStyles(tableStyles);
+const useStyles = makeStyles(tableStyles)
 
-const DATE = new Date();
+const DATE = new Date()
 
-const time = DATE.getHours();
+const time = DATE.getHours()
 
 function AddEditPurchaseRequest(props) {
-  const classes = useStyles();
-  const classesForTabs = useStylesForTabs();
+  const classes = useStyles()
+  const classesForTabs = useStylesForTabs()
 
   const initialState = {
-    _id: "",
-    itemCode: "",
-    itemName: "",
-    prId: "",
-    poId: "",
-    vendorId: "",
-    status: "",
-    poSentDate: "",
-  };
+    _id: '',
+    itemCode: '',
+    itemName: '',
+    prId: '',
+    poId: '',
+    vendorId: '',
+    status: '',
+    poSentDate: '',
+  }
 
   function reducer(state, { field, value }) {
     return {
       ...state,
       [field]: value,
-    };
+    }
   }
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   const {
     _id,
@@ -139,15 +148,15 @@ function AddEditPurchaseRequest(props) {
     vendorId,
     status,
     poSentDate,
-  } = state;
+  } = state
 
   const onChangeValue = (e) => {
-    dispatch({ field: e.target.name, value: e.target.value });
-  };
+    dispatch({ field: e.target.name, value: e.target.value })
+  }
 
   const onChangeDate = (value) => {
-    dispatch({ field: "poSentDate", value });
-  };
+    dispatch({ field: 'poSentDate', value })
+  }
 
   function validateForm() {
     // return (
@@ -160,153 +169,162 @@ function AddEditPurchaseRequest(props) {
     //   poSentDate !== ""
     // );
 
-    return true;
+    return true
   }
 
-  const [comingFor, setcomingFor] = useState("");
+  const [comingFor, setcomingFor] = useState('')
 
-  const [vendorsArray, setVendors] = useState("");
+  const [vendorsArray, setVendors] = useState('')
 
-  const [statues, setStatusArray] = useState("");
+  const [statues, setStatusArray] = useState('')
 
-  const [purchaseRequest, setPurchaseRequests] = useState([]);
+  const [purchaseRequest, setPurchaseRequests] = useState([])
 
-  const [purchaseOrders, setPurchaseOrders] = useState("");
+  const [purchaseOrders, setPurchaseOrders] = useState('')
 
-  const [currentUser, setCurrentUser] = useState("");
+  const [currentUser, setCurrentUser] = useState('')
 
-  const [vendors, setVendor] = useState("");
+  const [vendors, setVendor] = useState('')
 
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false)
 
-  const [errorMsg, setErrorMsg] = useState("");
-  const [openNotification, setOpenNotification] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('')
+  const [openNotification, setOpenNotification] = useState(false)
 
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(0)
 
-  const [openItemDialog, setOpenItemDialog] = useState(false);
-  const [item, setItem] = useState("");
+  const [openItemDialog, setOpenItemDialog] = useState(false)
+  const [item, setItem] = useState('')
 
-  const [selectedItem, setSelectedItem] = useState("");
+  const [selectedItem, setSelectedItem] = useState('')
 
-  const [purchaseOrderDetails, setPurchaseOrderDetails] = useState("");
+  const [purchaseOrderDetails, setPurchaseOrderDetails] = useState('')
 
   useEffect(() => {
-    setCurrentUser(cookie.load("current_user"));
+    setCurrentUser(cookie.load('current_user'))
 
-    setcomingFor(props.history.location.state.comingFor);
+    setcomingFor(props.history.location.state.comingFor)
 
-    setVendors(props.history.location.state.vendors);
+    setVendors(props.history.location.state.vendors)
 
-    setStatusArray(props.history.location.state.statues);
+    setStatusArray(props.history.location.state.statues)
 
-    setPurchaseRequests(props.history.location.state.purchaseRequests);
+    setPurchaseRequests(props.history.location.state.purchaseRequests)
 
-    setPurchaseOrders(props.history.location.state.purchaseOrders);
+    setPurchaseOrders(props.history.location.state.purchaseOrders)
 
-    const selectedRec = props.history.location.state.selectedItem;
+    const selectedRec = props.history.location.state.selectedItem
 
-    setSelectedItem(props.history.location.state.selectedItem);
+    setSelectedItem(props.history.location.state.selectedItem)
 
     if (selectedRec) {
       Object.entries(selectedRec).map(([key, val]) => {
-        if (val && typeof val === "object") {
-          if (key === "prId") {
-            var temp = [];
+        if (val && typeof val === 'object') {
+          if (key === 'prId') {
+            var temp = []
             for (let i = 0; i < val.length; i++) {
               const obj = {
                 ...val[i],
                 statusForPR: val[i].id.status,
-              };
-              temp.push(obj);
+              }
+              temp.push(obj)
             }
-            dispatch({ field: key, value: temp });
+            dispatch({ field: key, value: temp })
           } else {
-            dispatch({ field: key, value: val });
+            dispatch({ field: key, value: val })
           }
         } else {
-          dispatch({ field: key, value: val });
+          dispatch({ field: key, value: val })
         }
-      });
+      })
     }
     if (props.history.location.state.vendors) {
       dispatch({
-        field: "vendors",
+        field: 'vendors',
         value: props.history.location.state.vendors,
-      });
+      })
     }
     if (props.history.location.state.statues) {
       dispatch({
-        field: "statues",
+        field: 'statues',
         value: props.history.location.state.statues,
-      });
+      })
     }
 
-    getSingleMaterialReceiving();
-  }, []);
+    getSingleMaterialReceiving()
+  }, [])
 
   function getSingleMaterialReceiving() {
     axios
       .get(
         getSingleMaterialReceivingUrl +
-          "/" +
+          '/' +
           props.history.location.state.selectedItem._id
       )
       .then((res) => {
         if (res.data.success) {
-          console.log("response after getting the PO details", res.data.data);
-          setPurchaseOrderDetails(res.data.data.poId.purchaseRequestId);
+          console.log('response after getting the PO details', res.data.data)
+          setPurchaseOrderDetails(res.data.data.poId.purchaseRequestId)
         } else if (!res.data.success) {
-          setErrorMsg(res.data.error);
-          setOpenNotification(true);
+          setErrorMsg(res.data.error)
+          setOpenNotification(true)
         }
-        return res;
+        return res
       })
       .catch((e) => {
-        console.log("error: ", e);
-      });
+        console.log('error: ', e)
+      })
   }
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+    setValue(newValue)
+  }
 
   function viewItem(item) {
-    if (item !== "") {
-      setOpenItemDialog(true);
-      setItem(item.id.item);
+    if (item !== '') {
+      setOpenItemDialog(true)
+      setItem(item.id.item)
     } else {
-      setOpenItemDialog(false);
-      setItem("");
+      setOpenItemDialog(false)
+      setItem('')
     }
   }
 
-  console.log("pr details", prId);
+  console.log('pr details', prId)
 
   return (
     <div
       style={{
-        backgroundColor: "#60d69f",
-        position: "fixed",
-        display: "flex",
-        width: "100%",
-        height: "100%",
-        flexDirection: "column",
+        backgroundColor: '#60d69f',
+        position: 'fixed',
+        display: 'flex',
+        width: '100%',
+        height: '100%',
+        flexDirection: 'column',
         flex: 1,
-        overflowY: "scroll",
+        overflowY: 'scroll',
       }}
     >
       <Header />
 
-      <div className="cPadding">
-        <div className="subheader">
+      <div className='cPadding'>
+        <div className='subheader'>
           <div>
             <img src={business_Unit} />
             <h4>Purchase Order</h4>
           </div>
 
           <div>
-            <img onClick={() => props.history.goBack()} src={VIewAll} />
+            <Button
+              onClick={() => props.history.goBack()}
+              style={styles.stylesForButton}
+              variant='contained'
+              color='primary'
+            >
+              <img src={view_all} style={styles.stylesForIcon} />
+              &nbsp;&nbsp;
+              <strong>View All</strong>
+            </Button>
             {/* <img src={Search} /> */}
           </div>
         </div>
@@ -315,83 +333,85 @@ function AddEditPurchaseRequest(props) {
           <Tabs
             value={value}
             onChange={handleChange}
-            indicatorColor="null"
+            indicatorColor='null'
             centered
           >
             <Tab
               style={{
-                color: "white",
-                borderRadius:15,
-                backgroundColor: value === 0 ? "#2c6ddd" : undefined,
+                color: 'white',
+                borderRadius: 15,
+                outline: 'none',
+                backgroundColor: value === 0 ? '#2c6ddd' : undefined,
               }}
-              label="PO Details"
+              label='PO Details'
             />
             <Tab
               style={{
-                color: "white",
-                borderRadius:15,
-                backgroundColor: value === 1 ? "#2c6ddd" : undefined,
+                color: 'white',
+                borderRadius: 15,
+                outline: 'none',
+                backgroundColor: value === 1 ? '#2c6ddd' : undefined,
               }}
-              label="Items"
+              label='Items'
             />
           </Tabs>
         </div>
 
         {value === 0 ? (
           <div
-            style={{ flex: 4, display: "flex", flexDirection: "column" }}
-            className="container"
+            style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+            className='container'
           >
-            <div className="row">
-              <div className="col-md-12">
+            <div className='row'>
+              <div className='col-md-12'>
                 <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
+                  <InputLabel style={styles.stylesForLabel} id='status-label'>
                     PO Number
                   </InputLabel>
                   <input
                     disabled={true}
-                    type="text"
-                    placeholder="Item Name"
-                    name={"itemName"}
+                    type='text'
+                    placeholder='Item Name'
+                    name={'itemName'}
                     value={poId.purchaseOrderNo}
                     onChange={onChangeValue}
-                    className="textInputStyle"
+                    className='textInputStyle'
                   />
                 </div>
               </div>
             </div>
 
-            <div className="row">
-              <div className="col-md-6">
+            <div className='row'>
+              <div className='col-md-6'>
                 <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
+                  <InputLabel style={styles.stylesForLabel} id='status-label'>
                     Date/Time Generated
                   </InputLabel>
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <DateTimePicker
                       disabled={true}
-                      inputVariant="outlined"
+                      inputVariant='outlined'
                       onChange={onChangeDate}
                       fullWidth
-                      style={{ borderRadius: 10, backgroundColor: "white" }}
+                      style={{ borderRadius: 10, backgroundColor: 'white' }}
                       value={poId.createdAt}
                     />
                   </MuiPickersUtilsProvider>
                 </div>
               </div>
 
-              <div className="col-md-6">
+              <div className='col-md-6'>
                 <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
+                  <InputLabel style={styles.stylesForLabel} id='status-label'>
                     Date/Time Sent
                   </InputLabel>
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <DateTimePicker
                       disabled={true}
-                      inputVariant="outlined"
+                      inputVariant='outlined'
                       onChange={onChangeDate}
                       fullWidth
-                      style={{ borderRadius: 10, backgroundColor: "white" }}
+                      style={{ borderRadius: 10, backgroundColor: 'white' }}
                       value={poId.sentAt}
                     />
                   </MuiPickersUtilsProvider>
@@ -399,84 +419,84 @@ function AddEditPurchaseRequest(props) {
               </div>
             </div>
 
-            <div className="row">
-              <div className="col-md-6">
+            <div className='row'>
+              <div className='col-md-6'>
                 <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
-                  Generated
+                  <InputLabel style={styles.stylesForLabel} id='status-label'>
+                    Generated
                   </InputLabel>
                   <input
                     disabled={true}
-                    type="text"
-                    placeholder="Generated"
-                    name={"itemName"}
+                    type='text'
+                    placeholder='Generated'
+                    name={'itemName'}
                     value={poId.generated}
                     onChange={onChangeValue}
-                    className="textInputStyle"
+                    className='textInputStyle'
                   />
                 </div>
               </div>
 
-              <div className="col-md-6">
+              <div className='col-md-6'>
                 <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
+                  <InputLabel style={styles.stylesForLabel} id='status-label'>
                     Vendor Name
                   </InputLabel>
                   <input
                     disabled={true}
-                    type="text"
-                    placeholder="Venor Name"
-                    name={"itemName"}
+                    type='text'
+                    placeholder='Venor Name'
+                    name={'itemName'}
                     value={selectedItem && selectedItem.vendorId.englishName}
                     onChange={onChangeValue}
-                    className="textInputStyle"
+                    className='textInputStyle'
                   />
                 </div>
               </div>
             </div>
 
-            <div className="row">
-              <div className="col-md-6">
+            <div className='row'>
+              <div className='col-md-6'>
                 <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
+                  <InputLabel style={styles.stylesForLabel} id='status-label'>
                     Contact Person
                   </InputLabel>
                   <input
                     disabled={true}
-                    type="text"
-                    placeholder="Item Name"
-                    name={"Contact Person"}
+                    type='text'
+                    placeholder='Item Name'
+                    name={'Contact Person'}
                     value={
                       selectedItem && selectedItem.vendorId.contactPersonName
                     }
                     onChange={onChangeValue}
-                    className="textInputStyle"
+                    className='textInputStyle'
                   />
                 </div>
               </div>
 
-              <div className="col-md-6">
+              <div className='col-md-6'>
                 <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
+                  <InputLabel style={styles.stylesForLabel} id='status-label'>
                     Contact Number
                   </InputLabel>
                   <input
                     disabled={true}
-                    type="text"
-                    placeholder="Contact Number"
-                    name={"itemName"}
+                    type='text'
+                    placeholder='Contact Number'
+                    name={'itemName'}
                     value={
                       selectedItem &&
                       selectedItem.vendorId.contactPersonTelephone
                     }
                     onChange={onChangeValue}
-                    className="textInputStyle"
+                    className='textInputStyle'
                   />
                 </div>
               </div>
             </div>
 
-            <div style={{ marginTop: "5%" }}>
+            <div style={{ marginTop: '5%' }}>
               {prId.length !== 0 ? (
                 <AddedPurchaseRequestTable
                   tableData={prId}
@@ -485,7 +505,7 @@ function AddEditPurchaseRequest(props) {
                   tableHeading={tableHeadingForPR}
                   // action={actions}
                   viewItem={viewItem}
-                  borderBottomColor={"#60d69f"}
+                  borderBottomColor={'#60d69f'}
                   borderBottomWidth={20}
                 />
               ) : (
@@ -501,11 +521,11 @@ function AddEditPurchaseRequest(props) {
           </div>
           </div> */}
 
-            <div style={{ marginBottom: 20, marginTop: 50 }}>
+            <div style={{ marginBottom: 20 }}>
               <img
                 onClick={() => props.history.goBack()}
-                src={Back_Arrow}
-                style={{ width: 60, height: 40, cursor: "pointer" }}
+                src={Back}
+                style={{ width: 45, height: 35, cursor: 'pointer' }}
               />
             </div>
 
@@ -521,8 +541,8 @@ function AddEditPurchaseRequest(props) {
           </div>
         ) : (
           <div
-            style={{ flex: 4, display: "flex", flexDirection: "column" }}
-            className="container"
+            style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+            className='container'
           >
             <ViewItems
               history={props.history}
@@ -533,6 +553,6 @@ function AddEditPurchaseRequest(props) {
         )}
       </div>
     </div>
-  );
+  )
 }
-export default AddEditPurchaseRequest;
+export default AddEditPurchaseRequest

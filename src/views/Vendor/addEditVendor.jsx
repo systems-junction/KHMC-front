@@ -1,29 +1,39 @@
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable array-callback-return */
 /* eslint-disable react/jsx-indent */
-import React, { useEffect, useState, useReducer } from "react";
-import TextField from "@material-ui/core/TextField";
-import Checkbox from "@material-ui/core/Checkbox";
-import Modal from "@material-ui/core/Modal";
-import Button from "@material-ui/core/Button";
-import axios from "axios";
-import Select from "@material-ui/core/Select";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import { ToastsStore } from "react-toasts";
+import React, { useEffect, useState, useReducer } from 'react'
+import TextField from '@material-ui/core/TextField'
+import Checkbox from '@material-ui/core/Checkbox'
+import Modal from '@material-ui/core/Modal'
+import Button from '@material-ui/core/Button'
+import axios from 'axios'
+import Select from '@material-ui/core/Select'
+import InputLabel from '@material-ui/core/InputLabel'
+import MenuItem from '@material-ui/core/MenuItem'
+import { ToastsStore } from 'react-toasts'
 import {
   addVendorUrl,
   updateVendorUrl,
   addShippingTermUrl,
   updateShippingTermUrl,
-} from "../../public/endpoins";
-import ws from "../../variables/websocket";
-import ShippingTerm from "../ShippingTerm/shippingTerm";
-import vendor from "../../assets/img/Vendot.png";
-import Header from "../../components/Header/Header";
-import view_all from "../../assets/img/view_all.png";
-import Back_Arrow from "../../assets/img/Back_Arrow.png";
-import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
+} from '../../public/endpoins'
+// import ws from '../../variables/websocket'
+import ShippingTerm from '../ShippingTerm/shippingTerm'
+import vendor from '../../assets/img/Vendot.png'
+import Header from '../../components/Header/Header'
+import view_all from '../../assets/img/Eye.png'
+import Back from '../../assets/img/Back_Arrow.png'
+import '../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
+
+import InputLabelComponent from '../../components/InputLabel/inputLabel'
+import BootstrapInput from '../../components/Dropdown/dropDown.js'
+import ErrorMessage from '../../components/ErrorMessage/errorMessage'
+import capitalizeFirstLetter from '../../public/capitilizeLetter'
+import AvaliabilityComponent from '../../components/Avaliability/avaliability'
+
+import countryList from 'react-select-country-list'
+
+let countriesList = require('../../assets/countries.json')
 
 const styles = {
   // inputContainer: {
@@ -39,72 +49,94 @@ const styles = {
   // buttonContainer: {
   //   marginTop: 25
   // }
+  inputField: {
+    outline: 'none',
+  },
+  stylesForButton: {
+    color: 'white',
+    cursor: 'pointer',
+    borderRadius: 10,
+    backgroundColor: '#2c6ddd',
+    width: '115px',
+    height: '40px',
+    outline: 'none',
+  },
+  stylesForADD: {
+    color: 'white',
+    cursor: 'pointer',
+    borderRadius: 10,
+    backgroundColor: '#2c6ddd',
+    width: '60%',
+    height: '50px',
+    outline: 'none',
+  },
 
   inputContainerForTextField: {
     marginTop: 25,
+    outline: 'none',
   },
 
   inputContainerForDropDown: {
     marginTop: 25,
-    backgroundColor: "white",
-    borderRadius: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingTop: 2,
+    // backgroundColor: "white",
+    // borderRadius: 10,
+    // paddingLeft: 10,
+    // paddingRight: 10,
+    // paddingTop: 2,
   },
 
-  buttonContainer: {
-    marginTop: 25,
-  },
-};
+  // buttonContainer: {
+  //   marginTop: 25,
+  // },
+}
 
 function AddEditVendor(props) {
   const modalStyle = {
-    backgroundColor: "#5074f4",
+    backgroundColor: '#5074f4',
     borderRadius: 30,
-    height: "80%",
-    marginLeft: "15%",
-    marginRight: "15%",
-    marginTop: "5%",
-    display: "flex",
-    justifyContent: "center",
-    flexDirection: "column",
+    height: '80%',
+    marginLeft: '15%',
+    marginRight: '15%',
+    marginTop: '5%',
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'column',
     flex: 1,
-    position: "fixed",
-  };
+    position: 'fixed',
+  }
 
   const initialState = {
-    _id: "",
-    englishName: "",
-    arabicName: "",
-    telephone1: "",
-    telephone2: "",
-    contactEmail: "",
-    address: "",
-    country: "",
-    city: "",
-    zipcode: "",
-    pobox: "",
-    faxno: "",
-    taxno: "",
-    contactPersonName: "",
-    contactPersonTelephone: "",
-    contactPersonEmail: "",
-    paymentTerms: "",
-    rating: "",
-    status: "",
-    cls: "",
-    subClass: "",
-  };
+    _id: '',
+    englishName: '',
+    arabicName: '',
+    telephone1: '',
+    telephone2: '',
+    contactEmail: '',
+    address: '',
+    country: '',
+    city: '',
+    zipcode: '',
+    pobox: '',
+    faxno: '',
+    taxno: '',
+    contactPersonName: '',
+    contactPersonTelephone: '',
+    contactPersonEmail: '',
+    paymentTerms: '',
+    rating: '',
+    status: '',
+    cls: '',
+    subClass: [],
+  }
 
   function reducer(state, { field, value }) {
     return {
       ...state,
       [field]: value,
-    };
+    }
   }
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   const {
     _id,
@@ -128,77 +160,105 @@ function AddEditVendor(props) {
     status,
     subClass,
     cls,
-  } = state;
+  } = state
+
+  const onChangeCountry = (e) => {
+    if (e.target.value) {
+      dispatch({ field: e.target.name, value: e.target.value })
+      let cities = Object.entries(countriesList[0])
+      for (var x in cities) {
+        let arr = cities[x]
+        if (arr[0] === e.target.value) {
+          console.log('cities', arr[1])
+          setCities(arr[1])
+        }
+      }
+    } else {
+      dispatch({ field: e.target.name, value: e.target.value })
+      dispatch({ field: 'city', value: '' })
+      setCities('')
+    }
+  }
 
   const onChangeValue = (e) => {
-    dispatch({ field: e.target.name, value: e.target.value });
-  };
+    dispatch({ field: e.target.name, value: e.target.value })
+  }
 
   function validateForm() {
-    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
     let x =
       englishName.length > 0 &&
+      arabicName.length > 0 &&
       telephone1.length > 6 &&
       address.length > 0 &&
-      pobox.length > 0 &&
+      // pobox.length > 0 &&
       zipcode.length > 0 &&
       taxno.length > 0 &&
       contactPersonName.length > 0 &&
       contactPersonTelephone.length > 6 &&
       subClass.length > 0 &&
       cls.length > 0 &&
-      status.length > 0;
+      status.length > 0
 
-    if (contactEmail && contactPersonEmail === "") {
-      return x && re.test(contactEmail);
-    } else if (contactPersonEmail && contactEmail === "") {
-      return x && re.test(contactPersonEmail);
+    if (contactEmail && contactPersonEmail === '') {
+      return x && re.test(contactEmail)
+    } else if (contactPersonEmail && contactEmail === '') {
+      return x && re.test(contactPersonEmail)
     } else if (contactPersonEmail && contactEmail) {
-      return x && re.test(contactPersonEmail) && re.test(contactEmail);
+      return x && re.test(contactPersonEmail) && re.test(contactEmail)
     } else if (telephone2) {
-      return x && telephone2.length > 6;
+      return x && telephone2.length > 6
     } else {
-      return x;
+      return x
     }
   }
 
-  const [comingFor, setcomingFor] = useState("");
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-  const [openShippingTermModal, setOpenShippingTermModal] = useState(false);
-  const [shippingTermsData, setShippingTermsData] = useState([]);
-  const [modeForShippingTerms, setModeForShippingTerms] = useState("add");
+  const [comingFor, setcomingFor] = useState('')
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false)
+  const [openShippingTermModal, setOpenShippingTermModal] = useState(false)
+  const [shippingTermsData, setShippingTermsData] = useState([])
+  const [modeForShippingTerms, setModeForShippingTerms] = useState('add')
 
-  const [mainClasses, setClasses] = useState("");
+  const [mainClasses, setClasses] = useState('')
 
-  const [statues, setStatuses] = useState("");
+  const [statues, setStatuses] = useState('')
 
-  const [subClasses, setSubClasses] = useState("");
+  const [subClasses, setSubClasses] = useState('')
+
+  const [countries, setCountries] = useState('')
+  const [cities, setCities] = useState('')
+
+  const handleChange = (e) => {
+    dispatch({ field: e.target.name, value: e.target.value })
+  }
 
   useEffect(() => {
-    setcomingFor(props.history.location.state.comingFor);
-    setClasses(props.history.location.state.mainClasses);
-    setStatuses(props.history.location.state.statues);
-    setSubClasses(props.history.location.state.subClasses);
+    setCountries(Object.keys(countriesList[0]))
 
-    const selectedRec = props.history.location.state.selectedItem;
+    setcomingFor(props.history.location.state.comingFor)
+    setClasses(props.history.location.state.mainClasses)
+    setStatuses(props.history.location.state.statues)
+    setSubClasses(props.history.location.state.subClasses)
+
+    const selectedRec = props.history.location.state.selectedItem
     if (selectedRec) {
       Object.entries(selectedRec).map(([key, val]) => {
-        if (val && typeof val === "object") {
-          dispatch({ field: key, value: val._id });
+        if (val && typeof val === 'object') {
+          dispatch({ field: key, value: val._id })
         } else {
-          dispatch({ field: key, value: val });
+          dispatch({ field: key, value: val })
         }
-      });
+      })
     }
-  }, []);
+  }, [])
 
   const handleCancel = () => {
-    props.history.goBack();
-  };
+    props.history.goBack()
+  }
 
   const handleAdd = () => {
-    setIsFormSubmitted(true);
+    setIsFormSubmitted(true)
     if (validateForm()) {
       const params = {
         englishName,
@@ -210,7 +270,7 @@ function AddEditVendor(props) {
         country,
         city,
         zipcode,
-        pobox,
+        // pobox,
         faxno,
         taxno,
         contactPersonName,
@@ -221,27 +281,30 @@ function AddEditVendor(props) {
         status,
         cls,
         subClass,
-      };
+      }
+
+      console.log('param for vendor', params)
+
       axios
         .post(addVendorUrl, params)
         .then((res) => {
           if (res.data.success) {
-            console.log("response is", res.data.data._id);
+            console.log('response is', res.data.data._id)
             if (shippingTermsData.length > 0) {
-              addShippingTerms(res.data.data._id);
+              addShippingTerms(res.data.data._id)
             } else {
-              props.history.goBack();
+              props.history.goBack()
             }
-            ws.send("add_vendor");
+            // ws.send('add_vendor')
           } else if (!res.data.success) {
-            ToastsStore.error(res.data.error);
+            ToastsStore.error(res.data.error)
           }
         })
         .catch((e) => {
-          console.log("error after adding vendor", e);
-        });
+          console.log('error after adding vendor', e)
+        })
     }
-  };
+  }
 
   const addShippingTerms = (id, data = shippingTermsData) => {
     // shippingTermsData
@@ -249,24 +312,24 @@ function AddEditVendor(props) {
     var data = {
       shippingTermsData: data,
       vendorId: id,
-    };
+    }
     axios
       .post(addShippingTermUrl, data)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data);
-          props.history.goBack();
+          console.log(res.data.data)
+          props.history.goBack()
         } else if (!res.data.success) {
-          ToastsStore.error(res.data.error);
+          ToastsStore.error(res.data.error)
         }
       })
       .catch((e) => {
-        console.log("error while adding shipping term ", e);
-      });
-  };
+        console.log('error while adding shipping term ', e)
+      })
+  }
 
   const handleEdit = () => {
-    setIsFormSubmitted(true);
+    setIsFormSubmitted(true)
     if (validateForm()) {
       const params = {
         _id,
@@ -279,7 +342,7 @@ function AddEditVendor(props) {
         country,
         city,
         zipcode,
-        pobox,
+        // pobox,
         faxno,
         taxno,
         contactPersonName,
@@ -290,37 +353,37 @@ function AddEditVendor(props) {
         status,
         cls,
         subClass,
-      };
+      }
       axios
         .put(updateVendorUrl, params)
         .then((res) => {
           if (res.data.success) {
             // console.log('response is', res.data.data._id);
             if (shippingTermsData.length > 0) {
-              let withId = [];
-              let withOutId = [];
+              let withId = []
+              let withOutId = []
 
               for (let i = 0; i < shippingTermsData.length; i++) {
                 if (shippingTermsData[i]._id) {
-                  withId.push(shippingTermsData[i]);
+                  withId.push(shippingTermsData[i])
                 } else {
-                  withOutId.push(shippingTermsData[i]);
+                  withOutId.push(shippingTermsData[i])
                 }
               }
-              editShippingTerms(_id, withId);
-              addShippingTerms(_id, withOutId);
+              editShippingTerms(_id, withId)
+              addShippingTerms(_id, withOutId)
             } else {
-              props.history.goBack();
+              props.history.goBack()
             }
           } else if (!res.data.success) {
-            ToastsStore.error(res.data.error);
+            ToastsStore.error(res.data.error)
           }
         })
         .catch((e) => {
-          console.log("error after updating vendor", e);
-        });
+          console.log('error after updating vendor', e)
+        })
     }
-  };
+  }
 
   const editShippingTerms = (id, withId) => {
     // shippingTermsData
@@ -328,173 +391,312 @@ function AddEditVendor(props) {
     var data = {
       shippingTermsData: withId,
       vendorId: id,
-    };
+    }
     axios
       .put(updateShippingTermUrl, data)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data);
+          console.log(res.data.data)
           //   props.history.goBack();
         } else if (!res.data.success) {
-          ToastsStore.error(res.data.error);
+          ToastsStore.error(res.data.error)
         }
       })
       .catch((e) => {
-        console.log("error while adding shipping term ", e);
-      });
-  };
+        console.log('error while adding shipping term ', e)
+      })
+  }
 
   const addShippingTerm = () => {
-    setOpenShippingTermModal(true);
-  };
+    setOpenShippingTermModal(true)
+  }
 
   const editShippingTerm = () => {
-    setOpenShippingTermModal(true);
-    setModeForShippingTerms("edit");
-  };
+    setOpenShippingTermModal(true)
+    setModeForShippingTerms('edit')
+  }
 
-  const addPaymetTerm = () => {};
+  const addPaymetTerm = () => {}
 
   const hideShippingModel = (data = shippingTermsData) => {
-    console.log(data);
-    setShippingTermsData(data);
-    setOpenShippingTermModal(false);
-  };
+    console.log(data)
+    setShippingTermsData(data)
+    setOpenShippingTermModal(false)
+  }
 
   const hideModel = () => {
-    setOpenShippingTermModal(false);
-  };
+    setOpenShippingTermModal(false)
+  }
 
   return (
     <section
       style={{
-        backgroundColor: "#60d69f",
-        position: "fixed",
-        display: "flex",
-        width: "100%",
-        height: "100%",
-        flexDirection: "column",
+        backgroundColor: '#60d69f',
+        position: 'fixed',
+        display: 'flex',
+        width: '100%',
+        height: '100%',
+        flexDirection: 'column',
         flex: 1,
-        overflowY: "scroll",
+        overflowY: 'scroll',
       }}
     >
       <Header />
-      <div className="cPadding">
-        <div className="subheader">
+      <div className='cPadding'>
+        <div className='subheader'>
           <div>
             <img src={vendor} />
-            <h4>{comingFor === "add" ? " Add Vender" : " Edit Vender"}</h4>
+            <h4>{comingFor === 'add' ? ' Add Vender' : ' Edit Vender'}</h4>
           </div>
 
           <div>
-            <img onClick={() => props.history.goBack()} src={view_all} />
+            <Button
+              onClick={() => props.history.goBack()}
+              style={styles.stylesForButton}
+              variant='contained'
+              color='primary'
+            >
+              <img src={view_all} className='icon-view' />
+              &nbsp;&nbsp;
+              <strong style={{ fontSize: '12px' }}>View All</strong>
+            </Button>
             {/* <img src={Search} /> */}
           </div>
         </div>
 
-        <div className="">
-          <div className="row">
-            <div
-              className="col-md-12"
-              style={styles.inputContainerForTextField}
-            >
+        <div className=''>
+          <div className='row'>
+            <div className='col-md-6' style={styles.inputContainerForTextField}>
+              <InputLabelComponent>English Name*</InputLabelComponent>
               <input
-                type="text"
-                placeholder="English Name"
-                name={"englishName"}
+                style={styles.inputField}
+                type='text'
+                placeholder='English Name'
+                name={'englishName'}
                 value={englishName}
                 onChange={onChangeValue}
-                className="textInputStyle"
+                className='textInputStyle'
               />
             </div>
-            <div className="col-md-4" style={styles.inputContainerForTextField}>
+
+            <div className='col-md-6' style={styles.inputContainerForTextField}>
+              <InputLabelComponent>Arabic Name*</InputLabelComponent>
               <input
-                type="number"
-                placeholder="Telephone1"
-                name={"telephone1"}
+                style={styles.inputField}
+                type='text'
+                placeholder='Arabic Name'
+                name={'arabicName'}
+                value={arabicName}
+                onChange={onChangeValue}
+                className='textInputStyle'
+              />
+            </div>
+
+            <div className='col-md-4' style={styles.inputContainerForTextField}>
+              <InputLabelComponent>Telephone1*</InputLabelComponent>
+              <input
+                style={styles.inputField}
+                type='number'
+                placeholder='Telephone1'
+                name={'telephone1'}
                 value={telephone1}
                 onChange={onChangeValue}
-                className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                className='textInputStyle'
+                onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()}
               />
             </div>
 
-            <div className="col-md-4" style={styles.inputContainerForTextField}>
+            <div className='col-md-4' style={styles.inputContainerForTextField}>
+              <InputLabelComponent>Telephone2*</InputLabelComponent>
               <input
-                type="number"
-                placeholder="telephone2"
-                name={"telephone2"}
+                style={styles.inputField}
+                type='number'
+                placeholder='Telephone2'
+                name={'telephone2'}
                 value={telephone2}
                 onChange={onChangeValue}
-                className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                className='textInputStyle'
+                onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()}
               />
             </div>
 
-            <div className="col-md-4" style={styles.inputContainerForTextField}>
+            <div className='col-md-4' style={styles.inputContainerForTextField}>
+              <InputLabelComponent>Fax No*</InputLabelComponent>
               <input
-                type="email"
-                placeholder="Contact Email"
-                name={"contactEmail"}
+                style={styles.inputField}
+                type='number'
+                placeholder='Fax No'
+                name={'faxno'}
+                value={faxno}
+                onChange={onChangeValue}
+                className='textInputStyle'
+                onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()}
+              />
+            </div>
+          </div>
+
+          <div className='row'>
+            <div className='col-md-4' style={styles.inputContainerForTextField}>
+              <InputLabelComponent>Contact Person Name*</InputLabelComponent>
+              <input
+                style={styles.inputField}
+                type='text'
+                placeholder='Contact Person Name'
+                name={'contactPersonName'}
+                value={contactPersonName}
+                onChange={onChangeValue}
+                className='textInputStyle'
+              />
+            </div>
+
+            <div className='col-md-4' style={styles.inputContainerForTextField}>
+              <InputLabelComponent>
+                Contact Person Telephone*
+              </InputLabelComponent>
+              <input
+                style={styles.inputField}
+                type='number'
+                placeholder='Contact Person Telephone'
+                name={'contactPersonTelephone'}
+                value={contactPersonTelephone}
+                onChange={onChangeValue}
+                className='textInputStyle'
+                onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()}
+              />
+            </div>
+
+            <div className='col-md-4' style={styles.inputContainerForTextField}>
+              <InputLabelComponent>Contact Person Email*</InputLabelComponent>
+              <input
+                style={styles.inputField}
+                type='email'
+                placeholder='Contact Person Email'
+                name={'contactPersonEmail'}
+                value={contactPersonEmail}
+                onChange={onChangeValue}
+                className='textInputStyle'
+              />
+            </div>
+          </div>
+
+          <div className='row'>
+            <div className='col-md-6' style={styles.inputContainerForTextField}>
+              <InputLabelComponent>Contact Email*</InputLabelComponent>
+              <input
+                style={styles.inputField}
+                type='email'
+                placeholder='Contact Email'
+                name={'contactEmail'}
                 value={contactEmail}
                 onChange={onChangeValue}
-                className="textInputStyle"
+                className='textInputStyle'
               />
             </div>
-          </div>
 
-          <div className="row">
-            <div
-              className="col-md-12"
-              style={styles.inputContainerForTextField}
-            >
+            <div className='col-md-6' style={styles.inputContainerForTextField}>
+              <InputLabelComponent>Address*</InputLabelComponent>
               <input
-                type="text"
-                placeholder="Address"
-                name={"address"}
+                style={styles.inputField}
+                type='text'
+                placeholder='Address'
+                name={'address'}
                 value={address}
                 onChange={onChangeValue}
-                className="textInputStyle"
+                className='textInputStyle'
               />
             </div>
           </div>
 
-          <div className="row">
-            <div className="col-md-4" style={styles.inputContainerForTextField}>
-              <input
-                type="number"
-                placeholder="Zip Code"
-                name={"zipcode"}
-                value={zipcode}
-                onChange={onChangeValue}
-                className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              />
-            </div>
-            <div className="col-md-4" style={styles.inputContainerForTextField}>
-              <input
-                type="text"
-                placeholder="City"
-                name={"city"}
-                value={city}
-                onChange={onChangeValue}
-                className="textInputStyle"
-              />
-            </div>
-            <div className="col-md-4" style={styles.inputContainerForTextField}>
-              <input
+          <div className='row'>
+            <div className='col-md-4' style={styles.inputContainerForTextField}>
+              <InputLabelComponent>Country*</InputLabelComponent>
+              {/* <input
                 type="text"
                 placeholder="Country"
                 name={"country"}
                 value={country}
                 onChange={onChangeValue}
                 className="textInputStyle"
+              /> */}
+
+              <Select
+                style={styles.inputField}
+                fullWidth
+                id='country'
+                name='country'
+                value={country}
+                onChange={onChangeCountry}
+                label='Country'
+                className='dropDownStyle'
+                input={<BootstrapInput />}
+              >
+                <MenuItem value=''>
+                  <em>None</em>
+                </MenuItem>
+                {countries &&
+                  countries.map((val) => {
+                    return (
+                      <MenuItem key={val} value={val}>
+                        {val}
+                      </MenuItem>
+                    )
+                  })}
+              </Select>
+            </div>
+
+            <div className='col-md-4' style={styles.inputContainerForTextField}>
+              <InputLabelComponent>City*</InputLabelComponent>
+              {/* <input
+                type="text"
+                placeholder="City"
+                name={"city"}
+                value={city}
+                onChange={onChangeValue}
+                className="textInputStyle"
+              /> */}
+
+              <Select
+                style={styles.inputField}
+                fullWidth
+                id='city'
+                name='city'
+                value={city}
+                onChange={onChangeValue}
+                label='City'
+                className='dropDownStyle'
+                input={<BootstrapInput />}
+              >
+                <MenuItem value=''>
+                  <em>None</em>
+                </MenuItem>
+                {cities &&
+                  cities.map((val) => {
+                    return (
+                      <MenuItem key={val} value={val}>
+                        {val}
+                      </MenuItem>
+                    )
+                  })}
+              </Select>
+            </div>
+
+            <div className='col-md-4' style={styles.inputContainerForTextField}>
+              <InputLabelComponent>Zip Code*</InputLabelComponent>
+              <input
+                style={styles.inputField}
+                type='number'
+                placeholder='Zip Code'
+                name={'zipcode'}
+                value={zipcode}
+                onChange={onChangeValue}
+                className='textInputStyle'
+                onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()}
               />
             </div>
           </div>
 
-          <div className="row">
-            <div className="col-md-4" style={styles.inputContainerForTextField}>
+          <div className='row'>
+            {/* <div className="col-md-4" style={styles.inputContainerForTextField}>
               <input
                 type="number"
                 placeholder="PO Box"
@@ -504,83 +706,39 @@ function AddEditVendor(props) {
                 className="textInputStyle"
                 onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
               />
-            </div>
+            </div> */}
+          </div>
 
-            <div className="col-md-4" style={styles.inputContainerForTextField}>
+          <div className='row'>
+            <div className='col-md-4' style={styles.inputContainerForTextField}>
+              <InputLabelComponent>Tax No*</InputLabelComponent>
               <input
-                type="number"
-                placeholder="Fax No"
-                name={"faxno"}
-                value={faxno}
-                onChange={onChangeValue}
-                className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              />
-            </div>
-
-            <div className="col-md-4" style={styles.inputContainerForTextField}>
-              <input
-                type="number"
-                placeholder="Tax No"
-                name={"taxno"}
+                style={styles.inputField}
+                type='number'
+                placeholder='Tax No'
+                name={'taxno'}
                 value={taxno}
                 onChange={onChangeValue}
-                className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              />
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-md-4" style={styles.inputContainerForTextField}>
-              <input
-                type="text"
-                placeholder="Contact Person Name"
-                name={"contactPersonName"}
-                value={contactPersonName}
-                onChange={onChangeValue}
-                className="textInputStyle"
+                className='textInputStyle'
+                onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()}
               />
             </div>
 
-            <div className="col-md-4" style={styles.inputContainerForTextField}>
-              <input
-                type="number"
-                placeholder="Contact Person Telephone"
-                name={"contactPersonTelephone"}
-                value={contactPersonTelephone}
-                onChange={onChangeValue}
-                className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              />
-            </div>
-
-            <div className="col-md-4" style={styles.inputContainerForTextField}>
-              <input
-                type="email"
-                placeholder="Contact Person Email"
-                name={"contactPersonEmail"}
-                value={contactPersonEmail}
-                onChange={onChangeValue}
-                className="textInputStyle"
-              />
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-md-6">
+            <div className='col-md-4'>
               <div style={styles.inputContainerForDropDown}>
-                <InputLabel id="buHead-label">Class</InputLabel>
+                <InputLabelComponent>Class*</InputLabelComponent>
                 <Select
+                  style={styles.inputField}
                   fullWidth
-                  id="cls"
-                  name="cls"
+                  id='cls'
+                  name='cls'
                   value={cls}
                   onChange={onChangeValue}
-                  label="Class"
-                  error={!cls && isFormSubmitted}
+                  label='Class'
+                  className='dropDownStyle'
+                  input={<BootstrapInput />}
                 >
-                  <MenuItem value="">
+                  <MenuItem value=''>
                     <em>None</em>
                   </MenuItem>
                   {mainClasses &&
@@ -589,22 +747,25 @@ function AddEditVendor(props) {
                         <MenuItem key={val.key} value={val.key}>
                           {val.value}
                         </MenuItem>
-                      );
+                      )
                     })}
                 </Select>
               </div>
             </div>
 
-            <div className="col-md-6">
+            <div className='col-md-4'>
               <div style={styles.inputContainerForDropDown}>
-                <InputLabel id="buName-label">Sub Class</InputLabel>
-                <Select
+                <InputLabelComponent>Sub Class*</InputLabelComponent>
+                {/* <Select
                   fullWidth
-                  id="subClass"
-                  name="subClass"
+                  id='subClass'
+                  name='subClass'
                   value={subClass}
+                  // multiple
                   onChange={onChangeValue}
                   label="Sub Class"
+                  className="dropDownStyle"
+                  input={<BootstrapInput />}
                 >
                   <MenuItem value="">
                     <em>None</em>
@@ -618,47 +779,77 @@ function AddEditVendor(props) {
                           </MenuItem>
                         );
                     })}
+
+                </Select> */}
+                <Select
+                  style={styles.inputField}
+                  labelId='demo-mutiple-name-label'
+                  id='demo-mutiple-name'
+                  name={'subClass'}
+                  multiple
+                  value={subClass}
+                  onChange={handleChange}
+                  className='dropDownStyle'
+                  input={<BootstrapInput />}
+                >
+                  <MenuItem value=''>
+                    <em>None</em>
+                  </MenuItem>
+                  {subClasses &&
+                    subClasses.map((val) => {
+                      if (val.parent === cls)
+                        return (
+                          <MenuItem key={val.key} value={val.key}>
+                            {val.value}
+                          </MenuItem>
+                        )
+                    })}
                 </Select>
               </div>
             </div>
           </div>
 
-          <div className="row">
-            <div className="col-md-6" style={styles.inputContainerForTextField}>
+          <div className='row'>
+            <div className='col-md-4' style={styles.inputContainerForTextField}>
+              <InputLabelComponent>Payment Terms*</InputLabelComponent>
               <input
-                type="text"
-                placeholder="Payment Terms"
-                name={"paymentTerms"}
+                style={styles.inputField}
+                type='text'
+                placeholder='Payment Terms'
+                name={'paymentTerms'}
                 value={paymentTerms}
                 onChange={onChangeValue}
-                className="textInputStyle"
+                className='textInputStyle'
               />
             </div>
-            <div className="col-md-6" style={styles.inputContainerForTextField}>
+            <div className='col-md-4' style={styles.inputContainerForTextField}>
+              <InputLabelComponent>Rating*</InputLabelComponent>
               <input
-                type="text"
-                placeholder="Rating"
-                name={"rating"}
+                style={styles.inputField}
+                type='text'
+                placeholder='Rating'
+                name={'rating'}
                 value={rating}
                 onChange={onChangeValue}
-                className="textInputStyle"
+                className='textInputStyle'
               />
             </div>
-          </div>
 
-          <div className="row">
-            <div className="col-md-6">
+            <div className='col-md-4'>
               <div style={styles.inputContainerForDropDown}>
-                <InputLabel id="buName-label">Status</InputLabel>
+                <InputLabelComponent>Status*</InputLabelComponent>
                 <Select
+                  style={styles.inputField}
                   fullWidth
-                  id="status"
-                  name="status"
+                  id='status'
+                  name='status'
                   value={status}
                   onChange={onChangeValue}
-                  label="Status"
+                  label='Status'
+                  className='dropDownStyle'
+                  input={<BootstrapInput />}
                 >
-                  <MenuItem value="">
+                  <MenuItem value=''>
                     <em>None</em>
                   </MenuItem>
                   {statues &&
@@ -667,7 +858,7 @@ function AddEditVendor(props) {
                         <MenuItem key={val.key} value={val.key}>
                           {val.value}
                         </MenuItem>
-                      );
+                      )
                     })}
                 </Select>
               </div>
@@ -675,40 +866,40 @@ function AddEditVendor(props) {
           </div>
 
           {/* shipping terms modal */}
-          <Modal
+          {/* <Modal
             open={openShippingTermModal}
             // open={true}
             style={modalStyle}
             onClose={() => setOpenShippingTermModal(false)}
-            aria-labelledby="simple-modal-title"
-            aria-describedby="simple-modal-description"
+            aria-labelledby='simple-modal-title'
+            aria-describedby='simple-modal-description'
           >
             <div
               style={{
-                backgroundColor: "#e2e2e2",
-                height: "100%",
-                display: "flex",
+                backgroundColor: '#e2e2e2',
+                height: '100%',
+                display: 'flex',
                 flex: 1,
-                flexDirection: "column",
+                flexDirection: 'column',
               }}
             >
               <div
                 style={{
-                  display: "flex",
+                  display: 'flex',
                   flex: 1,
-                  justifyContent: "flex-start",
+                  justifyContent: 'flex-start',
                   marginLeft: 40,
-                  alignItems: "center",
+                  alignItems: 'center',
                 }}
               >
-                <h3 className="modal-heading" style={{ color: "black" }}>
+                <h3 className='modal-heading' style={{ color: 'black' }}>
                   Shipping Term(s)
                 </h3>
               </div>
 
               <div
-                className="popup-body"
-                style={{ display: "flex", flex: 7, flexDirection: "column" }}
+                className='popup-body'
+                style={{ display: 'flex', flex: 7, flexDirection: 'column' }}
               >
                 <ShippingTerm
                   hideShippingModel={hideShippingModel}
@@ -719,95 +910,53 @@ function AddEditVendor(props) {
                 />
               </div>
             </div>
-          </Modal>
+          </Modal> */}
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginTop: "1rem",
-              marginBottom: "1rem",
-            }}
-          >
-            {/* <div style={styles.inputContainer}>
-            <Button onClick={handleCancel} variant="contained">
-              Cancel
-            </Button>
-          </div> */}
-
-            <div className="addEditBtnDiv">
-              {comingFor === "add" ? (
-                <div
-                  style={{
-                    display: "flex",
-                    width: "100%",
-                    justifyContent: "space-between",
-                  }}
+          <div style={{ display: 'flex', flex: 1, justifyContent: 'center' }}>
+            <div
+              style={{
+                display: 'flex',
+                flex: 1,
+                height: 40,
+                justifyContent: 'center',
+                marginTop: '2%',
+                marginBottom: '2%',
+              }}
+            >
+              {comingFor === 'add' ? (
+                <Button
+                  disabled={!validateForm()}
+                  onClick={handleAdd}
+                  variant='contained'
+                  color='primary'
+                  style={styles.stylesForADD}
                 >
-                  <Button
-                    className="mr10"
-                    onClick={addShippingTerm}
-                    variant="contained"
-                  >
-                    Add Shipping Term(s)
-                  </Button>
-                  <Button
-                    className="mr10"
-                    onClick={addPaymetTerm}
-                    variant="contained"
-                  >
-                    Add Payment Term(s)
-                  </Button>
-                  <Button
-                    className="pl30 pr30"
-                    disabled={!validateForm()}
-                    onClick={handleAdd}
-                    variant="contained"
-                    color="primary"
-                  >
-                    Add
-                  </Button>
-                </div>
+                  <strong style={{ fontSize: '12px' }}>Add</strong>
+                </Button>
               ) : (
-                <>
-                  <Button
-                    className="mr10"
-                    onClick={editShippingTerm}
-                    variant="contained"
-                  >
-                    Edit Shipping Term(s)
-                  </Button>
-                  <Button
-                    className="mr10"
-                    onClick={addPaymetTerm}
-                    variant="contained"
-                  >
-                    Edit Payment Term(s)
-                  </Button>
-                  <Button
-                    className="pl30 pr30"
-                    disabled={!validateForm()}
-                    onClick={handleEdit}
-                    variant="contained"
-                    color="primary"
-                  >
-                    Edit
-                  </Button>
-                </>
+                <Button
+                  className='pl30 pr30'
+                  disabled={!validateForm()}
+                  onClick={handleEdit}
+                  variant='contained'
+                  color='primary'
+                  style={{ width: '60%' }}
+                >
+                  <strong style={{ fontSize: '12px' }}>Update</strong>
+                </Button>
               )}
             </div>
           </div>
         </div>
-
         <div style={{ marginBottom: 20 }}>
           <img
             onClick={() => props.history.goBack()}
-            src={Back_Arrow}
-            style={{ width: 60, height: 40, cursor: "pointer" }}
+            src={Back}
+            style={{ width: 45, height: 35, cursor: 'pointer' }}
           />
         </div>
       </div>
     </section>
-  );
+  )
 }
-export default AddEditVendor;
+export default AddEditVendor

@@ -1,26 +1,26 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable react/jsx-indent */
-import React, { useEffect, useState, useReducer } from "react";
-import TextField from "@material-ui/core/TextField";
-import Select from "@material-ui/core/Select";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import axios from "axios";
-import Notification from "../../components/Snackbar/Notification.js";
-import DateFnsUtils from "@date-io/date-fns";
-import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import { addWhInventoryUrl, updateWhInventoryUrl } from "../../public/endpoins";
+import React, { useEffect, useState, useReducer } from 'react'
+import TextField from '@material-ui/core/TextField'
+import Select from '@material-ui/core/Select'
+import InputLabel from '@material-ui/core/InputLabel'
+import MenuItem from '@material-ui/core/MenuItem'
+import { makeStyles } from '@material-ui/core/styles'
+import Button from '@material-ui/core/Button'
+import axios from 'axios'
+import Notification from '../../components/Snackbar/Notification.js'
+import DateFnsUtils from '@date-io/date-fns'
+import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
+import { addWhInventoryUrl, updateWhInventoryUrl } from '../../public/endpoins'
 
-import Header from "../../components/Header/Header";
+import Header from '../../components/Header/Header'
 
-import view_all from "../../assets/img/view_all.png";
-import wh_inventory from "../../assets/img/WH Inventory.png";
+import view_all from '../../assets/img/Eye.png'
+import wh_inventory from '../../assets/img/WH Inventory.png'
+import Back from '../../assets/img/Back_Arrow.png'
+import BootstrapInput from '../../components/Dropdown/dropDown.js'
 
-import Back_Arrow from "../../assets/img/Back_Arrow.png";
-
-import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
+import '../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
 
 const styles = {
   // inputContainer: {
@@ -40,90 +40,109 @@ const styles = {
   inputContainerForTextField: {
     marginTop: 25,
   },
+  inputField: { outline: 'none' },
 
   inputContainerForDropDown: {
     marginTop: 25,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 10,
     paddingLeft: 10,
     paddingRight: 10,
     paddingTop: 2,
   },
+  stylesForButton: {
+    color: 'white',
+    cursor: 'pointer',
+    borderRadius: 10,
+    backgroundColor: '#2c6ddd',
+    width: '115px',
+    height: '40px',
+    outline: 'none',
+  },
+  stylesForWHButton: {
+    color: 'white',
+    cursor: 'pointer',
+    borderRadius: 10,
+    backgroundColor: '#2c6ddd',
+    width: '70%',
+    height: '40px',
+    outline: 'none',
+  },
 
   buttonContainer: {
     marginTop: 25,
   },
-};
-const useStyles = makeStyles(styles);
+}
+const useStyles = makeStyles(styles)
 
 const ItemsData = [
-  { _id: 1, name: "First Item" },
-  { _id: 2, name: "Second Item" },
-  { _id: 3, name: "Third Item" },
-];
+  { _id: 1, name: 'First Item' },
+  { _id: 2, name: 'Second Item' },
+  { _id: 3, name: 'Third Item' },
+]
 
 function AddEditWareHouseInventory(props) {
   const initialState = {
-    _id: "",
-    itemId: "",
-    qty: "",
-    items: "",
-  };
+    _id: '',
+    itemId: '',
+    qty: '',
+    items: '',
+  }
 
   function reducer(state, { field, value }) {
     return {
       ...state,
       [field]: value,
-    };
+    }
   }
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState)
 
-  const { _id, itemId, qty, items } = state;
+  const { _id, itemId, qty, items } = state
 
   const onChangeValue = (e) => {
-    dispatch({ field: e.target.name, value: e.target.value });
-  };
-
-  function validateForm() {
-    return itemId !== "" && qty !== "";
+    dispatch({ field: e.target.name, value: e.target.value })
   }
 
-  const [comingFor, setcomingFor] = useState("");
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  function validateForm() {
+    return itemId !== '' && qty !== ''
+  }
 
-  const [errorMsg, setErrorMsg] = useState("");
-  const [openNotification, setOpenNotification] = useState(false);
+  const [comingFor, setcomingFor] = useState('')
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false)
+
+  const [errorMsg, setErrorMsg] = useState('')
+  const [openNotification, setOpenNotification] = useState(false)
 
   useEffect(() => {
-    setcomingFor(props.history.location.state.comingFor);
-    const selectedRec = props.history.location.state.selectedItem;
+    setcomingFor(props.history.location.state.comingFor)
+    const selectedRec = props.history.location.state.selectedItem
     if (selectedRec) {
       Object.entries(selectedRec).map(([key, val]) => {
-        if (val && typeof val === "object") {
-          dispatch({ field: key, value: val._id });
+        if (val && typeof val === 'object') {
+          dispatch({ field: key, value: val._id })
         } else {
-          dispatch({ field: key, value: val });
+          dispatch({ field: key, value: val })
         }
-      });
+      })
     }
     if (props.history.location.state.items) {
-      dispatch({ field: "items", value: props.history.location.state.items });
+      dispatch({ field: 'items', value: props.history.location.state.items })
     }
     if (props.history.location.state.staff) {
-      dispatch({ field: "staffs", value: props.history.location.state.staff });
+      dispatch({ field: 'staffs', value: props.history.location.state.staff })
     }
     if (props.history.location.state.businessUnit) {
       dispatch({
-        field: "businessUnits",
+        field: 'businessUnits',
         value: props.history.location.state.businessUnit,
-      });
+      })
     }
-  }, []);
+  }, [])
 
   const handleCancel = () => {
-    props.history.goBack();
-  };
+    props.history.goBack()
+  }
 
   const handleAdd = () => {
     // setIsFormSubmitted(true);
@@ -131,83 +150,92 @@ function AddEditWareHouseInventory(props) {
     const params = {
       qty,
       itemId,
-    };
-    console.log("params", params);
+    }
+    console.log('params', params)
     axios
       .post(addWhInventoryUrl, params)
       .then((res) => {
         if (res.data.success) {
-          props.history.goBack();
+          props.history.goBack()
         } else if (!res.data.success) {
-          setOpenNotification(true);
+          setOpenNotification(true)
         }
       })
       .catch((e) => {
-        console.log("error after adding bu inventory", e);
-        setOpenNotification(true);
-        setErrorMsg("Error while adding the item");
-      });
+        console.log('error after adding bu inventory', e)
+        setOpenNotification(true)
+        setErrorMsg('Error while adding the item')
+      })
     // }
-  };
+  }
 
   const handleEdit = () => {
-    setIsFormSubmitted(true);
+    setIsFormSubmitted(true)
     const params = {
       _id,
       itemId,
       qty,
-    };
+    }
     axios
       .put(updateWhInventoryUrl, params)
       .then((res) => {
         if (res.data.success) {
-          props.history.goBack();
+          props.history.goBack()
         } else if (!res.data.success) {
-          setOpenNotification(true);
+          setOpenNotification(true)
         }
       })
       .catch((e) => {
-        console.log("error after adding bu inventory", e);
-        setOpenNotification(true);
-        setErrorMsg("Error while editing the item");
-      });
-  };
+        console.log('error after adding bu inventory', e)
+        setOpenNotification(true)
+        setErrorMsg('Error while editing the item')
+      })
+  }
 
   if (openNotification) {
     setTimeout(() => {
-      setOpenNotification(false);
-      setErrorMsg("");
-    }, 2000);
+      setOpenNotification(false)
+      setErrorMsg('')
+    }, 2000)
   }
 
   return (
     <div
       style={{
-        backgroundColor: "#60d69f",
-        position: "fixed",
-        display: "flex",
-        width: "100%",
-        height: "100%",
-        flexDirection: "column",
+        backgroundColor: '#60d69f',
+        position: 'fixed',
+        display: 'flex',
+        width: '100%',
+        height: '100%',
+        flexDirection: 'column',
         flex: 1,
-        overflowY: "scroll",
+        overflowY: 'scroll',
       }}
     >
       <Header />
 
-      <div className="cPadding">
-        <div className="subheader">
+      <div className='cPadding'>
+        <div className='subheader'>
           <div>
             <img src={wh_inventory} />
             <h4>
-              {comingFor === "add"
-                ? " Add Warehouse Inventory"
-                : "Update Warehouse Inventory"}
+              {comingFor === 'add'
+                ? ' Add Warehouse Inventory'
+                : 'Update Warehouse Inventory'}
             </h4>
           </div>
 
           <div>
-            <img onClick={() => props.history.goBack()} src={view_all} />
+            <Button
+              onClick={() => props.history.goBack()}
+              style={styles.stylesForButton}
+              variant='contained'
+              color='primary'
+            >
+              <img className='icon-view' src={view_all} />
+              &nbsp;&nbsp;
+              <strong style={{ fontSize: '12px' }}>View All</strong>
+            </Button>
             {/* <img src={Search} /> */}
           </div>
         </div>
@@ -258,9 +286,9 @@ function AddEditWareHouseInventory(props) {
         </div>
       </div> */}
 
-        <div style={{ flex: 4, display: "flex", flexDirection: "column" }}>
-          <div className="row">
-            <div className="col-md-12" style={styles.inputContainer}>
+        <div style={{ flex: 4, display: 'flex', flexDirection: 'column' }}>
+          <div className='row'>
+            <div className='col-md-12' style={styles.inputContainer}>
               {/* <TextField
               fullWidth
               id="qty"
@@ -272,33 +300,37 @@ function AddEditWareHouseInventory(props) {
               onChange={onChangeValue}
             /> */}
               <input
-                type="number"
-                placeholder="Qunatity"
-                name={"qty"}
+                style={styles.inputField}
+                type='number'
+                placeholder='Qunatity'
+                name={'qty'}
                 value={qty}
                 onChange={onChangeValue}
-                className="textInputStyle"
+                className='textInputStyle'
                 onKeyDown={(evt) =>
-                  (evt.key === "e" || evt.key === "+" || evt.key === "-") &&
+                  (evt.key === 'e' || evt.key === '+' || evt.key === '-') &&
                   evt.preventDefault()
                 }
               />
             </div>
           </div>
 
-          <div className="row">
-            <div className="col-md-12">
+          <div className='row'>
+            <div className='col-md-12'>
               <div style={styles.inputContainerForDropDown}>
-                <InputLabel id="itemName-label">Item Name</InputLabel>
+                <InputLabel id='itemName-label'>Item Name</InputLabel>
                 <Select
+                  style={styles.inputField}
                   fullWidth
-                  id="itemName"
-                  name="itemId"
+                  id='itemName'
+                  name='itemId'
                   value={itemId}
                   onChange={onChangeValue}
-                  label="Item Name"
+                  label='Item Name'
+                  className='dropDownStyle'
+                  input={<BootstrapInput />}
                 >
-                  <MenuItem value="">
+                  <MenuItem value=''>
                     <em>None</em>
                   </MenuItem>
                   {items &&
@@ -307,14 +339,14 @@ function AddEditWareHouseInventory(props) {
                         <MenuItem key={val._id} value={val._id}>
                           {val.name}
                         </MenuItem>
-                      );
+                      )
                     })}
                 </Select>
               </div>
             </div>
           </div>
 
-          <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
+          <div style={{ display: 'flex', flex: 1, justifyContent: 'center' }}>
             {/* <div style={styles.buttonContainer}>
             <Button onClick={handleCancel} variant="contained">
               Cancel
@@ -323,33 +355,37 @@ function AddEditWareHouseInventory(props) {
 
             <div
               style={{
-                display: "flex",
+                display: 'flex',
                 flex: 1,
                 height: 50,
-                justifyContent: "center",
-                marginTop: "2%",
-                marginBottom: "2%",
+                justifyContent: 'center',
+                marginTop: '2%',
+                marginBottom: '2%',
               }}
             >
-              {comingFor === "add" ? (
+              {comingFor === 'add' ? (
                 <Button
-                  style={{ width: "60%" }}
+                  style={styles.stylesForWHButton}
                   disabled={!validateForm()}
                   onClick={handleAdd}
-                  variant="contained"
-                  color="primary"
+                  variant='contained'
+                  color='primary'
                 >
-                  Add WareHouse Inventory
+                  <strong style={{ fontSize: '12px' }}>
+                    Add WareHouse Inventory
+                  </strong>
                 </Button>
               ) : (
                 <Button
-                  style={{ width: "60%" }}
+                  style={styles.stylesForWHButton}
                   disabled={!validateForm()}
                   onClick={handleEdit}
-                  variant="contained"
-                  color="primary"
+                  variant='contained'
+                  color='primary'
                 >
-                  Update WareHouse Inventory
+                  <strong style={{ fontSize: '12px' }}>
+                    Update WareHouse Inventory
+                  </strong>
                 </Button>
               )}
             </div>
@@ -360,13 +396,13 @@ function AddEditWareHouseInventory(props) {
           <div style={{ marginBottom: 20 }}>
             <img
               onClick={() => props.history.goBack()}
-              src={Back_Arrow}
-              style={{ width: 60, height: 40, cursor: "pointer" }}
+              src={Back}
+              style={{ width: 45, height: 35, cursor: 'pointer' }}
             />
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 }
-export default AddEditWareHouseInventory;
+export default AddEditWareHouseInventory

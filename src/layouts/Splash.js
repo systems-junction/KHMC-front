@@ -41,7 +41,9 @@ class Login extends React.Component {
           position: "fixed",
           width: "100%",
           height: "100%",
-          backgroundImage: `url("${Splash}")`,
+          // backgroundImage: `url("${Splash}")`,
+          backgroundImage:
+            " linear-gradient(25deg, rgba(42,98,205,1) 0%, rgba(4,76,207,1) 33%, rgba(0,45,130,1) 66%, rgba(0,33,106,1) 100%)",
           backgroundPosition: "center",
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",

@@ -51,10 +51,10 @@ const tableDataKeysForPR = ["requestNo", "createdAt", "status"];
 const generatedArrayForPO = [
   { key: "approve", value: "Approve" },
   { key: "reject", value: "Reject" },
-  {
-    key: "pending_approval_from_accounts",
-    value: "Pending approval from accounts",
-  },
+  // {
+  //   key: "pending_approval_from_accounts",
+  //   value: "Pending approval from accounts",
+  // },
 ];
 
 const styles = {
@@ -144,7 +144,7 @@ function AddEditPurchaseRequest(props) {
   };
 
   function validateForm() {
-    return status.length > 0;
+    return status !== "";
   }
 
   const [comingFor, setcomingFor] = useState("");
@@ -268,13 +268,13 @@ function AddEditPurchaseRequest(props) {
         comments,
         dateTimeReceived: updatedAt,
       };
-      console.log(params);
+      console.log("params for update to be send", params);
 
       axios
         .put(updateReceiveRequestsUrl, params)
         .then((res) => {
           if (res.data.success) {
-            console.log(res.data);
+            console.log("updated", res.data);
             props.history.goBack();
           } else if (!res.data.success) {
             setOpenNotification(true);

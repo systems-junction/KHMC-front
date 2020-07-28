@@ -60,53 +60,53 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-restricted-globals */
 
-const CACHE_NAME = "pwa-task-manager";
-const urlsToCache = ["/", "/admin", "/admin/dashboard"];
+// const CACHE_NAME = "pwa-task-manager";
+// const urlsToCache = ["/", "/admin", "/admin/dashboard"];
 
-// Install a service worker
-self.addEventListener("install", (event) => {
-  // Perform install steps
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(function(cache) {
-      console.log("Opened cache");
-      caches
-        .match("/data.json")
-        .then((r) => r.json())
-        .then((r) => console.log(r));
+// // Install a service worker
+// self.addEventListener("install", (event) => {
+//   // Perform install steps
+//   event.waitUntil(
+//     caches.open(CACHE_NAME).then(function(cache) {
+//       console.log("Opened cache");
+//       // caches
+//       //   .match("/data.json")
+//       //   .then((r) => r.json())
+//       //   .then((r) => console.log(r));
 
-      return cache.addAll(urlsToCache);
-    })
-  );
-});
+//       return cache.addAll(urlsToCache);
+//     })
+//   );
+// });
 
-// Cache and return requests
-self.addEventListener("fetch", (event) => {
-  event.respondWith(
-    caches.match(event.request).then(function(response) {
-      // Cache hit - return response
-      if (response) {
-        return response;
-      }
-      return fetch(event.request);
-    })
-  );
-});
+// // Cache and return requests
+// self.addEventListener("fetch", (event) => {
+//   event.respondWith(
+//     caches.match(event.request).then(function(response) {
+//       // Cache hit - return response
+//       if (response) {
+//         return response;
+//       }
+//       return fetch(event.request);
+//     })
+//   );
+// });
 
-// Update a service worker
-self.addEventListener("activate", (event) => {
-  const cacheWhitelist = ["pwa-task-manager"];
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
-  );
-});
+// // Update a service worker
+// self.addEventListener("activate", (event) => {
+//   const cacheWhitelist = ["pwa-task-manager"];
+//   event.waitUntil(
+//     caches.keys().then((cacheNames) => {
+//       return Promise.all(
+//         cacheNames.map((cacheName) => {
+//           if (cacheWhitelist.indexOf(cacheName) === -1) {
+//             return caches.delete(cacheName);
+//           }
+//         })
+//       );
+//     })
+//   );
+// });
 
 self.addEventListener("push", (event) => {
   const data = event.data.json();
@@ -121,7 +121,7 @@ self.addEventListener("push", (event) => {
     image:
       "https://image.shutterstock.com/z/stock-vector-logistic-company-vector-logo-arrow-icon-delivery-icon-arrow-icon-arrow-vector-delivery-service-643639804.jpg",
     badge:
-      "https://image.shutterstock.com/z/stock-vector-logistic-company-vector-logo-arrow-icon-delivery-icon-arrow-icon-arrow-vector-delivery-service-643639804.jpg",
+      "https://image.shutterstock.com/z/stock-vector-logistic-company-vector-logo-arrow-icon-delivery-icon-arrow-icon-arrow-vector-delivery-service-643639804.jpg"
   };
   event.waitUntil(self.registration.showNotification(data.title, options));
 
@@ -166,22 +166,22 @@ self.addEventListener("notificationclick", function(event) {
   const title = event.notification.title;
 
   // const baseUrl = "http://localhost:3000";
-  const live = "http://167.172.148.139:8080";
-  const baseUrl=live
+  const live = "https://test.khmc-staging.com";
+  const baseUrl = live;
 
   const mapMsgToRoute = [
     {
       title: "Purchase Requested Generated",
-      url: `${baseUrl}/home/controlroom/wms/pr`,
+      url: `${baseUrl}/home/controlroom/wms/pr`
     },
     {
       title: "Purchase Order Generated",
-      url: `${baseUrl}/home/controlroom/wms/po`,
+      url: `${baseUrl}/home/controlroom/wms/po`
     },
     {
       title: "Account Approval Needed",
-      url: `${baseUrl}/home/controlroom/wms/receiverequests`,
-    },
+      url: `${baseUrl}/home/controlroom/wms/receiverequests`
+    }
   ];
 
   event.notification.close();
@@ -189,7 +189,7 @@ self.addEventListener("notificationclick", function(event) {
   event.waitUntil(
     clients
       .matchAll({
-        type: "window",
+        type: "window"
       })
       .then(function(clientList) {
         if (clients.openWindow) {

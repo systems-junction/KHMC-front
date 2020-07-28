@@ -39,15 +39,39 @@ import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 const tableHeadingForFUHead = [
   "Return Request No",
   "FU Name",
+  "Date Generated",
   "Item Code",
   "Item Name",
   "Reason",
   "Status",
   "Actions",
 ];
+
+const tableHeadingForWareHouseMembers = [
+  "Return Request No",
+  "FU Name",
+  "Date Generated",
+  "Item Code",
+  "Item Name",
+  "Reason",
+  "Status",
+  "Actions",
+];
+
+const tableDataKeysForWareHouseMembers = [
+  "returnRequestNo",
+  ["fuId", "fuName"],
+  "dateGenerated",
+  ["itemId", "itemCode"],
+  ["itemId", "name"],
+  "reason",
+  "status",
+];
+
 const tableDataKeysForFUHead = [
   "returnRequestNo",
   ["fuId", "fuName"],
+  "dateGenerated",
   ["itemId", "itemCode"],
   ["itemId", "name"],
   "reason",
@@ -56,25 +80,31 @@ const tableDataKeysForFUHead = [
 
 const tableHeading = [
   "Return Request No",
-  "Generated",
-  "Date/Time Generated",
   "FU Name",
-  "Approved By",
+  "Date Generated",
+  "Item Code",
+  "Item Name",
+  "Reason",
   "Status",
   "Actions",
 ];
 const tableDataKeys = [
   "returnRequestNo",
-  "generated",
-  "dateGenerated",
   ["fuId", "fuName"],
-  ["approvedBy", "firstName"],
-  "secondStatus",
+  "dateGenerated",
+  ["itemId", "itemCode"],
+  ["itemId", "name"],
+  "reason",
+  "status",
 ];
 
-const actions = { edit: true };
+const actions = { edit: true, view: true };
 const actionsForFUInventoryKeeper = {
   edit: true,
+  view: true,
+};
+
+const actionsForWareHouseMembers = {
   view: true,
 };
 
@@ -199,7 +229,7 @@ export default function ReplenishmentRequest(props) {
   };
 
   function handleEdit(rec) {
-    let path = `replenishment/edit`;
+    let path = `returnitems/edit`;
     props.history.push({
       pathname: path,
       state: {
@@ -244,7 +274,7 @@ export default function ReplenishmentRequest(props) {
   const handleView = (rec) => {
     console.log("item clicked", rec);
 
-    let path = `replenishment/returnitems`;
+    let path = `returnitems/view`;
     props.history.push({
       pathname: path,
       state: {
@@ -256,7 +286,7 @@ export default function ReplenishmentRequest(props) {
 
   function handleReceive(rec) {
     console.log("rec", rec);
-    let path = `replenishment/receive`;
+    let path = `returnitems/edit`;
     props.history.push({
       pathname: path,
       state: {
@@ -326,6 +356,8 @@ export default function ReplenishmentRequest(props) {
                       "FU Internal Request Return Approval Member" ||
                     currentUser.staffTypeId.type === "FU Inventory Keeper"
                       ? tableDataKeysForFUHead
+                      : currentUser.staffTypeId.type === "Warehouse Member"
+                      ? tableDataKeysForWareHouseMembers
                       : tableDataKeys
                   }
                   tableHeading={
@@ -333,12 +365,17 @@ export default function ReplenishmentRequest(props) {
                       "FU Internal Request Return Approval Member" ||
                     currentUser.staffTypeId.type === "FU Inventory Keeper"
                       ? tableHeadingForFUHead
+                      : currentUser.staffTypeId.type === "Warehouse Member"
+                      ? tableHeadingForWareHouseMembers
                       : tableHeading
                   }
                   action={
                     currentUser.staffTypeId.type === "FU Inventory Keeper" ||
-                    currentUser.staffTypeId.type ===  "FU Internal Request Return Approval Member"
+                    currentUser.staffTypeId.type ===
+                      "FU Internal Request Return Approval Member"
                       ? actionsForFUInventoryKeeper
+                      : currentUser.staffTypeId.type === "Warehouse Member"
+                      ? actionsForWareHouseMembers
                       : actions
                   }
                   handleEdit={handleEdit}

@@ -22,8 +22,9 @@ import FIN from "../../assets/img/FIN.png";
 import Control_Room from "../../assets/img/Control_Room.png";
 import BU from "../../assets/img/business_Unit.png";
 import FunctionalUnit from "../../assets/img/Functional Unit.png";
-import Items from "../../assets/img/Items Mgmt.png";
+
 import Staff from "../../assets/img/Staff.png";
+import PurchaseRequest from "../../assets/img/purchase request.png";
 
 import React, { useEffect } from "react";
 import "./MenuPage.css";
@@ -34,19 +35,19 @@ import Back from "../../assets/img/Back_Arrow.png";
 import KHMC_White from "../../assets/img/KHMC_White.png";
 
 import Influence_white from "../../assets/img/Influence_white.png";
+import ReturnItem from "../../assets/img/Return Item.png";
 
 import MenuTree from "../../components/MenuTree/MenuTree";
 
 const admin = [
-  { img: Control_Room, text: "Control Room" },
-  { img: RCM, text: "RCM" },
+  { img: Control_Room, text: "Control Room", path: "" },
+  { img: RCM, text: "RCM", path: "controlroom/rcm" },
   { img: WMS, text: "WMS", path: "controlroom/wms" },
   { img: FIN, text: "FIN" },
   { img: BU, text: "BU Mgmt", path: "controlroom/bus" },
   { img: FunctionalUnit, text: "FU Mgmt", path: "controlroom/fus" },
-  { img: Items, text: "Items", path: "controlroom/items" },
   { img: Staff, text: "Staff", path: "controlroom/staff" },
-  { img: Control_Room, text: "ControlRoom" },
+  { text: "", path: "", path: "" },
 ];
 
 const buHead = [
@@ -87,7 +88,11 @@ const warehouseMember = [
   { img: "", text: "", path: "" },
   { img: "", text: "", path: "" },
   { img: "", text: "", path: "" },
-  { img: "", text: "", path: "" },
+  {
+    img: ReturnItem,
+    text: "FU Return Request",
+    path: "controlroom/fus/replenishment/returnitems/view",
+  },
   {
     img: FunctionalUnit,
     text: "FU Mgmt",
@@ -99,26 +104,24 @@ const warehouseMember = [
 
 const warehouseIncharge = [
   { img: Control_Room, text: "Control Room", path: "" },
-  { img: "", text: "", path: "" },
   { img: WMS, text: "WMS", path: "controlroom/wms" },
-  { img: "", text: "", path: "" },
-  { img: "", text: "", path: "" },
-  {
-    img: FunctionalUnit,
-    text: "FU Mgmt",
-    path: "controlroom/fus/replenishment",
-  },
-  { img: "", text: "", path: "" },
-  { img: "", text: "", path: "" },
 ];
 
 const fuHead = [
   { img: Control_Room, text: "Control Room" },
+  {
+    img: PurchaseRequest,
+    text: "Professional Order",
+    path: "controlroom/bus/professionalorder",
+  },
+  {
+    img: PurchaseRequest,
+    text: "Medicinal Order",
+    path: "controlroom/bus/replenishment",
+  },
   { img: "", text: "", path: "" },
   { img: "", text: "", path: "" },
-  { img: "", text: "", path: "" },
-  { img: BU, text: "BU Mgmt", path: "controlroom/bus/replenishment" },
-
+  // { img: BU, text: 'BU Mgmt', path: 'controlroom/bus/replenishment' },
   {
     img: FunctionalUnit,
     text: "FU Mgmt",
@@ -130,7 +133,7 @@ const fuHead = [
 
 const fuInventoryKeeper = [
   { img: Control_Room, text: "Control Room" },
-  { img: "", text: "", path: "" },
+  { img: FunctionalUnit, text: "FU", path: "controlroom/fus" },
   { img: "", text: "", path: "" },
   { img: "", text: "", path: "" },
   { img: "", text: "", path: "" },
@@ -182,9 +185,17 @@ const fuReturnRequestApprovalMember = [
 
 const buMember = [
   { img: Control_Room, text: "Control Room", path: "" },
+  {
+    img: PurchaseRequest,
+    text: "Medicinal Order",
+    path: "controlroom/bus/replenishment",
+  },
+  {
+    img: PurchaseRequest,
+    text: "Professional Order",
+    path: "controlroom/bus/professionalorder",
+  },
   { img: "", text: "", path: "" },
-  { img: "", text: "", path: "" },
-  { img: BU, text: "BU Mgmt", path: "controlroom/bus/replenishment" },
   { img: "", text: "", path: "" },
   { img: "", text: "", path: "" },
   { img: "", text: "", path: "" },

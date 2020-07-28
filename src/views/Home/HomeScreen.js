@@ -21,42 +21,7 @@ import Back from "../../assets/img/Back_Arrow.png";
 
 import FIN from "../../assets/img/FIN.png";
 import Control_Room from "../../assets/img/Control_Room.png";
-
-import "./MenuPage.css";
-import { render } from "react-dom";
-
-// const convertedVapidKey = urlBase64ToUint8Array(
-//   "BOHtR0qVVMIA-IJEru-PbIKodcux05OzVVIJoIBKQu3Sp1mjvGkjaT-1PIzkEwAiAk6OuSCZfNGsgYkJJjOyV7k"
-// );
-
-// function urlBase64ToUint8Array(base64String) {
-//   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
-//   // eslint-disable-next-line
-//   const base64 = (base64String + padding)
-//     .replace(/\-/g, "+")
-//     .replace(/_/g, "/");
-
-//   const rawData = window.atob(base64);
-//   const outputArray = new Uint8Array(rawData.length);
-
-//   for (let i = 0; i < rawData.length; ++i) {
-//     outputArray[i] = rawData.charCodeAt(i);
-//   }
-//   return outputArray;
-// }
-
-// function sendSubscription(subscription) {
-//   axios
-//     .post(`http://localhost:4000/api/accesslevel/testnot`, subscription)
-//     .then((res) => {
-//       if (res) {
-//         console.log("response for the notification request", res);
-//       }
-//     })
-//     .catch((e) => {
-//       console.log("error for the notification request", e);
-//     });
-// }
+import "../../components/MenuTree/MenuPage.css";
 
 class HomeScreen extends React.Component {
   constructor(props) {
@@ -64,57 +29,13 @@ class HomeScreen extends React.Component {
 
     this.state = {
       openApps: false,
+      currentUser: "",
     };
   }
 
-  // componentDidMount() {
-  //   if ("serviceWorker" in navigator) {
-  //     navigator.serviceWorker.ready
-  //       .then(function(registration) {
-  //         if (!registration.pushManager) {
-  //           console.log("Push manager unavailable.");
-  //           return;
-  //         }
-
-  //         registration.pushManager
-  //           .getSubscription()
-  //           .then(function(existedSubscription) {
-  //             if (existedSubscription === null) {
-  //               console.log("No subscription detected, make a request.");
-  //               registration.pushManager
-  //                 .subscribe({
-  //                   applicationServerKey:
-  //                     "BOHtR0qVVMIA-IJEru-PbIKodcux05OzVVIJoIBKQu3Sp1mjvGkjaT-1PIzkEwAiAk6OuSCZfNGsgYkJJjOyV7k",
-  //                   userVisibleOnly: true,
-  //                 })
-  //                 .then(function(newSubscription) {
-  //                   console.log("New subscription added.", newSubscription);
-  //                   sendSubscription(newSubscription);
-  //                 })
-  //                 .catch(function(e) {
-  //                   if (Notification.permission !== "granted") {
-  //                     console.log("Permission was not granted.");
-  //                   } else {
-  //                     console.error(
-  //                       "An error ocurred during the subscription process.",
-  //                       e
-  //                     );
-  //                   }
-  //                 });
-  //             } else {
-  //               console.log("Existed subscription detected.");
-  //               sendSubscription(existedSubscription);
-  //             }
-  //           });
-  //       })
-  //       .catch(function(e) {
-  //         console.error(
-  //           "An error ocurred during Service Worker registration.",
-  //           e
-  //         );
-  //       });
-  //   }
-  // }
+  componentWillMount() {
+    this.setState({ currentUser: cookie.load("current_user") });
+  }
 
   render() {
     return (
@@ -138,7 +59,7 @@ class HomeScreen extends React.Component {
             minHeight: "100%",
             alignItems: "center",
             justifyContent: "center",
-            position: "fixed",
+            position: "center",
             left: "45%",
           }}
         >
@@ -155,7 +76,8 @@ class HomeScreen extends React.Component {
               for="menu-open"
               style={{
                 boxShadow: "5px 5px 5px #2433a5",
-                height:100, width:100
+                height: 100,
+                width: 100,
               }}
             >
               <div
@@ -202,6 +124,7 @@ class HomeScreen extends React.Component {
                   alignItems: "center",
                   height: "100%",
                 }}
+                onClick={() => this.props.history.push('/home/rcm')}
               >
                 <img
                   src={RCM}
@@ -233,6 +156,7 @@ class HomeScreen extends React.Component {
                   alignItems: "center",
                   height: "100%",
                 }}
+                onClick={() => this.props.history.push("/home/wms")}
               >
                 <img
                   src={WMS}
@@ -287,36 +211,41 @@ class HomeScreen extends React.Component {
               </div>
             </a>
             <a className="menu-item item-4">
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                }}
-                onClick={() => this.props.history.push("/home/controlroom")}
-              >
-                <img
-                  src={Control_Room}
+              {this.state.currentUser &&
+              this.state.currentUser.staffTypeId.type === "admin" ? (
+                <div
                   style={{
-                    maxWidth: "30%",
-                    height: "auto",
-                    position: "absolute",
-                    top: 11,
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100%",
                   }}
-                />
-                <h6
-                  style={{
-                    position: "absolute",
-                    top: 40,
-                    color: "white",
-                    fontWeight: "700",
-                  }}
+                  onClick={() => this.props.history.push("/home/controlroom")}
                 >
-                  Control Room
-                </h6>
-              </div>
+                  <img
+                    src={Control_Room}
+                    style={{
+                      maxWidth: "30%",
+                      height: "auto",
+                      position: "absolute",
+                      top: 11,
+                    }}
+                  />
+                  <h6
+                    style={{
+                      position: "absolute",
+                      top: 40,
+                      color: "white",
+                      fontWeight: "700",
+                    }}
+                  >
+                    Control Room
+                  </h6>
+                </div>
+              ) : (
+                undefined
+              )}
             </a>
             <a className="menu-item item-5"></a>
             <a className="menu-item item-6"></a>

@@ -1,0 +1,8 @@
+.purchaseStyle {
+  color: 'white';
+  cursor: 'pointer';
+  border-radius: 15;
+  background-color: '#2c6ddd';
+  height: '50px';
+  outline: 'none';
+}

@@ -30,6 +30,10 @@ import {
   updateReceiveItemsUrl,
 } from "../../public/endpoins";
 
+import InputLabelComponent from "../../components/InputLabel/inputLabel";
+import BootstrapInput from "../../components/Dropdown/dropDown.js";
+import ErrorMessage from "../../components/ErrorMessage/errorMessage";
+
 import cookie from "react-cookies";
 
 import Header from "../../components/Header/Header";
@@ -53,11 +57,11 @@ const styles = {
 
   inputContainerForDropDown: {
     marginTop: 35,
-    backgroundColor: "white",
-    borderRadius: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingTop: 2,
+    // backgroundColor: 'white',
+    // borderRadius: 10,
+    // paddingLeft: 10,
+    // paddingRight: 10,
+    // paddingTop: 2,
   },
 
   buttonContainer: {
@@ -65,6 +69,7 @@ const styles = {
   },
   styleForLabel: {
     fontWeight: "700",
+    color: "white",
   },
 };
 const useStyles = makeStyles(tableStyles);
@@ -83,23 +88,23 @@ function ReceiveItems(props) {
     currentQty: "",
     requiredQty: "",
     receivedQty: "",
-    bonusQty: "",
-    batchNumber: "",
-    lotNo: "",
-    unit: "",
-    discount: "",
-    uniyDiscount: "",
-    discountAmount: "",
-    tax: "",
-    taxAmount: "",
-    finalUnitPrice: "",
-    discountAmount2: "",
-    subTotal: "",
-    totalPrice: "",
-    invoice: "",
+    bonusQty: "0",
+    batchNumber: "123",
+    lotNo: "123",
+    unit: "kg",
+    discount: "0",
+    uniyDiscount: "0",
+    discountAmount: "0",
+    tax: "0",
+    taxAmount: "0",
+    finalUnitPrice: "1000",
+    discountAmount2: "0",
+    subTotal: "1000",
+    totalPrice: "1000",
+    invoice: "12345",
     date: "",
-    receivedDate: "",
-    comments: "",
+    receivedDate: new Date(),
+    comments: "Some comments for receiving",
     expiryDate: "",
     discountPercentage: "",
     statusForReceivingItem: "",
@@ -229,6 +234,7 @@ function ReceiveItems(props) {
   }
 
   const handleAdd = () => {
+    setIsFormSubmitted(true);
     if (validateForm()) {
       let params = {
         itemId: selectedItem.item.itemId._id,
@@ -339,7 +345,7 @@ function ReceiveItems(props) {
 
   const handleAddReturnRequest = () => {
     console.log("rec", selectedItem);
-    let path = `/home/controlroom/wms/materialreceiving/viewpo/externalreturn/add`;
+    let path = `/home/wms/materialreceiving/viewpo/externalreturn/add`;
     props.history.push({
       pathname: path,
       state: {
@@ -460,9 +466,7 @@ function ReceiveItems(props) {
 
             <div className="col-md-3">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Received Qty
-                </InputLabel>
+                <InputLabelComponent>Received Qty*</InputLabelComponent>
                 <input
                   type="number"
                   placeholder="Received Qty"
@@ -474,13 +478,15 @@ function ReceiveItems(props) {
                   // error={receivedQty.includes("e", 0)}
                 />
               </div>
+              <ErrorMessage
+                name={receivedQty}
+                isFormSubmitted={isFormSubmitted}
+              />
             </div>
 
             <div className="col-md-3">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Bonus Qty
-                </InputLabel>
+                <InputLabelComponent>Bonus Qty*</InputLabelComponent>
                 <input
                   type="number"
                   placeholder="Bonus Qty"
@@ -491,15 +497,14 @@ function ReceiveItems(props) {
                   onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 />
               </div>
+              <ErrorMessage name={bonusQty} isFormSubmitted={isFormSubmitted} />
             </div>
           </div>
 
           <div className="row">
             <div className="col-md-4">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Batch Number
-                </InputLabel>
+                <InputLabelComponent>Batch Number*</InputLabelComponent>
                 <input
                   type="number"
                   placeholder="Batch Number"
@@ -510,13 +515,15 @@ function ReceiveItems(props) {
                   onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 />
               </div>
+              <ErrorMessage
+                name={batchNumber}
+                isFormSubmitted={isFormSubmitted}
+              />
             </div>
 
             <div className="col-md-4">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  LOT No
-                </InputLabel>
+                <InputLabelComponent>LOT No*</InputLabelComponent>
                 <input
                   type="number"
                   placeholder="LOT No"
@@ -527,23 +534,26 @@ function ReceiveItems(props) {
                   onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 />
               </div>
+              <ErrorMessage name={lotNo} isFormSubmitted={isFormSubmitted} />
             </div>
 
-            <div
-              className="col-md-4"
-              style={(styles.inputContainerForTextField, { marginTop: 35 })}
-            >
-              <InputLabel style={styles.styleForLabel} id="generated-label">
-                Expiry Date
-              </InputLabel>
+            <div className="col-md-4" style={styles.inputContainerForTextField}>
+              <InputLabelComponent>Expiry Date*</InputLabelComponent>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DatePicker
-                  inputVariant="outlined"
+                  // inputVariant="outlined"
                   fullWidth={true}
                   format="dd/MM/yyyy"
                   // label="Expiry Date"
                   onChange={(val) => onChangeDate(val, "expiryDate")}
-                  style={{ borderRadius: 10, backgroundColor: "white" }}
+                  style={{
+                    borderRadius: 10,
+                    backgroundColor: "white",
+                    height: 47,
+                    marginTop: 5,
+                    paddingTop:9,
+                    paddingLeft:10
+                  }}
                   value={
                     comingFor === "add"
                       ? expiryDate
@@ -551,17 +561,22 @@ function ReceiveItems(props) {
                         : null
                       : expiryDate
                   }
+                  InputProps={{
+                    disableUnderline: true,
+                  }}
                 />
               </MuiPickersUtilsProvider>
+              <ErrorMessage
+                name={expiryDate}
+                isFormSubmitted={isFormSubmitted}
+              />
             </div>
           </div>
 
           <div className="row">
             <div className="col-md-3">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Unit
-                </InputLabel>
+                <InputLabelComponent>Unit*</InputLabelComponent>
                 <input
                   type="text"
                   placeholder="Unit"
@@ -571,13 +586,12 @@ function ReceiveItems(props) {
                   className="textInputStyle"
                 />
               </div>
+              <ErrorMessage name={unit} isFormSubmitted={isFormSubmitted} />
             </div>
 
             <div className="col-md-3">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Discount %
-                </InputLabel>
+                <InputLabelComponent>Discount %*</InputLabelComponent>
                 <input
                   type="number"
                   placeholder="Discount %"
@@ -588,13 +602,12 @@ function ReceiveItems(props) {
                   onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 />
               </div>
+              <ErrorMessage name={discount} isFormSubmitted={isFormSubmitted} />
             </div>
 
             <div className="col-md-3">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Unit Discount
-                </InputLabel>
+                <InputLabelComponent>Unit Discount*</InputLabelComponent>
                 <input
                   placeholder="Unit Discount"
                   name={"uniyDiscount"}
@@ -604,13 +617,15 @@ function ReceiveItems(props) {
                   onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 />
               </div>
+              <ErrorMessage
+                name={uniyDiscount}
+                isFormSubmitted={isFormSubmitted}
+              />
             </div>
 
             <div className="col-md-3">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Discount Amount
-                </InputLabel>
+                <InputLabelComponent>Discount Amount*</InputLabelComponent>
                 <input
                   type="number"
                   placeholder="Discount Amount"
@@ -621,15 +636,17 @@ function ReceiveItems(props) {
                   onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 />
               </div>
+              <ErrorMessage
+                name={discountAmount}
+                isFormSubmitted={isFormSubmitted}
+              />
             </div>
           </div>
 
           <div className="row">
             <div className="col-md-6">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Tax %
-                </InputLabel>
+                <InputLabelComponent>Tax %*</InputLabelComponent>
 
                 <input
                   type="number"
@@ -641,13 +658,12 @@ function ReceiveItems(props) {
                   onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 />
               </div>
+              <ErrorMessage name={tax} isFormSubmitted={isFormSubmitted} />
             </div>
 
             <div className="col-md-6">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Tax Amount
-                </InputLabel>
+                <InputLabelComponent>Tax Amount*</InputLabelComponent>
                 <input
                   type="number"
                   placeholder="Tax Amount"
@@ -658,15 +674,17 @@ function ReceiveItems(props) {
                   onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 />
               </div>
+              <ErrorMessage
+                name={taxAmount}
+                isFormSubmitted={isFormSubmitted}
+              />
             </div>
           </div>
 
           <div className="row">
             <div className="col-md-3">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Final Unit Price
-                </InputLabel>
+                <InputLabelComponent>Final Unit Price*</InputLabelComponent>
                 <input
                   type="number"
                   placeholder="Final Unit Price"
@@ -677,13 +695,15 @@ function ReceiveItems(props) {
                   onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 />
               </div>
+              <ErrorMessage
+                name={finalUnitPrice}
+                isFormSubmitted={isFormSubmitted}
+              />
             </div>
 
             <div className="col-md-3">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Sub Total
-                </InputLabel>
+                <InputLabelComponent>Sub Total*</InputLabelComponent>
                 <input
                   type="number"
                   placeholder="Sub Total"
@@ -694,13 +714,12 @@ function ReceiveItems(props) {
                   onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 />
               </div>
+              <ErrorMessage name={subTotal} isFormSubmitted={isFormSubmitted} />
             </div>
 
             <div className="col-md-3">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Total Price
-                </InputLabel>
+                <InputLabelComponent>Total Price*</InputLabelComponent>
                 <input
                   type="number"
                   placeholder="Total Price"
@@ -711,13 +730,15 @@ function ReceiveItems(props) {
                   onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 />
               </div>
+              <ErrorMessage
+                name={totalPrice}
+                isFormSubmitted={isFormSubmitted}
+              />
             </div>
 
             <div className="col-md-3">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Discount Amount
-                </InputLabel>
+                <InputLabelComponent>Amount Discount*</InputLabelComponent>
                 <input
                   type="number"
                   placeholder="Discount Amount"
@@ -728,15 +749,17 @@ function ReceiveItems(props) {
                   onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 />
               </div>
+              <ErrorMessage
+                name={discountAmount2}
+                isFormSubmitted={isFormSubmitted}
+              />
             </div>
           </div>
 
           <div className="row">
             <div className="col-md-4">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Invoice
-                </InputLabel>
+                <InputLabelComponent>Invoice*</InputLabelComponent>
                 <input
                   type="number"
                   placeholder="Invoice"
@@ -747,42 +770,55 @@ function ReceiveItems(props) {
                   onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 />
               </div>
+              <ErrorMessage name={invoice} isFormSubmitted={isFormSubmitted} />
             </div>
 
             <div className="col-md-4">
-              <div
-                style={(styles.inputContainerForTextField, { marginTop: 35 })}
-              >
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Date/Time Invoice
-                </InputLabel>
+              <div style={styles.inputContainerForTextField}>
+                <InputLabelComponent>Date/Time Invoice*</InputLabelComponent>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <DateTimePicker
-                    inputVariant="outlined"
+                    // inputVariant="outlined"
                     fullWidth={true}
                     // label="Date/Time Invoice"
                     onChange={(val) => onChangeDate(val, "date")}
-                    style={{ backgroundColor: "white", borderRadius: 10 }}
+                    style={{
+                      backgroundColor: "white",
+                      borderRadius: 10,
+                      height: 47,
+                      marginTop: 5,
+                      paddingTop:9,
+                      paddingLeft:10
+                    }}
                     value={comingFor === "add" ? (date ? date : null) : date}
+                    InputProps={{
+                      disableUnderline: true,
+                    }}
                   />
                 </MuiPickersUtilsProvider>
+                <ErrorMessage name={date} isFormSubmitted={isFormSubmitted} />
               </div>
             </div>
 
             <div className="col-md-4">
               <div
-                style={(styles.inputContainerForTextField, { marginTop: 35 })}
+                style={(styles.inputContainerForTextField)}
               >
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Date/Time received
-                </InputLabel>
+                <InputLabelComponent>Date/Time Recieved*</InputLabelComponent>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <DateTimePicker
-                    inputVariant="outlined"
+                    // inputVariant="outlined"
                     fullWidth={true}
                     // label="Date/Time Received"
                     onChange={(val) => onChangeDate(val, "receivedDate")}
-                    style={{ backgroundColor: "white", borderRadius: 10 }}
+                    style={{
+                      backgroundColor: "white",
+                      borderRadius: 10,
+                      height: 47,
+                      marginTop: 5,
+                      paddingTop:9,
+                      paddingLeft:10
+                    }}
                     value={
                       comingFor === "add"
                         ? receivedDate
@@ -790,8 +826,15 @@ function ReceiveItems(props) {
                           : null
                         : receivedDate
                     }
+                    InputProps={{
+                      disableUnderline: true,
+                    }}
                   />
                 </MuiPickersUtilsProvider>
+                <ErrorMessage
+                  name={receivedDate}
+                  isFormSubmitted={isFormSubmitted}
+                />
               </div>
             </div>
           </div>
@@ -799,9 +842,7 @@ function ReceiveItems(props) {
           <div className="row">
             <div className="col-md-12">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Comments
-                </InputLabel>
+                <InputLabelComponent>Comments*</InputLabelComponent>
                 <input
                   placeholder="Comments"
                   name={"comments"}
@@ -810,15 +851,14 @@ function ReceiveItems(props) {
                   className="textInputStyle"
                 />
               </div>
+              <ErrorMessage name={comments} isFormSubmitted={isFormSubmitted} />
             </div>
           </div>
 
           <div className="row">
             <div className="col-md-12">
               <div style={styles.inputContainerForDropDown}>
-                <InputLabel id="statusForReceivingItem-label">
-                  Status
-                </InputLabel>
+                <InputLabelComponent>Status*</InputLabelComponent>
                 <Select
                   fullWidth
                   id="statusForReceivingItem"
@@ -826,6 +866,8 @@ function ReceiveItems(props) {
                   value={statusForReceivingItem}
                   onChange={onChangeValue}
                   label="Status"
+                  className="dropDownStyle"
+                  input={<BootstrapInput />}
                 >
                   <MenuItem value="">
                     <em>None</em>
@@ -839,6 +881,10 @@ function ReceiveItems(props) {
                     );
                   })}
                 </Select>
+                <ErrorMessage
+                  name={statusForReceivingItem}
+                  isFormSubmitted={isFormSubmitted}
+                />
               </div>
             </div>
           </div>

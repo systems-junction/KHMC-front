@@ -20,6 +20,7 @@ import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import {
   addInternalReturnRequest,
   updateInternalReturnRequest,
+  getReceiveRequestFUUrl,
 } from "../../public/endpoins";
 
 import Paper from "@material-ui/core/Paper";
@@ -39,6 +40,12 @@ import DialogContent from "@material-ui/core/DialogContent";
 import Add_New from "../../assets/img/Add_New.png";
 
 import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
+
+import BootstrapInput from "../../components/Dropdown/dropDown.js";
+
+import Loader from "react-loader-spinner";
+
+import InputLabelComponent from "../../components/InputLabel/inputLabel";
 
 const reasonArray = [
   { key: "jit", value: "JIT" },
@@ -86,12 +93,12 @@ const styles = {
   },
 
   inputContainerForDropDown: {
-    marginTop: 35,
-    backgroundColor: "white",
-    borderRadius: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingTop: 2,
+    marginTop: 25,
+    // backgroundColor: "white",
+    // borderRadius: 10,
+    // paddingLeft: 10,
+    // paddingRight: 10,
+    // paddingTop: 2,
   },
 
   buttonContainer: {
@@ -100,6 +107,15 @@ const styles = {
   stylesForLabel: {
     fontWeight: "700",
     color: "white",
+  },
+
+  inputContainerForDate: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    borderWidth: 0,
+    height: 47,
+    paddingLeft: 10,
+    paddingTop: 8,
   },
 };
 const useStyles = makeStyles(tableStyles);
@@ -155,6 +171,9 @@ function AddEditPurchaseRequest(props) {
 
     damageReport: "",
     replenishmentRequestFU: "",
+
+    returnedQty: "",
+    receivedQty: "",
   };
 
   function reducer(state, { field, value }) {
@@ -214,6 +233,10 @@ function AddEditPurchaseRequest(props) {
 
     damageReport,
     replenishmentRequestFU,
+
+    returnedQty,
+
+    receivedQty,
   } = state;
 
   const [comingFor, setcomingFor] = useState("");
@@ -242,7 +265,11 @@ function AddEditPurchaseRequest(props) {
 
   const [fuObj, setFUObj] = useState("");
 
+  const [receiveRequests, setReceiveRequests] = useState("");
+
   useEffect(() => {
+    getReceiveRequestsForFU();
+
     setCurrentUser(cookie.load("current_user"));
 
     setcomingFor(props.history.location.state.comingFor);
@@ -290,12 +317,48 @@ function AddEditPurchaseRequest(props) {
     }
   }, []);
 
+  function getReceiveRequestsForFU() {
+    axios
+      .get(getReceiveRequestFUUrl)
+      .then((res) => {
+        if (res.data.success) {
+          console.log("receive requests", res.data.data.receiveItems);
+          const receivedItems = res.data.data.receiveItems;
+
+          for (let i = 0; i < receivedItems.length; i++) {
+            if (
+              receivedItems[i].replenishmentRequestId ===
+                props.history.location.state.selectedItem._id ||
+              (props.history.location.state.selectedItem
+                .replenishmentRequestFU &&
+                receivedItems[i].replenishmentRequestId ===
+                  props.history.location.state.selectedItem
+                    .replenishmentRequestFU._id)
+            ) {
+              dispatch({
+                field: "receivedQty",
+                value: receivedItems[i].receivedQty,
+              });
+            }
+          }
+          setReceiveRequests(res.data.data.receiveItems);
+        } else if (!res.data.success) {
+          setErrorMsg(res.data.error);
+          setOpenNotification(true);
+        }
+        return res;
+      })
+      .catch((e) => {
+        console.log("error: ", e);
+      });
+  }
+
   const onChangeValue = (e) => {
     dispatch({ field: e.target.name, value: e.target.value });
   };
 
   const handleCheckBox = (e) => {
-    if (e.target.name === "damaged") {
+    if (e.target.name === "Damaged") {
       setDialogOpen(true);
     }
     dispatch({ field: "reason", value: e.target.name });
@@ -311,7 +374,7 @@ function AddEditPurchaseRequest(props) {
       reason !== "" &&
       reasonDetail !== "" &&
       //   comments !== "" &&
-      expiryDate !== ""
+      expiryDate !== "" &&
       //   fuItemCost !== "" &&
       //   itemCode !== "" &&
       //   description !== "" &&
@@ -320,6 +383,9 @@ function AddEditPurchaseRequest(props) {
       //   currentQty !== ""
       //   recieptUnit !== "" &&
       //   issueUnit !== ""
+      returnedQty !== "" &&
+      returnedQty > 0 &&
+      returnedQty <= receivedQty
     );
   }
 
@@ -347,10 +413,11 @@ function AddEditPurchaseRequest(props) {
         },
 
         status:
-          reason === "approvalNotRequired" ? "approved" : "pending_approval",
+          reason === "Approval Not Required" ? "approved" : "pending_approval",
         replenishmentRequestFU: _id,
         // comments,
         // requestedQty,
+        returnedQty,
       };
 
       console.log("params", params);
@@ -400,13 +467,15 @@ function AddEditPurchaseRequest(props) {
         status,
         replenishmentRequestFU: replenishmentRequestFU._id,
         commentNote,
+        returnedQty,
       };
 
       let params;
 
       if (
         currentUser.staffTypeId.type ===
-        "FU Internal Request Return Approval Member"
+        "FU Internal Request Return Approval Member" ||  currentUser.staffTypeId.type ===
+        "admin" 
       ) {
         params = {
           ...obj,
@@ -530,8 +599,6 @@ function AddEditPurchaseRequest(props) {
     setDialogOpen(false);
   };
 
-  console.log("rep request fu", replenishmentRequestFU);
-
   return (
     <div
       style={{
@@ -553,6 +620,8 @@ function AddEditPurchaseRequest(props) {
             <h4>
               {comingFor === "add"
                 ? " Add Internal Return Request"
+                : comingFor === "view"
+                ? "View Internal Return Request"
                 : " Edit Internal Return Request"}
             </h4>
           </div>
@@ -562,155 +631,187 @@ function AddEditPurchaseRequest(props) {
           </div> */}
         </div>
 
-        <div style={{ flex: 4, display: "flex", flexDirection: "column" }}>
-          <div className="row">
-            <div className="col-md-6" style={styles.inputContainerForTextField}>
-              <InputLabel id="generated-label" style={styles.stylesForLabel}>
-                Return Request No
-              </InputLabel>
-              <input
-                disabled={true}
-                placeholder=" Return Request No"
-                name={"returnRequestNo"}
-                value={returnRequestNo}
-                onChange={onChangeValue}
-                className="textInputStyle"
-              />
-            </div>
+        {receivedQty ? (
+          <div style={{ flex: 4, display: "flex", flexDirection: "column" }}>
+            <div className="row">
+              <div
+                className="col-md-6"
+                style={styles.inputContainerForTextField}
+              >
+                <InputLabelComponent>Return Request No</InputLabelComponent>
 
-            <div className="col-md-6" style={styles.inputContainerForTextField}>
-              <InputLabel id="generated-label" style={styles.stylesForLabel}>
-                Generated By
-              </InputLabel>
-              <input
-                disabled={true}
-                type="text"
-                placeholder="Generated By"
-                name={generatedBy}
-                value={
-                  comingFor === "add"
-                    ? currentUser
-                      ? currentUser.name
-                      : ""
-                    : generatedBy
-                }
-                onChange={onChangeValue}
-                className="textInputStyle"
-              />
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-md-4" style={{ marginTop: 35 }}>
-              <InputLabel id="generated-label" style={styles.stylesForLabel}>
-                Date Generated
-              </InputLabel>
-              <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <DateTimePicker
-                  inputVariant="outlined"
-                  onChange={(val) => onChangeDate(val, "dateGenerated")}
-                  name={"dateGenerated"}
+                <input
                   disabled={true}
-                  fullWidth
-                  style={{
-                    backgroundColor: "white",
-                    borderRadius: 10,
-                    borderWidth: 0,
-                  }}
+                  placeholder=" Return Request No"
+                  name={"returnRequestNo"}
+                  value={returnRequestNo}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                />
+              </div>
+
+              <div
+                className="col-md-6"
+                style={styles.inputContainerForTextField}
+              >
+                <InputLabelComponent>Generated By</InputLabelComponent>
+
+                <input
+                  disabled={true}
+                  type="text"
+                  placeholder="Generated By"
+                  name={generatedBy}
                   value={
                     comingFor === "add"
-                      ? dateGenerated
-                        ? dateGenerated
-                        : new Date()
-                      : dateGenerated
+                      ? currentUser
+                        ? currentUser.name
+                        : ""
+                      : generatedBy
                   }
-                  //   label={"Date Generated"}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
                 />
-              </MuiPickersUtilsProvider>
+              </div>
             </div>
 
-            <div className="col-md-4" style={{ marginTop: 35 }}>
-              <InputLabel id="generated-label" style={styles.stylesForLabel}>
-                Expiry Date
-              </InputLabel>
-              <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <DateTimePicker
-                  inputVariant="outlined"
-                  onChange={(val) => onChangeDate(val, "expiryDate")}
-                  name={"expiryDate"}
+            <div className="row">
+              <div
+                className="col-md-4"
+                style={styles.inputContainerForTextField}
+              >
+                <InputLabelComponent>Item Code</InputLabelComponent>
+
+                <input
+                  disabled={true}
+                  type="text"
+                  placeholder="Item Code"
+                  name={"itemCode"}
+                  value={itemCode}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                />
+              </div>
+              <div
+                className="col-md-4"
+                style={styles.inputContainerForTextField}
+              >
+                <InputLabelComponent>Item Name</InputLabelComponent>
+
+                <input
+                  type="text"
+                  disabled={true}
+                  placeholder="Item Name"
+                  name={"itemName"}
+                  value={itemName}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                />
+              </div>
+
+              <div
+                className="col-md-4"
+                style={styles.inputContainerForTextField}
+              >
+                <InputLabelComponent>Received Qty</InputLabelComponent>
+
+                <input
+                  type="number"
+                  disabled={true}
+                  placeholder="Received Qty"
+                  name={"receivedQty"}
+                  value={receivedQty}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                />
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-md-4" style={{ marginTop: 35 }}>
+                <InputLabelComponent>Date Generated</InputLabelComponent>
+
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <DateTimePicker
+                    // inputVariant="outlined"
+                    onChange={(val) => onChangeDate(val, "dateGenerated")}
+                    name={"dateGenerated"}
+                    disabled={true}
+                    fullWidth
+                    style={styles.inputContainerForDate}
+                    value={
+                      comingFor === "add"
+                        ? dateGenerated
+                          ? dateGenerated
+                          : new Date()
+                        : dateGenerated
+                    }
+                    //   label={"Date Generated"}
+                    InputProps={{
+                      disableUnderline: true,
+                    }}
+                  />
+                </MuiPickersUtilsProvider>
+              </div>
+
+              <div className="col-md-4" style={{ marginTop: 35 }}>
+                <InputLabelComponent>Expiry Date</InputLabelComponent>
+
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <DateTimePicker
+                    // inputVariant="filled"
+                    onChange={(val) => onChangeDate(val, "expiryDate")}
+                    name={"expiryDate"}
+                    disabled={
+                      currentUser &&
+                      (currentUser.staffTypeId.type === "FU Inventory Keeper" ||
+                        currentUser.staffTypeId.type === "admin") &&
+                      comingFor !== "view"
+                        ? false
+                        : true
+                    }
+                    fullWidth
+                    style={styles.inputContainerForDate}
+                    value={
+                      comingFor === "add"
+                        ? expiryDate
+                          ? expiryDate
+                          : null
+                        : expiryDate
+                    }
+                    //   label={"Expiry Date"}
+                    InputProps={{
+                      disableUnderline: true,
+                    }}
+                  />
+                </MuiPickersUtilsProvider>
+              </div>
+
+              <div
+                className="col-md-4"
+                style={styles.inputContainerForTextField}
+              >
+                <InputLabelComponent>Return Qty</InputLabelComponent>
+
+                <input
+                  type="number"
+                  placeholder="Return Qty"
+                  name={"returnedQty"}
+                  value={returnedQty}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
                   disabled={
                     currentUser &&
-                    currentUser.staffTypeId.type === "FU Inventory Keeper" &&
+                    (currentUser.staffTypeId.type === "FU Inventory Keeper" ||
+                      currentUser.staffTypeId.type === "admin") &&
                     comingFor !== "view"
                       ? false
                       : true
                   }
-                  fullWidth
-                  style={{
-                    backgroundColor: "white",
-                    borderRadius: 10,
-                    borderWidth: 0,
-                  }}
-                  value={
-                    comingFor === "add"
-                      ? expiryDate
-                        ? expiryDate
-                        : null
-                      : expiryDate
-                  }
-                  //   label={"Expiry Date"}
                 />
-              </MuiPickersUtilsProvider>
+              </div>
             </div>
 
-            <div className="col-md-4" style={styles.inputContainerForTextField}>
-              <InputLabel id="generated-label" style={styles.stylesForLabel}>
-                Current Qty
-              </InputLabel>
-              <input
-                type="number"
-                disabled={true}
-                placeholder="Current Qty"
-                name={"currentQty"}
-                value={currentQty}
-                onChange={onChangeValue}
-                className="textInputStyle"
-              />
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-md-6" style={styles.inputContainerForTextField}>
-              <InputLabel id="generated-label" style={styles.stylesForLabel}>
-                Item Code
-              </InputLabel>
-              <input
-                disabled={true}
-                type="text"
-                placeholder="Item Code"
-                name={"itemCode"}
-                value={itemCode}
-                onChange={onChangeValue}
-                className="textInputStyle"
-              />
-            </div>
-            <div className="col-md-6" style={styles.inputContainerForTextField}>
-              <InputLabel id="generated-label" style={styles.stylesForLabel}>
-                Item Name
-              </InputLabel>
-              <input
-                type="text"
-                disabled={true}
-                placeholder="Item Name"
-                name={"itemName"}
-                value={itemName}
-                onChange={onChangeValue}
-                className="textInputStyle"
-              />
-            </div>
-          </div>
-
-          {/* <div className="row">
+            {/* <div className="row">
             <div
               className="col-md-12"
               style={styles.inputContainerForTextField}
@@ -732,290 +833,292 @@ function AddEditPurchaseRequest(props) {
             </div>
           </div> */}
 
-          <div className="row">
-            <div
-              className="col-md-12"
-              style={styles.inputContainerForTextField}
-            >
-              <InputLabel id="generated-label" style={styles.stylesForLabel}>
-                Description
-              </InputLabel>
-              <input
-                disabled={true}
-                type="text"
-                placeholder="Description"
-                name={"description"}
-                value={description}
-                onChange={handleCheckBox}
-                className="textInputStyle"
-              />
-            </div>
-          </div>
-
-          <div>
-            <h4 style={{ color: "white", fontWeight: "700", marginTop: 30 }}>
-              Reason
-            </h4>
-
-            <FormGroup
-              row
-              style={{
-                display: "flex",
-                width: "100%",
-                justifyContent: "space-between",
-              }}
-            >
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={reason === "expired" ? true : false}
-                    onChange={handleCheckBox}
-                    name="expired"
-                    color="primary"
-                    disabled={
-                      currentUser &&
-                      currentUser.staffTypeId.type === "FU Inventory Keeper" &&
-                      comingFor !== "view"
-                        ? false
-                        : true
-                    }
-                  />
-                }
-                label="Expired"
-              />
-
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={reason === "damaged" ? true : false}
-                    onChange={handleCheckBox}
-                    name="damaged"
-                    color="primary"
-                    disabled={
-                      currentUser &&
-                      currentUser.staffTypeId.type === "FU Inventory Keeper" &&
-                      comingFor !== "view"
-                        ? false
-                        : true
-                    }
-                  />
-                }
-                label="Damaged"
-              />
-
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={reason === "countMismatch" ? true : false}
-                    onChange={handleCheckBox}
-                    name="countMismatch"
-                    color="primary"
-                    disabled={
-                      currentUser &&
-                      currentUser.staffTypeId.type === "FU Inventory Keeper" &&
-                      comingFor !== "view"
-                        ? false
-                        : true
-                    }
-                  />
-                }
-                label="Count does not match desired quantity"
-              />
-
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={reason === "approvalNotRequired" ? true : false}
-                    onChange={handleCheckBox}
-                    name="approvalNotRequired"
-                    color="primary"
-                    disabled={
-                      currentUser &&
-                      currentUser.staffTypeId.type === "FU Inventory Keeper" &&
-                      comingFor !== "view"
-                        ? false
-                        : true
-                    }
-                  />
-                }
-                label="Do not need approval"
-              />
-
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={reason === "others" ? true : false}
-                    onChange={handleCheckBox}
-                    name="others"
-                    color="primary"
-                    disabled={
-                      currentUser &&
-                      currentUser.staffTypeId.type === "FU Inventory Keeper" &&
-                      comingFor !== "view"
-                        ? false
-                        : true
-                    }
-                  />
-                }
-                label="Others"
-              />
-            </FormGroup>
-
             <div className="row">
               <div
                 className="col-md-12"
                 style={styles.inputContainerForTextField}
               >
-                <InputLabel id="generated-label" style={styles.stylesForLabel}>
-                  Details
-                </InputLabel>
-                <textarea
-                  rows={4}
-                  placeholder="Details"
-                  name={"reasonDetail"}
-                  value={reasonDetail}
-                  onChange={onChangeValue}
+                <InputLabelComponent>Description</InputLabelComponent>
+
+                <input
+                  disabled={true}
+                  type="text"
+                  placeholder="Description"
+                  name={"description"}
+                  value={description}
+                  onChange={handleCheckBox}
                   className="textInputStyle"
-                  disabled={
-                    currentUser &&
-                    currentUser.staffTypeId.type === "FU Inventory Keeper" &&
-                    comingFor !== "view"
-                      ? false
-                      : true
-                  }
                 />
               </div>
             </div>
-          </div>
 
-          {comingFor === "edit" &&
-          (currentUser.staffTypeId.type === "admin" ||
-            currentUser.staffTypeId.type ===
-              "FU Internal Request Return Approval Member" ||
-            currentUser.staffTypeId.type === "Warehouse Incharge") ? (
-            <div className="row">
-              <div className="col-md-6">
-                <div style={styles.inputContainerForDropDown}>
-                  <InputLabel id="status-label">Status</InputLabel>
-                  {currentUser.staffTypeId.type ===
-                  "FU Internal Request Return Approval Member" ? (
-                    <Select
-                      fullWidth
-                      id="status"
-                      name="status"
-                      value={status}
-                      onChange={onChangeValue}
-                      label="Status"
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
+            <div>
+              <h4 style={{ color: "white", fontWeight: "700", marginTop: 30 }}>
+                Reason
+              </h4>
 
-                      {statusArrayApprovalMember.map((val) => {
-                        return (
-                          <MenuItem key={val.key} value={val.key}>
-                            {val.value}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                  ) : currentUser.staffTypeId.type === "Warehouse Incharge" ? (
-                    <Select
-                      fullWidth
-                      id="status"
-                      name="status"
-                      value={status}
-                      onChange={onChangeValue}
-                      label="Status"
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
+              <FormGroup
+                row
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "space-between",
+                }}
+              >
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={reason === "Expired" ? true : false}
+                      onChange={handleCheckBox}
+                      name="Expired"
+                      color="primary"
+                      disabled={
+                        currentUser &&
+                        (currentUser.staffTypeId.type ===
+                          "FU Inventory Keeper" ||
+                          currentUser.staffTypeId.type === "admin") &&
+                        comingFor !== "view"
+                          ? false
+                          : true
+                      }
+                    />
+                  }
+                  label="Expired"
+                />
 
-                      {statusArrayForWareHouseDeliveryMan.map((val) => {
-                        return (
-                          <MenuItem key={val.key} value={val.key}>
-                            {val.value}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                  ) : (
-                    undefined
-                  )}
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={reason === "Damaged" ? true : false}
+                      onChange={handleCheckBox}
+                      name="Damaged"
+                      color="primary"
+                      disabled={
+                        currentUser &&
+                        (currentUser.staffTypeId.type ===
+                          "FU Inventory Keeper" ||
+                          currentUser.staffTypeId.type === "admin") &&
+                        comingFor !== "view"
+                          ? false
+                          : true
+                      }
+                    />
+                  }
+                  label="Damaged"
+                />
+
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={reason === "Count Mismatch" ? true : false}
+                      onChange={handleCheckBox}
+                      name="Count Mismatch"
+                      color="primary"
+                      disabled={
+                        currentUser &&
+                        (currentUser.staffTypeId.type ===
+                          "FU Inventory Keeper" ||
+                          currentUser.staffTypeId.type === "admin") &&
+                        comingFor !== "view"
+                          ? false
+                          : true
+                      }
+                    />
+                  }
+                  label="Count does not match desired quantity"
+                />
+
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={
+                        reason === "Approval Not Required" ? true : false
+                      }
+                      onChange={handleCheckBox}
+                      name="Approval Not Required"
+                      color="primary"
+                      disabled={
+                        currentUser &&
+                        (currentUser.staffTypeId.type ===
+                          "FU Inventory Keeper" ||
+                          currentUser.staffTypeId.type === "admin") &&
+                        comingFor !== "view"
+                          ? false
+                          : true
+                      }
+                    />
+                  }
+                  label="Do not need approval"
+                />
+
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={reason === "Others" ? true : false}
+                      onChange={handleCheckBox}
+                      name="Others"
+                      color="primary"
+                      disabled={
+                        currentUser &&
+                        (currentUser.staffTypeId.type ===
+                          "FU Inventory Keeper" ||
+                          currentUser.staffTypeId.type === "admin") &&
+                        comingFor !== "view"
+                          ? false
+                          : true
+                      }
+                    />
+                  }
+                  label="Others"
+                />
+              </FormGroup>
+
+              <div className="row">
+                <div
+                  className="col-md-12"
+                  style={styles.inputContainerForTextField}
+                >
+                  <InputLabel
+                    id="generated-label"
+                    style={styles.stylesForLabel}
+                  >
+                    Details
+                  </InputLabel>
+                  <textarea
+                    rows={4}
+                    placeholder="Details"
+                    name={"reasonDetail"}
+                    value={reasonDetail}
+                    onChange={onChangeValue}
+                    className="textInputStyle"
+                    disabled={
+                      currentUser &&
+                      (currentUser.staffTypeId.type === "FU Inventory Keeper" ||
+                        currentUser.staffTypeId.type === "admin") &&
+                      comingFor !== "view"
+                        ? false
+                        : true
+                    }
+                  />
                 </div>
               </div>
+            </div>
 
+            {comingFor === "edit" &&
+            (currentUser.staffTypeId.type === "admin" ||
+              currentUser.staffTypeId.type ===
+                "FU Internal Request Return Approval Member" ||
+              currentUser.staffTypeId.type === "Warehouse Incharge") ? (
+              <div className="row">
+                <div className="col-md-6">
+                  <div style={styles.inputContainerForDropDown}>
+                    <InputLabelComponent>Generated</InputLabelComponent>
+
+                    {currentUser.staffTypeId.type ===
+                      "FU Internal Request Return Approval Member" ||
+                    currentUser.staffTypeId.type === "admin" ? (
+                      <Select
+                        fullWidth
+                        id="status"
+                        name="status"
+                        value={status}
+                        onChange={onChangeValue}
+                        label="Status"
+                        className="dropDownStyle"
+                        input={<BootstrapInput />}
+                      >
+                        <MenuItem value="">
+                          <em>None</em>
+                        </MenuItem>
+
+                        {statusArrayApprovalMember.map((val) => {
+                          return (
+                            <MenuItem key={val.key} value={val.key}>
+                              {val.value}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    ) : (
+                      undefined
+                    )}
+                  </div>
+                </div>
+
+                <div
+                  className="col-md-6"
+                  style={styles.inputContainerForTextField}
+                >
+                  <InputLabelComponent>Comment Note</InputLabelComponent>
+                  <input
+                    type="text"
+                    placeholder="Comment Note"
+                    name={"commentNote"}
+                    value={commentNote}
+                    onChange={onChangeValue}
+                    className="textInputStyle"
+                  />
+                </div>
+              </div>
+            ) : (
+              undefined
+            )}
+
+            <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
               <div
-                className="col-md-6"
-                style={styles.inputContainerForTextField}
+                style={{
+                  display: "flex",
+                  flex: 1,
+                  height: 50,
+                  justifyContent: "center",
+                  marginTop: "2%",
+                  marginBottom: "2%",
+                }}
               >
-                <input
-                  type="text"
-                  placeholder="Comment Note"
-                  name={"commentNote"}
-                  value={commentNote}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                />
+                {comingFor === "add" ? (
+                  <Button
+                    style={{ width: "60%" }}
+                    disabled={!validateForm()}
+                    onClick={handleAdd}
+                    variant="contained"
+                    color="primary"
+                  >
+                    Generate
+                  </Button>
+                ) : comingFor === "edit" ? (
+                  <Button
+                    style={{ width: "60%" }}
+                    disabled={!validateForm()}
+                    onClick={handleEdit}
+                    variant="contained"
+                    color="primary"
+                  >
+                    Update
+                  </Button>
+                ) : (
+                  undefined
+                )}
               </div>
             </div>
-          ) : (
-            undefined
-          )}
 
-          <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
-            <div
-              style={{
-                display: "flex",
-                flex: 1,
-                height: 50,
-                justifyContent: "center",
-                marginTop: "2%",
-                marginBottom: "2%",
-              }}
+            <Notification msg={errorMsg} open={openNotification} />
+
+            <Dialog
+              aria-labelledby="form-dialog-title"
+              open={dialogOpen}
+              maxWidth="xl"
+              fullWidth={true}
+              // fullScreen
             >
-              {comingFor === "add" ? (
-                <Button
-                  style={{ width: "60%" }}
-                  disabled={!validateForm()}
-                  onClick={handleAdd}
-                  variant="contained"
-                  color="primary"
+              <DialogContent style={{ backgroundColor: "#31e2aa" }}>
+                <DialogTitle
+                  id="simple-dialog-title"
+                  style={{ color: "white" }}
                 >
-                  Generate
-                </Button>
-              ) : comingFor === "edit" ? (
-                <Button
-                  style={{ width: "60%" }}
-                  disabled={!validateForm()}
-                  onClick={handleEdit}
-                  variant="contained"
-                  color="primary"
-                >
-                  Update
-                </Button>
-              ) : (
-                undefined
-              )}
-            </div>
-          </div>
-
-          <Notification msg={errorMsg} open={openNotification} />
-
-          <Dialog
-            aria-labelledby="form-dialog-title"
-            open={dialogOpen}
-            maxWidth="xl"
-            fullWidth={true}
-            // fullScreen
-          >
-            <DialogContent style={{ backgroundColor: "#31e2aa" }}>
-              <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
-                Damage Details
-              </DialogTitle>
-              <div className="container-fluid">
-                {/* <div className="row">
+                  Damage Details
+                </DialogTitle>
+                <div className="container-fluid">
+                  {/* <div className="row">
                   <div
                     className="col-md-12"
                     style={styles.inputContainerForTextField}
@@ -1038,267 +1141,240 @@ function AddEditPurchaseRequest(props) {
                   </div>
                 </div> */}
 
-                <div className="row">
-                  <div
-                    className="col-md-4"
-                    style={styles.inputContainerForTextField}
-                  >
-                    <InputLabel
-                      id="generated-label"
-                      style={styles.stylesForLabel}
+                  <div className="row">
+                    <div
+                      className="col-md-4"
+                      style={styles.inputContainerForTextField}
                     >
-                      Damaged Caused By
-                    </InputLabel>
-                    <input
-                      type="text"
-                      placeholder="Damage Cause"
-                      name={"causedBy"}
-                      value={causedBy}
-                      onChange={onChangeValue}
-                      className="textInputStyle"
-                    />
+                      <InputLabelComponent>Damage Cause By</InputLabelComponent>
+
+                      <input
+                        type="text"
+                        placeholder="Damage Cause"
+                        name={"causedBy"}
+                        value={causedBy}
+                        onChange={onChangeValue}
+                        className="textInputStyle"
+                      />
+                    </div>
+
+                    <div
+                      className="col-md-4"
+                      style={styles.inputContainerForTextField}
+                    >
+                      <InputLabelComponent>Item Code</InputLabelComponent>
+
+                      <input
+                        type="text"
+                        disabled={true}
+                        placeholder="Item Code"
+                        name={"itemCode"}
+                        value={itemCode}
+                        onChange={onChangeValue}
+                        className="textInputStyle"
+                      />
+                    </div>
+                    <div
+                      className="col-md-4"
+                      style={styles.inputContainerForTextField}
+                    >
+                      <InputLabelComponent>Item Name</InputLabelComponent>
+
+                      <input
+                        type="text"
+                        disabled={true}
+                        placeholder="Item Name"
+                        name={"itemName"}
+                        value={itemName}
+                        onChange={onChangeValue}
+                        className="textInputStyle"
+                      />
+                    </div>
                   </div>
 
-                  <div
-                    className="col-md-4"
-                    style={styles.inputContainerForTextField}
-                  >
-                    <InputLabel
-                      id="generated-label"
-                      style={styles.stylesForLabel}
+                  <div className="row">
+                    <div
+                      className="col-md-6"
+                      style={styles.inputContainerForTextField}
                     >
-                      Item Code
-                    </InputLabel>
-                    <input
-                      type="text"
-                      disabled={true}
-                      placeholder="Item Code"
-                      name={"itemCode"}
-                      value={itemCode}
-                      onChange={onChangeValue}
-                      className="textInputStyle"
-                    />
-                  </div>
-                  <div
-                    className="col-md-4"
-                    style={styles.inputContainerForTextField}
-                  >
-                    <InputLabel
-                      id="generated-label"
-                      style={styles.stylesForLabel}
-                    >
-                      Item Name
-                    </InputLabel>
-                    <input
-                      type="text"
-                      disabled={true}
-                      placeholder="Item Name"
-                      name={"itemName"}
-                      value={itemName}
-                      onChange={onChangeValue}
-                      className="textInputStyle"
-                    />
-                  </div>
-                </div>
+                      <InputLabelComponent>Description</InputLabelComponent>
 
-                <div className="row">
-                  <div
-                    className="col-md-6"
-                    style={styles.inputContainerForTextField}
-                  >
-                    <InputLabel
-                      id="generated-label"
-                      style={styles.stylesForLabel}
+                      <input
+                        type="text"
+                        disabled={true}
+                        placeholder="Description"
+                        name={"description"}
+                        value={description}
+                        onChange={onChangeValue}
+                        className="textInputStyle"
+                      />
+                    </div>
+
+                    <div
+                      className="col-md-6"
+                      style={styles.inputContainerForTextField}
                     >
-                      Description
-                    </InputLabel>
-                    <input
-                      type="text"
-                      disabled={true}
-                      placeholder="Description"
-                      name={"description"}
-                      value={description}
-                      onChange={onChangeValue}
-                      className="textInputStyle"
-                    />
+                      <InputLabelComponent>Item Sub Class</InputLabelComponent>
+
+                      <input
+                        type="text"
+                        disabled={true}
+                        placeholder="Description"
+                        name={"description"}
+                        value={itemId.subClass}
+                        onChange={onChangeValue}
+                        className="textInputStyle"
+                      />
+                    </div>
                   </div>
 
-                  <div
-                    className="col-md-6"
-                    style={styles.inputContainerForTextField}
-                  >
-                    <InputLabel
-                      id="generated-label"
-                      style={styles.stylesForLabel}
+                  <div className="row">
+                    <div
+                      className="col-md-6"
+                      style={styles.inputContainerForTextField}
                     >
-                      Item Sub Class
-                    </InputLabel>
-                    <input
-                      type="text"
-                      disabled={true}
-                      placeholder="Description"
-                      name={"description"}
-                      value={itemId.subClass}
-                      onChange={onChangeValue}
-                      className="textInputStyle"
-                    />
-                  </div>
-                </div>
+                      <InputLabelComponent>
+                        Item Cost Per Unit
+                      </InputLabelComponent>
 
-                <div className="row">
-                  <div
-                    className="col-md-6"
-                    style={styles.inputContainerForTextField}
-                  >
-                    <InputLabel
-                      id="generated-label"
-                      style={styles.stylesForLabel}
-                    >
-                      Item Cost Per Unit
-                    </InputLabel>
-                    <input
-                      type="number"
-                      placeholder="Item Cost Per Unit"
-                      name={"itemCostPerUnit"}
-                      value={itemCostPerUnit}
-                      onChange={onChangeValue}
-                      className="textInputStyle"
-                      onKeyDown={(evt) =>
-                        evt.key === "e" && evt.preventDefault()
-                      }
-                    />
-                  </div>
-
-                  <div
-                    className="col-md-6"
-                    style={styles.inputContainerForTextField}
-                  >
-                    <InputLabel
-                      id="generated-label"
-                      style={styles.stylesForLabel}
-                    >
-                      Total Damage Cost
-                    </InputLabel>
-                    <input
-                      type="number"
-                      placeholder="Total Damage Cost"
-                      name={"totalDamageCost"}
-                      value={totalDamageCost}
-                      onChange={onChangeValue}
-                      className="textInputStyle"
-                      onKeyDown={(evt) =>
-                        evt.key === "e" && evt.preventDefault()
-                      }
-                    />
-                  </div>
-                </div>
-
-                <div className="row">
-                  <div
-                    className="col-md-6"
-                    style={styles.inputContainerForTextField}
-                  >
-                    <InputLabel
-                      id="generated-label"
-                      style={styles.stylesForLabel}
-                    >
-                      FU Name
-                    </InputLabel>
-                    <input
-                      disabled={true}
-                      placeholder="FU Name"
-                      name={"fuName"}
-                      value={fuId.fuName}
-                      onChange={onChangeValue}
-                      className="textInputStyle"
-                    />
-                  </div>
-
-                  <div className="col-md-6" style={{ marginTop: 35 }}>
-                    <InputLabel
-                      id="generated-label"
-                      style={styles.stylesForLabel}
-                    >
-                      Date/Time
-                    </InputLabel>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                      <DateTimePicker
-                        inputVariant="outlined"
-                        onChange={(val) => onChangeDate(val, "date")}
-                        name={"date"}
-                        disabled={
-                          currentUser &&
-                          currentUser.staffTypeId.type === "FU Inventory Keeper"
-                            ? false
-                            : true
-                        }
-                        fullWidth
-                        style={{
-                          backgroundColor: "white",
-                          borderRadius: 10,
-                          borderWidth: 0,
-                        }}
-                        value={
-                          comingFor === "add" ? (date ? date : null) : date
+                      <input
+                        type="number"
+                        placeholder="Item Cost Per Unit"
+                        name={"itemCostPerUnit"}
+                        value={itemCostPerUnit}
+                        onChange={onChangeValue}
+                        className="textInputStyle"
+                        onKeyDown={(evt) =>
+                          evt.key === "e" && evt.preventDefault()
                         }
                       />
-                    </MuiPickersUtilsProvider>
-                  </div>
-                </div>
+                    </div>
 
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <div style={{ marginTop: "2%", marginBottom: "2%" }}>
-                    <Button onClick={() => hideDialog()} variant="contained">
-                      Cancel
-                    </Button>
+                    <div
+                      className="col-md-6"
+                      style={styles.inputContainerForTextField}
+                    >
+                      <InputLabelComponent>
+                        Total Damage Cost
+                      </InputLabelComponent>
+
+                      <input
+                        type="number"
+                        placeholder="Total Damage Cost"
+                        name={"totalDamageCost"}
+                        value={totalDamageCost}
+                        onChange={onChangeValue}
+                        className="textInputStyle"
+                        onKeyDown={(evt) =>
+                          evt.key === "e" && evt.preventDefault()
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div
+                      className="col-md-6"
+                      style={styles.inputContainerForTextField}
+                    >
+                      <InputLabelComponent>FU Name</InputLabelComponent>
+                      <input
+                        disabled={true}
+                        placeholder="FU Name"
+                        name={"fuName"}
+                        value={fuId.fuName}
+                        onChange={onChangeValue}
+                        className="textInputStyle"
+                      />
+                    </div>
+
+                    <div className="col-md-6" style={{ marginTop: 35 }}>
+                      <InputLabelComponent>Date/Time</InputLabelComponent>
+                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <DateTimePicker
+                          inputVariant="outlined"
+                          onChange={(val) => onChangeDate(val, "date")}
+                          name={"date"}
+                          disabled={
+                            (currentUser &&
+                              currentUser.staffTypeId.type ===
+                                "FU Inventory Keeper") ||
+                            currentUser.staffTypeId.type === "admin"
+                              ? false
+                              : true
+                          }
+                          fullWidth
+                          style={{
+                            backgroundColor: "white",
+                            borderRadius: 10,
+                            borderWidth: 0,
+                          }}
+                          value={
+                            comingFor === "add" ? (date ? date : null) : date
+                          }
+                        />
+                      </MuiPickersUtilsProvider>
+                    </div>
                   </div>
 
                   <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      marginTop: "2%",
-                      marginBottom: "2%",
-                    }}
+                    style={{ display: "flex", justifyContent: "space-between" }}
                   >
-                    {selectItemToEditId === "" ? (
-                      <Button
-                        style={{ paddingLeft: 30, paddingRight: 30 }}
-                        disabled={!validateItemsForm()}
-                        onClick={addSelectedItem}
-                        variant="contained"
-                        color="primary"
-                      >
-                        Submit
+                    <div style={{ marginTop: "2%", marginBottom: "2%" }}>
+                      <Button onClick={() => hideDialog()} variant="contained">
+                        Cancel
                       </Button>
-                    ) : (
-                      <Button
-                        style={{ paddingLeft: 30, paddingRight: 30 }}
-                        disabled={!validateItemsForm()}
-                        // onClick={editSelectedItem}
-                        variant="contained"
-                        color="primary"
-                      >
-                        {" "}
-                        Edit{" "}
-                      </Button>
-                    )}
+                    </div>
+
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        marginTop: "2%",
+                        marginBottom: "2%",
+                      }}
+                    >
+                      {selectItemToEditId === "" ? (
+                        <Button
+                          style={{ paddingLeft: 30, paddingRight: 30 }}
+                          disabled={!validateItemsForm()}
+                          onClick={addSelectedItem}
+                          variant="contained"
+                          color="primary"
+                        >
+                          Submit
+                        </Button>
+                      ) : (
+                        <Button
+                          style={{ paddingLeft: 30, paddingRight: 30 }}
+                          disabled={!validateItemsForm()}
+                          // onClick={editSelectedItem}
+                          variant="contained"
+                          color="primary"
+                        >
+                          {" "}
+                          Edit{" "}
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </DialogContent>
-          </Dialog>
+              </DialogContent>
+            </Dialog>
 
-          <div style={{ marginBottom: 20 }}>
-            <img
-              onClick={() => props.history.goBack()}
-              src={Back_Arrow}
-              style={{ width: 60, height: 40, cursor: "pointer" }}
-            />
+            <div style={{ marginBottom: 20 }}>
+              <img
+                onClick={() => props.history.goBack()}
+                src={Back_Arrow}
+                style={{ width: 60, height: 40, cursor: "pointer" }}
+              />
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="LoaderStyle">
+            <Loader type="TailSpin" color="red" height={50} width={50} />
+          </div>
+        )}
       </div>
     </div>
   );

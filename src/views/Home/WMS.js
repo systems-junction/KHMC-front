@@ -45,160 +45,160 @@ import MenuTree from "../../components/MenuTree/MenuTree";
 
 const admin = [
   { img: WMS, text: "WMS" },
-  {
-    img: ReceiveItem,
-    text: "Receive Items",
-    path: "/home/controlroom/wms/receiveitems",
-  },
-
-  { img: Vendor, text: "Vendor Mgmt", path: "/home/controlroom/wms/vendor" },
 
   {
-    img: "",
-    text: "",
-    path: "",
+    img: WMS,
+    text: "Warehouse Mgmt",
+    path: "wms/warehouse",
   },
 
   {
-    img: MaterialReceiving,
-    text: "Material Receiving",
-    path: "/home/controlroom/wms/materialreceiving",
+    img: FunctionalUnit,
+    text: "FU",
+    path: "wms/fus",
   },
 
-  {
-    img: purchase_request,
-    text: "Purchase Request",
-    path: "/home/controlroom/wms/pr",
-  },
+  // {
+  //   img: wh_inventory,
+  //   text: "WH Inventory",
+  //   path: "/home/wms/warehouseinventory",
+  // },
 
-  {
-    img: purchase_order,
-    text: "Purchase Order",
-    path: "/home/controlroom/wms/po",
-  },
+  // {
+  //   img: purchase_request,
+  //   text: "Purchase Request",
+  //   path: "/home/wms/pr",
+  // },
 
-  {
-    img: wh_inventory,
-    text: "WH Inventory",
-    path: "/home/controlroom/wms/warehouseinventory",
-  },
+  // {
+  //   img: purchase_order,
+  //   text: "Purchase Order",
+  //   path: "/home/wms/po",
+  // },
 
-  // { img: Items, text: "Items", path: "controlroom/items" },
-  // { img: "", text: "Staff", path: "controlroom/staff" },
-  // { img: Control_Room, text: "ControlRoom" },
+  // {
+  //   img: MaterialReceiving,
+  //   text: "Material Receiving",
+  //   path: "/home/wms/materialreceiving",
+  // },
+
+  // {
+  //   text: "",
+  //   path: "",
+  // },
 ];
 
 const buHead = [
   { img: WMS, text: "WMS" },
-  {
-    img: "",
-    text: "",
-    path: "",
-  },
-
-  { img: Vendor, text: "Vendor Mgmt", path: "/home/controlroom/wms/vendor" },
-
-  {
-    img: "",
-    text: "",
-    path: "",
-  },
-
-  {
-    img: "",
-    text: "",
-    path: "",
-  },
 
   {
     img: purchase_request,
     text: "Purchase Request",
-    path: "/home/controlroom/wms/pr",
+    path: "/home/wms/pr",
   },
 
   {
     img: purchase_order,
     text: "Purchase Order",
-    path: "/home/controlroom/wms/po",
+    path: "/home/wms/po",
   },
 
   {
     img: wh_inventory,
     text: "WH Inventory",
-    path: "/home/controlroom/wms/warehouseinventory",
+    path: "/home/wms/warehouseinventory",
   },
 ];
 
 const committeeMember = [
   { img: WMS, text: "WMS" },
-  { img: "", text: "", path: "" },
-  { img: "", text: "", path: "" },
-  { img: "", text: "", path: "" },
-  { img: "", text: "", path: "" },
+
   {
-    img: purchase_request,
-    text: "Purchase Request",
-    path: "/home/controlroom/wms/pr",
+    img: WMS,
+    text: "Warehouse Mgmt",
+    path: "wms/warehouse",
   },
-  {
-    img: purchase_order,
-    text: "Purchase Order",
-    path: "/home/controlroom/wms/po",
-  },
-  { img: "", text: "", path: "" },
 ];
 
 const accountsMember = [
   { img: WMS, text: "WMS" },
-  {
-    img: ReceiveItem,
-    text: "Receive Requests",
-    path: "/home/controlroom/wms/receiverequests",
-  },
-  { img: "", text: "", path: "" },
-  { img: "", text: "", path: "" },
-  { img: "", text: "", path: "" },
-
-  { img: "", text: "", path: "" },
 
   {
-    img: "",
-    text: "",
-    path: "",
+    img: WMS,
+    text: "Warehouse Mgmt",
+    path: "wms/warehouse",
   },
-  { img: "", text: "", path: "" },
 ];
 
 const warehouseMember = [
   { img: WMS, text: "WMS" },
-  {
-    img: "",
-    text: "",
-    path: "",
-  },
-  { img: "", text: "", path: "" },
-  { img: "", text: "", path: "" },
-  { img: "", text: "", path: "" },
-
-  { img: "", text: "", path: "" },
 
   {
-    img: "",
-    text: "",
-    path: "",
+    img: WMS,
+    text: "Warehouse Mgmt",
+    path: "wms/warehouse",
   },
-  { img: "", text: "", path: "" },
+
+  {
+    img: FunctionalUnit,
+    text: "FU",
+    path: "wms/fus",
+  },
 ];
 
 const warehouseIncharge = [
   { img: WMS, text: "WMS" },
-  { img: ReturnItem, text: "Return Request", path: "wms/materialreceiving/viewpo/externalreturn" },
-  { img: "", text: "", path: "" },
-  { img: "", text: "", path: "" },
-  { img: "", text: "", path: "" },
-  { img: "", text: "", path: "" },
-  { img: "", text: "", path: "" },
-  { img: "", text: "", path: "" },
+  {
+    img: WMS,
+    text: "Warehouse Mgmt",
+    path: "wms/warehouse",
+  },
+
+  {
+    img: FunctionalUnit,
+    text: "FU",
+    path: "wms/fus",
+  },
+];
+
+const fuMember = [
+  { img: WMS, text: "WMS" },
+
+  {
+    img: FunctionalUnit,
+    text: "FU",
+    path: "wms/fus",
+  },
+];
+
+const buMember = [
+  { img: WMS, text: "WMS" },
+
+  {
+    img: FunctionalUnit,
+    text: "FU",
+    path: "wms/fus",
+  },
+];
+
+const fuReturnRequestApprovalMember = [
+  { img: WMS, text: "WMS" },
+
+  {
+    img: FunctionalUnit,
+    text: "FU",
+    path: "wms/fus",
+  },
+];
+
+const warehouseInventoryKeeper = [
+  { img: WMS, text: "WMS" },
+
+  {
+    img: WMS,
+    text: "Warehouse Mgmt",
+    path: "wms/warehouse",
+  },
 ];
 
 class HomeScreen extends React.Component {
@@ -234,7 +234,8 @@ class HomeScreen extends React.Component {
           width: "100%",
           height: "100%",
           backgroundColor: "#2B62CC",
-          backgroundImage: `url("${WMS_Back}")`,
+          backgroundImage:
+            "linear-gradient(25deg, rgba(101,228,193,1) 0%, rgba(58,219,175,1) 33%, rgba(15,206,147,1) 66%, rgba(6,142,103,1) 100%)",
           backgroundSize: "100%",
         }}
       >
@@ -245,6 +246,9 @@ class HomeScreen extends React.Component {
           options={
             userType && userType.type === "BU Head"
               ? buHead
+              : userType &&
+                (userType.type === "BU Member" || userType.type === "BU Nurse")
+              ? buMember
               : userType && userType.type === "admin"
               ? admin
               : userType && userType.type === "Committe Member"
@@ -253,8 +257,16 @@ class HomeScreen extends React.Component {
               ? accountsMember
               : userType && userType.type === "Warehouse Member"
               ? warehouseMember
+              : userType && userType.type === "Warehouse Inventory Keeper"
+              ? warehouseInventoryKeeper
               : userType && userType.type === "Warehouse Incharge"
               ? warehouseIncharge
+              : (userType && userType.type === "FU Member") ||
+                (userType && userType.type === "FU Inventory Keeper")
+              ? fuMember
+              : userType &&
+                userType.type === "FU Internal Request Return Approval Member"
+              ? fuReturnRequestApprovalMember
               : admin
           }
         />

@@ -27,6 +27,7 @@ import {
   getPurchasingRequestItemUrl,
   updatePurchasingRequestItemUrl,
   getPurchaseRequestItemQtyUrl,
+  getCurrentQtyForFURepRequestUrl,
 } from "../../public/endpoins";
 
 import Paper from "@material-ui/core/Paper";
@@ -39,20 +40,23 @@ import Dialog from "@material-ui/core/Dialog";
 import { tr } from "date-fns/locale";
 
 import Header from "../../components/Header/Header";
-import view_all from "../../assets/img/view_all.png";
+import view_all from "../../assets/img/Eye.png";
 import purchase_request from "../../assets/img/purchase request.png";
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
-
 import Add_New from "../../assets/img/Add_New.png";
-
 import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
+import BootstrapInput from "../../components/Dropdown/dropDown.js";
+import InputLabelComponent from "../../components/InputLabel/inputLabel";
+import ErrorMessage from "../../components/ErrorMessage/errorMessage";
+
+import add_new from "../../assets/img/Plus.png";
 
 const reasonArray = [
   { key: "jit", value: "JIT" },
   { key: "new_item", value: "New Item" },
-  { key: "Reactivated Items", value: "Reactivated Items" },
+  { key: "reactivated_items", value: "Reactivated Items" },
   {
     key: "The System is Malfunctioning",
     value: "The System is Malfunctioning",
@@ -74,6 +78,11 @@ const statusArrayForFUInventoryKeeper = [
   { key: "Partially Recieved", value: "Partially Recieved" },
 ];
 
+const statusArrayForAdmin = [
+  { key: "Fulfillment Initiated", value: "Fulfillment Initiated" },
+  { key: "Delivery in Progress", value: "Delivery in Progress" },
+];
+
 const orderArray = [
   { key: "maintance_order", value: "Maintance Order" },
   { key: "doctor_order", value: "Doctor Order" },
@@ -85,14 +94,17 @@ const generatedArray = [
 ];
 
 const styles = {
+  // inputContainer: {
+  //   marginTop: 10,
+  //   // backgroundColor: "white",
+  //   borderRadius: 5,
+  //   paddingTop: 5,
+  //   paddingBottom: 5,
+  //   marginLeft: 5,
+  //   marginRight: 5,
+  // },
   inputContainer: {
-    marginTop: 10,
-    backgroundColor: "white",
-    borderRadius: 5,
-    paddingTop: 5,
-    paddingBottom: 5,
-    marginLeft: 5,
-    marginRight: 5,
+    marginTop: 20,
   },
 
   inputContainerForTextField: {
@@ -100,20 +112,31 @@ const styles = {
   },
 
   inputContainerForDropDown: {
-    marginTop: 35,
-    backgroundColor: "white",
-    borderRadius: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingTop: 2,
+    marginTop: 25,
+    // backgroundColor: "white",
+    // borderRadius: 10,
+    // paddingLeft: 10,
+    // paddingRight: 10,
+    // paddingTop: 2,
   },
 
   buttonContainer: {
     marginTop: 25,
   },
+
   stylesForLabel: {
     fontWeight: "700",
     color: "white",
+  },
+
+  stylesForButton: {
+    color: "white",
+    cursor: "pointer",
+    borderRadius: 15,
+    backgroundColor: "#2C6DDD",
+    width: "140px",
+    height: "50px",
+    outline: "none",
   },
 };
 const useStyles = makeStyles(tableStyles);
@@ -238,6 +261,8 @@ function AddEditPurchaseRequest(props) {
 
   const [fuObj, setFUObj] = useState("");
 
+  const [itemAdded, setItemAdded] = useState(false);
+
   useEffect(() => {
     setCurrentUser(cookie.load("current_user"));
 
@@ -260,6 +285,8 @@ function AddEditPurchaseRequest(props) {
             dispatch({ field: "itemCode", value: val.itemCode });
           } else if (key === "vendorId") {
             dispatch({ field: "vendorId", value: val._id });
+          } else {
+            dispatch({ field: key, value: val });
           }
         } else {
           dispatch({ field: key, value: val });
@@ -292,133 +319,174 @@ function AddEditPurchaseRequest(props) {
   };
 
   function validateForm() {
+    let jit = true;
+    // let qtyIsLess = true;
+    if (reason === "jit") {
+      jit = requesterName !== "" && department !== "" && orderType !== "";
+    }
     return (
       reason !== "" &&
       comments !== "" &&
       // dateGenerated !== "" &&
       fuItemCost !== "" &&
       itemCode !== "" &&
-      description !== "" &&
       itemName !== "" &&
       requestedQty !== "" &&
       currentQty !== "" &&
       recieptUnit !== "" &&
-      issueUnit !== ""
+      issueUnit !== "" &&
+      // requestedQty <= currentQty &&
+      jit
     );
   }
 
   const handleAdd = () => {
-    setIsFormSubmitted(true);
-    if (validateForm()) {
-      const params = {
-        requestNo,
-        generatedBy: currentUser.name,
-        dateGenerated: new Date(),
-        generated,
-        status: "pending",
-        reason,
-        comments,
+    if (!validateForm()) {
+      setIsFormSubmitted(true);
+      setOpenNotification(true);
+      setErrorMsg("Please fill the fields properly");
+    } else {
+      if (validateForm()) {
+        const params = {
+          requestNo,
+          generatedBy: currentUser.name,
+          dateGenerated: new Date(),
+          generated,
+          status: "pending",
+          reason,
+          comments,
 
-        itemId: itemId,
-        currentQty,
-        requestedQty,
-        description,
-        issueUnit,
-        recieptUnit,
-        fuItemCost,
-        to: "Warehouse",
-        from: "FU",
-        commentNote: "",
-        fuId: fuObj._id,
-      };
+          itemId: itemId,
+          currentQty,
+          requestedQty,
+          description,
+          issueUnit,
+          recieptUnit,
+          fuItemCost,
+          to: "Warehouse",
+          from: "FU",
+          commentNote: "",
+          fuId: fuObj._id,
 
-      console.log("params", params);
+          requesterName,
+          orderType,
+          department,
+        };
 
-      axios
-        .post(addReplenishmentRequestUrl, params)
-        .then((res) => {
-          if (res.data.success) {
-            console.log("response after adding RR", res.data);
-            props.history.goBack();
-          } else if (!res.data.success) {
+        console.log("params", params);
+
+        axios
+          .post(addReplenishmentRequestUrl, params)
+          .then((res) => {
+            if (res.data.success) {
+              console.log("response after adding RR", res.data);
+              props.history.goBack();
+            } else if (!res.data.success) {
+              setOpenNotification(true);
+            }
+          })
+          .catch((e) => {
+            console.log("error after adding purchase request", e);
             setOpenNotification(true);
-          }
-        })
-        .catch((e) => {
-          console.log("error after adding purchase request", e);
-          setOpenNotification(true);
-          setErrorMsg("Error while adding the replenishment request");
-        });
+            setErrorMsg("Error while adding the replenishment request");
+          });
+      }
     }
   };
 
-  console.log("fu obj in add rep request", fuObj);
-
   const handleEdit = () => {
-    setIsFormSubmitted(true);
-    if (validateForm()) {
-      const obj = {
-        _id,
-        requestNo,
-        generatedBy,
-        dateGenerated,
-        generated,
-        status:
-          currentUser.staffTypeId.type === "Warehouse Member" &&
-          status === "pending"
-            ? "Fulfillment Initiated"
-            : currentUser.staffTypeId.type === "Warehouse Incharge" &&
-              status === "Fulfillment Initiated"
-            ? "Delivery in Progress"
-            : currentUser.staffTypeId.type === "FU Inventory Keeper" &&
-              status === "Delivery in Progress"
-            ? "Received"
-            : status,
-        reason,
-        comments,
+    if (!validateForm()) {
+      setIsFormSubmitted(true);
+      setOpenNotification(true);
+      setErrorMsg("Please fill the fields properly");
+    } else {
+      if (validateForm()) {
+        if (
+          status === "pending" ||
+          currentUser.staffTypeId.type !== "FU Member"
+        ) {
+          const obj = {
+            _id,
+            requestNo,
+            generatedBy,
+            dateGenerated,
+            generated,
+            status:
+              (currentUser.staffTypeId.type === "Warehouse Member" ||
+                currentUser.staffTypeId.type === "admin") &&
+              status === "pending" &&
+              secondStatus === "Fulfillment Initiated"
+                ? "Fulfillment Initiated"
+                : (currentUser.staffTypeId.type === "Warehouse Incharge" ||
+                    currentUser.staffTypeId.type === "admin") &&
+                  status === "Fulfillment Initiated" &&
+                  secondStatus === "Delivery in Progress"
+                ? "Delivery in Progress"
+                : (currentUser.staffTypeId.type === "FU Inventory Keeper" ||
+                    currentUser.staffTypeId.type === "admin") &&
+                  status === "Delivery in Progress" &&
+                  secondStatus === "Received"
+                ? "Received"
+                : status,
+            reason,
+            comments,
 
-        itemId,
-        currentQty,
-        requestedQty,
-        description,
-        issueUnit,
-        recieptUnit,
-        fuItemCost,
-        to: to,
-        from: from,
-        commentNote,
-        fuId: fuId._id,
-        secondStatus,
-      };
+            itemId,
+            currentQty,
+            requestedQty,
+            description,
+            issueUnit,
+            recieptUnit,
+            fuItemCost,
+            to: to,
+            from: from,
+            commentNote,
+            fuId: fuId._id,
+            secondStatus,
 
-      let params;
+            requesterName,
+            orderType,
+            department,
+          };
 
-      if (currentUser.staffTypeId.type === "Warehouse Member") {
-        params = {
-          ...obj,
-          approvedBy: approvedBy === "" ? currentUser.staffId : approvedBy,
-        };
-      } else {
-        params = {
-          ...obj,
-          approvedBy: approvedBy === "" ? currentUser.staffId : approvedBy,
-        };
-      }
+          let params;
 
-      axios
-        .put(updateReplenishmentRequestUrl, params)
-        .then((res) => {
-          if (res.data.success) {
-            props.history.goBack();
-          } else if (!res.data.success) {
-            setOpenNotification(true);
+          if (
+            currentUser.staffTypeId.type === "Warehouse Member" ||
+            currentUser.staffTypeId.type === "admin"
+          ) {
+            params = {
+              ...obj,
+              approvedBy: approvedBy === "" ? currentUser.staffId : approvedBy,
+            };
+          } else {
+            params = {
+              ...obj,
+              approvedBy: approvedBy === "" ? "" : approvedBy,
+            };
           }
-        })
-        .catch((e) => {
-          console.log("error after updating purchase request", e);
+
+          console.log("params for edit rep request FU", params);
+
+          axios
+            .put(updateReplenishmentRequestUrl, params)
+            .then((res) => {
+              if (res.data.success) {
+                props.history.goBack();
+              } else if (!res.data.success) {
+                setOpenNotification(true);
+              }
+            })
+            .catch((e) => {
+              console.log("error after updating purchase request", e);
+              setOpenNotification(true);
+              setErrorMsg("Error while editing the purchase request");
+            });
+        } else {
           setOpenNotification(true);
-          setErrorMsg("Error while editing the purchase request");
-        });
+          setErrorMsg("Request can not be updated once it is in progress");
+        }
+      }
     }
   };
 
@@ -431,36 +499,46 @@ function AddEditPurchaseRequest(props) {
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
-    if (e.target.value.length >= 3) {
-      axios
-        .get(getSearchedItemUrl + "/" + e.target.value)
-        .then((res) => {
-          if (res.data.success) {
-            if (res.data.data.items.length > 0) {
-              console.log(res.data.data.items);
-              setItemFoundSuccessfully(true);
-              setItem(res.data.data.items);
-            } else {
-              setItemFoundSuccessfully(false);
-              setItem("");
-            }
+    // if (e.target.value.length >= 3) {
+    axios
+      .get(getSearchedItemUrl + "/" + e.target.value)
+      .then((res) => {
+        if (res.data.success) {
+          if (res.data.data.items.length > 0) {
+            console.log(res.data.data.items);
+            setItemFoundSuccessfully(true);
+            setItem(res.data.data.items);
+          } else {
+            setItemFoundSuccessfully(false);
+            setItem("");
           }
-        })
-        .catch((e) => {
-          console.log("error after adding purchase request", e);
-          setOpenNotification(true);
-          setErrorMsg("Error while adding the purchase request");
-        });
-    }
+        }
+      })
+      .catch((e) => {
+        console.log("error after adding purchase request", e);
+        setOpenNotification(true);
+        setErrorMsg("Error while adding the purchase request");
+      });
+    // }
   };
 
   const getCurrentQty = (id) => {
+    // const params = {
+    //   itemId: id,
+    //   // fuId: fuObj._id,
+    // };
+    // console.log("params for curr qty", params);
+
     axios
       .get(getPurchaseRequestItemQtyUrl + "/" + id)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data);
-          dispatch({ field: "currentQty", value: res.data.data.qty });
+          console.log("current quantity", res.data.data);
+          if (res.data.data) {
+            dispatch({ field: "currentQty", value: res.data.data.qty });
+          } else {
+            dispatch({ field: "currentQty", value: 0 });
+          }
         }
       })
       .catch((e) => {
@@ -497,23 +575,51 @@ function AddEditPurchaseRequest(props) {
   function validateItemsForm() {
     return (
       itemCode !== "" &&
-      description !== "" &&
       itemName !== "" &&
       requestedQty !== "" &&
-      fuItemCost !== ""
+      fuItemCost !== "" &&
+      currentQty !== 0
+      // && requestedQty <= currentQty
       // currentQty.length > 0 &&
       // maximumLevel >= requestedQty &&
     );
   }
 
   function hideDialog() {
-    setDialogOpen(false);
-    setSelectedItem("");
-    setSelectItemToEditId("");
+    if (!itemAdded) {
+      setDialogOpen(false);
+      setSelectedItem("");
+      setSelectItemToEditId("");
+
+      dispatch({ field: "itemId", value: "" });
+      dispatch({ field: "description", value: "" });
+      dispatch({ field: "currentQty", value: "" });
+      dispatch({ field: "comments", value: "" });
+      dispatch({ field: "reqQty", value: "" });
+      dispatch({ field: "itemName", value: "" });
+      dispatch({ field: "itemCode", value: "" });
+      dispatch({ field: "vendorId", value: "" });
+      dispatch({ field: "issueUnit", value: "" });
+      dispatch({ field: "recieptUnit", value: "" });
+      dispatch({ field: "requestedQty", value: "" });
+      dispatch({ field: "fuItemCost", value: "" });
+
+      // dispatch({ field: "maximumLevel", value: "" });
+    } else {
+      setDialogOpen(false);
+      setSelectedItem("");
+      setSelectItemToEditId("");
+    }
   }
 
   const addSelectedItem = () => {
-    setDialogOpen(false);
+    // setDialogOpen(false);
+    // setItemAdded(true);
+
+    if (validateItemsForm()) {
+      setDialogOpen(false);
+      setItemAdded(true);
+    }
   };
 
   const editSelectedItem = () => {};
@@ -537,21 +643,33 @@ function AddEditPurchaseRequest(props) {
           <div>
             <img src={purchase_request} />
             <h4>
+              {/* {comingFor === "add"
+                ? " Add Replenishment Request For FU"
+                : " Update Replenishment Request For FU"} */}
               {comingFor === "add"
                 ? " Add Replenishment Request For FU"
-                : " Edit Replenishment Request For FU"}
+                : " Update Replenishment Request For FU"}
             </h4>
           </div>
 
           <div>
-            <img onClick={() => props.history.goBack()} src={view_all} />
-            {/* <img src={Search} /> */}
+            <Button
+              onClick={() => props.history.goBack()}
+              style={styles.stylesForButton}
+              variant="contained"
+              color="primary"
+            >
+              <img src={view_all} style={styles.stylesForIcon} />
+              &nbsp;&nbsp;
+              <strong>View All</strong>
+            </Button>
           </div>
         </div>
 
         <div style={{ flex: 4, display: "flex", flexDirection: "column" }}>
           <div className="row">
-            <div className="col-md-4" style={styles.inputContainerForTextField}>
+            <div className="col-md-4" style={styles.inputContainer}>
+              <InputLabelComponent>Request No</InputLabelComponent>
               <input
                 disabled={true}
                 placeholder="Request No"
@@ -560,11 +678,15 @@ function AddEditPurchaseRequest(props) {
                 onChange={onChangeValue}
                 className="textInputStyle"
               />
+              {/* <ErrorMessage
+                name={requestNo}
+                isFormSubmitted={isFormSubmitted}
+              /> */}
             </div>
 
             <div className="col-md-4">
               <div style={styles.inputContainerForDropDown}>
-                <InputLabel id="generated-label">Generated</InputLabel>
+                <InputLabelComponent>Generated</InputLabelComponent>
                 <Select
                   fullWidth
                   disabled={true}
@@ -573,6 +695,8 @@ function AddEditPurchaseRequest(props) {
                   value={generated}
                   onChange={onChangeValue}
                   label="Generated"
+                  className="dropDownStyle"
+                  input={<BootstrapInput />}
                 >
                   <MenuItem value="">
                     <em>None</em>
@@ -586,10 +710,15 @@ function AddEditPurchaseRequest(props) {
                       );
                     })}
                 </Select>
+                {/* <ErrorMessage
+                  name={generated}
+                  isFormSubmitted={isFormSubmitted}
+                /> */}
               </div>
             </div>
 
-            <div className="col-md-4" style={styles.inputContainerForTextField}>
+            <div className="col-md-4" style={styles.inputContainer}>
+              <InputLabelComponent>Generated By</InputLabelComponent>
               <input
                 disabled={true}
                 type="text"
@@ -605,14 +734,19 @@ function AddEditPurchaseRequest(props) {
                 onChange={onChangeValue}
                 className="textInputStyle"
               />
+              {/* <ErrorMessage
+                name={generatedBy}
+                isFormSubmitted={isFormSubmitted}
+              /> */}
             </div>
           </div>
 
           <div className="row">
-            <div className="col-md-6" style={{ marginTop: 35 }}>
+            <div className="col-md-6" style={{ marginTop: 10 }}>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <InputLabelComponent>Date Generated</InputLabelComponent>
                 <DateTimePicker
-                  inputVariant="outlined"
+                  // inputVariant="outlined"
                   onChange={onChangeDate}
                   disabled={
                     // currentUser && currentUser.staffTypeId.type === "FU Member"
@@ -625,6 +759,10 @@ function AddEditPurchaseRequest(props) {
                     backgroundColor: "white",
                     borderRadius: 10,
                     borderWidth: 0,
+                    height: 47,
+                    marginTop: 5,
+                    paddingTop: 9,
+                    paddingLeft: 15,
                   }}
                   value={
                     comingFor === "add"
@@ -633,17 +771,23 @@ function AddEditPurchaseRequest(props) {
                         : new Date()
                       : dateGenerated
                   }
-                  label={"Date Generated"}
+                  label={""}
+                  InputProps={{
+                    disableUnderline: true,
+                  }}
                 />
               </MuiPickersUtilsProvider>
             </div>
 
             <div className="col-md-6">
-              <div style={styles.inputContainerForDropDown}>
-                <InputLabel id="status-label">Manual RR Reason</InputLabel>
+              <div style={{ marginTop: 10 }}>
+                <InputLabelComponent>Manual RR Reason*</InputLabelComponent>
+
                 <Select
                   disabled={
-                    currentUser && currentUser.staffTypeId.type === "FU Member"
+                    currentUser &&
+                    (currentUser.staffTypeId.type === "FU Member" ||
+                      currentUser.staffTypeId.type === "admin")
                       ? false
                       : true
                   }
@@ -653,6 +797,8 @@ function AddEditPurchaseRequest(props) {
                   value={reason}
                   onChange={onChangeValue}
                   label="Reason"
+                  className="dropDownStyle"
+                  input={<BootstrapInput />}
                 >
                   <MenuItem value="">
                     <em>None</em>
@@ -665,19 +811,114 @@ function AddEditPurchaseRequest(props) {
                     );
                   })}
                 </Select>
+
+                <ErrorMessage name={reason} isFormSubmitted={isFormSubmitted} />
               </div>
             </div>
           </div>
 
+          {reason === "jit" ? (
+            <div className="row">
+              <div
+                className="col-md-4"
+                style={styles.inputContainerForTextField}
+              >
+                <InputLabelComponent>Requester*</InputLabelComponent>
+                <input
+                  disabled={
+                    currentUser &&
+                    (currentUser.staffTypeId.type === "FU Member" ||
+                      currentUser.staffTypeId.type === "admin")
+                      ? false
+                      : true
+                  }
+                  placeholder="Requester"
+                  name={"requesterName"}
+                  value={requesterName}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                />
+                <ErrorMessage
+                  name={requesterName}
+                  isFormSubmitted={isFormSubmitted}
+                />
+              </div>
+
+              <div className="col-md-4">
+                <div style={styles.inputContainerForTextField}>
+                  <InputLabelComponent>Department*</InputLabelComponent>
+                  <input
+                    disabled={
+                      currentUser &&
+                      (currentUser.staffTypeId.type === "FU Member" ||
+                        currentUser.staffTypeId.type === "admin")
+                        ? false
+                        : true
+                    }
+                    placeholder="Department"
+                    name={"department"}
+                    value={department}
+                    onChange={onChangeValue}
+                    className="textInputStyle"
+                  />
+                  <ErrorMessage
+                    name={department}
+                    isFormSubmitted={isFormSubmitted}
+                  />
+                </div>
+              </div>
+
+              <div className="col-md-4">
+                <div style={styles.inputContainerForDropDown}>
+                  <InputLabelComponent>Order Type*</InputLabelComponent>
+                  <Select
+                    fullWidth
+                    disabled={
+                      currentUser &&
+                      (currentUser.staffTypeId.type === "FU Member" ||
+                        currentUser.staffTypeId.type === "admin")
+                        ? false
+                        : true
+                    }
+                    id="orderType"
+                    name="orderType"
+                    value={orderType}
+                    onChange={onChangeValue}
+                    label="Order Type"
+                    className="dropDownStyle"
+                    input={<BootstrapInput />}
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    {orderArray.map((val) => {
+                      return (
+                        <MenuItem key={val.key} value={val.key}>
+                          {val.value}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                  <ErrorMessage
+                    name={orderType}
+                    isFormSubmitted={isFormSubmitted}
+                  />
+                </div>
+              </div>
+            </div>
+          ) : (
+            undefined
+          )}
+
           <div className="row">
-            <div
-              className="col-md-12"
-              style={styles.inputContainerForTextField}
-            >
+            <div className="col-md-12" style={styles.inputContainer}>
+              <InputLabelComponent>Notes/Comments*</InputLabelComponent>
               <input
                 type="text"
                 disabled={
-                  currentUser && currentUser.staffTypeId.type === "FU Member"
+                  currentUser &&
+                  (currentUser.staffTypeId.type === "FU Member" ||
+                    currentUser.staffTypeId.type === "admin")
                     ? false
                     : true
                 }
@@ -688,10 +929,14 @@ function AddEditPurchaseRequest(props) {
                 onChange={onChangeValue}
                 className="textInputStyle"
               />
+              <ErrorMessage name={comments} isFormSubmitted={isFormSubmitted} />
             </div>
           </div>
 
-          {currentQty && description && issueUnit && recieptUnit ? (
+          {currentQty !== "" &&
+          description !== "" &&
+          issueUnit !== "" &&
+          recieptUnit !== "" ? (
             <div>
               <h4 style={{ color: "white", fontWeight: "700", marginTop: 30 }}>
                 Item details
@@ -701,6 +946,8 @@ function AddEditPurchaseRequest(props) {
                   className="col-md-6"
                   style={styles.inputContainerForTextField}
                 >
+                  <InputLabelComponent>Item Code</InputLabelComponent>
+
                   <input
                     disabled={true}
                     type="text"
@@ -715,6 +962,7 @@ function AddEditPurchaseRequest(props) {
                   className="col-md-6"
                   style={styles.inputContainerForTextField}
                 >
+                  <InputLabelComponent>Item Name</InputLabelComponent>
                   <input
                     type="text"
                     disabled={true}
@@ -732,6 +980,8 @@ function AddEditPurchaseRequest(props) {
                   className="col-md-6"
                   style={styles.inputContainerForTextField}
                 >
+                  <InputLabelComponent>Current Qty</InputLabelComponent>
+
                   <input
                     type="number"
                     disabled={true}
@@ -747,10 +997,13 @@ function AddEditPurchaseRequest(props) {
                   className="col-md-6"
                   style={styles.inputContainerForTextField}
                 >
+                  <InputLabelComponent>Requested Qty*</InputLabelComponent>
+
                   <input
                     disabled={
                       currentUser &&
-                      currentUser.staffTypeId.type === "FU Member"
+                      (currentUser.staffTypeId.type === "FU Member" ||
+                        currentUser.staffTypeId.type === "admin")
                         ? false
                         : true
                     }
@@ -769,6 +1022,8 @@ function AddEditPurchaseRequest(props) {
                   className="col-md-4"
                   style={styles.inputContainerForTextField}
                 >
+                  <InputLabelComponent>Receipt Unit</InputLabelComponent>
+
                   <input
                     disabled={true}
                     placeholder="Receipt Unit"
@@ -783,6 +1038,8 @@ function AddEditPurchaseRequest(props) {
                   className="col-md-4"
                   style={styles.inputContainerForTextField}
                 >
+                  <InputLabelComponent>Issue Unit</InputLabelComponent>
+
                   <input
                     disabled={true}
                     placeholder="Issue Unit"
@@ -797,10 +1054,13 @@ function AddEditPurchaseRequest(props) {
                   className="col-md-4"
                   style={styles.inputContainerForTextField}
                 >
+                  <InputLabelComponent>FU Item Cost*</InputLabelComponent>
+
                   <input
                     disabled={
                       currentUser &&
-                      currentUser.staffTypeId.type === "FU Member"
+                      (currentUser.staffTypeId.type === "FU Member" ||
+                        currentUser.staffTypeId.type === "admin")
                         ? false
                         : true
                     }
@@ -819,6 +1079,8 @@ function AddEditPurchaseRequest(props) {
                   className="col-md-12"
                   style={styles.inputContainerForTextField}
                 >
+                  <InputLabelComponent>Description</InputLabelComponent>
+
                   <input
                     disabled={true}
                     type="text"
@@ -843,7 +1105,7 @@ function AddEditPurchaseRequest(props) {
             <div className="row">
               <div className="col-md-6">
                 <div style={styles.inputContainerForDropDown}>
-                  <InputLabel id="status-label">Status</InputLabel>
+                  <InputLabelComponent>Status</InputLabelComponent>
                   {currentUser.staffTypeId.type === "Warehouse Member" ? (
                     <Select
                       fullWidth
@@ -852,6 +1114,8 @@ function AddEditPurchaseRequest(props) {
                       value={secondStatus}
                       onChange={onChangeValue}
                       label="Status"
+                      className="dropDownStyle"
+                      input={<BootstrapInput />}
                     >
                       <MenuItem value="">
                         <em>None</em>
@@ -873,12 +1137,37 @@ function AddEditPurchaseRequest(props) {
                       value={secondStatus}
                       onChange={onChangeValue}
                       label="Status"
+                      className="dropDownStyle"
+                      input={<BootstrapInput />}
                     >
                       <MenuItem value="">
                         <em>None</em>
                       </MenuItem>
 
                       {statusArrayForWareHouseDeliveryMan.map((val) => {
+                        return (
+                          <MenuItem key={val.key} value={val.key}>
+                            {val.value}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  ) : currentUser.staffTypeId.type === "admin" ? (
+                    <Select
+                      fullWidth
+                      id="secondStatus"
+                      name="secondStatus"
+                      value={secondStatus}
+                      onChange={onChangeValue}
+                      label="Status"
+                      className="dropDownStyle"
+                      input={<BootstrapInput />}
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+
+                      {statusArrayForAdmin.map((val) => {
                         return (
                           <MenuItem key={val.key} value={val.key}>
                             {val.value}
@@ -894,6 +1183,8 @@ function AddEditPurchaseRequest(props) {
                       value={secondStatus}
                       onChange={onChangeValue}
                       label="Status"
+                      className="dropDownStyle"
+                      input={<BootstrapInput />}
                     >
                       <MenuItem value="">
                         <em>None</em>
@@ -915,6 +1206,8 @@ function AddEditPurchaseRequest(props) {
                 className="col-md-6"
                 style={styles.inputContainerForTextField}
               >
+                <InputLabelComponent>Comment Note</InputLabelComponent>
+
                 <input
                   type="text"
                   placeholder="Comment Note"
@@ -941,11 +1234,16 @@ function AddEditPurchaseRequest(props) {
               }}
             >
               {comingFor === "add" ? (
-                <img
+                <Button
                   onClick={() => setDialogOpen(true)}
-                  src={Add_New}
-                  style={{ maxWidth: "20%", height: "auto", cursor: "pointer" }}
-                />
+                  style={styles.stylesForButton}
+                  variant="contained"
+                  color="primary"
+                >
+                  <img src={add_new} style={styles.stylesForIcon} />
+                  &nbsp;&nbsp;
+                  <strong>Add New</strong>
+                </Button>
               ) : (
                 undefined
               )}
@@ -966,7 +1264,7 @@ function AddEditPurchaseRequest(props) {
               {comingFor === "add" ? (
                 <Button
                   style={{ width: "60%" }}
-                  disabled={!validateForm()}
+                  // disabled={!validateForm()}
                   onClick={handleAdd}
                   variant="contained"
                   color="primary"
@@ -976,12 +1274,13 @@ function AddEditPurchaseRequest(props) {
               ) : (
                 <Button
                   style={{ width: "60%" }}
-                  disabled={!validateForm()}
+                  // disabled={!validateForm()}
                   onClick={handleEdit}
                   variant="contained"
                   color="primary"
                 >
-                  {currentUser && currentUser.staffTypeId.type === "Warehouse Incharge"
+                  {currentUser &&
+                  currentUser.staffTypeId.type === "Warehouse Incharge"
                     ? "Confirm Request"
                     : "Update Replenishment Request"}
                 </Button>
@@ -1008,12 +1307,7 @@ function AddEditPurchaseRequest(props) {
                     className="col-md-12"
                     style={styles.inputContainerForTextField}
                   >
-                    <InputLabel
-                      id="generated-label"
-                      style={styles.stylesForLabel}
-                    >
-                      Search
-                    </InputLabel>
+                    <InputLabelComponent> Search *</InputLabelComponent>
 
                     <input
                       type="text"
@@ -1022,6 +1316,10 @@ function AddEditPurchaseRequest(props) {
                       value={searchQuery}
                       onChange={handleSearch}
                       className="textInputStyle"
+                    />
+                    <ErrorMessage
+                      name={searchQuery}
+                      isFormSubmitted={isFormSubmitted}
                     />
                   </div>
                 </div>
@@ -1081,12 +1379,8 @@ function AddEditPurchaseRequest(props) {
                     className="col-md-6"
                     style={styles.inputContainerForTextField}
                   >
-                    <InputLabel
-                      id="generated-label"
-                      style={styles.stylesForLabel}
-                    >
-                      Item Code
-                    </InputLabel>
+                    <InputLabelComponent> Item Code *</InputLabelComponent>
+
                     <input
                       type="text"
                       disabled={true}
@@ -1096,17 +1390,17 @@ function AddEditPurchaseRequest(props) {
                       onChange={onChangeValue}
                       className="textInputStyle"
                     />
+                    <ErrorMessage
+                      name={itemCode}
+                      isFormSubmitted={isFormSubmitted}
+                    />
                   </div>
                   <div
                     className="col-md-6"
                     style={styles.inputContainerForTextField}
                   >
-                    <InputLabel
-                      id="generated-label"
-                      style={styles.stylesForLabel}
-                    >
-                      Item Name
-                    </InputLabel>
+                    <InputLabelComponent> Item Name *</InputLabelComponent>
+
                     <input
                       type="text"
                       disabled={true}
@@ -1117,6 +1411,10 @@ function AddEditPurchaseRequest(props) {
                       className="textInputStyle"
                     />
                   </div>
+                  <ErrorMessage
+                    name={itemName}
+                    isFormSubmitted={isFormSubmitted}
+                  />
                 </div>
 
                 <div className="row">
@@ -1124,12 +1422,8 @@ function AddEditPurchaseRequest(props) {
                     className="col-md-6"
                     style={styles.inputContainerForTextField}
                   >
-                    <InputLabel
-                      id="generated-label"
-                      style={styles.stylesForLabel}
-                    >
-                      Current Qty
-                    </InputLabel>
+                    <InputLabelComponent> Current Qty *</InputLabelComponent>
+
                     <input
                       type="number"
                       disabled={true}
@@ -1139,18 +1433,18 @@ function AddEditPurchaseRequest(props) {
                       onChange={onChangeValue}
                       className="textInputStyle"
                     />
+                    <ErrorMessage
+                      name={currentQty}
+                      isFormSubmitted={isFormSubmitted}
+                    />
                   </div>
 
                   <div
                     className="col-md-6"
                     style={styles.inputContainerForTextField}
                   >
-                    <InputLabel
-                      id="generated-label"
-                      style={styles.stylesForLabel}
-                    >
-                      Requested Qty
-                    </InputLabel>
+                    <InputLabelComponent> Requested Qty *</InputLabelComponent>
+
                     <input
                       type="number"
                       placeholder="Req Qty"
@@ -1158,6 +1452,10 @@ function AddEditPurchaseRequest(props) {
                       value={requestedQty}
                       onChange={onChangeValue}
                       className="textInputStyle"
+                    />
+                    <ErrorMessage
+                      name={requestedQty}
+                      isFormSubmitted={isFormSubmitted}
                     />
                   </div>
                 </div>
@@ -1167,12 +1465,8 @@ function AddEditPurchaseRequest(props) {
                     className="col-md-4"
                     style={styles.inputContainerForTextField}
                   >
-                    <InputLabel
-                      id="generated-label"
-                      style={styles.stylesForLabel}
-                    >
-                      Receipt Unit
-                    </InputLabel>
+                    <InputLabelComponent> Receipt Unit *</InputLabelComponent>
+
                     <input
                       disabled={true}
                       placeholder="Receipt Unit"
@@ -1181,18 +1475,18 @@ function AddEditPurchaseRequest(props) {
                       onChange={onChangeValue}
                       className="textInputStyle"
                     />
+                    <ErrorMessage
+                      name={recieptUnit}
+                      isFormSubmitted={isFormSubmitted}
+                    />
                   </div>
 
                   <div
                     className="col-md-4"
                     style={styles.inputContainerForTextField}
                   >
-                    <InputLabel
-                      id="generated-label"
-                      style={styles.stylesForLabel}
-                    >
-                      Issue Unit
-                    </InputLabel>
+                    <InputLabelComponent> Issue Unit *</InputLabelComponent>
+
                     <input
                       disabled={true}
                       placeholder="Issue Unit"
@@ -1201,18 +1495,18 @@ function AddEditPurchaseRequest(props) {
                       onChange={onChangeValue}
                       className="textInputStyle"
                     />
+                    <ErrorMessage
+                      name={issueUnit}
+                      isFormSubmitted={isFormSubmitted}
+                    />
                   </div>
 
                   <div
                     className="col-md-4"
                     style={styles.inputContainerForTextField}
                   >
-                    <InputLabel
-                      id="generated-label"
-                      style={styles.stylesForLabel}
-                    >
-                      FU Item Cost
-                    </InputLabel>
+                    <InputLabelComponent> FU Item Cost *</InputLabelComponent>
+
                     <input
                       type="number"
                       placeholder="FU Item Cost"
@@ -1220,6 +1514,10 @@ function AddEditPurchaseRequest(props) {
                       value={fuItemCost}
                       onChange={onChangeValue}
                       className="textInputStyle"
+                    />
+                    <ErrorMessage
+                      name={fuItemCost}
+                      isFormSubmitted={isFormSubmitted}
                     />
                   </div>
                 </div>
@@ -1229,12 +1527,8 @@ function AddEditPurchaseRequest(props) {
                     className="col-md-12"
                     style={styles.inputContainerForTextField}
                   >
-                    <InputLabel
-                      id="generated-label"
-                      style={styles.stylesForLabel}
-                    >
-                      Description
-                    </InputLabel>
+                    <InputLabelComponent> Description *</InputLabelComponent>
+
                     <input
                       type="text"
                       disabled={true}
@@ -1243,6 +1537,10 @@ function AddEditPurchaseRequest(props) {
                       value={description}
                       onChange={onChangeValue}
                       className="textInputStyle"
+                    />
+                    <ErrorMessage
+                      name={description}
+                      isFormSubmitted={isFormSubmitted}
                     />
                   </div>
                 </div>

@@ -1,5 +1,6 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable react/jsx-indent */
+
 import React, { useEffect, useState, useReducer } from "react";
 import TextField from "@material-ui/core/TextField";
 import Select from "@material-ui/core/Select";
@@ -9,16 +10,27 @@ import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
 import Notification from "../../components/Snackbar/Notification.js";
-import { addBuInventoryUrl, updateBuInventoryUrl } from "../../public/endpoins";
+import {
+  addFuInventoryUrl,
+  updateFuInventoryUrl,
+  getItemsUrl,
+} from "../../public/endpoins";
 
 import Header from "../../components/Header/Header";
 
-import view_all from "../../assets/img/view_all.png";
+import view_all from "../../assets/img/Eye.png";
 import functional_Unit from "../../assets/img/Functional Unit.png";
 
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 
 import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
+import BootstrapInput from "../../components/Dropdown/dropDown.js";
+
+import ErrorMessage from "../../components/ErrorMessage/errorMessage";
+
+import InputLabelComponent from "../../components/InputLabel/inputLabel";
+
+import Loader from "react-loader-spinner";
 
 const styles = {
   // inputContainer: {
@@ -34,18 +46,35 @@ const styles = {
   inputContainerForTextField: {
     marginTop: 25,
   },
-
-  inputContainerForDropDown: {
-    marginTop: 30,
-    backgroundColor: "white",
-    borderRadius: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingTop: 2,
+  stylesForButton: {
+    color: "white",
+    cursor: "pointer",
+    borderRadius: 15,
+    backgroundColor: "#2c6ddd",
+    width: "140px",
+    height: "50px",
+    outline: "none",
+  },
+  inputField: {
+    outline: "none",
+  },
+  stylesForPurchaseButton: {
+    color: "white",
+    cursor: "pointer",
+    borderRadius: 15,
+    backgroundColor: "#2c6ddd",
+    width: "60%",
+    height: "50px",
+    outline: "none",
   },
 
-  buttonContainer: {
+  inputContainerForDropDown: {
     marginTop: 25,
+    // backgroundColor: "white",
+    // borderRadius: 10,
+    // paddingLeft: 10,
+    // paddingRight: 10,
+    // paddingTop: 2,
   },
 };
 
@@ -57,7 +86,6 @@ function AddEditBuInventory(props) {
     buId: "",
     itemId: "",
     qty: "",
-    items: [],
     businessUnits: [],
   };
 
@@ -70,7 +98,7 @@ function AddEditBuInventory(props) {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const { _id, buId, itemId, qty, items, businessUnits } = state;
+  const { _id, buId, itemId, qty, businessUnits } = state;
 
   const onChangeValue = (e) => {
     dispatch({ field: e.target.name, value: e.target.value });
@@ -90,9 +118,37 @@ function AddEditBuInventory(props) {
   const [errorMsg, setErrorMsg] = useState("");
   const [openNotification, setOpenNotification] = useState(false);
 
+  const [items, setItems] = useState("");
+
+  const [selectedItem, setSelectedItem] = useState("");
+  const [fuId, setFU] = useState("");
+
+  function getItems() {
+    axios
+      .get(getItemsUrl)
+      .then((res) => {
+        if (res.data.success) {
+          console.log("items", res.data.data.items);
+          setItems(res.data.data.items);
+        } else if (!res.data.success) {
+          setErrorMsg(res.data.error);
+          setOpenNotification(true);
+        }
+        return res;
+      })
+      .catch((e) => {
+        console.log("error: ", e);
+      });
+  }
+
   useEffect(() => {
+    getItems();
+
+    setFU(props.history.location.state.fuId);
     setcomingFor(props.history.location.state.comingFor);
+
     const selectedRec = props.history.location.state.selectedItem;
+
     if (selectedRec) {
       Object.entries(selectedRec).map(([key, val]) => {
         if (val && typeof val === "object") {
@@ -120,9 +176,16 @@ function AddEditBuInventory(props) {
   const handleAdd = () => {
     setIsFormSubmitted(true);
     if (qty) {
-      const params = { buId, itemId, qty };
+      let params = "";
+
+      if (props.match.path === "/home/controlroom/fus/fuinventory/add/:id") {
+        params = { fuId: props.match.params.id, itemId, qty };
+      } else {
+        params = { fuId: fuId._id, itemId, qty };
+      }
+
       axios
-        .post(addBuInventoryUrl, params)
+        .post(addFuInventoryUrl, params)
         .then((res) => {
           if (res.data.success) {
             console.log("response after adding item", res);
@@ -142,9 +205,18 @@ function AddEditBuInventory(props) {
   const handleEdit = () => {
     setIsFormSubmitted(true);
     if (qty) {
-      const params = { _id, buId, itemId, qty };
+      // const params = { _id, fuId: fuId._id, itemId, qty };
+
+      let params = "";
+
+      if (props.match.path === "/home/controlroom/fus/fuinventory/edit/:id") {
+        params = { _id, fuId: props.match.params.id, itemId, qty };
+      } else {
+        params = { _id, fuId: fuId._id, itemId, qty };
+      }
+
       axios
-        .put(updateBuInventoryUrl, params)
+        .put(updateFuInventoryUrl, params)
         .then((res) => {
           if (res.data.success) {
             console.log("response after adding item", res);
@@ -183,60 +255,26 @@ function AddEditBuInventory(props) {
     >
       <Header />
 
-      {/* <div style={{ alignItems: "center", flex: 0.5, display: "flex" }}>
-        <div
-          style={{
-            flex: 0.5,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <img
-            src={business_Unit}
-            style={{ maxWidth: "100%", height: "auto" }}
-          />
-        </div>
-
-        <div style={{ flex: 4, display: "flex", alignItems: "center" }}>
-          <h3
-            style={{ color: "white",  fontWeight: "700" }}
-          >
-            {comingFor === "add" ? " Add FU Inventory" : " Edit FU Inventory"}
-          </h3>
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            flex: 0.8,
-            justifyContent: "flex-end",
-            alignItems: "center",
-          }}
-        >
-          <div style={{ flex: 1.5, display: "flex" }}>
-            <img
-              onClick={() => props.history.goBack()}
-              src={Add_New}
-              style={{ width: "100%", height: "100%", cursor: "pointer" }}
-            />
-          </div>
-        </div>
-      </div> */}
-
       <div className="cPadding">
         <div className="subheader">
           <div>
             <img src={functional_Unit} />
             <h4>
-              {comingFor === "add"
-                ? " Add FU Inventory"
-                : " Edit FU Inventory"}
+              {comingFor === "add" ? " Add FU Inventory" : " Edit FU Inventory"}
             </h4>
           </div>
 
           <div>
-            <img onClick={() => props.history.goBack()} src={view_all} />
+            <Button
+              onClick={() => props.history.goBack()}
+              style={styles.stylesForButton}
+              variant="contained"
+              color="primary"
+            >
+              <img src={view_all} style={styles.stylesForIcon} />
+              &nbsp;&nbsp;
+              <strong>View All</strong>
+            </Button>
             {/* <img src={Search} /> */}
           </div>
         </div>
@@ -245,20 +283,23 @@ function AddEditBuInventory(props) {
           style={{ flex: 4, display: "flex", flexDirection: "column" }}
           className="container"
         >
-          <div className="row">
-            <div className="col-md-12">
+          {items !== "" ? (
+            <div>
+              <div className="row">
+                {/* <div className="col-md-12">
               <div style={styles.inputContainerForDropDown}>
-                <InputLabel id="buId-label">Business Unit</InputLabel>
+                <InputLabel id='buId-label'>Business Unit</InputLabel>
                 <Select
+                  style={styles.inputField}
                   fullWidth
-                  labelId="buId-label"
-                  id="buId"
-                  name="buId"
+                  labelId='buId-label'
+                  id='buId'
+                  name='buId'
                   value={buId}
                   onChange={onChangeValue}
-                  label="Business Unit"
+                  label='Business Unit'
                 >
-                  <MenuItem value="">
+                  <MenuItem value=''>
                     <em>None</em>
                   </MenuItem>
                   {businessUnits.map((val, key) => {
@@ -266,106 +307,101 @@ function AddEditBuInventory(props) {
                       <MenuItem key={val._id} value={val._id}>
                         {val.buName}
                       </MenuItem>
-                    );
+                    )
                   })}
                 </Select>
               </div>
-            </div>
 
-            <div className="col-md-12">
-              <div style={styles.inputContainerForDropDown}>
-                <InputLabel id="itemId-label">Item</InputLabel>
-                <Select
-                  fullWidth
-                  labelId="itemId-label"
-                  id="itemId"
-                  name="itemId"
-                  value={itemId}
-                  onChange={onChangeValue}
-                  label="Item"
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  {items.map((val, key) => {
-                    return (
-                      <MenuItem key={val._id} value={val._id}>
-                        {val.name}
+            </div> */}
+
+                <div className="col-md-12">
+                  <div style={styles.inputContainerForDropDown}>
+                    <InputLabelComponent>Item</InputLabelComponent>
+                    <Select
+                      fullWidth
+                      labelId="itemId-label"
+                      id="itemId"
+                      name="itemId"
+                      value={itemId}
+                      onChange={onChangeValue}
+                      label="Item"
+                      className="dropDownStyle"
+                      input={<BootstrapInput />}
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
                       </MenuItem>
-                    );
-                  })}
-                </Select>
+                      {items &&
+                        items.map((val, key) => {
+                          return (
+                            <MenuItem key={val._id} value={val._id}>
+                              {val.name}
+                            </MenuItem>
+                          );
+                        })}
+                    </Select>
+                  </div>
+                </div>
+
+                <div
+                  className="col-md-12"
+                  style={styles.inputContainerForTextField}
+                >
+                  <InputLabelComponent>Quantity</InputLabelComponent>
+
+                  <input
+                    type="number"
+                    placeholder="Quantity"
+                    name={"qty"}
+                    value={qty}
+                    onChange={onChangeValue}
+                    className="textInputStyle"
+                  />
+                </div>
+              </div>
+
+              <div
+                style={{ display: "flex", flex: 1, justifyContent: "center" }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    flex: 1,
+                    height: 50,
+                    justifyContent: "center",
+                    marginTop: "2%",
+                    marginBottom: "2%",
+                  }}
+                >
+                  {comingFor === "add" ? (
+                    <Button
+                      style={{ width: "60%" }}
+                      disabled={!validateForm()}
+                      onClick={handleAdd}
+                      variant="contained"
+                      color="primary"
+                    >
+                      Add FU Inventory
+                    </Button>
+                  ) : (
+                    <Button
+                      style={{ width: "60%" }}
+                      disabled={!validateForm()}
+                      onClick={handleEdit}
+                      variant="contained"
+                      color="primary"
+                    >
+                      Edit FU Inventory
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
-
-            <div
-              className="col-md-12"
-              style={styles.inputContainerForTextField}
-            >
-              {/* <TextField
-              fullWidth
-              id="quantity"
-              name="qty"
-              label="Quantity"
-              type="number"
-              // variant="outlined"
-              value={qty}
-              min="0"
-              onChange={onChangeValue}
-              error={!qty && isFormSubmitted}
-            /> */}
-
-              <input
-                type="number"
-                placeholder="Quantity"
-                name={"qty"}
-                value={qty}
-                onChange={onChangeValue}
-                className="textInputStyle"
-              />
+          ) : (
+            <div className="LoaderStyle">
+              <Loader type="TailSpin" color="red" height={50} width={50} />
             </div>
-          </div>
-
-          <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
-            {/* <div style={styles.buttonContainer}>
-            <Button onClick={handleCancel} variant="contained">
-              Cancel
-            </Button>
-          </div> */}
-
-            <div
-              style={{
-                display: "flex",
-                flex: 1,
-                height: 50,
-                justifyContent: "center",
-                marginTop: "2%",
-                marginBottom: "2%",
-              }}
-            >
-              {comingFor === "add" ? (
-                <Button
-                  style={{ width: "60%" }}
-                  disabled={!validateForm()}
-                  onClick={handleAdd}
-                  variant="contained"
-                  color="primary"
-                >
-                  Add FU Inventory
-                </Button>
-              ) : (
-                <Button
-                  style={{ width: "60%" }}
-                  disabled={!validateForm()}
-                  onClick={handleEdit}
-                  variant="contained"
-                  color="primary"
-                >
-                  Edit FU Inventory
-                </Button>
-              )}
-            </div>
-          </div>
+          )}
 
           <Notification msg={errorMsg} open={openNotification} />
 
@@ -373,7 +409,7 @@ function AddEditBuInventory(props) {
             <img
               onClick={() => props.history.goBack()}
               src={Back_Arrow}
-              style={{ width: 60, height: 40, cursor: "pointer" }}
+              style={{ width: 45, height: 35, cursor: "pointer" }}
             />
           </div>
         </div>

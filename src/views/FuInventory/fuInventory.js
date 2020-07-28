@@ -8,13 +8,19 @@ import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
 import Notification from "../../components/Snackbar/Notification.js";
 import ConfirmationModal from "../../components/Modal/confirmationModal";
-
+import plus_icon from "../../assets/img/Plus.png";
 import axios from "axios";
-import { getBuInventoryUrl, deleteBuInventoryUrl } from "../../public/endpoins";
-
+import Back from "../../assets/img/Back_Arrow.png";
 import Loader from "react-loader-spinner";
 
-import CustomTable from "../../components/Table/Table.js";
+import CustomTable from "../../components/Table/Table";
+
+import {
+  getFuInventoryUrl,
+  deleteFuInventoryUrl,
+  getFuInventoryByFUIdUrl,
+  getFunctionalUnitFromHeadIdUrl,
+} from "../../public/endpoins";
 
 import Header from "../../components/Header/Header";
 
@@ -30,8 +36,8 @@ import Inactive from "../../assets/img/Inactive.png";
 
 import Active from "../../assets/img/Active.png";
 
-import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
-
+import business_Unit from "../../assets/img/Functional Unit.png";
+import cookie from "react-cookies";
 
 const styles = {
   cardCategoryWhite: {
@@ -67,12 +73,21 @@ const styles = {
     fontWeight: "400",
     fontFamily: "Ubuntu",
   },
+  stylesForButton: {
+    color: "white",
+    cursor: "pointer",
+    borderRadius: 15,
+    background: "#2c6ddd",
+    width: "140px",
+    height: "50px",
+    outline: "none",
+  },
 };
 
 const useStyles = makeStyles(styles);
 
-const tableHeading = ["Business Unit", "Item Name", "Qty", "Actions"];
-const tableDataKeys = [["buId", "buName"], ["itemId", "name"], "qty"];
+const tableHeading = ["FU Name", "Item Name", "Qty", "Actions"];
+const tableDataKeys = [["fuId", "fuName"], ["itemId", "name"], "qty"];
 const actions = { edit: true, delete: true };
 
 export default function BuInventory(props) {
@@ -84,6 +99,9 @@ export default function BuInventory(props) {
   const [modalVisible, setModalVisible] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [openNotification, setOpenNotification] = useState(false);
+  const [functionalUnits, setFunctionalUnits] = useState("");
+
+  const [currentUser, setCurrentUser] = useState(cookie.load("current_user"));
 
   if (openNotification) {
     setTimeout(() => {
@@ -92,14 +110,74 @@ export default function BuInventory(props) {
     }, 2000);
   }
 
-  function getBuInventory() {
+  function getFuInventory() {
+    console.log(currentUser);
+
+    let url = `${getFuInventoryUrl}`;
     axios
-      .get(getBuInventoryUrl)
+      .get(
+        // `${getFuInventoryByFUIdUrl}/${props.history.location.state.selectedItem._id}`
+        url
+      )
       .then((res) => {
         if (res.data.success) {
-          setBuInventories(res.data.data.buInventory);
+          console.log("response for inventory", res.data.data);
+          if (currentUser.staffTypeId.type === "admin") {
+            setBuInventories(res.data.data.fuInventory);
+          } else {
+            let temp = res.data.data.fuInventory.filter(
+              (inventory) => inventory.fuId.fuHead === currentUser.staffId
+            );
+            setBuInventories(temp);
+          }
           setItems(res.data.data.items);
-          setBusinessUnit(res.data.data.businessUnit);
+          setBusinessUnit(res.data.data.functionalUnit);
+        } else if (!res.data.success) {
+          setErrorMsg(res.data.error);
+          setOpenNotification(true);
+        }
+        return res;
+      })
+      .catch((e) => {
+        console.log("error: ", e);
+      });
+  }
+
+  function getFuInventoryById() {
+    axios
+      .get(`${getFuInventoryByFUIdUrl}/${props.match.params.id}`)
+      .then((res) => {
+        if (res.data.success) {
+          console.log("response for inventory", res.data.data);
+          if (currentUser.staffTypeId.type === "admin") {
+            setBuInventories(res.data.data.fuInventory);
+          } else {
+            let temp = res.data.data.fuInventory.filter(
+              (inventory) => inventory.fuId.fuHead === currentUser.staffId
+            );
+            setBuInventories(temp);
+          }
+          setItems(res.data.data.items);
+          setBusinessUnit(res.data.data.functionalUnit);
+        } else if (!res.data.success) {
+          setErrorMsg(res.data.error);
+          setOpenNotification(true);
+        }
+        return res;
+      })
+      .catch((e) => {
+        console.log("error: ", e);
+      });
+  }
+
+  function getFUFromHead() {
+    console.log("current user", currentUser);
+    axios
+      .get(getFunctionalUnitFromHeadIdUrl + "/" + currentUser.staffId)
+      .then((res) => {
+        if (res.data.success) {
+          console.log(res.data.data);
+          setFunctionalUnits(res.data.data[0]);
         } else if (!res.data.success) {
           setErrorMsg(res.data.error);
           setOpenNotification(true);
@@ -112,22 +190,54 @@ export default function BuInventory(props) {
   }
 
   useEffect(() => {
-    getBuInventory();
+    if (props.match.path === "/home/controlroom/fus/fuinventory/:id") {
+      getFuInventoryById();
+    } else {
+      getFuInventory();
+      getFUFromHead();
+    }
   }, []);
 
   const addNewItem = () => {
-    let path = `fuinventory/add`;
+    let path = "";
+
+    if (props.match.path === "/home/controlroom/fus/fuinventory/:id") {
+      path = `add/${props.match.params.id}`;
+    } else {
+      path = `fuinventory/add`;
+    }
     props.history.push({
       pathname: path,
-      state: { comingFor: "add", items, businessUnit },
+      state: {
+        comingFor: "add",
+        items,
+        businessUnit,
+        fuId: functionalUnits,
+      },
     });
   };
 
   function handleEdit(rec) {
-    let path = `fuinventory/edit`;
+    // let path = `fuinventory/edit`;
+
+    let path = "";
+
+    if (props.match.path === "/home/controlroom/fus/fuinventory/:id") {
+      path = `edit/${props.match.params.id}`;
+    } else {
+      path = `fuinventory/edit`;
+    }
+
     props.history.push({
       pathname: path,
-      state: { comingFor: "edit", selectedItem: rec, items, businessUnit },
+
+      state: {
+        comingFor: "edit",
+        selectedItem: rec,
+        items,
+        businessUnit,
+        fuId: functionalUnits,
+      },
     });
   }
 
@@ -138,11 +248,12 @@ export default function BuInventory(props) {
 
   function deleteBuInventory() {
     const params = {
-      _id: deleteItem,
+      _id: deleteItem._id,
     };
 
     axios
-      .delete(deleteBuInventoryUrl + "/" + params._id)
+      .delete(deleteFuInventoryUrl + "/" + params._id)
+
       .then((res) => {
         if (res.data.success) {
           setdeleteItem("");
@@ -159,6 +270,8 @@ export default function BuInventory(props) {
       });
   }
 
+  console.log(props);
+
   return (
     <div
       style={{
@@ -174,75 +287,28 @@ export default function BuInventory(props) {
     >
       <Header />
 
-      {/* <div style={{ alignItems: "center", flex: 0.5, display: "flex" }}>
-        <div
-          style={{
-            flex: 0.5,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <img
-            src={business_Unit}
-            style={{ maxWidth: "100%", height: "auto" }}
-          />
-        </div>
-
-        <div style={{ flex: 4, display: "flex", alignItems: "center" }}>
-          <h4
-            style={{ color: "white",  fontWeight: "700" }}
-          >
-            FU Inventory
-          </h4>
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            flex: 1.5,
-            justifyContent: "flex-end",
-            alignItems: "center",
-          }}
-        >
-          <div style={{ flex: 1.5, display: "flex" }}>
-            <img
-              onClick={addNewItem}
-              src={Add_New}
-              style={{ width: "100%", height: "100%", cursor: "pointer" }}
-            />
-          </div>
-
-          <div style={{ flex: 1, display: "flex" }}>
-            <img src={Search} style={{ width: "60%", height: "60%" }} />
-          </div>
-        </div>
-      </div> */}
-
-      <div
-        // style={{
-        //   flex: 4,
-        //   display: "flex",
-        //   flexDirection: "column",
-        //   marginLeft: "3%",
-        //   marginRight: "3%",
-        // }}
-        className="cPadding"
-      >
+      <div className="cPadding">
         <div className="subheader">
           <div>
-            <img src={functional_Unit} />
+            <img src={business_Unit} />
             <h4>FU Inventory</h4>
           </div>
 
           <div>
-            <img onClick={addNewItem} src={Add_New} />
-            {/* <img src={Search}  style={{ width: "60%", height: "60%" }}/> */}
+            <Button
+              onClick={addNewItem}
+              style={styles.stylesForButton}
+              variant="contained"
+              color="primary"
+            >
+              <img src={plus_icon} style={styles.stylesForIcon} />
+              &nbsp;&nbsp;
+              <strong>Add New</strong>
+            </Button>
           </div>
         </div>
         {buInventories !== "" ? (
           <div>
-            {/* table */}
             <div>
               <CustomTable
                 tableData={buInventories}
@@ -256,8 +322,6 @@ export default function BuInventory(props) {
               />
             </div>
 
-            {/* end table */}
-
             <ConfirmationModal
               modalVisible={modalVisible}
               msg="Are you sure want to delete the record?"
@@ -265,13 +329,21 @@ export default function BuInventory(props) {
               onConfirmDelete={() => deleteBuInventory()}
               setdeleteItem={() => setdeleteItem("")}
             />
-
+            <div style={{ marginBottom: 20 }}>
+              <img
+                onClick={() => props.history.goBack()}
+                src={Back}
+                style={{
+                  width: 45,
+                  height: 35,
+                  cursor: "pointer",
+                }}
+              />
+            </div>
             <Notification msg={errorMsg} open={openNotification} />
           </div>
         ) : (
-          <div
-          className="LoaderStyle"
-          >
+          <div className="LoaderStyle">
             <Loader type="TailSpin" color="red" height={50} width={50} />
           </div>
         )}

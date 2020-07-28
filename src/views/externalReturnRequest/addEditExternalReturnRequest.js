@@ -373,7 +373,7 @@ function AddEditPurchaseRequest(props) {
           if (res.data.success) {
             console.log("response after adding RR", res.data);
             props.history.replace(
-              "/home/controlroom/wms/materialreceiving/viewpo/externalreturn"
+              "/home/wms/materialreceiving/viewpo/externalreturn"
             );
           } else if (!res.data.success) {
             setOpenNotification(true);

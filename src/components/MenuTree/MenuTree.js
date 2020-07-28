@@ -55,7 +55,7 @@ class MenuTree extends React.Component {
           minHeight: "100%",
           alignItems: "center",
           justifyContent: "center",
-          position: "fixed",
+          position: "center",
           left: "45%",
         }}
       >
@@ -77,112 +77,148 @@ class MenuTree extends React.Component {
               width: 100,
             }}
           >
-            <div className="containerStyle" onClick={() => {}}>
-              <img src={this.props.options[0].img} className="imageStyle" />
-              <h6 className="headingStyle">{this.props.options[0].text}</h6>
-            </div>
+            {this.props.options[0] ? (
+              <div className="containerStyle" onClick={() => {}}>
+                <img src={this.props.options[0].img} className="imageStyle" />
+                <h6 className="headingStyle">{this.props.options[0].text}</h6>
+              </div>
+            ) : (
+              undefined
+            )}
           </label>
 
           <a className="menu-item item-1">
-            <div
-              className="containerStyle"
-              onClick={() =>
-                this.props.options[1].path
-                  ? this.props.history.push(this.props.options[1].path)
-                  : {}
-              }
-            >
-              <img src={this.props.options[1].img} className="imageStyle" />
-              <h6 className="headingStyle">{this.props.options[1].text}</h6>
-            </div>
+            {this.props.options[1] ? (
+              <div
+                className="containerStyle"
+                onClick={() =>
+                  this.props.options[1].path
+                    ? this.props.history.push(this.props.options[1].path)
+                    : {}
+                }
+              >
+                <img src={this.props.options[1].img} className="imageStyle" />
+                <h6 className="headingStyle">{this.props.options[1].text}</h6>
+              </div>
+            ) : (
+              undefined
+            )}
           </a>
+
           <a className="menu-item item-2">
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "100%",
-                width: "100%",
-              }}
-              onClick={() =>
-                this.props.options[2].path
-                  ? this.props.history.push(this.props.options[2].path)
-                  : {}
-              }
-            >
-              <img src={this.props.options[2].img} className="imageStyle" />
-              <h6 className="headingStyle">{this.props.options[2].text}</h6>
-            </div>
+            {this.props.options[2] ? (
+              <div
+                // style={{
+                //   display: "flex",
+                //   flexDirection: "column",
+                //   justifyContent: "center",
+                //   alignItems: "center",
+                //   height: "100%",
+                //   width: "100%",
+                // }}
+                className="containerStyle"
+                onClick={() =>
+                  this.props.options[2].path
+                    ? this.props.history.push(this.props.options[2].path)
+                    : {}
+                }
+              >
+                <img src={this.props.options[2].img} className="imageStyle" />
+                <h6 className="headingStyle">{this.props.options[2].text}</h6>
+              </div>
+            ) : (
+              undefined
+            )}
           </a>
+
           <a className="menu-item item-3">
-            <div
-              className="containerStyle"
-              onClick={() =>
-                this.props.options[3].path
-                  ? this.props.history.push(this.props.options[3].path)
-                  : {}
-              }
-            >
-              <img src={this.props.options[3].img} className="imageStyle" />
-              <h6 className="headingStyle">{this.props.options[3].text}</h6>
-            </div>
+            {this.props.options[3] ? (
+              <div
+                className="containerStyle"
+                onClick={() =>
+                  this.props.options[3].path
+                    ? this.props.history.push(this.props.options[3].path)
+                    : {}
+                }
+              >
+                <img src={this.props.options[3].img} className="imageStyle" />
+                <h6 className="headingStyle">{this.props.options[3].text}</h6>
+              </div>
+            ) : (
+              undefined
+            )}
           </a>
 
           <a className="menu-item item-4">
-            <div
-              className="containerStyle"
-              onClick={() =>
-                this.props.options[4].path
-                  ? this.props.history.push(this.props.options[4].path)
-                  : {}
-              }
-            >
-              <img src={this.props.options[4].img} className="imageStyle" />
-              <h6 className="headingStyle">{this.props.options[4].text}</h6>
-            </div>
+            {this.props.options[4] ? (
+              <div
+                className="containerStyle"
+                onClick={() =>
+                  this.props.options[4].path
+                    ? this.props.history.push(this.props.options[4].path)
+                    : {}
+                }
+              >
+                <img src={this.props.options[4].img} className="imageStyle" />
+                <h6 className="headingStyle">{this.props.options[4].text}</h6>
+              </div>
+            ) : (
+              undefined
+            )}
           </a>
-          <a className="menu-item item-5">
-            <div
-              className="containerStyle"
-              onClick={() =>
-                this.props.options[5].path
-                  ? this.props.history.push(this.props.options[5].path)
-                  : {}
-              }
-            >
-              <img src={this.props.options[5].img} className="imageStyle" />
 
-              <h6 className="headingStyle">{this.props.options[5].text}</h6>
-            </div>
+          <a className="menu-item item-5">
+            {this.props.options[5] ? (
+              <div
+                className="containerStyle"
+                onClick={() =>
+                  this.props.options[5].path
+                    ? this.props.history.push(this.props.options[5].path)
+                    : {}
+                }
+              >
+                <img src={this.props.options[5].img} className="imageStyle" />
+                <h6 className="headingStyle">{this.props.options[5].text}</h6>
+              </div>
+            ) : (
+              undefined
+            )}
           </a>
 
           <a className="menu-item item-6">
-            <div
-              className="containerStyle"
-              onClick={() =>
-                this.props.options[6].path
-                  ? this.props.history.push(this.props.options[6].path)
-                  : {}
-              }
-            >
-              <img src={this.props.options[6].img} className="imageStyle" />
-              <h6 className="headingStyle">{this.props.options[6].text}</h6>
-            </div>
+            {this.props.options[6] ? (
+              <div
+                className="containerStyle"
+                onClick={() =>
+                  this.props.options[6].path
+                    ? this.props.history.push(this.props.options[6].path)
+                    : {}
+                }
+              >
+                <img src={this.props.options[6].img} className="imageStyle" />
+                <h6 className="headingStyle">{this.props.options[6].text}</h6>
+              </div>
+            ) : (
+              undefined
+            )}
           </a>
+
           <a className="menu-item item-7">
-            <div
-              className="containerStyle"
-              onClick={() =>
-                this.props.options[7].path
-                  ? this.props.history.push(this.props.options[7].path)
-                  : {}
-              }
-            >
-              <img src={this.props.options[7].img} className="imageStyle" />
-              <h6 className="headingStyle">{this.props.options[7].text}</h6>
-            </div>
+            {this.props.options[7] ? (
+              <div
+                className="containerStyle"
+                onClick={() =>
+                  this.props.options[7]
+                    ? this.props.history.push(this.props.options[7].path)
+                    : {}
+                }
+              >
+                <img src={this.props.options[7].img} className="imageStyle" />
+                <h6 className="headingStyle">{this.props.options[7].text}</h6>
+              </div>
+            ) : (
+              undefined
+            )}
           </a>
         </nav>
       </div>

@@ -1,53 +1,55 @@
 import React from "react";
 import { Router, Route, Switch, Redirect } from "react-router-dom";
 import NotFound from "../components/NotFound/NotFound";
-import replenishmentRequest from "../views/ReplenishmentRequestForFU/replenishmentRequest";
-import addEditReplenishmentRequest from "../views/ReplenishmentRequestForFU/addEditReplenishmentRequest";
-import receiveItemsForFUInventory from "../views/ReplenishmentRequestForFU/receiveItemsForFUInventory";
-import returnItemsForFUInventory from "../views/ReplenishmentRequestForFU/addEditInternalReturnRequestForFUInventory";
-import requestReturnTable from "../views/internalReturnRequest/internalReturnRequestTable";
-
+import ReplenishmentRequest from "../views/ReplenishmentRequestForFU/replenishmentRequest";
+import AddEditReplenishmentRequest from "../views/ReplenishmentRequestForFU/addEditReplenishmentRequest";
 import SuccessScreen from "../components/SuccessScreen/SuccessScreen";
 
 class ItemRoutes extends React.Component {
   render() {
-    console.log("rednere items", this.props.match);
     return (
       <Switch>
         <Route
           exact
           path={`${this.props.match.url}`}
-          component={replenishmentRequest}
+          // component={replenishmentRequest}
+          component={(props) => (
+            <ReplenishmentRequest {...props} match={this.props.match} />
+          )}
         />
 
         <Route
           path={`${this.props.match.url}/add`}
-          component={addEditReplenishmentRequest}
+          // component={addEditReplenishmentRequest}
+          component={(props) => (
+            <AddEditReplenishmentRequest {...props} match={this.props.match} />
+          )}
         />
 
         <Route
           path={`${this.props.match.url}/edit`}
-          component={addEditReplenishmentRequest}
+          // component={addEditReplenishmentRequest}
+          component={(props) => (
+            <AddEditReplenishmentRequest {...props} match={this.props.match} />
+          )}
         />
 
-        <Route
+        {/* <Route
           path={`${this.props.match.url}/receive`}
-          component={receiveItemsForFUInventory}
-        />
+          // component={receiveItemsForFUInventory}
+          component={(props) => (
+            <ReceiveItemsForFUInventory {...props} match={this.props.match} />
+          )}
+        /> */}
 
-        <Route
-          path={`${this.props.match.url}/returnitems/view`}
-          component={requestReturnTable}
-        />
-
-        <Route
-          path={`${this.props.match.url}/returnitems`}
-          component={returnItemsForFUInventory}
-        />
+     
 
         <Route
           path={`${this.props.match.url}/success`}
-          component={SuccessScreen}
+          // component={SuccessScreen}
+          component={(props) => (
+            <SuccessScreen {...props} match={this.props.match} />
+          )}
         />
 
         <Route path="*" component={NotFound} />

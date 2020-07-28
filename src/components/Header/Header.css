@@ -1,44 +1,106 @@
-.header{
-    width: 100%;
-    padding: 2% 5%;
-    display: flex;
-    justify-content: space-between;
+.header {
+  width: 100%;
+  padding: 2% 5%;
+  display: flex;
+  justify-content: space-between;
+}
+.header1-style {
+  max-width: 50%;
+  height: auto;
+}
+.header2-style {
+  max-width: 50%;
+  height: auto;
+}
+
+@media screen and (max-width: 768px) {
+  /* start of medium tablet styles */
+  /* Adding a fixed/percentage min-width could ensure that the image doesn't get too small */
+  .KHMC {
+    width: 35%;
+    height: auto;
+    /* background-color: crimson; */
+  }
+  .header {
+    padding: 5% 7%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  /* start of medium tablet styles */
+  /* Adding a fixed/percentage min-width could ensure that the image doesn't get too small */
+  .KHMC {
+    width: 10%;
+    height: auto;
+    /* background-color: crimson; */
+  }
+  .header {
+    padding: 5% 12%;
+  }
+  .header1-style {
+    max-width: 40%;
+    height: auto;
+  }
+  .header2-style {
+    max-width: 40%;
+    height: auto;
+  }
+}
+@media screen and (max-width: 768px) {
+  /* start of medium tablet styles */
+  /* Adding a fixed/percentage min-width could ensure that the image doesn't get too small */
+  .Influence_white {
+    width: 35%;
+    height: auto;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  /* start of medium tablet styles */
+  /* Adding a fixed/percentage min-width could ensure that the image doesn't get too small */
+  .Influence_white {
+    width: 10%;
+    height: auto;
+  }
+  .subheader div:first-of-type > h4 {
+    color: white;
+    margin-left: 20px;
+    font-size: 15px;
+  }
 }
 
 .header > img:first-of-type {
-    cursor: pointer;
+  cursor: pointer;
 }
 
-.subheader{
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    /* background: gray; */
+.subheader {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  /* background: gray; */
 }
 
-.subheader div{
-    width: 30%;
-    display: flex;
-    align-items: center;
+.subheader div {
+  width: 30%;
+  display: flex;
+  align-items: center;
 }
 
-.subheader div:first-of-type > img{
-    height: 54px;
-    width: 60px;
+.subheader div:first-of-type > img {
+  height: 54px;
+  width: 60px;
 }
-.subheader div:first-of-type > h4{
-    color: white;
-    margin-left: 20px;
+.subheader div:first-of-type > h4 {
+  color: white;
+  margin-left: 20px;
 }
-.subheader div:nth-of-type(2){
-    justify-content: flex-end;
+.subheader div:nth-of-type(2) {
+  justify-content: flex-end;
 }
-.subheader div:nth-of-type(2) > img{
-    height: 75px;
-    width: 190px;
+.subheader div:nth-of-type(2) > img {
+  height: 75px;
+  width: 190px;
 }
-
-
 
 /* color: "white",  fontWeight: "700" */
 /* maxWidth: "100%", height: "auto" 

@@ -1,147 +1,156 @@
 /*eslint-disable*/
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react'
 // @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
-import styles from "../../assets/jss/material-dashboard-react/components/tableStyle.js";
-import CustomTable from "../../components/Table/Table";
-import ConfirmationModal from "../../components/Modal/confirmationModal";
-import axios from "axios";
-import Header from "../../components/Header/Header";
-import vendor from "../../assets/img/Vendot.png";
-import Add_New from "../../assets/img/Add_New.png";
-import Search from "../../assets/img/Search.png";
-import Table from "../../components/Table/Table.js";
-import Back_Arrow from "../../assets/img/Back_Arrow.png";
-import {
-  getVendorUrl,
-  deleteVendorUrl,
-  socketUrl,
-} from "../../public/endpoins";
-import ws from "../../variables/websocket";
-import { ToastsStore } from "react-toasts";
+import { makeStyles } from '@material-ui/core/styles'
+import Button from '@material-ui/core/Button'
+import Paper from '@material-ui/core/Paper'
+import styles from '../../assets/jss/material-dashboard-react/components/tableStyle.js'
+import CustomTable from '../../components/Table/Table'
+import ConfirmationModal from '../../components/Modal/confirmationModal'
+import axios from 'axios'
+import Header from '../../components/Header/Header'
+import vendor from '../../assets/img/Vendot.png'
+import Add_New from '../../assets/img/Add_New.png'
+import Search from '../../assets/img/Search.png'
+import Table from '../../components/Table/Table.js'
+import Back from '../../assets/img/Back_Arrow.png'
+import { getVendorUrl, deleteVendorUrl, socketUrl } from '../../public/endpoins'
+// import ws from '../../variables/websocket'
+import { ToastsStore } from 'react-toasts'
+import plus_icon from '../../assets/img/Plus.png'
+import Loader from 'react-loader-spinner'
+import '../../assets/jss/material-dashboard-react/components/loaderStyle.css'
 
-import Loader from "react-loader-spinner";
-import  '../../assets/jss/material-dashboard-react/components/loaderStyle.css'
+const stylesB = {
+  stylesForButton: {
+    color: 'white',
+    cursor: 'pointer',
+    borderRadius: 10,
+    background: '#2c6ddd',
+    width: '110px',
+    height: '40px',
+    outline: 'none',
+  },
+}
 
-
-const useStyles = makeStyles(styles);
+const useStyles = makeStyles(styles)
 
 const tableHeading = [
-  "Name",
-  "Phone Number",
-  "Contact Person",
-  "Email",
-  "Action",
-];
+  'Name',
+  'Phone Number',
+  'Contact Person',
+  'Email',
+  'Status',
+  'Action',
+]
 const tableDataKeys = [
-  "englishName",
-  "telephone1",
-  "contactPersonName",
-  "contactEmail",
-];
+  'englishName',
+  'telephone1',
+  'contactPersonName',
+  'contactEmail',
+  'status',
+]
 
-const actions = { edit: true, delete: true };
+const actions = { edit: true, delete: true }
 
 export default function Vendor(props) {
-  const classes = useStyles();
-  const [vendors, setVendor] = useState("");
-  const [deleteItem, setdeleteItem] = useState("");
-  const [modalVisible, setModalVisible] = useState(false);
+  const classes = useStyles()
+  const [vendors, setVendor] = useState('')
+  const [deleteItem, setdeleteItem] = useState('')
+  const [modalVisible, setModalVisible] = useState(false)
 
-  const [mainClasses, setClasses] = useState("");
+  const [mainClasses, setClasses] = useState('')
 
-  const [statues, setStatuses] = useState("");
+  const [statues, setStatuses] = useState('')
 
-  const [subClasses, setSubClasses] = useState("");
+  const [subClasses, setSubClasses] = useState('')
 
-  ws.onmessage = (message) => {
-    if (message.data == "add_vendor") {
-      getVendors();
-      console.log("inside check");
-    }
-    // console.log(`Received: ${message.data}`);
-  };
+  // ws.onmessage = (message) => {
+  //   if (message.data == 'add_vendor') {
+  //     getVendors()
+  //     console.log('inside check')
+  //   }
+  //   // console.log(`Received: ${message.data}`);
+  // }
 
   function getVendors() {
     axios
       .get(getVendorUrl)
       .then((res) => {
         if (res.data.success) {
-          setVendor(res.data.data.vendor);
-          setStatuses(res.data.data.statues);
-          setClasses(res.data.data.classes);
-          setSubClasses(res.data.data.subClasses);
+          setVendor(res.data.data.vendor)
+          setStatuses(res.data.data.statues)
+          setClasses(res.data.data.classes)
+          setSubClasses(res.data.data.subClasses)
         } else if (!res.data.success) {
-          ToastsStore.error(res.data.error);
+          ToastsStore.error(res.data.error)
         }
-        return res;
+        return res
       })
       .catch((e) => {
-        console.log("error: ", e);
-      });
+        console.log('error: ', e)
+      })
   }
 
   useEffect(() => {
-    getVendors();
-  }, []);
+    getVendors()
+  }, [])
 
   const addNewItem = () => {
-    let path = `vendor/add/`;
+    let path = `vendor/add/`
     props.history.push({
       pathname: path,
       state: {
-        comingFor: "add",
+        comingFor: 'add',
         statues: statues,
         mainClasses: mainClasses,
         subClasses: subClasses,
       },
-    });
-  };
+    })
+  }
 
   function handleEdit(rec) {
-    let path = `vendor/edit`;
+    let path = `vendor/edit`
     props.history.push({
       pathname: path,
       state: {
-        comingFor: "edit",
+        comingFor: 'edit',
         selectedItem: rec,
         statues: statues,
         mainClasses: mainClasses,
         subClasses: subClasses,
       },
-    });
+    })
   }
 
   function handleDelete(id) {
-    setModalVisible(true);
-    setdeleteItem(id);
+    setModalVisible(true)
+    setdeleteItem(id)
   }
   function handleStatus(id) {
-    setModalVisible(true);
-    setdeleteItem(id);
+    setModalVisible(true)
+    setdeleteItem(id)
   }
   function deleteVendor() {
     const params = {
       _id: deleteItem,
-    };
+    }
 
     axios
-      .delete(deleteVendorUrl + "/" + params._id)
+      .delete(deleteVendorUrl + '/' + params._id)
       .then((res) => {
         if (res.data.success) {
-          setdeleteItem("");
-          setModalVisible(false);
-          window.location.reload(false);
+          setdeleteItem('')
+          setModalVisible(false)
+          window.location.reload(false)
         } else if (!res.data.success) {
-          ToastsStore.error(res.data.error);
+          ToastsStore.error(res.data.error)
         }
-        return res;
+        return res
       })
       .catch((e) => {
-        console.log("error while deletion ", e);
-      });
+        console.log('error while deletion ', e)
+      })
   }
 
   return (
@@ -196,26 +205,35 @@ export default function Vendor(props) {
     // </div>
     <div
       style={{
-        display: "flex",
-        flexDirection: "column",
+        display: 'flex',
+        flexDirection: 'column',
         flex: 1,
-        position: "fixed",
-        width: "100%",
-        height: "100%",
-        backgroundColor: "#60d69f",
-        overflowY: "scroll",
+        position: 'fixed',
+        width: '100%',
+        height: '100%',
+        backgroundColor: '#60d69f',
+        overflowY: 'scroll',
       }}
     >
       <Header />
-      <div className="cPadding">
-        <div className="subheader">
+      <div className='cPadding'>
+        <div className='subheader'>
           <div>
             <img src={vendor} />
             <h4>Vendor Unit</h4>
           </div>
 
           <div>
-            <img onClick={addNewItem} src={Add_New} />
+            <Button
+              onClick={addNewItem}
+              style={stylesB.stylesForButton}
+              variant='contained'
+              color='primary'
+            >
+              <img className='icon-style' src={plus_icon} />
+              &nbsp;&nbsp;
+              <strong style={{ fontSize: '12px' }}>Add New</strong>
+            </Button>
             {/* <img src={Search} /> */}
           </div>
         </div>
@@ -223,8 +241,8 @@ export default function Vendor(props) {
         <div
           style={{
             flex: 4,
-            display: "flex",
-            flexDirection: "column",
+            display: 'flex',
+            flexDirection: 'column',
           }}
         >
           {vendors ? (
@@ -239,32 +257,32 @@ export default function Vendor(props) {
                   handleEdit={handleEdit}
                   handleDelete={handleDelete}
                   handleStatus={handleStatus}
-                  borderBottomColor={"#60d69f"}
+                  borderBottomColor={'#60d69f'}
                   borderBottomWidth={20}
                 />
               </div>
               <ConfirmationModal
                 modalVisible={modalVisible}
-                msg="Are you sure want to delete the record?"
+                msg='Are you sure want to delete the record?'
                 hideconfirmationModal={() => setModalVisible(false)}
                 onConfirmDelete={() => deleteVendor()}
-                setdeleteItem={() => setdeleteItem("")}
+                setdeleteItem={() => setdeleteItem('')}
               />
               <div style={{ marginBottom: 20 }}>
                 <img
                   onClick={() => props.history.goBack()}
-                  src={Back_Arrow}
-                  style={{ width: 60, height: 40, cursor: "pointer" }}
+                  src={Back}
+                  style={{ width: 45, height: 35, cursor: 'pointer' }}
                 />
               </div>
             </div>
           ) : (
-            <div className="LoaderStyle">
-              <Loader type="TailSpin" color="red" height={50} width={50} />
+            <div className='LoaderStyle'>
+              <Loader type='TailSpin' color='red' height={50} width={50} />
             </div>
           )}
         </div>
       </div>
     </div>
-  );
+  )
 }
