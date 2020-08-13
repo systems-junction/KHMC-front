@@ -751,7 +751,16 @@ function AddEditPatientListing(props) {
 
     dispatch({ field: 'coverageTerms', value: i.coverageTerms })
     dispatch({ field: 'payment', value: i.payment })
-    dispatch({ field: 'depositSlip', value: i.depositSlip })
+
+    let deposit = ''
+    if (i.depositSlip) {
+      deposit = {
+        name: i.depositSlip === '' ? '' : i.depositSlip.split('\\')[1],
+      }
+    }
+
+    // console.log(i.depositSlip.split('\\')[0], 'Split')
+    dispatch({ field: 'depositSlip', value: deposit })
     dispatch({ field: 'DateTime', value: i.DateTime })
     dispatch({ field: 'paymentMethod', value: i.paymentMethod })
     dispatch({ field: 'insuranceVendor', value: i.insuranceVendor })
@@ -1816,25 +1825,30 @@ function AddEditPatientListing(props) {
                       >
                         <label style={styles.upload}>
                           <TextField
+                            required
                             type='file'
                             style={styles.input}
                             onChange={onSlipUpload}
                             // value={depositSlip.name}
+                            // error={slipUpload.name === '' && isFormSubmitted}
+                            // variant='filled'
+                            // error={true}
                             name='depositSlip'
-                            required
                           />
                           <FaUpload /> Upload Deposit Slip
-                          {/* <ErrorMessage
-                              name={depositSlip}
-                              isFormSubmitted={isFormSubmitted}
-                            /> */}
+                          <ErrorMessage
+                            name={slipUpload && slipUpload.name}
+                            isFormSubmitted={isFormSubmitted}
+                          />
                         </label>
 
                         <span
                           className='container-fluid'
                           style={{ color: 'green' }}
                         >
-                          {depositSlip && depositSlip.name}
+                          {depositSlip && depositSlip === ''
+                            ? ''
+                            : depositSlip.name}
                         </span>
                       </div>
                     </>
@@ -1848,26 +1862,32 @@ function AddEditPatientListing(props) {
                         }}
                       >
                         <label style={styles.upload}>
-                          <input
+                          <TextField
+                            required
                             type='file'
                             style={styles.input}
                             onChange={onSlipUpload}
-                            // value={depositSlip.name}
                             name='depositSlip'
-                            required
                           />
                           <FaUpload /> Upload Deposit Slip
-                          {/* <ErrorMessage
-                              name={depositSlip}
-                              isFormSubmitted={isFormSubmitted}
-                            /> */}
+                          <ErrorMessage
+                            name={slipUpload && slipUpload.name}
+                            isFormSubmitted={isFormSubmitted}
+                          />
                         </label>
 
                         <span
                           className='container-fluid'
                           style={{ color: 'green' }}
                         >
-                          {depositSlip && depositSlip.name}
+                          {/* {depositSlip && depositSlip === ''
+                            ? ''
+                            : depositSlip.name} */}
+                          {depositSlip && depositSlip.name
+                            ? depositSlip.name
+                            : depositSlip.split('\\')[0] === 'uploads'
+                            ? depositSlip.split('\\')[1]
+                            : depositSlip.name}
                         </span>
                       </div>
                       <div
@@ -1992,6 +2012,7 @@ function AddEditPatientListing(props) {
                     name={'insuranceNo'}
                     value={insuranceNo}
                     onChange={onChangeValue}
+                    error={insuranceNo === '' && isFormSubmitted}
                     className='textInputStyle'
                     variant='filled'
                     InputProps={{
