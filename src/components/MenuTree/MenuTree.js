@@ -43,7 +43,11 @@ class MenuTree extends React.Component {
     this.state = {};
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    setTimeout(() => {
+      document.getElementById("menu-open").checked = true;
+    }, 120);
+  }
 
   render() {
     return (

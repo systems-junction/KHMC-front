@@ -4,7 +4,9 @@
 }
 
 .cPadding {
-  padding: 0 5% !important;
+  /* padding: 0 3% !important; */
+  padding-left: 40px;
+  padding-right: 40px;
 }
 
 .img-style {
@@ -28,6 +30,7 @@
   margin-left: 20px;
   font-weight: 900;
   padding-top: 16px;
+  padding-bottom: 5px;
 }
 
 .subheader div {
@@ -35,19 +38,27 @@
 }
 
 .depositSlipImg{
-  margin-top: 25px;
   margin-bottom: 30px;
-  height: 350px;
-  width: 350px;
-  border-radius: 10px;
-  padding: 4px;
+  height: 300px;
+  width: 450px;
+  border-radius: 15px;
+  padding: 0px;
   line-height: 1.42857143;
   background-color: #f7f7f7;
-  border: 1px solid #e2dbd6;
+  /* border: 1px solid #e2dbd6; */
   transition: all .2s ease-in-out;
   display: inline-block;
 }
 
+@import url("//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css");
+.search { position: relative; }
+.search input { text-indent: 32px;}
+.search .fa-search { 
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  font-size: 15px;
+}
 /* .addButton {
   color: 'white';
   cursor: pointer;

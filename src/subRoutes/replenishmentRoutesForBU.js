@@ -4,6 +4,7 @@ import NotFound from "../components/NotFound/NotFound";
 import replenishmentRequest from "../views/ReplenishmentRequestForBU/replenishmentRequestForBU";
 import addEditReplenishmentRequest from "../views/ReplenishmentRequestForBU/addEditReplenishmentRequestForBU";
 import receiveItemsForBUInventory from "../views/ReplenishmentRequestForBU/receiveItemsForBUInventory";
+import editRequestedItems from "../views/ReplenishmentRequestForBU/editRequestedItems";
 
 import SuccessScreen from "../components/SuccessScreen/SuccessScreen";
 
@@ -36,6 +37,11 @@ class ItemRoutes extends React.Component {
         <Route
           path={`${this.props.match.url}/success`}
           component={SuccessScreen}
+        />
+
+        <Route
+          path={`${this.props.match.url}/requesteditem/edit`}
+          component={editRequestedItems}
         />
 
         <Route path="*" component={NotFound} />

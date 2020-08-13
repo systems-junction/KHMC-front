@@ -7,6 +7,11 @@ import tableStyles from '../../assets/jss/material-dashboard-react/components/ta
 import Header from '../../components/Header/Header'
 import business_Unit from '../../assets/img/Purchase Order.png'
 import Back_Arrow from '../../assets/img/Back_Arrow.png'
+import cookie from 'react-cookies'
+import axios from 'axios'
+import {
+    updateEDR
+} from '../../public/endpoins'
 import '../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
 
 const styles = {
@@ -29,18 +34,19 @@ const useStylesForTabs = makeStyles({
 
 const useStyles = makeStyles(tableStyles)
 
-function TriageAndAssessment(props) {
+function TriageAndAssessment(props) 
+{
     const classes = useStyles()
     const initialState = {
-        triageLevel: '',
-        goodAppearance: '',
-        specify: '',
-        headAndNeck: '',
-        respiratory: '',
-        cardiac: '',
-        abdomen: '',
-        neurological: '',
+        triageLevel:'',
+        generalAppearance:'',
+        headNeck:'',
+        respiratory:'',
+        cardiac:'',
+        abdomen:'',
+        neurological:'',
     }
+    
 
     function reducer(state, { field, value }) {
         return {
@@ -53,9 +59,8 @@ function TriageAndAssessment(props) {
 
     const {
         triageLevel,
-        goodAppearance,
-        specify,
-        headAndNeck,
+        generalAppearance,
+        headNeck,
         respiratory,
         cardiac,
         abdomen,
@@ -65,9 +70,37 @@ function TriageAndAssessment(props) {
     const classesForTabs = useStylesForTabs()
 
     const [value, setValue] = React.useState(0)
+    const [id, setId] = React.useState('')
+    const [currentUser, setCurrentUser] = useState('')
+    const [errorMsg, setErrorMsg] = useState('')
+    const [openNotification, setOpenNotification] = useState(false)
+
+    useEffect(() => {
+        setCurrentUser(cookie.load('current_user'))
+    
+        const selectedRec = props.history.location.state.selectedItem
+
+        setId(props.history.location.state.selectedItem._id)
+
+        if(selectedRec)
+        {
+            Object.entries(selectedRec).map(([key, val]) => {
+                if (val && typeof val === "object") 
+                {
+                    if(key === "triageAssessment")
+                    {
+                        Object.entries(val).map(([key1,val1])=>{
+                            dispatch({ field: key1 , value: val1 });
+                            // console.log(key1,val1)
+                        })
+                    }
+                }
+            })
+        }
+
+    },[])
 
     const onCheckedValue = (e) => {
-        console.log(e.target.value)
         dispatch({ field: e.target.name, value: e.target.value })
     }
 
@@ -77,6 +110,39 @@ function TriageAndAssessment(props) {
 
     const onNext = () => {
         setValue(value + 1)
+    }
+
+    const handleSubmitAssessment = (e) => {
+        console.log(e)
+        const params={
+            _id : id,
+            triageAssessment:{
+            triageLevel,
+            generalAppearance,
+            headNeck,
+            respiratory,
+            cardiac,
+            abdomen,
+            neurological,
+        }
+        }
+        // console.log(params)
+        axios.put(updateEDR, params)
+            .then((res) => {
+              if (res.data.success) {
+                console.log("Update EDR : ",res.data.data)
+                // dispatch({field:e.target.name,value:e.target.value})
+                props.history.goBack();
+              } else if (!res.data.success) {
+                setOpenNotification(true);
+                setErrorMsg("Error in Submitting Assessment");
+              }
+            })
+            .catch((e) => {
+              console.log("error after submitting Assessment", e);
+              setOpenNotification(true);
+              setErrorMsg("Error while submitting Assessment");
+            });
     }
 
     return (
@@ -154,13 +220,14 @@ function TriageAndAssessment(props) {
                                     <strong>Triage Level</strong>
                                 </label>
                             </div>
-                            <div onChange={onCheckedValue}>
+                            <div onChange={onCheckedValue} value={triageLevel}>
                                 <div className='row'>
                                     <div className='col-md-4'>
                                         <input
                                             type='radio'
                                             name='triageLevel'
-                                            value='1 - Resucsitation'
+                                            value='Resucsitation'
+                                            checked={triageLevel === 'Resucsitation'}
                                         />
                                         <label for='male'>&nbsp;&nbsp;1 - Resucsitation</label>
                                     </div>
@@ -168,12 +235,16 @@ function TriageAndAssessment(props) {
                                         <input
                                             type='radio'
                                             name='triageLevel'
-                                            value='2 - Emergent'
+                                            value='Emergent'
+                                            checked={triageLevel === 'Emergent'}
                                         />
                                         <label for='male'>&nbsp;&nbsp;2 - Emergent</label>
                                     </div>
                                     <div className='col-md-4'>
-                                        <input type='radio' name='triageLevel' value='3 - Urgent' />
+                                        <input type='radio' name='triageLevel' 
+                                        value='Urgent' 
+                                        checked={triageLevel === 'Urgent'}
+                                        />
                                         <label for='male'>&nbsp;&nbsp;3 - Urgent</label>
                                     </div>
                                 </div>
@@ -182,17 +253,19 @@ function TriageAndAssessment(props) {
                                         <input
                                             type='radio'
                                             name='triageLevel'
-                                            value='4 - Less urgent'
+                                            value='LessUrgent'
+                                            checked={triageLevel === 'LessUrgent'}
                                         />
-                                        <label for='male'>&nbsp;&nbsp; 4 - Less urgent</label>
+                                        <label for='male'>&nbsp;&nbsp;4 - Less Urgent</label>
                                     </div>
                                     <div className='col-md-4'>
                                         <input
                                             type='radio'
                                             name='triageLevel'
-                                            value='5 - Non urgent'
+                                            value='NonUrgent'
+                                            checked={triageLevel === 'NonUrgent'}
                                         />
-                                        <label for='male'>&nbsp;&nbsp; 5 - Non urgent</label>
+                                        <label for='male'>&nbsp;&nbsp;5 - Non Urgent</label>
                                     </div>
                                 </div>
                             </div>
@@ -236,436 +309,471 @@ function TriageAndAssessment(props) {
                                     padding: '25px',
                                     borderRadius: '25px',
                                 }}
-                                className='container'
                             >
-                                <div>
+                                <div className='container'>
                                     <div className='row'>
-                                        <label style={{ paddingLeft: '10px' }}>
+                                        <label style={{ paddingLeft: '15px' }}>
                                             <strong>General Appearance</strong>
                                         </label>
                                     </div>
                                     <form
-                                        class='form-inline row'
+                                        className='form-inline row'
                                         role='form'
                                         onChange={onCheckedValue}
+                                        value={generalAppearance}
                                     >
-                                        <div class='form-group col-md-2'>
+                                        <div className='form-group col-md-3'>
                                             <div class='radio'>
                                                 <label class='radio-inline control-label'>
                                                     <input
                                                         type='radio'
-                                                        name='goodAppearance'
+                                                        name='generalAppearance'
                                                         value='Good'
+                                                        checked={generalAppearance === 'Good'}
                                                     />
-                        &nbsp;&nbsp;Good
-                      </label>
+                                                    &nbsp;&nbsp;Good
+                                                </label>
                                             </div>
                                         </div>
-                                        <div class='form-group col-md-2'>
+                                        <div className='form-group col-md-3'>
                                             <div class='radio'>
                                                 <label class='radio-inline control-label'>
-                                                    <input type='radio' name='goodAppearance' value='Ill' />
-                        &nbsp;&nbsp;Ill
-                      </label>
+                                                    <input type='radio' name='generalAppearance' value='Ill' 
+                                                    checked={generalAppearance === 'Ill'}
+                                                    />
+                                                    &nbsp;&nbsp;Ill
+                                                </label>
                                             </div>
                                         </div>
-                                        <div class='form-group col-md-2'>
+                                        <div className='form-group col-md-3'>
                                             <div class='radio'>
                                                 <label class='radio-inline control-label'>
                                                     <input
                                                         type='radio'
-                                                        name='goodAppearance'
+                                                        name='generalAppearance'
                                                         value='Pain'
+                                                        checked={generalAppearance === 'Pain'}
                                                     />
-                        &nbsp;&nbsp;Pain
-                      </label>
+                                                    &nbsp;&nbsp;Pain
+                                                </label>
                                             </div>
                                         </div>
-                                        <div class='form-group col-md-2'>
+                                        <div className='form-group col-md-3'>
                                             <div class='radio'>
                                                 <label class='radio-inline control-label'>
                                                     <input
                                                         type='radio'
-                                                        name='goodAppearance'
+                                                        name='generalAppearance'
                                                         value='Other'
+                                                        checked={generalAppearance === 'Other'}
                                                     />
-                        &nbsp;&nbsp;Other
-                      </label>
+                                                    &nbsp;&nbsp;Other
+                                                </label>
                                             </div>
                                         </div>
-                                        <div class='form-group col-md-2'>
+                                    </form>
+                                    <form
+                                        className='form-inline row'
+                                        role='form'
+                                        onChange={onCheckedValue}
+                                        value={generalAppearance}
+                                    >
+                                        <div className='form-group col-md-12'>
                                             <input
                                                 style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
                                                 type='text'
                                                 placeholder='Specify'
-                                                name={'specify'}
-                                                value={specify}
-                                                className='form-control textInputStyle'
-                                            // maxlength='5'
-                                            // data-rule-required='true'
-                                            // contenteditable='false'
+                                                name='generalAppearance'
+                                                value={generalAppearance}
+                                                className='control-label textInputStyle'
                                             />
                                         </div>
                                     </form>
                                 </div>
-                                <div class='container'>
+                                <br/>
+                                <div className='container'>
                                     <div className='row'>
                                         <label style={{ paddingLeft: '15px' }}>
                                             <strong>Head and Neck</strong>
                                         </label>
                                     </div>
                                     <form
-                                        class='form-inline row'
+                                        className='form-inline row'
                                         role='form'
                                         onChange={onCheckedValue}
+                                        value={headNeck}
                                     >
-                                        <div class='form-group col-md-2'>
+                                        <div className='form-group col-md-3'>
                                             <div class='radio'>
                                                 <label class='radio-inline control-label'>
-                                                    <input type='radio' name='headAndNeck' value='Normal' />
-                        &nbsp;&nbsp;Normal
-                      </label>
+                                                    <input type='radio' name='headNeck' value='Normal' 
+                                                    checked={headNeck === 'Normal'}
+                                                    />
+                                                &nbsp;&nbsp;Normal
+                                            </label>
                                             </div>
                                         </div>
-                                        <div class='form-group col-md-2'>
+                                        <div className='form-group col-md-3'>
                                             <div class='radio'>
                                                 <label class='radio-inline control-label'>
-                                                    <input type='radio' name='headAndNeck' value='Line' />
-                        &nbsp;&nbsp;Line
-                      </label>
+                                                    <input type='radio' name='headNeck' value='Line' 
+                                                    checked={headNeck === 'Line'}
+                                                    />
+                                                &nbsp;&nbsp;Line
+                                            </label>
                                             </div>
                                         </div>
-                                        <div class='form-group col-md-2'>
+                                        <div className='form-group col-md-3'>
                                             <div class='radio'>
                                                 <label class='radio-inline control-label'>
                                                     <input
                                                         type='radio'
-                                                        name='headAndNeck'
+                                                        name='headNeck'
                                                         value='Thyroid'
+                                                        checked={headNeck === 'Thyroid'}
                                                     />
-                        &nbsp;&nbsp;Thyroid
-                      </label>
+                                                    &nbsp;&nbsp;Thyroid
+                                                </label>
                                             </div>
                                         </div>
-                                        <div class='form-group col-md-2'>
+                                        <div className='form-group col-md-3'>
                                             <div class='radio'>
                                                 <label class='radio-inline control-label'>
-                                                    <input type='radio' name='headAndNeck' value='Other' />
-                        &nbsp;&nbsp;Other
-                      </label>
+                                                    <input type='radio' name='headNeck' value='Other' 
+                                                    checked={headNeck === 'Other'}
+                                                    />
+                                                    &nbsp;&nbsp;Other
+                                                </label>
                                             </div>
                                         </div>
-                                        <div class='form-group col-md-2'>
+                                    </form>
+                                    <form className='form-inline row' role='form' onChange={onCheckedValue}
+                                        value={headNeck}>
+                                        <div className='form-group col-md-12'>
                                             <input
                                                 style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
                                                 type='text'
                                                 placeholder='Specify'
-                                                name={'specify'}
-                                                value={specify}
-                                                className='form-control textInputStyle'
-                                            // maxlength='5'
-                                            // data-rule-required='true'
-                                            // contenteditable='false'
+                                                name='specify'
+                                                value={headNeck}
+                                                className='control-label textInputStyle'
                                             />
                                         </div>
                                     </form>
                                 </div>
-
-                                <div class='container'>
+                                <br />
+                                <div className='container'>
                                     <div className='row'>
                                         <label style={{ paddingLeft: '15px' }}>
                                             <strong>Respiratory</strong>
                                         </label>
                                     </div>
                                     <form
-                                        class='form-inline row'
+                                        className='form-inline row'
                                         role='form'
                                         onChange={onCheckedValue}
+                                        value={respiratory}
                                     >
-                                        <div class='form-group col-md-2'>
+                                        <div className='form-group col-md-3'>
                                             <div class='radio'>
                                                 <label class='radio-inline control-label'>
-                                                    <input type='radio' name='respiratory' value='GBAE' />
-                        &nbsp;&nbsp;GBAE
-                      </label>
+                                                    <input type='radio' name='respiratory' value='GBAE' 
+                                                    checked={respiratory === 'GBAE'}
+                                                    />
+                                                    &nbsp;&nbsp;GBAE
+                                                </label>
                                             </div>
                                         </div>
-                                        <div class='form-group col-md-2'>
+                                        <div className='form-group col-md-3'>
                                             <div class='radio'>
                                                 <label class='radio-inline control-label'>
                                                     <input
                                                         type='radio'
                                                         name='respiratory'
                                                         value='Wheezing'
+                                                        checked={respiratory === 'Wheezing'}
                                                     />
-                        &nbsp;&nbsp;Wheezing
-                      </label>
+                                                    &nbsp;&nbsp;Wheezing
+                                                </label>
                                             </div>
                                         </div>
-                                        <div class='form-group col-md-2'>
+                                        <div className='form-group col-md-3'>
                                             <div class='radio'>
                                                 <label class='radio-inline control-label'>
-                                                    <input type='radio' name='respiratory' value='Other' />
-                        &nbsp;&nbsp;Other
-                      </label>
+                                                    <input type='radio' name='respiratory' value='Other' 
+                                                    checked={respiratory === 'Other'}
+                                                    />
+                                                    &nbsp;&nbsp;Other
+                                                </label>
                                             </div>
                                         </div>
-                                        <div class='form-group col-md-2'>
+                                        <div className='form-group col-md-3'>
                                             <div class='radio'>
                                                 <label class='radio-inline control-label'>
                                                     <input
                                                         type='radio'
                                                         name='respiratory'
                                                         value='Crackles'
+                                                        checked={respiratory === 'Crackles'}
                                                     />
-                        &nbsp;&nbsp;Crackles
-                      </label>
+                                                    &nbsp;&nbsp;Crackles
+                                                </label>
                                             </div>
                                         </div>
-                                        <div class='form-group col-md-2'>
+                                    </form>
+                                    <form className='form-inline row' role='form'
+                                        onChange={onCheckedValue}
+                                        value={respiratory}
+                                        >
+                                        <div className='form-group col-md-3'>
                                             <div class='radio'>
                                                 <label class='radio-inline control-label'>
                                                     <input
                                                         type='radio'
                                                         name='respiratory'
                                                         value='Crepitation'
+                                                        checked={respiratory === 'Crepitation'}
                                                     />
-                        &nbsp;&nbsp;Crepitation
-                      </label>
+                                                    &nbsp;&nbsp;Crepitation
+                                                </label>
                                             </div>
                                         </div>
-                                    </form>
-                                </div>
-
-                                {/* <div class='container'>
-                <form class='form-inline row' onChange={onCheckedValue}>
-                  <div class='form-group col-md-12'>
-                    <input
-                      style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
-                      type='text'
-                      placeholder='Specify'
-                      name={'specify'}
-                      value={specify}
-                      className='form-control textInputStyle'
-                    />
-                  </div>
-                </form>
-              </div> */}
-                                <br />
-                                <div className='container'>
-                                    <form class='form-inline row' role='form'>
-                                        <div className='form-group col-md-12'>
+                                        <div className='form-group col-md-9'>
                                             <input
                                                 style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
                                                 type='text'
                                                 placeholder='Specify'
-                                                name={'specify'}
-                                                value={specify}
+                                                name='specify'
+                                                value={respiratory}
                                                 className='control-label textInputStyle'
-                                                onChange={onCheckedValue}
                                             />
                                         </div>
                                     </form>
                                 </div>
-
                                 <br />
-
-                                <div class='container'>
+                                <div className='container'>
                                     <div className='row'>
                                         <label style={{ paddingLeft: '15px' }}>
                                             <strong>Cardiac</strong>
                                         </label>
                                     </div>
                                     <form
-                                        class='form-inline row'
+                                        className='form-inline row'
                                         role='form'
                                         onChange={onCheckedValue}
+                                        value={cardiac}
                                     >
-                                        <div class='form-group col-md-2'>
+                                        <div className='form-group col-md-4 col-sm-4'>
                                             <div class='radio'>
                                                 <label class='radio-inline control-label'>
                                                     <input
                                                         type='radio'
                                                         name='cardiac'
                                                         value='Normal S1, S2'
+                                                        checked={cardiac === 'Normal S1, S2'}
                                                     />
-                        &nbsp;&nbsp;Normal S1, S2
-                      </label>
+                                                    &nbsp;&nbsp;Normal S1, S2
+                                                </label>
                                             </div>
                                         </div>
-                                        <div class='form-group col-md-2'>
+                                        <div className='form-group col-md-4 col-sm-4'>
                                             <div class='radio'>
                                                 <label class='radio-inline control-label'>
-                                                    <input type='radio' name='cardiac' value='No Murmurs' />
-                        &nbsp;&nbsp;No Murmurs
-                      </label>
+                                                    <input type='radio' name='cardiac' value='No Murmurs' 
+                                                    checked={cardiac === 'No Murmurs'}
+                                                    />
+                                                    &nbsp;&nbsp;No Murmurs
+                                                </label>
                                             </div>
                                         </div>
-                                        <div class='form-group col-md-2'>
+                                        <div className='form-group col-md-4 col-sm-4'>
                                             <div class='radio'>
                                                 <label class='radio-inline control-label'>
-                                                    <input type='radio' name='cardiac' value='Other' />
-                        &nbsp;&nbsp;Other
-                      </label>
+                                                    <input type='radio' name='cardiac' value='Other' 
+                                                    checked={cardiac === 'Other'}
+                                                    />
+                                                    &nbsp;&nbsp;Other
+                                                </label>
                                             </div>
                                         </div>
-                                        <div class='form-group col-md-2'>
+                                    </form>
+                                    <form className='form-inline row' role='form'
+                                    onChange={onCheckedValue}
+                                    value={cardiac}
+                                    >
+                                        <div className='form-group col-md-12'>
                                             <input
                                                 style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
                                                 type='text'
                                                 placeholder='Specify'
-                                                name={'specify'}
-                                                value={specify}
-                                                className='form-control textInputStyle'
-                                            // maxlength='5'
-                                            // data-rule-required='true'
-                                            // contenteditable='false'
+                                                name='specify'
+                                                value={cardiac}
+                                                className='control-label textInputStyle'
                                             />
                                         </div>
                                     </form>
                                 </div>
-
-                                <div class='container'>
+                                <br/>
+                                <div className='container'>
                                     <div className='row'>
                                         <label style={{ paddingLeft: '15px' }}>
                                             <strong>Abdomen</strong>
                                         </label>
                                     </div>
                                     <form
-                                        class='form-inline row'
+                                        className='form-inline row'
                                         role='form'
                                         onChange={onCheckedValue}
+                                        value={abdomen}
                                     >
-                                        <div class='form-group col-md-2'>
+                                        <div className='form-group col-md-3'>
                                             <div class='radio'>
                                                 <label class='radio-inline control-label'>
-                                                    <input type='radio' name='abdomen' value='Soft Lax' />
-                        &nbsp;&nbsp;Soft Lax
-                      </label>
+                                                    <input type='radio' name='abdomen' value='Soft Lax' 
+                                                    checked={abdomen === 'Soft Lax'}
+                                                    />
+                                                    &nbsp;&nbsp;Soft Lax
+                                                </label>
                                             </div>
                                         </div>
-                                        <div class='form-group col-md-2'>
+                                        <div className='form-group col-md-3'>
                                             <div class='radio'>
                                                 <label class='radio-inline control-label'>
                                                     <input
                                                         type='radio'
                                                         name='abdomen'
                                                         value='No Tenderness'
+                                                        checked={abdomen === 'No Tenderness'}
                                                     />
-                        &nbsp;&nbsp;No Tenderness
-                      </label>
+                                                    &nbsp;&nbsp;No Tenderness
+                                                </label>
                                             </div>
                                         </div>
-                                        <div class='form-group col-md-2'>
+                                        <div className='form-group col-md-3'>
                                             <div class='radio'>
                                                 <label class='radio-inline control-label'>
-                                                    <input type='radio' name='abdomen' value='Murphy +ve' />
-                        &nbsp;&nbsp;Murphy +ve
-                      </label>
+                                                    <input type='radio' name='abdomen' value='Murphy +ve' 
+                                                    checked={abdomen === 'Murphy +ve'}
+                                                    />
+                                                    &nbsp;&nbsp;Murphy +ve
+                                                </label>
                                             </div>
                                         </div>
-                                        <div class='form-group col-md-2'>
+                                        <div className='form-group col-md-3'>
                                             <div class='radio'>
                                                 <label class='radio-inline control-label'>
                                                     <input
                                                         type='radio'
                                                         name='abdomen'
                                                         value='Rebound +ve'
+                                                        checked={abdomen === 'Rebound +ve'}
                                                     />
-                        &nbsp;&nbsp;Rebound +ve
-                      </label>
+                                                    &nbsp;&nbsp;Rebound +ve
+                                                </label>
                                             </div>
                                         </div>
-                                        <div class='form-group col-md-2'>
+                                    </form>
+                                    <form className='form-inline row' role='form'
+                                    onChange={onCheckedValue}
+                                    value={abdomen}
+                                    >
+                                        <div className='form-group col-md-3'>
                                             <div class='radio'>
                                                 <label class='radio-inline control-label'>
-                                                    <input type='radio' name='abdomen' value='Other' />
-                        &nbsp;&nbsp;Other
-                      </label>
+                                                    <input type='radio' name='abdomen' value='Other'
+                                                    checked={abdomen === 'Other'}
+                                                    />
+                                                    &nbsp;&nbsp;Other
+                                                </label>
                                             </div>
                                         </div>
-                                        <div class='col-md-2'>
+                                        <div className='col-md-9'>
                                             <input
                                                 style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
                                                 type='text'
                                                 placeholder='Specify'
-                                                name={'specify'}
-                                                value={specify}
+                                                name='specify'
+                                                value={abdomen}
                                                 className=' textInputStyle'
-                                            //maxlength='5'
-                                            // data-rule-required='true'
-                                            // contenteditable='false'
                                             />
                                         </div>
                                     </form>
                                 </div>
-
-                                <div class='container'>
+                                <br/>
+                                <div className='container'>
                                     <div className='row'>
                                         <label style={{ paddingLeft: '15px' }}>
                                             <strong>Neurological</strong>
                                         </label>
                                     </div>
                                     <form
-                                        class='form-inline row'
+                                        className='form-inline row'
                                         role='form'
                                         onChange={onCheckedValue}
+                                        value={neurological}
                                     >
-                                        <div class='form-group col-md-2'>
+                                        <div className='form-group col-md-3'>
                                             <div class='radio'>
                                                 <label class='radio-inline control-label'>
                                                     <input
                                                         type='radio'
                                                         name='neurological'
                                                         value='Conscious'
+                                                        checked={neurological === 'Conscious'}
                                                     />
-                        &nbsp;&nbsp;Conscious
-                      </label>
+                                                    &nbsp;&nbsp;Conscious
+                                                </label>
                                             </div>
                                         </div>
-                                        <div class='form-group col-md-2'>
+                                        <div className='form-group col-md-3'>
                                             <div class='radio'>
                                                 <label class='radio-inline control-label'>
                                                     <input
                                                         type='radio'
                                                         name='neurological'
                                                         value='Oriented'
+                                                        checked={neurological === 'Oriented'}
                                                     />
-                        &nbsp;&nbsp;Oriented
-                      </label>
+                                                    &nbsp;&nbsp;Oriented
+                                                </label>
                                             </div>
                                         </div>
-                                        <div class='form-group col-md-2'>
+                                        <div className='form-group col-md-3'>
                                             <div class='radio'>
                                                 <label class='radio-inline control-label'>
                                                     <input
                                                         type='radio'
                                                         name='neurological'
                                                         value='Weakness'
+                                                        checked={neurological === 'Weakness'}
                                                     />
-                        &nbsp;&nbsp;Weakness
-                      </label>
+                                                    &nbsp;&nbsp;Weakness
+                                                </label>
                                             </div>
                                         </div>
-                                        <div class='form-group col-md-2'>
+                                        <div className='form-group col-md-3'>
                                             <div class='radio'>
                                                 <label class='radio-inline control-label'>
-                                                    <input type='radio' name='neurological' value='Other' />
-                        &nbsp;&nbsp;Other
-                      </label>
+                                                    <input type='radio' name='neurological' value='Other' 
+                                                    checked={neurological === 'Other'}
+                                                    />
+                                                    &nbsp;&nbsp;Other
+                                                </label>
                                             </div>
                                         </div>
-                                        <div class='form-group col-md-2'>
+                                    </form>
+                                    <form className='form-inline row' role='form'
+                                        onChange={onCheckedValue}
+                                        value={neurological}
+                                        >
+                                        <div classNames='col-md-12'>
                                             <input
                                                 style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
                                                 type='text'
                                                 placeholder='Specify'
-                                                name={'specify'}
-                                                value={specify}
-                                                className='form-control textInputStyle'
-                                            // maxlength='5'
-                                            // data-rule-required='true'
-                                            // contenteditable='false'
+                                                name='specify'
+                                                value={neurological}
+                                                className='control-label textInputStyle'
                                             />
                                         </div>
                                     </form>
@@ -687,7 +795,7 @@ function TriageAndAssessment(props) {
                                         <Button
                                             style={styles.stylesForButton}
                                             //disabled={!validateFormType1()}
-                                            //onClick={onClick}
+                                            onClick={handleSubmitAssessment}
                                             variant='contained'
                                             color='primary'
                                         >

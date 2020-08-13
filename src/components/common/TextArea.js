@@ -9,7 +9,7 @@ const styles = {
     outline: 'none',
   },
 }
-const textAread = ({ type = 'text', onChange, placeholder, name }) => {
+const textAread = ({ type = 'text', onChange, placeholder, name,value,rows,disabled }) => {
   return (
     <div style={styles.inputContainerForTextField}>
       <InputLabelComponent id='gender-label'>
@@ -21,7 +21,10 @@ const textAread = ({ type = 'text', onChange, placeholder, name }) => {
         placeholder={placeholder}
         name={name}
         onChange={(e) => onChange(e)}
+        value={value}
         className='textInputStyle'
+        rows={rows}
+        disabled={disabled}
       />
     </div>
   )

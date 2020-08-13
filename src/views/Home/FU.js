@@ -51,16 +51,16 @@ import Loader from "react-loader-spinner";
 const fu = "";
 
 const admin = [
-  { img: FunctionalUnit, text: "FU", path: "" },
+  { img: FunctionalUnit, text: "Functional Unit", path: "" },
   {
     img: PurchaseRequest,
-    text: "Medication  Order",
+    text: "Medication Orders",
     path: `fus/medicinalorder`,
   },
 
   {
     img: PurchaseRequest,
-    text: "Professional Order",
+    text: "Professional Orders",
     path: `fus/professionalorder`,
   },
 
@@ -97,7 +97,7 @@ const buHead = [
 ];
 
 const committeeMember = [
-  { img: FunctionalUnit, text: "FU", path: "" },
+  { img: FunctionalUnit, text: "Functional Unit", path: "" },
   { img: RCM, text: "RCM", path: "" },
   { img: WMS, text: "WMS", path: "controlroom/wms" },
 ];
@@ -109,7 +109,7 @@ const accountsMember = [
 ];
 
 const warehouseMember = [
-  { img: FunctionalUnit, text: "FU", path: "" },
+  { img: FunctionalUnit, text: "Functional Unit", path: "" },
 
   {
     img: FunctionalUnit,
@@ -131,7 +131,7 @@ const warehouseMember = [
 ];
 
 const warehouseIncharge = [
-  { img: FunctionalUnit, text: "FU", path: "" },
+  { img: FunctionalUnit, text: "Functional Unit", path: "" },
 
   {
     img: FunctionalUnit,
@@ -153,7 +153,7 @@ const warehouseIncharge = [
 ];
 
 const fuHead = [
-  { img: FunctionalUnit, text: "FU", path: "" },
+  { img: FunctionalUnit, text: "Functional Unit", path: "" },
   {
     img: PurchaseRequest,
     text: "Medication  Order",
@@ -192,7 +192,7 @@ const fuHead = [
 ];
 
 const buMember = [
-  { img: FunctionalUnit, text: "FU", path: "" },
+  { img: FunctionalUnit, text: "Functional Unit", path: "" },
   {
     img: PurchaseRequest,
     text: "Medication  Order",
@@ -231,7 +231,7 @@ const buMember = [
 ];
 
 const buNurse = [
-  { img: FunctionalUnit, text: "FU", path: "" },
+  { img: FunctionalUnit, text: "Functional Unit", path: "" },
   {
     img: PurchaseRequest,
     text: "Medication  Order",
@@ -252,7 +252,7 @@ const buNurse = [
 ];
 
 const fuReturnRequestApprovalMember = [
-  { img: FunctionalUnit, text: "FU", path: "" },
+  { img: FunctionalUnit, text: "Functional Unit", path: "" },
 
   {
     img: ReturnItem,
@@ -284,7 +284,7 @@ const fuReturnRequestApprovalMember = [
 // ];
 
 const fuInventoryKeeper = [
-  { img: FunctionalUnit, text: "FU", path: "" },
+  { img: FunctionalUnit, text: "Functional Unit", path: "" },
   {
     img: ReceiveItem,
     text: "Receive Items",
@@ -321,60 +321,48 @@ class HomeScreen extends React.Component {
       currentUser: "",
       fuObj: "",
       forAdmin: "",
+      userStaff: "",
+      options: "",
     };
   }
 
+  setOptions() {
+    let routeAccess = this.state.userStaff.routeAccess;
+
+    let options = [];
+
+    for (let i = 0; i < routeAccess.length; i++) {
+      let routeObj = routeAccess[i];
+      let splitedModulesArray = routeObj.route.split("/");
+
+      for (let j = 0; j < splitedModulesArray.length; j++) {
+        let singleModule = splitedModulesArray[j];
+        let temp = admin.find((r) => r.text === singleModule);
+        if (temp) {
+          console.log(temp.text);
+          let alreadyFound =
+            options && options.find((f) => f.text === temp.text);
+          if (!alreadyFound) {
+            options.push(temp);
+          }
+        }
+      }
+    }
+    console.log(options);
+    this.setState({ options: [...options] });
+  }
+
   componentWillMount() {
-    this.setState({ currentUser: cookie.load("current_user") });
+    this.setState({
+      currentUser: cookie.load("current_user"),
+      userStaff: cookie.load("user_staff"),
+    });
   }
 
   componentDidMount() {
-    // axios
-    //   .get(
-    //     getFunctionalUnitFromHeadIdUrl + "/" + this.state.currentUser.staffId
-    //   )
-    //   .then((res) => {
-    //     if (res.data.success) {
-    //       fu = res.data.data[0];
-    //       console.log("FU Obj", res.data.data[0]);
-    //       this.setState({ fuObj: res.data.data[0] });
-    //       this.setState({
-    //         forAdmin: [
-    //           { img: FunctionalUnit, text: res.data.data.fuName, path: "" },
-    //           {
-    //             img: PurchaseRequest,
-    //             text: "Medication  Order",
-    //             path: `${this.props.match.params.fuName}/medicinalorder`,
-    //           },
-    //           {
-    //             img: PurchaseRequest,
-    //             text: "Professional Order",
-    //             path: `${this.props.match.params.fuName}/professionalorder`,
-    //           },
-    //           {
-    //             img: FunctionalUnit,
-    //             text: "FU Inventory",
-    //             path: `${this.props.match.params.fuName}/fuinventory`,
-    //           },
-    //           {
-    //             img: BU,
-    //             text: "FU Rep Request",
-    //             path: `${this.props.match.params.fuName}/replenishment`,
-    //           },
-    //           { img: ReturnItem, text: "FU Returns", path: `${this.props.match.params.fuName}/returnitems` },
-    //           { img: ReceiveItem, text: "Receive Items", path: `${this.props.match.params.fuName}/receive` },
-    //           { img: Staff, text: "Staff", path: "controlroom/staff" },
-    //         ],
-    //       });
-    //     } else if (!res.data.success) {
-    //       setErrorMsg(res.data.error);
-    //       setOpenNotification(true);
-    //     }
-    //     return res;
-    //   })
-    //   .catch((e) => {
-    //     console.log("error: ", e);
-    //   });
+    // if (this.state.userStaff !== "" && this.state.userStaff !== "undefined") {
+    //   this.setOptions();
+    // }
   }
 
   checkForUserType() {
@@ -447,6 +435,11 @@ class HomeScreen extends React.Component {
                 admin
           }
         />
+
+        {/* <MenuTree
+          history={this.props.history}
+          options={this.state.options ? this.state.options : admin}
+        /> */}
 
         <div
           style={{

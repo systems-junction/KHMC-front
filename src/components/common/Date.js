@@ -11,7 +11,7 @@ const styles = {
     outline: 'none',
   },
 }
-const datePicker = ({ inputVariant, onChangeDate, comingFor, date, name }) => {
+const datePicker = ({ inputVariant, onChangeDate, comingFor, date, name,disabled }) => {
   return (
     <div style={styles.inputContainerForTextField}>
       <MuiPickersUtilsProvider className='input' utils={DateFnsUtils}>
@@ -24,8 +24,9 @@ const datePicker = ({ inputVariant, onChangeDate, comingFor, date, name }) => {
           InputProps={{
             disableUnderline: true,
            }}
-          style={{ backgroundColor: 'white',marginTop:'6px', borderRadius:'10px',height:'45px',padding:'5px' }}
+          style={disabled ? { backgroundColor: 'rgba(239, 239, 239, 0.3)',color:'black', marginTop:'6px', borderRadius:'10px',height:'45px',padding:'5px',paddingLeft:'15px' } : { backgroundColor: 'white',marginTop:'6px', borderRadius:'10px',height:'45px',padding:'5px',paddingLeft:'15px' }}
           value={comingFor === 'add' ? (date ? date : new Date()) : date}
+          disabled={disabled}
         />
       </MuiPickersUtilsProvider>
     </div>

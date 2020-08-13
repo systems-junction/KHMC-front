@@ -54,7 +54,7 @@ const admin = [
 
   {
     img: FunctionalUnit,
-    text: "FU",
+    text: "Functional Unit",
     path: "wms/fus",
   },
 
@@ -141,7 +141,7 @@ const warehouseMember = [
 
   {
     img: FunctionalUnit,
-    text: "FU",
+    text: "Functional Unit",
     path: "wms/fus",
   },
 ];
@@ -156,7 +156,7 @@ const warehouseIncharge = [
 
   {
     img: FunctionalUnit,
-    text: "FU",
+    text: "Functional Unit",
     path: "wms/fus",
   },
 ];
@@ -166,7 +166,7 @@ const fuMember = [
 
   {
     img: FunctionalUnit,
-    text: "FU",
+    text: "Functional Unit",
     path: "wms/fus",
   },
 ];
@@ -176,7 +176,7 @@ const buMember = [
 
   {
     img: FunctionalUnit,
-    text: "FU",
+    text: "Functional Unit",
     path: "wms/fus",
   },
 ];
@@ -186,7 +186,7 @@ const fuReturnRequestApprovalMember = [
 
   {
     img: FunctionalUnit,
-    text: "FU",
+    text: "Functional Unit",
     path: "wms/fus",
   },
 ];

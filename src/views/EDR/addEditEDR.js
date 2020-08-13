@@ -17,7 +17,8 @@ import tableStyles from '../../assets/jss/material-dashboard-react/components/ta
 import axios from 'axios'
 import Notification from '../../components/Snackbar/Notification.js'
 import {
-  socketUrl,
+  updateEDR,
+  getSearchedPharmaceuticalItemsUrl,
 } from '../../public/endpoins'
 import InputLabelComponent from '../../components/InputLabel/inputLabel'
 import BootstrapInput from '../../components/Dropdown/dropDown.js'
@@ -35,13 +36,28 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
 import '../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
 import socketIOClient from 'socket.io-client'
+import CustomTable from '../../components/Table/Table'
+import { colors } from '@material-ui/core'
 
 const durationArray = [
   { key: '1 Week', value: '1 week' },
   { key: '2 Week', value: '2 week' },
   { key: '3 Week', value: '3 week' },
 ]
-
+const tableHeadingForPharmacyReq = [
+  'Medicine Name',
+  'Duration',
+  'Dosage',
+  // 'Additional Note',
+  'Action',
+]
+const tableDataKeysForPharmacyReq = [
+  'medicineName',
+  'duration',
+  'dosage',
+  // 'additionalNote',
+]
+const actions = { edit: true }
 const styles = {
   inputContainer: {
     marginTop: 10,
@@ -85,14 +101,23 @@ const styles = {
 }
 const useStyles = makeStyles(tableStyles)
 
-function AddEditEDR(props) 
-{
+function AddEditEDR(props) {
   const classes = useStyles()
   const initialState = {
-    medName:'',
-    duration:'',
-    dosage:'',
-    comments:''
+    date: new Date(),
+    status: 'pending',
+    requester: '',
+    medicineDataArray: '',
+    itemId: '',
+    duration: 0,
+    dosage: 0,
+    priority: '',
+    schedule: '',
+    frequency: 0,
+    requestedQty: 0,
+    // additionalNote:'',
+    pharmacyRequest: '',
+    medicineName: '',
   }
 
   function reducer(state, { field, value }) {
@@ -105,45 +130,51 @@ function AddEditEDR(props)
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const {
-    medName,
+    medicineName,
+    date = new Date(),
+    status = 'pending',
+    requester,
+    medicineDataArray,
+    itemId,
     duration,
     dosage,
-    comments,
+    priority,
+    schedule,
+    frequency,
+    requestedQty,
+    // additionalNote,
+    pharmacyRequest,
   } = state
 
   const onChangeValue = (e) => {
     dispatch({ field: e.target.name, value: e.target.value })
   }
 
-  function validateForm() 
-  {
+  function validateForm() {
     // let jit = true;
     // let rejection = true;
     // let qtyIsLess = true;
     // if (reason === 'jit') {
     //   jit = requesterName !== '' && department !== '' && orderType !== ''
     // }
-
     // if (committeeStatus === "reject") {
     //   rejection = rejectionReason !== "" ? true : false;
     // }
-
     // return (
-      // generatedBy.length > 0 &&
-      // status &&
-      // status.length > 0 &&
-      // reason.length > 0 &&
-      // itemCode.length > 0 &&
-      // description.length > 0 &&
-      // name.length > 0 &&
-      // reqQty !== '' &&
-      // comments !== '' &&
-      // reqQty <= maximumLevel &&
-      // jit &&
-      // rejection
-
-      // &&qtyIsLess
-  //   )
+    // generatedBy.length > 0 &&
+    // status &&
+    // status.length > 0 &&
+    // reason.length > 0 &&
+    // itemCode.length > 0 &&
+    // description.length > 0 &&
+    // name.length > 0 &&
+    // reqQty !== '' &&
+    // comments !== '' &&
+    // reqQty <= maximumLevel &&
+    // jit &&
+    // rejection
+    // &&qtyIsLess
+    //   )
   }
 
   const [comingFor, setcomingFor] = useState('')
@@ -153,17 +184,17 @@ function AddEditEDR(props)
   const [openNotification, setOpenNotification] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [selectedItem, setSelectedItem] = useState('')
-  // const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false)
-  // const [itemFound, setItem] = useState('')
-  // const [selectedItemsArray, setSelectedItemsArray] = useState([])
-  // const [purchaseRequestItems, setPurchaseRequestItems] = useState('')
-  // const [selectItemToEditId, setSelectItemToEditId] = useState('')
-  // const [socket, setSocket] = useState('')
-  // const [itemAdded, setItemAdded] = useState(false);
-  // const [searchQuery, setSearchQuery] = useState('')
+  const [selectItemToEditId, setSelectItemToEditId] = useState('')
+  const [id, setId] = useState('')
+  const [requestNo, setrequestNo] = useState('')
+  const [medicines, setmedicines] = useState('')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [itemFound, setItemFound] = useState('')
+  const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false)
+  const [selectedSearchedItem, setSelectedSearchedItem] = useState('')
+  const [selectedLabArray, setSelectedLabArray] = useState([])
 
-  useEffect(() => 
-  {
+  useEffect(() => {
     // const soc = socketIOClient(socketUrl);
     // setSocket(soc);
     // soc.emit("connection");
@@ -173,22 +204,59 @@ function AddEditEDR(props)
     setcomingFor(props.history.location.state.comingFor)
 
     const selectedRec = props.history.location.state.selectedItem
+    console.log('Item', props.history.location.state.selectedItem)
 
-    if (selectedRec) 
-    {
+    setId(props.history.location.state.selectedItem._id)
+    setrequestNo(props.history.location.state.selectedItem.requestNo)
+
+    // const pharmacyReq = props.history.location.state.selectedItem.pharmacyRequest
+
+    // let temp = [];
+    // for (let i = 0; i < pharmacyReq.length; i++)
+    // {
+    // if (pharmacyReq[i].requester === cookie.load('current_user').staffId)
+    // {
+    // for (let j = 0; j < pharmacyReq[i].medicine.length ;j++)
+    // {
+    // temp.push(pharmacyReq[i].medicine[j]);
+    // }
+    // }
+    // }
+    // console.log("Only show the meds of the person logged in", temp);
+    // setmedicines(temp.reverse());
+
+    if (selectedRec) {
       Object.entries(selectedRec).map(([key, val]) => {
         if (val && typeof val === 'object') {
-          if (key === 'item') {
-            dispatch({ field: 'itemId', value: val.itemId })
-            dispatch({ field: 'currentQty', value: val.currQty })
-            dispatch({ field: 'reqQty', value: val.reqQty })
-            dispatch({ field: 'comments', value: val.comments })
-            dispatch({ field: 'description', value: val.itemId.description })
-            dispatch({ field: 'name', value: val.itemId.name })
-            dispatch({ field: 'itemCode', value: val.itemId.itemCode })
-            dispatch({ field: 'maximumLevel', value: val.itemId.maximumLevel })
-          } else if (key === 'vendorId') {
-            dispatch({ field: 'vendorId', value: val._id })
+          if (key === 'pharmacyRequest') {
+            Object.entries(val).map(([key1, val1]) => {
+              // console.log("pharmacy k andr",key1,val1)
+              Object.entries(val1).map(([key2, val2]) => {
+                if (key2 === 'medicine') {
+                  // console.log("med k andr",key2,val2)
+                  // Object.entries(val2).map(([key3,val3])=>
+                  // {
+                  //   Object.entries(val3).map(([key4,val4])=>
+                  //   {
+                  //     if(key4 === "itemId"){
+                  //       dispatch({ field: "itemId", value: val4._id });
+                  //     }
+                  //     else{
+                  //       console.log("medicine k andr",key4,val4)
+                  //       dispatch({ field: key4, value: val4 });
+                  //     }
+                  //   })
+                  // })
+                  dispatch({ field: 'medicineDataArray', value: val2 })
+                  console.log(key2, val2)
+                } else if (key2 === 'requester') {
+                  dispatch({ field: 'requester', value: val2._id })
+                } else {
+                  dispatch({ field: key2, value: val2 })
+                }
+              })
+            })
+            dispatch({ field: 'pharmacyRequest', value: val })
           }
         } else {
           dispatch({ field: key, value: val })
@@ -198,290 +266,358 @@ function AddEditEDR(props)
     // return () => soc.disconnect();
   }, [])
 
-  const handleAdd = () => {
-    // if (!validateForm()) {
-    //   setIsFormSubmitted(true)
-    //   setOpenNotification(true)
-    //   setErrorMsg('Please fill the fields properly')
-    // } else {
-      // if (validateForm()) {
-        // const params = {
-        //   generatedBy: currentUser.name,
-        //   date: new Date(),
-        //   vendorId: vendorId,
-        //   generated,
-        //   status: props.history.location.state.manualAddPO
-        //     ? 'pending_recieving'
-        //     : status,
-        //   item: {
-        //     itemId: itemId,
-        //     currQty: currentQty,
-        //     reqQty: reqQty,
-        //     comments: comments,
-        //     itemCode: itemCode,
-        //     description: description,
-        //     name: name,
-        //   },
-        //   reason: reason,
-        //   requesterName,
-        //   orderType,
-        //   department,
-        // }
-        // axios
-        //   .post(addPurchaseRequestUrl, params)
-        //   .then((res) => {
-        //     if (res.data.success) {
-        //       if (props.history.location.state.manualAddPO) {
-        //         console.log('res after addng pr', res.data.data)
-                // socket.emit("purchaseRequest");
-
-          //       props.history.replace({
-          //         pathname: '/home/controlroom/wms/po/add',
-          //         state: { pr: res.data.data, comingFor: 'add' },
-          //       })
-          //     } else {
-          //       props.history.goBack()
-          //       socket.emit('purchaseRequest')
-          //     }
-          //   } else if (!res.data.success) {
-          //     setOpenNotification(true)
-          //   }
-          // })
-          // .catch((e) => {
-          //   console.log('error after adding request', e)
-          //   setOpenNotification(true)
-          //   setErrorMsg('Error while adding the request')
-          // })
-      // }
+  function validateForm() {
+    // let jit = true;
+    // let qtyIsLess = true;
+    // if (reason === "jit") {
+    //   jit = requesterName !== "" && department !== "" && orderType !== "";
     // }
+    // return (
+    //   comments !== "" &&
+    //   requestedItemsArray !== "" &&
+    //   requestedItemsArray.length > 0 &&
+    // dateGenerated !== "" &&
+    // itemCode !== "" &&
+    // description !== "" &&
+    // itemName !== "" &&
+    // requestedQty !== "" &&
+    // currentQty !== "" &&
+    // fuItemCost !== "" &&
+    // reason !== "" &&
+    // fuId !== "" &&
+    // jit &&
+    // patientReferenceNo !== ""
+    //  && receiptUnit !== ""
+    // && issueUnit !== ""
+    // );
   }
 
-  const handleEdit = () => {
+  const handleAdd = () => {
     // if (!validateForm()) {
     //   setIsFormSubmitted(true);
     //   setOpenNotification(true);
     //   setErrorMsg("Please fill the fields properly");
     // } else {
-    //   if (validateForm()) {
-    //     if (committeeStatus !== "approved" || status === "to_do") {
-    //       const params = {
-    //         _id,
-    //         requestNo,
-    //         generatedBy: generatedBy,
-    //         date: createdAt,
-    //         vendorId: vendorId,
-    //         generated,
-    //         status:
-    //           currentUser.staffTypeId.type === "Committe Member"
-    //             ? committeeStatus === "reject"
-    //               ? "reject"
-    //               : status
-    //             : status,
-    //         item: {
-    //           itemId: itemId,
-    //           currQty: currentQty,
-    //           reqQty: reqQty,
-    //           comments: comments,
-    //           itemCode: itemCode,
-    //           description: description,
-    //           name: name,
-    //         },
-    //         reason: reason,
-    //         committeeStatus:
-    //           currentUser.staffTypeId.type === "Committe Member"
-    //             ? committeeStatus
-    //             : committeeStatus,
-    //         requesterName,
-    //         orderType,
-    //         department,
-    //         rejectionReason,
-    //       };
-    //       axios
-    //         .put(updatePurchaseRequestUrl, params)
-    //         .then((res) => {
-    //           if (res.data.success) {
-    //             props.history.goBack();
-    //           } else if (!res.data.success) {
-    //             setOpenNotification(true);
-    //           }
-    //         })
-    //         .catch((e) => {
-    //           console.log("error after updating purchase request", e);
-    //           setOpenNotification(true);
-    //           setErrorMsg("Error while editing the purchase request");
-    //         });
-    //     } else {
-    //       setOpenNotification(true);
-    //       setErrorMsg("Approved PRs can not be updated");
-    //     }
+    // if (validateForm()) {
+
+    let medicineData = []
+
+    for (let i = 0; i < medicineDataArray.length; i++) {
+      medicineData = [
+        ...medicineData,
+        {
+          itemId: medicineDataArray[i].itemId,
+          medicineName: medicineDataArray[i].medicineName,
+          duration: medicineDataArray[i].duration,
+          dosage: medicineDataArray[i].dosage,
+          priority: medicineDataArray[i].priority,
+          schedule: medicineDataArray[i].schedule,
+          frequency: medicineDataArray[i].frequency,
+          requestedQty: medicineDataArray[i].requestedQty,
+          // additionalNote: medicineDataArray[i].additionalNote,
+        },
+      ]
+    }
+
+    let pharmacyRequestArray = []
+
+    pharmacyRequestArray = [
+      ...pharmacyRequestArray,
+      {
+        date: date,
+        status: status,
+        requester: currentUser.staffId,
+        medicine: medicineData,
+      },
+    ]
+
+    const params = {
+      _id: id,
+      pharmacyRequest: pharmacyRequestArray,
+    }
+    console.log('params', params)
+    axios
+      .put(updateEDR, params)
+      .then((res) => {
+        if (res.data.success) {
+          console.log('response while adding Medicine Req', res.data.data)
+          props.history.goBack()
+        } else if (!res.data.success) {
+          setOpenNotification(true)
+          setErrorMsg('Error while adding the Medicine request')
+        }
+      })
+      .catch((e) => {
+        console.log('error after adding Medicine request', e)
+        setOpenNotification(true)
+        setErrorMsg('Error after adding the medicine request')
+      })
     //   }
+    // }
+  }
+
+  // const handleEdit = () => {
+  //   if (!validateForm()) {
+  //     setIsFormSubmitted(true);
+  //     setOpenNotification(true);
+  //     setErrorMsg("Please fill the fields properly");
+  //   } else {
+  //     if (validateForm()) {
+  //       let requestedItems = [];
+
+  //       for (let i = 0; i < requestedItemsArray.length; i++) {
+  //         requestedItems = [
+  //           ...requestedItems,
+  //           {
+  //             itemId: requestedItemsArray[i].itemId._id,
+  //             currentQty: requestedItemsArray[i].currentQty,
+  //             requestedQty: requestedItemsArray[i].requestedQty,
+  //             status: requestedItemsArray[i].status,
+  //             secondStatus: requestedItemsArray[i].secondStatus,
+  //             dosage: requestedItemsArray[i].dosage,
+  //             noOfTimes: requestedItemsArray[i].noOfTimes,
+  //             duration: requestedItemsArray[i].duration,
+  //           },
+  //         ];
+  //       }
+  //       const obj = {
+  //         _id,
+  //         requestNo,
+  //         generatedBy,
+  //         dateGenerated,
+  //         generated,
+  //         status:
+  //           currentUser.staffTypeId.type === "FU Member" &&
+  //           status === "pending" &&
+  //           secondStatus === "in_progress"
+  //             ? "in_progress"
+  //             : currentUser.staffTypeId.type === "FU Member" &&
+  //               status === "in_progress" &&
+  //               secondStatus === "Delivery in Progress"
+  //             ? "Delivery in Progress"
+  //             : currentUser.staffTypeId.type === "BU Nurse" &&
+  //               status === "Delivery in Progress" &&
+  //               secondStatus === "pending_administration"
+  //             ? "pending_administration"
+  //             : currentUser.staffTypeId.type === "BU Inventory Keeper" &&
+  //               status === "pending_administration" &&
+  //               secondStatus === "complete"
+  //             ? "complete"
+  //             : status,
+  //         comments,
+  //         item: requestedItems,
+  // currentQty,
+  // requestedQty,
+  // description,
+  //         commentNote,
+  //         fuId: fuId,
+  //         secondStatus,
+  //         buId: buId,
+  //         requesterName,
+  //         department,
+  //         orderType,
+  //         patientReferenceNo,
+  //         orderFor,
+  //         orderBy,
+  //       };
+
+  //       axios
+  //         .put(updateReplenishmentRequestUrlBU, obj)
+  //         .then((res) => {
+  //           if (res.data.success) {
+  //             props.history.goBack();
+  //           } else if (!res.data.success) {
+  //             setOpenNotification(true);
+  //           }
+  //         })
+  //         .catch((e) => {
+  //           console.log("error after updating purchase request", e);
+  //           setOpenNotification(true);
+  //           setErrorMsg("Error while editing the purchase request");
+  //         });
+  //     }
+  //   }
+  // };
+
+  if (openNotification) {
+    setTimeout(() => {
+      setOpenNotification(false)
+      setErrorMsg('')
+    }, 2000)
+  }
+
+  function validateItemsForm() {
+    return (
+      itemId &&
+      itemId.length > 0 &&
+      medicineName &&
+      medicineName.length > 0 &&
+      priority &&
+      priority.length > 0 &&
+      schedule &&
+      schedule.length > 0
+    )
+  }
+
+  function hideDialog() {
+    setDialogOpen(false)
+    setSelectedItem('')
+    setSelectItemToEditId('')
+
+    dispatch({ field: 'itemId', value: '' })
+    dispatch({ field: 'medicineName', value: '' })
+    dispatch({ field: 'duration', value: 0 })
+    dispatch({ field: 'dosage', value: 0 })
+    // dispatch({ field: 'additionalNote', value: '' })
+    dispatch({ field: 'priority', value: '' })
+    dispatch({ field: 'schedule', value: '' })
+    dispatch({ field: 'frequency', value: 0 })
+    dispatch({ field: 'requestedQty', value: 0 })
+  }
+
+  const addSelectedItem = () => {
+    setIsFormSubmitted(true)
+    if (validateItemsForm()) {
+      setDialogOpen(false)
+
+      let found =
+        medicineDataArray &&
+        medicineDataArray.find((item) => item.itemId === itemId)
+
+      if (found) {
+        setOpenNotification(true)
+        setErrorMsg('This Medicine has already been added.')
+      } else {
+        dispatch({
+          field: 'medicineDataArray',
+          value: [
+            ...medicineDataArray,
+            {
+              itemId,
+              medicineName,
+              duration,
+              dosage,
+              // additionalNote,
+              priority,
+              schedule,
+              frequency,
+              requestedQty,
+            },
+          ],
+        })
+      }
+    }
+
+    dispatch({ field: 'itemId', value: '' })
+    dispatch({ field: 'medicineName', value: '' })
+    dispatch({ field: 'duration', value: 0 })
+    dispatch({ field: 'dosage', value: 0 })
+    // dispatch({ field: 'additionalNote', value: '' })
+    dispatch({ field: 'priority', value: '' })
+    dispatch({ field: 'schedule', value: '' })
+    dispatch({ field: 'frequency', value: 0 })
+    dispatch({ field: 'requestedQty', value: 0 })
+  }
+
+  const editSelectedItem = () => {
+    setIsFormSubmitted(true)
+    if (validateItemsForm()) {
+      setDialogOpen(false)
+      let temp = []
+
+      // console.log("MEDSSS",medicines)
+
+      for (let i = 0; i < medicineDataArray.length; i++) {
+        if (medicineDataArray[i].itemId === selectItemToEditId) {
+          let obj = {
+            itemId,
+            medicineName,
+            duration,
+            dosage,
+            // additionalNote,
+            priority,
+            schedule,
+            frequency,
+            requestedQty,
+          }
+          temp[i] = obj
+        } else {
+          temp = [...temp, medicineDataArray[i]]
+        }
+      }
+
+      dispatch({
+        field: 'medicineDataArray',
+        value: temp,
+      })
+    }
+
+    setDialogOpen(false)
+    setSelectedItem('')
+    setSelectItemToEditId('')
+
+    dispatch({ field: 'itemId', value: '' })
+    dispatch({ field: 'medicineName', value: '' })
+    dispatch({ field: 'duration', value: 0 })
+    dispatch({ field: 'dosage', value: 0 })
+    dispatch({ field: 'priority', value: '' })
+    dispatch({ field: 'schedule', value: '' })
+    dispatch({ field: 'frequency', value: 0 })
+    dispatch({ field: 'requestedQty', value: 0 })
+    // dispatch({ field: 'additionalNote', value: '' })
+  }
+
+  function handleRequestedItemEdit(i) {
+    console.log(i)
+    // if (i.status === "pending") {
+    setDialogOpen(true)
+    setSelectedItem(i.itemId)
+    setSelectItemToEditId(i.itemId)
+    dispatch({ field: 'itemId', value: i.itemId })
+    dispatch({ field: 'medicineName', value: i.medicineName })
+    dispatch({ field: 'duration', value: i.duration })
+    dispatch({ field: 'dosage', value: i.dosage })
+    dispatch({ field: 'priority', value: i.priority })
+    dispatch({ field: 'schedule', value: i.schedule })
+    dispatch({ field: 'frequency', value: i.frequency })
+    dispatch({ field: 'requestedQty', value: i.requestedQty })
+    // dispatch({ field: 'additionalNote', value: i.additionalNote })
+    // } else {
+    //   setOpenNotification(true);
+    //   setErrorMsg("Item can not be updated once it is in progess");
     // }
   }
 
   const handleSearch = (e) => {
-    // setSearchQuery(e.target.value);
-    // if (e.target.value.length >= 3) {
-    // axios
-    //   .get(getSearchedItemUrl + "/" + e.target.value)
-    //   .then((res) => {
-    //     if (res.data.success) {
-    //       if (res.data.data.items.length > 0) {
-    //         console.log(res.data.data.items);
-    //         setItemFoundSuccessfully(true);
-    //         setItem(res.data.data.items);
-    //       } else {
-    //         setItemFoundSuccessfully(false);
-    //         setItem("");
-    //       }
-    //     }
-    //   })
-    //   .catch((e) => {
-    //     console.log("error after adding purchase request", e);
-    //     setOpenNotification(true);
-    //     setErrorMsg("Error while adding the purchase request");
-    //   });
-    // }
-  };
-
-  const getCurrentQty = (id) => {
-    // axios
-    //   .get(getPurchaseRequestItemQtyUrl + '/' + id)
-    //   .then((res) => {
-    //     if (res.data.success) {
-    //       console.log('current quantity', res.data.data)
-    //       if (res.data.data) {
-    //         dispatch({ field: 'currentQty', value: res.data.data.qty })
-    //       } else {
-    //         dispatch({ field: 'currentQty', value: 0 })
-    //       }
-    //     }
-    //   })
-    //   .catch((e) => {
-    //     console.log('error after adding purchase request', e)
-    //     setOpenNotification(true)
-    //     setErrorMsg('Error while adding the purchase request')
-    //   })
+    setSearchQuery(e.target.value)
+    if (e.target.value.length >= 3) {
+      axios
+        .get(getSearchedPharmaceuticalItemsUrl + '/' + e.target.value)
+        .then((res) => {
+          if (res.data.success) {
+            if (res.data.data.items.length > 0) {
+              setItemFoundSuccessfully(true)
+              setItemFound(res.data.data.items)
+            } else {
+              setItemFoundSuccessfully(false)
+              setItemFound('')
+            }
+          }
+        })
+        .catch((e) => {
+          console.log('error while searching medicine', e)
+        })
+    }
   }
 
   function handleAddItem(i) {
-    // getCurrentQty(i._id)
-    // setDialogOpen(true)
-    // setSelectedItem(i)
+    console.log('selected med', i.name)
+    console.log('selected id', i._id)
 
-    // dispatch({ field: 'itemId', value: i._id })
-    // dispatch({ field: 'itemCode', value: i.itemCode })
-    // dispatch({ field: 'name', value: i.name })
-    // dispatch({ field: 'vendorId', value: i.vendorId })
-    // dispatch({ field: 'description', value: i.description })
-    // dispatch({ field: 'maximumLevel', value: i.maximumLevel })
+    dispatch({ field: 'itemId', value: i._id })
+    dispatch({ field: 'medicineName', value: i.name })
 
-    // const obj = {
-    //   itemCode: i.itemCode,
-    // }
-
-    // setSelectedItemsArray((pervState) => [...pervState, obj])
-    // setSearchQuery('')
-  }
-
-  function validateItemsForm() {
-    // return (
-      // itemCode.length > 0 &&
-      // description.length > 0 &&
-      // name.length > 0 &&
-      // reqQty.length > 0 &&
-      // currentQty.length > 0 &&
-      // comments.length > 0 &&
-      // maximumLevel >= reqQty
-      //  &&currentQty >= reqQty
-    // )
-  }
-
-  function hideDialog() {
-    // if (!itemAdded) {
-    //   setDialogOpen(false);
-    //   setSelectedItem("");
-    //   setSelectItemToEditId("");
-    //   dispatch({ field: "description", value: "" });
-    //   dispatch({ field: "currentQty", value: "" });
-    //   dispatch({ field: "comments", value: "" });
-    //   dispatch({ field: "reqQty", value: "" });
-    //   dispatch({ field: "name", value: "" });
-    //   dispatch({ field: "itemCode", value: "" });
-    //   dispatch({ field: "vendorId", value: "" });
-    //   dispatch({ field: "maximumLevel", value: "" });
-    // } else {
-      setDialogOpen(false);
-      setSelectedItem("");
-      // setSelectItemToEditId("");
-    // }
-  }
-
-  const addSelectedItem = () => {
-    // if (validateItemsForm()) {
-    //   setDialogOpen(false);
-    //   setItemAdded(true);
-    // }
-  }
-
-  function selectedItemToEdit(i) {
-    // setSelectItemToEditId(i._id)
-    // dispatch({ field: 'description', value: i.description })
-    // dispatch({ field: 'currentQty', value: i.currentQty })
-    // dispatch({ field: 'comments', value: i.comments })
-    // dispatch({ field: 'reqQty', value: i.reqQty })
-    // dispatch({ field: 'name', value: i.name })
-    // dispatch({ field: 'itemCode', value: i.itemCode })
-    // dispatch({ field: 'vendorId', value: i.vendorId })
-    // setDialogOpen(true)
-  }
-
-  const editSelectedItem = () => {
-    // if (validateItemsForm()) {
-    //   const params = {
-    //     _id: selectItemToEditId,
-    //     purchaseRequestId: _id,
-    //     itemCode,
-    //     vendorId,
-    //     name,
-    //     description,
-    //     currentQty,
-    //     reqQty,
-    //     comments,
-    //   }
-
-    //   axios
-    //     .put(updatePurchasingRequestItemUrl, params)
-    //     .then((res) => {
-    //       if (res.data.success) {
-    //         dispatch({ field: 'description', value: '' })
-    //         dispatch({ field: 'currentQty', value: '' })
-    //         dispatch({ field: 'comments', value: '' })
-    //         dispatch({ field: 'reqQty', value: '' })
-    //         dispatch({ field: 'name', value: '' })
-    //         dispatch({ field: 'itemCode', value: '' })
-    //         setDialogOpen(false)
-    //         setSelectedItem('')
-    //         setSelectItemToEditId('')
-            // window.location.reload(false);
-            // getPurchasingRequestItems(_id);
-    //       } else if (!res.data.success) {
-    //         setOpenNotification(true)
-    //       }
-    //     })
-    //     .catch((e) => {
-    //       console.log('error after adding purchase request', e)
-    //       setOpenNotification(true)
-    //       setErrorMsg('Error while adding the purchase request')
-    //     })
-    // }
-  }
-
-  if (openNotification) {
-    setTimeout(() => {
-      console.log('called')
-      setOpenNotification(false)
-      setErrorMsg('')
-    }, 2000)
+    setSearchQuery('')
   }
 
   return (
@@ -502,11 +638,7 @@ function AddEditEDR(props)
         <div className='subheader'>
           <div>
             <img src={purchase_request} />
-            <h4>
-              {comingFor === 'add'
-                ? ' Pharmacy Request'
-                : ''}
-            </h4>
+            <h4>{comingFor === 'add' ? ' Pharmacy Request' : ''}</h4>
           </div>
 
           <div>
@@ -516,24 +648,37 @@ function AddEditEDR(props)
               variant='contained'
               color='primary'
             >
-            <img className='icon-style' src={plus_icon} />
-            &nbsp;&nbsp;
-            <strong style={{ fontSize: '12px' }}>Add New</strong>
+              <img className='icon-style' src={plus_icon} />
+              &nbsp;&nbsp;
+              <strong style={{ fontSize: '12px' }}>Add New</strong>
             </Button>
           </div>
-
         </div>
 
-        <div style={{ flex: 4, display: 'flex', flexDirection: 'column' }} className="container">
-          <div className='row'>
-
-            <div className='col-md-12 col-sm-12 col-12'>
-            {/* HERE ADD THE TABLE OF PHARMACY REQUEST */}
-            </div>
-
+        <div
+          style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+          className='container'
+        >
+          <div className='row' style={{ marginTop: '20px' }}>
+            {medicineDataArray !== 0 ? (
+              <CustomTable
+                tableData={medicineDataArray}
+                tableDataKeys={tableDataKeysForPharmacyReq}
+                tableHeading={tableHeadingForPharmacyReq}
+                action={actions}
+                handleEdit={handleRequestedItemEdit}
+                borderBottomColor={'#60d69f'}
+                borderBottomWidth={20}
+              />
+            ) : (
+              undefined
+            )}
           </div>
 
-          <div className='row' style={{ marginTop: '25px' }}>
+          <div
+            className='row'
+            style={{ marginTop: '25px', marginBottom: '25px' }}
+          >
             <div className='col-md-6 col-sm-6 col-6'>
               <img
                 onClick={() => props.history.goBack()}
@@ -550,9 +695,7 @@ function AddEditEDR(props)
                 variant='contained'
                 color='primary'
               >
-                <strong style={{ fontSize: '12px' }}>
-                  Save
-                </strong>
+                <strong style={{ fontSize: '12px' }}>Save</strong>
               </Button>
             </div>
           </div>
@@ -567,33 +710,185 @@ function AddEditEDR(props)
           >
             <DialogContent style={{ backgroundColor: '#31e2aa' }}>
               <DialogTitle id='simple-dialog-title' style={{ color: 'white' }}>
-                Add Request
+                Add Medicine
               </DialogTitle>
               <div className='container-fluid'>
                 <div className='row'>
+                  <div className='col-md-12 col-sm-12 col-12'>
+                    <InputLabelComponent>Search Medicine</InputLabelComponent>
+                    <input
+                      type='text'
+                      placeholder='Search medicine by name'
+                      name={'searchQuery'}
+                      value={searchQuery}
+                      onChange={handleSearch}
+                      className='textInputStyle'
+                    />
+                  </div>
+                </div>
+
+                {searchQuery ? (
+                  // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
+                  <div style={{ zIndex: 3 }}>
+                    <Paper>
+                      {itemFoundSuccessfull ? (
+                        itemFound && (
+                          <Table size='small'>
+                            <TableHead>
+                              <TableRow>
+                                <TableCell>Medicine Name</TableCell>
+                                <TableCell>Scientific Name</TableCell>
+                                <TableCell>Item Code</TableCell>
+                              </TableRow>
+                            </TableHead>
+
+                            <TableBody>
+                              {itemFound.map((i, index) => {
+                                return (
+                                  <TableRow
+                                    key={i.itemCode}
+                                    onClick={() => handleAddItem(i)}
+                                    style={{ cursor: 'pointer' }}
+                                  >
+                                    <TableCell>{i.tradeName}</TableCell>
+                                    <TableCell>{i.scientificName}</TableCell>
+                                    <TableCell>{i.itemCode}</TableCell>
+                                  </TableRow>
+                                )
+                              })}
+                            </TableBody>
+                          </Table>
+                        )
+                      ) : (
+                        <h4
+                          style={{ textAlign: 'center' }}
+                          onClick={() => setSearchQuery('')}
+                        >
+                          Medicine Not Found
+                        </h4>
+                      )}
+                    </Paper>
+                  </div>
+                ) : (
+                  undefined
+                )}
+
+                <div className='row'>
                   <div
-                    className='col-md-12 col-sm-12 col-12'
+                    className='col-md-4 col-sm-4 col-4'
                     style={styles.inputContainerForTextField}
                   >
                     <InputLabelComponent>Medicine Name*</InputLabelComponent>
                     <input
+                      disabled
                       style={styles.inputField}
                       type='text'
-                      placeholder='Enter Medicine name'
-                      name={'medName'}
-                      value={medName}
+                      placeholder='Search from above...'
+                      name={'medicineName'}
+                      value={medicineName}
                       onChange={onChangeValue}
                       className='textInputStyle'
                     />
+                  </div>
+                  <div
+                    className='col-md-4 col-sm-4 col-4'
+                    style={styles.inputContainerForDropDown}
+                  >
+                    <InputLabelComponent>Priority*</InputLabelComponent>
+                    <Select
+                      fullWidth
+                      id='priority'
+                      name='priority'
+                      value={priority}
+                      onChange={onChangeValue}
+                      label='Priority'
+                      className='dropDownStyle'
+                      input={<BootstrapInput />}
+                    >
+                      <MenuItem value=''>
+                        <em>None</em>
+                      </MenuItem>
+                      {durationArray.map((val) => {
+                        return (
+                          <MenuItem key={val.key} value={val.key}>
+                            {val.value}
+                          </MenuItem>
+                        )
+                      })}
+                    </Select>
                     <ErrorMessage
-                      name={medName}
+                      name={priority}
+                      isFormSubmitted={isFormSubmitted}
+                    />
+                  </div>
+                  <div
+                    className='col-md-4 col-sm-4 col-4'
+                    style={styles.inputContainerForDropDown}
+                  >
+                    <InputLabelComponent>Schedule*</InputLabelComponent>
+                    <Select
+                      fullWidth
+                      id='schedule'
+                      name='schedule'
+                      value={schedule}
+                      onChange={onChangeValue}
+                      label='Schedule'
+                      className='dropDownStyle'
+                      input={<BootstrapInput />}
+                    >
+                      <MenuItem value=''>
+                        <em>None</em>
+                      </MenuItem>
+                      {durationArray.map((val) => {
+                        return (
+                          <MenuItem key={val.key} value={val.key}>
+                            {val.value}
+                          </MenuItem>
+                        )
+                      })}
+                    </Select>
+                    <ErrorMessage
+                      name={schedule}
                       isFormSubmitted={isFormSubmitted}
                     />
                   </div>
                 </div>
 
                 <div className='row'>
-                  <div className='col-md-6 col-sm-6' style={styles.inputContainerForDropDown}>
+                  <div
+                    className='col-md-3 col-sm-3 col-3'
+                    style={styles.inputContainerForTextField}
+                  >
+                    <InputLabelComponent>Frequency*</InputLabelComponent>
+                    <input
+                      style={styles.inputField}
+                      type='number'
+                      placeholder='Frequency'
+                      name={'frequency'}
+                      value={frequency}
+                      onChange={onChangeValue}
+                      className='textInputStyle'
+                    />
+                  </div>
+                  <div
+                    className='col-md-3 col-sm-3 col-3'
+                    style={styles.inputContainerForTextField}
+                  >
+                    <InputLabelComponent>Duration*</InputLabelComponent>
+                    <input
+                      style={styles.inputField}
+                      type='number'
+                      placeholder='Duration'
+                      name={'duration'}
+                      value={duration}
+                      onChange={onChangeValue}
+                      className='textInputStyle'
+                    />
+                  </div>
+                  {/* <div
+                    className='col-md-3 col-sm-3 col-3'
+                    style={styles.inputContainerForDropDown}
+                  >
                     <InputLabelComponent>Duration*</InputLabelComponent>
                     <Select
                       fullWidth
@@ -616,15 +911,18 @@ function AddEditEDR(props)
                         )
                       })}
                     </Select>
-                    <ErrorMessage name={duration} isFormSubmitted={isFormSubmitted} />
-                  </div>
+                    <ErrorMessage
+                      name={duration}
+                      isFormSubmitted={isFormSubmitted}
+                    />
+                  </div> */}
                   <div
-                    className='col-md-6 col-sm-6'
+                    className='col-md-3 col-sm-3 col-3'
                     style={styles.inputContainerForTextField}
                   >
                     <InputLabelComponent>Dosage</InputLabelComponent>
                     <input
-                      type='text'
+                      type='number'
                       placeholder='Enter Dosage'
                       name={'dosage'}
                       value={dosage}
@@ -636,23 +934,22 @@ function AddEditEDR(props)
                       isFormSubmitted={isFormSubmitted}
                     />
                   </div>
-                </div>
-
-                <div className='row'>
                   <div
-                    className='col-md-12'
+                    className='col-md-3 col-sm-3 col-3'
                     style={styles.inputContainerForTextField}
                   >
-                    <InputLabelComponent>Additional Notes*</InputLabelComponent>
+                    <InputLabelComponent>Requested Qty</InputLabelComponent>
                     <input
-                      style={styles.inputField}
-                      type='text'
-                      rows={4}
-                      placeholder='Add Additional Notes/Comments...'
-                      name={'comments'}
-                      value={comments}
+                      type='number'
+                      placeholder='Enter Requested Qty'
+                      name={'requestedQty'}
+                      value={requestedQty}
                       onChange={onChangeValue}
                       className='textInputStyle'
+                    />
+                    <ErrorMessage
+                      name={requestedQty}
+                      isFormSubmitted={isFormSubmitted}
                     />
                   </div>
                 </div>
@@ -678,6 +975,7 @@ function AddEditEDR(props)
                       marginBottom: '2%',
                     }}
                   >
+                    {selectItemToEditId === '' ? (
                       <Button
                         style={{
                           color: 'white',
@@ -695,14 +993,25 @@ function AddEditEDR(props)
                         variant='contained'
                         color='primary'
                       >
-                        Submit
+                        Add
                       </Button>
+                    ) : (
+                      <Button
+                        style={{ paddingLeft: 30, paddingRight: 30 }}
+                        disabled={!validateItemsForm()}
+                        onClick={editSelectedItem}
+                        variant='contained'
+                        color='primary'
+                      >
+                        {' '}
+                        Edit
+                      </Button>
+                    )}
                   </div>
                 </div>
               </div>
             </DialogContent>
           </Dialog>
-
         </div>
       </div>
     </div>

@@ -4,14 +4,20 @@ import { Route, Switch, Router, Redirect } from 'react-router-dom'
 import { createBrowserHistory } from 'history'
 import NotFound from '../components/NotFound/NotFound'
 
-import ECR from '../views/ECR/ECR'
+import ECR from '../views/ECR/ECRMenu'
 
-import EDR from './edrRoutes'
-import IPR from './iprRoutes'
-import ViewIPR from '../views/ServicesRequest/PHR/viewIPR'
-import ViewEDR from '../views/ServicesRequest/PHR/viewEDR'
-import EDRTriageAndAssessment from '../views/ServicesRequest/PHR/EDRTriageAndAssessment'
-import IPRTriageAndAssessment from '../views/ServicesRequest/PHR/IPRTriageAndAssessment'
+// import EDR from './edrRoutes'
+// import IPR from './iprRoutes'
+
+
+import EDR from '../views/ECR/EcrEDR'
+import IPR from '../views/ECR/EcrIPR'
+import ViewEDR from '../views/ECR/viewEcrEDR'
+import ViewIPR from '../views/ECR/viewEcrIPR'
+import AddIPR from '../views/ECR/addIPR'
+import AddEDR from '../views/ECR/addEDR'
+import TriageAndAssessmentEDR from '../views/ECR/TriageAndAssessmentEDR'
+import TriageAndAssessmentIPR from '../views/ECR/TriageAndAssessmentIPR'
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const [currentUser, setCurrentUser] = React.useState(
@@ -59,11 +65,21 @@ class WMSRoutes extends React.PureComponent {
         />
         <Route
           path={`${this.props.match.url}/edr/viewEDR/TriageAndAssessment`}
-          component={EDRTriageAndAssessment}
+          component={TriageAndAssessmentEDR}
         />
         <Route
           path={`${this.props.match.url}/ipr/viewIPR/TriageAndAssessment`}
-          component={IPRTriageAndAssessment}
+          component={TriageAndAssessmentIPR}
+        />
+        <Route
+          exact
+          path={`${this.props.match.url}/ipr/viewIPR/add`}
+          component={AddIPR}
+        />
+        <Route
+          exact
+          path={`${this.props.match.url}/edr/viewEDR/add`}
+          component={AddEDR}
         />
 
         <Route path={`${this.props.match.url}/notfound`} component={NotFound} />

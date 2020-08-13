@@ -6,10 +6,12 @@ import NotFound from '../components/NotFound/NotFound'
 
 import RCM from '../views/Home/RCMHome'
 import ServicesRequestRoutes from '../subRoutes/servicesRequest'
+import InsuranceClaimRoutes from '../subRoutes/insuranceClaim'
 import ResidentDoctor from '../subRoutes/residentDoctor'
 import ECR from '../subRoutes/ecr'
 import PatientListingRoutes from './patientListing'
 import EDR from './EDR'
+import IPR from './iprRoutes'
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const [currentUser, setCurrentUser] = React.useState(
@@ -47,6 +49,8 @@ class WMSRoutes extends React.PureComponent {
         <Route path={'/home/rcm/rd'} component={ResidentDoctor} />
         <Route path={'/home/rcm/ecr'} component={ECR} />
         <Route path={`${this.props.match.url}/edr`} component={EDR} />
+        <Route path={`${this.props.match.url}/ipr`} component={IPR} />
+        <Route path={'/home/rcm/ic'} component={InsuranceClaimRoutes} />
 
         <Route
           path={`${this.props.match.url}/patientListing`}

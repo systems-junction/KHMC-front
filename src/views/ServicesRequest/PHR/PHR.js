@@ -33,8 +33,10 @@ import WMS_Back from '../../../assets/img/WMS_Back.png'
 
 // import Items from '../../assets/img/Items.png'
 import PHR from '../../../assets/img/PHR.png'
+import DM from '../../../assets/img/Discharge Medication.png'
 import EDR from '../../../assets/img/EDR.png'
 import IPR from '../../../assets/img/IPR.png'
+import OPR from '../../../assets/img/OPR.png'
 import React, { useEffect } from 'react'
 import { render } from 'react-dom'
 import Back from '../../../assets/img/Back_Arrow.png'
@@ -59,13 +61,15 @@ const admin = [
   },
 
   {
-    text: '',
-    path: '',
+    img: OPR,
+    text: 'OPR',
+    path: '/home/rcm/sr/phr/opr',
   },
 
   {
-    text: '',
-    path: '',
+    img: DM,
+    text: 'Discharge Medication',
+    path: '/home/rcm/sr/phr/dischargemedication',
   },
 
   {

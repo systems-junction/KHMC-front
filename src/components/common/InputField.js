@@ -9,7 +9,7 @@ const styles = {
     outline: 'none',
   },
 }
-const inputField = ({ type = 'text', onChange, value, placeholder, name }) => {
+const inputField = ({ type = 'text', onChange, value, placeholder, name,disabled }) => {
   return (
     <div style={styles.inputContainerForTextField}>
       <InputLabelComponent id='gender-label'>
@@ -23,6 +23,7 @@ const inputField = ({ type = 'text', onChange, value, placeholder, name }) => {
         value={value}
         onChange={(e) => onChange(e)}
         className='textInputStyle'
+        disabled={disabled}
       />
     </div>
   )

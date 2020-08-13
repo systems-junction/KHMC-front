@@ -147,8 +147,7 @@ class Login extends React.Component {
                 color: "white",
               }}
             >
-              You forgot your passowrd? No problem just add your email address
-              to get it back
+            Forgot your password? Just enter your email to gain access
             </h6>
           </div>
 

@@ -1,18 +1,14 @@
 const local = 'http://localhost:4000/api'
 const live = 'https://test.khmc-staging.com/api'
+// const dev = "http://ec2-52-14-42-129.us-east-2.compute.amazonaws.com/api";
+const baseUrl = 'http://localhost:4000/api'
 
-// const baseUrl = "http://localhost:4000/api";
-
-// const baseUrl = "http://192.168.10.20:4000/api";
-
-const baseUrl = local;
+// const baseUrl = dev;
 
 // export const socketUrl = "ws://localhost:4001";
 // export const socketUrl = "ws://192.168.10.20:4001";
 
-
-export const socketUrl = "wss://test.khmc-staging.com:4001";
-
+export const socketUrl = 'wss://test.khmc-staging.com:4001'
 
 // auth endpoints
 export const loginUrl = `${baseUrl}/auth/login`
@@ -20,25 +16,53 @@ export const loginUrl = `${baseUrl}/auth/login`
 export const addSubscriber = `${baseUrl}/subscriber/postsubscriber`
 
 // items endpoints
+
 export const getItemsUrl = `${baseUrl}/item/getitems`
 export const addItemUrl = `${baseUrl}/item/additem`
 export const updateItemUrl = `${baseUrl}/item/updateitem`
 export const deleteItemUrl = `${baseUrl}/item/deleteitem`
 export const getSearchedItemUrl = `${baseUrl}/item/getsearcheditems`
 export const getSearchedPharmaceuticalItemsUrl = `${baseUrl}/item/getsearcheditemsp`
-export const getSearchedNonPharmaceuticalItemsUrl = `${baseUrl}/item/getsearcheditemsnp`
+export const getSearchedItemsNonPharmaceuticalUrl = `${baseUrl}/item/getsearcheditemsnp`
+export const getSearchedNonPharmaceuticalItemsUrl = `${baseUrl}/item/getsearcheditemsnm`
 
 // patient endpoints
 export const getPatientById = `${baseUrl}/patient/getpatient/:id`
+export const getPatientByProfileNo = `${baseUrl}/patient/getpatientbyprofileno`
 export const getPatientUrl = `${baseUrl}/patient/getpatient`
 export const addPatientUrl = `${baseUrl}/patient/addpatient`
 export const deletePatientUrl = `${baseUrl}/patient/deletepatient`
 export const updatePatientUrl = `${baseUrl}/patient/updatepatient`
 export const generateEDR = `${baseUrl}/edr/addedr`
+export const generateIPR = `${baseUrl}/ipr/addipr`
+
+// reimbursement endpoints
+export const getSearchedpatient = `${baseUrl}/reimbursementclaim/getpatient`
+export const addClaim = `${baseUrl}/reimbursementclaim/addclaim`
+export const getedripr = `${baseUrl}/reimbursementclaim/getedripr`
+export const getClaim = `${baseUrl}/reimbursementclaim/getclaim`
+export const updateClaim = `${baseUrl}/reimbursementclaim/updateclaim`
+
+// pre-approval Endpoints
+export const getPreApproval = `${baseUrl}/par/getedrandipr`
+export const addPreApproval = `${baseUrl}/par/addpar`
+export const updatePreApproval = `${baseUrl}/par/updatepar`
+// export const getSearchedpatient = `${baseUrl}/reimbursementclaim/getpatient`
 
 // EDR endpoints
-export const getEDRUrl = `${baseUrl}/EDR/getEDRs`
-export const getSingleEDRPatient = `${baseUrl}/EDR/getSingleEDRPatient`
+export const getEDRUrl = `${baseUrl}/edr/getedr`
+export const getSingleEDRPatient = `${baseUrl}/edr/getedr`
+export const addEDR = `${baseUrl}/edr/addedr`
+export const deleteEDR = `${baseUrl}/edr/deleteedr/:_id`
+export const updateEDR = `${baseUrl}/edr/updateedr`
+export const getEDRDischargeUrl = `${baseUrl}/dischargerequest/getedrdischarge`
+
+//IPR endpoints
+export const getIPRUrl = `${baseUrl}/ipr/getipr`
+export const getSingleIPRPatient = `${baseUrl}/ipr/getipr`
+export const addIPR = `${baseUrl}/ipr/addipr`
+export const deleteIPR = `${baseUrl}/ipr/deleteipr/:_id`
+export const updateIPR = `${baseUrl}/ipr/updateipr`
 
 // warehouse endpoints
 export const getWhInventoryUrl = `${baseUrl}/warehouseinventory/getWhInventory`
@@ -232,12 +256,14 @@ export const getRadiologyServiceUrl = `${baseUrl}/radiologyservice/getradiologys
 export const addRadiologyServiceUrl = `${baseUrl}/radiologyservice/addradiologyservice`
 export const deleteRadiologyServiceUrl = `${baseUrl}/radiologyservice/deleteradiologyservice`
 export const updateRadiologyServiceUrl = `${baseUrl}/radiologyservice/updateradiologyservice`
+export const getSearchedRadiologyService = `${baseUrl}/radiologyservice/getsearchedradiology`
 
 // laboratory services
 export const getLaboratoryServiceUrl = `${baseUrl}/laboratoryservice/getlaboratoryservice`
 export const addLaboratoryServiceUrl = `${baseUrl}/laboratoryservice/addlaboratoryservice`
 export const deleteLaboratoryServiceUrl = `${baseUrl}/laboratoryservice/deletelaboratoryservice`
 export const updateLaboratoryServiceUrl = `${baseUrl}/laboratoryservice/updatelaboratoryservice`
+export const getSearchedLaboratoryService = `${baseUrl}/laboratoryservice/getsearchedlabs`
 
 // surgery services
 export const getSurgeryServiceUrl = `${baseUrl}/surgeryservice/getsurgeryservice`
@@ -250,9 +276,54 @@ export const getNursingServiceUrl = `${baseUrl}/nurseservice/getnurseservice`
 export const addNursingServiceUrl = `${baseUrl}/nurseservice/addnurseservice`
 export const deleteNursingServiceUrl = `${baseUrl}/nurseservice/deletenurseservice`
 export const updateNursingServiceUrl = `${baseUrl}/nurseservice/updatenurseservice`
+export const getSearchedNurseService = `${baseUrl}/nurseservice/getsearchednurse`
 
 // ECR
-export const getECRUrl = `${baseUrl}/ecr/getecr`
-export const addECRUrl = `${baseUrl}/ecr/addecr`
+export const getECRFromEDRUrl = `${baseUrl}/ecr/getecrfromedr`
+export const getECRFromIPRUrl = `${baseUrl}/ecr/getecrfromipr`
 export const deleteECRUrl = `${baseUrl}/ecr/deleteecr`
 export const updateECRUrl = `${baseUrl}/ecr/updateecr`
+export const getECRUrl = `${baseUrl}/ecr/getecr`
+export const addECRUrl = `${baseUrl}/ecr/addecr`
+export const getAllExternalConsultantsUrl = `${baseUrl}/staff/getexternalconsultant`
+
+// PHR
+export const getPHREDRUrl = `${baseUrl}/edr/getphredr`
+export const getPHRIPRUrl = `${baseUrl}/ipr/getphripr`
+export const getRREDRUrl = `${baseUrl}/edr/getrredr`
+export const getRRIPRUrl = `${baseUrl}/ipr/getrripr`
+export const getLREDRUrl = `${baseUrl}/edr/getlredr`
+export const getLRIPRUrl = `${baseUrl}/ipr/getlripr`
+export const getOPRFromPharmacyUrl = `${baseUrl}/opr/getoprfrompharmacy`
+export const getOPRFromLabUrl = `${baseUrl}/opr/getoprfromlab`
+export const getOPRFromRadiologyUrl = `${baseUrl}/opr/getoprfromradiology`
+export const generateOPR = `${baseUrl}/opr/addopr`
+export const updateOPR = `${baseUrl}/opr/updateopr`
+export const getOPRById = `${baseUrl}/opr/getopr`
+
+// LR by ID
+export const getLRById = `${baseUrl}/edr/getlredr`
+export const updateLRById = `${baseUrl}/edr/updatelab`
+export const getLRIPRById = `${baseUrl}/ipr/getlripr`
+export const updateLRIPRById = `${baseUrl}/ipr/updatelab`
+
+// RR by ID
+export const getRRById = `${baseUrl}/edr/getrredr`
+export const updateRRById = `${baseUrl}/edr/updaterad`
+export const getRRIPRById = `${baseUrl}/ipr/getrripr`
+export const updateRRIPRById = `${baseUrl}/ipr/updaterad`
+
+// PHR by ID
+export const getPHRById = `${baseUrl}/edr/getphredr`
+export const updatePHRById = `${baseUrl}/edr/updatephr`
+export const getPHRIPRById = `${baseUrl}/ipr/getphripr`
+export const updatePHRIPRById = `${baseUrl}/ipr/updatephr`
+
+//Add Discharge Request
+export const AddDischargeRequestUrl = `${baseUrl}/dischargerequest/adddischarge`
+
+// Discharge Medication
+export const getDischargeEDRUrl = `${baseUrl}/edr/getdischargeedr`
+export const getDischargeIPRUrl = `${baseUrl}/ipr/getdischargeipr`
+export const updateDischargeEDRUrl = `${baseUrl}/edr/updatedischarge`
+export const updateDischargeIPRUrl = `${baseUrl}/ipr/updatedischarge`

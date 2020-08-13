@@ -19,8 +19,6 @@ import {
   DatePicker,
 } from "@material-ui/pickers";
 import {
-  addReceiveItemsUrl,
-  updateReceiveItemsUrl,
   addReceiveRequestBUUrl,
   updateReceiveRequestBUUrl,
 } from "../../public/endpoins";
@@ -35,6 +33,9 @@ import business_Unit from "../../assets/img/business_Unit.png";
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 
 import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
+
+import InputLabelComponent from "../../components/InputLabel/inputLabel";
+import BootstrapInput from "../../components/Dropdown/dropDown.js";
 
 const statusArray = [
   // { key: "pending_administration", value: "Pending Administration" },
@@ -62,12 +63,8 @@ const styles = {
   },
 
   inputContainerForDropDown: {
-    marginTop: 55,
-    backgroundColor: "white",
-    borderRadius: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingTop: 2,
+    marginTop: 25,
+
   },
 
   buttonContainer: {
@@ -75,6 +72,16 @@ const styles = {
   },
   styleForLabel: {
     fontWeight: "700",
+    color: "white",
+  },
+
+  styleForDate: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    height: 46,
+    marginTop: 5,
+    paddingLeft:10,
+    paddingTop:8
   },
 };
 const useStyles = makeStyles(tableStyles);
@@ -460,9 +467,7 @@ function ReceiveItems(props) {
           <div className="row">
             <div className="col-md-6">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Item Code
-                </InputLabel>
+                <InputLabelComponent>Item Code</InputLabelComponent>
 
                 <input
                   // type="number"
@@ -478,9 +483,8 @@ function ReceiveItems(props) {
 
             <div className="col-md-6">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Item Name
-                </InputLabel>
+                <InputLabelComponent> Item Name</InputLabelComponent>
+
                 <input
                   type="text"
                   disabled={true}
@@ -497,9 +501,7 @@ function ReceiveItems(props) {
           <div className="row">
             <div className="col-md-3">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Current Qty
-                </InputLabel>
+                <InputLabelComponent> Current Qty</InputLabelComponent>
 
                 <input
                   disabled={true}
@@ -516,9 +518,8 @@ function ReceiveItems(props) {
 
             <div className="col-md-3">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Required Qty
-                </InputLabel>
+                <InputLabelComponent> Required Qty</InputLabelComponent>
+
                 <input
                   type="number"
                   disabled={true}
@@ -534,9 +535,8 @@ function ReceiveItems(props) {
 
             <div className="col-md-3">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Received Qty
-                </InputLabel>
+                <InputLabelComponent> Received Qty</InputLabelComponent>
+
                 <input
                   type="number"
                   placeholder="Received Qty"
@@ -567,9 +567,8 @@ function ReceiveItems(props) {
 
             <div className="col-md-3">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Bonus Qty
-                </InputLabel>
+                <InputLabelComponent> Bonus Qty</InputLabelComponent>
+
                 <input
                   type="number"
                   placeholder="Bonus Qty"
@@ -586,9 +585,11 @@ function ReceiveItems(props) {
           {/* <div className="row">
             <div className="col-md-4">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Batch Number
-                </InputLabel>
+
+                <InputLabelComponent>              
+                     Batch Number
+</InputLabelComponent>
+
                 <input
                   type="number"
                   placeholder="Batch Number"
@@ -603,9 +604,10 @@ function ReceiveItems(props) {
 
             <div className="col-md-4">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
+
+                       <InputLabelComponent>              
                   LOT No
-                </InputLabel>
+</InputLabelComponent>
                 <input
                   type="number"
                   placeholder="LOT No"
@@ -622,9 +624,9 @@ function ReceiveItems(props) {
               className="col-md-4"
               style={(styles.inputContainerForTextField, { marginTop: 35 })}
             >
-              <InputLabel style={styles.styleForLabel} id="generated-label">
-                Expiry Date
-              </InputLabel>
+                   <InputLabelComponent>              
+Expiry Date
+</InputLabelComponent>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DatePicker
                   inputVariant="outlined"
@@ -648,9 +650,10 @@ function ReceiveItems(props) {
           <div className="row">
             <div className="col-md-3">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
+
+                     <InputLabelComponent>              
                   Unit
-                </InputLabel>
+</InputLabelComponent>
                 <input
                   type="text"
                   placeholder="Unit"
@@ -664,9 +667,10 @@ function ReceiveItems(props) {
 
             <div className="col-md-3">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
+              
+                  <InputLabelComponent>              
                   Discount %
-                </InputLabel>
+</InputLabelComponent>
                 <input
                   type="number"
                   placeholder="Discount %"
@@ -681,9 +685,10 @@ function ReceiveItems(props) {
 
             <div className="col-md-3">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
+
+                     <InputLabelComponent>              
                   Unit Discount
-                </InputLabel>
+</InputLabelComponent>
                 <input
                   placeholder="Unit Discount"
                   name={"uniyDiscount"}
@@ -697,9 +702,9 @@ function ReceiveItems(props) {
 
             <div className="col-md-3">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
+                        <InputLabelComponent>              
                   Discount Amount
-                </InputLabel>
+</InputLabelComponent>
                 <input
                   type="number"
                   placeholder="Discount Amount"
@@ -716,9 +721,10 @@ function ReceiveItems(props) {
           <div className="row">
             <div className="col-md-6">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
+
+                       <InputLabelComponent>              
                   Tax %
-                </InputLabel>
+</InputLabelComponent>
 
                 <input
                   type="number"
@@ -734,9 +740,9 @@ function ReceiveItems(props) {
 
             <div className="col-md-6">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
+                  <InputLabelComponent>              
                   Tax Amount
-                </InputLabel>
+</InputLabelComponent>
                 <input
                   type="number"
                   placeholder="Tax Amount"
@@ -753,9 +759,7 @@ function ReceiveItems(props) {
           <div className="row">
             <div className="col-md-3">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Final Unit Price
-                </InputLabel>
+                <InputLabelComponent>Final Unit Price</InputLabelComponent>
                 <input
                   type="number"
                   placeholder="Final Unit Price"
@@ -770,9 +774,8 @@ function ReceiveItems(props) {
 
             <div className="col-md-3">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Sub Total
-                </InputLabel>
+                <InputLabelComponent> Sub Total</InputLabelComponent>
+
                 <input
                   type="number"
                   placeholder="Sub Total"
@@ -787,9 +790,8 @@ function ReceiveItems(props) {
 
             <div className="col-md-3">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Total Price
-                </InputLabel>
+                <InputLabelComponent>Total Price</InputLabelComponent>
+
                 <input
                   type="number"
                   placeholder="Total Price"
@@ -804,9 +806,7 @@ function ReceiveItems(props) {
 
             <div className="col-md-3">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Discount Amount
-                </InputLabel>
+                <InputLabelComponent>Discount Amount</InputLabelComponent>
                 <input
                   type="number"
                   placeholder="Discount Amount"
@@ -823,9 +823,7 @@ function ReceiveItems(props) {
           <div className="row">
             <div className="col-md-4">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Invoice
-                </InputLabel>
+                <InputLabelComponent>Invoice</InputLabelComponent>
                 <input
                   // type="number"
                   placeholder="Invoice"
@@ -839,39 +837,34 @@ function ReceiveItems(props) {
             </div>
 
             <div className="col-md-4">
-              <div
-                style={(styles.inputContainerForTextField, { marginTop: 35 })}
-              >
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Date/Time Invoice
-                </InputLabel>
+              <div style={styles.inputContainerForTextField}>
+                <InputLabelComponent>Date/Time Invoice</InputLabelComponent>
+
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <DateTimePicker
-                    inputVariant="outlined"
                     fullWidth={true}
                     // label="Date/Time Invoice"
                     onChange={(val) => onChangeDate(val, "date")}
-                    style={{ backgroundColor: "white", borderRadius: 10 }}
+                    style={styles.styleForDate}
                     value={comingFor === "add" ? (date ? date : null) : date}
+                    InputProps={{
+                      disableUnderline: true,
+                    }}
                   />
                 </MuiPickersUtilsProvider>
               </div>
             </div>
 
             <div className="col-md-4">
-              <div
-                style={(styles.inputContainerForTextField, { marginTop: 35 })}
-              >
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Date/Time received
-                </InputLabel>
+              <div style={styles.inputContainerForTextField}>
+                <InputLabelComponent>Date/Time received</InputLabelComponent>
+
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <DateTimePicker
-                    inputVariant="outlined"
                     fullWidth={true}
                     // label="Date/Time Received"
                     onChange={(val) => onChangeDate(val, "receivedDate")}
-                    style={{ backgroundColor: "white", borderRadius: 10 }}
+                    style={styles.styleForDate}
                     value={
                       comingFor === "add"
                         ? receivedDate
@@ -879,6 +872,9 @@ function ReceiveItems(props) {
                           : new Date()
                         : receivedDate
                     }
+                    InputProps={{
+                      disableUnderline: true,
+                    }}
                   />
                 </MuiPickersUtilsProvider>
               </div>
@@ -888,9 +884,8 @@ function ReceiveItems(props) {
           <div className="row">
             <div className="col-md-6">
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Notes
-                </InputLabel>
+                <InputLabelComponent> Notes</InputLabelComponent>
+
                 <input
                   placeholder="Notes"
                   name={"notes"}
@@ -903,9 +898,8 @@ function ReceiveItems(props) {
 
             <div className="col-md-6">
               <div style={styles.inputContainerForDropDown}>
-                <InputLabel id="status-label" style={styles.styleForLabel}>
-                  Status
-                </InputLabel>
+                <InputLabelComponent> Status</InputLabelComponent>
+
                 <Select
                   fullWidth
                   id="replenishmentRequestStatus"
@@ -913,6 +907,8 @@ function ReceiveItems(props) {
                   value={replenishmentRequestStatus}
                   onChange={onChangeValue}
                   label="Status"
+                  className="dropDownStyle"
+                  input={<BootstrapInput />}
                 >
                   <MenuItem value="">
                     <em>None</em>

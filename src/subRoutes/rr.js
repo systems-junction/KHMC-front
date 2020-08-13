@@ -5,12 +5,16 @@ import { createBrowserHistory } from 'history'
 import NotFound from '../components/NotFound/NotFound'
 
 import RR from '../views/ServicesRequest/RR/RR'
-import EDR from './edrRoutes'
-import IPR from './iprRoutes'
-import ViewIPR from '../views/ServicesRequest/PHR/viewIPR'
-import ViewEDR from '../views/ServicesRequest/PHR/viewEDR'
+import EDR from '../views/ServicesRequest/RR/EDR'
+import IPR from '../views/ServicesRequest/RR/IPR'
+import OPR from '../views/ServicesRequest/RR/OPR'
+import ViewIPR from '../views/ServicesRequest/RR/viewIPR'
+import ViewEDR from '../views/ServicesRequest/RR/viewEDR'
+import ViewOPR from '../views/ServicesRequest/RR/viewOPR'
 import EDRTriageAndAssessment from '../views/ServicesRequest/PHR/EDRTriageAndAssessment'
 import IPRTriageAndAssessment from '../views/ServicesRequest/PHR/IPRTriageAndAssessment'
+import AddEditOPR from '../views/ServicesRequest/RR/addEditOPR'
+import AddRadioOPR from '../views/ServicesRequest/RR/addRadiology'
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const [currentUser, setCurrentUser] = React.useState(
@@ -45,6 +49,7 @@ class WMSRoutes extends React.PureComponent {
         <Route exact path={`${this.props.match.url}`} component={RR} />
         <Route exact path={`${this.props.match.url}/edr`} component={EDR} />
         <Route exact path={`${this.props.match.url}/ipr`} component={IPR} />
+        <Route exact path={`${this.props.match.url}/opr`} component={OPR} />
         <Route
           exact
           path={`${this.props.match.url}/ipr/viewIPR`}
@@ -54,6 +59,21 @@ class WMSRoutes extends React.PureComponent {
           exact
           path={`${this.props.match.url}/edr/viewEDR`}
           component={ViewEDR}
+        />
+        <Route
+          exact
+          path={`${this.props.match.url}/opr/viewOPR`}
+          component={ViewOPR}
+        />
+        <Route
+          exact
+          path={`${this.props.match.url}/opr/add`}
+          component={AddEditOPR}
+        />
+        <Route
+          exact
+          path={`${this.props.match.url}/opr/viewOPR/add`}
+          component={AddRadioOPR}
         />
         <Route
           path={`${this.props.match.url}/edr/viewEDR/TriageAndAssessment`}

@@ -1,57 +1,58 @@
-import React from 'react'
-import './Header.css'
-import KHMC_White from '../../assets/img/KHMC_White.png'
-import Influence_white from '../../assets/img/Influence_white.png'
-import { Redirect } from 'react-router-dom'
+import React from "react";
+import "./Header.css";
+import KHMC_White from "../../assets/img/KHMC_White.png";
+import Influence_white from "../../assets/img/Influence_white.png";
+import { Redirect } from "react-router-dom";
 
-import Card from '@material-ui/core/Card'
-import CardActions from '@material-ui/core/CardActions'
-import CardContent from '@material-ui/core/CardContent'
-import Button from '@material-ui/core/Button'
-import Typography from '@material-ui/core/Typography'
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
 
-import cookie from 'react-cookies'
+import cookie from "react-cookies";
 
 class Header extends React.Component {
   state = {
     goBack: false,
     hover: false,
     open: false,
-    currentUser: '',
-  }
+    currentUser: "",
+  };
 
   componentDidMount() {
-    this.setState({ currentUser: cookie.load('current_user') })
+    this.setState({ currentUser: cookie.load("current_user") });
   }
 
   logoutUser() {
-    console.log('called')
-    cookie.remove('token', { path: '/' })
-    cookie.remove('current_user', { path: '/' })
-    window.location.reload()
+    console.log("called");
+    cookie.remove("token", { path: "/" });
+    cookie.remove("current_user", { path: "/" });
+    cookie.remove("user_staff", { path: "/" });
+    window.location.reload();
   }
 
   render() {
     if (this.state.goBack) {
-      var currentLocation = window.location.pathname
-      if (currentLocation !== '/home') {
-        return <Redirect to={'/home'} />
+      var currentLocation = window.location.pathname;
+      if (currentLocation !== "/home") {
+        return <Redirect to={"/home"} />;
       }
     }
 
     return (
-      <div className='header'>
+      <div className="header">
         <img
           src={KHMC_White}
-          className='header1-style'
+          className="header1-style"
           // style={{ maxWidth: '50%', height: 'auto' }}
           onClick={() => {
-            return this.setState({ goBack: true })
+            return this.setState({ goBack: true });
           }}
         />
         <img
           src={Influence_white}
-          className='header2-style'
+          className="header2-style"
           // style={{
           //   maxWidth: '60%',
           //   height: 'auto',
@@ -66,32 +67,32 @@ class Header extends React.Component {
         {this.state.open ? (
           <div
             style={{
-              float: 'right',
+              float: "right",
               width: 300,
               marginRight: 40,
               top: 50,
               right: 0,
               bottom: 0,
-              position: 'fixed',
+              position: "fixed",
               zIndex: 5,
             }}
           >
-            <Card style={{ marginTop: 50 }}>
+            <Card style={{ marginTop: 20 }}>
               <CardContent>
                 <Typography
                   // variant="h6"
-                  color='textSecondary'
+                  color="textSecondary"
                   gutterBottom
-                  style={{ display: 'flex', justifyContent: 'space-between' }}
+                  style={{ display: "flex", justifyContent: "space-between" }}
                 >
                   {this.state.currentUser && this.state.currentUser.name}
                 </Typography>
 
                 <Typography
                   // variant="h6"
-                  color='textSecondary'
+                  color="textSecondary"
                   // gutterBottom
-                  style={{ display: 'flex', justifyContent: 'space-between' }}
+                  style={{ display: "flex", justifyContent: "space-between" }}
                 >
                   {this.state.currentUser && this.state.currentUser.email}
                 </Typography>
@@ -99,18 +100,18 @@ class Header extends React.Component {
                 <hr />
 
                 <Typography
-                  variant='h6'
-                  color='textSecondary'
+                  variant="h6"
+                  color="textSecondary"
                   gutterBottom
                   style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    cursor: 'pointer',
+                    display: "flex",
+                    justifyContent: "space-between",
+                    cursor: "pointer",
                   }}
                   onClick={() => this.logoutUser()}
                 >
                   Logout
-                  <i class='zmdi zmdi-power'></i>
+                  <i class="zmdi zmdi-power"></i>
                 </Typography>
               </CardContent>
               <CardActions></CardActions>
@@ -120,8 +121,8 @@ class Header extends React.Component {
           undefined
         )}
       </div>
-    )
+    );
   }
 }
 
-export default Header
+export default Header;

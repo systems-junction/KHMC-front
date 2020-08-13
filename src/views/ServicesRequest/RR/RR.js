@@ -33,6 +33,7 @@ import WMS_Back from '../../../assets/img/WMS_Back.png'
 import RR from '../../../assets/img/RR.png'
 import EDR from '../../../assets/img/EDR.png'
 import IPR from '../../../assets/img/IPR.png'
+import OPR from '../../../assets/img/OPR.png'
 // import Items from '../../assets/img/Items.png'
 
 import React, { useEffect } from 'react'
@@ -59,8 +60,9 @@ const admin = [
   },
 
   {
-    text: '',
-    path: '',
+    img: OPR,
+    text: 'OPR',
+    path: '/home/rcm/sr/rr/opr',
   },
 
   {

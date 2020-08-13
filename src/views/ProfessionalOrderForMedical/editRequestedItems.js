@@ -197,6 +197,11 @@ function AddEditPurchaseRequest(props) {
     dosage: "",
     noOfTimes: "",
     duration: "",
+
+    orderBy: "",
+
+    schedule: "",
+    priority: "",
   };
 
   function reducer(state, { field, value }) {
@@ -260,6 +265,11 @@ function AddEditPurchaseRequest(props) {
     dosage,
     noOfTimes,
     duration,
+
+    orderBy,
+
+    schedule,
+    priority,
   } = state;
 
   const [comingFor, setcomingFor] = useState("");
@@ -362,7 +372,7 @@ function AddEditPurchaseRequest(props) {
     //   jit = requesterName !== "" && department !== "" && orderType !== "";
     // }
     return (
-      comments !== "" &&
+      // comments !== "" &&
       requestedItemsArray !== "" &&
       requestedItemsArray.length > 0 &&
       // dateGenerated !== "" &&
@@ -613,7 +623,7 @@ function AddEditPurchaseRequest(props) {
             <div className="row">
               {comingFor === "edit" || comingFor === "view" ? (
                 <div
-                  className="col-md-4"
+                  className="col-md-6"
                   style={styles.inputContainerForTextField}
                 >
                   <InputLabelComponent>Request No</InputLabelComponent>
@@ -630,47 +640,10 @@ function AddEditPurchaseRequest(props) {
                 undefined
               )}
 
-              {comingFor === "edit" || comingFor === "view" ? (
-                <div className="col-md-4">
-                  <div style={styles.inputContainerForDropDown}>
-                    <InputLabelComponent>Generated</InputLabelComponent>
-                    {/* <Select
-                      fullWidth
-                      disabled={true}
-                      id="generated"
-                      name="generated"
-                      value={generated}
-                      onChange={onChangeValue}
-                      label="Generated"
-                      className="dropDownStyle"
-                      input={<BootstrapInput />}
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem> */}
-                    {generatedArray &&
-                      generatedArray.map((val) => {
-                        if (generated === val.key) {
-                          return (
-                            <input
-                              className="textInputStyle"
-                              disabled={true}
-                              value={val.key}
-                            />
-                          );
-                        }
-                      })}
-                    {/* </Select> */}
-                  </div>
-                </div>
-              ) : (
-                undefined
-              )}
-
               <div
                 className={
                   comingFor === "edit" || comingFor === "view"
-                    ? "col-md-4"
+                    ? "col-md-6"
                     : "col-md-12"
                 }
                 style={styles.inputContainerForTextField}
@@ -698,7 +671,7 @@ function AddEditPurchaseRequest(props) {
 
             <div className="row">
               <div
-                className={comingFor === "add" ? "col-md-12" : "col-md-6"}
+                className={comingFor === "add" ? "col-md-12" : "col-md-4"}
                 style={styles.inputContainerForTextField}
               >
                 <InputLabelComponent>Date Generated</InputLabelComponent>
@@ -736,68 +709,77 @@ function AddEditPurchaseRequest(props) {
                 </MuiPickersUtilsProvider>
               </div>
 
-              {comingFor === "edit" || comingFor === "view" ? (
-                <div className="col-md-6">
-                  <div style={styles.inputContainerForDropDown}>
-                    <InputLabelComponent id="status-label">
-                      Requested FU
-                    </InputLabelComponent>
-                    {/* <Select
-                      disabled={
-                        currentUser &&
-                        currentUser.staffTypeId.type === "BU Member"
-                          ? false
-                          : true
-                      }
-                      fullWidth
-                      id="reason"
-                      name="fuId"
-                      value={fuId}
-                      onChange={onChangeValue}
-                      label="Reason"
-                      className="dropDownStyle"
-                      input={<BootstrapInput />}
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      {fuArray &&
-                        fuArray.map((val) => {
-                          return (
-                            <MenuItem key={val._id} value={val._id}>
-                              {val.fuName}
-                            </MenuItem>
-                          );
-                        })}
-                    </Select> */}
+              <div className="col-md-4">
+                <div style={styles.inputContainerForDropDown}>
+                  <InputLabelComponent id="status-label">
+                    Requested FU
+                  </InputLabelComponent>
 
-                    {fuArray &&
-                      fuArray.map((val) => {
-                        if (val._id === fuId) {
-                          return (
-                            <input
-                              disabled={true}
-                              type="text"
-                              placeholder="Fu Id"
-                              name={"fuId"}
-                              value={val.fuName}
-                              onChange={onChangeValue}
-                              className="textInputStyle"
-                            />
-                          );
-                        }
-                      })}
-                  </div>
-                  <ErrorMessage name={fuId} isFormSubmitted={isFormSubmitted} />
+                  {fuArray &&
+                    fuArray.map((val) => {
+                      if (val._id === fuId) {
+                        return (
+                          <input
+                            disabled={true}
+                            type="text"
+                            placeholder="Fu Id"
+                            name={"fuId"}
+                            value={val.fuName}
+                            onChange={onChangeValue}
+                            className="textInputStyle"
+                          />
+                        );
+                      }
+                    })}
                 </div>
-              ) : (
-                undefined
-              )}
+                <ErrorMessage name={fuId} isFormSubmitted={isFormSubmitted} />
+              </div>
+
+                <div
+                  className="col-md-4"
+                  style={styles.inputContainerForTextField}
+                >
+                  <InputLabelComponent id="status-label">
+                    Patient Reference No
+                  </InputLabelComponent>
+                  <input
+                    disabled={true}
+                    type="text"
+                    placeholder="Patient Reference No"
+                    name={"patientReferenceNo"}
+                    value={patientReferenceNo}
+                    onChange={onChangeValue}
+                    className="textInputStyle"
+                  />
+                  <ErrorMessage
+                    name={patientReferenceNo}
+                    isFormSubmitted={isFormSubmitted}
+                  />
+                </div>
+        
             </div>
 
             <div className="row">
+              {/* <div
+                className="col-md-4"
+                style={styles.inputContainerForTextField}
+              >
+                <InputLabelComponent id="status-label">
+                  Order By
+                </InputLabelComponent>
+                <input
+                  disabled={true}
+                  type="text"
+                  placeholder="Order By"
+                  name={orderBy}
+                  value={orderBy}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                />
+              </div> */}
+
               <div
-                className="col-md-6"
+                className="col-md-12"
                 style={styles.inputContainerForTextField}
               >
                 <InputLabelComponent>Comments</InputLabelComponent>
@@ -817,31 +799,8 @@ function AddEditPurchaseRequest(props) {
                   isFormSubmitted={isFormSubmitted}
                 />
               </div>
-
-              <div
-                className="col-md-6"
-                style={styles.inputContainerForTextField}
-              >
-                <InputLabelComponent id="status-label">
-                  Patient Reference No
-                </InputLabelComponent>
-                <input
-                  disabled={true}
-                  type="text"
-                  placeholder="Patient Reference No"
-                  name={"patientReferenceNo"}
-                  value={patientReferenceNo}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                />
-                <ErrorMessage
-                  name={patientReferenceNo}
-                  isFormSubmitted={isFormSubmitted}
-                />
-              </div>
             </div>
 
-            {/* {currentQty && description ? ( */}
             <div>
               <h4 style={{ color: "white", fontWeight: "700", marginTop: 30 }}>
                 Item details
@@ -882,108 +841,7 @@ function AddEditPurchaseRequest(props) {
                   className="col-md-4"
                   style={styles.inputContainerForTextField}
                 >
-                  <InputLabelComponent>Item Type</InputLabelComponent>
-                  <input
-                    type="text"
-                    disabled={true}
-                    placeholder="Item Type"
-                    name={"itemType"}
-                    value={
-                      itemType === "pharmaceutical"
-                        ? "Pharmaceutical"
-                        : itemType
-                    }
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                  />
-                </div>
-              </div>
-
-              <div className="row">
-                {/* <div
-                  className="col-md-6"
-                  style={styles.inputContainerForTextField}
-                >
-                  <InputLabelComponent>Current Qty</InputLabelComponent>
-                  <input
-                    type="number"
-                    disabled={true}
-                    placeholder="Current Qty"
-                    name={"currentQty"}
-                    value={currentQty}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                  />
-                </div> */}
-
-                <div
-                  className="col-md-3"
-                  style={styles.inputContainerForTextField}
-                >
-                  <InputLabelComponent>Dosage*</InputLabelComponent>
-                  <input
-                    disabled={true}
-                    type="number"
-                    placeholder="Dosage"
-                    name={"dosage"}
-                    value={dosage}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                    onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                  />
-                  <ErrorMessage
-                    name={dosage}
-                    isFormSubmitted={isFormSubmitted}
-                  />
-                </div>
-
-                <div
-                  className="col-md-3"
-                  style={styles.inputContainerForTextField}
-                >
-                  <InputLabelComponent>No of times*</InputLabelComponent>
-                  <input
-                    disabled={true}
-                    type="number"
-                    placeholder="No of times"
-                    name={"noOfTimes"}
-                    value={noOfTimes}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                    onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                  />
-                  <ErrorMessage
-                    name={noOfTimes}
-                    isFormSubmitted={isFormSubmitted}
-                  />
-                </div>
-
-                <div
-                  className="col-md-3"
-                  style={styles.inputContainerForTextField}
-                >
-                  <InputLabelComponent>Duration*</InputLabelComponent>
-                  <input
-                    disabled={true}
-                    type="number"
-                    placeholder="Duration"
-                    name={"duration"}
-                    value={duration}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                    onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                  />
-                  <ErrorMessage
-                    name={duration}
-                    isFormSubmitted={isFormSubmitted}
-                  />
-                </div>
-
-                <div
-                  className="col-md-3"
-                  style={styles.inputContainerForTextField}
-                >
-                  <InputLabelComponent>Requested Qty*</InputLabelComponent>
+                  <InputLabelComponent>Requested Qty</InputLabelComponent>
                   <input
                     disabled={true}
                     type="number"
@@ -1000,60 +858,104 @@ function AddEditPurchaseRequest(props) {
                 </div>
               </div>
 
-              <div className="row">
-                <div
-                  className="col-md-6"
-                  style={styles.inputContainerForTextField}
-                >
-                  <InputLabelComponent>Receipt Unit</InputLabelComponent>
-                  <input
-                    disabled={true}
-                    placeholder="Receipt Unit"
-                    name={"receiptUnit"}
-                    value={receiptUnit}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                  />
-                </div>
+              {dosage && noOfTimes && duration ? (
+                <div className="row">
+                  <div
+                    className="col-md-4"
+                    style={styles.inputContainerForTextField}
+                  >
+                    <InputLabelComponent>Dosage</InputLabelComponent>
+                    <input
+                      disabled={true}
+                      type="number"
+                      placeholder="Dosage"
+                      name={"dosage"}
+                      value={dosage}
+                      onChange={onChangeValue}
+                      className="textInputStyle"
+                    />
+                    <ErrorMessage
+                      name={dosage}
+                      isFormSubmitted={isFormSubmitted}
+                    />
+                  </div>
 
-                <div
-                  className="col-md-6"
-                  style={styles.inputContainerForTextField}
-                >
-                  <InputLabelComponent>Issue Unit</InputLabelComponent>
+                  <div
+                    className="col-md-4"
+                    style={styles.inputContainerForTextField}
+                  >
+                    <InputLabelComponent>Frequency</InputLabelComponent>
+                    <input
+                      disabled={true}
+                      type="number"
+                      placeholder="No of times"
+                      name={"noOfTimes"}
+                      value={noOfTimes}
+                      onChange={onChangeValue}
+                      className="textInputStyle"
+                    />
+                    <ErrorMessage
+                      name={noOfTimes}
+                      isFormSubmitted={isFormSubmitted}
+                    />
+                  </div>
 
-                  <input
-                    disabled={true}
-                    placeholder="Issue Unit"
-                    name={"issueUnit"}
-                    value={issueUnit}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                  />
+                  <div
+                    className="col-md-4"
+                    style={styles.inputContainerForTextField}
+                  >
+                    <InputLabelComponent>Duration</InputLabelComponent>
+                    <input
+                      disabled={true}
+                      type="number"
+                      placeholder="Duration"
+                      name={"duration"}
+                      value={duration}
+                      onChange={onChangeValue}
+                      className="textInputStyle"
+                    />
+                    <ErrorMessage
+                      name={duration}
+                      isFormSubmitted={isFormSubmitted}
+                    />
+                  </div>
                 </div>
+              ) : (
+                undefined
+              )}
+            </div>
+
+            <div className="row">
+              <div
+                className="col-md-6"
+                style={styles.inputContainerForTextField}
+              >
+                <InputLabelComponent>Priority</InputLabelComponent>
+                <input
+                  disabled={true}
+                  placeholder="Priority"
+                  name={"priority"}
+                  value={priority}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                />
               </div>
 
-              <div className="row">
-                <div
-                  className="col-md-12"
-                  style={styles.inputContainerForTextField}
-                >
-                  <InputLabelComponent>Description</InputLabelComponent>
-                  <input
-                    disabled={true}
-                    type="text"
-                    placeholder="Description"
-                    name={"description"}
-                    value={description}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                  />
-                </div>
+              <div
+                className="col-md-6"
+                style={styles.inputContainerForTextField}
+              >
+                <InputLabelComponent>Schedule</InputLabelComponent>
+                <input
+                  disabled={true}
+                  placeholder="Schedule"
+                  name={"schedule"}
+                  value={schedule}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                />
               </div>
             </div>
-            {/* ) : (
-              undefined
-            )} */}
 
             {comingFor === "edit" &&
             (currentUser.staffTypeId.type === "admin" ||

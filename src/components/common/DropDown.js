@@ -17,6 +17,7 @@ const inputField = ({
   onChange,
   label,
   genderArray,
+  statusArray,
   titles,
   coverageTermsArr,
   countries,
@@ -40,6 +41,14 @@ const inputField = ({
         </MenuItem>
         {genderArray &&
           genderArray.map((val) => {
+            return (
+              <MenuItem key={val.key} value={val.key}>
+                {val.value}
+              </MenuItem>
+            )
+          })}
+        {statusArray &&
+          statusArray.map((val) => {
             return (
               <MenuItem key={val.key} value={val.key}>
                 {val.value}

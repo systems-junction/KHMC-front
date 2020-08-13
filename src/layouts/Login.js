@@ -12,7 +12,7 @@ import AddAlert from "@material-ui/icons/AddAlert";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
 import cookie from "react-cookies";
-import { loginUrl } from "../public/endpoins";
+import { loginUrl, getStaffUrl } from "../public/endpoins";
 
 import KHMC_White from "../assets/img/KHMC_White.png";
 
@@ -50,7 +50,48 @@ class Login extends React.Component {
       buttonPressed: false,
 
       current_user: "",
+
+      systemAdmin: "",
+      staffType: "",
+      staff: "",
+      staffUser: "",
     };
+  }
+
+  getStaffTypes(user) {
+    axios
+      .get(getStaffUrl)
+      .then((res) => {
+        if (res.data.success) {
+          console.log("all staff", res.data.data);
+
+          let userStaff = res.data.data.staff.filter(
+            (s) => s._id === user.staffId
+          );
+
+          console.log("user staff", userStaff[0]);
+          cookie.save("user_staff", userStaff[0], { path: "/" });
+          // this.setState({
+          //   systemAdmin: res.data.data.systemAdmin,
+          //   staffType: res.data.data.staffType,
+          //   staff: res.data.data.staff,
+          // });
+
+          this.setState({
+            verifiedUser: true,
+            buttonPressed: false,
+            current_user: user,
+          });
+        } else if (!res.data.success) {
+          console.log("error", res);
+          // setErrorMsg(res.data.error);
+          // setOpenNotification(true);
+        }
+        return res;
+      })
+      .catch((e) => {
+        console.log("error: ", e);
+      });
   }
 
   handleInput(e, key) {
@@ -81,15 +122,10 @@ class Login extends React.Component {
           .then((res) => {
             if (res.data.success) {
               console.log(res.data);
-
+              this.getStaffTypes(res.data.data.user);
               cookie.save("token", res.data.data.token, { path: "/" });
               cookie.save("current_user", res.data.data.user, { path: "/" });
               subscribeUser(res.data.data.user);
-              this.setState({
-                verifiedUser: true,
-                buttonPressed: false,
-                current_user: res.data.data.user,
-              });
 
               // this.props.history.push('/home'+ '/'+res.data.data.user.staffTypeId.routeAccess);
 
@@ -133,12 +169,10 @@ class Login extends React.Component {
   hideSplash() {
     this.setState({ splash: false });
 
-    if(cookie.load("current_user")){
-      this.props.history.push('home')
+    if (cookie.load("current_user")) {
+      this.props.history.push("home");
     }
   }
-
-
 
   render() {
     if (this.state.tr) {
@@ -206,7 +240,7 @@ class Login extends React.Component {
                 color: "white",
               }}
             >
-              Please enter your username and password to access the features
+              Please enter username and password
             </h6>
           </div>
 

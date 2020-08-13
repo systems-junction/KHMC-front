@@ -86,6 +86,9 @@ function AddEditBuInventory(props) {
     buId: "",
     itemId: "",
     qty: "",
+    maximumLevel: "",
+    minimumLevel: "",
+    reorderLevel: "",
     businessUnits: [],
   };
 
@@ -98,18 +101,38 @@ function AddEditBuInventory(props) {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const { _id, buId, itemId, qty, businessUnits } = state;
+  const {
+    _id,
+    buId,
+    itemId,
+    qty,
+    businessUnits,
+
+    maximumLevel,
+    minimumLevel,
+    reorderLevel,
+  } = state;
 
   const onChangeValue = (e) => {
     dispatch({ field: e.target.name, value: e.target.value });
   };
 
   function validateForm() {
-    let res = false;
-    if (qty) {
-      res = true;
-    }
-    return res;
+    // let res = false;
+    // if (qty) {
+    //   res = true;
+    // }
+    // return res;
+
+    return (
+      qty !== "" &&
+      qty !== "0" &&
+      maximumLevel !== "" &&
+      maximumLevel !== "0" &&
+      itemId !== "" &&
+      reorderLevel !== "" &&
+      reorderLevel !== "0"
+    );
   }
 
   const [comingFor, setcomingFor] = useState("");
@@ -179,9 +202,23 @@ function AddEditBuInventory(props) {
       let params = "";
 
       if (props.match.path === "/home/controlroom/fus/fuinventory/add/:id") {
-        params = { fuId: props.match.params.id, itemId, qty };
+        params = {
+          fuId: props.match.params.id,
+          itemId,
+          qty,
+          maximumLevel,
+          minimumLevel,
+          reorderLevel,
+        };
       } else {
-        params = { fuId: fuId._id, itemId, qty };
+        params = {
+          fuId: fuId._id,
+          itemId,
+          qty,
+          maximumLevel,
+          minimumLevel,
+          reorderLevel,
+        };
       }
 
       axios
@@ -210,9 +247,25 @@ function AddEditBuInventory(props) {
       let params = "";
 
       if (props.match.path === "/home/controlroom/fus/fuinventory/edit/:id") {
-        params = { _id, fuId: props.match.params.id, itemId, qty };
+        params = {
+          _id,
+          fuId: props.match.params.id,
+          itemId,
+          qty,
+          maximumLevel,
+          minimumLevel,
+          reorderLevel,
+        };
       } else {
-        params = { _id, fuId: fuId._id, itemId, qty };
+        params = {
+          _id,
+          fuId: fuId._id,
+          itemId,
+          qty,
+          maximumLevel,
+          minimumLevel,
+          reorderLevel,
+        };
       }
 
       axios
@@ -314,7 +367,7 @@ function AddEditBuInventory(props) {
 
             </div> */}
 
-                <div className="col-md-12">
+                <div className="col-md-6">
                   <div style={styles.inputContainerForDropDown}>
                     <InputLabelComponent>Item</InputLabelComponent>
                     <Select
@@ -344,7 +397,7 @@ function AddEditBuInventory(props) {
                 </div>
 
                 <div
-                  className="col-md-12"
+                  className="col-md-6"
                   style={styles.inputContainerForTextField}
                 >
                   <InputLabelComponent>Quantity</InputLabelComponent>
@@ -354,6 +407,56 @@ function AddEditBuInventory(props) {
                     placeholder="Quantity"
                     name={"qty"}
                     value={qty}
+                    onChange={onChangeValue}
+                    className="textInputStyle"
+                  />
+                </div>
+              </div>
+
+              <div className="row">
+                <div
+                  className="col-md-4"
+                  style={styles.inputContainerForTextField}
+                >
+                  <InputLabelComponent>Maximum Level</InputLabelComponent>
+
+                  <input
+                    type="number"
+                    placeholder="Maximum Level"
+                    name={"maximumLevel"}
+                    value={maximumLevel}
+                    onChange={onChangeValue}
+                    className="textInputStyle"
+                  />
+                </div>
+
+                <div
+                  className="col-md-4"
+                  style={styles.inputContainerForTextField}
+                >
+                  <InputLabelComponent>Minimum Level</InputLabelComponent>
+
+                  <input
+                    type="number"
+                    placeholder="Minimum Level"
+                    name={"minimumLevel"}
+                    value={minimumLevel}
+                    onChange={onChangeValue}
+                    className="textInputStyle"
+                  />
+                </div>
+
+                <div
+                  className="col-md-4"
+                  style={styles.inputContainerForTextField}
+                >
+                  <InputLabelComponent>Reorder Level</InputLabelComponent>
+
+                  <input
+                    type="number"
+                    placeholder="Reorder Level"
+                    name={"reorderLevel"}
+                    value={reorderLevel}
                     onChange={onChangeValue}
                     className="textInputStyle"
                   />

@@ -250,8 +250,6 @@ export default function PurchaseRequest(props) {
     props.handleAddPR(selectedPurchaseRequests)
   }
 
-  console.log(props.vendors)
-
   return (
     <div
       style={{

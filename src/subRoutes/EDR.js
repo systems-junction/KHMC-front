@@ -6,6 +6,8 @@ import edr from '../views/EDR/EDR'
 import viewEDR from '../views/EDR/viewEDR'
 import addEditEDR from '../views/EDR/addEditEDR'
 import TriageAndAssessment from '../views/EDR/TriageAndAssessment'
+import DischargeRequest from '../views/EDR/DischargeRequest'
+import addDischargeMed from '../views/EDR/addDischargeMed'
 
 class EmergencyDR extends React.PureComponent {
   render() {
@@ -27,6 +29,16 @@ class EmergencyDR extends React.PureComponent {
         <Route
           path={`${this.props.match.url}/viewEDR/TriageAndAssessment`}
           component={TriageAndAssessment}
+        />
+
+        <Route
+          path={`${this.props.match.url}/viewEDR/DischargeRequest`}
+          component={DischargeRequest}
+        />
+
+        <Route
+          path={`${this.props.match.url}/viewEDR/addDischargeRequest`}
+          component={addDischargeMed}
         />
         
         <Route path='*' component={NotFound} />

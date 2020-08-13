@@ -1,67 +1,47 @@
 /*eslint-disable*/
-import React, { useState, useEffect } from "react";
-import Notification from "../../components/Snackbar/Notification.js";
-import CustomTable from "../../components/Table/Table";
-import axios from "axios";
+import React, { useState, useEffect } from 'react'
+import Notification from '../../components/Snackbar/Notification.js'
+import CustomTable from '../../components/Table/Table'
+import axios from 'axios'
 import {
   getEDRUrl,
-  getMaterialReceivingUrl
-} from "../../public/endpoins";
-import Loader from "react-loader-spinner";
-import Back from "../../assets/img/Back_Arrow.png";
-import Header from "../../components/Header/Header";
-import business_Unit from "../../assets/img/Material Receiving.png";
-import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
-import socketIOClient from "socket.io-client";
+  // getMaterialReceivingUrl
+} from '../../public/endpoins'
+import Loader from 'react-loader-spinner'
+import Back from '../../assets/img/Back_Arrow.png'
+import Header from '../../components/Header/Header'
+import business_Unit from '../../assets/img/EDR.png'
+import '../../assets/jss/material-dashboard-react/components/loaderStyle.css'
+import socketIOClient from 'socket.io-client'
 
 const tableHeading = [
-  "Patient ID",
-  "Request Number",
-  "Patient First Name",
-  "Patient Last Name",
-  "Date",
-  "Status",
-  "Action",
-];
+  'MRN',
+  'Request Number',
+  'Patient Name',
+  'Date',
+  'Status',
+  'Action',
+]
 const tableDataKeys = [
-  'identificationNumber',
-  'requestNumber',
-  'firstName',
-  'lastName',
-  "date",
-  "status"
-];
+  ['patientId', 'profileNo'],
+  'requestNo',
+  'Name',
+  'updatedAt',
+  'status',
+]
 
-const actions = { view: true };
+const actions = { view: true }
 
 export default function EDR(props) {
-  const [Edr, setEdr] = useState("")
+  const [Edr, setEdr] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
   const [openNotification, setOpenNotification] = useState(false)
 
   if (openNotification) {
     setTimeout(() => {
-      setOpenNotification(false);
-      setErrorMsg("");
-    }, 2000);
-  }
-
-  function getEDRsData() {
-    axios
-      .get(getMaterialReceivingUrl)
-      .then((res) => {
-        if (res.data.success) {
-          console.log(res.data.data);
-          setEdr(res.data.data.materialReceivings.reverse());
-        } else if (!res.data.success) {
-          setErrorMsg(res.data.error);
-          setOpenNotification(true);
-        }
-        return res;
-      })
-      .catch((e) => {
-        console.log("error: ", e);
-      });
+      setOpenNotification(false)
+      setErrorMsg('')
+    }, 2000)
   }
 
   useEffect(() => {
@@ -71,37 +51,58 @@ export default function EDR(props) {
     //   setMaterialReceivings(data.reverse());
     //   console.log("res after adding through socket", data);
     // });
-    getEDRsData();
+    getEDRsData()
     // return () => socket.disconnect();
-  }, []);
+  }, [])
+
+  function getEDRsData() {
+    axios
+      .get(getEDRUrl)
+      .then((res) => {
+        if (res.data.success) {
+          console.log(res.data.data, 'data')
+          res.data.data.map(
+            (d) => (d.Name = d.patientId.firstName + ' ' + d.patientId.lastName)
+          )
+          setEdr(res.data.data.reverse())
+        } else if (!res.data.success) {
+          setErrorMsg(res.data.error)
+          setOpenNotification(true)
+        }
+        return res
+      })
+      .catch((e) => {
+        console.log('error: ', e)
+      })
+  }
 
   function handleView(rec) {
-    let path = `edr/viewEDR`;
+    let path = `edr/viewEDR`
     props.history.push({
       pathname: path,
       state: {
-        selectedItem: rec
+        selectedItem: rec,
       },
-    });
+    })
   }
 
   return (
     <div
       style={{
-        display: "flex",
-        flexDirection: "column",
+        display: 'flex',
+        flexDirection: 'column',
         flex: 1,
-        position: "fixed",
-        width: "100%",
-        height: "100%",
-        backgroundColor: "#60d69f",
-        overflowY: "scroll",
+        position: 'fixed',
+        width: '100%',
+        height: '100%',
+        backgroundColor: '#60d69f',
+        overflowY: 'scroll',
       }}
     >
       <Header />
 
-      <div className="cPadding">
-        <div className="subheader">
+      <div className='cPadding'>
+        <div className='subheader'>
           <div>
             <img src={business_Unit} />
             <h4>Emergency Department Requests</h4>
@@ -115,8 +116,8 @@ export default function EDR(props) {
         <div
           style={{
             flex: 4,
-            display: "flex",
-            flexDirection: "column",
+            display: 'flex',
+            flexDirection: 'column',
           }}
         >
           {Edr ? (
@@ -128,7 +129,7 @@ export default function EDR(props) {
                   tableHeading={tableHeading}
                   action={actions}
                   handleView={handleView}
-                  borderBottomColor={"#60d69f"}
+                  borderBottomColor={'#60d69f'}
                   borderBottomWidth={20}
                 />
               </div>
@@ -139,19 +140,19 @@ export default function EDR(props) {
                   style={{
                     width: 45,
                     height: 35,
-                    cursor: "pointer",
+                    cursor: 'pointer',
                   }}
                 />
               </div>
               <Notification msg={errorMsg} open={openNotification} />
             </div>
           ) : (
-              <div className="LoaderStyle">
-                <Loader type="TailSpin" color="red" height={50} width={50} />
-              </div>
-            )}
+            <div className='LoaderStyle'>
+              <Loader type='TailSpin' color='red' height={50} width={50} />
+            </div>
+          )}
         </div>
       </div>
     </div>
-  );
+  )
 }

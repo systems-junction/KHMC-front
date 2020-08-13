@@ -1,0 +1,466 @@
+/* eslint-disable react/jsx-wrap-multilines */
+/* eslint-disable array-callback-return */
+/* eslint-disable react/jsx-indent */
+import React, { useEffect, useState, useReducer } from 'react'
+import { makeStyles } from '@material-ui/core/styles'
+import axios from 'axios'
+import {
+  getSingleEDRPatient,
+} from '../../../public/endpoins'
+import cookie from 'react-cookies'
+import Header from '../../../components/Header/Header'
+import PreApproval from '../../../assets/img/Pre-Approval.png'
+import Back from '../../../assets/img/Back_Arrow.png'
+import '../../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
+import CustomTable from '../../../components/Table/Table'
+import Notification from '../../../components/Snackbar/Notification.js'
+import Loader from 'react-loader-spinner'
+
+const tableHeadingForNeedApproval = [
+  'Request No',
+  'Request Type',
+  'Item',
+  'Total Cost',
+  'Status',
+  'Insurance',
+  'Action'
+]
+const tableDataKeysForNeedApproval = [
+  '_id',
+  'RequestType',
+  'item',
+  'totalCost',
+  'status',
+  'insurance'
+]
+const tableHeadingForCovered = [
+  'ICD Code',
+  'Date/Time',
+  'Item',
+  'Qty',
+  'Covered Amount',
+  'Status'
+]
+const tableDataKeysForCovered = [
+  'consultationNo',
+  'date',
+  'description',
+  ['requester', 'firstName'],
+]
+const tableHeadingForNotCovered = [
+  'ICD Code',
+  'Date/Time',
+  'Item',
+  'Qty',
+  'Covered Amount',
+  'Status'
+]
+const tableDataKeysForNotCovered = [
+  'requestNo',
+  'date',
+  ['requester', 'firstName'],
+  'status',
+]
+const tableHeadingForFollowUp = [
+  'Date/Time',
+  'MRN No',
+  'Description',
+  'Doctor',
+  'Status',
+  'Action'
+]
+const tableDataKeysForFollowUp = [
+  'serviceCode',
+  'serviceName',
+  'requesterName',
+  'status',
+]
+const actions = { view: true }
+
+const useStylesForTabs = makeStyles({
+  root: {
+    justifyContent: "center"
+  },
+  scroller: {
+    flexGrow: "0"
+  }
+})
+
+
+function AddEditPurchaseRequest(props) {
+  const classesForTabs = useStylesForTabs()
+
+  const initialState = {
+    labServiceId: '',
+    labServiceCode: '',
+    followUpArray: '',
+    labServiceName: '',
+    labServiceStatus: '',
+
+    radioServiceId: '',
+    radioServiceCode: '',
+    radioServiceName: '',
+    radiologyRequestArray: '',
+    radioServiceStatus: '',
+
+    coveredArray: '',
+    consultationNo: '',
+    date: new Date(),
+    description: '',
+    consultationNotes: '',
+    requester: cookie.load('current_user').name,
+
+    // needApprovalArray: '',
+    rdescription: '',
+    note: '',
+    doctor: cookie.load('current_user').name,
+
+    notCoveredArray: ''
+  }
+
+  function reducer(state, { field, value }) {
+    return {
+      ...state,
+      [field]: value,
+    }
+  }
+
+  const [state, dispatch] = useReducer(reducer, initialState)
+
+  const {
+    followUpArray,
+    coveredArray,
+    // needApprovalArray,
+    notCoveredArray
+  } = state
+
+  const [, setCurrentUser] = useState('')
+  const [errorMsg, setErrorMsg] = useState('')
+  const [openNotification, setOpenNotification] = useState(false)
+  const [value, setValue] = React.useState(0)
+  const [, setSelectedItem] = useState('')
+  const [, setSelectedPatient] = useState('')
+  const [, setrequestNo] = useState('')
+  const [, setId] = useState('')
+  const [needApprovalArray, setneedApprovalArray] = useState('')
+
+  useEffect(() => {
+    setCurrentUser(cookie.load('current_user'))
+
+    setId(props.history.location.state.selectedItem._id)
+    setrequestNo(props.history.location.state.selectedItem.requestNo)
+    setSelectedPatient(props.history.location.state.selectedItem.patientId)
+
+    const selectedRec = props.history.location.state.selectedItem
+
+    if (selectedRec) 
+    {
+      if (selectedRec.pharmacyRequest) 
+      { 
+
+        for (let i = 0; i < selectedRec.pharmacyRequest.length; i++) 
+        {
+          let amount = 0
+          let singlePR = selectedRec.pharmacyRequest[i]
+
+          for (let j = 0; j < singlePR.medicine.length; j++) 
+          {  
+            amount = amount + singlePR.medicine[j].itemId.purchasePrice
+          }
+
+          selectedRec.pharmacyRequest[i] ={
+            ...selectedRec.pharmacyRequest[i],
+            totalCost:amount,
+            RequestType:"PHR",
+            item:"Medicine",
+            insurance:"Uncovered"
+          }
+        }
+      }
+      if (selectedRec.labRequest) 
+      {
+        selectedRec.labRequest.map(
+          (d) => (d.RequestType = "LR", d.item = d.serviceName,d.totalCost = d.serviceId.price,d.insurance="Uncovered")
+        )
+
+      }
+      if (selectedRec.radiologyRequest) 
+      {
+        selectedRec.radiologyRequest.map(
+          (d) => (d.RequestType = "RR", d.item = d.serviceName,d.totalCost = d.serviceId.price,d.insurance="Uncovered")
+        )
+      }
+    }
+
+    setneedApprovalArray([].concat(selectedRec.labRequest, selectedRec.radiologyRequest, selectedRec.pharmacyRequest))
+    console.log([].concat(selectedRec.labRequest, selectedRec.radiologyRequest, selectedRec.pharmacyRequest))
+
+  }, [])
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue)
+  }
+
+  function viewNeedApproval(rec) {
+    let path = `viewPreApproval/needApproval`
+    props.history.push({
+      pathname: path,
+      state: {
+        selectedItem: rec,
+      },
+    })
+  }
+
+  function viewFollowUp(rec) {
+    let path = `viewPreApproval/followUp`
+    props.history.push({
+      pathname: path,
+      state: {
+        selectedItem: rec,
+      },
+    })
+  }
+
+  if (openNotification) {
+    setTimeout(() => {
+      setOpenNotification(false)
+      setErrorMsg('')
+    }, 2000)
+  }
+
+  return (
+    <div
+      style={{
+        backgroundColor: '#60d69f',
+        position: 'fixed',
+        display: 'flex',
+        width: '100%',
+        height: '100%',
+        flexDirection: 'column',
+        flex: 1,
+        overflowY: 'scroll',
+      }}
+    >
+      <Header />
+
+      <div className='cPadding'>
+        <div className='subheader'>
+          <div>
+            <img src={PreApproval} />
+            <h4>Pre-Approval</h4>
+          </div>
+
+        </div>
+
+        <div style={{
+          height: '20px'
+        }}
+        />
+
+        {needApprovalArray !== 0 && coveredArray !== 0 && notCoveredArray !== 0 && followUpArray !== 0 ?
+          (
+            <div>
+              <div className={classesForTabs.root}>
+                <Tabs
+                  classes={{ root: classesForTabs.root, scroller: classesForTabs.scroller }}
+                  value={value}
+                  onChange={handleChange}
+                  indicatorColor='null'
+                  centered={false}
+                  variant='scrollable'
+                  fullWidth={true}
+                >
+                  <Tab
+                    style={{
+                      color: 'white',
+                      borderRadius: 15,
+                      outline: 'none',
+                      backgroundColor: value === 0 ? '#2c6ddd' : undefined,
+                    }}
+                    label='Need Approval'
+                  />
+                  {/* <Tab
+                    style={{
+                      color: 'white',
+                      borderRadius: 15,
+                      outline: 'none',
+                      backgroundColor: value === 1 ? '#2c6ddd' : undefined,
+                    }}
+                    label='Covered'
+                  />
+                  <Tab
+                    style={{
+                      color: 'white',
+                      borderRadius: 15,
+                      outline: 'none',
+                      backgroundColor: value === 2 ? '#2c6ddd' : undefined,
+                    }}
+                    label='Not Covered'
+                  /> */}
+                  <Tab
+                    style={{
+                      color: 'white',
+                      borderRadius: 15,
+                      outline: 'none',
+                      backgroundColor: value === 1 ? '#2c6ddd' : undefined,
+                    }}
+                    label='Follow Up'
+                  />
+                </Tabs>
+              </div>
+
+              {value === 0 ? (
+                <div
+                  style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+                  className='container-fluid'
+                >
+                  <div className='row' style={{ marginTop: '20px' }}>
+                    {needApprovalArray !== 0 ? (
+                      <CustomTable
+                        tableData={needApprovalArray}
+                        tableDataKeys={tableDataKeysForNeedApproval}
+                        tableHeading={tableHeadingForNeedApproval}
+                        handleView={viewNeedApproval}
+                        action={actions}
+                        borderBottomColor={'#60d69f'}
+                        borderBottomWidth={20}
+                      />
+                    ) : (
+                        <div className='LoaderStyle'>
+                          <Loader type='TailSpin' color='red' height={50} width={50} />
+                        </div>
+                      )}
+                  </div>
+
+                  <div className='row' style={{ marginTop: '20px', marginBottom: '25px' }}>
+                    <div className='col-md-6 col-sm-6 col-6'>
+                      <img
+                        onClick={() => props.history.goBack()}
+                        src={Back}
+                        style={{ width: 45, height: 35, cursor: 'pointer' }}
+                      />
+                    </div>
+                  </div>
+
+                </div>
+              ) 
+              // : value === 1 ?
+                  // (
+                  //   <div
+                  //     style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+                  //     className='container-fluid'
+                  //   >
+                  //     <div className='row' style={{ marginTop: '20px' }}>
+                  //       {coveredArray !== 0 ? (
+                  //         <CustomTable
+                  //           tableData={coveredArray}
+                  //           tableDataKeys={tableDataKeysForCovered}
+                  //           tableHeading={tableHeadingForCovered}
+                  //           borderBottomColor={'#60d69f'}
+                  //           borderBottomWidth={20}
+                  //         />
+                  //       ) : (
+                  //           <div className='LoaderStyle'>
+                  //             <Loader type='TailSpin' color='red' height={50} width={50} />
+                  //           </div>
+                  //         )}
+                  //     </div>
+
+                  //     <div className='row' style={{ marginTop: '20px', marginBottom: '25px' }}>
+                  //       <div className='col-md-6 col-sm-6 col-6'>
+                  //         <img
+                  //           onClick={() => props.history.goBack()}
+                  //           src={Back}
+                  //           style={{ width: 45, height: 35, cursor: 'pointer' }}
+                  //         />
+                  //       </div>
+                  //     </div>
+                  //   </div>
+                  // ) : value === 2 ?
+                  //   (
+                  //     <div
+                  //       style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+                  //       className='container-fluid'
+                  //     >
+                  //       <div className='row' style={{ marginTop: '20px' }}>
+                  //         {notCoveredArray !== 0 ? (
+                  //           <CustomTable
+                  //             tableData={notCoveredArray}
+                  //             tableDataKeys={tableDataKeysForNotCovered}
+                  //             tableHeading={tableHeadingForNotCovered}
+                  //             borderBottomColor={'#60d69f'}
+                  //             borderBottomWidth={20}
+                  //           />
+                  //         ) : (
+                  //             <div className='LoaderStyle'>
+                  //               <Loader type='TailSpin' color='red' height={50} width={50} />
+                  //             </div>
+                  //           )}
+                  //       </div>
+
+                  //       <div className='row' style={{ marginTop: '20px', marginBottom: '25px' }}>
+                  //         <div className='col-md-6 col-sm-6 col-6'>
+                  //           <img
+                  //             onClick={() => props.history.goBack()}
+                  //             src={Back}
+                  //             style={{ width: 45, height: 35, cursor: 'pointer' }}
+                  //           />
+                  //         </div>
+                  //       </div>
+
+                  //     </div>
+                    // ) 
+                    : value === 1 ?
+                      (
+                        <div
+                          style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+                          className='container-fluid'
+                        >
+                          <div className='row' style={{ marginTop: '20px' }}>
+                            {followUpArray !== 0 ? (
+                              <CustomTable
+                                tableData={followUpArray}
+                                tableDataKeys={tableDataKeysForFollowUp}
+                                tableHeading={tableHeadingForFollowUp}
+                                handleView={viewFollowUp}
+                                action={actions}
+                                borderBottomColor={'#60d69f'}
+                                borderBottomWidth={20}
+                              />
+                            ) : (
+                                <div className='LoaderStyle'>
+                                  <Loader type='TailSpin' color='red' height={50} width={50} />
+                                </div>
+                              )}
+                          </div>
+
+                          <div className='row' style={{ marginTop: '20px', marginBottom: '25px' }}>
+                            <div className='col-md-6 col-sm-6 col-6'>
+                              <img
+                                onClick={() => props.history.goBack()}
+                                src={Back}
+                                style={{ width: 45, height: 35, cursor: 'pointer' }}
+                              />
+                            </div>
+                          </div>
+
+                        </div>
+                      ) : (
+                        undefined
+                      )}
+            </div>
+          ) : (
+            <div className='LoaderStyle'>
+              <Loader type='TailSpin' color='red' height={50} width={50} />
+            </div>
+          )}
+
+        <Notification msg={errorMsg} open={openNotification} />
+
+      </div>
+    </div>
+  )
+}
+export default AddEditPurchaseRequest

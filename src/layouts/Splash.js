@@ -19,7 +19,19 @@ class Login extends React.Component {
       verifiedUser: false,
 
       msg: "",
+
+      hideImage: false,
     };
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({ hideImage: true });
+    }, 2000);
+
+    setTimeout(() => {
+      this.props.hideSplash();
+    }, 3000);
   }
 
   render() {
@@ -62,11 +74,15 @@ class Login extends React.Component {
           }}
         >
           <div style={{ display: "flex", flex: 1, alignItems: "flex-end" }}>
-            <img
-              src={Influence_white}
-              onClick={() => this.props.hideSplash()}
-              style={{ width: "28%", height: "auto", cursor: "pointer" }}
-            />
+            {!this.state.hideImage ? (
+              <img
+                src={Influence_white}
+                onClick={() => this.props.hideSplash()}
+                style={{ width: "28%", height: "auto", cursor: "pointer" }}
+              />
+            ) : (
+              undefined
+            )}
           </div>
         </div>
       </div>
