@@ -491,7 +491,6 @@ function AddEditPatientListing(props) {
         receiverName,
         bankName,
         depositorName,
-        // insuranceId,
         insuranceNo,
         insuranceVendor,
         coverageDetails,
@@ -563,6 +562,7 @@ function AddEditPatientListing(props) {
         bankName,
         depositorName,
         insuranceNo,
+        insuranceVendor,
         coverageDetails,
         coverageTerms,
         payment,
@@ -591,23 +591,24 @@ function AddEditPatientListing(props) {
     }
     setIsFormSubmitted(true)
   }
-  const onSlipUpload = (event) => {
+
+  const onSlipUpload = (event) => 
+  {
     setSlipUpload(event.target.files[0])
 
     var file = event.target.files[0]
     var reader = new FileReader()
     var url = reader.readAsDataURL(file)
 
-    reader.onloadend = function(e) {
+    reader.onloadend = function (e) {
       setImagePreview([reader.result])
       dispatch({ field: 'depositSlip', value: file })
     }
 
-    console.log(file.name, 'fle')
+    console.log(file.name, 'file')
   }
 
   const handleChange = (event, newValue) => {
-    console.log('value', newValue)
     setValue(newValue)
   }
 
@@ -619,8 +620,8 @@ function AddEditPatientListing(props) {
     value === 1
       ? setValue(0)
       : value === 2
-      ? setValue(1)
-      : props.history.goBack()
+        ? setValue(1)
+        : props.history.goBack()
     // setValue(tabIndex);
   }
 
@@ -751,7 +752,16 @@ function AddEditPatientListing(props) {
 
     dispatch({ field: 'coverageTerms', value: i.coverageTerms })
     dispatch({ field: 'payment', value: i.payment })
-    dispatch({ field: 'depositSlip', value: i.depositSlip })
+
+    let deposit = ''
+    if (i.depositSlip) {
+      deposit = {
+        name: i.depositSlip === '' ? '' : i.depositSlip.split('\\')[1],
+      }
+    }
+
+    // console.log(i.depositSlip.split('\\')[0], 'Split')
+    dispatch({ field: 'depositSlip', value: deposit })
     dispatch({ field: 'DateTime', value: i.DateTime })
     dispatch({ field: 'paymentMethod', value: i.paymentMethod })
     dispatch({ field: 'insuranceVendor', value: i.insuranceVendor })
@@ -762,6 +772,20 @@ function AddEditPatientListing(props) {
 
   const onChangeValue = (e) => {
     dispatch({ field: e.target.name, value: e.target.value })
+    if(e.target.value === "Cash")
+    {
+    dispatch({field:'bankName', value:""})
+    }
+    else if(e.target.value === "Insurance")
+    {
+      dispatch({field:"depositorName",value:""})
+      dispatch({field:"amountReceived",value:""})
+      dispatch({field:"bankName",value:""})
+    }
+    else if(e.target.value === "WireTransfer")
+    {
+      dispatch({field:"amountReceived",value:""})
+    }
   }
 
   if (openNotification) {
@@ -847,106 +871,118 @@ function AddEditPatientListing(props) {
             className={`${'container-fluid'} ${classes.root}`}
           >
             {comingFor === 'add' ? (
-              <div className='row' style={{ marginTop: '20px' }}>
-                <div
-                  className='col-md-11 col-sm-12'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    type='text'
-                    label='Search Patient by Name / MRN / National ID / Mobile Number'
-                    name={'searchQuery'}
-                    value={searchQuery}
-                    onChange={handleSearch}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position='end'>
-                          <AccountCircle />
-                        </InputAdornment>
-                      ),
-                      className: classes.input,
-                      classes: { input: classes.input },
+              <>
+                <div className='row' style={{ marginTop: '20px' }}>
+                  <div
+                    className='col-md-11 col-sm-10 col-10'
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
                     }}
-                    InputLabelProps={{
-                      className: classes.label,
-                      classes: { label: classes.label },
-                    }}
-                  />
+                  >
+                    <TextField
+                      type='text'
+                      label='Search Patient by Name / MRN / National ID / Mobile Number'
+                      name={'searchQuery'}
+                      value={searchQuery}
+                      onChange={handleSearch}
+                      className='textInputStyle'
+                      variant='filled'
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position='end'>
+                            <AccountCircle />
+                          </InputAdornment>
+                        ),
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                      InputLabelProps={{
+                        className: classes.label,
+                        classes: { label: classes.label },
+                      }}
+                    />
+                  </div>
 
-                  {searchQuery ? (
-                    <div style={{ zIndex: 3 }}>
-                      <Paper>
-                        {itemFoundSuccessfull ? (
-                          itemFound && (
-                            <Table size='small'>
-                              <TableHead>
-                                <TableRow>
-                                  <TableCell>MRN Number</TableCell>
-                                  <TableCell>Patient Name</TableCell>
-                                  <TableCell>Gender</TableCell>
-                                  <TableCell>Age</TableCell>
-                                  <TableCell>Payment Method</TableCell>
-                                </TableRow>
-                              </TableHead>
-
-                              <TableBody>
-                                {itemFound.map((i) => {
-                                  return (
-                                    <TableRow
-                                      key={i._id}
-                                      onClick={() => handleAddItem(i)}
-                                      style={{ cursor: 'pointer' }}
-                                    >
-                                      <TableCell>{i.profileNo}</TableCell>
-                                      <TableCell>
-                                        {i.firstName + ` ` + i.lastName}
-                                      </TableCell>
-                                      <TableCell>{i.gender}</TableCell>
-                                      <TableCell>{i.age}</TableCell>
-                                      <TableCell>{i.paymentMethod}</TableCell>
-                                    </TableRow>
-                                  )
-                                })}
-                              </TableBody>
-                            </Table>
-                          )
-                        ) : (
-                          <h4
-                            style={{ textAlign: 'center' }}
-                            onClick={() => setSearchQuery('')}
-                          >
-                            Patient Not Found
-                          </h4>
-                        )}
-                      </Paper>
+                  <div className='col-md-1 col-sm-2 col-2'>
+                    <div style={{
+                       ...styles.inputContainerForTextField,
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      backgroundColor: 'white',
+                      borderRadius: 6,
+                      height:55
+                    }}>
+                      <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
                     </div>
-                  ) : (
-                    undefined
-                  )}
+                  </div>
                 </div>
+                
+                <div className='row'>
+                  <div
+                    className='col-md-11 col-sm-11 col-10'
+                    style={{
+                      //  ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    {searchQuery ? (
+                      <div style={{ zIndex: 3 }}>
+                        <Paper>
+                          {itemFoundSuccessfull ? (
+                            itemFound && (
+                              <Table size='small'>
+                                <TableHead>
+                                  <TableRow>
+                                    <TableCell>MRN Number</TableCell>
+                                    <TableCell>Patient Name</TableCell>
+                                    <TableCell>Gender</TableCell>
+                                    <TableCell>Age</TableCell>
+                                    <TableCell>Payment Method</TableCell>
+                                  </TableRow>
+                                </TableHead>
 
-                <div
-                  className='col-md-1'
-                  style={{
-                    ...styles.textFieldPadding,
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    backgroundColor: 'white',
-                    borderRadius: 4,
-                  }}
-                >
-                  <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
+                                <TableBody>
+                                  {itemFound.map((i) => {
+                                    return (
+                                      <TableRow
+                                        key={i._id}
+                                        onClick={() => handleAddItem(i)}
+                                        style={{ cursor: 'pointer' }}
+                                      >
+                                        <TableCell>{i.profileNo}</TableCell>
+                                        <TableCell>
+                                          {i.firstName + ` ` + i.lastName}
+                                        </TableCell>
+                                        <TableCell>{i.gender}</TableCell>
+                                        <TableCell>{i.age}</TableCell>
+                                        <TableCell>{i.paymentMethod}</TableCell>
+                                      </TableRow>
+                                    )
+                                  })}
+                                </TableBody>
+                              </Table>
+                            )
+                          ) : (
+                              <h4
+                                style={{ textAlign: 'center' }}
+                                onClick={() => setSearchQuery('')}
+                              >
+                                Patient Not Found
+                              </h4>
+                            )}
+                        </Paper>
+                      </div>
+                    ) : (
+                        undefined
+                      )}
+                  </div>
                 </div>
-              </div>
+              </>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             <div className='row'>
               <div
@@ -1816,25 +1852,30 @@ function AddEditPatientListing(props) {
                       >
                         <label style={styles.upload}>
                           <TextField
+                            required
                             type='file'
                             style={styles.input}
                             onChange={onSlipUpload}
                             // value={depositSlip.name}
+                            // error={slipUpload.name === '' && isFormSubmitted}
+                            // variant='filled'
+                            // error={true}
                             name='depositSlip'
-                            required
                           />
                           <FaUpload /> Upload Deposit Slip
-                          {/* <ErrorMessage
-                              name={depositSlip}
-                              isFormSubmitted={isFormSubmitted}
-                            /> */}
+                          <ErrorMessage
+                            name={slipUpload && slipUpload.name}
+                            isFormSubmitted={isFormSubmitted}
+                          />
                         </label>
 
                         <span
                           className='container-fluid'
                           style={{ color: 'green' }}
                         >
-                          {depositSlip && depositSlip.name}
+                          {depositSlip && depositSlip === ''
+                            ? ''
+                            : depositSlip.name}
                         </span>
                       </div>
                     </>
@@ -1848,46 +1889,47 @@ function AddEditPatientListing(props) {
                         }}
                       >
                         <label style={styles.upload}>
-                          <input
+                          <TextField
+                            required
                             type='file'
                             style={styles.input}
                             onChange={onSlipUpload}
-                            // value={depositSlip.name}
                             name='depositSlip'
-                            required
                           />
                           <FaUpload /> Upload Deposit Slip
-                          {/* <ErrorMessage
-                              name={depositSlip}
-                              isFormSubmitted={isFormSubmitted}
-                            /> */}
+                          <ErrorMessage
+                            name={slipUpload && slipUpload.name}
+                            isFormSubmitted={isFormSubmitted}
+                          />
                         </label>
 
-                        <span
-                          className='container-fluid'
-                          style={{ color: 'green' }}
+                          <span
+                            className='container-fluid'
+                            style={{ color: 'green' }}
+                          >
+                            {depositSlip && depositSlip.name}
+                          </span>
+                        </div>
+                        <div
+                          className='col-md-6 col-sm-6 col-6'
+                          style={{
+                            ...styles.inputContainerForTextField,
+                            ...styles.textFieldPadding,
+                          }}
                         >
-                          {depositSlip && depositSlip.name}
-                        </span>
-                      </div>
-                      <div
-                        className='col-md-6 col-sm-6 col-6'
-                        style={{
-                          ...styles.inputContainerForTextField,
-                          ...styles.textFieldPadding,
-                        }}
-                      >
-                        {/* <img src={imagePreview} className='depositSlipImg' />
-                        <br /> */}
-                        {/* <span>{depositSlip && depositSlip.name}</span> */}
-                      </div>
-                    </>
-                  )}
+                          {depositSlip && depositSlip.name
+                            ? depositSlip.name
+                            : depositSlip.split('\\')[0] === 'uploads'
+                            ? depositSlip.split('\\')[1]
+                            : depositSlip.name}
+                      </div> 
+                      </>
+                    )}
                 </div>
               </div>
             ) : (
-              <div></div>
-            )}
+                    <div></div>
+                  )}
 
             <div style={{ display: 'flex', flex: 1, justifyContent: 'center' }}>
               <div
@@ -1936,8 +1978,8 @@ function AddEditPatientListing(props) {
                     />
                   </>
                 ) : (
-                  <></>
-                )}
+                    <></>
+                  )}
                 {currentUser.staffTypeId.type === 'EDR Receptionist' ? (
                   <Button
                     style={styles.generate}
@@ -1952,8 +1994,8 @@ function AddEditPatientListing(props) {
                     {comingFor === 'add' ? 'Generate EDR' : 'Update'}
                   </Button>
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
 
                 {currentUser.staffTypeId.type === 'IPR Receptionist' ? (
                   <Button
@@ -1968,265 +2010,265 @@ function AddEditPatientListing(props) {
                     {comingFor === 'add' ? 'Generate IPR' : 'Update'}
                   </Button>
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
               </div>
             </div>
           </div>
         ) : (
-          <div>
-            <div
-              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-              className={`${'container-fluid'} ${classes.root}`}
-            >
-              <div className='row' style={{ marginTop: '20px' }}>
+              <div>
                 <div
-                  className='col-md-10 col-sm-10 col-6'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
+                  style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+                  className={`${'container-fluid'} ${classes.root}`}
                 >
-                  <TextField
-                    label='Insurance Number'
-                    name={'insuranceNo'}
-                    value={insuranceNo}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
-                </div>
-                <div
-                  className='col-md-2 col-sm-2 col-6'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <Button
-                    style={{
-                      ...styles.stylesForButton,
-                      height: '50px',
-                      backgroundColor: '#ba55d3',
-                    }}
-                    variant='contained'
-                    color='primary'
-                  >
-                    Verify
-                  </Button>
-                </div>
-              </div>
-
-              <div className='row'>
-                <div
-                  className='col-md-12'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <div>
-                    <TextField
-                      required
-                      label='Insurance Vendor'
-                      name={'insuranceVendor'}
-                      value={insuranceVendor}
-                      onChange={onChangeValue}
-                      error={insuranceVendor === '' && isFormSubmitted}
-                      className='textInputStyle'
-                      variant='filled'
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
+                  <div className='row' style={{ marginTop: '20px' }}>
+                    <div
+                      className='col-md-10 col-sm-10 col-8'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
                       }}
-                    />
-                    {/* <ErrorMessage
+                    >
+                      <TextField
+                        label='Insurance Number'
+                        name={'insuranceNo'}
+                        value={insuranceNo}
+                        onChange={onChangeValue}
+                        className='textInputStyle'
+                        variant='filled'
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                      />
+                    </div>
+                    <div
+                      className='col-md-2 col-sm-2 col-4'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
+                    >
+                      <Button
+                        style={{
+                          ...styles.stylesForButton,
+                          height: '50px',
+                          backgroundColor: '#ba55d3',
+                        }}
+                        variant='contained'
+                        color='primary'
+                      >
+                        Verify
+                  </Button>
+                    </div>
+                  </div>
+
+                  <div className='row'>
+                    <div
+                      className='col-md-12'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
+                    >
+                      <div>
+                        <TextField
+                          required
+                          label='Insurance Vendor'
+                          name={'insuranceVendor'}
+                          value={insuranceVendor}
+                          onChange={onChangeValue}
+                          error={insuranceVendor === '' && isFormSubmitted}
+                          className='textInputStyle'
+                          variant='filled'
+                          InputProps={{
+                            className: classes.input,
+                            classes: { input: classes.input },
+                          }}
+                        />
+                        {/* <ErrorMessage
                           name={insuranceVendor}
                           isFormSubmitted={isFormSubmitted}
                         /> */}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
 
-              <div className='row'>
-                <div
-                  className='col-md-12'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    multiline
-                    type='text'
-                    error={coverageDetails === '' && isFormSubmitted}
-                    label='Coverage Details'
-                    name={'coverageDetails'}
-                    value={coverageDetails}
-                    onChange={onChangeValue}
-                    rows={4}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
-                  {/* <ErrorMessage
+                  <div className='row'>
+                    <div
+                      className='col-md-12'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
+                    >
+                      <TextField
+                        required
+                        multiline
+                        type='text'
+                        error={coverageDetails === '' && isFormSubmitted}
+                        label='Coverage Details'
+                        name={'coverageDetails'}
+                        value={coverageDetails}
+                        onChange={onChangeValue}
+                        rows={4}
+                        className='textInputStyle'
+                        variant='filled'
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                      />
+                      {/* <ErrorMessage
                         name={coverageDetails}
                         isFormSubmitted={isFormSubmitted}
                       /> */}
-                </div>
-              </div>
+                    </div>
+                  </div>
 
-              <div className='row'>
-                <div
-                  className='col-md-6'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    select
-                    fullWidth
-                    id='coverageTerms'
-                    name='coverageTerms'
-                    value={coverageTerms}
-                    onChange={onChangeValue}
-                    error={coverageTerms === '' && isFormSubmitted}
-                    label='Coverage Terms'
-                    variant='filled'
-                    className='dropDownStyle'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  >
-                    <MenuItem value={coverageTerms}>{coverageTerms}</MenuItem>
+                  <div className='row'>
+                    <div
+                      className='col-md-6'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
+                    >
+                      <TextField
+                        required
+                        select
+                        fullWidth
+                        id='coverageTerms'
+                        name='coverageTerms'
+                        value={coverageTerms}
+                        onChange={onChangeValue}
+                        error={coverageTerms === '' && isFormSubmitted}
+                        label='Coverage Terms'
+                        variant='filled'
+                        className='dropDownStyle'
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                      >
+                        <MenuItem value={coverageTerms}>{coverageTerms}</MenuItem>
 
-                    {coverageTermsArr.map((val) => {
-                      return (
-                        <MenuItem key={val.key} value={val.key}>
-                          {val.value}
-                        </MenuItem>
-                      )
-                    })}
-                  </TextField>
-                  {/* <ErrorMessage
+                        {coverageTermsArr.map((val) => {
+                          return (
+                            <MenuItem key={val.key} value={val.key}>
+                              {val.value}
+                            </MenuItem>
+                          )
+                        })}
+                      </TextField>
+                      {/* <ErrorMessage
                         name={coverageTerms}
                         isFormSubmitted={isFormSubmitted}
                       /> */}
-                </div>
-                <div
-                  className='col-md-6'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <div>
-                    <TextField
-                      required
-                      label='Co-Payment %'
-                      name={'payment'}
-                      value={payment}
-                      onChange={onChangeValue}
-                      error={payment === '' && isFormSubmitted}
-                      type='number'
-                      className='textInputStyle'
-                      variant='filled'
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
+                    </div>
+                    <div
+                      className='col-md-6'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
                       }}
-                    />
-                    {/* <ErrorMessage
+                    >
+                      <div>
+                        <TextField
+                          required
+                          label='Co-Payment %'
+                          name={'payment'}
+                          value={payment}
+                          onChange={onChangeValue}
+                          error={payment === '' && isFormSubmitted}
+                          type='number'
+                          className='textInputStyle'
+                          variant='filled'
+                          InputProps={{
+                            className: classes.input,
+                            classes: { input: classes.input },
+                          }}
+                        />
+                        {/* <ErrorMessage
                           name={payment}
                           isFormSubmitted={isFormSubmitted}
                         /> */}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  style={{ display: 'flex', flex: 1, justifyContent: 'center' }}
+                  className='container-fluid'
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      flex: 1,
+                      justifyContent: 'flex-end',
+                      marginTop: '2%',
+                      marginBottom: '2%',
+                    }}
+                  >
+                    {comingFor === 'add' ? (
+                      <>
+                        <Button
+                          style={styles.save}
+                          disabled={
+                            !(validatePatientForm() && validatePaymentForm())
+                          }
+                          onClick={searchActivated ? handleEdit : handleAdd}
+                          variant='contained'
+                          color='default'
+                        >
+                          Save
+                    </Button>
+                        <div
+                          style={{
+                            width: '10px',
+                            height: 'auto',
+                            display: 'inline-block',
+                          }}
+                        />
+                      </>
+                    ) : (
+                        <></>
+                      )}
+
+                    {currentUser.staffTypeId.type === 'EDR Receptionist' ? (
+                      <Button
+                        style={styles.generate}
+                        disabled={comingFor === 'add' ? !isFormSubmitted : false}
+                        onClick={
+                          comingFor === 'add' ? handleGenerateEDR : handleEdit
+                        }
+                        variant='contained'
+                        color='danger'
+                      >
+                        {comingFor === 'add' ? 'Generate EDR' : 'Update'}
+                      </Button>
+                    ) : (
+                        undefined
+                      )}
+                    {currentUser.staffTypeId.type === 'IPR Receptionist' ? (
+                      <Button
+                        style={styles.generate}
+                        disabled={comingFor === 'add' ? !isFormSubmitted : false}
+                        onClick={
+                          comingFor === 'add' ? handleGenerateIPR : handleEdit
+                        }
+                        variant='contained'
+                        color='danger'
+                      >
+                        {comingFor === 'add' ? 'Generate IPR' : 'Update'}
+                      </Button>
+                    ) : (
+                        undefined
+                      )}
                   </div>
                 </div>
               </div>
-            </div>
-            <div
-              style={{ display: 'flex', flex: 1, justifyContent: 'center' }}
-              className='container-fluid'
-            >
-              <div
-                style={{
-                  display: 'flex',
-                  flex: 1,
-                  justifyContent: 'flex-end',
-                  marginTop: '2%',
-                  marginBottom: '2%',
-                }}
-              >
-                {comingFor === 'add' ? (
-                  <>
-                    <Button
-                      style={styles.save}
-                      disabled={
-                        !(validatePatientForm() && validatePaymentForm())
-                      }
-                      onClick={searchActivated ? handleEdit : handleAdd}
-                      variant='contained'
-                      color='default'
-                    >
-                      Save
-                    </Button>
-                    <div
-                      style={{
-                        width: '10px',
-                        height: 'auto',
-                        display: 'inline-block',
-                      }}
-                    />
-                  </>
-                ) : (
-                  <></>
-                )}
-
-                {currentUser.staffTypeId.type === 'EDR Receptionist' ? (
-                  <Button
-                    style={styles.generate}
-                    disabled={comingFor === 'add' ? !isFormSubmitted : false}
-                    onClick={
-                      comingFor === 'add' ? handleGenerateEDR : handleEdit
-                    }
-                    variant='contained'
-                    color='danger'
-                  >
-                    {comingFor === 'add' ? 'Generate EDR' : 'Update'}
-                  </Button>
-                ) : (
-                  undefined
-                )}
-                {currentUser.staffTypeId.type === 'IPR Receptionist' ? (
-                  <Button
-                    style={styles.generate}
-                    disabled={comingFor === 'add' ? !isFormSubmitted : false}
-                    onClick={
-                      comingFor === 'add' ? handleGenerateIPR : handleEdit
-                    }
-                    variant='contained'
-                    color='danger'
-                  >
-                    {comingFor === 'add' ? 'Generate IPR' : 'Update'}
-                  </Button>
-                ) : (
-                  undefined
-                )}
-              </div>
-            </div>
-          </div>
-        )}
+            )}
 
         <Notification msg={errorMsg} open={openNotification} />
 
