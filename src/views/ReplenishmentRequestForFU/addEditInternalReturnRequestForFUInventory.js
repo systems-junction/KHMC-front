@@ -474,8 +474,8 @@ function AddEditPurchaseRequest(props) {
 
       if (
         currentUser.staffTypeId.type ===
-        "FU Internal Request Return Approval Member" ||  currentUser.staffTypeId.type ===
-        "admin" 
+          "FU Internal Request Return Approval Member" ||
+        currentUser.staffTypeId.type === "admin"
       ) {
         params = {
           ...obj,

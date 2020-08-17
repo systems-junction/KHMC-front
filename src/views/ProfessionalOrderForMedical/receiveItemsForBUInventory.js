@@ -1431,17 +1431,24 @@ function ReceiveItems(props) {
             </div>
           </div>
 
-          <div style={{ display: "flex", flex: 1, justifyContent: "center", alignItems:'center' }}>
+          <div
+            style={{
+              display: "flex",
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <div
               style={{
                 display: "flex",
                 flex: 1,
                 height: 50,
-               
-                flexDirection:'row'
+
+                flexDirection: "row",
               }}
             >
-              <div style={{  marginTop: 30 }}>
+              <div style={{ marginTop: 30 }}>
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back_Arrow}
@@ -1493,8 +1500,8 @@ function ReceiveItems(props) {
                   }}
                 >
                   <Button
-                       variant="contained"
-                       style={{ height: 54, marginRight: 6 }}
+                    variant="contained"
+                    style={{ height: 54, marginRight: 6 }}
                   >
                     Upload Invoice
                   </Button>
