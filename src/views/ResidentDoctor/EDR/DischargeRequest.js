@@ -1634,99 +1634,139 @@
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable array-callback-return */
 /* eslint-disable react/jsx-indent */
-import React, { useEffect, useState, useReducer } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
-import Button from "@material-ui/core/Button";
-import cookie from "react-cookies";
-import Header from "../../../components/Header/Header";
-import business_Unit from "../../../assets/img/Purchase Order.png";
-import Back from "../../../assets/img/Back_Arrow.png";
-import "../../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import CustomTable from "../../../components/Table/Table";
-import plus_icon from "../../../assets/img/Plus.png";
-import ViewSingleRequest from "./viewRequest";
-import Notification from "../../../components/Snackbar/Notification.js";
-import TextArea from "../../../components/common/TextArea";
-import axios from "axios";
-import { updateEDR, getSingleEDRPatient } from "../../../public/endpoins";
+import React, { useEffect, useState, useReducer } from 'react'
+import { makeStyles } from '@material-ui/core/styles'
+import InputLabel from '@material-ui/core/InputLabel'
+import Button from '@material-ui/core/Button'
+import cookie from 'react-cookies'
+import Header from '../../../components/Header/Header'
+import business_Unit from '../../../assets/img/Purchase Order.png'
+import Back from '../../../assets/img/Back_Arrow.png'
+import '../../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
+import CustomTable from '../../../components/Table/Table'
+import plus_icon from '../../../assets/img/Plus.png'
+import ViewSingleRequest from './viewRequest'
+import Notification from '../../../components/Snackbar/Notification.js'
+import TextArea from '../../../components/common/TextArea'
+import axios from 'axios'
+import { updateEDR, getSingleEDRPatient } from '../../../public/endpoins'
+import TextField from '@material-ui/core/TextField'
 
 const tableHeadingForDischargeMed = [
-  "Request ID",
-  "Date/Time",
-  "Status",
-  "Action",
-];
+  'Request ID',
+  'Date/Time',
+  'Status',
+  'Action',
+]
 const tableDataKeysForDischargeMed = [
-  ["requester", "identificationNumber"],
-  "date",
-  "status",
-];
-const actions = { view: true };
+  ['requester', 'identificationNumber'],
+  'date',
+  'status',
+]
+const actions = { view: true }
 const styles = {
   patientDetails: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 15,
-    padding: "20px",
+    padding: '20px',
   },
   inputContainerForTextField: {
     marginTop: 25,
   },
   inputContainerForDropDown: {
     marginTop: 25,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 10,
     paddingLeft: 10,
     paddingRight: 10,
     paddingTop: 2,
   },
   stylesForButton: {
-    color: "white",
-    cursor: "pointer",
+    color: 'white',
+    cursor: 'pointer',
     borderRadius: 15,
-    backgroundColor: "#2c6ddd",
-    height: "50px",
-    outline: "none",
+    backgroundColor: '#2c6ddd',
+    height: '50px',
+    outline: 'none',
   },
   buttonContainer: {
     marginTop: 25,
   },
   stylesForLabel: {
-    fontWeight: "700",
-    color: "gray",
+    fontWeight: '700',
+    color: 'gray',
   },
-};
+}
 
 const useStylesForTabs = makeStyles({
   root: {
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   scroller: {
-    flexGrow: "0",
+    flexGrow: '0',
   },
-});
+})
+
+const useStyles = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(0),
+  },
+  input: {
+    backgroundColor: 'white',
+    borderRadius: 6,
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:disabled': {
+      color: 'gray',
+    },
+  },
+  multilineColor: {
+    backgroundColor: 'white',
+    borderRadius: 6,
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+  },
+  root: {
+    '& .MuiTextField-root': {
+      backgroundColor: 'white',
+    },
+    '& .Mui-focused': {
+      backgroundColor: 'white',
+      color: 'black',
+    },
+  },
+}))
 
 function DischargeRequest(props) {
-  const classesForTabs = useStylesForTabs();
+  const classes = useStyles()
+  const classesForTabs = useStylesForTabs()
 
   const initialState = {
-    dischargeMedArray: "",
-    dischargeRequest: "",
+    dischargeMedArray: '',
+    dischargeRequest: '',
 
-    otherNotes: "",
-    dischargeNotes: "",
-  };
+    otherNotes: '',
+    dischargeNotes: '',
+  }
 
   function reducer(state, { field, value }) {
     return {
       ...state,
       [field]: value,
-    };
+    }
   }
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   const {
     dischargeMedArray,
@@ -1734,115 +1774,116 @@ function DischargeRequest(props) {
 
     otherNotes,
     dischargeNotes,
-  } = state;
+  } = state
 
   const onChangeValue = (e) => {
-    dispatch({ field: e.target.name, value: e.target.value });
-  };
+    dispatch({ field: e.target.name, value: e.target.value })
+  }
 
-  const [, setCurrentUser] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
-  const [openNotification, setOpenNotification] = useState(false);
-  const [value, setValue] = React.useState(0);
-  const [openItemDialog, setOpenItemDialog] = useState(false);
-  const [item, setItem] = useState("");
-  const [selectedItem, setSelectedItem] = useState("");
-  const [selectedPatient, setSelectedPatient] = useState("");
-  const [requestNo, setrequestNo] = useState("");
-  const [id, setId] = useState("");
+  const [, setCurrentUser] = useState('')
+  const [errorMsg, setErrorMsg] = useState('')
+  const [openNotification, setOpenNotification] = useState(false)
+  const [value, setValue] = React.useState(0)
+  const [openItemDialog, setOpenItemDialog] = useState(false)
+  const [item, setItem] = useState('')
+  const [selectedItem, setSelectedItem] = useState('')
+  const [selectedPatient, setSelectedPatient] = useState('')
+  const [requestNo, setrequestNo] = useState('')
+  const [id, setId] = useState('')
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false)
 
   useEffect(() => {
-    setCurrentUser(cookie.load("current_user"));
+    setCurrentUser(cookie.load('current_user'))
 
-    console.log(props.history.location.state.selectedItem);
+    console.log(props.history.location.state.selectedItem)
 
     // const selectedRec = props.history.location.state.selectedItem
 
     // setSelectedItem(props.history.location.state.selectedItem)
-    setId(props.history.location.state.selectedItem._id);
-    setrequestNo(props.history.location.state.selectedItem.requestNo);
-    setSelectedPatient(props.history.location.state.selectedItem.patientId);
+    setId(props.history.location.state.selectedItem._id)
+    setrequestNo(props.history.location.state.selectedItem.requestNo)
+    setSelectedPatient(props.history.location.state.selectedItem.patientId)
 
-    getEDRdetails();
-  }, []);
+    getEDRdetails()
+  }, [])
 
   function getEDRdetails() {
     axios
       .get(
         getSingleEDRPatient +
-          "/" +
+          '/' +
           props.history.location.state.selectedItem._id
       )
       .then((res) => {
         if (res.data.success) {
           console.log(
-            "response after getting the EDR details",
+            'response after getting the EDR details',
             res.data.data[0]
-          );
-          setSelectedItem(res.data.data[0]);
-          const selectedRec = res.data.data[0];
+          )
+          setSelectedItem(res.data.data[0])
+          const selectedRec = res.data.data[0]
 
           if (selectedRec) {
             Object.entries(selectedRec).map(([key, val]) => {
-              if (val && typeof val === "object") {
-                if (key === "dischargeRequest") {
+              if (val && typeof val === 'object') {
+                if (key === 'dischargeRequest') {
                   // console.log("INNNN dischargeRequest",key,val)
                   Object.entries(val).map(([key1, val1]) => {
-                    if (key1 === "dischargeSummary") {
-                      console.log(key1, val1);
+                    if (key1 === 'dischargeSummary') {
+                      console.log(key1, val1)
                       dispatch({
-                        field: "dischargeNotes",
+                        field: 'dischargeNotes',
                         value: val1.dischargeNotes,
-                      });
-                      dispatch({ field: "otherNotes", value: val1.otherNotes });
-                    } else if (key1 === "dischargeMedication") {
+                      })
+                      dispatch({ field: 'otherNotes', value: val1.otherNotes })
+                    } else if (key1 === 'dischargeMedication') {
                       // console.log("INNNN dischargeMedication",key1,val1)
-                      dispatch({ field: "dischargeMedArray", value: [val1] });
+                      dispatch({ field: 'dischargeMedArray', value: [val1] })
                     }
-                  });
-                  dispatch({ field: "dischargeRequest", value: val });
+                  })
+                  dispatch({ field: 'dischargeRequest', value: val })
                 }
               } else {
-                dispatch({ field: key, value: val });
+                dispatch({ field: key, value: val })
               }
-            });
+            })
           }
         } else if (!res.data.success) {
-          setErrorMsg(res.data.error);
-          setOpenNotification(true);
+          setErrorMsg(res.data.error)
+          setOpenNotification(true)
         }
-        return res;
+        return res
       })
       .catch((e) => {
-        console.log("error: ", e);
-      });
+        console.log('error: ', e)
+      })
   }
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+    setValue(newValue)
+  }
 
   function viewItem(item) {
-    if (item !== "") {
-      setOpenItemDialog(true);
-      setItem(item);
+    if (item !== '') {
+      setOpenItemDialog(true)
+      setItem(item)
     } else {
-      setOpenItemDialog(false);
-      setItem("");
+      setOpenItemDialog(false)
+      setItem('')
     }
   }
 
   const addNewRequest = () => {
-    let path = `dischargerequest/addDischargeRequest`;
+    let path = `dischargerequest/addDischargeRequest`
     props.history.push({
       pathname: path,
       state: {
-        comingFor: "add",
+        comingFor: 'add',
         selectedItem: selectedItem,
         dischargeMedArray,
       },
-    });
-  };
+    })
+  }
 
   const submitDischargeSummary = () => {
     const params = {
@@ -1854,64 +1895,65 @@ function DischargeRequest(props) {
           otherNotes: otherNotes,
         },
       },
-    };
-    console.log("params", params);
+    }
+    console.log('params', params)
     axios
       .put(updateEDR, params)
       .then((res) => {
         if (res.data.success) {
-          console.log("response while adding Discharge Req", res.data.data);
-          props.history.goBack();
+          console.log('response while adding Discharge Req', res.data.data)
+          props.history.goBack()
         } else if (!res.data.success) {
-          setOpenNotification(true);
-          setErrorMsg("Error while adding the Discharge request");
+          setOpenNotification(true)
+          setErrorMsg('Error while adding the Discharge request')
         }
       })
       .catch((e) => {
-        console.log("error after adding Discharge request", e);
-        setOpenNotification(true);
-        setErrorMsg("Error after adding the Discharge request");
-      });
-  };
+        console.log('error after adding Discharge request', e)
+        setOpenNotification(true)
+        setErrorMsg('Error after adding the Discharge request')
+      })
+    setIsFormSubmitted(true)
+  }
 
   const onClick = () => {
-    setValue(value + 1);
-  };
+    setValue(value + 1)
+  }
 
   if (openNotification) {
     setTimeout(() => {
-      setOpenNotification(false);
-      setErrorMsg("");
-    }, 2000);
+      setOpenNotification(false)
+      setErrorMsg('')
+    }, 2000)
   }
 
   function validateDischargeForm() {
-    console.log(dischargeMedArray[0]);
+    console.log(dischargeMedArray[0])
     return (
       dischargeMedArray &&
       dischargeMedArray[0].medicine.length !== 0 &&
-      dischargeNotes !== "" &&
-      otherNotes !== ""
-    );
+      dischargeNotes !== '' &&
+      otherNotes !== ''
+    )
   }
 
   return (
     <div
       style={{
-        backgroundColor: "#60d69f",
-        position: "fixed",
-        display: "flex",
-        width: "100%",
-        height: "100%",
-        flexDirection: "column",
+        backgroundColor: '#60d69f',
+        position: 'fixed',
+        display: 'flex',
+        width: '100%',
+        height: '100%',
+        flexDirection: 'column',
         flex: 1,
-        overflowY: "scroll",
+        overflowY: 'scroll',
       }}
     >
       <Header />
 
-      <div className="cPadding">
-        <div className="subheader">
+      <div className={`cPadding ${classes.root}`}>
+        <div className='subheader'>
           <div>
             <img src={business_Unit} />
             <h4>EDR - Discharge Request</h4>
@@ -1919,121 +1961,121 @@ function DischargeRequest(props) {
         </div>
         <div
           style={{
-            height: "20px",
+            height: '20px',
           }}
         />
-        <div className="container" style={styles.patientDetails}>
-          <div className="row">
-            <div className="col-md-12">
-              <h4 style={{ color: "blue", fontWeight: "600" }}>
+        <div className='container' style={styles.patientDetails}>
+          <div className='row'>
+            <div className='col-md-12'>
+              <h4 style={{ color: 'blue', fontWeight: '600' }}>
                 Patient Details
               </h4>
             </div>
           </div>
-          <div className="row">
-            <div className="col-md-4 col-sm-4">
+          <div className='row'>
+            <div className='col-md-4 col-sm-4'>
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.stylesForLabel} id="status-label">
+                <InputLabel style={styles.stylesForLabel} id='status-label'>
                   Patient Name
                 </InputLabel>
                 <input
                   disabled={true}
-                  type="text"
-                  placeholder="Patient Name"
-                  name={"patientName"}
+                  type='text'
+                  placeholder='Patient Name'
+                  name={'patientName'}
                   value={
                     selectedPatient.firstName + ` ` + selectedPatient.lastName
                   }
                   onChange={onChangeValue}
-                  className="textInputStyle"
+                  className='textInputStyle'
                 />
               </div>
             </div>
-            <div className="col-md-4 col-sm-4">
+            <div className='col-md-4 col-sm-4'>
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.stylesForLabel} id="status-label">
+                <InputLabel style={styles.stylesForLabel} id='status-label'>
                   Gender
                 </InputLabel>
                 <input
                   disabled={true}
-                  type="text"
-                  placeholder="Gender"
-                  name={"gender"}
+                  type='text'
+                  placeholder='Gender'
+                  name={'gender'}
                   value={selectedPatient.gender}
                   onChange={onChangeValue}
-                  className="textInputStyle"
+                  className='textInputStyle'
                 />
               </div>
             </div>
-            <div className="col-md-4 col-sm-4">
+            <div className='col-md-4 col-sm-4'>
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.stylesForLabel} id="status-label">
+                <InputLabel style={styles.stylesForLabel} id='status-label'>
                   Age
                 </InputLabel>
                 <input
                   disabled={true}
-                  type="text"
-                  placeholder="Age"
-                  name={"age"}
+                  type='text'
+                  placeholder='Age'
+                  name={'age'}
                   value={selectedPatient.age}
                   onChange={onChangeValue}
-                  className="textInputStyle"
+                  className='textInputStyle'
                 />
               </div>
             </div>
           </div>
 
-          <div className="row">
-            <div className="col-md-4 col-sm-4">
+          <div className='row'>
+            <div className='col-md-4 col-sm-4'>
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.stylesForLabel} id="status-label">
+                <InputLabel style={styles.stylesForLabel} id='status-label'>
                   Patient ID
                 </InputLabel>
                 <input
                   disabled={true}
-                  type="text"
-                  placeholder="Patient ID"
-                  name={"patientId"}
+                  type='text'
+                  placeholder='Patient ID'
+                  name={'patientId'}
                   value={selectedPatient.profileNo}
                   onChange={onChangeValue}
-                  className="textInputStyle"
+                  className='textInputStyle'
                 />
               </div>
             </div>
 
-            <div className="col-md-4 col-sm-4">
+            <div className='col-md-4 col-sm-4'>
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.stylesForLabel} id="status-label">
+                <InputLabel style={styles.stylesForLabel} id='status-label'>
                   Insurance No
                 </InputLabel>
                 <input
                   disabled={true}
-                  type="text"
-                  placeholder="Insurance Number"
-                  name={"insuranceId"}
+                  type='text'
+                  placeholder='Insurance Number'
+                  name={'insuranceId'}
                   value={
                     selectedPatient.insuranceId
                       ? selectedPatient.insuranceId
-                      : "--"
+                      : '--'
                   }
                   onChange={onChangeValue}
-                  className="textInputStyle"
+                  className='textInputStyle'
                 />
               </div>
             </div>
-            <div className="col-md-4 col-sm-4">
+            <div className='col-md-4 col-sm-4'>
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.stylesForLabel} id="status-label">
+                <InputLabel style={styles.stylesForLabel} id='status-label'>
                   Request No
                 </InputLabel>
                 <input
                   disabled={true}
-                  type="text"
-                  placeholder="Request Number"
-                  name={"requestNo"}
+                  type='text'
+                  placeholder='Request Number'
+                  name={'requestNo'}
                   value={requestNo}
                   onChange={onChangeValue}
-                  className="textInputStyle"
+                  className='textInputStyle'
                 />
               </div>
             </div>
@@ -2042,7 +2084,7 @@ function DischargeRequest(props) {
 
         <div
           style={{
-            height: "20px",
+            height: '20px',
           }}
         />
         <div className={classesForTabs.root}>
@@ -2053,109 +2095,139 @@ function DischargeRequest(props) {
             }}
             value={value}
             onChange={handleChange}
-            indicatorColor="null"
+            indicatorColor='null'
             centered={false}
-            variant="scrollable"
+            variant='scrollable'
             fullWidth={true}
           >
             <Tab
               style={{
-                color: "white",
+                color: 'white',
                 borderRadius: 15,
-                outline: "none",
-                backgroundColor: value === 0 ? "#2c6ddd" : undefined,
+                outline: 'none',
+                backgroundColor: value === 0 ? '#2c6ddd' : undefined,
               }}
-              label="Discharge Summary"
+              label='Discharge Summary'
             />
             <Tab
               style={{
-                color: "white",
+                color: 'white',
                 borderRadius: 15,
-                outline: "none",
-                backgroundColor: value === 1 ? "#2c6ddd" : undefined,
+                outline: 'none',
+                backgroundColor: value === 1 ? '#2c6ddd' : undefined,
               }}
-              label="Discharge Medication"
+              label='Discharge Medication'
             />
           </Tabs>
         </div>
 
         {value === 0 ? (
           <div
-            style={{ flex: 4, display: "flex", flexDirection: "column" }}
-            className="container"
+            style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+            className='container'
           >
-            <div style={{ marginTop: "20px" }} className="row">
-              <div className="col-md-12 col-sm-12 col-12">
-                <TextArea
-                  type="text"
-                  placeholder="Discharge Notes"
-                  name={"dischargeNotes"}
+            <div style={{ marginTop: '20px' }} className='row'>
+              <div
+                className='col-md-12 col-sm-12 col-12'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  required
+                  multiline
+                  type='text'
+                  error={dischargeNotes === '' && isFormSubmitted}
+                  label='Discharge Notes'
+                  name={'dischargeNotes'}
                   value={dischargeNotes}
                   onChange={onChangeValue}
-                  rows="4"
+                  rows={4}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
                 />
               </div>
             </div>
 
-            <div style={{ marginTop: "20px" }} className="row">
-              <div className="col-md-12 col-sm-12 col-12">
-                <TextArea
-                  type="text"
-                  placeholder="Other Notes"
-                  name={"otherNotes"}
+            <div style={{ marginTop: '20px' }} className='row'>
+              <div
+                className='col-md-12 col-sm-12 col-12'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  required
+                  multiline
+                  type='text'
+                  error={otherNotes === '' && isFormSubmitted}
+                  label='Other Notes'
+                  name={'otherNotes'}
                   value={otherNotes}
                   onChange={onChangeValue}
-                  rows="4"
+                  rows={4}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
                 />
               </div>
             </div>
 
             <div
-              className="row d-flex"
-              style={{ marginBottom: "25px", marginTop: "25px" }}
+              className='row d-flex'
+              style={{ marginBottom: '25px', marginTop: '25px' }}
             >
-              <div className="mr-auto p-2">
+              <div className='mr-auto p-2'>
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back}
                   style={{
                     width: 45,
                     height: 35,
-                    marginTop: "7px",
-                    cursor: "pointer",
+                    marginTop: '7px',
+                    cursor: 'pointer',
                   }}
                 />
               </div>
-              <div className="p-2">
+              <div className='p-2'>
                 <Button
                   style={styles.stylesForButton}
                   //disabled={!validateFormType1()}
                   onClick={onClick}
-                  variant="contained"
-                  color="primary"
+                  variant='contained'
+                  color='primary'
                 >
                   Next
                 </Button>
               </div>
-              <div className="p-2">
+              <div className='p-2'>
                 <Button
                   onClick={submitDischargeSummary}
                   style={styles.stylesForButton}
-                  variant="contained"
-                  color="primary"
+                  variant='contained'
+                  color='primary'
                   disabled={!validateDischargeForm()}
                 >
-                  <strong style={{ fontSize: "12px" }}>Submit</strong>
+                  <strong style={{ fontSize: '12px' }}>Submit</strong>
                 </Button>
               </div>
             </div>
           </div>
         ) : value === 1 ? (
           <div
-            style={{ flex: 4, display: "flex", flexDirection: "column" }}
-            className="container"
+            style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+            className='container'
           >
-            <div className="row" style={{ marginTop: "20px" }}>
+            <div className='row' style={{ marginTop: '20px' }}>
               {dischargeMedArray !== 0 ? (
                 <CustomTable
                   tableData={dischargeMedArray}
@@ -2163,7 +2235,7 @@ function DischargeRequest(props) {
                   tableHeading={tableHeadingForDischargeMed}
                   handleView={viewItem}
                   action={actions}
-                  borderBottomColor={"#60d69f"}
+                  borderBottomColor={'#60d69f'}
                   borderBottomWidth={20}
                 />
               ) : (
@@ -2171,32 +2243,32 @@ function DischargeRequest(props) {
               )}
             </div>
 
-            <div className="row" style={{ marginBottom: "25px" }}>
-              <div className="col-md-6 col-sm-6 col-6">
+            <div className='row' style={{ marginBottom: '25px' }}>
+              <div className='col-md-6 col-sm-6 col-6'>
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back}
-                  style={{ width: 45, height: 35, cursor: "pointer" }}
+                  style={{ width: 45, height: 35, cursor: 'pointer' }}
                 />
               </div>
-              <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
+              <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
                 <Button
                   onClick={addNewRequest}
                   style={styles.stylesForButton}
-                  variant="contained"
-                  color="primary"
+                  variant='contained'
+                  color='primary'
                 >
-                  <img className="icon-style" src={plus_icon} />
+                  <img className='icon-style' src={plus_icon} />
                   &nbsp;&nbsp;
-                  <strong style={{ fontSize: "12px" }}>Pharmacy Request</strong>
+                  <strong style={{ fontSize: '12px' }}>Pharmacy Request</strong>
                 </Button>
               </div>
             </div>
           </div>
         ) : (
           <div
-            style={{ flex: 4, display: "flex", flexDirection: "column" }}
-            className="container"
+            style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+            className='container'
           ></div>
         )}
 
@@ -2213,6 +2285,6 @@ function DischargeRequest(props) {
         <Notification msg={errorMsg} open={openNotification} />
       </div>
     </div>
-  );
+  )
 }
-export default DischargeRequest;
+export default DischargeRequest

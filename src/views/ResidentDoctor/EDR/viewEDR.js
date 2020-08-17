@@ -5,8 +5,11 @@ import React, { useEffect, useState, useReducer } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import InputLabel from '@material-ui/core/InputLabel'
 import Button from '@material-ui/core/Button'
+import TextField from '@material-ui/core/TextField'
 import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
 import axios from 'axios'
+import DateFnsUtils from '@date-io/date-fns'
+import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
 import {
   getSearchedLaboratoryService,
   getSearchedRadiologyService,
@@ -157,9 +160,55 @@ const useStylesForTabs = makeStyles({
 })
 
 const useStyles = makeStyles(tableStyles)
+const useStylesForInput = makeStyles((theme) => ({
+  underline: {
+    '&&&:before': {
+      borderBottom: 'none',
+    },
+    '&&:after': {
+      borderBottom: 'none',
+    },
+  },
+  margin: {
+    margin: theme.spacing(0),
+  },
+  input: {
+    backgroundColor: 'white',
+    borderRadius: 6,
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:disabled': {
+      color: 'gray',
+    },
+  },
+  multilineColor: {
+    backgroundColor: 'white',
+    borderRadius: 6,
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+  },
+  root: {
+    '& .MuiTextField-root': {
+      backgroundColor: 'white',
+    },
+    '& .Mui-focused': {
+      backgroundColor: 'white',
+      color: 'black',
+    },
+  },
+}))
 
 function AddEditPurchaseRequest(props) {
   const classesForTabs = useStylesForTabs()
+  const classes = useStylesForInput()
 
   const initialState = {
     labServiceId: '',
@@ -1224,15 +1273,26 @@ function AddEditPurchaseRequest(props) {
               className='container'
             >
               <div style={{ marginTop: '20px' }} className='row'>
-                <div className='col-md-12 col-sm-12 col-12'>
-                  <InputLabelComponent>Service Name</InputLabelComponent>
-                  <input
-                    type='text'
-                    placeholder='Search service by name'
+                <div
+                  className='col-md-12 col-sm-12 col-12'
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
+                    label='Service Name'
                     name={'searchQuery'}
                     value={searchQuery}
+                    // error={searchQuery === '' && isFormSubmitted}
                     onChange={handleSearch}
                     className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
                   />
                 </div>
               </div>
@@ -1285,17 +1345,27 @@ function AddEditPurchaseRequest(props) {
               )}
 
               <div style={{ marginTop: '20px' }} className='row'>
-                <div className='col-md-10 col-sm-10 col-6'>
-                  <InputLabelComponent>Selected Service*</InputLabelComponent>
-                  <input
+                <div
+                  className='col-md-10 col-sm-10 col-6'
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
                     disabled
-                    style={styles.inputField}
-                    type='text'
-                    placeholder='Search from above...'
+                    label='Selected Service'
                     name={'labServiceName'}
                     value={labServiceName}
+                    // error={labServiceName === '' && isFormSubmitted}
                     onChange={onChangeValue}
                     className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
                   />
                 </div>
                 <div className='col-md-2 col-sm-2 col-6'>
@@ -1358,15 +1428,26 @@ function AddEditPurchaseRequest(props) {
               className='container'
             >
               <div style={{ marginTop: '20px' }} className='row'>
-                <div className='col-md-12 col-sm-12 col-12'>
-                  <InputLabelComponent>Service Name</InputLabelComponent>
-                  <input
-                    type='text'
-                    placeholder='Search service by name'
+                <div
+                  className='col-md-12 col-sm-12 col-12'
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
+                    label='Service Name'
                     name={'searchRadioQuery'}
                     value={searchRadioQuery}
+                    // error={searchRadioQuery === '' && isFormSubmitted}
                     onChange={handleRadioSearch}
                     className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
                   />
                 </div>
               </div>
@@ -1419,17 +1500,27 @@ function AddEditPurchaseRequest(props) {
               )}
 
               <div style={{ marginTop: '20px' }} className='row'>
-                <div className='col-md-10 col-sm-10 col-6'>
-                  <InputLabelComponent>Selected Service*</InputLabelComponent>
-                  <input
+                <div
+                  className='col-md-10 col-sm-10 col-6'
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
                     disabled
-                    style={styles.inputField}
-                    type='text'
-                    placeholder='Search from above...'
+                    label='Selected Service'
                     name={'radioServiceName'}
                     value={radioServiceName}
+                    error={radioServiceName === '' && isFormSubmitted}
                     onChange={onChangeValue}
                     className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
                   />
                 </div>
                 <div className='col-md-2 col-sm-2 col-6'>
@@ -1651,25 +1742,28 @@ function AddEditPurchaseRequest(props) {
               <DialogTitle id='simple-dialog-title' style={{ color: 'white' }}>
                 Add Resident Note
               </DialogTitle>
-              <div className='container-fluid'>
+              <div className={`container-fluid ${classes.root}`}>
                 <div className='row'>
                   <div
                     className='col-md-12 col-sm-12 col-12'
-                    style={styles.inputContainerForTextField}
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
                   >
-                    <InputLabelComponent>Description*</InputLabelComponent>
-                    <input
-                      style={styles.inputField}
-                      type='text'
-                      placeholder='Enter Your description'
+                    <TextField
+                      required
+                      label='Description'
                       name={'rdescription'}
                       value={rdescription}
+                      error={rdescription === '' && isFormSubmitted}
                       onChange={onChangeValue}
                       className='textInputStyle'
-                    />
-                    <ErrorMessage
-                      name={rdescription}
-                      isFormSubmitted={isFormSubmitted}
+                      variant='filled'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
                     />
                   </div>
                 </div>
@@ -1677,21 +1771,24 @@ function AddEditPurchaseRequest(props) {
                 <div className='row'>
                   <div
                     className='col-md-12'
-                    style={styles.inputContainerForTextField}
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
                   >
-                    <InputLabelComponent>Note*</InputLabelComponent>
-                    <input
-                      style={styles.inputField}
-                      type='text'
-                      placeholder='Add your note here...'
+                    <TextField
+                      required
+                      label='Note'
                       name={'note'}
                       value={note}
+                      error={note === '' && isFormSubmitted}
                       onChange={onChangeValue}
                       className='textInputStyle'
-                    />
-                    <ErrorMessage
-                      name={note}
-                      isFormSubmitted={isFormSubmitted}
+                      variant='filled'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
                     />
                   </div>
                 </div>
@@ -1699,10 +1796,26 @@ function AddEditPurchaseRequest(props) {
                 <div className='row'>
                   <div
                     className='col-md-6 col-sm-6 col-6'
-                    style={styles.inputContainerForTextField}
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
                   >
-                    <InputLabelComponent>Date*</InputLabelComponent>
-                    <input
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                      <DateTimePicker
+                        inputVariant='filled'
+                        // onChange={onChangeDate}
+                        disabled={true}
+                        label='Date'
+                        fullWidth
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                        value={date}
+                      />
+                    </MuiPickersUtilsProvider>
+                    {/* <input
                       disabled
                       style={styles.inputField}
                       type='text'
@@ -1711,13 +1824,31 @@ function AddEditPurchaseRequest(props) {
                       value={date}
                       onChange={onChangeValue}
                       className='textInputStyle'
-                    />
+                    /> */}
                   </div>
                   <div
                     className='col-md-6 col-sm-6 col-6'
-                    style={styles.inputContainerForTextField}
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
                   >
-                    <InputLabelComponent>Doctor*</InputLabelComponent>
+                    <TextField
+                      required
+                      disabled
+                      label='Doctor'
+                      name={'doctor'}
+                      value={doctor}
+                      error={doctor === '' && isFormSubmitted}
+                      onChange={onChangeValue}
+                      className='textInputStyle'
+                      variant='filled'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                    />
+                    {/* <InputLabelComponent>Doctor*</InputLabelComponent>
                     <input
                       disabled
                       style={styles.inputField}
@@ -1727,7 +1858,7 @@ function AddEditPurchaseRequest(props) {
                       value={doctor}
                       onChange={onChangeValue}
                       className='textInputStyle'
-                    />
+                    /> */}
                   </div>
                 </div>
 
@@ -1787,26 +1918,31 @@ function AddEditPurchaseRequest(props) {
               <DialogTitle id='simple-dialog-title' style={{ color: 'white' }}>
                 Add External Consultant
               </DialogTitle>
-              <div className='container-fluid'>
+              <div className={`container-fluid ${classes.root}`}>
                 <div className='row'>
                   <div
                     className='col-md-12 col-sm-12 col-12'
-                    style={styles.inputContainerForTextField}
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
                   >
-                    <InputLabelComponent>
-                      External Consultant*
-                    </InputLabelComponent>
-                    <Select
-                      style={styles.inputField}
+                    <TextField
+                      required
+                      select
                       fullWidth
-                      labelId='receiptUnit-label'
-                      id='externalConsultant'
+                      id='buHead'
                       name='externalConsultant'
                       value={externalConsultant}
+                      error={externalConsultant === '' && isFormSubmitted}
                       onChange={handleChangeExternalConsultant}
                       label='External Consultant'
+                      variant='filled'
                       className='dropDownStyle'
-                      input={<BootstrapInput />}
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
                     >
                       <MenuItem value=''>
                         <em>None</em>
@@ -1818,12 +1954,7 @@ function AddEditPurchaseRequest(props) {
                           </MenuItem>
                         )
                       })}
-                    </Select>
-
-                    <ErrorMessage
-                      name={externalConsultant}
-                      isFormSubmitted={isFormSubmitted}
-                    />
+                    </TextField>
                   </div>
                 </div>
 

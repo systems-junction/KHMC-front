@@ -33,8 +33,22 @@ import Back_Arrow from '../../assets/img/Back_Arrow.png'
 import '../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
 
 const styles = {
+  // buttonContainer: {
+  //   marginTop: 25
+  // }
+  // inputContainerForTextField: {
+  //   marginTop: 6,
+  // },
+
+  // inputContainerForDropDown: {
+  //   marginTop: 6,
+  // },
+  // textFieldPadding: {
+  //   paddingLeft: 3,
+  //   paddingRight: 3,
+  // },
   inputContainerForTextField: {
-    marginTop: 25,
+    marginTop: 6,
   },
   inputField: {
     outline: 'none',
@@ -75,7 +89,7 @@ const styles = {
   },
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   underline: {
     '&&&:before': {
       borderBottom: 'none',
@@ -84,7 +98,42 @@ const useStyles = makeStyles({
       borderBottom: 'none',
     },
   },
-})
+  margin: {
+    margin: theme.spacing(0),
+  },
+  input: {
+    backgroundColor: 'white',
+    borderRadius: 6,
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:disabled': {
+      color: 'gray',
+    },
+  },
+  multilineColor: {
+    backgroundColor: 'white',
+    borderRadius: 6,
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+  },
+  root: {
+    '& .MuiTextField-root': {
+      backgroundColor: 'white',
+    },
+    '& .Mui-focused': {
+      backgroundColor: 'white',
+      color: 'black',
+    },
+  },
+}))
 
 function AddBusinessUnit(props) {
   const classes = useStyles()
@@ -295,7 +344,7 @@ function AddBusinessUnit(props) {
     >
       <Header />
 
-      <div className='cPadding'>
+      <div className={`cPadding ${classes.root}`}>
         <div className='subheader'>
           <div>
             <img src={business_Unit} />
@@ -330,118 +379,133 @@ function AddBusinessUnit(props) {
         >
           {/* <h1>{comingFor === 'add' ? 'Add' : 'Edit'}</h1> */}
 
-          <div className='row'>
+          <div className='row '>
             <div
               className='col-md-12'
-              style={styles.inputContainerForTextField}
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
             >
-              {/* <TextField
-              fullWidth
-              name="buName"
-              label="Business Unit Name"
-              // variant="outlined"
-              value={buName}
-              onChange={onChangeValue}
-              error={!buName && isFormSubmitted}
-              InputProps={{ classes }}
-            /> */}
-
-              <input
-                style={styles.inputField}
-                type='text'
-                placeholder='BU Name'
+              <TextField
+                required
+                label='BU Name'
                 name={'buName'}
                 value={buName}
-                onChange={onChangeValue}
+                error={buName === '' && isFormSubmitted}
+                onChange={(e) => onChangeValue(e)}
                 className='textInputStyle'
+                variant='filled'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
               />
             </div>
           </div>
 
           <div className='row'>
-            <div className='col-md-12'>
-              <div style={styles.inputContainerForDropDown}>
-                <InputLabel id='buHead-label'>BU Head</InputLabel>
-                <Select
-                  style={styles.inputField}
-                  fullWidth
-                  name='buHead'
-                  value={buHead}
-                  onChange={onChangeValue}
-                  label='Business Unit Head'
-                  error={!buHead && isFormSubmitted}
-                >
-                  <MenuItem value=''>
-                    <em>BU Head</em>
-                  </MenuItem>
-                  {buHeads &&
-                    buHeads.map((val) => {
-                      return (
-                        <MenuItem key={val._id} value={val._id}>
-                          {val.firstName} {val.lastName}
-                        </MenuItem>
-                      )
-                    })}
-                </Select>
-              </div>
+            <div
+              className='col-md-12'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                select
+                fullWidth
+                id='buHead'
+                name='buHead'
+                value={buHead}
+                error={buHead === '' && isFormSubmitted}
+                onChange={onChangeValue}
+                label='BU Head'
+                variant='filled'
+                className='dropDownStyle'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              >
+                <MenuItem value=''>
+                  <em>BU Head</em>
+                </MenuItem>
+                {buHeads &&
+                  buHeads.map((val) => {
+                    return (
+                      <MenuItem key={val._id} value={val._id}>
+                        {val.firstName} {val.lastName}
+                      </MenuItem>
+                    )
+                  })}
+              </TextField>
             </div>
 
-            <div className='col-md-12'>
-              <div style={styles.inputContainerForDropDown}>
-                <InputLabel id='division-label'>Division</InputLabel>
-                <Select
-                  style={styles.inputField}
-                  fullWidth
-                  name='division'
-                  value={division}
-                  onChange={onChangeValue}
-                  label='Division'
-                  error={!division && isFormSubmitted}
-                >
-                  <MenuItem value=''>
-                    <em>None</em>
-                  </MenuItem>
-                  {divisions &&
-                    divisions.map((val) => {
-                      return (
-                        <MenuItem key={val.key} value={val.key}>
-                          {val.value}
-                        </MenuItem>
-                      )
-                    })}
-                </Select>
-              </div>
+            <div
+              className='col-md-12'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                select
+                fullWidth
+                id='division'
+                name='division'
+                value={division}
+                error={division === '' && isFormSubmitted}
+                onChange={onChangeValue}
+                label='Division'
+                variant='filled'
+                className='dropDownStyle'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              >
+                <MenuItem value=''>
+                  <em>None</em>
+                </MenuItem>
+                {divisions &&
+                  divisions.map((val) => {
+                    return (
+                      <MenuItem key={val.key} value={val.key}>
+                        {val.value}
+                      </MenuItem>
+                    )
+                  })}
+              </TextField>
             </div>
           </div>
 
           <div className='row'>
             <div
               className='col-md-12'
-              style={styles.inputContainerForTextField}
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
             >
-              {/* <TextField
-              fullWidth
-              multiline
-              rows={4}
-              name="description"
-              id="description"
-              label="Description"
-              // variant="outlined"
-              value={description}
-              onChange={onChangeValue}
-              error={!description && isFormSubmitted}
-              InputProps={{ classes }}
-            /> */}
-
-              <textarea
-                style={styles.inputField}
+              <TextField
+                required
+                multiline
                 type='text'
-                placeholder='Description'
+                error={description === '' && isFormSubmitted}
+                label='Description'
                 name={'description'}
-                rows='4'
                 value={description}
                 onChange={onChangeValue}
+                rows={4}
                 className='textInputStyle'
+                variant='filled'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
               />
             </div>
           </div>
@@ -540,26 +604,24 @@ function AddBusinessUnit(props) {
             {status === 'in_active' ? (
               <div
                 className='col-md-12'
-                style={styles.inputContainerForTextField}
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
               >
-                {/* <TextField
-                fullWidth
-                id="reason"
-                name="reason"
-                label="Resaon"
-                variant="outlined"
-                value={reason}
-                onChange={onChangeValue}
-              /> */}
-
-                <input
-                  type='text'
-                  placeholder='Reason'
+                <TextField
+                  required
+                  label='Reason'
                   name={'reason'}
                   value={reason}
+                  error={reason === '' && isFormSubmitted}
                   onChange={onChangeValue}
                   className='textInputStyle'
-                  style={{ borderColor: 'red', borderWidth: 4 }}
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
                 />
               </div>
             ) : (
