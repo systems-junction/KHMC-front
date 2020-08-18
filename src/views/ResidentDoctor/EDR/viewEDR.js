@@ -930,17 +930,9 @@ function AddEditPurchaseRequest(props) {
                   <InputLabel style={styles.stylesForLabel} id='status-label'>
                     Patient Name
                   </InputLabel>
-                  <input
-                    disabled={true}
-                    type='text'
-                    placeholder='Patient Name'
-                    name={'patientName'}
-                    value={
-                      selectedPatient.firstName + ` ` + selectedPatient.lastName
-                    }
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                  />
+                  <span style={styles.styleForPatientDetails}>
+                    {selectedPatient.firstName + ` ` + selectedPatient.lastName}{' '}
+                  </span>
                 </div>
               </div>
               <div className='col-md-4 col-sm-4'>
@@ -948,15 +940,9 @@ function AddEditPurchaseRequest(props) {
                   <InputLabel style={styles.stylesForLabel} id='status-label'>
                     Gender
                   </InputLabel>
-                  <input
-                    disabled={true}
-                    type='text'
-                    placeholder='Gender'
-                    name={'gender'}
-                    value={selectedPatient.gender}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                  />
+                  <span style={styles.styleForPatientDetails}>
+                    {selectedPatient.gender}
+                  </span>
                 </div>
               </div>
               <div className='col-md-4 col-sm-4'>
@@ -964,15 +950,9 @@ function AddEditPurchaseRequest(props) {
                   <InputLabel style={styles.stylesForLabel} id='status-label'>
                     Age
                   </InputLabel>
-                  <input
-                    disabled={true}
-                    type='text'
-                    placeholder='Age'
-                    name={'age'}
-                    value={selectedPatient.age}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                  />
+                  <span style={styles.styleForPatientDetails}>
+                    {selectedPatient.age ? selectedPatient.age : 30}
+                  </span>
                 </div>
               </div>
             </div>
@@ -981,17 +961,11 @@ function AddEditPurchaseRequest(props) {
               <div className='col-md-4 col-sm-4'>
                 <div style={styles.inputContainerForTextField}>
                   <InputLabel style={styles.stylesForLabel} id='status-label'>
-                    MRN Number
+                    Patient MRN
                   </InputLabel>
-                  <input
-                    disabled={true}
-                    type='text'
-                    placeholder='Patient ID'
-                    name={'patientId'}
-                    value={selectedPatient.profileNo}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                  />
+                  <span style={styles.styleForPatientDetails}>
+                    {selectedPatient.profileNo}
+                  </span>
                 </div>
               </div>
 
@@ -1000,19 +974,11 @@ function AddEditPurchaseRequest(props) {
                   <InputLabel style={styles.stylesForLabel} id='status-label'>
                     Insurance No
                   </InputLabel>
-                  <input
-                    disabled={true}
-                    type='text'
-                    placeholder='Insurance Number'
-                    name={'insuranceId'}
-                    value={
-                      selectedPatient.insuranceId
-                        ? selectedPatient.insuranceId
-                        : '--'
-                    }
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                  />
+                  <span style={styles.styleForPatientDetails}>
+                    {selectedPatient.insuranceId
+                      ? selectedPatient.insuranceId
+                      : '--'}
+                  </span>
                 </div>
               </div>
               <div className='col-md-4 col-sm-4'>
@@ -1020,15 +986,7 @@ function AddEditPurchaseRequest(props) {
                   <InputLabel style={styles.stylesForLabel} id='status-label'>
                     Request No
                   </InputLabel>
-                  <input
-                    disabled={true}
-                    type='text'
-                    placeholder='Request Number'
-                    name={'requestNo'}
-                    value={requestNo}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                  />
+                  <span style={styles.styleForPatientDetails}>{requestNo}</span>
                 </div>
               </div>
             </div>

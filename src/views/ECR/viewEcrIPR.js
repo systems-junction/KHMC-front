@@ -4,6 +4,7 @@ import InputLabel from '@material-ui/core/InputLabel'
 import Button from '@material-ui/core/Button'
 import tableStyles from '../../assets/jss/material-dashboard-react/components/tableStyle.js'
 import axios from 'axios'
+import TextField from '@material-ui/core/TextField'
 import {
   getSearchedLaboratoryService,
   getSearchedRadiologyService,
@@ -164,10 +165,57 @@ const useStylesForTabs = makeStyles({
   },
 })
 
+const useStylesForInput = makeStyles((theme) => ({
+  underline: {
+    '&&&:before': {
+      borderBottom: 'none',
+    },
+    '&&:after': {
+      borderBottom: 'none',
+    },
+  },
+  margin: {
+    margin: theme.spacing(0),
+  },
+  input: {
+    backgroundColor: 'white',
+    borderRadius: 6,
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:disabled': {
+      color: 'gray',
+    },
+  },
+  multilineColor: {
+    backgroundColor: 'white',
+    borderRadius: 6,
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+  },
+  root: {
+    '& .MuiTextField-root': {
+      backgroundColor: 'white',
+    },
+    '& .Mui-focused': {
+      backgroundColor: 'white',
+      color: 'black',
+    },
+  },
+}))
+
 const useStyles = makeStyles(tableStyles)
 
 function AddEditPurchaseRequest(props) {
   const classesForTabs = useStylesForTabs()
+  const classes = useStylesForInput()
 
   const initialState = {
     labServiceId: '',
@@ -439,9 +487,9 @@ function AddEditPurchaseRequest(props) {
   }
 
   function viewItem(item) {
-    if (item !== "") {
-      setOpenItemDialog(true);
-      setItem(item);
+    if (item !== '') {
+      setOpenItemDialog(true)
+      setItem(item)
     } else {
       setOpenItemDialog(false)
       setItem('')
@@ -1236,18 +1284,29 @@ function AddEditPurchaseRequest(props) {
           ) : value === 3 ? (
             <div
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-              className='container'
+              className={`container ${classes.root}`}
             >
               <div style={{ marginTop: '20px' }} className='row'>
-                <div className='col-md-12 col-sm-12 col-12'>
-                  <InputLabelComponent>Service Name</InputLabelComponent>
-                  <input
-                    type='text'
-                    placeholder='Search service by name'
+                <div
+                  className='col-md-12 col-sm-12 col-12'
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
+                    label='Service Name'
                     name={'searchQuery'}
                     value={searchQuery}
+                    // error={searchQuery === '' && isFormSubmitted}
                     onChange={handleSearch}
                     className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
                   />
                 </div>
               </div>
@@ -1301,17 +1360,27 @@ function AddEditPurchaseRequest(props) {
               )}
 
               <div style={{ marginTop: '20px' }} className='row'>
-                <div className='col-md-10 col-sm-10 col-6'>
-                  <InputLabelComponent>Selected Service*</InputLabelComponent>
-                  <input
+                <div
+                  className='col-md-10 col-sm-10 col-6'
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
                     disabled
-                    style={styles.inputField}
-                    type='text'
-                    placeholder='Search from above...'
+                    label='Selected Service'
                     name={'labServiceName'}
                     value={labServiceName}
+                    // error={labServiceName === '' && isFormSubmitted}
                     onChange={onChangeValue}
                     className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
                   />
                 </div>
                 <div className='col-md-2 col-sm-2 col-6'>
@@ -1371,18 +1440,29 @@ function AddEditPurchaseRequest(props) {
           ) : value === 4 ? (
             <div
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-              className='container'
+              className={`container ${classes.root}`}
             >
               <div style={{ marginTop: '20px' }} className='row'>
-                <div className='col-md-12 col-sm-12 col-12'>
-                  <InputLabelComponent>Service Name</InputLabelComponent>
-                  <input
-                    type='text'
-                    placeholder='Search service by name'
+                <div
+                  className='col-md-12 col-sm-12 col-12'
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
+                    label='Service Name'
                     name={'searchRadioQuery'}
                     value={searchRadioQuery}
+                    // error={searchRadioQuery === '' && isFormSubmitted}
                     onChange={handleRadioSearch}
                     className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
                   />
                 </div>
               </div>
@@ -1436,17 +1516,27 @@ function AddEditPurchaseRequest(props) {
               )}
 
               <div style={{ marginTop: '20px' }} className='row'>
-                <div className='col-md-10 col-sm-10 col-6'>
-                  <InputLabelComponent>Selected Service*</InputLabelComponent>
-                  <input
+                <div
+                  className='col-md-10 col-sm-10 col-6'
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
                     disabled
-                    style={styles.inputField}
-                    type='text'
-                    placeholder='Search from above...'
+                    label='Selected Service'
                     name={'radioServiceName'}
                     value={radioServiceName}
+                    // error={radioServiceName === '' && isFormSubmitted}
                     onChange={onChangeValue}
                     className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
                   />
                 </div>
                 <div className='col-md-2 col-sm-2 col-6'>
@@ -1506,18 +1596,29 @@ function AddEditPurchaseRequest(props) {
           ) : value === 5 ? (
             <div
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-              className='container'
+              className={`container ${classes.root}`}
             >
               <div style={{ marginTop: '20px' }} className='row'>
-                <div className='col-md-12 col-sm-12 col-12'>
-                  <InputLabelComponent>Service Name</InputLabelComponent>
-                  <input
-                    type='text'
-                    placeholder='Search service by name'
-                    name={'searchRadioQuery'}
+                <div
+                  className='col-md-12 col-sm-12 col-12'
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
+                    label='Service Name'
+                    name={'searchNurseQuery'}
                     value={searchNurseQuery}
+                    // error={searchNurseQuery === '' && isFormSubmitted}
                     onChange={handleNurseSearch}
                     className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
                   />
                 </div>
               </div>
@@ -1568,17 +1669,26 @@ function AddEditPurchaseRequest(props) {
                 undefined
               )}
               <div style={{ marginTop: '20px' }} className='row'>
-                <div className='col-md-10 col-sm-10 col-6'>
-                  <InputLabelComponent>Selected Service*</InputLabelComponent>
-                  <input
-                    disabled
-                    style={styles.inputField}
-                    type='text'
-                    placeholder='Search from above...'
+                <div
+                  className='col-md-10 col-sm-10 col-6'
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
+                    label='Selected Service'
                     name={'nurseServiceName'}
                     value={nurseServiceName}
+                    // error={nurseServiceName === '' && isFormSubmitted}
                     onChange={onChangeValue}
                     className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
                   />
                 </div>
                 <div className='col-md-2 col-sm-2 col-6'>
@@ -1660,25 +1770,28 @@ function AddEditPurchaseRequest(props) {
               <DialogTitle id='simple-dialog-title' style={{ color: 'white' }}>
                 Add Consultation Note
               </DialogTitle>
-              <div className='container-fluid'>
+              <div className={`container-fluid ${classes.root}`}>
                 <div className='row'>
                   <div
                     className='col-md-12 col-sm-12 col-12'
-                    style={styles.inputContainerForTextField}
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
                   >
-                    <InputLabelComponent>Description*</InputLabelComponent>
-                    <input
-                      style={styles.inputField}
-                      type='text'
-                      placeholder='Enter Your description'
+                    <TextField
+                      required
+                      label='Description'
                       name={'description'}
                       value={description}
+                      error={description === '' && isFormSubmitted}
                       onChange={onChangeValue}
                       className='textInputStyle'
-                    />
-                    <ErrorMessage
-                      name={description}
-                      isFormSubmitted={isFormSubmitted}
+                      variant='filled'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
                     />
                   </div>
                 </div>
@@ -1686,23 +1799,24 @@ function AddEditPurchaseRequest(props) {
                 <div className='row'>
                   <div
                     className='col-md-12'
-                    style={styles.inputContainerForTextField}
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
                   >
-                    <InputLabelComponent>
-                      Consultation Note*
-                    </InputLabelComponent>
-                    <input
-                      style={styles.inputField}
-                      type='text'
-                      placeholder='Add your consultation here...'
+                    <TextField
+                      required
+                      label='Consultation Note'
                       name={'consultationNotes'}
                       value={consultationNotes}
+                      error={consultationNotes === '' && isFormSubmitted}
                       onChange={onChangeValue}
                       className='textInputStyle'
-                    />
-                    <ErrorMessage
-                      name={consultationNotes}
-                      isFormSubmitted={isFormSubmitted}
+                      variant='filled'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
                     />
                   </div>
                 </div>
@@ -1710,34 +1824,48 @@ function AddEditPurchaseRequest(props) {
                 <div className='row'>
                   <div
                     className='col-md-6 col-sm-6 col-6'
-                    style={styles.inputContainerForTextField}
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
                   >
-                    <InputLabelComponent>Date*</InputLabelComponent>
-                    <input
+                    <TextField
+                      required
                       disabled
-                      style={styles.inputField}
-                      type='text'
-                      placeholder='Date'
+                      label='Date'
                       name={'date'}
                       value={date}
+                      // error={date === '' && isFormSubmitted}
                       onChange={onChangeValue}
                       className='textInputStyle'
+                      variant='filled'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
                     />
                   </div>
                   <div
                     className='col-md-6 col-sm-6 col-6'
-                    style={styles.inputContainerForTextField}
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
                   >
-                    <InputLabelComponent>Requester*</InputLabelComponent>
-                    <input
+                    <TextField
+                      required
                       disabled
-                      style={styles.inputField}
-                      type='text'
-                      placeholder='Requester'
+                      label='Requester'
                       name={'requester'}
                       value={requester}
+                      // error={requester === '' && isFormSubmitted}
                       onChange={onChangeValue}
                       className='textInputStyle'
+                      variant='filled'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
                     />
                   </div>
                 </div>
@@ -1942,25 +2070,28 @@ function AddEditPurchaseRequest(props) {
               <DialogTitle id='simple-dialog-title' style={{ color: 'white' }}>
                 Add Consultation Note
               </DialogTitle>
-              <div className='container-fluid'>
+              <div className={`container-fluid ${classes.root}`}>
                 <div className='row'>
                   <div
                     className='col-md-12 col-sm-12 col-12'
-                    style={styles.inputContainerForTextField}
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
                   >
-                    <InputLabelComponent>Description*</InputLabelComponent>
-                    <input
-                      style={styles.inputField}
-                      type='text'
-                      placeholder='Enter Your description'
+                    <TextField
+                      required
+                      label='Description'
                       name={'description'}
                       value={description}
+                      error={description === '' && isFormSubmitted}
                       onChange={onChangeValue}
                       className='textInputStyle'
-                    />
-                    <ErrorMessage
-                      name={description}
-                      isFormSubmitted={isFormSubmitted}
+                      variant='filled'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
                     />
                   </div>
                 </div>
@@ -1968,23 +2099,24 @@ function AddEditPurchaseRequest(props) {
                 <div className='row'>
                   <div
                     className='col-md-12'
-                    style={styles.inputContainerForTextField}
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
                   >
-                    <InputLabelComponent>
-                      Consultation Note*
-                    </InputLabelComponent>
-                    <input
-                      style={styles.inputField}
-                      type='text'
-                      placeholder='Add your consultation here...'
+                    <TextField
+                      required
+                      label='Consultation Note'
                       name={'consultationNotes'}
                       value={consultationNotes}
+                      error={consultationNotes === '' && isFormSubmitted}
                       onChange={onChangeValue}
                       className='textInputStyle'
-                    />
-                    <ErrorMessage
-                      name={consultationNotes}
-                      isFormSubmitted={isFormSubmitted}
+                      variant='filled'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
                     />
                   </div>
                 </div>
@@ -1992,34 +2124,48 @@ function AddEditPurchaseRequest(props) {
                 <div className='row'>
                   <div
                     className='col-md-6 col-sm-6 col-6'
-                    style={styles.inputContainerForTextField}
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
                   >
-                    <InputLabelComponent>Date*</InputLabelComponent>
-                    <input
+                    <TextField
+                      required
                       disabled
-                      style={styles.inputField}
-                      type='text'
-                      placeholder='Date'
+                      label='Date'
                       name={'date'}
                       value={date}
+                      // error={date === '' && isFormSubmitted}
                       onChange={onChangeValue}
                       className='textInputStyle'
+                      variant='filled'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
                     />
                   </div>
                   <div
                     className='col-md-6 col-sm-6 col-6'
-                    style={styles.inputContainerForTextField}
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
                   >
-                    <InputLabelComponent>Requester*</InputLabelComponent>
-                    <input
+                    <TextField
+                      required
                       disabled
-                      style={styles.inputField}
-                      type='text'
-                      placeholder='Requester'
+                      label='Requester'
                       name={'requester'}
                       value={requester}
+                      // error={requester === '' && isFormSubmitted}
                       onChange={onChangeValue}
                       className='textInputStyle'
+                      variant='filled'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
                     />
                   </div>
                 </div>
@@ -2059,8 +2205,8 @@ function AddEditPurchaseRequest(props) {
                       }}
                       // disabled={!validateItemsForm()}
                       onClick={addConsultRequest}
-                      variant="contained"
-                      color="primary"
+                      variant='contained'
+                      color='primary'
                     >
                       Add Note
                     </Button>
