@@ -442,14 +442,7 @@ export default function EdrRequest(props) {
                   <InputLabel style={styles.styleForLabel} id="generated-label">
                     Date
                   </InputLabel>
-                  <input
-                    type="text"
-                    disabled={true}
-                    placeholder="date"
-                    name={"date"}
-                    value={props.item.date}
-                    className="textInputStyle"
-                  />
+                  <span>{props.item.date}</span>
                 </div>
               ) : (
                 undefined
@@ -482,18 +475,11 @@ export default function EdrRequest(props) {
                   <InputLabel style={styles.styleForLabel} id="generated-label">
                     Requester
                   </InputLabel>
-                  <input
-                    type="text"
-                    disabled={true}
-                    placeholder="Requester"
-                    name={"requester"}
-                    value={
-                      props.item.requester.firstName +
+                  <span>
+                    {props.item.requester.firstName +
                       ` ` +
-                      props.item.requester.lastName
-                    }
-                    className="textInputStyle"
-                  />
+                      props.item.requester.lastName}
+                  </span>
                 </div>
               ) : (
                 undefined
