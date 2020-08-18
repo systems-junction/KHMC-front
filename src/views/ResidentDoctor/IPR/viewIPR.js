@@ -122,7 +122,22 @@ const tableDataKeysForNurse = [
   "requesterName",
   "status",
 ];
-const actions = { view: true };
+const tableHeadingForFollowUp = [
+  "Date/Time",
+  "Description",
+  "Doctor",
+  "Status",
+  "Action",
+];
+const tableDataKeysForFollowUp = [
+  "date",
+  "description",
+  "doctorName",
+  "status",
+];
+const actions = { view: true};
+const followUpactions = { view: true,add:true};
+
 const styles = {
   patientDetails: {
     backgroundColor: "white",
@@ -209,6 +224,8 @@ function AddEditPurchaseRequest(props) {
     pharmacyRequestArray: "",
 
     nurseService: "",
+
+    followUpArray:""
   };
 
   function reducer(state, { field, value }) {
@@ -253,6 +270,7 @@ function AddEditPurchaseRequest(props) {
 
     pharmacyRequestArray,
     nurseService,
+    followUpArray
   } = state;
 
   const onChangeValue = (e) => {
@@ -333,7 +351,12 @@ function AddEditPurchaseRequest(props) {
                   dispatch({ field: "radiologyRequestArray", value: val });
                 } else if (key === "nurseService") {
                   dispatch({ field: "nurseRequestArray", value: val });
-                } else if (key === "consultationNote") {
+                } 
+                else if (key === "followUp") 
+                {
+                  dispatch({ field: "followUpArray", value: val });
+                }
+                else if (key === "consultationNote") {
                   Object.entries(val).map(([key1, val1]) => {
                     if (key1 == "requester") {
                       dispatch({ field: "requester", value: val1._id });
@@ -470,6 +493,30 @@ function AddEditPurchaseRequest(props) {
       setOpenItemDialog(false);
       setItem("");
     }
+  }
+
+  function viewFollowUp(item){
+    let path = `viewIPR/followUp`;
+    props.history.push({
+      pathname: path,
+      state: {
+        comingFor: "view",
+        selectedItem: selectedItem,
+        followUpItem:item
+      },
+    });
+  }
+
+  function addFollowUp(item){
+    let path = `viewIPR/followUp`;
+    props.history.push({
+      pathname: path,
+      state: {
+        comingFor: "add",
+        selectedItem: selectedItem,
+        followUpItem:item
+      },
+    });
   }
 
   function addConsultRequest() {
@@ -955,8 +1002,6 @@ function AddEditPurchaseRequest(props) {
     }, 2000);
   }
 
-  console.log("Nusrse Sercie", nurseService);
-
   // function validateItemsForm() {
   //   return description && description.length > 0 && note && note.length > 0;
 
@@ -1029,7 +1074,7 @@ function AddEditPurchaseRequest(props) {
               height: "20px",
             }}
           />
-          <div className="container" style={styles.patientDetails}>
+          <div className="container-fluid" style={styles.patientDetails}>
             <div className="row">
               <div className="col-md-12">
                 <h4 style={{ color: "blue", fontWeight: "600" }}>
@@ -1219,13 +1264,22 @@ function AddEditPurchaseRequest(props) {
                 }}
                 label="NP/NS"
               />
+              <Tab
+                style={{
+                  color: "white",
+                  borderRadius: 15,
+                  outline: "none",
+                  backgroundColor: value === 6 ? "#2c6ddd" : undefined,
+                }}
+                label="Follow Up"
+              />
             </Tabs>
           </div>
 
           {value === 0 ? (
             <div
               style={{ flex: 4, display: "flex", flexDirection: "column" }}
-              className="container"
+              className="container-fluid"
             >
               <div className="row" style={{ marginTop: "20px" }}>
                 {residentNoteArray !== 0 ? (
@@ -1284,7 +1338,7 @@ function AddEditPurchaseRequest(props) {
           ) : value === 1 ? (
             <div
               style={{ flex: 4, display: "flex", flexDirection: "column" }}
-              className="container"
+              className="container-fluid"
             >
               <div className="row" style={{ marginTop: "20px" }}>
                 {consultationNoteArray !== 0 ? (
@@ -1340,7 +1394,7 @@ function AddEditPurchaseRequest(props) {
           ) : value === 2 ? (
             <div
               style={{ flex: 4, display: "flex", flexDirection: "column" }}
-              className="container"
+              className="container-fluid"
             >
               <div className="row" style={{ marginTop: "20px" }}>
                 {pharmacyRequestArray !== 0 ? (
@@ -1385,7 +1439,7 @@ function AddEditPurchaseRequest(props) {
           ) : value === 3 ? (
             <div
               style={{ flex: 4, display: "flex", flexDirection: "column" }}
-              className="container"
+              className="container-fluid"
             >
               <div style={{ marginTop: "20px" }} className="row">
                 <div className="col-md-12 col-sm-12 col-12">
@@ -1519,7 +1573,7 @@ function AddEditPurchaseRequest(props) {
           ) : value === 4 ? (
             <div
               style={{ flex: 4, display: "flex", flexDirection: "column" }}
-              className="container"
+              className="container-fluid"
             >
               <div style={{ marginTop: "20px" }} className="row">
                 <div className="col-md-12 col-sm-12 col-12">
@@ -1653,7 +1707,7 @@ function AddEditPurchaseRequest(props) {
           ) : value === 5 ? (
             <div
               style={{ flex: 4, display: "flex", flexDirection: "column" }}
-              className="container"
+              className="container-fluid"
             >
               <div style={{ marginTop: "20px" }} className="row">
                 <div className="col-md-12 col-sm-12 col-12">
@@ -1785,10 +1839,42 @@ function AddEditPurchaseRequest(props) {
                 </div>
               </div>
             </div>
+          ): value === 6 ? (
+            <div
+              style={{ flex: 4, display: "flex", flexDirection: "column" }}
+              className="container-fluid"
+            >
+              <div className="row" style={{ marginTop: "20px" }}>
+                {followUpArray !== 0 ? (
+                  <CustomTable
+                    tableData={followUpArray}
+                    tableDataKeys={tableDataKeysForFollowUp}
+                    tableHeading={tableHeadingForFollowUp}
+                    handleView={viewFollowUp}
+                    handleAdd={addFollowUp}
+                    action={followUpactions}
+                    borderBottomColor={"#60d69f"}
+                    borderBottomWidth={20}
+                  />
+                ) : (
+                  undefined
+                )}
+              </div>
+  
+              <div className="row" style={{ marginBottom: "25px" }}>
+                <div className="col-md-6 col-sm-6 col-6">
+                  <img
+                    onClick={() => props.history.goBack()}
+                    src={Back}
+                    style={{ width: 45, height: 35, cursor: "pointer" }}
+                  />
+                </div>
+              </div>
+            </div>
           ) : (
             <div
               style={{ flex: 4, display: "flex", flexDirection: "column" }}
-              className="container"
+              className="container-fluid"
             ></div>
           )}
 

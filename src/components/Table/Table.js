@@ -628,7 +628,7 @@ export default function CustomTable(props) {
                             <RcIf if={props.action.add}>
                               <span onClick={() => props.handleAdd(prop)}>
                                 <i
-                                  style={{ color: "blue" }}
+                                  style={{ color: "grey" }}
                                   className=" ml-10 zmdi zmdi-plus-circle zmdi-hc-2x"
                                 />
                               </span>

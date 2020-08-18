@@ -12,6 +12,7 @@ import {
   getSearchedRadiologyService,
   getSearchedNurseService,
   updateIPR,
+  getSingleIPRPatient
 } from "../../public/endpoins";
 import cookie from "react-cookies";
 import Header from "../../components/Header/Header";
@@ -23,7 +24,6 @@ import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css"
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import CustomTable from "../../components/Table/Table";
-import plus_icon from "../../assets/img/Plus.png";
 import ViewSingleRequest from "./viewRequest";
 import InputLabelComponent from "../../components/InputLabel/inputLabel";
 import Paper from "@material-ui/core/Paper";
@@ -32,11 +32,13 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
+import plus_icon from '../../assets/img/Plus.png'
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import ErrorMessage from "../../components/ErrorMessage/errorMessage";
 import Notification from "../../components/Snackbar/Notification.js";
+import Loader from "react-loader-spinner";
 
 const tableHeadingForResident = [
   "Date/Time",
@@ -119,6 +121,19 @@ const tableDataKeysForEDR = [
   "serviceCode",
   "serviceName",
   "requesterName",
+  "status",
+];
+const tableHeadingForFollowUp = [
+  "Date/Time",
+  "Description",
+  "Doctor",
+  "Status",
+  "Action",
+];
+const tableDataKeysForFollowUp = [
+  "date",
+  "description",
+  "doctorName",
   "status",
 ];
 const actions = { view: true };
@@ -206,6 +221,8 @@ function AddEditPurchaseRequest(props) {
     doctor: cookie.load("current_user").name,
 
     pharmacyRequestArray: "",
+
+    followUpArray:""
   };
 
   function reducer(state, { field, value }) {
@@ -251,6 +268,8 @@ function AddEditPurchaseRequest(props) {
     doctor = cookie.load("current_user").name,
 
     pharmacyRequestArray,
+
+    followUpArray,
   } = state;
 
   const onChangeValue = (e) => {
@@ -259,6 +278,7 @@ function AddEditPurchaseRequest(props) {
 
   const [currentUser, setCurrentUser] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, setsuccessMsg] = useState("");
   const [openNotification, setOpenNotification] = useState(false);
   const [value, setValue] = React.useState(0);
   const [openItemDialog, setOpenItemDialog] = useState(false);
@@ -295,11 +315,73 @@ function AddEditPurchaseRequest(props) {
   const [addNurseRequest, setaddNurseRequest] = useState(false);
   const [searchNurseQuery, setSearchNurseQuery] = useState("");
   const [addRadioRequest, setaddRadioRequest] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const getIPRById = (id) => {
+    axios
+      .get(getSingleIPRPatient + "/" + id)
+      .then((res) => {
+        if (res.data.success) {
+          if (res.data.data) {
+            console.log(res.data.data[0]);
+
+            setIsLoading(false);
+
+            Object.entries(res.data.data[0]).map(([key, val]) => {
+              if (val && typeof val === "object") {
+                if (key === "patientId") {
+                  dispatch({ field: "patientId", value: val._id });
+                } else if (key === "labRequest") {
+                  dispatch({ field: "labRequestArray", value: val });
+                } else if (key === "radiologyRequest") {
+                  dispatch({ field: "radiologyRequestArray", value: val });
+                } else if (key === "nurseService") {
+                  dispatch({ field: "nurseRequestArray", value: val });
+                } 
+                else if (key === "followUp") 
+                {
+                  dispatch({ field: "followUpArray", value: val });
+                } 
+                else if (key === "consultationNote") {
+                  Object.entries(val).map(([key1, val1]) => {
+                    if (key1 == "requester") {
+                      dispatch({ field: "requester", value: val1._id });
+                    } else {
+                      dispatch({ field: key1, value: val1 });
+                    }
+                  });
+                  dispatch({ field: "consultationNoteArray", value: val });
+                } else if (key === "residentNotes") {
+                  Object.entries(val).map(([key1, val1]) => {
+                    if (key1 == "doctor") {
+                      dispatch({ field: "doctor", value: val1._id });
+                    } else {
+                      dispatch({ field: key1, value: val1 });
+                    }
+                  });
+                  dispatch({ field: "residentNoteArray", value: val });
+                } else if (key === "pharmacyRequest") {
+                  dispatch({ field: "pharmacyRequestArray", value: val });
+                } else if (key === "nurseService") {
+                  dispatch({ field: "nurseService", value: val });
+                }
+              } else {
+                dispatch({ field: key, value: val });
+              }
+            });
+          }
+        }
+      })
+      .catch((e) => {
+        console.log("error while searching req", e);
+      });
+  };
 
   useEffect(() => {
     setCurrentUser(cookie.load("current_user"));
 
-    console.log(props.history.location.state.selectedItem.requestNo);
+    console.log(props.history.location.state.selectedItem);
+    getIPRById(props.history.location.state.selectedItem._id);
 
     const selectedRec = props.history.location.state.selectedItem;
 
@@ -308,43 +390,6 @@ function AddEditPurchaseRequest(props) {
     setrequestNo(props.history.location.state.selectedItem.requestNo);
     setSelectedPatient(props.history.location.state.selectedItem.patientId);
 
-    if (selectedRec) {
-      Object.entries(selectedRec).map(([key, val]) => {
-        if (val && typeof val === "object") {
-          if (key === "patientId") {
-            dispatch({ field: "patientId", value: val._id });
-          } else if (key === "labRequest") {
-            dispatch({ field: "labRequestArray", value: val });
-          } else if (key === "radiologyRequest") {
-            dispatch({ field: "radiologyRequestArray", value: val });
-          } else if (key === "nurseService") {
-            dispatch({ field: "nurseRequestArray", value: val });
-          } else if (key === "consultationNote") {
-            Object.entries(val).map(([key1, val1]) => {
-              if (key1 == "requester") {
-                dispatch({ field: "requester", value: val1._id });
-              } else {
-                dispatch({ field: key1, value: val1 });
-              }
-            });
-            dispatch({ field: "consultationNoteArray", value: val });
-          } else if (key === "residentNotes") {
-            Object.entries(val).map(([key1, val1]) => {
-              if (key1 == "doctor") {
-                dispatch({ field: "doctor", value: val1._id });
-              } else {
-                dispatch({ field: key1, value: val1 });
-              }
-            });
-            dispatch({ field: "residentNoteArray", value: val });
-          } else if (key === "pharmacyRequest") {
-            dispatch({ field: "pharmacyRequestArray", value: val });
-          }
-        } else {
-          dispatch({ field: key, value: val });
-        }
-      });
-    }
   }, []);
 
   // For dummy Data
@@ -862,10 +907,80 @@ function AddEditPurchaseRequest(props) {
     });
   };
 
+  const sendExtension = () =>
+  {
+    let followUp = [];
+
+    followUp = [
+      ...followUpArray,
+      {
+        date: date,
+        requester: currentUser.staffId,
+        status: 'pending',
+        doctorName:'--',
+        description:'--'
+      },
+    ];
+
+    // let followUpItems = [];
+    // for (let i = 0; i < followUpArray.length; i++) {
+    //   followUpItems = [
+    //     ...followUpItems,
+    //     {
+    //       // file: followUpArray[i].file,
+    //       description: followUpArray[i].description,
+    //       requester: followUpArray[i].requester,
+    //       // notes: followUpArray[i].notes,
+    //       doctorName: followUpArray[i].doctorName,
+    //       // doctor: followUpArray[i].doctor,
+    //       status: followUpArray[i].status,
+    //       date: followUpArray[i].date,
+    //     },
+    //   ];
+    // }
+    console.log(followUp,"follow up")
+    const params = {
+      _id: id,
+      followUp: followUp,
+    };
+    console.log("params", params);
+    axios
+      .put(updateIPR, params)
+      .then((res) => {
+        if (res.data.success) {
+          console.log("response after adding followUp Request", res.data);
+          setOpenNotification(true);
+          setsuccessMsg("Follow Up has been generated");
+          dispatch({
+            field: "followUpArray",
+            value: [
+              ...followUpArray,
+              {
+                date: date,
+                requester: currentUser.staffId,
+                status: 'pending',
+                doctorName:'--',
+                description:'--'
+              },
+            ],
+          });
+        } else if (!res.data.success) {
+          setOpenNotification(true);
+          setErrorMsg("Error while adding the followUp Request");
+        }
+      })
+      .catch((e) => {
+        console.log("error after adding followUp Request", e);
+        setOpenNotification(true);
+        setErrorMsg("Error after adding the followUp Request");
+      });
+  }
+
   if (openNotification) {
     setTimeout(() => {
       setOpenNotification(false);
       setErrorMsg("");
+      setsuccessMsg("")
     }, 2000);
   }
 
@@ -884,6 +999,7 @@ function AddEditPurchaseRequest(props) {
     >
       <Header />
 
+      {!isLoading ? (
       <div className="cPadding">
         <div className="subheader">
           <div>
@@ -907,7 +1023,7 @@ function AddEditPurchaseRequest(props) {
             height: "20px",
           }}
         />
-        <div className="container" style={styles.patientDetails}>
+        <div className="container-fluid" style={styles.patientDetails}>
           <div className="row">
             <div className="col-md-12">
               <h4 style={{ color: "blue", fontWeight: "600" }}>
@@ -1106,13 +1222,22 @@ function AddEditPurchaseRequest(props) {
               }}
               label="EDR"
             />
+            <Tab
+              style={{
+                color: "white",
+                borderRadius: 15,
+                outline: "none",
+                backgroundColor: value === 7 ? "#2c6ddd" : undefined,
+              }}
+              label="Follow Up"
+            />
           </Tabs>
         </div>
 
         {value === 0 ? (
           <div
             style={{ flex: 4, display: "flex", flexDirection: "column" }}
-            className="container"
+            className="container-fluid"
           >
             <div className="row" style={{ marginTop: "20px" }}>
               {residentNoteArray !== 0 ? (
@@ -1174,7 +1299,7 @@ function AddEditPurchaseRequest(props) {
         ) : value === 1 ? (
           <div
             style={{ flex: 4, display: "flex", flexDirection: "column" }}
-            className="container"
+            className="container-fluid"
           >
             <div className="row" style={{ marginTop: "20px" }}>
               {consultationNoteArray !== 0 ? (
@@ -1219,7 +1344,7 @@ function AddEditPurchaseRequest(props) {
         ) : value === 2 ? (
           <div
             style={{ flex: 4, display: "flex", flexDirection: "column" }}
-            className="container"
+            className="container-fluid"
           >
             <div className="row" style={{ marginTop: "20px" }}>
               {pharmacyRequestArray !== 0 ? (
@@ -1262,7 +1387,7 @@ function AddEditPurchaseRequest(props) {
         ) : value === 3 ? (
           <div
             style={{ flex: 4, display: "flex", flexDirection: "column" }}
-            className="container"
+            className="container-fluid"
           >
             {/* <div style={{ marginTop: "20px" }} className="row">
               <div className="col-md-12 col-sm-12 col-12">
@@ -1396,7 +1521,7 @@ function AddEditPurchaseRequest(props) {
         ) : value === 4 ? (
           <div
             style={{ flex: 4, display: "flex", flexDirection: "column" }}
-            className="container"
+            className="container-fluid"
           >
             {/* <div style={{ marginTop: "20px" }} className="row">
               <div className="col-md-12 col-sm-12 col-12">
@@ -1530,7 +1655,7 @@ function AddEditPurchaseRequest(props) {
         ) : value === 5 ? (
           <div
             style={{ flex: 4, display: "flex", flexDirection: "column" }}
-            className="container"
+            className="container-fluid"
           >
             {/* <div style={{ marginTop: "20px" }} className="row">
               <div className="col-md-12 col-sm-12 col-12">
@@ -1665,7 +1790,7 @@ function AddEditPurchaseRequest(props) {
         ) : value === 6 ? (
           <div
             style={{ flex: 4, display: "flex", flexDirection: "column" }}
-            className="container"
+            className="container-fluid"
           >
             {/* <div style={{ marginTop: "20px" }} className="row">
               <div className="col-md-12 col-sm-12 col-12">
@@ -1797,10 +1922,53 @@ function AddEditPurchaseRequest(props) {
               </div> */}
             </div>
           </div>
+        ): value === 7 ? (
+          <div
+            style={{ flex: 4, display: "flex", flexDirection: "column" }}
+            className="container-fluid"
+          >
+
+            <div className="row" style={{ marginTop: "20px" }}>
+              {followUpArray !== 0 ? (
+                <CustomTable
+                  tableData={followUpArray}
+                  tableDataKeys={tableDataKeysForFollowUp}
+                  tableHeading={tableHeadingForFollowUp}
+                  handleView={viewItem}
+                  action={actions}
+                  borderBottomColor={"#60d69f"}
+                  borderBottomWidth={20}
+                />
+              ) : (
+                undefined
+              )}
+            </div>
+
+            <div className="row" style={{ marginBottom: "25px" }}>
+              <div className="col-md-6 col-sm-6 col-6">
+                <img
+                  onClick={() => props.history.goBack()}
+                  src={Back}
+                  style={{ width: 45, height: 35, cursor: "pointer" }}
+                />
+              </div>
+              <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
+                <Button
+                  onClick={sendExtension}
+                  style={styles.stylesForButton}
+                  variant="contained"
+                  color="primary"
+                >
+                  <img src={plus_icon} />&nbsp;&nbsp;
+                  <strong style={{ fontSize: "13px" }}>Send Extension Request</strong>
+                </Button>
+              </div>
+            </div>
+          </div>
         ) : (
           <div
             style={{ flex: 4, display: "flex", flexDirection: "column" }}
-            className="container"
+            className="container-fluid"
           ></div>
         )}
 
@@ -2079,8 +2247,13 @@ function AddEditPurchaseRequest(props) {
           </DialogContent>
         </Dialog>
 
-        <Notification msg={errorMsg} open={openNotification} />
+        <Notification msg={errorMsg} open={openNotification} success={successMsg} />
       </div>
+      ) : (
+        <div className="LoaderStyle">
+          <Loader type="TailSpin" color="red" height={50} width={50} />
+        </div>
+      )}
     </div>
   );
 }

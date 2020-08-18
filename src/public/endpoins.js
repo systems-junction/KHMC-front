@@ -63,6 +63,7 @@ export const getSingleIPRPatient = `${baseUrl}/ipr/getipr`
 export const addIPR = `${baseUrl}/ipr/addipr`
 export const deleteIPR = `${baseUrl}/ipr/deleteipr/:_id`
 export const updateIPR = `${baseUrl}/ipr/updateipr`
+export const addfollowup = `${baseUrl}/ipr/addfollowup`
 
 // warehouse endpoints
 export const getWhInventoryUrl = `${baseUrl}/warehouseinventory/getWhInventory`

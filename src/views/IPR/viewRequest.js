@@ -466,10 +466,12 @@ export default function EdrRequest(props) {
                     disabled={true}
                     placeholder="Doctor"
                     name={"doctor"}
-                    value={
+                    value={props.item.doctor.firstName ?
                       props.item.doctor.firstName +
                       ` ` +
                       props.item.doctor.lastName
+                      :
+                      props.item.doctorName
                     }
                     className="textInputStyle"
                   />

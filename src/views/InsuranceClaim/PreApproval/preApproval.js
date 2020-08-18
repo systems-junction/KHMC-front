@@ -69,7 +69,7 @@ export default function preApproval(props) {
           res.data.data.opr.map(
             (d) => (d.Name = d.patientId.firstName + ' ' + d.patientId.lastName)
           )
-          setpreApproval([].concat(res.data.data.edr, res.data.data.ipr,res.data.data.opr ))
+          setpreApproval([].concat(res.data.data.edr, res.data.data.ipr,res.data.data.opr ).reverse())
           console.log([].concat(res.data.data.edr, res.data.data.ipr,res.data.data.opr ),"CONCATENATE")
         } else if (!res.data.success) {
           setErrorMsg(res.data.error)

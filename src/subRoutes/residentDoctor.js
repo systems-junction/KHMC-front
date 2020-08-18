@@ -27,6 +27,7 @@ import IPR from "../views/ResidentDoctor/IPR/IPR";
 import ViewIPR from "../views/ResidentDoctor/IPR/viewIPR";
 import iprDischargeRequest from "../views/ResidentDoctor/IPR/DischargeRequest";
 import iprAddDischargeMed from "../views/ResidentDoctor/IPR/addDischargeMed";
+import addViewFollowUp from "../views/ResidentDoctor/IPR/addViewFollowUp";
 
 import AddIPR from "../views/ResidentDoctor/IPR/addEditIPR";
 import IPRTriageAndAssessment from "../views/ResidentDoctor/IPR/TriageAndAssessment";
@@ -74,6 +75,12 @@ class WMSRoutes extends React.PureComponent {
           exact
           path={`${this.props.match.url}/ipr/viewIPR/add`}
           component={AddIPR}
+        />
+
+        <Route
+          exact
+          path={`${this.props.match.url}/ipr/viewIPR/followUp`}
+          component={addViewFollowUp}
         />
 
         <Route
