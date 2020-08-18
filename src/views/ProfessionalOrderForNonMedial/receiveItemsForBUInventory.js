@@ -2058,11 +2058,11 @@ function ReceiveItems(props) {
                 className="textInputStyle"
                 id="finalUnitPrice"
                 type={"number"}
-                variant="filled"
                 label="Final Unit Price"
                 name={"finalUnitPrice"}
                 value={finalUnitPrice}
                 onChange={onChangeValue}
+                variant="filled"
                 InputProps={{
                   className: classes.input,
                   classes: { input: classes.input },
