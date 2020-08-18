@@ -1150,56 +1150,31 @@ function AddItems(props) {
                 grandSubClass != 'mei_medical')) && (
               <>
                 <div
-                  className='col-md-4'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
                   }}
+                  className={comingFor === 'add' ? 'col-md-12' : 'col-md-12'}
                 >
-                  <div
-                    className={comingFor === 'add' ? 'col-md-12' : 'col-md-4'}
-                  >
-                    {/* <InputLabelComponent>Date Generated</InputLabelComponent> */}
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                      <DateTimePicker
-                        inputVariant='filled'
-                        label='Expiration'
-                        fullWidth
-                        onChange={(val) => onChangeDate(val, 'expiration')}
-                        InputProps={{
-                          className: classes.input,
-                          classes: { input: classes.input },
-                        }}
-                        value={
-                          comingFor === 'add'
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <DateTimePicker
+                      inputVariant='filled'
+                      label='Expiration'
+                      fullWidth
+                      onChange={(val) => onChangeDate(val, 'expiration')}
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                      value={
+                        comingFor === 'add'
+                          ? expiration
                             ? expiration
-                              ? expiration
-                              : new Date()
-                            : expiration
-                        }
-                      />
-                    </MuiPickersUtilsProvider>
-                  </div>
-                  {/* <div style={styles.inputContainer}>
-                    <InputLabelComponent>Expiration</InputLabelComponent>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                      <DateTimePicker
-                        style={styles.inputField}
-                        inputVariant='outlined'
-                        style={{ backgroundColor: 'white' }}
-                        className='textInputStyle'
-                        onChange={(val) => onChangeDate(val, 'expiration')}
-                        fullWidth
-                        value={
-                          comingFor === 'add'
-                            ? expiration
-                              ? expiration
-                              : new Date()
-                            : expiration
-                        }
-                      />
-                    </MuiPickersUtilsProvider>
-                  </div> */}
+                            : new Date()
+                          : expiration
+                      }
+                    />
+                  </MuiPickersUtilsProvider>
                 </div>
               </>
             )}
