@@ -3,6 +3,7 @@
 /* eslint-disable react/jsx-indent */
 import React, { useEffect, useState, useReducer } from 'react'
 import TextField from '@material-ui/core/TextField'
+import { makeStyles } from '@material-ui/core/styles'
 import Checkbox from '@material-ui/core/Checkbox'
 import Modal from '@material-ui/core/Modal'
 import Button from '@material-ui/core/Button'
@@ -71,26 +72,84 @@ const styles = {
     outline: 'none',
   },
 
-  inputContainerForTextField: {
-    marginTop: 25,
-    outline: 'none',
-  },
+  // inputContainerForTextField: {
+  //   marginTop: 25,
+  //   outline: 'none',
+  // },
 
-  inputContainerForDropDown: {
-    marginTop: 25,
-    // backgroundColor: "white",
-    // borderRadius: 10,
-    // paddingLeft: 10,
-    // paddingRight: 10,
-    // paddingTop: 2,
-  },
+  // inputContainerForDropDown: {
+  //   marginTop: 25,
+  //   // backgroundColor: "white",
+  //   // borderRadius: 10,
+  //   // paddingLeft: 10,
+  //   // paddingRight: 10,
+  //   // paddingTop: 2,
+  // },
 
   // buttonContainer: {
   //   marginTop: 25,
   // },
+  inputContainerForTextField: {
+    marginTop: 6,
+  },
+
+  inputContainerForDropDown: {
+    marginTop: 6,
+  },
+  textFieldPadding: {
+    paddingLeft: 3,
+    paddingRight: 3,
+  },
 }
 
+const useStyles = makeStyles((theme) => ({
+  underline: {
+    '&&&:before': {
+      borderBottom: 'none',
+    },
+    '&&:after': {
+      borderBottom: 'none',
+    },
+  },
+  margin: {
+    margin: theme.spacing(0),
+  },
+  input: {
+    backgroundColor: 'white',
+    borderRadius: 6,
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:disabled': {
+      color: 'gray',
+    },
+  },
+  multilineColor: {
+    backgroundColor: 'white',
+    borderRadius: 6,
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+  },
+  root: {
+    '& .MuiTextField-root': {
+      backgroundColor: 'white',
+    },
+    '& .Mui-focused': {
+      backgroundColor: 'white',
+      color: 'black',
+    },
+  },
+}))
+
 function AddEditVendor(props) {
+  const classes = useStyles()
   const modalStyle = {
     backgroundColor: '#5074f4',
     borderRadius: 30,
@@ -464,171 +523,274 @@ function AddEditVendor(props) {
           </div>
         </div>
 
-        <div className=''>
+        <div className={`container-fluid ${classes.root}`}>
           <div className='row'>
-            <div className='col-md-6' style={styles.inputContainerForTextField}>
-              <InputLabelComponent>English Name*</InputLabelComponent>
-              <input
-                style={styles.inputField}
-                type='text'
-                placeholder='English Name'
+            <div
+              className='col-md-6'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                label='English Name'
                 name={'englishName'}
                 value={englishName}
-                onChange={onChangeValue}
+                error={englishName === '' && isFormSubmitted}
+                onChange={(e) => onChangeValue(e)}
                 className='textInputStyle'
+                variant='filled'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
               />
             </div>
 
-            <div className='col-md-6' style={styles.inputContainerForTextField}>
-              <InputLabelComponent>Arabic Name*</InputLabelComponent>
-              <input
-                style={styles.inputField}
-                type='text'
-                placeholder='Arabic Name'
+            <div
+              className='col-md-6'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                label='Arabic Name'
                 name={'arabicName'}
                 value={arabicName}
-                onChange={onChangeValue}
+                error={arabicName === '' && isFormSubmitted}
+                onChange={(e) => onChangeValue(e)}
                 className='textInputStyle'
+                variant='filled'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
               />
             </div>
 
-            <div className='col-md-4' style={styles.inputContainerForTextField}>
-              <InputLabelComponent>Telephone1*</InputLabelComponent>
-              <input
-                style={styles.inputField}
+            <div
+              className='col-md-4'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
                 type='number'
-                placeholder='Telephone1'
+                label='Telephone1'
                 name={'telephone1'}
                 value={telephone1}
-                onChange={onChangeValue}
+                error={telephone1 === '' && isFormSubmitted}
+                onChange={(e) => onChangeValue(e)}
                 className='textInputStyle'
                 onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()}
+                variant='filled'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
               />
             </div>
 
-            <div className='col-md-4' style={styles.inputContainerForTextField}>
-              <InputLabelComponent>Telephone2*</InputLabelComponent>
-              <input
-                style={styles.inputField}
+            <div
+              className='col-md-4'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
                 type='number'
-                placeholder='Telephone2'
+                label='Telephone2'
                 name={'telephone2'}
                 value={telephone2}
-                onChange={onChangeValue}
+                error={telephone2 === '' && isFormSubmitted}
+                onChange={(e) => onChangeValue(e)}
                 className='textInputStyle'
                 onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()}
+                variant='filled'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
               />
             </div>
 
-            <div className='col-md-4' style={styles.inputContainerForTextField}>
-              <InputLabelComponent>Fax No*</InputLabelComponent>
-              <input
-                style={styles.inputField}
+            <div
+              className='col-md-4'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
                 type='number'
-                placeholder='Fax No'
+                label='Fax No'
                 name={'faxno'}
                 value={faxno}
-                onChange={onChangeValue}
+                error={faxno === '' && isFormSubmitted}
+                onChange={(e) => onChangeValue(e)}
                 className='textInputStyle'
                 onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()}
+                variant='filled'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
               />
             </div>
           </div>
 
           <div className='row'>
-            <div className='col-md-4' style={styles.inputContainerForTextField}>
-              <InputLabelComponent>Contact Person Name*</InputLabelComponent>
-              <input
-                style={styles.inputField}
-                type='text'
-                placeholder='Contact Person Name'
+            <div
+              className='col-md-4'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                label='Contact Person Name'
                 name={'contactPersonName'}
                 value={contactPersonName}
-                onChange={onChangeValue}
+                error={contactPersonName === '' && isFormSubmitted}
+                onChange={(e) => onChangeValue(e)}
                 className='textInputStyle'
+                variant='filled'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
               />
             </div>
 
-            <div className='col-md-4' style={styles.inputContainerForTextField}>
-              <InputLabelComponent>
-                Contact Person Telephone*
-              </InputLabelComponent>
-              <input
-                style={styles.inputField}
-                type='number'
-                placeholder='Contact Person Telephone'
+            <div
+              className='col-md-4'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                label='Contact Person Telephone'
                 name={'contactPersonTelephone'}
                 value={contactPersonTelephone}
-                onChange={onChangeValue}
+                error={contactPersonTelephone === '' && isFormSubmitted}
+                onChange={(e) => onChangeValue(e)}
                 className='textInputStyle'
                 onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()}
+                variant='filled'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
               />
             </div>
 
-            <div className='col-md-4' style={styles.inputContainerForTextField}>
-              <InputLabelComponent>Contact Person Email*</InputLabelComponent>
-              <input
-                style={styles.inputField}
-                type='email'
-                placeholder='Contact Person Email'
+            <div
+              className='col-md-4'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                label='Contact Person Email'
                 name={'contactPersonEmail'}
                 value={contactPersonEmail}
-                onChange={onChangeValue}
+                error={contactPersonEmail === '' && isFormSubmitted}
+                onChange={(e) => onChangeValue(e)}
                 className='textInputStyle'
+                variant='filled'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
               />
             </div>
           </div>
 
           <div className='row'>
-            <div className='col-md-6' style={styles.inputContainerForTextField}>
-              <InputLabelComponent>Contact Email*</InputLabelComponent>
-              <input
-                style={styles.inputField}
-                type='email'
-                placeholder='Contact Email'
+            <div
+              className='col-md-6'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                label='Contact Email'
                 name={'contactEmail'}
                 value={contactEmail}
-                onChange={onChangeValue}
+                error={contactEmail === '' && isFormSubmitted}
+                onChange={(e) => onChangeValue(e)}
                 className='textInputStyle'
+                variant='filled'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
               />
             </div>
 
-            <div className='col-md-6' style={styles.inputContainerForTextField}>
-              <InputLabelComponent>Address*</InputLabelComponent>
-              <input
-                style={styles.inputField}
-                type='text'
-                placeholder='Address'
+            <div
+              className='col-md-6'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                label='Address'
                 name={'address'}
                 value={address}
-                onChange={onChangeValue}
+                error={address === '' && isFormSubmitted}
+                onChange={(e) => onChangeValue(e)}
                 className='textInputStyle'
+                variant='filled'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
               />
             </div>
           </div>
 
           <div className='row'>
-            <div className='col-md-4' style={styles.inputContainerForTextField}>
-              <InputLabelComponent>Country*</InputLabelComponent>
-              {/* <input
-                type="text"
-                placeholder="Country"
-                name={"country"}
-                value={country}
-                onChange={onChangeValue}
-                className="textInputStyle"
-              /> */}
-
-              <Select
-                style={styles.inputField}
+            <div
+              className='col-md-4'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                select
                 fullWidth
                 id='country'
                 name='country'
                 value={country}
+                error={country === '' && isFormSubmitted}
                 onChange={onChangeCountry}
                 label='Country'
+                variant='filled'
                 className='dropDownStyle'
-                input={<BootstrapInput />}
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
               >
                 <MenuItem value=''>
                   <em>None</em>
@@ -641,30 +803,32 @@ function AddEditVendor(props) {
                       </MenuItem>
                     )
                   })}
-              </Select>
+              </TextField>
             </div>
 
-            <div className='col-md-4' style={styles.inputContainerForTextField}>
-              <InputLabelComponent>City*</InputLabelComponent>
-              {/* <input
-                type="text"
-                placeholder="City"
-                name={"city"}
-                value={city}
-                onChange={onChangeValue}
-                className="textInputStyle"
-              /> */}
-
-              <Select
-                style={styles.inputField}
+            <div
+              className='col-md-4'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                select
                 fullWidth
                 id='city'
                 name='city'
                 value={city}
+                error={city === '' && isFormSubmitted}
                 onChange={onChangeValue}
                 label='City'
+                variant='filled'
                 className='dropDownStyle'
-                input={<BootstrapInput />}
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
               >
                 <MenuItem value=''>
                   <em>None</em>
@@ -677,20 +841,30 @@ function AddEditVendor(props) {
                       </MenuItem>
                     )
                   })}
-              </Select>
+              </TextField>
             </div>
 
-            <div className='col-md-4' style={styles.inputContainerForTextField}>
-              <InputLabelComponent>Zip Code*</InputLabelComponent>
-              <input
-                style={styles.inputField}
-                type='number'
-                placeholder='Zip Code'
+            <div
+              className='col-md-4'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                label='Zip Code'
                 name={'zipcode'}
                 value={zipcode}
-                onChange={onChangeValue}
+                error={zipcode === '' && isFormSubmitted}
+                onChange={(e) => onChangeValue(e)}
                 className='textInputStyle'
                 onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()}
+                variant='filled'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
               />
             </div>
           </div>
@@ -710,158 +884,190 @@ function AddEditVendor(props) {
           </div>
 
           <div className='row'>
-            <div className='col-md-4' style={styles.inputContainerForTextField}>
-              <InputLabelComponent>Tax No*</InputLabelComponent>
-              <input
-                style={styles.inputField}
-                type='number'
-                placeholder='Tax No'
+            <div
+              className='col-md-4'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                label='Tax No'
                 name={'taxno'}
                 value={taxno}
-                onChange={onChangeValue}
+                error={taxno === '' && isFormSubmitted}
+                onChange={(e) => onChangeValue(e)}
                 className='textInputStyle'
                 onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()}
+                variant='filled'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
               />
             </div>
 
-            <div className='col-md-4'>
-              <div style={styles.inputContainerForDropDown}>
-                <InputLabelComponent>Class*</InputLabelComponent>
-                <Select
-                  style={styles.inputField}
-                  fullWidth
-                  id='cls'
-                  name='cls'
-                  value={cls}
-                  onChange={onChangeValue}
-                  label='Class'
-                  className='dropDownStyle'
-                  input={<BootstrapInput />}
-                >
-                  <MenuItem value=''>
-                    <em>None</em>
-                  </MenuItem>
-                  {mainClasses &&
-                    mainClasses.map((val) => {
+            <div
+              className='col-md-4'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                select
+                fullWidth
+                id='cls'
+                name='cls'
+                value={cls}
+                error={cls === '' && isFormSubmitted}
+                onChange={onChangeValue}
+                label='Class'
+                variant='filled'
+                className='dropDownStyle'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              >
+                <MenuItem value=''>
+                  <em>None</em>
+                </MenuItem>
+                {mainClasses &&
+                  mainClasses.map((val) => {
+                    return (
+                      <MenuItem key={val.key} value={val.key}>
+                        {val.value}
+                      </MenuItem>
+                    )
+                  })}
+              </TextField>
+            </div>
+
+            <div
+              className='col-md-4'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                select
+                fullWidth
+                id='subClass'
+                name='subClass'
+                value={subClass}
+                error={subClass === '' && isFormSubmitted}
+                onChange={handleChange}
+                label='Sub Class'
+                variant='filled'
+                className='dropDownStyle'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              >
+                <MenuItem value=''>
+                  <em>None</em>
+                </MenuItem>
+                {subClasses &&
+                  subClasses.map((val) => {
+                    if (val.parent === cls)
                       return (
                         <MenuItem key={val.key} value={val.key}>
                           {val.value}
                         </MenuItem>
                       )
-                    })}
-                </Select>
-              </div>
-            </div>
-
-            <div className='col-md-4'>
-              <div style={styles.inputContainerForDropDown}>
-                <InputLabelComponent>Sub Class*</InputLabelComponent>
-                {/* <Select
-                  fullWidth
-                  id='subClass'
-                  name='subClass'
-                  value={subClass}
-                  // multiple
-                  onChange={onChangeValue}
-                  label="Sub Class"
-                  className="dropDownStyle"
-                  input={<BootstrapInput />}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  {subClasses &&
-                    subClasses.map((val) => {
-                      if (val.parent === cls)
-                        return (
-                          <MenuItem key={val.key} value={val.key}>
-                            {val.value}
-                          </MenuItem>
-                        );
-                    })}
-
-                </Select> */}
-                <Select
-                  style={styles.inputField}
-                  labelId='demo-mutiple-name-label'
-                  id='demo-mutiple-name'
-                  name={'subClass'}
-                  multiple
-                  value={subClass}
-                  onChange={handleChange}
-                  className='dropDownStyle'
-                  input={<BootstrapInput />}
-                >
-                  <MenuItem value=''>
-                    <em>None</em>
-                  </MenuItem>
-                  {subClasses &&
-                    subClasses.map((val) => {
-                      if (val.parent === cls)
-                        return (
-                          <MenuItem key={val.key} value={val.key}>
-                            {val.value}
-                          </MenuItem>
-                        )
-                    })}
-                </Select>
-              </div>
+                  })}
+              </TextField>
             </div>
           </div>
 
           <div className='row'>
-            <div className='col-md-4' style={styles.inputContainerForTextField}>
-              <InputLabelComponent>Payment Terms*</InputLabelComponent>
-              <input
-                style={styles.inputField}
-                type='text'
-                placeholder='Payment Terms'
+            <div
+              className='col-md-4'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                label='Payment Terms'
                 name={'paymentTerms'}
                 value={paymentTerms}
-                onChange={onChangeValue}
+                error={paymentTerms === '' && isFormSubmitted}
+                onChange={(e) => onChangeValue(e)}
                 className='textInputStyle'
+                variant='filled'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
               />
             </div>
-            <div className='col-md-4' style={styles.inputContainerForTextField}>
-              <InputLabelComponent>Rating*</InputLabelComponent>
-              <input
-                style={styles.inputField}
-                type='text'
-                placeholder='Rating'
+            <div
+              className='col-md-4'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                label='Rating'
                 name={'rating'}
                 value={rating}
-                onChange={onChangeValue}
+                error={rating === '' && isFormSubmitted}
+                onChange={(e) => onChangeValue(e)}
                 className='textInputStyle'
+                variant='filled'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
               />
             </div>
 
-            <div className='col-md-4'>
-              <div style={styles.inputContainerForDropDown}>
-                <InputLabelComponent>Status*</InputLabelComponent>
-                <Select
-                  style={styles.inputField}
-                  fullWidth
-                  id='status'
-                  name='status'
-                  value={status}
-                  onChange={onChangeValue}
-                  label='Status'
-                  className='dropDownStyle'
-                  input={<BootstrapInput />}
-                >
-                  <MenuItem value=''>
-                    <em>None</em>
-                  </MenuItem>
-                  {statues &&
-                    statues.map((val) => {
-                      return (
-                        <MenuItem key={val.key} value={val.key}>
-                          {val.value}
-                        </MenuItem>
-                      )
-                    })}
-                </Select>
-              </div>
+            <div
+              className='col-md-4'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                select
+                fullWidth
+                id='status'
+                name='status'
+                value={status}
+                error={status === '' && isFormSubmitted}
+                onChange={onChangeValue}
+                label='Status'
+                variant='filled'
+                className='dropDownStyle'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              >
+                <MenuItem value=''>
+                  <em>None</em>
+                </MenuItem>
+                {statues &&
+                  statues.map((val) => {
+                    return (
+                      <MenuItem key={val.key} value={val.key}>
+                        {val.value}
+                      </MenuItem>
+                    )
+                  })}
+              </TextField>
             </div>
           </div>
 

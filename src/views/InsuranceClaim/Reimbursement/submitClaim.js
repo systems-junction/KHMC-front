@@ -1,24 +1,25 @@
-import React, { useEffect, useState, useReducer } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { FaUpload } from "react-icons/fa";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Button from "@material-ui/core/Button";
+import React, { useEffect, useState, useReducer } from 'react'
+import { makeStyles } from '@material-ui/core/styles'
+import { FaUpload } from 'react-icons/fa'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
+import Button from '@material-ui/core/Button'
+import TextField from '@material-ui/core/TextField'
 import {
-    updatePatientUrl,
-    updateClaim,
-    getSearchedpatient,
-    addClaim,
-    getedripr
-} from "../../../public/endpoins";
-import tableStyles from "../../../assets/jss/material-dashboard-react/components/tableStyle.js";
-import axios from "axios";
-import Notification from "../../../components/Snackbar/Notification.js";
-import cookie from "react-cookies";
-import Header from "../../../components/Header/Header";
-import Back_Arrow from "../../../assets/img/Back_Arrow.png";
-import "../../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
-import FormData from "form-data";
+  updatePatientUrl,
+  updateClaim,
+  getSearchedpatient,
+  addClaim,
+  getedripr,
+} from '../../../public/endpoins'
+import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
+import axios from 'axios'
+import Notification from '../../../components/Snackbar/Notification.js'
+import cookie from 'react-cookies'
+import Header from '../../../components/Header/Header'
+import Back_Arrow from '../../../assets/img/Back_Arrow.png'
+import '../../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
+import FormData from 'form-data'
 import ReInbursement from '../../../assets/img/Re-Inbursement.png'
 import Table from '@material-ui/core/Table'
 import TableHead from '@material-ui/core/TableHead'
@@ -35,895 +36,974 @@ import BootstrapInput from '../../../components/Dropdown/dropDown.js'
 import ErrorMessage from '../../../components/ErrorMessage/errorMessage'
 
 const tableHeadingForBillSummary = [
-    'Date/Time',
-    'Service Name',
-    'Amount',
-    'Invoice',
+  'Date/Time',
+  'Service Name',
+  'Amount',
+  'Invoice',
 ]
 const tableDataKeysForBillSummary = [
-    'date',
-    ['serviceId', 'name'],
-    ['serviceId', 'price'],
+  'date',
+  ['serviceId', 'name'],
+  ['serviceId', 'price'],
 ]
 
 const statusArray = [
-    { key: 'Analysis In Progress', value: 'Analysis In Progress' },
-    { key: 'Approved', value: 'Approved' },
-    { key: 'Partial Approved', value: 'Partial Approved' },
-    { key: 'Rejected', value: 'Rejected' },
+  { key: 'Analysis In Progress', value: 'Analysis In Progress' },
+  { key: 'Approved', value: 'Approved' },
+  { key: 'Partial Approved', value: 'Partial Approved' },
+  { key: 'Rejected', value: 'Rejected' },
 ]
 
 const actions = { print: true }
 
 const styles = {
-    stylesForButton: {
-        color: "white",
-        cursor: "pointer",
-        borderRadius: 15,
-        backgroundColor: "#2c6ddd",
-        width: "130px",
-        height: "45px",
-        outline: "none",
-    },
-    save: {
-        color: "white",
-        cursor: "pointer",
-        borderRadius: 15,
-        backgroundColor: "#ba55d3",
-        width: "130px",
-        height: "45px",
-        outline: "none",
-    },
-    form: {
-        backgroundColor: "white",
-        borderRadius: "10px",
-        marginTop: "20px",
-        padding: "10px",
-        textAlign: "center",
-    },
-    upload: {
-        backgroundColor: "white",
-        border: "0px solid #ccc",
-        borderRadius: 15,
-        color: "gray",
-        width: "100%",
-        height: "45px",
-        cursor: "pointer",
-        padding: "10px",
-    },
-    input: {
-        display: "none",
-    },
-    patientDetails: {
-        backgroundColor: 'white',
-        borderRadius: 15,
-        padding: '20px'
-    },
-    inputContainerForTextField: {
-        marginTop: 25,
-    },
-    styleForLabel: {
-        paddingTop: 25,
-        fontWeight: "700",
-        color: "gray",
-    },
-    inputStyles: {
-        outline: 'none',
-    },
-};
+  stylesForButton: {
+    color: 'white',
+    cursor: 'pointer',
+    borderRadius: 15,
+    backgroundColor: '#2c6ddd',
+    width: '130px',
+    height: '45px',
+    outline: 'none',
+  },
+  save: {
+    color: 'white',
+    cursor: 'pointer',
+    borderRadius: 15,
+    backgroundColor: '#ba55d3',
+    width: '130px',
+    height: '45px',
+    outline: 'none',
+  },
+  form: {
+    backgroundColor: 'white',
+    borderRadius: '10px',
+    marginTop: '20px',
+    padding: '10px',
+    textAlign: 'center',
+  },
+  upload: {
+    backgroundColor: 'white',
+    border: '0px solid #ccc',
+    borderRadius: '6px',
+    color: 'gray',
+    marginTop: '-25px',
+    width: '100%',
+    height: '60px',
+    cursor: 'pointer',
+    padding: '15px',
+  },
+  input: {
+    display: 'none',
+  },
+  patientDetails: {
+    backgroundColor: 'white',
+    borderRadius: 15,
+    padding: '20px',
+  },
+  inputContainerForTextField: {
+    marginTop: 25,
+  },
+  styleForLabel: {
+    paddingTop: 25,
+    fontWeight: '700',
+    color: 'gray',
+  },
+  inputStyles: {
+    outline: 'none',
+  },
+}
 
 const useStylesForTabs = makeStyles({
-    root: {
-        flexGrow: 1,
-    },
-});
+  root: {
+    flexGrow: 1,
+  },
+})
 
+const useStyles = makeStyles((theme) => ({
+  underline: {
+    '&&&:before': {
+      borderBottom: 'none',
+    },
+    '&&:after': {
+      borderBottom: 'none',
+    },
+  },
+  margin: {
+    margin: theme.spacing(0),
+  },
+  input: {
+    backgroundColor: 'white',
+    borderRadius: 6,
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:disabled': {
+      color: 'gray',
+    },
+  },
+  multilineColor: {
+    backgroundColor: 'white',
+    borderRadius: 6,
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+  },
+  root: {
+    '& .MuiTextField-root': {
+      backgroundColor: 'white',
+    },
+    '& .Mui-focused': {
+      backgroundColor: 'white',
+      color: 'black',
+    },
+  },
+}))
 
 function AddEditPatientListing(props) {
-    const initialState = {
-        profileNo: "-----",
-        firstName: "-----",
-        lastName: "-----",
-        gender: "-----",
-        age: '--',
-        document: "",
-        generatedBy: cookie.load("current_user").staffId,
-        insuranceNumber: "----",
-        insuranceVendor: "----",
-        paymentMethod: "",
-        treatmentDetail: '',
-        patientId: '',
-        status: '',
-        responseCode:''
+  const classes = useStyles()
+  const initialState = {
+    profileNo: '-----',
+    firstName: '-----',
+    lastName: '-----',
+    gender: '-----',
+    age: '--',
+    document: '',
+    generatedBy: cookie.load('current_user').staffId,
+    insuranceNumber: '----',
+    insuranceVendor: '----',
+    paymentMethod: '',
+    treatmentDetail: '',
+    patientId: '',
+    status: '',
+    responseCode: '',
 
-        // billSummaryArray: "",
-    };
+    // billSummaryArray: "",
+  }
 
-    function reducer(state, { field, value }) {
-        return {
-            ...state,
-            [field]: value,
-        };
+  function reducer(state, { field, value }) {
+    return {
+      ...state,
+      [field]: value,
     }
+  }
 
-    const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState)
 
-    const {
-        profileNo="-----",
-        firstName="-----",
-        lastName="-----",
-        gender="----",
-        age="--",
-        document,
-        generatedBy = cookie.load("current_user").staffId,
-        insuranceNumber="-----",
-        insuranceVendor="-----",
-        paymentMethod,
-        treatmentDetail,
-        patientId,
-        status,
-        responseCode
+  const {
+    profileNo = '-----',
+    firstName = '-----',
+    lastName = '-----',
+    gender = '----',
+    age = '--',
+    document,
+    generatedBy = cookie.load('current_user').staffId,
+    insuranceNumber = '-----',
+    insuranceVendor = '-----',
+    paymentMethod,
+    treatmentDetail,
+    patientId,
+    status,
+    responseCode,
 
-        // billSummaryArray,
-    } = state;
+    // billSummaryArray,
+  } = state
 
-    const classesForTabs = useStylesForTabs();
+  const classesForTabs = useStylesForTabs()
 
-    const [comingFor, setcomingFor] = useState("");
-    const [, setIsFormSubmitted] = useState(false);
-    const [errorMsg, setErrorMsg] = useState("");
-    const [openNotification, setOpenNotification] = useState(false);
-    // const [isDisabled, setDisabled] = useState(false)
-    const [value, setValue] = React.useState(0);
-    const [DocumentUpload, setDocumentUpload] = useState("");
-    const [imagePreview, setImagePreview] = useState("");
-    const [searchQuery, setSearchQuery] = useState('')
-    const [itemFound, setItemFound] = useState('')
-    const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false)
-    const [billSummaryArray, setbillSummaryArray] = useState(false)
-    const [ClaimId, setClaimId] = useState(false)
+  const [comingFor, setcomingFor] = useState('')
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
+  const [openNotification, setOpenNotification] = useState(false)
+  // const [isDisabled, setDisabled] = useState(false)
+  const [value, setValue] = React.useState(0)
+  const [DocumentUpload, setDocumentUpload] = useState('')
+  const [imagePreview, setImagePreview] = useState('')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [itemFound, setItemFound] = useState('')
+  const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false)
+  const [billSummaryArray, setbillSummaryArray] = useState(false)
+  const [ClaimId, setClaimId] = useState(false)
 
-    useEffect(() => {
+  useEffect(() => {
+    setcomingFor(props.history.location.state.comingFor)
 
-        setcomingFor(props.history.location.state.comingFor);
+    const selectedRec = props.history.location.state.selectedItem
+    // console.log("selected rec is ... ", selectedRec)
 
-        const selectedRec = props.history.location.state.selectedItem;
-        // console.log("selected rec is ... ", selectedRec)
-
-        if (selectedRec) {
-            setClaimId(selectedRec._id)
-            Object.entries(selectedRec).map(([key, val]) => {
-                if (val && typeof val === "object") {
-                    if (key === "patient") {
-                        Object.entries(val).map(([key1, val1]) => {
-                            if (key1 === '_id') {
-                                dispatch({ field: 'patientId', value: val1 })
-                                getBillSummary(val1)
-                                console.log("Patient id is ", val1)
-                            }
-                            else {
-                                dispatch({ field: key1, value: val1 });
-                            }
-                        })
-                    }
-                    else {
-                        dispatch({ field: key, value: val._id });
-                    }
-                } else {
-                    dispatch({ field: key, value: val });
-                }
-            });
+    if (selectedRec) {
+      setClaimId(selectedRec._id)
+      Object.entries(selectedRec).map(([key, val]) => {
+        if (val && typeof val === 'object') {
+          if (key === 'patient') {
+            Object.entries(val).map(([key1, val1]) => {
+              if (key1 === '_id') {
+                dispatch({ field: 'patientId', value: val1 })
+                getBillSummary(val1)
+                console.log('Patient id is ', val1)
+              } else {
+                dispatch({ field: key1, value: val1 })
+              }
+            })
+          } else {
+            dispatch({ field: key, value: val._id })
+          }
+        } else {
+          dispatch({ field: key, value: val })
         }
-    }, []);
+      })
+    }
+  }, [])
 
-    // function validatePatientForm() {
-    //   return (
-    //     identificationNumber &&
-    //     identificationNumber.length > 0 &&
-    //     title &&
-    //     title.length > 0 &&
-    //     firstName &&
-    //     firstName.length > 0 &&
-    //     lastName &&
-    //     lastName.length > 0 &&
-    //     phoneNumber &&
-    //     phoneNumber.length > 0 &&
-    //     gender &&
-    //     gender.length > 0 &&
-    //     email &&
-    //     email.length > 0 &&
-    //     country &&
-    //     country.length > 0 &&
-    //     city &&
-    //     city.length > 0 &&
-    //     address &&
-    //     address.length > 0
-    //   )
-    // }
+  // function validatePatientForm() {
+  //   return (
+  //     identificationNumber &&
+  //     identificationNumber.length > 0 &&
+  //     title &&
+  //     title.length > 0 &&
+  //     firstName &&
+  //     firstName.length > 0 &&
+  //     lastName &&
+  //     lastName.length > 0 &&
+  //     phoneNumber &&
+  //     phoneNumber.length > 0 &&
+  //     gender &&
+  //     gender.length > 0 &&
+  //     email &&
+  //     email.length > 0 &&
+  //     country &&
+  //     country.length > 0 &&
+  //     city &&
+  //     city.length > 0 &&
+  //     address &&
+  //     address.length > 0
+  //   )
+  // }
 
-    // function validateDetailsForm() {
-    //   return (
-    //     insuranceNumber &&
-    //     insuranceNumber.length > 0 &&
-    //     insuranceVendor &&
-    //     insuranceVendor.length > 0 &&
-    //     coverageDetails &&
-    //     coverageDetails.length > 0
-    //     // coverageTerms &&
-    //     // coverageTerms.length > 0 &&
-    //     // payment &&
-    //     // payment.length > 0
-    //   )
-    // }
+  // function validateDetailsForm() {
+  //   return (
+  //     insuranceNumber &&
+  //     insuranceNumber.length > 0 &&
+  //     insuranceVendor &&
+  //     insuranceVendor.length > 0 &&
+  //     coverageDetails &&
+  //     coverageDetails.length > 0
+  //     // coverageTerms &&
+  //     // coverageTerms.length > 0 &&
+  //     // payment &&
+  //     // payment.length > 0
+  //   )
+  // }
 
-    const handleAdd = () => {
-        let formData = new FormData();
-        if (DocumentUpload) {
-            formData.append("file", DocumentUpload, DocumentUpload.name);
+  const handleAdd = () => {
+    let formData = new FormData()
+    if (DocumentUpload) {
+      formData.append('file', DocumentUpload, DocumentUpload.name)
+    }
+    //if (validatePatientForm()) {
+    const params = {
+      generatedBy: generatedBy,
+      patient: patientId,
+      // insurer,
+      treatmentDetail: treatmentDetail,
+      document: document,
+      status: 'pending',
+      responseCode: 'N/A',
+    }
+    formData.append('data', JSON.stringify(params))
+    // console.log("PARAMSS ", params);
+    // console.log("DATAAA ", formData);
+    axios
+      .post(addClaim, formData, {
+        headers: {
+          accept: 'application/json',
+          'Accept-Language': 'en-US,en;q=0.8',
+          'content-type': 'multipart/form-data',
+        },
+      })
+      .then((res) => {
+        if (res.data.success) {
+          console.log(res.data.data, 'patients data')
+          dispatch({ field: 'patientId', value: '' })
+          dispatch({ field: 'firstName', value: '' })
+          dispatch({ field: 'lastName', value: '' })
+          dispatch({ field: 'gender', value: '' })
+          dispatch({ field: 'age', value: '' })
+          dispatch({ field: 'profileNo', value: '' })
+          dispatch({ field: 'insuranceNumber', value: '' })
+          dispatch({ field: 'insuranceVendor', value: '' })
+          dispatch({ field: 'treatmentDetail', value: '' })
+          dispatch({ field: 'document', value: '' })
+        } else if (!res.data.success) {
+          setOpenNotification(true)
         }
-        //if (validatePatientForm()) {
-        const params = {
-            generatedBy: generatedBy,
-            patient: patientId,
-            // insurer,
-            treatmentDetail: treatmentDetail,
-            document: document,
-            status: 'pending',
-            responseCode:'N/A'
-        };
-        formData.append("data", JSON.stringify(params));
-        // console.log("PARAMSS ", params);
-        // console.log("DATAAA ", formData);
-        axios
-            .post(addClaim, formData, {
-                headers: {
-                    accept: "application/json",
-                    "Accept-Language": "en-US,en;q=0.8",
-                    "content-type": "multipart/form-data",
-                },
-            })
-            .then((res) => {
-                if (res.data.success) {
-                    console.log(res.data.data, "patients data");
-                    dispatch({ field: 'patientId', value: '' })
-                    dispatch({ field: 'firstName', value: '' })
-                    dispatch({ field: 'lastName', value: '' })
-                    dispatch({ field: 'gender', value: '' })
-                    dispatch({ field: 'age', value: '' })
-                    dispatch({ field: 'profileNo', value: '' })
-                    dispatch({ field: 'insuranceNumber', value: '' })
-                    dispatch({ field: 'insuranceVendor', value: '' })
-                    dispatch({ field: 'treatmentDetail', value: '' })
-                    dispatch({ field: 'document', value: '' })
+      })
+      .catch((e) => {
+        console.log('error after adding Claim details', e)
+        setOpenNotification(true)
+        setErrorMsg('Error while adding the Claim details')
+      })
+    //}
+    setIsFormSubmitted(true)
+  }
 
-                } else if (!res.data.success) {
-                    setOpenNotification(true);
-                }
-            })
-            .catch((e) => {
-                console.log("error after adding Claim details", e);
-                setOpenNotification(true);
-                setErrorMsg("Error while adding the Claim details");
-            });
-        //}
-        setIsFormSubmitted(true);
-    };
-
-    const handleEdit = () => {
-        let formData = new FormData();
-        if (DocumentUpload) {
-            formData.append("file", DocumentUpload, DocumentUpload.name);
+  const handleEdit = () => {
+    let formData = new FormData()
+    if (DocumentUpload) {
+      formData.append('file', DocumentUpload, DocumentUpload.name)
+    }
+    //if (validatePatientForm()) {
+    const params = {
+      _id: ClaimId,
+      treatmentDetail: treatmentDetail,
+      document: document,
+      status: status,
+      responseCode: responseCode,
+    }
+    formData.append('data', JSON.stringify(params))
+    // console.log("PARAMSS ", params);
+    // console.log("DATAAA ", formData);
+    axios
+      .put(updateClaim, formData)
+      .then((res) => {
+        if (res.data.success) {
+          props.history.goBack()
+        } else if (!res.data.success) {
+          setOpenNotification(true)
         }
-        //if (validatePatientForm()) {
-        const params = {
-            _id: ClaimId,
-            treatmentDetail: treatmentDetail,
-            document: document,
-            status:status,
-            responseCode: responseCode
-        };
-        formData.append("data", JSON.stringify(params));
-        // console.log("PARAMSS ", params);
-        // console.log("DATAAA ", formData);
-        axios
-            .put(updateClaim, formData)
-            .then((res) => {
-                if (res.data.success) {
-                    props.history.goBack();
-                } else if (!res.data.success) {
-                    setOpenNotification(true);
-                }
-            })
-            .catch((e) => {
-                console.log("error after updating Claim details", e);
-                setOpenNotification(true);
-                setErrorMsg("Error while editing the Claim details");
-            });
-        //}
-        // setIsFormSubmitted(true)
-    };
+      })
+      .catch((e) => {
+        console.log('error after updating Claim details', e)
+        setOpenNotification(true)
+        setErrorMsg('Error while editing the Claim details')
+      })
+    //}
+    // setIsFormSubmitted(true)
+  }
 
-    const onDocumentUpload = (event) => {
-        setDocumentUpload(event.target.files[0]);
+  const onDocumentUpload = (event) => {
+    setDocumentUpload(event.target.files[0])
 
-        var file = event.target.files[0];
-        var reader = new FileReader();
-        var url = reader.readAsDataURL(file);
+    var file = event.target.files[0]
+    var reader = new FileReader()
+    var url = reader.readAsDataURL(file)
 
-        reader.onloadend = function (e) {
-            setImagePreview([reader.result]);
-        };
-    };
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
-
-    const onClick = () => {
-        setValue(value + 1);
-    };
-
-    const onChangeValue = (e) => {
-        dispatch({ field: e.target.name, value: e.target.value });
-    };
-
-    if (openNotification) {
-        setTimeout(() => {
-            setOpenNotification(false);
-            setErrorMsg("");
-        }, 2000);
+    reader.onloadend = function(e) {
+      setImagePreview([reader.result])
     }
+  }
 
-    const handleSearch = (e) => {
-        setSearchQuery(e.target.value)
-        if (e.target.value.length >= 3) {
-            axios
-                .get(getSearchedpatient + '/' + e.target.value)
-                .then((res) => {
-                    if (res.data.success) {
-                        if (res.data.data.length > 0) {
-                            console.log("patient data ", res.data.data)
-                            setItemFoundSuccessfully(true)
-                            setItemFound(res.data.data)
-                        } else {
-                            setItemFoundSuccessfully(false)
-                            setItemFound('')
-                        }
-                    }
-                })
-                .catch((e) => {
-                    console.log('error while searching patient', e)
-                })
+  const handleChange = (event, newValue) => {
+    setValue(newValue)
+  }
+
+  const onClick = () => {
+    setValue(value + 1)
+  }
+
+  const onChangeValue = (e) => {
+    dispatch({ field: e.target.name, value: e.target.value })
+  }
+
+  if (openNotification) {
+    setTimeout(() => {
+      setOpenNotification(false)
+      setErrorMsg('')
+    }, 2000)
+  }
+
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value)
+    if (e.target.value.length >= 3) {
+      axios
+        .get(getSearchedpatient + '/' + e.target.value)
+        .then((res) => {
+          if (res.data.success) {
+            if (res.data.data.length > 0) {
+              console.log('patient data ', res.data.data)
+              setItemFoundSuccessfully(true)
+              setItemFound(res.data.data)
+            } else {
+              setItemFoundSuccessfully(false)
+              setItemFound('')
+            }
+          }
+        })
+        .catch((e) => {
+          console.log('error while searching patient', e)
+        })
+    }
+  }
+
+  function handleAddItem(i) {
+    console.log('selected banda', i)
+
+    dispatch({ field: 'patientId', value: i._id })
+    dispatch({ field: 'firstName', value: i.firstName })
+    dispatch({ field: 'lastName', value: i.lastName })
+    dispatch({ field: 'gender', value: i.gender })
+    dispatch({ field: 'age', value: i.age })
+    dispatch({ field: 'profileNo', value: i.profileNo })
+    dispatch({ field: 'insuranceNumber', value: i.insuranceNumber })
+    dispatch({ field: 'insuranceVendor', value: i.insuranceVendor })
+
+    setSearchQuery('')
+    getBillSummary(i._id)
+  }
+
+  function getBillSummary(i) {
+    axios
+      .get(getedripr + '/' + i)
+      .then((res) => {
+        if (res.data.success) {
+          let prEDR = []
+          for (let i = 0; i < res.data.data.prEdr.length; i++) {
+            let amount = 0
+            let singlePR = res.data.data.prEdr[i]
+            let date = ''
+            for (let j = 0; j < singlePR.medicine.length; j++) {
+              // console.log(singlePR.medicine[j].itemId.purchasePrice)
+              amount = amount + singlePR.medicine[j].itemId.purchasePrice
+            }
+            let obj = {
+              serviceId: {
+                name: 'Pharmacy Service',
+                price: amount,
+              },
+              date: res.data.data.prEdr[i].date,
+            }
+            prEDR.push(obj)
+          }
+          //   console.log("response is ... ",[].concat(res.data.data.lrEdr, res.data.data.rrEdr,prEDR))
+          setbillSummaryArray(
+            [].concat(res.data.data.lrEdr, res.data.data.rrEdr, prEDR)
+          )
+          // if(res.data.data.edr)
+          // {
+          // setbillSummaryArray(res.data.data)
+          // console.log('response is ... ', res.data.data.edr)
+          // }
+          // else if(res.data.data.ipr)
+          // {
+          // setbillSummaryArray(res.data.data.ipr)
+          // console.log('response is ... ', res.data.data.ipr)
+          // }
+        } else if (!res.data.success) {
+          setErrorMsg(res.data.error)
+          setOpenNotification(true)
         }
-    }
+        return res
+      })
+      .catch((e) => {
+        console.log('error: ', e)
+      })
+  }
 
-    function handleAddItem(i) {
-        console.log('selected banda', i)
+  const handleInvoicePrint = () => {
+    alert('Printer not attached')
+  }
 
-        dispatch({ field: 'patientId', value: i._id })
-        dispatch({ field: 'firstName', value: i.firstName })
-        dispatch({ field: 'lastName', value: i.lastName })
-        dispatch({ field: 'gender', value: i.gender })
-        dispatch({ field: 'age', value: i.age })
-        dispatch({ field: 'profileNo', value: i.profileNo })
-        dispatch({ field: 'insuranceNumber', value: i.insuranceNumber })
-        dispatch({ field: 'insuranceVendor', value: i.insuranceVendor })
-
-        setSearchQuery('')
-        getBillSummary(i._id)
-    }
-
-    function getBillSummary(i) {
-        axios.get(
-            getedripr +
-            '/' +
-            i)
-            .then((res) => {
-                if (res.data.success) {
-                    let prEDR = []
-                    for (let i = 0; i < res.data.data.prEdr.length; i++) {
-                        let amount = 0
-                        let singlePR = res.data.data.prEdr[i]
-                        let date = ""
-                        for (let j = 0; j < singlePR.medicine.length; j++) {
-                            // console.log(singlePR.medicine[j].itemId.purchasePrice)
-                            amount = amount + singlePR.medicine[j].itemId.purchasePrice
-                        }
-                        let obj = {
-                            serviceId: {
-                                name: "Pharmacy Service",
-                                price: amount,
-                            },
-                            date: res.data.data.prEdr[i].date
-                        }
-                        prEDR.push(obj)
-                    }
-                    //   console.log("response is ... ",[].concat(res.data.data.lrEdr, res.data.data.rrEdr,prEDR))
-                    setbillSummaryArray([].concat(res.data.data.lrEdr, res.data.data.rrEdr, prEDR))
-                    // if(res.data.data.edr)
-                    // {
-                    // setbillSummaryArray(res.data.data)
-                    // console.log('response is ... ', res.data.data.edr)
-                    // }
-                    // else if(res.data.data.ipr)
-                    // {
-                    // setbillSummaryArray(res.data.data.ipr)
-                    // console.log('response is ... ', res.data.data.ipr)
-                    // }
-                } else if (!res.data.success) {
-                    setErrorMsg(res.data.error)
-                    setOpenNotification(true)
-                }
-                return res
-            })
-            .catch((e) => {
-                console.log('error: ', e)
-            })
-    }
-
-    const handleInvoicePrint = () => {
-        alert("Printer not attached")
-    }
-
-    return (
-        <div
-            style={{
-                backgroundColor: "#60d69f",
-                position: "fixed",
-                display: "flex",
-                width: "100%",
-                height: "100%",
-                flexDirection: "column",
-                flex: 1,
-                overflowY: "scroll",
-            }}
-        >
-            <Header />
-            <div className="cPadding">
-                <div className="subheader">
-                    <div>
-                        <img src={ReInbursement} />
-                        <div style={{ flex: 4, display: "flex", alignItems: "center" }}>
-                            <h4>
-                                {comingFor === "add"
-                                    ? " Insurance Re-Imbursement"
-                                    : " Edit Insurance Re-Imbursement"}
-                            </h4>
-                        </div>
-                    </div>
-                </div>
-
-                <div style={{ width: "auto", height: "20px" }} />
-                <div className={classesForTabs.root}>
-                    <Tabs
-                        value={value}
-                        onChange={handleChange}
-                        indicatorColor="null"
-                        centered
-                    >
-                        <Tab
-                            style={{
-                                color: "white",
-                                borderRadius: 15,
-                                outline: "none",
-                                backgroundColor: value === 0 ? "#2c6ddd" : undefined,
-                            }}
-                            label="Treatment Details"
-                        />
-                        <Tab
-                            style={{
-                                color: "white",
-                                borderRadius: 15,
-                                outline: "none",
-                                backgroundColor: value === 1 ? "#2c6ddd" : undefined,
-                            }}
-                            label="Bill Summary"
-                        />
-                    </Tabs>
-                </div>
-                {value === 0 ? (
-                    <div>
-                        <div
-                            style={{ marginTop: '20px', marginBottom: '10px' }}
-                            className="container"
-                        >
-                            {comingFor === "add" ? (
-                                <div>
-                                    <div className='row'>
-                                        <input
-                                            type='text'
-                                            placeholder='Search Patient by Name / MRN / National ID / Mobile Number'
-                                            name={'searchQuery'}
-                                            value={searchQuery}
-                                            onChange={handleSearch}
-                                            className='textInputStyle'
-                                        />
-                                    </div>
-
-                                    {searchQuery ? (
-                                        <div style={{ zIndex: 3 }}>
-                                            <Paper>
-                                                {itemFoundSuccessfull ? (
-                                                    itemFound && (
-                                                        <Table size='small'>
-                                                            <TableHead>
-                                                                <TableRow>
-                                                                    <TableCell>MRN Number</TableCell>
-                                                                    <TableCell>Patient Name</TableCell>
-                                                                    <TableCell>Gender</TableCell>
-                                                                    <TableCell>Age</TableCell>
-                                                                    <TableCell>Payment Method</TableCell>
-                                                                </TableRow>
-                                                            </TableHead>
-
-                                                            <TableBody>
-                                                                {itemFound.map((i) => {
-                                                                    return (
-                                                                        <TableRow
-                                                                            key={i._id}
-                                                                            onClick={() => handleAddItem(i)}
-                                                                            style={{ cursor: 'pointer' }}
-                                                                        >
-                                                                            <TableCell>{i.profileNo}</TableCell>
-                                                                            <TableCell>{i.firstName + ` ` + i.lastName}</TableCell>
-                                                                            <TableCell>{i.gender}</TableCell>
-                                                                            <TableCell>{i.age}</TableCell>
-                                                                            <TableCell>{i.paymentMethod}</TableCell>
-                                                                        </TableRow>
-                                                                    )
-                                                                })}
-                                                            </TableBody>
-                                                        </Table>
-                                                    )
-                                                ) : (
-                                                        <h4
-                                                            style={{ textAlign: 'center' }}
-                                                            onClick={() => setSearchQuery('')}
-                                                        >
-                                                            Patient Not Found
-                                                        </h4>
-                                                    )}
-                                            </Paper>
-                                        </div>
-                                    ) : (
-                                            undefined
-                                        )}
-                                </div>
-                            ) : (
-                                    undefined
-                                )}
-                        </div>
-
-                        <div className="container" style={styles.patientDetails}>
-                            <div className='row'>
-                                <div className='col-md-12'>
-                                    <h4 style={{ color: 'blue', fontWeight: '600' }}>Patient Details</h4>
-                                </div>
-                            </div>
-                            <div className='row'>
-                                <div className='col-md-4 col-sm-4 col-4'>
-                                    <div style={styles.inputContainerForTextField}>
-                                        <InputLabel style={styles.stylesForLabel} id='status-label'>
-                                            Patient Name
-                                        </InputLabel>
-                                        <input
-                                            disabled={true}
-                                            type='text'
-                                            placeholder='Patient Name'
-                                            name={'firstName'}
-                                            value={firstName + ` ` + lastName}
-                                            onChange={onChangeValue}
-                                            className='textInputStyle'
-                                        />
-                                    </div>
-                                </div>
-                                <div className='col-md-4 col-sm-4 col-4'>
-                                    <div style={styles.inputContainerForTextField}>
-                                        <InputLabel style={styles.stylesForLabel} id='status-label'>
-                                            Gender
-                                        </InputLabel>
-                                        <input
-                                            disabled={true}
-                                            type='text'
-                                            placeholder='Gender'
-                                            name={'gender'}
-                                            value={gender}
-                                            onChange={onChangeValue}
-                                            className='textInputStyle'
-                                        />
-                                    </div>
-                                </div>
-                                <div className='col-md-4 col-sm-4 col-4'>
-                                    <div style={styles.inputContainerForTextField}>
-                                        <InputLabel style={styles.stylesForLabel} id='status-label'>
-                                            Age
-                                        </InputLabel>
-                                        <input
-                                            disabled={true}
-                                            type='text'
-                                            placeholder='Age'
-                                            name={'age'}
-                                            value={age}
-                                            onChange={onChangeValue}
-                                            className='textInputStyle'
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className='row'>
-                                <div className='col-md-4 col-sm-4 col-4'>
-                                    <div style={styles.inputContainerForTextField}>
-                                        <InputLabel style={styles.stylesForLabel} id='status-label'>
-                                            MRN Number
-                                        </InputLabel>
-                                        <input
-                                            disabled={true}
-                                            type='text'
-                                            placeholder='Patient ID'
-                                            name={'profileNo'}
-                                            value={profileNo}
-                                            onChange={onChangeValue}
-                                            className='textInputStyle'
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className='col-md-4 col-sm-4 col-4'>
-                                    <div style={styles.inputContainerForTextField}>
-                                        <InputLabel style={styles.stylesForLabel} id='status-label'>
-                                            Insurance No
-                                        </InputLabel>
-                                        <input
-                                            disabled={true}
-                                            type='text'
-                                            placeholder='Insurance Number'
-                                            name={'insuranceId'}
-                                            value={insuranceNumber}
-                                            onChange={onChangeValue}
-                                            className='textInputStyle'
-                                        />
-                                    </div>
-                                </div>
-                                <div className='col-md-4 col-sm-4 col-4'>
-                                    <div style={styles.inputContainerForTextField}>
-                                        <InputLabel style={styles.stylesForLabel} id='status-label'>
-                                            Insurance Provider
-                                        </InputLabel>
-                                        <input
-                                            disabled={true}
-                                            type='text'
-                                            placeholder='Insurance Provider'
-                                            name={'insuranceVendor'}
-                                            value={insuranceVendor}
-                                            onChange={onChangeValue}
-                                            className='textInputStyle'
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div style={{
-                            height: '10px'
-                        }}
-                        />
-
-                        <div className="container" style={styles.patientDetails}>
-                            <div className='row'>
-                                <div className="col-md-12">
-                                    <InputLabel style={styles.styleForLabel}>Treatment Details</InputLabel>
-                                    <textarea
-                                        style={styles.inputStyles}
-                                        placeholder="Enter Treatment Details here..."
-                                        name={"treatmentDetail"}
-                                        value={treatmentDetail}
-                                        onChange={onChangeValue}
-                                        rows="4"
-                                        className='textInputStyle'
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div style={{
-                            height: '10px'
-                        }}
-                        />
-
-                        {comingFor === "edit" ?(
-                            <div className="container">
-                                <div className='row'>
-                                    <div className='col-md-6 col-sm-6 col-6'>
-                                    <InputLabelComponent>Status*</InputLabelComponent>
-                                    <Select
-                                        fullWidth
-                                        id='status'
-                                        name='status'
-                                        value={status}
-                                        onChange={onChangeValue}
-                                        label='Status'
-                                        className='dropDownStyle'
-                                        style={{ marginBottom: '10px' }}
-                                        input={<BootstrapInput />}
-                                    >
-                                        <MenuItem value=''>
-                                            <em>None</em>
-                                        </MenuItem>
-                                        {statusArray.map((val) => {
-                                            return (
-                                                <MenuItem key={val.key} value={val.key}>
-                                                    {val.value}
-                                                </MenuItem>
-                                            )
-                                        })}
-                                    </Select>
-                                    <ErrorMessage
-                                        name={status}
-                                    // isFormSubmitted={isFormSubmitted}
-                                    />
-                                    </div>
-                                    <div className='col-md-6 col-sm-6 col-6'>
-                                    <InputLabelComponent>Response Code*</InputLabelComponent>
-                                    <input
-                                        style={styles.inputField}
-                                        type='text'
-                                        placeholder='Response Code'
-                                        name={'responseCode'}
-                                        value={responseCode}
-                                        onChange={onChangeValue}
-                                        className='textInputStyle'
-                                        style={{ marginBottom: '10px' }}
-                                    />
-                                    <ErrorMessage
-                                        name={responseCode}
-                                        // isFormSubmitted={isFormSubmitted}
-                                    />
-                                    </div>
-                                </div>
-                            </div>
-                        ):(
-                            undefined
-                        )}
-
-                        <div className="container">
-                            <div className='row'>
-                                {/* <div className='col-md-12 col-sm-12 col-12'> */}
-                                <label style={styles.upload}>
-                                    <input
-                                        type="file"
-                                        style={styles.input}
-                                        onChange={onDocumentUpload}
-                                        value={document}
-                                        name="document"
-                                        required
-                                    />
-                                    <FaUpload />&nbsp;&nbsp;&nbsp;Upload Document
-                                    </label>
-                                {/* </div> */}
-                            </div>
-                            <div className='row'>
-                                {/* <div className="col-md-6 col-sm-6 col-6"> */}
-                                <img src={imagePreview} className="depositSlipImg" />
-                                {/* </div> */}
-                            </div>
-                        </div>
-
-                        <div style={{
-                            display: "flex", flex: 1, justifyContent: "center", marginTop: "2%",
-                            marginBottom: "2%",
-                        }} className='container'>
-                            <img
-                                onClick={() => props.history.goBack()}
-                                src={Back_Arrow}
-                                style={{ width: 45, height: 35, cursor: "pointer" }}
-                            />
-                            <div
-                                style={{
-                                    display: "flex",
-                                    flex: 1,
-                                    justifyContent: "flex-end",
-                                }}
-                            >
-                                {comingFor === "add" ? (
-                                    <Button
-                                        style={styles.stylesForButton}
-                                        //disabled={!validateFormType1()}
-                                        onClick={onClick}
-                                        variant="contained"
-                                        color="primary"
-                                    >
-                                        Next
-                                    </Button>
-                                ) : (
-                                        <Button
-                                            style={styles.stylesForButton}
-                                            //disabled={!validateFormType1()}
-                                            onClick={handleEdit}
-                                            variant="contained"
-                                            color="default"
-                                        >
-                                            Update
-                                        </Button>
-                                    )}
-
-                            </div>
-                        </div>
-                    </div>
-                ) : value === 1 ? (
-                    <div
-                        style={{ flex: 4, display: "flex", flexDirection: "column" }}
-                        className="container"
-                    >
-
-                        <div className='row' style={{ marginTop: '20px' }}>
-                            {billSummaryArray !== 0 ? (
-                                <CustomTable
-                                    tableData={billSummaryArray}
-                                    tableDataKeys={tableDataKeysForBillSummary}
-                                    tableHeading={tableHeadingForBillSummary}
-                                    action={actions}
-                                    printItem={handleInvoicePrint}
-                                    borderBottomColor={'#60d69f'}
-                                    borderBottomWidth={20}
-                                />
-                            ) : (
-                                    undefined
-                                )}
-                        </div>
-
-
-                        <div style={{
-                            display: "flex", flex: 1, justifyContent: "center", marginTop: "2%",
-                            marginBottom: "2%",
-                        }}>
-                            <img
-                                onClick={() => props.history.goBack()}
-                                src={Back_Arrow}
-                                style={{ width: 45, height: 35, cursor: "pointer" }}
-                            />
-                            <div
-                                style={{
-                                    display: "flex",
-                                    flex: 1,
-                                    justifyContent: "flex-end",
-                                }}
-                            >
-                                {comingFor === "add" ? (
-
-                                    <Button
-                                        style={styles.stylesForButton}
-                                        //disabled={!validateFormType1()}
-                                        onClick={handleAdd}
-                                        variant="contained"
-                                        color="default"
-                                    >
-                                        Submit
-                                    </Button>
-
-                                ) : (
-                                        <Button
-                                            style={styles.stylesForButton}
-                                            //disabled={!validateFormType1()}
-                                            onClick={handleEdit}
-                                            variant="contained"
-                                            color="default"
-                                        >
-                                            Update
-                                        </Button>
-                                    )}
-
-                            </div>
-                        </div>
-                    </div>
-                ) : (
-                            undefined
-                        )}
-
-                <Notification msg={errorMsg} open={openNotification} />
-
+  return (
+    <div
+      style={{
+        backgroundColor: '#60d69f',
+        position: 'fixed',
+        display: 'flex',
+        width: '100%',
+        height: '100%',
+        flexDirection: 'column',
+        flex: 1,
+        overflowY: 'scroll',
+      }}
+    >
+      <Header />
+      <div className='cPadding'>
+        <div className='subheader'>
+          <div>
+            <img src={ReInbursement} />
+            <div style={{ flex: 4, display: 'flex', alignItems: 'center' }}>
+              <h4>
+                {comingFor === 'add'
+                  ? ' Insurance Re-Imbursement'
+                  : ' Edit Insurance Re-Imbursement'}
+              </h4>
             </div>
+          </div>
         </div>
-    );
+
+        <div style={{ width: 'auto', height: '20px' }} />
+        <div className={classesForTabs.root}>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            indicatorColor='null'
+            centered
+          >
+            <Tab
+              style={{
+                color: 'white',
+                borderRadius: 15,
+                outline: 'none',
+                backgroundColor: value === 0 ? '#2c6ddd' : undefined,
+              }}
+              label='Treatment Details'
+            />
+            <Tab
+              style={{
+                color: 'white',
+                borderRadius: 15,
+                outline: 'none',
+                backgroundColor: value === 1 ? '#2c6ddd' : undefined,
+              }}
+              label='Bill Summary'
+            />
+          </Tabs>
+        </div>
+        {value === 0 ? (
+          <div>
+            <div
+              style={{ marginTop: '20px', marginBottom: '10px' }}
+              className={`container ${classes.root}`}
+            >
+              {comingFor === 'add' ? (
+                <div>
+                  <div
+                    className='row'
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      required
+                      label='Search Patient by Name / MRN / National ID / Mobile Number'
+                      name={'searchQuery'}
+                      value={searchQuery}
+                      error={searchQuery === '' && isFormSubmitted}
+                      onChange={handleSearch}
+                      className='textInputStyle'
+                      variant='filled'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                    />
+                  </div>
+
+                  {searchQuery ? (
+                    <div style={{ zIndex: 3 }}>
+                      <Paper>
+                        {itemFoundSuccessfull ? (
+                          itemFound && (
+                            <Table size='small'>
+                              <TableHead>
+                                <TableRow>
+                                  <TableCell>MRN Number</TableCell>
+                                  <TableCell>Patient Name</TableCell>
+                                  <TableCell>Gender</TableCell>
+                                  <TableCell>Age</TableCell>
+                                  <TableCell>Payment Method</TableCell>
+                                </TableRow>
+                              </TableHead>
+
+                              <TableBody>
+                                {itemFound.map((i) => {
+                                  return (
+                                    <TableRow
+                                      key={i._id}
+                                      onClick={() => handleAddItem(i)}
+                                      style={{ cursor: 'pointer' }}
+                                    >
+                                      <TableCell>{i.profileNo}</TableCell>
+                                      <TableCell>
+                                        {i.firstName + ` ` + i.lastName}
+                                      </TableCell>
+                                      <TableCell>{i.gender}</TableCell>
+                                      <TableCell>{i.age}</TableCell>
+                                      <TableCell>{i.paymentMethod}</TableCell>
+                                    </TableRow>
+                                  )
+                                })}
+                              </TableBody>
+                            </Table>
+                          )
+                        ) : (
+                          <h4
+                            style={{ textAlign: 'center' }}
+                            onClick={() => setSearchQuery('')}
+                          >
+                            Patient Not Found
+                          </h4>
+                        )}
+                      </Paper>
+                    </div>
+                  ) : (
+                    undefined
+                  )}
+                </div>
+              ) : (
+                undefined
+              )}
+            </div>
+
+            <div className='container' style={styles.patientDetails}>
+              <div className='row'>
+                <div className='col-md-12'>
+                  <h4 style={{ color: 'blue', fontWeight: '600' }}>
+                    Patient Details
+                  </h4>
+                </div>
+              </div>
+              <div className='row'>
+                <div className='col-md-4 col-sm-4 col-4'>
+                  <div style={styles.inputContainerForTextField}>
+                    <InputLabel style={styles.stylesForLabel} id='status-label'>
+                      Patient Name
+                    </InputLabel>
+                    <span style={styles.styleForPatientDetails}>
+                      {firstName + ` ` + lastName}{' '}
+                    </span>
+                  </div>
+                </div>
+                <div className='col-md-4 col-sm-4 col-4'>
+                  <div style={styles.inputContainerForTextField}>
+                    <InputLabel style={styles.stylesForLabel} id='status-label'>
+                      Gender
+                    </InputLabel>
+                    <span style={styles.styleForPatientDetails}>{gender}</span>
+                  </div>
+                </div>
+                <div className='col-md-4 col-sm-4 col-4'>
+                  <div style={styles.inputContainerForTextField}>
+                    <InputLabel style={styles.stylesForLabel} id='status-label'>
+                      Age
+                    </InputLabel>
+                    <span style={styles.styleForPatientDetails}>{age}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className='row'>
+                <div className='col-md-4 col-sm-4 col-4'>
+                  <div style={styles.inputContainerForTextField}>
+                    <InputLabel style={styles.stylesForLabel} id='status-label'>
+                      Patient MRN
+                    </InputLabel>
+                    <span style={styles.styleForPatientDetails}>
+                      {profileNo}
+                    </span>
+                  </div>
+                </div>
+
+                <div className='col-md-4 col-sm-4 col-4'>
+                  <div style={styles.inputContainerForTextField}>
+                    <InputLabel style={styles.stylesForLabel} id='status-label'>
+                      Insurance No
+                    </InputLabel>
+                    <span style={styles.styleForPatientDetails}>
+                      {insuranceNumber}
+                    </span>
+                    {/* <input
+                      disabled={true}
+                      type='text'
+                      placeholder='Insurance Number'
+                      name={'insuranceId'}
+                      value={insuranceNumber}
+                      onChange={onChangeValue}
+                      className='textInputStyle'
+                    /> */}
+                  </div>
+                </div>
+                <div className='col-md-4 col-sm-4 col-4'>
+                  <div style={styles.inputContainerForTextField}>
+                    <InputLabel style={styles.stylesForLabel} id='status-label'>
+                      Insurance Provider
+                    </InputLabel>
+                    <span style={styles.styleForPatientDetails}>
+                      {insuranceVendor}
+                    </span>
+                    {/* <input
+                      disabled={true}
+                      type='text'
+                      placeholder='Insurance Provider'
+                      name={'insuranceVendor'}
+                      value={insuranceVendor}
+                      onChange={onChangeValue}
+                      className='textInputStyle'
+                    /> */}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              style={{
+                height: '10px',
+              }}
+            />
+
+            <div
+              className={`container ${classes.root}`}
+              style={styles.patientDetails}
+            >
+              <div className='row'>
+                <div
+                  className='col-md-12'
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
+                    multiline
+                    type='text'
+                    error={treatmentDetail === '' && isFormSubmitted}
+                    label='Treatment Details'
+                    name={'treatmentDetail'}
+                    value={treatmentDetail}
+                    onChange={onChangeValue}
+                    rows={4}
+                    className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div
+              style={{
+                height: '10px',
+              }}
+            />
+
+            {comingFor === 'edit' ? (
+              <div className={`container ${classes.root}`}>
+                <div className='row'>
+                  <div
+                    className='col-md-6 col-sm-6 col-6'
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      required
+                      select
+                      fullWidth
+                      id='status'
+                      name='status'
+                      value={status}
+                      error={status === '' && isFormSubmitted}
+                      onChange={onChangeValue}
+                      label='Status'
+                      variant='filled'
+                      className='dropDownStyle'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                    >
+                      <MenuItem value=''>
+                        <em>None</em>
+                      </MenuItem>
+                      {statusArray.map((val) => {
+                        return (
+                          <MenuItem key={val.key} value={val.key}>
+                            {val.value}
+                          </MenuItem>
+                        )
+                      })}
+                    </TextField>
+                  </div>
+                  <div
+                    className='col-md-6 col-sm-6 col-6'
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      required
+                      label='Response Code'
+                      name={'responseCode'}
+                      value={responseCode}
+                      error={responseCode === '' && isFormSubmitted}
+                      onChange={onChangeValue}
+                      className='textInputStyle'
+                      variant='filled'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              undefined
+            )}
+
+            <div className='container'>
+              <div
+                className='row'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <label style={styles.upload}>
+                  <TextField
+                    required
+                    type='file'
+                    style={styles.input}
+                    onChange={onDocumentUpload}
+                    value={document}
+                    name='document'
+                  />
+                  <FaUpload /> &nbsp;&nbsp;&nbsp;Upload Document
+                  <ErrorMessage
+                    name={document && document.name}
+                    isFormSubmitted={isFormSubmitted}
+                  />
+                </label>
+              </div>
+              <div className='row'>
+                {/* <div className="col-md-6 col-sm-6 col-6"> */}
+                <img src={imagePreview} className='depositSlipImg' />
+                {/* </div> */}
+              </div>
+            </div>
+
+            <div
+              style={{
+                display: 'flex',
+                flex: 1,
+                justifyContent: 'center',
+                marginTop: '2%',
+                marginBottom: '2%',
+              }}
+              className='container'
+            >
+              <img
+                onClick={() => props.history.goBack()}
+                src={Back_Arrow}
+                style={{ width: 45, height: 35, cursor: 'pointer' }}
+              />
+              <div
+                style={{
+                  display: 'flex',
+                  flex: 1,
+                  justifyContent: 'flex-end',
+                }}
+              >
+                {comingFor === 'add' ? (
+                  <Button
+                    style={styles.stylesForButton}
+                    //disabled={!validateFormType1()}
+                    onClick={onClick}
+                    variant='contained'
+                    color='primary'
+                  >
+                    Next
+                  </Button>
+                ) : (
+                  <Button
+                    style={styles.stylesForButton}
+                    //disabled={!validateFormType1()}
+                    onClick={handleEdit}
+                    variant='contained'
+                    color='default'
+                  >
+                    Update
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
+        ) : value === 1 ? (
+          <div
+            style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+            className='container'
+          >
+            <div className='row' style={{ marginTop: '20px' }}>
+              {billSummaryArray !== 0 ? (
+                <CustomTable
+                  tableData={billSummaryArray}
+                  tableDataKeys={tableDataKeysForBillSummary}
+                  tableHeading={tableHeadingForBillSummary}
+                  action={actions}
+                  printItem={handleInvoicePrint}
+                  borderBottomColor={'#60d69f'}
+                  borderBottomWidth={20}
+                />
+              ) : (
+                undefined
+              )}
+            </div>
+
+            <div
+              style={{
+                display: 'flex',
+                flex: 1,
+                justifyContent: 'center',
+                marginTop: '2%',
+                marginBottom: '2%',
+              }}
+            >
+              <img
+                onClick={() => props.history.goBack()}
+                src={Back_Arrow}
+                style={{ width: 45, height: 35, cursor: 'pointer' }}
+              />
+              <div
+                style={{
+                  display: 'flex',
+                  flex: 1,
+                  justifyContent: 'flex-end',
+                }}
+              >
+                {comingFor === 'add' ? (
+                  <Button
+                    style={styles.stylesForButton}
+                    //disabled={!validateFormType1()}
+                    onClick={handleAdd}
+                    variant='contained'
+                    color='default'
+                  >
+                    Submit
+                  </Button>
+                ) : (
+                  <Button
+                    style={styles.stylesForButton}
+                    //disabled={!validateFormType1()}
+                    onClick={handleEdit}
+                    variant='contained'
+                    color='default'
+                  >
+                    Update
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
+        ) : (
+          undefined
+        )}
+
+        <Notification msg={errorMsg} open={openNotification} />
+      </div>
+    </div>
+  )
 }
-export default AddEditPatientListing;
+export default AddEditPatientListing

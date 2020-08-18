@@ -1715,6 +1715,7 @@ function AddEditPatientListing(props) {
                     label='Depositor Name'
                     name={'depositorName'}
                     value={depositorName}
+                    error={depositorName === '' && isFormSubmitted}
                     onChange={onChangeValue}
                     className='textInputStyle'
                     variant='filled'
@@ -1739,6 +1740,7 @@ function AddEditPatientListing(props) {
                     label='Amount Received'
                     name={'amountReceived'}
                     value={amountReceived}
+                    error={amountReceived === '' && isFormSubmitted}
                     onChange={onChangeValue}
                     type={'number'}
                     className='textInputStyle'
@@ -1837,7 +1839,7 @@ function AddEditPatientListing(props) {
                           />
                           <FaUpload /> Upload Deposit Slip
                           <ErrorMessage
-                            name={slipUpload && slipUpload.name}
+                            name={depositSlip && depositSlip.name}
                             isFormSubmitted={isFormSubmitted}
                           />
                         </label>
@@ -1871,7 +1873,7 @@ function AddEditPatientListing(props) {
                           />
                           <FaUpload /> Upload Deposit Slip
                           <ErrorMessage
-                            name={slipUpload && slipUpload.name}
+                            name={depositSlip && depositSlip.name}
                             isFormSubmitted={isFormSubmitted}
                           />
                         </label>

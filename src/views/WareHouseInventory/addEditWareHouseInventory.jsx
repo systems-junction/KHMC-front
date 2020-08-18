@@ -38,7 +38,7 @@ const styles = {
   // },
 
   inputContainerForTextField: {
-    marginTop: 25,
+    marginTop: 6,
   },
   inputField: { outline: 'none' },
 
@@ -73,7 +73,51 @@ const styles = {
     marginTop: 25,
   },
 }
-const useStyles = makeStyles(styles)
+const useStyles = makeStyles((theme) => ({
+  underline: {
+    '&&&:before': {
+      borderBottom: 'none',
+    },
+    '&&:after': {
+      borderBottom: 'none',
+    },
+  },
+  margin: {
+    margin: theme.spacing(0),
+  },
+  input: {
+    backgroundColor: 'white',
+    borderRadius: 6,
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:disabled': {
+      color: 'gray',
+    },
+  },
+  multilineColor: {
+    backgroundColor: 'white',
+    borderRadius: 6,
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+  },
+  root: {
+    '& .MuiTextField-root': {
+      backgroundColor: 'white',
+    },
+    '& .Mui-focused': {
+      backgroundColor: 'white',
+      color: 'black',
+    },
+  },
+}))
 
 const ItemsData = [
   { _id: 1, name: 'First Item' },
@@ -82,6 +126,7 @@ const ItemsData = [
 ]
 
 function AddEditWareHouseInventory(props) {
+  const classes = useStyles()
   const initialState = {
     _id: '',
     itemId: '',
@@ -214,7 +259,7 @@ function AddEditWareHouseInventory(props) {
     >
       <Header />
 
-      <div className='cPadding'>
+      <div className={`cPadding ${classes.root}`}>
         <div className='subheader'>
           <div>
             <img src={wh_inventory} />
@@ -288,61 +333,72 @@ function AddEditWareHouseInventory(props) {
 
         <div style={{ flex: 4, display: 'flex', flexDirection: 'column' }}>
           <div className='row'>
-            <div className='col-md-12' style={styles.inputContainer}>
-              {/* <TextField
-              fullWidth
-              id="qty"
-              name="qty"
-              label="Quantity"
-              // variant="outlined"
-              value={qty}
-              type="number"
-              onChange={onChangeValue}
-            /> */}
-              <input
-                style={styles.inputField}
+            <div
+              className='col-md-12'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
                 type='number'
-                placeholder='Qunatity'
+                label='Quantity'
                 name={'qty'}
                 value={qty}
-                onChange={onChangeValue}
+                error={qty === '' && isFormSubmitted}
+                onChange={(e) => onChangeValue(e)}
                 className='textInputStyle'
                 onKeyDown={(evt) =>
                   (evt.key === 'e' || evt.key === '+' || evt.key === '-') &&
                   evt.preventDefault()
                 }
+                variant='filled'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
               />
             </div>
           </div>
 
           <div className='row'>
-            <div className='col-md-12'>
-              <div style={styles.inputContainerForDropDown}>
-                <InputLabel id='itemName-label'>Item Name</InputLabel>
-                <Select
-                  style={styles.inputField}
-                  fullWidth
-                  id='itemName'
-                  name='itemId'
-                  value={itemId}
-                  onChange={onChangeValue}
-                  label='Item Name'
-                  className='dropDownStyle'
-                  input={<BootstrapInput />}
-                >
-                  <MenuItem value=''>
-                    <em>None</em>
-                  </MenuItem>
-                  {items &&
-                    items.map((val, key) => {
-                      return (
-                        <MenuItem key={val._id} value={val._id}>
-                          {val.name}
-                        </MenuItem>
-                      )
-                    })}
-                </Select>
-              </div>
+            <div
+              className='col-md-12'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                select
+                fullWidth
+                id='itemName'
+                name='itemId'
+                value={itemId}
+                error={itemId === '' && isFormSubmitted}
+                onChange={onChangeValue}
+                label='Item Name'
+                variant='filled'
+                className='dropDownStyle'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              >
+                <MenuItem value=''>
+                  <em>None</em>
+                </MenuItem>
+                {items &&
+                  items.map((val, key) => {
+                    return (
+                      <MenuItem key={val._id} value={val._id}>
+                        {val.name}
+                      </MenuItem>
+                    )
+                  })}
+              </TextField>
             </div>
           </div>
 
