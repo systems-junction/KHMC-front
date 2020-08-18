@@ -946,33 +946,49 @@ function AddItems(props) {
               grandSubClass == 'cm_contrast' ||
               grandSubClass == 'mri_contrast') && (
               <>
-                <div className='col-md-4'>
-                  <div style={styles.inputContainer}>
-                    <InputLabelComponent>Scientific Name</InputLabelComponent>
-                    <input
-                      style={styles.inputField}
-                      type='text'
-                      placeholder='Scientific Name'
-                      name={'scientificName'}
-                      value={scientificName}
-                      onChange={onChangeValue}
-                      className='textInputStyle'
-                    />
-                  </div>
+                <div
+                  className='col-md-4'
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
+                    label='Scientific Name'
+                    name={'scientificName'}
+                    value={scientificName}
+                    error={scientificName === '' && isFormSubmitted}
+                    onChange={(e) => onChangeValue(e)}
+                    className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  />
                 </div>
-                <div className='col-md-4'>
-                  <div style={styles.inputContainer}>
-                    <InputLabelComponent>TradeName</InputLabelComponent>
-                    <input
-                      style={styles.inputField}
-                      type='text'
-                      placeholder='Trade Name'
-                      name={'tradeName'}
-                      value={tradeName}
-                      onChange={onChangeValue}
-                      className='textInputStyle'
-                    />
-                  </div>
+                <div
+                  className='col-md-4'
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
+                    label='TradeName'
+                    name={'tradeName'}
+                    value={tradeName}
+                    error={tradeName === '' && isFormSubmitted}
+                    onChange={(e) => onChangeValue(e)}
+                    className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  />
                 </div>
               </>
             )}
@@ -982,23 +998,29 @@ function AddItems(props) {
               (subClass == 'medical_supplies' &&
                 grandSubClass != 'os_orthopedic')) && (
               <>
-                <div className='col-md-4'>
-                  <div style={styles.inputContainer}>
-                    <InputLabelComponent>Temperature</InputLabelComponent>
-
-                    <input
-                      style={styles.inputField}
-                      type='number'
-                      placeholder='Temperature'
-                      name={'temperature'}
-                      value={temperature}
-                      onChange={onChangeValue}
-                      className='textInputStyle'
-                      onKeyDown={(evt) =>
-                        evt.key === 'e' && evt.preventDefault()
-                      }
-                    />
-                  </div>
+                <div
+                  className='col-md-4'
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
+                    type='number'
+                    label='Temperature'
+                    name={'temperature'}
+                    value={temperature}
+                    error={temperature === '' && isFormSubmitted}
+                    onChange={(e) => onChangeValue(e)}
+                    className='textInputStyle'
+                    onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()}
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  />
                 </div>
               </>
             )}
@@ -1010,53 +1032,68 @@ function AddItems(props) {
               (subClass == 'medical_supplies' &&
                 grandSubClass != 'os_orthopedic')) && (
               <>
-                <div className='col-md-4'>
-                  <div style={styles.inputContainer}>
-                    <InputLabelComponent>Humidity</InputLabelComponent>
-                    <input
-                      style={styles.inputField}
-                      type='number'
-                      placeholder='Humidity'
-                      name={'humidity'}
-                      value={humidity}
-                      onChange={onChangeValue}
-                      className='textInputStyle'
-                      onKeyDown={(evt) =>
-                        evt.key === 'e' && evt.preventDefault()
-                      }
-                    />
-                  </div>
+                <div
+                  className='col-md-4'
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
+                    label='Humidity'
+                    name={'humidity'}
+                    value={humidity}
+                    error={humidity === '' && isFormSubmitted}
+                    onChange={(e) => onChangeValue(e)}
+                    className='textInputStyle'
+                    onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()}
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  />
                 </div>
               </>
             )}
             {grandSubClass == 'me_medicines' && (
               <>
-                <div className='col-md-4'>
-                  <div style={styles.inputContainerForDropDown}>
-                    <InputLabelComponent>Light Sensitive</InputLabelComponent>
-                    <Select
-                      style={styles.inputField}
-                      fullWidth
-                      labelId='receiptUnit-label'
-                      id='lightSensitive'
-                      name='lightSensitive'
-                      value={lightSensitive}
-                      onChange={onChangeValue}
-                      className='dropDownStyle'
-                      input={<BootstrapInput />}
-                    >
-                      <MenuItem value=''>
-                        <em>None</em>
-                      </MenuItem>
-                      {con.map((val) => {
-                        return (
-                          <MenuItem key={val.key} value={val.key}>
-                            {val.value}
-                          </MenuItem>
-                        )
-                      })}
-                    </Select>
-                  </div>
+                <div
+                  className='col-md-4'
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
+                    select
+                    fullWidth
+                    id='lightSensitive'
+                    name='lightSensitive'
+                    value={lightSensitive}
+                    error={lightSensitive === '' && isFormSubmitted}
+                    onChange={onChangeValue}
+                    label='Light Sensitive'
+                    variant='filled'
+                    className='dropDownStyle'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  >
+                    <MenuItem value=''>
+                      <em>None</em>
+                    </MenuItem>
+                    {con.map((val) => {
+                      return (
+                        <MenuItem key={val.key} value={val.key}>
+                          {val.value}
+                        </MenuItem>
+                      )
+                    })}
+                  </TextField>
                 </div>
               </>
             )}
@@ -1064,32 +1101,41 @@ function AddItems(props) {
               grandSubClass == 'mei_medical' ||
               grandSubClass == 'cs_cardiac') && (
               <>
-                <div className='col-md-4'>
-                  <div style={styles.inputContainerForDropDown}>
-                    <InputLabelComponent>Reusable</InputLabelComponent>
-                    <Select
-                      style={styles.inputField}
-                      fullWidth
-                      labelId='receiptUnit-label'
-                      id='resuableItem'
-                      name='resuableItem'
-                      value={resuableItem}
-                      onChange={onChangeValue}
-                      className='dropDownStyle'
-                      input={<BootstrapInput />}
-                    >
-                      <MenuItem value=''>
-                        <em>None</em>
-                      </MenuItem>
-                      {con.map((val) => {
-                        return (
-                          <MenuItem key={val.key} value={val.key}>
-                            {val.value}
-                          </MenuItem>
-                        )
-                      })}
-                    </Select>
-                  </div>
+                <div
+                  className='col-md-4'
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
+                    select
+                    fullWidth
+                    id='resuableItem'
+                    name='resuableItem'
+                    value={resuableItem}
+                    error={resuableItem === '' && isFormSubmitted}
+                    onChange={onChangeValue}
+                    label='Reusable'
+                    variant='filled'
+                    className='dropDownStyle'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  >
+                    <MenuItem value=''>
+                      <em>None</em>
+                    </MenuItem>
+                    {con.map((val) => {
+                      return (
+                        <MenuItem key={val.key} value={val.key}>
+                          {val.value}
+                        </MenuItem>
+                      )
+                    })}
+                  </TextField>
                 </div>
               </>
             )}
@@ -1103,8 +1149,38 @@ function AddItems(props) {
               (subClass == 'medical_supplies' &&
                 grandSubClass != 'mei_medical')) && (
               <>
-                <div className='col-md-4'>
-                  <div style={styles.inputContainer}>
+                <div
+                  className='col-md-4'
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <div
+                    className={comingFor === 'add' ? 'col-md-12' : 'col-md-4'}
+                  >
+                    {/* <InputLabelComponent>Date Generated</InputLabelComponent> */}
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                      <DateTimePicker
+                        inputVariant='filled'
+                        label='Expiration'
+                        fullWidth
+                        onChange={(val) => onChangeDate(val, 'expiration')}
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                        value={
+                          comingFor === 'add'
+                            ? expiration
+                              ? expiration
+                              : new Date()
+                            : expiration
+                        }
+                      />
+                    </MuiPickersUtilsProvider>
+                  </div>
+                  {/* <div style={styles.inputContainer}>
                     <InputLabelComponent>Expiration</InputLabelComponent>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                       <DateTimePicker
@@ -1123,7 +1199,7 @@ function AddItems(props) {
                         }
                       />
                     </MuiPickersUtilsProvider>
-                  </div>
+                  </div> */}
                 </div>
               </>
             )}
