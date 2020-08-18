@@ -2,6 +2,8 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable react/jsx-indent */
 import React, { useEffect, useState, useReducer } from "react";
+import TextField from "@material-ui/core/TextField";
+
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import Button from "@material-ui/core/Button";
@@ -49,10 +51,18 @@ const styles = {
     padding: "20px",
   },
   inputContainerForTextField: {
-    marginTop: 25,
+    marginTop: 6,
   },
+
   inputContainerForDropDown: {
-    marginTop: 25,
+    marginTop: 6,
+  },
+  textFieldPadding: {
+    paddingLeft: 3,
+    paddingRight: 3,
+  },
+  input: {
+    display: "none",
   },
   stylesForButton: {
     color: "white",
@@ -68,7 +78,7 @@ const styles = {
   },
   stylesForLabel: {
     fontWeight: "700",
-    color: "gray",
+    color: "white",
   },
 
   inputField: {
@@ -77,27 +87,62 @@ const styles = {
   upload: {
     backgroundColor: "white",
     border: "0px solid #ccc",
-    borderRadius: "10px",
+    borderRadius: "5px",
     color: "gray",
-    marginTop: "30px",
+    // marginTop: "30px",
     width: "100%",
-    height: "45px",
+    height: "55px",
     cursor: "pointer",
-    padding: "10px",
+    padding: "15px",
   },
 };
 
-const useStylesForTabs = makeStyles({
-  root: {
+const useStyles = makeStyles((theme) => ({
+  rootTab: {
     justifyContent: "center",
   },
   scroller: {
     flexGrow: "0",
   },
-});
+  margin: {
+    margin: theme.spacing(0),
+  },
+  input: {
+    backgroundColor: "white",
+    borderRadius: 6,
+    "&:after": {
+      borderBottomColor: "black",
+    },
+    "&:hover": {
+      backgroundColor: "white",
+    },
+    "&:disabled": {
+      color: "gray",
+    },
+  },
+  multilineColor: {
+    backgroundColor: "white",
+    borderRadius: 6,
+    "&:hover": {
+      backgroundColor: "white",
+    },
+    "&:after": {
+      borderBottomColor: "black",
+    },
+  },
+  root: {
+    "& .MuiTextField-root": {
+      backgroundColor: "white",
+    },
+    "& .Mui-focused": {
+      backgroundColor: "white",
+      color: "black",
+    },
+  },
+}));
 
 function DischargeRequest(props) {
-  const classesForTabs = useStylesForTabs();
+  const classes = useStyles();
 
   const initialState = {
     dischargeMedArray: "",
@@ -486,7 +531,7 @@ function DischargeRequest(props) {
     >
       <Header />
 
-      <div className="cPadding">
+      <div className={`cPadding ${classes.root}`}>
         <div className="subheader">
           <div>
             <img src={business_Unit} />
@@ -512,17 +557,9 @@ function DischargeRequest(props) {
                 <InputLabel style={styles.stylesForLabel} id="status-label">
                   Patient Name
                 </InputLabel>
-                <input
-                  disabled={true}
-                  type="text"
-                  placeholder="Patient Name"
-                  name={"patientName"}
-                  value={
-                    selectedPatient.firstName + ` ` + selectedPatient.lastName
-                  }
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                />
+                <span>
+                  {selectedPatient.firstName + ` ` + selectedPatient.lastName}
+                </span>
               </div>
             </div>
             <div className="col-md-4 col-sm-4">
@@ -530,15 +567,7 @@ function DischargeRequest(props) {
                 <InputLabel style={styles.stylesForLabel} id="status-label">
                   Gender
                 </InputLabel>
-                <input
-                  disabled={true}
-                  type="text"
-                  placeholder="Gender"
-                  name={"gender"}
-                  value={selectedPatient.gender}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                />
+                <span>{selectedPatient.gender}</span>
               </div>
             </div>
             <div className="col-md-4 col-sm-4">
@@ -546,15 +575,7 @@ function DischargeRequest(props) {
                 <InputLabel style={styles.stylesForLabel} id="status-label">
                   Age
                 </InputLabel>
-                <input
-                  disabled={true}
-                  type="text"
-                  placeholder="Age"
-                  name={"age"}
-                  value={selectedPatient.age ? selectedPatient.age : 30}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                />
+                <span>{selectedPatient.age}</span>
               </div>
             </div>
           </div>
@@ -565,15 +586,7 @@ function DischargeRequest(props) {
                 <InputLabel style={styles.stylesForLabel} id="status-label">
                   Patient ID
                 </InputLabel>
-                <input
-                  disabled={true}
-                  type="text"
-                  placeholder="Patient ID"
-                  name={"patientId"}
-                  value={selectedPatient.profileNo}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                />
+                <span>{selectedPatient.profileNo}</span>
               </div>
             </div>
 
@@ -582,19 +595,11 @@ function DischargeRequest(props) {
                 <InputLabel style={styles.stylesForLabel} id="status-label">
                   Insurance No
                 </InputLabel>
-                <input
-                  disabled={true}
-                  type="text"
-                  placeholder="Insurance Number"
-                  name={"insuranceId"}
-                  value={
-                    selectedPatient.insuranceId
-                      ? selectedPatient.insuranceId
-                      : "--"
-                  }
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                />
+                <span>
+                  {selectedPatient.insuranceId
+                    ? selectedPatient.insuranceId
+                    : "--"}
+                </span>
               </div>
             </div>
             <div className="col-md-4 col-sm-4">
@@ -602,15 +607,7 @@ function DischargeRequest(props) {
                 <InputLabel style={styles.stylesForLabel} id="status-label">
                   Request No
                 </InputLabel>
-                <input
-                  disabled={true}
-                  type="text"
-                  placeholder="Request Number"
-                  name={"requestNo"}
-                  value={requestNo}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                />
+                <span>{requestNo}</span>
               </div>
             </div>
           </div>
@@ -621,11 +618,11 @@ function DischargeRequest(props) {
             height: "20px",
           }}
         />
-        <div className={classesForTabs.root}>
+        <div className={classes.root}>
           <Tabs
             classes={{
-              root: classesForTabs.root,
-              scroller: classesForTabs.scroller,
+              root: classes.rootTab,
+              scroller: classes.scroller,
             }}
             value={value}
             onChange={handleChange}
@@ -681,41 +678,36 @@ function DischargeRequest(props) {
           >
             <div style={{ marginTop: "20px" }} className="row">
               <div className="col-md-12 col-sm-12 col-12">
-                <TextArea
-                  disabled={true}
-                  type="text"
-                  placeholder="Discharge Notes"
-                  name={"dischargeNotes"}
-                  value={
-                    selectedItem &&
-                    selectedItem.dischargeRequest.dischargeSummary
-                      ? selectedItem.dischargeRequest.dischargeSummary
-                          .dischargeNotes
-                      : ""
-                  }
-                  onChange={onChangeValue}
-                  rows="4"
-                />
+                <InputLabel style={styles.stylesForLabel} id="status-label">
+                  Discharge Notes
+                </InputLabel>
+
+                <span>
+                  {selectedItem &&
+                  selectedItem &&
+                  selectedItem.dischargeRequest.dischargeSummary
+                    ? selectedItem.dischargeRequest.dischargeSummary
+                        .dischargeNotes
+                    : ""}{" "}
+                </span>
               </div>
             </div>
 
             <div style={{ marginTop: "20px" }} className="row">
               <div className="col-md-12 col-sm-12 col-12">
-                <TextArea
-                  disabled={true}
-                  type="text"
-                  placeholder="Other Notes"
-                  name={"otherNotes"}
-                  value={
-                    selectedItem &&
+                <div style={styles.inputContainerForTextField}>
+                  <InputLabel style={styles.stylesForLabel} id="status-label">
+                    Other Notes
+                  </InputLabel>
+
+                  <span>
+                    {selectedItem &&
                     selectedItem.dischargeRequest.dischargeSummary.otherNotes
                       ? selectedItem.dischargeRequest.dischargeSummary
                           .otherNotes
-                      : ""
-                  }
-                  onChange={onChangeValue}
-                  rows="4"
-                />
+                      : ""}{" "}
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -862,32 +854,53 @@ function DischargeRequest(props) {
               <div className="row">
                 <div
                   className="col-md-6"
-                  style={styles.inputContainerForTextField}
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
                 >
-                  <input
+                  <TextField
                     disabled
-                    style={styles.inputField}
-                    // type="date"
-                    placeholder="Date/Time"
+                    label="Date/Time"
                     name={"dateTime"}
                     value={new Date()}
                     onChange={onChangeValue}
                     className="textInputStyle"
+                    variant="filled"
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                    InputLabelProps={{
+                      className: classes.label,
+                      classes: { label: classes.label },
+                    }}
                   />
                 </div>
 
                 <div
                   className="col-md-6"
-                  style={styles.inputContainerForTextField}
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
                 >
-                  <input
+                  <TextField
                     disabled
-                    style={styles.inputField}
-                    placeholder="Receiver Name"
+                    label="Receiver Name"
                     name={"receivedBy"}
                     value={currentUser.name}
                     onChange={onChangeValue}
                     className="textInputStyle"
+                    variant="filled"
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                    InputLabelProps={{
+                      className: classes.label,
+                      classes: { label: classes.label },
+                    }}
                   />
                 </div>
               </div>
@@ -897,32 +910,54 @@ function DischargeRequest(props) {
                   <div className="row">
                     <div
                       className="col-md-6"
-                      style={styles.inputContainerForTextField}
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
                     >
-                      <input
-                        style={styles.inputField}
+                      <TextField
                         type="number"
-                        placeholder="Deposit Amount"
+                        label="Deposit Amount"
                         name={"depositAmount"}
+                        variant="filled"
                         value={depositAmount}
                         onChange={onChangeValue}
                         className="textInputStyle"
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                        InputLabelProps={{
+                          className: classes.label,
+                          classes: { label: classes.label },
+                        }}
                       />
                     </div>
 
                     <div
                       className="col-md-6"
-                      style={styles.inputContainerForTextField}
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
                     >
-                      <input
+                      <TextField
                         disabled
-                        style={styles.inputField}
                         type="number"
-                        placeholder="Amount Received"
+                        label="Amount Received"
                         name={"amountReceived"}
+                        variant="filled"
                         value={selectedPatient.amountReceived}
                         onChange={onChangeValue}
                         className="textInputStyle"
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                        InputLabelProps={{
+                          className: classes.label,
+                          classes: { label: classes.label },
+                        }}
                       />
                     </div>
                   </div>
@@ -930,13 +965,16 @@ function DischargeRequest(props) {
                   <div className="row">
                     <div
                       className="col-md-6"
-                      style={styles.inputContainerForTextField}
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
                     >
-                      <input
+                      <TextField
                         disabled
-                        style={styles.inputField}
+                        variant="filled"
                         type="number"
-                        placeholder="Total Amount"
+                        label="Total Amount"
                         name={"totalAmount"}
                         value={
                           parseInt(depositAmount) +
@@ -944,6 +982,14 @@ function DischargeRequest(props) {
                         }
                         onChange={onChangeValue}
                         className="textInputStyle"
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                        InputLabelProps={{
+                          className: classes.label,
+                          classes: { label: classes.label },
+                        }}
                       />
                     </div>
                   </div>
@@ -953,15 +999,27 @@ function DischargeRequest(props) {
                   <div className="row">
                     <div
                       className="col-md-12"
-                      style={styles.inputContainerForTextField}
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
                     >
-                      <input
+                      <TextField
                         style={styles.inputField}
-                        placeholder="Bank Name"
+                        label="Bank Name"
                         name={"bankName"}
+                        variant="filled"
                         value={bankName}
                         onChange={onChangeValue}
                         className="textInputStyle"
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                        InputLabelProps={{
+                          className: classes.label,
+                          classes: { label: classes.label },
+                        }}
                       />
                     </div>
                   </div>
@@ -969,31 +1027,54 @@ function DischargeRequest(props) {
                   <div className="row">
                     <div
                       className="col-md-6"
-                      style={styles.inputContainerForTextField}
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
                     >
-                      <input
-                        style={styles.inputField}
-                        placeholder="Depositer's Name"
+                      <TextField
+                        label="Depositer's Name"
                         name={"depositorName"}
+                        variant="filled"
                         value={depositorName}
                         onChange={onChangeValue}
                         className="textInputStyle"
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                        InputLabelProps={{
+                          className: classes.label,
+                          classes: { label: classes.label },
+                        }}
                       />
                     </div>
 
                     <div
                       className="col-md-6 col-sm-6 col-6"
-                      // style={styles.inputContainerForTextField}
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
                     >
                       <label style={styles.upload}>
-                        <input
+                        <TextField
                           type="file"
                           style={styles.input}
                           onChange={onSlipUpload}
                           // value={depositSlip.name}
+                          variant="filled"
                           name="depositSlip"
                           required
-                          style={{ display: "none" }}
+                          // style={{ display: "none" }}
+                          InputProps={{
+                            className: classes.input,
+                            classes: { input: classes.input },
+                          }}
+                          InputLabelProps={{
+                            className: classes.label,
+                            classes: { label: classes.label },
+                          }}
                         />
                         <FaUpload />{" "}
                         {depositSlip ? (
