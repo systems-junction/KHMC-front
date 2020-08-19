@@ -323,7 +323,8 @@ export default function CustomTable(props) {
       val === "Item Returned to Warehouse" ||
       val === "Returned" ||
       val === "receive" ||
-      val === "Received"
+      val === "Received" ||
+      val === "Sent for PAR"
     ) {
       return (
         <>
@@ -334,6 +335,14 @@ export default function CustomTable(props) {
               color="primary"
             >
               <strong>Complete</strong>
+            </Button>
+          ) : val === "Sent for PAR" ? (
+            <Button
+              style={{...stylesB.stylesForActive,width:'120px'}}
+              variant="contained"
+              color="primary"
+            >
+              <strong>Sent for PAR</strong>
             </Button>
           ) : val === "completed" ? (
             <Button

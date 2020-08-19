@@ -7,6 +7,7 @@ const baseUrl = 'http://localhost:4000/api'
 
 // export const socketUrl = "ws://localhost:4001";
 // export const socketUrl = "ws://192.168.10.20:4001";
+export const uploadsUrl = 'http://localhost:4000'
 
 export const socketUrl = 'wss://test.khmc-staging.com:4001'
 

@@ -313,7 +313,8 @@ export default function EdrRequest(props) {
       val === "Item Returned to Warehouse" ||
       val === "Returned" ||
       val === "receive" ||
-      val === "Received"
+      val === "Received" ||
+      val === "Sent for PAR"
     ) {
       return (
         <>
@@ -349,7 +350,15 @@ export default function EdrRequest(props) {
             >
               <strong>Received</strong>
             </Button>
-          ) : val === "receive" ? (
+          )  : val === "Sent for PAR" ? (
+            <Button
+              style={{...stylesB.stylesForActive,width:'120px'}}
+              variant="contained"
+              color="primary"
+            >
+              <strong>Sent for PAR</strong>
+            </Button>
+          ): val === "receive" ? (
             <Button
               style={stylesB.stylesForActive}
               variant="contained"

@@ -13,7 +13,8 @@ import IPR from "../../../assets/img/IPR.png";
 import Back_Arrow from "../../../assets/img/Back_Arrow.png";
 import InputLabel from '@material-ui/core/InputLabel'
 import {
-    addfollowup
+    addfollowup,
+    uploadsUrl
 } from "../../../public/endpoins";
 import { doc } from "prettier";
 import { element } from "prop-types";
@@ -199,6 +200,8 @@ function AddEditEDR(props) {
         var reader = new FileReader();
         var url = reader.readAsDataURL(file);
 
+        console.log("Photu link ",file)
+
         reader.onloadend = function (e) {
             setImagePreview([reader.result]);
             dispatch({ field: 'file', value: file.name })
@@ -227,7 +230,7 @@ function AddEditEDR(props) {
             formData.append('file', DocumentUpload, DocumentUpload.name)
         }
         const params = {
-            _id: id,
+            // _id: id,
             followUp: followUpArray,
         };
         formData.append('data', JSON.stringify(params))
@@ -331,8 +334,8 @@ function AddEditEDR(props) {
                             </>
                         ) : (
                                 <>
-                                    {file ? (
-                                        <img src={`uploads\\`+file.name} className="depositSlipImg" />
+                                    {file && console.log(uploadsUrl+file) ? (
+                                        <img src={uploadsUrl+file} className="depositSlipImg" />
                                     ) : (
                                             undefined
                                         )}
