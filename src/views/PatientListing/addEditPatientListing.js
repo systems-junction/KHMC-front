@@ -344,6 +344,7 @@ function AddEditPatientListing(props) {
   const [currentUser, setCurrentUser] = useState(cookie.load('current_user'))
   const [isFormSubmitted, setIsFormSubmitted] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
+  const [successMsg, setsuccessMsg] = useState("");
   const [openNotification, setOpenNotification] = useState(false)
   // const [isDisabled, setDisabled] = useState(false)
   const [countries, setCountries] = useState('')
@@ -514,6 +515,8 @@ function AddEditPatientListing(props) {
             // console.log(res.data.data, "patients data");
             // console.log(res.data.data._id, "patient id");
             setPatientId(res.data.data._id)
+            setOpenNotification(true);
+            setsuccessMsg("Patient details saved successfully");
           } else if (!res.data.success) {
             setOpenNotification(true)
           }
@@ -786,6 +789,7 @@ function AddEditPatientListing(props) {
     setTimeout(() => {
       setOpenNotification(false)
       setErrorMsg('')
+      setsuccessMsg("")
     }, 2000)
   }
 
@@ -2273,7 +2277,7 @@ function AddEditPatientListing(props) {
           </div>
         )}
 
-        <Notification msg={errorMsg} open={openNotification} />
+        <Notification msg={errorMsg} open={openNotification} success={successMsg}/>
 
         <div style={{ marginBottom: 20, marginTop: 50 }}>
           <img
