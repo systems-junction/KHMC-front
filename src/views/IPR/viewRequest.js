@@ -350,17 +350,18 @@ export default function EdrRequest(props) {
         </>
       )
     } else if (
-      val === 'complete' ||
-      val === 'approved' ||
-      val === 'approve' ||
-      val === 'reject' ||
-      val === 'received' ||
-      val === 'Partially Received' ||
-      val === 'Cannot be fulfilled' ||
-      val === 'Item Returned to Warehouse' ||
-      val === 'Returned' ||
-      val === 'receive' ||
-      val === 'Received'
+      val === "complete" ||
+      val === "approved" ||
+      val === "approve" ||
+      val === "reject" ||
+      val === "received" ||
+      val === "Partially Received" ||
+      val === "Cannot be fulfilled" ||
+      val === "Item Returned to Warehouse" ||
+      val === "Returned" ||
+      val === "receive" ||
+      val === "Received" ||
+      val === "Sent for PAR"
     ) {
       return (
         <>
@@ -396,7 +397,15 @@ export default function EdrRequest(props) {
             >
               <strong>Received</strong>
             </Button>
-          ) : val === 'receive' ? (
+          )  : val === "Sent for PAR" ? (
+            <Button
+              style={{...stylesB.stylesForActive,width:'120px'}}
+              variant="contained"
+              color="primary"
+            >
+              <strong>Sent for PAR</strong>
+            </Button>
+          ): val === "receive" ? (
             <Button
               style={stylesB.stylesForActive}
               variant='contained'
@@ -509,12 +518,14 @@ export default function EdrRequest(props) {
                   <TextField
                     required
                     disabled={true}
-                    label='Doctor'
-                    name={'doctor'}
-                    value={
+                    placeholder="Doctor"
+                    name={"doctor"}
+                    value={props.item.doctor.firstName ?
                       props.item.doctor.firstName +
                       ` ` +
                       props.item.doctor.lastName
+                      :
+                      props.item.doctorName
                     }
                     // error={buName === '' && isFormSubmitted}
                     // onChange={(e) => onChangeValue(e)}

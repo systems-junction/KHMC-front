@@ -2,11 +2,11 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable react/jsx-indent */
 import React, { useEffect, useState, useReducer } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
 import InputLabel from '@material-ui/core/InputLabel'
 import axios from 'axios'
 import {
-    getSingleEDRPatient,
+    addfollowup,
+    uploadsUrl
 } from '../../../public/endpoins'
 import cookie from 'react-cookies'
 import Header from '../../../components/Header/Header'
@@ -20,12 +20,14 @@ import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
 import Back from '../../../assets/img/Back_Arrow.png'
+import Loader from 'react-loader-spinner'
 
 const statusArray = [
-    { key: '1 Week', value: '1 week' },
-    { key: '2 Week', value: '2 week' },
-    { key: '3 Week', value: '3 week' },
-  ]
+    { key: 'Approved', value: 'approved' },
+    { key: 'Reject', value: 'reject' },
+    { key: 'Pending', value: 'pending' },
+    { key: 'Sent for PAR', value: 'Sent for PAR' },
+]
 
 const styles = {
     patientDetails: {
@@ -60,9 +62,14 @@ const styles = {
 function AddEditPurchaseRequest(props) {
 
     const initialState = {
+        date: '',
         status: '',
         approvalNumber: '',
-        approvalPerson: ''
+        approvalPerson:'',
+        description: '',
+        file: '',
+        doctor: '',
+        followUpArray: ''
     }
 
     function reducer(state, { field, value }) {
@@ -75,104 +82,71 @@ function AddEditPurchaseRequest(props) {
     const [state, dispatch] = useReducer(reducer, initialState)
 
     const {
+        date,
         approvalNumber,
         approvalPerson,
-        status
+        status,
+        description,
+        file,
+        doctor,
+        followUpArray
     } = state
 
     const onChangeValue = (e) => {
         dispatch({ field: e.target.name, value: e.target.value })
     }
 
-    const [, setCurrentUser] = useState('')
+    const [currentUser, setCurrentUser] = useState('')
     const [errorMsg, setErrorMsg] = useState('')
     const [openNotification, setOpenNotification] = useState(false)
-    const [, setSelectedItem] = useState('')
-    const [selectedPatient, setSelectedPatient] = useState('')
-    const [requestNo, setrequestNo] = useState('')
-    const [, setId] = useState('')
+    const [selectedItem, setSelectedItem] = useState('')
+    const [selectedPatient, setselectedPatient] = useState('')
+    const [id, setId] = useState('')
+    const [followUpid, setfollowUpid] = useState("");
     const [isFormSubmitted] = useState(false)
+    const [DocumentUpload, setDocumentUpload] = useState("");
 
     useEffect(() => {
         setCurrentUser(cookie.load('current_user'))
+        console.log(cookie.load('current_user'))
 
-        console.log(props.history.location.state.selectedItem)
+        console.log("selected rec ", props.history.location.state.selectedItem)
 
-        // const selectedRec = props.history.location.state.selectedItem
+        setSelectedItem(props.history.location.state.selectedItem)
+        setselectedPatient(props.history.location.state.selectedItem.mrn)
 
-        setId(props.history.location.state.selectedItem._id)
-        // setSelectedItem(props.history.location.state.selectedItem)
-        setrequestNo(props.history.location.state.selectedItem.requestNo)
-        setSelectedPatient(props.history.location.state.selectedItem.patientId)
+        setId(props.history.location.state.followUp._id)
+        setfollowUpid(props.history.location.state.selectedItem._id)
 
-        getEDRdetails()
+        const selectedfollowUp = props.history.location.state.followUp
+        const selectedRec = props.history.location.state.selectedItem
 
-    }, [])
-
-    function getEDRdetails() {
-        axios.get(
-            getSingleEDRPatient +
-            '/' +
-            props.history.location.state.selectedItem._id)
-            .then((res) => {
-                if (res.data.success) {
-                    console.log('response after getting the EDR details', res.data.data[0])
-                    setSelectedItem(res.data.data[0])
-                    const selectedRec = res.data.data[0]
-
-                    if (selectedRec) {
-                        Object.entries(selectedRec).map(([key, val]) => {
-                            if (val && typeof val === "object") {
-                                if (key === "patientId") {
-                                    dispatch({ field: "patientId", value: val._id });
-                                }
-                                else if (key === "labRequest") {
-                                    dispatch({ field: "labRequestArray", value: val });
-                                }
-                                else if (key === "radiologyRequest") {
-                                    dispatch({ field: "radiologyRequestArray", value: val });
-                                }
-                                else if (key === "consultationNote") {
-                                    Object.entries(val).map(([key1, val1]) => {
-                                        if (key1 == "requester") {
-                                            dispatch({ field: "requester", value: val1._id });
-                                        }
-                                        else {
-                                            dispatch({ field: key1, value: val1 });
-                                        }
-                                    })
-                                    dispatch({ field: "consultationNoteArray", value: val });
-                                }
-                                else if (key === "residentNotes") {
-                                    Object.entries(val).map(([key1, val1]) => {
-                                        if (key1 == "doctor") {
-                                            dispatch({ field: "doctor", value: val1._id });
-                                        }
-                                        else {
-                                            dispatch({ field: key1, value: val1 });
-                                        }
-                                    })
-                                    dispatch({ field: "residentNoteArray", value: val });
-                                }
-                                else if (key === "pharmacyRequest") {
-                                    dispatch({ field: "pharmacyRequestArray", value: val })
-                                }
-                            } else {
-                                dispatch({ field: key, value: val });
-                            }
-                        });
+        if (selectedRec) {
+            Object.entries(selectedRec).map(([key, val]) => {
+                if (val && typeof val === "object") {
+                    if(key === "approvalPerson")
+                    {
+                        dispatch({ field: key, value: val })
                     }
-
-                } else if (!res.data.success) {
-                    setErrorMsg(res.data.error)
-                    setOpenNotification(true)
+                    else{
+                    dispatch({ field: key, value: val._id })
+                    }
+                } else {
+                    dispatch({ field: key, value: val });
                 }
-                return res
-            })
-            .catch((e) => {
-                console.log('error: ', e)
-            })
-    }
+            });
+        }
+        if (selectedfollowUp) {
+            Object.entries(selectedfollowUp).map(([key, val]) => {
+                if (val && typeof val === "object") {
+                    if (key === "followUp") {
+                        dispatch({ field: "followUpArray", value: val });
+                        //   console.log(key,val)
+                    }
+                }
+            });
+        }
+    }, [])
 
     if (openNotification) {
         setTimeout(() => {
@@ -182,7 +156,55 @@ function AddEditPurchaseRequest(props) {
     }
 
     const handleUpdate = () => {
-        alert("YESHHH")
+
+        for (let i = 0; i < followUpArray.length; i++) {
+            if (followUpArray[i].date === date) {
+                followUpArray[i] = {
+                    ...followUpArray[i],
+                    description: description,
+                    doctorName: followUpArray[i].doctorName,
+                    requester: followUpArray[i].requester,
+                    status: status,
+                    doctor: followUpArray[i].doctor,
+                    file: followUpArray[i].file,
+                    approvalNumber: approvalNumber,
+                    approvalPerson: currentUser.staffId
+                }
+            }
+        }
+        // console.log("FOLLOW UP SUBMITTED ",followUpArray)
+        let formData = new FormData()
+        if (DocumentUpload) {
+            formData.append('file', DocumentUpload, DocumentUpload.name)
+        }
+        const params = {
+            IPRId: id,
+            followUpId: followUpid,
+            followUp: followUpArray,
+        };
+        formData.append('data', JSON.stringify(params))
+        console.log('PARAMSS ', params)
+        axios
+            .put(addfollowup, formData, {
+                headers: {
+                    accept: 'application/json',
+                    'Accept-Language': 'en-US,en;q=0.8',
+                    'content-type': 'multipart/form-data',
+                },
+            })
+            .then((res) => {
+                if (res.data.success) {
+                    console.log("response after Updating followUp Request", res.data);
+                    props.history.goBack();
+                } else if (!res.data.success) {
+                    setOpenNotification(true);
+                }
+            })
+            .catch((e) => {
+                console.log("error after Updating followUp Request", e);
+                setOpenNotification(true);
+                setErrorMsg("Error while Updating the follow Up Request");
+            });
     }
 
     return (
@@ -230,7 +252,7 @@ function AddEditPurchaseRequest(props) {
                                     type='text'
                                     placeholder='Patient Name'
                                     name={'patientName'}
-                                    //   value={selectedPatient.firstName + ` ` + selectedPatient.lastName}
+                                    value={selectedPatient.firstName + ` ` + selectedPatient.lastName}
                                     onChange={onChangeValue}
                                     className='textInputStyle'
                                 />
@@ -246,7 +268,7 @@ function AddEditPurchaseRequest(props) {
                                     type='text'
                                     placeholder='Gender'
                                     name={'gender'}
-                                    //   value={selectedPatient.gender}
+                                    value={selectedPatient.gender}
                                     onChange={onChangeValue}
                                     className='textInputStyle'
                                 />
@@ -262,7 +284,7 @@ function AddEditPurchaseRequest(props) {
                                     type='text'
                                     placeholder='Age'
                                     name={'age'}
-                                    //   value={selectedPatient.age}
+                                    value={selectedPatient.age}
                                     onChange={onChangeValue}
                                     className='textInputStyle'
                                 />
@@ -281,7 +303,7 @@ function AddEditPurchaseRequest(props) {
                                     type='text'
                                     placeholder='Patient ID'
                                     name={'patientId'}
-                                    //   value={selectedPatient.profileNo}
+                                    value={selectedPatient.profileNo}
                                     onChange={onChangeValue}
                                     className='textInputStyle'
                                 />
@@ -298,7 +320,7 @@ function AddEditPurchaseRequest(props) {
                                     type='text'
                                     placeholder='Insurance Number'
                                     name={'insuranceId'}
-                                    //   value={selectedPatient.insuranceId ? selectedPatient.insuranceId : '--'}
+                                    value={selectedPatient.insuranceId ? selectedPatient.insuranceId : '--'}
                                     onChange={onChangeValue}
                                     className='textInputStyle'
                                 />
@@ -314,7 +336,7 @@ function AddEditPurchaseRequest(props) {
                                     type='text'
                                     placeholder='Request Number'
                                     name={'requestNo'}
-                                    //   value={requestNo}
+                                    value={selectedItem.requestNo}
                                     onChange={onChangeValue}
                                     className='textInputStyle'
                                 />
@@ -330,14 +352,21 @@ function AddEditPurchaseRequest(props) {
 
                 <div className="container-fluid" style={styles.patientDetails}>
                     <div className='row'>
-
+                        <div className="col-md-12">
+                            <InputLabel style={styles.styleForLabel}>Extension Notes</InputLabel>
+                            <textarea
+                                style={styles.inputStyles}
+                                placeholder="Enter Extension Notes here..."
+                                name={"description"}
+                                value={description}
+                                onChange={onChangeValue}
+                                rows="4"
+                                className='textInputStyle'
+                            />
+                        </div>
                     </div>
                 </div>
 
-                <div style={{
-                    height: '20px'
-                }}
-                />
                 <div className="container-fluid">
                     <div className='row'>
                         <div
@@ -360,8 +389,8 @@ function AddEditPurchaseRequest(props) {
                                 </MenuItem>
                                 {statusArray.map((val) => {
                                     return (
-                                        <MenuItem key={val.key} value={val.key}>
-                                            {val.value}
+                                        <MenuItem key={val.key} value={val.value}>
+                                            {val.key}
                                         </MenuItem>
                                     )
                                 })}
@@ -402,7 +431,9 @@ function AddEditPurchaseRequest(props) {
                                 type='text'
                                 placeholder='Approval Person'
                                 name={'approvalPerson'}
-                                value={approvalPerson}
+                                value={approvalPerson
+                                    ? approvalPerson.firstName+' '+approvalPerson.lastName : currentUser.name
+                                }
                                 onChange={onChangeValue}
                                 className='textInputStyle'
                             />
@@ -410,6 +441,21 @@ function AddEditPurchaseRequest(props) {
                                 name={approvalPerson}
                                 isFormSubmitted={isFormSubmitted}
                             />
+                        </div>
+                    </div>
+
+                    <div className='row'>
+                        <div
+                            className='col-md-6 col-sm-6 col-6'
+                            style={styles.inputContainerForTextField}
+                        >
+                            {file ? (
+                                <img src={uploadsUrl + file.split('\\')[1]} className="depositSlipImg" />
+                            ) : (
+                                <div className='LoaderStyle'>
+                                    <Loader type='TailSpin' color='red' height={50} width={50} />
+                                </div>
+                                )}
                         </div>
                     </div>
                 </div>
@@ -420,23 +466,23 @@ function AddEditPurchaseRequest(props) {
                         style={{ marginTop: '25px', marginBottom: '25px' }}
                     >
                         <div className='col-md-6 col-sm-6 col-6'>
-                        <img
-                            onClick={() => props.history.goBack()}
-                            src={Back}
-                            style={{ width: 45, height: 35, cursor: 'pointer' }}
-                        />
+                            <img
+                                onClick={() => props.history.goBack()}
+                                src={Back}
+                                style={{ width: 45, height: 35, cursor: 'pointer' }}
+                            />
                         </div>
 
                         <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
-                        <Button
-                            style={styles.stylesForButton}
-                            // disabled={!validateForm()}
-                            onClick={handleUpdate}
-                            variant='contained'
-                            color='primary'
-                        >
-                            <strong style={{ fontSize: '12px' }}>Update</strong>
-                        </Button>
+                            <Button
+                                style={styles.stylesForButton}
+                                // disabled={!validateForm()}
+                                onClick={handleUpdate}
+                                variant='contained'
+                                color='primary'
+                            >
+                                <strong style={{ fontSize: '12px' }}>Update</strong>
+                            </Button>
                         </div>
                     </div>
                 </div>

@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import axios from 'axios'
 import {
   getSingleEDRPatient,
+  getSingleIPRPatient
 } from '../../../public/endpoins'
 import cookie from 'react-cookies'
 import Header from '../../../components/Header/Header'
@@ -72,9 +73,10 @@ const tableHeadingForFollowUp = [
   'Action'
 ]
 const tableDataKeysForFollowUp = [
-  'serviceCode',
-  'serviceName',
-  'requesterName',
+  'date',
+  ['mrn', 'profileNo'],
+  'description',
+  'doctorName',
   'status',
 ]
 const actions = { view: true }
@@ -132,7 +134,6 @@ function AddEditPurchaseRequest(props) {
   const {
     followUpArray,
     coveredArray,
-    // needApprovalArray,
     notCoveredArray
   } = state
 
@@ -140,11 +141,12 @@ function AddEditPurchaseRequest(props) {
   const [errorMsg, setErrorMsg] = useState('')
   const [openNotification, setOpenNotification] = useState(false)
   const [value, setValue] = React.useState(0)
-  const [, setSelectedItem] = useState('')
+  const [selectedItem, setSelectedItem] = useState('')
   const [, setSelectedPatient] = useState('')
   const [, setrequestNo] = useState('')
   const [, setId] = useState('')
   const [needApprovalArray, setneedApprovalArray] = useState('')
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     setCurrentUser(cookie.load('current_user'))
@@ -152,52 +154,73 @@ function AddEditPurchaseRequest(props) {
     setId(props.history.location.state.selectedItem._id)
     setrequestNo(props.history.location.state.selectedItem.requestNo)
     setSelectedPatient(props.history.location.state.selectedItem.patientId)
+    setSelectedItem(props.history.location.state.selectedItem)
+    getIPRById(props.history.location.state.selectedItem._id);
 
     const selectedRec = props.history.location.state.selectedItem
+    console.log("Record", selectedRec)
 
-    if (selectedRec) 
-    {
-      if (selectedRec.pharmacyRequest) 
-      { 
+    if (selectedRec) {
+      if (selectedRec.pharmacyRequest) {
 
-        for (let i = 0; i < selectedRec.pharmacyRequest.length; i++) 
-        {
+        for (let i = 0; i < selectedRec.pharmacyRequest.length; i++) {
           let amount = 0
           let singlePR = selectedRec.pharmacyRequest[i]
 
-          for (let j = 0; j < singlePR.medicine.length; j++) 
-          {  
+          for (let j = 0; j < singlePR.medicine.length; j++) {
             amount = amount + singlePR.medicine[j].itemId.purchasePrice
           }
 
-          selectedRec.pharmacyRequest[i] ={
+          selectedRec.pharmacyRequest[i] = {
             ...selectedRec.pharmacyRequest[i],
-            totalCost:amount,
-            RequestType:"PHR",
-            item:"Medicine",
-            insurance:"Uncovered"
+            totalCost: amount,
+            RequestType: "PHR",
+            item: "Medicine",
+            insurance: "Uncovered"
           }
         }
       }
-      if (selectedRec.labRequest) 
-      {
+      if (selectedRec.labRequest) {
         selectedRec.labRequest.map(
-          (d) => (d.RequestType = "LR", d.item = d.serviceName,d.totalCost = d.serviceId.price,d.insurance="Uncovered")
+          (d) => (d.RequestType = "LR", d.item = d.serviceName, d.totalCost = d.serviceId.price, d.insurance = "Uncovered")
         )
 
       }
-      if (selectedRec.radiologyRequest) 
-      {
+      if (selectedRec.radiologyRequest) {
         selectedRec.radiologyRequest.map(
-          (d) => (d.RequestType = "RR", d.item = d.serviceName,d.totalCost = d.serviceId.price,d.insurance="Uncovered")
+          (d) => (d.RequestType = "RR", d.item = d.serviceName, d.totalCost = d.serviceId.price, d.insurance = "Uncovered")
         )
       }
     }
-
     setneedApprovalArray([].concat(selectedRec.labRequest, selectedRec.radiologyRequest, selectedRec.pharmacyRequest))
-    console.log([].concat(selectedRec.labRequest, selectedRec.radiologyRequest, selectedRec.pharmacyRequest))
 
   }, [])
+
+  const getIPRById = (id) => {
+    axios
+      .get(getSingleIPRPatient + "/" + id)
+      .then((res) => {
+        if (res.data.success) 
+        {
+          if (res.data.data) 
+          {
+            const selectedfollowUp = res.data.data[0]
+            console.log(selectedfollowUp);
+
+            setIsLoading(false);
+
+            if (selectedfollowUp.followUp) {
+              selectedfollowUp.followUp.map(
+                (d) => (d.mrn = selectedfollowUp.patientId, d.requestNo = selectedfollowUp.requestNo))
+              dispatch({ field: 'followUpArray', value: selectedfollowUp.followUp })
+            }
+          }
+        }
+      })
+      .catch((e) => {
+        console.log("error while searching req", e);
+      });
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
@@ -219,6 +242,7 @@ function AddEditPurchaseRequest(props) {
       pathname: path,
       state: {
         selectedItem: rec,
+        followUp: selectedItem
       },
     })
   }
@@ -345,111 +369,117 @@ function AddEditPurchaseRequest(props) {
                   </div>
 
                 </div>
-              ) 
-              // : value === 1 ?
-                  // (
-                  //   <div
-                  //     style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-                  //     className='container-fluid'
-                  //   >
-                  //     <div className='row' style={{ marginTop: '20px' }}>
-                  //       {coveredArray !== 0 ? (
-                  //         <CustomTable
-                  //           tableData={coveredArray}
-                  //           tableDataKeys={tableDataKeysForCovered}
-                  //           tableHeading={tableHeadingForCovered}
-                  //           borderBottomColor={'#60d69f'}
-                  //           borderBottomWidth={20}
-                  //         />
-                  //       ) : (
-                  //           <div className='LoaderStyle'>
-                  //             <Loader type='TailSpin' color='red' height={50} width={50} />
-                  //           </div>
-                  //         )}
-                  //     </div>
+              )
+                // : value === 1 ?
+                // (
+                //   <div
+                //     style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+                //     className='container-fluid'
+                //   >
+                //     <div className='row' style={{ marginTop: '20px' }}>
+                //       {coveredArray !== 0 ? (
+                //         <CustomTable
+                //           tableData={coveredArray}
+                //           tableDataKeys={tableDataKeysForCovered}
+                //           tableHeading={tableHeadingForCovered}
+                //           borderBottomColor={'#60d69f'}
+                //           borderBottomWidth={20}
+                //         />
+                //       ) : (
+                //           <div className='LoaderStyle'>
+                //             <Loader type='TailSpin' color='red' height={50} width={50} />
+                //           </div>
+                //         )}
+                //     </div>
 
-                  //     <div className='row' style={{ marginTop: '20px', marginBottom: '25px' }}>
-                  //       <div className='col-md-6 col-sm-6 col-6'>
-                  //         <img
-                  //           onClick={() => props.history.goBack()}
-                  //           src={Back}
-                  //           style={{ width: 45, height: 35, cursor: 'pointer' }}
-                  //         />
-                  //       </div>
-                  //     </div>
-                  //   </div>
-                  // ) : value === 2 ?
-                  //   (
-                  //     <div
-                  //       style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-                  //       className='container-fluid'
-                  //     >
-                  //       <div className='row' style={{ marginTop: '20px' }}>
-                  //         {notCoveredArray !== 0 ? (
-                  //           <CustomTable
-                  //             tableData={notCoveredArray}
-                  //             tableDataKeys={tableDataKeysForNotCovered}
-                  //             tableHeading={tableHeadingForNotCovered}
-                  //             borderBottomColor={'#60d69f'}
-                  //             borderBottomWidth={20}
-                  //           />
-                  //         ) : (
-                  //             <div className='LoaderStyle'>
-                  //               <Loader type='TailSpin' color='red' height={50} width={50} />
-                  //             </div>
-                  //           )}
-                  //       </div>
+                //     <div className='row' style={{ marginTop: '20px', marginBottom: '25px' }}>
+                //       <div className='col-md-6 col-sm-6 col-6'>
+                //         <img
+                //           onClick={() => props.history.goBack()}
+                //           src={Back}
+                //           style={{ width: 45, height: 35, cursor: 'pointer' }}
+                //         />
+                //       </div>
+                //     </div>
+                //   </div>
+                // ) : value === 2 ?
+                //   (
+                //     <div
+                //       style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+                //       className='container-fluid'
+                //     >
+                //       <div className='row' style={{ marginTop: '20px' }}>
+                //         {notCoveredArray !== 0 ? (
+                //           <CustomTable
+                //             tableData={notCoveredArray}
+                //             tableDataKeys={tableDataKeysForNotCovered}
+                //             tableHeading={tableHeadingForNotCovered}
+                //             borderBottomColor={'#60d69f'}
+                //             borderBottomWidth={20}
+                //           />
+                //         ) : (
+                //             <div className='LoaderStyle'>
+                //               <Loader type='TailSpin' color='red' height={50} width={50} />
+                //             </div>
+                //           )}
+                //       </div>
 
-                  //       <div className='row' style={{ marginTop: '20px', marginBottom: '25px' }}>
-                  //         <div className='col-md-6 col-sm-6 col-6'>
-                  //           <img
-                  //             onClick={() => props.history.goBack()}
-                  //             src={Back}
-                  //             style={{ width: 45, height: 35, cursor: 'pointer' }}
-                  //           />
-                  //         </div>
-                  //       </div>
+                //       <div className='row' style={{ marginTop: '20px', marginBottom: '25px' }}>
+                //         <div className='col-md-6 col-sm-6 col-6'>
+                //           <img
+                //             onClick={() => props.history.goBack()}
+                //             src={Back}
+                //             style={{ width: 45, height: 35, cursor: 'pointer' }}
+                //           />
+                //         </div>
+                //       </div>
 
-                  //     </div>
-                    // ) 
-                    : value === 1 ?
-                      (
-                        <div
-                          style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-                          className='container-fluid'
-                        >
-                          <div className='row' style={{ marginTop: '20px' }}>
-                            {followUpArray !== 0 ? (
-                              <CustomTable
-                                tableData={followUpArray}
-                                tableDataKeys={tableDataKeysForFollowUp}
-                                tableHeading={tableHeadingForFollowUp}
-                                handleView={viewFollowUp}
-                                action={actions}
-                                borderBottomColor={'#60d69f'}
-                                borderBottomWidth={20}
-                              />
-                            ) : (
-                                <div className='LoaderStyle'>
-                                  <Loader type='TailSpin' color='red' height={50} width={50} />
-                                </div>
-                              )}
-                          </div>
-
-                          <div className='row' style={{ marginTop: '20px', marginBottom: '25px' }}>
-                            <div className='col-md-6 col-sm-6 col-6'>
-                              <img
-                                onClick={() => props.history.goBack()}
-                                src={Back}
-                                style={{ width: 45, height: 35, cursor: 'pointer' }}
-                              />
+                //     </div>
+                // ) 
+                : value === 1 ?
+                  (
+                    <div
+                      style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+                      className='container-fluid'
+                    >
+                      {!isLoading ? (
+                      <div className='row' style={{ marginTop: '20px' }}>
+                        {followUpArray !== 0 ? (
+                          <CustomTable
+                            tableData={followUpArray}
+                            tableDataKeys={tableDataKeysForFollowUp}
+                            tableHeading={tableHeadingForFollowUp}
+                            handleView={viewFollowUp}
+                            action={actions}
+                            borderBottomColor={'#60d69f'}
+                            borderBottomWidth={20}
+                          />
+                        ) : (
+                            <div className='LoaderStyle'>
+                              <Loader type='TailSpin' color='red' height={50} width={50} />
                             </div>
-                          </div>
-
+                          )}
+                      </div>
+                      ):(
+                        <div className='LoaderStyle'>
+                          <Loader type='TailSpin' color='red' height={50} width={50} />
                         </div>
-                      ) : (
-                        undefined
                       )}
+
+                      <div className='row' style={{ marginTop: '20px', marginBottom: '25px' }}>
+                        <div className='col-md-6 col-sm-6 col-6'>
+                          <img
+                            onClick={() => props.history.goBack()}
+                            src={Back}
+                            style={{ width: 45, height: 35, cursor: 'pointer' }}
+                          />
+                        </div>
+                      </div>
+
+                    </div>
+                  ) : (
+                    undefined
+                  )}
             </div>
           ) : (
             <div className='LoaderStyle'>

@@ -323,7 +323,8 @@ export default function CustomTable(props) {
       val === "Item Returned to Warehouse" ||
       val === "Returned" ||
       val === "receive" ||
-      val === "Received"
+      val === "Received" ||
+      val === "Sent for PAR"
     ) {
       return (
         <>
@@ -334,6 +335,14 @@ export default function CustomTable(props) {
               color="primary"
             >
               <strong>Complete</strong>
+            </Button>
+          ) : val === "Sent for PAR" ? (
+            <Button
+              style={{...stylesB.stylesForActive,width:'120px'}}
+              variant="contained"
+              color="primary"
+            >
+              <strong>Sent for PAR</strong>
             </Button>
           ) : val === "completed" ? (
             <Button
@@ -628,7 +637,7 @@ export default function CustomTable(props) {
                             <RcIf if={props.action.add}>
                               <span onClick={() => props.handleAdd(prop)}>
                                 <i
-                                  style={{ color: "blue" }}
+                                  style={{ color: "grey" }}
                                   className=" ml-10 zmdi zmdi-plus-circle zmdi-hc-2x"
                                 />
                               </span>
