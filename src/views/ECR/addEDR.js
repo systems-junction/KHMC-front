@@ -1073,6 +1073,7 @@ import '../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
 import socketIOClient from 'socket.io-client'
 import CustomTable from '../../components/Table/Table'
 import { colors } from '@material-ui/core'
+import TextField from '@material-ui/core/TextField'
 
 const durationArray = [
   { key: '1 Week', value: '1 week' },
@@ -1080,9 +1081,9 @@ const durationArray = [
   { key: '3 Week', value: '3 week' },
 ]
 const tableHeadingForPharmacyReq = [
-  "Medicine Name",
-  "Duration(days)",
-  "Dosage(Per Single Dosage)",
+  'Medicine Name',
+  'Duration(days)',
+  'Dosage(Per Single Dosage)',
   // 'Additional Note',
   'Action',
 ]
@@ -1134,22 +1135,68 @@ const styles = {
     marginTop: 25,
   },
 }
-const useStyles = makeStyles(tableStyles)
+// const useStyles = makeStyles(tableStyles)
 
+const useStylesForInput = makeStyles((theme) => ({
+  underline: {
+    '&&&:before': {
+      borderBottom: 'none',
+    },
+    '&&:after': {
+      borderBottom: 'none',
+    },
+  },
+  margin: {
+    margin: theme.spacing(0),
+  },
+  input: {
+    backgroundColor: 'white',
+    borderRadius: 6,
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:disabled': {
+      color: 'gray',
+    },
+  },
+  multilineColor: {
+    backgroundColor: 'white',
+    borderRadius: 6,
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+  },
+  root: {
+    '& .MuiTextField-root': {
+      backgroundColor: 'white',
+    },
+    '& .Mui-focused': {
+      backgroundColor: 'white',
+      color: 'black',
+    },
+  },
+}))
 function AddEditEDR(props) {
-  const classes = useStyles()
+  // const classes = useStyles()
+  const classes = useStylesForInput()
   const initialState = {
     date: new Date(),
-    status: "pending",
-    requester: "",
-    medicineDataArray: "",
-    itemId: "",
-    duration: "",
-    dosage: "",
-    priority: "",
-    schedule: "",
-    frequency: "",
-    requestedQty: "",
+    status: 'pending',
+    requester: '',
+    medicineDataArray: '',
+    itemId: '',
+    duration: '',
+    dosage: '',
+    priority: '',
+    schedule: '',
+    frequency: '',
+    requestedQty: '',
     // additionalNote:'',
     pharmacyRequest: '',
     medicineName: '',
@@ -1387,7 +1434,7 @@ function AddEditEDR(props) {
             state: {
               comingFor: 'back',
               selectedItem: props.history.location.state.selectedItem,
-              tabValue: 2
+              tabValue: 2,
             },
           })
         } else if (!res.data.success) {
@@ -1496,30 +1543,30 @@ function AddEditEDR(props) {
 
   function validateItemsForm() {
     return (
-      medicineName !== "" &&
+      medicineName !== '' &&
       // requestedQty !== "" &&
-      dosage !== "" &&
-      frequency !== "" &&
-      duration !== "" &&
-      schedule !== "" &&
-      priority !== ""
-    );
+      dosage !== '' &&
+      frequency !== '' &&
+      duration !== '' &&
+      schedule !== '' &&
+      priority !== ''
+    )
   }
 
   function hideDialog() {
-    setDialogOpen(false);
-    setSelectedItem("");
-    setSelectItemToEditId("");
+    setDialogOpen(false)
+    setSelectedItem('')
+    setSelectItemToEditId('')
 
-    dispatch({ field: "itemId", value: "" });
-    dispatch({ field: "medicineName", value: "" });
-    dispatch({ field: "duration", value: "" });
-    dispatch({ field: "dosage", value: "" });
+    dispatch({ field: 'itemId', value: '' })
+    dispatch({ field: 'medicineName', value: '' })
+    dispatch({ field: 'duration', value: '' })
+    dispatch({ field: 'dosage', value: '' })
     // dispatch({ field: 'additionalNote', value: '' })
-    dispatch({ field: "priority", value: "" });
-    dispatch({ field: "schedule", value: "" });
-    dispatch({ field: "frequency", value: "" });
-    dispatch({ field: "requestedQty", value: "" });
+    dispatch({ field: 'priority', value: '' })
+    dispatch({ field: 'schedule', value: '' })
+    dispatch({ field: 'frequency', value: '' })
+    dispatch({ field: 'requestedQty', value: '' })
   }
 
   const addSelectedItem = () => {
@@ -1566,11 +1613,10 @@ function AddEditEDR(props) {
     dispatch({ field: 'requestedQty', value: 0 })
   }
 
-
   const editSelectedItem = () => {
     // if (validateItemsForm()) {
-    setDialogOpen(false);
-    let temp = [];
+    setDialogOpen(false)
+    let temp = []
 
     // console.log("MEDSSS",medicines)
 
@@ -1586,10 +1632,10 @@ function AddEditEDR(props) {
           schedule,
           frequency,
           requestedQty,
-        };
-        temp[i] = obj;
+        }
+        temp[i] = obj
       } else {
-        temp = [...temp, medicineDataArray[i]];
+        temp = [...temp, medicineDataArray[i]]
       }
 
       dispatch({
@@ -1598,21 +1644,20 @@ function AddEditEDR(props) {
       })
     }
 
-    setDialogOpen(false);
-    setSelectedItem("");
-    setSelectItemToEditId("");
+    setDialogOpen(false)
+    setSelectedItem('')
+    setSelectItemToEditId('')
 
-    dispatch({ field: "itemId", value: "" });
-    dispatch({ field: "medicineName", value: "" });
-    dispatch({ field: "duration", value: "" });
-    dispatch({ field: "dosage", value: "" });
-    dispatch({ field: "priority", value: "" });
-    dispatch({ field: "schedule", value: "" });
-    dispatch({ field: "frequency", value: "" });
-    dispatch({ field: "requestedQty", value: "" });
+    dispatch({ field: 'itemId', value: '' })
+    dispatch({ field: 'medicineName', value: '' })
+    dispatch({ field: 'duration', value: '' })
+    dispatch({ field: 'dosage', value: '' })
+    dispatch({ field: 'priority', value: '' })
+    dispatch({ field: 'schedule', value: '' })
+    dispatch({ field: 'frequency', value: '' })
+    dispatch({ field: 'requestedQty', value: '' })
     // dispatch({ field: 'additionalNote', value: '' })
   }
-
 
   function handleRequestedItemEdit(i) {
     console.log(i)
@@ -1720,8 +1765,8 @@ function AddEditEDR(props) {
                 borderBottomWidth={20}
               />
             ) : (
-                undefined
-              )}
+              undefined
+            )}
           </div>
 
           <div
@@ -1761,17 +1806,22 @@ function AddEditEDR(props) {
               <DialogTitle id='simple-dialog-title' style={{ color: 'white' }}>
                 Add Medicine
               </DialogTitle>
-              <div className='container-fluid'>
+              <div className={`container-fluid ${classes.root}`}>
                 <div className='row'>
                   <div className='col-md-12 col-sm-12 col-12'>
-                    <InputLabelComponent>Search Medicine</InputLabelComponent>
-                    <input
-                      type='text'
-                      placeholder='Search medicine by name'
+                    <TextField
+                      required
+                      label='Search Medicine'
                       name={'searchQuery'}
                       value={searchQuery}
+                      // error={searchQuery === '' && isFormSubmitted}
                       onChange={handleSearch}
                       className='textInputStyle'
+                      variant='filled'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
                     />
                   </div>
                 </div>
@@ -1808,50 +1858,60 @@ function AddEditEDR(props) {
                           </Table>
                         )
                       ) : (
-                          <h4
-                            style={{ textAlign: 'center' }}
-                            onClick={() => setSearchQuery('')}
-                          >
-                            Medicine Not Found
-                          </h4>
-                        )}
+                        <h4
+                          style={{ textAlign: 'center' }}
+                          onClick={() => setSearchQuery('')}
+                        >
+                          Medicine Not Found
+                        </h4>
+                      )}
                     </Paper>
                   </div>
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
 
                 <div className='row'>
                   <div
                     className='col-md-4 col-sm-4 col-4'
                     style={styles.inputContainerForTextField}
                   >
-                    <InputLabelComponent>Medicine Name*</InputLabelComponent>
-                    <input
+                    <TextField
+                      required
                       disabled
-                      style={styles.inputField}
-                      type='text'
-                      placeholder='Search from above...'
+                      label='Medicine Name'
                       name={'medicineName'}
                       value={medicineName}
+                      // error={medicineName === '' && isFormSubmitted}
                       onChange={onChangeValue}
                       className='textInputStyle'
+                      variant='filled'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
                     />
                   </div>
                   <div
                     className='col-md-4 col-sm-4 col-4'
                     style={styles.inputContainerForDropDown}
                   >
-                    <InputLabelComponent>Priority*</InputLabelComponent>
-                    <Select
+                    <TextField
+                      required
+                      select
                       fullWidth
                       id='priority'
                       name='priority'
                       value={priority}
+                      error={priority === '' && isFormSubmitted}
                       onChange={onChangeValue}
                       label='Priority'
+                      variant='filled'
                       className='dropDownStyle'
-                      input={<BootstrapInput />}
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
                     >
                       <MenuItem value=''>
                         <em>None</em>
@@ -1863,26 +1923,28 @@ function AddEditEDR(props) {
                           </MenuItem>
                         )
                       })}
-                    </Select>
-                    <ErrorMessage
-                      name={priority}
-                      isFormSubmitted={isFormSubmitted}
-                    />
+                    </TextField>
                   </div>
                   <div
                     className='col-md-4 col-sm-4 col-4'
                     style={styles.inputContainerForDropDown}
                   >
-                    <InputLabelComponent>Schedule*</InputLabelComponent>
-                    <Select
+                    <TextField
+                      required
+                      select
                       fullWidth
                       id='schedule'
                       name='schedule'
                       value={schedule}
+                      error={schedule === '' && isFormSubmitted}
                       onChange={onChangeValue}
                       label='Schedule'
+                      variant='filled'
                       className='dropDownStyle'
-                      input={<BootstrapInput />}
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
                     >
                       <MenuItem value=''>
                         <em>None</em>
@@ -1894,11 +1956,7 @@ function AddEditEDR(props) {
                           </MenuItem>
                         )
                       })}
-                    </Select>
-                    <ErrorMessage
-                      name={schedule}
-                      isFormSubmitted={isFormSubmitted}
-                    />
+                    </TextField>
                   </div>
                 </div>
 
@@ -1907,30 +1965,40 @@ function AddEditEDR(props) {
                     className='col-md-3 col-sm-3 col-3'
                     style={styles.inputContainerForTextField}
                   >
-                    <InputLabelComponent>Frequency*</InputLabelComponent>
-                    <input
-                      style={styles.inputField}
+                    <TextField
+                      required
                       type='number'
-                      placeholder='Frequency'
+                      label='Frequency'
                       name={'frequency'}
                       value={frequency}
+                      // error={frequency === '' && isFormSubmitted}
                       onChange={onChangeValue}
                       className='textInputStyle'
+                      variant='filled'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
                     />
                   </div>
                   <div
                     className='col-md-3 col-sm-3 col-3'
                     style={styles.inputContainerForTextField}
                   >
-                    <InputLabelComponent>Duration*</InputLabelComponent>
-                    <input
-                      style={styles.inputField}
+                    <TextField
+                      required
                       type='number'
-                      placeholder='Duration'
+                      label='Duration'
                       name={'duration'}
                       value={duration}
-                      onChange={onChangeValue}
+                      // error={duration === '' && isFormSubmitted}
+                      onChange={(e) => onChangeValue(e)}
                       className='textInputStyle'
+                      variant='filled'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
                     />
                   </div>
 
@@ -1938,37 +2006,41 @@ function AddEditEDR(props) {
                     className='col-md-3 col-sm-3 col-3'
                     style={styles.inputContainerForTextField}
                   >
-                    <InputLabelComponent>Dosage</InputLabelComponent>
-                    <input
+                    <TextField
+                      required
                       type='number'
-                      placeholder='Enter Dosage'
+                      label='Dosage'
                       name={'dosage'}
                       value={dosage}
+                      error={dosage === '' && isFormSubmitted}
                       onChange={onChangeValue}
                       className='textInputStyle'
-                    />
-                    <ErrorMessage
-                      name={dosage}
-                      isFormSubmitted={isFormSubmitted}
+                      variant='filled'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
                     />
                   </div>
                   <div
                     className='col-md-3 col-sm-3 col-3'
                     style={styles.inputContainerForTextField}
                   >
-                    <InputLabelComponent>Requested Qty</InputLabelComponent>
-                    <input
+                    <TextField
+                      required
                       disabled={true}
-                      type="number"
-                      placeholder="Enter Requested Qty"
-                      name={"requestedQty"}
+                      type='number'
+                      label='Requested Qty'
+                      name={'requestedQty'}
                       value={dosage * frequency * duration}
-                      onChange={onChangeValue}
+                      error={requestedQty === '' && isFormSubmitted}
+                      onChange={(e) => onChangeValue(e)}
                       className='textInputStyle'
-                    />
-                    <ErrorMessage
-                      name={requestedQty}
-                      isFormSubmitted={isFormSubmitted}
+                      variant='filled'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
                     />
                   </div>
                 </div>
@@ -2015,17 +2087,17 @@ function AddEditEDR(props) {
                         Add
                       </Button>
                     ) : (
-                        <Button
-                          style={{ paddingLeft: 30, paddingRight: 30 }}
-                          disabled={!validateItemsForm()}
-                          onClick={editSelectedItem}
-                          variant='contained'
-                          color='primary'
-                        >
-                          {' '}
+                      <Button
+                        style={{ paddingLeft: 30, paddingRight: 30 }}
+                        disabled={!validateItemsForm()}
+                        onClick={editSelectedItem}
+                        variant='contained'
+                        color='primary'
+                      >
+                        {' '}
                         Edit
-                        </Button>
-                      )}
+                      </Button>
+                    )}
                   </div>
                 </div>
               </div>

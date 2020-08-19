@@ -9,14 +9,13 @@ import InputLabel from '@material-ui/core/InputLabel'
 import capitilizeLetter from '../../public/capitilizeLetter'
 import cookie from 'react-cookies'
 import CustomTable from '../../components/Table/Table'
-
+import TextField from '@material-ui/core/TextField'
 const tableHeadingForPHR = [
   'Medicine Name',
   'Requested Qty',
   'Dosage',
   'Frequency',
   'Duration',
-  '',
 ]
 const tableDataKeysForPHR = [
   'medicineName',
@@ -25,9 +24,6 @@ const tableDataKeysForPHR = [
   'frequency',
   'duration',
 ]
-
-// const actions = { view: false };
-
 const styles = {
   inputContainer: {
     marginTop: 10,
@@ -100,13 +96,59 @@ const stylesB = {
 
 const useStyles = makeStyles(styles)
 
+const useStylesForInput = makeStyles((theme) => ({
+  underline: {
+    '&&&:before': {
+      borderBottom: 'none',
+    },
+    '&&:after': {
+      borderBottom: 'none',
+    },
+  },
+  margin: {
+    margin: theme.spacing(0),
+  },
+  input: {
+    backgroundColor: 'white',
+    borderRadius: 6,
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:disabled': {
+      color: 'gray',
+    },
+  },
+  multilineColor: {
+    backgroundColor: 'white',
+    borderRadius: 6,
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+  },
+  root: {
+    '& .MuiTextField-root': {
+      backgroundColor: 'white',
+    },
+    '& .Mui-focused': {
+      backgroundColor: 'white',
+      color: 'black',
+    },
+  },
+}))
 export default function EdrRequest(props) {
+  const classes = useStylesForInput()
   const [currentUser, setCurrentUser] = React.useState(
     cookie.load('current_user')
   )
 
   useEffect(() => {
-    console.log(props.item, 'view Data')
+    console.log(props.item)
   }, [])
 
   const replaceSlugToTitle = (val) => {
@@ -440,16 +482,18 @@ export default function EdrRequest(props) {
             >
               {props.item.date ? (
                 <div>
-                  <InputLabel style={styles.styleForLabel} id='generated-label'>
-                    Date
-                  </InputLabel>
-                  <input
-                    type='text'
+                  <TextField
+                    required
                     disabled={true}
-                    placeholder='date'
+                    label='Date'
                     name={'date'}
                     value={props.item.date}
                     className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
                   />
                 </div>
               ) : (
@@ -462,31 +506,32 @@ export default function EdrRequest(props) {
             >
               {props.item.doctor ? (
                 <div>
-                  <InputLabel style={styles.styleForLabel} id='generated-label'>
-                    Doctor
-                  </InputLabel>
-                  <input
-                    type='text'
+                  <TextField
+                    required
                     disabled={true}
-                    placeholder='Doctor'
+                    label='Doctor'
                     name={'doctor'}
                     value={
                       props.item.doctor.firstName +
                       ` ` +
                       props.item.doctor.lastName
                     }
+                    // error={buName === '' && isFormSubmitted}
+                    // onChange={(e) => onChangeValue(e)}
                     className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
                   />
                 </div>
               ) : props.item.requester ? (
                 <div>
-                  <InputLabel style={styles.styleForLabel} id='generated-label'>
-                    Requester
-                  </InputLabel>
-                  <input
-                    type='text'
+                  <TextField
+                    required
                     disabled={true}
-                    placeholder='Requester'
+                    label='Requester'
                     name={'requester'}
                     value={
                       props.item.requester.firstName +
@@ -494,6 +539,11 @@ export default function EdrRequest(props) {
                       props.item.requester.lastName
                     }
                     className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
                   />
                 </div>
               ) : (
@@ -509,17 +559,19 @@ export default function EdrRequest(props) {
             >
               {props.item.description ? (
                 <div>
-                  <InputLabel style={styles.styleForLabel} id='generated-label'>
-                    Description
-                  </InputLabel>
-                  <textarea
-                    type='text'
+                  <TextField
+                    required
                     disabled={true}
-                    placeholder='Description'
+                    label='Description'
                     name={'description'}
                     value={props.item.description}
-                    className='textInputStyle'
                     rows={4}
+                    className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
                   />
                 </div>
               ) : (
@@ -532,32 +584,36 @@ export default function EdrRequest(props) {
             >
               {props.item.note ? (
                 <div>
-                  <InputLabel style={styles.styleForLabel} id='generated-label'>
-                    Note
-                  </InputLabel>
-                  <textarea
-                    type='text'
+                  <TextField
+                    required
                     disabled={true}
-                    placeholder='Note'
+                    label='Note'
                     name={'note'}
                     value={props.item.note}
-                    className='textInputStyle'
                     rows={4}
+                    className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
                   />
                 </div>
               ) : props.item.consultationNotes ? (
                 <div>
-                  <InputLabel style={styles.styleForLabel} id='generated-label'>
-                    Consultation Note
-                  </InputLabel>
-                  <textarea
-                    type='text'
+                  <TextField
+                    required
                     disabled={true}
-                    placeholder='Consultation Note'
+                    label='Consultation Note'
                     name={'consultationNotes'}
                     value={props.item.consultationNotes}
                     className='textInputStyle'
                     rows={4}
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
                   />
                 </div>
               ) : (
@@ -573,16 +629,19 @@ export default function EdrRequest(props) {
             >
               {props.item.serviceCode ? (
                 <div>
-                  <InputLabel style={styles.styleForLabel} id='generated-label'>
-                    Service Code
-                  </InputLabel>
-                  <input
-                    type='text'
+                  <TextField
+                    required
+                    label='Service Code'
                     disabled={true}
                     placeholder='serviceCode'
                     name={'serviceCode'}
                     value={props.item.serviceCode}
                     className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
                   />
                 </div>
               ) : (
@@ -595,16 +654,19 @@ export default function EdrRequest(props) {
             >
               {props.item.serviceName ? (
                 <div>
-                  <InputLabel style={styles.styleForLabel} id='generated-label'>
-                    Service Name
-                  </InputLabel>
-                  <input
-                    type='text'
+                  <TextField
+                    required
+                    label='Service Name'
                     disabled={true}
                     placeholder='serviceName'
                     name={'serviceName'}
                     value={props.item.serviceName}
                     className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
                   />
                 </div>
               ) : (
@@ -612,7 +674,6 @@ export default function EdrRequest(props) {
               )}
             </div>
           </div>
-
           <div
             className='container'
             // style={styles.inputContainerForTextField}
@@ -640,15 +701,32 @@ export default function EdrRequest(props) {
               undefined
             )}
           </div>
-
           {/* <div className="row">
             <div
-              className="col-md-12 col-sm-12 col-12 d-flex justify-content-center text-center"
+              className="col-md-6 col-sm-6 col-6"
+              style={styles.inputContainerForTextField}
+            >
+              {props.item.serviceCode ? (
+                <div>
+                  <InputLabel style={styles.styleForLabel} id="generated-label">
+                    Service Code
+                  </InputLabel>
+                  <li> {props.item.medicine}</li>
+                </div>
+              ) : (
+                undefined
+              )}
+            </div>
+          </div> */}
+
+          <div className='row'>
+            <div
+              className='col-md-12 col-sm-12 col-12 d-flex justify-content-center text-center'
               style={styles.inputContainerForTextField}
             >
               {props.item.status ? (
                 <div>
-                  <InputLabel style={styles.styleForLabel} id="generated-label">
+                  <InputLabel style={styles.styleForLabel} id='generated-label'>
                     Status
                   </InputLabel>
                   {replaceSlugToTitle(props.item.status)}
@@ -657,7 +735,7 @@ export default function EdrRequest(props) {
                 undefined
               )}
             </div>
-          </div> */}
+          </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <div style={{ marginTop: '2%', marginBottom: '2%' }}>

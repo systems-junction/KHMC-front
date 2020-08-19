@@ -1064,6 +1064,7 @@ import {
   addReceiveRequestBUUrl,
   updateReceiveRequestBUUrl,
 } from "../../public/endpoins";
+import useStyleforinput from "../../../src/assets/jss/material-dashboard-react/inputStyle.js";
 
 import cookie from "react-cookies";
 
@@ -1101,11 +1102,11 @@ const styles = {
   // },
 
   inputContainerForTextField: {
-    marginTop: 25,
+    marginTop: 6,
   },
 
   inputContainerForDropDown: {
-    marginTop: 25,
+    marginTop: 6,
   },
 
   buttonContainer: {
@@ -1124,6 +1125,21 @@ const styles = {
     paddingLeft: 10,
     paddingTop: 8,
   },
+
+  textFieldPadding: {
+    paddingLeft: 3,
+    paddingRight: 3,
+  },
+
+  stylesForButton: {
+    color: "white",
+    cursor: "pointer",
+    borderRadius: 5,
+    backgroundColor: "#2C6DDD",
+    // width: "140px",
+    height: "54px",
+    outline: "none",
+  },
 };
 const useStyles = makeStyles(tableStyles);
 
@@ -1132,7 +1148,9 @@ const DATE = new Date();
 const time = DATE.getHours();
 
 function ReceiveItems(props) {
-  const classes = useStyles();
+  // const classes = useStyles();
+  // const classesForInput = MUIInputStyle();
+  const classes = useStyleforinput();
 
   const initialState = {
     requiredQty: "",
@@ -1506,174 +1524,243 @@ function ReceiveItems(props) {
 
         <div style={{ flex: 4, display: "flex", flexDirection: "column" }}>
           <div className="row">
-            <div className="col-md-6">
-              <div style={styles.inputContainerForTextField}>
-                <InputLabelComponent>Item Code</InputLabelComponent>
+            <div
+              className="col-md-6"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              {/* <InputLabelComponent>Item Code</InputLabelComponent> */}
 
-                <input
-                  // type="number"
-                  disabled={true}
-                  placeholder="Item Code"
-                  name={"itemCode"}
-                  value={selectedItem && selectedItem.itemId.itemCode}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                />
-              </div>
+              <TextField
+                // type="number"
+                id="itemCode"
+                disabled={true}
+                label="Item Code"
+                name={"itemCode"}
+                value={selectedItem && selectedItem.itemId.itemCode}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              />
             </div>
 
-            <div className="col-md-6">
-              <div style={styles.inputContainerForTextField}>
-                <InputLabelComponent> Item Name</InputLabelComponent>
+            <div
+              className="col-md-6"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              {/* <InputLabelComponent> Item Name</InputLabelComponent> */}
 
-                <input
-                  type="text"
-                  disabled={true}
-                  placeholder="Item Name"
-                  name={"itemName"}
-                  value={selectedItem && selectedItem.itemId.name}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                />
-              </div>
+              <TextField
+                type="text"
+                disabled={true}
+                label="Item Name"
+                name={"itemName"}
+                value={selectedItem && selectedItem.itemId.name}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              />
             </div>
           </div>
 
           <div className="row">
-            <div className="col-md-3">
-              <div style={styles.inputContainerForTextField}>
-                <InputLabelComponent> Current Qty</InputLabelComponent>
+            <div
+              className="col-md-3"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              {/* <InputLabelComponent> Current Qty</InputLabelComponent> */}
 
-                <input
-                  disabled={true}
-                  type="number"
-                  placeholder="Current Qty"
-                  name={"currentQty"}
-                  value={selectedItem && currentQty}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
+              <TextField
+                disabled={true}
+                type="number"
+                label="Current Qty"
+                name={"currentQty"}
+                value={selectedItem && currentQty}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
             </div>
 
-            <div className="col-md-3">
-              <div style={styles.inputContainerForTextField}>
-                <InputLabelComponent> Required Qty</InputLabelComponent>
+            <div
+              className="col-md-3"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              {/* <InputLabelComponent> Required Qty</InputLabelComponent> */}
 
-                <input
-                  type="number"
-                  disabled={true}
-                  placeholder="Required Qty"
-                  name={"requiredQty"}
-                  value={selectedItem && selectedItem.requestedQty}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
+              <TextField
+                type="number"
+                disabled={true}
+                label="Required Qty"
+                name={"requiredQty"}
+                value={selectedItem && selectedItem.requestedQty}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              />
             </div>
 
-            <div className="col-md-3">
-              <div style={styles.inputContainerForTextField}>
-                <InputLabelComponent> Received Qty</InputLabelComponent>
+            <div
+              className="col-md-3"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              {/* <InputLabelComponent> Received Qty</InputLabelComponent> */}
 
-                <input
-                  type="number"
-                  placeholder="Received Qty"
-                  name={"receivedQty"}
-                  value={receivedQty}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                  style={{
-                    borderColor:
-                      receivedQty > requestedQty ||
-                      (replenishmentRequestStatus &&
-                        replenishmentRequestStatus === "Received" &&
-                        receivedQty !== requestedQty)
-                        ? "red"
-                        : null,
-                    borderWidth:
-                      receivedQty > requestedQty ||
-                      (replenishmentRequestStatus &&
-                        replenishmentRequestStatus === "Received" &&
-                        receivedQty !== requestedQty)
-                        ? 2.5
-                        : null,
-                  }}
-                />
-              </div>
+              <TextField
+                type="number"
+                label="Received Qty"
+                name={"receivedQty"}
+                value={receivedQty}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                style={{
+                  borderColor:
+                    receivedQty > requestedQty ||
+                    (replenishmentRequestStatus &&
+                      replenishmentRequestStatus === "Received" &&
+                      receivedQty !== requestedQty)
+                      ? "red"
+                      : null,
+                  borderWidth:
+                    receivedQty > requestedQty ||
+                    (replenishmentRequestStatus &&
+                      replenishmentRequestStatus === "Received" &&
+                      receivedQty !== requestedQty)
+                      ? 2.5
+                      : null,
+                }}
+              />
             </div>
 
-            <div className="col-md-3">
-              <div style={styles.inputContainerForTextField}>
-                <InputLabelComponent> Bonus Qty</InputLabelComponent>
+            <div
+              className="col-md-3"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              {/* <InputLabelComponent> Bonus Qty</InputLabelComponent> */}
 
-                <input
-                  type="number"
-                  placeholder="Bonus Qty"
-                  name={"bonusQty"}
-                  value={bonusQty}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
+              <TextField
+                type="number"
+                label="Bonus Qty"
+                name={"bonusQty"}
+                value={bonusQty}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
             </div>
           </div>
 
-          {/* <div className="row">
-            <div className="col-md-4">
-              <div style={styles.inputContainerForTextField}>
+          <div className="row">
+            <div
+              className="col-md-4"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              {/* <InputLabelComponent>Batch Number</InputLabelComponent> */}
 
-                <InputLabelComponent>              
-                     Batch Number
-</InputLabelComponent>
-
-                <input
-                  type="number"
-                  placeholder="Batch Number"
-                  name={"batchNumber"}
-                  value={batchNumber}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
-            </div>
-
-            <div className="col-md-4">
-              <div style={styles.inputContainerForTextField}>
-
-                       <InputLabelComponent>              
-                  LOT No
-</InputLabelComponent>
-                <input
-                  type="number"
-                  placeholder="LOT No"
-                  name={"lotNo"}
-                  value={lotNo}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
+              <TextField
+                type="number"
+                label="Batch Number"
+                name={"batchNumber"}
+                value={batchNumber}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
             </div>
 
             <div
               className="col-md-4"
-              style={(styles.inputContainerForTextField, { marginTop: 35 })}
+              // <div
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
             >
-                   <InputLabelComponent>              
-Expiry Date
-</InputLabelComponent>
+              {/* <InputLabelComponent>LOT No</InputLabelComponent> */}
+              <TextField
+                type="number"
+                label="LOT No"
+                name={"lotNo"}
+                value={lotNo}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
+            </div>
+
+            <div
+              className="col-md-4"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              {/* <InputLabelComponent>Expiry Date</InputLabelComponent> */}
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DatePicker
-                  inputVariant="outlined"
+                  inputVariant="filled"
                   fullWidth={true}
                   format="dd/MM/yyyy"
-                  // label="Expiry Date"
+                  label="Expiry Date"
                   onChange={(val) => onChangeDate(val, "expiryDate")}
                   style={{ borderRadius: 10, backgroundColor: "white" }}
                   value={
@@ -1683,322 +1770,658 @@ Expiry Date
                         : null
                       : expiryDate
                   }
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                  // InputLabelProps={{
+                  //   className: classesForInput.label,
+                  //   classes: { label: classesForInput.label },
+                  // }}
+                />
+                {/* <DatePicker
+                  inputVariant="filled"
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                  fullWidth={true}
+                  format="dd/MM/yyyy"
+                  label="Expiry Date"
+                  onChange={(val) => onChangeDate(val, "expiryDate")}
+                  // style={{ borderRadius: 10, backgroundColor: "white" }}
+                  value={
+                    comingFor === "add"
+                      ? expiryDate
+                        ? expiryDate
+                        : null
+                      : expiryDate
+                  }
+                /> */}
+              </MuiPickersUtilsProvider>
+            </div>
+          </div>
+
+          <div className="row">
+            <div
+              className="col-md-3"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              {/* <InputLabelComponent>Unit</InputLabelComponent> */}
+              <TextField
+                className="textInputStyle"
+                id="unit"
+                variant="filled"
+                label="Unit"
+                name={"unit"}
+                value={unit}
+                onChange={onChangeValue}
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                // InputLabelProps={{
+                //   className: classesForInput.label,
+                //   classes: { label: classesForInput.label },
+                // }}
+              />
+              {/* <TextField
+                id="unit"
+                type="text"
+                label="Unit"
+                name={"unit"}
+                value={unit}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                Variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              /> */}
+            </div>
+
+            <div
+              className="col-md-3"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              {/* <InputLabelComponent>Discount %</InputLabelComponent> */}
+              <TextField
+                className="textInputStyle"
+                type={"number"}
+                id="discount"
+                variant="filled"
+                label="Discount %"
+                name={"discount"}
+                value={discount}
+                onChange={onChangeValue}
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                // InputLabelProps={{
+                //   className: classesForInput.label,
+                //   classes: { label: classesForInput.label },
+                // }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
+              {/* <TextField
+                id="discount"
+                type="number"
+                label="Discount %"
+                name={"discount"}
+                value={discount}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                Variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              /> */}
+            </div>
+
+            <div
+              className="col-md-3"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              {/* <InputLabelComponent>Unit Discount</InputLabelComponent> */}
+              <TextField
+                className="textInputStyle"
+                id="uniyDiscount"
+                variant="filled"
+                label="Unit Discount"
+                name={"uniyDiscount"}
+                value={uniyDiscount}
+                onChange={onChangeValue}
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                // InputLabelProps={{
+                //   className: classesForInput.label,
+                //   classes: { label: classesForInput.label },
+                // }}
+              />
+              {/* <TextField
+                id="uniyDiscount"
+                label="Unit Discount"
+                name={"uniyDiscount"}
+                value={uniyDiscount}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                Variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              /> */}
+            </div>
+
+            <div
+              className="col-md-3"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              {/* <InputLabelComponent>Discount Amount</InputLabelComponent> */}
+              <TextField
+                className="textInputStyle"
+                id="discountAmount"
+                type={"number"}
+                variant="filled"
+                label="Discount Amount"
+                name={"discountAmount"}
+                value={discountAmount}
+                onChange={onChangeValue}
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                // InputLabelProps={{
+                //   className: classesForInput.label,
+                //   classes: { label: classesForInput.label },
+                // }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
+              {/* <TextField
+                type="number"
+                label="Discount Amount"
+                name={"discountAmount"}
+                value={discountAmount}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                Variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }} */}
+              {/* /> */}
+            </div>
+          </div>
+
+          <div className="row">
+            <div
+              className="col-md-6"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              {/* <InputLabelComponent>Tax %</InputLabelComponent> */}
+              <TextField
+                className="textInputStyle"
+                id="tax"
+                type={"number"}
+                variant="filled"
+                label="Tax %"
+                name={"tax"}
+                value={tax}
+                onChange={onChangeValue}
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
+
+              {/* <TextField
+                id="tax"
+                type={"number"}
+                Variant="filled"
+                label="Tax %"
+                name={"tax"}
+                value={tax}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                // InputLabelProps={{
+                //   className: classesForInput.label,
+                //   classes: { label: classesForInput.label },
+                // }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              /> */}
+            </div>
+
+            <div
+              className="col-md-6"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              {/* <InputLabelComponent>Tax Amount</InputLabelComponent> */}
+              <TextField
+                id="taxAmount"
+                type="number"
+                label="Tax Amount"
+                name={"taxAmount"}
+                value={taxAmount}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
+            </div>
+          </div>
+
+          <div className="row">
+            <div
+              className="col-md-3"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              {/* <InputLabelComponent>Final Unit Price</InputLabelComponent> */}
+              <TextField
+                className="textInputStyle"
+                id="finalUnitPrice"
+                type={"number"}
+                label="Final Unit Price"
+                name={"finalUnitPrice"}
+                value={finalUnitPrice}
+                onChange={onChangeValue}
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                // InputLabelProps={{
+                //   className: classesForInput.label,
+                //   classes: { label: classesForInput.label },
+                // }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
+
+              {/* <TextField
+                type={"number"}
+                label="finalUnitPrice"
+                name={"finalUnitPrice"}
+                value={finalUnitPrice}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                Variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              /> */}
+            </div>
+
+            <div
+              className="col-md-3"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              {/* <InputLabelComponent> Sub Total</InputLabelComponent> */}
+              <TextField
+                className="textInputStyle"
+                id="subTotal"
+                type={"number"}
+                variant="filled"
+                label="Sub Total"
+                name={"subTotal"}
+                value={subTotal}
+                onChange={onChangeValue}
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                // InputLabelProps={{
+                //   className: classesForInput.label,
+                //   classes: { label: classesForInput.label },
+                // }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
+              {/* <TextField
+                className="textInputStyle"
+                id="subTotal"
+                type={"number"}
+                Variant="filled"
+                label="Sub Total"
+                name={"subTotal"}
+                value={subTotal}
+                onChange={onChangeValue}
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()} */}
+              {/* /> */}
+            </div>
+
+            <div
+              className="col-md-3"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              {/* <InputLabelComponent>Total Price</InputLabelComponent> */}
+
+              <TextField
+                className="textInputStyle"
+                type="number"
+                id="totalPrice"
+                variant="filled"
+                label="Total Price"
+                name={"totalPrice"}
+                value={totalPrice}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
+            </div>
+
+            <div
+              className="col-md-3"
+              // <div
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              {/* <InputLabelComponent>Discount Amount</InputLabelComponent> */}
+              <TextField
+                className="textInputStyle"
+                id="discountAmount2"
+                type={"number"}
+                variant="filled"
+                label="Discount Amount"
+                name={"discountAmount2"}
+                value={discountAmount2}
+                onChange={onChangeValue}
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                // InputLabelProps={{
+                //   className: classesForInput.label,
+                //   classes: { label: classesForInput.label },
+                // }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
+              {/* <TextField
+                type="number"
+                label="Discount Amount"
+                name={"discountAmount2"}
+                value={discountAmount2}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                Variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              /> */}
+            </div>
+            {/* </div> */}
+          </div>
+
+          <div className="row">
+            <div
+              className="col-md-4"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              {/* <InputLabelComponent>Invoice</InputLabelComponent> */}
+              <TextField
+                className="textInputStyle"
+                id="invoice"
+                type={"number"}
+                variant="filled"
+                label="Invoice"
+                name={"invoice"}
+                value={invoice}
+                onChange={onChangeValue}
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                // InputLabelProps={{
+                //   className: classesForInput.label,
+                //   classes: { label: classesForInput.label },
+                // }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
+              {/* <TextField
+                // type="number"
+                label="Invoice"
+                name={"invoice"}
+                value={invoice}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                Variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              /> */}
+            </div>
+
+            <div
+              className="col-md-4"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              {/* <InputLabelComponent>Date/Time Invoice</InputLabelComponent> */}
+
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <DateTimePicker
+                  inputVariant={"filled"}
+                  fullWidth={true}
+                  label="Date/Time Invoice"
+                  onChange={(val) => onChangeDate(val, "date")}
+                  // style={styles.styleForDate}
+                  value={comingFor === "add" ? (date ? date : null) : date}
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                />
+              </MuiPickersUtilsProvider>
+            </div>
+
+            <div
+              className="col-md-4"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              {/* <InputLabelComponent>Date/Time received</InputLabelComponent> */}
+
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <DateTimePicker
+                  inputVariant={"filled"}
+                  fullWidth={true}
+                  label="Date/Time Received"
+                  onChange={(val) => onChangeDate(val, "receivedDate")}
+                  // style={styles.styleForDate}
+                  value={
+                    comingFor === "add"
+                      ? receivedDate
+                        ? receivedDate
+                        : new Date()
+                      : receivedDate
+                  }
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
                 />
               </MuiPickersUtilsProvider>
             </div>
           </div>
 
           <div className="row">
-            <div className="col-md-3">
-              <div style={styles.inputContainerForTextField}>
-
-                     <InputLabelComponent>              
-                  Unit
-</InputLabelComponent>
-                <input
-                  type="text"
-                  placeholder="Unit"
-                  name={"unit"}
-                  value={unit}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                />
-              </div>
-            </div>
-
-            <div className="col-md-3">
-              <div style={styles.inputContainerForTextField}>
-              
-                  <InputLabelComponent>              
-                  Discount %
-</InputLabelComponent>
-                <input
-                  type="number"
-                  placeholder="Discount %"
-                  name={"discount"}
-                  value={discount}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
-            </div>
-
-            <div className="col-md-3">
-              <div style={styles.inputContainerForTextField}>
-
-                     <InputLabelComponent>              
-                  Unit Discount
-</InputLabelComponent>
-                <input
-                  placeholder="Unit Discount"
-                  name={"uniyDiscount"}
-                  value={uniyDiscount}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
-            </div>
-
-            <div className="col-md-3">
-              <div style={styles.inputContainerForTextField}>
-                        <InputLabelComponent>              
-                  Discount Amount
-</InputLabelComponent>
-                <input
-                  type="number"
-                  placeholder="Discount Amount"
-                  name={"discountAmount"}
-                  value={discountAmount}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-md-6">
-              <div style={styles.inputContainerForTextField}>
-
-                       <InputLabelComponent>              
-                  Tax %
-</InputLabelComponent>
-
-                <input
-                  type="number"
-                  placeholder="Tax %"
-                  name={"tax"}
-                  value={tax}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
-            </div>
-
-            <div className="col-md-6">
-              <div style={styles.inputContainerForTextField}>
-                  <InputLabelComponent>              
-                  Tax Amount
-</InputLabelComponent>
-                <input
-                  type="number"
-                  placeholder="Tax Amount"
-                  name={"taxAmount"}
-                  value={taxAmount}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
-            </div>
-          </div> */}
-
-          <div className="row">
-            <div className="col-md-3">
-              <div style={styles.inputContainerForTextField}>
-                <InputLabelComponent>Final Unit Price</InputLabelComponent>
-                <input
-                  type="number"
-                  placeholder="Final Unit Price"
-                  name={"finalUnitPrice"}
-                  value={finalUnitPrice}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
-            </div>
-
-            <div className="col-md-3">
-              <div style={styles.inputContainerForTextField}>
-                <InputLabelComponent> Sub Total</InputLabelComponent>
-
-                <input
-                  type="number"
-                  placeholder="Sub Total"
-                  name={"subTotal"}
-                  value={subTotal}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
-            </div>
-
-            <div className="col-md-3">
-              <div style={styles.inputContainerForTextField}>
-                <InputLabelComponent>Total Price</InputLabelComponent>
-
-                <input
-                  type="number"
-                  placeholder="Total Price"
-                  name={"totalPrice"}
-                  value={totalPrice}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
-            </div>
-
-            <div className="col-md-3">
-              <div style={styles.inputContainerForTextField}>
-                <InputLabelComponent>Discount Amount</InputLabelComponent>
-                <input
-                  type="number"
-                  placeholder="Discount Amount"
-                  name={"discountAmount2"}
-                  value={discountAmount2}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-md-4">
-              <div style={styles.inputContainerForTextField}>
-                <InputLabelComponent>Invoice</InputLabelComponent>
-                <input
-                  // type="number"
-                  placeholder="Invoice"
-                  name={"invoice"}
-                  value={invoice}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
-            </div>
-
-            <div className="col-md-4">
-              <div style={styles.inputContainerForTextField}>
-                <InputLabelComponent>Date/Time Invoice</InputLabelComponent>
-
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <DateTimePicker
-                    fullWidth={true}
-                    // label="Date/Time Invoice"
-                    onChange={(val) => onChangeDate(val, "date")}
-                    style={styles.styleForDate}
-                    value={comingFor === "add" ? (date ? date : null) : date}
-                    InputProps={{
-                      disableUnderline: true,
-                    }}
-                  />
-                </MuiPickersUtilsProvider>
-              </div>
-            </div>
-
-            <div className="col-md-4">
-              <div style={styles.inputContainerForTextField}>
-                <InputLabelComponent>Date/Time received</InputLabelComponent>
-
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <DateTimePicker
-                    fullWidth={true}
-                    // label="Date/Time Received"
-                    onChange={(val) => onChangeDate(val, "receivedDate")}
-                    style={styles.styleForDate}
-                    value={
-                      comingFor === "add"
-                        ? receivedDate
-                          ? receivedDate
-                          : new Date()
-                        : receivedDate
-                    }
-                    InputProps={{
-                      disableUnderline: true,
-                    }}
-                  />
-                </MuiPickersUtilsProvider>
-              </div>
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-md-6">
-              <div style={styles.inputContainerForTextField}>
-                <InputLabelComponent> Notes</InputLabelComponent>
-
-                <input
-                  placeholder="Notes"
-                  name={"notes"}
-                  value={notes}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                />
-              </div>
-            </div>
-
-            <div className="col-md-6">
-              <div style={styles.inputContainerForDropDown}>
-                <InputLabelComponent> Status</InputLabelComponent>
-
-                <Select
-                  fullWidth
-                  id="replenishmentRequestStatus"
-                  name="replenishmentRequestStatus"
-                  value={replenishmentRequestStatus}
-                  onChange={onChangeValue}
-                  label="Status"
-                  className="dropDownStyle"
-                  input={<BootstrapInput />}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  {statusArray.map((val) => {
-                    return (
-                      <MenuItem
-                        disabled={
-                          receivedQty &&
-                          ((val.key === "Received" &&
-                            receivedQty < requestedQty) ||
-                            (val.key === "Partially Recieved" &&
-                              receivedQty >= requestedQty))
-                        }
-                        key={val.key}
-                        value={val.key}
-                      >
-                        {val.value}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </div>
-            </div>
-          </div>
-
-          <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
             <div
+              className="col-md-6"
               style={{
-                display: "flex",
-                flex: 1,
-                height: 50,
-                marginTop: "2%",
-                marginBottom: "2%",
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
               }}
             >
-              {comingFor === "add" ? (
-                <div
-                  style={{
-                    display: "flex",
-                    flex: 1,
-                    height: 50,
-                    justifyContent: "flex-end",
-                    marginTop: "2%",
-                    marginBottom: "2%",
-                    flexDirection: "row",
-                  }}
-                >
-                  {/* <Button
+              {/* <InputLabelComponent> Notes</InputLabelComponent> */}
+              <TextField
+                className="textInputStyle"
+                id="notes"
+                variant="filled"
+                label="Notes"
+                name={"notes"}
+                value={notes}
+                onChange={onChangeValue}
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                // InputLabelProps={{
+                //   className: classesForInput.label,
+                //   classes: { label: classesForInput.label },
+                // }}
+              />
+              {/* <TextField
+                className="textInputStyle"
+                id="notes"
+                label="Notes"
+                name={"notes"}
+                value={notes}
+                onChange={onChangeValue}
+                Variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              /> */}
+            </div>
+
+            <div
+              className="col-md-6"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              {/* <InputLabelComponent> Status</InputLabelComponent> */}
+
+              <TextField
+                required
+                select
+                fullWidth
+                id="replenishmentRequestStatus"
+                name="replenishmentRequestStatus"
+                value={replenishmentRequestStatus}
+                onChange={onChangeValue}
+                label="Status"
+                variant="filled"
+                // className="dropDownStyle"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {statusArray.map((val) => {
+                  return (
+                    <MenuItem
+                      disabled={
+                        receivedQty &&
+                        ((val.key === "Received" &&
+                          receivedQty < requestedQty) ||
+                          (val.key === "Partially Recieved" &&
+                            receivedQty >= requestedQty))
+                      }
+                      key={val.key}
+                      value={val.key}
+                    >
+                      {val.value}
+                    </MenuItem>
+                  );
+                })}
+              </TextField>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              flex: 1,
+              height: 50,
+              marginTop: "2%",
+              marginBottom: "2%",
+            }}
+          >
+            {comingFor === "add" ? (
+              <div
+                style={{
+                  display: "flex",
+                  flex: 1,
+                  height: 50,
+                  justifyContent: "flex-end",
+                  marginTop: "2%",
+                  marginBottom: "2%",
+                  flexDirection: "row",
+                }}
+              >
+                {/* <Button
                     style={{ minWidth: "20%", marginRight: 30 }}
                     // disabled={true}
                     // onClick={handleAdd}
@@ -2007,60 +2430,59 @@ Expiry Date
                     Upload Invoice
                   </Button> */}
 
-                  <Button
-                    style={{ minWidth: "10%" }}
-                    disabled={!validateForm()}
-                    onClick={handleAdd}
-                    variant="contained"
-                    color="primary"
-                  >
-                    Receive
-                  </Button>
-                </div>
-              ) : (
-                <div
-                  style={{
-                    display: "flex",
-                    flex: 1,
-                    height: 50,
-                    justifyContent: "space-between",
-                    marginTop: "2%",
-                    marginBottom: "2%",
-                    flexDirection: "row",
-                  }}
+                <Button
+                  style={{ minWidth: "10%" }}
+                  disabled={!validateForm()}
+                  onClick={handleAdd}
+                  variant="contained"
+                  color="primary"
                 >
-                  <Button
-                    style={{ minWidth: "20%" }}
-                    // disabled={true}
-                    // onClick={handleAdd}
-                    variant="contained"
-                    // color="primary"
-                  >
-                    Upload Invoice
-                  </Button>
-                  <Button
-                    style={{ minWidth: "10%" }}
-                    disabled={!validateForm()}
-                    onClick={handleEdit}
-                    variant="contained"
-                    color="primary"
-                  >
-                    Receive
-                  </Button>
-                </div>
-              )}
-            </div>
+                  Receive
+                </Button>
+              </div>
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  flex: 1,
+                  height: 50,
+                  justifyContent: "space-between",
+                  marginTop: "2%",
+                  marginBottom: "2%",
+                  flexDirection: "row",
+                }}
+              >
+                <Button
+                  style={{ minWidth: "20%" }}
+                  // disabled={true}
+                  // onClick={handleAdd}
+                  variant="contained"
+                  // color="primary"
+                >
+                  Upload Invoice
+                </Button>
+                <Button
+                  style={{ minWidth: "10%" }}
+                  disabled={!validateForm()}
+                  onClick={handleEdit}
+                  variant="contained"
+                  color="primary"
+                >
+                  Receive
+                </Button>
+              </div>
+            )}
           </div>
+        </div>
 
-          <Notification msg={errorMsg} open={openNotification} />
+        <Notification msg={errorMsg} open={openNotification} />
 
-          <div style={{ marginBottom: 20, marginTop: 20 }}>
-            <img
-              onClick={() => props.history.goBack()}
-              src={Back_Arrow}
-              style={{ width: 60, height: 40, cursor: "pointer" }}
-            />
-          </div>
+        <div style={{ marginBottom: 20, marginTop: 20 }}>
+          <img
+            onClick={() => props.history.goBack()}
+            src={Back_Arrow}
+            style={{ width: 60, height: 40, cursor: "pointer" }}
+          />
         </div>
       </div>
     </div>

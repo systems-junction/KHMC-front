@@ -71,8 +71,19 @@ const styles = {
   //   marginTop: 25,
   // },
 
+  // inputContainerForTextField: {
+  //   marginTop: 25,
+  // },
   inputContainerForTextField: {
-    marginTop: 25,
+    marginTop: 6,
+  },
+
+  inputContainerForDropDown: {
+    marginTop: 6,
+  },
+  textFieldPadding: {
+    paddingLeft: 3,
+    paddingRight: 3,
   },
 
   inputContainerForDropDown: {
@@ -109,7 +120,52 @@ const useStylesForTabs = makeStyles({
   },
 })
 
-const useStyles = makeStyles(tableStyles)
+// const useStyles = makeStyles(tableStyles)
+const useStyles = makeStyles((theme) => ({
+  underline: {
+    '&&&:before': {
+      borderBottom: 'none',
+    },
+    '&&:after': {
+      borderBottom: 'none',
+    },
+  },
+  margin: {
+    margin: theme.spacing(0),
+  },
+  input: {
+    backgroundColor: 'white',
+    borderRadius: 6,
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:disabled': {
+      color: 'gray',
+    },
+  },
+  multilineColor: {
+    backgroundColor: 'white',
+    borderRadius: 6,
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+  },
+  root: {
+    '& .MuiTextField-root': {
+      backgroundColor: 'white',
+    },
+    '& .Mui-focused': {
+      backgroundColor: 'white',
+      color: 'black',
+    },
+  },
+}))
 
 const DATE = new Date()
 
@@ -307,7 +363,7 @@ function AddEditPurchaseRequest(props) {
     >
       <Header />
 
-      <div className='cPadding'>
+      <div className={`cPadding ${classes.root}`}>
         <div className='subheader'>
           <div>
             <img src={business_Unit} />
@@ -363,136 +419,175 @@ function AddEditPurchaseRequest(props) {
             className='container'
           >
             <div className='row'>
-              <div className='col-md-12'>
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id='status-label'>
-                    PO Number
-                  </InputLabel>
-                  <input
-                    disabled={true}
-                    type='text'
-                    placeholder='Item Name'
-                    name={'itemName'}
-                    value={poId.purchaseOrderNo}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                  />
-                </div>
+              <div
+                className='col-md-12'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  disabled={true}
+                  label='Item Name'
+                  name={'itemName'}
+                  value={poId && poId.purchaseOrderNo}
+                  // error={poId.purchaseOrderNo === '' && isFormSubmitted}
+                  onChange={onChangeValue}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                />
               </div>
             </div>
 
             <div className='row'>
-              <div className='col-md-6'>
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id='status-label'>
-                    Date/Time Generated
-                  </InputLabel>
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <DateTimePicker
-                      disabled={true}
-                      inputVariant='outlined'
-                      onChange={onChangeDate}
-                      fullWidth
-                      style={{ borderRadius: 10, backgroundColor: 'white' }}
-                      value={poId.createdAt}
-                    />
-                  </MuiPickersUtilsProvider>
-                </div>
+              <div
+                className='col-md-6'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <DateTimePicker
+                    disabled={true}
+                    label='Date/Time Generated'
+                    inputVariant='filled'
+                    onChange={onChangeDate}
+                    fullWidth
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                    value={poId.createdAt}
+                  />
+                </MuiPickersUtilsProvider>
               </div>
 
-              <div className='col-md-6'>
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id='status-label'>
-                    Date/Time Sent
-                  </InputLabel>
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <DateTimePicker
-                      disabled={true}
-                      inputVariant='outlined'
-                      onChange={onChangeDate}
-                      fullWidth
-                      style={{ borderRadius: 10, backgroundColor: 'white' }}
-                      value={poId.sentAt}
-                    />
-                  </MuiPickersUtilsProvider>
-                </div>
+              <div
+                className='col-md-6'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <DateTimePicker
+                    disabled={true}
+                    label='Date/Time Sent'
+                    inputVariant='filled'
+                    onChange={onChangeDate}
+                    fullWidth
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                    value={poId.sentAt}
+                  />
+                </MuiPickersUtilsProvider>
               </div>
             </div>
 
             <div className='row'>
-              <div className='col-md-6'>
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id='status-label'>
-                    Generated
-                  </InputLabel>
-                  <input
-                    disabled={true}
-                    type='text'
-                    placeholder='Generated'
-                    name={'itemName'}
-                    value={poId.generated}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                  />
-                </div>
+              <div
+                className='col-md-6'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  disabled={true}
+                  label='Generated'
+                  name={'itemName'}
+                  value={poId && poId.generated}
+                  // error={selectedItem.vendorId.contactPersonName === '' && isFormSubmitted}
+                  onChange={onChangeValue}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                />
               </div>
 
-              <div className='col-md-6'>
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id='status-label'>
-                    Vendor Name
-                  </InputLabel>
-                  <input
-                    disabled={true}
-                    type='text'
-                    placeholder='Venor Name'
-                    name={'itemName'}
-                    value={selectedItem && selectedItem.vendorId.englishName}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                  />
-                </div>
+              <div
+                className='col-md-6'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  disabled={true}
+                  label=' Vendor Name'
+                  name={'itemName'}
+                  value={selectedItem && selectedItem.vendorId.englishName}
+                  // error={selectedItem.vendorId.englishName === '' && isFormSubmitted}
+                  onChange={onChangeValue}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                />
               </div>
             </div>
 
             <div className='row'>
-              <div className='col-md-6'>
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id='status-label'>
-                    Contact Person
-                  </InputLabel>
-                  <input
-                    disabled={true}
-                    type='text'
-                    placeholder='Item Name'
-                    name={'Contact Person'}
-                    value={
-                      selectedItem && selectedItem.vendorId.contactPersonName
-                    }
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                  />
-                </div>
+              <div
+                className='col-md-6'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  disabled={true}
+                  label='  Contact Person'
+                  name={'itemName'}
+                  value={
+                    selectedItem && selectedItem.vendorId.contactPersonName
+                  }
+                  // error={selectedItem.vendorId.contactPersonName === '' && isFormSubmitted}
+                  onChange={onChangeValue}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                />
               </div>
 
-              <div className='col-md-6'>
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id='status-label'>
-                    Contact Number
-                  </InputLabel>
-                  <input
-                    disabled={true}
-                    type='text'
-                    placeholder='Contact Number'
-                    name={'itemName'}
-                    value={
-                      selectedItem &&
-                      selectedItem.vendorId.contactPersonTelephone
-                    }
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                  />
-                </div>
+              <div
+                className='col-md-6'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  disabled={true}
+                  label='Contact Number'
+                  name={'itemName'}
+                  value={
+                    selectedItem && selectedItem.vendorId.contactPersonTelephone
+                  }
+                  // error={selectedItem.vendorId.contactPersonTelephone === '' && isFormSubmitted}
+                  onChange={onChangeValue}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                />
               </div>
             </div>
 

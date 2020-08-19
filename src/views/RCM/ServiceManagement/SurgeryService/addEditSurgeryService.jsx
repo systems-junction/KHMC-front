@@ -3,12 +3,14 @@ import TextField from "@material-ui/core/TextField";
 import Checkbox from "@material-ui/core/Checkbox";
 import Modal from "@material-ui/core/Modal";
 import Button from "@material-ui/core/Button";
+import { makeStyles } from "@material-ui/core/styles";
+
 import axios from "axios";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import {
   updateSurgeryServiceUrl,
-  addSurgeryServiceUrl
+  addSurgeryServiceUrl,
 } from "../../../../public/endpoins";
 import RadiologyDepartment from "../../../../assets/img/Radiology Department.png";
 import Header from "../../../../components/Header/Header";
@@ -51,16 +53,62 @@ const styles = {
   },
 
   inputContainerForTextField: {
-    marginTop: 25,
-    outline: "none",
+    marginTop: 6,
   },
 
   inputContainerForDropDown: {
-    marginTop: 25,
+    marginTop: 6,
+  },
+  textFieldPadding: {
+    paddingLeft: 3,
+    paddingRight: 3,
+  },
+  input: {
+    display: "none",
   },
 };
 
+const useStyles = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(0),
+  },
+  input: {
+    backgroundColor: "white",
+    borderRadius: 6,
+    "&:after": {
+      borderBottomColor: "black",
+    },
+    "&:hover": {
+      backgroundColor: "white",
+    },
+    "&:disabled": {
+      color: "gray",
+    },
+  },
+  multilineColor: {
+    backgroundColor: "white",
+    borderRadius: 6,
+    "&:hover": {
+      backgroundColor: "white",
+    },
+    "&:after": {
+      borderBottomColor: "black",
+    },
+  },
+  root: {
+    "& .MuiTextField-root": {
+      backgroundColor: "white",
+    },
+    "& .Mui-focused": {
+      backgroundColor: "white",
+      color: "black",
+    },
+  },
+}));
+
 function AddEditVendor(props) {
+  const classes = useStyles();
+
   const modalStyle = {
     backgroundColor: "#5074f4",
     borderRadius: 30,
@@ -99,8 +147,7 @@ function AddEditVendor(props) {
     dispatch({ field: e.target.name, value: e.target.value });
   };
 
-  function validateForm() 
-  {
+  function validateForm() {
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return (
       name.length > 0 &&
@@ -174,33 +221,33 @@ function AddEditVendor(props) {
     //   setIsFormSubmitted(true);
     //   setOpenNotification(true);
     //   setErrorMsg("Please fill the fields properly");
-    // } 
-    // else 
+    // }
+    // else
     // {
-      // if (validateForm()) {
-        const params = {
-          _id,
-          name,
-          description,
-          serviceNo,
-          price,
-          status,
-        };
-        axios
-          .put(updateSurgeryServiceUrl, params)
-          .then((res) => {
-            if (res.data.success) {
-              console.log(res.data)
-            } else {
-              props.history.goBack();
-            }
-          })
-          .catch((e) => {
-            console.log("error after updating Surgery Data", e);
-            setOpenNotification(true);
-            setErrorMsg("error while updating Surgery Data");
-          });
-      // }
+    // if (validateForm()) {
+    const params = {
+      _id,
+      name,
+      description,
+      serviceNo,
+      price,
+      status,
+    };
+    axios
+      .put(updateSurgeryServiceUrl, params)
+      .then((res) => {
+        if (res.data.success) {
+          console.log(res.data);
+        } else {
+          props.history.goBack();
+        }
+      })
+      .catch((e) => {
+        console.log("error after updating Surgery Data", e);
+        setOpenNotification(true);
+        setErrorMsg("error while updating Surgery Data");
+      });
+    // }
     // }
   };
 
@@ -226,7 +273,7 @@ function AddEditVendor(props) {
       }}
     >
       <Header />
-      <div className="cPadding">
+      <div className={`cPadding ${classes.root}`}>
         <div className="subheader">
           <div>
             <img src={RadiologyDepartment} />
@@ -249,22 +296,31 @@ function AddEditVendor(props) {
           </div>
         </div>
 
-        <div className="container">
+        <div className="container-fluid">
           {comingFor === "edit" ? (
             <div className="row">
               <div
                 className="col-md-12"
-                style={styles.inputContainerForTextField}
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
               >
-                <InputLabelComponent>Service Id*</InputLabelComponent>
-                <input
+                <TextField
                   disabled={true}
-                  style={styles.inputField}
-                  type="text"
-                  placeholder="Service Id"
+                  label="Service Id"
                   name={"serviceNo"}
                   value={serviceNo}
+                  variant="filled"
                   className="textInputStyle"
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                  InputLabelProps={{
+                    className: classes.label,
+                    classes: { label: classes.label },
+                  }}
                 />
               </div>
             </div>
@@ -273,55 +329,89 @@ function AddEditVendor(props) {
           )}
 
           <div className="row">
-            <div className="col-md-6" style={styles.inputContainerForTextField}>
-              <InputLabelComponent>Name*</InputLabelComponent>
-              <input
-                style={styles.inputField}
-                type="text"
-                placeholder="Name"
-                name={"name"}
+            <div
+              className="col-md-6"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                label="Name"
+                name="name"
+                variant="filled"
                 value={name}
+                error={name === "" && isFormSubmitted}
                 onChange={onChangeValue}
                 className="textInputStyle"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                InputLabelProps={{
+                  className: classes.label,
+                  classes: { label: classes.label },
+                }}
               />
-
-              <ErrorMessage name={name} isFormSubmitted={isFormSubmitted} />
             </div>
 
-            <div className="col-md-6" style={styles.inputContainerForTextField}>
-              <InputLabelComponent>Price*</InputLabelComponent>
-              <input
-                style={styles.inputField}
+            <div
+              className="col-md-6"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                label="Price"
                 type="number"
-                placeholder="Price"
                 name={"price"}
+                variant="filled"
+                error={price === "" && isFormSubmitted}
                 value={price}
                 onChange={onChangeValue}
                 className="textInputStyle"
                 onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                InputLabelProps={{
+                  className: classes.label,
+                  classes: { label: classes.label },
+                }}
               />
-              <ErrorMessage name={price} isFormSubmitted={isFormSubmitted} />
             </div>
           </div>
 
           <div className="row">
             <div
               className="col-md-12"
-              style={styles.inputContainerForTextField}
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
             >
-              <InputLabelComponent>Description*</InputLabelComponent>
-              <input
-                style={styles.inputField}
-                type="text"
-                placeholder="Description"
+              <TextField
+                required
+                label="Description"
+                // multiline
                 name={"description"}
+                variant="filled"
                 value={description}
                 onChange={onChangeValue}
                 className="textInputStyle"
-              />
-              <ErrorMessage
-                name={description}
-                isFormSubmitted={isFormSubmitted}
+                error={description === "" && isFormSubmitted}
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                InputLabelProps={{
+                  className: classes.label,
+                  classes: { label: classes.label },
+                }}
               />
             </div>
           </div>
@@ -329,19 +419,27 @@ function AddEditVendor(props) {
           <div className="row">
             <div
               className="col-md-12"
-              style={styles.inputContainerForTextField}
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
             >
-              <InputLabelComponent>Status*</InputLabelComponent>
-
-              <Select
-                style={styles.inputField}
+              <TextField
+                required
+                select
                 fullWidth
                 id="status"
                 name="status"
+                variant="filled"
                 value={status}
                 onChange={onChangeValue}
                 label="Status"
+                error={status === "" && isFormSubmitted}
                 className="dropDownStyle"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
                 input={<BootstrapInput />}
               >
                 <MenuItem value="">
@@ -355,9 +453,7 @@ function AddEditVendor(props) {
                       </MenuItem>
                     );
                   })}
-              </Select>
-
-              <ErrorMessage name={status} isFormSubmitted={isFormSubmitted} />
+              </TextField>
             </div>
           </div>
 

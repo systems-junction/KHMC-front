@@ -6,24 +6,59 @@ export default makeStyles((theme) => ({
   },
   input: {
     backgroundColor: "white",
-    borderRadius: 4,
-    "&:placeholder": {
-      // color: "gray",
-      // fontWeight: "400",
+    borderRadius: 6,
+    "&:after": {
+      borderBottomColor: "black",
     },
-    "&:before": {
-      borderBottomWidth: "0px",
+    "&:hover": {
+      backgroundColor: "white",
+    },
+    "&:disabled": {
+      color: "gray",
+    },
+  },
+  multilineColor: {
+    backgroundColor: "white",
+    borderRadius: 6,
+    "&:hover": {
+      backgroundColor: "white",
     },
     "&:after": {
+      borderBottomColor: "black",
+    },
+  },
+  root: {
+    "& .MuiTextField-root": {
+      backgroundColor: "white",
+    },
+    "& .Mui-focused": {
+      backgroundColor: "white",
       color: "black",
     },
   },
-  // label: {
-  //   "&:focused": {
-  //     color: "black",
+  // margin: {
+  //   margin: theme.spacing(0),
+  // },
+  // input: {
+  //   backgroundColor: "white",
+  //   borderRadius: 4,
+  //   "&:placeholder": {
+  //     // color: "gray",
+  //     // fontWeight: "400",
+  //   },
+  //   "&:before": {
+  //     borderBottomWidth: "0px",
   //   },
   //   "&:after": {
   //     color: "black",
   //   },
   // },
+  // // label: {
+  // //   "&:focused": {
+  // //     color: "black",
+  // //   },
+  // //   "&:after": {
+  // //     color: "black",
+  // //   },
+  // // },
 }));

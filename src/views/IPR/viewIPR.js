@@ -1,12 +1,12 @@
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable array-callback-return */
 /* eslint-disable react/jsx-indent */
-import React, { useEffect, useState, useReducer } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
-import Button from "@material-ui/core/Button";
-import tableStyles from "../../assets/jss/material-dashboard-react/components/tableStyle.js";
-import axios from "axios";
+import React, { useEffect, useState, useReducer } from 'react'
+import { makeStyles } from '@material-ui/core/styles'
+import InputLabel from '@material-ui/core/InputLabel'
+import Button from '@material-ui/core/Button'
+import tableStyles from '../../assets/jss/material-dashboard-react/components/tableStyle.js'
+import axios from 'axios'
 import {
   getSearchedLaboratoryService,
   getSearchedRadiologyService,
@@ -18,7 +18,6 @@ import cookie from "react-cookies";
 import Header from "../../components/Header/Header";
 import business_Unit from "../../assets/img/Purchase Order.png";
 import IPR from "../../assets/img/IPR.png";
-
 import Back from "../../assets/img/Back_Arrow.png";
 import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
 import Tabs from "@material-ui/core/Tabs";
@@ -41,82 +40,82 @@ import Notification from "../../components/Snackbar/Notification.js";
 import Loader from "react-loader-spinner";
 
 const tableHeadingForResident = [
-  "Date/Time",
-  "Description",
-  "Doctor Ref",
-  "Action",
-];
+  'Date/Time',
+  'Description',
+  'Doctor Ref',
+  'Action',
+]
 const tableDataKeysForResident = [
-  "date",
-  "description",
-  ["doctor", "firstName"],
-];
+  'date',
+  'description',
+  ['doctor', 'firstName'],
+]
 const tableHeadingForConsultation = [
-  "Consultation ID",
-  "Date/Time",
-  "Description",
-  "Doctor Ref",
-  "Action",
-];
+  'Consultation ID',
+  'Date/Time',
+  'Description',
+  'Doctor Ref',
+  'Action',
+]
 const tableDataKeysForConsultation = [
-  "consultationNo",
-  "date",
-  "description",
-  ["requester", "firstName"],
-];
+  'consultationNo',
+  'date',
+  'description',
+  ['requester', 'firstName'],
+]
 const tableHeadingForPharmacy = [
-  "Request ID",
-  "Date/Time",
-  "Requester",
-  "Status",
-  "Action",
-];
+  'Request ID',
+  'Date/Time',
+  'Requester',
+  'Status',
+  'Action',
+]
 const tableDataKeysForPharmacy = [
-  "requestNo",
-  "date",
-  ["requester", "firstName"],
-  "status",
-];
+  'requestNo',
+  'date',
+  ['requester', 'firstName'],
+  'status',
+]
 const tableHeadingForLabReq = [
-  "Service Code",
-  "Service Name",
-  "Requester",
-  "Status",
-  "Action",
-];
+  'Service Code',
+  'Service Name',
+  'Requester',
+  'Status',
+  'Action',
+]
 const tableDataKeysForLabReq = [
-  "serviceCode",
-  "serviceName",
-  "requesterName",
-  "status",
-];
+  'serviceCode',
+  'serviceName',
+  'requesterName',
+  'status',
+]
 const tableHeadingForRadiology = [
-  "Service Code",
-  "Service Name",
-  "Requester",
-  "Status",
-  "Action",
-];
+  'Service Code',
+  'Service Name',
+  'Requester',
+  'Status',
+  'Action',
+]
 const tableDataKeysForRadiology = [
-  "serviceCode",
-  "serviceName",
-  "requesterName",
-  "status",
-];
+  'serviceCode',
+  'serviceName',
+  'requesterName',
+  'status',
+]
 const tableHeadingForNurse = [
-  "Service Code",
-  "Service Name",
-  "Requester",
-  "Status",
-  "Action",
-];
+  'Service Code',
+  'Service Name',
+  'Requester',
+  'Status',
+  'Action',
+]
 const tableDataKeysForNurse = [
-  "serviceCode",
-  "serviceName",
-  "requesterName",
-  "status",
-];
-const tableHeadingForEDR = ["Date/TIme", "Description", "Doctor Ref", "Action"];
+  'serviceCode',
+  'serviceName',
+  'requesterName',
+  'status',
+]
+const tableHeadingForEDR = ['Date/TIme', 'Description', 'Doctor Ref', 'Action']
 const tableDataKeysForEDR = [
   "serviceCode",
   "serviceName",
@@ -139,86 +138,86 @@ const tableDataKeysForFollowUp = [
 const actions = { view: true };
 const styles = {
   patientDetails: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 15,
-    padding: "20px",
+    padding: '20px',
   },
   inputContainerForTextField: {
     marginTop: 25,
   },
   inputContainerForDropDown: {
     marginTop: 25,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 10,
     paddingLeft: 10,
     paddingRight: 10,
     paddingTop: 2,
   },
   stylesForButton: {
-    color: "white",
-    cursor: "pointer",
+    color: 'white',
+    cursor: 'pointer',
     borderRadius: 15,
-    backgroundColor: "#2c6ddd",
-    height: "50px",
-    outline: "none",
+    backgroundColor: '#2c6ddd',
+    height: '50px',
+    outline: 'none',
   },
   buttonContainer: {
     marginTop: 25,
   },
   stylesForLabel: {
-    fontWeight: "700",
-    color: "gray",
+    fontWeight: '700',
+    color: 'gray',
   },
-};
+}
 
 const useStylesForTabs = makeStyles({
   root: {
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   scroller: {
-    flexGrow: "0",
+    flexGrow: '0',
   },
-});
+})
 
-const useStyles = makeStyles(tableStyles);
+const useStyles = makeStyles(tableStyles)
 
 function AddEditPurchaseRequest(props) {
-  const classesForTabs = useStylesForTabs();
+  const classesForTabs = useStylesForTabs()
 
   const initialState = {
-    labServiceId: "",
-    labServiceCode: "",
-    labRequestArray: "",
-    labServiceName: "",
-    labServiceStatus: "",
+    labServiceId: '',
+    labServiceCode: '',
+    labRequestArray: '',
+    labServiceName: '',
+    labServiceStatus: '',
 
-    radioServiceId: "",
-    radioServiceCode: "",
+    radioServiceId: '',
+    radioServiceCode: '',
 
-    radioServiceName: "",
-    radiologyRequestArray: "",
-    radioServiceStatus: "",
+    radioServiceName: '',
+    radiologyRequestArray: '',
+    radioServiceStatus: '',
 
     //for nurse
 
-    nurseServiceId: "",
-    nurseServiceCode: "",
+    nurseServiceId: '',
+    nurseServiceCode: '',
 
-    nurseServiceName: "",
-    nurseRequestArray: "",
-    nurseServiceStatus: "",
+    nurseServiceName: '',
+    nurseRequestArray: '',
+    nurseServiceStatus: '',
 
-    consultationNoteArray: "",
-    consultationNo: "",
+    consultationNoteArray: '',
+    consultationNo: '',
     date: new Date(),
-    description: "",
-    consultationNotes: "",
-    requester: cookie.load("current_user").name,
+    description: '',
+    consultationNotes: '',
+    requester: cookie.load('current_user').name,
 
-    residentNoteArray: "",
-    rdescription: "",
-    note: "",
-    doctor: cookie.load("current_user").name,
+    residentNoteArray: '',
+    rdescription: '',
+    note: '',
+    doctor: cookie.load('current_user').name,
 
     pharmacyRequestArray: "",
 
@@ -229,10 +228,10 @@ function AddEditPurchaseRequest(props) {
     return {
       ...state,
       [field]: value,
-    };
+    }
   }
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   const {
     labServiceId,
@@ -260,12 +259,12 @@ function AddEditPurchaseRequest(props) {
     date = new Date(),
     description,
     consultationNotes,
-    requester = cookie.load("current_user").name,
+    requester = cookie.load('current_user').name,
 
     residentNoteArray,
     rdescription,
     note,
-    doctor = cookie.load("current_user").name,
+    doctor = cookie.load('current_user').name,
 
     pharmacyRequestArray,
 
@@ -303,14 +302,14 @@ function AddEditPurchaseRequest(props) {
   const [id, setId] = useState("");
   const [searchRadioQuery, setSearchRadioQuery] = useState("");
   const [radioItemFoundSuccessfull, setRadioItemFoundSuccessfully] = useState(
-    ""
-  );
-  const [radioItemFound, setRadioItemFound] = useState("");
+    ''
+  )
+  const [radioItemFound, setRadioItemFound] = useState('')
   const [nurseItemFoundSuccessfull, setNurseItemFoundSuccessfully] = useState(
-    ""
-  );
-  const [nurseItemFound, setNurseItemFound] = useState("");
-  const [addLabRequest, setaddLabRequest] = useState(false);
+    ''
+  )
+  const [nurseItemFound, setNurseItemFound] = useState('')
+  const [addLabRequest, setaddLabRequest] = useState(false)
 
   const [addNurseRequest, setaddNurseRequest] = useState(false);
   const [searchNurseQuery, setSearchNurseQuery] = useState("");
@@ -378,17 +377,17 @@ function AddEditPurchaseRequest(props) {
   };
 
   useEffect(() => {
-    setCurrentUser(cookie.load("current_user"));
+    setCurrentUser(cookie.load('current_user'))
 
     console.log(props.history.location.state.selectedItem);
     getIPRById(props.history.location.state.selectedItem._id);
 
-    const selectedRec = props.history.location.state.selectedItem;
+    const selectedRec = props.history.location.state.selectedItem
 
-    setId(props.history.location.state.selectedItem._id);
-    setSelectedItem(props.history.location.state.selectedItem);
-    setrequestNo(props.history.location.state.selectedItem.requestNo);
-    setSelectedPatient(props.history.location.state.selectedItem.patientId);
+    setId(props.history.location.state.selectedItem._id)
+    setSelectedItem(props.history.location.state.selectedItem)
+    setrequestNo(props.history.location.state.selectedItem.requestNo)
+    setSelectedPatient(props.history.location.state.selectedItem.patientId)
 
   }, []);
 
@@ -415,8 +414,8 @@ function AddEditPurchaseRequest(props) {
   // }
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+    setValue(newValue)
+  }
 
   // function viewItem(item) {
   //   if (item !== "") {
@@ -429,12 +428,12 @@ function AddEditPurchaseRequest(props) {
   // }
 
   function viewItem(item) {
-    if (item !== "") {
-      setOpenItemDialog(true);
-      setItem(item);
+    if (item !== '') {
+      setOpenItemDialog(true)
+      setItem(item)
     } else {
-      setOpenItemDialog(false);
-      setItem("");
+      setOpenItemDialog(false)
+      setItem('')
     }
   }
   function addConsultRequest() {
@@ -445,7 +444,7 @@ function AddEditPurchaseRequest(props) {
     // } else {
     // if (validateForm()) {
 
-    let consultationNote = [];
+    let consultationNote = []
 
     consultationNote = [
       ...consultationNoteArray,
@@ -456,30 +455,30 @@ function AddEditPurchaseRequest(props) {
         requester: currentUser.staffId,
         date: date,
       },
-    ];
+    ]
 
     const params = {
       _id: id,
       consultationNote: consultationNote,
-    };
+    }
 
     // console.log("params", params);
     axios
       .put(updateIPR, params)
       .then((res) => {
         if (res.data.success) {
-          console.log("response while adding Consult Req", res.data.data);
-          props.history.goBack();
+          console.log('response while adding Consult Req', res.data.data)
+          props.history.goBack()
         } else if (!res.data.success) {
-          setOpenNotification(true);
-          setErrorMsg("Error while adding the Consultation request");
+          setOpenNotification(true)
+          setErrorMsg('Error while adding the Consultation request')
         }
       })
       .catch((e) => {
-        console.log("error after adding Consultation request", e);
-        setOpenNotification(true);
-        setErrorMsg("Error after adding the Consultation request");
-      });
+        console.log('error after adding Consultation request', e)
+        setOpenNotification(true)
+        setErrorMsg('Error after adding the Consultation request')
+      })
     //   }
     // }
   }
@@ -492,7 +491,7 @@ function AddEditPurchaseRequest(props) {
     // } else {
     // if (validateForm()) {
 
-    let residentNote = [];
+    let residentNote = []
 
     residentNote = [
       ...residentNoteArray,
@@ -502,90 +501,90 @@ function AddEditPurchaseRequest(props) {
         doctor: currentUser.staffId,
         note: note,
       },
-    ];
+    ]
 
     const params = {
       _id: id,
       residentNotes: residentNote,
-    };
+    }
 
     // console.log("params", params);
     axios
       .put(updateIPR, params)
       .then((res) => {
         if (res.data.success) {
-          console.log("response while adding Resident Req", res.data.data);
-          props.history.goBack();
+          console.log('response while adding Resident Req', res.data.data)
+          props.history.goBack()
         } else if (!res.data.success) {
-          setOpenNotification(true);
-          setErrorMsg("Error while adding the Resident request");
+          setOpenNotification(true)
+          setErrorMsg('Error while adding the Resident request')
         }
       })
       .catch((e) => {
-        console.log("error after adding Resident request", e);
-        setOpenNotification(true);
-        setErrorMsg("Error after adding the Resident request");
-      });
+        console.log('error after adding Resident request', e)
+        setOpenNotification(true)
+        setErrorMsg('Error after adding the Resident request')
+      })
     //   }
     // }
   }
 
   const addNewRequest = () => {
-    let path = `viewIPR/add`;
+    let path = `viewIPR/add`
     props.history.push({
       pathname: path,
       state: {
-        comingFor: "add",
+        comingFor: 'add',
         selectedItem: selectedItem,
         pharmacyRequestArray,
       },
-    });
-  };
+    })
+  }
 
   function hideDialog() {
-    setOpenAddConsultDialog(false);
-    setOpenAddResidentDialog(false);
+    setOpenAddConsultDialog(false)
+    setOpenAddResidentDialog(false)
 
-    dispatch({ field: "consultationNo", value: "" });
-    dispatch({ field: "description", value: "" });
-    dispatch({ field: "consultationNotes", value: "" });
-    dispatch({ field: "rdescription", value: "" });
-    dispatch({ field: "note", value: "" });
+    dispatch({ field: 'consultationNo', value: '' })
+    dispatch({ field: 'description', value: '' })
+    dispatch({ field: 'consultationNotes', value: '' })
+    dispatch({ field: 'rdescription', value: '' })
+    dispatch({ field: 'note', value: '' })
   }
 
   const handleSearch = (e) => {
-    setSearchQuery(e.target.value);
+    setSearchQuery(e.target.value)
     if (e.target.value.length >= 3) {
       axios
-        .get(getSearchedLaboratoryService + "/" + e.target.value)
+        .get(getSearchedLaboratoryService + '/' + e.target.value)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
-              console.log(res.data.data);
-              setItemFoundSuccessfully(true);
-              setItemFound(res.data.data);
+              console.log(res.data.data)
+              setItemFoundSuccessfully(true)
+              setItemFound(res.data.data)
             } else {
-              setItemFoundSuccessfully(false);
-              setItemFound("");
+              setItemFoundSuccessfully(false)
+              setItemFound('')
             }
           }
         })
         .catch((e) => {
-          console.log("error while searching req", e);
-        });
+          console.log('error while searching req', e)
+        })
     }
-  };
+  }
 
   function handleAddItem(i) {
     // console.log("selected item", i);
 
-    dispatch({ field: "labServiceId", value: i._id });
-    dispatch({ field: "labServiceCode", value: i.serviceNo });
-    dispatch({ field: "labServiceName", value: i.name });
-    dispatch({ field: "labServiceStatus", value: i.status });
+    dispatch({ field: 'labServiceId', value: i._id })
+    dispatch({ field: 'labServiceCode', value: i.serviceNo })
+    dispatch({ field: 'labServiceName', value: i.name })
+    dispatch({ field: 'labServiceStatus', value: i.status })
 
-    setSearchQuery("");
-    setaddLabRequest(true);
+    setSearchQuery('')
+    setaddLabRequest(true)
   }
 
   const addSelectedLabItem = () => {
@@ -594,14 +593,14 @@ function AddEditPurchaseRequest(props) {
 
     let found =
       labRequestArray &&
-      labRequestArray.find((item) => item.serviceId === labServiceId);
+      labRequestArray.find((item) => item.serviceId === labServiceId)
 
     if (found) {
-      setOpenNotification(true);
-      setErrorMsg("This Service has already been added.");
+      setOpenNotification(true)
+      setErrorMsg('This Service has already been added.')
     } else {
       dispatch({
-        field: "labRequestArray",
+        field: 'labRequestArray',
         value: [
           ...labRequestArray,
           {
@@ -613,22 +612,22 @@ function AddEditPurchaseRequest(props) {
             status: labServiceStatus,
           },
         ],
-      });
+      })
       // }
     }
 
-    dispatch({ field: "labServiceId", value: "" });
-    dispatch({ field: "labServiceName", value: "" });
-    dispatch({ field: "labServiceStatus", value: "" });
-    dispatch({ field: "labServiceCode", value: "" });
+    dispatch({ field: 'labServiceId', value: '' })
+    dispatch({ field: 'labServiceName', value: '' })
+    dispatch({ field: 'labServiceStatus', value: '' })
+    dispatch({ field: 'labServiceCode', value: '' })
 
-    setaddLabRequest(false);
-  };
+    setaddLabRequest(false)
+  }
 
   const saveLabReq = () => {
     // console.log("THIS IS ARRAY",labRequestArray)
 
-    let labItems = [];
+    let labItems = []
     for (let i = 0; i < labRequestArray.length; i++) {
       labItems = [
         ...labItems,
@@ -640,63 +639,63 @@ function AddEditPurchaseRequest(props) {
           serviceName: labRequestArray[i].serviceName,
           status: labRequestArray[i].status,
         },
-      ];
+      ]
     }
     const params = {
       _id: id,
       labRequest: labItems,
-    };
+    }
     // console.log("params", params);
     axios
       .put(updateIPR, params)
       .then((res) => {
         if (res.data.success) {
-          console.log("response after adding Lab Request", res.data);
-          props.history.goBack();
+          console.log('response after adding Lab Request', res.data)
+          props.history.goBack()
         } else if (!res.data.success) {
-          setOpenNotification(true);
+          setOpenNotification(true)
         }
       })
       .catch((e) => {
-        console.log("error after adding Lab Request", e);
-        setOpenNotification(true);
-        setErrorMsg("Error while adding the Lab Request");
-      });
-  };
+        console.log('error after adding Lab Request', e)
+        setOpenNotification(true)
+        setErrorMsg('Error while adding the Lab Request')
+      })
+  }
 
   const handleRadioSearch = (e) => {
-    setSearchRadioQuery(e.target.value);
+    setSearchRadioQuery(e.target.value)
     if (e.target.value.length >= 3) {
       axios
-        .get(getSearchedRadiologyService + "/" + e.target.value)
+        .get(getSearchedRadiologyService + '/' + e.target.value)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
-              console.log(res.data.data);
-              setRadioItemFoundSuccessfully(true);
-              setRadioItemFound(res.data.data);
+              console.log(res.data.data)
+              setRadioItemFoundSuccessfully(true)
+              setRadioItemFound(res.data.data)
             } else {
-              setRadioItemFoundSuccessfully(false);
-              setRadioItemFound("");
+              setRadioItemFoundSuccessfully(false)
+              setRadioItemFound('')
             }
           }
         })
         .catch((e) => {
-          console.log("error while searching req", e);
-        });
+          console.log('error while searching req', e)
+        })
     }
-  };
+  }
 
   function handleAddRadioItem(i) {
     // console.log("selected item", i.serviceNo);
 
-    dispatch({ field: "radioServiceId", value: i._id });
-    dispatch({ field: "radioServiceCode", value: i.serviceNo });
-    dispatch({ field: "radioServiceName", value: i.name });
-    dispatch({ field: "radioServiceStatus", value: i.status });
+    dispatch({ field: 'radioServiceId', value: i._id })
+    dispatch({ field: 'radioServiceCode', value: i.serviceNo })
+    dispatch({ field: 'radioServiceName', value: i.name })
+    dispatch({ field: 'radioServiceStatus', value: i.status })
 
-    setSearchRadioQuery("");
-    setaddRadioRequest(true);
+    setSearchRadioQuery('')
+    setaddRadioRequest(true)
   }
 
   const addSelectedRadioItem = () => {
@@ -705,14 +704,14 @@ function AddEditPurchaseRequest(props) {
 
     let found =
       radiologyRequestArray &&
-      radiologyRequestArray.find((item) => item.serviceId === radioServiceId);
+      radiologyRequestArray.find((item) => item.serviceId === radioServiceId)
 
     if (found) {
-      setOpenNotification(true);
-      setErrorMsg("This Service has already been added.");
+      setOpenNotification(true)
+      setErrorMsg('This Service has already been added.')
     } else {
       dispatch({
-        field: "radiologyRequestArray",
+        field: 'radiologyRequestArray',
         value: [
           ...radiologyRequestArray,
           {
@@ -724,22 +723,22 @@ function AddEditPurchaseRequest(props) {
             status: radioServiceStatus,
           },
         ],
-      });
+      })
       // }
     }
 
-    dispatch({ field: "radioServiceId", value: "" });
-    dispatch({ field: "radioServiceCode", value: "" });
-    dispatch({ field: "radioServiceName", value: "" });
-    dispatch({ field: "radioServiceStatus", value: "" });
+    dispatch({ field: 'radioServiceId', value: '' })
+    dispatch({ field: 'radioServiceCode', value: '' })
+    dispatch({ field: 'radioServiceName', value: '' })
+    dispatch({ field: 'radioServiceStatus', value: '' })
 
-    setaddLabRequest(false);
-  };
+    setaddLabRequest(false)
+  }
 
   const saveRadioReq = () => {
     // console.log("THISSSSS ISS ARRAYY",radiologyRequestArray)
 
-    let radioItems = [];
+    let radioItems = []
     for (let i = 0; i < radiologyRequestArray.length; i++) {
       radioItems = [
         ...radioItems,
@@ -751,64 +750,64 @@ function AddEditPurchaseRequest(props) {
           serviceName: radiologyRequestArray[i].serviceName,
           status: radiologyRequestArray[i].status,
         },
-      ];
+      ]
     }
     const params = {
       _id: id,
       radiologyRequest: radioItems,
-    };
+    }
     // console.log("params", params);
     axios
       .put(updateIPR, params)
       .then((res) => {
         if (res.data.success) {
-          console.log("response after adding Radio Request", res.data);
-          props.history.goBack();
+          console.log('response after adding Radio Request', res.data)
+          props.history.goBack()
         } else if (!res.data.success) {
-          setOpenNotification(true);
+          setOpenNotification(true)
         }
       })
       .catch((e) => {
-        console.log("error after adding Radio Request", e);
-        setOpenNotification(true);
-        setErrorMsg("Error while adding the Radiology Request");
-      });
-  };
+        console.log('error after adding Radio Request', e)
+        setOpenNotification(true)
+        setErrorMsg('Error while adding the Radiology Request')
+      })
+  }
 
   // for Nursing
   const handleNurseSearch = (e) => {
-    setSearchNurseQuery(e.target.value);
+    setSearchNurseQuery(e.target.value)
     if (e.target.value.length >= 3) {
       axios
-        .get(getSearchedNurseService + "/" + e.target.value)
+        .get(getSearchedNurseService + '/' + e.target.value)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
-              console.log(res.data.data);
-              setNurseItemFoundSuccessfully(true);
-              setNurseItemFound(res.data.data);
+              console.log(res.data.data)
+              setNurseItemFoundSuccessfully(true)
+              setNurseItemFound(res.data.data)
             } else {
-              setNurseItemFoundSuccessfully(false);
-              setNurseItemFound("");
+              setNurseItemFoundSuccessfully(false)
+              setNurseItemFound('')
             }
           }
         })
         .catch((e) => {
-          console.log("error while searching req", e);
-        });
+          console.log('error while searching req', e)
+        })
     }
-  };
+  }
 
   function handleAddNurseItem(i) {
     // console.log("selected item", i.serviceNo);
 
-    dispatch({ field: "nurseServiceId", value: i._id });
-    dispatch({ field: "nurseServiceCode", value: i.serviceNo });
-    dispatch({ field: "nurseServiceName", value: i.name });
-    dispatch({ field: "nurseServiceStatus", value: i.status });
+    dispatch({ field: 'nurseServiceId', value: i._id })
+    dispatch({ field: 'nurseServiceCode', value: i.serviceNo })
+    dispatch({ field: 'nurseServiceName', value: i.name })
+    dispatch({ field: 'nurseServiceStatus', value: i.status })
 
-    setSearchNurseQuery("");
-    setaddNurseRequest(true);
+    setSearchNurseQuery('')
+    setaddNurseRequest(true)
   }
 
   const addSelectedNurseItem = () => {
@@ -817,14 +816,14 @@ function AddEditPurchaseRequest(props) {
 
     let found =
       nurseRequestArray &&
-      nurseRequestArray.find((item) => item.serviceId === nurseServiceId);
+      nurseRequestArray.find((item) => item.serviceId === nurseServiceId)
 
     if (found) {
-      setOpenNotification(true);
-      setErrorMsg("This Service has already been added.");
+      setOpenNotification(true)
+      setErrorMsg('This Service has already been added.')
     } else {
       dispatch({
-        field: "nurseRequestArray",
+        field: 'nurseRequestArray',
         value: [
           ...nurseRequestArray,
           {
@@ -836,22 +835,22 @@ function AddEditPurchaseRequest(props) {
             status: nurseServiceStatus,
           },
         ],
-      });
+      })
       // }
     }
 
-    dispatch({ field: "nurseServiceId", value: "" });
-    dispatch({ field: "nurseServiceCode", value: "" });
-    dispatch({ field: "nurseServiceName", value: "" });
-    dispatch({ field: "nurseServiceStatus", value: "" });
+    dispatch({ field: 'nurseServiceId', value: '' })
+    dispatch({ field: 'nurseServiceCode', value: '' })
+    dispatch({ field: 'nurseServiceName', value: '' })
+    dispatch({ field: 'nurseServiceStatus', value: '' })
 
-    setaddLabRequest(false);
-  };
+    setaddLabRequest(false)
+  }
 
   const saveNurseReq = () => {
     // console.log("THISSSSS ISS ARRAYY",radiologyRequestArray)
 
-    let nurseItems = [];
+    let nurseItems = []
     for (let i = 0; i < nurseRequestArray.length; i++) {
       nurseItems = [
         ...nurseItems,
@@ -863,49 +862,49 @@ function AddEditPurchaseRequest(props) {
           serviceName: nurseRequestArray[i].serviceName,
           status: nurseRequestArray[i].status,
         },
-      ];
+      ]
     }
     const params = {
       _id: id,
       nurseService: nurseItems,
-    };
+    }
     // console.log("params", params);
     axios
       .put(updateIPR, params)
       .then((res) => {
         if (res.data.success) {
-          console.log("response after adding nurse Request", res.data);
-          props.history.goBack();
+          console.log('response after adding nurse Request', res.data)
+          props.history.goBack()
         } else if (!res.data.success) {
-          setOpenNotification(true);
+          setOpenNotification(true)
         }
       })
       .catch((e) => {
-        console.log("error after adding Nurse Request", e);
-        setOpenNotification(true);
-        setErrorMsg("Error while adding the Nurse Request");
-      });
-  };
+        console.log('error after adding Nurse Request', e)
+        setOpenNotification(true)
+        setErrorMsg('Error while adding the Nurse Request')
+      })
+  }
 
   const TriageAssessment = () => {
-    let path = `viewIPR/TriageAndAssessment`;
+    let path = `viewIPR/TriageAndAssessment`
     props.history.push({
       pathname: path,
       state: {
         selectedItem: selectedItem,
       },
-    });
-  };
+    })
+  }
 
   const dischargeRequest = () => {
-    let path = `viewIPR/DischargeRequest`;
+    let path = `viewIPR/DischargeRequest`
     props.history.push({
       pathname: path,
       state: {
         selectedItem: selectedItem,
       },
-    });
-  };
+    })
+  }
 
   const sendExtension = () =>
   {
@@ -987,14 +986,14 @@ function AddEditPurchaseRequest(props) {
   return (
     <div
       style={{
-        backgroundColor: "#60d69f",
-        position: "fixed",
-        display: "flex",
-        width: "100%",
-        height: "100%",
-        flexDirection: "column",
+        backgroundColor: '#60d69f',
+        position: 'fixed',
+        display: 'flex',
+        width: '100%',
+        height: '100%',
+        flexDirection: 'column',
         flex: 1,
-        overflowY: "scroll",
+        overflowY: 'scroll',
       }}
     >
       <Header />
@@ -1011,8 +1010,8 @@ function AddEditPurchaseRequest(props) {
             <Button
               onClick={TriageAssessment}
               style={styles.stylesForButton}
-              variant="contained"
-              color="primary"
+              variant='contained'
+              color='primary'
             >
               Triage And Assessment
             </Button>
@@ -1020,7 +1019,7 @@ function AddEditPurchaseRequest(props) {
         </div>
         <div
           style={{
-            height: "20px",
+            height: '20px',
           }}
         />
         <div className="container-fluid" style={styles.patientDetails}>
@@ -1031,111 +1030,70 @@ function AddEditPurchaseRequest(props) {
               </h4>
             </div>
           </div>
-          <div className="row">
-            <div className="col-md-4 col-sm-4">
+          <div className='row'>
+            <div className='col-md-4 col-sm-4'>
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.stylesForLabel} id="status-label">
+                <InputLabel style={styles.stylesForLabel} id='status-label'>
                   Patient Name
                 </InputLabel>
-                <input
-                  disabled={true}
-                  type="text"
-                  placeholder="Patient Name"
-                  name={"patientName"}
-                  value={
-                    selectedPatient.firstName + ` ` + selectedPatient.lastName
-                  }
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                />
+                <span style={styles.styleForPatientDetails}>
+                  {selectedPatient.firstName + ` ` + selectedPatient.lastName}{' '}
+                </span>
               </div>
             </div>
-            <div className="col-md-4 col-sm-4">
+            <div className='col-md-4 col-sm-4'>
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.stylesForLabel} id="status-label">
+                <InputLabel style={styles.stylesForLabel} id='status-label'>
                   Gender
                 </InputLabel>
-                <input
-                  disabled={true}
-                  type="text"
-                  placeholder="Gender"
-                  name={"gender"}
-                  value={selectedPatient.gender}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                />
+                <span style={styles.styleForPatientDetails}>
+                  {selectedPatient.gender}
+                </span>
               </div>
             </div>
-            <div className="col-md-4 col-sm-4">
+            <div className='col-md-4 col-sm-4'>
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.stylesForLabel} id="status-label">
+                <InputLabel style={styles.stylesForLabel} id='status-label'>
                   Age
                 </InputLabel>
-                <input
-                  disabled={true}
-                  type="text"
-                  placeholder="Age"
-                  name={"age"}
-                  value={selectedPatient.age}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                />
+                <span style={styles.styleForPatientDetails}>
+                  {selectedPatient.age ? selectedPatient.age : 30}
+                </span>
               </div>
             </div>
           </div>
 
-          <div className="row">
-            <div className="col-md-4 col-sm-4">
+          <div className='row'>
+            <div className='col-md-4 col-sm-4'>
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.stylesForLabel} id="status-label">
-                  MRN
+                <InputLabel style={styles.stylesForLabel} id='status-label'>
+                  Patient MRN
                 </InputLabel>
-                <input
-                  disabled={true}
-                  type="text"
-                  placeholder="Patient ID"
-                  name={"MRN"}
-                  value={selectedPatient.profileNo}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                />
+
+                <span style={styles.styleForPatientDetails}>
+                  {selectedPatient.profileNo}
+                </span>
               </div>
             </div>
 
-            <div className="col-md-4 col-sm-4">
+            <div className='col-md-4 col-sm-4'>
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.stylesForLabel} id="status-label">
+                <InputLabel style={styles.stylesForLabel} id='status-label'>
                   Insurance No
                 </InputLabel>
-                <input
-                  disabled={true}
-                  type="text"
-                  placeholder="Insurance Number"
-                  name={"insuranceId"}
-                  value={
-                    selectedPatient.insuranceId
-                      ? selectedPatient.insuranceId
-                      : "--"
-                  }
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                />
+                <span style={styles.styleForPatientDetails}>
+                  {selectedPatient.insuranceId
+                    ? selectedPatient.insuranceId
+                    : '--'}
+                </span>
               </div>
             </div>
-            <div className="col-md-4 col-sm-4">
+            <div className='col-md-4 col-sm-4'>
               <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.stylesForLabel} id="status-label">
+                <InputLabel style={styles.stylesForLabel} id='status-label'>
                   Request No
                 </InputLabel>
-                <input
-                  disabled={true}
-                  type="text"
-                  placeholder="Request Number"
-                  name={"requestNo"}
-                  value={requestNo}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                />
+                <span style={styles.styleForPatientDetails}>{requestNo}</span>
               </div>
             </div>
           </div>
@@ -1143,7 +1101,7 @@ function AddEditPurchaseRequest(props) {
 
         <div
           style={{
-            height: "20px",
+            height: '20px',
           }}
         />
         <div className={classesForTabs.root}>
@@ -1154,73 +1112,73 @@ function AddEditPurchaseRequest(props) {
             }}
             value={value}
             onChange={handleChange}
-            indicatorColor="null"
+            indicatorColor='null'
             centered={false}
-            variant="scrollable"
+            variant='scrollable'
             fullWidth={true}
           >
             <Tab
               style={{
-                color: "white",
+                color: 'white',
                 borderRadius: 15,
-                outline: "none",
-                backgroundColor: value === 0 ? "#2c6ddd" : undefined,
+                outline: 'none',
+                backgroundColor: value === 0 ? '#2c6ddd' : undefined,
               }}
-              label="Resident Doctor Notes"
+              label='Resident Doctor Notes'
             />
             <Tab
               style={{
-                color: "white",
+                color: 'white',
                 borderRadius: 15,
-                outline: "none",
-                backgroundColor: value === 1 ? "#2c6ddd" : undefined,
+                outline: 'none',
+                backgroundColor: value === 1 ? '#2c6ddd' : undefined,
               }}
-              label="Consultation Notes"
+              label='Consultation Notes'
             />
             <Tab
               style={{
-                color: "white",
+                color: 'white',
                 borderRadius: 15,
-                outline: "none",
-                backgroundColor: value === 2 ? "#2c6ddd" : undefined,
+                outline: 'none',
+                backgroundColor: value === 2 ? '#2c6ddd' : undefined,
               }}
-              label="PHR"
+              label='PHR'
             />
             <Tab
               style={{
-                color: "white",
+                color: 'white',
                 borderRadius: 15,
-                outline: "none",
-                backgroundColor: value === 3 ? "#2c6ddd" : undefined,
+                outline: 'none',
+                backgroundColor: value === 3 ? '#2c6ddd' : undefined,
               }}
-              label="LR"
+              label='LR'
             />
             <Tab
               style={{
-                color: "white",
+                color: 'white',
                 borderRadius: 15,
-                outline: "none",
-                backgroundColor: value === 4 ? "#2c6ddd" : undefined,
+                outline: 'none',
+                backgroundColor: value === 4 ? '#2c6ddd' : undefined,
               }}
-              label="RR"
+              label='RR'
             />
             <Tab
               style={{
-                color: "white",
+                color: 'white',
                 borderRadius: 15,
-                outline: "none",
-                backgroundColor: value === 5 ? "#2c6ddd" : undefined,
+                outline: 'none',
+                backgroundColor: value === 5 ? '#2c6ddd' : undefined,
               }}
-              label="NP/NS"
+              label='NP/NS'
             />
             <Tab
               style={{
-                color: "white",
+                color: 'white',
                 borderRadius: 15,
-                outline: "none",
-                backgroundColor: value === 6 ? "#2c6ddd" : undefined,
+                outline: 'none',
+                backgroundColor: value === 6 ? '#2c6ddd' : undefined,
               }}
-              label="EDR"
+              label='EDR'
             />
             <Tab
               style={{
@@ -1239,7 +1197,7 @@ function AddEditPurchaseRequest(props) {
             style={{ flex: 4, display: "flex", flexDirection: "column" }}
             className="container-fluid"
           >
-            <div className="row" style={{ marginTop: "20px" }}>
+            <div className='row' style={{ marginTop: '20px' }}>
               {residentNoteArray !== 0 ? (
                 <CustomTable
                   tableData={residentNoteArray}
@@ -1247,7 +1205,7 @@ function AddEditPurchaseRequest(props) {
                   tableHeading={tableHeadingForResident}
                   handleView={viewItem}
                   action={actions}
-                  borderBottomColor={"#60d69f"}
+                  borderBottomColor={'#60d69f'}
                   borderBottomWidth={20}
                 />
               ) : (
@@ -1255,8 +1213,8 @@ function AddEditPurchaseRequest(props) {
               )}
             </div>
 
-            <div className="row" style={{ marginBottom: "25px" }}>
-              <div className="col-md-6 col-sm-6 col-6">
+            <div className='row' style={{ marginBottom: '25px' }}>
+              <div className='col-md-6 col-sm-6 col-6'>
                 {/* <img
                   onClick={() => props.history.goBack()}
                   src={Back}
@@ -1286,12 +1244,12 @@ function AddEditPurchaseRequest(props) {
                 </Button>
               </div> */}
             </div>
-            <div className="row" style={{ marginBottom: "25px" }}>
-              <div className="col-md-6 col-sm-6 col-6">
+            <div className='row' style={{ marginBottom: '25px' }}>
+              <div className='col-md-6 col-sm-6 col-6'>
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back}
-                  style={{ width: 45, height: 35, cursor: "pointer" }}
+                  style={{ width: 45, height: 35, cursor: 'pointer' }}
                 />
               </div>
             </div>
@@ -1301,7 +1259,7 @@ function AddEditPurchaseRequest(props) {
             style={{ flex: 4, display: "flex", flexDirection: "column" }}
             className="container-fluid"
           >
-            <div className="row" style={{ marginTop: "20px" }}>
+            <div className='row' style={{ marginTop: '20px' }}>
               {consultationNoteArray !== 0 ? (
                 <CustomTable
                   tableData={consultationNoteArray}
@@ -1309,7 +1267,7 @@ function AddEditPurchaseRequest(props) {
                   tableHeading={tableHeadingForConsultation}
                   handleView={viewItem}
                   action={actions}
-                  borderBottomColor={"#60d69f"}
+                  borderBottomColor={'#60d69f'}
                   borderBottomWidth={20}
                 />
               ) : (
@@ -1317,12 +1275,12 @@ function AddEditPurchaseRequest(props) {
               )}
             </div>
 
-            <div className="row" style={{ marginBottom: "25px" }}>
-              <div className="col-md-6 col-sm-6 col-6">
+            <div className='row' style={{ marginBottom: '25px' }}>
+              <div className='col-md-6 col-sm-6 col-6'>
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back}
-                  style={{ width: 45, height: 35, cursor: "pointer" }}
+                  style={{ width: 45, height: 35, cursor: 'pointer' }}
                 />
               </div>
               {/* <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
@@ -1346,7 +1304,7 @@ function AddEditPurchaseRequest(props) {
             style={{ flex: 4, display: "flex", flexDirection: "column" }}
             className="container-fluid"
           >
-            <div className="row" style={{ marginTop: "20px" }}>
+            <div className='row' style={{ marginTop: '20px' }}>
               {pharmacyRequestArray !== 0 ? (
                 <CustomTable
                   tableData={pharmacyRequestArray}
@@ -1354,7 +1312,7 @@ function AddEditPurchaseRequest(props) {
                   tableHeading={tableHeadingForPharmacy}
                   handleView={viewItem}
                   action={actions}
-                  borderBottomColor={"#60d69f"}
+                  borderBottomColor={'#60d69f'}
                   borderBottomWidth={20}
                 />
               ) : (
@@ -1362,12 +1320,12 @@ function AddEditPurchaseRequest(props) {
               )}
             </div>
 
-            <div className="row" style={{ marginBottom: "25px" }}>
-              <div className="col-md-6 col-sm-6 col-6">
+            <div className='row' style={{ marginBottom: '25px' }}>
+              <div className='col-md-6 col-sm-6 col-6'>
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back}
-                  style={{ width: 45, height: 35, cursor: "pointer" }}
+                  style={{ width: 45, height: 35, cursor: 'pointer' }}
                 />
               </div>
               {/* <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
@@ -1482,7 +1440,7 @@ function AddEditPurchaseRequest(props) {
               </div>
             </div> */}
 
-            <div className="row" style={{ marginTop: "20px" }}>
+            <div className='row' style={{ marginTop: '20px' }}>
               {labRequestArray !== 0 ? (
                 <CustomTable
                   tableData={labRequestArray}
@@ -1490,7 +1448,7 @@ function AddEditPurchaseRequest(props) {
                   tableHeading={tableHeadingForLabReq}
                   handleView={viewItem}
                   action={actions}
-                  borderBottomColor={"#60d69f"}
+                  borderBottomColor={'#60d69f'}
                   borderBottomWidth={20}
                 />
               ) : (
@@ -1498,12 +1456,12 @@ function AddEditPurchaseRequest(props) {
               )}
             </div>
 
-            <div className="row" style={{ marginBottom: "25px" }}>
-              <div className="col-md-6 col-sm-6 col-6">
+            <div className='row' style={{ marginBottom: '25px' }}>
+              <div className='col-md-6 col-sm-6 col-6'>
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back}
-                  style={{ width: 45, height: 35, cursor: "pointer" }}
+                  style={{ width: 45, height: 35, cursor: 'pointer' }}
                 />
               </div>
               {/* <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
@@ -1616,7 +1574,7 @@ function AddEditPurchaseRequest(props) {
               </div>
             </div> */}
 
-            <div className="row" style={{ marginTop: "20px" }}>
+            <div className='row' style={{ marginTop: '20px' }}>
               {radiologyRequestArray !== 0 ? (
                 <CustomTable
                   tableData={radiologyRequestArray}
@@ -1624,7 +1582,7 @@ function AddEditPurchaseRequest(props) {
                   tableHeading={tableHeadingForRadiology}
                   handleView={viewItem}
                   action={actions}
-                  borderBottomColor={"#60d69f"}
+                  borderBottomColor={'#60d69f'}
                   borderBottomWidth={20}
                 />
               ) : (
@@ -1632,12 +1590,12 @@ function AddEditPurchaseRequest(props) {
               )}
             </div>
 
-            <div className="row" style={{ marginBottom: "25px" }}>
-              <div className="col-md-6 col-sm-6 col-6">
+            <div className='row' style={{ marginBottom: '25px' }}>
+              <div className='col-md-6 col-sm-6 col-6'>
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back}
-                  style={{ width: 45, height: 35, cursor: "pointer" }}
+                  style={{ width: 45, height: 35, cursor: 'pointer' }}
                 />
               </div>
               {/* <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
@@ -1751,7 +1709,7 @@ function AddEditPurchaseRequest(props) {
               </div>
             </div> */}
 
-            <div className="row" style={{ marginTop: "20px" }}>
+            <div className='row' style={{ marginTop: '20px' }}>
               {nurseRequestArray !== 0 ? (
                 <CustomTable
                   tableData={nurseRequestArray}
@@ -1759,7 +1717,7 @@ function AddEditPurchaseRequest(props) {
                   tableHeading={tableHeadingForNurse}
                   handleView={viewItem}
                   action={actions}
-                  borderBottomColor={"#60d69f"}
+                  borderBottomColor={'#60d69f'}
                   borderBottomWidth={20}
                 />
               ) : (
@@ -1767,12 +1725,12 @@ function AddEditPurchaseRequest(props) {
               )}
             </div>
 
-            <div className="row" style={{ marginBottom: "25px" }}>
-              <div className="col-md-6 col-sm-6 col-6">
+            <div className='row' style={{ marginBottom: '25px' }}>
+              <div className='col-md-6 col-sm-6 col-6'>
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back}
-                  style={{ width: 45, height: 35, cursor: "pointer" }}
+                  style={{ width: 45, height: 35, cursor: 'pointer' }}
                 />
               </div>
               {/* <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
@@ -1886,7 +1844,7 @@ function AddEditPurchaseRequest(props) {
               </div>
             </div> */}
 
-            <div className="row" style={{ marginTop: "20px" }}>
+            <div className='row' style={{ marginTop: '20px' }}>
               {nurseRequestArray !== 0 ? (
                 <CustomTable
                   tableData={nurseRequestArray}
@@ -1894,7 +1852,7 @@ function AddEditPurchaseRequest(props) {
                   tableHeading={tableHeadingForEDR}
                   handleView={viewItem}
                   action={actions}
-                  borderBottomColor={"#60d69f"}
+                  borderBottomColor={'#60d69f'}
                   borderBottomWidth={20}
                 />
               ) : (
@@ -1902,12 +1860,12 @@ function AddEditPurchaseRequest(props) {
               )}
             </div>
 
-            <div className="row" style={{ marginBottom: "25px" }}>
-              <div className="col-md-6 col-sm-6 col-6">
+            <div className='row' style={{ marginBottom: '25px' }}>
+              <div className='col-md-6 col-sm-6 col-6'>
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back}
-                  style={{ width: 45, height: 35, cursor: "pointer" }}
+                  style={{ width: 45, height: 35, cursor: 'pointer' }}
                 />
               </div>
               {/* <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
@@ -1983,30 +1941,30 @@ function AddEditPurchaseRequest(props) {
         )}
 
         <Dialog
-          aria-labelledby="form-dialog-title"
+          aria-labelledby='form-dialog-title'
           open={openAddConsultDialog}
-          maxWidth="xl"
+          maxWidth='xl'
           fullWidth={true}
         >
-          <DialogContent style={{ backgroundColor: "#31e2aa" }}>
-            <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
+          <DialogContent style={{ backgroundColor: '#31e2aa' }}>
+            <DialogTitle id='simple-dialog-title' style={{ color: 'white' }}>
               Add Consultation Note
             </DialogTitle>
-            <div className="container-fluid">
-              <div className="row">
+            <div className='container-fluid'>
+              <div className='row'>
                 <div
-                  className="col-md-12 col-sm-12 col-12"
+                  className='col-md-12 col-sm-12 col-12'
                   style={styles.inputContainerForTextField}
                 >
                   <InputLabelComponent>Description*</InputLabelComponent>
                   <input
                     style={styles.inputField}
-                    type="text"
-                    placeholder="Enter Your description"
-                    name={"description"}
+                    type='text'
+                    placeholder='Enter Your description'
+                    name={'description'}
                     value={description}
                     onChange={onChangeValue}
-                    className="textInputStyle"
+                    className='textInputStyle'
                   />
                   <ErrorMessage
                     name={description}
@@ -2015,20 +1973,20 @@ function AddEditPurchaseRequest(props) {
                 </div>
               </div>
 
-              <div className="row">
+              <div className='row'>
                 <div
-                  className="col-md-12"
+                  className='col-md-12'
                   style={styles.inputContainerForTextField}
                 >
                   <InputLabelComponent>Consultation Note*</InputLabelComponent>
                   <input
                     style={styles.inputField}
-                    type="text"
-                    placeholder="Add your consultation here..."
-                    name={"consultationNotes"}
+                    type='text'
+                    placeholder='Add your consultation here...'
+                    name={'consultationNotes'}
                     value={consultationNotes}
                     onChange={onChangeValue}
-                    className="textInputStyle"
+                    className='textInputStyle'
                   />
                   <ErrorMessage
                     name={consultationNotes}
@@ -2037,47 +1995,47 @@ function AddEditPurchaseRequest(props) {
                 </div>
               </div>
 
-              <div className="row">
+              <div className='row'>
                 <div
-                  className="col-md-6 col-sm-6 col-6"
+                  className='col-md-6 col-sm-6 col-6'
                   style={styles.inputContainerForTextField}
                 >
                   <InputLabelComponent>Date*</InputLabelComponent>
                   <input
                     disabled
                     style={styles.inputField}
-                    type="text"
-                    placeholder="Date"
-                    name={"date"}
+                    type='text'
+                    placeholder='Date'
+                    name={'date'}
                     value={date}
                     onChange={onChangeValue}
-                    className="textInputStyle"
+                    className='textInputStyle'
                   />
                 </div>
                 <div
-                  className="col-md-6 col-sm-6 col-6"
+                  className='col-md-6 col-sm-6 col-6'
                   style={styles.inputContainerForTextField}
                 >
                   <InputLabelComponent>Requester*</InputLabelComponent>
                   <input
                     disabled
                     style={styles.inputField}
-                    type="text"
-                    placeholder="Requester"
-                    name={"requester"}
+                    type='text'
+                    placeholder='Requester'
+                    name={'requester'}
                     value={requester}
                     onChange={onChangeValue}
-                    className="textInputStyle"
+                    className='textInputStyle'
                   />
                 </div>
               </div>
 
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div style={{ marginTop: "2%", marginBottom: "2%" }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div style={{ marginTop: '2%', marginBottom: '2%' }}>
                   <Button
                     onClick={() => hideDialog()}
                     style={styles.stylesForButton}
-                    variant="contained"
+                    variant='contained'
                   >
                     <strong>Cancel</strong>
                   </Button>
@@ -2085,28 +2043,28 @@ function AddEditPurchaseRequest(props) {
 
                 <div
                   style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    marginTop: "2%",
-                    marginBottom: "2%",
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    marginTop: '2%',
+                    marginBottom: '2%',
                   }}
                 >
                   <Button
                     style={{
-                      color: "white",
-                      cursor: "pointer",
+                      color: 'white',
+                      cursor: 'pointer',
                       borderRadius: 15,
-                      backgroundColor: "#2c6ddd",
-                      width: "140px",
-                      height: "50px",
-                      outline: "none",
+                      backgroundColor: '#2c6ddd',
+                      width: '140px',
+                      height: '50px',
+                      outline: 'none',
                       paddingLeft: 30,
                       paddingRight: 30,
                     }}
                     // disabled={!validateItemsForm()}
                     onClick={addConsultRequest}
-                    variant="contained"
-                    color="primary"
+                    variant='contained'
+                    color='primary'
                   >
                     Add Note
                   </Button>
@@ -2117,30 +2075,30 @@ function AddEditPurchaseRequest(props) {
         </Dialog>
 
         <Dialog
-          aria-labelledby="form-dialog-title"
+          aria-labelledby='form-dialog-title'
           open={openAddResidentDialog}
-          maxWidth="xl"
+          maxWidth='xl'
           fullWidth={true}
         >
-          <DialogContent style={{ backgroundColor: "#31e2aa" }}>
-            <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
+          <DialogContent style={{ backgroundColor: '#31e2aa' }}>
+            <DialogTitle id='simple-dialog-title' style={{ color: 'white' }}>
               Add Resident Note
             </DialogTitle>
-            <div className="container-fluid">
-              <div className="row">
+            <div className='container-fluid'>
+              <div className='row'>
                 <div
-                  className="col-md-12 col-sm-12 col-12"
+                  className='col-md-12 col-sm-12 col-12'
                   style={styles.inputContainerForTextField}
                 >
                   <InputLabelComponent>Description*</InputLabelComponent>
                   <input
                     style={styles.inputField}
-                    type="text"
-                    placeholder="Enter Your description"
-                    name={"rdescription"}
+                    type='text'
+                    placeholder='Enter Your description'
+                    name={'rdescription'}
                     value={rdescription}
                     onChange={onChangeValue}
-                    className="textInputStyle"
+                    className='textInputStyle'
                   />
                   <ErrorMessage
                     name={rdescription}
@@ -2149,66 +2107,66 @@ function AddEditPurchaseRequest(props) {
                 </div>
               </div>
 
-              <div className="row">
+              <div className='row'>
                 <div
-                  className="col-md-12"
+                  className='col-md-12'
                   style={styles.inputContainerForTextField}
                 >
                   <InputLabelComponent>Note*</InputLabelComponent>
                   <input
                     style={styles.inputField}
-                    type="text"
-                    placeholder="Add your note here..."
-                    name={"note"}
+                    type='text'
+                    placeholder='Add your note here...'
+                    name={'note'}
                     value={note}
                     onChange={onChangeValue}
-                    className="textInputStyle"
+                    className='textInputStyle'
                   />
                   <ErrorMessage name={note} isFormSubmitted={isFormSubmitted} />
                 </div>
               </div>
 
-              <div className="row">
+              <div className='row'>
                 <div
-                  className="col-md-6 col-sm-6 col-6"
+                  className='col-md-6 col-sm-6 col-6'
                   style={styles.inputContainerForTextField}
                 >
                   <InputLabelComponent>Date*</InputLabelComponent>
                   <input
                     disabled
                     style={styles.inputField}
-                    type="text"
-                    placeholder="Date"
-                    name={"date"}
+                    type='text'
+                    placeholder='Date'
+                    name={'date'}
                     value={date}
                     onChange={onChangeValue}
-                    className="textInputStyle"
+                    className='textInputStyle'
                   />
                 </div>
                 <div
-                  className="col-md-6 col-sm-6 col-6"
+                  className='col-md-6 col-sm-6 col-6'
                   style={styles.inputContainerForTextField}
                 >
                   <InputLabelComponent>Doctor*</InputLabelComponent>
                   <input
                     disabled
                     style={styles.inputField}
-                    type="text"
-                    placeholder="Doctor"
-                    name={"doctor"}
+                    type='text'
+                    placeholder='Doctor'
+                    name={'doctor'}
                     value={doctor}
                     onChange={onChangeValue}
-                    className="textInputStyle"
+                    className='textInputStyle'
                   />
                 </div>
               </div>
 
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div style={{ marginTop: "2%", marginBottom: "2%" }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div style={{ marginTop: '2%', marginBottom: '2%' }}>
                   <Button
                     onClick={() => hideDialog()}
                     style={styles.stylesForButton}
-                    variant="contained"
+                    variant='contained'
                   >
                     <strong>Cancel</strong>
                   </Button>
@@ -2216,28 +2174,28 @@ function AddEditPurchaseRequest(props) {
 
                 <div
                   style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    marginTop: "2%",
-                    marginBottom: "2%",
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    marginTop: '2%',
+                    marginBottom: '2%',
                   }}
                 >
                   <Button
                     style={{
-                      color: "white",
-                      cursor: "pointer",
+                      color: 'white',
+                      cursor: 'pointer',
                       borderRadius: 15,
-                      backgroundColor: "#2c6ddd",
-                      width: "140px",
-                      height: "50px",
-                      outline: "none",
+                      backgroundColor: '#2c6ddd',
+                      width: '140px',
+                      height: '50px',
+                      outline: 'none',
                       paddingLeft: 30,
                       paddingRight: 30,
                     }}
                     // disabled={!validateItemsForm()}
                     onClick={addResidentRequest}
-                    variant="contained"
-                    color="primary"
+                    variant='contained'
+                    color='primary'
                   >
                     Add Note
                   </Button>
@@ -2255,6 +2213,6 @@ function AddEditPurchaseRequest(props) {
         </div>
       )}
     </div>
-  );
+  )
 }
-export default AddEditPurchaseRequest;
+export default AddEditPurchaseRequest

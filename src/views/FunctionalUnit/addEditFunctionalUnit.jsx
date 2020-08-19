@@ -66,9 +66,19 @@ const styles = {
   // buttonContainer: {
   //   marginTop: 25
   // }
+  // inputContainerForTextField: {
+  //   marginTop: 6,
+  // },
 
+  // inputContainerForDropDown: {
+  //   marginTop: 6,
+  // },
+  // textFieldPadding: {
+  //   paddingLeft: 3,
+  //   paddingRight: 3,
+  // },
   inputContainerForTextField: {
-    marginTop: 25,
+    marginTop: 6,
   },
 
   inputContainerForDropDown: {
@@ -85,9 +95,46 @@ const styles = {
   },
 }
 
-const useStyles = makeStyles(styles)
+const useStyles = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(0),
+  },
+  input: {
+    backgroundColor: 'white',
+    borderRadius: 6,
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:disabled': {
+      color: 'gray',
+    },
+  },
+  multilineColor: {
+    backgroundColor: 'white',
+    borderRadius: 6,
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+  },
+  root: {
+    '& .MuiTextField-root': {
+      backgroundColor: 'white',
+    },
+    '& .Mui-focused': {
+      backgroundColor: 'white',
+      color: 'black',
+    },
+  },
+}))
 
 function AddEditBuReturn(props) {
+  const classes = useStyles()
   const [comingFor, setcomingFor] = useState('')
   const [isFormSubmitted, setIsFormSubmitted] = useState(false)
   const [fuLogs, setFuLogs] = useState([])
@@ -293,7 +340,7 @@ function AddEditBuReturn(props) {
       }}
     >
       <Header />
-      <div className='cPadding'>
+      <div className={`cPadding ${classes.root}`}>
         <div className='subheader'>
           <div>
             <img src={functional_Unit} />
@@ -329,26 +376,24 @@ function AddEditBuReturn(props) {
           <div className='row'>
             <div
               className='col-md-12'
-              style={styles.inputContainerForTextField}
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
             >
-              {/* <TextField
-              fullWidth
-              id="fuName"
-              name="fuName"
-              label="Functional Unit Name"
-              // variant="outlined"
-              value={fuName}
-              onChange={onChangeValue}
-            /> */}
-
-              <input
-                style={styles.inputField}
-                type='text'
-                placeholder='FU Name'
+              <TextField
+                required
+                label='FU Name'
                 name={'fuName'}
                 value={fuName}
-                onChange={onChangeValue}
+                error={fuName === '' && isFormSubmitted}
+                onChange={(e) => onChangeValue(e)}
                 className='textInputStyle'
+                variant='filled'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
               />
             </div>
           </div>
@@ -356,7 +401,10 @@ function AddEditBuReturn(props) {
           <div className='row'>
             <div
               className='col-md-12'
-              style={styles.inputContainerForTextField}
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
             >
               {/* <TextField
               fullWidth
@@ -369,108 +417,153 @@ function AddEditBuReturn(props) {
               rows={5}
               onChange={onChangeValue}
             /> */}
-              <textarea
-                style={styles.inputField}
+              <TextField
+                required
+                multiline
                 type='text'
-                placeholder='Description'
+                error={description === '' && isFormSubmitted}
+                label='Description'
                 name={'description'}
-                rows='4'
                 value={description}
                 onChange={onChangeValue}
+                rows={4}
                 className='textInputStyle'
+                variant='filled'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
               />
             </div>
           </div>
 
           <div className='row'>
-            <div className='col-md-12'>
-              <div style={styles.inputContainerForDropDown}>
-                <InputLabel id='buHead-label'>FU Head</InputLabel>
-                <Select
-                  style={styles.inputField}
-                  fullWidth
-                  id='fuHead'
-                  name='fuHead'
-                  value={fuHead}
-                  onChange={onChangeValue}
-                  label='FU Head'
-                  error={!fuHead && isFormSubmitted}
-                >
-                  <MenuItem value=''>
-                    <em>None</em>
-                  </MenuItem>
-                  {staffArray &&
-                    staffArray.map((val) => {
-                      return (
-                        <MenuItem key={val._id} value={val._id}>
-                          {val.firstName} {val.lastName}
-                        </MenuItem>
-                      )
-                    })}
-                </Select>
-              </div>
+            <div
+              className='col-md-12'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                select
+                fullWidth
+                id='fuHead'
+                name='fuHead'
+                value={fuHead}
+                error={fuHead === '' && isFormSubmitted}
+                onChange={onChangeValue}
+                label='FU Head'
+                variant='filled'
+                className='dropDownStyle'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              >
+                <MenuItem value=''>
+                  <em>None</em>
+                </MenuItem>
+                {staffArray &&
+                  staffArray.map((val) => {
+                    return (
+                      <MenuItem key={val._id} value={val._id}>
+                        {val.firstName} {val.lastName}
+                      </MenuItem>
+                    )
+                  })}
+              </TextField>
             </div>
 
-            <div className='col-md-12'>
-              <div style={styles.inputContainerForDropDown}>
-                <InputLabel id='buName-label'>BU Name</InputLabel>
-                <Select
-                  style={styles.inputField}
-                  fullWidth
-                  id='buId'
-                  name='buId'
-                  value={buId}
-                  onChange={onChangeValue}
-                  label='BU Name'
-                >
-                  <MenuItem value=''>
-                    <em>None</em>
-                  </MenuItem>
-                  {businessUnits &&
-                    businessUnits.map((val) => {
-                      return (
-                        <MenuItem key={val._id} value={val._id}>
-                          {val.buName}
-                        </MenuItem>
-                      )
-                    })}
-                </Select>
-              </div>
+            <div
+              className='col-md-12'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                select
+                fullWidth
+                id='buId'
+                name='buId'
+                value={buId}
+                error={buId === '' && isFormSubmitted}
+                onChange={onChangeValue}
+                label='BU Name'
+                variant='filled'
+                className='dropDownStyle'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              >
+                <MenuItem value=''>
+                  <em>None</em>
+                </MenuItem>
+                {businessUnits &&
+                  businessUnits.map((val) => {
+                    return (
+                      <MenuItem key={val._id} value={val._id}>
+                        {val.buName}
+                      </MenuItem>
+                    )
+                  })}
+              </TextField>
             </div>
           </div>
 
           <div className='row'>
-            <div className='col-md-12'>
-              <div style={styles.inputContainerForDropDown}>
-                <InputLabel id='buHead-label'>Status</InputLabel>
-                <Select
-                  style={styles.inputField}
-                  fullWidth
-                  id='status'
-                  name='status'
-                  value={status}
-                  onChange={onChangeValue}
-                  label='Status'
-                >
-                  <MenuItem value=''>
-                    <em>None</em>
-                  </MenuItem>
-                  {statusArray &&
-                    statusArray.map((val) => {
-                      return (
-                        <MenuItem key={val.key} value={val.key}>
-                          {val.value}
-                        </MenuItem>
-                      )
-                    })}
-                </Select>
-              </div>
+            <div
+              className='col-md-12'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                select
+                fullWidth
+                id='status'
+                name='status'
+                value={status}
+                error={status === '' && isFormSubmitted}
+                onChange={onChangeValue}
+                label='Status'
+                variant='filled'
+                className='dropDownStyle'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              >
+                <MenuItem value=''>
+                  <em>None</em>
+                </MenuItem>
+                {statusArray &&
+                  statusArray.map((val) => {
+                    return (
+                      <MenuItem key={val.key} value={val.key}>
+                        {val.value}
+                      </MenuItem>
+                    )
+                  })}
+              </TextField>
             </div>
 
             {status === 'in_active' ? (
-              <div className='col-md-12'>
-                <div style={styles.inputContainerForTextField}>
-                  {/* <TextField
+              <div
+                className='col-md-12'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                {/* <div style={styles.inputContainerForTextField}> */}
+                {/* <TextField
                   fullWidth
                   id="reason"
                   name="reason"
@@ -479,7 +572,21 @@ function AddEditBuReturn(props) {
                   value={reason}
                   onChange={onChangeValue}
                 /> */}
-                  <input
+                <TextField
+                  required
+                  label='Reason'
+                  name={'reason'}
+                  value={reason}
+                  error={reason === '' && isFormSubmitted}
+                  onChange={(e) => onChangeValue(e)}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                />
+                {/* <input
                     type='text'
                     placeholder='Reason'
                     name={'reason'}
@@ -487,8 +594,8 @@ function AddEditBuReturn(props) {
                     onChange={onChangeValue}
                     className='textInputStyle'
                     style={{ borderColor: 'red', borderWidth: 4 }}
-                  />
-                </div>
+                  /> */}
+                {/* </div> */}
               </div>
             ) : (
               undefined
