@@ -2,12 +2,11 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable react/jsx-indent */
 import React, { useEffect, useState, useReducer } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
 import InputLabel from '@material-ui/core/InputLabel'
 import axios from 'axios'
 import {
-    getSingleEDRPatient,
-    addfollowup
+    addfollowup,
+    uploadsUrl
 } from '../../../public/endpoins'
 import cookie from 'react-cookies'
 import Header from '../../../components/Header/Header'
@@ -21,13 +20,14 @@ import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
 import Back from '../../../assets/img/Back_Arrow.png'
+import Loader from 'react-loader-spinner'
 
 const statusArray = [
-    { key: 'Approved', value: 'Approved' },
-    { key: 'Reject', value: 'Reject' },
-    { key: 'Pending', value: 'Pending' },
+    { key: 'Approved', value: 'approved' },
+    { key: 'Reject', value: 'reject' },
+    { key: 'Pending', value: 'pending' },
     { key: 'Sent for PAR', value: 'Sent for PAR' },
-  ]
+]
 
 const styles = {
     patientDetails: {
@@ -62,14 +62,14 @@ const styles = {
 function AddEditPurchaseRequest(props) {
 
     const initialState = {
-        date:'',
+        date: '',
         status: '',
         approvalNumber: '',
-        approvalPerson: cookie.load('current_user').name,
-        description:'',
-        file:'',
-        doctor:'',
-        followUpArray:''
+        approvalPerson:'',
+        description: '',
+        file: '',
+        doctor: '',
+        followUpArray: ''
     }
 
     function reducer(state, { field, value }) {
@@ -84,7 +84,7 @@ function AddEditPurchaseRequest(props) {
     const {
         date,
         approvalNumber,
-        approvalPerson=cookie.load('current_user').name,
+        approvalPerson,
         status,
         description,
         file,
@@ -100,20 +100,23 @@ function AddEditPurchaseRequest(props) {
     const [errorMsg, setErrorMsg] = useState('')
     const [openNotification, setOpenNotification] = useState(false)
     const [selectedItem, setSelectedItem] = useState('')
-    const [selectedPatient,setselectedPatient] = useState('')
+    const [selectedPatient, setselectedPatient] = useState('')
     const [id, setId] = useState('')
+    const [followUpid, setfollowUpid] = useState("");
     const [isFormSubmitted] = useState(false)
     const [DocumentUpload, setDocumentUpload] = useState("");
 
     useEffect(() => {
         setCurrentUser(cookie.load('current_user'))
+        console.log(cookie.load('current_user'))
 
-        console.log("selected rec ",props.history.location.state.followUp)
-   
+        console.log("selected rec ", props.history.location.state.selectedItem)
+
         setSelectedItem(props.history.location.state.selectedItem)
         setselectedPatient(props.history.location.state.selectedItem.mrn)
 
         setId(props.history.location.state.followUp._id)
+        setfollowUpid(props.history.location.state.selectedItem._id)
 
         const selectedfollowUp = props.history.location.state.followUp
         const selectedRec = props.history.location.state.selectedItem
@@ -121,7 +124,13 @@ function AddEditPurchaseRequest(props) {
         if (selectedRec) {
             Object.entries(selectedRec).map(([key, val]) => {
                 if (val && typeof val === "object") {
+                    if(key === "approvalPerson")
+                    {
+                        dispatch({ field: key, value: val })
+                    }
+                    else{
                     dispatch({ field: key, value: val._id })
+                    }
                 } else {
                     dispatch({ field: key, value: val });
                 }
@@ -134,7 +143,7 @@ function AddEditPurchaseRequest(props) {
                         dispatch({ field: "followUpArray", value: val });
                         //   console.log(key,val)
                     }
-                } 
+                }
             });
         }
     }, [])
@@ -148,10 +157,8 @@ function AddEditPurchaseRequest(props) {
 
     const handleUpdate = () => {
 
-        for (let i = 0; i < followUpArray.length; i++) 
-        {
-            if (followUpArray[i].date === date) 
-            {
+        for (let i = 0; i < followUpArray.length; i++) {
+            if (followUpArray[i].date === date) {
                 followUpArray[i] = {
                     ...followUpArray[i],
                     description: description,
@@ -160,8 +167,8 @@ function AddEditPurchaseRequest(props) {
                     status: status,
                     doctor: followUpArray[i].doctor,
                     file: followUpArray[i].file,
-                    approvalNumber:approvalNumber,
-                    approvalPerson:currentUser.staffId
+                    approvalNumber: approvalNumber,
+                    approvalPerson: currentUser.staffId
                 }
             }
         }
@@ -171,7 +178,8 @@ function AddEditPurchaseRequest(props) {
             formData.append('file', DocumentUpload, DocumentUpload.name)
         }
         const params = {
-            _id: id,
+            IPRId: id,
+            followUpId: followUpid,
             followUp: followUpArray,
         };
         formData.append('data', JSON.stringify(params))
@@ -244,7 +252,7 @@ function AddEditPurchaseRequest(props) {
                                     type='text'
                                     placeholder='Patient Name'
                                     name={'patientName'}
-                                      value={selectedPatient.firstName + ` ` + selectedPatient.lastName}
+                                    value={selectedPatient.firstName + ` ` + selectedPatient.lastName}
                                     onChange={onChangeValue}
                                     className='textInputStyle'
                                 />
@@ -260,7 +268,7 @@ function AddEditPurchaseRequest(props) {
                                     type='text'
                                     placeholder='Gender'
                                     name={'gender'}
-                                      value={selectedPatient.gender}
+                                    value={selectedPatient.gender}
                                     onChange={onChangeValue}
                                     className='textInputStyle'
                                 />
@@ -276,7 +284,7 @@ function AddEditPurchaseRequest(props) {
                                     type='text'
                                     placeholder='Age'
                                     name={'age'}
-                                      value={selectedPatient.age}
+                                    value={selectedPatient.age}
                                     onChange={onChangeValue}
                                     className='textInputStyle'
                                 />
@@ -295,7 +303,7 @@ function AddEditPurchaseRequest(props) {
                                     type='text'
                                     placeholder='Patient ID'
                                     name={'patientId'}
-                                      value={selectedPatient.profileNo}
+                                    value={selectedPatient.profileNo}
                                     onChange={onChangeValue}
                                     className='textInputStyle'
                                 />
@@ -312,7 +320,7 @@ function AddEditPurchaseRequest(props) {
                                     type='text'
                                     placeholder='Insurance Number'
                                     name={'insuranceId'}
-                                      value={selectedPatient.insuranceId ? selectedPatient.insuranceId : '--'}
+                                    value={selectedPatient.insuranceId ? selectedPatient.insuranceId : '--'}
                                     onChange={onChangeValue}
                                     className='textInputStyle'
                                 />
@@ -381,8 +389,8 @@ function AddEditPurchaseRequest(props) {
                                 </MenuItem>
                                 {statusArray.map((val) => {
                                     return (
-                                        <MenuItem key={val.key} value={val.key}>
-                                            {val.value}
+                                        <MenuItem key={val.key} value={val.value}>
+                                            {val.key}
                                         </MenuItem>
                                     )
                                 })}
@@ -423,7 +431,9 @@ function AddEditPurchaseRequest(props) {
                                 type='text'
                                 placeholder='Approval Person'
                                 name={'approvalPerson'}
-                                value={approvalPerson}
+                                value={approvalPerson
+                                    ? approvalPerson.firstName+' '+approvalPerson.lastName : currentUser.name
+                                }
                                 onChange={onChangeValue}
                                 className='textInputStyle'
                             />
@@ -431,6 +441,21 @@ function AddEditPurchaseRequest(props) {
                                 name={approvalPerson}
                                 isFormSubmitted={isFormSubmitted}
                             />
+                        </div>
+                    </div>
+
+                    <div className='row'>
+                        <div
+                            className='col-md-6 col-sm-6 col-6'
+                            style={styles.inputContainerForTextField}
+                        >
+                            {file ? (
+                                <img src={uploadsUrl + file.split('\\')[1]} className="depositSlipImg" />
+                            ) : (
+                                <div className='LoaderStyle'>
+                                    <Loader type='TailSpin' color='red' height={50} width={50} />
+                                </div>
+                                )}
                         </div>
                     </div>
                 </div>
@@ -441,23 +466,23 @@ function AddEditPurchaseRequest(props) {
                         style={{ marginTop: '25px', marginBottom: '25px' }}
                     >
                         <div className='col-md-6 col-sm-6 col-6'>
-                        <img
-                            onClick={() => props.history.goBack()}
-                            src={Back}
-                            style={{ width: 45, height: 35, cursor: 'pointer' }}
-                        />
+                            <img
+                                onClick={() => props.history.goBack()}
+                                src={Back}
+                                style={{ width: 45, height: 35, cursor: 'pointer' }}
+                            />
                         </div>
 
                         <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
-                        <Button
-                            style={styles.stylesForButton}
-                            // disabled={!validateForm()}
-                            onClick={handleUpdate}
-                            variant='contained'
-                            color='primary'
-                        >
-                            <strong style={{ fontSize: '12px' }}>Update</strong>
-                        </Button>
+                            <Button
+                                style={styles.stylesForButton}
+                                // disabled={!validateForm()}
+                                onClick={handleUpdate}
+                                variant='contained'
+                                color='primary'
+                            >
+                                <strong style={{ fontSize: '12px' }}>Update</strong>
+                            </Button>
                         </div>
                     </div>
                 </div>
