@@ -72,9 +72,10 @@ const tableHeadingForFollowUp = [
   'Action'
 ]
 const tableDataKeysForFollowUp = [
-  'serviceCode',
-  'serviceName',
-  'requesterName',
+  'date',
+  ['mrn','profileNo'],
+  'description',
+  'doctorName',
   'status',
 ]
 const actions = { view: true }
@@ -132,7 +133,6 @@ function AddEditPurchaseRequest(props) {
   const {
     followUpArray,
     coveredArray,
-    // needApprovalArray,
     notCoveredArray
   } = state
 
@@ -140,7 +140,7 @@ function AddEditPurchaseRequest(props) {
   const [errorMsg, setErrorMsg] = useState('')
   const [openNotification, setOpenNotification] = useState(false)
   const [value, setValue] = React.useState(0)
-  const [, setSelectedItem] = useState('')
+  const [selectedItem, setSelectedItem] = useState('')
   const [, setSelectedPatient] = useState('')
   const [, setrequestNo] = useState('')
   const [, setId] = useState('')
@@ -152,8 +152,10 @@ function AddEditPurchaseRequest(props) {
     setId(props.history.location.state.selectedItem._id)
     setrequestNo(props.history.location.state.selectedItem.requestNo)
     setSelectedPatient(props.history.location.state.selectedItem.patientId)
+    setSelectedItem(props.history.location.state.selectedItem)
 
     const selectedRec = props.history.location.state.selectedItem
+    console.log("Record",selectedRec)
 
     if (selectedRec) 
     {
@@ -192,10 +194,14 @@ function AddEditPurchaseRequest(props) {
           (d) => (d.RequestType = "RR", d.item = d.serviceName,d.totalCost = d.serviceId.price,d.insurance="Uncovered")
         )
       }
+      if (selectedRec.followUp)
+      {
+        selectedRec.followUp.map(
+          (d) => (d.mrn = selectedRec.patientId, d.requestNo = selectedRec.requestNo))
+        dispatch({field:'followUpArray',value:selectedRec.followUp})
+      }
     }
-
     setneedApprovalArray([].concat(selectedRec.labRequest, selectedRec.radiologyRequest, selectedRec.pharmacyRequest))
-    console.log([].concat(selectedRec.labRequest, selectedRec.radiologyRequest, selectedRec.pharmacyRequest))
 
   }, [])
 
@@ -219,6 +225,7 @@ function AddEditPurchaseRequest(props) {
       pathname: path,
       state: {
         selectedItem: rec,
+        followUp:selectedItem
       },
     })
   }

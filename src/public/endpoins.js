@@ -7,6 +7,7 @@ const baseUrl = 'http://localhost:4000/api'
 
 // export const socketUrl = "ws://localhost:4001";
 // export const socketUrl = "ws://192.168.10.20:4001";
+export const uploadsUrl = 'http://localhost:4000'
 
 export const socketUrl = 'wss://test.khmc-staging.com:4001'
 
@@ -63,6 +64,7 @@ export const getSingleIPRPatient = `${baseUrl}/ipr/getipr`
 export const addIPR = `${baseUrl}/ipr/addipr`
 export const deleteIPR = `${baseUrl}/ipr/deleteipr/:_id`
 export const updateIPR = `${baseUrl}/ipr/updateipr`
+export const addfollowup = `${baseUrl}/ipr/addfollowup`
 
 // warehouse endpoints
 export const getWhInventoryUrl = `${baseUrl}/warehouseinventory/getWhInventory`
