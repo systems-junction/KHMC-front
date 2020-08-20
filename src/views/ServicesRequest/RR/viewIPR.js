@@ -5,46 +5,22 @@ import React, { useEffect, useState, useReducer } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import Button from "@material-ui/core/Button";
-import tableStyles from "../../../assets/jss/material-dashboard-react/components/tableStyle.js";
 import axios from "axios";
-import DropDown from "../../../components/common/DropDown";
 import {
-  getSearchedLaboratoryService,
-  getSearchedRadiologyService,
-  updateEDR,
-  getSingleEDRPatient,
-  getAllExternalConsultantsUrl,
-  addECRUrl,
+  uploadsUrl,
   getRRIPRById,
   updateRRIPRById,
 } from "../../../public/endpoins";
 import cookie from "react-cookies";
 import Header from "../../../components/Header/Header";
-import business_Unit from "../../../assets/img/Purchase Order.png";
+import business_Unit from "../../../assets/img/IPR.png";
 import Back from "../../../assets/img/Back_Arrow.png";
 import "../../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import CustomTable from "../../../components/Table/Table";
-import plus_icon from "../../../assets/img/Plus.png";
-// import ViewSingleRequest from './viewRequest'
-import InputLabelComponent from "../../../components/InputLabel/inputLabel";
-import Paper from "@material-ui/core/Paper";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import ErrorMessage from "../../../components/ErrorMessage/errorMessage";
 import Notification from "../../../components/Snackbar/Notification.js";
 import TextField from "@material-ui/core/TextField";
-import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import BootstrapInput from "../../../components/Dropdown/dropDown.js";
-
+import { FaUpload } from 'react-icons/fa'
 import Loader from "react-loader-spinner";
 import "../../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 
@@ -59,7 +35,6 @@ const statusArray = [
   },
 ];
 
-const actions = { view: true };
 const styles = {
   patientDetails: {
     backgroundColor: "white",
@@ -95,6 +70,20 @@ const styles = {
   stylesForLabel: {
     fontWeight: "700",
     color: "gray",
+  },
+  upload: {
+    backgroundColor: 'white',
+    border: '0px solid #ccc',
+    borderRadius: '6px',
+    color: 'gray',
+    // marginTop: "10px",
+    width: '100%',
+    height: '55px',
+    cursor: 'pointer',
+    padding: '15px',
+  },
+  input: {
+    display: 'none',
   },
 };
 
@@ -146,6 +135,8 @@ function AddEditPurchaseRequest(props) {
     name: "",
     price: "",
     status: "",
+    date:"",
+    results:''
   };
 
   function reducer(state, { field, value }) {
@@ -157,29 +148,29 @@ function AddEditPurchaseRequest(props) {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const { name, price, status } = state;
+  const { name, price, status,results } = state;
 
   const onChangeValue = (e) => {
     dispatch({ field: e.target.name, value: e.target.value });
   };
 
-  const [currentUser, setCurrentUser] = useState("");
+  const [, setCurrentUser] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const [openNotification, setOpenNotification] = useState(false);
-  const [selectedItem, setSelectedItem] = useState("");
+  const [, setSelectedItem] = useState("");
   const [selectedPatient, setSelectedPatient] = useState("");
   const [requestNo, setrequestNo] = useState("");
   const [id, setId] = useState("");
-
+  const [slipUpload, setSlipUpload] = useState('')
+  const [imagePreview, setImagePreview] = useState('')
   const [isLoading, setIsLoading] = useState(true);
 
-  const [externalConsultant, setExternalConsultant] = useState("");
+  const [] = useState("");
 
-  const [allExternalConsultants, setAllExternalConsultants] = useState([]);
+  const [] = useState([]);
 
   const [
-    openExtenalConsultantDialog,
-    setOpenExtenalConsultantDialog,
+,
   ] = useState(false);
 
   const getLRByIdURI = (id) => {
@@ -246,8 +237,6 @@ function AddEditPurchaseRequest(props) {
         console.log("error while searching req", e);
       });
   };
-
-  console.log(name, price, "name");
 
   useEffect(() => {
     getLRByIdURI(props.history.location.state.selectedItem._id);
@@ -319,6 +308,18 @@ function AddEditPurchaseRequest(props) {
   //   console.log('error: ', e)
   // })
   // }
+  const onSlipUpload = (event) => {
+    setSlipUpload(event.target.files[0])
+
+    var file = event.target.files[0]
+    var reader = new FileReader()
+    var url = reader.readAsDataURL(file);
+
+    reader.onloadend = function () {
+      setImagePreview([reader.result])
+      dispatch({ field: 'results', value: file.name })
+    }
+  }
 
   if (openNotification) {
     setTimeout(() => {
@@ -532,6 +533,80 @@ function AddEditPurchaseRequest(props) {
                     );
                   })}
                 </TextField>
+              </div>
+            </div>
+
+            <div className="row">
+              <div
+                className='col-md-6 col-sm-6 col-6'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <label style={styles.upload}>
+                  <TextField
+                    required
+                    type='file'
+                    style={styles.input}
+                    onChange={onSlipUpload}
+                    name='results'
+                  />
+                  <FaUpload /> Results
+                </label>
+                {imagePreview !== "" ? (
+                  <img src={imagePreview} className="depositSlipImg" />
+                ) : (
+                    undefined
+                  )}
+                <span
+                  className='container-fluid'
+                  style={{ color: 'green' }}
+                >
+                  {results && results === ''
+                    ? ''
+                    : results.name}
+                </span>
+              </div>
+              <div
+                className="col-md-6 col-sm-6 col-6"
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  disabled={true}
+                  variant='filled'
+                  label='Date/Time'
+                  name={'DateTime'}
+                  // value={DateTime}
+                  // defaultValue={DateTime}
+                  type='date'
+                  className='textInputStyle'
+                  // onChange={(val) => onChangeValue(val, 'DateTime')}
+                  InputLabelProps={{
+                    shrink: true,
+                    color: 'black'
+                  }}
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className='row'>
+              <div
+                className='col-md-6 col-sm-6 col-6'
+                style={styles.inputContainerForTextField}
+              >
+                {results && results.split('\\')[1] ? (
+                  <img src={uploadsUrl + results.split('\\')[1]} className="depositSlipImg" />
+                ) : (
+                    undefined
+                  )}
               </div>
             </div>
 
