@@ -137,7 +137,7 @@ function AddEditEDR(props) {
         console.log("Selected Item", props.history.location.state.selectedItem);
         console.log("Follow Up Item", props.history.location.state.followUpItem);
 
-        setId(props.history.location.state.selectedItem._id);
+        setId(props.history.location.state.followUpItem._id);
         setrequestNo(props.history.location.state.selectedItem.requestNo);
 
         if (selectedRec) {
@@ -230,7 +230,7 @@ function AddEditEDR(props) {
             formData.append('file', DocumentUpload, DocumentUpload.name)
         }
         const params = {
-            // _id: id,
+            followUpid: id,
             followUp: followUpArray,
         };
         formData.append('data', JSON.stringify(params))
