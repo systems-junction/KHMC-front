@@ -443,7 +443,14 @@ export default function EdrRequest(props) {
                   <InputLabel style={styles.styleForLabel} id="generated-label">
                     Date
                   </InputLabel>
-                  <span>{props.item.date}</span>
+                  <input
+                    type="text"
+                    disabled={true}
+                    placeholder="date"
+                    name={"date"}
+                    value={props.item.date}
+                    className="textInputStyle"
+                  />
                 </div>
               ) : (
                 undefined
@@ -469,11 +476,18 @@ export default function EdrRequest(props) {
                   <InputLabel style={styles.styleForLabel} id="generated-label">
                     Requester
                   </InputLabel>
-                  <span>
-                    {props.item.requester.firstName +
+                  <input
+                    type="text"
+                    disabled={true}
+                    placeholder="Requester"
+                    name={"requester"}
+                    value={
+                      props.item.requester.firstName +
                       ` ` +
-                      props.item.requester.lastName}
-                  </span>
+                      props.item.requester.lastName
+                    }
+                    className="textInputStyle"
+                  />
                 </div>
               ) : (
                 undefined
@@ -555,7 +569,14 @@ export default function EdrRequest(props) {
                   <InputLabel style={styles.styleForLabel} id="generated-label">
                     Service Code
                   </InputLabel>
-                  <span>{props.item.serviceCode}</span>
+                  <input
+                    type="text"
+                    disabled={true}
+                    placeholder="serviceName"
+                    name={"serviceName"}
+                    value={props.item.serviceName}
+                    className="textInputStyle"
+                  />
                 </div>
               ) : (
                 undefined

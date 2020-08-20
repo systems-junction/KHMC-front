@@ -78,7 +78,7 @@ const styles = {
   },
   stylesForLabel: {
     fontWeight: "700",
-    color: "white",
+    color: "gray",
   },
 
   inputField: {
@@ -678,36 +678,41 @@ function DischargeRequest(props) {
           >
             <div style={{ marginTop: "20px" }} className="row">
               <div className="col-md-12 col-sm-12 col-12">
-                <InputLabel style={styles.stylesForLabel} id="status-label">
-                  Discharge Notes
-                </InputLabel>
-
-                <span>
-                  {selectedItem &&
-                  selectedItem &&
-                  selectedItem.dischargeRequest.dischargeSummary
-                    ? selectedItem.dischargeRequest.dischargeSummary
-                        .dischargeNotes
-                    : ""}{" "}
-                </span>
+                <TextArea
+                  disabled={true}
+                  type="text"
+                  placeholder="Discharge Notes"
+                  name={"dischargeNotes"}
+                  value={
+                    selectedItem &&
+                    selectedItem.dischargeRequest.dischargeSummary
+                      ? selectedItem.dischargeRequest.dischargeSummary
+                          .dischargeNotes
+                      : ""
+                  }
+                  onChange={onChangeValue}
+                  rows="4"
+                />
               </div>
             </div>
 
             <div style={{ marginTop: "20px" }} className="row">
               <div className="col-md-12 col-sm-12 col-12">
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
-                    Other Notes
-                  </InputLabel>
-
-                  <span>
-                    {selectedItem &&
+                <TextArea
+                  disabled={true}
+                  type="text"
+                  placeholder="Other Notes"
+                  name={"otherNotes"}
+                  value={
+                    selectedItem &&
                     selectedItem.dischargeRequest.dischargeSummary.otherNotes
                       ? selectedItem.dischargeRequest.dischargeSummary
                           .otherNotes
-                      : ""}{" "}
-                  </span>
-                </div>
+                      : ""
+                  }
+                  onChange={onChangeValue}
+                  rows="4"
+                />
               </div>
             </div>
 
