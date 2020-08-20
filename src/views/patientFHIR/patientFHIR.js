@@ -184,17 +184,19 @@ const useStylesDropdown = makeStyles((theme) => ({
   },
 }))
 
-const relationshipArray = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
+const relationshipDataArray = [
+  {
+    key: 'Father',
+    value: 'father',
+  },
+  {
+    key: 'Son',
+    value: 'son',
+  },
+  {
+    key: 'Uncle',
+    value: 'uncle',
+  },
 ]
 
 const useStyles = makeStyles((theme) => ({
@@ -241,10 +243,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-function getStyles(name, personName, theme) {
+function getStyles(name, relationshipArray, theme) {
   return {
     fontWeight:
-      personName.indexOf(name) === -1
+      relationshipArray.indexOf(name) === -1
         ? theme.typography.fontWeightRegular
         : theme.typography.fontWeightMedium,
   }
@@ -300,7 +302,7 @@ export default function PurchaseRequest(props) {
   const [contacts, setContact] = useState([
     { relationship: [], name: '', telecom: telecoms, address: address },
   ])
-  const [personName, setPersonName] = React.useState([])
+  const [relationshipArray, setrelationshipArray] = React.useState([])
 
   // handle input change
   const handleNameChange = (e, index) => {
@@ -329,13 +331,11 @@ export default function PurchaseRequest(props) {
     const list = [...contacts]
     list[index][name] = value
     setContact(list)
-    console.log('contacts', index)
   }
 
-  const handleChange = (event) => {
-    setPersonName(event.target.value)
-    setContact([{ relationship: event.target.value }])
-    console.log(event.target.value, 'event')
+  const handleChange = (event,index) => {
+    setrelationshipArray(event.target.value)
+    contacts[index].relationship = event.target.value
   }
 
   // handle click event of the Remove button
@@ -393,6 +393,7 @@ export default function PurchaseRequest(props) {
   }
 
   console.log('contact', contacts)
+  console.log("relationShip",relationshipArray)
 
   const handleSubmitClick = (event) => {
     event.preventDefault()
@@ -855,13 +856,13 @@ export default function PurchaseRequest(props) {
               return (
                 <div className='row'>
                   <FormControl className={classesDropdown.formControl}>
-                    <InputLabel id='demo-mutiple-chip-label'>Chip</InputLabel>
+                    <InputLabel id='demo-mutiple-chip-label'>Relationship</InputLabel>
                     <Select
                       labelId='demo-mutiple-chip-label'
                       id='demo-mutiple-chip'
                       multiple
-                      value={personName}
-                      onChange={(e) => handleChange(e, i)}
+                      value={contacts[i].relationship}
+                      onChange={(e)=>handleChange(e,i)}
                       input={<Input id='select-multiple-chip' />}
                       renderValue={(selected) => (
                         <div className={classesDropdown.chips}>
@@ -876,13 +877,13 @@ export default function PurchaseRequest(props) {
                       )}
                       MenuProps={MenuProps}
                     >
-                      {relationshipArray.map((name) => (
+                      {relationshipDataArray.map((name) => (
                         <MenuItem
-                          key={name}
-                          value={name}
-                          // style={getStyles(name, personName, theme)}
+                          key={name.key}
+                          value={name.value}
+                          // style={getStyles(name, relationshipArray, theme)}
                         >
-                          {name}
+                          {name.value}
                         </MenuItem>
                       ))}
                     </Select>
