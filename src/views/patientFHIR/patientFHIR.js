@@ -4,11 +4,20 @@ import { TextField, Button } from '@material-ui/core'
 import Header from '../../components/Header/Header'
 import business_Unit from '../../assets/img/business_Unit.png'
 import Back from '../../assets/img/Back_Arrow.png'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, useTheme } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
 import RemoveIcon from '@material-ui/icons/Remove'
 import MenuItem from '@material-ui/core/MenuItem'
 import { ja } from 'date-fns/esm/locale'
+// import MultiSelect from 'react-multi-select-component'
+import InputLabelComponent from '../../components/InputLabel/inputLabel'
+import Autocomplete from '@material-ui/lab/Autocomplete'
+import Chip from '@material-ui/core/Chip'
+import FormControl from '@material-ui/core/FormControl'
+import InputLabel from '@material-ui/core/InputLabel'
+import Select from '@material-ui/core/Select'
+import Input from '@material-ui/core/Input'
+import ListItemText from '@material-ui/core/ListItemText'
 
 const styles = {
   patientDetails: {
@@ -145,6 +154,49 @@ const genderArray = [
   },
 ]
 
+const ITEM_HEIGHT = 48
+const ITEM_PADDING_TOP = 8
+
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+}
+
+const useStylesDropdown = makeStyles((theme) => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+    maxWidth: 300,
+  },
+  chips: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  chip: {
+    margin: 2,
+  },
+  noLabel: {
+    marginTop: theme.spacing(3),
+  },
+}))
+
+const relationshipArray = [
+  'Oliver Hansen',
+  'Van Henry',
+  'April Tucker',
+  'Ralph Hubbard',
+  'Omar Alexander',
+  'Carlos Abbott',
+  'Miriam Wagner',
+  'Bradley Wilkerson',
+  'Virginia Andrews',
+  'Kelly Snyder',
+]
+
 const useStyles = makeStyles((theme) => ({
   rootTab: {
     justifyContent: 'center',
@@ -188,8 +240,19 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }))
+
+function getStyles(name, personName, theme) {
+  return {
+    fontWeight:
+      personName.indexOf(name) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  }
+}
 export default function PurchaseRequest(props) {
   const classes = useStyles()
+  const classesDropdown = useStylesDropdown()
+
   const initialState = {
     gender: '',
     birthDate: new Date(),
@@ -235,9 +298,9 @@ export default function PurchaseRequest(props) {
     },
   ])
   const [contacts, setContact] = useState([
-    { relationshipArray: [], name: '', telecom: telecoms, address: address },
+    { relationship: [], name: '', telecom: telecoms, address: address },
   ])
-  const [relationships, setRelationships] = useState([{ relationship: [] }])
+  const [personName, setPersonName] = React.useState([])
 
   // handle input change
   const handleNameChange = (e, index) => {
@@ -266,20 +329,14 @@ export default function PurchaseRequest(props) {
     const list = [...contacts]
     list[index][name] = value
     setContact(list)
+    console.log('contacts', index)
   }
 
-  const handleRelationshipChange = (e, index) => {
-    console.log('hello')
-    const { name, value } = e.target
-    const list = [...relationships]
-    console.log(list, 'list')
-    list[index][name] = value
-
-    setRelationships(list)
-    // setContact([{ relationshipArray: list, name: '', telecom: telecoms }])
+  const handleChange = (event) => {
+    setPersonName(event.target.value)
+    setContact([{ relationship: event.target.value }])
+    console.log(event.target.value, 'event')
   }
-
-  console.log(relationships, 'this is value')
 
   // handle click event of the Remove button
   const handleNameRemove = (index) => {
@@ -298,13 +355,6 @@ export default function PurchaseRequest(props) {
     const list = [...address]
     list.splice(index, 1)
     setAddress(list)
-  }
-
-  const handleRelationshipRemove = (index) => {
-    const list = [...relationships]
-    list.splice(index, 1)
-    setRelationships(list)
-    setContact([{ relationshipArray: list, name: '', telecom: telecoms }])
   }
 
   const handleContactRemove = (index) => {
@@ -337,19 +387,9 @@ export default function PurchaseRequest(props) {
     ])
   }
 
-  const handleRelationshipAdd = () => {
-    console.log(relationships, 'rl')
-    // setContact([
-    //   { relationshipArray: relationships, name: '', telecom: telecoms },
-    // ])
-    setRelationships([...relationships, { relationship: [] }])
-  }
-
   const handleContactAdd = () => {
-    setContact([
-      ...contacts,
-      { relationshipArray: [], name: '', telecom: telecoms },
-    ])
+    console.log(contacts, 'contacts')
+    setContact([...contacts, { relationship: [], name: '', telecom: telecoms }])
   }
 
   console.log('contact', contacts)
@@ -358,7 +398,6 @@ export default function PurchaseRequest(props) {
     event.preventDefault()
     console.log('====================================')
     console.log('telecoms', telecoms)
-    console.log('relationship', relationships)
     console.log('contact', contacts)
     console.log(state, 'state')
     console.log('====================================')
@@ -392,11 +431,13 @@ export default function PurchaseRequest(props) {
         </div>
         <div className={`container-fluid ${classes.root}`}>
           <form onSubmit={handleSubmitClick}>
+            <br />
+            <InputLabelComponent>Name Data</InputLabelComponent>
             {names.map((x, i) => {
               return (
                 <div className='row'>
                   <div
-                    className='col-md-3 col-sm-6'
+                    className='col-md-3 col-sm-3'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -430,7 +471,7 @@ export default function PurchaseRequest(props) {
                   </div>
 
                   <div
-                    className='col-md-3 col-sm-6'
+                    className='col-md-3 col-sm-3'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -451,7 +492,7 @@ export default function PurchaseRequest(props) {
                   </div>
 
                   <div
-                    className='col-md-3 col-sm-6'
+                    className='col-md-3 col-sm-3'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -472,7 +513,7 @@ export default function PurchaseRequest(props) {
                   </div>
 
                   <div
-                    className='col-md-3 col-sm-6'
+                    className='col-md-3 col-sm-3'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -501,7 +542,8 @@ export default function PurchaseRequest(props) {
                 </div>
               )
             })}
-
+            <br />
+            <InputLabelComponent>Telecom Data</InputLabelComponent>
             {telecoms.map((x, i) => {
               return (
                 <div className='row'>
@@ -612,7 +654,8 @@ export default function PurchaseRequest(props) {
                 </div>
               )
             })}
-
+            <br />
+            <InputLabelComponent>Address Data</InputLabelComponent>
             {address.map((x, i) => {
               return (
                 <div className='row'>
@@ -806,62 +849,44 @@ export default function PurchaseRequest(props) {
                 </div>
               )
             })}
-
+            <br />
+            <InputLabelComponent>Contact Data</InputLabelComponent>
             {contacts.map((x, i) => {
               return (
                 <div className='row'>
-                  {relationships.map((y, j) => {
-                    return (
-                      <>
-                        <div
-                          className='col-md-3 col-sm-6'
-                          style={{
-                            ...styles.inputContainerForTextField,
-                            ...styles.textFieldPadding,
-                          }}
-                        >
-                          <TextField
-                            name='relationship'
-                            label='relationship'
-                            variant='filled'
-                            className='textInputStyle'
-                            value={y.relationship}
-                            onChange={(e) => handleRelationshipChange(e, j)}
-                            InputProps={{
-                              className: classes.input,
-                              classes: { input: classes.input },
-                            }}
-                          />
-                        </div>
-                        <div
-                          className='col-md-1 col-sm-6'
-                          style={{
-                            ...styles.inputContainerForTextField,
-                            ...styles.textFieldPadding,
-                          }}
-                        >
-                          {relationships.length !== 1 && (
-                            <RemoveIcon
-                              fontSize='large'
-                              style={{
-                                background: 'red',
-                              }}
-                              onClick={() => handleRelationshipRemove(j)}
+                  <FormControl className={classesDropdown.formControl}>
+                    <InputLabel id='demo-mutiple-chip-label'>Chip</InputLabel>
+                    <Select
+                      labelId='demo-mutiple-chip-label'
+                      id='demo-mutiple-chip'
+                      multiple
+                      value={personName}
+                      onChange={(e) => handleChange(e, i)}
+                      input={<Input id='select-multiple-chip' />}
+                      renderValue={(selected) => (
+                        <div className={classesDropdown.chips}>
+                          {selected.map((value) => (
+                            <Chip
+                              key={value}
+                              label={value}
+                              className={classesDropdown.chip}
                             />
-                          )}
-                          {relationships.length - 1 === j && (
-                            <AddIcon
-                              fontSize='large'
-                              onClick={handleRelationshipAdd}
-                              style={{
-                                background: 'blue',
-                              }}
-                            />
-                          )}
+                          ))}
                         </div>
-                      </>
-                    )
-                  })}
+                      )}
+                      MenuProps={MenuProps}
+                    >
+                      {relationshipArray.map((name) => (
+                        <MenuItem
+                          key={name}
+                          value={name}
+                          // style={getStyles(name, personName, theme)}
+                        >
+                          {name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
 
                   <div
                     className='col-md-2 col-sm-6'
