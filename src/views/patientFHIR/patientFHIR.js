@@ -1,23 +1,20 @@
 /*eslint-disable*/
-import React, { useState, useEffect, useReducer } from 'react'
+import React, { useState, useReducer } from 'react'
 import { TextField, Button } from '@material-ui/core'
 import Header from '../../components/Header/Header'
 import business_Unit from '../../assets/img/business_Unit.png'
 import Back from '../../assets/img/Back_Arrow.png'
-import { makeStyles, useTheme } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
 import RemoveIcon from '@material-ui/icons/Remove'
 import MenuItem from '@material-ui/core/MenuItem'
-import { ja } from 'date-fns/esm/locale'
 // import MultiSelect from 'react-multi-select-component'
 import InputLabelComponent from '../../components/InputLabel/inputLabel'
-import Autocomplete from '@material-ui/lab/Autocomplete'
 import Chip from '@material-ui/core/Chip'
 import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
 import Select from '@material-ui/core/Select'
 import Input from '@material-ui/core/Input'
-import ListItemText from '@material-ui/core/ListItemText'
 
 const styles = {
   patientDetails: {
@@ -73,7 +70,6 @@ const styles = {
     border: '0px solid #ccc',
     borderRadius: '5px',
     color: 'gray',
-    // marginTop: "30px",
     width: '100%',
     height: '55px',
     cursor: 'pointer',
@@ -243,15 +239,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-function getStyles(name, relationshipArray, theme) {
-  return {
-    fontWeight:
-      relationshipArray.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  }
-}
-export default function PurchaseRequest(props) {
+export default function PurchaseRequest() {
   const classes = useStyles()
   const classesDropdown = useStylesDropdown()
 
