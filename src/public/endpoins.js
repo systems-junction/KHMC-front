@@ -1,13 +1,13 @@
 const local = 'http://localhost:4000/api'
 const live = 'https://test.khmc-staging.com/api'
-// const dev = "http://ec2-52-14-42-129.us-east-2.compute.amazonaws.com/api";
-const baseUrl = 'http://localhost:4000/api'
+const dev = "http://ec2-52-14-42-129.us-east-2.compute.amazonaws.com/api";
+// const baseUrl = 'http://localhost:4000/api'
 
-// const baseUrl = dev;
+const baseUrl = dev;
 
 // export const socketUrl = "ws://localhost:4001";
 // export const socketUrl = "ws://192.168.10.20:4001";
-export const uploadsUrl = 'http://localhost:4000'
+export const uploadsUrl = 'http://localhost:4000/uploads/'
 
 export const socketUrl = 'wss://test.khmc-staging.com:4001'
 

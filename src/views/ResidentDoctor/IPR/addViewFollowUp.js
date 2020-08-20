@@ -16,8 +16,7 @@ import {
     addfollowup,
     uploadsUrl
 } from "../../../public/endpoins";
-import { doc } from "prettier";
-import { element } from "prop-types";
+import Loader from 'react-loader-spinner'
 import axios from 'axios'
 
 const styles = {
@@ -117,7 +116,8 @@ function AddEditEDR(props) {
     const [currentUser, setCurrentUser] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
     const [openNotification, setOpenNotification] = useState(false);
-    const [id, setId] = useState("");
+    const [followUpid, setfollowUpid] = useState("");
+    const [id, setid] = useState("");
     const [, setrequestNo] = useState("");
     const [DocumentUpload, setDocumentUpload] = useState("");
     const [imagePreview, setImagePreview] = useState("");
@@ -137,7 +137,8 @@ function AddEditEDR(props) {
         console.log("Selected Item", props.history.location.state.selectedItem);
         console.log("Follow Up Item", props.history.location.state.followUpItem);
 
-        setId(props.history.location.state.followUpItem._id);
+        setfollowUpid(props.history.location.state.followUpItem._id);
+        setid(props.history.location.state.selectedItem._id);
         setrequestNo(props.history.location.state.selectedItem.requestNo);
 
         if (selectedRec) {
@@ -200,7 +201,7 @@ function AddEditEDR(props) {
         var reader = new FileReader();
         var url = reader.readAsDataURL(file);
 
-        console.log("Photu link ",file)
+        console.log("Photu link ", file)
 
         reader.onloadend = function (e) {
             setImagePreview([reader.result]);
@@ -211,8 +212,7 @@ function AddEditEDR(props) {
     const submitFollowUp = () => {
 
         for (let i = 0; i < followUpArray.length; i++) {
-            if (followUpArray[i].date === date) 
-            {
+            if (followUpArray[i].date === date) {
                 followUpArray[i] = {
                     ...followUpArray[i],
                     description: description,
@@ -230,11 +230,12 @@ function AddEditEDR(props) {
             formData.append('file', DocumentUpload, DocumentUpload.name)
         }
         const params = {
-            followUpid: id,
+            IPRId: id,
+            followUpId: followUpid,
             followUp: followUpArray,
         };
         formData.append('data', JSON.stringify(params))
-          console.log('PARAMSS ', params)
+        console.log('PARAMSS ', params)
         axios
             .put(addfollowup, formData, {
                 headers: {
@@ -334,24 +335,13 @@ function AddEditEDR(props) {
                             </>
                         ) : (
                                 <>
-                                    {file && console.log(uploadsUrl+file) ? (
-                                        <img src={uploadsUrl+file} className="depositSlipImg" />
+                                    {file ? (
+                                        <img src={uploadsUrl + file.split('\\')[1]} className="depositSlipImg" />
                                     ) : (
-                                            undefined
+                                        <div className='LoaderStyle'>
+                                            <Loader type='TailSpin' color='red' height={50} width={50} />
+                                        </div>
                                         )}
-                                    <div
-                                        className='col-md-6 col-sm-6 col-6'
-                                        style={{
-                                            ...styles.inputContainerForTextField,
-                                            ...styles.textFieldPadding,
-                                        }}
-                                    >
-                                        {file && file.name
-                                            ? file.name
-                                            : file.split('\\')[0] === 'uploads'
-                                                ? file.split('\\')[1]
-                                                : file.name}
-                                    </div>
                                 </>
                             )}
                     </div>
