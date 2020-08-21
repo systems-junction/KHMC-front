@@ -136,11 +136,11 @@ const priorityArray = [
 
 const styles = {
   inputContainerForTextField: {
-    marginTop: 25,
+    marginTop: 6,
   },
 
   inputContainerForDropDown: {
-    marginTop: 25,
+    marginTop: 6,
   },
 
   stylesForLabel: {

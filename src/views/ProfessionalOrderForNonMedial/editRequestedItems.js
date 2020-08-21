@@ -103,11 +103,11 @@ const generatedArray = [
 
 const styles = {
   inputContainerForTextField: {
-    marginTop: 25,
+    marginTop: 6,
   },
 
   inputContainerForDropDown: {
-    marginTop: 25,
+    marginTop: 6,
     // backgroundColor: 'white',
     // borderRadius: 10,
     // paddingLeft: 10,
@@ -719,7 +719,6 @@ function AddEditPurchaseRequest(props) {
                     }
                     label="Date"
                     fullWidth
-                    fullWidth
                     // style={{
                     //   backgroundColor: "white",
                     //   borderRadius: 10,
@@ -748,40 +747,40 @@ function AddEditPurchaseRequest(props) {
               </div>
 
               {comingFor === "edit" || comingFor === "view" ? (
-                <div className="col-md-4">
-                  <div
-                    style={{
-                      ...styles.inputContainerForTextField,
-                      ...styles.textFieldPadding,
-                    }}
-                  >
-                    {/* <InputLabelComponent id="status-label">
+                <div
+                  className="col-md-4"
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  {/* <InputLabelComponent id="status-label">
                       Requested FU
                     </InputLabelComponent> */}
 
-                    {fuArray &&
-                      fuArray.map((val) => {
-                        if (val._id === fuId) {
-                          return (
-                            <TextField
-                              disabled={true}
-                              type="text"
-                              label="Fu Id"
-                              name={"fuId"}
-                              value={val.fuName}
-                              onChange={onChangeValue}
-                              className="textInputStyle"
-                              error={fuId === "" && isFormSubmitted}
-                              variant="filled"
-                              InputProps={{
-                                className: classes.input,
-                                classes: { input: classes.input },
-                              }}
-                            />
-                          );
-                        }
-                      })}
-                  </div>
+                  {fuArray &&
+                    fuArray.map((val) => {
+                      if (val._id === fuId) {
+                        return (
+                          <TextField
+                            disabled={true}
+                            type="text"
+                            label="Fu Id"
+                            name={"fuId"}
+                            value={val.fuName}
+                            onChange={onChangeValue}
+                            className="textInputStyle"
+                            error={fuId === "" && isFormSubmitted}
+                            variant="filled"
+                            InputProps={{
+                              className: classes.input,
+                              classes: { input: classes.input },
+                            }}
+                          />
+                        );
+                      }
+                    })}
+
                   {/* <ErrorMessage name={fuId} isFormSubmitted={isFormSubmitted} /> */}
                 </div>
               ) : (
@@ -1061,7 +1060,72 @@ function AddEditPurchaseRequest(props) {
                   }}
                 >
                   {/* <InputLabelComponent>Status*</InputLabelComponent> */}
-                  {currentUser.staffTypeId.type === "FU Member" ? (
+                  {currentUser.staffTypeId.type === "admin" ? (
+                    <>
+                      <TextField
+                        required
+                        select
+                        fullWidth
+                        id="secondStatus"
+                        name="secondStatus"
+                        // value={country}
+                        // error={country === '' && isFormSubmitted}
+                        onChange={onChangeValue}
+                        label="Status"
+                        variant="filled"
+                        className="dropDownStyle"
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                        error={secondStatus === "" && isFormSubmitted}
+                      >
+                        {/* <TextField
+                          required
+                          select
+                          fullWidth
+                          id="secondStatus"
+                          name="secondStatus"
+                          value={secondStatus}
+                          onChange={onChangeValue}
+                          label="Status"
+                          // className="dropDownStyle"
+                          // input={<BootstrapInput />}
+                          InputProps={{
+                            className: classes.input,
+                            classes: { input: classes.input },
+                          }}
+                          error={secondStatus === "" && isFormSubmitted}
+                        > */}
+                        <MenuItem value="">
+                          <em>None</em>
+                        </MenuItem>
+
+                        {statusArrayForFUMember.map((val) => {
+                          return (
+                            <MenuItem
+                              disabled={
+                                (status === "pending" &&
+                                  val.key === "Delivery in Progress") ||
+                                (status === "in_progress" &&
+                                  val.key === "in_progress")
+                                  ? true
+                                  : false
+                              }
+                              key={val.key}
+                              value={val.key}
+                            >
+                              {val.value}
+                            </MenuItem>
+                          );
+                        })}
+                      </TextField>
+                      {/* <ErrorMessage
+                          name={secondStatus}
+                          isFormSubmitted={isFormSubmitted}
+                        /> */}
+                    </>
+                  ) : currentUser.staffTypeId.type === "FU Member" ? (
                     <>
                       <TextField
                         required
