@@ -46,11 +46,11 @@ import DialogContent from "@material-ui/core/DialogContent";
 
 const styles = {
   inputContainerForTextField: {
-    marginTop: 25,
+    marginTop: 6,
   },
 
   inputContainerForDropDown: {
-    marginTop: 25,
+    marginTop: 6,
     // backgroundColor: 'white',
     // borderRadius: 10,
     // paddingLeft: 10,
