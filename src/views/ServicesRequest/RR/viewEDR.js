@@ -148,7 +148,7 @@ function AddEditPurchaseRequest(props) {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const { name, price, status,date, results } = state;
+  const { name, price, status, date, results } = state;
 
   const onChangeValue = (e) => {
     dispatch({ field: e.target.name, value: e.target.value });
@@ -156,14 +156,15 @@ function AddEditPurchaseRequest(props) {
 
   const [, setCurrentUser] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, setsuccessMsg] = useState("");
   const [openNotification, setOpenNotification] = useState(false);
   const [, setSelectedItem] = useState("");
   const [selectedPatient, setSelectedPatient] = useState("");
   const [requestNo, setrequestNo] = useState("");
-  const [id, setId] = useState("");
+  const [rrId, setrrId] = useState("");
+  const [edrId, setedrId] = useState("")
   const [slipUpload, setSlipUpload] = useState('')
   const [imagePreview, setImagePreview] = useState('')
-
   const [isLoading, setIsLoading] = useState(true);
 
   const getLRByIdURI = (id) => {
@@ -171,10 +172,8 @@ function AddEditPurchaseRequest(props) {
       .get(getRRById + "/" + id)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data, "data");
           if (res.data.data) {
-            console.log(res.data.data, "data2");
-
+            console.log(res.data.data, "EDRs RR");
             setIsLoading(false);
 
             Object.entries(res.data.data).map(([key, val]) => {
@@ -182,10 +181,15 @@ function AddEditPurchaseRequest(props) {
                 if (key === "serviceId") {
                   dispatch({ field: "name", value: val.name });
                   dispatch({ field: "price", value: val.price });
-                  dispatch({ field: "status", value: val.status });
                 }
-              } else {
-                dispatch({ field: key, value: val });
+              }
+              else {
+                if (key === "date") {
+                  dispatch({ field: 'date', value: new Date(val).toISOString().substr(0, 10) });
+                }
+                else {
+                  dispatch({ field: key, value: val });
+                }
               }
             });
           }
@@ -197,33 +201,49 @@ function AddEditPurchaseRequest(props) {
   };
 
   const updateLRByIdURI = () => {
+    let formData = new FormData()
+    if (slipUpload) {
+      formData.append('file', slipUpload, slipUpload.name)
+    }
     const params = {
-      _id: id,
+      EDRId: edrId,
+      radiologyRequestId: rrId,
       status: status,
     };
-    console.log(params, "params");
+    formData.append('data', JSON.stringify(params))
+    console.log('PARAMSS ', params)
     axios
-      .put(updateRRById, params)
+      .put(updateRRById, formData, {
+        headers: {
+          accept: 'application/json',
+          'Accept-Language': 'en-US,en;q=0.8',
+          'content-type': 'multipart/form-data',
+        },
+      })
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data, "data");
-          if (res.data.data) {
-            console.log(res.data.data, "data2");
+          setOpenNotification(true);
+          setsuccessMsg("Submitted successfully");
+          // if (res.data.data) {
+          //   console.log(res.data.data, "data2");
 
-            setIsLoading(false);
+          //   setIsLoading(false);
 
-            Object.entries(res.data.data).map(([key, val]) => {
-              if (val && typeof val === "object") {
-                if (key === "serviceId") {
-                  dispatch({ field: "name", value: val.name });
-                  dispatch({ field: "price", value: val.price });
-                }
-              } else {
-                dispatch({ field: key, value: val });
-              }
-            });
-          }
-          props.history.goBack();
+          //   Object.entries(res.data.data).map(([key, val]) => {
+          //     if (val && typeof val === "object") {
+          //       if (key === "serviceId") {
+          //         dispatch({ field: "name", value: val.name });
+          //         dispatch({ field: "price", value: val.price });
+          //       }
+          //     } else {
+          //       dispatch({ field: key, value: val });
+          //     }
+          //   });
+          // }
+        }
+        else {
+          setOpenNotification(true);
+          setErrorMsg("Error while submitting");
         }
       })
       .catch((e) => {
@@ -232,75 +252,18 @@ function AddEditPurchaseRequest(props) {
   };
 
   useEffect(() => {
-    getLRByIdURI(props.history.location.state.selectedItem._id);
-
     setCurrentUser(cookie.load("current_user"));
+    getLRByIdURI(props.history.location.state.selectedItem._id);
+    // console.log("Lab req ID :", props.history.location.state.selectedItem._id)
+    // console.log("EDR ID : ", props.history.location.state.selectedItem.edrId._id)
 
-    const selectedRec = props.history.location.state.selectedItem._id;
-    console.log(selectedRec, "rec");
-    setId(props.history.location.state.selectedItem._id);
+    setrrId(props.history.location.state.selectedItem._id);
+    setedrId(props.history.location.state.selectedItem.edrId._id);
     setSelectedItem(props.history.location.state.selectedItem);
     setrequestNo(props.history.location.state.selectedItem.requestNo);
     setSelectedPatient(props.history.location.state.selectedItem.patientId);
-
-    // if (selectedRec) {
-    //   Object.entries(selectedRec).map(([key, val]) => {
-    //     if (val && typeof val === "object") {
-    //       if (key === "patientId") {
-    //         dispatch({ field: "patientId", value: val._id });
-    //       } else if (key === "labRequest") {
-    //         dispatch({ field: "labRequestArray", value: val });
-    //       } else if (key === "radiologyRequest") {
-    //         dispatch({ field: "radiologyRequestArray", value: val });
-    //       } else if (key === "consultationNote") {
-    //         Object.entries(val).map(([key1, val1]) => {
-    //           if (key1 == "requester") {
-    //             dispatch({ field: "requester", value: val1._id });
-    //           } else {
-    //             dispatch({ field: key1, value: val1 });
-    //           }
-    //         });
-    //         dispatch({ field: "consultationNoteArray", value: val });
-    //       } else if (key === "residentNotes") {
-    //         Object.entries(val).map(([key1, val1]) => {
-    //           if (key1 == "doctor") {
-    //             dispatch({ field: "doctor", value: val1._id });
-    //           } else {
-    //             dispatch({ field: key1, value: val1 });
-    //           }
-    //         });
-    //         dispatch({ field: "residentNoteArray", value: val });
-    //       } else if (key === "pharmacyRequest") {
-    //         dispatch({ field: "pharmacyRequestArray", value: val });
-    //       }
-    //     } else {
-    //       dispatch({ field: key, value: val });
-    //     }
-    //   });
-    // }
   }, []);
 
-  // For dummy Data
-  // function getEDRdetails() {
-  // axios.get(
-  //   getSingleEDRPatient +
-  //   '/' +
-  //   props.history.location.state.selectedItem._id
-  // )
-  //   .then((res) => {
-  //     if (res.data.success) {
-  //       console.log('response after getting the EDR details', res.data.data)
-  // setPurchaseOrderDetails(res.data.data.poId.purchaseRequestId)
-  //   } else if (!res.data.success) {
-  //     setErrorMsg(res.data.error)
-  //     setOpenNotification(true)
-  //   }
-  //   return res
-  // })
-  // .catch((e) => {
-  //   console.log('error: ', e)
-  // })
-  // }
   const onSlipUpload = (event) => {
     setSlipUpload(event.target.files[0])
 
@@ -310,7 +273,6 @@ function AddEditPurchaseRequest(props) {
 
     reader.onloadend = function () {
       setImagePreview([reader.result])
-      dispatch({ field: 'results', value: file.name })
     }
   }
 
@@ -318,6 +280,7 @@ function AddEditPurchaseRequest(props) {
     setTimeout(() => {
       setOpenNotification(false);
       setErrorMsg("");
+      setsuccessMsg("")
     }, 2000);
   }
 
@@ -344,16 +307,6 @@ function AddEditPurchaseRequest(props) {
               <h4>EDR - Radiology Service Request</h4>
             </div>
 
-            {/* <div>
-              <Button
-                onClick={TriageAssessment}
-                style={styles.stylesForButton}
-                variant='contained'
-                color='primary'
-              >
-                Triage And Assessment
-              </Button>
-            </div> */}
           </div>
           <div
             style={{
@@ -552,9 +505,27 @@ function AddEditPurchaseRequest(props) {
                   <FaUpload /> Results
                 </label>
                 {imagePreview !== "" ? (
-                  <img src={imagePreview} className="depositSlipImg" />
+                  <>
+                    <img src={imagePreview} className="depositSlipImg" />
+                    {results !== "" ? (
+                      <span
+                        style={{ marginLeft: '10px', color: 'green' }}
+                      >
+                        New results
+                      </span>
+                    ) : (
+                        undefined
+                      )}
+                  </>
                 ) : (
                     undefined
+                  )}
+                {results !== "" ? (
+                  <img src={uploadsUrl + results.split('\\')[1]} className="depositSlipImg" />
+                ) : (
+                    <div className='LoaderStyle'>
+                      <Loader type='TailSpin' color='red' height={50} width={50} />
+                    </div>
                   )}
                 <span
                   className='container-fluid'
@@ -576,9 +547,8 @@ function AddEditPurchaseRequest(props) {
                   disabled={true}
                   variant='filled'
                   label='Date/Time'
-                  name={'DateTime'}
-                  // value={DateTime}
-                  // defaultValue={DateTime}
+                  name={'date'}
+                  value={date}
                   type='date'
                   className='textInputStyle'
                   // onChange={(val) => onChangeValue(val, 'DateTime')}
@@ -591,19 +561,6 @@ function AddEditPurchaseRequest(props) {
                     classes: { input: classes.input },
                   }}
                 />
-              </div>
-            </div>
-
-            <div className='row'>
-              <div
-                className='col-md-6 col-sm-6 col-6'
-                style={styles.inputContainerForTextField}
-              >
-                {results && results.split('\\')[1] ? (
-                  <img src={uploadsUrl + results.split('\\')[1]} className="depositSlipImg" />
-                ) : (
-                    undefined
-                  )}
               </div>
             </div>
 
@@ -630,17 +587,7 @@ function AddEditPurchaseRequest(props) {
             </div>
           </div>
 
-          {/* {openItemDialog ? (
-            <ViewSingleRequest
-              item={item}
-              openItemDialog={openItemDialog}
-              viewItem={viewItem}
-            />
-          ) : (
-            undefined
-          )} */}
-
-          <Notification msg={errorMsg} open={openNotification} />
+          <Notification msg={errorMsg} open={openNotification} success={successMsg}/>
         </div>
       ) : (
           <div className="LoaderStyle">

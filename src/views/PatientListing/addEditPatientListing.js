@@ -577,13 +577,15 @@ function AddEditPatientListing(props) {
         .put(updatePatientUrl, formData)
         .then((res) => {
           if (res.data.success) {
-            console.log(res.data.data._id, 'patient id')
             setPatientId(res.data.data._id)
+            setOpenNotification(true);
+            setsuccessMsg("Done");
             if (!searchActivated) {
               props.history.goBack()
             }
           } else if (!res.data.success) {
             setOpenNotification(true)
+            setErrorMsg("Error");
           }
         })
         .catch((e) => {
