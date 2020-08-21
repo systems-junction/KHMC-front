@@ -378,8 +378,13 @@ function AddEditBuInventory(props) {
         </div>
 
         <div
-          style={{ flex: 4, display: "flex", flexDirection: "column" }}
-          className="container"
+          style={{
+            flex: 4,
+            display: "flex",
+            flexDirection: "column",
+            marginTop: "25px",
+          }}
+          className="container-fluid"
         >
           {items !== "" ? (
             <div>
