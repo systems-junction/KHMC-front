@@ -59,6 +59,8 @@ import Loader from "react-loader-spinner";
 import add_new from "../../assets/img/Plus.png";
 
 import TableForAddedItems from "./tableforAddedItems";
+// import Moment from "moment/moment.js";
+import Moment from "react-moment";
 
 const reasonArray = [
   { key: "jit", value: "JIT" },
@@ -264,6 +266,8 @@ function AddEditPurchaseRequest(props) {
     orderFor,
     orderBy,
   } = state;
+
+  // <Moment format="MMMM Do YYYY, h:mm:ss a">{dateGenerated}</Moment>;
 
   const [comingFor, setcomingFor] = useState("");
   const [vendorsArray, setVendors] = useState("");
@@ -717,6 +721,7 @@ function AddEditPurchaseRequest(props) {
                       //   : true
                       true
                     }
+                    format="MM-dd-yy HHmm  " //[4:03 PM] MM-DD-YY 0000Hrs
                     label="Date"
                     fullWidth
                     // style={{
