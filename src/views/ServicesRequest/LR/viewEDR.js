@@ -5,48 +5,26 @@ import React, { useEffect, useState, useReducer } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import Button from "@material-ui/core/Button";
-import tableStyles from "../../../assets/jss/material-dashboard-react/components/tableStyle.js";
 import axios from "axios";
-import DropDown from "../../../components/common/DropDown";
 import {
-  getSearchedLaboratoryService,
-  getSearchedRadiologyService,
-  updateEDR,
-  getSingleEDRPatient,
-  getAllExternalConsultantsUrl,
-  addECRUrl,
   getLRById,
+  uploadsUrl,
   updateLRById,
 } from "../../../public/endpoins";
 import cookie from "react-cookies";
 import Header from "../../../components/Header/Header";
-import business_Unit from "../../../assets/img/Purchase Order.png";
+import business_Unit from "../../../assets/img/EDR.png";
 import Back from "../../../assets/img/Back_Arrow.png";
 import "../../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import CustomTable from "../../../components/Table/Table";
-import plus_icon from "../../../assets/img/Plus.png";
-// import ViewSingleRequest from './viewRequest'
-import InputLabelComponent from "../../../components/InputLabel/inputLabel";
-import Paper from "@material-ui/core/Paper";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import ErrorMessage from "../../../components/ErrorMessage/errorMessage";
 import Notification from "../../../components/Snackbar/Notification.js";
 import TextField from "@material-ui/core/TextField";
-import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import BootstrapInput from "../../../components/Dropdown/dropDown.js";
-
 import Loader from "react-loader-spinner";
 import "../../../assets/jss/material-dashboard-react/components/loaderStyle.css";
+import { FaUpload } from 'react-icons/fa'
 
 const statusArray = [
   {
@@ -59,7 +37,6 @@ const statusArray = [
   },
 ];
 
-const actions = { view: true };
 const styles = {
   patientDetails: {
     backgroundColor: "white",
@@ -69,7 +46,6 @@ const styles = {
   inputContainerForTextField: {
     marginTop: 6,
   },
-
   inputContainerForDropDown: {
     marginTop: 6,
   },
@@ -96,7 +72,24 @@ const styles = {
     fontWeight: "700",
     color: "gray",
   },
+  upload: {
+    backgroundColor: 'white',
+    border: '0px solid #ccc',
+    borderRadius: '6px',
+    color: 'gray',
+    // marginTop: "10px",
+    width: '100%',
+    height: '55px',
+    cursor: 'pointer',
+    padding: '15px',
+  },
 };
+
+const useStylesForTabs = makeStyles({
+  root: {
+    flexGrow: 1,
+  },
+})
 
 const useStyles = makeStyles((theme) => ({
   scroller: {
@@ -146,6 +139,9 @@ function AddEditPurchaseRequest(props) {
     name: "",
     price: "",
     status: "",
+    date: '',
+    results: '',
+    sampleID: ''
   };
 
   function reducer(state, { field, value }) {
@@ -157,20 +153,25 @@ function AddEditPurchaseRequest(props) {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const { name, price, status } = state;
+  const { name, price, status, date, results, sampleID } = state;
 
   const onChangeValue = (e) => {
     dispatch({ field: e.target.name, value: e.target.value });
   };
 
-  const [currentUser, setCurrentUser] = useState("");
+  const classesForTabs = useStylesForTabs()
+  const [, setCurrentUser] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, setsuccessMsg] = useState("");
   const [openNotification, setOpenNotification] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState("");
   const [requestNo, setrequestNo] = useState("");
-  const [selectedItem, setSelectedItem] = useState("");
-  const [id, setId] = useState("");
-
+  const [, setSelectedItem] = useState("");
+  const [value, setValue] = React.useState(0)
+  const [labid, setlabId] = useState("");
+  const [edrId, setedrId] = useState("")
+  const [slipUpload, setSlipUpload] = useState('')
+  const [imagePreview, setImagePreview] = useState('')
   const [isLoading, setIsLoading] = useState(true);
 
   const getLRByIdURI = (id) => {
@@ -178,9 +179,8 @@ function AddEditPurchaseRequest(props) {
       .get(getLRById + "/" + id)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data, "data");
           if (res.data.data) {
-            console.log(res.data.data, "data2");
+            console.log(res.data.data, "EDRs LR");
 
             setIsLoading(false);
 
@@ -189,10 +189,14 @@ function AddEditPurchaseRequest(props) {
                 if (key === "serviceId") {
                   dispatch({ field: "name", value: val.name });
                   dispatch({ field: "price", value: val.price });
-                  dispatch({ field: "status", value: val.status });
                 }
               } else {
-                dispatch({ field: key, value: val });
+                if (key === "date") {
+                  dispatch({ field: 'date', value: new Date(val).toISOString().substr(0, 10) });
+                }
+                else {
+                  dispatch({ field: key, value: val });
+                }
               }
             });
           }
@@ -204,33 +208,49 @@ function AddEditPurchaseRequest(props) {
   };
 
   const updateLRByIdURI = () => {
+    let formData = new FormData()
+    if (slipUpload) {
+      formData.append('file', slipUpload, slipUpload.name)
+    }
     const params = {
-      _id: id,
+      EDRId: edrId,
+      labRequestId: labid,
       status: status,
     };
-    console.log(params, "params");
+    formData.append('data', JSON.stringify(params))
+    console.log('PARAMSS ', params)
     axios
-      .put(updateLRById, params)
+      .put(updateLRById, formData, {
+        headers: {
+          accept: 'application/json',
+          'Accept-Language': 'en-US,en;q=0.8',
+          'content-type': 'multipart/form-data',
+        },
+      })
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data, "data");
-          if (res.data.data) {
-            console.log(res.data.data, "data2");
+          setOpenNotification(true);
+          setsuccessMsg("Submitted successfully");
+          // if (res.data.data) {
+          //   console.log(res.data.data, "response after adding");
 
-            setIsLoading(false);
+          //   setIsLoading(false);
 
-            Object.entries(res.data.data).map(([key, val]) => {
-              if (val && typeof val === "object") {
-                if (key === "serviceId") {
-                  dispatch({ field: "name", value: val.name });
-                  dispatch({ field: "price", value: val.price });
-                }
-              } else {
-                dispatch({ field: key, value: val });
-              }
-            });
-          }
-          props.history.goBack();
+          //   Object.entries(res.data.data).map(([key, val]) => {
+          //     if (val && typeof val === "object") {
+          //       if (key === "serviceId") {
+          //         dispatch({ field: "name", value: val.name });
+          //         dispatch({ field: "price", value: val.price });
+          //       }
+          //     } else {
+          //       dispatch({ field: key, value: val });
+          //     }
+          //   });
+          // }
+        }
+        else {
+          setOpenNotification(true);
+          setErrorMsg("Error while submitting");
         }
       })
       .catch((e) => {
@@ -238,83 +258,40 @@ function AddEditPurchaseRequest(props) {
       });
   };
 
-  console.log(name, price, "name");
-
   useEffect(() => {
-    getLRByIdURI(props.history.location.state.selectedItem._id);
-
     setCurrentUser(cookie.load("current_user"));
+    getLRByIdURI(props.history.location.state.selectedItem._id);
+    console.log("Lab req ID :", props.history.location.state.selectedItem._id)
+    console.log("EDR ID : ", props.history.location.state.selectedItem.edrId._id);
 
-    const selectedRec = props.history.location.state.selectedItem._id;
-    console.log(selectedRec, "rec");
-    setId(props.history.location.state.selectedItem._id);
+    setlabId(props.history.location.state.selectedItem._id);
+    setedrId(props.history.location.state.selectedItem.edrId._id);
     setSelectedItem(props.history.location.state.selectedItem);
     setrequestNo(props.history.location.state.selectedItem.requestNo);
     setSelectedPatient(props.history.location.state.selectedItem.patientId);
-
-    // if (selectedRec) {
-    //   Object.entries(selectedRec).map(([key, val]) => {
-    //     if (val && typeof val === "object") {
-    //       if (key === "patientId") {
-    //         dispatch({ field: "patientId", value: val._id });
-    //       } else if (key === "labRequest") {
-    //         dispatch({ field: "labRequestArray", value: val });
-    //       } else if (key === "radiologyRequest") {
-    //         dispatch({ field: "radiologyRequestArray", value: val });
-    //       } else if (key === "consultationNote") {
-    //         Object.entries(val).map(([key1, val1]) => {
-    //           if (key1 == "requester") {
-    //             dispatch({ field: "requester", value: val1._id });
-    //           } else {
-    //             dispatch({ field: key1, value: val1 });
-    //           }
-    //         });
-    //         dispatch({ field: "consultationNoteArray", value: val });
-    //       } else if (key === "residentNotes") {
-    //         Object.entries(val).map(([key1, val1]) => {
-    //           if (key1 == "doctor") {
-    //             dispatch({ field: "doctor", value: val1._id });
-    //           } else {
-    //             dispatch({ field: key1, value: val1 });
-    //           }
-    //         });
-    //         dispatch({ field: "residentNoteArray", value: val });
-    //       } else if (key === "pharmacyRequest") {
-    //         dispatch({ field: "pharmacyRequestArray", value: val });
-    //       }
-    //     } else {
-    //       dispatch({ field: key, value: val });
-    //     }
-    //   });
-    // }
   }, []);
 
-  // For dummy Data
-  // function getEDRdetails() {
-  // axios.get(
-  //   getSingleEDRPatient +
-  //   '/' +
-  //   props.history.location.state.selectedItem._id
-  // )
-  //   .then((res) => {
-  //     if (res.data.success) {
-  //       console.log('response after getting the EDR details', res.data.data)
-  // setPurchaseOrderDetails(res.data.data.poId.purchaseRequestId)
-  //   } else if (!res.data.success) {
-  //     setErrorMsg(res.data.error)
-  //     setOpenNotification(true)
-  //   }
-  //   return res
-  // })
-  // .catch((e) => {
-  //   console.log('error: ', e)
-  // })
-  // }
+  const handleChange = (event, newValue) => {
+    setValue(newValue)
+  }
+
+  const onSlipUpload = (event) => {
+    setSlipUpload(event.target.files[0])
+
+    var file = event.target.files[0]
+    var reader = new FileReader()
+    var url = reader.readAsDataURL(file);
+
+    reader.onloadend = function () {
+      setImagePreview([reader.result])
+    }
+  }
 
   if (openNotification) {
     setTimeout(() => {
       setOpenNotification(false);
       setErrorMsg("");
+      setsuccessMsg("")
     }, 2000);
   }
 
@@ -338,19 +315,9 @@ function AddEditPurchaseRequest(props) {
           <div className="subheader">
             <div>
               <img src={business_Unit} />
-              <h4>Emergency Department Request</h4>
+              <h4>EDR - Lab Service Request</h4>
             </div>
 
-            {/* <div>
-              <Button
-                onClick={TriageAssessment}
-                style={styles.stylesForButton}
-                variant='contained'
-                color='primary'
-              >
-                Triage And Assessment
-              </Button>
-            </div> */}
           </div>
           <div
             style={{
@@ -437,96 +404,237 @@ function AddEditPurchaseRequest(props) {
             style={{ flex: 4, display: "flex", flexDirection: "column" }}
             className="container"
           >
-            <div className="row">
-              <div
-                className="col-md-4 col-sm-4"
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
+            <div className={classesForTabs.root}>
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                indicatorColor='null'
+                centered
               >
-                <TextField
-                  disabled={true}
-                  label="Lab Name"
-                  name={"name"}
-                  value={name}
-                  // onChange={onChangeValue}
-                  variant="filled"
-                  className="textInputStyle"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
+                <Tab
+                  style={{
+                    color: 'white',
+                    borderRadius: 15,
+                    outline: 'none',
+                    backgroundColor: value === 0 ? '#2c6ddd' : undefined,
                   }}
-                  InputLabelProps={{
-                    className: classes.label,
-                    classes: { label: classes.label },
-                  }}
+                  label='Sample Collection'
                 />
-              </div>
-
-              <div
-                className="col-md-4 col-sm-4"
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <TextField
-                  disabled={true}
-                  label="Price"
-                  variant="filled"
-                  name={"price"}
-                  value={price}
-                  // onChange={onChangeValue}
-                  className="textInputStyle"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
+                <Tab
+                  style={{
+                    color: 'white',
+                    borderRadius: 15,
+                    outline: 'none',
+                    backgroundColor: value === 1 ? '#2c6ddd' : undefined,
                   }}
-                  InputLabelProps={{
-                    className: classes.label,
-                    classes: { label: classes.label },
-                  }}
+                  label='Results'
                 />
-              </div>
-
-              <div
-                className="col-md-4 col-sm-4"
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <TextField
-                  fullWidth
-                  select
-                  id="status"
-                  name="status"
-                  value={status}
-                  onChange={onChangeValue}
-                  variant="filled"
-                  label="Status"
-                  className="dropDownStyle"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  input={<BootstrapInput />}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  {statusArray.map((val) => {
-                    return (
-                      <MenuItem key={val.key} value={val.key}>
-                        {val.value}
-                      </MenuItem>
-                    );
-                  })}
-                </TextField>
-              </div>
+              </Tabs>
             </div>
+            {value === 0 ? (
+              <>
+                <div className="row" style={{ marginTop: '20px' }}>
+                  <div
+                    className="col-md-4 col-sm-4"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      disabled={true}
+                      label="Lab Test Name"
+                      name={"name"}
+                      value={name}
+                      // onChange={onChangeValue}
+                      variant="filled"
+                      className="textInputStyle"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                      InputLabelProps={{
+                        className: classes.label,
+                        classes: { label: classes.label },
+                      }}
+                    />
+                  </div>
 
+                  <div
+                    className="col-md-4 col-sm-4"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      disabled={true}
+                      label="Price"
+                      variant="filled"
+                      name={"price"}
+                      value={price}
+                      // onChange={onChangeValue}
+                      className="textInputStyle"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                      InputLabelProps={{
+                        className: classes.label,
+                        classes: { label: classes.label },
+                      }}
+                    />
+                  </div>
+
+                  <div
+                    className="col-md-4 col-sm-4"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      fullWidth
+                      select
+                      id="status"
+                      name="status"
+                      value={status}
+                      onChange={onChangeValue}
+                      variant="filled"
+                      label="Status"
+                      className="dropDownStyle"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                      input={<BootstrapInput />}
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      {statusArray.map((val) => {
+                        return (
+                          <MenuItem key={val.key} value={val.key}>
+                            {val.value}
+                          </MenuItem>
+                        );
+                      })}
+                    </TextField>
+                  </div>
+                </div>
+
+                <div className="row">
+                  <div
+                    className="col-md-6 col-sm-6 col-6"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      disabled={true}
+                      variant='filled'
+                      label='Date/Time'
+                      name={'date'}
+                      value={date}
+                      type='date'
+                      className='textInputStyle'
+                      // onChange={(val) => onChangeValue(val, 'DateTime')}
+                      InputLabelProps={{
+                        shrink: true,
+                        color: 'black'
+                      }}
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                    />
+                  </div>
+                  <div
+                    className="col-md-6 col-sm-6 col-6"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      disabled={true}
+                      variant='filled'
+                      label='Sample ID'
+                      name={'sampleID'}
+                      // value={DateTime}
+                      type='text'
+                      className='textInputStyle'
+                      // onChange={(val) => onChangeValue(val, 'DateTime')}
+                      InputLabelProps={{
+                        shrink: true,
+                        color: 'black'
+                      }}
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                    />
+                  </div>
+                </div>
+              </>
+            ) : value === 1 ? (
+              <>
+                <div className="row" style={{ marginTop: '20px' }}>
+                  <div
+                    className='col-md-6 col-sm-6 col-6'
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <label style={styles.upload}>
+                      <TextField
+                        required
+                        type='file'
+                        style={styles.input}
+                        onChange={onSlipUpload}
+                        name='results'
+                      />
+                      <FaUpload /> Results
+                    </label>
+                    {imagePreview !== "" ? (
+                      <>
+                        <img src={imagePreview} className="depositSlipImg" />
+                        {results !== "" ? (
+                          <span
+                            style={{marginLeft:'10px', color: 'green' }}
+                          >
+                          New results
+                          </span>
+                        ) : (
+                            undefined
+                          )}
+                      </>
+                    ) : (
+                        undefined
+                      )}
+                    {results !== "" ? (
+                      <img src={uploadsUrl + results.split('\\')[1]} className="depositSlipImg" />
+                    ) : (
+                        <div className='LoaderStyle'>
+                          <Loader type='TailSpin' color='red' height={50} width={50} />
+                        </div>
+                      )}
+                    <span
+                      className='container-fluid'
+                      style={{ color: 'green' }}
+                    >
+                      {results && results === ''
+                        ? ''
+                        : results.name}
+                    </span>
+                  </div>
+                </div>
+              </>
+            ) : (
+                  undefined
+                )}
             <br />
             <br />
             <div className="row" style={{ marginBottom: "25px" }}>
@@ -550,23 +658,13 @@ function AddEditPurchaseRequest(props) {
             </div>
           </div>
 
-          {/* {openItemDialog ? (
-            <ViewSingleRequest
-              item={item}
-              openItemDialog={openItemDialog}
-              viewItem={viewItem}
-            />
-          ) : (
-            undefined
-          )} */}
-
-          <Notification msg={errorMsg} open={openNotification} />
+          <Notification msg={errorMsg} open={openNotification} success={successMsg} />
         </div>
       ) : (
-        <div className="LoaderStyle">
-          <Loader type="TailSpin" color="red" height={50} width={50} />
-        </div>
-      )}
+          <div className="LoaderStyle">
+            <Loader type="TailSpin" color="red" height={50} width={50} />
+          </div>
+        )}
     </div>
   );
 }

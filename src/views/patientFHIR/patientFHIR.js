@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import React, { useState, useEffect, useReducer } from 'react'
+import React, { useState, useReducer } from 'react'
 import { TextField, Button } from '@material-ui/core'
 import Header from '../../components/Header/Header'
 import business_Unit from '../../assets/img/business_Unit.png'
@@ -8,7 +8,15 @@ import { makeStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
 import RemoveIcon from '@material-ui/icons/Remove'
 import MenuItem from '@material-ui/core/MenuItem'
-import { ja } from 'date-fns/esm/locale'
+// import MultiSelect from 'react-multi-select-component'
+import InputLabelComponent from '../../components/InputLabel/inputLabel'
+import Chip from '@material-ui/core/Chip'
+import FormControl from '@material-ui/core/FormControl'
+import InputLabel from '@material-ui/core/InputLabel'
+import Select from '@material-ui/core/Select'
+import Input from '@material-ui/core/Input'
+import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
+import DateFnsUtils from '@date-io/date-fns'
 
 const styles = {
   patientDetails: {
@@ -17,11 +25,11 @@ const styles = {
     padding: '20px',
   },
   inputContainerForTextField: {
-    marginTop: 25,
+    marginTop: 6,
   },
 
   inputContainerForDropDown: {
-    marginTop: 25,
+    marginTop: 6,
   },
   textFieldPadding: {
     paddingLeft: 3,
@@ -43,10 +51,10 @@ const styles = {
     color: 'white',
     cursor: 'pointer',
     borderRadius: 15,
-    backgroundColor: '#2c6ddd',
-    height: '50px',
+    backgroundColor: 'rgb(96, 214, 159)',
+    height: '57px',
     outline: 'none',
-    width: 120,
+    width: '90px',
   },
   buttonContainer: {
     marginTop: 25,
@@ -64,7 +72,6 @@ const styles = {
     border: '0px solid #ccc',
     borderRadius: '5px',
     color: 'gray',
-    // marginTop: "30px",
     width: '100%',
     height: '55px',
     cursor: 'pointer',
@@ -72,7 +79,7 @@ const styles = {
   },
 }
 
-const useNames = [
+const usename = [
   {
     key: 'USUAL',
     value: 'USUAL',
@@ -103,7 +110,7 @@ const useNames = [
   },
 ]
 
-const useTelecoms = [
+const usetelecom = [
   {
     key: 'home',
     value: 'home',
@@ -142,6 +149,93 @@ const genderArray = [
   {
     key: 'unknown',
     value: 'unknown',
+  },
+]
+
+const deceasedArray = [
+  {
+    key: false,
+    value: 'False',
+  },
+  {
+    key: true,
+    value: 'True',
+  },
+]
+
+const maritalArray = [
+  {
+    key: 'single',
+    value: 'Single',
+  },
+  {
+    key: 'married',
+    value: 'Married',
+  },
+]
+
+const multipleBirth = [
+  {
+    key: false,
+    value: 'False',
+  },
+  {
+    key: true,
+    value: 'True',
+  },
+]
+
+const useStylesDropdown = makeStyles((theme) => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+    maxWidth: 300,
+  },
+  chips: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  chip: {
+    margin: 2,
+  },
+  noLabel: {
+    marginTop: theme.spacing(3),
+  },
+}))
+
+const ITEM_HEIGHT = 48
+const ITEM_PADDING_TOP = 8
+
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+}
+
+// function getStyles(name, personName, theme) {
+//   return {
+//     fontWeight:
+//       personName.indexOf(name) === -1
+//         ? theme.typography.fontWeightRegular
+//         : theme.typography.fontWeightMedium,
+//   }
+// }
+
+const relationshipDataArray = [
+  {
+    key: 'Father',
+    value: 'father',
+  },
+  {
+    key: 'Son',
+    value: 'son',
+  },
+  {
+    key: 'Uncle',
+    value: 'uncle',
   },
 ]
 
@@ -188,17 +282,19 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }))
-export default function PurchaseRequest(props) {
+
+export default function PurchaseRequest() {
   const classes = useStyles()
+  const classesDropdown = useStylesDropdown()
+
   const initialState = {
     gender: '',
-    birthDate: new Date(),
+    birthDate: '',
     deceasedBoolean: false,
-    deceasedDateTime: new Date(),
+    deceasedDateTime: '',
     maritalStatus: '',
     multipleBirthBoolean: false,
     multipleBirthInteger: 0,
-    // relationship: '',
   }
 
   function reducer(state, { field, value }) {
@@ -218,11 +314,10 @@ export default function PurchaseRequest(props) {
     maritalStatus,
     multipleBirthBoolean,
     multipleBirthInteger,
-    // relationship,
   } = state
 
-  const [names, setNames] = useState([{ use: '', family: '', prefix: '' }])
-  const [telecoms, setTelecoms] = useState([{ use: '', value: '', rank: '' }])
+  const [name, setName] = useState([{ use: '', family: '', prefix: '' }])
+  const [telecom, setTelecom] = useState([{ use: '', value: '', rank: '' }])
   const [address, setAddress] = useState([
     {
       use: '',
@@ -234,24 +329,39 @@ export default function PurchaseRequest(props) {
       country: '',
     },
   ])
-  const [contacts, setContact] = useState([
-    { relationshipArray: [], name: '', telecom: telecoms, address: address },
+  const [contact, setContact] = useState([
+    {
+      relationship: [],
+      name: '',
+      telecom: [{ use: '', value: '', rank: '' }],
+      address: {
+        use: '',
+        text: '',
+        city: '',
+        district: '',
+        state: '',
+        postalCode: '',
+        country: '',
+      },
+    },
   ])
-  const [relationships, setRelationships] = useState([{ relationship: [] }])
+  const [relationshipArray, setrelationshipArray] = React.useState([])
 
   // handle input change
   const handleNameChange = (e, index) => {
-    const { name, value } = e.target
-    const list = [...names]
-    list[index][name] = value
-    setNames(list)
+    const list = [...name]
+    list[index][e.target.name] = e.target.value
+    setName(list)
   }
 
   const handleTelecomChange = (e, index) => {
     const { name, value } = e.target
-    const list = [...telecoms]
+    const list = [...telecom]
     list[index][name] = value
-    setTelecoms(list)
+    // for (let i = 0; i < contact.length; i++) {
+    //   contact[i].telecom = list
+    // }
+    setTelecom(list)
   }
 
   const handleAddressChange = (e, index) => {
@@ -263,35 +373,113 @@ export default function PurchaseRequest(props) {
 
   const handleContactChange = (e, index) => {
     const { name, value } = e.target
-    const list = [...contacts]
-    list[index][name] = value
-    setContact(list)
-  }
-
-  const handleRelationshipChange = (e, index) => {
-    console.log('hello')
-    const { name, value } = e.target
-    const list = [...relationships]
+    const list = [...contact]
     console.log(list, 'list')
     list[index][name] = value
+    // list[index]['telecom'] = telecom
+    // contact[index].telecom[0].value = value
+    // contact[index].address = address
 
-    setRelationships(list)
-    // setContact([{ relationshipArray: list, name: '', telecom: telecoms }])
+    setContact(list)
+    console.log(contact[index].telecom[0], 'tel')
   }
 
-  console.log(relationships, 'this is value')
+  const handleContactTelecomValueChange = (e, index) => {
+    const { name, value } = e.target
+    const list = [...contact]
+    contact[index].telecom[0].value = value
+    setContact(list)
+    console.log(contact, 'tel')
+  }
+
+  const handleContactTelecomUseChange = (e, index) => {
+    const { name, value } = e.target
+    const list = [...contact]
+    contact[index].telecom[0].use = value
+    setContact(list)
+    console.log(contact, 'tel')
+  }
+  const handleContactTelecomRankChange = (e, index) => {
+    const { name, value } = e.target
+    const list = [...contact]
+    contact[index].telecom[0].rank = value
+    setContact(list)
+    console.log(contact, 'tel')
+  }
+
+  const handleContactAddressUseChange = (e, index) => {
+    const { name, value } = e.target
+    const list = [...contact]
+    contact[index].address.use = value
+    setContact(list)
+    console.log(contact, 'tel')
+  }
+
+  const handleContactAddressTextChange = (e, index) => {
+    const { name, value } = e.target
+    const list = [...contact]
+    contact[index].address.text = value
+    setContact(list)
+    console.log(contact, 'tel')
+  }
+
+  const handleContactAddressDistrictChange = (e, index) => {
+    const { name, value } = e.target
+    const list = [...contact]
+    contact[index].address.district = value
+    setContact(list)
+    console.log(contact, 'tel')
+  }
+
+  const handleContactAddressStateChange = (e, index) => {
+    const { name, value } = e.target
+    const list = [...contact]
+    contact[index].address.state = value
+    setContact(list)
+    console.log(contact, 'tel')
+  }
+
+  const handleContactAddressPostalChange = (e, index) => {
+    const { name, value } = e.target
+    const list = [...contact]
+    contact[index].address.postalCode = value
+    setContact(list)
+    console.log(contact, 'tel')
+  }
+
+  const handleContactAddressCountryChange = (e, index) => {
+    const { name, value } = e.target
+    const list = [...contact]
+    contact[index].address.country = value
+    setContact(list)
+    console.log(contact, 'tel')
+  }
+
+  const handleContactAddressCityChange = (e, index) => {
+    const { name, value } = e.target
+    const list = [...contact]
+    contact[index].address.city = value
+    setContact(list)
+    console.log(contact, 'tel')
+  }
+
+  const handleChange = (event, index) => {
+    setrelationshipArray(event.target.value)
+    contact[index].relationship = event.target.value
+    console.log(index, 'index')
+  }
 
   // handle click event of the Remove button
   const handleNameRemove = (index) => {
-    const list = [...names]
+    const list = [...name]
     list.splice(index, 1)
-    setNames(list)
+    setName(list)
   }
 
   const handleTelecomRemove = (index) => {
-    const list = [...telecoms]
+    const list = [...telecom]
     list.splice(index, 1)
-    setTelecoms(list)
+    setTelecom(list)
   }
 
   const handleAddressRemove = (index) => {
@@ -300,26 +488,19 @@ export default function PurchaseRequest(props) {
     setAddress(list)
   }
 
-  const handleRelationshipRemove = (index) => {
-    const list = [...relationships]
-    list.splice(index, 1)
-    setRelationships(list)
-    setContact([{ relationshipArray: list, name: '', telecom: telecoms }])
-  }
-
   const handleContactRemove = (index) => {
-    const list = [...contacts]
+    const list = [...contact]
     list.splice(index, 1)
     setContact(list)
   }
 
   // handle click event of the Add button
   const handleNameAdd = () => {
-    setNames([...names, { use: '', family: '', prefix: '' }])
+    setName([...name, { use: '', family: '', prefix: '' }])
   }
 
   const handleTelecomAdd = () => {
-    setTelecoms([...telecoms, { use: '', value: '', rank: 0 }])
+    setTelecom([...telecom, { use: '', value: '', rank: 0 }])
   }
 
   const handleAddressAdd = () => {
@@ -337,31 +518,42 @@ export default function PurchaseRequest(props) {
     ])
   }
 
-  const handleRelationshipAdd = () => {
-    console.log(relationships, 'rl')
-    // setContact([
-    //   { relationshipArray: relationships, name: '', telecom: telecoms },
-    // ])
-    setRelationships([...relationships, { relationship: [] }])
-  }
-
   const handleContactAdd = () => {
+    console.log(contact, 'contact')
     setContact([
-      ...contacts,
-      { relationshipArray: [], name: '', telecom: telecoms },
+      ...contact,
+      {
+        relationship: [],
+        name: '',
+        telecom: [{ use: '', value: '', rank: '' }],
+        address: {
+          use: '',
+          text: '',
+          city: '',
+          district: '',
+          state: '',
+          postalCode: '',
+          country: '',
+        },
+      },
     ])
   }
 
-  console.log('contact', contacts)
+  console.log('contact', contact)
+  console.log('relationShip', relationshipArray)
 
   const handleSubmitClick = (event) => {
     event.preventDefault()
     console.log('====================================')
-    console.log('telecoms', telecoms)
-    console.log('relationship', relationships)
-    console.log('contact', contacts)
+    console.log('name', name)
+    console.log('telecom', telecom)
+    console.log('contact', contact)
     console.log(state, 'state')
     console.log('====================================')
+  }
+
+  function onChangeDate(value, type) {
+    dispatch({ field: type, value })
   }
 
   const onChangeValue = (e) => {
@@ -392,11 +584,13 @@ export default function PurchaseRequest(props) {
         </div>
         <div className={`container-fluid ${classes.root}`}>
           <form onSubmit={handleSubmitClick}>
-            {names.map((x, i) => {
+            <br />
+            <InputLabelComponent>Name Data</InputLabelComponent>
+            {name.map((x, i) => {
               return (
                 <div className='row'>
                   <div
-                    className='col-md-3 col-sm-6'
+                    className='col-md-4 col-sm-4'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -419,7 +613,7 @@ export default function PurchaseRequest(props) {
                         <em>None</em>
                       </MenuItem>
 
-                      {useNames.map((val) => {
+                      {usename.map((val) => {
                         return (
                           <MenuItem key={val.key} value={val.key}>
                             {val.value}
@@ -430,7 +624,7 @@ export default function PurchaseRequest(props) {
                   </div>
 
                   <div
-                    className='col-md-3 col-sm-6'
+                    className='col-md-4 col-sm-4'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -451,7 +645,7 @@ export default function PurchaseRequest(props) {
                   </div>
 
                   <div
-                    className='col-md-3 col-sm-6'
+                    className='col-md-3 col-sm-3'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -472,41 +666,61 @@ export default function PurchaseRequest(props) {
                   </div>
 
                   <div
-                    className='col-md-3 col-sm-6'
                     style={{
-                      ...styles.inputContainerForTextField,
-                      ...styles.textFieldPadding,
+                      display: 'flex',
+                      flex: 1,
+                      justifyContent: 'center',
                     }}
                   >
-                    {names.length !== 1 && (
-                      <RemoveIcon
-                        fontSize='large'
-                        style={{
-                          background: 'red',
-                        }}
-                        onClick={() => handleNameRemove(i)}
-                      />
-                    )}
-
-                    {names.length - 1 === i && (
-                      <AddIcon
-                        fontSize='large'
-                        onClick={handleNameAdd}
-                        style={{
-                          background: 'blue',
-                        }}
-                      />
-                    )}
+                    <div
+                      style={{
+                        display: 'flex',
+                        flex: 1,
+                        justifyContent: 'flex-end',
+                        marginTop: '2%',
+                        marginBottom: '2%',
+                      }}
+                    >
+                      <Button
+                        style={styles.stylesForButton}
+                        // onClick={onClick}
+                        variant='contained'
+                        color='primary'
+                      >
+                        {name.length !== 1 && (
+                          <RemoveIcon
+                            fontSize='large'
+                            style={{
+                              background: 'red',
+                              borderRadius: 15,
+                            }}
+                            onClick={() => handleNameRemove(i)}
+                          />
+                        )}
+                        &nbsp;
+                        {name.length - 1 === i && (
+                          <AddIcon
+                            fontSize='large'
+                            onClick={handleNameAdd}
+                            style={{
+                              background: 'blue',
+                              borderRadius: 15,
+                            }}
+                          />
+                        )}
+                      </Button>
+                    </div>
                   </div>
                 </div>
               )
             })}
-
-            {telecoms.map((x, i) => {
+            <br />
+            <InputLabelComponent>Telecom Data</InputLabelComponent>
+            {telecom.map((x, i) => {
               return (
                 <div className='row'>
                   <div
-                    className='col-md-3 col-sm-6'
+                    className='col-md-4 col-sm-4'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -529,7 +743,7 @@ export default function PurchaseRequest(props) {
                         <em>None</em>
                       </MenuItem>
 
-                      {useTelecoms.map((val) => {
+                      {usetelecom.map((val) => {
                         return (
                           <MenuItem key={val.key} value={val.key}>
                             {val.value}
@@ -540,7 +754,7 @@ export default function PurchaseRequest(props) {
                   </div>
 
                   <div
-                    className='col-md-3 col-sm-6'
+                    className='col-md-4 col-sm-4'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -561,7 +775,7 @@ export default function PurchaseRequest(props) {
                   </div>
 
                   <div
-                    className='col-md-3 col-sm-6'
+                    className='col-md-3 col-sm-3'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -583,13 +797,60 @@ export default function PurchaseRequest(props) {
                   </div>
 
                   <div
-                    className='col-md-3 col-sm-6'
+                    style={{
+                      display: 'flex',
+                      flex: 1,
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        flex: 1,
+                        justifyContent: 'flex-end',
+                        marginTop: '2%',
+                        marginBottom: '2%',
+                      }}
+                    >
+                      <Button
+                        style={styles.stylesForButton}
+                        // onClick={onClick}
+                        variant='contained'
+                        color='primary'
+                      >
+                        {telecom.length !== 1 && (
+                          <RemoveIcon
+                            fontSize='large'
+                            style={{
+                              background: 'red',
+                              borderRadius: 15,
+                            }}
+                            onClick={() => handleTelecomRemove(i)}
+                          />
+                        )}
+                        &nbsp;
+                        {telecom.length - 1 === i && (
+                          <AddIcon
+                            fontSize='large'
+                            onClick={handleTelecomAdd}
+                            style={{
+                              background: 'blue',
+                              borderRadius: 15,
+                            }}
+                          />
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* <div
+                    className='col-md-1 col-sm-1'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
                     }}
                   >
-                    {telecoms.length !== 1 && (
+                    {telecom.length !== 1 && (
                       <RemoveIcon
                         fontSize='large'
                         style={{
@@ -599,7 +860,7 @@ export default function PurchaseRequest(props) {
                       />
                     )}
 
-                    {telecoms.length - 1 === i && (
+                    {telecom.length - 1 === i && (
                       <AddIcon
                         fontSize='large'
                         onClick={handleTelecomAdd}
@@ -608,16 +869,17 @@ export default function PurchaseRequest(props) {
                         }}
                       />
                     )}
-                  </div>
+                  </div> */}
                 </div>
               )
             })}
-
+            <br />
+            <InputLabelComponent>Address Data</InputLabelComponent>
             {address.map((x, i) => {
               return (
                 <div className='row'>
                   <div
-                    className='col-md-1 col-sm-6'
+                    className='col-md-2 col-sm-2'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -640,7 +902,7 @@ export default function PurchaseRequest(props) {
                         <em>None</em>
                       </MenuItem>
 
-                      {useTelecoms.map((val) => {
+                      {usetelecom.map((val) => {
                         return (
                           <MenuItem key={val.key} value={val.key}>
                             {val.value}
@@ -651,7 +913,7 @@ export default function PurchaseRequest(props) {
                   </div>
 
                   <div
-                    className='col-md-1 col-sm-6'
+                    className='col-md-2 col-sm-2'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -672,7 +934,7 @@ export default function PurchaseRequest(props) {
                   </div>
 
                   <div
-                    className='col-md-1 col-sm-6'
+                    className='col-md-2 col-sm-2'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -681,7 +943,7 @@ export default function PurchaseRequest(props) {
                     <TextField
                       name='city'
                       variant='filled'
-                      label='city'
+                      label='City'
                       value={x.city}
                       className='textInputStyle'
                       onChange={(e) => handleAddressChange(e, i)}
@@ -693,7 +955,7 @@ export default function PurchaseRequest(props) {
                   </div>
 
                   <div
-                    className='col-md-1 col-sm-6'
+                    className='col-md-2 col-sm-2'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -702,7 +964,7 @@ export default function PurchaseRequest(props) {
                     <TextField
                       name='district'
                       variant='filled'
-                      label='district'
+                      label='District'
                       value={x.district}
                       className='textInputStyle'
                       onChange={(e) => handleAddressChange(e, i)}
@@ -723,7 +985,7 @@ export default function PurchaseRequest(props) {
                     <TextField
                       name='state'
                       variant='filled'
-                      label='state'
+                      label='State'
                       value={x.state}
                       className='textInputStyle'
                       onChange={(e) => handleAddressChange(e, i)}
@@ -744,7 +1006,7 @@ export default function PurchaseRequest(props) {
                     <TextField
                       name='postalCode'
                       variant='filled'
-                      label='postalCode'
+                      label='Postal Code'
                       value={x.postalCode}
                       className='textInputStyle'
                       onChange={(e) => handleAddressChange(e, i)}
@@ -765,7 +1027,7 @@ export default function PurchaseRequest(props) {
                     <TextField
                       name='country'
                       variant='filled'
-                      label='country'
+                      label='Country'
                       value={x.country}
                       className='textInputStyle'
                       onChange={(e) => handleAddressChange(e, i)}
@@ -777,164 +1039,402 @@ export default function PurchaseRequest(props) {
                   </div>
 
                   <div
-                    className='col-md-1 col-sm-6'
                     style={{
-                      ...styles.inputContainerForTextField,
-                      ...styles.textFieldPadding,
+                      display: 'flex',
+                      flex: 1,
+                      justifyContent: 'center',
                     }}
                   >
-                    {address.length !== 1 && (
-                      <RemoveIcon
-                        fontSize='large'
-                        style={{
-                          background: 'red',
-                        }}
-                        onClick={() => handleAddressRemove(i)}
-                      />
-                    )}
-
-                    {address.length - 1 === i && (
-                      <AddIcon
-                        fontSize='large'
-                        onClick={handleAddressAdd}
-                        style={{
-                          background: 'blue',
-                        }}
-                      />
-                    )}
+                    <div
+                      style={{
+                        display: 'flex',
+                        flex: 1,
+                        justifyContent: 'flex-end',
+                        marginTop: '2%',
+                        marginBottom: '2%',
+                      }}
+                    >
+                      <Button
+                        style={styles.stylesForButton}
+                        // onClick={onClick}
+                        variant='contained'
+                        color='primary'
+                      >
+                        {address.length !== 1 && (
+                          <RemoveIcon
+                            fontSize='large'
+                            style={{
+                              background: 'red',
+                              borderRadius: 15,
+                            }}
+                            onClick={() => handleAddressRemove(i)}
+                          />
+                        )}
+                        &nbsp;
+                        {address.length - 1 === i && (
+                          <AddIcon
+                            fontSize='large'
+                            onClick={handleAddressAdd}
+                            style={{
+                              background: 'blue',
+                              borderRadius: 15,
+                            }}
+                          />
+                        )}
+                      </Button>
+                    </div>
                   </div>
                 </div>
               )
             })}
-
-            {contacts.map((x, i) => {
+            <br />
+            <InputLabelComponent>Contact Data</InputLabelComponent>
+            {contact.map((x, i) => {
               return (
-                <div className='row'>
-                  {relationships.map((y, j) => {
-                    return (
-                      <>
-                        <div
-                          className='col-md-3 col-sm-6'
-                          style={{
-                            ...styles.inputContainerForTextField,
-                            ...styles.textFieldPadding,
-                          }}
+                <>
+                  <div className='row'>
+                    <div
+                      className='col-md-2 col-sm-2'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
+                    >
+                      <FormControl className={classesDropdown.formControl}>
+                        <InputLabel id='demo-mutiple-chip-label'>
+                          Relationship
+                        </InputLabel>
+                        <Select
+                          labelId='demo-mutiple-chip-label'
+                          id='demo-mutiple-chip'
+                          multiple
+                          value={contact[i].relationship}
+                          onChange={(e) => handleChange(e, i)}
+                          input={<Input id='select-multiple-chip' />}
+                          renderValue={(selected) => (
+                            <div className={classesDropdown.chips}>
+                              {selected.map((value) => (
+                                <Chip
+                                  key={value}
+                                  label={value}
+                                  className={classesDropdown.chip}
+                                />
+                              ))}
+                            </div>
+                          )}
+                          MenuProps={MenuProps}
                         >
-                          <TextField
-                            name='relationship'
-                            label='relationship'
-                            variant='filled'
-                            className='textInputStyle'
-                            value={y.relationship}
-                            onChange={(e) => handleRelationshipChange(e, j)}
-                            InputProps={{
-                              className: classes.input,
-                              classes: { input: classes.input },
-                            }}
-                          />
-                        </div>
-                        <div
-                          className='col-md-1 col-sm-6'
-                          style={{
-                            ...styles.inputContainerForTextField,
-                            ...styles.textFieldPadding,
-                          }}
+                          {relationshipDataArray.map((name) => (
+                            <MenuItem
+                              key={name.key}
+                              value={name.value}
+                              // style={getStyles(name, relationshipArray, theme)}
+                            >
+                              {name.value}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </div>
+                    <div
+                      className='col-md-2 col-sm-2'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
+                    >
+                      <TextField
+                        name='name'
+                        variant='filled'
+                        label='name'
+                        value={x.name}
+                        className='textInputStyle'
+                        onChange={(e) => handleContactChange(e, i)}
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                      />
+                    </div>
+                    <div
+                      className='col-md-2 col-sm-2'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
+                    >
+                      <TextField
+                        name='use'
+                        id={`use ${i}`}
+                        variant='filled'
+                        label='Telecom Use'
+                        value={contact[i].telecom[0].use}
+                        className='textInputStyle'
+                        onChange={(e) => handleContactTelecomUseChange(e, i)}
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                      />
+                    </div>
+                    <div
+                      className='col-md-2 col-sm-2'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
+                    >
+                      <TextField
+                        name='value'
+                        id={`value ${i}`}
+                        variant='filled'
+                        label='Value'
+                        value={contact[i].telecom[0].value}
+                        className='textInputStyle'
+                        onChange={(e) => handleContactTelecomValueChange(e, i)}
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                      />
+                    </div>
+                    <div
+                      className='col-md-3 col-sm-3'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
+                    >
+                      <TextField
+                        name='rank'
+                        type='number'
+                        id={`rank ${i}`}
+                        variant='filled'
+                        label='Rank'
+                        value={contact[i].telecom[0].rank}
+                        className='textInputStyle'
+                        onChange={(e) => handleContactTelecomRankChange(e, i)}
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                      />
+                    </div>
+                    {/* //   )
+                  // })} */}
+                  </div>
+
+                  <div className='row'>
+                    <div
+                      className='col-md-2 col-sm-2'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
+                    >
+                      <TextField
+                        name='use'
+                        id={`use ${i}`}
+                        variant='filled'
+                        label='Address Use'
+                        value={contact[i].address.use}
+                        className='textInputStyle'
+                        onChange={(e) => handleContactAddressUseChange(e, i)}
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                      />
+                    </div>
+
+                    <div
+                      className='col-md-2 col-sm-2'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
+                    >
+                      <TextField
+                        name='text'
+                        id={`text ${i}`}
+                        variant='filled'
+                        label='Text'
+                        value={contact[i].address.text}
+                        className='textInputStyle'
+                        onChange={(e) => handleContactAddressTextChange(e, i)}
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                      />
+                    </div>
+
+                    <div
+                      className='col-md-2 col-sm-2'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
+                    >
+                      <TextField
+                        name='city'
+                        id={`city ${i}`}
+                        variant='filled'
+                        label='City'
+                        value={contact[i].address.city}
+                        className='textInputStyle'
+                        onChange={(e) => handleContactAddressCityChange(e, i)}
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                      />
+                    </div>
+
+                    <div
+                      className='col-md-2 col-sm-2'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
+                    >
+                      <TextField
+                        name='district'
+                        id={`district ${i}`}
+                        variant='filled'
+                        label='District'
+                        value={contact[i].address.district}
+                        className='textInputStyle'
+                        onChange={(e) =>
+                          handleContactAddressDistrictChange(e, i)
+                        }
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                      />
+                    </div>
+
+                    <div
+                      className='col-md-1 col-sm-1'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
+                    >
+                      <TextField
+                        name='state'
+                        id={`state ${i}`}
+                        variant='filled'
+                        label='State'
+                        value={contact[i].address.state}
+                        className='textInputStyle'
+                        onChange={(e) => handleContactAddressStateChange(e, i)}
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                      />
+                    </div>
+
+                    <div
+                      className='col-md-1 col-sm-1'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
+                    >
+                      <TextField
+                        name='postalCode'
+                        id={`postalCode ${i}`}
+                        variant='filled'
+                        label='Postal Code'
+                        value={contact[i].address.postalCode}
+                        className='textInputStyle'
+                        onChange={(e) => handleContactAddressPostalChange(e, i)}
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                      />
+                    </div>
+
+                    <div
+                      className='col-md-1 col-sm-1'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
+                    >
+                      <TextField
+                        name='country'
+                        id={`country ${i}`}
+                        variant='filled'
+                        label='country'
+                        value={contact[i].address.country}
+                        className='textInputStyle'
+                        onChange={(e) =>
+                          handleContactAddressCountryChange(e, i)
+                        }
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                      />
+                    </div>
+
+                    <div
+                      style={{
+                        display: 'flex',
+                        flex: 1,
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: 'flex',
+                          flex: 1,
+                          justifyContent: 'flex-end',
+                          marginTop: '2%',
+                          marginBottom: '2%',
+                        }}
+                      >
+                        <Button
+                          style={styles.stylesForButton}
+                          // onClick={onClick}
+                          variant='contained'
+                          color='primary'
                         >
-                          {relationships.length !== 1 && (
+                          {contact.length !== 1 && (
                             <RemoveIcon
                               fontSize='large'
                               style={{
                                 background: 'red',
+                                borderRadius: 15,
                               }}
-                              onClick={() => handleRelationshipRemove(j)}
+                              onClick={() => handleContactRemove(i)}
                             />
                           )}
-                          {relationships.length - 1 === j && (
+                          &nbsp;
+                          {contact.length - 1 === i && (
                             <AddIcon
                               fontSize='large'
-                              onClick={handleRelationshipAdd}
+                              onClick={handleContactAdd}
                               style={{
                                 background: 'blue',
+                                borderRadius: 15,
                               }}
                             />
                           )}
-                        </div>
-                      </>
-                    )
-                  })}
-
-                  <div
-                    className='col-md-2 col-sm-6'
-                    style={{
-                      ...styles.inputContainerForTextField,
-                      ...styles.textFieldPadding,
-                    }}
-                  >
-                    <TextField
-                      name='name'
-                      variant='filled'
-                      label='name'
-                      value={x.name}
-                      className='textInputStyle'
-                      onChange={(e) => handleContactChange(e, i)}
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                      }}
-                    />
+                        </Button>
+                      </div>
+                    </div>
                   </div>
-
-                  {/* <div
-                  className='col-md-2 col-sm-6'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    variant='filled'
-                    name='telecom'
-                    label='telecom'
-                    value={x.telecom}
-                    className='textInputStyle'
-                    onChange={(e) => handleContactChange(e, i)}
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
-                </div> */}
-
-                  <div
-                    className='col-md-3 col-sm-6'
-                    style={{
-                      ...styles.inputContainerForTextField,
-                      ...styles.textFieldPadding,
-                    }}
-                  >
-                    {contacts.length !== 1 && (
-                      <RemoveIcon
-                        fontSize='large'
-                        style={{
-                          background: 'red',
-                        }}
-                        onClick={() => handleContactRemove(i)}
-                      />
-                    )}
-
-                    {contacts.length - 1 === i && (
-                      <AddIcon
-                        fontSize='large'
-                        onClick={handleContactAdd}
-                        style={{
-                          background: 'blue',
-                        }}
-                      />
-                    )}
-                  </div>
-                </div>
+                </>
               )
             })}
+
+            <br />
 
             <div>
               <div className='row'>
@@ -980,20 +1480,26 @@ export default function PurchaseRequest(props) {
                     ...styles.textFieldPadding,
                   }}
                 >
-                  <TextField
-                    required
-                    label='Birth Date'
-                    name={'birthDate'} // now Identity
-                    value={birthDate}
-                    // error={birthDate === '' && isFormSubmitted}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <DateTimePicker
+                      inputVariant='filled'
+                      label='Birth Date'
+                      fullWidth
+                      onChange={(val) => onChangeDate(val, 'birthDate')}
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                      value={
+                        birthDate ? birthDate : new Date()
+                        // comingFor === 'add'
+                        //   ? expiration
+                        //     ? expiration
+                        //     : new Date()
+                        //   : expiration
+                      }
+                    />
+                  </MuiPickersUtilsProvider>
                 </div>
                 <div
                   className='col-md-3 col-sm-3'
@@ -1004,9 +1510,10 @@ export default function PurchaseRequest(props) {
                 >
                   <TextField
                     required
-                    label='multipleBirthInteger'
-                    name={'deceasedBoolean'} // now Identity
-                    value={deceasedBoolean}
+                    select
+                    label='Deceased '
+                    name={'deceasedBoolean'}
+                    value={deceasedBoolean === true ? true : false}
                     // error={deceasedBoolean === '' && isFormSubmitted}
                     onChange={onChangeValue}
                     className='textInputStyle'
@@ -1015,29 +1522,40 @@ export default function PurchaseRequest(props) {
                       className: classes.input,
                       classes: { input: classes.input },
                     }}
-                  />
+                  >
+                    <MenuItem value=''>
+                      <em>None</em>
+                    </MenuItem>
+
+                    {deceasedArray.map((val) => {
+                      return (
+                        <MenuItem key={val.key} value={val.key}>
+                          {val.value}
+                        </MenuItem>
+                      )
+                    })}
+                  </TextField>
                 </div>
                 <div
-                  className='col-md-3 col-sm-3'
+                  className='col-md-2 col-sm-2'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
                   }}
                 >
-                  <TextField
-                    required
-                    label='Deceased DateTime'
-                    name={'deceasedDateTime'} // now Identity
-                    value={deceasedDateTime}
-                    // error={deceasedDateTime === '' && isFormSubmitted}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <DateTimePicker
+                      inputVariant='filled'
+                      label='Deceased Date Time'
+                      fullWidth
+                      onChange={(val) => onChangeDate(val, 'deceasedDateTime')}
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                      value={deceasedDateTime ? deceasedDateTime : new Date()}
+                    />
+                  </MuiPickersUtilsProvider>
                 </div>
               </div>
 
@@ -1051,8 +1569,9 @@ export default function PurchaseRequest(props) {
                 >
                   <TextField
                     required
+                    select
                     label='Marital Status'
-                    name={'maritalStatus'} // now Identity
+                    name={'maritalStatus'}
                     value={maritalStatus}
                     // error={gender === '' && isFormSubmitted}
                     onChange={onChangeValue}
@@ -1062,7 +1581,19 @@ export default function PurchaseRequest(props) {
                       className: classes.input,
                       classes: { input: classes.input },
                     }}
-                  />
+                  >
+                    <MenuItem value=''>
+                      <em>None</em>
+                    </MenuItem>
+
+                    {maritalArray.map((val) => {
+                      return (
+                        <MenuItem key={val.key} value={val.key}>
+                          {val.value}
+                        </MenuItem>
+                      )
+                    })}
+                  </TextField>
                 </div>
                 <div
                   className='col-md-3 col-sm-3'
@@ -1073,9 +1604,10 @@ export default function PurchaseRequest(props) {
                 >
                   <TextField
                     required
-                    label='Multiple BirthBoolean'
-                    name={'multipleBirthBoolean'} // now Identity
-                    value={multipleBirthBoolean}
+                    select
+                    label='Multiple Birth'
+                    name={'multipleBirthBoolean'}
+                    value={multipleBirthBoolean === true ? true : false}
                     // error={multipleBirthBoolean === '' && isFormSubmitted}
                     onChange={onChangeValue}
                     className='textInputStyle'
@@ -1084,10 +1616,22 @@ export default function PurchaseRequest(props) {
                       className: classes.input,
                       classes: { input: classes.input },
                     }}
-                  />
+                  >
+                    <MenuItem value=''>
+                      <em>None</em>
+                    </MenuItem>
+
+                    {multipleBirth.map((val) => {
+                      return (
+                        <MenuItem key={val.key} value={val.key}>
+                          {val.value}
+                        </MenuItem>
+                      )
+                    })}
+                  </TextField>
                 </div>
                 <div
-                  className='col-md-3 col-sm-3'
+                  className='col-md-5 col-sm-5'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1095,8 +1639,8 @@ export default function PurchaseRequest(props) {
                 >
                   <TextField
                     required
-                    label='Multiple BirthInteger'
-                    name={'multipleBirthInteger'} // now Identity
+                    label='Multiple Birth'
+                    name={'multipleBirthInteger'}
                     value={multipleBirthInteger}
                     // error={multipleBirthInteger === '' && isFormSubmitted}
                     onChange={onChangeValue}
@@ -1113,8 +1657,11 @@ export default function PurchaseRequest(props) {
             <div
               className='col-md-12 col-sm-6 '
               style={{
-                ...styles.inputContainerForTextField,
-                ...styles.textFieldPadding,
+                display: 'flex',
+                flex: 1,
+                justifyContent: 'flex-end',
+                marginTop: '2%',
+                marginBottom: '2%',
               }}
             >
               <Button
@@ -1129,7 +1676,7 @@ export default function PurchaseRequest(props) {
           </form>
         </div>
 
-        {/* <div style={{ marginTop: 20 }}>{JSON.stringify(contacts)}</div> */}
+        {/* <div style={{ marginTop: 20 }}>{JSON.stringify(contact)}</div> */}
 
         <div
           style={{
