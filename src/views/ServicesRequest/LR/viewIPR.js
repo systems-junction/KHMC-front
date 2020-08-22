@@ -8,6 +8,7 @@ import Button from "@material-ui/core/Button";
 import axios from "axios";
 import {
   getLRIPRById,
+  uploadsUrl,
   updateLRIPRById,
 } from "../../../public/endpoins";
 import cookie from "react-cookies";
@@ -162,11 +163,13 @@ function AddEditPurchaseRequest(props) {
   const classesForTabs = useStylesForTabs()
   const [, setCurrentUser] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, setsuccessMsg] = useState("");
   const [openNotification, setOpenNotification] = useState(false);
   const [, setSelectedItem] = useState("");
   const [selectedPatient, setSelectedPatient] = useState("");
   const [requestNo, setrequestNo] = useState("");
-  const [id, setId] = useState("");
+  const [lrId, setlrId] = useState("");
+  const [iprId, setiprId] = useState("")
   const [slipUpload, setSlipUpload] = useState('')
   const [imagePreview, setImagePreview] = useState('')
   const [isLoading, setIsLoading] = useState(true);
@@ -177,10 +180,8 @@ function AddEditPurchaseRequest(props) {
       .get(getLRIPRById + "/" + id)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data, "data");
           if (res.data.data) {
-            console.log(res.data.data, "data2");
-
+            console.log(res.data.data, "IPRs LR");
             setIsLoading(false);
 
             Object.entries(res.data.data).map(([key, val]) => {
@@ -188,10 +189,15 @@ function AddEditPurchaseRequest(props) {
                 if (key === "serviceId") {
                   dispatch({ field: "name", value: val.name });
                   dispatch({ field: "price", value: val.price });
-                  dispatch({ field: "status", value: val.status });
                 }
-              } else {
-                dispatch({ field: key, value: val });
+              }
+              else {
+                if (key === "date") {
+                  dispatch({ field: 'date', value: new Date(val).toISOString().substr(0, 10) });
+                }
+                else {
+                  dispatch({ field: key, value: val });
+                }
               }
             });
           }
@@ -203,33 +209,33 @@ function AddEditPurchaseRequest(props) {
   };
 
   const updateLRByIdURI = () => {
+    let formData = new FormData()
+    if (slipUpload) {
+      formData.append('file', slipUpload, slipUpload.name)
+    }
     const params = {
-      _id: id,
+      IPRId: iprId,
+      labRequestId: lrId,
       status: status,
     };
-    console.log(params, "params");
+    formData.append('data', JSON.stringify(params))
+    console.log('PARAMSS ', params)
     axios
-      .put(updateLRIPRById, params)
+      .put(updateLRIPRById, formData, {
+        headers: {
+          accept: 'application/json',
+          'Accept-Language': 'en-US,en;q=0.8',
+          'content-type': 'multipart/form-data',
+        },
+      })
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data, "data");
-          if (res.data.data) {
-            console.log(res.data.data, "data2");
-
-            setIsLoading(false);
-
-            Object.entries(res.data.data).map(([key, val]) => {
-              if (val && typeof val === "object") {
-                if (key === "serviceId") {
-                  dispatch({ field: "name", value: val.name });
-                  dispatch({ field: "price", value: val.price });
-                }
-              } else {
-                dispatch({ field: key, value: val });
-              }
-            });
-          }
-          props.history.goBack();
+          setOpenNotification(true);
+          setsuccessMsg("Submitted successfully");
+        }
+        else {
+          setOpenNotification(true);
+          setErrorMsg("Error while submitting");
         }
       })
       .catch((e) => {
@@ -238,13 +244,13 @@ function AddEditPurchaseRequest(props) {
   };
 
   useEffect(() => {
-    getLRByIdURI(props.history.location.state.selectedItem._id);
-
     setCurrentUser(cookie.load("current_user"));
+    getLRByIdURI(props.history.location.state.selectedItem._id);
+    console.log("Lab req ID :", props.history.location.state.selectedItem._id)
+    console.log("IPR ID : ", props.history.location.state.selectedItem.iprId._id);
 
-    const selectedRec = props.history.location.state.selectedItem._id;
-    console.log(selectedRec, "rec");
-    setId(props.history.location.state.selectedItem._id);
+    setlrId(props.history.location.state.selectedItem._id);
+    setiprId(props.history.location.state.selectedItem.iprId._id);
     setSelectedItem(props.history.location.state.selectedItem);
     setrequestNo(props.history.location.state.selectedItem.requestNo);
     setSelectedPatient(props.history.location.state.selectedItem.patientId);
@@ -254,6 +260,7 @@ function AddEditPurchaseRequest(props) {
     setTimeout(() => {
       setOpenNotification(false);
       setErrorMsg("");
+      setsuccessMsg("")
     }, 2000);
   }
 
@@ -270,7 +277,6 @@ function AddEditPurchaseRequest(props) {
 
     reader.onloadend = function () {
       setImagePreview([reader.result])
-      dispatch({ field: 'results', value: file.name })
     }
   }
   return (
@@ -513,9 +519,8 @@ function AddEditPurchaseRequest(props) {
                       disabled={true}
                       variant='filled'
                       label='Date/Time'
-                      name={'DateTime'}
-                      // value={DateTime}
-                      // defaultValue={DateTime}
+                      name={'date'}
+                      value={date}
                       type='date'
                       className='textInputStyle'
                       // onChange={(val) => onChangeValue(val, 'DateTime')}
@@ -578,9 +583,27 @@ function AddEditPurchaseRequest(props) {
                       <FaUpload /> Results
                   </label>
                     {imagePreview !== "" ? (
-                      <img src={imagePreview} className="depositSlipImg" />
+                      <>
+                        <img src={imagePreview} className="depositSlipImg" />
+                        {results !== "" ? (
+                          <span
+                            style={{ marginLeft: '10px', color: 'green' }}
+                          >
+                            New results
+                          </span>
+                        ) : (
+                            undefined
+                          )}
+                      </>
                     ) : (
                         undefined
+                      )}
+                    {results !== "" ? (
+                      <img src={uploadsUrl + results.split('\\')[1]} className="depositSlipImg" />
+                    ) : (
+                        <div className='LoaderStyle'>
+                          <Loader type='TailSpin' color='red' height={50} width={50} />
+                        </div>
                       )}
                     <span
                       className='container-fluid'
@@ -619,7 +642,7 @@ function AddEditPurchaseRequest(props) {
             </div>
           </div>
 
-          <Notification msg={errorMsg} open={openNotification} />
+          <Notification msg={errorMsg} open={openNotification} success={successMsg}/>
         </div>
       ) : (
           <div className="LoaderStyle">

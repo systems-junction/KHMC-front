@@ -35,7 +35,6 @@ import Back_Arrow from "../../assets/img/Back_Arrow.png";
 
 import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
 
-
 const styles = {
   // inputContainer: {
   //   marginTop: 25,
@@ -313,7 +312,7 @@ function AddEditPurchaseRequest(props) {
 
       <div
         style={{ flex: 4, display: "flex", flexDirection: "column" }}
-        className="container"
+        // className="container-flui"
       >
         {/* <h1>
         <span> {comingFor === 'add' ? 'Add' : 'Edit'}</span>
@@ -466,8 +465,6 @@ function AddEditPurchaseRequest(props) {
             </div>
           </div>
         </div>
-                    
-
 
         <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
           {/* <div style={styles.buttonContainer}>
