@@ -379,88 +379,22 @@ export default function PurchaseRequest() {
     // list[index]['telecom'] = telecom
     // contact[index].telecom[0].value = value
     // contact[index].address = address
-
     setContact(list)
-    console.log(contact[index].telecom[0], 'tel')
   }
 
-  const handleContactTelecomValueChange = (e, index) => {
+  const handleContactTelecomChange = (e, index) => {
     const { name, value } = e.target
+
     const list = [...contact]
-    contact[index].telecom[0].value = value
+    contact[index].telecom[0][name] = value
     setContact(list)
-    console.log(contact, 'tel')
   }
 
-  const handleContactTelecomUseChange = (e, index) => {
+  const handleContactAddressChange = (e, index) => {
     const { name, value } = e.target
     const list = [...contact]
-    contact[index].telecom[0].use = value
+    contact[index].address[name] = value
     setContact(list)
-    console.log(contact, 'tel')
-  }
-  const handleContactTelecomRankChange = (e, index) => {
-    const { name, value } = e.target
-    const list = [...contact]
-    contact[index].telecom[0].rank = value
-    setContact(list)
-    console.log(contact, 'tel')
-  }
-
-  const handleContactAddressUseChange = (e, index) => {
-    const { name, value } = e.target
-    const list = [...contact]
-    contact[index].address.use = value
-    setContact(list)
-    console.log(contact, 'tel')
-  }
-
-  const handleContactAddressTextChange = (e, index) => {
-    const { name, value } = e.target
-    const list = [...contact]
-    contact[index].address.text = value
-    setContact(list)
-    console.log(contact, 'tel')
-  }
-
-  const handleContactAddressDistrictChange = (e, index) => {
-    const { name, value } = e.target
-    const list = [...contact]
-    contact[index].address.district = value
-    setContact(list)
-    console.log(contact, 'tel')
-  }
-
-  const handleContactAddressStateChange = (e, index) => {
-    const { name, value } = e.target
-    const list = [...contact]
-    contact[index].address.state = value
-    setContact(list)
-    console.log(contact, 'tel')
-  }
-
-  const handleContactAddressPostalChange = (e, index) => {
-    const { name, value } = e.target
-    const list = [...contact]
-    contact[index].address.postalCode = value
-    setContact(list)
-    console.log(contact, 'tel')
-  }
-
-  const handleContactAddressCountryChange = (e, index) => {
-    const { name, value } = e.target
-    const list = [...contact]
-    contact[index].address.country = value
-    setContact(list)
-    console.log(contact, 'tel')
-  }
-
-  const handleContactAddressCityChange = (e, index) => {
-    const { name, value } = e.target
-    const list = [...contact]
-    contact[index].address.city = value
-    setContact(list)
-    console.log(contact, 'tel')
   }
 
   const handleChange = (event, index) => {
@@ -1170,7 +1104,7 @@ export default function PurchaseRequest() {
                         label='Telecom Use'
                         value={contact[i].telecom[0].use}
                         className='textInputStyle'
-                        onChange={(e) => handleContactTelecomUseChange(e, i)}
+                        onChange={(e) => handleContactTelecomChange(e, i)}
                         InputProps={{
                           className: classes.input,
                           classes: { input: classes.input },
@@ -1191,7 +1125,7 @@ export default function PurchaseRequest() {
                         label='Value'
                         value={contact[i].telecom[0].value}
                         className='textInputStyle'
-                        onChange={(e) => handleContactTelecomValueChange(e, i)}
+                        onChange={(e) => handleContactTelecomChange(e, i)}
                         InputProps={{
                           className: classes.input,
                           classes: { input: classes.input },
@@ -1213,15 +1147,13 @@ export default function PurchaseRequest() {
                         label='Rank'
                         value={contact[i].telecom[0].rank}
                         className='textInputStyle'
-                        onChange={(e) => handleContactTelecomRankChange(e, i)}
+                        onChange={(e) => handleContactTelecomChange(e, i)}
                         InputProps={{
                           className: classes.input,
                           classes: { input: classes.input },
                         }}
                       />
                     </div>
-                    {/* //   )
-                  // })} */}
                   </div>
 
                   <div className='row'>
@@ -1239,7 +1171,7 @@ export default function PurchaseRequest() {
                         label='Address Use'
                         value={contact[i].address.use}
                         className='textInputStyle'
-                        onChange={(e) => handleContactAddressUseChange(e, i)}
+                        onChange={(e) => handleContactAddressChange(e, i)}
                         InputProps={{
                           className: classes.input,
                           classes: { input: classes.input },
@@ -1261,7 +1193,7 @@ export default function PurchaseRequest() {
                         label='Text'
                         value={contact[i].address.text}
                         className='textInputStyle'
-                        onChange={(e) => handleContactAddressTextChange(e, i)}
+                        onChange={(e) => handleContactAddressChange(e, i)}
                         InputProps={{
                           className: classes.input,
                           classes: { input: classes.input },
@@ -1283,7 +1215,7 @@ export default function PurchaseRequest() {
                         label='City'
                         value={contact[i].address.city}
                         className='textInputStyle'
-                        onChange={(e) => handleContactAddressCityChange(e, i)}
+                        onChange={(e) => handleContactAddressChange(e, i)}
                         InputProps={{
                           className: classes.input,
                           classes: { input: classes.input },
@@ -1305,9 +1237,7 @@ export default function PurchaseRequest() {
                         label='District'
                         value={contact[i].address.district}
                         className='textInputStyle'
-                        onChange={(e) =>
-                          handleContactAddressDistrictChange(e, i)
-                        }
+                        onChange={(e) => handleContactAddressChange(e, i)}
                         InputProps={{
                           className: classes.input,
                           classes: { input: classes.input },
@@ -1329,7 +1259,7 @@ export default function PurchaseRequest() {
                         label='State'
                         value={contact[i].address.state}
                         className='textInputStyle'
-                        onChange={(e) => handleContactAddressStateChange(e, i)}
+                        onChange={(e) => handleContactAddressChange(e, i)}
                         InputProps={{
                           className: classes.input,
                           classes: { input: classes.input },
@@ -1351,7 +1281,7 @@ export default function PurchaseRequest() {
                         label='Postal Code'
                         value={contact[i].address.postalCode}
                         className='textInputStyle'
-                        onChange={(e) => handleContactAddressPostalChange(e, i)}
+                        onChange={(e) => handleContactAddressChange(e, i)}
                         InputProps={{
                           className: classes.input,
                           classes: { input: classes.input },
@@ -1373,9 +1303,7 @@ export default function PurchaseRequest() {
                         label='country'
                         value={contact[i].address.country}
                         className='textInputStyle'
-                        onChange={(e) =>
-                          handleContactAddressCountryChange(e, i)
-                        }
+                        onChange={(e) => handleContactAddressChange(e, i)}
                         InputProps={{
                           className: classes.input,
                           classes: { input: classes.input },
