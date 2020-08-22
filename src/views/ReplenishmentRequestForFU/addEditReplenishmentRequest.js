@@ -2,23 +2,23 @@
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable array-callback-return */
 /* eslint-disable react/jsx-indent */
-import React, { useEffect, useState, useReducer } from "react";
-import TextField from "@material-ui/core/TextField";
-import Select from "@material-ui/core/Select";
-import { makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import Button from "@material-ui/core/Button";
-import tableStyles from "../../assets/jss/material-dashboard-react/components/tableStyle.js";
-import axios from "axios";
-import Notification from "../../components/Snackbar/Notification.js";
-import DateFnsUtils from "@date-io/date-fns";
-import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import React, { useEffect, useState, useReducer } from 'react'
+import TextField from '@material-ui/core/TextField'
+import Select from '@material-ui/core/Select'
+import { makeStyles } from '@material-ui/core/styles'
+import Table from '@material-ui/core/Table'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import InputLabel from '@material-ui/core/InputLabel'
+import MenuItem from '@material-ui/core/MenuItem'
+import Button from '@material-ui/core/Button'
+import tableStyles from '../../assets/jss/material-dashboard-react/components/tableStyle.js'
+import axios from 'axios'
+import Notification from '../../components/Snackbar/Notification.js'
+import DateFnsUtils from '@date-io/date-fns'
+import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
 import {
   addReplenishmentRequestUrl,
   updateReplenishmentRequestUrl,
@@ -28,71 +28,71 @@ import {
   updatePurchasingRequestItemUrl,
   getPurchaseRequestItemQtyUrl,
   getCurrentQtyForFURepRequestUrl,
-} from "../../public/endpoins";
+} from '../../public/endpoins'
 
-import Paper from "@material-ui/core/Paper";
+import Paper from '@material-ui/core/Paper'
 
-import cookie from "react-cookies";
+import cookie from 'react-cookies'
 
-import Chip from "@material-ui/core/Chip";
+import Chip from '@material-ui/core/Chip'
 
-import Dialog from "@material-ui/core/Dialog";
-import { tr } from "date-fns/locale";
+import Dialog from '@material-ui/core/Dialog'
+import { tr } from 'date-fns/locale'
 
-import Header from "../../components/Header/Header";
-import view_all from "../../assets/img/Eye.png";
-import purchase_request from "../../assets/img/purchase request.png";
-import Back_Arrow from "../../assets/img/Back_Arrow.png";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import Add_New from "../../assets/img/Add_New.png";
-import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
-import BootstrapInput from "../../components/Dropdown/dropDown.js";
-import InputLabelComponent from "../../components/InputLabel/inputLabel";
-import ErrorMessage from "../../components/ErrorMessage/errorMessage";
+import Header from '../../components/Header/Header'
+import view_all from '../../assets/img/Eye.png'
+import purchase_request from '../../assets/img/business_Unit.png'
+import Back_Arrow from '../../assets/img/Back_Arrow.png'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import DialogContent from '@material-ui/core/DialogContent'
+import Add_New from '../../assets/img/Add_New.png'
+import '../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
+import BootstrapInput from '../../components/Dropdown/dropDown.js'
+import InputLabelComponent from '../../components/InputLabel/inputLabel'
+import ErrorMessage from '../../components/ErrorMessage/errorMessage'
 
-import add_new from "../../assets/img/Plus.png";
-import useStyleforinput from "../../../src/assets/jss/material-dashboard-react/inputStyle.js";
+import add_new from '../../assets/img/Plus.png'
+import useStyleforinput from '../../../src/assets/jss/material-dashboard-react/inputStyle.js'
 
 const reasonArray = [
-  { key: "jit", value: "JIT" },
-  { key: "new_item", value: "New Item" },
-  { key: "reactivated_items", value: "Reactivated Items" },
+  { key: 'jit', value: 'JIT' },
+  { key: 'new_item', value: 'New Item' },
+  { key: 'reactivated_items', value: 'Reactivated Items' },
   {
-    key: "The System is Malfunctioning",
-    value: "The System is Malfunctioning",
+    key: 'The System is Malfunctioning',
+    value: 'The System is Malfunctioning',
   },
-];
+]
 
 const statusArrayForWareHouseMember = [
-  { key: "Fulfillment Initiated", value: "Fulfillment Initiated" },
+  { key: 'Fulfillment Initiated', value: 'Fulfillment Initiated' },
   // { key: "Unfulfillment Initiated", value: "Unfulfillment Initiated" },
-];
+]
 
 const statusArrayForWareHouseDeliveryMan = [
-  { key: "Delivery in Progress", value: "Delivery in Progress" },
+  { key: 'Delivery in Progress', value: 'Delivery in Progress' },
   // { key: "Unfulfillment Initiated", value: "Unfulfillment Initiated" },
-];
+]
 
 const statusArrayForFUInventoryKeeper = [
-  { key: "Recieved", value: "Recieved" },
-  { key: "Partially Recieved", value: "Partially Recieved" },
-];
+  { key: 'Recieved', value: 'Recieved' },
+  { key: 'Partially Recieved', value: 'Partially Recieved' },
+]
 
 const statusArrayForAdmin = [
-  { key: "Fulfillment Initiated", value: "Fulfillment Initiated" },
-  { key: "Delivery in Progress", value: "Delivery in Progress" },
-];
+  { key: 'Fulfillment Initiated', value: 'Fulfillment Initiated' },
+  { key: 'Delivery in Progress', value: 'Delivery in Progress' },
+]
 
 const orderArray = [
-  { key: "maintance_order", value: "Maintance Order" },
-  { key: "doctor_order", value: "Doctor Order" },
-];
+  { key: 'maintance_order', value: 'Maintance Order' },
+  { key: 'doctor_order', value: 'Doctor Order' },
+]
 
 const generatedArray = [
-  { key: "Manual", value: "Manual" },
-  { key: "System", value: "System" },
-];
+  { key: 'Manual', value: 'Manual' },
+  { key: 'System', value: 'System' },
+]
 
 const styles = {
   // inputContainer: {
@@ -108,12 +108,22 @@ const styles = {
     marginTop: 20,
   },
 
+  stylesForWHButton: {
+    color: 'white',
+    cursor: 'pointer',
+    borderRadius: 10,
+    backgroundColor: '#2c6ddd',
+    width: '60%',
+    height: '40px',
+    outline: 'none',
+  },
+
   inputContainerForTextField: {
     marginTop: 6,
   },
 
   inputContainerForDropDown: {
-    marginTop: 25,
+    marginTop: 6,
     // backgroundColor: "white",
     // borderRadius: 10,
     // paddingLeft: 10,
@@ -126,90 +136,122 @@ const styles = {
   },
 
   stylesForLabel: {
-    fontWeight: "700",
-    color: "white",
+    fontWeight: '700',
+    color: 'white',
   },
 
   stylesForButton: {
-    color: "white",
-    cursor: "pointer",
-    borderRadius: 15,
-    backgroundColor: "#2C6DDD",
-    width: "140px",
-    height: "50px",
-    outline: "none",
+    color: 'white',
+    cursor: 'pointer',
+    borderRadius: 10,
+    background: '#2c6ddd',
+    width: '115px',
+    height: '40px',
+    outline: 'none',
   },
   textFieldPadding: {
     paddingLeft: 3,
     paddingRight: 3,
   },
+}
 
-  stylesForButton: {
-    color: "white",
-    cursor: "pointer",
-    borderRadius: 5,
-    backgroundColor: "#2C6DDD",
-    // width: "140px",
-    height: "54px",
-    outline: "none",
+const useStyles = makeStyles((theme) => ({
+  underline: {
+    '&&&:before': {
+      borderBottom: 'none',
+    },
+    '&&:after': {
+      borderBottom: 'none',
+    },
   },
-};
-const useStyles = makeStyles(tableStyles);
-
+  margin: {
+    margin: theme.spacing(0),
+  },
+  input: {
+    backgroundColor: 'white',
+    borderRadius: 6,
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:disabled': {
+      color: 'gray',
+    },
+  },
+  multilineColor: {
+    backgroundColor: 'white',
+    borderRadius: 6,
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+  },
+  root: {
+    '& .MuiTextField-root': {
+      backgroundColor: 'white',
+    },
+    '& .Mui-focused': {
+      backgroundColor: 'white',
+      color: 'black',
+    },
+  },
+}))
 function AddEditPurchaseRequest(props) {
-  // const classes = useStyles();
-
-  const classes = useStyleforinput();
+  const classes = useStyles()
   const initialState = {
-    _id: "",
-    requestNo: "",
-    generatedBy: "",
-    dateGenerated: "",
-    vendorId: "",
-    status: "to_do",
-    itemId: "",
-    itemCode: "",
-    itemName: "",
-    description: "",
-    currentQty: "",
-    requestedQty: "",
-    comments: "",
+    _id: '',
+    requestNo: '',
+    generatedBy: '',
+    dateGenerated: '',
+    vendorId: '',
+    status: 'to_do',
+    itemId: '',
+    itemCode: '',
+    itemName: '',
+    description: '',
+    currentQty: '',
+    requestedQty: '',
+    comments: '',
     vendors: [],
     statues: [],
     items: [],
-    selectedRow: "",
-    reason: "",
+    selectedRow: '',
+    reason: '',
 
-    generated: "Manual",
+    generated: 'Manual',
 
-    requesterName: "",
-    department: "",
-    orderType: "",
-    maximumLevel: "",
+    requesterName: '',
+    department: '',
+    orderType: '',
+    maximumLevel: '',
 
-    committeeStatus: "",
+    committeeStatus: '',
 
     vendorsArray: [],
 
-    recieptUnit: "",
-    issueUnit: "",
-    fuItemCost: "",
-    fuId: "",
-    to: "",
-    from: "",
-    approvedBy: "",
-    commentNote: "",
-    secondStatus: "",
-  };
+    recieptUnit: '',
+    issueUnit: '',
+    fuItemCost: '',
+    fuId: '',
+    to: '',
+    from: '',
+    approvedBy: '',
+    commentNote: '',
+    secondStatus: '',
+  }
 
   function reducer(state, { field, value }) {
     return {
       ...state,
       [field]: value,
-    };
+    }
   }
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   const {
     _id,
@@ -250,118 +292,118 @@ function AddEditPurchaseRequest(props) {
     approvedBy,
     commentNote,
     secondStatus,
-  } = state;
+  } = state
 
-  const [comingFor, setcomingFor] = useState("");
-  const [vendorsArray, setVendors] = useState("");
-  const [currentUser, setCurrentUser] = useState("");
+  const [comingFor, setcomingFor] = useState('')
+  const [vendorsArray, setVendors] = useState('')
+  const [currentUser, setCurrentUser] = useState('')
 
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('')
 
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false)
 
-  const [errorMsg, setErrorMsg] = useState("");
-  const [openNotification, setOpenNotification] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('')
+  const [openNotification, setOpenNotification] = useState(false)
 
-  const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false);
-  const [itemFound, setItem] = useState("");
+  const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false)
+  const [itemFound, setItem] = useState('')
 
-  const [selectedItemsArray, setSelectedItemsArray] = useState([]);
+  const [selectedItemsArray, setSelectedItemsArray] = useState([])
 
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false)
 
-  const [selectedItem, setSelectedItem] = useState("");
+  const [selectedItem, setSelectedItem] = useState('')
 
-  const [purchaseRequestItems, setPurchaseRequestItems] = useState("");
+  const [purchaseRequestItems, setPurchaseRequestItems] = useState('')
 
-  const [selectItemToEditId, setSelectItemToEditId] = useState("");
+  const [selectItemToEditId, setSelectItemToEditId] = useState('')
 
-  const [fuObj, setFUObj] = useState("");
+  const [fuObj, setFUObj] = useState('')
 
-  const [itemAdded, setItemAdded] = useState(false);
+  const [itemAdded, setItemAdded] = useState(false)
 
   useEffect(() => {
-    setCurrentUser(cookie.load("current_user"));
+    setCurrentUser(cookie.load('current_user'))
 
-    setcomingFor(props.history.location.state.comingFor);
-    setVendors(props.history.location.state.vendors);
-    setFUObj(props.history.location.state.fuObj);
+    setcomingFor(props.history.location.state.comingFor)
+    setVendors(props.history.location.state.vendors)
+    setFUObj(props.history.location.state.fuObj)
 
-    const selectedRec = props.history.location.state.selectedItem;
-    console.log(selectedRec);
+    const selectedRec = props.history.location.state.selectedItem
+    console.log(selectedRec)
     if (selectedRec) {
       Object.entries(selectedRec).map(([key, val]) => {
-        if (val && typeof val === "object") {
-          if (key === "itemId") {
-            dispatch({ field: "itemId", value: val._id });
+        if (val && typeof val === 'object') {
+          if (key === 'itemId') {
+            dispatch({ field: 'itemId', value: val._id })
             // dispatch({ field: "currentQty", value: val.currQty });
             // dispatch({ field: "requestedQty", value: val.requestedQty });
             // dispatch({ field: "comments", value: val.comments });
             // dispatch({ field: "description", value: val.description });
-            dispatch({ field: "itemName", value: val.name });
-            dispatch({ field: "itemCode", value: val.itemCode });
-          } else if (key === "vendorId") {
-            dispatch({ field: "vendorId", value: val._id });
+            dispatch({ field: 'itemName', value: val.name })
+            dispatch({ field: 'itemCode', value: val.itemCode })
+          } else if (key === 'vendorId') {
+            dispatch({ field: 'vendorId', value: val._id })
           } else {
-            dispatch({ field: key, value: val });
+            dispatch({ field: key, value: val })
           }
         } else {
-          dispatch({ field: key, value: val });
+          dispatch({ field: key, value: val })
         }
-      });
+      })
     }
     if (props.history.location.state.vendors) {
       dispatch({
-        field: "vendors",
+        field: 'vendors',
         value: props.history.location.state.vendors,
-      });
+      })
     }
     if (props.history.location.state.statues) {
       dispatch({
-        field: "statues",
+        field: 'statues',
         value: props.history.location.state.statues,
-      });
+      })
     }
     if (props.history.location.state.items) {
-      dispatch({ field: "items", value: props.history.location.state.items });
+      dispatch({ field: 'items', value: props.history.location.state.items })
     }
-  }, []);
+  }, [])
 
   const onChangeValue = (e) => {
-    dispatch({ field: e.target.name, value: e.target.value });
-  };
+    dispatch({ field: e.target.name, value: e.target.value })
+  }
 
   const onChangeDate = (value) => {
-    dispatch({ field: "dateGenerated", value });
-  };
+    dispatch({ field: 'dateGenerated', value })
+  }
 
   function validateForm() {
-    let jit = true;
+    let jit = true
     // let qtyIsLess = true;
-    if (reason === "jit") {
-      jit = requesterName !== "" && department !== "" && orderType !== "";
+    if (reason === 'jit') {
+      jit = requesterName !== '' && department !== '' && orderType !== ''
     }
     return (
-      reason !== "" &&
-      comments !== "" &&
+      reason !== '' &&
+      comments !== '' &&
       // dateGenerated !== "" &&
-      fuItemCost !== "" &&
-      itemCode !== "" &&
-      itemName !== "" &&
-      requestedQty !== "" &&
-      currentQty !== "" &&
-      recieptUnit !== "" &&
-      issueUnit !== "" &&
+      fuItemCost !== '' &&
+      itemCode !== '' &&
+      itemName !== '' &&
+      requestedQty !== '' &&
+      currentQty !== '' &&
+      recieptUnit !== '' &&
+      issueUnit !== '' &&
       // requestedQty <= currentQty &&
       jit
-    );
+    )
   }
 
   const handleAdd = () => {
     if (!validateForm()) {
-      setIsFormSubmitted(true);
-      setOpenNotification(true);
-      setErrorMsg("Please fill the fields properly");
+      setIsFormSubmitted(true)
+      setOpenNotification(true)
+      setErrorMsg('Please fill the fields properly')
     } else {
       if (validateForm()) {
         const params = {
@@ -369,7 +411,7 @@ function AddEditPurchaseRequest(props) {
           generatedBy: currentUser.name,
           dateGenerated: new Date(),
           generated,
-          status: "pending",
+          status: 'pending',
           reason,
           comments,
 
@@ -380,47 +422,47 @@ function AddEditPurchaseRequest(props) {
           issueUnit,
           recieptUnit,
           fuItemCost,
-          to: "Warehouse",
-          from: "FU",
-          commentNote: "",
+          to: 'Warehouse',
+          from: 'FU',
+          commentNote: '',
           fuId: fuObj._id,
 
           requesterName,
           orderType,
           department,
-        };
+        }
 
-        console.log("params", params);
+        console.log('params', params)
 
         axios
           .post(addReplenishmentRequestUrl, params)
           .then((res) => {
             if (res.data.success) {
-              console.log("response after adding RR", res.data);
-              props.history.goBack();
+              console.log('response after adding RR', res.data)
+              props.history.goBack()
             } else if (!res.data.success) {
-              setOpenNotification(true);
+              setOpenNotification(true)
             }
           })
           .catch((e) => {
-            console.log("error after adding purchase request", e);
-            setOpenNotification(true);
-            setErrorMsg("Error while adding the replenishment request");
-          });
+            console.log('error after adding purchase request', e)
+            setOpenNotification(true)
+            setErrorMsg('Error while adding the replenishment request')
+          })
       }
     }
-  };
+  }
 
   const handleEdit = () => {
     if (!validateForm()) {
-      setIsFormSubmitted(true);
-      setOpenNotification(true);
-      setErrorMsg("Please fill the fields properly");
+      setIsFormSubmitted(true)
+      setOpenNotification(true)
+      setErrorMsg('Please fill the fields properly')
     } else {
       if (validateForm()) {
         if (
-          status === "pending" ||
-          currentUser.staffTypeId.type !== "FU Member"
+          status === 'pending' ||
+          currentUser.staffTypeId.type !== 'FU Member'
         ) {
           const obj = {
             _id,
@@ -429,21 +471,21 @@ function AddEditPurchaseRequest(props) {
             dateGenerated,
             generated,
             status:
-              (currentUser.staffTypeId.type === "Warehouse Member" ||
-                currentUser.staffTypeId.type === "admin") &&
-              status === "pending" &&
-              secondStatus === "Fulfillment Initiated"
-                ? "Fulfillment Initiated"
-                : (currentUser.staffTypeId.type === "Warehouse Incharge" ||
-                    currentUser.staffTypeId.type === "admin") &&
-                  status === "Fulfillment Initiated" &&
-                  secondStatus === "Delivery in Progress"
-                ? "Delivery in Progress"
-                : (currentUser.staffTypeId.type === "FU Inventory Keeper" ||
-                    currentUser.staffTypeId.type === "admin") &&
-                  status === "Delivery in Progress" &&
-                  secondStatus === "Received"
-                ? "Received"
+              (currentUser.staffTypeId.type === 'Warehouse Member' ||
+                currentUser.staffTypeId.type === 'admin') &&
+              status === 'pending' &&
+              secondStatus === 'Fulfillment Initiated'
+                ? 'Fulfillment Initiated'
+                : (currentUser.staffTypeId.type === 'Warehouse Incharge' ||
+                    currentUser.staffTypeId.type === 'admin') &&
+                  status === 'Fulfillment Initiated' &&
+                  secondStatus === 'Delivery in Progress'
+                ? 'Delivery in Progress'
+                : (currentUser.staffTypeId.type === 'FU Inventory Keeper' ||
+                    currentUser.staffTypeId.type === 'admin') &&
+                  status === 'Delivery in Progress' &&
+                  secondStatus === 'Received'
+                ? 'Received'
                 : status,
             reason,
             comments,
@@ -464,80 +506,80 @@ function AddEditPurchaseRequest(props) {
             requesterName,
             orderType,
             department,
-          };
+          }
 
-          let params;
+          let params
 
           if (
-            currentUser.staffTypeId.type === "Warehouse Member" ||
-            currentUser.staffTypeId.type === "admin"
+            currentUser.staffTypeId.type === 'Warehouse Member' ||
+            currentUser.staffTypeId.type === 'admin'
           ) {
             params = {
               ...obj,
-              approvedBy: approvedBy === "" ? currentUser.staffId : approvedBy,
-            };
+              approvedBy: approvedBy === '' ? currentUser.staffId : approvedBy,
+            }
           } else {
             params = {
               ...obj,
-              approvedBy: approvedBy === "" ? "" : approvedBy,
-            };
+              approvedBy: approvedBy === '' ? '' : approvedBy,
+            }
           }
 
-          console.log("params for edit rep request FU", params);
+          console.log('params for edit rep request FU', params)
 
           axios
             .put(updateReplenishmentRequestUrl, params)
             .then((res) => {
               if (res.data.success) {
-                props.history.goBack();
+                props.history.goBack()
               } else if (!res.data.success) {
-                setOpenNotification(true);
+                setOpenNotification(true)
               }
             })
             .catch((e) => {
-              console.log("error after updating purchase request", e);
-              setOpenNotification(true);
-              setErrorMsg("Error while editing the purchase request");
-            });
+              console.log('error after updating purchase request', e)
+              setOpenNotification(true)
+              setErrorMsg('Error while editing the purchase request')
+            })
         } else {
-          setOpenNotification(true);
-          setErrorMsg("Request can not be updated once it is in progress");
+          setOpenNotification(true)
+          setErrorMsg('Request can not be updated once it is in progress')
         }
       }
     }
-  };
+  }
 
   if (openNotification) {
     setTimeout(() => {
-      setOpenNotification(false);
-      setErrorMsg("");
-    }, 2000);
+      setOpenNotification(false)
+      setErrorMsg('')
+    }, 2000)
   }
 
   const handleSearch = (e) => {
-    setSearchQuery(e.target.value);
+    setSearchQuery(e.target.value)
     // if (e.target.value.length >= 3) {
     axios
-      .get(getSearchedItemUrl + "/" + e.target.value)
+      .get(getSearchedItemUrl + '/' + e.target.value)
       .then((res) => {
         if (res.data.success) {
           if (res.data.data.items.length > 0) {
-            console.log(res.data.data.items);
-            setItemFoundSuccessfully(true);
-            setItem(res.data.data.items);
+            console.log(res.data.data.items)
+            setItemFoundSuccessfully(true)
+            setItem(res.data.data.items)
           } else {
-            setItemFoundSuccessfully(false);
-            setItem("");
+            setItemFoundSuccessfully(false)
+            setItem('')
           }
         }
       })
       .catch((e) => {
-        console.log("error after adding purchase request", e);
-        setOpenNotification(true);
-        setErrorMsg("Error while adding the purchase request");
-      });
+        console.log('error after adding purchase request', e)
+        setOpenNotification(true)
+        setErrorMsg('Error while adding the purchase request')
+      })
     // }
-  };
+  }
 
   const getCurrentQty = (id) => {
     // const params = {
@@ -547,85 +589,85 @@ function AddEditPurchaseRequest(props) {
     // console.log("params for curr qty", params);
 
     axios
-      .get(getPurchaseRequestItemQtyUrl + "/" + id)
+      .get(getPurchaseRequestItemQtyUrl + '/' + id)
       .then((res) => {
         if (res.data.success) {
-          console.log("current quantity", res.data.data);
+          console.log('current quantity', res.data.data)
           if (res.data.data) {
-            dispatch({ field: "currentQty", value: res.data.data.qty });
+            dispatch({ field: 'currentQty', value: res.data.data.qty })
           } else {
-            dispatch({ field: "currentQty", value: 0 });
+            dispatch({ field: 'currentQty', value: 0 })
           }
         }
       })
       .catch((e) => {
-        console.log("error after adding purchase request", e);
-        setOpenNotification(true);
-        setErrorMsg("Error while adding the purchase request");
-      });
-  };
+        console.log('error after adding purchase request', e)
+        setOpenNotification(true)
+        setErrorMsg('Error while adding the purchase request')
+      })
+  }
 
   function handleAddItem(i) {
-    console.log("selected item", i);
+    console.log('selected item', i)
 
-    getCurrentQty(i._id);
-    setDialogOpen(true);
-    setSelectedItem(i);
+    getCurrentQty(i._id)
+    setDialogOpen(true)
+    setSelectedItem(i)
 
-    dispatch({ field: "itemId", value: i._id });
-    dispatch({ field: "itemCode", value: i.itemCode });
-    dispatch({ field: "itemName", value: i.name });
-    dispatch({ field: "vendorId", value: i.vendorId });
-    dispatch({ field: "description", value: i.description });
-    dispatch({ field: "maximumLevel", value: i.maximumLevel });
-    dispatch({ field: "issueUnit", value: i.issueUnit });
-    dispatch({ field: "recieptUnit", value: i.receiptUnit });
+    dispatch({ field: 'itemId', value: i._id })
+    dispatch({ field: 'itemCode', value: i.itemCode })
+    dispatch({ field: 'itemName', value: i.name })
+    dispatch({ field: 'vendorId', value: i.vendorId })
+    dispatch({ field: 'description', value: i.description })
+    dispatch({ field: 'maximumLevel', value: i.maximumLevel })
+    dispatch({ field: 'issueUnit', value: i.issueUnit })
+    dispatch({ field: 'recieptUnit', value: i.receiptUnit })
 
     const obj = {
       itemCode: i.itemCode,
-    };
+    }
 
-    setSelectedItemsArray((pervState) => [...pervState, obj]);
-    setSearchQuery("");
+    setSelectedItemsArray((pervState) => [...pervState, obj])
+    setSearchQuery('')
   }
 
   function validateItemsForm() {
     return (
-      itemCode !== "" &&
-      itemName !== "" &&
-      requestedQty !== "" &&
-      fuItemCost !== "" &&
+      itemCode !== '' &&
+      itemName !== '' &&
+      requestedQty !== '' &&
+      fuItemCost !== '' &&
       currentQty !== 0
       // && requestedQty <= currentQty
       // currentQty.length > 0 &&
       // maximumLevel >= requestedQty &&
-    );
+    )
   }
 
   function hideDialog() {
     if (!itemAdded) {
-      setDialogOpen(false);
-      setSelectedItem("");
-      setSelectItemToEditId("");
+      setDialogOpen(false)
+      setSelectedItem('')
+      setSelectItemToEditId('')
 
-      dispatch({ field: "itemId", value: "" });
-      dispatch({ field: "description", value: "" });
-      dispatch({ field: "currentQty", value: "" });
-      dispatch({ field: "comments", value: "" });
-      dispatch({ field: "reqQty", value: "" });
-      dispatch({ field: "itemName", value: "" });
-      dispatch({ field: "itemCode", value: "" });
-      dispatch({ field: "vendorId", value: "" });
-      dispatch({ field: "issueUnit", value: "" });
-      dispatch({ field: "recieptUnit", value: "" });
-      dispatch({ field: "requestedQty", value: "" });
-      dispatch({ field: "fuItemCost", value: "" });
+      dispatch({ field: 'itemId', value: '' })
+      dispatch({ field: 'description', value: '' })
+      dispatch({ field: 'currentQty', value: '' })
+      dispatch({ field: 'comments', value: '' })
+      dispatch({ field: 'reqQty', value: '' })
+      dispatch({ field: 'itemName', value: '' })
+      dispatch({ field: 'itemCode', value: '' })
+      dispatch({ field: 'vendorId', value: '' })
+      dispatch({ field: 'issueUnit', value: '' })
+      dispatch({ field: 'recieptUnit', value: '' })
+      dispatch({ field: 'requestedQty', value: '' })
+      dispatch({ field: 'fuItemCost', value: '' })
 
       // dispatch({ field: "maximumLevel", value: "" });
     } else {
-      setDialogOpen(false);
-      setSelectedItem("");
-      setSelectItemToEditId("");
+      setDialogOpen(false)
+      setSelectedItem('')
+      setSelectItemToEditId('')
     }
   }
 
@@ -634,59 +676,66 @@ function AddEditPurchaseRequest(props) {
     // setItemAdded(true);
 
     if (validateItemsForm()) {
-      setDialogOpen(false);
-      setItemAdded(true);
+      setDialogOpen(false)
+      setItemAdded(true)
     }
-  };
+  }
 
-  const editSelectedItem = () => {};
+  const editSelectedItem = () => {}
 
   return (
     <div
       style={{
-        backgroundColor: "#60d69f",
-        position: "fixed",
-        display: "flex",
-        width: "100%",
-        height: "100%",
-        flexDirection: "column",
+        backgroundColor: '#60d69f',
+        position: 'fixed',
+        display: 'flex',
+        width: '100%',
+        height: '100%',
+        flexDirection: 'column',
         flex: 1,
-        overflowY: "scroll",
+        overflowY: 'scroll',
       }}
     >
       <Header />
-      <div className="cPadding">
-        <div className="subheader">
+      <div className={`cPadding ${classes.root}`}>
+        <div className='subheader'>
           <div>
             <img src={purchase_request} />
             <h4>
               {/* {comingFor === "add"
                 ? " Add Replenishment Request For FU"
                 : " Update Replenishment Request For FU"} */}
-              {comingFor === "add"
-                ? " Add Replenishment Request For FU"
-                : " Update Replenishment Request For FU"}
+              {comingFor === 'add'
+                ? ' Add Replenishment Request For FU'
+                : ' Update Replenishment Request For FU'}
             </h4>
           </div>
-
           <div>
             <Button
               onClick={() => props.history.goBack()}
               style={styles.stylesForButton}
-              variant="contained"
-              color="primary"
+              variant='contained'
+              color='primary'
             >
-              <img src={view_all} style={styles.stylesForIcon} />
+              <img className='icon-view' src={view_all} />
               &nbsp;&nbsp;
-              <strong>View All</strong>
+              <strong style={{ fontSize: '12px' }}>View All</strong>
             </Button>
+            {/* <img src={Search} /> */}
           </div>
         </div>
 
-        <div style={{ flex: 4, display: "flex", flexDirection: "column" }}>
-          <div className="row">
+        <div
+          style={{
+            flex: 4,
+            display: 'flex',
+            flexDirection: 'column',
+            className: 'container-fluid',
+          }}
+        >
+          <div className='row'>
             <div
-              className="col-md-4"
+              className='col-md-4'
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -695,17 +744,17 @@ function AddEditPurchaseRequest(props) {
               {/* <InputLabelComponent>Request No</InputLabelComponent> */}
               <TextField
                 disabled={true}
-                label="Request No"
-                name={"requestNo"}
+                label='Request No'
+                name={'requestNo'}
                 value={requestNo}
                 onChange={onChangeValue}
-                className="textInputStyle"
-                variant="filled"
+                className='textInputStyle'
+                variant='filled'
                 InputProps={{
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
-                error={requestNo === "" && isFormSubmitted}
+                error={requestNo === '' && isFormSubmitted}
               />
               {/* <ErrorMessage
                 name={requestNo}
@@ -714,7 +763,7 @@ function AddEditPurchaseRequest(props) {
             </div>
 
             <div
-              className="col-md-4"
+              className='col-md-4'
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -726,20 +775,20 @@ function AddEditPurchaseRequest(props) {
                 select
                 fullWidth
                 disabled={true}
-                id="generated"
-                name="generated"
+                id='generated'
+                name='generated'
                 value={generated}
                 onChange={onChangeValue}
-                label="Generated"
-                variant="filled"
-                className="dropDownStyle"
+                label='Generated'
+                variant='filled'
+                className='dropDownStyle'
                 // input={<BootstrapInput />}
                 InputProps={{
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
               >
-                <MenuItem value="">
+                <MenuItem value=''>
                   <em>None</em>
                 </MenuItem>
                 {generatedArray &&
@@ -748,7 +797,7 @@ function AddEditPurchaseRequest(props) {
                       <MenuItem key={val.key} value={val.key}>
                         {val.value}
                       </MenuItem>
-                    );
+                    )
                   })}
               </TextField>
               {/* <ErrorMessage
@@ -758,7 +807,7 @@ function AddEditPurchaseRequest(props) {
             </div>
 
             <div
-              className="col-md-4"
+              className='col-md-4'
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -767,24 +816,24 @@ function AddEditPurchaseRequest(props) {
               {/* <InputLabelComponent>Generated By</InputLabelComponent> */}
               <TextField
                 disabled={true}
-                type="text"
-                label="Generated By"
+                type='text'
+                label='Generated By'
                 name={generatedBy}
                 value={
-                  comingFor === "add"
+                  comingFor === 'add'
                     ? currentUser
                       ? currentUser.name
-                      : ""
+                      : ''
                     : generatedBy
                 }
                 onChange={onChangeValue}
-                className="textInputStyle"
-                variant="filled"
+                className='textInputStyle'
+                variant='filled'
                 InputProps={{
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
-                error={generatedBy === "" && isFormSubmitted}
+                error={generatedBy === '' && isFormSubmitted}
               />
               {/* <ErrorMessage
                 name={generatedBy}
@@ -793,9 +842,9 @@ function AddEditPurchaseRequest(props) {
             </div>
           </div>
 
-          <div className="row">
+          <div className='row'>
             <div
-              className="col-md-6"
+              className='col-md-6'
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -805,7 +854,7 @@ function AddEditPurchaseRequest(props) {
                 {/* <InputLabelComponent>Date Generated</InputLabelComponent> */}
                 <DateTimePicker
                   // inputVariant="outlined"
-                  inputVariant="filled"
+                  inputVariant='filled'
                   onChange={onChangeDate}
                   disabled={
                     // currentUser && currentUser.staffTypeId.type === "FU Member"
@@ -828,13 +877,13 @@ function AddEditPurchaseRequest(props) {
                     classes: { input: classes.input },
                   }}
                   value={
-                    comingFor === "add"
+                    comingFor === 'add'
                       ? dateGenerated
                         ? dateGenerated
                         : new Date()
                       : dateGenerated
                   }
-                  label={""}
+                  label={''}
                   // InputProps={{
                   //   disableUnderline: true,
                   // }}
@@ -843,7 +892,7 @@ function AddEditPurchaseRequest(props) {
             </div>
 
             <div
-              className="col-md-6"
+              className='col-md-6'
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -857,27 +906,27 @@ function AddEditPurchaseRequest(props) {
                 fullWidth
                 disabled={
                   currentUser &&
-                  (currentUser.staffTypeId.type === "FU Member" ||
-                    currentUser.staffTypeId.type === "admin")
+                  (currentUser.staffTypeId.type === 'FU Member' ||
+                    currentUser.staffTypeId.type === 'admin')
                     ? false
                     : true
                 }
                 fullWidth
-                id="reason"
-                name="reason"
+                id='reason'
+                name='reason'
                 value={reason}
                 onChange={onChangeValue}
-                label="Reason"
-                className="dropDownStyle"
+                label='Reason'
+                className='dropDownStyle'
                 // input={<BootstrapInput />}
-                variant="filled"
+                variant='filled'
                 InputProps={{
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
-                error={reason === "" && isFormSubmitted}
+                error={reason === '' && isFormSubmitted}
               >
-                <MenuItem value="">
+                <MenuItem value=''>
                   <em>None</em>
                 </MenuItem>
                 {reasonArray.map((val) => {
@@ -885,7 +934,7 @@ function AddEditPurchaseRequest(props) {
                     <MenuItem key={val.key} value={val.key}>
                       {val.value}
                     </MenuItem>
-                  );
+                  )
                 })}
               </TextField>
 
@@ -893,10 +942,10 @@ function AddEditPurchaseRequest(props) {
             </div>
           </div>
 
-          {reason === "jit" ? (
-            <div className="row">
+          {reason === 'jit' ? (
+            <div className='row'>
               <div
-                className="col-md-4"
+                className='col-md-4'
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -906,22 +955,22 @@ function AddEditPurchaseRequest(props) {
                 <TextField
                   disabled={
                     currentUser &&
-                    (currentUser.staffTypeId.type === "FU Member" ||
-                      currentUser.staffTypeId.type === "admin")
+                    (currentUser.staffTypeId.type === 'FU Member' ||
+                      currentUser.staffTypeId.type === 'admin')
                       ? false
                       : true
                   }
-                  label="Requester"
-                  name={"requesterName"}
+                  label='Requester'
+                  name={'requesterName'}
                   value={requesterName}
                   onChange={onChangeValue}
-                  className="textInputStyle"
-                  variant="filled"
+                  className='textInputStyle'
+                  variant='filled'
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
-                  verror={requesterName === "" && isFormSubmitted}
+                  verror={requesterName === '' && isFormSubmitted}
                 />
                 {/* <ErrorMessage
                   name={requesterName}
@@ -930,7 +979,7 @@ function AddEditPurchaseRequest(props) {
               </div>
 
               <div
-                className="col-md-4"
+                className='col-md-4'
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -940,22 +989,22 @@ function AddEditPurchaseRequest(props) {
                 <TextField
                   disabled={
                     currentUser &&
-                    (currentUser.staffTypeId.type === "FU Member" ||
-                      currentUser.staffTypeId.type === "admin")
+                    (currentUser.staffTypeId.type === 'FU Member' ||
+                      currentUser.staffTypeId.type === 'admin')
                       ? false
                       : true
                   }
-                  label="Department"
-                  name={"department"}
+                  label='Department'
+                  name={'department'}
                   value={department}
                   onChange={onChangeValue}
-                  className="textInputStyle"
-                  variant="filled"
+                  className='textInputStyle'
+                  variant='filled'
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
-                  error={department === "" && isFormSubmitted}
+                  error={department === '' && isFormSubmitted}
                 />
                 {/* <ErrorMessage
                     name={department}
@@ -964,7 +1013,7 @@ function AddEditPurchaseRequest(props) {
               </div>
 
               <div
-                className="col-md-4"
+                className='col-md-4'
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -978,26 +1027,26 @@ function AddEditPurchaseRequest(props) {
                   fullWidth
                   disabled={
                     currentUser &&
-                    (currentUser.staffTypeId.type === "FU Member" ||
-                      currentUser.staffTypeId.type === "admin")
+                    (currentUser.staffTypeId.type === 'FU Member' ||
+                      currentUser.staffTypeId.type === 'admin')
                       ? false
                       : true
                   }
-                  id="orderType"
-                  name="orderType"
+                  id='orderType'
+                  name='orderType'
                   value={orderType}
                   onChange={onChangeValue}
-                  label="Order Type"
-                  className="dropDownStyle"
-                  variant="filled"
+                  label='Order Type'
+                  className='dropDownStyle'
+                  variant='filled'
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
-                  error={orderType === "" && isFormSubmitted}
+                  error={orderType === '' && isFormSubmitted}
                   // input={<BootstrapInput />}
                 >
-                  <MenuItem value="">
+                  <MenuItem value=''>
                     <em>None</em>
                   </MenuItem>
                   {orderArray.map((val) => {
@@ -1005,7 +1054,7 @@ function AddEditPurchaseRequest(props) {
                       <MenuItem key={val.key} value={val.key}>
                         {val.value}
                       </MenuItem>
-                    );
+                    )
                   })}
                 </TextField>
                 {/* <ErrorMessage
@@ -1018,9 +1067,9 @@ function AddEditPurchaseRequest(props) {
             undefined
           )}
 
-          <div className="row">
+          <div className='row'>
             <div
-              className="col-md-12"
+              className='col-md-12'
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -1028,42 +1077,42 @@ function AddEditPurchaseRequest(props) {
             >
               {/* <InputLabelComponent>Notes/Comments*</InputLabelComponent> */}
               <TextField
-                type="text"
+                type='text'
                 disabled={
                   currentUser &&
-                  (currentUser.staffTypeId.type === "FU Member" ||
-                    currentUser.staffTypeId.type === "admin")
+                  (currentUser.staffTypeId.type === 'FU Member' ||
+                    currentUser.staffTypeId.type === 'admin')
                     ? false
                     : true
                 }
                 rows={4}
-                label="Notes/Comments"
-                name={"comments"}
+                label='Notes/Comments'
+                name={'comments'}
                 value={comments}
                 onChange={onChangeValue}
-                className="textInputStyle"
-                variant="filled"
+                className='textInputStyle'
+                variant='filled'
                 InputProps={{
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
-                error={comments === "" && isFormSubmitted}
+                error={comments === '' && isFormSubmitted}
               />
               {/* <ErrorMessage name={comments} isFormSubmitted={isFormSubmitted} /> */}
             </div>
           </div>
 
-          {currentQty !== "" &&
-          description !== "" &&
-          issueUnit !== "" &&
-          recieptUnit !== "" ? (
+          {currentQty !== '' &&
+          description !== '' &&
+          issueUnit !== '' &&
+          recieptUnit !== '' ? (
             <div>
-              <h4 style={{ color: "white", fontWeight: "700", marginTop: 30 }}>
+              <h4 style={{ color: 'white', fontWeight: '700', marginTop: 30 }}>
                 Item details
               </h4>
-              <div className="row">
+              <div className='row'>
                 <div
-                  className="col-md-6"
+                  className='col-md-6'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1073,13 +1122,13 @@ function AddEditPurchaseRequest(props) {
 
                   <TextField
                     disabled={true}
-                    type="text"
-                    label="Item Code"
-                    name={"itemCode"}
+                    type='text'
+                    label='Item Code'
+                    name={'itemCode'}
                     value={itemCode}
                     onChange={onChangeValue}
-                    className="textInputStyle"
-                    variant="filled"
+                    className='textInputStyle'
+                    variant='filled'
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
@@ -1087,7 +1136,7 @@ function AddEditPurchaseRequest(props) {
                   />
                 </div>
                 <div
-                  className="col-md-6"
+                  className='col-md-6'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1095,14 +1144,14 @@ function AddEditPurchaseRequest(props) {
                 >
                   {/* <InputLabelComponent>Item Name</InputLabelComponent> */}
                   <TextField
-                    type="text"
+                    type='text'
                     disabled={true}
-                    label="Item Name"
-                    name={"itemName"}
+                    label='Item Name'
+                    name={'itemName'}
                     value={itemName}
                     onChange={onChangeValue}
-                    className="textInputStyle"
-                    variant="filled"
+                    className='textInputStyle'
+                    variant='filled'
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
@@ -1111,9 +1160,9 @@ function AddEditPurchaseRequest(props) {
                 </div>
               </div>
 
-              <div className="row">
+              <div className='row'>
                 <div
-                  className="col-md-6"
+                  className='col-md-6'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1122,14 +1171,14 @@ function AddEditPurchaseRequest(props) {
                   {/* <InputLabelComponent>Current Qty</InputLabelComponent> */}
 
                   <TextField
-                    type="number"
+                    type='number'
                     disabled={true}
-                    label="Current Qty"
-                    name={"currentQty"}
+                    label='Current Qty'
+                    name={'currentQty'}
                     value={currentQty}
                     onChange={onChangeValue}
-                    className="textInputStyle"
-                    variant="filled"
+                    className='textInputStyle'
+                    variant='filled'
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
@@ -1138,7 +1187,7 @@ function AddEditPurchaseRequest(props) {
                 </div>
 
                 <div
-                  className="col-md-6"
+                  className='col-md-6'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1149,18 +1198,18 @@ function AddEditPurchaseRequest(props) {
                   <TextField
                     disabled={
                       currentUser &&
-                      (currentUser.staffTypeId.type === "FU Member" ||
-                        currentUser.staffTypeId.type === "admin")
+                      (currentUser.staffTypeId.type === 'FU Member' ||
+                        currentUser.staffTypeId.type === 'admin')
                         ? false
                         : true
                     }
-                    type="number"
-                    label="Requested Qty"
-                    name={"requestedQty"}
+                    type='number'
+                    label='Requested Qty'
+                    name={'requestedQty'}
                     value={requestedQty}
                     onChange={onChangeValue}
-                    className="textInputStyle"
-                    variant="filled"
+                    className='textInputStyle'
+                    variant='filled'
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
@@ -1169,9 +1218,9 @@ function AddEditPurchaseRequest(props) {
                 </div>
               </div>
 
-              <div className="row">
+              <div className='row'>
                 <div
-                  className="col-md-4"
+                  className='col-md-4'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1181,12 +1230,12 @@ function AddEditPurchaseRequest(props) {
 
                   <TextField
                     disabled={true}
-                    label="Receipt Unit"
-                    name={"recieptUnit"}
+                    label='Receipt Unit'
+                    name={'recieptUnit'}
                     value={recieptUnit}
                     onChange={onChangeValue}
-                    className="textInputStyle"
-                    variant="filled"
+                    className='textInputStyle'
+                    variant='filled'
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
@@ -1195,7 +1244,7 @@ function AddEditPurchaseRequest(props) {
                 </div>
 
                 <div
-                  className="col-md-4"
+                  className='col-md-4'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1205,12 +1254,12 @@ function AddEditPurchaseRequest(props) {
 
                   <TextField
                     disabled={true}
-                    label="Issue Unit"
-                    name={"issueUnit"}
+                    label='Issue Unit'
+                    name={'issueUnit'}
                     value={issueUnit}
                     onChange={onChangeValue}
-                    className="textInputStyle"
-                    variant="filled"
+                    className='textInputStyle'
+                    variant='filled'
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
@@ -1219,7 +1268,7 @@ function AddEditPurchaseRequest(props) {
                 </div>
 
                 <div
-                  className="col-md-4"
+                  className='col-md-4'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1230,18 +1279,18 @@ function AddEditPurchaseRequest(props) {
                   <TextField
                     disabled={
                       currentUser &&
-                      (currentUser.staffTypeId.type === "FU Member" ||
-                        currentUser.staffTypeId.type === "admin")
+                      (currentUser.staffTypeId.type === 'FU Member' ||
+                        currentUser.staffTypeId.type === 'admin')
                         ? false
                         : true
                     }
-                    type="number"
-                    label="FU Item Cost"
-                    name={"fuItemCost"}
+                    type='number'
+                    label='FU Item Cost'
+                    name={'fuItemCost'}
                     value={fuItemCost}
                     onChange={onChangeValue}
-                    className="textInputStyle"
-                    variant="filled"
+                    className='textInputStyle'
+                    variant='filled'
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
@@ -1250,9 +1299,9 @@ function AddEditPurchaseRequest(props) {
                 </div>
               </div>
 
-              <div className="row">
+              <div className='row'>
                 <div
-                  className="col-md-12"
+                  className='col-md-12'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1262,13 +1311,13 @@ function AddEditPurchaseRequest(props) {
 
                   <TextField
                     disabled={true}
-                    type="text"
-                    label="Description"
-                    name={"description"}
+                    type='text'
+                    label='Description'
+                    name={'description'}
                     value={description}
                     onChange={onChangeValue}
-                    className="textInputStyle"
-                    variant="filled"
+                    className='textInputStyle'
+                    variant='filled'
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
@@ -1281,39 +1330,39 @@ function AddEditPurchaseRequest(props) {
             undefined
           )}
 
-          {comingFor === "edit" &&
-          (currentUser.staffTypeId.type === "admin" ||
-            currentUser.staffTypeId.type === "Warehouse Member" ||
-            currentUser.staffTypeId.type === "Warehouse Incharge" ||
-            currentUser.staffTypeId.type === "FU Inventory Keeper") ? (
-            <div className="row">
+          {comingFor === 'edit' &&
+          (currentUser.staffTypeId.type === 'admin' ||
+            currentUser.staffTypeId.type === 'Warehouse Member' ||
+            currentUser.staffTypeId.type === 'Warehouse Incharge' ||
+            currentUser.staffTypeId.type === 'FU Inventory Keeper') ? (
+            <div className='row'>
               <div
-                className="col-md-6"
+                className='col-md-6'
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
                 }}
               >
                 {/* <InputLabelComponent>Status</InputLabelComponent> */}
-                {currentUser.staffTypeId.type === "Warehouse Member" ? (
+                {currentUser.staffTypeId.type === 'Warehouse Member' ? (
                   <TextField
                     required
                     select
                     fullWidth
-                    id="secondStatus"
-                    name="secondStatus"
+                    id='secondStatus'
+                    name='secondStatus'
                     value={secondStatus}
                     onChange={onChangeValue}
-                    label="Status"
-                    className="dropDownStyle"
+                    label='Status'
+                    className='dropDownStyle'
                     // input={<BootstrapInput />}
-                    variant="filled"
+                    variant='filled'
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
                     }}
                   >
-                    <MenuItem value="">
+                    <MenuItem value=''>
                       <em>None</em>
                     </MenuItem>
 
@@ -1322,10 +1371,10 @@ function AddEditPurchaseRequest(props) {
                         <MenuItem key={val.key} value={val.key}>
                           {val.value}
                         </MenuItem>
-                      );
+                      )
                     })}
                   </TextField>
-                ) : currentUser.staffTypeId.type === "Warehouse Incharge" ? (
+                ) : currentUser.staffTypeId.type === 'Warehouse Incharge' ? (
                   // <Select
                   //   fullWidth
                   //   id="secondStatus"
@@ -1340,20 +1389,20 @@ function AddEditPurchaseRequest(props) {
                     required
                     select
                     fullWidth
-                    id="secondStatus"
-                    name="secondStatus"
+                    id='secondStatus'
+                    name='secondStatus'
                     value={secondStatus}
                     onChange={onChangeValue}
-                    label="Status"
-                    className="dropDownStyle"
+                    label='Status'
+                    className='dropDownStyle'
                     // input={<BootstrapInput />}
-                    variant="filled"
+                    variant='filled'
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
                     }}
                   >
-                    <MenuItem value="">
+                    <MenuItem value=''>
                       <em>None</em>
                     </MenuItem>
 
@@ -1362,10 +1411,10 @@ function AddEditPurchaseRequest(props) {
                         <MenuItem key={val.key} value={val.key}>
                           {val.value}
                         </MenuItem>
-                      );
+                      )
                     })}
                   </TextField>
-                ) : currentUser.staffTypeId.type === "admin" ? (
+                ) : currentUser.staffTypeId.type === 'admin' ? (
                   // <Select
                   //   fullWidth
                   //   id="secondStatus"
@@ -1380,20 +1429,20 @@ function AddEditPurchaseRequest(props) {
                     required
                     select
                     fullWidth
-                    id="secondStatus"
-                    name="secondStatus"
+                    id='secondStatus'
+                    name='secondStatus'
                     value={secondStatus}
                     onChange={onChangeValue}
-                    label="Status"
-                    className="dropDownStyle"
+                    label='Status'
+                    className='dropDownStyle'
                     // input={<BootstrapInput />}
-                    variant="filled"
+                    variant='filled'
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
                     }}
                   >
-                    <MenuItem value="">
+                    <MenuItem value=''>
                       <em>None</em>
                     </MenuItem>
 
@@ -1402,7 +1451,7 @@ function AddEditPurchaseRequest(props) {
                         <MenuItem key={val.key} value={val.key}>
                           {val.value}
                         </MenuItem>
-                      );
+                      )
                     })}
                   </TextField>
                 ) : (
@@ -1420,20 +1469,20 @@ function AddEditPurchaseRequest(props) {
                     required
                     select
                     fullWidth
-                    id="secondStatus"
-                    name="secondStatus"
+                    id='secondStatus'
+                    name='secondStatus'
                     value={secondStatus}
                     onChange={onChangeValue}
-                    label="Status"
-                    className="dropDownStyle"
+                    label='Status'
+                    className='dropDownStyle'
                     // input={<BootstrapInput />}
-                    variant="filled"
+                    variant='filled'
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
                     }}
                   >
-                    <MenuItem value="">
+                    <MenuItem value=''>
                       <em>None</em>
                     </MenuItem>
 
@@ -1442,14 +1491,14 @@ function AddEditPurchaseRequest(props) {
                         <MenuItem key={val.key} value={val.key}>
                           {val.value}
                         </MenuItem>
-                      );
+                      )
                     })}
                   </TextField>
                 )}
               </div>
 
               <div
-                className="col-md-6"
+                className='col-md-6'
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -1458,13 +1507,13 @@ function AddEditPurchaseRequest(props) {
                 {/* <InputLabelComponent>Comment Note</InputLabelComponent> */}
 
                 <TextField
-                  type="text"
-                  label="Comment Note"
-                  name={"commentNote"}
+                  type='text'
+                  label='Comment Note'
+                  name={'commentNote'}
                   value={commentNote}
                   onChange={onChangeValue}
-                  className="textInputStyle"
-                  variant="filled"
+                  className='textInputStyle'
+                  variant='filled'
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
@@ -1476,27 +1525,27 @@ function AddEditPurchaseRequest(props) {
             undefined
           )}
 
-          <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
+          <div style={{ display: 'flex', flex: 1, justifyContent: 'center' }}>
             <div
               style={{
-                display: "flex",
+                display: 'flex',
                 flex: 1,
                 // height: 50,
-                justifyContent: "flex-end",
-                marginTop: "2%",
-                marginBottom: "2%",
+                justifyContent: 'flex-end',
+                marginTop: '2%',
+                marginBottom: '2%',
               }}
             >
-              {comingFor === "add" ? (
+              {comingFor === 'add' ? (
                 <Button
                   onClick={() => setDialogOpen(true)}
                   style={styles.stylesForButton}
-                  variant="contained"
-                  color="primary"
+                  variant='contained'
+                  color='primary'
                 >
-                  <img src={add_new} style={styles.stylesForIcon} />
+                  <img className='icon-view' src={view_all} />
                   &nbsp;&nbsp;
-                  <strong>Add New</strong>
+                  <strong style={{ fontSize: '12px' }}>Add New</strong>
                 </Button>
               ) : (
                 undefined
@@ -1504,39 +1553,42 @@ function AddEditPurchaseRequest(props) {
             </div>
           </div>
 
-          <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
+          <div style={{ display: 'flex', flex: 1, justifyContent: 'center' }}>
             <div
               style={{
-                display: "flex",
+                display: 'flex',
                 flex: 1,
                 height: 50,
-                justifyContent: "center",
-                marginTop: "2%",
-                marginBottom: "2%",
+                justifyContent: 'center',
+                marginTop: '2%',
+                marginBottom: '2%',
               }}
             >
-              {comingFor === "add" ? (
+              {comingFor === 'add' ? (
                 <Button
-                  style={{ width: "60%" }}
+                  // style={{ width: '60%' }}
+                  style={styles.stylesForWHButton}
                   // disabled={!validateForm()}
                   onClick={handleAdd}
-                  variant="contained"
-                  color="primary"
+                  variant='contained'
+                  color='primary'
                 >
-                  Generate Replenishment Request
+                  <strong style={{ fontSize: '12px' }}>
+                    Generate Replenishment Request
+                  </strong>
                 </Button>
               ) : (
                 <Button
-                  style={{ width: "60%" }}
+                  style={{ width: '60%' }}
                   // disabled={!validateForm()}
                   onClick={handleEdit}
-                  variant="contained"
-                  color="primary"
+                  variant='contained'
+                  color='primary'
                 >
                   {currentUser &&
-                  currentUser.staffTypeId.type === "Warehouse Incharge"
-                    ? "Confirm Request"
-                    : "Update Replenishment Request"}
+                  currentUser.staffTypeId.type === 'Warehouse Incharge'
+                    ? 'Confirm Request'
+                    : 'Update Replenishment Request'}
                 </Button>
               )}
             </div>
@@ -1545,20 +1597,20 @@ function AddEditPurchaseRequest(props) {
           <Notification msg={errorMsg} open={openNotification} />
 
           <Dialog
-            aria-labelledby="form-dialog-title"
+            aria-labelledby='form-dialog-title'
             open={dialogOpen}
-            maxWidth="xl"
+            maxWidth='xl'
             fullWidth={true}
             // fullScreen
           >
-            <DialogContent style={{ backgroundColor: "#31e2aa" }}>
-              <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
+            <DialogContent style={{ backgroundColor: '#31e2aa' }}>
+              <DialogTitle id='simple-dialog-title' style={{ color: 'white' }}>
                 Add Item
               </DialogTitle>
-              <div className="container-fluid">
-                <div className="row">
+              <div className='container-fluid'>
+                <div className='row'>
                   <div
-                    className="col-md-12"
+                    className='col-md-12'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1567,18 +1619,18 @@ function AddEditPurchaseRequest(props) {
                     {/* <InputLabelComponent> Search *</InputLabelComponent> */}
 
                     <TextField
-                      type="text"
-                      label="Search Items by name or code"
-                      name={"searchQuery"}
+                      type='text'
+                      label='Search Items by name or code'
+                      name={'searchQuery'}
                       value={searchQuery}
                       onChange={handleSearch}
-                      className="textInputStyle"
-                      variant="filled"
+                      className='textInputStyle'
+                      variant='filled'
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
                       }}
-                      error={searchQuery === "" && isFormSubmitted}
+                      error={searchQuery === '' && isFormSubmitted}
                     />
                     {/* <ErrorMessage
                       name={searchQuery}
@@ -1593,13 +1645,13 @@ function AddEditPurchaseRequest(props) {
                     <Paper>
                       {itemFoundSuccessfull ? (
                         itemFound && (
-                          <Table size="small">
+                          <Table size='small'>
                             <TableHead>
                               <TableRow>
                                 <TableCell>Name</TableCell>
                                 <TableCell>Item Code</TableCell>
                                 <TableCell>Puschase Price</TableCell>
-                                <TableCell align="center">
+                                <TableCell align='center'>
                                   Description
                                 </TableCell>
                               </TableRow>
@@ -1611,22 +1663,22 @@ function AddEditPurchaseRequest(props) {
                                   <TableRow
                                     key={i.itemCode}
                                     onClick={() => handleAddItem(i)}
-                                    style={{ cursor: "pointer" }}
+                                    style={{ cursor: 'pointer' }}
                                   >
                                     <TableCell>{i.name}</TableCell>
                                     <TableCell>{i.itemCode}</TableCell>
                                     <TableCell>{i.purchasePrice}</TableCell>
                                     <TableCell>{i.description}</TableCell>
                                   </TableRow>
-                                );
+                                )
                               })}
                             </TableBody>
                           </Table>
                         )
                       ) : (
                         <h4
-                          style={{ textAlign: "center" }}
-                          onClick={() => console.log("ddf")}
+                          style={{ textAlign: 'center' }}
+                          onClick={() => console.log('ddf')}
                         >
                           Item Not Found
                         </h4>
@@ -1637,9 +1689,9 @@ function AddEditPurchaseRequest(props) {
                   undefined
                 )}
 
-                <div className="row">
+                <div className='row'>
                   <div
-                    className="col-md-6"
+                    className='col-md-6'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1648,19 +1700,19 @@ function AddEditPurchaseRequest(props) {
                     {/* <InputLabelComponent> Item Code *</InputLabelComponent> */}
 
                     <TextField
-                      type="text"
+                      type='text'
                       disabled={true}
-                      label="Item Code"
-                      name={"itemCode"}
+                      label='Item Code'
+                      name={'itemCode'}
                       value={itemCode}
                       onChange={onChangeValue}
-                      className="textInputStyle"
-                      variant="filled"
+                      className='textInputStyle'
+                      variant='filled'
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
                       }}
-                      error={itemCode === "" && isFormSubmitted}
+                      error={itemCode === '' && isFormSubmitted}
                     />
                     {/* <ErrorMessage
                       name={itemCode}
@@ -1668,7 +1720,7 @@ function AddEditPurchaseRequest(props) {
                     /> */}
                   </div>
                   <div
-                    className="col-md-6"
+                    className='col-md-6'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1677,19 +1729,19 @@ function AddEditPurchaseRequest(props) {
                     {/* <InputLabelComponent> Item Name *</InputLabelComponent> */}
 
                     <TextField
-                      type="text"
+                      type='text'
                       disabled={true}
-                      label="Item Name"
-                      name={"itemName"}
+                      label='Item Name'
+                      name={'itemName'}
                       value={itemName}
                       onChange={onChangeValue}
-                      className="textInputStyle"
-                      variant="filled"
+                      className='textInputStyle'
+                      variant='filled'
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
                       }}
-                      error={itemName === "" && isFormSubmitted}
+                      error={itemName === '' && isFormSubmitted}
                     />
                   </div>
                   {/* <ErrorMessage
@@ -1698,9 +1750,9 @@ function AddEditPurchaseRequest(props) {
                   /> */}
                 </div>
 
-                <div className="row">
+                <div className='row'>
                   <div
-                    className="col-md-6"
+                    className='col-md-6'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1709,19 +1761,19 @@ function AddEditPurchaseRequest(props) {
                     {/* <InputLabelComponent> Current Qty *</InputLabelComponent> */}
 
                     <TextField
-                      type="number"
+                      type='number'
                       disabled={true}
-                      label="Current Qty"
-                      name={"currentQty"}
+                      label='Current Qty'
+                      name={'currentQty'}
                       value={currentQty}
                       onChange={onChangeValue}
-                      className="textInputStyle"
-                      variant="filled"
+                      className='textInputStyle'
+                      variant='filled'
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
                       }}
-                      error={currentQty === "" && isFormSubmitted}
+                      error={currentQty === '' && isFormSubmitted}
                     />
                     {/* <ErrorMessage
                       name={currentQty}
@@ -1730,7 +1782,7 @@ function AddEditPurchaseRequest(props) {
                   </div>
 
                   <div
-                    className="col-md-6"
+                    className='col-md-6'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1739,18 +1791,18 @@ function AddEditPurchaseRequest(props) {
                     {/* <InputLabelComponent> Requested Qty *</InputLabelComponent> */}
 
                     <TextField
-                      type="number"
-                      label="Req Qty"
-                      name={"requestedQty"}
+                      type='number'
+                      label='Req Qty'
+                      name={'requestedQty'}
                       value={requestedQty}
                       onChange={onChangeValue}
-                      className="textInputStyle"
-                      variant="filled"
+                      className='textInputStyle'
+                      variant='filled'
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
                       }}
-                      error={requestedQty === "" && isFormSubmitted}
+                      error={requestedQty === '' && isFormSubmitted}
                     />
                     {/* <ErrorMessage
                       name={requestedQty}
@@ -1759,9 +1811,9 @@ function AddEditPurchaseRequest(props) {
                   </div>
                 </div>
 
-                <div className="row">
+                <div className='row'>
                   <div
-                    className="col-md-4"
+                    className='col-md-4'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1771,17 +1823,17 @@ function AddEditPurchaseRequest(props) {
 
                     <TextField
                       disabled={true}
-                      placeholder="Receipt Unit"
-                      name={"recieptUnit"}
+                      placeholder='Receipt Unit'
+                      name={'recieptUnit'}
                       value={recieptUnit}
                       onChange={onChangeValue}
-                      className="textInputStyle"
-                      variant="filled"
+                      className='textInputStyle'
+                      variant='filled'
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
                       }}
-                      error={recieptUnit === "" && isFormSubmitted}
+                      error={recieptUnit === '' && isFormSubmitted}
                     />
                     {/* <ErrorMessage
                       name={recieptUnit}
@@ -1790,7 +1842,7 @@ function AddEditPurchaseRequest(props) {
                   </div>
 
                   <div
-                    className="col-md-4"
+                    className='col-md-4'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1800,17 +1852,17 @@ function AddEditPurchaseRequest(props) {
 
                     <TextField
                       disabled={true}
-                      label="Issue Unit"
-                      name={"issueUnit"}
+                      label='Issue Unit'
+                      name={'issueUnit'}
                       value={issueUnit}
                       onChange={onChangeValue}
-                      className="textInputStyle"
-                      variant="filled"
+                      className='textInputStyle'
+                      variant='filled'
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
                       }}
-                      error={issueUnit === "" && isFormSubmitted}
+                      error={issueUnit === '' && isFormSubmitted}
                     />
                     {/* <ErrorMessage
                       name={issueUnit}
@@ -1819,7 +1871,7 @@ function AddEditPurchaseRequest(props) {
                   </div>
 
                   <div
-                    className="col-md-4"
+                    className='col-md-4'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1828,18 +1880,18 @@ function AddEditPurchaseRequest(props) {
                     {/* <InputLabelComponent> FU Item Cost *</InputLabelComponent> */}
 
                     <TextField
-                      type="number"
-                      label="FU Item Cost"
-                      name={"fuItemCost"}
+                      type='number'
+                      label='FU Item Cost'
+                      name={'fuItemCost'}
                       value={fuItemCost}
                       onChange={onChangeValue}
-                      className="textInputStyle"
-                      variant="filled"
+                      className='textInputStyle'
+                      variant='filled'
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
                       }}
-                      error={fuItemCost === "" && isFormSubmitted}
+                      error={fuItemCost === '' && isFormSubmitted}
                     />
                     {/* <ErrorMessage
                       name={fuItemCost}
@@ -1848,9 +1900,9 @@ function AddEditPurchaseRequest(props) {
                   </div>
                 </div>
 
-                <div className="row">
+                <div className='row'>
                   <div
-                    className="col-md-12"
+                    className='col-md-12'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1859,19 +1911,19 @@ function AddEditPurchaseRequest(props) {
                     {/* <InputLabelComponent> Description *</InputLabelComponent> */}
 
                     <TextField
-                      type="text"
+                      type='text'
                       disabled={true}
-                      label="Description"
-                      name={"description"}
+                      label='Description'
+                      name={'description'}
                       value={description}
                       onChange={onChangeValue}
-                      className="textInputStyle"
-                      variant="filled"
+                      className='textInputStyle'
+                      variant='filled'
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
                       }}
-                      error={description === "" && isFormSubmitted}
+                      error={description === '' && isFormSubmitted}
                     />
                     {/* <ErrorMessage
                       name={description}
@@ -1881,29 +1933,29 @@ function AddEditPurchaseRequest(props) {
                 </div>
 
                 <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
+                  style={{ display: 'flex', justifyContent: 'space-between' }}
                 >
-                  <div style={{ marginTop: "2%", marginBottom: "2%" }}>
-                    <Button onClick={() => hideDialog()} variant="contained">
+                  <div style={{ marginTop: '2%', marginBottom: '2%' }}>
+                    <Button onClick={() => hideDialog()} variant='contained'>
                       Cancel
                     </Button>
                   </div>
 
                   <div
                     style={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      marginTop: "2%",
-                      marginBottom: "2%",
+                      display: 'flex',
+                      justifyContent: 'flex-end',
+                      marginTop: '2%',
+                      marginBottom: '2%',
                     }}
                   >
-                    {selectItemToEditId === "" ? (
+                    {selectItemToEditId === '' ? (
                       <Button
                         style={{ paddingLeft: 30, paddingRight: 30 }}
                         disabled={!validateItemsForm()}
                         onClick={addSelectedItem}
-                        variant="contained"
-                        color="primary"
+                        variant='contained'
+                        color='primary'
                       >
                         Add Item
                       </Button>
@@ -1912,11 +1964,11 @@ function AddEditPurchaseRequest(props) {
                         style={{ paddingLeft: 30, paddingRight: 30 }}
                         disabled={!validateItemsForm()}
                         onClick={editSelectedItem}
-                        variant="contained"
-                        color="primary"
+                        variant='contained'
+                        color='primary'
                       >
-                        {" "}
-                        Edit{" "}
+                        {' '}
+                        Edit{' '}
                       </Button>
                     )}
                   </div>
@@ -1929,12 +1981,12 @@ function AddEditPurchaseRequest(props) {
             <img
               onClick={() => props.history.goBack()}
               src={Back_Arrow}
-              style={{ width: 60, height: 40, cursor: "pointer" }}
+              style={{ width: 60, height: 40, cursor: 'pointer' }}
             />
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 }
-export default AddEditPurchaseRequest;
+export default AddEditPurchaseRequest
