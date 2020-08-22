@@ -77,7 +77,6 @@ const styles = {
     border: '0px solid #ccc',
     borderRadius: '6px',
     color: 'gray',
-    // marginTop: "10px",
     width: '100%',
     height: '55px',
     cursor: 'pointer',
@@ -172,6 +171,7 @@ function AddEditPurchaseRequest(props) {
   const [edrId, setedrId] = useState("")
   const [slipUpload, setSlipUpload] = useState('')
   const [imagePreview, setImagePreview] = useState('')
+  const [pdfView, setpdfView] = useState('')
   const [isLoading, setIsLoading] = useState(true);
 
   const getLRByIdURI = (id) => {
@@ -181,7 +181,6 @@ function AddEditPurchaseRequest(props) {
         if (res.data.success) {
           if (res.data.data) {
             console.log(res.data.data, "EDRs LR");
-
             setIsLoading(false);
 
             Object.entries(res.data.data).map(([key, val]) => {
@@ -218,7 +217,7 @@ function AddEditPurchaseRequest(props) {
       status: status,
     };
     formData.append('data', JSON.stringify(params))
-    console.log('PARAMSS ', params)
+    // console.log('PARAMSS ', params)
     axios
       .put(updateLRById, formData, {
         headers: {
@@ -231,22 +230,6 @@ function AddEditPurchaseRequest(props) {
         if (res.data.success) {
           setOpenNotification(true);
           setsuccessMsg("Submitted successfully");
-          // if (res.data.data) {
-          //   console.log(res.data.data, "response after adding");
-
-          //   setIsLoading(false);
-
-          //   Object.entries(res.data.data).map(([key, val]) => {
-          //     if (val && typeof val === "object") {
-          //       if (key === "serviceId") {
-          //         dispatch({ field: "name", value: val.name });
-          //         dispatch({ field: "price", value: val.price });
-          //       }
-          //     } else {
-          //       dispatch({ field: key, value: val });
-          //     }
-          //   });
-          // }
         }
         else {
           setOpenNotification(true);
@@ -261,8 +244,6 @@ function AddEditPurchaseRequest(props) {
   useEffect(() => {
     setCurrentUser(cookie.load("current_user"));
     getLRByIdURI(props.history.location.state.selectedItem._id);
-    console.log("Lab req ID :", props.history.location.state.selectedItem._id)
-    console.log("EDR ID : ", props.history.location.state.selectedItem.edrId._id);
 
     setlabId(props.history.location.state.selectedItem._id);
     setedrId(props.history.location.state.selectedItem.edrId._id);
@@ -276,14 +257,23 @@ function AddEditPurchaseRequest(props) {
   }
 
   const onSlipUpload = (event) => {
-    setSlipUpload(event.target.files[0])
-
     var file = event.target.files[0]
+    var fileType = file.name.slice(file.name.length - 3)
+
+    // console.log("Selected file : ", file.name)
+    // console.log("file type : ", fileType)
+
+    setSlipUpload(file)
     var reader = new FileReader()
     var url = reader.readAsDataURL(file);
 
     reader.onloadend = function () {
-      setImagePreview([reader.result])
+      if (fileType === 'pdf') {
+        setpdfView(file.name)
+      }
+      else {
+        setImagePreview([reader.result])
+      }
     }
   }
 
@@ -598,38 +588,67 @@ function AddEditPurchaseRequest(props) {
                       />
                       <FaUpload /> Results
                     </label>
-                    {imagePreview !== "" ? (
-                      <>
-                        <img src={imagePreview} className="depositSlipImg" />
-                        {results !== "" ? (
-                          <span
-                            style={{marginLeft:'10px', color: 'green' }}
-                          >
-                          New results
-                          </span>
-                        ) : (
-                            undefined
-                          )}
-                      </>
+
+                    {pdfView !== "" ? (
+                      <div
+                        style={{ textAlign: 'center', color: '#2c6ddd', fontStyle: 'italic' }}
+                      >
+                        <span style={{ color: 'black' }}>Selected File : </span>{pdfView}
+                      </div>
                     ) : (
                         undefined
                       )}
-                    {results !== "" ? (
+
+                  </div>
+                </div>
+
+                <div className='row'>
+                  {results !== "" && results.slice(results.length - 3) !== 'pdf' ? (
+                    <div className='col-md-6 col-sm-6 col-6'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}>
+
                       <img src={uploadsUrl + results.split('\\')[1]} className="depositSlipImg" />
-                    ) : (
+                    </div>
+                  ) : results !== "" && results.slice(results.length - 3) === 'pdf' ? (
+                    <div className='col-md-6 col-sm-6 col-6'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                        // textAlign:'center',
+                      }}>
+                      <a href={uploadsUrl + results.split('\\')[1]} style={{ color: '#2c6ddd' }}>Click here to open results</a>
+                    </div>
+                  ) : (
                         <div className='LoaderStyle'>
                           <Loader type='TailSpin' color='red' height={50} width={50} />
                         </div>
                       )}
-                    <span
-                      className='container-fluid'
-                      style={{ color: 'green' }}
-                    >
-                      {results && results === ''
-                        ? ''
-                        : results.name}
-                    </span>
-                  </div>
+
+                  {imagePreview !== "" ? (
+                    <div className='col-md-6 col-sm-6 col-6'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}>
+                      <img src={imagePreview} className="depositSlipImg" />
+                      {results !== "" ? (
+                        <div
+                          style={{ color: 'black', textAlign: 'center' }}
+                        >
+                          New results
+                        </div>
+
+                      ) : (
+                          undefined
+                        )}
+
+                    </div>
+                  ) : (
+                      undefined
+                    )}
                 </div>
               </>
             ) : (

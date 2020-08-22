@@ -54,6 +54,7 @@ const styles = {
         height: "45px",
         cursor: "pointer",
         padding: "10px",
+        marginTop:'10px'
     },
     input: {
         display: "none",
@@ -64,7 +65,7 @@ const styles = {
         padding: '10px'
     },
     inputContainerForTextField: {
-        marginTop: 25,
+        marginTop: 10,
     },
     styleForLabel: {
         paddingTop: 25,
@@ -121,21 +122,19 @@ function AddEditEDR(props) {
     const [, setrequestNo] = useState("");
     const [DocumentUpload, setDocumentUpload] = useState("");
     const [imagePreview, setImagePreview] = useState("");
+    const [pdfView, setpdfView] = useState('')
 
     useEffect(() => {
         // const soc = socketIOClient(socketUrl);
         // setSocket(soc);
         // soc.emit("connection");
-
         setCurrentUser(cookie.load("current_user"));
-        console.log(cookie.load("current_user").name, "BANDAA")
-
         setcomingFor(props.history.location.state.comingFor);
 
         const selectedRec = props.history.location.state.selectedItem;
         const selectedFollowUp = props.history.location.state.followUpItem;
-        console.log("Selected Item", props.history.location.state.selectedItem);
-        console.log("Follow Up Item", props.history.location.state.followUpItem);
+        // console.log("Selected Item", props.history.location.state.selectedItem);
+        // console.log("Follow Up Item", props.history.location.state.followUpItem);
 
         setfollowUpid(props.history.location.state.followUpItem._id);
         setid(props.history.location.state.selectedItem._id);
@@ -195,17 +194,20 @@ function AddEditEDR(props) {
     // }
 
     const onDocumentUpload = (event) => {
-        setDocumentUpload(event.target.files[0]);
+        var file = event.target.files[0]
+        var fileType = file.name.slice(file.name.length - 3)
 
-        var file = event.target.files[0];
+        setDocumentUpload(file);
         var reader = new FileReader();
         var url = reader.readAsDataURL(file);
 
-        console.log("Photu link ", file)
-
         reader.onloadend = function (e) {
-            setImagePreview([reader.result]);
-            dispatch({ field: 'file', value: file.name })
+            if (fileType === 'pdf') {
+                setpdfView(file.name)
+            }
+            else {
+                setImagePreview([reader.result])
+            }
         };
     };
 
@@ -235,7 +237,7 @@ function AddEditEDR(props) {
             followUp: followUpArray,
         };
         formData.append('data', JSON.stringify(params))
-        console.log('PARAMSS ', params)
+        // console.log('PARAMSS ', params)
         axios
             .put(addfollowup, formData, {
                 headers: {
@@ -300,51 +302,102 @@ function AddEditEDR(props) {
                         </div>
                     </div>
 
-                    <div style={{
-                        height: '10px'
-                    }}
-                    />
-
-                    <div className='row'>
-                        {comingFor === 'add' ? (
-                            <>
-                                <label style={styles.upload}>
-                                    <input
-                                        type="file"
-                                        style={styles.input}
-                                        onChange={onDocumentUpload}
-                                        // value={file}
-                                        name="file"
-                                        required
-                                    />
-                                    <FaUpload />&nbsp;&nbsp;&nbsp;Upload File
-                                </label>
-                                {imagePreview !== "" ? (
-                                    <img src={imagePreview} className="depositSlipImg" />
-                                ) : (
-                                        undefined
-                                    )}
-                                <span
-                                    className='container-fluid'
-                                    style={{ color: 'green' }}
+                    {comingFor === 'add' ? (
+                        <>
+                        <div className='row'>
+                            <label style={styles.upload}>
+                                <input
+                                    type="file"
+                                    style={styles.input}
+                                    onChange={onDocumentUpload}
+                                    name="file"
+                                    required
+                                />
+                                <FaUpload />&nbsp;&nbsp;&nbsp;Upload File
+                            </label>
+                            {pdfView !== "" ? (
+                                <div className="col-md-12 col-sm-12 col-12"
+                                    style={{ textAlign: 'center', color: '#2c6ddd', fontStyle: 'italic' }}
                                 >
-                                    {file && file === ''
-                                        ? ''
-                                        : file.name}
-                                </span>
-                            </>
-                        ) : (
-                                <>
-                                    {file ? (
-                                        <img src={uploadsUrl + file.split('\\')[1]} className="depositSlipImg" />
-                                    ) : (
+                                    <span style={{ color: 'black' }}>Selected File : </span>{pdfView}
+                                </div>
+                            ) : (
+                                    undefined
+                                )}
+                        </div>
+                        <div className='row'>
+                            {file !== "" && file.slice(file.length - 3) !== 'pdf' ? (
+                                <div className='col-md-6 col-sm-6 col-6'
+                                    style={{
+                                        ...styles.inputContainerForTextField,
+                                        ...styles.textFieldPadding,
+                                    }}>
+
+                                    <img src={uploadsUrl + file.split('\\')[1]} className="depositSlipImg" />
+                                </div>
+                            ) : file !== "" && file.slice(file.length - 3) === 'pdf' ? (
+                                <div className='col-md-6 col-sm-6 col-6'
+                                    style={{
+                                        ...styles.inputContainerForTextField,
+                                        ...styles.textFieldPadding,
+                                        // textAlign:'center',
+                                    }}>
+                                    <a href={uploadsUrl + file.split('\\')[1]} style={{ color: '#2c6ddd' }}>Click here to open file</a>
+                                </div>
+                            ) : (
                                         <div className='LoaderStyle'>
                                             <Loader type='TailSpin' color='red' height={50} width={50} />
                                         </div>
+                                    )}
+
+                            {imagePreview !== "" ? (
+                                <div className='col-md-6 col-sm-6 col-6'
+                                    style={{
+                                        ...styles.inputContainerForTextField,
+                                        ...styles.textFieldPadding,
+                                    }}>
+                                    <img src={imagePreview} className="depositSlipImg" />
+                                    {file !== "" ? (
+                                        <div
+                                            style={{ color: 'black', textAlign: 'center' }}
+                                        >
+                                            New file
+                                        </div>
+
+                                    ) : (
+                                            undefined
                                         )}
-                                </>
-                            )}
-                    </div>
+
+                                </div>
+                            ) : (
+                                    undefined
+                                )}
+                        </div>
+                        </>
+                    ) : (
+                            <div className='row'>
+                                {file !== "" && file.slice(file.length - 3) !== 'pdf' ? (
+                                    <div className='col-md-6 col-sm-6 col-6'
+                                        style={{
+                                            ...styles.inputContainerForTextField,
+                                        }}>
+
+                                        <img src={uploadsUrl + file.split('\\')[1]} className="depositSlipImg" />
+                                    </div>
+                                ) : file !== "" && file.slice(file.length - 3) === 'pdf' ? (
+                                    <div className='col-md-6 col-sm-6 col-6'
+                                        style={{
+                                            ...styles.inputContainerForTextField,
+                                        }}>
+                                        <a href={uploadsUrl + file.split('\\')[1]} style={{ color: '#2c6ddd' }}>Click here to open file</a>
+                                    </div>
+                                ) : (
+                                            <div className='LoaderStyle'>
+                                                <Loader type='TailSpin' color='red' height={50} width={50} />
+                                            </div>
+                                        )}
+                            </div>
+                        )}
 
                     <div style={{
                         display: "flex", flex: 1, justifyContent: "center", marginTop: "2%",
