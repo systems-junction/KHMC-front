@@ -65,7 +65,7 @@ function AddEditPurchaseRequest(props) {
         date: '',
         status: '',
         approvalNumber: '',
-        approvalPerson:'',
+        approvalPerson: '',
         description: '',
         file: '',
         doctor: '',
@@ -108,8 +108,6 @@ function AddEditPurchaseRequest(props) {
 
     useEffect(() => {
         setCurrentUser(cookie.load('current_user'))
-        console.log(cookie.load('current_user'))
-
         console.log("selected rec ", props.history.location.state.selectedItem)
 
         setSelectedItem(props.history.location.state.selectedItem)
@@ -124,12 +122,11 @@ function AddEditPurchaseRequest(props) {
         if (selectedRec) {
             Object.entries(selectedRec).map(([key, val]) => {
                 if (val && typeof val === "object") {
-                    if(key === "approvalPerson")
-                    {
+                    if (key === "approvalPerson") {
                         dispatch({ field: key, value: val })
                     }
-                    else{
-                    dispatch({ field: key, value: val._id })
+                    else {
+                        dispatch({ field: key, value: val._id })
                     }
                 } else {
                     dispatch({ field: key, value: val });
@@ -432,7 +429,7 @@ function AddEditPurchaseRequest(props) {
                                 placeholder='Approval Person'
                                 name={'approvalPerson'}
                                 value={approvalPerson
-                                    ? approvalPerson.firstName+' '+approvalPerson.lastName : currentUser.name
+                                    ? approvalPerson.firstName + ' ' + approvalPerson.lastName : currentUser.name
                                 }
                                 onChange={onChangeValue}
                                 className='textInputStyle'
@@ -445,18 +442,26 @@ function AddEditPurchaseRequest(props) {
                     </div>
 
                     <div className='row'>
-                        <div
-                            className='col-md-6 col-sm-6 col-6'
-                            style={styles.inputContainerForTextField}
-                        >
-                            {file ? (
+                        {file !== "" && file.slice(file.length - 3) !== 'pdf' ? (
+                            <div className='col-md-6 col-sm-6 col-6'
+                                style={{
+                                    ...styles.inputContainerForTextField,
+                                }}>
+
                                 <img src={uploadsUrl + file.split('\\')[1]} className="depositSlipImg" />
-                            ) : (
+                            </div>
+                        ) : file !== "" && file.slice(file.length - 3) === 'pdf' ? (
+                            <div className='col-md-6 col-sm-6 col-6'
+                                style={{
+                                    ...styles.inputContainerForTextField,
+                                }}>
+                                <a href={uploadsUrl + file.split('\\')[1]} style={{ color: '#2c6ddd' }}>Click here to open file</a>
+                            </div>
+                        ) : (
                                 <div className='LoaderStyle'>
                                     <Loader type='TailSpin' color='red' height={50} width={50} />
                                 </div>
-                                )}
-                        </div>
+                            )}
                     </div>
                 </div>
 

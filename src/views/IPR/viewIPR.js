@@ -115,7 +115,7 @@ const tableDataKeysForNurse = [
   'requesterName',
   'status',
 ]
-const tableHeadingForEDR = ['Date/TIme', 'Description', 'Doctor Ref', 'Action']
+const tableHeadingForEDR = ['Date/TIme', 'Description', 'Doctor Ref','status', 'Action']
 const tableDataKeysForEDR = [
   "serviceCode",
   "serviceName",

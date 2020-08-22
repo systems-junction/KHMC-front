@@ -6,13 +6,12 @@ import Tab from '@material-ui/core/Tab'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import {
-  updatePatientUrl,
   updateClaim,
   getSearchedpatient,
   addClaim,
   getedripr,
+  uploadsUrl
 } from '../../../public/endpoins'
-import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
 import axios from 'axios'
 import Notification from '../../../components/Snackbar/Notification.js'
 import cookie from 'react-cookies'
@@ -29,11 +28,8 @@ import TableCell from '@material-ui/core/TableCell'
 import InputLabel from '@material-ui/core/InputLabel'
 import Paper from '@material-ui/core/Paper'
 import CustomTable from '../../../components/Table/Table'
-import InputLabelComponent from '../../../components/InputLabel/inputLabel'
-import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
-import BootstrapInput from '../../../components/Dropdown/dropDown.js'
-import ErrorMessage from '../../../components/ErrorMessage/errorMessage'
+import Loader from "react-loader-spinner";
 
 const tableHeadingForBillSummary = [
   'Date/Time',
@@ -87,7 +83,6 @@ const styles = {
     border: '0px solid #ccc',
     borderRadius: '6px',
     color: 'gray',
-    marginTop: '-25px',
     width: '100%',
     height: '60px',
     cursor: 'pointer',
@@ -102,7 +97,7 @@ const styles = {
     padding: '20px',
   },
   inputContainerForTextField: {
-    marginTop: 25,
+    marginTop: 10,
   },
   styleForLabel: {
     paddingTop: 25,
@@ -206,7 +201,6 @@ function AddEditPatientListing(props) {
     generatedBy = cookie.load('current_user').staffId,
     insuranceNumber = '-----',
     insuranceVendor = '-----',
-    paymentMethod,
     treatmentDetail,
     patientId,
     status,
@@ -225,6 +219,7 @@ function AddEditPatientListing(props) {
   const [value, setValue] = React.useState(0)
   const [DocumentUpload, setDocumentUpload] = useState('')
   const [imagePreview, setImagePreview] = useState('')
+  const [pdfView, setpdfView] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [itemFound, setItemFound] = useState('')
   const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false)
@@ -235,7 +230,7 @@ function AddEditPatientListing(props) {
     setcomingFor(props.history.location.state.comingFor)
 
     const selectedRec = props.history.location.state.selectedItem
-    // console.log("selected rec is ... ", selectedRec)
+    console.log("selected rec is ... ", selectedRec)
 
     if (selectedRec) {
       setClaimId(selectedRec._id)
@@ -310,7 +305,6 @@ function AddEditPatientListing(props) {
     const params = {
       generatedBy: generatedBy,
       patient: patientId,
-      // insurer,
       treatmentDetail: treatmentDetail,
       document: document,
       status: 'pending',
@@ -388,14 +382,20 @@ function AddEditPatientListing(props) {
   }
 
   const onDocumentUpload = (event) => {
-    setDocumentUpload(event.target.files[0])
-
     var file = event.target.files[0]
-    var reader = new FileReader()
-    var url = reader.readAsDataURL(file)
+    var fileType = file.name.slice(file.name.length - 3)
 
-    reader.onloadend = function(e) {
-      setImagePreview([reader.result])
+    setDocumentUpload(file)
+    var reader = new FileReader()
+    var url = reader.readAsDataURL(file);
+    
+    reader.onloadend = function () {
+      if (fileType === 'pdf') {
+        setpdfView(file.name)
+      }
+      else {
+        setImagePreview([reader.result])
+      }
     }
   }
 
@@ -466,7 +466,6 @@ function AddEditPatientListing(props) {
           for (let i = 0; i < res.data.data.prEdr.length; i++) {
             let amount = 0
             let singlePR = res.data.data.prEdr[i]
-            let date = ''
             for (let j = 0; j < singlePR.medicine.length; j++) {
               // console.log(singlePR.medicine[j].itemId.purchasePrice)
               amount = amount + singlePR.medicine[j].itemId.purchasePrice
@@ -634,22 +633,22 @@ function AddEditPatientListing(props) {
                             </Table>
                           )
                         ) : (
-                          <h4
-                            style={{ textAlign: 'center' }}
-                            onClick={() => setSearchQuery('')}
-                          >
-                            Patient Not Found
-                          </h4>
-                        )}
+                            <h4
+                              style={{ textAlign: 'center' }}
+                              onClick={() => setSearchQuery('')}
+                            >
+                              Patient Not Found
+                            </h4>
+                          )}
                       </Paper>
                     </div>
                   ) : (
-                    undefined
-                  )}
+                      undefined
+                    )}
                 </div>
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
             </div>
 
             <div className='container' style={styles.patientDetails}>
@@ -755,10 +754,6 @@ function AddEditPatientListing(props) {
               <div className='row'>
                 <div
                   className='col-md-12'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
                 >
                   <TextField
                     required
@@ -792,10 +787,6 @@ function AddEditPatientListing(props) {
                 <div className='row'>
                   <div
                     className='col-md-6 col-sm-6 col-6'
-                    style={{
-                      ...styles.inputContainerForTextField,
-                      ...styles.textFieldPadding,
-                    }}
                   >
                     <TextField
                       required
@@ -828,10 +819,6 @@ function AddEditPatientListing(props) {
                   </div>
                   <div
                     className='col-md-6 col-sm-6 col-6'
-                    style={{
-                      ...styles.inputContainerForTextField,
-                      ...styles.textFieldPadding,
-                    }}
                   >
                     <TextField
                       required
@@ -851,37 +838,85 @@ function AddEditPatientListing(props) {
                 </div>
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             <div className='container'>
               <div
                 className='row'
                 style={{
                   ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
                 }}
               >
-                <label style={styles.upload}>
-                  <TextField
-                    required
-                    type='file'
-                    style={styles.input}
-                    onChange={onDocumentUpload}
-                    value={document}
-                    name='document'
-                  />
-                  <FaUpload /> &nbsp;&nbsp;&nbsp;Upload Document
-                  <ErrorMessage
-                    name={document && document.name}
-                    isFormSubmitted={isFormSubmitted}
-                  />
-                </label>
+                <div
+                  className='col-md-12 col-sm-12 col-12'
+                >
+                  <label style={styles.upload}>
+                    <TextField
+                      required
+                      type='file'
+                      style={styles.input}
+                      onChange={onDocumentUpload}
+                      name='document'
+                    />
+                    <FaUpload /> &nbsp;&nbsp;&nbsp;Upload Document
+                  </label>
+
+                  {pdfView !== "" ? (
+                    <div
+                      style={{ textAlign: 'center', color: '#2c6ddd', fontStyle: 'italic' }}
+                    >
+                      <span style={{ color: 'black' }}>Selected File : </span>{pdfView}
+                    </div>
+                  ) : (
+                      undefined
+                    )}
+                </div>
               </div>
+
               <div className='row'>
-                {/* <div className="col-md-6 col-sm-6 col-6"> */}
-                <img src={imagePreview} className='depositSlipImg' />
-                {/* </div> */}
+                {document !== "" && document.slice(document.length - 3) !== 'pdf' ? (
+                  <div className='col-md-6 col-sm-6 col-6'
+                    style={{
+                      ...styles.inputContainerForTextField,
+                    }}>
+
+                    <img src={uploadsUrl + document.split('\\')[1]} className="depositSlipImg" />
+                  </div>
+                ) : document !== "" && document.slice(document.length - 3) === 'pdf' ? (
+                  <div className='col-md-6 col-sm-6 col-6'
+                    style={{
+                      ...styles.inputContainerForTextField,
+                    }}>
+                    <a href={uploadsUrl + document.split('\\')[1]} style={{ color: '#2c6ddd' }}>Click here to open document</a>
+                  </div>
+                ) : (
+                      <div className='LoaderStyle'>
+                        <Loader type='TailSpin' color='red' height={50} width={50} />
+                      </div>
+                    )}
+
+                {imagePreview !== "" ? (
+                  <div className='col-md-6 col-sm-6 col-6'
+                    style={{
+                      ...styles.inputContainerForTextField,
+                    }}>
+                    <img src={imagePreview} className="depositSlipImg" />
+                    {document !== "" ? (
+                      <div
+                        style={{ color: 'black', textAlign: 'center' }}
+                      >
+                        New document
+                      </div>
+
+                    ) : (
+                        undefined
+                      )}
+
+                  </div>
+                ) : (
+                    undefined
+                  )}
               </div>
             </div>
 
@@ -918,16 +953,16 @@ function AddEditPatientListing(props) {
                     Next
                   </Button>
                 ) : (
-                  <Button
-                    style={styles.stylesForButton}
-                    //disabled={!validateFormType1()}
-                    onClick={handleEdit}
-                    variant='contained'
-                    color='default'
-                  >
-                    Update
-                  </Button>
-                )}
+                    <Button
+                      style={styles.stylesForButton}
+                      //disabled={!validateFormType1()}
+                      onClick={handleEdit}
+                      variant='contained'
+                      color='default'
+                    >
+                      Update
+                    </Button>
+                  )}
               </div>
             </div>
           </div>
@@ -948,8 +983,8 @@ function AddEditPatientListing(props) {
                   borderBottomWidth={20}
                 />
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
             </div>
 
             <div
@@ -984,22 +1019,22 @@ function AddEditPatientListing(props) {
                     Submit
                   </Button>
                 ) : (
-                  <Button
-                    style={styles.stylesForButton}
-                    //disabled={!validateFormType1()}
-                    onClick={handleEdit}
-                    variant='contained'
-                    color='default'
-                  >
-                    Update
-                  </Button>
-                )}
+                    <Button
+                      style={styles.stylesForButton}
+                      //disabled={!validateFormType1()}
+                      onClick={handleEdit}
+                      variant='contained'
+                      color='default'
+                    >
+                      Update
+                    </Button>
+                  )}
               </div>
             </div>
           </div>
         ) : (
-          undefined
-        )}
+              undefined
+            )}
 
         <Notification msg={errorMsg} open={openNotification} />
       </div>
