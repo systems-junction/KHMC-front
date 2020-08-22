@@ -2,15 +2,17 @@ const local = 'http://localhost:4000/api'
 const live = 'https://test.khmc-staging.com/api'
 
 // const dev = "http://ec2-52-14-42-129.us-east-2.compute.amazonaws.com/api"; http://165.232.66.148/api
-// const devDigital = "http://165.232.66.148/api"; 
+//const stagingDigitalOcean = "http://165.232.66.148:8080/api"; 
+//const StagingDigitalOceanUploadsUrl = 'http://165.232.66.148:8080/uploads/';
 
 const baseUrl = 'http://localhost:4000/api'
 
-// const baseUrl = devDigital;
+//const baseUrl = stagingDigitalOcean;
 
 // export const socketUrl = "ws://localhost:4001";
 // export const socketUrl = "ws://192.168.10.20:4001";
 export const uploadsUrl = 'http://localhost:4000/uploads/'
+//export const uploadsUrl = StagingDigitalOceanUploadsUrl
 
 export const socketUrl = 'wss://test.khmc-staging.com:4001'
 
