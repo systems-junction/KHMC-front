@@ -109,7 +109,7 @@ const styles = {
   },
 
   inputContainerForTextField: {
-    marginTop: 25,
+    marginTop: 6,
   },
 
   inputContainerForDropDown: {
@@ -713,49 +713,48 @@ function AddEditPurchaseRequest(props) {
               /> */}
             </div>
 
-            <div className="col-md-4">
-              <div
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
+            <div
+              className="col-md-4"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              {/* <InputLabelComponent>Generated</InputLabelComponent> */}
+              <TextField
+                required
+                select
+                fullWidth
+                disabled={true}
+                id="generated"
+                name="generated"
+                value={generated}
+                onChange={onChangeValue}
+                label="Generated"
+                variant="filled"
+                className="dropDownStyle"
+                // input={<BootstrapInput />}
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
                 }}
               >
-                {/* <InputLabelComponent>Generated</InputLabelComponent> */}
-                <TextField
-                  required
-                  select
-                  fullWidth
-                  disabled={true}
-                  id="generated"
-                  name="generated"
-                  value={generated}
-                  onChange={onChangeValue}
-                  label="Generated"
-                  variant="filled"
-                  className="dropDownStyle"
-                  // input={<BootstrapInput />}
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  {generatedArray &&
-                    generatedArray.map((val) => {
-                      return (
-                        <MenuItem key={val.key} value={val.key}>
-                          {val.value}
-                        </MenuItem>
-                      );
-                    })}
-                </TextField>
-                {/* <ErrorMessage
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {generatedArray &&
+                  generatedArray.map((val) => {
+                    return (
+                      <MenuItem key={val.key} value={val.key}>
+                        {val.value}
+                      </MenuItem>
+                    );
+                  })}
+              </TextField>
+              {/* <ErrorMessage
                   name={generated}
                   isFormSubmitted={isFormSubmitted}
                 /> */}
-              </div>
             </div>
 
             <div
@@ -843,55 +842,54 @@ function AddEditPurchaseRequest(props) {
               </MuiPickersUtilsProvider>
             </div>
 
-            <div className="col-md-6">
-              <div
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
+            <div
+              className="col-md-6"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              {/* <InputLabelComponent>Manual RR Reason*</InputLabelComponent> */}
+
+              <TextField
+                required
+                select
+                fullWidth
+                disabled={
+                  currentUser &&
+                  (currentUser.staffTypeId.type === "FU Member" ||
+                    currentUser.staffTypeId.type === "admin")
+                    ? false
+                    : true
+                }
+                fullWidth
+                id="reason"
+                name="reason"
+                value={reason}
+                onChange={onChangeValue}
+                label="Reason"
+                className="dropDownStyle"
+                // input={<BootstrapInput />}
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
                 }}
+                error={reason === "" && isFormSubmitted}
               >
-                {/* <InputLabelComponent>Manual RR Reason*</InputLabelComponent> */}
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {reasonArray.map((val) => {
+                  return (
+                    <MenuItem key={val.key} value={val.key}>
+                      {val.value}
+                    </MenuItem>
+                  );
+                })}
+              </TextField>
 
-                <TextField
-                  required
-                  select
-                  fullWidth
-                  disabled={
-                    currentUser &&
-                    (currentUser.staffTypeId.type === "FU Member" ||
-                      currentUser.staffTypeId.type === "admin")
-                      ? false
-                      : true
-                  }
-                  fullWidth
-                  id="reason"
-                  name="reason"
-                  value={reason}
-                  onChange={onChangeValue}
-                  label="Reason"
-                  className="dropDownStyle"
-                  // input={<BootstrapInput />}
-                  variant="filled"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  error={reason === "" && isFormSubmitted}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  {reasonArray.map((val) => {
-                    return (
-                      <MenuItem key={val.key} value={val.key}>
-                        {val.value}
-                      </MenuItem>
-                    );
-                  })}
-                </TextField>
-
-                {/* <ErrorMessage name={reason} isFormSubmitted={isFormSubmitted} /> */}
-              </div>
+              {/* <ErrorMessage name={reason} isFormSubmitted={isFormSubmitted} /> */}
             </div>
           </div>
 
@@ -931,91 +929,89 @@ function AddEditPurchaseRequest(props) {
                 /> */}
               </div>
 
-              <div className="col-md-4">
-                <div
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
+              <div
+                className="col-md-4"
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                {/* <InputLabelComponent>Department*</InputLabelComponent> */}
+                <TextField
+                  disabled={
+                    currentUser &&
+                    (currentUser.staffTypeId.type === "FU Member" ||
+                      currentUser.staffTypeId.type === "admin")
+                      ? false
+                      : true
+                  }
+                  label="Department"
+                  name={"department"}
+                  value={department}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                  variant="filled"
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
                   }}
-                >
-                  {/* <InputLabelComponent>Department*</InputLabelComponent> */}
-                  <TextField
-                    disabled={
-                      currentUser &&
-                      (currentUser.staffTypeId.type === "FU Member" ||
-                        currentUser.staffTypeId.type === "admin")
-                        ? false
-                        : true
-                    }
-                    label="Department"
-                    name={"department"}
-                    value={department}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                    error={department === "" && isFormSubmitted}
-                  />
-                  {/* <ErrorMessage
+                  error={department === "" && isFormSubmitted}
+                />
+                {/* <ErrorMessage
                     name={department}
                     isFormSubmitted={isFormSubmitted}
                   /> */}
-                </div>
               </div>
 
-              <div className="col-md-4">
-                <div
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
+              <div
+                className="col-md-4"
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                {/* <InputLabelComponent>Order Type*</InputLabelComponent> */}
+                <TextField
+                  required
+                  select
+                  fullWidth
+                  fullWidth
+                  disabled={
+                    currentUser &&
+                    (currentUser.staffTypeId.type === "FU Member" ||
+                      currentUser.staffTypeId.type === "admin")
+                      ? false
+                      : true
+                  }
+                  id="orderType"
+                  name="orderType"
+                  value={orderType}
+                  onChange={onChangeValue}
+                  label="Order Type"
+                  className="dropDownStyle"
+                  variant="filled"
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
                   }}
+                  error={orderType === "" && isFormSubmitted}
+                  // input={<BootstrapInput />}
                 >
-                  {/* <InputLabelComponent>Order Type*</InputLabelComponent> */}
-                  <TextField
-                    required
-                    select
-                    fullWidth
-                    fullWidth
-                    disabled={
-                      currentUser &&
-                      (currentUser.staffTypeId.type === "FU Member" ||
-                        currentUser.staffTypeId.type === "admin")
-                        ? false
-                        : true
-                    }
-                    id="orderType"
-                    name="orderType"
-                    value={orderType}
-                    onChange={onChangeValue}
-                    label="Order Type"
-                    className="dropDownStyle"
-                    variant="filled"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                    error={orderType === "" && isFormSubmitted}
-                    // input={<BootstrapInput />}
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    {orderArray.map((val) => {
-                      return (
-                        <MenuItem key={val.key} value={val.key}>
-                          {val.value}
-                        </MenuItem>
-                      );
-                    })}
-                  </TextField>
-                  {/* <ErrorMessage
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  {orderArray.map((val) => {
+                    return (
+                      <MenuItem key={val.key} value={val.key}>
+                        {val.value}
+                      </MenuItem>
+                    );
+                  })}
+                </TextField>
+                {/* <ErrorMessage
                     name={orderType}
                     isFormSubmitted={isFormSubmitted}
                   /> */}
-                </div>
               </div>
             </div>
           ) : (
@@ -1291,166 +1287,165 @@ function AddEditPurchaseRequest(props) {
             currentUser.staffTypeId.type === "Warehouse Incharge" ||
             currentUser.staffTypeId.type === "FU Inventory Keeper") ? (
             <div className="row">
-              <div className="col-md-6">
-                <div
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  {/* <InputLabelComponent>Status</InputLabelComponent> */}
-                  {currentUser.staffTypeId.type === "Warehouse Member" ? (
-                    <TextField
-                      required
-                      select
-                      fullWidth
-                      id="secondStatus"
-                      name="secondStatus"
-                      value={secondStatus}
-                      onChange={onChangeValue}
-                      label="Status"
-                      className="dropDownStyle"
-                      // input={<BootstrapInput />}
-                      variant="filled"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                      }}
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
+              <div
+                className="col-md-6"
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                {/* <InputLabelComponent>Status</InputLabelComponent> */}
+                {currentUser.staffTypeId.type === "Warehouse Member" ? (
+                  <TextField
+                    required
+                    select
+                    fullWidth
+                    id="secondStatus"
+                    name="secondStatus"
+                    value={secondStatus}
+                    onChange={onChangeValue}
+                    label="Status"
+                    className="dropDownStyle"
+                    // input={<BootstrapInput />}
+                    variant="filled"
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
 
-                      {statusArrayForWareHouseMember.map((val) => {
-                        return (
-                          <MenuItem key={val.key} value={val.key}>
-                            {val.value}
-                          </MenuItem>
-                        );
-                      })}
-                    </TextField>
-                  ) : currentUser.staffTypeId.type === "Warehouse Incharge" ? (
-                    // <Select
-                    //   fullWidth
-                    //   id="secondStatus"
-                    //   name="secondStatus"
-                    //   value={secondStatus}
-                    //   onChange={onChangeValue}
-                    //   label="Status"
-                    //   className="dropDownStyle"
-                    //   input={<BootstrapInput />}
-                    // >
-                    <TextField
-                      required
-                      select
-                      fullWidth
-                      id="secondStatus"
-                      name="secondStatus"
-                      value={secondStatus}
-                      onChange={onChangeValue}
-                      label="Status"
-                      className="dropDownStyle"
-                      // input={<BootstrapInput />}
-                      variant="filled"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                      }}
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
+                    {statusArrayForWareHouseMember.map((val) => {
+                      return (
+                        <MenuItem key={val.key} value={val.key}>
+                          {val.value}
+                        </MenuItem>
+                      );
+                    })}
+                  </TextField>
+                ) : currentUser.staffTypeId.type === "Warehouse Incharge" ? (
+                  // <Select
+                  //   fullWidth
+                  //   id="secondStatus"
+                  //   name="secondStatus"
+                  //   value={secondStatus}
+                  //   onChange={onChangeValue}
+                  //   label="Status"
+                  //   className="dropDownStyle"
+                  //   input={<BootstrapInput />}
+                  // >
+                  <TextField
+                    required
+                    select
+                    fullWidth
+                    id="secondStatus"
+                    name="secondStatus"
+                    value={secondStatus}
+                    onChange={onChangeValue}
+                    label="Status"
+                    className="dropDownStyle"
+                    // input={<BootstrapInput />}
+                    variant="filled"
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
 
-                      {statusArrayForWareHouseDeliveryMan.map((val) => {
-                        return (
-                          <MenuItem key={val.key} value={val.key}>
-                            {val.value}
-                          </MenuItem>
-                        );
-                      })}
-                    </TextField>
-                  ) : currentUser.staffTypeId.type === "admin" ? (
-                    // <Select
-                    //   fullWidth
-                    //   id="secondStatus"
-                    //   name="secondStatus"
-                    //   value={secondStatus}
-                    //   onChange={onChangeValue}
-                    //   label="Status"
-                    //   className="dropDownStyle"
-                    //   input={<BootstrapInput />}
-                    // >
-                    <TextField
-                      required
-                      select
-                      fullWidth
-                      id="secondStatus"
-                      name="secondStatus"
-                      value={secondStatus}
-                      onChange={onChangeValue}
-                      label="Status"
-                      className="dropDownStyle"
-                      // input={<BootstrapInput />}
-                      variant="filled"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                      }}
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
+                    {statusArrayForWareHouseDeliveryMan.map((val) => {
+                      return (
+                        <MenuItem key={val.key} value={val.key}>
+                          {val.value}
+                        </MenuItem>
+                      );
+                    })}
+                  </TextField>
+                ) : currentUser.staffTypeId.type === "admin" ? (
+                  // <Select
+                  //   fullWidth
+                  //   id="secondStatus"
+                  //   name="secondStatus"
+                  //   value={secondStatus}
+                  //   onChange={onChangeValue}
+                  //   label="Status"
+                  //   className="dropDownStyle"
+                  //   input={<BootstrapInput />}
+                  // >
+                  <TextField
+                    required
+                    select
+                    fullWidth
+                    id="secondStatus"
+                    name="secondStatus"
+                    value={secondStatus}
+                    onChange={onChangeValue}
+                    label="Status"
+                    className="dropDownStyle"
+                    // input={<BootstrapInput />}
+                    variant="filled"
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
 
-                      {statusArrayForAdmin.map((val) => {
-                        return (
-                          <MenuItem key={val.key} value={val.key}>
-                            {val.value}
-                          </MenuItem>
-                        );
-                      })}
-                    </TextField>
-                  ) : (
-                    // <Select
-                    //   fullWidth
-                    //   id="secondStatus"
-                    //   name="secondStatus"
-                    //   value={secondStatus}
-                    //   onChange={onChangeValue}
-                    //   label="Status"
-                    //   className="dropDownStyle"
-                    //   input={<BootstrapInput />}
-                    // >
-                    <TextField
-                      required
-                      select
-                      fullWidth
-                      id="secondStatus"
-                      name="secondStatus"
-                      value={secondStatus}
-                      onChange={onChangeValue}
-                      label="Status"
-                      className="dropDownStyle"
-                      // input={<BootstrapInput />}
-                      variant="filled"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                      }}
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
+                    {statusArrayForAdmin.map((val) => {
+                      return (
+                        <MenuItem key={val.key} value={val.key}>
+                          {val.value}
+                        </MenuItem>
+                      );
+                    })}
+                  </TextField>
+                ) : (
+                  // <Select
+                  //   fullWidth
+                  //   id="secondStatus"
+                  //   name="secondStatus"
+                  //   value={secondStatus}
+                  //   onChange={onChangeValue}
+                  //   label="Status"
+                  //   className="dropDownStyle"
+                  //   input={<BootstrapInput />}
+                  // >
+                  <TextField
+                    required
+                    select
+                    fullWidth
+                    id="secondStatus"
+                    name="secondStatus"
+                    value={secondStatus}
+                    onChange={onChangeValue}
+                    label="Status"
+                    className="dropDownStyle"
+                    // input={<BootstrapInput />}
+                    variant="filled"
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
 
-                      {statusArrayForFUInventoryKeeper.map((val) => {
-                        return (
-                          <MenuItem key={val.key} value={val.key}>
-                            {val.value}
-                          </MenuItem>
-                        );
-                      })}
-                    </TextField>
-                  )}
-                </div>
+                    {statusArrayForFUInventoryKeeper.map((val) => {
+                      return (
+                        <MenuItem key={val.key} value={val.key}>
+                          {val.value}
+                        </MenuItem>
+                      );
+                    })}
+                  </TextField>
+                )}
               </div>
 
               <div

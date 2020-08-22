@@ -109,11 +109,11 @@ const orderByArray = [
 
 const styles = {
   inputContainerForTextField: {
-    marginTop: 25,
+    marginTop: 6,
   },
 
   inputContainerForDropDown: {
-    marginTop: 25,
+    marginTop: 6,
     // backgroundColor: 'white',
     // borderRadius: 10,
     // paddingLeft: 10,
@@ -1018,35 +1018,40 @@ function AddEditPurchaseRequest(props) {
                     </MuiPickersUtilsProvider>
                   </div>
 
-                  <div className="col-md-4">
-                    <div style={styles.inputContainerForDropDown}>
-                      {/* <InputLabelComponent id="status-label">
+                  <div
+                    className="col-md-4"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    {/* <InputLabelComponent id="status-label">
                         Requested FU
                       </InputLabelComponent> */}
 
-                      {fuArray &&
-                        fuArray.map((val) => {
-                          if (val._id === fuId) {
-                            return (
-                              <TextField
-                                disabled={true}
-                                type="text"
-                                label="Fu Id"
-                                name={"fuId"}
-                                value={val.fuName}
-                                onChange={onChangeValue}
-                                className="textInputStyle"
-                                error={fuId === "" && isFormSubmitted}
-                                variant="filled"
-                                InputProps={{
-                                  className: classes.input,
-                                  classes: { input: classes.input },
-                                }}
-                              />
-                            );
-                          }
-                        })}
-                    </div>
+                    {fuArray &&
+                      fuArray.map((val) => {
+                        if (val._id === fuId) {
+                          return (
+                            <TextField
+                              disabled={true}
+                              type="text"
+                              label="Fu Id"
+                              name={"fuId"}
+                              value={val.fuName}
+                              onChange={onChangeValue}
+                              className="textInputStyle"
+                              error={fuId === "" && isFormSubmitted}
+                              variant="filled"
+                              InputProps={{
+                                className: classes.input,
+                                classes: { input: classes.input },
+                              }}
+                            />
+                          );
+                        }
+                      })}
+
                     {/* <ErrorMessage
                       name={fuId}
                       isFormSubmitted={isFormSubmitted}

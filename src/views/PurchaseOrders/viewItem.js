@@ -12,7 +12,7 @@ import {
   deletePurchaseRequestUrl,
 } from "../../public/endpoins";
 import Loader from "react-loader-spinner";
-
+import TextField from "@material-ui/core/TextField";
 import Header from "../../components/Header/Header";
 
 import Add_New from "../../assets/img/Add_New.png";
@@ -41,50 +41,96 @@ import TableCell from "@material-ui/core/TableCell";
 
 import { makeStyles } from "@material-ui/core/styles";
 
-
 const styles = {
-    inputContainer: {
-      marginTop: 10,
-      backgroundColor: "white",
-      borderRadius: 5,
-      paddingTop: 5,
-      paddingBottom: 5,
-      marginLeft: 5,
-      marginRight: 5,
-    },
-  
-    // buttonContainer: {
-    //   marginTop: 25
-    // }
-  
-    inputContainerForTextField: {
-      marginTop: 25,
-    },
-  
-    inputContainerForDropDown: {
-      marginTop: 35,
-      backgroundColor: "white",
-      borderRadius: 10,
-      paddingLeft: 10,
-      paddingRight: 10,
-      paddingTop: 2,
-    },
-  
-    buttonContainer: {
-      marginTop: 25,
-    },
+  inputContainer: {
+    marginTop: 10,
+    backgroundColor: "white",
+    borderRadius: 5,
+    paddingTop: 5,
+    paddingBottom: 5,
+    marginLeft: 5,
+    marginRight: 5,
+  },
 
-    styleForLabel:{
-      fontWeight:'700'
-    }
-  };
+  // buttonContainer: {
+  //   marginTop: 25
+  // }
+
+  inputContainerForTextField: {
+    marginTop: 25,
+  },
+
+  inputContainerForDropDown: {
+    marginTop: 35,
+    backgroundColor: "white",
+    borderRadius: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 2,
+  },
+
+  buttonContainer: {
+    marginTop: 25,
+  },
+
+  styleForLabel: {
+    fontWeight: "700",
+  },
+};
 
 const useStyles = makeStyles(styles);
 
+const useStylesForInput = makeStyles((theme) => ({
+  underline: {
+    "&&&:before": {
+      borderBottom: "none",
+    },
+    "&&:after": {
+      borderBottom: "none",
+    },
+  },
+  margin: {
+    margin: theme.spacing(0),
+  },
+  input: {
+    backgroundColor: "white",
+    borderRadius: 6,
+    "&:after": {
+      borderBottomColor: "black",
+    },
+    "&:hover": {
+      backgroundColor: "white",
+    },
+    "&:disabled": {
+      color: "gray",
+    },
+  },
+  multilineColor: {
+    backgroundColor: "white",
+    borderRadius: 6,
+    "&:hover": {
+      backgroundColor: "white",
+    },
+    "&:after": {
+      borderBottomColor: "black",
+    },
+  },
+  root: {
+    "& .MuiTextField-root": {
+      backgroundColor: "white",
+    },
+    "& .Mui-focused": {
+      backgroundColor: "white",
+      color: "black",
+    },
+  },
+}));
+
 export default function PurchaseRequest(props) {
+  const classes = useStylesForInput();
   const [purchaseRequests, setPurchaseRequest] = useState("");
 
-  const classes = useStyles();
+  // const classes = useStyles();
 
   useEffect(() => {}, []);
 
@@ -99,61 +145,114 @@ export default function PurchaseRequest(props) {
       open={props.openItemDialog}
     >
       <DialogContent style={{ backgroundColor: "#31e2aa" }}>
-        <DialogTitle id="simple-dialog-title" style={{color:'white'}}>Item Details</DialogTitle>
+        <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
+          Item Details
+        </DialogTitle>
         <div className="container-fluid">
           <div className="row">
-            <div className="col-md-6" style={styles.inputContainerForTextField}>
-              <InputLabel style={styles.styleForLabel} id="generated-label">Item Code</InputLabel>
+            <div
+              className="col-md-6"
+              style={{
+                ...styles.inputContainerForTextField,
+              }}
+            >
+              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
+                Item Code
+              </InputLabel> */}
 
-              <input
+              <TextField
                 type="text"
                 disabled={true}
-                placeholder="Item Code"
+                label="Item Code"
                 name={"itemCode"}
                 value={props.item.itemCode}
                 // onChange={onChangeValue}
                 className="textInputStyle"
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
               />
             </div>
-            <div className="col-md-6" style={styles.inputContainerForTextField}>
-              <InputLabel style={styles.styleForLabel} id="generated-label">Item Name</InputLabel>
+            <div
+              className="col-md-6"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
+                Item Name
+              </InputLabel> */}
 
-              <input
+              <TextField
                 type="text"
                 disabled={true}
-                placeholder="Name"
+                label="Name"
                 name={"name"}
                 value={props.item.name}
                 // onChange={onChangeValue}
                 className="textInputStyle"
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
               />
             </div>
           </div>
 
           <div className="row">
-            <div className="col-md-6" style={styles.inputContainerForTextField}>
-              <InputLabel style={styles.styleForLabel} id="generated-label">Current Quantity</InputLabel>
-              <input
+            <div
+              className="col-md-6"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
+                Current Quantity
+              </InputLabel> */}
+              <TextField
                 type="number"
                 disabled={true}
-                placeholder="Current Qty"
+                label="Current Qty"
                 name={"currentQty"}
                 value={props.item.currQty}
                 // onChange={onChangeValue}
                 className="textInputStyle"
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
               />
             </div>
 
-            <div className="col-md-6" style={styles.inputContainerForTextField}>
-              <InputLabel style={styles.styleForLabel} id="generated-label">Required Quantity</InputLabel>
-              <input
+            <div
+              className="col-md-6"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
+                Required Quantity
+              </InputLabel> */}
+              <TextField
                 disabled={true}
                 type="number"
-                placeholder="Req Qty"
+                label="Req Qty"
                 name={"reqQty"}
                 value={props.item.reqQty}
                 // onChange={onChangeValue}
                 className="textInputStyle"
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
               />
             </div>
           </div>
@@ -161,17 +260,27 @@ export default function PurchaseRequest(props) {
           <div className="row">
             <div
               className="col-md-12"
-              style={styles.inputContainerForTextField}
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
             >
-              <InputLabel style={styles.styleForLabel} id="generated-label">Description</InputLabel>
-              <input
+              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
+                Description
+              </InputLabel> */}
+              <TextField
                 type="text"
                 disabled={true}
-                placeholder="Description"
+                label="Description"
                 name={"description"}
                 value={props.item.description}
                 // onChange={onChangeValue}
                 className="textInputStyle"
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
               />
             </div>
           </div>
@@ -179,19 +288,29 @@ export default function PurchaseRequest(props) {
           <div className="row">
             <div
               className="col-md-12"
-              style={styles.inputContainerForTextField}
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
             >
-              <InputLabel style={styles.styleForLabel} id="generated-label">Comments</InputLabel>
+              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
+                Comments
+              </InputLabel> */}
 
-              <input
+              <TextField
                 disabled={true}
                 type="text"
                 rows={4}
-                placeholder="Notes/Comments"
+                label="Notes/Comments"
                 name={"comments"}
                 value={props.item.comments}
                 // onChange={onChangeValue}
                 className="textInputStyle"
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
               />
             </div>
           </div>
