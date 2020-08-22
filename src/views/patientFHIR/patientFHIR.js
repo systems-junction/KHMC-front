@@ -9,6 +9,7 @@ import AddIcon from '@material-ui/icons/Add'
 import RemoveIcon from '@material-ui/icons/Remove'
 import MenuItem from '@material-ui/core/MenuItem'
 // import MultiSelect from 'react-multi-select-component'
+import axios from 'axios'
 import InputLabelComponent from '../../components/InputLabel/inputLabel'
 import Chip from '@material-ui/core/Chip'
 import FormControl from '@material-ui/core/FormControl'
@@ -17,6 +18,7 @@ import Select from '@material-ui/core/Select'
 import Input from '@material-ui/core/Input'
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
+import { addPatientFHIRUrl, updatePatientFHIRUrl } from '../../public/endpoins'
 
 const styles = {
   patientDetails: {
@@ -346,6 +348,55 @@ export default function PurchaseRequest() {
     },
   ])
   const [relationshipArray, setrelationshipArray] = React.useState([])
+
+  const handleAdd = () => {
+    const params = {
+      name,
+      telecom,
+      address,
+      contact,
+      gender,
+      birthDate,
+      deceasedBoolean,
+      deceasedDateTime,
+      maritalStatus,
+      multipleBirthBoolean,
+      multipleBirthInteger,
+    }
+
+    console.log('params', params)
+
+    axios.post(addPatientFHIRUrl, params).then((res) => {
+      if (res.data.success) {
+        console.log('success', res.data.data)
+      }
+    })
+  }
+
+  const handleEdit = () => {
+    const params = {
+      _id: '5f40c2dca4d0ab00bc401cd0',
+      name,
+      telecom,
+      address,
+      contact,
+      gender,
+      birthDate,
+      deceasedBoolean,
+      deceasedDateTime,
+      maritalStatus,
+      multipleBirthBoolean,
+      multipleBirthInteger,
+    }
+
+    console.log('params', params)
+
+    axios.put(updatePatientFHIRUrl, params).then((res) => {
+      if (res.data.success) {
+        console.log('success', res.data.data)
+      }
+    })
+  }
 
   // handle input change
   const handleNameChange = (e, index) => {
@@ -1597,8 +1648,18 @@ export default function PurchaseRequest() {
                 type='submit'
                 variant='contained'
                 color='primary'
+                onClick={handleAdd}
               >
                 Submit
+              </Button>
+              <Button
+                style={styles.stylesForPurchaseButton}
+                type='submit'
+                variant='contained'
+                // color='primary'
+                onClick={handleEdit}
+              >
+                Update
               </Button>
             </div>
           </form>
