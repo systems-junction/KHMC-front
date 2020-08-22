@@ -730,8 +730,8 @@ function AddEditPurchaseRequest(props) {
             flex: 4,
             display: 'flex',
             flexDirection: 'column',
-            className: 'container-fluid',
           }}
+          className='container-fluid'
         >
           <div className='row'>
             <div
