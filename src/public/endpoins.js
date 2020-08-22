@@ -332,3 +332,7 @@ export const getDischargeEDRUrl = `${baseUrl}/edr/getdischargeedr`
 export const getDischargeIPRUrl = `${baseUrl}/ipr/getdischargeipr`
 export const updateDischargeEDRUrl = `${baseUrl}/edr/updatedischarge`
 export const updateDischargeIPRUrl = `${baseUrl}/ipr/updatedischarge`
+
+// Patient FHIR
+export const addPatientFHIRUrl = `${baseUrl}/patient/addpatientfhir`
+export const updatePatientFHIRUrl = `${baseUrl}/patient/updatepatientfhir`
