@@ -1,9 +1,12 @@
 const local = 'http://localhost:4000/api'
 const live = 'https://test.khmc-staging.com/api'
-// const dev = "http://ec2-52-14-42-129.us-east-2.compute.amazonaws.com/api";
+
+// const dev = "http://ec2-52-14-42-129.us-east-2.compute.amazonaws.com/api"; http://165.232.66.148/api
+// const devDigital = "http://165.232.66.148/api"; 
+
 const baseUrl = 'http://localhost:4000/api'
 
-// const baseUrl = dev;
+// const baseUrl = devDigital;
 
 // export const socketUrl = "ws://localhost:4001";
 // export const socketUrl = "ws://192.168.10.20:4001";
@@ -329,3 +332,7 @@ export const getDischargeEDRUrl = `${baseUrl}/edr/getdischargeedr`
 export const getDischargeIPRUrl = `${baseUrl}/ipr/getdischargeipr`
 export const updateDischargeEDRUrl = `${baseUrl}/edr/updatedischarge`
 export const updateDischargeIPRUrl = `${baseUrl}/ipr/updatedischarge`
+
+// Patient FHIR
+export const addPatientFHIRUrl = `${baseUrl}/patient/addpatientfhir`
+export const updatePatientFHIRUrl = `${baseUrl}/patient/updatepatientfhir`
