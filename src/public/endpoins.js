@@ -2,8 +2,9 @@ const local = 'http://localhost:4000/api'
 const live = 'https://test.khmc-staging.com/api'
 
 // const dev = "http://ec2-52-14-42-129.us-east-2.compute.amazonaws.com/api"; http://165.232.66.148/api
-//const stagingDigitalOcean = "http://165.232.66.148:8080/api"; 
-//const StagingDigitalOceanUploadsUrl = 'http://165.232.66.148:8080/uploads/';
+const stagingDigitalOcean = "http://165.232.66.148:8080/api"; 
+const StagingDigitalOceanUploadsUrl = 'http://165.232.66.148:8080/uploads/';
+const StagingSocketUrl = 'wss://165.232.66.148:4001'
 
 const baseUrl = 'http://localhost:4000/api'
 
@@ -15,6 +16,7 @@ export const uploadsUrl = 'http://localhost:4000/uploads/'
 //export const uploadsUrl = StagingDigitalOceanUploadsUrl
 
 export const socketUrl = 'wss://test.khmc-staging.com:4001'
+
 
 // auth endpoints
 export const loginUrl = `${baseUrl}/auth/login`
