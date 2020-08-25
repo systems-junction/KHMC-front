@@ -350,18 +350,18 @@ export default function EdrRequest(props) {
         </>
       )
     } else if (
-      val === "complete" ||
-      val === "approved" ||
-      val === "approve" ||
-      val === "reject" ||
-      val === "received" ||
-      val === "Partially Received" ||
-      val === "Cannot be fulfilled" ||
-      val === "Item Returned to Warehouse" ||
-      val === "Returned" ||
-      val === "receive" ||
-      val === "Received" ||
-      val === "Sent for PAR"
+      val === 'complete' ||
+      val === 'approved' ||
+      val === 'approve' ||
+      val === 'reject' ||
+      val === 'received' ||
+      val === 'Partially Received' ||
+      val === 'Cannot be fulfilled' ||
+      val === 'Item Returned to Warehouse' ||
+      val === 'Returned' ||
+      val === 'receive' ||
+      val === 'Received' ||
+      val === 'Sent for PAR'
     ) {
       return (
         <>
@@ -397,15 +397,15 @@ export default function EdrRequest(props) {
             >
               <strong>Received</strong>
             </Button>
-          )  : val === "Sent for PAR" ? (
+          ) : val === 'Sent for PAR' ? (
             <Button
-              style={{...stylesB.stylesForActive,width:'120px'}}
-              variant="contained"
-              color="primary"
+              style={{ ...stylesB.stylesForActive, width: '120px' }}
+              variant='contained'
+              color='primary'
             >
               <strong>Sent for PAR</strong>
             </Button>
-          ): val === "receive" ? (
+          ) : val === 'receive' ? (
             <Button
               style={stylesB.stylesForActive}
               variant='contained'
@@ -503,6 +503,7 @@ export default function EdrRequest(props) {
                       className: classes.input,
                       classes: { input: classes.input },
                     }}
+                    // InputProps={{ disableUnderline: true }}
                   />
                 </div>
               ) : (
@@ -518,14 +519,14 @@ export default function EdrRequest(props) {
                   <TextField
                     required
                     disabled={true}
-                    label="Doctor"
-                    name={"doctor"}
-                    value={props.item.doctor.firstName ?
-                      props.item.doctor.firstName +
-                      ` ` +
-                      props.item.doctor.lastName
-                      :
-                      props.item.doctorName
+                    label='Doctor'
+                    name={'doctor'}
+                    value={
+                      props.item.doctor.firstName
+                        ? props.item.doctor.firstName +
+                          ` ` +
+                          props.item.doctor.lastName
+                        : props.item.doctorName
                     }
                     // error={buName === '' && isFormSubmitted}
                     // onChange={(e) => onChangeValue(e)}
@@ -544,12 +545,12 @@ export default function EdrRequest(props) {
                     disabled={true}
                     label='Requester'
                     name={'requester'}
-                    value={props.item.requester.firstName ?
-                      props.item.requester.firstName +
-                      ` ` +
-                      props.item.requester.lastName
-                      :
-                      '--'
+                    value={
+                      props.item.requester.firstName
+                        ? props.item.requester.firstName +
+                          ` ` +
+                          props.item.requester.lastName
+                        : '--'
                     }
                     className='textInputStyle'
                     variant='filled'
