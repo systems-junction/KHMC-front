@@ -4,7 +4,7 @@ const dev = "http://ec2-52-14-42-129.us-east-2.compute.amazonaws.com/api";
 
 // http://165.232.66.148/api
 const stagingDigitalOcean = "http://165.232.66.148:8080/api"; 
-const StagingDigitalOceanUploadsUrl = 'http://165.232.66.148:8080/uploads/';
+const StagingDigitalOceanUploadsUrl = 'http://165.232.66.148:8080/';
 const StagingSocketUrl = 'wss://165.232.66.148:4001'
 
 // const baseUrl = dev;
@@ -19,7 +19,7 @@ export const socketUrl = "ws://localhost:4001";
 
 // export const uploadsUrl = 'https://test.khmc-staging.com/uploads/'
 export const uploadsUrl = 'http://localhost:4000/uploads/'
-// export const uploadsUrl = 'http://ec2-52-14-42-129.us-east-2.compute.amazonaws.com/uploads/'
+// export const uploadsUrl = 'http://ec2-52-14-42-129.us-east-2.compute.amazonaws.com/'
 // export const uploadsUrl = StagingDigitalOceanUploadsUrl
 
 

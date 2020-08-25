@@ -54,7 +54,7 @@ const styles = {
         height: "45px",
         cursor: "pointer",
         padding: "10px",
-        marginTop:'10px'
+        marginTop: '10px'
     },
     input: {
         display: "none",
@@ -304,98 +304,151 @@ function AddEditEDR(props) {
 
                     {comingFor === 'add' ? (
                         <>
-                        <div className='row'>
-                            <label style={styles.upload}>
-                                <input
-                                    type="file"
-                                    style={styles.input}
-                                    onChange={onDocumentUpload}
-                                    name="file"
-                                    required
-                                />
-                                <FaUpload />&nbsp;&nbsp;&nbsp;Upload File
+                            <div className='row'>
+                                <label style={styles.upload}>
+                                    <input
+                                        type="file"
+                                        style={styles.input}
+                                        onChange={onDocumentUpload}
+                                        name="file"
+                                        required
+                                    />
+                                    <FaUpload />&nbsp;&nbsp;&nbsp;Upload File
                             </label>
-                            {pdfView !== "" ? (
-                                <div className="col-md-12 col-sm-12 col-12"
-                                    style={{ textAlign: 'center', color: '#2c6ddd', fontStyle: 'italic' }}
-                                >
-                                    <span style={{ color: 'black' }}>Selected File : </span>{pdfView}
-                                </div>
-                            ) : (
-                                    undefined
-                                )}
-                        </div>
-                        <div className='row'>
-                            {file !== "" && file.slice(file.length - 3) !== 'pdf' ? (
-                                <div className='col-md-6 col-sm-6 col-6'
-                                    style={{
-                                        ...styles.inputContainerForTextField,
-                                        ...styles.textFieldPadding,
-                                    }}>
-
-                                    <img src={uploadsUrl + file.split('\\')[1]} className="depositSlipImg" />
-                                </div>
-                            ) : file !== "" && file.slice(file.length - 3) === 'pdf' ? (
-                                <div className='col-md-6 col-sm-6 col-6'
-                                    style={{
-                                        ...styles.inputContainerForTextField,
-                                        ...styles.textFieldPadding,
-                                        // textAlign:'center',
-                                    }}>
-                                    <a href={uploadsUrl + file.split('\\')[1]} style={{ color: '#2c6ddd' }}>Click here to open file</a>
-                                </div>
-                            ) : (
-                                        <div className='LoaderStyle'>
-                                            <Loader type='TailSpin' color='red' height={50} width={50} />
-                                        </div>
+                                {pdfView !== "" ? (
+                                    <div className="col-md-12 col-sm-12 col-12"
+                                        style={{ textAlign: 'center', color: '#2c6ddd', fontStyle: 'italic' }}
+                                    >
+                                        <span style={{ color: 'black' }}>Selected File : </span>{pdfView}
+                                    </div>
+                                ) : (
+                                        undefined
                                     )}
+                            </div>
+                            <div className='row'>
+                                {file !== "" && file.includes('\\') ? (
+                                    <>
+                                        {file !== "" && file.slice(file.length - 3) !== 'pdf' ? (
+                                            <div className='col-md-6 col-sm-6 col-6'
+                                                style={{
+                                                    ...styles.inputContainerForTextField,
+                                                    ...styles.textFieldPadding,
+                                                }}>
 
-                            {imagePreview !== "" ? (
-                                <div className='col-md-6 col-sm-6 col-6'
-                                    style={{
-                                        ...styles.inputContainerForTextField,
-                                        ...styles.textFieldPadding,
-                                    }}>
-                                    <img src={imagePreview} className="depositSlipImg" />
-                                    {file !== "" ? (
-                                        <div
-                                            style={{ color: 'black', textAlign: 'center' }}
-                                        >
-                                            New file
-                                        </div>
+                                                <img src={uploadsUrl + file.split('\\')[1]} className="depositSlipImg" />
+                                            </div>
+                                        ) : file !== "" && file.slice(file.length - 3) === 'pdf' ? (
+                                            <div className='col-md-6 col-sm-6 col-6'
+                                                style={{
+                                                    ...styles.inputContainerForTextField,
+                                                    ...styles.textFieldPadding,
+                                                    // textAlign:'center',
+                                                }}>
+                                                <a href={uploadsUrl + file.split('\\')[1]} style={{ color: '#2c6ddd' }}>Click here to open file</a>
+                                            </div>
+                                        ) : (
+                                                    undefined
+                                                )}
+                                    </>
+                                ) : file !== "" && file.includes('/') ? (
+                                    <>
+                                        {file !== "" && file.slice(file.length - 3) !== 'pdf' ? (
+                                            <div className='col-md-6 col-sm-6 col-6'
+                                                style={{
+                                                    ...styles.inputContainerForTextField,
+                                                    ...styles.textFieldPadding,
+                                                }}>
 
-                                    ) : (
+                                                <img src={uploadsUrl + file} className="depositSlipImg" />
+                                            </div>
+                                        ) : file !== "" && file.slice(file.length - 3) === 'pdf' ? (
+                                            <div className='col-md-6 col-sm-6 col-6'
+                                                style={{
+                                                    ...styles.inputContainerForTextField,
+                                                    ...styles.textFieldPadding,
+                                                    // textAlign:'center',
+                                                }}>
+                                                <a href={uploadsUrl + file} style={{ color: '#2c6ddd' }}>Click here to open file</a>
+                                            </div>
+                                        ) : (
+                                                    undefined
+                                                )}
+                                    </>
+                                ) : (
                                             undefined
                                         )}
 
-                                </div>
-                            ) : (
-                                    undefined
-                                )}
-                        </div>
+                                {imagePreview !== "" ? (
+                                    <div className='col-md-6 col-sm-6 col-6'
+                                        style={{
+                                            ...styles.inputContainerForTextField,
+                                            ...styles.textFieldPadding,
+                                        }}>
+                                        <img src={imagePreview} className="depositSlipImg" />
+                                        {file !== "" ? (
+                                            <div
+                                                style={{ color: 'black', textAlign: 'center' }}
+                                            >
+                                                New file
+                                            </div>
+
+                                        ) : (
+                                                undefined
+                                            )}
+
+                                    </div>
+                                ) : (
+                                        undefined
+                                    )}
+                            </div>
                         </>
                     ) : (
                             <div className='row'>
-                                {file !== "" && file.slice(file.length - 3) !== 'pdf' ? (
-                                    <div className='col-md-6 col-sm-6 col-6'
-                                        style={{
-                                            ...styles.inputContainerForTextField,
-                                        }}>
+                                {file !== "" && file.includes('\\') ? (
+                                    <>
+                                        {file !== "" && file.slice(file.length - 3) !== 'pdf' ? (
+                                            <div className='col-md-6 col-sm-6 col-6'
+                                                style={{
+                                                    ...styles.inputContainerForTextField,
+                                                }}>
 
-                                        <img src={uploadsUrl + file.split('\\')[1]} className="depositSlipImg" />
-                                    </div>
-                                ) : file !== "" && file.slice(file.length - 3) === 'pdf' ? (
-                                    <div className='col-md-6 col-sm-6 col-6'
-                                        style={{
-                                            ...styles.inputContainerForTextField,
-                                        }}>
-                                        <a href={uploadsUrl + file.split('\\')[1]} style={{ color: '#2c6ddd' }}>Click here to open file</a>
-                                    </div>
-                                ) : (
-                                            <div className='LoaderStyle'>
-                                                <Loader type='TailSpin' color='red' height={50} width={50} />
+                                                <img src={uploadsUrl + file.split('\\')[1]} className="depositSlipImg" />
                                             </div>
-                                        )}
+                                        ) : file !== "" && file.slice(file.length - 3) === 'pdf' ? (
+                                            <div className='col-md-6 col-sm-6 col-6'
+                                                style={{
+                                                    ...styles.inputContainerForTextField,
+                                                }}>
+                                                <a href={uploadsUrl + file.split('\\')[1]} style={{ color: '#2c6ddd' }}>Click here to open file</a>
+                                            </div>
+                                        ) : (
+                                                undefined
+                                            )}
+                                    </>
+                                ) : file !== "" && file.includes('/') ? (
+                                    <>
+                                        {file !== "" && file.slice(file.length - 3) !== 'pdf' ? (
+                                            <div className='col-md-6 col-sm-6 col-6'
+                                                style={{
+                                                    ...styles.inputContainerForTextField,
+                                                }}>
+
+                                                <img src={uploadsUrl + file} className="depositSlipImg" />
+                                            </div>
+                                        ) : file !== "" && file.slice(file.length - 3) === 'pdf' ? (
+                                            <div className='col-md-6 col-sm-6 col-6'
+                                                style={{
+                                                    ...styles.inputContainerForTextField,
+                                                }}>
+                                                <a href={uploadsUrl + file} style={{ color: '#2c6ddd' }}>Click here to open file</a>
+                                            </div>
+                                        ) : (
+                                                undefined
+                                            )}
+                                    </>
+                                ) : (
+                                        undefined
+                                    )}
                             </div>
                         )}
 
