@@ -1,49 +1,35 @@
 import React, { useEffect, useState, useReducer } from 'react'
 import TextField from '@material-ui/core/TextField'
-import Select from '@material-ui/core/Select'
 import { makeStyles } from '@material-ui/core/styles'
 import { FaUpload } from 'react-icons/fa'
 import Paper from '@material-ui/core/Paper'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
-import InputLabel from '@material-ui/core/InputLabel'
 import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
 import Fingerprint from '../../../assets/img/fingerprint.png'
 import ErrorMessage from '../../../components/ErrorMessage/errorMessage'
 import {
+  uploadsUrl,
   updatePatientUrl,
   addPatientUrl,
   generateOPR,
-  generateIPR,
   getSearchedpatient,
 } from '../../../public/endpoins'
-import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
 import axios from 'axios'
 import Notification from '../../../components/Snackbar/Notification.js'
 import ButtonField from '../../../components/common/Button'
 import cookie from 'react-cookies'
 import Header from '../../../components/Header/Header'
-import Add_New from '../../../assets/img/Add_New.png'
-import AddedPurchaseRequestTable from '../../PurchaseOrders/addedPurchaseRequestTable'
-import VIewAll from '../../../assets/img/view_all.png'
 import patientRegister from '../../../assets/img/PatientRegistration.png'
-import BootstrapInput from '../../../components/Dropdown/dropDown.js'
 import Back_Arrow from '../../../assets/img/Back_Arrow.png'
 import '../../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
-import FormInput from '../../../components/common/InputField'
-import TextArea from '../../../components/common/TextArea'
-import DatePicker from '../../../components/common/Date'
-import DropDown from '../../../components/common/DropDown'
-import { number } from 'prop-types'
 import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormControl from '@material-ui/core/FormControl'
 import FormLabel from '@material-ui/core/FormLabel'
 import FormData from 'form-data'
-import { he } from 'date-fns/locale'
-import { MdBluetoothConnected } from 'react-icons/md'
 import Table from '@material-ui/core/Table'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
@@ -51,6 +37,7 @@ import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import AccountCircle from '@material-ui/icons/SearchOutlined'
 import InputAdornment from '@material-ui/core/InputAdornment'
+import Loader from 'react-loader-spinner'
 
 let countriesList = require('../../../assets/countries.json')
 
@@ -107,7 +94,6 @@ const styles = {
     border: '0px solid #ccc',
     borderRadius: '6px',
     color: 'gray',
-    // marginTop: "10px",
     width: '100%',
     height: '60px',
     cursor: 'pointer',
@@ -238,8 +224,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-// const useStyles = makeStyles(tableStyles);
-
 function AddEditPatientListing(props) {
   const classes = useStyles()
   const initialState = {
@@ -286,7 +270,6 @@ function AddEditPatientListing(props) {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const {
-    _id,
     profileNo,
     SIN,
     title,
@@ -340,17 +323,18 @@ function AddEditPatientListing(props) {
   const classesForTabs = useStylesForTabs()
 
   const [comingFor, setcomingFor] = useState('')
-  const [currentUser, setCurrentUser] = useState(cookie.load('current_user'))
+  const [currentUser] = useState(cookie.load('current_user'))
   const [isFormSubmitted, setIsFormSubmitted] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
+  const [successMsg, setsuccessMsg] = useState('')
   const [openNotification, setOpenNotification] = useState(false)
   // const [isDisabled, setDisabled] = useState(false)
   const [countries, setCountries] = useState('')
   const [cities, setCities] = useState('')
   const [value, setValue] = React.useState(0)
-  const [details, setDetails] = useState('patient')
   const [slipUpload, setSlipUpload] = useState('')
   const [imagePreview, setImagePreview] = useState('')
+  const [pdfView, setpdfView] = useState('')
   const [patientId, setPatientId] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [itemFound, setItemFound] = useState('')
@@ -362,7 +346,6 @@ function AddEditPatientListing(props) {
     setCountries(Object.keys(countriesList[0]))
 
     const selectedRec = props.history.location.state.selectedItem
-    console.log('Selected record : ', props.history.location.state.selectedItem)
 
     if (selectedRec) {
       setPatientId(props.history.location.state.selectedItem._id)
@@ -490,7 +473,6 @@ function AddEditPatientListing(props) {
         receiverName,
         bankName,
         depositorName,
-        // insuranceId,
         insuranceNo,
         insuranceVendor,
         coverageDetails,
@@ -514,6 +496,8 @@ function AddEditPatientListing(props) {
             // console.log(res.data.data, "patients data");
             // console.log(res.data.data._id, "patient id");
             setPatientId(res.data.data._id)
+            setOpenNotification(true)
+            setsuccessMsg('Patient details saved successfully')
           } else if (!res.data.success) {
             setOpenNotification(true)
           }
@@ -528,7 +512,6 @@ function AddEditPatientListing(props) {
   }
 
   const handleEdit = () => {
-    console.log('itemsssiiiiii ', props.item)
     let formData = new FormData()
     if (slipUpload) {
       formData.append('file', slipUpload, slipUpload.name)
@@ -562,24 +545,27 @@ function AddEditPatientListing(props) {
         bankName,
         depositorName,
         insuranceNo,
+        insuranceVendor,
         coverageDetails,
         coverageTerms,
         payment,
       }
       formData.append('data', JSON.stringify(params))
-      console.log('PARAMSS ', params)
+      // console.log('PARAMSS ', params)
       // console.log("DATAAA ", formData);
       axios
         .put(updatePatientUrl, formData)
         .then((res) => {
           if (res.data.success) {
-            console.log(res.data.data._id, 'patient id')
             setPatientId(res.data.data._id)
+            setOpenNotification(true)
+            setsuccessMsg('Done')
             if (!searchActivated) {
               props.history.goBack()
             }
           } else if (!res.data.success) {
             setOpenNotification(true)
+            setErrorMsg('Error')
           }
         })
         .catch((e) => {
@@ -590,23 +576,28 @@ function AddEditPatientListing(props) {
     }
     setIsFormSubmitted(true)
   }
-  const onSlipUpload = (event) => {
-    setSlipUpload(event.target.files[0])
 
+  const onSlipUpload = (event) => {
     var file = event.target.files[0]
+    var fileType = file.name.slice(file.name.length - 3)
+
+    // console.log("Selected file : ", file.name)
+    // console.log("file type : ", fileType)
+
+    setSlipUpload(file)
     var reader = new FileReader()
     var url = reader.readAsDataURL(file)
 
-    reader.onloadend = function(e) {
-      setImagePreview([reader.result])
-      dispatch({ field: 'depositSlip', value: file })
+    reader.onloadend = function() {
+      if (fileType === 'pdf') {
+        setpdfView(file.name)
+      } else {
+        setImagePreview([reader.result])
+      }
     }
-
-    console.log(file.name, 'fle')
   }
 
   const handleChange = (event, newValue) => {
-    console.log('value', newValue)
     setValue(newValue)
   }
 
@@ -623,14 +614,14 @@ function AddEditPatientListing(props) {
     // setValue(tabIndex);
   }
 
-  const handleGenerateEDR = () => {
+  const handleGenerateOPR = () => {
     const params = {
       patientId,
       // generatedBy: currentUser.staffId,
       generatedFrom: 'pharmacyRequest',
       status: 'pending',
     }
-    console.log(params)
+    // console.log(params)
     axios
       .post(generateOPR, params, {})
       .then((res) => {
@@ -647,55 +638,7 @@ function AddEditPatientListing(props) {
         setErrorMsg('Error while generating EDR request')
       })
   }
-  //for IPR
-  const handleGenerateIPR = () => {
-    const params = {
-      patientId,
-      generatedBy: currentUser.staffId,
-      status: 'pending',
-    }
-    console.log(params)
-    axios
-      .post(generateIPR, params, {})
-      .then((res) => {
-        if (res.data.success) {
-          console.log(res.data.data, 'response')
-          props.history.goBack()
-        } else if (!res.data.success) {
-          setOpenNotification(true)
-        }
-      })
-      .catch((e) => {
-        console.log('error after generating IPR request', e)
-        setOpenNotification(true)
-        setErrorMsg('Error while generating IPR request')
-      })
-  }
 
-  // const onChangeValues = (e) => {
-  //   if (e.target.value.length === 4) {
-  //     axios
-  //       .get(getPatientUrl + `/${e.target.value}`)
-  //       .then((res) => {
-  //         if (res.data.success) {
-  //           //setPatient(res.data.data)
-  //           console.log(res.data.data[0].firstName, 'patient')
-  //           // } else if (!res.data.success) {
-  //           //   setErrorMsg(res.data.error)
-  //           //   setOpenNotification(true)
-  //           dispatch({ field: 'firstName', value: res.data.data[0].firstName })
-  //           //dispatch({ field: 'firstName', value: res.data.firstName })
-  //           // setDisabled(true)
-  //         }
-
-  //         //return res
-  //       })
-  //       .catch((e) => {
-  //         console.log('error: ', e)
-  //       })
-  //   }
-  //   dispatch({ field: e.target.name, value: e.target.value })
-  // }
   const handleSearch = (e) => {
     setSearchQuery(e.target.value)
     if (e.target.value.length >= 3) {
@@ -752,15 +695,14 @@ function AddEditPatientListing(props) {
     dispatch({ field: 'coverageTerms', value: i.coverageTerms })
     dispatch({ field: 'payment', value: i.payment })
 
-    let deposit = ''
-    if (i.depositSlip) {
-      deposit = {
-        name: i.depositSlip === '' ? '' : i.depositSlip.split('\\')[1],
-      }
-    }
+    // let deposit = ''
+    // if (i.depositSlip) {
+    //   deposit = {
+    //     name: i.depositSlip === '' ? '' : i.depositSlip.split('\\')[1],
+    //   }
+    // }
 
-    // console.log(i.depositSlip.split('\\')[0], 'Split')
-    dispatch({ field: 'depositSlip', value: deposit })
+    dispatch({ field: 'depositSlip', value: i.depositSlip })
     dispatch({ field: 'DateTime', value: i.DateTime })
     dispatch({ field: 'paymentMethod', value: i.paymentMethod })
     dispatch({ field: 'insuranceVendor', value: i.insuranceVendor })
@@ -771,12 +713,22 @@ function AddEditPatientListing(props) {
 
   const onChangeValue = (e) => {
     dispatch({ field: e.target.name, value: e.target.value })
+    if (e.target.value === 'Cash') {
+      dispatch({ field: 'bankName', value: '' })
+    } else if (e.target.value === 'Insurance') {
+      dispatch({ field: 'depositorName', value: '' })
+      dispatch({ field: 'amountReceived', value: '' })
+      dispatch({ field: 'bankName', value: '' })
+    } else if (e.target.value === 'WireTransfer') {
+      dispatch({ field: 'amountReceived', value: '' })
+    }
   }
 
   if (openNotification) {
     setTimeout(() => {
       setOpenNotification(false)
       setErrorMsg('')
+      setsuccessMsg('')
     }, 2000)
   }
 
@@ -856,103 +808,120 @@ function AddEditPatientListing(props) {
             className={`${'container-fluid'} ${classes.root}`}
           >
             {comingFor === 'add' ? (
-              <div className='row' style={{ marginTop: '20px' }}>
-                <div
-                  className='col-md-11 col-sm-12'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    type='text'
-                    label='Search Patient by Name / MRN / National ID / Mobile Number'
-                    name={'searchQuery'}
-                    value={searchQuery}
-                    onChange={handleSearch}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position='end'>
-                          <AccountCircle />
-                        </InputAdornment>
-                      ),
-                      className: classes.input,
-                      classes: { input: classes.input },
+              <>
+                <div className='row' style={{ marginTop: '20px' }}>
+                  <div
+                    className='col-md-11 col-sm-10 col-10'
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
                     }}
-                    InputLabelProps={{
-                      className: classes.label,
-                      classes: { label: classes.label },
-                    }}
-                  />
+                  >
+                    <TextField
+                      type='text'
+                      label='Search Patient by Name / MRN / National ID / Mobile Number'
+                      name={'searchQuery'}
+                      value={searchQuery}
+                      onChange={handleSearch}
+                      className='textInputStyle'
+                      variant='filled'
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position='end'>
+                            <AccountCircle />
+                          </InputAdornment>
+                        ),
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                      InputLabelProps={{
+                        className: classes.label,
+                        classes: { label: classes.label },
+                      }}
+                    />
+                  </div>
 
-                  {searchQuery ? (
-                    <div style={{ zIndex: 3 }}>
-                      <Paper>
-                        {itemFoundSuccessfull ? (
-                          itemFound && (
-                            <Table size='small'>
-                              <TableHead>
-                                <TableRow>
-                                  <TableCell>MRN Number</TableCell>
-                                  <TableCell>Patient Name</TableCell>
-                                  <TableCell>Gender</TableCell>
-                                  <TableCell>Age</TableCell>
-                                  <TableCell>Payment Method</TableCell>
-                                </TableRow>
-                              </TableHead>
-
-                              <TableBody>
-                                {itemFound.map((i) => {
-                                  return (
-                                    <TableRow
-                                      key={i._id}
-                                      onClick={() => handleAddItem(i)}
-                                      style={{ cursor: 'pointer' }}
-                                    >
-                                      <TableCell>{i.profileNo}</TableCell>
-                                      <TableCell>
-                                        {i.firstName + ` ` + i.lastName}
-                                      </TableCell>
-                                      <TableCell>{i.gender}</TableCell>
-                                      <TableCell>{i.age}</TableCell>
-                                      <TableCell>{i.paymentMethod}</TableCell>
-                                    </TableRow>
-                                  )
-                                })}
-                              </TableBody>
-                            </Table>
-                          )
-                        ) : (
-                          <h4
-                            style={{ textAlign: 'center' }}
-                            onClick={() => setSearchQuery('')}
-                          >
-                            Patient Not Found
-                          </h4>
-                        )}
-                      </Paper>
+                  <div className='col-md-1 col-sm-2 col-2'>
+                    <div
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: 'white',
+                        borderRadius: 6,
+                        height: 55,
+                      }}
+                    >
+                      <img
+                        src={Fingerprint}
+                        style={{ maxWidth: 43, height: 43 }}
+                      />
                     </div>
-                  ) : (
-                    undefined
-                  )}
+                  </div>
                 </div>
 
-                <div
-                  className='col-md-1'
-                  style={{
-                    ...styles.textFieldPadding,
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    backgroundColor: 'white',
-                    borderRadius: 4,
-                  }}
-                >
-                  <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
+                <div className='row'>
+                  <div
+                    className='col-md-11 col-sm-11 col-10'
+                    style={{
+                      //  ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    {searchQuery ? (
+                      <div style={{ zIndex: 3 }}>
+                        <Paper>
+                          {itemFoundSuccessfull ? (
+                            itemFound && (
+                              <Table size='small'>
+                                <TableHead>
+                                  <TableRow>
+                                    <TableCell>MRN Number</TableCell>
+                                    <TableCell>Patient Name</TableCell>
+                                    <TableCell>Gender</TableCell>
+                                    <TableCell>Age</TableCell>
+                                    <TableCell>Payment Method</TableCell>
+                                  </TableRow>
+                                </TableHead>
+
+                                <TableBody>
+                                  {itemFound.map((i) => {
+                                    return (
+                                      <TableRow
+                                        key={i._id}
+                                        onClick={() => handleAddItem(i)}
+                                        style={{ cursor: 'pointer' }}
+                                      >
+                                        <TableCell>{i.profileNo}</TableCell>
+                                        <TableCell>
+                                          {i.firstName + ` ` + i.lastName}
+                                        </TableCell>
+                                        <TableCell>{i.gender}</TableCell>
+                                        <TableCell>{i.age}</TableCell>
+                                        <TableCell>{i.paymentMethod}</TableCell>
+                                      </TableRow>
+                                    )
+                                  })}
+                                </TableBody>
+                              </Table>
+                            )
+                          ) : (
+                            <h4
+                              style={{ textAlign: 'center' }}
+                              onClick={() => setSearchQuery('')}
+                            >
+                              Patient Not Found
+                            </h4>
+                          )}
+                        </Paper>
+                      </div>
+                    ) : (
+                      undefined
+                    )}
+                  </div>
                 </div>
-              </div>
+              </>
             ) : (
               undefined
             )}
@@ -1578,7 +1547,7 @@ function AddEditPatientListing(props) {
                     style={comingFor === "add" ? styles.generate : styles.None}
                     disabled={comingFor === "add" ? !isFormSubmitted : false}
                     onClick={
-                      comingFor === "add" ? handleGenerateEDR : handleEdit
+                      comingFor === "add" ? handleGenerateOPR : handleEdit
                     }
                     variant="contained"
                     color="primary"
@@ -1816,94 +1785,102 @@ function AddEditPatientListing(props) {
                 </div>
 
                 <div className='row'>
-                  {comingFor === 'add' ? (
-                    <>
+                  <div
+                    className='col-md-6 col-sm-6 col-6'
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <label style={styles.upload}>
+                      <TextField
+                        required
+                        type='file'
+                        style={styles.input}
+                        onChange={onSlipUpload}
+                        name='depositSlip'
+                      />
+                      <FaUpload /> Upload Deposit Slip
+                    </label>
+                    {pdfView !== '' ? (
                       <div
-                        className='col-md-6 col-sm-6 col-6'
                         style={{
-                          ...styles.inputContainerForTextField,
-                          ...styles.textFieldPadding,
+                          textAlign: 'center',
+                          color: '#2c6ddd',
+                          fontStyle: 'italic',
                         }}
                       >
-                        <label style={styles.upload}>
-                          <TextField
-                            required
-                            type='file'
-                            style={styles.input}
-                            onChange={onSlipUpload}
-                            // value={depositSlip.name}
-                            // error={slipUpload.name === '' && isFormSubmitted}
-                            // variant='filled'
-                            // error={true}
-                            name='depositSlip'
-                          />
-                          <FaUpload /> Upload Deposit Slip
-                          <ErrorMessage
-                            name={depositSlip && depositSlip.name}
-                            isFormSubmitted={isFormSubmitted}
-                          />
-                        </label>
-
-                        <span
-                          className='container-fluid'
-                          style={{ color: 'green' }}
-                        >
-                          {depositSlip && depositSlip === ''
-                            ? ''
-                            : depositSlip.name}
-                        </span>
+                        <span style={{ color: 'black' }}>Selected File : </span>
+                        {pdfView}
                       </div>
-                    </>
+                    ) : (
+                      undefined
+                    )}
+                  </div>
+                </div>
+
+                <div className='row'>
+                  {depositSlip !== '' &&
+                  depositSlip.slice(depositSlip.length - 3) !== 'pdf' ? (
+                    <div
+                      className='col-md-6 col-sm-6 col-6'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
+                    >
+                      <img
+                        src={uploadsUrl + depositSlip.split('\\')[1]}
+                        className='depositSlipImg'
+                      />
+                    </div>
+                  ) : depositSlip !== '' &&
+                    depositSlip.slice(depositSlip.length - 3) === 'pdf' ? (
+                    <div
+                      className='col-md-6 col-sm-6 col-6'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                        // textAlign:'center',
+                      }}
+                    >
+                      <a
+                        href={uploadsUrl + depositSlip.split('\\')[1]}
+                        style={{ color: '#2c6ddd' }}
+                      >
+                        Click here to open Deposit Slip
+                      </a>
+                    </div>
                   ) : (
-                    <>
-                      <div
-                        className='col-md-6 col-sm-6 col-6'
-                        style={{
-                          ...styles.inputContainerForTextField,
-                          ...styles.textFieldPadding,
-                        }}
-                      >
-                        <label style={styles.upload}>
-                          <TextField
-                            required
-                            type='file'
-                            style={styles.input}
-                            onChange={onSlipUpload}
-                            name='depositSlip'
-                          />
-                          <FaUpload /> Upload Deposit Slip
-                          <ErrorMessage
-                            name={depositSlip && depositSlip.name}
-                            isFormSubmitted={isFormSubmitted}
-                          />
-                        </label>
+                    <div className='LoaderStyle'>
+                      <Loader
+                        type='TailSpin'
+                        color='red'
+                        height={50}
+                        width={50}
+                      />
+                    </div>
+                  )}
 
-                        <span
-                          className='container-fluid'
-                          style={{ color: 'green' }}
-                        >
-                          {/* {depositSlip && depositSlip === ''
-                            ? ''
-                            : depositSlip.name} */}
-                          {depositSlip && depositSlip.name
-                            ? depositSlip.name
-                            : depositSlip.split('\\')[0] === 'uploads'
-                            ? depositSlip.split('\\')[1]
-                            : depositSlip.name}
-                        </span>
-                      </div>
-                      <div
-                        className='col-md-6 col-sm-6 col-6'
-                        style={{
-                          ...styles.inputContainerForTextField,
-                          ...styles.textFieldPadding,
-                        }}
-                      >
-                        {/* <img src={imagePreview} className='depositSlipImg' />
-                        <br /> */}
-                        {/* <span>{depositSlip && depositSlip.name}</span> */}
-                      </div>
-                    </>
+                  {imagePreview !== '' ? (
+                    <div
+                      className='col-md-6 col-sm-6 col-6'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
+                    >
+                      <img src={imagePreview} className='depositSlipImg' />
+                      {depositSlip !== '' ? (
+                        <div style={{ color: 'black', textAlign: 'center' }}>
+                          New Deposit Slip
+                        </div>
+                      ) : (
+                        undefined
+                      )}
+                    </div>
+                  ) : (
+                    undefined
                   )}
                 </div>
               </div>
@@ -1966,7 +1943,7 @@ function AddEditPatientListing(props) {
                     //disabled={!validatePatientForm()}
                     disabled={comingFor === 'add' ? !isFormSubmitted : false}
                     onClick={
-                      comingFor === 'add' ? handleGenerateEDR : handleEdit
+                      comingFor === 'add' ? handleGenerateOPR : handleEdit
                     }
                     variant='contained'
                     color='primary'
@@ -1982,7 +1959,7 @@ function AddEditPatientListing(props) {
                     style={styles.generate}
                     disabled={comingFor === 'add' ? !isFormSubmitted : false}
                     onClick={
-                      comingFor === 'add' ? handleGenerateIPR : handleEdit
+                      comingFor === 'add' ? handleGenerateOPR : handleEdit
                     }
                     variant='contained'
                     color='primary'
@@ -2003,7 +1980,7 @@ function AddEditPatientListing(props) {
             >
               <div className='row' style={{ marginTop: '20px' }}>
                 <div
-                  className='col-md-10 col-sm-10 col-6'
+                  className='col-md-10 col-sm-10 col-8'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -2014,7 +1991,6 @@ function AddEditPatientListing(props) {
                     name={'insuranceNo'}
                     value={insuranceNo}
                     onChange={onChangeValue}
-                    error={insuranceNo === '' && isFormSubmitted}
                     className='textInputStyle'
                     variant='filled'
                     InputProps={{
@@ -2024,7 +2000,7 @@ function AddEditPatientListing(props) {
                   />
                 </div>
                 <div
-                  className='col-md-2 col-sm-2 col-6'
+                  className='col-md-2 col-sm-2 col-4'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -2221,7 +2197,7 @@ function AddEditPatientListing(props) {
                     style={styles.generate}
                     disabled={comingFor === 'add' ? !isFormSubmitted : false}
                     onClick={
-                      comingFor === 'add' ? handleGenerateEDR : handleEdit
+                      comingFor === 'add' ? handleGenerateOPR : handleEdit
                     }
                     variant='contained'
                     color='danger'
@@ -2236,7 +2212,7 @@ function AddEditPatientListing(props) {
                     style={styles.generate}
                     disabled={comingFor === 'add' ? !isFormSubmitted : false}
                     onClick={
-                      comingFor === 'add' ? handleGenerateIPR : handleEdit
+                      comingFor === 'add' ? handleGenerateOPR : handleEdit
                     }
                     variant='contained'
                     color='danger'
@@ -2251,7 +2227,11 @@ function AddEditPatientListing(props) {
           </div>
         )}
 
-        <Notification msg={errorMsg} open={openNotification} />
+        <Notification
+          msg={errorMsg}
+          open={openNotification}
+          success={successMsg}
+        />
 
         <div style={{ marginBottom: 20, marginTop: 50 }}>
           <img
