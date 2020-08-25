@@ -388,7 +388,7 @@ function AddEditPatientListing(props) {
     setDocumentUpload(file)
     var reader = new FileReader()
     var url = reader.readAsDataURL(file);
-    
+
     reader.onloadend = function () {
       if (fileType === 'pdf') {
         setpdfView(file.name)
@@ -875,25 +875,50 @@ function AddEditPatientListing(props) {
               </div>
 
               <div className='row'>
-                {document !== "" && document.slice(document.length - 3) !== 'pdf' ? (
-                  <div className='col-md-6 col-sm-6 col-6'
-                    style={{
-                      ...styles.inputContainerForTextField,
-                    }}>
+                {document !== "" && document.includes('\\') ? (
+                  <>
+                    {document !== "" && document.slice(document.length - 3) !== 'pdf' ? (
+                      <div className='col-md-6 col-sm-6 col-6'
+                        style={{
+                          ...styles.inputContainerForTextField,
+                        }}>
 
-                    <img src={uploadsUrl + document.split('\\')[1]} className="depositSlipImg" />
-                  </div>
-                ) : document !== "" && document.slice(document.length - 3) === 'pdf' ? (
-                  <div className='col-md-6 col-sm-6 col-6'
-                    style={{
-                      ...styles.inputContainerForTextField,
-                    }}>
-                    <a href={uploadsUrl + document.split('\\')[1]} style={{ color: '#2c6ddd' }}>Click here to open document</a>
-                  </div>
-                ) : (
-                      <div className='LoaderStyle'>
-                        <Loader type='TailSpin' color='red' height={50} width={50} />
+                        <img src={uploadsUrl + document.split('\\')[1]} className="depositSlipImg" />
                       </div>
+                    ) : document !== "" && document.slice(document.length - 3) === 'pdf' ? (
+                      <div className='col-md-6 col-sm-6 col-6'
+                        style={{
+                          ...styles.inputContainerForTextField,
+                        }}>
+                        <a href={uploadsUrl + document.split('\\')[1]} style={{ color: '#2c6ddd' }}>Click here to open document</a>
+                      </div>
+                    ) : (
+                          undefined
+                        )}
+                  </>
+                ) : document !== "" && document.includes('/') ? (
+                  <>
+                    {document !== "" && document.slice(document.length - 3) !== 'pdf' ? (
+                      <div className='col-md-6 col-sm-6 col-6'
+                        style={{
+                          ...styles.inputContainerForTextField,
+                        }}>
+
+                        <img src={uploadsUrl + document} className="depositSlipImg" />
+                      </div>
+                    ) : document !== "" && document.slice(document.length - 3) === 'pdf' ? (
+                      <div className='col-md-6 col-sm-6 col-6'
+                        style={{
+                          ...styles.inputContainerForTextField,
+                        }}>
+                        <a href={uploadsUrl + document} style={{ color: '#2c6ddd' }}>Click here to open document</a>
+                      </div>
+                    ) : (
+                          undefined
+                        )}
+                  </>
+                ) : (
+                      undefined
                     )}
 
                 {imagePreview !== "" ? (

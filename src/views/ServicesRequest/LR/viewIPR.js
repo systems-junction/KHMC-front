@@ -604,6 +604,8 @@ function AddEditPurchaseRequest(props) {
                 </div>
 
                 <div className='row'>
+                {results !== "" && results.includes('\\') ? (
+                  <>
                   {results !== "" && results.slice(results.length - 3) !== 'pdf' ? (
                     <div className='col-md-6 col-sm-6 col-6'
                       style={{
@@ -623,10 +625,35 @@ function AddEditPurchaseRequest(props) {
                       <a href={uploadsUrl + results.split('\\')[1]} style={{ color: '#2c6ddd' }}>Click here to open results</a>
                     </div>
                   ) : (
-                        <div className='LoaderStyle'>
-                          <Loader type='TailSpin' color='red' height={50} width={50} />
-                        </div>
+                        undefined
                       )}
+                  </>
+                ):results !== "" && results.includes('/') ? (
+                  <>
+                  {results !== "" && results.slice(results.length - 3) !== 'pdf' ? (
+                    <div className='col-md-6 col-sm-6 col-6'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}>
+
+                      <img src={uploadsUrl + results} className="depositSlipImg" />
+                    </div>
+                  ) : results !== "" && results.slice(results.length - 3) === 'pdf' ? (
+                    <div className='col-md-6 col-sm-6 col-6'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}>
+                      <a href={uploadsUrl + results} style={{ color: '#2c6ddd' }}>Click here to open results</a>
+                    </div>
+                  ) : (
+                        undefined
+                      )}
+                  </>
+                ):(
+                  undefined
+                )}
 
                   {imagePreview !== "" ? (
                     <div className='col-md-6 col-sm-6 col-6'

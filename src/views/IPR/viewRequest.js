@@ -519,7 +519,7 @@ export default function EdrRequest(props) {
                   <TextField
                     required
                     disabled={true}
-                    placeholder='Doctor'
+                    label='Doctor'
                     name={'doctor'}
                     value={
                       props.item.doctor.firstName
@@ -546,9 +546,11 @@ export default function EdrRequest(props) {
                     label='Requester'
                     name={'requester'}
                     value={
-                      props.item.requester.firstName +
-                      ` ` +
-                      props.item.requester.lastName
+                      props.item.requester.firstName
+                        ? props.item.requester.firstName +
+                          ` ` +
+                          props.item.requester.lastName
+                        : '--'
                     }
                     className='textInputStyle'
                     variant='filled'

@@ -252,7 +252,7 @@ function AddEditPurchaseRequest(props) {
 
     // console.log("Selected file : ", file.name)
     // console.log("file type : ", fileType)
-    
+
     setSlipUpload(file)
     var reader = new FileReader()
     var url = reader.readAsDataURL(file);
@@ -536,29 +536,59 @@ function AddEditPurchaseRequest(props) {
             </div>
 
             <div className='row'>
-              {results !== "" && results.slice(results.length - 3) !== 'pdf' ? (
-                <div className='col-md-6 col-sm-6 col-6'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}>
+              {results !== "" && results.includes('\\') ? (
+                <>
+                  {results !== "" && results.slice(results.length - 3) !== 'pdf' ? (
+                    <div className='col-md-6 col-sm-6 col-6'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}>
 
-                  <img src={uploadsUrl + results.split('\\')[1]} className="depositSlipImg" />
-                </div>
-              ) : results !== "" && results.slice(results.length - 3) === 'pdf' ? (
-                <div className='col-md-6 col-sm-6 col-6'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                    // textAlign:'center',
-                  }}>
-                  <a href={uploadsUrl+results.split('\\')[1]} style={{color:'#2c6ddd'}}>Click here to open results</a>
-                </div>
-              ) : (
-                    <div className='LoaderStyle'>
-                      <Loader type='TailSpin' color='red' height={50} width={50} />
+                      <img src={uploadsUrl + results.split('\\')[1]} className="depositSlipImg" />
                     </div>
+                  ) : results !== "" && results.slice(results.length - 3) === 'pdf' ? (
+                    <div className='col-md-6 col-sm-6 col-6'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                        // textAlign:'center',
+                      }}>
+                      <a href={uploadsUrl + results.split('\\')[1]} style={{ color: '#2c6ddd' }}>Click here to open results</a>
+                    </div>
+                  ) : (
+                        undefined
+                      )}
+                </>
+              ) : results !== "" && results.includes('/') ? (
+                <>
+                  {results !== "" && results.slice(results.length - 3) !== 'pdf' ? (
+                    <div className='col-md-6 col-sm-6 col-6'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}>
+
+                      <img src={uploadsUrl + results} className="depositSlipImg" />
+                    </div>
+                  ) : results !== "" && results.slice(results.length - 3) === 'pdf' ? (
+                    <div className='col-md-6 col-sm-6 col-6'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                        // textAlign:'center',
+                      }}>
+                      <a href={uploadsUrl + results} style={{ color: '#2c6ddd' }}>Click here to open results</a>
+                    </div>
+                  ) : (
+                        undefined
+                      )}
+                </>
+              ) : (
+                    undefined
                   )}
+
+
 
               {imagePreview !== "" ? (
                 <div className='col-md-6 col-sm-6 col-6'
