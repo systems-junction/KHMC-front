@@ -7,7 +7,7 @@ const stagingDigitalOcean = "http://165.232.66.148:8080/api";
 const StagingDigitalOceanUploadsUrl = 'http://165.232.66.148:8080/uploads/';
 const StagingSocketUrl = 'wss://165.232.66.148:4001'
 
-// const baseUrl = live;
+// const baseUrl = dev;
 const baseUrl = 'http://localhost:4000/api'
 // const baseUrl = stagingDigitalOcean;
 
