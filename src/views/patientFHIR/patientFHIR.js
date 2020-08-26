@@ -1079,7 +1079,7 @@ export default function PurchaseRequest() {
                 <>
                   <div className='row'>
                     <div
-                      className='col-md-2 col-sm-2'
+                      className='col-md-12 col-sm-12'
                       style={{
                         ...styles.inputContainerForTextField,
                         ...styles.textFieldPadding,
@@ -1121,6 +1121,9 @@ export default function PurchaseRequest() {
                         </Select>
                       </FormControl>
                     </div>
+                  </div>
+
+                  <div className='row'>
                     <div
                       className='col-md-2 col-sm-2'
                       style={{
@@ -1184,7 +1187,7 @@ export default function PurchaseRequest() {
                       />
                     </div>
                     <div
-                      className='col-md-3 col-sm-3'
+                      className='col-md-2 col-sm-2'
                       style={{
                         ...styles.inputContainerForTextField,
                         ...styles.textFieldPadding,
@@ -1205,9 +1208,6 @@ export default function PurchaseRequest() {
                         }}
                       />
                     </div>
-                  </div>
-
-                  <div className='row'>
                     <div
                       className='col-md-2 col-sm-2'
                       style={{
@@ -1229,9 +1229,8 @@ export default function PurchaseRequest() {
                         }}
                       />
                     </div>
-
                     <div
-                      className='col-md-2 col-sm-2'
+                      className='col-md-1 col-sm-1'
                       style={{
                         ...styles.inputContainerForTextField,
                         ...styles.textFieldPadding,
@@ -1251,7 +1250,9 @@ export default function PurchaseRequest() {
                         }}
                       />
                     </div>
+                  </div>
 
+                  <div className='row'>
                     <div
                       className='col-md-2 col-sm-2'
                       style={{
@@ -1297,7 +1298,7 @@ export default function PurchaseRequest() {
                     </div>
 
                     <div
-                      className='col-md-1 col-sm-1'
+                      className='col-md-2 col-sm-2'
                       style={{
                         ...styles.inputContainerForTextField,
                         ...styles.textFieldPadding,
@@ -1319,7 +1320,7 @@ export default function PurchaseRequest() {
                     </div>
 
                     <div
-                      className='col-md-1 col-sm-1'
+                      className='col-md-2 col-sm-2'
                       style={{
                         ...styles.inputContainerForTextField,
                         ...styles.textFieldPadding,
@@ -1341,7 +1342,7 @@ export default function PurchaseRequest() {
                     </div>
 
                     <div
-                      className='col-md-1 col-sm-1'
+                      className='col-md-3 col-sm-3'
                       style={{
                         ...styles.inputContainerForTextField,
                         ...styles.textFieldPadding,
