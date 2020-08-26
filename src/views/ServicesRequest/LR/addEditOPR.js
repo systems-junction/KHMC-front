@@ -14,6 +14,7 @@ import {
   updatePatientUrl,
   addPatientUrl,
   generateOPR,
+  generateIPR,
   getSearchedpatient,
 } from '../../../public/endpoins'
 import axios from 'axios'
@@ -199,9 +200,6 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: 'white',
     },
-    '&:disabled': {
-      color: 'gray',
-    },
   },
   multilineColor: {
     backgroundColor: 'white',
@@ -220,6 +218,10 @@ const useStyles = makeStyles((theme) => ({
     '& .Mui-focused': {
       backgroundColor: 'white',
       color: 'black',
+    },
+    '& .Mui-disabled': {
+      backgroundColor: 'white',
+      color: 'gray',
     },
   },
 }))
@@ -340,6 +342,7 @@ function AddEditPatientListing(props) {
   const [itemFound, setItemFound] = useState('')
   const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false)
   const [searchActivated, setsearchActivated] = useState(false)
+  const [Insuranceform, setInsuranceForm] = useState(true)
 
   useEffect(() => {
     setcomingFor(props.history.location.state.comingFor)
@@ -422,8 +425,7 @@ function AddEditPatientListing(props) {
         bankName.length > 0 &&
         depositorName &&
         depositorName.length > 0 &&
-        depositSlip &&
-        depositSlip != null
+        slipUpload
       )
     } else if (paymentMethod === 'Insurance') {
       return (
@@ -715,12 +717,31 @@ function AddEditPatientListing(props) {
     dispatch({ field: e.target.name, value: e.target.value })
     if (e.target.value === 'Cash') {
       dispatch({ field: 'bankName', value: '' })
+      setSlipUpload('')
+      setImagePreview('')
+      setpdfView('')
+      setInsuranceForm(true)
+      dispatch({ field: 'insuranceNo', value: '' })
+      dispatch({ field: 'insuranceVendor', value: '' })
+      dispatch({ field: 'coverageDetails', value: '' })
+      dispatch({ field: 'coverageTerms', value: '' })
+      dispatch({ field: 'payment', value: '' })
     } else if (e.target.value === 'Insurance') {
       dispatch({ field: 'depositorName', value: '' })
       dispatch({ field: 'amountReceived', value: '' })
       dispatch({ field: 'bankName', value: '' })
+      setSlipUpload('')
+      setImagePreview('')
+      setpdfView('')
+      setInsuranceForm(false)
     } else if (e.target.value === 'WireTransfer') {
       dispatch({ field: 'amountReceived', value: '' })
+      setInsuranceForm(true)
+      dispatch({ field: 'insuranceNo', value: '' })
+      dispatch({ field: 'insuranceVendor', value: '' })
+      dispatch({ field: 'coverageDetails', value: '' })
+      dispatch({ field: 'coverageTerms', value: '' })
+      dispatch({ field: 'payment', value: '' })
     }
   }
 
@@ -1820,46 +1841,82 @@ function AddEditPatientListing(props) {
                 </div>
 
                 <div className='row'>
-                  {depositSlip !== '' &&
-                  depositSlip.slice(depositSlip.length - 3) !== 'pdf' ? (
-                    <div
-                      className='col-md-6 col-sm-6 col-6'
-                      style={{
-                        ...styles.inputContainerForTextField,
-                        ...styles.textFieldPadding,
-                      }}
-                    >
-                      <img
-                        src={uploadsUrl + depositSlip.split('\\')[1]}
-                        className='depositSlipImg'
-                      />
-                    </div>
-                  ) : depositSlip !== '' &&
-                    depositSlip.slice(depositSlip.length - 3) === 'pdf' ? (
-                    <div
-                      className='col-md-6 col-sm-6 col-6'
-                      style={{
-                        ...styles.inputContainerForTextField,
-                        ...styles.textFieldPadding,
-                        // textAlign:'center',
-                      }}
-                    >
-                      <a
-                        href={uploadsUrl + depositSlip.split('\\')[1]}
-                        style={{ color: '#2c6ddd' }}
-                      >
-                        Click here to open Deposit Slip
-                      </a>
-                    </div>
+                  {depositSlip !== '' && depositSlip.includes('\\') ? (
+                    <>
+                      {depositSlip !== '' &&
+                      depositSlip.slice(depositSlip.length - 3) !== 'pdf' ? (
+                        <div
+                          className='col-md-6 col-sm-6 col-6'
+                          style={{
+                            ...styles.inputContainerForTextField,
+                            ...styles.textFieldPadding,
+                          }}
+                        >
+                          <img
+                            src={uploadsUrl + depositSlip.split('\\')[1]}
+                            className='depositSlipImg'
+                          />
+                        </div>
+                      ) : depositSlip !== '' &&
+                        depositSlip.slice(depositSlip.length - 3) === 'pdf' ? (
+                        <div
+                          className='col-md-6 col-sm-6 col-6'
+                          style={{
+                            ...styles.inputContainerForTextField,
+                            ...styles.textFieldPadding,
+                            // textAlign:'center',
+                          }}
+                        >
+                          <a
+                            href={uploadsUrl + depositSlip.split('\\')[1]}
+                            style={{ color: '#2c6ddd' }}
+                          >
+                            Click here to open Deposit Slip
+                          </a>
+                        </div>
+                      ) : (
+                        undefined
+                      )}
+                    </>
+                  ) : depositSlip !== '' && depositSlip.includes('/') ? (
+                    <>
+                      {depositSlip !== '' &&
+                      depositSlip.slice(depositSlip.length - 3) !== 'pdf' ? (
+                        <div
+                          className='col-md-6 col-sm-6 col-6'
+                          style={{
+                            ...styles.inputContainerForTextField,
+                            ...styles.textFieldPadding,
+                          }}
+                        >
+                          <img
+                            src={uploadsUrl + depositSlip}
+                            className='depositSlipImg'
+                          />
+                        </div>
+                      ) : depositSlip !== '' &&
+                        depositSlip.slice(depositSlip.length - 3) === 'pdf' ? (
+                        <div
+                          className='col-md-6 col-sm-6 col-6'
+                          style={{
+                            ...styles.inputContainerForTextField,
+                            ...styles.textFieldPadding,
+                            // textAlign:'center',
+                          }}
+                        >
+                          <a
+                            href={uploadsUrl + depositSlip}
+                            style={{ color: '#2c6ddd' }}
+                          >
+                            Click here to open Deposit Slip
+                          </a>
+                        </div>
+                      ) : (
+                        undefined
+                      )}
+                    </>
                   ) : (
-                    <div className='LoaderStyle'>
-                      <Loader
-                        type='TailSpin'
-                        color='red'
-                        height={50}
-                        width={50}
-                      />
-                    </div>
+                    undefined
                   )}
 
                   {imagePreview !== '' ? (
@@ -1937,38 +1994,36 @@ function AddEditPatientListing(props) {
                 ) : (
                   <></>
                 )}
-                {currentUser.staffTypeId.type === 'EDR Receptionist' ? (
-                  <Button
-                    style={styles.generate}
-                    //disabled={!validatePatientForm()}
-                    disabled={comingFor === 'add' ? !isFormSubmitted : false}
-                    onClick={
-                      comingFor === 'add' ? handleGenerateOPR : handleEdit
-                    }
-                    variant='contained'
-                    color='primary'
-                  >
-                    {comingFor === 'add' ? 'Generate OPR' : 'Update'}
-                  </Button>
-                ) : (
+                {/* {currentUser.staffTypeId.type === 'EDR Receptionist' ? ( */}
+                <Button
+                  style={styles.generate}
+                  //disabled={!validatePatientForm()}
+                  disabled={comingFor === 'add' ? !isFormSubmitted : false}
+                  onClick={comingFor === 'add' ? handleGenerateOPR : handleEdit}
+                  variant='contained'
+                  color='primary'
+                >
+                  {comingFor === 'add' ? 'Generate EDR' : 'Update'}
+                </Button>
+                {/* ) : (
                   undefined
-                )}
+                )} */}
 
-                {currentUser.staffTypeId.type === 'IPR Receptionist' ? (
+                {/* {currentUser.staffTypeId.type === 'IPR Receptionist' ? (
                   <Button
                     style={styles.generate}
                     disabled={comingFor === 'add' ? !isFormSubmitted : false}
                     onClick={
-                      comingFor === 'add' ? handleGenerateOPR : handleEdit
+                      comingFor === 'add' ? handleGenerateIPR : handleEdit
                     }
                     variant='contained'
                     color='primary'
                   >
-                    {comingFor === 'add' ? 'Generate OPR' : 'Update'}
+                    {comingFor === 'add' ? 'Generate IPR' : 'Update'}
                   </Button>
                 ) : (
                   undefined
-                )}
+                )} */}
               </div>
             </div>
           </div>
@@ -1993,6 +2048,7 @@ function AddEditPatientListing(props) {
                     onChange={onChangeValue}
                     className='textInputStyle'
                     variant='filled'
+                    disabled={Insuranceform}
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
@@ -2034,6 +2090,7 @@ function AddEditPatientListing(props) {
                       label='Insurance Vendor'
                       name={'insuranceVendor'}
                       value={insuranceVendor}
+                      disabled={Insuranceform}
                       onChange={onChangeValue}
                       error={insuranceVendor === '' && isFormSubmitted}
                       className='textInputStyle'
@@ -2063,6 +2120,7 @@ function AddEditPatientListing(props) {
                     required
                     multiline
                     type='text'
+                    disabled={Insuranceform}
                     error={coverageDetails === '' && isFormSubmitted}
                     label='Coverage Details'
                     name={'coverageDetails'}
@@ -2095,6 +2153,7 @@ function AddEditPatientListing(props) {
                     required
                     select
                     fullWidth
+                    disabled={Insuranceform}
                     id='coverageTerms'
                     name='coverageTerms'
                     value={coverageTerms}
@@ -2136,6 +2195,7 @@ function AddEditPatientListing(props) {
                       label='Co-Payment %'
                       name={'payment'}
                       value={payment}
+                      disabled={Insuranceform}
                       onChange={onChangeValue}
                       error={payment === '' && isFormSubmitted}
                       type='number'
@@ -2192,36 +2252,34 @@ function AddEditPatientListing(props) {
                   <></>
                 )}
 
-                {currentUser.staffTypeId.type === 'EDR Receptionist' ? (
+                {/* {currentUser.staffTypeId.type === 'EDR Receptionist' ? ( */}
+                <Button
+                  style={styles.generate}
+                  disabled={comingFor === 'add' ? !isFormSubmitted : false}
+                  onClick={comingFor === 'add' ? handleGenerateOPR : handleEdit}
+                  variant='contained'
+                  color='danger'
+                >
+                  {comingFor === 'add' ? 'Generate EDR' : 'Update'}
+                </Button>
+                {/* ) : (
+                  undefined
+                )} */}
+                {/* {currentUser.staffTypeId.type === 'IPR Receptionist' ? (
                   <Button
                     style={styles.generate}
                     disabled={comingFor === 'add' ? !isFormSubmitted : false}
                     onClick={
-                      comingFor === 'add' ? handleGenerateOPR : handleEdit
+                      comingFor === 'add' ? handleGenerateIPR : handleEdit
                     }
                     variant='contained'
                     color='danger'
                   >
-                    {comingFor === 'add' ? 'Generate OPR' : 'Update'}
+                    {comingFor === 'add' ? 'Generate IPR' : 'Update'}
                   </Button>
                 ) : (
                   undefined
-                )}
-                {currentUser.staffTypeId.type === 'IPR Receptionist' ? (
-                  <Button
-                    style={styles.generate}
-                    disabled={comingFor === 'add' ? !isFormSubmitted : false}
-                    onClick={
-                      comingFor === 'add' ? handleGenerateOPR : handleEdit
-                    }
-                    variant='contained'
-                    color='danger'
-                  >
-                    {comingFor === 'add' ? 'Generate OPR' : 'Update'}
-                  </Button>
-                ) : (
-                  undefined
-                )}
+                )} */}
               </div>
             </div>
           </div>
