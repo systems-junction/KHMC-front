@@ -2003,7 +2003,7 @@ function AddEditPatientListing(props) {
                   variant='contained'
                   color='primary'
                 >
-                  {comingFor === 'add' ? 'Generate EDR' : 'Update'}
+                  {comingFor === 'add' ? 'Generate OPR' : 'Update'}
                 </Button>
                 {/* ) : (
                   undefined
@@ -2260,7 +2260,7 @@ function AddEditPatientListing(props) {
                   variant='contained'
                   color='danger'
                 >
-                  {comingFor === 'add' ? 'Generate EDR' : 'Update'}
+                  {comingFor === 'add' ? 'Generate OPR' : 'Update'}
                 </Button>
                 {/* ) : (
                   undefined
