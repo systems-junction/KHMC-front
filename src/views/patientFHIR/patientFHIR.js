@@ -190,8 +190,8 @@ const multipleBirth = [
 const useStylesDropdown = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120,
-    maxWidth: 300,
+    minWidth: 200,
+    maxWidth: 520,
   },
   chips: {
     display: 'flex',
@@ -199,7 +199,9 @@ const useStylesDropdown = makeStyles((theme) => ({
   },
   chip: {
     margin: 2,
+    // backgroundColor: 'white',
   },
+
   noLabel: {
     marginTop: theme.spacing(3),
   },
@@ -238,6 +240,22 @@ const relationshipDataArray = [
   {
     key: 'Uncle',
     value: 'uncle',
+  },
+  {
+    key: 'Mother',
+    value: 'mother',
+  },
+  {
+    key: 'Daughter',
+    value: 'daughter',
+  },
+  {
+    key: 'Brother',
+    value: 'brother',
+  },
+  {
+    key: 'Sister',
+    value: 'sister',
   },
 ]
 
@@ -919,7 +937,7 @@ export default function PurchaseRequest() {
                   </div>
 
                   <div
-                    className='col-md-2 col-sm-2'
+                    className='col-md-1 col-sm-1'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -930,6 +948,27 @@ export default function PurchaseRequest() {
                       variant='filled'
                       label='City'
                       value={x.city}
+                      className='textInputStyle'
+                      onChange={(e) => handleAddressChange(e, i)}
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                    />
+                  </div>
+
+                  <div
+                    className='col-md-1 col-sm-1'
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      name='state'
+                      variant='filled'
+                      label='State'
+                      value={x.state}
                       className='textInputStyle'
                       onChange={(e) => handleAddressChange(e, i)}
                       InputProps={{
@@ -961,28 +1000,7 @@ export default function PurchaseRequest() {
                   </div>
 
                   <div
-                    className='col-md-1 col-sm-6'
-                    style={{
-                      ...styles.inputContainerForTextField,
-                      ...styles.textFieldPadding,
-                    }}
-                  >
-                    <TextField
-                      name='state'
-                      variant='filled'
-                      label='State'
-                      value={x.state}
-                      className='textInputStyle'
-                      onChange={(e) => handleAddressChange(e, i)}
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                      }}
-                    />
-                  </div>
-
-                  <div
-                    className='col-md-1 col-sm-6'
+                    className='col-md-2 col-sm-2'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1466,6 +1484,7 @@ export default function PurchaseRequest() {
                       label='Birth Date'
                       fullWidth
                       onChange={(val) => onChangeDate(val, 'birthDate')}
+                      style={{ borderRadius: 6 }}
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
@@ -1528,6 +1547,7 @@ export default function PurchaseRequest() {
                       inputVariant='filled'
                       label='Deceased Date Time'
                       fullWidth
+                      style={{ borderRadius: 6 }}
                       onChange={(val) => onChangeDate(val, 'deceasedDateTime')}
                       InputProps={{
                         className: classes.input,
@@ -1653,6 +1673,7 @@ export default function PurchaseRequest() {
               >
                 Submit
               </Button>
+              &nbsp;
               <Button
                 style={styles.stylesForPurchaseButton}
                 type='submit'
