@@ -61,7 +61,7 @@ export default function StaffTypes(props) {
       .get(getStaffTypeUrl)
       .then((res) => {
         if (res.data.success) {
-          setStaffTypes(res.data.data.staffType);
+          setStaffTypes(res.data.data.staffType.reverse());
           setSystemAdminArray(res.data.data.systemAdmin);
           setAccessLevelArray(res.data.data.accessLevel);
         } else if (!res.data.success) {

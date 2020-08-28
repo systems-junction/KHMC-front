@@ -10,12 +10,12 @@ import {
 import Loader from 'react-loader-spinner'
 import Back from '../../../assets/img/Back_Arrow.png'
 import Header from '../../../components/Header/Header'
-import business_Unit from '../../../assets/img/RR.png'
+import radioIcon from '../../../assets/img/RR.png'
 import '../../../assets/jss/material-dashboard-react/components/loaderStyle.css'
 import socketIOClient from 'socket.io-client'
 
 const tableHeading = [
-  'MRN Number',
+  'MRN',
   'Request Number',
   'Date',
   'Status',
@@ -102,7 +102,7 @@ export default function EDR(props) {
       <div className='cPadding'>
         <div className='subheader'>
           <div>
-            <img src={business_Unit} />
+            <img src={radioIcon} />
             <h4>In Patient</h4>
           </div>
           {/* <div>

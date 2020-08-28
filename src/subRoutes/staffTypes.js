@@ -3,11 +3,16 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import NotFound from '../components/NotFound/NotFound';
 import AddEditStaffTypes from '../views/UserManagement/staffType/addEditStaffTypes';
+import StaffTypes from '../views/UserManagement/staffType/staffTypes';
 
 class StaffTypesRoutes extends React.PureComponent {
   render(){
     return (
       <Switch>
+        <Route
+          path={`${this.props.match.url}`}
+          component={StaffTypes}
+        />
         <Route
           path={`${this.props.match.url}/add`}
           component={AddEditStaffTypes}
