@@ -29,11 +29,14 @@ import Influence_white from "../../assets/img/Influence_white.png";
 import ReturnItem from "../../assets/img/Return Item.png";
 import ReceiveItem from "../../assets/img/Receive Item.png";
 import ReceiveItems from "../ReplenishmentRequestForFU/handleReceiveItemForFUInventory";
-import claimsReview from '../../assets/img/Re-Inbursement.png'
+import claimsReview from '../../assets/img/ClaimsReview.png'
 import PreApproval from '../../assets/img/Pre-Approval.png'
+import IPR from '../../assets/img/IPR.png'
+import outPatient from '../../assets/img/OutPatient.png'
+import DM from '../../assets/img/Discharge Medication.png'
 
 const admin = [
-  { img: KHMC, text: "KHMC APPS", path: "" },
+  { img: KHMC, text: "KHMC", path: "" },
   {
     img: RCM,
     text: "RCM",
@@ -59,7 +62,7 @@ const admin = [
 ];
 
 const residentDoctor = [
-  { img: KHMC, text: "KHMC APPS", path: "" },
+  { img: KHMC, text: "KHMC", path: "" },
   {
     img: RCM,
     text: "RCM",
@@ -73,7 +76,7 @@ const residentDoctor = [
 ];
 
 const frontDesk = [
-  { img: KHMC, text: "KHMC APPS", path: "" },
+  { img: KHMC, text: "KHMC", path: "" },
   {
     img: PatientRegistration,
     text: "Patient Registration",
@@ -82,7 +85,7 @@ const frontDesk = [
 ];
 
 const insuranceDepartment = [
-  { img: KHMC, text: "KHMC APPS", path: "" },
+  { img: KHMC, text: "KHMC", path: "" },
   {
     img: PreApproval,
     text: 'Pre Approval',
@@ -96,7 +99,7 @@ const insuranceDepartment = [
 ];
 
 const registeredNurse = [
-  { img: KHMC, text: "KHMC APPS", path: "" },
+  { img: KHMC, text: "KHMC", path: "" },
   {
     img: RCM,
     text: "RCM",
@@ -106,6 +109,57 @@ const registeredNurse = [
     img: WMS,
     text: "WMS",
     path: "/home/wms",
+  },
+];
+
+const radiologyImagingDepartment = [
+  { img: KHMC, text: "KHMC", path: "" },
+  {
+    img: IPR,
+    text: 'In-Patient',
+    path: '/home/rcm/sr/rr/ipr',
+  },
+
+  {
+    img: outPatient,
+    text: 'Out-Patient',
+    path: '/home/rcm/sr/rr/opr',
+  },
+];
+
+const labTechnician = [
+  { img: KHMC, text: "KHMC", path: "" },
+  {
+    img: IPR,
+    text: 'In-Patient',
+    path: '/home/rcm/sr/lr/ipr',
+  },
+
+  {
+    img: outPatient,
+    text: 'Out-Patient',
+    path: '/home/rcm/sr/lr/opr',
+  },
+];
+
+const pharmacist = [
+  { img: KHMC, text: "KHMC", path: "" },
+  {
+    img: IPR,
+    text: 'In-Patient',
+    path: '/home/rcm/sr/phr/ipr',
+  },
+
+  {
+    img: outPatient,
+    text: 'Out-Patient',
+    path: '/home/rcm/sr/phr/opr',
+  },
+
+  {
+    img: DM,
+    text: 'Discharge',
+    path: '/home/rcm/sr/phr/dischargemedication/ipr',
   },
 ];
 
@@ -213,7 +267,7 @@ const fuHead = [
 
 const buMember = [
   // { img: FunctionalUnit, text: "Functional Unit", path: "" },
-  { img: KHMC, text: "KHMC APPS", path: "" },
+  { img: KHMC, text: "KHMC", path: "" },
 
   {
     img: PurchaseRequest,
@@ -653,7 +707,13 @@ class HomeScreen extends React.Component {
                 : userType && userType.type === "Insurance Department"
                   ? insuranceDepartment
                 : userType && userType.type === "Registered Nurse"
-                  ? registeredNurse   
+                  ? registeredNurse
+                : userType && userType.type === "Radiology/Imaging"
+                  ? radiologyImagingDepartment
+                : userType && userType.type === "Lab Technician"
+                  ? labTechnician
+                : userType && userType.type === "Pharmacist"
+                  ? pharmacist             
                 : admin
           }
         />

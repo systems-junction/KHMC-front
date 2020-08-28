@@ -19,7 +19,7 @@ import Header from '../../../components/Header/Header'
 import Back_Arrow from '../../../assets/img/Back_Arrow.png'
 import '../../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
 import FormData from 'form-data'
-import ReInbursement from '../../../assets/img/Re-Inbursement.png'
+import claimsReview from '../../../assets/img/ClaimsReview.png'
 import Table from '@material-ui/core/Table'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
@@ -527,7 +527,7 @@ function AddEditPatientListing(props) {
       <div className='cPadding'>
         <div className='subheader'>
           <div>
-            <img src={ReInbursement} />
+            <img src={claimsReview} />
             <div style={{ flex: 4, display: 'flex', alignItems: 'center' }}>
               <h4>
                 {comingFor === 'add'

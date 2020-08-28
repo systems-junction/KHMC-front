@@ -6,13 +6,8 @@ import { makeStyles } from '@material-ui/core/styles'
 import InputLabel from '@material-ui/core/InputLabel'
 import Button from '@material-ui/core/Button'
 import { TextField } from '@material-ui/core'
-
-import tableStyles from '../../../../assets/jss/material-dashboard-react/components/tableStyle.js'
 import axios from 'axios'
-import DropDown from '../../../../components/common/DropDown'
 import {
-  getSearchedLaboratoryService,
-  getSearchedRadiologyService,
   updateEDR,
   getSingleIPRPatient,
   getAllExternalConsultantsUrl,
@@ -22,58 +17,23 @@ import {
 } from '../../../../public/endpoins'
 import cookie from 'react-cookies'
 import Header from '../../../../components/Header/Header'
-import business_Unit from '../../../../assets/img/EDR.png'
+import dischargeIcon from '../../../../assets/img/Discharge Medication.png'
 import Back from '../../../../assets/img/Back_Arrow.png'
 import '../../../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
-import Tabs from '@material-ui/core/Tabs'
-import Tab from '@material-ui/core/Tab'
 import CustomTable from '../../../../components/Table/Table'
-import plus_icon from '../../../../assets/img/Plus.png'
 // import ViewSingleRequest from './viewRequest'
 import InputLabelComponent from '../../../../components/InputLabel/inputLabel'
-import Paper from '@material-ui/core/Paper'
-import Table from '@material-ui/core/Table'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
 import ErrorMessage from '../../../../components/ErrorMessage/errorMessage'
 import Notification from '../../../../components/Snackbar/Notification.js'
-
 import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
 import BootstrapInput from '../../../../components/Dropdown/dropDown.js'
-
 import Loader from 'react-loader-spinner'
 import '../../../../assets/jss/material-dashboard-react/components/loaderStyle.css'
 
-const tableHeadingForResident = [
-  'Date/Time',
-  'Description',
-  'Doctor Ref',
-  'Action',
-]
-const tableDataKeysForResident = [
-  'date',
-  'description',
-  ['doctor', 'firstName'],
-]
-const tableHeadingForConsultation = [
-  'Consultation ID',
-  'Date/Time',
-  'Description',
-  'Doctor Ref',
-  'Action',
-]
-const tableDataKeysForConsultation = [
-  'consultationNo',
-  'date',
-  'description',
-  ['requester', 'firstName'],
-]
 const tableHeadingForPharmacy = [
   'Medicine Name',
   'Quantity',
@@ -87,32 +47,6 @@ const tableDataKeysForPharmacy = [
   'unitPrice',
   'totalPrice',
 ]
-const tableHeadingForLabReq = [
-  'Service Code',
-  'Service Name',
-  'Requester',
-  'Status',
-  'Action',
-]
-const tableDataKeysForLabReq = [
-  'serviceCode',
-  'serviceName',
-  'requesterName',
-  'status',
-]
-const tableHeadingForRadiology = [
-  'Service Code',
-  'Service Name',
-  'Requester',
-  'Status',
-  'Action',
-]
-const tableDataKeysForRadiology = [
-  'serviceCode',
-  'serviceName',
-  'requesterName',
-  'status',
-]
 
 const statusArray = [
   {
@@ -125,11 +59,10 @@ const statusArray = [
   },
 ]
 
-const actions = { view: true }
 const styles = {
   patientDetails: {
     backgroundColor: 'white',
-    borderRadius: 15,
+    borderRadius: 5,
     padding: '20px',
   },
   inputContainerForTextField: {
@@ -149,7 +82,7 @@ const styles = {
   stylesForButton: {
     color: 'white',
     cursor: 'pointer',
-    borderRadius: 15,
+    borderRadius: 5,
     backgroundColor: '#2c6ddd',
     height: '50px',
     outline: 'none',
@@ -176,7 +109,7 @@ const useStyles = makeStyles((theme) => ({
   },
   input: {
     backgroundColor: 'white',
-    borderRadius: 6,
+    borderRadius: 5,
     '&:after': {
       borderBottomColor: 'black',
     },
@@ -189,7 +122,7 @@ const useStyles = makeStyles((theme) => ({
   },
   multilineColor: {
     backgroundColor: 'white',
-    borderRadius: 6,
+    borderRadius: 5,
     '&:hover': {
       backgroundColor: 'white',
     },
@@ -267,7 +200,6 @@ function AddEditPurchaseRequest(props) {
     radioServiceStatus,
 
     consultationNoteArray,
-    consultationNo,
     date = new Date(),
     description,
     consultationNotes,
@@ -294,39 +226,27 @@ function AddEditPurchaseRequest(props) {
   const [currentUser, setCurrentUser] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
   const [openNotification, setOpenNotification] = useState(false)
-  const [value, setValue] = React.useState(0)
-  const [openItemDialog, setOpenItemDialog] = useState(false)
+  const [, setValue] = React.useState(0)
+  const [, setOpenItemDialog] = useState(false)
   const [openAddConsultDialog, setOpenAddConsultDialog] = useState(false)
   const [openAddResidentDialog, setOpenAddResidentDialog] = useState(false)
-  const [item, setItem] = useState('')
+  const [, setItem] = useState('')
   const [selectedItem, setSelectedItem] = useState('')
   const [selectedPatient, setSelectedPatient] = useState('')
   const [requestNo, setrequestNo] = useState('')
-  const [labRequest, setlabRequest] = useState('')
-  const [radiologyRequest, setradiologyRequest] = useState('')
-  const [searchQuery, setSearchQuery] = useState('')
-  const [itemFound, setItemFound] = useState('')
-  const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false)
-  const [selectedSearchedItem, setSelectedSearchedItem] = useState('')
-  const [selectedSearchedRadioItem, setSelectedSearchedRadioItem] = useState('')
-  const [selectedLabArray, setSelectedLabArray] = useState([])
-  const [selectedRadioArray, setSelectedRadioArray] = useState([])
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false)
+  const [, setSearchQuery] = useState('')
+  const [, setItemFound] = useState('')
+  const [, setItemFoundSuccessfully] = useState(false)
+  const [isFormSubmitted] = useState(false)
   const [id, setId] = useState('')
-  const [searchRadioQuery, setSearchRadioQuery] = useState('')
-  const [radioItemFoundSuccessfull, setRadioItemFoundSuccessfully] = useState(
-    ''
-  )
-  const [radioItemFound, setRadioItemFound] = useState('')
-  const [addLabRequest, setaddLabRequest] = useState(false)
-  const [addRadioRequest, setaddRadioRequest] = useState(false)
-
+  const [, setSearchRadioQuery] = useState('')
+  const [, setRadioItemFoundSuccessfully] = useState('')
+  const [, setRadioItemFound] = useState('')
+  const [, setaddLabRequest] = useState(false)
+  const [, setaddRadioRequest] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-
   const [externalConsultant, setExternalConsultant] = useState('')
-
   const [allExternalConsultants, setAllExternalConsultants] = useState([])
-
   const [
     openExtenalConsultantDialog,
     setOpenExtenalConsultantDialog,
@@ -419,8 +339,6 @@ function AddEditPurchaseRequest(props) {
       })
   }
 
-  console.log(medicineDataArray, 'md')
-
   const updateLRByIdURI = () => {
     const params = {
       _id: id,
@@ -444,8 +362,6 @@ function AddEditPurchaseRequest(props) {
         console.log('error while searching req', e)
       })
   }
-
-  console.log(name, price, 'name')
 
   const getAllExternalConsultants = () => {
     axios
@@ -477,81 +393,10 @@ function AddEditPurchaseRequest(props) {
     setrequestNo(props.history.location.state.selectedItem.requestNo)
     setSelectedPatient(props.history.location.state.selectedItem.patientId)
 
-    // if (selectedRec) {
-    //   Object.entries(selectedRec).map(([key, val]) => {
-    //     if (val && typeof val === "object") {
-    //       if (key === "patientId") {
-    //         dispatch({ field: "patientId", value: val._id });
-    //       } else if (key === "labRequest") {
-    //         dispatch({ field: "labRequestArray", value: val });
-    //       } else if (key === "radiologyRequest") {
-    //         dispatch({ field: "radiologyRequestArray", value: val });
-    //       } else if (key === "consultationNote") {
-    //         Object.entries(val).map(([key1, val1]) => {
-    //           if (key1 == "requester") {
-    //             dispatch({ field: "requester", value: val1._id });
-    //           } else {
-    //             dispatch({ field: key1, value: val1 });
-    //           }
-    //         });
-    //         dispatch({ field: "consultationNoteArray", value: val });
-    //       } else if (key === "residentNotes") {
-    //         Object.entries(val).map(([key1, val1]) => {
-    //           if (key1 == "doctor") {
-    //             dispatch({ field: "doctor", value: val1._id });
-    //           } else {
-    //             dispatch({ field: key1, value: val1 });
-    //           }
-    //         });
-    //         dispatch({ field: "residentNoteArray", value: val });
-    //       } else if (key === "pharmacyRequest") {
-    //         dispatch({ field: "pharmacyRequestArray", value: val });
-    //       }
-    //     } else {
-    //       dispatch({ field: key, value: val });
-    //     }
-    //   });
-    // }
   }, [])
-
-  // For dummy Data
-  // function getEDRdetails() {
-  // axios.get(
-  //   getSingleIPRPatient +
-  //   '/' +
-  //   props.history.location.state.selectedItem._id
-  // )
-  //   .then((res) => {
-  //     if (res.data.success) {
-  //       console.log('response after getting the EDR details', res.data.data)
-  // setPurchaseOrderDetails(res.data.data.poId.purchaseRequestId)
-  //   } else if (!res.data.success) {
-  //     setErrorMsg(res.data.error)
-  //     setOpenNotification(true)
-  //   }
-  //   return res
-  // })
-  // .catch((e) => {
-  //   console.log('error: ', e)
-  // })
-  // }
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue)
-  }
 
   const handleChangeExternalConsultant = (event) => {
     setExternalConsultant(event.target.value)
-  }
-
-  function viewItem(item) {
-    if (item !== '') {
-      setOpenItemDialog(true)
-      setItem(item.id)
-    } else {
-      setOpenItemDialog(false)
-      setItem('')
-    }
   }
 
   function addConsultRequest() {
@@ -647,17 +492,6 @@ function AddEditPurchaseRequest(props) {
     }
   }
 
-  const addNewRequest = () => {
-    let path = `viewEDR/add`
-    props.history.push({
-      pathname: path,
-      state: {
-        comingFor: 'add',
-        selectedItem: selectedItem,
-        pharmacyRequestArray,
-      },
-    })
-  }
 
   function hideDialog() {
     setOpenAddConsultDialog(false)
@@ -670,247 +504,15 @@ function AddEditPurchaseRequest(props) {
     dispatch({ field: 'note', value: '' })
   }
 
-  const handleSearch = (e) => {
-    setSearchQuery(e.target.value)
-    if (e.target.value.length >= 3) {
-      axios
-        .get(getSearchedLaboratoryService + '/' + e.target.value)
-        .then((res) => {
-          if (res.data.success) {
-            if (res.data.data.length > 0) {
-              console.log(res.data.data)
-              setItemFoundSuccessfully(true)
-              setItemFound(res.data.data)
-            } else {
-              setItemFoundSuccessfully(false)
-              setItemFound('')
-            }
-          }
-        })
-        .catch((e) => {
-          console.log('error while searching req', e)
-        })
-    }
-  }
 
-  function handleAddItem(i) {
-    // console.log("selected item", i);
 
-    dispatch({ field: 'labServiceId', value: i._id })
-    dispatch({ field: 'labServiceCode', value: i.serviceNo })
-    dispatch({ field: 'labServiceName', value: i.name })
-    dispatch({ field: 'labServiceStatus', value: i.status })
 
-    setSearchQuery('')
-    setaddLabRequest(true)
-  }
 
-  const addSelectedLabItem = () => {
-    // setIsFormSubmitted(true);
-    // if (validateItemsForm()) {
 
-    let found =
-      labRequestArray &&
-      labRequestArray.find((item) => item.serviceId === labServiceId)
 
-    if (found) {
-      setOpenNotification(true)
-      setErrorMsg('This Service has already been added.')
-    } else {
-      dispatch({
-        field: 'labRequestArray',
-        value: [
-          ...labRequestArray,
-          {
-            serviceId: labServiceId,
-            serviceCode: labServiceCode,
-            serviceName: labServiceName,
-            requester: currentUser.staffId,
-            requesterName: requester,
-            status: labServiceStatus,
-          },
-        ],
-      })
-      // }
-    }
 
-    dispatch({ field: 'labServiceId', value: '' })
-    dispatch({ field: 'labServiceName', value: '' })
-    dispatch({ field: 'labServiceStatus', value: '' })
-    dispatch({ field: 'labServiceCode', value: '' })
 
-    setaddLabRequest(false)
-  }
 
-  const saveLabReq = () => {
-    // console.log("THIS IS ARRAY",labRequestArray)
-
-    let labItems = []
-    for (let i = 0; i < labRequestArray.length; i++) {
-      labItems = [
-        ...labItems,
-        {
-          serviceId: labRequestArray[i].serviceId,
-          serviceCode: labRequestArray[i].serviceCode,
-          requesterName: labRequestArray[i].requesterName,
-          requester: labRequestArray[i].requester,
-          serviceName: labRequestArray[i].serviceName,
-          status: labRequestArray[i].status,
-        },
-      ]
-    }
-    const params = {
-      _id: id,
-      labRequest: labItems,
-    }
-    // console.log("params", params);
-    axios
-      .put(updateEDR, params)
-      .then((res) => {
-        if (res.data.success) {
-          console.log('response after adding Lab Request', res.data)
-          props.history.goBack()
-        } else if (!res.data.success) {
-          setOpenNotification(true)
-        }
-      })
-      .catch((e) => {
-        console.log('error after adding Lab Request', e)
-        setOpenNotification(true)
-        setErrorMsg('Error while adding the Lab Request')
-      })
-  }
-
-  const handleRadioSearch = (e) => {
-    setSearchRadioQuery(e.target.value)
-    if (e.target.value.length >= 3) {
-      axios
-        .get(getSearchedRadiologyService + '/' + e.target.value)
-        .then((res) => {
-          if (res.data.success) {
-            if (res.data.data.length > 0) {
-              console.log(res.data.data)
-              setRadioItemFoundSuccessfully(true)
-              setRadioItemFound(res.data.data)
-            } else {
-              setRadioItemFoundSuccessfully(false)
-              setRadioItemFound('')
-            }
-          }
-        })
-        .catch((e) => {
-          console.log('error while searching req', e)
-        })
-    }
-  }
-
-  function handleAddRadioItem(i) {
-    // console.log("selected item", i.serviceNo);
-
-    dispatch({ field: 'radioServiceId', value: i._id })
-    dispatch({ field: 'radioServiceCode', value: i.serviceNo })
-    dispatch({ field: 'radioServiceName', value: i.name })
-    dispatch({ field: 'radioServiceStatus', value: i.status })
-
-    setSearchRadioQuery('')
-    setaddRadioRequest(true)
-  }
-
-  const addSelectedRadioItem = () => {
-    // setIsFormSubmitted(true);
-    // if (validateItemsForm()) {
-
-    let found =
-      radiologyRequestArray &&
-      radiologyRequestArray.find((item) => item.serviceId === radioServiceId)
-
-    if (found) {
-      setOpenNotification(true)
-      setErrorMsg('This Service has already been added.')
-    } else {
-      dispatch({
-        field: 'radiologyRequestArray',
-        value: [
-          ...radiologyRequestArray,
-          {
-            serviceId: radioServiceId,
-            serviceCode: radioServiceCode,
-            requesterName: requester,
-            serviceName: radioServiceName,
-            requester: currentUser.staffId,
-            status: radioServiceStatus,
-          },
-        ],
-      })
-      // }
-    }
-
-    dispatch({ field: 'radioServiceId', value: '' })
-    dispatch({ field: 'radioServiceCode', value: '' })
-    dispatch({ field: 'radioServiceName', value: '' })
-    dispatch({ field: 'radioServiceStatus', value: '' })
-
-    setaddLabRequest(false)
-  }
-
-  const saveRadioReq = () => {
-    // console.log("THISSSSS ISS ARRAYY",radiologyRequestArray)
-
-    let radioItems = []
-    for (let i = 0; i < radiologyRequestArray.length; i++) {
-      radioItems = [
-        ...radioItems,
-        {
-          serviceId: radiologyRequestArray[i].serviceId,
-          serviceCode: radiologyRequestArray[i].serviceCode,
-          requester: radiologyRequestArray[i].requester,
-          requesterName: radiologyRequestArray[i].requesterName,
-          serviceName: radiologyRequestArray[i].serviceName,
-          status: radiologyRequestArray[i].status,
-        },
-      ]
-    }
-    const params = {
-      _id: id,
-      radiologyRequest: radioItems,
-    }
-    // console.log("params", params);
-    axios
-      .put(updateEDR, params)
-      .then((res) => {
-        if (res.data.success) {
-          console.log('response after adding Radio Request', res.data)
-          props.history.goBack()
-        } else if (!res.data.success) {
-          setOpenNotification(true)
-        }
-      })
-      .catch((e) => {
-        console.log('error after adding Radio Request', e)
-        setOpenNotification(true)
-        setErrorMsg('Error while adding the Radiology Request')
-      })
-  }
-
-  const TriageAssessment = () => {
-    let path = `viewEDR/TriageAndAssessment`
-    props.history.push({
-      pathname: path,
-      state: {
-        selectedItem: selectedItem,
-      },
-    })
-  }
-
-  const dischargeRequest = () => {
-    let path = `viewEDR/dischargerequest`
-    props.history.push({
-      pathname: path,
-      state: {
-        selectedItem: selectedItem,
-      },
-    })
-  }
 
   if (openNotification) {
     setTimeout(() => {
@@ -970,20 +572,9 @@ function AddEditPurchaseRequest(props) {
         <div className={`cPadding ${classes.root}`}>
           <div className='subheader'>
             <div>
-              <img src={business_Unit} />
-              <h4>IPR - Discharge Medication</h4>
+              <img src={dischargeIcon} />
+              <h4>Discharge</h4>
             </div>
-
-            {/* <div>
-              <Button
-                onClick={TriageAssessment}
-                style={styles.stylesForButton}
-                variant='contained'
-                color='primary'
-              >
-                Triage And Assessment
-              </Button>
-            </div> */}
           </div>
           <div
             style={{
@@ -993,7 +584,7 @@ function AddEditPurchaseRequest(props) {
           <div className='container' style={styles.patientDetails}>
             <div className='row'>
               <div className='col-md-12'>
-                <h4 style={{ color: 'blue', fontWeight: '600' }}>
+                <h4 style={{ color: '#2c6ddd', fontWeight: '600' }}>
                   Patient Details
                 </h4>
               </div>
@@ -1096,7 +687,7 @@ function AddEditPurchaseRequest(props) {
                   </MenuItem>
                   {console.log(statusArray, 'status')}
                   {statusArray &&
-                    statusArray.map((val, key) => {
+                    statusArray.map((val) => {
                       return (
                         <MenuItem key={val.key} value={val.key}>
                           {val.value}
@@ -1112,7 +703,7 @@ function AddEditPurchaseRequest(props) {
             style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
             className='container'
           >
-            <div className='row' style={{ marginTop: '20px' }}>
+            <div className='row' style={{ marginTop: '10px' }}>
               {medicineDataArray !== 0 ? (
                 <CustomTable
                   tableData={medicineDataArray}
@@ -1148,7 +739,7 @@ function AddEditPurchaseRequest(props) {
                 variant='contained'
                 color='primary'
               >
-                <strong style={{ fontSize: '12px' }}>Save</strong>
+                <strong style={{ fontSize: '12px' }}>Update</strong>
               </Button>
             </div>
 
@@ -1281,7 +872,7 @@ function AddEditPurchaseRequest(props) {
                       style={{
                         color: 'white',
                         cursor: 'pointer',
-                        borderRadius: 15,
+                        borderRadius: 5,
                         backgroundColor: '#2c6ddd',
                         width: '140px',
                         height: '50px',
@@ -1417,7 +1008,7 @@ function AddEditPurchaseRequest(props) {
                       style={{
                         color: 'white',
                         cursor: 'pointer',
-                        borderRadius: 15,
+                        borderRadius: 5,
                         backgroundColor: '#2c6ddd',
                         width: '140px',
                         height: '50px',
@@ -1513,7 +1104,7 @@ function AddEditPurchaseRequest(props) {
                       style={{
                         color: 'white',
                         cursor: 'pointer',
-                        borderRadius: 15,
+                        borderRadius: 5,
                         backgroundColor: '#2c6ddd',
                         width: '140px',
                         height: '50px',
