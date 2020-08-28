@@ -10,7 +10,7 @@ import {
 import Loader from 'react-loader-spinner'
 import Back from '../../../assets/img/Back_Arrow.png'
 import Header from '../../../components/Header/Header'
-import business_Unit from '../../../assets/img/IPR.png'
+import business_Unit from '../../../assets/img/RR.png'
 import '../../../assets/jss/material-dashboard-react/components/loaderStyle.css'
 import socketIOClient from 'socket.io-client'
 
@@ -103,7 +103,7 @@ export default function EDR(props) {
         <div className='subheader'>
           <div>
             <img src={business_Unit} />
-            <h4>IPR - Radiology Service Requests</h4>
+            <h4>In Patient</h4>
           </div>
           {/* <div>
             <img onClick={addNewItem} src={Add_New} />
