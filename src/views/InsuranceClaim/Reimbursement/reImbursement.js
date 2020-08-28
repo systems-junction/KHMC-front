@@ -117,7 +117,7 @@ export default function Reimbursement(props)
         <div className='subheader'>
           <div>
             <img src={ReInbursement} />
-            <h4>Insurance Re-Imbursement</h4>
+            <h4>Claims Review</h4>
           </div>
 
           <div>

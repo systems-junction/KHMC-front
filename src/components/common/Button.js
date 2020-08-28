@@ -7,7 +7,7 @@ const styles = {
   stylesForButton: {
     color: 'white',
     cursor: 'pointer',
-    borderRadius: 15,
+    borderRadius: 5,
     background: '#2c6ddd',
     width: '140px',
     height: '50px',

@@ -1,47 +1,36 @@
 // import React from 'react';
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
-
 import KHMC from "../../assets/img/KHMC Apps.png";
-
 import "../../components/MenuTree/MenuPage.css";
-
 import MenuTree from "../../components/MenuTree/MenuTree";
-
+import PatientRegistration from "../../assets/img/PatientRegistration.png";
 import Snackbar from "../../components/Snackbar/Snackbar";
 import Notification from "../../components/Snackbar/Notification.js";
-
 import AddAlert from "@material-ui/icons/AddAlert";
-
 import { Redirect } from "react-router-dom";
 import axios from "axios";
 import cookie from "react-cookies";
-
 import Header from "../../components/Header/Header";
-
 import RCM from "../../assets/img/RCM.png";
 import WMS from "../../assets/img/WMS.png";
 import FIN from "../../assets/img/FIN.png";
 import Control_Room from "../../assets/img/Control_Room.png";
 import BU from "../../assets/img/business_Unit.png";
 import FunctionalUnit from "../../assets/img/Functional Unit.png";
-
 import Staff from "../../assets/img/Staff.png";
 import PurchaseRequest from "../../assets/img/purchase request.png";
-
 import React, { useEffect } from "react";
 import "./MenuPage.css";
 import { render } from "react-dom";
-
 import Back from "../../assets/img/Back_Arrow.png";
-
 import KHMC_White from "../../assets/img/KHMC_White.png";
-
 import Influence_white from "../../assets/img/Influence_white.png";
 import ReturnItem from "../../assets/img/Return Item.png";
 import ReceiveItem from "../../assets/img/Receive Item.png";
-
 import ReceiveItems from "../ReplenishmentRequestForFU/handleReceiveItemForFUInventory";
+import claimsReview from '../../assets/img/Re-Inbursement.png'
+import PreApproval from '../../assets/img/Pre-Approval.png'
 
 const admin = [
   { img: KHMC, text: "KHMC APPS", path: "" },
@@ -66,6 +55,57 @@ const admin = [
     img: Control_Room,
     text: "Control Room",
     path: `/home/controlroom`,
+  },
+];
+
+const residentDoctor = [
+  { img: KHMC, text: "KHMC APPS", path: "" },
+  {
+    img: RCM,
+    text: "RCM",
+    path: "/home/rcm",
+  },
+  {
+    img: WMS,
+    text: "WMS",
+    path: "/home/wms",
+  },
+];
+
+const frontDesk = [
+  { img: KHMC, text: "KHMC APPS", path: "" },
+  {
+    img: PatientRegistration,
+    text: "Patient Registration",
+    path: "/home/rcm/patientListing",
+  },
+];
+
+const insuranceDepartment = [
+  { img: KHMC, text: "KHMC APPS", path: "" },
+  {
+    img: PreApproval,
+    text: 'Pre Approval',
+    path: '/home/rcm/ic/pa',
+  },
+  {
+    img: claimsReview,
+    text: 'Claims Review',
+    path: '/home/rcm/ic/ri',
+  },
+];
+
+const registeredNurse = [
+  { img: KHMC, text: "KHMC APPS", path: "" },
+  {
+    img: RCM,
+    text: "RCM",
+    path: "/home/rcm",
+  },
+  {
+    img: WMS,
+    text: "WMS",
+    path: "/home/wms",
   },
 ];
 
@@ -578,7 +618,7 @@ class HomeScreen extends React.Component {
           options={
             userType && userType.type === "BU Head"
               ? buHead
-              : // : userType && userType.type === "Committe Member"
+              // : userType && userType.type === "Committe Member"
               // ? committeeMember
               // : userType && userType.type === "Accounts Member"
               // ? accountsMember
@@ -597,15 +637,24 @@ class HomeScreen extends React.Component {
               // ? fuIncharge
               // : userType && userType.type === "BU Nurse"
               // ? buNurse
-              (userType && userType.type === "BU Member") ||
+              : (userType && userType.type === "BU Member") ||
                 (userType && userType.type === "BU Inventory Keeper") ||
                 (userType && userType.type === "BU Doctor")
-              ? buMember
-              : // : userType && userType.type === "Warehouse Incharge"
-                // ? warehouseIncharge
-                // : userType && userType.type === "FU Inventory Keeper"
-                // ? fuInventoryKeeper
-                admin
+                ? buMember
+              // : userType && userType.type === "Warehouse Incharge"
+              // ? warehouseIncharge
+              // : userType && userType.type === "FU Inventory Keeper"
+              // ? fuInventoryKeeper
+                : userType && userType.type === "Resident Doctor"
+                  ? residentDoctor
+                : (userType && userType.type === "IPR Receptionist") ||
+                  (userType && userType.type === "EDR Receptionist")
+                  ? frontDesk
+                : userType && userType.type === "Insurance Department"
+                  ? insuranceDepartment
+                : userType && userType.type === "Registered Nurse"
+                  ? registeredNurse   
+                : admin
           }
         />
       </div>
