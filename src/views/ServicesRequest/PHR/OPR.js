@@ -22,7 +22,7 @@ const tableHeading = [
   'City',
   'Insurance No',
   'Coverage Terms',
-  'Actions',
+  '',
 ]
 const tableDataKeys = [
   'profileNo',
@@ -141,7 +141,7 @@ export default function EDR(props) {
                   tableData={Edr}
                   tableDataKeys={tableDataKeys}
                   tableHeading={tableHeading}
-                  action={actions}
+                  // action={actions}
                   handleView={handleView}
                   borderBottomColor={'#60d69f'}
                   borderBottomWidth={20}
