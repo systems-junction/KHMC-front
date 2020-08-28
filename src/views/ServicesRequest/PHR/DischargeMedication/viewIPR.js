@@ -392,7 +392,6 @@ function AddEditPurchaseRequest(props) {
     setSelectedItem(props.history.location.state.selectedItem)
     setrequestNo(props.history.location.state.selectedItem.requestNo)
     setSelectedPatient(props.history.location.state.selectedItem.patientId)
-
   }, [])
 
   const handleChangeExternalConsultant = (event) => {
@@ -492,7 +491,6 @@ function AddEditPurchaseRequest(props) {
     }
   }
 
-
   function hideDialog() {
     setOpenAddConsultDialog(false)
     setOpenAddResidentDialog(false)
@@ -503,16 +501,6 @@ function AddEditPurchaseRequest(props) {
     dispatch({ field: 'rdescription', value: '' })
     dispatch({ field: 'note', value: '' })
   }
-
-
-
-
-
-
-
-
-
-
 
   if (openNotification) {
     setTimeout(() => {
