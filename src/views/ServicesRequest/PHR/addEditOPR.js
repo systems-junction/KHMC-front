@@ -8,11 +8,13 @@ import Tab from '@material-ui/core/Tab'
 import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
 import Fingerprint from '../../../assets/img/fingerprint.png'
+import BarCode from '../../../assets/img/Bar Code.png'
 import ErrorMessage from '../../../components/ErrorMessage/errorMessage'
 import {
   uploadsUrl,
   updatePatientUrl,
   addPatientUrl,
+  generateEDR,
   generateOPR,
   generateIPR,
   getSearchedpatient,
@@ -141,6 +143,21 @@ const genderArray = [
   },
 ]
 
+const relationArray = [
+  {
+    key: 'brother',
+    value: 'Brother',
+  },
+  {
+    key: 'father',
+    value: 'Father',
+  },
+  {
+    key: 'mother',
+    value: 'Mother',
+  },
+]
+
 const coverageTermsArr = [
   {
     key: 'coPayment',
@@ -260,6 +277,10 @@ function AddEditPatientListing(props) {
     // insuranceNo: "",
     insuranceVendor: '',
     paymentMethod: '',
+    name: '',
+    contactNo: '',
+    relation: '',
+    coveredFamilyMembers: '',
   }
 
   function reducer(state, { field, value }) {
@@ -302,6 +323,10 @@ function AddEditPatientListing(props) {
     // insuranceNo,
     insuranceVendor,
     paymentMethod,
+    name,
+    contactNo,
+    relation,
+    coveredFamilyMembers,
   } = state
 
   const onChangeCountry = (e) => {
@@ -438,78 +463,98 @@ function AddEditPatientListing(props) {
         coverageTerms &&
         coverageTerms.length > 0 &&
         payment &&
-        payment.length > 0
+        payment.length > 0 &&
+        coveredFamilyMembers &&
+        coveredFamilyMembers.length > 0
       )
     }
   }
+
+  // function validateEmergencyForm() {
+  //   return (
+  //     name &&
+  //     name.length > 0 &&
+  //     contactNo &&
+  //     contactNo.length > 0 &&
+  //     relation &&
+  //     relation.length > 0
+  //   )
+  // }
 
   const handleAdd = () => {
     let formData = new FormData()
     if (slipUpload) {
       formData.append('file', slipUpload, slipUpload.name)
     }
-    if (validatePatientForm() && validatePaymentForm()) {
-      const params = {
-        profileNo,
-        SIN,
-        title,
-        firstName,
-        lastName,
-        gender,
-        dob,
-        age,
-        height,
-        weight,
-        bloodGroup,
-        phoneNumber,
-        height,
-        weight,
-        bloodGroup,
-        email,
-        country,
-        city,
-        address,
-        otherDetails,
-        paymentMethod,
-        amountReceived,
-        receiverName,
-        bankName,
-        depositorName,
-        insuranceNo,
-        insuranceVendor,
-        coverageDetails,
-        coverageTerms,
-        payment,
-        depositSlip,
-      }
-      formData.append('data', JSON.stringify(params))
-      // console.log("PARAMSS ", params);
-      // console.log("DATAAA ", formData);
-      axios
-        .post(addPatientUrl, formData, {
-          headers: {
-            accept: 'application/json',
-            'Accept-Language': 'en-US,en;q=0.8',
-            'content-type': 'multipart/form-data',
-          },
-        })
-        .then((res) => {
-          if (res.data.success) {
-            // console.log(res.data.data, "patients data");
-            // console.log(res.data.data._id, "patient id");
-            setPatientId(res.data.data._id)
-            setOpenNotification(true)
-            setsuccessMsg('Patient details saved successfully')
-          } else if (!res.data.success) {
-            setOpenNotification(true)
-          }
-        })
-        .catch((e) => {
-          console.log('error after adding patient details', e)
-          setOpenNotification(true)
-          setErrorMsg('Error while adding the patient details')
-        })
+    // if (
+    //   (validatePatientForm() && validatePaymentForm()) ||
+    //   validateEmergencyForm()
+    // ) {
+    const params = {
+      profileNo,
+      SIN,
+      title,
+      firstName,
+      lastName,
+      gender,
+      dob,
+      age,
+      height,
+      weight,
+      bloodGroup,
+      phoneNumber,
+      height,
+      weight,
+      bloodGroup,
+      email,
+      country,
+      city,
+      address,
+      otherDetails,
+      paymentMethod,
+      amountReceived,
+      receiverName,
+      bankName,
+      depositorName,
+      insuranceNo,
+      insuranceVendor,
+      coverageDetails,
+      coverageTerms,
+      payment,
+      depositSlip,
+      name,
+      contactNo,
+      relation,
+      coveredFamilyMembers,
     }
+    formData.append('data', JSON.stringify(params))
+    console.log('PARAMSS ', params)
+    // console.log("DATAAA ", formData);
+    axios
+      .post(addPatientUrl, formData, {
+        headers: {
+          accept: 'application/json',
+          'Accept-Language': 'en-US,en;q=0.8',
+          'content-type': 'multipart/form-data',
+        },
+      })
+      .then((res) => {
+        if (res.data.success) {
+          console.log(res.data.data, 'patients data')
+          // console.log(res.data.data._id, "patient id");
+          setPatientId(res.data.data._id)
+          setOpenNotification(true)
+          setsuccessMsg('Patient details saved successfully')
+        } else if (!res.data.success) {
+          setOpenNotification(true)
+        }
+      })
+      .catch((e) => {
+        console.log('error after adding patient details', e)
+        setOpenNotification(true)
+        setErrorMsg('Error while adding the patient details')
+      })
+    // }
     setIsFormSubmitted(true)
   }
 
@@ -616,7 +661,7 @@ function AddEditPatientListing(props) {
     // setValue(tabIndex);
   }
 
-  const handleGenerateOPR = () => {
+  const handleGenerateEDR = () => {
     const params = {
       patientId,
       // generatedBy: currentUser.staffId,
@@ -638,6 +683,30 @@ function AddEditPatientListing(props) {
         console.log('error after generating EDR request', e)
         setOpenNotification(true)
         setErrorMsg('Error while generating EDR request')
+      })
+  }
+
+  const handleGenerateIPR = () => {
+    const params = {
+      patientId,
+      generatedBy: currentUser.staffId,
+      status: 'pending',
+    }
+    // console.log(params)
+    axios
+      .post(generateIPR, params, {})
+      .then((res) => {
+        if (res.data.success) {
+          console.log(res.data.data, 'response')
+          props.history.goBack()
+        } else if (!res.data.success) {
+          setOpenNotification(true)
+        }
+      })
+      .catch((e) => {
+        console.log('error after generating IPR request', e)
+        setOpenNotification(true)
+        setErrorMsg('Error while generating IPR request')
       })
   }
 
@@ -726,6 +795,7 @@ function AddEditPatientListing(props) {
       dispatch({ field: 'coverageDetails', value: '' })
       dispatch({ field: 'coverageTerms', value: '' })
       dispatch({ field: 'payment', value: '' })
+      dispatch({ field: 'coverageFamilyMembers', value: '' })
     } else if (e.target.value === 'Insurance') {
       dispatch({ field: 'depositorName', value: '' })
       dispatch({ field: 'amountReceived', value: '' })
@@ -810,7 +880,7 @@ function AddEditPatientListing(props) {
                 outline: 'none',
                 backgroundColor: value === 1 ? '#2c6ddd' : undefined,
               }}
-              label='Payment Method'
+              label='Emergency Contact'
             />
             <Tab
               style={{
@@ -818,6 +888,15 @@ function AddEditPatientListing(props) {
                 borderRadius: 15,
                 outline: 'none',
                 backgroundColor: value === 2 ? '#2c6ddd' : undefined,
+              }}
+              label='Payment Method'
+            />
+            <Tab
+              style={{
+                color: 'white',
+                borderRadius: 15,
+                outline: 'none',
+                backgroundColor: value === 3 ? '#2c6ddd' : undefined,
               }}
               label='Insurance Details'
             />
@@ -1568,12 +1647,12 @@ function AddEditPatientListing(props) {
                     style={comingFor === "add" ? styles.generate : styles.None}
                     disabled={comingFor === "add" ? !isFormSubmitted : false}
                     onClick={
-                      comingFor === "add" ? handleGenerateOPR : handleEdit
+                      comingFor === "add" ? handleGenerateEDR : handleEdit
                     }
                     variant="contained"
                     color="primary"
                   >
-                    {comingFor === "add" ? "Generate EDR" : "Update"}
+                    {comingFor === "add" ? "Generate ED/IP Record" : "Update"}
                   </Button>
                 ) : (
                     undefined
@@ -1589,7 +1668,7 @@ function AddEditPatientListing(props) {
                     variant="contained"
                     color="primary"
                   >
-                    {comingFor === "add" ? "Generate IPR" : "Update"}
+                    {comingFor === "add" ? "Generate ED/IP Record" : "Update"}
                   </Button>
                 ) : (
                     undefined
@@ -1598,6 +1677,165 @@ function AddEditPatientListing(props) {
             </div>
           </div>
         ) : value === 1 ? (
+          <div
+            style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+            className={`${'container-fluid'} ${classes.root}`}
+          >
+            <div className='row'>
+              <div
+                className='col-md-12'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <div>
+                  <TextField
+                    required
+                    label='Name'
+                    name={'name'}
+                    //value={name}
+                    onChange={onChangeValue}
+                    //error={name === '' && isFormSubmitted}
+                    className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className='row'>
+              <div
+                className='col-md-12'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <div>
+                  <TextField
+                    required
+                    label='Contact No'
+                    name={'contactNo'}
+                    //value={contactNo}
+                    onChange={onChangeValue}
+                    //error={contactNo === '' && isFormSubmitted}
+                    className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className='row'>
+              <div
+                className='col-md-12'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <div>
+                  <TextField
+                    required
+                    select
+                    label='Relation'
+                    name={'relation'}
+                    //value={relation}
+                    onChange={onChangeValue}
+                    //error={relation === '' && isFormSubmitted}
+                    className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  >
+                    <MenuItem value=''>
+                      <em>None</em>
+                    </MenuItem>
+
+                    {relationArray.map((val) => {
+                      return (
+                        <MenuItem key={val.key} value={val.key}>
+                          {val.value}
+                        </MenuItem>
+                      )
+                    })}
+                  </TextField>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', flex: 1, justifyContent: 'center' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  flex: 1,
+                  justifyContent: 'flex-end',
+                  marginTop: '2%',
+                  marginBottom: '2%',
+                }}
+              >
+                <Button
+                  style={styles.stylesForButton}
+                  //disabled={!validateFormType1()}
+                  onClick={onClick}
+                  variant='contained'
+                  color='primary'
+                >
+                  Next
+                </Button>
+                <div
+                  style={{
+                    width: '10px',
+                    height: 'auto',
+                    display: 'inline-block',
+                  }}
+                />
+                <>
+                  <Button
+                    style={styles.save}
+                    // disabled={!validateEmergencyForm()}
+                    // onClick={searchActivated ? handleEdit : handleAdd}
+                    onClick={handleAdd}
+                    variant='contained'
+                    color='default'
+                  >
+                    Save
+                  </Button>
+                  <div
+                    style={{
+                      width: '10px',
+                      height: 'auto',
+                      display: 'inline-block',
+                    }}
+                  />
+                </>
+
+                <Button
+                  style={styles.generate}
+                  // disabled={!validateEmergencyForm()}
+                  // disabled={comingFor === 'add' ? !isFormSubmitted : false}
+                  // onClick={comingFor === 'add' ? handleGenerateEDR : handleEdit}
+                  onClick={handleGenerateEDR}
+                  variant='contained'
+                  color='primary'
+                >
+                  {comingFor === 'add' ? 'Generate ED/IP Record' : 'Update'}
+                </Button>
+              </div>
+            </div>
+          </div>
+        ) : value === 2 ? (
           <div
             style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
             className={`${'container-fluid'} ${classes.root}`}
@@ -1999,17 +2237,17 @@ function AddEditPatientListing(props) {
                   style={styles.generate}
                   //disabled={!validatePatientForm()}
                   disabled={comingFor === 'add' ? !isFormSubmitted : false}
-                  onClick={comingFor === 'add' ? handleGenerateOPR : handleEdit}
+                  onClick={comingFor === 'add' ? handleGenerateEDR : handleEdit}
                   variant='contained'
                   color='primary'
                 >
-                  {comingFor === 'add' ? 'Generate OPR' : 'Update'}
+                  {comingFor === 'add' ? 'Generate ED/IP Record' : 'Update'}
                 </Button>
                 {/* ) : (
                   undefined
-                )} */}
+                )}
 
-                {/* {currentUser.staffTypeId.type === 'IPR Receptionist' ? (
+                {currentUser.staffTypeId.type === 'IPR Receptionist' ? (
                   <Button
                     style={styles.generate}
                     disabled={comingFor === 'add' ? !isFormSubmitted : false}
@@ -2019,7 +2257,7 @@ function AddEditPatientListing(props) {
                     variant='contained'
                     color='primary'
                   >
-                    {comingFor === 'add' ? 'Generate IPR' : 'Update'}
+                    {comingFor === 'add' ? 'Generate ED/IP Record' : 'Update'}
                   </Button>
                 ) : (
                   undefined
@@ -2035,7 +2273,7 @@ function AddEditPatientListing(props) {
             >
               <div className='row' style={{ marginTop: '20px' }}>
                 <div
-                  className='col-md-10 col-sm-10 col-8'
+                  className='col-md-7 col-sm-7 col-7'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -2055,8 +2293,43 @@ function AddEditPatientListing(props) {
                     }}
                   />
                 </div>
+
+                <div className='col-md-2 col-sm-2 col-2'>
+                  <div
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      backgroundColor: 'white',
+                      borderRadius: 6,
+                      height: 55,
+                    }}
+                  >
+                    <img src={BarCode} style={{ maxWidth: 120, height: 70 }} />
+                  </div>
+                </div>
+
+                <div className='col-md-1 col-sm-1 col-1'>
+                  <div
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      backgroundColor: 'white',
+                      borderRadius: 6,
+                      height: 55,
+                    }}
+                  >
+                    <img
+                      src={Fingerprint}
+                      style={{ maxWidth: 43, height: 43 }}
+                    />
+                  </div>
+                </div>
                 <div
-                  className='col-md-2 col-sm-2 col-4'
+                  className='col-md-1 col-sm-1 col-1'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -2213,7 +2486,35 @@ function AddEditPatientListing(props) {
                   </div>
                 </div>
               </div>
+              <div className='row'>
+                <div
+                  className='col-md-12'
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <div>
+                    <TextField
+                      required
+                      label='Covered Family Members'
+                      name={'coveredFamilyMembers'}
+                      value={coveredFamilyMembers}
+                      disabled={Insuranceform}
+                      onChange={onChangeValue}
+                      error={coveredFamilyMembers === '' && isFormSubmitted}
+                      className='textInputStyle'
+                      variant='filled'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
+
             <div
               style={{ display: 'flex', flex: 1, justifyContent: 'center' }}
               className='container-fluid'
@@ -2256,16 +2557,16 @@ function AddEditPatientListing(props) {
                 <Button
                   style={styles.generate}
                   disabled={comingFor === 'add' ? !isFormSubmitted : false}
-                  onClick={comingFor === 'add' ? handleGenerateOPR : handleEdit}
+                  onClick={comingFor === 'add' ? handleGenerateEDR : handleEdit}
                   variant='contained'
                   color='danger'
                 >
-                  {comingFor === 'add' ? 'Generate OPR' : 'Update'}
+                  {comingFor === 'add' ? 'Generate ED/IP Record' : 'Update'}
                 </Button>
                 {/* ) : (
                   undefined
-                )} */}
-                {/* {currentUser.staffTypeId.type === 'IPR Receptionist' ? (
+                )}
+                {currentUser.staffTypeId.type === 'IPR Receptionist' ? (
                   <Button
                     style={styles.generate}
                     disabled={comingFor === 'add' ? !isFormSubmitted : false}
@@ -2275,7 +2576,7 @@ function AddEditPatientListing(props) {
                     variant='contained'
                     color='danger'
                   >
-                    {comingFor === 'add' ? 'Generate IPR' : 'Update'}
+                    {comingFor === 'add' ? 'Generate ED/IP Record' : 'Update'}
                   </Button>
                 ) : (
                   undefined
