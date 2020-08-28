@@ -10,18 +10,15 @@ import {
   uploadsUrl,
   getRRIPRById,
   updateRRIPRById,
-  getSearchedpatient,
   getPatientRRIPR,
 } from '../../../public/endpoins'
 import cookie from 'react-cookies'
 import Header from '../../../components/Header/Header'
-import business_Unit from '../../../assets/img/IPR.png'
+import radioIcon from '../../../assets/img/RR.png'
 import Back from '../../../assets/img/Back_Arrow.png'
 import '../../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
 import Notification from '../../../components/Snackbar/Notification.js'
 import TextField from '@material-ui/core/TextField'
-import MenuItem from '@material-ui/core/MenuItem'
-import BootstrapInput from '../../../components/Dropdown/dropDown.js'
 import { FaUpload } from 'react-icons/fa'
 import Loader from 'react-loader-spinner'
 import '../../../assets/jss/material-dashboard-react/components/loaderStyle.css'
@@ -32,22 +29,13 @@ import TableRow from '@material-ui/core/TableRow'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import Fingerprint from '../../../assets/img/fingerprint.png'
-
-const statusArray = [
-  {
-    key: 'pending',
-    value: 'Pending',
-  },
-  {
-    key: 'completed',
-    value: 'Completed',
-  },
-]
+import AccountCircle from '@material-ui/icons/SearchOutlined'
+import InputAdornment from '@material-ui/core/InputAdornment'
 
 const styles = {
   patientDetails: {
     backgroundColor: 'white',
-    borderRadius: 15,
+    borderRadius: 5,
     padding: '20px',
   },
   inputContainerForTextField: {
@@ -67,7 +55,7 @@ const styles = {
   stylesForButton: {
     color: 'white',
     cursor: 'pointer',
-    borderRadius: 15,
+    borderRadius: 5,
     backgroundColor: '#2c6ddd',
     height: '50px',
     outline: 'none',
@@ -83,7 +71,7 @@ const styles = {
   upload: {
     backgroundColor: 'white',
     border: '0px solid #ccc',
-    borderRadius: '6px',
+    borderRadius: '5px',
     color: 'gray',
     width: '100%',
     height: '55px',
@@ -104,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
   },
   input: {
     backgroundColor: 'white',
-    borderRadius: 6,
+    borderRadius: 5,
     '&:after': {
       borderBottomColor: 'black',
     },
@@ -117,7 +105,7 @@ const useStyles = makeStyles((theme) => ({
   },
   multilineColor: {
     backgroundColor: 'white',
-    borderRadius: 6,
+    borderRadius: 5,
     '&:hover': {
       backgroundColor: 'white',
     },
@@ -165,9 +153,7 @@ function AddEditPurchaseRequest(props) {
 
   const {
     name,
-    price,
     status,
-    date,
     results,
     gender,
     age,
@@ -178,9 +164,6 @@ function AddEditPurchaseRequest(props) {
     requestNo,
   } = state
 
-  const onChangeValue = (e) => {
-    dispatch({ field: e.target.name, value: e.target.value })
-  }
 
   const [, setCurrentUser] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
@@ -188,7 +171,6 @@ function AddEditPurchaseRequest(props) {
   const [openNotification, setOpenNotification] = useState(false)
   const [selectedItem, setSelectedItem] = useState('')
   const [selectedPatient, setSelectedPatient] = useState('')
-  // const [requestNo, setrequestNo] = useState('')
   const [rrId, setrrId] = useState('')
   const [iprId, setiprId] = useState('')
   const [slipUpload, setSlipUpload] = useState('')
@@ -198,8 +180,7 @@ function AddEditPurchaseRequest(props) {
   const [searchQuery, setSearchQuery] = useState('')
   const [itemFound, setItemFound] = useState('')
   const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false)
-  const [searchActivated, setsearchActivated] = useState(false)
-  const [patientId, setPatientId] = useState('')
+  const [, setsearchActivated] = useState(false)
   const [patientPopulate, setpatientPopulate] = useState(false)
 
   const getLRByIdURI = (id) => {
@@ -290,7 +271,6 @@ function AddEditPurchaseRequest(props) {
 
     setSlipUpload(file)
     var reader = new FileReader()
-    var url = reader.readAsDataURL(file)
 
     reader.onloadend = function() {
       if (fileType === 'pdf') {
@@ -374,8 +354,8 @@ function AddEditPurchaseRequest(props) {
         <div className={`cPadding ${classes.root}`}>
           <div className='subheader'>
             <div>
-              <img src={business_Unit} />
-              <h4>IPR - Radiology Service Request</h4>
+              <img src={radioIcon} />
+              <h4>Radiology / Imaging Request</h4>
             </div>
           </div>
           <div
@@ -405,11 +385,11 @@ function AddEditPurchaseRequest(props) {
                   className='textInputStyle'
                   variant='filled'
                   InputProps={{
-                    // endAdornment: (
-                    //   <InputAdornment position='end'>
-                    //     <AccountCircle />
-                    //   </InputAdornment>
-                    // ),
+                    endAdornment: (
+                      <InputAdornment position='end'>
+                        <AccountCircle />
+                      </InputAdornment>
+                    ),
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
@@ -428,7 +408,7 @@ function AddEditPurchaseRequest(props) {
                     justifyContent: 'center',
                     alignItems: 'center',
                     backgroundColor: 'white',
-                    borderRadius: 6,
+                    borderRadius: 5,
                     height: 55,
                   }}
                 >
@@ -511,7 +491,7 @@ function AddEditPurchaseRequest(props) {
             <div className='container' style={styles.patientDetails}>
               <div className='row'>
                 <div className='col-md-12'>
-                  <h4 style={{ color: 'blue', fontWeight: '600' }}>
+                  <h4 style={{ color: '#2c6ddd', fontWeight: '600' }}>
                     Patient Details
                   </h4>
                 </div>
@@ -1046,7 +1026,7 @@ function AddEditPurchaseRequest(props) {
                   variant='contained'
                   color='primary'
                 >
-                  <strong style={{ fontSize: '12px' }}>Save</strong>
+                  <strong style={{ fontSize: '13px' }}>Submit</strong>
                 </Button>
               </div>
             </div>

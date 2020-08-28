@@ -87,7 +87,7 @@ export default function Staff(props) {
       .then((res) => {
         if (res.data.success) {
           console.log(res.data.data)
-          setStaff(res.data.data.staff)
+          setStaff(res.data.data.staff.reverse())
           setSystemAdminArray(res.data.data.systemAdmin)
           setStaffTypesArray(res.data.data.staffType)
         } else if (!res.data.success) {

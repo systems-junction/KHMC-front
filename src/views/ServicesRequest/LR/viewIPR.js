@@ -40,7 +40,7 @@ const statusArray = [
 const styles = {
   patientDetails: {
     backgroundColor: 'white',
-    borderRadius: 15,
+    borderRadius: 5,
     padding: '20px',
   },
   inputContainerForTextField: {
@@ -60,7 +60,7 @@ const styles = {
   stylesForButton: {
     color: 'white',
     cursor: 'pointer',
-    borderRadius: 15,
+    borderRadius: 5,
     backgroundColor: '#2c6ddd',
     height: '50px',
     outline: 'none',
@@ -76,7 +76,7 @@ const styles = {
   upload: {
     backgroundColor: 'white',
     border: '0px solid #ccc',
-    borderRadius: '6px',
+    borderRadius: '5px',
     color: 'gray',
     width: '100%',
     height: '55px',
@@ -100,7 +100,7 @@ const useStyles = makeStyles((theme) => ({
   },
   input: {
     backgroundColor: 'white',
-    borderRadius: 6,
+    borderRadius: 5,
     '&:after': {
       borderBottomColor: 'black',
     },
@@ -113,7 +113,7 @@ const useStyles = makeStyles((theme) => ({
   },
   multilineColor: {
     backgroundColor: 'white',
-    borderRadius: 6,
+    borderRadius: 5,
     '&:hover': {
       backgroundColor: 'white',
     },
@@ -403,7 +403,7 @@ function AddEditPurchaseRequest(props) {
                 <Tab
                   style={{
                     color: 'white',
-                    borderRadius: 15,
+                    borderRadius: 5,
                     outline: 'none',
                     backgroundColor: value === 0 ? '#2c6ddd' : undefined,
                   }}
@@ -412,7 +412,7 @@ function AddEditPurchaseRequest(props) {
                 <Tab
                   style={{
                     color: 'white',
-                    borderRadius: 15,
+                    borderRadius: 5,
                     outline: 'none',
                     backgroundColor: value === 1 ? '#2c6ddd' : undefined,
                   }}
