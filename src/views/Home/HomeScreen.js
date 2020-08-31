@@ -43,6 +43,11 @@ import ReceiveItem from "../../assets/img/Receive Item.png";
 
 import ReceiveItems from "../ReplenishmentRequestForFU/handleReceiveItemForFUInventory";
 
+import wh_inventory from "../../assets/img/WH Inventory.png";
+import purchase_order from "../../assets/img/Purchase Order.png";
+import purchase_request from "../../assets/img/purchase request.png";
+import MaterialReceiving from "../../assets/img/Material Receiving.png";
+
 const admin = [
   { img: KHMC, text: "KHMC APPS", path: "" },
   {
@@ -77,9 +82,24 @@ const buHead = [
 ];
 
 const committeeMember = [
-  { img: FunctionalUnit, text: "Functional Unit", path: "" },
-  { img: RCM, text: "RCM", path: "" },
-  { img: WMS, text: "WMS", path: "controlroom/wms" },
+  // { img: FunctionalUnit, text: "Functional Unit", path: "" },
+  // { img: RCM, text: "RCM", path: "" },
+  // { img: WMS, text: "WMS", path: "controlroom/wms" },
+  { img: KHMC, text: "KHMC APPS", path: "" },
+
+  {
+    img: purchase_request,
+    text: "Purchase Request",
+    path: "/home/wms/warehouse/pr",
+  },
+
+  {
+    img: purchase_order,
+    text: "Purchase Order",
+    path: "/home/wms/warehouse/po",
+  },
+
+
 ];
 
 const accountsMember = [
@@ -290,6 +310,34 @@ const fuIncharge = [
     img: FunctionalUnit,
     text: "FU Mgmt",
     path: "controlroom/fus/replenishment",
+  },
+];
+
+const warehouseInventoryKeeper = [
+  { img: KHMC, text: "KHMC APPS", path: "" },
+
+  {
+    img: wh_inventory,
+    text: "WH Inventory",
+    path: "/home/wms/warehouse/warehouseinventory",
+  },
+
+  {
+    img: purchase_request,
+    text: "Purchase Request",
+    path: "/home/wms/warehouse/pr",
+  },
+
+  {
+    img: purchase_order,
+    text: "Purchase Order",
+    path: "/home/wms/warehouse/po",
+  },
+
+  {
+    img: MaterialReceiving,
+    text: "Material Receiving",
+    path: "/home/wms/warehouse/materialreceiving",
   },
 ];
 
@@ -578,9 +626,9 @@ class HomeScreen extends React.Component {
           options={
             userType && userType.type === "BU Head"
               ? buHead
-              : // : userType && userType.type === "Committe Member"
-              // ? committeeMember
-              // : userType && userType.type === "Accounts Member"
+              : userType && userType.type === "Committe Member"
+              ? committeeMember
+              : // : userType && userType.type === "Accounts Member"
               // ? accountsMember
               // : userType && userType.type === "Warehouse Member"
               // ? warehouseMember
@@ -601,11 +649,13 @@ class HomeScreen extends React.Component {
                 (userType && userType.type === "BU Inventory Keeper") ||
                 (userType && userType.type === "BU Doctor")
               ? buMember
-              : // : userType && userType.type === "Warehouse Incharge"
-                // ? warehouseIncharge
-                // : userType && userType.type === "FU Inventory Keeper"
-                // ? fuInventoryKeeper
-                admin
+               // : userType && userType.type === "Warehouse Incharge"
+              // ? warehouseIncharge
+              // : userType && userType.type === "FU Inventory Keeper"
+              // ? fuInventoryKeeper
+            //  : userType && userType.type === "Warehouse Inventory Keeper"
+            //   ? warehouseInventoryKeeper
+              : admin
           }
         />
       </div>

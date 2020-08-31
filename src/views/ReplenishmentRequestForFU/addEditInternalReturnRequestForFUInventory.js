@@ -352,8 +352,10 @@ function AddEditPurchaseRequest(props) {
 
           for (let i = 0; i < receivedItems.length; i++) {
             if (
-              receivedItems[i].replenishmentRequestId ===
-                props.history.location.state.selectedItem._id ||
+              (receivedItems[i].replenishmentRequestId ===
+                props.history.location.state.selectedItem._id &&
+                receivedItems[i].itemId ===
+                  props.history.location.state.selectedItem.itemId._id) ||
               (props.history.location.state.selectedItem
                 .replenishmentRequestFU &&
                 receivedItems[i].replenishmentRequestId ===
