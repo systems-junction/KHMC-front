@@ -1,47 +1,39 @@
 // import React from 'react';
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
-
 import KHMC from "../../assets/img/KHMC Apps.png";
-
 import "../../components/MenuTree/MenuPage.css";
-
 import MenuTree from "../../components/MenuTree/MenuTree";
-
+import PatientRegistration from "../../assets/img/PatientRegistration.png";
 import Snackbar from "../../components/Snackbar/Snackbar";
 import Notification from "../../components/Snackbar/Notification.js";
-
 import AddAlert from "@material-ui/icons/AddAlert";
-
 import { Redirect } from "react-router-dom";
 import axios from "axios";
 import cookie from "react-cookies";
-
 import Header from "../../components/Header/Header";
-
 import RCM from "../../assets/img/RCM.png";
 import WMS from "../../assets/img/WMS.png";
 import FIN from "../../assets/img/FIN.png";
 import Control_Room from "../../assets/img/Control_Room.png";
 import BU from "../../assets/img/business_Unit.png";
 import FunctionalUnit from "../../assets/img/Functional Unit.png";
-
 import Staff from "../../assets/img/Staff.png";
 import PurchaseRequest from "../../assets/img/purchase request.png";
-
 import React, { useEffect } from "react";
 import "./MenuPage.css";
 import { render } from "react-dom";
-
 import Back from "../../assets/img/Back_Arrow.png";
-
 import KHMC_White from "../../assets/img/KHMC_White.png";
-
 import Influence_white from "../../assets/img/Influence_white.png";
 import ReturnItem from "../../assets/img/Return Item.png";
 import ReceiveItem from "../../assets/img/Receive Item.png";
-
 import ReceiveItems from "../ReplenishmentRequestForFU/handleReceiveItemForFUInventory";
+import claimsReview from '../../assets/img/ClaimsReview.png'
+import PreApproval from '../../assets/img/Pre-Approval.png'
+import IPR from '../../assets/img/IPR.png'
+import outPatient from '../../assets/img/OutPatient.png'
+import DM from '../../assets/img/Discharge Medication.png'
 
 import wh_inventory from "../../assets/img/WH Inventory.png";
 import purchase_order from "../../assets/img/Purchase Order.png";
@@ -49,7 +41,7 @@ import purchase_request from "../../assets/img/purchase request.png";
 import MaterialReceiving from "../../assets/img/Material Receiving.png";
 
 const admin = [
-  { img: KHMC, text: "KHMC APPS", path: "" },
+  { img: KHMC, text: "KHMC", path: "" },
   {
     img: RCM,
     text: "RCM",
@@ -71,6 +63,108 @@ const admin = [
     img: Control_Room,
     text: "Control Room",
     path: `/home/controlroom`,
+  },
+];
+
+const residentDoctor = [
+  { img: KHMC, text: "KHMC", path: "" },
+  {
+    img: RCM,
+    text: "RCM",
+    path: "/home/rcm",
+  },
+  {
+    img: WMS,
+    text: "WMS",
+    path: "/home/wms",
+  },
+];
+
+const frontDesk = [
+  { img: KHMC, text: "KHMC", path: "" },
+  {
+    img: PatientRegistration,
+    text: "Patient Registration",
+    path: "/home/rcm/patientListing",
+  },
+];
+
+const insuranceDepartment = [
+  { img: KHMC, text: "KHMC", path: "" },
+  {
+    img: PreApproval,
+    text: 'Pre Approval',
+    path: '/home/rcm/ic/pa',
+  },
+  {
+    img: claimsReview,
+    text: 'Claims Review',
+    path: '/home/rcm/ic/ri',
+  },
+];
+
+const registeredNurse = [
+  { img: KHMC, text: "KHMC", path: "" },
+  {
+    img: RCM,
+    text: "RCM",
+    path: "/home/rcm",
+  },
+  {
+    img: WMS,
+    text: "WMS",
+    path: "/home/wms",
+  },
+];
+
+const radiologyImagingDepartment = [
+  { img: KHMC, text: "KHMC", path: "" },
+  {
+    img: IPR,
+    text: 'In-Patient',
+    path: '/home/rcm/sr/rr/ipr',
+  },
+
+  {
+    img: outPatient,
+    text: 'Out-Patient',
+    path: '/home/rcm/sr/rr/opr',
+  },
+];
+
+const labTechnician = [
+  { img: KHMC, text: "KHMC", path: "" },
+  {
+    img: IPR,
+    text: 'In-Patient',
+    path: '/home/rcm/sr/lr/ipr',
+  },
+
+  {
+    img: outPatient,
+    text: 'Out-Patient',
+    path: '/home/rcm/sr/lr/opr',
+  },
+];
+
+const pharmacist = [
+  { img: KHMC, text: "KHMC", path: "" },
+  {
+    img: IPR,
+    text: 'In-Patient',
+    path: '/home/rcm/sr/phr/ipr',
+  },
+
+  {
+    img: outPatient,
+    text: 'Out-Patient',
+    path: '/home/rcm/sr/phr/opr',
+  },
+
+  {
+    img: DM,
+    text: 'Discharge',
+    path: '/home/rcm/sr/phr/dischargemedication/ipr',
   },
 ];
 
@@ -193,7 +287,7 @@ const fuHead = [
 
 const buMember = [
   // { img: FunctionalUnit, text: "Functional Unit", path: "" },
-  { img: KHMC, text: "KHMC APPS", path: "" },
+  { img: KHMC, text: "KHMC", path: "" },
 
   {
     img: PurchaseRequest,
@@ -628,7 +722,7 @@ class HomeScreen extends React.Component {
               ? buHead
               : userType && userType.type === "Committe Member"
               ? committeeMember
-              : // : userType && userType.type === "Accounts Member"
+               // : userType && userType.type === "Accounts Member"
               // ? accountsMember
               // : userType && userType.type === "Warehouse Member"
               // ? warehouseMember
@@ -645,7 +739,7 @@ class HomeScreen extends React.Component {
               // ? fuIncharge
               // : userType && userType.type === "BU Nurse"
               // ? buNurse
-              (userType && userType.type === "BU Member") ||
+              : (userType && userType.type === "BU Member") ||
                 (userType && userType.type === "BU Inventory Keeper") ||
                 (userType && userType.type === "BU Doctor")
               ? buMember

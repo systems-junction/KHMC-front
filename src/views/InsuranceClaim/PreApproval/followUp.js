@@ -442,26 +442,52 @@ function AddEditPurchaseRequest(props) {
                     </div>
 
                     <div className='row'>
-                        {file !== "" && file.slice(file.length - 3) !== 'pdf' ? (
-                            <div className='col-md-6 col-sm-6 col-6'
-                                style={{
-                                    ...styles.inputContainerForTextField,
-                                }}>
+                        {file !== "" && file.includes('\\') ? (
+                            <>
+                                {file !== "" && file.slice(file.length - 3) !== 'pdf' ? (
+                                    <div className='col-md-6 col-sm-6 col-6'
+                                        style={{
+                                            ...styles.inputContainerForTextField,
+                                        }}>
 
-                                <img src={uploadsUrl + file.split('\\')[1]} className="depositSlipImg" />
-                            </div>
-                        ) : file !== "" && file.slice(file.length - 3) === 'pdf' ? (
-                            <div className='col-md-6 col-sm-6 col-6'
-                                style={{
-                                    ...styles.inputContainerForTextField,
-                                }}>
-                                <a href={uploadsUrl + file.split('\\')[1]} style={{ color: '#2c6ddd' }}>Click here to open file</a>
-                            </div>
-                        ) : (
-                                <div className='LoaderStyle'>
-                                    <Loader type='TailSpin' color='red' height={50} width={50} />
-                                </div>
-                            )}
+                                        <img src={uploadsUrl + file.split('\\')[1]} className="depositSlipImg" />
+                                    </div>
+                                ) : file !== "" && file.slice(file.length - 3) === 'pdf' ? (
+                                    <div className='col-md-6 col-sm-6 col-6'
+                                        style={{
+                                            ...styles.inputContainerForTextField,
+                                        }}>
+                                        <a href={uploadsUrl + file.split('\\')[1]} style={{ color: '#2c6ddd' }}>Click here to open file</a>
+                                    </div>
+                                ) : (
+                                        undefined
+                                    )}
+                            </>
+                        ) : file !== "" && file.includes('/') ? (
+                                <>
+                                    {file !== "" && file.slice(file.length - 3) !== 'pdf' ? (
+                                        <div className='col-md-6 col-sm-6 col-6'
+                                            style={{
+                                                ...styles.inputContainerForTextField,
+                                            }}>
+
+                                            <img src={uploadsUrl + file} className="depositSlipImg" />
+                                        </div>
+                                    ) : file !== "" && file.slice(file.length - 3) === 'pdf' ? (
+                                        <div className='col-md-6 col-sm-6 col-6'
+                                            style={{
+                                                ...styles.inputContainerForTextField,
+                                            }}>
+                                            <a href={uploadsUrl + file} style={{ color: '#2c6ddd' }}>Click here to open file</a>
+                                        </div>
+                                    ) : (
+                                            undefined
+                                        )}
+                                </>
+
+                            ):(
+                        undefined
+                    )}
                     </div>
                 </div>
 

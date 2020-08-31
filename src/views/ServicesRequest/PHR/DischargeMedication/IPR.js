@@ -10,7 +10,7 @@ import {
 import Loader from 'react-loader-spinner'
 import Back from '../../../../assets/img/Back_Arrow.png'
 import Header from '../../../../components/Header/Header'
-import business_Unit from '../../../../assets/img/EDR.png'
+import dischargeIcon from '../../../../assets/img/Discharge Medication.png'
 import '../../../../assets/jss/material-dashboard-react/components/loaderStyle.css'
 import socketIOClient from 'socket.io-client'
 
@@ -24,8 +24,8 @@ const tableDataKeys = [
 
 const actions = { view: true }
 
-export default function EDR(props) {
-  const [Edr, setEdr] = useState('')
+export default function Ipr(props) {
+  const [Ipr, setIpr] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
   const [openNotification, setOpenNotification] = useState(false)
 
@@ -43,11 +43,11 @@ export default function EDR(props) {
     //   setMaterialReceivings(data.reverse());
     //   console.log("res after adding through socket", data);
     // });
-    getEDRsData()
+    getIprsData()
     // return () => socket.disconnect();
   }, [])
 
-  function getEDRsData() {
+  function getIprsData() {
     axios
       .get(getDischargeIPRUrl)
       .then((res) => {
@@ -58,7 +58,7 @@ export default function EDR(props) {
           )
           res.data.data.map((d) => (d.status = d.dischargeRequest.status))
           console.log(res.data.data, 'data')
-          setEdr(res.data.data.reverse())
+          setIpr(res.data.data.reverse())
         } else if (!res.data.success) {
           setErrorMsg(res.data.error)
           setOpenNotification(true)
@@ -76,7 +76,7 @@ export default function EDR(props) {
       pathname: path,
       state: {
         selectedItem: rec,
-        comingFor: 'edr',
+        comingFor: 'Ipr',
       },
     })
   }
@@ -99,13 +99,9 @@ export default function EDR(props) {
       <div className='cPadding'>
         <div className='subheader'>
           <div>
-            <img src={business_Unit} />
-            <h4>IPR - Discharge Medication</h4>
+            <img src={dischargeIcon} />
+            <h4>Discharge</h4>
           </div>
-          {/* <div>
-            <img onClick={addNewItem} src={Add_New} />
-            <img src={Search} />
-          </div> */}
         </div>
 
         <div
@@ -115,11 +111,11 @@ export default function EDR(props) {
             flexDirection: 'column',
           }}
         >
-          {Edr ? (
+          {Ipr ? (
             <div>
               <div>
                 <CustomTable
-                  tableData={Edr}
+                  tableData={Ipr}
                   tableDataKeys={tableDataKeys}
                   tableHeading={tableHeading}
                   action={actions}

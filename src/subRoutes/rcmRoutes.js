@@ -3,13 +3,13 @@ import cookie from 'react-cookies'
 import { Route, Switch, Router, Redirect } from 'react-router-dom'
 import { createBrowserHistory } from 'history'
 import NotFound from '../components/NotFound/NotFound'
-
 import RCM from '../views/Home/RCMHome'
 import ServicesRequestRoutes from '../subRoutes/servicesRequest'
 import InsuranceClaimRoutes from '../subRoutes/insuranceClaim'
 import ResidentDoctor from '../subRoutes/residentDoctor'
 import ECR from '../subRoutes/ecr'
 import PatientListingRoutes from './patientListing'
+import patientAssessment from './patientAssessment'
 import EDR from './EDR'
 import IPR from './iprRoutes'
 
@@ -51,13 +51,16 @@ class WMSRoutes extends React.PureComponent {
         <Route path={`${this.props.match.url}/edr`} component={EDR} />
         <Route path={`${this.props.match.url}/ipr`} component={IPR} />
         <Route path={'/home/rcm/ic'} component={InsuranceClaimRoutes} />
-
         <Route
           path={`${this.props.match.url}/patientListing`}
           component={PatientListingRoutes}
         />
-        <Route path={`${this.props.match.url}/notfound`} component={NotFound} />
+        <Route
+          path={`/home/rcm/patientAssessment`}
+          component={patientAssessment}
+        />
 
+        <Route path={`${this.props.match.url}/notfound`} component={NotFound} />
         <Route path='*' component={NotFound} />
       </Switch>
     )

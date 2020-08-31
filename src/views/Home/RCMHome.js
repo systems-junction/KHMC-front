@@ -2,6 +2,7 @@ import { Redirect } from "react-router-dom";
 import cookie from "react-cookies";
 import Header from "../../components/Header/Header";
 import WMS from "../../assets/img/WMS.png";
+import RCM from "../../assets/img/RCM.png";
 import wh_inventory from "../../assets/img/WH Inventory.png";
 import purchase_order from "../../assets/img/Purchase Order.png";
 import purchase_request from "../../assets/img/purchase request.png";
@@ -16,13 +17,16 @@ import Resident from "../../assets/img/ResidentDoctor.png";
 import ECR from "../../assets/img/ECR.png";
 import Services from "../../assets/img/ServicesRequest.png";
 import InsuranceClaim from '../../assets/img/Insurance_Claim.png'
+import assessmentIcon from '../../assets/img/PatientAssessment.png'
+import patientCareIcon from '../../assets/img/PatientCare.png'
+import Lab_RadIcon from '../../assets/img/Lab-Rad Request.png'
 import React from "react";
 import "./MenuPage.css";
 import Back from "../../assets/img/Back_Arrow.png";
 import MenuTree from "../../components/MenuTree/MenuTree";
 
 const admin = [
-  { img: WMS, text: "RCM" },
+  { img: RCM, text: "RCM" },
   {
     img: PatientRegistration,
     text: "Patient Registration",
@@ -65,87 +69,41 @@ const admin = [
 ];
 
 const externalConsultant = [
-  { img: WMS, text: "RCM" },
-  // {
-  //   img: PatientRegistration,
-  //   text: "Patient Registration",
-  //   path: "/home/rcm/patientListing",
-  // },
-  // {
-  //   img: EDR,
-  //   text: "EDR",
-  //   path: "/home/rcm/edr",
-  // },
-  // {
-  //   img: IPR,
-  //   text: "IPR",
-  //   path: "/home/rcm/ipr",
-  // },
-
-  // {
-  //   img: Resident,
-  //   text: "Resident Doctor",
-  //   path: "/home/rcm/rd",
-  // },
-
+  { img: RCM, text: "RCM" },
   {
     img: ECR,
     text: "ECR",
     path: "/home/rcm/ecr",
   },
-
-  // {
-  //   img: Services,
-  //   text: "Services Request",
-  //   path: "/home/rcm/sr",
-  // },
-
-  // {
-  //   text: "",
-  //   path: "",
-  // },
 ];
 
 const residentDoctor = [
-  { img: WMS, text: "RCM" },
-  // {
-  //   img: PatientRegistration,
-  //   text: "Patient Registration",
-  //   path: "/home/rcm/patientListing",
-  // },
-  // {
-  //   img: EDR,
-  //   text: "EDR",
-  //   path: "/home/rcm/edr",
-  // },
-  // {
-  //   img: IPR,
-  //   text: "IPR",
-  //   path: "/home/rcm/ipr",
-  // },
-
+  { img: RCM, text: "RCM" },
   {
     img: Resident,
     text: "Resident Doctor",
     path: "/home/rcm/rd",
   },
+];
 
-  // {
-  //   img: ECR,
-  //   text: "ECR",
-  //   path: "/home/rcm/ecr",
-  // },
-
-  // {
-  //   img: Services,
-  //   text: "Services Request",
-  //   path: "/home/rcm/sr",
-  // },
-
-  // {
-  //   text: "",
-  //   path: "",
-  // },
+const registeredNurse = [
+  { img: RCM, text: "RCM" },
+  {
+    img: assessmentIcon,
+    text: "Patient Assessment",
+    path: "/home/rcm/patientAssessment",
+  },
+  {
+    img: patientCareIcon,
+    text: "Patient Care",
+    path: "/home/rcm/rd",
+  },
+  {
+    img: Lab_RadIcon,
+    text: "Lab/Rad Request",
+    path: "/home/rcm/rd",
+  },
+  
 ];
 
 const accountsMember = [
@@ -259,6 +217,8 @@ class HomeScreen extends React.Component {
               ? warehouseMember
               : userType && userType.type === "Warehouse Incharge"
               ? warehouseIncharge
+              : userType && userType.type === "Registered Nurse"
+              ? registeredNurse
               : admin
           }
         />

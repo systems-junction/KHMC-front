@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import axios from 'axios'
 import Loader from 'react-loader-spinner'
 import Header from '../../../components/Header/Header'
-import ReInbursement from '../../../assets/img/Re-Inbursement.png'
+import claimsReview from '../../../assets/img/ClaimsReview.png'
 import Back_Arrow from '../../../assets/img/Back_Arrow.png'
 import plus_icon from '../../../assets/img/Plus.png'
 import Button from '@material-ui/core/Button'
@@ -116,8 +116,8 @@ export default function Reimbursement(props)
       <div className='cPadding'>
         <div className='subheader'>
           <div>
-            <img src={ReInbursement} />
-            <h4>Insurance Re-Imbursement</h4>
+            <img src={claimsReview} />
+            <h4>Claims Review</h4>
           </div>
 
           <div>

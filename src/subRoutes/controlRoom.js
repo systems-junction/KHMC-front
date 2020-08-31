@@ -21,9 +21,7 @@ import ReplenishmentRoutesForBU from './professionalOrderForMedicinal'
 import ProfessionalOrderForNonMedical from './professionalOrderForNonMedical'
 import MaterialReceivingRoutes from './materialReceiving'
 import ReceiveRequestsRoutes from './receiveRequests'
-
 import RCMRoutes from './rcm'
-
 import FUMgmtRoutes from './fuMgmtRoutes'
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -59,7 +57,6 @@ class ControlRoomRoutes extends React.PureComponent {
           path={`${this.props.match.url}/staff`}
           component={StaffRoutes}
         />
-
         {/* <Route
           path={`${this.props.match.url}/fus/replenishment`}
           component={ReplenishmentRoutesForFU}

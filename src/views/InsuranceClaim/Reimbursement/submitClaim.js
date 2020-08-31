@@ -19,7 +19,7 @@ import Header from '../../../components/Header/Header'
 import Back_Arrow from '../../../assets/img/Back_Arrow.png'
 import '../../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
 import FormData from 'form-data'
-import ReInbursement from '../../../assets/img/Re-Inbursement.png'
+import claimsReview from '../../../assets/img/ClaimsReview.png'
 import Table from '@material-ui/core/Table'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
@@ -30,6 +30,8 @@ import Paper from '@material-ui/core/Paper'
 import CustomTable from '../../../components/Table/Table'
 import MenuItem from '@material-ui/core/MenuItem'
 import Loader from "react-loader-spinner";
+import AccountCircle from '@material-ui/icons/SearchOutlined'
+import InputAdornment from '@material-ui/core/InputAdornment'
 
 const tableHeadingForBillSummary = [
   'Date/Time',
@@ -56,7 +58,7 @@ const styles = {
   stylesForButton: {
     color: 'white',
     cursor: 'pointer',
-    borderRadius: 15,
+    borderRadius: 10,
     backgroundColor: '#2c6ddd',
     width: '130px',
     height: '45px',
@@ -65,7 +67,7 @@ const styles = {
   save: {
     color: 'white',
     cursor: 'pointer',
-    borderRadius: 15,
+    borderRadius: 10,
     backgroundColor: '#ba55d3',
     width: '130px',
     height: '45px',
@@ -81,7 +83,7 @@ const styles = {
   upload: {
     backgroundColor: 'white',
     border: '0px solid #ccc',
-    borderRadius: '6px',
+    borderRadius: '10px',
     color: 'gray',
     width: '100%',
     height: '60px',
@@ -93,7 +95,7 @@ const styles = {
   },
   patientDetails: {
     backgroundColor: 'white',
-    borderRadius: 15,
+    borderRadius: 10,
     padding: '20px',
   },
   inputContainerForTextField: {
@@ -129,7 +131,7 @@ const useStyles = makeStyles((theme) => ({
   },
   input: {
     backgroundColor: 'white',
-    borderRadius: 6,
+    borderRadius: 10,
     '&:after': {
       borderBottomColor: 'black',
     },
@@ -142,7 +144,7 @@ const useStyles = makeStyles((theme) => ({
   },
   multilineColor: {
     backgroundColor: 'white',
-    borderRadius: 6,
+    borderRadius: 10,
     '&:hover': {
       backgroundColor: 'white',
     },
@@ -388,7 +390,7 @@ function AddEditPatientListing(props) {
     setDocumentUpload(file)
     var reader = new FileReader()
     var url = reader.readAsDataURL(file);
-    
+
     reader.onloadend = function () {
       if (fileType === 'pdf') {
         setpdfView(file.name)
@@ -525,12 +527,12 @@ function AddEditPatientListing(props) {
       <div className='cPadding'>
         <div className='subheader'>
           <div>
-            <img src={ReInbursement} />
+            <img src={claimsReview} />
             <div style={{ flex: 4, display: 'flex', alignItems: 'center' }}>
               <h4>
                 {comingFor === 'add'
-                  ? ' Insurance Re-Imbursement'
-                  : ' Edit Insurance Re-Imbursement'}
+                  ? ' Claim Review'
+                  : ' Edit Claim Review'}
               </h4>
             </div>
           </div>
@@ -547,7 +549,7 @@ function AddEditPatientListing(props) {
             <Tab
               style={{
                 color: 'white',
-                borderRadius: 15,
+                borderRadius: 10,
                 outline: 'none',
                 backgroundColor: value === 0 ? '#2c6ddd' : undefined,
               }}
@@ -556,7 +558,7 @@ function AddEditPatientListing(props) {
             <Tab
               style={{
                 color: 'white',
-                borderRadius: 15,
+                borderRadius: 10,
                 outline: 'none',
                 backgroundColor: value === 1 ? '#2c6ddd' : undefined,
               }}
@@ -589,8 +591,14 @@ function AddEditPatientListing(props) {
                       className='textInputStyle'
                       variant='filled'
                       InputProps={{
+                        endAdornment: (
+                          <InputAdornment position='end'>
+                            <AccountCircle />
+                          </InputAdornment>
+                        ),
                         className: classes.input,
                         classes: { input: classes.input },
+                        disableUnderline:true
                       }}
                     />
                   </div>
@@ -752,9 +760,6 @@ function AddEditPatientListing(props) {
               style={styles.patientDetails}
             >
               <div className='row'>
-                <div
-                  className='col-md-12'
-                >
                   <TextField
                     required
                     multiline
@@ -770,24 +775,18 @@ function AddEditPatientListing(props) {
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
+                      disableUnderline:true
                     }}
                   />
-                </div>
               </div>
             </div>
 
-            <div
-              style={{
-                height: '10px',
-              }}
-            />
-
             {comingFor === 'edit' ? (
-              <div className={`container ${classes.root}`}>
+              <div className={`container ${classes.root}`} style={{marginTop:'10px'}}>
                 <div className='row'>
-                  <div
+                  {/* <div
                     className='col-md-6 col-sm-6 col-6'
-                  >
+                  > */}
                     <TextField
                       required
                       select
@@ -803,11 +802,11 @@ function AddEditPatientListing(props) {
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
+                        disableUnderline:true
                       }}
                     >
-                      <MenuItem value=''>
-                        <em>None</em>
-                      </MenuItem>
+                      <MenuItem value={status}>{status}</MenuItem>
+
                       {statusArray.map((val) => {
                         return (
                           <MenuItem key={val.key} value={val.key}>
@@ -816,8 +815,8 @@ function AddEditPatientListing(props) {
                         )
                       })}
                     </TextField>
-                  </div>
-                  <div
+                  {/* </div> */}
+                  {/* <div
                     className='col-md-6 col-sm-6 col-6'
                   >
                     <TextField
@@ -834,7 +833,7 @@ function AddEditPatientListing(props) {
                         classes: { input: classes.input },
                       }}
                     />
-                  </div>
+                  </div> */}
                 </div>
               </div>
             ) : (
@@ -848,9 +847,6 @@ function AddEditPatientListing(props) {
                   ...styles.inputContainerForTextField,
                 }}
               >
-                <div
-                  className='col-md-12 col-sm-12 col-12'
-                >
                   <label style={styles.upload}>
                     <TextField
                       required
@@ -871,29 +867,53 @@ function AddEditPatientListing(props) {
                   ) : (
                       undefined
                     )}
-                </div>
               </div>
 
               <div className='row'>
-                {document !== "" && document.slice(document.length - 3) !== 'pdf' ? (
-                  <div className='col-md-6 col-sm-6 col-6'
-                    style={{
-                      ...styles.inputContainerForTextField,
-                    }}>
+                {document !== "" && document.includes('\\') ? (
+                  <>
+                    {document !== "" && document.slice(document.length - 3) !== 'pdf' ? (
+                      <div className='col-md-6 col-sm-6 col-6'
+                        style={{
+                          ...styles.inputContainerForTextField,
+                        }}>
 
-                    <img src={uploadsUrl + document.split('\\')[1]} className="depositSlipImg" />
-                  </div>
-                ) : document !== "" && document.slice(document.length - 3) === 'pdf' ? (
-                  <div className='col-md-6 col-sm-6 col-6'
-                    style={{
-                      ...styles.inputContainerForTextField,
-                    }}>
-                    <a href={uploadsUrl + document.split('\\')[1]} style={{ color: '#2c6ddd' }}>Click here to open document</a>
-                  </div>
-                ) : (
-                      <div className='LoaderStyle'>
-                        <Loader type='TailSpin' color='red' height={50} width={50} />
+                        <img src={uploadsUrl + document.split('\\')[1]} className="depositSlipImg" />
                       </div>
+                    ) : document !== "" && document.slice(document.length - 3) === 'pdf' ? (
+                      <div className='col-md-6 col-sm-6 col-6'
+                        style={{
+                          ...styles.inputContainerForTextField,
+                        }}>
+                        <a href={uploadsUrl + document.split('\\')[1]} style={{ color: '#2c6ddd' }}>Click here to open document</a>
+                      </div>
+                    ) : (
+                          undefined
+                        )}
+                  </>
+                ) : document !== "" && document.includes('/') ? (
+                  <>
+                    {document !== "" && document.slice(document.length - 3) !== 'pdf' ? (
+                      <div className='col-md-6 col-sm-6 col-6'
+                        style={{
+                          ...styles.inputContainerForTextField,
+                        }}>
+
+                        <img src={uploadsUrl + document} className="depositSlipImg" />
+                      </div>
+                    ) : document !== "" && document.slice(document.length - 3) === 'pdf' ? (
+                      <div className='col-md-6 col-sm-6 col-6'
+                        style={{
+                          ...styles.inputContainerForTextField,
+                        }}>
+                        <a href={uploadsUrl + document} style={{ color: '#2c6ddd' }}>Click here to open document</a>
+                      </div>
+                    ) : (
+                          undefined
+                        )}
+                  </>
+                ) : (
+                      undefined
                     )}
 
                 {imagePreview !== "" ? (
