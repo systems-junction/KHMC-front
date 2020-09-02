@@ -1,6 +1,7 @@
 const local = 'http://localhost:4000/api'
 const live = 'https://test.khmc-staging.com/api'
 const dev = 'http://ec2-52-14-42-129.us-east-2.compute.amazonaws.com/api'
+const devSecure = 'https://dev.khmc-staging.com/api'
 
 // http://165.232.66.148/api
 const stagingDigitalOcean = 'http://165.232.66.148:8080/api'
@@ -8,15 +9,17 @@ const StagingDigitalOceanUploadsUrl = 'http://165.232.66.148:8080/'
 const StagingSocketUrl = 'wss://165.232.66.148:4001'
 
 // const baseUrl = dev;
-const baseUrl = 'http://localhost:4000/api'
+ const baseUrl = devSecure;
+//const baseUrl = 'http://localhost:4000/api'
 // const baseUrl = stagingDigitalOcean;
 
-// export const socketUrl = 'wss://test.khmc-staging.com:4001'
-export const socketUrl = 'ws://localhost:4001'
+ export const socketUrl = 'wss://test.khmc-staging.com:4001'
+//export const socketUrl = 'ws://localhost:4001'
 // export const socketUrl = "ws://192.168.10.20:4001";
 
-// export const uploadsUrl = 'https://test.khmc-staging.com/uploads/'
-export const uploadsUrl = 'http://localhost:4000/uploads/'
+export const uploadsUrl = 'https://dev.khmc-staging.com/uploads/'
+//export const uploadsUrl = 'https://test.khmc-staging.com/uploads/'
+//export const uploadsUrl = 'http://localhost:4000/uploads/'
 // export const uploadsUrl = 'http://ec2-52-14-42-129.us-east-2.compute.amazonaws.com/'
 // export const uploadsUrl = StagingDigitalOceanUploadsUrl
 
