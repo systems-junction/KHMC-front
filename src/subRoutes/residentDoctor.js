@@ -26,6 +26,10 @@ import EDRTriageAndAssessment from '../views/ResidentDoctor/EDR/TriageAndAssessm
 import IPR from '../views/ResidentDoctor/IPR/IPR'
 import PA from '../views/ResidentDoctor/patientAssessment'
 import LabRadRequest from '../views/ResidentDoctor/labRadRequest'
+import AssessmentAndDiagnosis from '../views/ResidentDoctor/AssessmentAndDiagnosis/AssessmentAndDiagnosis'
+import triageAssessment from '../views/ResidentDoctor/TriageAndAssessment'
+import ADtriageAssessment from '../views/ResidentDoctor/AssessmentAndDiagnosis/TriageAndAssessment'
+import Discharge from '../views/ResidentDoctor/Discharge/DischargeRequest'
 import ViewIPR from '../views/ResidentDoctor/IPR/viewIPR'
 import iprDischargeRequest from '../views/ResidentDoctor/IPR/DischargeRequest'
 import iprAddDischargeMed from '../views/ResidentDoctor/IPR/addDischargeMed'
@@ -77,6 +81,30 @@ class WMSRoutes extends React.PureComponent {
           exact
           path={`${this.props.match.url}/labradrequest`}
           component={LabRadRequest}
+        />
+
+        <Route
+          exact
+          path={`${this.props.match.url}/labradrequest/triageAssessment`}
+          component={triageAssessment}
+        />
+
+        <Route
+          exact
+          path={`${this.props.match.url}/assessmentdiagnosis`}
+          component={AssessmentAndDiagnosis}
+        />
+
+        <Route
+          exact
+          path={`${this.props.match.url}/assessmentdiagnosis/triageAssessment`}
+          component={ADtriageAssessment}
+        />
+
+        <Route
+          exact
+          path={`${this.props.match.url}/dischargerequest`}
+          component={Discharge}
         />
 
         <Route
