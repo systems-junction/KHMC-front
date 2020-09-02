@@ -12,7 +12,7 @@ import {
 } from "../../public/endpoins";
 import cookie from "react-cookies";
 import Header from "../../components/Header/Header";
-import assessmentIcon from "../../assets/img/PatientAssessment.png";
+import patientCareIcon from '../../assets/img/PatientCare.png'
 import Back from "../../assets/img/Back_Arrow.png";
 import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
 import Tabs from "@material-ui/core/Tabs";
@@ -32,10 +32,10 @@ import DialogContent from "@material-ui/core/DialogContent";
 import ErrorMessage from "../../components/ErrorMessage/errorMessage";
 import Notification from "../../components/Snackbar/Notification.js";
 import Fingerprint from "../../assets/img/fingerprint.png";
-// import PatientDetails from "../ProfessionalOrderForMedical/patientDetailsDialog";
 import AccountCircle from '@material-ui/icons/SearchOutlined'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import BarCode from '../../assets/img/Bar Code.png'
+import ViewSingleRequest from './viewRequest'
 import Loader from "react-loader-spinner";
 
 // const tableHeadingForResident = [
@@ -62,19 +62,19 @@ import Loader from "react-loader-spinner";
 //     "description",
 //     ["requester", "firstName"],
 // ];
-// const tableHeadingForPharmacy = [
-//     "Request ID",
-//     "Date/Time",
-//     "Requester",
-//     "Status",
-//     "Action",
-// ];
-// const tableDataKeysForPharmacy = [
-//     "_id",
-//     "date",
-//     ["requester", "firstName"],
-//     "status",
-// ];
+const tableHeadingForPharmacy = [
+    "Request ID",
+    "Date/Time",
+    "Requester",
+    "Status",
+    "Action",
+];
+const tableDataKeysForPharmacy = [
+    "_id",
+    "date",
+    ["requester", "firstName"],
+    "status",
+];
 // const tableHeadingForLabReq = [
 //     "Request Id",
 //     "Service Code",
@@ -118,7 +118,7 @@ import Loader from "react-loader-spinner";
 //     "requesterName",
 //     "status",
 // ];
-// const actions = { view: true };
+const actions = { view: true };
 const styles = {
     patientDetails: {
         backgroundColor: "white",
@@ -235,7 +235,7 @@ const useStylesForInput = makeStyles((theme) => ({
 
 const useStyles = makeStyles(tableStyles);
 
-function PatientAssessment(props) {
+function PatientCare(props) {
     const classesForTabs = useStylesForTabs();
     const classes = useStylesForInput();
 
@@ -325,7 +325,7 @@ function PatientAssessment(props) {
     const [currentUser, setCurrentUser] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
     const [openNotification, setOpenNotification] = useState(false);
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = useState(2);
     const [selectedItem, setSelectedItem] = useState("");
     const [searchPatientQuery, setSearchPatientQuery] = useState("");
     const [patientFoundSuccessfull, setpatientFoundSuccessfully] = useState(false);
@@ -379,15 +379,15 @@ function PatientAssessment(props) {
         setValue(newValue);
     };
 
-    // function viewItem(item) {
-    //     if (item !== "") {
-    //         setOpenItemDialog(true);
-    //         setItem(item);
-    //     } else {
-    //         setOpenItemDialog(false);
-    //         setItem("");
-    //     }
-    // }
+    function viewItem(item) {
+        if (item !== "") {
+            setOpenItemDialog(true);
+            setItem(item);
+        } else {
+            setOpenItemDialog(false);
+            setItem("");
+        }
+    }
 
     // function addConsultRequest() {
     // if (!validateForm()) {
@@ -876,53 +876,52 @@ function PatientAssessment(props) {
                 {
                     if (res.data.data) 
                     {
-                        // const selectedItem = res.data.data[0]
-                        // console.log("Response after getting EDR/IPR data : ",selectedItem[0]);
-
-                        console.log("Response after getting EDR/IPR data : ",res.data.data);
+                        console.log("Response after getting EDR/IPR data : ", res.data.data);
 
                         setIsLoading(false);
                         setSelectedItem(res.data.data)
                         setenableAssessment(false)
 
-                        // Object.entries(res.data.data[0]).map(([key, val]) => {
-                        //     if (val && typeof val === "object") {
-                        //         if (key === "patientId") {
-                        //             dispatch({ field: "patientId", value: val._id });
-                        //         } else if (key === "labRequest") {
-                        //             dispatch({ field: "labRequestArray", value: val });
-                        //         } else if (key === "radiologyRequest") {
-                        //             dispatch({ field: "radiologyRequestArray", value: val });
-                        //         } else if (key === "consultationNote") {
-                        //             Object.entries(val).map(([key1, val1]) => {
-                        //                 if (key1 == "requester") {
-                        //                     dispatch({ field: "requester", value: val1._id });
-                        //                 } else {
-                        //                     dispatch({ field: key1, value: val1 });
-                        //                 }
-                        //             });
-                        //             dispatch({ field: "consultationNoteArray", value: val });
-                        //         } else if (key === "residentNotes") {
-                        //             Object.entries(val).map(([key1, val1]) => {
-                        //                 if (key1 == "doctor") {
-                        //                     dispatch({ field: "doctor", value: val1._id });
-                        //                 } else {
-                        //                     dispatch({ field: key1, value: val1 });
-                        //                 }
-                        //             });
-                        //             dispatch({ field: "residentNoteArray", value: val });
-                        //         } else if (key === "pharmacyRequest") {
-                        //             dispatch({ field: "pharmacyRequestArray", value: val });
-                        //         } else if (key === "nurseService") {
-                        //             dispatch({ field: "nurseService", value: val });
-                        //         }
-                        //     } else {
-                        //         dispatch({ field: key, value: val });
-                        //     }
-                        // });
+                        Object.entries(res.data.data).map(([key, val]) => {
+                            if (val && typeof val === "object") {
+                                // if (key === "patientId") {
+                                //     dispatch({ field: "patientId", value: val._id });
+                                // } else if (key === "labRequest") {
+                                //     dispatch({ field: "labRequestArray", value: val });
+                                // } else if (key === "radiologyRequest") {
+                                //     dispatch({ field: "radiologyRequestArray", value: val });
+                                // } else if (key === "consultationNote") {
+                                //     Object.entries(val).map(([key1, val1]) => {
+                                //         if (key1 == "requester") {
+                                //             dispatch({ field: "requester", value: val1._id });
+                                //         } else {
+                                //             dispatch({ field: key1, value: val1 });
+                                //         }
+                                //     });
+                                //     dispatch({ field: "consultationNoteArray", value: val });
+                                // } else if (key === "residentNotes") {
+                                //     Object.entries(val).map(([key1, val1]) => {
+                                //         if (key1 == "doctor") {
+                                //             dispatch({ field: "doctor", value: val1._id });
+                                //         } else {
+                                //             dispatch({ field: key1, value: val1 });
+                                //         }
+                                //     });
+                                //     dispatch({ field: "residentNoteArray", value: val });
+                                // } else 
+                                if (key === "pharmacyRequest") {
+                                    dispatch({ field: "pharmacyRequestArray", value: val });
+                                }
+                                //  else if (key === "nurseService") {
+                                //     dispatch({ field: "nurseService", value: val });
+                                // }
+                            } else {
+                                dispatch({ field: key, value: val });
+                            }
+                        });
                     }
                 }
-                else{
+                else {
                     setOpenNotification(true)
                     setErrorMsg("EDR/IPR not generated for patient")
                 }
@@ -934,7 +933,7 @@ function PatientAssessment(props) {
     };
 
     const TriageAssessment = () => {
-        let path = `patientAssessment/triageAssessment`;
+        let path = `patientCare/triageAssessment`;
         props.history.push({
             pathname: path,
             state: {
@@ -967,8 +966,8 @@ function PatientAssessment(props) {
             <div className="cPadding">
                 <div className="subheader">
                     <div>
-                        <img src={assessmentIcon} />
-                        <h4>Patient Assessment</h4>
+                        <img src={patientCareIcon} />
+                        <h4>Patient Care</h4>
                     </div>
 
                     <div>
@@ -1278,7 +1277,6 @@ function PatientAssessment(props) {
                                     backgroundColor: value === 2 ? "#2c6ddd" : undefined,
                                 }}
                                 label="Pharm"
-                                disabled
                             />
                             <Tab
                                 style={{
@@ -1389,7 +1387,8 @@ function PatientAssessment(props) {
                                 </div>
                             </div>
                         </div>
-                    ) : value === 2 ? (
+                    ) :  */}
+                    {value === 2 ? (
                         <div
                             style={{ flex: 4, display: "flex", flexDirection: "column" }}
                             className="container-fluid"
@@ -1409,514 +1408,493 @@ function PatientAssessment(props) {
                                         undefined
                                     )}
                             </div>
-
-                            <div className="row" style={{ marginBottom: "25px" }}>
-                                <div className="col-md-6 col-sm-6 col-6">
-                                    <img
-                                        onClick={() => props.history.goBack()}
-                                        src={Back}
-                                        style={{ width: 45, height: 35, cursor: "pointer" }}
-                                    />
-                                </div>
-                                <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
-                                    <Button
-                                        onClick={addNewRequest}
-                                        style={styles.stylesForButton}
-                                        variant="contained"
-                                        color="primary"
-                                    >
-                                        <img className="icon-style" src={plus_icon} />
-                        &nbsp;&nbsp;
-                        <strong style={{ fontSize: "12px" }}>
-                                            Pharmacy Request
-                        </strong>
-                                    </Button>
-                                </div>
-                            </div>
                         </div>
-                    ) : value === 3 ? (
-                        <div
-                            style={{ flex: 4, display: "flex", flexDirection: "column" }}
-                            // className={`container ${classes.root}`}
-                            className="container-fluid"
-                        >
-                            <div style={{ marginTop: "20px" }} className="row">
-                                <div
-                                    className="col-md-12 col-sm-12 col-12"
-                                    style={{
-                                        ...styles.inputContainerForTextField,
-                                        ...styles.textFieldPadding,
-                                    }}
-                                >
-                                    <AutoComplete
-                                        id="tags-outlined"
-                                        getOptionLabel={(option) => option.title}
-                                        filterSelectedOptions
-                                        renderInput={(params) => (
-                                            <TextField
-                                                {...params}
-                                                variant="outlined"
-                                                label="Service Name"
-                                                placeholder="Search Service Name"
-                                            />
-                                        )}
-                                    />
-                                </div>
-                            </div>
+                        // ) 
+                        // : value === 3 ? (
+                        //     <div
+                        //         style={{ flex: 4, display: "flex", flexDirection: "column" }}
+                        //         // className={`container ${classes.root}`}
+                        //         className="container-fluid"
+                        //     >
+                        //         <div style={{ marginTop: "20px" }} className="row">
+                        //             <div
+                        //                 className="col-md-12 col-sm-12 col-12"
+                        //                 style={{
+                        //                     ...styles.inputContainerForTextField,
+                        //                     ...styles.textFieldPadding,
+                        //                 }}
+                        //             >
+                        //                 <AutoComplete
+                        //                     id="tags-outlined"
+                        //                     getOptionLabel={(option) => option.title}
+                        //                     filterSelectedOptions
+                        //                     renderInput={(params) => (
+                        //                         <TextField
+                        //                             {...params}
+                        //                             variant="outlined"
+                        //                             label="Service Name"
+                        //                             placeholder="Search Service Name"
+                        //                         />
+                        //                     )}
+                        //                 />
+                        //             </div>
+                        //         </div>
 
-                            {searchQuery ? (
-                                // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
-                                <div style={{ zIndex: 10 }}>
-                                    <Paper>
-                                        {itemFoundSuccessfull ? (
-                                            itemFound && (
-                                                <Table size="small">
-                                                    <TableHead>
-                                                        <TableRow>
-                                                            <TableCell>Service Name</TableCell>
-                                                            <TableCell>Service Number</TableCell>
-                                                            <TableCell>Price</TableCell>
-                                                            <TableCell align="center">
-                                                                Description
-                                                                </TableCell>
-                                                        </TableRow>
-                                                    </TableHead>
+                        //         {searchQuery ? (
+                        //             // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
+                        //             <div style={{ zIndex: 10 }}>
+                        //                 <Paper>
+                        //                     {itemFoundSuccessfull ? (
+                        //                         itemFound && (
+                        //                             <Table size="small">
+                        //                                 <TableHead>
+                        //                                     <TableRow>
+                        //                                         <TableCell>Service Name</TableCell>
+                        //                                         <TableCell>Service Number</TableCell>
+                        //                                         <TableCell>Price</TableCell>
+                        //                                         <TableCell align="center">
+                        //                                             Description
+                        //                                             </TableCell>
+                        //                                     </TableRow>
+                        //                                 </TableHead>
 
-                                                    <TableBody>
-                                                        {itemFound.map((i, index) => {
-                                                            return (
-                                                                <TableRow
-                                                                    key={i.serviceNo}
-                                                                    onClick={() => handleAddItem(i)}
-                                                                    style={{ cursor: "pointer" }}
-                                                                >
-                                                                    <TableCell>{i.name}</TableCell>
-                                                                    <TableCell>{i.serviceNo}</TableCell>
-                                                                    <TableCell>{i.price}</TableCell>
-                                                                    <TableCell>{i.description}</TableCell>
-                                                                </TableRow>
-                                                            );
-                                                        })}
-                                                    </TableBody>
-                                                </Table>
-                                            )
-                                        ) : (
-                                                <h4
-                                                    style={{ textAlign: "center" }}
-                                                    onClick={() => setSearchQuery("")}
-                                                >
-                                                    Service Not Found
-                                                </h4>
-                                            )}
-                                    </Paper>
-                                </div>
-                            ) : (
-                                    undefined
-                                )}
+                        //                                 <TableBody>
+                        //                                     {itemFound.map((i, index) => {
+                        //                                         return (
+                        //                                             <TableRow
+                        //                                                 key={i.serviceNo}
+                        //                                                 onClick={() => handleAddItem(i)}
+                        //                                                 style={{ cursor: "pointer" }}
+                        //                                             >
+                        //                                                 <TableCell>{i.name}</TableCell>
+                        //                                                 <TableCell>{i.serviceNo}</TableCell>
+                        //                                                 <TableCell>{i.price}</TableCell>
+                        //                                                 <TableCell>{i.description}</TableCell>
+                        //                                             </TableRow>
+                        //                                         );
+                        //                                     })}
+                        //                                 </TableBody>
+                        //                             </Table>
+                        //                         )
+                        //                     ) : (
+                        //                             <h4
+                        //                                 style={{ textAlign: "center" }}
+                        //                                 onClick={() => setSearchQuery("")}
+                        //                             >
+                        //                                 Service Not Found
+                        //                             </h4>
+                        //                         )}
+                        //                 </Paper>
+                        //             </div>
+                        //         ) : (
+                        //                 undefined
+                        //             )}
 
-                            <div style={{ marginTop: "20px" }} className="row">
-                                <div
-                                    className="col-md-10 col-sm-10 col-6"
-                                    style={{
-                                        ...styles.inputContainerForTextField,
-                                        ...styles.textFieldPadding,
-                                    }}
-                                >
-                                    <TextField
-                                        required
-                                        disabled
-                                        label="Selected Service"
-                                        name={"labServiceName"}
-                                        value={labServiceName}
-                                        // error={labServiceName === '' && isFormSubmitted}
-                                        onChange={onChangeValue}
-                                        className="textInputStyle"
-                                        variant="filled"
-                                        InputProps={{
-                                            className: classes.input,
-                                            classes: { input: classes.input },
-                                        }}
-                                    />
-                                </div>
-                                <div className="col-md-2 col-sm-2 col-6">
-                                    <Button
-                                        style={{
-                                            ...styles.stylesForButton,
-                                            marginTop: "25px",
-                                            backgroundColor: "#ad6bbf",
-                                        }}
-                                        disabled={!addLabRequest}
-                                        onClick={addSelectedLabItem}
-                                        variant="contained"
-                                        color="primary"
-                                        fullWidth
-                                    >
-                                        Add
-                      </Button>
-                                </div>
-                            </div>
+                        //         <div style={{ marginTop: "20px" }} className="row">
+                        //             <div
+                        //                 className="col-md-10 col-sm-10 col-6"
+                        //                 style={{
+                        //                     ...styles.inputContainerForTextField,
+                        //                     ...styles.textFieldPadding,
+                        //                 }}
+                        //             >
+                        //                 <TextField
+                        //                     required
+                        //                     disabled
+                        //                     label="Selected Service"
+                        //                     name={"labServiceName"}
+                        //                     value={labServiceName}
+                        //                     // error={labServiceName === '' && isFormSubmitted}
+                        //                     onChange={onChangeValue}
+                        //                     className="textInputStyle"
+                        //                     variant="filled"
+                        //                     InputProps={{
+                        //                         className: classes.input,
+                        //                         classes: { input: classes.input },
+                        //                     }}
+                        //                 />
+                        //             </div>
+                        //             <div className="col-md-2 col-sm-2 col-6">
+                        //                 <Button
+                        //                     style={{
+                        //                         ...styles.stylesForButton,
+                        //                         marginTop: "25px",
+                        //                         backgroundColor: "#ad6bbf",
+                        //                     }}
+                        //                     disabled={!addLabRequest}
+                        //                     onClick={addSelectedLabItem}
+                        //                     variant="contained"
+                        //                     color="primary"
+                        //                     fullWidth
+                        //                 >
+                        //                     Add
+                        //   </Button>
+                        //             </div>
+                        //         </div>
 
-                            <div className="row" style={{ marginTop: "20px" }}>
-                                {labRequestArray !== 0 ? (
-                                    <CustomTable
-                                        tableData={labRequestArray}
-                                        tableDataKeys={tableDataKeysForLabReq}
-                                        tableHeading={tableHeadingForLabReq}
-                                        handleView={viewItem}
-                                        action={actions}
-                                        borderBottomColor={"#60d69f"}
-                                        borderBottomWidth={20}
-                                    />
-                                ) : (
-                                        undefined
-                                    )}
-                            </div>
+                        //         <div className="row" style={{ marginTop: "20px" }}>
+                        //             {labRequestArray !== 0 ? (
+                        //                 <CustomTable
+                        //                     tableData={labRequestArray}
+                        //                     tableDataKeys={tableDataKeysForLabReq}
+                        //                     tableHeading={tableHeadingForLabReq}
+                        //                     handleView={viewItem}
+                        //                     action={actions}
+                        //                     borderBottomColor={"#60d69f"}
+                        //                     borderBottomWidth={20}
+                        //                 />
+                        //             ) : (
+                        //                     undefined
+                        //                 )}
+                        //         </div>
 
-                            <div className="row" style={{ marginBottom: "25px" }}>
-                                <div className="col-md-6 col-sm-6 col-6">
-                                    <img
-                                        onClick={() => props.history.goBack()}
-                                        src={Back}
-                                        style={{ width: 45, height: 35, cursor: "pointer" }}
-                                    />
-                                </div>
-                                <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
-                                    <Button
-                                        onClick={saveLabReq}
-                                        style={styles.stylesForButton}
-                                        variant="contained"
-                                        color="primary"
-                                    >
-                                        <strong style={{ fontSize: "12px" }}>Save</strong>
-                                    </Button>
-                                </div>
-                            </div>
-                        </div>
-                    ) : value === 4 ? (
-                        <div
-                            style={{ flex: 4, display: "flex", flexDirection: "column" }}
-                            // className={`container ${classes.root}`}
-                            className="container-fluid"
-                        >
-                            <div style={{ marginTop: "20px" }} className="row">
-                                <div
-                                    className="col-md-12 col-sm-12 col-12"
-                                    style={{
-                                        ...styles.inputContainerForTextField,
-                                        ...styles.textFieldPadding,
-                                    }}
-                                >
-                                    <TextField
-                                        required
-                                        label="Service Name"
-                                        name={"searchRadioQuery"}
-                                        value={searchRadioQuery}
-                                        // error={searchRadioQuery === '' && isFormSubmitted}
-                                        onChange={handleRadioSearch}
-                                        className="textInputStyle"
-                                        variant="filled"
-                                        InputProps={{
-                                            className: classes.input,
-                                            classes: { input: classes.input },
-                                        }}
-                                    />
-                                </div>
-                            </div>
+                        //         <div className="row" style={{ marginBottom: "25px" }}>
+                        //             <div className="col-md-6 col-sm-6 col-6">
+                        //                 <img
+                        //                     onClick={() => props.history.goBack()}
+                        //                     src={Back}
+                        //                     style={{ width: 45, height: 35, cursor: "pointer" }}
+                        //                 />
+                        //             </div>
+                        //             <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
+                        //                 <Button
+                        //                     onClick={saveLabReq}
+                        //                     style={styles.stylesForButton}
+                        //                     variant="contained"
+                        //                     color="primary"
+                        //                 >
+                        //                     <strong style={{ fontSize: "12px" }}>Save</strong>
+                        //                 </Button>
+                        //             </div>
+                        //         </div>
+                        //     </div>
+                        // ) : value === 4 ? (
+                        //     <div
+                        //         style={{ flex: 4, display: "flex", flexDirection: "column" }}
+                        //         // className={`container ${classes.root}`}
+                        //         className="container-fluid"
+                        //     >
+                        //         <div style={{ marginTop: "20px" }} className="row">
+                        //             <div
+                        //                 className="col-md-12 col-sm-12 col-12"
+                        //                 style={{
+                        //                     ...styles.inputContainerForTextField,
+                        //                     ...styles.textFieldPadding,
+                        //                 }}
+                        //             >
+                        //                 <TextField
+                        //                     required
+                        //                     label="Service Name"
+                        //                     name={"searchRadioQuery"}
+                        //                     value={searchRadioQuery}
+                        //                     // error={searchRadioQuery === '' && isFormSubmitted}
+                        //                     onChange={handleRadioSearch}
+                        //                     className="textInputStyle"
+                        //                     variant="filled"
+                        //                     InputProps={{
+                        //                         className: classes.input,
+                        //                         classes: { input: classes.input },
+                        //                     }}
+                        //                 />
+                        //             </div>
+                        //         </div>
 
-                            {searchRadioQuery ? (
-                                // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
-                                <div style={{ zIndex: 10 }}>
-                                    <Paper>
-                                        {radioItemFoundSuccessfull ? (
-                                            radioItemFound && (
-                                                <Table size="small">
-                                                    <TableHead>
-                                                        <TableRow>
-                                                            <TableCell>Service Name</TableCell>
-                                                            <TableCell>Service Number</TableCell>
-                                                            <TableCell>Price</TableCell>
-                                                            <TableCell align="center">
-                                                                Description
-                                  </TableCell>
-                                                        </TableRow>
-                                                    </TableHead>
+                        //         {searchRadioQuery ? (
+                        //             // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
+                        //             <div style={{ zIndex: 10 }}>
+                        //                 <Paper>
+                        //                     {radioItemFoundSuccessfull ? (
+                        //                         radioItemFound && (
+                        //                             <Table size="small">
+                        //                                 <TableHead>
+                        //                                     <TableRow>
+                        //                                         <TableCell>Service Name</TableCell>
+                        //                                         <TableCell>Service Number</TableCell>
+                        //                                         <TableCell>Price</TableCell>
+                        //                                         <TableCell align="center">
+                        //                                             Description
+                        //               </TableCell>
+                        //                                     </TableRow>
+                        //                                 </TableHead>
 
-                                                    <TableBody>
-                                                        {radioItemFound.map((i, index) => {
-                                                            return (
-                                                                <TableRow
-                                                                    key={i.serviceNo}
-                                                                    onClick={() => handleAddRadioItem(i)}
-                                                                    style={{ cursor: "pointer" }}
-                                                                >
-                                                                    <TableCell>{i.name}</TableCell>
-                                                                    <TableCell>{i.serviceNo}</TableCell>
-                                                                    <TableCell>{i.price}</TableCell>
-                                                                    <TableCell>{i.description}</TableCell>
-                                                                </TableRow>
-                                                            );
-                                                        })}
-                                                    </TableBody>
-                                                </Table>
-                                            )
-                                        ) : (
-                                                <h4
-                                                    style={{ textAlign: "center" }}
-                                                    onClick={() => setSearchRadioQuery("")}
-                                                >
-                                                    Service Not Found
-                                                </h4>
-                                            )}
-                                    </Paper>
-                                </div>
-                            ) : (
-                                    undefined
-                                )}
+                        //                                 <TableBody>
+                        //                                     {radioItemFound.map((i, index) => {
+                        //                                         return (
+                        //                                             <TableRow
+                        //                                                 key={i.serviceNo}
+                        //                                                 onClick={() => handleAddRadioItem(i)}
+                        //                                                 style={{ cursor: "pointer" }}
+                        //                                             >
+                        //                                                 <TableCell>{i.name}</TableCell>
+                        //                                                 <TableCell>{i.serviceNo}</TableCell>
+                        //                                                 <TableCell>{i.price}</TableCell>
+                        //                                                 <TableCell>{i.description}</TableCell>
+                        //                                             </TableRow>
+                        //                                         );
+                        //                                     })}
+                        //                                 </TableBody>
+                        //                             </Table>
+                        //                         )
+                        //                     ) : (
+                        //                             <h4
+                        //                                 style={{ textAlign: "center" }}
+                        //                                 onClick={() => setSearchRadioQuery("")}
+                        //                             >
+                        //                                 Service Not Found
+                        //                             </h4>
+                        //                         )}
+                        //                 </Paper>
+                        //             </div>
+                        //         ) : (
+                        //                 undefined
+                        //             )}
 
-                            <div style={{ marginTop: "20px" }} className="row">
-                                <div
-                                    className="col-md-10 col-sm-10 col-6"
-                                    style={{
-                                        ...styles.inputContainerForTextField,
-                                        ...styles.textFieldPadding,
-                                    }}
-                                >
-                                    <TextField
-                                        required
-                                        disabled
-                                        label="Selected Service"
-                                        name={"radioServiceName"}
-                                        value={radioServiceName}
-                                        // error={radioServiceName === '' && isFormSubmitted}
-                                        onChange={onChangeValue}
-                                        className="textInputStyle"
-                                        variant="filled"
-                                        InputProps={{
-                                            className: classes.input,
-                                            classes: { input: classes.input },
-                                        }}
-                                    />
-                                </div>
-                                <div className="col-md-2 col-sm-2 col-6">
-                                    <Button
-                                        style={{
-                                            ...styles.stylesForButton,
-                                            marginTop: "25px",
-                                            backgroundColor: "#ad6bbf",
-                                        }}
-                                        disabled={!addRadioRequest}
-                                        onClick={addSelectedRadioItem}
-                                        variant="contained"
-                                        color="primary"
-                                        fullWidth
-                                    >
-                                        Add
-                      </Button>
-                                </div>
-                            </div>
+                        //         <div style={{ marginTop: "20px" }} className="row">
+                        //             <div
+                        //                 className="col-md-10 col-sm-10 col-6"
+                        //                 style={{
+                        //                     ...styles.inputContainerForTextField,
+                        //                     ...styles.textFieldPadding,
+                        //                 }}
+                        //             >
+                        //                 <TextField
+                        //                     required
+                        //                     disabled
+                        //                     label="Selected Service"
+                        //                     name={"radioServiceName"}
+                        //                     value={radioServiceName}
+                        //                     // error={radioServiceName === '' && isFormSubmitted}
+                        //                     onChange={onChangeValue}
+                        //                     className="textInputStyle"
+                        //                     variant="filled"
+                        //                     InputProps={{
+                        //                         className: classes.input,
+                        //                         classes: { input: classes.input },
+                        //                     }}
+                        //                 />
+                        //             </div>
+                        //             <div className="col-md-2 col-sm-2 col-6">
+                        //                 <Button
+                        //                     style={{
+                        //                         ...styles.stylesForButton,
+                        //                         marginTop: "25px",
+                        //                         backgroundColor: "#ad6bbf",
+                        //                     }}
+                        //                     disabled={!addRadioRequest}
+                        //                     onClick={addSelectedRadioItem}
+                        //                     variant="contained"
+                        //                     color="primary"
+                        //                     fullWidth
+                        //                 >
+                        //                     Add
+                        //   </Button>
+                        //             </div>
+                        //         </div>
 
-                            <div className="row" style={{ marginTop: "20px" }}>
-                                {radiologyRequestArray !== 0 ? (
-                                    <CustomTable
-                                        tableData={radiologyRequestArray}
-                                        tableDataKeys={tableDataKeysForRadiology}
-                                        tableHeading={tableHeadingForRadiology}
-                                        handleView={viewItem}
-                                        action={actions}
-                                        borderBottomColor={"#60d69f"}
-                                        borderBottomWidth={20}
-                                    />
-                                ) : (
-                                        undefined
-                                    )}
-                            </div>
+                        //         <div className="row" style={{ marginTop: "20px" }}>
+                        //             {radiologyRequestArray !== 0 ? (
+                        //                 <CustomTable
+                        //                     tableData={radiologyRequestArray}
+                        //                     tableDataKeys={tableDataKeysForRadiology}
+                        //                     tableHeading={tableHeadingForRadiology}
+                        //                     handleView={viewItem}
+                        //                     action={actions}
+                        //                     borderBottomColor={"#60d69f"}
+                        //                     borderBottomWidth={20}
+                        //                 />
+                        //             ) : (
+                        //                     undefined
+                        //                 )}
+                        //         </div>
 
-                            <div className="row" style={{ marginBottom: "25px" }}>
-                                <div className="col-md-6 col-sm-6 col-6">
-                                    <img
-                                        onClick={() => props.history.goBack()}
-                                        src={Back}
-                                        style={{ width: 45, height: 35, cursor: "pointer" }}
-                                    />
-                                </div>
-                                <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
-                                    <Button
-                                        onClick={saveRadioReq}
-                                        style={styles.stylesForButton}
-                                        variant="contained"
-                                        color="primary"
-                                    >
-                                        <strong style={{ fontSize: "12px" }}>Save</strong>
-                                    </Button>
-                                </div>
-                            </div>
-                        </div>
-                    ) : value === 5 ? (
-                        <div
-                            style={{ flex: 4, display: "flex", flexDirection: "column" }}
-                            // className={`container ${classes.root}`}
-                            className="container-fluid"
-                        >
-                            <div style={{ marginTop: "20px" }} className="row">
-                                <div
-                                    className="col-md-12 col-sm-12 col-12"
-                                    style={{
-                                        ...styles.inputContainerForTextField,
-                                        ...styles.textFieldPadding,
-                                    }}
-                                >
-                                    <TextField
-                                        required
-                                        label="Service Name"
-                                        name={"searchNurseQuery"}
-                                        value={searchNurseQuery}
-                                        // error={searchNurseQuery === '' && isFormSubmitted}
-                                        onChange={handleNurseSearch}
-                                        className="textInputStyle"
-                                        variant="filled"
-                                        InputProps={{
-                                            className: classes.input,
-                                            classes: { input: classes.input },
-                                        }}
-                                    />
-                                </div>
-                            </div>
-                            {searchNurseQuery ? (
-                                // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
-                                <div style={{ zIndex: 10 }}>
-                                    <Paper>
-                                        {nurseItemFoundSuccessfull ? (
-                                            nurseItemFound && (
-                                                <Table size="small">
-                                                    <TableHead>
-                                                        <TableRow>
-                                                            <TableCell>Service Name</TableCell>
-                                                            <TableCell>Service Number</TableCell>
-                                                            <TableCell>Price</TableCell>
-                                                            <TableCell align="center">
-                                                                Description
-                                  </TableCell>
-                                                        </TableRow>
-                                                    </TableHead>
-                                                    <TableBody>
-                                                        {nurseItemFound.map((i, index) => {
-                                                            return (
-                                                                <TableRow
-                                                                    key={i.serviceNo}
-                                                                    onClick={() => handleAddNurseItem(i)}
-                                                                    style={{ cursor: "pointer" }}
-                                                                >
-                                                                    <TableCell>{i.name}</TableCell>
-                                                                    <TableCell>{i.serviceNo}</TableCell>
-                                                                    <TableCell>{i.price}</TableCell>
-                                                                    <TableCell>{i.description}</TableCell>
-                                                                </TableRow>
-                                                            );
-                                                        })}
-                                                    </TableBody>
-                                                </Table>
-                                            )
-                                        ) : (
-                                                <h4
-                                                    style={{ textAlign: "center" }}
-                                                    onClick={() => setSearchNurseQuery("")}
-                                                >
-                                                    Service Not Found
-                                                </h4>
-                                            )}
-                                    </Paper>
-                                </div>
-                            ) : (
-                                    undefined
-                                )}
-                            <div style={{ marginTop: "20px" }} className="row">
-                                <div
-                                    className="col-md-10 col-sm-10 col-6"
-                                    style={{
-                                        ...styles.inputContainerForTextField,
-                                        ...styles.textFieldPadding,
-                                    }}
-                                >
-                                    <TextField
-                                        required
-                                        label="Selected Service"
-                                        name={"nurseServiceName"}
-                                        value={nurseServiceName}
-                                        // error={nurseServiceName === '' && isFormSubmitted}
-                                        onChange={onChangeValue}
-                                        className="textInputStyle"
-                                        variant="filled"
-                                        InputProps={{
-                                            className: classes.input,
-                                            classes: { input: classes.input },
-                                        }}
-                                    />
-                                </div>
-                                <div className="col-md-2 col-sm-2 col-6">
-                                    <Button
-                                        style={{
-                                            ...styles.stylesForButton,
-                                            marginTop: "25px",
-                                            backgroundColor: "#ad6bbf",
-                                        }}
-                                        disabled={!addNurseRequest}
-                                        onClick={addSelectedNurseItem}
-                                        variant="contained"
-                                        color="primary"
-                                        fullWidth
-                                    >
-                                        Add
-                      </Button>
-                                </div>
-                            </div>
-                            <div className="row" style={{ marginTop: "20px" }}>
-                                {nurseService !== 0 ? (
-                                    <CustomTable
-                                        tableData={nurseService}
-                                        tableDataKeys={tableDataKeysForNurse}
-                                        tableHeading={tableHeadingForNurse}
-                                        handleView={viewItem}
-                                        action={actions}
-                                        borderBottomColor={"#60D69F"}
-                                        borderBottomWidth={20}
-                                    />
-                                ) : (
-                                        undefined
-                                    )}
-                            </div>
-                            <div className="row" style={{ marginBottom: "25px" }}>
-                                <div className="col-md-6 col-sm-6 col-6">
-                                    <img
-                                        onClick={() => props.history.goBack()}
-                                        src={Back}
-                                        style={{ width: 45, height: 35, cursor: "pointer" }}
-                                    />
-                                </div>
-                                <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
-                                    <Button
-                                        onClick={saveNurseReq}
-                                        style={styles.stylesForButton}
-                                        variant="contained"
-                                        color="primary"
-                                    >
-                                        <strong style={{ fontSize: "12px" }}>Save</strong>
-                                    </Button>
-                                </div>
-                            </div>
-                        </div>
+                        //         <div className="row" style={{ marginBottom: "25px" }}>
+                        //             <div className="col-md-6 col-sm-6 col-6">
+                        //                 <img
+                        //                     onClick={() => props.history.goBack()}
+                        //                     src={Back}
+                        //                     style={{ width: 45, height: 35, cursor: "pointer" }}
+                        //                 />
+                        //             </div>
+                        //             <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
+                        //                 <Button
+                        //                     onClick={saveRadioReq}
+                        //                     style={styles.stylesForButton}
+                        //                     variant="contained"
+                        //                     color="primary"
+                        //                 >
+                        //                     <strong style={{ fontSize: "12px" }}>Save</strong>
+                        //                 </Button>
+                        //             </div>
+                        //         </div>
+                        //     </div>
+                        // ) : value === 5 ? (
+                        //     <div
+                        //         style={{ flex: 4, display: "flex", flexDirection: "column" }}
+                        //         // className={`container ${classes.root}`}
+                        //         className="container-fluid"
+                        //     >
+                        //         <div style={{ marginTop: "20px" }} className="row">
+                        //             <div
+                        //                 className="col-md-12 col-sm-12 col-12"
+                        //                 style={{
+                        //                     ...styles.inputContainerForTextField,
+                        //                     ...styles.textFieldPadding,
+                        //                 }}
+                        //             >
+                        //                 <TextField
+                        //                     required
+                        //                     label="Service Name"
+                        //                     name={"searchNurseQuery"}
+                        //                     value={searchNurseQuery}
+                        //                     // error={searchNurseQuery === '' && isFormSubmitted}
+                        //                     onChange={handleNurseSearch}
+                        //                     className="textInputStyle"
+                        //                     variant="filled"
+                        //                     InputProps={{
+                        //                         className: classes.input,
+                        //                         classes: { input: classes.input },
+                        //                     }}
+                        //                 />
+                        //             </div>
+                        //         </div>
+                        //         {searchNurseQuery ? (
+                        //             // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
+                        //             <div style={{ zIndex: 10 }}>
+                        //                 <Paper>
+                        //                     {nurseItemFoundSuccessfull ? (
+                        //                         nurseItemFound && (
+                        //                             <Table size="small">
+                        //                                 <TableHead>
+                        //                                     <TableRow>
+                        //                                         <TableCell>Service Name</TableCell>
+                        //                                         <TableCell>Service Number</TableCell>
+                        //                                         <TableCell>Price</TableCell>
+                        //                                         <TableCell align="center">
+                        //                                             Description
+                        //               </TableCell>
+                        //                                     </TableRow>
+                        //                                 </TableHead>
+                        //                                 <TableBody>
+                        //                                     {nurseItemFound.map((i, index) => {
+                        //                                         return (
+                        //                                             <TableRow
+                        //                                                 key={i.serviceNo}
+                        //                                                 onClick={() => handleAddNurseItem(i)}
+                        //                                                 style={{ cursor: "pointer" }}
+                        //                                             >
+                        //                                                 <TableCell>{i.name}</TableCell>
+                        //                                                 <TableCell>{i.serviceNo}</TableCell>
+                        //                                                 <TableCell>{i.price}</TableCell>
+                        //                                                 <TableCell>{i.description}</TableCell>
+                        //                                             </TableRow>
+                        //                                         );
+                        //                                     })}
+                        //                                 </TableBody>
+                        //                             </Table>
+                        //                         )
+                        //                     ) : (
+                        //                             <h4
+                        //                                 style={{ textAlign: "center" }}
+                        //                                 onClick={() => setSearchNurseQuery("")}
+                        //                             >
+                        //                                 Service Not Found
+                        //                             </h4>
+                        //                         )}
+                        //                 </Paper>
+                        //             </div>
+                        //         ) : (
+                        //                 undefined
+                        //             )}
+                        //         <div style={{ marginTop: "20px" }} className="row">
+                        //             <div
+                        //                 className="col-md-10 col-sm-10 col-6"
+                        //                 style={{
+                        //                     ...styles.inputContainerForTextField,
+                        //                     ...styles.textFieldPadding,
+                        //                 }}
+                        //             >
+                        //                 <TextField
+                        //                     required
+                        //                     label="Selected Service"
+                        //                     name={"nurseServiceName"}
+                        //                     value={nurseServiceName}
+                        //                     // error={nurseServiceName === '' && isFormSubmitted}
+                        //                     onChange={onChangeValue}
+                        //                     className="textInputStyle"
+                        //                     variant="filled"
+                        //                     InputProps={{
+                        //                         className: classes.input,
+                        //                         classes: { input: classes.input },
+                        //                     }}
+                        //                 />
+                        //             </div>
+                        //             <div className="col-md-2 col-sm-2 col-6">
+                        //                 <Button
+                        //                     style={{
+                        //                         ...styles.stylesForButton,
+                        //                         marginTop: "25px",
+                        //                         backgroundColor: "#ad6bbf",
+                        //                     }}
+                        //                     disabled={!addNurseRequest}
+                        //                     onClick={addSelectedNurseItem}
+                        //                     variant="contained"
+                        //                     color="primary"
+                        //                     fullWidth
+                        //                 >
+                        //                     Add
+                        //   </Button>
+                        //             </div>
+                        //         </div>
+                        //         <div className="row" style={{ marginTop: "20px" }}>
+                        //             {nurseService !== 0 ? (
+                        //                 <CustomTable
+                        //                     tableData={nurseService}
+                        //                     tableDataKeys={tableDataKeysForNurse}
+                        //                     tableHeading={tableHeadingForNurse}
+                        //                     handleView={viewItem}
+                        //                     action={actions}
+                        //                     borderBottomColor={"#60D69F"}
+                        //                     borderBottomWidth={20}
+                        //                 />
+                        //             ) : (
+                        //                     undefined
+                        //                 )}
+                        //         </div>
+                        //         <div className="row" style={{ marginBottom: "25px" }}>
+                        //             <div className="col-md-6 col-sm-6 col-6">
+                        //                 <img
+                        //                     onClick={() => props.history.goBack()}
+                        //                     src={Back}
+                        //                     style={{ width: 45, height: 35, cursor: "pointer" }}
+                        //                 />
+                        //             </div>
+                        //             <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
+                        //                 <Button
+                        //                     onClick={saveNurseReq}
+                        //                     style={styles.stylesForButton}
+                        //                     variant="contained"
+                        //                     color="primary"
+                        //                 >
+                        //                     <strong style={{ fontSize: "12px" }}>Save</strong>
+                        //                 </Button>
+                        //             </div>
+                        //         </div>
+                        //     </div>
+                    )
+                        : (
+                            undefined
+                        )}
+
+                    {openItemDialog ? (
+                        <ViewSingleRequest
+                            item={item}
+                            openItemDialog={openItemDialog}
+                            viewItem={viewItem}
+                        />
                     ) : (
-                        undefined
-                    )} */}
+                            undefined
+                        )}
 
-                    {/* {openItemDialog ? (
-                <ViewSingleRequest
-                  item={item}
-                  openItemDialog={openItemDialog}
-                  viewItem={viewItem}
-                />
-              ) : (
-                undefined
-              )} */}
                 </div>
                 {/* 
                 <Dialog
@@ -2379,4 +2357,4 @@ function PatientAssessment(props) {
         </div>
     );
 }
-export default PatientAssessment;
+export default PatientCare;

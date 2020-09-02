@@ -1,17 +1,17 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import NotFound from '../components/NotFound/NotFound'
-import patientAssessment from '../views/PatientAssessment/patientAssessment'
-import triageAssessment from '../views/PatientAssessment/TriageAndAssessment'
+import labRadRequest from '../views/LabRadRequest/labRadRequest'
+import triageAssessment from '../views/LabRadRequest/TriageAndAssessment'
 
-class PatientAssessment extends React.PureComponent {
+class LabRadRequest extends React.PureComponent {
   render() {
     return (
       <Switch>
         <Route
           exact
           path={`${this.props.match.url}`}
-          component={patientAssessment}
+          component={labRadRequest}
         />
         <Route
           path={`${this.props.match.url}/triageAssessment`}
@@ -23,4 +23,4 @@ class PatientAssessment extends React.PureComponent {
   }
 }
 
-export default PatientAssessment
+export default LabRadRequest

@@ -96,12 +96,12 @@ const registeredNurse = [
   {
     img: patientCareIcon,
     text: "Patient Care",
-    path: "/home/rcm/rd",
+    path: "/home/rcm/patientCare",
   },
   {
     img: Lab_RadIcon,
     text: "Lab/Rad Request",
-    path: "/home/rcm/rd",
+    path: "/home/rcm/LabRadRequest",
   },
   
 ];

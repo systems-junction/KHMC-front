@@ -635,7 +635,7 @@ function AddEditPurchaseRequest(props) {
                     }}
                   >
                     <TextField
-                      // disabled={true}
+                      disabled={true}
                       label='Comments / Notes'
                       name={'comments'}
                       // value={comments}
