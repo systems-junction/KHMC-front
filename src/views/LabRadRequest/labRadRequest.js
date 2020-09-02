@@ -10,6 +10,7 @@ import {
     getSearchedLaboratoryService,
     getSearchedRadiologyService,
     updateIPR,
+    updateEdrIpr,
     searchpatient,
     getSearchedpatient,
 } from "../../public/endpoins";
@@ -275,6 +276,7 @@ function LabRadRequest(props) {
         doctor: cookie.load("current_user").name,
 
         pharmacyRequestArray: "",
+        requestType:''
     };
 
     function reducer(state, { field, value }) {
@@ -292,12 +294,14 @@ function LabRadRequest(props) {
         labRequestArray,
         labServiceName,
         labServiceStatus,
+        labComments,
 
         radioServiceId,
         radioServiceCode,
         radioServiceName,
         radiologyRequestArray,
         radioServiceStatus,
+        radioComments,
 
         //for nursing
         nurseServiceId,
@@ -319,6 +323,7 @@ function LabRadRequest(props) {
         doctor = cookie.load("current_user").name,
 
         pharmacyRequestArray,
+        requestType
     } = state;
 
     const onChangeValue = (e) => {
@@ -597,11 +602,12 @@ function LabRadRequest(props) {
         }
         const params = {
             _id: id,
+            requestType,
             labRequest: labItems,
         };
-        // console.log("params", params);
+        console.log("Lab params", params);
         axios
-            .put(updateIPR, params)
+            .put(updateEdrIpr, params)
             .then((res) => {
                 if (res.data.success) {
                     console.log("response after adding Lab Request", res.data);
@@ -706,11 +712,12 @@ function LabRadRequest(props) {
 
         const params = {
             _id: id,
+            requestType,
             radiologyRequest: radioItems,
         };
-        // console.log("params", params);
+        console.log("Radio params", params);
         axios
-            .put(updateIPR, params)
+            .put(updateEdrIpr, params)
             .then((res) => {
                 if (res.data.success) {
                     console.log("response after adding Radio Request", res.data);
@@ -881,6 +888,7 @@ function LabRadRequest(props) {
 
                         setIsLoading(false);
                         setSelectedItem(res.data.data)
+                        setId(res.data.data._id)
                         setenableForm(false)
 
                         Object.entries(res.data.data).map(([key, val]) => {
@@ -920,6 +928,7 @@ function LabRadRequest(props) {
                                 // }
                             } else {
                                 dispatch({ field: key, value: val });
+                                // console.log("here",key,val)
                             }
                         });
                     }
@@ -1417,8 +1426,7 @@ function LabRadRequest(props) {
                     {value === 3 ? (
                         <div
                             style={{ flex: 4, display: "flex", flexDirection: "column" }}
-                            // className={`container ${classes.root}`}
-                            className="container-fluid"
+                            className={`container-fluid ${classes.root}`}
                         >
                             <div style={{ marginTop: "20px" }} className="row">
                                 <div
@@ -1497,7 +1505,7 @@ function LabRadRequest(props) {
 
                             <div style={{ marginTop: "20px" }} className="row">
                                 <div
-                                    className="col-md-10 col-sm-10 col-6"
+                                    className="col-md-5 col-sm-5 col-3"
                                     style={{
                                         ...styles.inputContainerForTextField,
                                         ...styles.textFieldPadding,
@@ -1515,6 +1523,30 @@ function LabRadRequest(props) {
                                         InputProps={{
                                             className: classes.input,
                                             classes: { input: classes.input },
+                                            disableUnderline:true
+                                        }}
+                                    />
+                                </div>
+                                <div
+                                    className="col-md-5 col-sm-5 col-3"
+                                    style={{
+                                        ...styles.inputContainerForTextField,
+                                        ...styles.textFieldPadding,
+                                    }}
+                                >
+                                    <TextField
+                                        required
+                                        disabled={enableForm}
+                                        label="Comments / Notes"
+                                        name={"labComments"}
+                                        value={labComments}
+                                        onChange={onChangeValue}
+                                        className="textInputStyle"
+                                        variant="filled"
+                                        InputProps={{
+                                            className: classes.input,
+                                            classes: { input: classes.input },
+                                            disableUnderline:true
                                         }}
                                     />
                                 </div>
@@ -1555,8 +1587,9 @@ function LabRadRequest(props) {
                             <div className="row" style={{ marginBottom: "25px" }}>
                                 <div className="col-md-12 col-sm-12 col-12 d-flex justify-content-end">
                                     <Button
+                                        disabled={enableForm}
                                         onClick={saveLabReq}
-                                        style={styles.stylesForButton}
+                                        style={{...styles.stylesForButton,width:'100px'}}
                                         variant="contained"
                                         color="primary"
                                     >
@@ -1568,7 +1601,7 @@ function LabRadRequest(props) {
                     ) : value === 4 ? (
                         <div
                             style={{ flex: 4, display: "flex", flexDirection: "column" }}
-                            className="container-fluid"
+                            className={`container-fluid ${classes.root}`}
                         >
                             <div style={{ marginTop: "20px" }} className="row">
                                 <div
@@ -1647,7 +1680,7 @@ function LabRadRequest(props) {
 
                             <div style={{ marginTop: "20px" }} className="row">
                                 <div
-                                    className="col-md-10 col-sm-10 col-6"
+                                    className="col-md-5 col-sm-5 col-3"
                                     style={{
                                         ...styles.inputContainerForTextField,
                                         ...styles.textFieldPadding,
@@ -1666,6 +1699,30 @@ function LabRadRequest(props) {
                                         InputProps={{
                                             className: classes.input,
                                             classes: { input: classes.input },
+                                            disableUnderline:true
+                                        }}
+                                    />
+                                </div>
+                                <div
+                                    className="col-md-5 col-sm-5 col-3"
+                                    style={{
+                                        ...styles.inputContainerForTextField,
+                                        ...styles.textFieldPadding,
+                                    }}
+                                >
+                                    <TextField
+                                        required
+                                        disabled={enableForm}
+                                        label="Comments / Notes"
+                                        name={"radioComments"}
+                                        value={radioComments}
+                                        onChange={onChangeValue}
+                                        className="textInputStyle"
+                                        variant="filled"
+                                        InputProps={{
+                                            className: classes.input,
+                                            classes: { input: classes.input },
+                                            disableUnderline:true
                                         }}
                                     />
                                 </div>
@@ -1706,8 +1763,9 @@ function LabRadRequest(props) {
                             <div className="row" style={{ marginBottom: "25px" }}>
                                 <div className="col-md-12 col-sm-12 col-12 d-flex justify-content-end">
                                     <Button
+                                        disabled={enableForm}
                                         onClick={saveRadioReq}
-                                        style={styles.stylesForButton}
+                                        style={{...styles.stylesForButton,width:'100px'}}
                                         variant="contained"
                                         color="primary"
                                     >
