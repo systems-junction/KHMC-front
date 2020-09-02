@@ -16,7 +16,8 @@ import {
   getIPREDRById,
   searchPatients,
   getSearchedLaboratoryService,
-  updateIPR,
+  getSearchedRadiologyService,
+  updateEdrIpr,
 } from '../../public/endpoins'
 import Loader from 'react-loader-spinner'
 import Back from '../../assets/img/Back_Arrow.png'
@@ -228,8 +229,8 @@ export default function EDR(props) {
   const [selectedPatient, setSelectedPatient] = useState('')
   const [selectedPatientArray, setSelectedPatientArray] = useState([])
   const [patientDetails, setPatientDetails] = useState('')
-  const [labRequest, setLabRequest] = useState('')
-  const [radRequest, setRadRequest] = useState('')
+  const [labReq, setLabReq] = useState('')
+  const [radReq, setRadReq] = useState('')
   const [value, setValue] = React.useState(0)
   const [searchQuery, setSearchQuery] = useState('')
   const [addLabRequest, setaddLabRequest] = useState(false)
@@ -239,6 +240,10 @@ export default function EDR(props) {
   const [itemFound, setItemFound] = useState('')
   const [currentUser, setCurrentUser] = useState('')
   const [id, setId] = useState('')
+  const [radioItemFoundSuccessfull, setRadioItemFoundSuccessfully] = useState(
+    ''
+  )
+  const [radioItemFound, setRadioItemFound] = useState('')
 
   const [patientDetailsDialog, openPatientDetailsDialog] = useState(false)
 
@@ -285,8 +290,8 @@ export default function EDR(props) {
       .then((res) => {
         if (res.data.success) {
           console.log('res2', res.data)
-          setLabRequest(res.data.data.labRequest)
-          setRadRequest(res.data.radRequest)
+          setLabReq(res.data.data.labRequest)
+          setRadReq(res.data.data.radiologyRequest)
           setId(res.data.data._id)
         }
       })
@@ -352,7 +357,7 @@ export default function EDR(props) {
   }
 
   function handleAddItem(i) {
-    // console.log("selected item", i);
+    console.log('selected item', i)
 
     dispatch({ field: 'labServiceId', value: i._id })
     dispatch({ field: 'labServiceCode', value: i.serviceNo })
@@ -420,10 +425,11 @@ export default function EDR(props) {
     const params = {
       _id: id,
       labRequest: labItems,
+      // requestType,
     }
     // console.log("params", params);
     axios
-      .put(updateIPR, params)
+      .put(updateEdrIpr, params)
       .then((res) => {
         if (res.data.success) {
           console.log('response after adding Lab Request', res.data)
@@ -532,10 +538,11 @@ export default function EDR(props) {
     const params = {
       _id: id,
       radiologyRequest: radioItems,
+      requestType,
     }
     // console.log("params", params);
     axios
-      .put(updateIPR, params)
+      .put(updateEdrIpr, params)
       .then((res) => {
         if (res.data.success) {
           console.log('response after adding Radio Request', res.data)
@@ -883,9 +890,9 @@ export default function EDR(props) {
                   </div>
 
                   <div className='row' style={{ marginTop: '20px' }}>
-                    {labRequest !== 0 ? (
+                    {labReq !== 0 ? (
                       <CustomTable
-                        tableData={labRequest}
+                        tableData={labReq}
                         tableDataKeys={tableDataKeysForLabReq}
                         tableHeading={tableHeadingForLabReq}
                         // handleView={viewItem}
@@ -1021,9 +1028,9 @@ export default function EDR(props) {
                   </div>
 
                   <div className='row' style={{ marginTop: '20px' }}>
-                    {radiologyRequestArray !== 0 ? (
+                    {radReq !== 0 ? (
                       <CustomTable
-                        tableData={radiologyRequestArray}
+                        tableData={radReq}
                         tableDataKeys={tableDataKeysForRadiology}
                         tableHeading={tableHeadingForRadiology}
                         // handleView={viewItem}
