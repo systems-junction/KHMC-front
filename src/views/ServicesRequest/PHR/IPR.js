@@ -4,7 +4,7 @@ import Notification from '../../../components/Snackbar/Notification.js'
 import CustomTable from '../../../components/Table/Table'
 import axios from 'axios'
 import {
-  getPHRIPRUrl,
+  getPHRPatient,
   // getMaterialReceivingUrl
 } from '../../../public/endpoins'
 import Loader from 'react-loader-spinner'
@@ -21,12 +21,7 @@ const tableHeading = [
   'Status',
   'Action',
 ]
-const tableDataKeys = [
-  ['patientId', 'profileNo'],
-  ['iprId', 'requestNo'],
-  'date',
-  'status',
-]
+const tableDataKeys = ['profileNo', , 'requestNo', 'date', 'status']
 
 const actions = { view: true }
 
@@ -55,13 +50,12 @@ export default function EDR(props) {
 
   function getEDRsData() {
     axios
-      .get(getPHRIPRUrl)
+      .get(getPHRPatient)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data, 'ecr1')
-          res.data.data.map((d) => (d.patientId = d.iprId.patientId))
-          // res.data.data.map((d) => (d.requestNo = d.edrId.requestNo))
-          setEdr(res.data.data)
+          console.log(res.data.data[0], 'ecr1')
+          res.data.data[0].map((d) => (d.profileNo = d.patientData.profileNo))
+          setEdr(res.data.data[0])
         } else if (!res.data.success) {
           setErrorMsg(res.data.error)
           setOpenNotification(true)

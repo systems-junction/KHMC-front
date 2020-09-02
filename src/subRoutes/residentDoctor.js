@@ -25,6 +25,7 @@ import EDRTriageAndAssessment from '../views/ResidentDoctor/EDR/TriageAndAssessm
 
 import IPR from '../views/ResidentDoctor/IPR/IPR'
 import PA from '../views/ResidentDoctor/patientAssessment'
+import LabRadRequest from '../views/ResidentDoctor/labRadRequest'
 import ViewIPR from '../views/ResidentDoctor/IPR/viewIPR'
 import iprDischargeRequest from '../views/ResidentDoctor/IPR/DischargeRequest'
 import iprAddDischargeMed from '../views/ResidentDoctor/IPR/addDischargeMed'
@@ -72,6 +73,11 @@ class WMSRoutes extends React.PureComponent {
         <Route exact path={`${this.props.match.url}/edr`} component={EDR} />
         <Route exact path={`${this.props.match.url}/ipr`} component={IPR} />
         <Route exact path={`${this.props.match.url}/pa`} component={PA} />
+        <Route
+          exact
+          path={`${this.props.match.url}/labradrequest`}
+          component={LabRadRequest}
+        />
 
         <Route
           exact

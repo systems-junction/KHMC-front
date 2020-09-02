@@ -16,8 +16,9 @@ import {
   getSingleEDRPatient,
   getAllExternalConsultantsUrl,
   addECRUrl,
-  getPHRIPRById,
+  getPHRByIdURL,
   updatePHRIPRById,
+  updatePHRRByIdURL,
 } from '../../../public/endpoins'
 import cookie from 'react-cookies'
 import Header from '../../../components/Header/Header'
@@ -55,10 +56,19 @@ const tableHeadingForPharmacy = [
   'Price/Unit',
   '',
 ]
-const tableDataKeysForPharmacy = [
+const tableDataKeysForPharmacy = ['medicineName', 'requestedQty', 'unitPrice']
+
+const tableHeadingForDischarge = [
+  'Medicine Name',
+  'Requested Qty',
+  'Unit Price',
+  'Total Price',
+]
+const tableDataKeysForDischarge = [
   'medicineName',
   'requestedQty',
-  ['itemId', 'purchasePrice'],
+  'unitPrice',
+  'totalPrice',
 ]
 
 const statusArray = [
@@ -155,11 +165,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+const useStylesForTabs = makeStyles({
+  root: {
+    flexGrow: 1,
+  },
+})
+
 function AddEditPurchaseRequest(props) {
   const classes = useStyles()
-
+  const classesForTabs = useStylesForTabs()
   const initialState = {
     medicineDataArray: '',
+    dischargeMedicationArray: '',
 
     name: '',
     price: '',
@@ -177,6 +194,7 @@ function AddEditPurchaseRequest(props) {
 
   const {
     medicineDataArray,
+    dischargeMedicationArray,
 
     name,
     price,
@@ -196,22 +214,34 @@ function AddEditPurchaseRequest(props) {
   const [id, setId] = useState('')
   const [selectedItem, setSelectedItem] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+  const [value, setValue] = React.useState(0)
 
   const getLRByIdURI = (id) => {
     axios
-      .get(getPHRIPRById + '/' + id)
+      .get(getPHRByIdURL + '/' + id)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data, 'data')
+          console.log(res.data, 'data')
           if (res.data.data) {
-            console.log(res.data.data[0], 'data2')
-
             setIsLoading(false)
 
             Object.entries(res.data.data).map(([key, val]) => {
               if (val && typeof val === 'object') {
                 if (key === 'medicine') {
                   dispatch({ field: 'medicineDataArray', value: val })
+                }
+              } else {
+                dispatch({ field: key, value: val })
+              }
+            })
+          }
+          if (res.data.data2) {
+            setIsLoading(false)
+
+            Object.entries(res.data.data2).map(([key, val]) => {
+              if (val && typeof val === 'object') {
+                if (key === 'medicine') {
+                  dispatch({ field: 'dischargeMedicationArray', value: val })
                 }
               } else {
                 dispatch({ field: key, value: val })
@@ -232,12 +262,12 @@ function AddEditPurchaseRequest(props) {
     }
     console.log(params, 'params')
     axios
-      .put(updatePHRIPRById, params)
+      .put(updatePHRRByIdURL, params)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data, 'data')
+          console.log(res.data, 'data')
           if (res.data.data) {
-            console.log(res.data.data, 'data2')
+            console.log(res.data, 'data2')
 
             setIsLoading(false)
 
@@ -259,7 +289,7 @@ function AddEditPurchaseRequest(props) {
       })
   }
 
-  console.log(name, price, 'name')
+  console.log(dischargeMedicationArray, 'name')
 
   useEffect(() => {
     getLRByIdURI(props.history.location.state.selectedItem._id)
@@ -269,6 +299,7 @@ function AddEditPurchaseRequest(props) {
     const selectedRec = props.history.location.state.selectedItem._id
     console.log(selectedRec, 'rec')
     setId(props.history.location.state.selectedItem._id)
+    console.log('id', props.history.location.state.selectedItem._id)
     setSelectedItem(props.history.location.state.selectedItem)
     setrequestNo(props.history.location.state.selectedItem.requestNo)
     setSelectedPatient(props.history.location.state.selectedItem.patientId)
@@ -332,6 +363,10 @@ function AddEditPurchaseRequest(props) {
   // })
   // }
 
+  const handleChange = (event, newValue) => {
+    setValue(newValue)
+  }
+
   if (openNotification) {
     setTimeout(() => {
       setOpenNotification(false)
@@ -373,11 +408,34 @@ function AddEditPurchaseRequest(props) {
               </Button>
             </div> */}
           </div>
-          <div
-            style={{
-              height: '20px',
-            }}
-          />
+          {/* <div style={{ width: 'auto', height: '20px' }} />
+          <div className={classesForTabs.root}>
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              indicatorColor='null'
+              centered
+            >
+              <Tab
+                style={{
+                  color: 'white',
+                  borderRadius: 5,
+                  outline: 'none',
+                  backgroundColor: value === 0 ? '#2c6ddd' : undefined,
+                }}
+                label='Patient Details'
+              />
+              <Tab
+                style={{
+                  color: 'white',
+                  borderRadius: 5,
+                  outline: 'none',
+                  backgroundColor: value === 1 ? '#2c6ddd' : undefined,
+                }}
+                label='Emergency Contact'
+              />
+            </Tabs>
+          </div> */}
           {/* <div className="container" style={styles.patientDetails}>
             <div className="row">
               <div className="col-md-12">
@@ -453,7 +511,7 @@ function AddEditPurchaseRequest(props) {
               height: '20px',
             }}
           />
-
+          {/* {value === 0 ? ( */}
           <div
             style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
             className='container'
@@ -474,13 +532,35 @@ function AddEditPurchaseRequest(props) {
               )}
             </div>
           </div>
+          {/* ) : (
+            <div
+              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              className='container'
+            >
+              <div className='row' style={{ marginTop: '20px' }}>
+                {dischargeMedicationArray !== 0 ? (
+                  <CustomTable
+                    tableData={dischargeMedicationArray}
+                    tableDataKeys={tableDataKeysForDischarge}
+                    tableHeading={tableHeadingForDischarge}
+                    // handleView={viewItem}
+                    // action={actions}
+                    borderBottomColor={'#60d69f'}
+                    borderBottomWidth={20}
+                  />
+                ) : (
+                  undefined
+                )}
+              </div>
+            </div>
+          )} */}
 
           <div
             style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
             className='container'
           >
-            {/* <div className='row'>
-              <div
+            <div className='row'>
+              {/* <div
                 className='col-md-4 col-sm-4'
                 style={{
                   ...styles.inputContainerForTextField,
@@ -517,18 +597,18 @@ function AddEditPurchaseRequest(props) {
                       )
                     })}
                 </TextField>
-              </div>
-              <div className='col-md-8 col-sm-8 col-8 d-flex justify-content-end'>
+              </div> */}
+              <div className='col-md-12 col-sm-12 col-12 d-flex justify-content-end'>
                 <Button
                   onClick={updateLRByIdURI}
                   style={styles.stylesForButton}
                   variant='contained'
                   color='primary'
                 >
-                  <strong style={{ fontSize: '12px' }}>Save</strong>
+                  <strong style={{ fontSize: '12px' }}>Submit</strong>
                 </Button>
               </div>
-            </div> */}
+            </div>
 
             <br />
             <div className='row' style={{ marginBottom: '25px' }}>

@@ -13,7 +13,9 @@ import {
   getAllExternalConsultantsUrl,
   addECRUrl,
   getDischargeIPRUrl,
+  getDischargeByIdURL,
   updateDischargeIPRUrl,
+  updateDischargeByIdURL,
 } from '../../../../public/endpoins'
 import cookie from 'react-cookies'
 import Header from '../../../../components/Header/Header'
@@ -305,7 +307,7 @@ function AddEditPurchaseRequest(props) {
 
   const getLRByIdURI = (id) => {
     axios
-      .get(getDischargeIPRUrl + '/' + id)
+      .get(getDischargeByIdURL + '/' + id)
       .then((res) => {
         if (res.data.success) {
           console.log(res.data.data, 'data')
@@ -346,7 +348,7 @@ function AddEditPurchaseRequest(props) {
     }
     console.log(params, 'params')
     axios
-      .put(updateDischargeIPRUrl, params)
+      .put(updateDischargeByIdURL, params)
       .then((res) => {
         if (res.data.success) {
           console.log(res.data.data, 'data')

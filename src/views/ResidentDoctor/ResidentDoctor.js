@@ -62,13 +62,13 @@ const admin = [
   },
 
   {
-    text: 'Patient Assessment',
+    text: 'Assessment & Diagnosis',
     path: '/home/rcm/rd/pa',
   },
 
   {
-    text: '',
-    path: '',
+    text: 'Lab/Rad Request',
+    path: '/home/rcm/rd/labradrequest',
   },
 
   {
