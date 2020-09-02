@@ -281,6 +281,7 @@ function AddEditPatientListing(props) {
     title: '',
     firstName: '',
     lastName: '',
+    nationality: '',
     gender: '',
     age: '',
     height: '',
@@ -328,6 +329,7 @@ function AddEditPatientListing(props) {
     title,
     firstName,
     lastName,
+    nationality,
     gender,
     age,
     height,
@@ -441,6 +443,8 @@ function AddEditPatientListing(props) {
       firstName.length > 0 &&
       lastName &&
       lastName.length > 0 &&
+      nationality &&
+      nationality.length > 0 &&
       phoneNumber &&
       phoneNumber.length > 0 &&
       age &&
@@ -528,6 +532,7 @@ function AddEditPatientListing(props) {
       firstName,
       lastName,
       gender,
+      nationality,
       dob,
       age,
       height,
@@ -604,6 +609,7 @@ function AddEditPatientListing(props) {
         firstName,
         lastName,
         gender,
+        nationality,
         height,
         age,
         weight,
@@ -778,6 +784,7 @@ function AddEditPatientListing(props) {
     dispatch({ field: 'firstName', value: i.firstName })
     dispatch({ field: 'lastName', value: i.lastName })
     dispatch({ field: 'gender', value: i.gender })
+    dispatch({ field: 'nationality', value: i.nationality })
     dispatch({ field: 'age', value: i.age })
     dispatch({ field: 'profileNo', value: i.profileNo })
     dispatch({ field: 'insuranceNo', value: i.insuranceNo })
@@ -1115,7 +1122,7 @@ function AddEditPatientListing(props) {
                 {/* <ErrorMessage name={SIN} isFormSubmitted={isFormSubmitted} /> */}
               </div>
               <div
-                className='col-md-2'
+                className='col-md-2 col-sm-2'
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -1148,16 +1155,6 @@ function AddEditPatientListing(props) {
                     )
                   })}
                 </TextField>
-                {/* <DropDown
-                  fullWidth
-                  id="title"
-                  name="title"
-                  label="Title"
-                  value={title}
-                  onChange={onChangeValue}
-                  titles={titles}
-                /> */}
-                {/* <ErrorMessage name={title} isFormSubmitted={isFormSubmitted} /> */}
               </div>
               <div
                 className='col-md-5 col-sm-5'
@@ -1207,16 +1204,12 @@ function AddEditPatientListing(props) {
                     classes: { input: classes.input },
                   }}
                 />
-                {/* <ErrorMessage
-                  name={lastName}
-                  isFormSubmitted={isFormSubmitted}
-                /> */}
               </div>
             </div>
 
             <div className='row'>
               <div
-                className='col-md-2 col-sm-2'
+                className='col-md-4 col-sm-4 col-4'
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -1251,26 +1244,15 @@ function AddEditPatientListing(props) {
                     )
                   })}
                 </TextField>
-                {/* <DropDown
-                  id="gender"
-                  name="gender"
-                  value={gender}
-                  onChange={(e) => onChangeValue(e)}
-                  label="Gender"
-                  genderArray={genderArray}
-                /> */}
-                {/* <ErrorMessage name={gender} isFormSubmitted={isFormSubmitted} /> */}
               </div>
 
               <div
-                className='col-md-2 col-sm-2'
+                className='col-md-4 col-sm-4 col-4'
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
                 }}
               >
-                {/* {comingFor === "add" ? (
-                  <> */}
                 <TextField
                   required
                   variant='filled'
@@ -1290,41 +1272,36 @@ function AddEditPatientListing(props) {
                     classes: { input: classes.input },
                   }}
                 />
-                {/* <ErrorMessage
-                      name={dob}
-                      isFormSubmitted={isFormSubmitted}
-                    /> */}
-                {/* </>
-                ) : (
-                    <>
-                      <TextField
-                        label="Date of birth"
-                        name={"editDOB"}
-                        value={editDOB}
-                        onChange={(e) => onChangeDate(e)}
-                        type={"date"}
-                        className="textInputStyle"
-                        variant="filled"
-                        InputProps={{
-                          className: classes.input,
-                          classes: { input: classes.input }
-                        }}
-                        InputLabelProps={{
-                          shrink: true,
-                          color:'black'
-                        }}
-                      />
-                      <ErrorMessage
-                        name={editDOB}
-                        isFormSubmitted={isFormSubmitted}
-                      />
-                    </>
-                  )} */}
               </div>
 
-              {/* here */}
               <div
-                className='col-md-2 col-sm-2'
+                className='col-md-4 col-sm-4 col-4'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  required
+                  type='text'
+                  label='Nationality'
+                  name={'nationality'}
+                  value={nationality}
+                  error={nationality === '' && isFormSubmitted}
+                  onChange={(e) => onChangeValue(e)}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className="row">
+              <div
+                className='col-md-3 col-sm-3 col-3'
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -1345,7 +1322,7 @@ function AddEditPatientListing(props) {
                 />
               </div>
               <div
-                className='col-md-2 col-sm-2'
+                className='col-md-3 col-sm-3 col-3'
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -1365,7 +1342,7 @@ function AddEditPatientListing(props) {
                 />
               </div>
               <div
-                className='col-md-2 col-sm-2'
+                className='col-md-3 col-sm-3 col-3'
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -1386,7 +1363,7 @@ function AddEditPatientListing(props) {
               </div>
 
               <div
-                className='col-md-2 col-sm-2'
+                className='col-md-3 col-sm-3 col-3'
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -1417,14 +1394,6 @@ function AddEditPatientListing(props) {
                     )
                   })}
                 </TextField>
-                {/* <DropDown
-                  id="cls"
-                  name="bloodGroup"
-                  value={bloodGroup}
-                  label="Blood Group"
-                  onChange={onChangeValue}
-                  coverageTermsArr={bloodGroups}
-                /> */}
               </div>
             </div>
 

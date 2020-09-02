@@ -7,12 +7,15 @@ import axios from "axios";
 import TextField from "@material-ui/core/TextField";
 import AutoComplete from "@material-ui/lab/AutoComplete";
 import {
+    getSearchedLaboratoryService,
+    getSearchedRadiologyService,
+    updateIPR,
     searchpatient,
     getSearchedpatient,
 } from "../../public/endpoins";
 import cookie from "react-cookies";
 import Header from "../../components/Header/Header";
-import assessmentIcon from "../../assets/img/PatientAssessment.png";
+import Lab_RadIcon from '../../assets/img/Lab-Rad Request.png'
 import Back from "../../assets/img/Back_Arrow.png";
 import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
 import Tabs from "@material-ui/core/Tabs";
@@ -32,10 +35,10 @@ import DialogContent from "@material-ui/core/DialogContent";
 import ErrorMessage from "../../components/ErrorMessage/errorMessage";
 import Notification from "../../components/Snackbar/Notification.js";
 import Fingerprint from "../../assets/img/fingerprint.png";
-// import PatientDetails from "../ProfessionalOrderForMedical/patientDetailsDialog";
 import AccountCircle from '@material-ui/icons/SearchOutlined'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import BarCode from '../../assets/img/Bar Code.png'
+import ViewSingleRequest from './viewRequest'
 import Loader from "react-loader-spinner";
 
 // const tableHeadingForResident = [
@@ -75,36 +78,36 @@ import Loader from "react-loader-spinner";
 //     ["requester", "firstName"],
 //     "status",
 // ];
-// const tableHeadingForLabReq = [
-//     "Request Id",
-//     "Service Code",
-//     "Service Name",
-//     "Requester",
-//     "Status",
-//     "Action",
-// ];
-// const tableDataKeysForLabReq = [
-//     "_id",
-//     "serviceCode",
-//     "serviceName",
-//     "requesterName",
-//     "status",
-// ];
-// const tableHeadingForRadiology = [
-//     "Request Id",
-//     "Service Code",
-//     "Service Name",
-//     "Requester",
-//     "Status",
-//     "Action",
-// ];
-// const tableDataKeysForRadiology = [
-//     "_id",
-//     "serviceCode",
-//     "serviceName",
-//     "requesterName",
-//     "status",
-// ];
+const tableHeadingForLabReq = [
+    "Request Id",
+    "Service Code",
+    "Service Name",
+    "Requester",
+    "Status",
+    "Action",
+];
+const tableDataKeysForLabReq = [
+    "_id",
+    "serviceCode",
+    "serviceName",
+    "requesterName",
+    "status",
+];
+const tableHeadingForRadiology = [
+    "Request Id",
+    "Service Code",
+    "Service Name",
+    "Requester",
+    "Status",
+    "Action",
+];
+const tableDataKeysForRadiology = [
+    "_id",
+    "serviceCode",
+    "serviceName",
+    "requesterName",
+    "status",
+];
 // const tableHeadingForNurse = [
 //     "Service Code",
 //     "Service Name",
@@ -118,7 +121,7 @@ import Loader from "react-loader-spinner";
 //     "requesterName",
 //     "status",
 // ];
-// const actions = { view: true };
+const actions = { view: true };
 const styles = {
     patientDetails: {
         backgroundColor: "white",
@@ -235,7 +238,7 @@ const useStylesForInput = makeStyles((theme) => ({
 
 const useStyles = makeStyles(tableStyles);
 
-function PatientAssessment(props) {
+function LabRadRequest(props) {
     const classesForTabs = useStylesForTabs();
     const classes = useStylesForInput();
 
@@ -325,7 +328,7 @@ function PatientAssessment(props) {
     const [currentUser, setCurrentUser] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
     const [openNotification, setOpenNotification] = useState(false);
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = useState(3);
     const [selectedItem, setSelectedItem] = useState("");
     const [searchPatientQuery, setSearchPatientQuery] = useState("");
     const [patientFoundSuccessfull, setpatientFoundSuccessfully] = useState(false);
@@ -333,7 +336,7 @@ function PatientAssessment(props) {
     const [patientDetails, setPatientDetails] = useState("");
     const [selectedPatientArray, setSelectedPatientArray] = useState([]);
     const [patientDetailsDialog, openPatientDetailsDialog] = useState(false);
-    const [enableAssessment, setenableAssessment] = useState(true)
+    const [enableForm, setenableForm] = useState(true)
 
     const [openItemDialog, setOpenItemDialog] = useState(false);
     const [openAddConsultDialog, setOpenAddConsultDialog] = useState(false);
@@ -379,15 +382,15 @@ function PatientAssessment(props) {
         setValue(newValue);
     };
 
-    // function viewItem(item) {
-    //     if (item !== "") {
-    //         setOpenItemDialog(true);
-    //         setItem(item);
-    //     } else {
-    //         setOpenItemDialog(false);
-    //         setItem("");
-    //     }
-    // }
+    function viewItem(item) {
+        if (item !== "") {
+            setOpenItemDialog(true);
+            setItem(item);
+        } else {
+            setOpenItemDialog(false);
+            setItem("");
+        }
+    }
 
     // function addConsultRequest() {
     // if (!validateForm()) {
@@ -505,223 +508,223 @@ function PatientAssessment(props) {
     //     dispatch({ field: "note", value: "" });
     // }
 
-    // const handleSearch = (e) => {
-    //     setSearchQuery(e.target.value);
-    //     if (e.target.value.length >= 3) {
-    //         axios
-    //             .get(getSearchedLaboratoryService + "/" + e.target.value)
-    //             .then((res) => {
-    //                 if (res.data.success) {
-    //                     if (res.data.data.length > 0) {
-    //                         console.log(res.data.data);
-    //                         setItemFoundSuccessfully(true);
-    //                         setItemFound(res.data.data);
-    //                     } else {
-    //                         setItemFoundSuccessfully(false);
-    //                         setItemFound("");
-    //                     }
-    //                 }
-    //             })
-    //             .catch((e) => {
-    //                 console.log("error while searching req", e);
-    //             });
-    //     }
-    // };
+    const handleSearch = (e) => {
+        setSearchQuery(e.target.value);
+        if (e.target.value.length >= 3) {
+            axios
+                .get(getSearchedLaboratoryService + "/" + e.target.value)
+                .then((res) => {
+                    if (res.data.success) {
+                        if (res.data.data.length > 0) {
+                            console.log(res.data.data);
+                            setItemFoundSuccessfully(true);
+                            setItemFound(res.data.data);
+                        } else {
+                            setItemFoundSuccessfully(false);
+                            setItemFound("");
+                        }
+                    }
+                })
+                .catch((e) => {
+                    console.log("error while searching req", e);
+                });
+        }
+    };
 
-    // function handleAddItem(i) {
-    //     // console.log("selected item", i);
+    function handleAddItem(i) {
+        // console.log("selected item", i);
 
-    //     dispatch({ field: "labServiceId", value: i._id });
-    //     dispatch({ field: "labServiceCode", value: i.serviceNo });
-    //     dispatch({ field: "labServiceName", value: i.name });
-    //     dispatch({ field: "labServiceStatus", value: i.status });
+        dispatch({ field: "labServiceId", value: i._id });
+        dispatch({ field: "labServiceCode", value: i.serviceNo });
+        dispatch({ field: "labServiceName", value: i.name });
+        dispatch({ field: "labServiceStatus", value: i.status });
 
-    //     setSearchQuery("");
-    //     setaddLabRequest(true);
-    // }
+        setSearchQuery("");
+        setaddLabRequest(true);
+    }
 
-    // const addSelectedLabItem = () => {
-    //     // setIsFormSubmitted(true);
-    //     // if (validateItemsForm()) {
+    const addSelectedLabItem = () => {
+        // setIsFormSubmitted(true);
+        // if (validateItemsForm()) {
 
-    //     let found =
-    //         labRequestArray &&
-    //         labRequestArray.find((item) => item.serviceId === labServiceId);
+        let found =
+            labRequestArray &&
+            labRequestArray.find((item) => item.serviceId === labServiceId);
 
-    //     if (found) {
-    //         setOpenNotification(true);
-    //         setErrorMsg("This Service has already been added.");
-    //     } else {
-    //         dispatch({
-    //             field: "labRequestArray",
-    //             value: [
-    //                 ...labRequestArray,
-    //                 {
-    //                     serviceId: labServiceId,
-    //                     serviceCode: labServiceCode,
-    //                     serviceName: labServiceName,
-    //                     requester: currentUser.staffId,
-    //                     requesterName: requester,
-    //                     status: labServiceStatus,
-    //                 },
-    //             ],
-    //         });
-    //         // }
-    //     }
+        if (found) {
+            setOpenNotification(true);
+            setErrorMsg("This Service has already been added.");
+        } else {
+            dispatch({
+                field: "labRequestArray",
+                value: [
+                    ...labRequestArray,
+                    {
+                        serviceId: labServiceId,
+                        serviceCode: labServiceCode,
+                        serviceName: labServiceName,
+                        requester: currentUser.staffId,
+                        requesterName: requester,
+                        status: labServiceStatus,
+                    },
+                ],
+            });
+            // }
+        }
 
-    //     dispatch({ field: "labServiceId", value: "" });
-    //     dispatch({ field: "labServiceName", value: "" });
-    //     dispatch({ field: "labServiceStatus", value: "" });
-    //     dispatch({ field: "labServiceCode", value: "" });
+        dispatch({ field: "labServiceId", value: "" });
+        dispatch({ field: "labServiceName", value: "" });
+        dispatch({ field: "labServiceStatus", value: "" });
+        dispatch({ field: "labServiceCode", value: "" });
 
-    //     setaddLabRequest(false);
-    // };
+        setaddLabRequest(false);
+    };
 
-    // const saveLabReq = () => {
-    //     let labItems = [];
-    //     for (let i = 0; i < labRequestArray.length; i++) {
-    //         labItems = [
-    //             ...labItems,
-    //             {
-    //                 serviceId: labRequestArray[i].serviceId,
-    //                 serviceCode: labRequestArray[i].serviceCode,
-    //                 requesterName: labRequestArray[i].requesterName,
-    //                 requester: labRequestArray[i].requester,
-    //                 serviceName: labRequestArray[i].serviceName,
-    //                 status: labRequestArray[i].status,
-    //             },
-    //         ];
-    //     }
-    //     const params = {
-    //         _id: id,
-    //         labRequest: labItems,
-    //     };
-    //     // console.log("params", params);
-    //     axios
-    //         .put(updateIPR, params)
-    //         .then((res) => {
-    //             if (res.data.success) {
-    //                 console.log("response after adding Lab Request", res.data);
-    //                 window.location.reload(false);
-    //             } else if (!res.data.success) {
-    //                 setOpenNotification(true);
-    //             }
-    //         })
-    //         .catch((e) => {
-    //             console.log("error after adding Lab Request", e);
-    //             setOpenNotification(true);
-    //             setErrorMsg("Error while adding the Lab Request");
-    //         });
-    // };
+    const saveLabReq = () => {
+        let labItems = [];
+        for (let i = 0; i < labRequestArray.length; i++) {
+            labItems = [
+                ...labItems,
+                {
+                    serviceId: labRequestArray[i].serviceId,
+                    serviceCode: labRequestArray[i].serviceCode,
+                    requesterName: labRequestArray[i].requesterName,
+                    requester: labRequestArray[i].requester,
+                    serviceName: labRequestArray[i].serviceName,
+                    status: labRequestArray[i].status,
+                },
+            ];
+        }
+        const params = {
+            _id: id,
+            labRequest: labItems,
+        };
+        // console.log("params", params);
+        axios
+            .put(updateIPR, params)
+            .then((res) => {
+                if (res.data.success) {
+                    console.log("response after adding Lab Request", res.data);
+                    window.location.reload(false);
+                } else if (!res.data.success) {
+                    setOpenNotification(true);
+                }
+            })
+            .catch((e) => {
+                console.log("error after adding Lab Request", e);
+                setOpenNotification(true);
+                setErrorMsg("Error while adding the Lab Request");
+            });
+    };
 
-    // const handleRadioSearch = (e) => {
-    //     setSearchRadioQuery(e.target.value);
-    //     if (e.target.value.length >= 3) {
-    //         axios
-    //             .get(getSearchedRadiologyService + "/" + e.target.value)
-    //             .then((res) => {
-    //                 if (res.data.success) {
-    //                     if (res.data.data.length > 0) {
-    //                         console.log(res.data.data);
-    //                         setRadioItemFoundSuccessfully(true);
-    //                         setRadioItemFound(res.data.data);
-    //                     } else {
-    //                         setRadioItemFoundSuccessfully(false);
-    //                         setRadioItemFound("");
-    //                     }
-    //                 }
-    //             })
-    //             .catch((e) => {
-    //                 console.log("error while searching req", e);
-    //             });
-    //     }
-    // };
+    const handleRadioSearch = (e) => {
+        setSearchRadioQuery(e.target.value);
+        if (e.target.value.length >= 3) {
+            axios
+                .get(getSearchedRadiologyService + "/" + e.target.value)
+                .then((res) => {
+                    if (res.data.success) {
+                        if (res.data.data.length > 0) {
+                            console.log(res.data.data);
+                            setRadioItemFoundSuccessfully(true);
+                            setRadioItemFound(res.data.data);
+                        } else {
+                            setRadioItemFoundSuccessfully(false);
+                            setRadioItemFound("");
+                        }
+                    }
+                })
+                .catch((e) => {
+                    console.log("error while searching req", e);
+                });
+        }
+    };
 
-    // function handleAddRadioItem(i) {
-    //     // console.log("selected item", i);
-    //     dispatch({ field: "radioServiceId", value: i._id });
-    //     dispatch({ field: "radioServiceCode", value: i.serviceNo });
-    //     dispatch({ field: "radioServiceName", value: i.name });
-    //     dispatch({ field: "radioServiceStatus", value: i.status });
+    function handleAddRadioItem(i) {
+        // console.log("selected item", i);
+        dispatch({ field: "radioServiceId", value: i._id });
+        dispatch({ field: "radioServiceCode", value: i.serviceNo });
+        dispatch({ field: "radioServiceName", value: i.name });
+        dispatch({ field: "radioServiceStatus", value: i.status });
 
-    //     setSearchRadioQuery("");
-    //     setaddRadioRequest(true);
-    // }
+        setSearchRadioQuery("");
+        setaddRadioRequest(true);
+    }
 
-    // const addSelectedRadioItem = () => {
-    //     // setIsFormSubmitted(true);
-    //     // if (validateItemsForm()) {
+    const addSelectedRadioItem = () => {
+        // setIsFormSubmitted(true);
+        // if (validateItemsForm()) {
 
-    //     let found =
-    //         radiologyRequestArray &&
-    //         radiologyRequestArray.find((item) => item.serviceId === radioServiceId);
+        let found =
+            radiologyRequestArray &&
+            radiologyRequestArray.find((item) => item.serviceId === radioServiceId);
 
-    //     if (found) {
-    //         setOpenNotification(true);
-    //         setErrorMsg("This Service has already been added.");
-    //     } else {
-    //         dispatch({
-    //             field: "radiologyRequestArray",
-    //             value: [
-    //                 ...radiologyRequestArray,
-    //                 {
-    //                     serviceId: radioServiceId,
-    //                     serviceCode: radioServiceCode,
-    //                     requesterName: requester,
-    //                     serviceName: radioServiceName,
-    //                     requester: currentUser.staffId,
-    //                     status: radioServiceStatus,
-    //                 },
-    //             ],
-    //         });
-    //         // }
-    //     }
+        if (found) {
+            setOpenNotification(true);
+            setErrorMsg("This Service has already been added.");
+        } else {
+            dispatch({
+                field: "radiologyRequestArray",
+                value: [
+                    ...radiologyRequestArray,
+                    {
+                        serviceId: radioServiceId,
+                        serviceCode: radioServiceCode,
+                        requesterName: requester,
+                        serviceName: radioServiceName,
+                        requester: currentUser.staffId,
+                        status: radioServiceStatus,
+                    },
+                ],
+            });
+            // }
+        }
 
-    //     dispatch({ field: "radioServiceId", value: "" });
-    //     dispatch({ field: "radioServiceCode", value: "" });
-    //     dispatch({ field: "radioServiceName", value: "" });
-    //     dispatch({ field: "radioServiceStatus", value: "" });
+        dispatch({ field: "radioServiceId", value: "" });
+        dispatch({ field: "radioServiceCode", value: "" });
+        dispatch({ field: "radioServiceName", value: "" });
+        dispatch({ field: "radioServiceStatus", value: "" });
 
-    //     setaddLabRequest(false);
-    // };
+        setaddLabRequest(false);
+    };
 
-    // const saveRadioReq = () => {
-    //     let radioItems = [];
-    //     for (let i = 0; i < radiologyRequestArray.length; i++) {
-    //         radioItems = [
-    //             ...radioItems,
-    //             {
-    //                 serviceId: radiologyRequestArray[i].serviceId,
-    //                 serviceCode: radiologyRequestArray[i].serviceCode,
-    //                 requester: radiologyRequestArray[i].requester,
-    //                 requesterName: radiologyRequestArray[i].requesterName,
-    //                 serviceName: radiologyRequestArray[i].serviceName,
-    //                 status: radiologyRequestArray[i].status,
-    //             },
-    //         ];
-    //     }
+    const saveRadioReq = () => {
+        let radioItems = [];
+        for (let i = 0; i < radiologyRequestArray.length; i++) {
+            radioItems = [
+                ...radioItems,
+                {
+                    serviceId: radiologyRequestArray[i].serviceId,
+                    serviceCode: radiologyRequestArray[i].serviceCode,
+                    requester: radiologyRequestArray[i].requester,
+                    requesterName: radiologyRequestArray[i].requesterName,
+                    serviceName: radiologyRequestArray[i].serviceName,
+                    status: radiologyRequestArray[i].status,
+                },
+            ];
+        }
 
-    //     const params = {
-    //         _id: id,
-    //         radiologyRequest: radioItems,
-    //     };
-    //     // console.log("params", params);
-    //     axios
-    //         .put(updateIPR, params)
-    //         .then((res) => {
-    //             if (res.data.success) {
-    //                 console.log("response after adding Radio Request", res.data);
-    //                 window.location.reload(false);
-    //             } else if (!res.data.success) {
-    //                 setOpenNotification(true);
-    //             }
-    //         })
-    //         .catch((e) => {
-    //             console.log("error after adding Radio Request", e);
-    //             setOpenNotification(true);
-    //             setErrorMsg("Error while adding the Radiology Request");
-    //         });
-    // };
+        const params = {
+            _id: id,
+            radiologyRequest: radioItems,
+        };
+        // console.log("params", params);
+        axios
+            .put(updateIPR, params)
+            .then((res) => {
+                if (res.data.success) {
+                    console.log("response after adding Radio Request", res.data);
+                    window.location.reload(false);
+                } else if (!res.data.success) {
+                    setOpenNotification(true);
+                }
+            })
+            .catch((e) => {
+                console.log("error after adding Radio Request", e);
+                setOpenNotification(true);
+                setErrorMsg("Error while adding the Radiology Request");
+            });
+    };
 
     // // for Nursing
     // const handleNurseSearch = (e) => {
@@ -872,57 +875,56 @@ function PatientAssessment(props) {
         axios
             .get(searchpatient + "/" + id)
             .then((res) => {
-                if (res.data.success) 
-                {
-                    if (res.data.data) 
-                    {
-                        // const selectedItem = res.data.data[0]
-                        // console.log("Response after getting EDR/IPR data : ",selectedItem[0]);
-
-                        console.log("Response after getting EDR/IPR data : ",res.data.data);
+                if (res.data.success) {
+                    if (res.data.data) {
+                        console.log("Response after getting EDR/IPR data : ", res.data.data);
 
                         setIsLoading(false);
                         setSelectedItem(res.data.data)
-                        setenableAssessment(false)
+                        setenableForm(false)
 
-                        // Object.entries(res.data.data[0]).map(([key, val]) => {
-                        //     if (val && typeof val === "object") {
-                        //         if (key === "patientId") {
-                        //             dispatch({ field: "patientId", value: val._id });
-                        //         } else if (key === "labRequest") {
-                        //             dispatch({ field: "labRequestArray", value: val });
-                        //         } else if (key === "radiologyRequest") {
-                        //             dispatch({ field: "radiologyRequestArray", value: val });
-                        //         } else if (key === "consultationNote") {
-                        //             Object.entries(val).map(([key1, val1]) => {
-                        //                 if (key1 == "requester") {
-                        //                     dispatch({ field: "requester", value: val1._id });
-                        //                 } else {
-                        //                     dispatch({ field: key1, value: val1 });
-                        //                 }
-                        //             });
-                        //             dispatch({ field: "consultationNoteArray", value: val });
-                        //         } else if (key === "residentNotes") {
-                        //             Object.entries(val).map(([key1, val1]) => {
-                        //                 if (key1 == "doctor") {
-                        //                     dispatch({ field: "doctor", value: val1._id });
-                        //                 } else {
-                        //                     dispatch({ field: key1, value: val1 });
-                        //                 }
-                        //             });
-                        //             dispatch({ field: "residentNoteArray", value: val });
-                        //         } else if (key === "pharmacyRequest") {
-                        //             dispatch({ field: "pharmacyRequestArray", value: val });
-                        //         } else if (key === "nurseService") {
-                        //             dispatch({ field: "nurseService", value: val });
-                        //         }
-                        //     } else {
-                        //         dispatch({ field: key, value: val });
-                        //     }
-                        // });
+                        Object.entries(res.data.data).map(([key, val]) => {
+                            if (val && typeof val === "object") {
+                                // if (key === "patientId") {
+                                //     dispatch({ field: "patientId", value: val._id });
+                                // } else
+                                if (key === "labRequest") {
+                                    dispatch({ field: "labRequestArray", value: val });
+                                }
+                                else if (key === "radiologyRequest") {
+                                    dispatch({ field: "radiologyRequestArray", value: val });
+                                }
+                                // else if (key === "consultationNote") {
+                                //     Object.entries(val).map(([key1, val1]) => {
+                                //         if (key1 == "requester") {
+                                //             dispatch({ field: "requester", value: val1._id });
+                                //         } else {
+                                //             dispatch({ field: key1, value: val1 });
+                                //         }
+                                //     });
+                                //     dispatch({ field: "consultationNoteArray", value: val });
+                                // } else if (key === "residentNotes") {
+                                //     Object.entries(val).map(([key1, val1]) => {
+                                //         if (key1 == "doctor") {
+                                //             dispatch({ field: "doctor", value: val1._id });
+                                //         } else {
+                                //             dispatch({ field: key1, value: val1 });
+                                //         }
+                                //     });
+                                //     dispatch({ field: "residentNoteArray", value: val });
+                                // } else if (key === "pharmacyRequest") {
+                                //     dispatch({ field: "pharmacyRequestArray", value: val });
+                                // }
+                                //  else if (key === "nurseService") {
+                                //     dispatch({ field: "nurseService", value: val });
+                                // }
+                            } else {
+                                dispatch({ field: key, value: val });
+                            }
+                        });
                     }
                 }
-                else{
+                else {
                     setOpenNotification(true)
                     setErrorMsg("EDR/IPR not generated for patient")
                 }
@@ -934,7 +936,7 @@ function PatientAssessment(props) {
     };
 
     const TriageAssessment = () => {
-        let path = `patientAssessment/triageAssessment`;
+        let path = `patientCare/triageAssessment`;
         props.history.push({
             pathname: path,
             state: {
@@ -967,13 +969,13 @@ function PatientAssessment(props) {
             <div className="cPadding">
                 <div className="subheader">
                     <div>
-                        <img src={assessmentIcon} />
-                        <h4>Patient Assessment</h4>
+                        <img src={Lab_RadIcon} />
+                        <h4>{value === 3 ? "Lab Request" : value === 4 ? "Radiology Request" : "Lab / Rad Request"}</h4>
                     </div>
 
                     <div>
                         <Button
-                            disabled={enableAssessment}
+                            disabled={enableForm}
                             onClick={TriageAssessment}
                             style={styles.stylesForButton}
                             variant="contained"
@@ -1288,7 +1290,7 @@ function PatientAssessment(props) {
                                     backgroundColor: value === 3 ? "#2c6ddd" : undefined,
                                 }}
                                 label="Lab"
-                                disabled
+                                disabled={enableForm}
                             />
                             <Tab
                                 style={{
@@ -1298,7 +1300,7 @@ function PatientAssessment(props) {
                                     backgroundColor: value === 4 ? "#2c6ddd" : undefined,
                                 }}
                                 label="Rad"
-                                disabled
+                                disabled={enableForm}
                             />
                             <Tab
                                 style={{
@@ -1389,7 +1391,8 @@ function PatientAssessment(props) {
                                 </div>
                             </div>
                         </div>
-                    ) : value === 2 ? (
+                    ) :  */}
+                    {/* value === 2 ? (
                         <div
                             style={{ flex: 4, display: "flex", flexDirection: "column" }}
                             className="container-fluid"
@@ -1409,32 +1412,9 @@ function PatientAssessment(props) {
                                         undefined
                                     )}
                             </div>
-
-                            <div className="row" style={{ marginBottom: "25px" }}>
-                                <div className="col-md-6 col-sm-6 col-6">
-                                    <img
-                                        onClick={() => props.history.goBack()}
-                                        src={Back}
-                                        style={{ width: 45, height: 35, cursor: "pointer" }}
-                                    />
-                                </div>
-                                <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
-                                    <Button
-                                        onClick={addNewRequest}
-                                        style={styles.stylesForButton}
-                                        variant="contained"
-                                        color="primary"
-                                    >
-                                        <img className="icon-style" src={plus_icon} />
-                        &nbsp;&nbsp;
-                        <strong style={{ fontSize: "12px" }}>
-                                            Pharmacy Request
-                        </strong>
-                                    </Button>
-                                </div>
-                            </div>
                         </div>
-                    ) : value === 3 ? (
+                        )  */}
+                    {value === 3 ? (
                         <div
                             style={{ flex: 4, display: "flex", flexDirection: "column" }}
                             // className={`container ${classes.root}`}
@@ -1448,24 +1428,25 @@ function PatientAssessment(props) {
                                         ...styles.textFieldPadding,
                                     }}
                                 >
-                                    <AutoComplete
-                                        id="tags-outlined"
-                                        getOptionLabel={(option) => option.title}
-                                        filterSelectedOptions
-                                        renderInput={(params) => (
-                                            <TextField
-                                                {...params}
-                                                variant="outlined"
-                                                label="Service Name"
-                                                placeholder="Search Service Name"
-                                            />
-                                        )}
+                                    <TextField
+                                        required
+                                        disabled={enableForm}
+                                        label='Lab Test'
+                                        name={'searchQuery'}
+                                        value={searchQuery}
+                                        onChange={handleSearch}
+                                        className='textInputStyle'
+                                        variant='filled'
+                                        InputProps={{
+                                            className: classes.input,
+                                            classes: { input: classes.input },
+                                            disableUnderline:true
+                                        }}
                                     />
                                 </div>
                             </div>
 
                             {searchQuery ? (
-                                // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
                                 <div style={{ zIndex: 10 }}>
                                     <Paper>
                                         {itemFoundSuccessfull ? (
@@ -1478,7 +1459,7 @@ function PatientAssessment(props) {
                                                             <TableCell>Price</TableCell>
                                                             <TableCell align="center">
                                                                 Description
-                                                                </TableCell>
+                                                                    </TableCell>
                                                         </TableRow>
                                                     </TableHead>
 
@@ -1528,7 +1509,6 @@ function PatientAssessment(props) {
                                         label="Selected Service"
                                         name={"labServiceName"}
                                         value={labServiceName}
-                                        // error={labServiceName === '' && isFormSubmitted}
                                         onChange={onChangeValue}
                                         className="textInputStyle"
                                         variant="filled"
@@ -1552,7 +1532,7 @@ function PatientAssessment(props) {
                                         fullWidth
                                     >
                                         Add
-                      </Button>
+                          </Button>
                                 </div>
                             </div>
 
@@ -1573,14 +1553,7 @@ function PatientAssessment(props) {
                             </div>
 
                             <div className="row" style={{ marginBottom: "25px" }}>
-                                <div className="col-md-6 col-sm-6 col-6">
-                                    <img
-                                        onClick={() => props.history.goBack()}
-                                        src={Back}
-                                        style={{ width: 45, height: 35, cursor: "pointer" }}
-                                    />
-                                </div>
-                                <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
+                                <div className="col-md-12 col-sm-12 col-12 d-flex justify-content-end">
                                     <Button
                                         onClick={saveLabReq}
                                         style={styles.stylesForButton}
@@ -1595,7 +1568,6 @@ function PatientAssessment(props) {
                     ) : value === 4 ? (
                         <div
                             style={{ flex: 4, display: "flex", flexDirection: "column" }}
-                            // className={`container ${classes.root}`}
                             className="container-fluid"
                         >
                             <div style={{ marginTop: "20px" }} className="row">
@@ -1608,16 +1580,16 @@ function PatientAssessment(props) {
                                 >
                                     <TextField
                                         required
-                                        label="Service Name"
+                                        label="Radiology / Imaging"
                                         name={"searchRadioQuery"}
                                         value={searchRadioQuery}
-                                        // error={searchRadioQuery === '' && isFormSubmitted}
                                         onChange={handleRadioSearch}
                                         className="textInputStyle"
                                         variant="filled"
                                         InputProps={{
                                             className: classes.input,
                                             classes: { input: classes.input },
+                                            disableUnderline:true
                                         }}
                                     />
                                 </div>
@@ -1637,7 +1609,7 @@ function PatientAssessment(props) {
                                                             <TableCell>Price</TableCell>
                                                             <TableCell align="center">
                                                                 Description
-                                  </TableCell>
+                                      </TableCell>
                                                         </TableRow>
                                                     </TableHead>
 
@@ -1711,7 +1683,7 @@ function PatientAssessment(props) {
                                         fullWidth
                                     >
                                         Add
-                      </Button>
+                                    </Button>
                                 </div>
                             </div>
 
@@ -1732,14 +1704,7 @@ function PatientAssessment(props) {
                             </div>
 
                             <div className="row" style={{ marginBottom: "25px" }}>
-                                <div className="col-md-6 col-sm-6 col-6">
-                                    <img
-                                        onClick={() => props.history.goBack()}
-                                        src={Back}
-                                        style={{ width: 45, height: 35, cursor: "pointer" }}
-                                    />
-                                </div>
-                                <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
+                                <div className="col-md-12 col-sm-12 col-12 d-flex justify-content-end">
                                     <Button
                                         onClick={saveRadioReq}
                                         style={styles.stylesForButton}
@@ -1751,172 +1716,175 @@ function PatientAssessment(props) {
                                 </div>
                             </div>
                         </div>
-                    ) : value === 5 ? (
-                        <div
-                            style={{ flex: 4, display: "flex", flexDirection: "column" }}
-                            // className={`container ${classes.root}`}
-                            className="container-fluid"
-                        >
-                            <div style={{ marginTop: "20px" }} className="row">
-                                <div
-                                    className="col-md-12 col-sm-12 col-12"
-                                    style={{
-                                        ...styles.inputContainerForTextField,
-                                        ...styles.textFieldPadding,
-                                    }}
-                                >
-                                    <TextField
-                                        required
-                                        label="Service Name"
-                                        name={"searchNurseQuery"}
-                                        value={searchNurseQuery}
-                                        // error={searchNurseQuery === '' && isFormSubmitted}
-                                        onChange={handleNurseSearch}
-                                        className="textInputStyle"
-                                        variant="filled"
-                                        InputProps={{
-                                            className: classes.input,
-                                            classes: { input: classes.input },
-                                        }}
-                                    />
-                                </div>
-                            </div>
-                            {searchNurseQuery ? (
-                                // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
-                                <div style={{ zIndex: 10 }}>
-                                    <Paper>
-                                        {nurseItemFoundSuccessfull ? (
-                                            nurseItemFound && (
-                                                <Table size="small">
-                                                    <TableHead>
-                                                        <TableRow>
-                                                            <TableCell>Service Name</TableCell>
-                                                            <TableCell>Service Number</TableCell>
-                                                            <TableCell>Price</TableCell>
-                                                            <TableCell align="center">
-                                                                Description
-                                  </TableCell>
-                                                        </TableRow>
-                                                    </TableHead>
-                                                    <TableBody>
-                                                        {nurseItemFound.map((i, index) => {
-                                                            return (
-                                                                <TableRow
-                                                                    key={i.serviceNo}
-                                                                    onClick={() => handleAddNurseItem(i)}
-                                                                    style={{ cursor: "pointer" }}
-                                                                >
-                                                                    <TableCell>{i.name}</TableCell>
-                                                                    <TableCell>{i.serviceNo}</TableCell>
-                                                                    <TableCell>{i.price}</TableCell>
-                                                                    <TableCell>{i.description}</TableCell>
-                                                                </TableRow>
-                                                            );
-                                                        })}
-                                                    </TableBody>
-                                                </Table>
-                                            )
-                                        ) : (
-                                                <h4
-                                                    style={{ textAlign: "center" }}
-                                                    onClick={() => setSearchNurseQuery("")}
-                                                >
-                                                    Service Not Found
-                                                </h4>
-                                            )}
-                                    </Paper>
-                                </div>
-                            ) : (
-                                    undefined
-                                )}
-                            <div style={{ marginTop: "20px" }} className="row">
-                                <div
-                                    className="col-md-10 col-sm-10 col-6"
-                                    style={{
-                                        ...styles.inputContainerForTextField,
-                                        ...styles.textFieldPadding,
-                                    }}
-                                >
-                                    <TextField
-                                        required
-                                        label="Selected Service"
-                                        name={"nurseServiceName"}
-                                        value={nurseServiceName}
-                                        // error={nurseServiceName === '' && isFormSubmitted}
-                                        onChange={onChangeValue}
-                                        className="textInputStyle"
-                                        variant="filled"
-                                        InputProps={{
-                                            className: classes.input,
-                                            classes: { input: classes.input },
-                                        }}
-                                    />
-                                </div>
-                                <div className="col-md-2 col-sm-2 col-6">
-                                    <Button
-                                        style={{
-                                            ...styles.stylesForButton,
-                                            marginTop: "25px",
-                                            backgroundColor: "#ad6bbf",
-                                        }}
-                                        disabled={!addNurseRequest}
-                                        onClick={addSelectedNurseItem}
-                                        variant="contained"
-                                        color="primary"
-                                        fullWidth
-                                    >
-                                        Add
-                      </Button>
-                                </div>
-                            </div>
-                            <div className="row" style={{ marginTop: "20px" }}>
-                                {nurseService !== 0 ? (
-                                    <CustomTable
-                                        tableData={nurseService}
-                                        tableDataKeys={tableDataKeysForNurse}
-                                        tableHeading={tableHeadingForNurse}
-                                        handleView={viewItem}
-                                        action={actions}
-                                        borderBottomColor={"#60D69F"}
-                                        borderBottomWidth={20}
-                                    />
-                                ) : (
-                                        undefined
-                                    )}
-                            </div>
-                            <div className="row" style={{ marginBottom: "25px" }}>
-                                <div className="col-md-6 col-sm-6 col-6">
-                                    <img
-                                        onClick={() => props.history.goBack()}
-                                        src={Back}
-                                        style={{ width: 45, height: 35, cursor: "pointer" }}
-                                    />
-                                </div>
-                                <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
-                                    <Button
-                                        onClick={saveNurseReq}
-                                        style={styles.stylesForButton}
-                                        variant="contained"
-                                        color="primary"
-                                    >
-                                        <strong style={{ fontSize: "12px" }}>Save</strong>
-                                    </Button>
-                                </div>
-                            </div>
-                        </div>
-                    ) : (
-                        undefined
-                    )} */}
+                    )
+                            //     : value === 5 ? (
+                            //         <div
+                            //             style={{ flex: 4, display: "flex", flexDirection: "column" }}
+                            //             // className={`container ${classes.root}`}
+                            //             className="container-fluid"
+                            //         >
+                            //             <div style={{ marginTop: "20px" }} className="row">
+                            //                 <div
+                            //                     className="col-md-12 col-sm-12 col-12"
+                            //                     style={{
+                            //                         ...styles.inputContainerForTextField,
+                            //                         ...styles.textFieldPadding,
+                            //                     }}
+                            //                 >
+                            //                     <TextField
+                            //                         required
+                            //                         label="Service Name"
+                            //                         name={"searchNurseQuery"}
+                            //                         value={searchNurseQuery}
+                            //                         // error={searchNurseQuery === '' && isFormSubmitted}
+                            //                         onChange={handleNurseSearch}
+                            //                         className="textInputStyle"
+                            //                         variant="filled"
+                            //                         InputProps={{
+                            //                             className: classes.input,
+                            //                             classes: { input: classes.input },
+                            //                         }}
+                            //                     />
+                            //                 </div>
+                            //             </div>
+                            //             {searchNurseQuery ? (
+                            //                 // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
+                            //                 <div style={{ zIndex: 10 }}>
+                            //                     <Paper>
+                            //                         {nurseItemFoundSuccessfull ? (
+                            //                             nurseItemFound && (
+                            //                                 <Table size="small">
+                            //                                     <TableHead>
+                            //                                         <TableRow>
+                            //                                             <TableCell>Service Name</TableCell>
+                            //                                             <TableCell>Service Number</TableCell>
+                            //                                             <TableCell>Price</TableCell>
+                            //                                             <TableCell align="center">
+                            //                                                 Description
+                            //                   </TableCell>
+                            //                                         </TableRow>
+                            //                                     </TableHead>
+                            //                                     <TableBody>
+                            //                                         {nurseItemFound.map((i, index) => {
+                            //                                             return (
+                            //                                                 <TableRow
+                            //                                                     key={i.serviceNo}
+                            //                                                     onClick={() => handleAddNurseItem(i)}
+                            //                                                     style={{ cursor: "pointer" }}
+                            //                                                 >
+                            //                                                     <TableCell>{i.name}</TableCell>
+                            //                                                     <TableCell>{i.serviceNo}</TableCell>
+                            //                                                     <TableCell>{i.price}</TableCell>
+                            //                                                     <TableCell>{i.description}</TableCell>
+                            //                                                 </TableRow>
+                            //                                             );
+                            //                                         })}
+                            //                                     </TableBody>
+                            //                                 </Table>
+                            //                             )
+                            //                         ) : (
+                            //                                 <h4
+                            //                                     style={{ textAlign: "center" }}
+                            //                                     onClick={() => setSearchNurseQuery("")}
+                            //                                 >
+                            //                                     Service Not Found
+                            //                                 </h4>
+                            //                             )}
+                            //                     </Paper>
+                            //                 </div>
+                            //             ) : (
+                            //                     undefined
+                            //                 )}
+                            //             <div style={{ marginTop: "20px" }} className="row">
+                            //                 <div
+                            //                     className="col-md-10 col-sm-10 col-6"
+                            //                     style={{
+                            //                         ...styles.inputContainerForTextField,
+                            //                         ...styles.textFieldPadding,
+                            //                     }}
+                            //                 >
+                            //                     <TextField
+                            //                         required
+                            //                         label="Selected Service"
+                            //                         name={"nurseServiceName"}
+                            //                         value={nurseServiceName}
+                            //                         // error={nurseServiceName === '' && isFormSubmitted}
+                            //                         onChange={onChangeValue}
+                            //                         className="textInputStyle"
+                            //                         variant="filled"
+                            //                         InputProps={{
+                            //                             className: classes.input,
+                            //                             classes: { input: classes.input },
+                            //                         }}
+                            //                     />
+                            //                 </div>
+                            //                 <div className="col-md-2 col-sm-2 col-6">
+                            //                     <Button
+                            //                         style={{
+                            //                             ...styles.stylesForButton,
+                            //                             marginTop: "25px",
+                            //                             backgroundColor: "#ad6bbf",
+                            //                         }}
+                            //                         disabled={!addNurseRequest}
+                            //                         onClick={addSelectedNurseItem}
+                            //                         variant="contained"
+                            //                         color="primary"
+                            //                         fullWidth
+                            //                     >
+                            //                         Add
+                            //       </Button>
+                            //                 </div>
+                            //             </div>
+                            //             <div className="row" style={{ marginTop: "20px" }}>
+                            //                 {nurseService !== 0 ? (
+                            //                     <CustomTable
+                            //                         tableData={nurseService}
+                            //                         tableDataKeys={tableDataKeysForNurse}
+                            //                         tableHeading={tableHeadingForNurse}
+                            //                         handleView={viewItem}
+                            //                         action={actions}
+                            //                         borderBottomColor={"#60D69F"}
+                            //                         borderBottomWidth={20}
+                            //                     />
+                            //                 ) : (
+                            //                         undefined
+                            //                     )}
+                            //             </div>
+                            //             <div className="row" style={{ marginBottom: "25px" }}>
+                            //                 <div className="col-md-6 col-sm-6 col-6">
+                            //                     <img
+                            //                         onClick={() => props.history.goBack()}
+                            //                         src={Back}
+                            //                         style={{ width: 45, height: 35, cursor: "pointer" }}
+                            //                     />
+                            //                 </div>
+                            //                 <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
+                            //                     <Button
+                            //                         onClick={saveNurseReq}
+                            //                         style={styles.stylesForButton}
+                            //                         variant="contained"
+                            //                         color="primary"
+                            //                     >
+                            //                         <strong style={{ fontSize: "12px" }}>Save</strong>
+                            //                     </Button>
+                            //                 </div>
+                            //             </div>
+                            //         </div>
+                            // )
+                            : (
+                                undefined
+                            )}
 
-                    {/* {openItemDialog ? (
-                <ViewSingleRequest
-                  item={item}
-                  openItemDialog={openItemDialog}
-                  viewItem={viewItem}
-                />
-              ) : (
-                undefined
-              )} */}
+                    {openItemDialog ? (
+                        <ViewSingleRequest
+                            item={item}
+                            openItemDialog={openItemDialog}
+                            viewItem={viewItem}
+                        />
+                    ) : (
+                            undefined
+                        )}
+
                 </div>
                 {/* 
                 <Dialog
@@ -2364,7 +2332,7 @@ function PatientAssessment(props) {
                         </div>
                     </DialogContent>
                 </Dialog> */}
-                <div className="container-fluid" style={{ marginBottom: "15px", marginTop: '25px' }}>
+                <div className="container-fluid" style={{ marginBottom: "25px", marginTop: '25px' }}>
                     <div className="row">
                         <img
                             onClick={() => props.history.goBack()}
@@ -2379,4 +2347,4 @@ function PatientAssessment(props) {
         </div>
     );
 }
-export default PatientAssessment;
+export default LabRadRequest;
