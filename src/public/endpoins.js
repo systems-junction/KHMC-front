@@ -40,11 +40,14 @@ export const getSearchedNonPharmaceuticalItemsUrl = `${baseUrl}/item/getsearched
 export const getPatientById = `${baseUrl}/patient/getpatient/:id`
 export const getPatientByProfileNo = `${baseUrl}/patient/getpatientbyprofileno`
 export const getPatientUrl = `${baseUrl}/patient/getpatient`
+export const getPatientUrlById = `${baseUrl}/patient/getpatient`
 export const addPatientUrl = `${baseUrl}/patient/addpatient`
 export const deletePatientUrl = `${baseUrl}/patient/deletepatient`
 export const updatePatientUrl = `${baseUrl}/patient/updatepatient`
 export const generateEDR = `${baseUrl}/edr/addedr`
 export const generateIPR = `${baseUrl}/ipr/addipr`
+export const searchpatient = `${baseUrl}/patient/searchpatient`
+export const updateEdrIpr = `${baseUrl}/patient/updateEdrIpr`
 
 // reimbursement endpoints
 export const getSearchedpatient = `${baseUrl}/reimbursementclaim/getpatient`
@@ -344,4 +347,30 @@ export const addPatientFHIRUrl = `${baseUrl}/patient/addpatientfhir`
 export const updatePatientFHIRUrl = `${baseUrl}/patient/updatepatientfhir`
 
 // get RRIPR
-export const getPatientRRIPR = `${baseUrl}/ipr/getpatientrripr`
+export const getRRPatient = `${baseUrl}/ipr/getrrpatient`
+export const getRRPatientById = `${baseUrl}/ipr/getrrpatientbyid`
+
+// get RR
+export const getRRByIdURL = `${baseUrl}/ipr/getrrbyid`
+export const updateRRByIdURL = `${baseUrl}/ipr/updaterr`
+
+// get LR
+export const getLRPatient = `${baseUrl}/ipr/getlrpatient`
+export const getLRByIdURL = `${baseUrl}/ipr/getlrbyid`
+export const updateLRByIdURL = `${baseUrl}/ipr/updatelr`
+
+// get PHR
+export const getPHRPatient = `${baseUrl}/ipr/getphrpatient`
+export const getPHRByIdURL = `${baseUrl}/ipr/getphrbyid`
+export const updatePHRRByIdURL = `${baseUrl}/ipr/updatephrbyid`
+
+// get Discharge
+export const getDischarge = `${baseUrl}/ipr/getdischarge`
+export const getDischargeByIdURL = `${baseUrl}/ipr/getdischargebyid`
+export const updateDischargeByIdURL = `${baseUrl}/ipr/updatedischargebyid`
+
+// getEDRIPRByID
+export const getIPREDRById = `${baseUrl}/ipr/getipredrbyid`
+
+// searchPatients
+export const searchPatients = `${baseUrl}/patient/searchpatient`

@@ -117,26 +117,21 @@ const tableHeadingForNurse = [
   'Action',
 ]
 const tableDataKeysForNurse = [
-  "serviceCode",
-  "serviceName",
-  "requesterName",
-  "status",
-];
+  'serviceCode',
+  'serviceName',
+  'requesterName',
+  'status',
+]
 const tableHeadingForFollowUp = [
-  "Date/Time",
-  "Description",
-  "Doctor",
-  "Status",
-  "Action",
-];
-const tableDataKeysForFollowUp = [
-  "date",
-  "description",
-  "doctorName",
-  "status",
-];
-const actions = { view: true};
-const followUpactions = { view: true,add:true};
+  'Date/Time',
+  'Description',
+  'Doctor',
+  'Status',
+  'Action',
+]
+const tableDataKeysForFollowUp = ['date', 'description', 'doctorName', 'status']
+const actions = { view: true }
+const followUpactions = { view: true, add: true }
 
 const styles = {
   patientDetails: {
@@ -223,10 +218,10 @@ function AddEditPurchaseRequest(props) {
 
     pharmacyRequestArray: '',
 
-    nurseService: "",
+    nurseService: '',
 
-    followUpArray:""
-  };
+    followUpArray: '',
+  }
 
   function reducer(state, { field, value }) {
     return {
@@ -270,8 +265,8 @@ function AddEditPurchaseRequest(props) {
 
     pharmacyRequestArray,
     nurseService,
-    followUpArray
-  } = state;
+    followUpArray,
+  } = state
 
   const onChangeValue = (e) => {
     dispatch({ field: e.target.name, value: e.target.value })
@@ -340,21 +335,18 @@ function AddEditPurchaseRequest(props) {
             setIsLoading(false)
 
             Object.entries(res.data.data[0]).map(([key, val]) => {
-              if (val && typeof val === "object") {
-                if (key === "patientId") {
-                  dispatch({ field: "patientId", value: val._id });
-                } else if (key === "labRequest") {
-                  dispatch({ field: "labRequestArray", value: val });
-                } else if (key === "radiologyRequest") {
-                  dispatch({ field: "radiologyRequestArray", value: val });
-                } else if (key === "nurseService") {
-                  dispatch({ field: "nurseRequestArray", value: val });
-                } 
-                else if (key === "followUp") 
-                {
-                  dispatch({ field: "followUpArray", value: val });
-                }
-                else if (key === "consultationNote") {
+              if (val && typeof val === 'object') {
+                if (key === 'patientId') {
+                  dispatch({ field: 'patientId', value: val._id })
+                } else if (key === 'labRequest') {
+                  dispatch({ field: 'labRequestArray', value: val })
+                } else if (key === 'radiologyRequest') {
+                  dispatch({ field: 'radiologyRequestArray', value: val })
+                } else if (key === 'nurseService') {
+                  dispatch({ field: 'nurseRequestArray', value: val })
+                } else if (key === 'followUp') {
+                  dispatch({ field: 'followUpArray', value: val })
+                } else if (key === 'consultationNote') {
                   Object.entries(val).map(([key1, val1]) => {
                     if (key1 == 'requester') {
                       dispatch({ field: 'requester', value: val1._id })
@@ -493,28 +485,28 @@ function AddEditPurchaseRequest(props) {
     }
   }
 
-  function viewFollowUp(item){
-    let path = `viewIPR/followUp`;
+  function viewFollowUp(item) {
+    let path = `viewIPR/followUp`
     props.history.push({
       pathname: path,
       state: {
-        comingFor: "view",
+        comingFor: 'view',
         selectedItem: selectedItem,
-        followUpItem:item
+        followUpItem: item,
       },
-    });
+    })
   }
 
-  function addFollowUp(item){
-    let path = `viewIPR/followUp`;
+  function addFollowUp(item) {
+    let path = `viewIPR/followUp`
     props.history.push({
       pathname: path,
       state: {
-        comingFor: "add",
+        comingFor: 'add',
         selectedItem: selectedItem,
-        followUpItem:item
+        followUpItem: item,
       },
-    });
+    })
   }
 
   function addConsultRequest() {
@@ -1072,10 +1064,10 @@ function AddEditPurchaseRequest(props) {
               height: '20px',
             }}
           />
-          <div className="container-fluid" style={styles.patientDetails}>
-            <div className="row">
-              <div className="col-md-12">
-                <h4 style={{ color: "blue", fontWeight: "600" }}>
+          <div className='container-fluid' style={styles.patientDetails}>
+            <div className='row'>
+              <div className='col-md-12'>
+                <h4 style={{ color: 'blue', fontWeight: '600' }}>
                   Patient Details
                 </h4>
               </div>
@@ -1222,20 +1214,20 @@ function AddEditPurchaseRequest(props) {
               />
               <Tab
                 style={{
-                  color: "white",
+                  color: 'white',
                   borderRadius: 15,
-                  outline: "none",
-                  backgroundColor: value === 6 ? "#2c6ddd" : undefined,
+                  outline: 'none',
+                  backgroundColor: value === 6 ? '#2c6ddd' : undefined,
                 }}
-                label="Follow Up"
+                label='Follow Up'
               />
             </Tabs>
           </div>
 
           {value === 0 ? (
             <div
-              style={{ flex: 4, display: "flex", flexDirection: "column" }}
-              className="container-fluid"
+              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              className='container-fluid'
             >
               <div className='row' style={{ marginTop: '20px' }}>
                 {residentNoteArray !== 0 ? (
@@ -1293,8 +1285,8 @@ function AddEditPurchaseRequest(props) {
             </div>
           ) : value === 1 ? (
             <div
-              style={{ flex: 4, display: "flex", flexDirection: "column" }}
-              className="container-fluid"
+              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              className='container-fluid'
             >
               <div className='row' style={{ marginTop: '20px' }}>
                 {consultationNoteArray !== 0 ? (
@@ -1349,8 +1341,8 @@ function AddEditPurchaseRequest(props) {
             </div>
           ) : value === 2 ? (
             <div
-              style={{ flex: 4, display: "flex", flexDirection: "column" }}
-              className="container-fluid"
+              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              className='container-fluid'
             >
               <div className='row' style={{ marginTop: '20px' }}>
                 {pharmacyRequestArray !== 0 ? (
@@ -1394,8 +1386,8 @@ function AddEditPurchaseRequest(props) {
             </div>
           ) : value === 3 ? (
             <div
-              style={{ flex: 4, display: "flex", flexDirection: "column" }}
-              className="container-fluid"
+              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              className='container-fluid'
             >
               <div style={{ marginTop: '20px' }} className='row'>
                 <div className='col-md-12 col-sm-12 col-12'>
@@ -1528,8 +1520,8 @@ function AddEditPurchaseRequest(props) {
             </div>
           ) : value === 4 ? (
             <div
-              style={{ flex: 4, display: "flex", flexDirection: "column" }}
-              className="container-fluid"
+              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              className='container-fluid'
             >
               <div style={{ marginTop: '20px' }} className='row'>
                 <div className='col-md-12 col-sm-12 col-12'>
@@ -1662,8 +1654,8 @@ function AddEditPurchaseRequest(props) {
             </div>
           ) : value === 5 ? (
             <div
-              style={{ flex: 4, display: "flex", flexDirection: "column" }}
-              className="container-fluid"
+              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              className='container-fluid'
             >
               <div style={{ marginTop: '20px' }} className='row'>
                 <div className='col-md-12 col-sm-12 col-12'>
@@ -1795,12 +1787,12 @@ function AddEditPurchaseRequest(props) {
                 </div>
               </div>
             </div>
-          ): value === 6 ? (
+          ) : value === 6 ? (
             <div
-              style={{ flex: 4, display: "flex", flexDirection: "column" }}
-              className="container-fluid"
+              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              className='container-fluid'
             >
-              <div className="row" style={{ marginTop: "20px" }}>
+              <div className='row' style={{ marginTop: '20px' }}>
                 {followUpArray !== 0 ? (
                   <CustomTable
                     tableData={followUpArray}
@@ -1809,28 +1801,28 @@ function AddEditPurchaseRequest(props) {
                     handleView={viewFollowUp}
                     handleAdd={addFollowUp}
                     action={followUpactions}
-                    borderBottomColor={"#60d69f"}
+                    borderBottomColor={'#60d69f'}
                     borderBottomWidth={20}
                   />
                 ) : (
                   undefined
                 )}
               </div>
-  
-              <div className="row" style={{ marginBottom: "25px" }}>
-                <div className="col-md-6 col-sm-6 col-6">
+
+              <div className='row' style={{ marginBottom: '25px' }}>
+                <div className='col-md-6 col-sm-6 col-6'>
                   <img
                     onClick={() => props.history.goBack()}
                     src={Back}
-                    style={{ width: 45, height: 35, cursor: "pointer" }}
+                    style={{ width: 45, height: 35, cursor: 'pointer' }}
                   />
                 </div>
               </div>
             </div>
           ) : (
             <div
-              style={{ flex: 4, display: "flex", flexDirection: "column" }}
-              className="container-fluid"
+              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              className='container-fluid'
             ></div>
           )}
 

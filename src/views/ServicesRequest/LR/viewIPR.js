@@ -7,9 +7,9 @@ import InputLabel from '@material-ui/core/InputLabel'
 import Button from '@material-ui/core/Button'
 import axios from 'axios'
 import {
-  getLRIPRById,
+  getLRByIdURL,
   uploadsUrl,
-  updateLRIPRById,
+  updateLRByIdURL,
 } from '../../../public/endpoins'
 import cookie from 'react-cookies'
 import Header from '../../../components/Header/Header'
@@ -142,6 +142,7 @@ function AddEditPurchaseRequest(props) {
     date: '',
     results: '',
     sampleID: '',
+    comments:''
   }
 
   function reducer(state, { field, value }) {
@@ -153,7 +154,7 @@ function AddEditPurchaseRequest(props) {
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const { name, price, status, date, results, sampleID } = state
+  const { name, price, status, date, results, sampleID, comments } = state
 
   const onChangeValue = (e) => {
     dispatch({ field: e.target.name, value: e.target.value })
@@ -177,7 +178,7 @@ function AddEditPurchaseRequest(props) {
 
   const getLRByIdURI = (id) => {
     axios
-      .get(getLRIPRById + '/' + id)
+      .get(getLRByIdURL + '/' + id)
       .then((res) => {
         if (res.data.success) {
           if (res.data.data) {
@@ -216,13 +217,14 @@ function AddEditPurchaseRequest(props) {
     }
     const params = {
       IPRId: iprId,
+      EDRId: iprId,
       labRequestId: lrId,
       status: status,
     }
     formData.append('data', JSON.stringify(params))
     // console.log('PARAMSS ', params)
     axios
-      .put(updateLRIPRById, formData, {
+      .put(updateLRByIdURL, formData, {
         headers: {
           accept: 'application/json',
           'Accept-Language': 'en-US,en;q=0.8',
@@ -231,6 +233,7 @@ function AddEditPurchaseRequest(props) {
       })
       .then((res) => {
         if (res.data.success) {
+          console.log('res', res.data)
           setOpenNotification(true)
           setsuccessMsg('Submitted successfully')
         } else {
@@ -248,7 +251,7 @@ function AddEditPurchaseRequest(props) {
     getLRByIdURI(props.history.location.state.selectedItem._id)
 
     setlrId(props.history.location.state.selectedItem._id)
-    setiprId(props.history.location.state.selectedItem.iprId._id)
+    setiprId(props.history.location.state.selectedItem.edipId._id)
     setSelectedItem(props.history.location.state.selectedItem)
     setrequestNo(props.history.location.state.selectedItem.requestNo)
     setSelectedPatient(props.history.location.state.selectedItem.patientId)
@@ -633,10 +636,10 @@ function AddEditPurchaseRequest(props) {
                     }}
                   >
                     <TextField
-                      // disabled={true}
+                      disabled={true}
                       label='Comments / Notes'
                       name={'comments'}
-                      // value={comments}
+                      value={comments}
                       // onChange={onChangeValue}
                       variant='filled'
                       className='textInputStyle'

@@ -1,10 +1,10 @@
-import React from "react";
-import cookie from "react-cookies";
-import { Route, Switch, Router, Redirect } from "react-router-dom";
-import { createBrowserHistory } from "history";
-import NotFound from "../components/NotFound/NotFound";
+import React from 'react'
+import cookie from 'react-cookies'
+import { Route, Switch, Router, Redirect } from 'react-router-dom'
+import { createBrowserHistory } from 'history'
+import NotFound from '../components/NotFound/NotFound'
 
-import ResidentDoctor from "../views/ResidentDoctor/ResidentDoctor";
+import ResidentDoctor from '../views/ResidentDoctor/ResidentDoctor'
 
 // import EDR from './edrRoutes'
 // import IPR from './iprRoutes'
@@ -16,43 +16,45 @@ import ResidentDoctor from "../views/ResidentDoctor/ResidentDoctor";
 // import IPRTriageAndAssessment from '../views/ServicesRequest/PHR/IPRTriageAndAssessment'
 
 // import ViewIPR from '../views/ResidentDoctor/viewEDR'
-import EDR from "../views/ResidentDoctor/EDR/EDR";
-import ViewEDR from "../views/ResidentDoctor/EDR/viewEDR";
-import DischargeRequest from "../views/ResidentDoctor/EDR/DischargeRequest";
-import AddDischargeMed from "../views/ResidentDoctor/EDR/addDischargeMed";
-import AddEDR from "../views/ResidentDoctor/EDR/addEditEDR";
-import EDRTriageAndAssessment from "../views/ResidentDoctor/EDR/TriageAndAssessment";
+import EDR from '../views/ResidentDoctor/EDR/EDR'
+import ViewEDR from '../views/ResidentDoctor/EDR/viewEDR'
+import DischargeRequest from '../views/ResidentDoctor/EDR/DischargeRequest'
+import AddDischargeMed from '../views/ResidentDoctor/EDR/addDischargeMed'
+import AddEDR from '../views/ResidentDoctor/EDR/addEditEDR'
+import EDRTriageAndAssessment from '../views/ResidentDoctor/EDR/TriageAndAssessment'
 
-import IPR from "../views/ResidentDoctor/IPR/IPR";
-import ViewIPR from "../views/ResidentDoctor/IPR/viewIPR";
-import iprDischargeRequest from "../views/ResidentDoctor/IPR/DischargeRequest";
-import iprAddDischargeMed from "../views/ResidentDoctor/IPR/addDischargeMed";
-import addViewFollowUp from "../views/ResidentDoctor/IPR/addViewFollowUp";
+import IPR from '../views/ResidentDoctor/IPR/IPR'
+import PA from '../views/ResidentDoctor/patientAssessment'
+import LabRadRequest from '../views/ResidentDoctor/labRadRequest'
+import ViewIPR from '../views/ResidentDoctor/IPR/viewIPR'
+import iprDischargeRequest from '../views/ResidentDoctor/IPR/DischargeRequest'
+import iprAddDischargeMed from '../views/ResidentDoctor/IPR/addDischargeMed'
+import addViewFollowUp from '../views/ResidentDoctor/IPR/addViewFollowUp'
 
-import AddIPR from "../views/ResidentDoctor/IPR/addEditIPR";
-import IPRTriageAndAssessment from "../views/ResidentDoctor/IPR/TriageAndAssessment";
+import AddIPR from '../views/ResidentDoctor/IPR/addEditIPR'
+import IPRTriageAndAssessment from '../views/ResidentDoctor/IPR/TriageAndAssessment'
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const [currentUser, setCurrentUser] = React.useState(
-    cookie.load("current_user")
-  );
+    cookie.load('current_user')
+  )
 
   return (
     <Route
       {...rest}
       render={(props) =>
-        currentUser.staffTypeId.type === "admin" ||
-        currentUser.staffTypeId.type === "Committe Member" ||
-        currentUser.staffTypeId.type === "Accounts Member" ||
-        currentUser.staffTypeId.type === "Warehouse Member" ? (
+        currentUser.staffTypeId.type === 'admin' ||
+        currentUser.staffTypeId.type === 'Committe Member' ||
+        currentUser.staffTypeId.type === 'Accounts Member' ||
+        currentUser.staffTypeId.type === 'Warehouse Member' ? (
           <Component {...props} />
         ) : (
-          <Redirect to="notfound" />
+          <Redirect to='notfound' />
         )
       }
     />
-  );
-};
+  )
+}
 
 class WMSRoutes extends React.PureComponent {
   render() {
@@ -70,6 +72,12 @@ class WMSRoutes extends React.PureComponent {
         />
         <Route exact path={`${this.props.match.url}/edr`} component={EDR} />
         <Route exact path={`${this.props.match.url}/ipr`} component={IPR} />
+        <Route exact path={`${this.props.match.url}/pa`} component={PA} />
+        <Route
+          exact
+          path={`${this.props.match.url}/labradrequest`}
+          component={LabRadRequest}
+        />
 
         <Route
           exact
@@ -167,10 +175,10 @@ class WMSRoutes extends React.PureComponent {
 
         <Route path={`${this.props.match.url}/notfound`} component={NotFound} />
 
-        <Route path="*" component={NotFound} />
+        <Route path='*' component={NotFound} />
       </Switch>
-    );
+    )
   }
 }
 
-export default WMSRoutes;
+export default WMSRoutes
