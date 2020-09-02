@@ -142,6 +142,7 @@ function AddEditPurchaseRequest(props) {
     date: '',
     results: '',
     sampleID: '',
+    comments:''
   }
 
   function reducer(state, { field, value }) {
@@ -153,7 +154,7 @@ function AddEditPurchaseRequest(props) {
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const { name, price, status, date, results, sampleID } = state
+  const { name, price, status, date, results, sampleID, comments } = state
 
   const onChangeValue = (e) => {
     dispatch({ field: e.target.name, value: e.target.value })
@@ -638,7 +639,7 @@ function AddEditPurchaseRequest(props) {
                       disabled={true}
                       label='Comments / Notes'
                       name={'comments'}
-                      // value={comments}
+                      value={comments}
                       // onChange={onChangeValue}
                       variant='filled'
                       className='textInputStyle'

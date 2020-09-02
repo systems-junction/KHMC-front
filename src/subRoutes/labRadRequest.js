@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom'
 import NotFound from '../components/NotFound/NotFound'
 import labRadRequest from '../views/LabRadRequest/labRadRequest'
 import triageAssessment from '../views/LabRadRequest/TriageAndAssessment'
+import viewLabRadReport from '../views/LabRadRequest/viewLabRadReport'
 
 class LabRadRequest extends React.PureComponent {
   render() {
@@ -16,6 +17,10 @@ class LabRadRequest extends React.PureComponent {
         <Route
           path={`${this.props.match.url}/triageAssessment`}
           component={triageAssessment}
+        />
+        <Route
+          path={`${this.props.match.url}/viewReport`}
+          component={viewLabRadReport}
         />
         <Route path='*' component={NotFound} />
       </Switch>
