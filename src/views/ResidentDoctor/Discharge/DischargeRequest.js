@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button'
 import cookie from 'react-cookies'
 import Header from '../../../components/Header/Header'
 import TextField from '@material-ui/core/TextField'
-import business_Unit from '../../../assets/img/Purchase Order.png'
+import business_Unit from '../../../assets/img/Doctor - Discharge.png'
 import Back from '../../../assets/img/Back_Arrow.png'
 import '../../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
 import Tabs from '@material-ui/core/Tabs'
@@ -444,7 +444,7 @@ function DischargeRequest(props) {
         <div className='subheader'>
           <div>
             <img src={business_Unit} />
-            <h4>IPR - Discharge Request</h4>
+            <h4>Discharge</h4>
           </div>
         </div>
 

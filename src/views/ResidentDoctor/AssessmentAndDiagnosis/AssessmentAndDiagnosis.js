@@ -16,7 +16,7 @@ import {
 } from '../../../public/endpoins'
 import cookie from 'react-cookies'
 import Header from '../../../components/Header/Header'
-import Lab_RadIcon from '../../../assets/img/Lab-Rad Request.png'
+import Lab_RadIcon from '../../../assets/img/Assessment & Diagnosis.png'
 import Back from '../../../assets/img/Back_Arrow.png'
 import '../../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
 import Tabs from '@material-ui/core/Tabs'
@@ -979,13 +979,7 @@ function LabRadRequest(props) {
         <div className='subheader'>
           <div>
             <img src={Lab_RadIcon} />
-            <h4>
-              {value === 3
-                ? 'Lab Request'
-                : value === 4
-                ? 'Radiology Request'
-                : 'Lab / Rad Request'}
-            </h4>
+            <h4>Assessment & Diagnosis</h4>
           </div>
 
           <div>

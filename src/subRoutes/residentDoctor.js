@@ -3,28 +3,16 @@ import cookie from 'react-cookies'
 import { Route, Switch, Router, Redirect } from 'react-router-dom'
 import { createBrowserHistory } from 'history'
 import NotFound from '../components/NotFound/NotFound'
-
 import ResidentDoctor from '../views/ResidentDoctor/ResidentDoctor'
-
-// import EDR from './edrRoutes'
-// import IPR from './iprRoutes'
-// import ViewIPR from '../views/ServicesRequest/PHR/viewIPR'
-// import ViewEDR from '../views/ServicesRequest/PHR/viewEDR'
-// import AddEDR from '../views/ServicesRequest/PHR/addEditEDR'
-// import AddIPR from '../views/ServicesRequest/PHR/addEditIPR'
-// import EDRTriageAndAssessment from '../views/ServicesRequest/PHR/EDRTriageAndAssessment'
-// import IPRTriageAndAssessment from '../views/ServicesRequest/PHR/IPRTriageAndAssessment'
-
-// import ViewIPR from '../views/ResidentDoctor/viewEDR'
 import EDR from '../views/ResidentDoctor/EDR/EDR'
 import ViewEDR from '../views/ResidentDoctor/EDR/viewEDR'
 import DischargeRequest from '../views/ResidentDoctor/EDR/DischargeRequest'
 import AddDischargeMed from '../views/ResidentDoctor/EDR/addDischargeMed'
 import AddEDR from '../views/ResidentDoctor/EDR/addEditEDR'
 import EDRTriageAndAssessment from '../views/ResidentDoctor/EDR/TriageAndAssessment'
-
 import IPR from '../views/ResidentDoctor/IPR/IPR'
 import LabRadRequest from '../views/ResidentDoctor/LabRadRequest/labRadRequest'
+import viewReport from '../views/ResidentDoctor/LabRadRequest/viewLabRadReport'
 import AssessmentAndDiagnosis from '../views/ResidentDoctor/AssessmentAndDiagnosis/AssessmentAndDiagnosis'
 import triageAssessment from '../views/ResidentDoctor/LabRadRequest/TriageAndAssessment'
 import ADtriageAssessment from '../views/ResidentDoctor/AssessmentAndDiagnosis/TriageAndAssessment'
@@ -35,7 +23,6 @@ import ViewIPR from '../views/ResidentDoctor/IPR/viewIPR'
 import iprDischargeRequest from '../views/ResidentDoctor/IPR/DischargeRequest'
 import iprAddDischargeMed from '../views/ResidentDoctor/IPR/addDischargeMed'
 import addViewFollowUp from '../views/ResidentDoctor/IPR/addViewFollowUp'
-
 import AddIPR from '../views/ResidentDoctor/IPR/addEditIPR'
 import IPRTriageAndAssessment from '../views/ResidentDoctor/IPR/TriageAndAssessment'
 
@@ -91,6 +78,12 @@ class WMSRoutes extends React.PureComponent {
 
         <Route
           exact
+          path={`${this.props.match.url}/labradrequest/viewReport`}
+          component={viewReport}
+        />
+
+        <Route
+          exact
           path={`${this.props.match.url}/assessmentdiagnosis`}
           component={AssessmentAndDiagnosis}
         />
@@ -137,12 +130,6 @@ class WMSRoutes extends React.PureComponent {
           component={ViewIPR}
         />
 
-        {/* <Route
-          exact
-          path={`${this.props.match.url}/ipr/viewIPR`}
-          component={ViewIPR}
-        />  */}
-
         <Route
           exact
           path={`${this.props.match.url}/edr/viewEDR`}
@@ -186,32 +173,6 @@ class WMSRoutes extends React.PureComponent {
           path={`${this.props.match.url}/ipr/viewIPR/TriageAndAssessment`}
           component={IPRTriageAndAssessment}
         />
-
-        {/* <Route
-          exact
-          path={`${this.props.match.url}/services`}
-          component={ServiceMgmt}
-        />
-
-        <Route
-          path={`${this.props.match.url}/services/radiology`}
-          component={RadiologyRoutes}
-        />
-
-        <Route path={`${this.props.match.url}/edr`} component={EmergencyDR} />
-
-        <Route
-          path={`${this.props.match.url}/patientListing`}
-          component={PatientListingRoutes}
-        />
-        <Route
-          path={`${this.props.match.url}/services/laboratory`}
-          component={LaboratoryRoutes}
-        />
-        <Route
-          path={`${this.props.match.url}/services/surgery`}
-          component={SurgeryRoutes}
-        /> */}
 
         <Route path={`${this.props.match.url}/notfound`} component={NotFound} />
 

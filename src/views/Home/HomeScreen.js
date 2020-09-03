@@ -34,6 +34,7 @@ import PreApproval from '../../assets/img/Pre-Approval.png'
 import IPR from '../../assets/img/IPR.png'
 import outPatient from '../../assets/img/OutPatient.png'
 import DM from '../../assets/img/Discharge Medication.png'
+import CN from "../../assets/img/Consultation_Notes.png";
 
 const admin = [
   { img: KHMC, text: "KHMC", path: "" },
@@ -162,6 +163,30 @@ const pharmacist = [
     path: '/home/rcm/sr/phr/dischargemedication/ipr',
   },
 ];
+
+const doctorPhysician = [
+  { img: KHMC, text: "KHMC", path: "" },
+  {
+    img: RCM,
+    text: "RCM",
+    path: "/home/rcm",
+  },
+  {
+    img: WMS,
+    text: "WMS",
+    path: "/home/wms",
+  },
+];
+
+const consultantSpecialist = [
+  { img: KHMC, text: "KHMC", path: "" },
+  {
+    img: CN,
+    text: "Consultation Notes",
+    path: "/home/rcm/ecr/cn",
+  },
+];
+
 
 const buHead = [
   { img: Control_Room, text: "Control Room", path: "" },
@@ -713,7 +738,11 @@ class HomeScreen extends React.Component {
                 : userType && userType.type === "Lab Technician"
                   ? labTechnician
                 : userType && userType.type === "Pharmacist"
-                  ? pharmacist             
+                  ? pharmacist
+                : userType && userType.type === "Doctor/Physician"
+                  ? doctorPhysician 
+                : userType && userType.type === "Consultant/Specialist"
+                  ? consultantSpecialist                 
                 : admin
           }
         />
