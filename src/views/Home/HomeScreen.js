@@ -34,6 +34,7 @@ import PreApproval from '../../assets/img/Pre-Approval.png'
 import IPR from '../../assets/img/IPR.png'
 import outPatient from '../../assets/img/OutPatient.png'
 import DM from '../../assets/img/Discharge Medication.png'
+import CN from "../../assets/img/Consultation_Notes.png";
 
 import wh_inventory from "../../assets/img/WH Inventory.png";
 import purchase_order from "../../assets/img/Purchase Order.png";
@@ -167,6 +168,30 @@ const pharmacist = [
     path: '/home/rcm/sr/phr/dischargemedication/ipr',
   },
 ];
+
+const doctorPhysician = [
+  { img: KHMC, text: "KHMC", path: "" },
+  {
+    img: RCM,
+    text: "RCM",
+    path: "/home/rcm",
+  },
+  {
+    img: WMS,
+    text: "WMS",
+    path: "/home/wms",
+  },
+];
+
+const consultantSpecialist = [
+  { img: KHMC, text: "KHMC", path: "" },
+  {
+    img: CN,
+    text: "Consultation Notes",
+    path: "/home/rcm/ecr/cn",
+  },
+];
+
 
 const buHead = [
   { img: Control_Room, text: "Control Room", path: "" },
@@ -747,9 +772,26 @@ class HomeScreen extends React.Component {
               // ? warehouseIncharge
               // : userType && userType.type === "FU Inventory Keeper"
               // ? fuInventoryKeeper
-            //  : userType && userType.type === "Warehouse Inventory Keeper"
-            //   ? warehouseInventoryKeeper
-              : admin
+                : userType && userType.type === "Resident Doctor"
+                  ? residentDoctor
+                : (userType && userType.type === "IPR Receptionist") ||
+                  (userType && userType.type === "EDR Receptionist")
+                  ? frontDesk
+                : userType && userType.type === "Insurance Department"
+                  ? insuranceDepartment
+                : userType && userType.type === "Registered Nurse"
+                  ? registeredNurse
+                : userType && userType.type === "Radiology/Imaging"
+                  ? radiologyImagingDepartment
+                : userType && userType.type === "Lab Technician"
+                  ? labTechnician
+                : userType && userType.type === "Pharmacist"
+                  ? pharmacist
+                : userType && userType.type === "Doctor/Physician"
+                  ? doctorPhysician 
+                : userType && userType.type === "Consultant/Specialist"
+                  ? consultantSpecialist                 
+                : admin
           }
         />
       </div>

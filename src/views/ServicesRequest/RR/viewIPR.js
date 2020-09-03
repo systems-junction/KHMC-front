@@ -9,8 +9,9 @@ import axios from 'axios'
 import {
   uploadsUrl,
   getRRIPRById,
-  updateRRIPRById,
-  getPatientRRIPR,
+  getRRByIdURL,
+  updateRRByIdURL,
+  getRRPatientById,
 } from '../../../public/endpoins'
 import cookie from 'react-cookies'
 import Header from '../../../components/Header/Header'
@@ -140,6 +141,7 @@ function AddEditPurchaseRequest(props) {
     lastName: '',
     insuranceId: '',
     requestNo: '',
+    comments: '',
   }
 
   function reducer(state, { field, value }) {
@@ -162,8 +164,8 @@ function AddEditPurchaseRequest(props) {
     lastName,
     insuranceId,
     requestNo,
+    comments,
   } = state
-
 
   const [, setCurrentUser] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
@@ -185,7 +187,7 @@ function AddEditPurchaseRequest(props) {
 
   const getLRByIdURI = (id) => {
     axios
-      .get(getRRIPRById + '/' + id)
+      .get(getRRByIdURL + '/' + id)
       .then((res) => {
         if (res.data.success) {
           if (res.data.data) {
@@ -224,13 +226,14 @@ function AddEditPurchaseRequest(props) {
     }
     const params = {
       IPRId: iprId,
+      EDRId: iprId,
       radiologyRequestId: rrId,
       status: status,
     }
     formData.append('data', JSON.stringify(params))
     console.log('PARAMSS ', params)
     axios
-      .put(updateRRIPRById, formData, {
+      .put(updateRRByIdURL, formData, {
         headers: {
           accept: 'application/json',
           'Accept-Language': 'en-US,en;q=0.8',
@@ -239,6 +242,7 @@ function AddEditPurchaseRequest(props) {
       })
       .then((res) => {
         if (res.data.success) {
+          console.log(res.data, 'res')
           setOpenNotification(true)
           setsuccessMsg('Submitted successfully')
         } else {
@@ -253,24 +257,26 @@ function AddEditPurchaseRequest(props) {
 
   useEffect(() => {
     setCurrentUser(cookie.load('current_user'))
+
     getLRByIdURI(props.history.location.state.selectedItem._id)
 
     setrrId(props.history.location.state.selectedItem._id)
-    setiprId(props.history.location.state.selectedItem.iprId._id)
+    setiprId(props.history.location.state.selectedItem.edipId._id)
     setSelectedItem(props.history.location.state.selectedItem)
     // setrequestNo(props.history.location.state.selectedItem.requestNo)
-    setSelectedPatient(props.history.location.state.selectedItem.patientId)
+    setSelectedPatient(props.history.location.state.selectedItem.patientData)
   }, [])
 
   const onSlipUpload = (event) => {
     var file = event.target.files[0]
     var fileType = file.name.slice(file.name.length - 3)
 
-    // console.log("Selected file : ", file.name)
+    // console.log("Selected file : ", file)
     // console.log("file type : ", fileType)
 
     setSlipUpload(file)
     var reader = new FileReader()
+    var url = reader.readAsDataURL(file)
 
     reader.onloadend = function() {
       if (fileType === 'pdf') {
@@ -281,51 +287,54 @@ function AddEditPurchaseRequest(props) {
     }
   }
 
-  const handleSearch = (e) => {
-    setSearchQuery(e.target.value)
-    if (e.target.value.length >= 3) {
-      axios
-        .get(getPatientRRIPR + '/' + e.target.value)
-        .then((res) => {
-          if (res.data.success) {
-            console.log('patient data ', res.data.data.data2)
-            if (res.data.data.data2.length > 0) {
-              setItemFoundSuccessfully(true)
-              setItemFound(res.data.data.data2)
-            } else {
-              setItemFoundSuccessfully(false)
-              setItemFound('')
-            }
-          }
-        })
-        .catch((e) => {
-          console.log('error while searching patient', e)
-        })
-    }
-  }
+  // const handleSearch = (e) => {
+  //   setSearchQuery(e.target.value)
+  //   if (e.target.value.length >= 3) {
+  //     axios
+  //       .get(getRRPatientById + '/' + e.target.value)
+  //       .then((res) => {
+  //         if (res.data.success) {
+  //           console.log('patient data ', res.data)
+  //           if (res.data.data[0].length > 0) {
+  //             setItemFoundSuccessfully(true)
+  //             setItemFound(res.data.data[0])
+  //           } else {
+  //             setItemFoundSuccessfully(false)
+  //             setItemFound('')
+  //           }
+  //         }
+  //       })
+  //       .catch((e) => {
+  //         console.log('error while searching patient', e)
+  //       })
+  //   }
+  // }
 
-  function handleAddItem(i) {
-    console.log('selected banda', i)
-    setpatientPopulate(true)
-    // const dob = new Date(i.dob).toISOString().substr(0, 10)
+  // function handleAddItem(i) {
+  //   console.log('selected banda', i)
+  //   setpatientPopulate(true)
+  //   // const dob = new Date(i.dob).toISOString().substr(0, 10)
 
-    // setPatientId(i._id)
-    dispatch({ field: 'name', value: i.serviceName })
-    dispatch({ field: 'results', value: i.results })
-    dispatch({ field: 'gender', value: i.patientData.gender })
-    dispatch({ field: 'age', value: i.patientData.age })
-    dispatch({ field: 'profileNo', value: i.patientData.profileNo })
-    dispatch({ field: 'firstName', value: i.patientData.firstName })
-    dispatch({ field: 'lastName', value: i.patientData.lastName })
-    dispatch({ field: 'insuranceId', value: i.patientData.insuranceId })
-    dispatch({ field: 'requestNo', value: i.iprId.requestNo })
+  //   // setPatientId(i._id)
+  //   dispatch({ field: 'name', value: i.serviceName })
+  //   if (i.results != null) {
+  //     dispatch({ field: 'results', value: i.results })
+  //   }
 
-    setrrId(i._id)
-    setiprId(i.iprId._id)
+  //   dispatch({ field: 'gender', value: i.patientData.gender })
+  //   dispatch({ field: 'age', value: i.patientData.age })
+  //   dispatch({ field: 'profileNo', value: i.patientData.profileNo })
+  //   dispatch({ field: 'firstName', value: i.patientData.firstName })
+  //   dispatch({ field: 'lastName', value: i.patientData.lastName })
+  //   dispatch({ field: 'insuranceId', value: i.patientData.insuranceId })
+  //   dispatch({ field: 'requestNo', value: i.edipId.requestNo })
 
-    setSearchQuery('')
-    setsearchActivated(true)
-  }
+  //   setrrId(i._id)
+  //   setiprId(i.edipId._id)
+
+  //   setSearchQuery('')
+  //   setsearchActivated(true)
+  // }
 
   if (openNotification) {
     setTimeout(() => {
@@ -364,7 +373,7 @@ function AddEditPurchaseRequest(props) {
             }}
           />
 
-          <div
+          {/* <div
             style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
             className={`container ${classes.root}`}
           >
@@ -437,6 +446,7 @@ function AddEditPurchaseRequest(props) {
                                 <TableCell>Gender</TableCell>
                                 <TableCell>Age</TableCell>
                                 <TableCell>Payment Method</TableCell>
+                                <TableCell>Service Name</TableCell>
                               </TableRow>
                             </TableHead>
 
@@ -463,6 +473,7 @@ function AddEditPurchaseRequest(props) {
                                     <TableCell>
                                       {i.patientData.paymentMethod}
                                     </TableCell>
+                                    <TableCell>{i.serviceName}</TableCell>
                                   </TableRow>
                                 )
                               })}
@@ -485,9 +496,79 @@ function AddEditPurchaseRequest(props) {
               </div>
             </div>
           </div>
-          <br />
+          <br /> */}
 
-          {patientPopulate ? (
+          <div className='container' style={styles.patientDetails}>
+            <div className='row'>
+              <div className='col-md-12'>
+                <h4 style={{ color: 'blue', fontWeight: '600' }}>
+                  Patient Details
+                </h4>
+              </div>
+            </div>
+            <div className='row'>
+              <div className='col-md-4 col-sm-4'>
+                <div style={styles.inputContainerForTextField}>
+                  <InputLabel style={styles.stylesForLabel} id='status-label'>
+                    Patient Name
+                  </InputLabel>
+                  <span>
+                    {selectedPatient.firstName + ` ` + selectedPatient.lastName}{' '}
+                  </span>
+                </div>
+              </div>
+              <div className='col-md-4 col-sm-4'>
+                <div style={styles.inputContainerForTextField}>
+                  <InputLabel style={styles.stylesForLabel} id='status-label'>
+                    Gender
+                  </InputLabel>
+                  <span>{selectedPatient.gender}</span>
+                </div>
+              </div>
+              <div className='col-md-4 col-sm-4'>
+                <div style={styles.inputContainerForTextField}>
+                  <InputLabel style={styles.stylesForLabel} id='status-label'>
+                    Age
+                  </InputLabel>
+                  <span>{selectedPatient.age}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className='row'>
+              <div className='col-md-4 col-sm-4'>
+                <div style={styles.inputContainerForTextField}>
+                  <InputLabel style={styles.stylesForLabel} id='status-label'>
+                    MRN
+                  </InputLabel>
+                  {selectedPatient.profileNo}
+                </div>
+              </div>
+
+              <div className='col-md-4 col-sm-4'>
+                <div style={styles.inputContainerForTextField}>
+                  <InputLabel style={styles.stylesForLabel} id='status-label'>
+                    Insurance No
+                  </InputLabel>
+                  <span>
+                    {selectedPatient.insuranceId
+                      ? selectedPatient.insuranceId
+                      : '--'}
+                  </span>
+                </div>
+              </div>
+              <div className='col-md-4 col-sm-4'>
+                <div style={styles.inputContainerForTextField}>
+                  <InputLabel style={styles.stylesForLabel} id='status-label'>
+                    Request No
+                  </InputLabel>
+                  <span>{selectedItem.requestNo}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* {patientPopulate ? (
             <div className='container' style={styles.patientDetails}>
               <div className='row'>
                 <div className='col-md-12'>
@@ -504,7 +585,6 @@ function AddEditPurchaseRequest(props) {
                       disabled={true}
                       label='Patient Name'
                       value={firstName + ` ` + lastName}
-                      // onChange={onChangeValue}
                       variant='filled'
                       className='textInputStyle'
                       InputProps={{
@@ -527,7 +607,6 @@ function AddEditPurchaseRequest(props) {
                       label='gender'
                       name={'gender'}
                       value={gender}
-                      // onChange={onChangeValue}
                       variant='filled'
                       className='textInputStyle'
                       InputProps={{
@@ -549,7 +628,6 @@ function AddEditPurchaseRequest(props) {
                       label='Age'
                       name={'age'}
                       value={age}
-                      // onChange={onChangeValue}
                       variant='filled'
                       className='textInputStyle'
                       InputProps={{
@@ -574,7 +652,6 @@ function AddEditPurchaseRequest(props) {
                       label='Patient MRN'
                       name={'profileNo'}
                       value={profileNo}
-                      // onChange={onChangeValue}
                       variant='filled'
                       className='textInputStyle'
                       InputProps={{
@@ -587,10 +664,6 @@ function AddEditPurchaseRequest(props) {
                         classes: { label: classes.label },
                       }}
                     />
-                    {/* <InputLabel style={styles.stylesForLabel} id='status-label'>
-                      MRN
-                    </InputLabel>
-                    <span>{selectedPatient.profileNo}</span> */}
                   </div>
                 </div>
 
@@ -601,7 +674,6 @@ function AddEditPurchaseRequest(props) {
                       label='Insurance No'
                       name={'insuranceId'}
                       value={insuranceId}
-                      // onChange={onChangeValue}
                       variant='filled'
                       className='textInputStyle'
                       InputProps={{
@@ -614,14 +686,6 @@ function AddEditPurchaseRequest(props) {
                         classes: { label: classes.label },
                       }}
                     />
-                    {/* <InputLabel style={styles.stylesForLabel} id='status-label'>
-                      Insurance No
-                    </InputLabel>
-                    <span>
-                      {selectedPatient.insuranceId
-                        ? selectedPatient.insuranceId
-                        : '--'}
-                    </span> */}
                   </div>
                 </div>
                 <div className='col-md-4 col-sm-4'>
@@ -693,7 +757,7 @@ function AddEditPurchaseRequest(props) {
                     <InputLabel style={styles.stylesForLabel} id='status-label'>
                       MRN
                     </InputLabel>
-                    <span>{selectedPatient.profileNo}</span>
+                    {selectedPatient.profileNo}
                   </div>
                 </div>
 
@@ -719,7 +783,7 @@ function AddEditPurchaseRequest(props) {
                 </div>
               </div>
             </div>
-          )}
+          )} */}
 
           <div
             style={{
@@ -829,11 +893,10 @@ function AddEditPurchaseRequest(props) {
                 }}
               >
                 <TextField
-                  // disabled={true}
+                  disabled={true}
                   label='Comments / Notes'
                   name={'comments'}
-                  // value={comments}
-                  // onChange={onChangeValue}
+                  value={comments}
                   variant='filled'
                   className='textInputStyle'
                   InputProps={{

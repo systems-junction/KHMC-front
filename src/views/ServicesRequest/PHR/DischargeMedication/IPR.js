@@ -5,6 +5,7 @@ import CustomTable from '../../../../components/Table/Table'
 import axios from 'axios'
 import {
   getDischargeIPRUrl,
+  getDischarge,
   // getMaterialReceivingUrl
 } from '../../../../public/endpoins'
 import Loader from 'react-loader-spinner'
@@ -49,16 +50,16 @@ export default function Ipr(props) {
 
   function getIprsData() {
     axios
-      .get(getDischargeIPRUrl)
+      .get(getDischarge)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data, 'ecr1')
-          res.data.data.map(
+          console.log(res.data.data[0], 'ecr1')
+          res.data.data[0].map(
             (d) => (d.date = d.dischargeRequest.dischargeMedication.date)
           )
-          res.data.data.map((d) => (d.status = d.dischargeRequest.status))
-          console.log(res.data.data, 'data')
-          setIpr(res.data.data.reverse())
+          res.data.data[0].map((d) => (d.status = d.dischargeRequest.status))
+          setIpr(res.data.data[0])
+          // setIpr(res.data.data.reverse())
         } else if (!res.data.success) {
           setErrorMsg(res.data.error)
           setOpenNotification(true)

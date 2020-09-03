@@ -1,21 +1,24 @@
 const local = 'http://localhost:4000/api'
 const live = 'https://test.khmc-staging.com/api'
 const dev = 'http://ec2-52-14-42-129.us-east-2.compute.amazonaws.com/api'
+//const devSecure = 'https://dev.khmc-staging.com/api'
 
 // http://165.232.66.148/api
-const stagingDigitalOcean = 'http://165.232.66.148:8080/api'
-const StagingDigitalOceanUploadsUrl = 'http://165.232.66.148:8080/'
-const StagingSocketUrl = 'wss://165.232.66.148:4001'
+//const stagingDigitalOcean = 'http://165.232.66.148:8080/api'
+//const StagingDigitalOceanUploadsUrl = 'http://165.232.66.148:8080/'
+//const StagingSocketUrl = 'wss://165.232.66.148:4001'
 
 // const baseUrl = dev;
+ //const baseUrl = devSecure;
 const baseUrl = 'http://localhost:4000/api'
 // const baseUrl = stagingDigitalOcean;
 
-// export const socketUrl = 'wss://test.khmc-staging.com:4001'
+//export const socketUrl = 'wss://test.khmc-staging.com:4001'
 export const socketUrl = 'ws://localhost:4001'
 // export const socketUrl = "ws://192.168.10.20:4001";
 
-// export const uploadsUrl = 'https://test.khmc-staging.com/uploads/'
+//export const uploadsUrl = 'https://dev.khmc-staging.com/uploads/'
+//export const uploadsUrl = 'https://test.khmc-staging.com/uploads/'
 export const uploadsUrl = 'http://localhost:4000/uploads/'
 // export const uploadsUrl = 'http://ec2-52-14-42-129.us-east-2.compute.amazonaws.com/'
 // export const uploadsUrl = StagingDigitalOceanUploadsUrl
@@ -40,11 +43,14 @@ export const getSearchedNonPharmaceuticalItemsUrl = `${baseUrl}/item/getsearched
 export const getPatientById = `${baseUrl}/patient/getpatient/:id`
 export const getPatientByProfileNo = `${baseUrl}/patient/getpatientbyprofileno`
 export const getPatientUrl = `${baseUrl}/patient/getpatient`
+export const getPatientUrlById = `${baseUrl}/patient/getpatient`
 export const addPatientUrl = `${baseUrl}/patient/addpatient`
 export const deletePatientUrl = `${baseUrl}/patient/deletepatient`
 export const updatePatientUrl = `${baseUrl}/patient/updatepatient`
 export const generateEDR = `${baseUrl}/edr/addedr`
 export const generateIPR = `${baseUrl}/ipr/addipr`
+export const searchpatient = `${baseUrl}/patient/searchpatient`
+export const updateEdrIpr = `${baseUrl}/patient/updateEdrIpr`
 
 // reimbursement endpoints
 export const getSearchedpatient = `${baseUrl}/reimbursementclaim/getpatient`
@@ -344,4 +350,30 @@ export const addPatientFHIRUrl = `${baseUrl}/patient/addpatientfhir`
 export const updatePatientFHIRUrl = `${baseUrl}/patient/updatepatientfhir`
 
 // get RRIPR
-export const getPatientRRIPR = `${baseUrl}/ipr/getpatientrripr`
+export const getRRPatient = `${baseUrl}/ipr/getrrpatient`
+export const getRRPatientById = `${baseUrl}/ipr/getrrpatientbyid`
+
+// get RR
+export const getRRByIdURL = `${baseUrl}/ipr/getrrbyid`
+export const updateRRByIdURL = `${baseUrl}/ipr/updaterr`
+
+// get LR
+export const getLRPatient = `${baseUrl}/ipr/getlrpatient`
+export const getLRByIdURL = `${baseUrl}/ipr/getlrbyid`
+export const updateLRByIdURL = `${baseUrl}/ipr/updatelr`
+
+// get PHR
+export const getPHRPatient = `${baseUrl}/ipr/getphrpatient`
+export const getPHRByIdURL = `${baseUrl}/ipr/getphrbyid`
+export const updatePHRRByIdURL = `${baseUrl}/ipr/updatephrbyid`
+
+// get Discharge
+export const getDischarge = `${baseUrl}/ipr/getdischarge`
+export const getDischargeByIdURL = `${baseUrl}/ipr/getdischargebyid`
+export const updateDischargeByIdURL = `${baseUrl}/ipr/updatedischargebyid`
+
+// getEDRIPRByID
+export const getIPREDRById = `${baseUrl}/ipr/getipredrbyid`
+
+// searchPatients
+export const searchPatients = `${baseUrl}/patient/searchpatient`

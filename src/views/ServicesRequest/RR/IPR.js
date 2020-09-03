@@ -5,6 +5,7 @@ import CustomTable from '../../../components/Table/Table'
 import axios from 'axios'
 import {
   getRRIPRUrl,
+  getRRPatient,
   // getMaterialReceivingUrl
 } from '../../../public/endpoins'
 import Loader from 'react-loader-spinner'
@@ -14,19 +15,8 @@ import radioIcon from '../../../assets/img/RR.png'
 import '../../../assets/jss/material-dashboard-react/components/loaderStyle.css'
 import socketIOClient from 'socket.io-client'
 
-const tableHeading = [
-  'MRN',
-  'Request Number',
-  'Date',
-  'Status',
-  'Action',
-]
-const tableDataKeys = [
-  ['patientId', 'profileNo'],
-  'requestNo',
-  'date',
-  'status',
-]
+const tableHeading = ['MRN', 'Request Number', 'Date', 'Status', 'Action']
+const tableDataKeys = ['profileNo', 'requestNo', 'date', 'status']
 
 const actions = { view: true }
 
@@ -55,13 +45,15 @@ export default function EDR(props) {
 
   function getEDRsData() {
     axios
-      .get(getRRIPRUrl)
+      .get(getRRPatient)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data, 'ecr1')
-          res.data.data.map((d) => (d.patientId = d.iprId.patientId))
-          res.data.data.map((d) => (d.requestNo = d.iprId.requestNo))
-          setEdr(res.data.data)
+          console.log(res.data.data[0], 'data')
+          // res.data.data[0].map((d) => (d.patientId = d.iprId.patientId))
+          res.data.data[0].map((d) => (d.profileNo = d.patientData.profileNo))
+          // res.data.data[0].map((d) => (d.requestNo = d.iprId.requestNo))
+          // res.data.data[0].map((d) => (d.requestNo = d.edrId.requestNo))
+          setEdr(res.data.data[0])
         } else if (!res.data.success) {
           setErrorMsg(res.data.error)
           setOpenNotification(true)

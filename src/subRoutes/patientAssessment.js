@@ -2,7 +2,7 @@ import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import NotFound from '../components/NotFound/NotFound'
 import patientAssessment from '../views/PatientAssessment/patientAssessment'
-// import patientListing from '../views/PatientListing/patientListing'
+import triageAssessment from '../views/PatientAssessment/TriageAndAssessment'
 
 class PatientAssessment extends React.PureComponent {
   render() {
@@ -13,14 +13,10 @@ class PatientAssessment extends React.PureComponent {
           path={`${this.props.match.url}`}
           component={patientAssessment}
         />
-        {/* <Route
-          path={`${this.props.match.url}/add`}
-          component={AddEditPatientListing}
-        />
         <Route
-          path={`${this.props.match.url}/edit`}
-          component={AddEditPatientListing}
-        /> */}
+          path={`${this.props.match.url}/triageAssessment`}
+          component={triageAssessment}
+        />
         <Route path='*' component={NotFound} />
       </Switch>
     )
