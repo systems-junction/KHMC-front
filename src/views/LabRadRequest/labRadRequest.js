@@ -5,7 +5,6 @@ import Button from "@material-ui/core/Button";
 import tableStyles from "../../assets/jss/material-dashboard-react/components/tableStyle.js";
 import axios from "axios";
 import TextField from "@material-ui/core/TextField";
-import AutoComplete from "@material-ui/lab/AutoComplete";
 import {
     getSearchedLaboratoryService,
     getSearchedRadiologyService,
@@ -39,7 +38,6 @@ import Fingerprint from "../../assets/img/fingerprint.png";
 import AccountCircle from '@material-ui/icons/SearchOutlined'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import BarCode from '../../assets/img/Bar Code.png'
-import ViewSingleRequest from './viewRequest'
 import Loader from "react-loader-spinner";
 
 // const tableHeadingForResident = [
@@ -332,6 +330,7 @@ function LabRadRequest(props) {
 
     const [currentUser, setCurrentUser] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
+    const [successMsg, setsuccessMsg] = useState('')
     const [openNotification, setOpenNotification] = useState(false);
     const [value, setValue] = useState(3);
     const [selectedItem, setSelectedItem] = useState("");
@@ -387,15 +386,15 @@ function LabRadRequest(props) {
         setValue(newValue);
     };
 
-    function viewItem(item) {
-        if (item !== "") {
-            setOpenItemDialog(true);
-            setItem(item);
-        } else {
-            setOpenItemDialog(false);
-            setItem("");
-        }
-    }
+    function viewLabRadReport(rec) {
+        let path = `LabRadRequest/viewReport`
+        props.history.push({
+          pathname: path,
+          state: {
+            selectedItem: rec,
+          },
+        })
+      }
 
     // function addConsultRequest() {
     // if (!validateForm()) {
@@ -565,12 +564,14 @@ function LabRadRequest(props) {
                 value: [
                     ...labRequestArray,
                     {
+                        serviceType:"lab",
                         serviceId: labServiceId,
                         serviceCode: labServiceCode,
                         serviceName: labServiceName,
                         requester: currentUser.staffId,
                         requesterName: requester,
                         status: labServiceStatus,
+                        comments:labComments
                     },
                 ],
             });
@@ -581,6 +582,7 @@ function LabRadRequest(props) {
         dispatch({ field: "labServiceName", value: "" });
         dispatch({ field: "labServiceStatus", value: "" });
         dispatch({ field: "labServiceCode", value: "" });
+        dispatch({ field: "labComments", value: "" });
 
         setaddLabRequest(false);
     };
@@ -591,12 +593,14 @@ function LabRadRequest(props) {
             labItems = [
                 ...labItems,
                 {
+                    serviceType: labRequestArray[i].serviceType,
                     serviceId: labRequestArray[i].serviceId,
                     serviceCode: labRequestArray[i].serviceCode,
                     requesterName: labRequestArray[i].requesterName,
                     requester: labRequestArray[i].requester,
                     serviceName: labRequestArray[i].serviceName,
                     status: labRequestArray[i].status,
+                    comments: labRequestArray[i].comments,
                 },
             ];
         }
@@ -611,15 +615,17 @@ function LabRadRequest(props) {
             .then((res) => {
                 if (res.data.success) {
                     console.log("response after adding Lab Request", res.data);
-                    window.location.reload(false);
+                    setOpenNotification(true);
+                    setsuccessMsg("Lab Request added");
                 } else if (!res.data.success) {
                     setOpenNotification(true);
+                    setErrorMsg("Error while adding the Lab Request");
                 }
             })
             .catch((e) => {
                 console.log("error after adding Lab Request", e);
                 setOpenNotification(true);
-                setErrorMsg("Error while adding the Lab Request");
+                setErrorMsg("Error after adding the Lab Request");
             });
     };
 
@@ -674,12 +680,14 @@ function LabRadRequest(props) {
                 value: [
                     ...radiologyRequestArray,
                     {
+                        serviceType:'radio',
                         serviceId: radioServiceId,
                         serviceCode: radioServiceCode,
                         requesterName: requester,
                         serviceName: radioServiceName,
                         requester: currentUser.staffId,
                         status: radioServiceStatus,
+                        comments: radioComments
                     },
                 ],
             });
@@ -690,6 +698,7 @@ function LabRadRequest(props) {
         dispatch({ field: "radioServiceCode", value: "" });
         dispatch({ field: "radioServiceName", value: "" });
         dispatch({ field: "radioServiceStatus", value: "" });
+        dispatch({ field: "radioComments", value: "" });
 
         setaddLabRequest(false);
     };
@@ -700,12 +709,14 @@ function LabRadRequest(props) {
             radioItems = [
                 ...radioItems,
                 {
+                    serviceType: radiologyRequestArray[i].serviceType,
                     serviceId: radiologyRequestArray[i].serviceId,
                     serviceCode: radiologyRequestArray[i].serviceCode,
                     requester: radiologyRequestArray[i].requester,
                     requesterName: radiologyRequestArray[i].requesterName,
                     serviceName: radiologyRequestArray[i].serviceName,
                     status: radiologyRequestArray[i].status,
+                    comments: radiologyRequestArray[i].comments,
                 },
             ];
         }
@@ -721,15 +732,17 @@ function LabRadRequest(props) {
             .then((res) => {
                 if (res.data.success) {
                     console.log("response after adding Radio Request", res.data);
-                    window.location.reload(false);
+                    setOpenNotification(true);
+                    setsuccessMsg("Radiology Request Added");
                 } else if (!res.data.success) {
                     setOpenNotification(true);
+                    setErrorMsg("Error while adding the Radiology Request");
                 }
             })
             .catch((e) => {
                 console.log("error after adding Radio Request", e);
                 setOpenNotification(true);
-                setErrorMsg("Error while adding the Radiology Request");
+                setErrorMsg("Error after adding the Radiology Request",e);
             });
     };
 
@@ -958,6 +971,7 @@ function LabRadRequest(props) {
         setTimeout(() => {
             setOpenNotification(false);
             setErrorMsg("");
+            setsuccessMsg('');
         }, 2000);
     }
 
@@ -1574,7 +1588,7 @@ function LabRadRequest(props) {
                                         tableData={labRequestArray}
                                         tableDataKeys={tableDataKeysForLabReq}
                                         tableHeading={tableHeadingForLabReq}
-                                        handleView={viewItem}
+                                        handleView={viewLabRadReport}
                                         action={actions}
                                         borderBottomColor={"#60d69f"}
                                         borderBottomWidth={20}
@@ -1750,7 +1764,7 @@ function LabRadRequest(props) {
                                         tableData={radiologyRequestArray}
                                         tableDataKeys={tableDataKeysForRadiology}
                                         tableHeading={tableHeadingForRadiology}
-                                        handleView={viewItem}
+                                        handleView={viewLabRadReport}
                                         action={actions}
                                         borderBottomColor={"#60d69f"}
                                         borderBottomWidth={20}
@@ -1932,16 +1946,6 @@ function LabRadRequest(props) {
                             : (
                                 undefined
                             )}
-
-                    {openItemDialog ? (
-                        <ViewSingleRequest
-                            item={item}
-                            openItemDialog={openItemDialog}
-                            viewItem={viewItem}
-                        />
-                    ) : (
-                            undefined
-                        )}
 
                 </div>
                 {/* 
@@ -2400,7 +2404,7 @@ function LabRadRequest(props) {
                     </div>
                 </div>
 
-                <Notification msg={errorMsg} open={openNotification} />
+                <Notification msg={errorMsg} open={openNotification} success={successMsg} />
             </div>
         </div>
     );

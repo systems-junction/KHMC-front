@@ -271,11 +271,12 @@ function AddEditPurchaseRequest(props) {
     var file = event.target.files[0]
     var fileType = file.name.slice(file.name.length - 3)
 
-    // console.log("Selected file : ", file.name)
+    // console.log("Selected file : ", file)
     // console.log("file type : ", fileType)
 
     setSlipUpload(file)
     var reader = new FileReader()
+    var url = reader.readAsDataURL(file)
 
     reader.onloadend = function() {
       if (fileType === 'pdf') {
@@ -896,7 +897,6 @@ function AddEditPurchaseRequest(props) {
                   label='Comments / Notes'
                   name={'comments'}
                   value={comments}
-                  // onChange={onChangeValue}
                   variant='filled'
                   className='textInputStyle'
                   InputProps={{
