@@ -63,7 +63,7 @@ const admin = [
 
   {
     text: 'Assessment & Diagnosis',
-    path: '/home/rcm/rd/pa',
+    path: '/home/rcm/rd/assessmentdiagnosis',
   },
 
   {
@@ -72,8 +72,8 @@ const admin = [
   },
 
   {
-    text: '',
-    path: '',
+    text: 'Discharge',
+    path: '/home/rcm/rd/dischargerequest',
   },
 
   {

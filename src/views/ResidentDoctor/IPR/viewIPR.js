@@ -651,7 +651,7 @@ function AddEditPurchaseRequest(props) {
   }
 
   function handleAddItem(i) {
-    // console.log("selected item", i);
+    console.log('selected item', i)
 
     dispatch({ field: 'labServiceId', value: i._id })
     dispatch({ field: 'labServiceCode', value: i.serviceNo })

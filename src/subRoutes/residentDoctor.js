@@ -24,8 +24,12 @@ import AddEDR from '../views/ResidentDoctor/EDR/addEditEDR'
 import EDRTriageAndAssessment from '../views/ResidentDoctor/EDR/TriageAndAssessment'
 
 import IPR from '../views/ResidentDoctor/IPR/IPR'
-import PA from '../views/ResidentDoctor/patientAssessment'
-import LabRadRequest from '../views/ResidentDoctor/labRadRequest'
+import LabRadRequest from '../views/ResidentDoctor/LabRadRequest/labRadRequest'
+import AssessmentAndDiagnosis from '../views/ResidentDoctor/AssessmentAndDiagnosis/AssessmentAndDiagnosis'
+import triageAssessment from '../views/ResidentDoctor/LabRadRequest/TriageAndAssessment'
+import ADtriageAssessment from '../views/ResidentDoctor/AssessmentAndDiagnosis/TriageAndAssessment'
+import Discharge from '../views/ResidentDoctor/Discharge/DischargeRequest'
+import AddDischargeMedication from '../views/ResidentDoctor/Discharge/addDischargeMed'
 import ViewIPR from '../views/ResidentDoctor/IPR/viewIPR'
 import iprDischargeRequest from '../views/ResidentDoctor/IPR/DischargeRequest'
 import iprAddDischargeMed from '../views/ResidentDoctor/IPR/addDischargeMed'
@@ -72,11 +76,40 @@ class WMSRoutes extends React.PureComponent {
         />
         <Route exact path={`${this.props.match.url}/edr`} component={EDR} />
         <Route exact path={`${this.props.match.url}/ipr`} component={IPR} />
-        <Route exact path={`${this.props.match.url}/pa`} component={PA} />
         <Route
           exact
           path={`${this.props.match.url}/labradrequest`}
           component={LabRadRequest}
+        />
+
+        <Route
+          exact
+          path={`${this.props.match.url}/labradrequest/triageAssessment`}
+          component={triageAssessment}
+        />
+
+        <Route
+          exact
+          path={`${this.props.match.url}/assessmentdiagnosis`}
+          component={AssessmentAndDiagnosis}
+        />
+
+        <Route
+          exact
+          path={`${this.props.match.url}/assessmentdiagnosis/triageAssessment`}
+          component={ADtriageAssessment}
+        />
+
+        <Route
+          exact
+          path={`${this.props.match.url}/dischargerequest`}
+          component={Discharge}
+        />
+
+        <Route
+          exact
+          path={`${this.props.match.url}/dischargerequest/addDischargeRequest`}
+          component={AddDischargeMedication}
         />
 
         <Route

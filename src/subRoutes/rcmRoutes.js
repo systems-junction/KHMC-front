@@ -61,14 +61,8 @@ class WMSRoutes extends React.PureComponent {
           path={`/home/rcm/patientAssessment`}
           component={patientAssessment}
         />
-        <Route
-          path={`/home/rcm/patientCare`}
-          component={patientCare}
-        />
-        <Route
-          path={`/home/rcm/LabRadRequest`}
-          component={LabRadRequest}
-        />
+        <Route path={`/home/rcm/patientCare`} component={patientCare} />
+        <Route path={`/home/rcm/LabRadRequest`} component={LabRadRequest} />
 
         <Route path={`${this.props.match.url}/notfound`} component={NotFound} />
         <Route path='*' component={NotFound} />
