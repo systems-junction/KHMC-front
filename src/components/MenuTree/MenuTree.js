@@ -77,8 +77,8 @@ class MenuTree extends React.Component {
             for="menu-open"
             style={{
               boxShadow: "3px 3px 3px #2433a5",
-              height: 100,
-              width: 100,
+              height: 115,
+              width: 115,
             }}
           >
             {this.props.options[0] ? (
