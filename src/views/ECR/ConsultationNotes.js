@@ -57,9 +57,10 @@ const tableDataKeysForResident = [
 ]
 const tableHeadingForConsultation = [
   'Date/Time',
-  'Description',
+  'Description/Condition',
   'Doctor Ref',
-  'Consultation ID',
+  // 'Consultation ID',
+  'Doctor',
   'Status',
   'Action',
 ]
@@ -67,7 +68,8 @@ const tableDataKeysForConsultation = [
   'date',
   'description',
   ['requester', 'firstName'],
-  'consultationNo',
+  // 'consultationNo',
+  'specialist',
   'status',
 ]
 const tableHeadingForPharmacy = [
@@ -420,6 +422,54 @@ function LabRadRequest(props) {
         consultationNotes: consultationNotes,
         requester: currentUser.staffId,
         date: date,
+      },
+    ]
+
+    const params = {
+      _id: id,
+      requestType,
+      consultationNote: consultationNote,
+    }
+
+    console.log('params', params)
+    axios
+      .put(updateIPR, params)
+      .then((res) => {
+        if (res.data.success) {
+          console.log('response while adding Consult Req', res.data.data)
+          window.location.reload(false)
+        } else if (!res.data.success) {
+          setOpenNotification(true)
+          setErrorMsg('Error while adding the Consultation request')
+        }
+      })
+      .catch((e) => {
+        console.log('error after adding Consultation request', e)
+        setOpenNotification(true)
+        setErrorMsg('Error after adding the Consultation request')
+      })
+    //   }
+    // }
+  }
+
+  function EditStatus() {
+    // if (!validateForm()) {
+    //   setIsFormSubmitted(true)
+    //   setOpenNotification(true)
+    //   setErrorMsg('Please fill the fields properly')
+    // } else {
+    //   if (validateForm()) {
+    let consultationNote = []
+
+    consultationNote = [
+      ...consultationNoteArray,
+      {
+        consultationNo: id,
+        description: description,
+        consultationNotes: consultationNotes,
+        requester: currentUser.staffId,
+        date: date,
+        status: 'Completed',
       },
     ]
 
@@ -1358,7 +1408,7 @@ function LabRadRequest(props) {
                   undefined
                 )}
               </div>
-              <div className='row' style={{ marginBottom: '25px' }}>
+              {/* <div className='row' style={{ marginBottom: '25px' }}>
                 <div className='col-md-6 col-sm-6 col-6'></div>
                 <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
                   <Button
@@ -1375,7 +1425,7 @@ function LabRadRequest(props) {
                     </strong>
                   </Button>
                 </div>
-              </div>
+              </div> */}
             </div>
           ) : value === 0 ? (
             <div
@@ -1784,7 +1834,7 @@ function LabRadRequest(props) {
                   undefined
                 )}
               </div>
-            </div> /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/)
+            </div> /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/)
           ) : (
             //     : value === 5 ? (
             //         <div
@@ -1945,12 +1995,170 @@ function LabRadRequest(props) {
           )}
 
           {openItemDialog ? (
-            <ViewSingleRequest
-              item={item}
-              openItemDialog={openItemDialog}
-              viewItem={viewItem}
-            />
+            <Dialog
+              aria-labelledby='form-dialog-title'
+              open={openItemDialog}
+              maxWidth='xl'
+              fullWidth={true}
+            >
+              <DialogContent style={{ backgroundColor: '#31e2aa' }}>
+                {/* <DialogTitle
+                  id='simple-dialog-title'
+                  style={{ color: 'white' }}
+                >
+                  Add Consultation Note
+                </DialogTitle> */}
+                <div className={`container-fluid ${classes.root}`}>
+                  {/* <div className='row'>
+                    <div
+                      className='col-md-12 col-sm-12 col-12'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
+                    >
+                      <TextField
+                        required
+                        label='Description'
+                        name={'description'}
+                        value={description}
+                        error={description === '' && isFormSubmitted}
+                        onChange={onChangeValue}
+                        className='textInputStyle'
+                        variant='filled'
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className='row'>
+                    <div
+                      className='col-md-12'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
+                    >
+                      <TextField
+                        required
+                        label='Consultation Note'
+                        name={'consultationNotes'}
+                        value={consultationNotes}
+                        error={consultationNotes === '' && isFormSubmitted}
+                        onChange={onChangeValue}
+                        className='textInputStyle'
+                        variant='filled'
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                      />
+                    </div>
+                  </div> */}
+
+                  {/* <div className='row'>
+                    <div
+                      className='col-md-6 col-sm-6 col-6'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
+                    >
+                      <TextField
+                        required
+                        disabled
+                        label='Date'
+                        name={'date'}
+                        value={date}
+                        // error={date === '' && isFormSubmitted}
+                        onChange={onChangeValue}
+                        className='textInputStyle'
+                        variant='filled'
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                      />
+                    </div>
+                    <div
+                      className='col-md-6 col-sm-6 col-6'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
+                    >
+                      <TextField
+                        required
+                        disabled
+                        label='Requester'
+                        name={'requester'}
+                        value={requester}
+                        // error={requester === '' && isFormSubmitted}
+                        onChange={onChangeValue}
+                        className='textInputStyle'
+                        variant='filled'
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                      />
+                    </div>
+                  </div> */}
+
+                  <div
+                    style={{ display: 'flex', justifyContent: 'space-between' }}
+                  >
+                    <div style={{ marginTop: '2%', marginBottom: '2%' }}>
+                      <Button
+                        onClick={() => hideDialog()}
+                        style={styles.stylesForButton}
+                        variant='contained'
+                      >
+                        <strong>Cancel</strong>
+                      </Button>
+                    </div>
+
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        marginTop: '2%',
+                        marginBottom: '2%',
+                      }}
+                    >
+                      <Button
+                        style={{
+                          color: 'white',
+                          cursor: 'pointer',
+                          borderRadius: 5,
+                          backgroundColor: '#2c6ddd',
+                          width: '140px',
+                          height: '50px',
+                          outline: 'none',
+                          paddingLeft: 30,
+                          paddingRight: 30,
+                        }}
+                        // disabled={!validateItemsForm()}
+                        onClick={EditStatus}
+                        variant='contained'
+                        color='primary'
+                      >
+                        Submit
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
           ) : (
+            // <ViewSingleRequest
+            //   item={item}
+            //   openItemDialog={openItemDialog}
+            //   viewItem={viewItem}
+            // />
             undefined
           )}
         </div>
