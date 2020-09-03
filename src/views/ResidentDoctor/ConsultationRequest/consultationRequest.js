@@ -421,6 +421,7 @@ function LabRadRequest(props) {
 
     const params = {
       _id: id,
+      requestType,
       consultationNote: consultationNote,
     }
 
