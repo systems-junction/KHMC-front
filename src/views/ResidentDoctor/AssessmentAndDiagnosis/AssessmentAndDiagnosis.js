@@ -1307,7 +1307,7 @@ function LabRadRequest(props) {
                   backgroundColor: value === 2 ? '#2c6ddd' : undefined,
                 }}
                 label='Lab'
-                disabled={enableForm}
+                disabled
               />
               <Tab
                 style={{
@@ -1317,7 +1317,7 @@ function LabRadRequest(props) {
                   backgroundColor: value === 3 ? '#2c6ddd' : undefined,
                 }}
                 label='Rad'
-                disabled={enableForm}
+                disabled
               />
               <Tab
                 style={{
@@ -1326,7 +1326,7 @@ function LabRadRequest(props) {
                   outline: 'none',
                   backgroundColor: value === 4 ? '#2c6ddd' : undefined,
                 }}
-                label='Consultation Requests'
+                label='External Consultation'
                 disabled={enableForm}
               />
             </Tabs>

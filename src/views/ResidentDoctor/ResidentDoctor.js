@@ -77,8 +77,8 @@ const admin = [
   },
 
   {
-    text: '',
-    path: '',
+    text: 'Consultation Request',
+    path: '/home/rcm/rd/consultationrequest',
   },
 
   {
