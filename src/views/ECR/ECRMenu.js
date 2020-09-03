@@ -34,6 +34,8 @@ import EDR from "../../assets/img/EDR.png";
 import IPR from "../../assets/img/IPR.png";
 import Resident from "../../assets/img/ResidentDoctor.png";
 import ECR from "../../assets/img/ECR.png";
+import CN from "../../assets/img/Consultation_Notes.png";
+
 import Services from "../../assets/img/ServicesRequest.png";
 
 import Items from "../../assets/img/Items.png";
@@ -47,25 +49,15 @@ import KHMC_White from "../../assets/img/KHMC_White.png";
 import Influence_white from "../../assets/img/Influence_white.png";
 
 import MenuTree from "../../components/MenuTree/MenuTree";
+import { zhCN } from "date-fns/locale";
 
 const admin = [
   { img: ECR, text: "ECR" },
   {
-    img: EDR,
-    text: "EDR",
-    path: "/home/rcm/ecr/edr",
+    img: CN,
+    text: "Consultation Notes",
+    path: "/home/rcm/ecr/cn",
   },
-  {
-    img: IPR,
-    text: "IPR",
-    path: "/home/rcm/ecr/ipr",
-  },
-
-  {
-    text: "",
-    path: "",
-  },
-
   {
     text: "",
     path: "",

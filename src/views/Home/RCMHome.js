@@ -20,6 +20,8 @@ import InsuranceClaim from '../../assets/img/Insurance_Claim.png'
 import assessmentIcon from '../../assets/img/PatientAssessment.png'
 import patientCareIcon from '../../assets/img/PatientCare.png'
 import Lab_RadIcon from '../../assets/img/Lab-Rad Request.png'
+import AssessDiagIcon from '../../assets/img/Assessment & Diagnosis.png'
+import DischargeIcon from '../../assets/img/Doctor - Discharge.png'
 import React from "react";
 import "./MenuPage.css";
 import Back from "../../assets/img/Back_Arrow.png";
@@ -83,6 +85,25 @@ const residentDoctor = [
     img: Resident,
     text: "Resident Doctor",
     path: "/home/rcm/rd",
+  },
+];
+
+const doctorPhysician = [
+  { img: RCM, text: "RCM" },
+  {
+    img: AssessDiagIcon,
+    text: 'Assessment & Diagnosis',
+    path: '/home/rcm/rd/assessmentdiagnosis',
+  },
+  {
+    img: Lab_RadIcon,
+    text: 'Lab/Rad Request',
+    path: '/home/rcm/rd/labradrequest',
+  },
+  {
+    img: DischargeIcon,
+    text: 'Discharge',
+    path: '/home/rcm/rd/dischargerequest',
   },
 ];
 
@@ -219,6 +240,8 @@ class HomeScreen extends React.Component {
               ? warehouseIncharge
               : userType && userType.type === "Registered Nurse"
               ? registeredNurse
+              : userType && userType.type === "Doctor/Physician"
+              ? doctorPhysician     
               : admin
           }
         />
