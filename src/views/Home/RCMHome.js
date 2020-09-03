@@ -22,6 +22,7 @@ import patientCareIcon from '../../assets/img/PatientCare.png'
 import Lab_RadIcon from '../../assets/img/Lab-Rad Request.png'
 import AssessDiagIcon from '../../assets/img/Assessment & Diagnosis.png'
 import DischargeIcon from '../../assets/img/Doctor - Discharge.png'
+import CRIcon from '../../assets/img/Consultation Request.png'
 import React from "react";
 import "./MenuPage.css";
 import Back from "../../assets/img/Back_Arrow.png";
@@ -99,6 +100,11 @@ const doctorPhysician = [
     img: Lab_RadIcon,
     text: 'Lab/Rad Request',
     path: '/home/rcm/rd/labradrequest',
+  },
+  {
+    img: CRIcon,
+    text: 'Consultation Request',
+    path: '/home/rcm/rd/consultationrequest',
   },
   {
     img: DischargeIcon,
