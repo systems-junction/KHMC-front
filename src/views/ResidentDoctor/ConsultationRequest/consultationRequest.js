@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button'
 import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
 import axios from 'axios'
 import TextField from '@material-ui/core/TextField'
+import MenuItem from '@material-ui/core/MenuItem'
 import AutoComplete from '@material-ui/lab/AutoComplete'
 import {
   getSearchedLaboratoryService,
@@ -54,16 +55,18 @@ const tableDataKeysForResident = [
   ['doctor', 'firstName'],
 ]
 const tableHeadingForConsultation = [
-  'Consultation ID',
+  // 'Consultation ID',
   'Date/Time',
-  'Description',
+  'Description/Condition',
+  'Doctor',
   'Doctor Ref',
   'Action',
 ]
 const tableDataKeysForConsultation = [
-  'consultationNo',
+  // 'consultationNo',
   'date',
   'description',
+  'specialist',
   ['requester', 'firstName'],
 ]
 // const tableHeadingForPharmacy = [
@@ -122,6 +125,36 @@ const tableDataKeysForRadiology = [
 //     "requesterName",
 //     "status",
 // ];
+
+const specialistArray = [
+  {
+    key: 'Dr.Hammad',
+    value: 'Dr.Hammad',
+  },
+  {
+    key: 'Dr.Asad',
+    value: 'Dr.Asad',
+  },
+  {
+    key: 'Dr.Hameed',
+    value: 'Dr.Hameed',
+  },
+]
+
+const specialityArray = [
+  {
+    key: 'Cardiolgy',
+    value: 'Cardiolgy',
+  },
+  {
+    key: 'Heart',
+    value: 'Heart',
+  },
+  {
+    key: 'ENT',
+    value: 'ENT',
+  },
+]
 const actions = { view: true }
 const styles = {
   patientDetails: {
@@ -268,6 +301,8 @@ function LabRadRequest(props) {
     description: '',
     consultationNotes: '',
     requester: cookie.load('current_user').name,
+    speciality: '',
+    specialist: '',
 
     residentNoteArray: '',
     rdescription: '',
@@ -315,6 +350,8 @@ function LabRadRequest(props) {
     description,
     consultationNotes,
     requester = cookie.load('current_user').name,
+    speciality,
+    specialist,
 
     residentNoteArray,
     rdescription,
@@ -411,11 +448,12 @@ function LabRadRequest(props) {
     consultationNote = [
       ...consultationNoteArray,
       {
-        consultationNo: id,
+        // consultationNo: id,
         description: description,
         consultationNotes: consultationNotes,
         requester: currentUser.staffId,
         date: date,
+        specialist: specialist,
       },
     ]
 
@@ -2243,7 +2281,8 @@ function LabRadRequest(props) {
                 >
                   <TextField
                     required
-                    label='Consultation Note'
+                    label='Comments/Notes'
+                    // label='Consultation Note'
                     name={'consultationNotes'}
                     value={consultationNotes}
                     error={consultationNotes === '' && isFormSubmitted}
@@ -2304,6 +2343,81 @@ function LabRadRequest(props) {
                       classes: { input: classes.input },
                     }}
                   />
+                </div>
+              </div>
+
+              <div className='row'>
+                <div
+                  className='col-md-6'
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
+                    select
+                    fullWidth
+                    label='Speciality'
+                    name={'speciality'}
+                    value={speciality}
+                    error={speciality === '' && isFormSubmitted}
+                    onChange={onChangeValue}
+                    variant='filled'
+                    className='dropDownStyle'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  >
+                    <MenuItem value=''>
+                      <em>Speciality</em>
+                    </MenuItem>
+
+                    {specialityArray.map((val) => {
+                      return (
+                        <MenuItem key={val.key} value={val.key}>
+                          {val.value}
+                        </MenuItem>
+                      )
+                    })}
+                  </TextField>
+                </div>
+                <div
+                  className='col-md-6'
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
+                    select
+                    fullWidth
+                    label='Specialist'
+                    name={'specialist'}
+                    value={specialist}
+                    error={specialist === '' && isFormSubmitted}
+                    onChange={onChangeValue}
+                    variant='filled'
+                    className='dropDownStyle'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  >
+                    <MenuItem value=''>
+                      <em>Specialist</em>
+                    </MenuItem>
+
+                    {specialistArray.map((val) => {
+                      return (
+                        <MenuItem key={val.key} value={val.key}>
+                          {val.value}
+                        </MenuItem>
+                      )
+                    })}
+                  </TextField>
                 </div>
               </div>
 
