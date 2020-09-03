@@ -11,7 +11,7 @@ import ECR from '../subRoutes/ecr'
 import PatientListingRoutes from './patientListing'
 import patientAssessment from './patientAssessment'
 import patientCare from './patientCare'
-import LabRadRequest from './LabRadRequest'
+import LabRadRequest from './labRadRequest'
 import EDR from './EDR'
 import IPR from './iprRoutes'
 
