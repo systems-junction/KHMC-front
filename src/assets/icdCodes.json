@@ -1,0 +1,33 @@
+[
+    {
+        "Intestinal infectious diseases": [
+            "A00 Cholera",
+            "A01 Typhoid and paratyphoid fevers",
+            "A02 Other salmonella infections",
+            "A03 Shigellosis",
+            "A04 Other bacterial intestinal infections",
+            "A05 Oth bacterial foodborne intoxications, NEC",
+            "A06 Amebiasis",
+            "A07 Other protozoal intestinal diseases",
+            "A08 Viral and other specified intestinal infections",
+            "A09 Infectious gastroenteritis and colitis, unspecified"
+        ],
+        "Tuberculosis": [
+            "A15 Respiratory tuberculosis",
+            "A17 Tuberculosis of nervous system",
+            "A18 Tuberculosis of other organs",
+            "A19 Miliary tuberculosis"
+        ],
+        "Certain zoonotic bacterial diseases": [
+            "A20 Plague",
+            "A21 Tularemia",
+            "A22 Anthrax",
+            "A23 Brucellosis",
+            "A24 Glanders and melioidosis",
+            "A25 Rat-bite fevers",
+            "A26 Erysipeloid",
+            "A27 Leptospirosis",
+            "A28 Other zoonotic bacterial diseases, not elsewhere classified"
+        ]
+    }
+]

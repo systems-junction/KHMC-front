@@ -45,7 +45,7 @@ import Loader from 'react-loader-spinner'
 
 const tableHeadingForResident = [
   'Date/Time',
-  'Description',
+  'Description/Condition',
   'Doctor Ref',
   'Action',
 ]
@@ -55,7 +55,6 @@ const tableDataKeysForResident = [
   ['doctor', 'firstName'],
 ]
 const tableHeadingForConsultation = [
-  // 'Consultation ID',
   'Date/Time',
   'Description/Condition',
   'Doctor',
@@ -63,7 +62,6 @@ const tableHeadingForConsultation = [
   'Action',
 ]
 const tableDataKeysForConsultation = [
-  // 'consultationNo',
   'date',
   'description',
   'specialist',
@@ -2249,6 +2247,34 @@ function LabRadRequest(props) {
               Add Consultation Note
             </DialogTitle>
             <div className={`container-fluid ${classes.root}`}>
+            <div className='row'>
+                <div
+                  className='col-md-12 col-sm-12 col-12'
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
+                    multiline
+                    rows={4}
+                    label='Comments/Notes'
+                    name={'consultationNotes'}
+                    value={consultationNotes}
+                    error={consultationNotes === '' && isFormSubmitted}
+                    onChange={onChangeValue}
+                    className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                      disableUnderline: true
+                    }}
+                  />
+                </div>
+              </div>
+
               <div className='row'>
                 <div
                   className='col-md-12 col-sm-12 col-12'
@@ -2259,6 +2285,8 @@ function LabRadRequest(props) {
                 >
                   <TextField
                     required
+                    multiline
+                    rows={4}
                     label='Description'
                     name={'description'}
                     value={description}
@@ -2269,81 +2297,7 @@ function LabRadRequest(props) {
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className='row'>
-                <div
-                  className='col-md-12'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    label='Comments/Notes'
-                    // label='Consultation Note'
-                    name={'consultationNotes'}
-                    value={consultationNotes}
-                    error={consultationNotes === '' && isFormSubmitted}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className='row'>
-                <div
-                  className='col-md-6 col-sm-6 col-6'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    disabled
-                    label='Date'
-                    name={'date'}
-                    value={date}
-                    // error={date === '' && isFormSubmitted}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
-                </div>
-                <div
-                  className='col-md-6 col-sm-6 col-6'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    disabled
-                    label='Requester'
-                    name={'requester'}
-                    value={requester}
-                    // error={requester === '' && isFormSubmitted}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
+                      disableUnderline: true
                     }}
                   />
                 </div>
@@ -2371,6 +2325,7 @@ function LabRadRequest(props) {
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
+                      disableUnderline: true
                     }}
                   >
                     <MenuItem value=''>
@@ -2397,7 +2352,7 @@ function LabRadRequest(props) {
                     required
                     select
                     fullWidth
-                    label='Specialist'
+                    label='Select Consultant/Specialist'
                     name={'specialist'}
                     value={specialist}
                     error={specialist === '' && isFormSubmitted}
@@ -2407,6 +2362,7 @@ function LabRadRequest(props) {
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
+                      disableUnderline: true
                     }}
                   >
                     <MenuItem value=''>
@@ -2428,7 +2384,7 @@ function LabRadRequest(props) {
                 <div style={{ marginTop: '2%', marginBottom: '2%' }}>
                   <Button
                     onClick={() => hideDialog()}
-                    style={styles.stylesForButton}
+                    style={{...styles.stylesForButton,backgroundColor:'white',color:'grey'}}
                     variant='contained'
                   >
                     <strong>Cancel</strong>
@@ -2460,7 +2416,7 @@ function LabRadRequest(props) {
                     variant='contained'
                     color='primary'
                   >
-                    Add Note
+                    Submit
                   </Button>
                 </div>
               </div>

@@ -1,11 +1,9 @@
 import React, { useEffect, useState, useReducer } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import InputLabel from '@material-ui/core/InputLabel'
 import Button from '@material-ui/core/Button'
 import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
 import axios from 'axios'
 import TextField from '@material-ui/core/TextField'
-import AutoComplete from '@material-ui/lab/AutoComplete'
 import {
   getSearchedLaboratoryService,
   getSearchedRadiologyService,
@@ -23,28 +21,28 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import CustomTable from '../../../components/Table/Table'
 import plus_icon from '../../../assets/img/Plus.png'
-import InputLabelComponent from '../../../components/InputLabel/inputLabel'
 import Paper from '@material-ui/core/Paper'
 import Table from '@material-ui/core/Table'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
+import MenuItem from '@material-ui/core/MenuItem'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
-import ErrorMessage from '../../../components/ErrorMessage/errorMessage'
 import Notification from '../../../components/Snackbar/Notification.js'
 import Fingerprint from '../../../assets/img/fingerprint.png'
 import AccountCircle from '@material-ui/icons/SearchOutlined'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import BarCode from '../../../assets/img/Bar Code.png'
 import ViewSingleRequest from './viewRequest'
-import Loader from 'react-loader-spinner'
+
+let icdCodesList = require('../../../assets/icdCodes.json')
 
 const tableHeadingForResident = [
   'Date/Time',
-  'Description',
+  'Description / Condition',
   'Doctor Ref',
   'Action',
 ]
@@ -54,15 +52,13 @@ const tableDataKeysForResident = [
   ['doctor', 'firstName'],
 ]
 const tableHeadingForConsultation = [
-  // 'Consultation ID',
   'Date/Time',
-  'Description/Condition',
+  'Description / Condition',
   'Doctor',
   'Doctor Ref',
   'Action',
 ]
 const tableDataKeysForConsultation = [
-  // 'consultationNo',
   'date',
   'description',
   'specialist',
@@ -81,36 +77,36 @@ const tableDataKeysForConsultation = [
 //     ["requester", "firstName"],
 //     "status",
 // ];
-const tableHeadingForLabReq = [
-  'Request Id',
-  'Service Code',
-  'Service Name',
-  'Requester',
-  'Status',
-  'Action',
-]
-const tableDataKeysForLabReq = [
-  '_id',
-  'serviceCode',
-  'serviceName',
-  'requesterName',
-  'status',
-]
-const tableHeadingForRadiology = [
-  'Request Id',
-  'Service Code',
-  'Service Name',
-  'Requester',
-  'Status',
-  'Action',
-]
-const tableDataKeysForRadiology = [
-  '_id',
-  'serviceCode',
-  'serviceName',
-  'requesterName',
-  'status',
-]
+// const tableHeadingForLabReq = [
+//   'Request Id',
+//   'Service Code',
+//   'Service Name',
+//   'Requester',
+//   'Status',
+//   'Action',
+// ]
+// const tableDataKeysForLabReq = [
+//   '_id',
+//   'serviceCode',
+//   'serviceName',
+//   'requesterName',
+//   'status',
+// ]
+// const tableHeadingForRadiology = [
+//   'Request Id',
+//   'Service Code',
+//   'Service Name',
+//   'Requester',
+//   'Status',
+//   'Action',
+// ]
+// const tableDataKeysForRadiology = [
+//   '_id',
+//   'serviceCode',
+//   'serviceName',
+//   'requesterName',
+//   'status',
+// ]
 // const tableHeadingForNurse = [
 //     "Service Code",
 //     "Service Name",
@@ -129,7 +125,7 @@ const styles = {
   patientDetails: {
     backgroundColor: 'white',
     borderRadius: 5,
-    padding: '20px',
+    // padding: '20px',
   },
   inputContainerForTextField: {
     marginTop: 25,
@@ -238,8 +234,6 @@ const useStylesForInput = makeStyles((theme) => ({
   },
 }))
 
-const useStyles = makeStyles(tableStyles)
-
 function LabRadRequest(props) {
   const classesForTabs = useStylesForTabs()
   const classes = useStylesForInput()
@@ -280,6 +274,8 @@ function LabRadRequest(props) {
 
     pharmacyRequestArray: '',
     requestType: '',
+    section: '',
+    code: []
   }
 
   function reducer(state, { field, value }) {
@@ -306,15 +302,7 @@ function LabRadRequest(props) {
     radioServiceStatus,
     radioComments,
 
-    //for nursing
-    nurseServiceId,
-    nurseServiceCode,
-    nurseServiceName,
-    nurseService,
-    nurseServiceStatus,
-
     consultationNoteArray,
-    consultationNo,
     date = new Date(),
     description,
     consultationNotes,
@@ -325,10 +313,9 @@ function LabRadRequest(props) {
     residentNoteArray,
     rdescription,
     note,
-    doctor = cookie.load('current_user').name,
-
-    pharmacyRequestArray,
     requestType,
+    section,
+    code
   } = state
 
   const onChangeValue = (e) => {
@@ -337,6 +324,7 @@ function LabRadRequest(props) {
 
   const [currentUser, setCurrentUser] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
+  const [successMsg, setsuccessMsg] = useState('')
   const [openNotification, setOpenNotification] = useState(false)
   const [value, setValue] = useState(0)
   const [selectedItem, setSelectedItem] = useState('')
@@ -344,52 +332,37 @@ function LabRadRequest(props) {
   const [patientFoundSuccessfull, setpatientFoundSuccessfully] = useState(false)
   const [patientFound, setpatientFound] = useState('')
   const [patientDetails, setPatientDetails] = useState('')
-  const [selectedPatientArray, setSelectedPatientArray] = useState([])
-  const [patientDetailsDialog, openPatientDetailsDialog] = useState(false)
+  const [, setSelectedPatientArray] = useState([])
+  const [, openPatientDetailsDialog] = useState(false)
   const [enableForm, setenableForm] = useState(true)
   const [openItemDialog, setOpenItemDialog] = useState(false)
   const [openAddConsultDialog, setOpenAddConsultDialog] = useState(false)
   const [openAddResidentDialog, setOpenAddResidentDialog] = useState(false)
   const [item, setItem] = useState('')
-  const [selectedPatient, setSelectedPatient] = useState('')
-  const [requestNo, setrequestNo] = useState('')
-  const [labRequest, setlabRequest] = useState('')
-  const [pharmacyRequest, setpharmacyRequest] = useState('')
-  const [radiologyRequest, setradiologyRequest] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [itemFound, setItemFound] = useState('')
   const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false)
-  const [selectedSearchedItem, setSelectedSearchedItem] = useState('')
-  const [selectedSearchedRadioItem, setSelectedSearchedRadioItem] = useState('')
-  const [selectedLabArray, setSelectedLabArray] = useState([])
-  const [selectedRadioArray, setSelectedRadioArray] = useState([])
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false)
+  const [isFormSubmitted] = useState(false)
   const [id, setId] = useState('')
   const [searchRadioQuery, setSearchRadioQuery] = useState('')
-  const [radioItemFoundSuccessfull, setRadioItemFoundSuccessfully] = useState(
-    ''
-  )
+  const [radioItemFoundSuccessfull, setRadioItemFoundSuccessfully] = useState('')
   const [radioItemFound, setRadioItemFound] = useState('')
   const [addLabRequest, setaddLabRequest] = useState(false)
   const [addRadioRequest, setaddRadioRequest] = useState(false)
-  const [nurseItemFoundSuccessfull, setNurseItemFoundSuccessfully] = useState(
-    ''
-  )
-  const [nurseItemFound, setNurseItemFound] = useState('')
-  const [addNurseRequest, setaddNurseRequest] = useState(false)
-  const [searchNurseQuery, setSearchNurseQuery] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
+  const [, setIsLoading] = useState(true)
+  const [icdSection, seticdSection] = useState('')
+  const [icdCode, seticdCode] = useState([])
 
   useEffect(() => {
     setCurrentUser(cookie.load('current_user'))
-
+    seticdSection(Object.keys(icdCodesList[0]))
     // getEDRById(props.history.location.state.selectedItem._id);
 
     // setId(props.history.location.state.selectedItem._id);
     // setSelectedItem(props.history.location.state.selectedItem);
     // setrequestNo(props.history.location.state.selectedItem.requestNo);
     // setSelectedPatient(props.history.location.state.selectedItem.patientId);
-  }, [])
+  }, [icdCode])
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
@@ -470,6 +443,8 @@ function LabRadRequest(props) {
         description: rdescription,
         doctor: currentUser.staffId,
         note: note,
+        section:section,
+        code:code
       },
     ]
 
@@ -478,14 +453,15 @@ function LabRadRequest(props) {
       requestType,
       residentNotes: residentNote,
     }
-
-    // console.log("params", params);
+    console.log("params", params);
     axios
       .put(updateEdrIpr, params)
       .then((res) => {
         if (res.data.success) {
           console.log('response while adding Resident Req', res.data.data)
           window.location.reload(false)
+          setOpenNotification(true)
+          setsuccessMsg('Submitted')
         } else if (!res.data.success) {
           setOpenNotification(true)
           setErrorMsg('Error while adding the Resident request')
@@ -523,225 +499,225 @@ function LabRadRequest(props) {
     dispatch({ field: 'note', value: '' })
   }
 
-  const handleSearch = (e) => {
-    setSearchQuery(e.target.value)
-    if (e.target.value.length >= 3) {
-      axios
-        .get(getSearchedLaboratoryService + '/' + e.target.value)
-        .then((res) => {
-          if (res.data.success) {
-            if (res.data.data.length > 0) {
-              console.log(res.data.data)
-              setItemFoundSuccessfully(true)
-              setItemFound(res.data.data)
-            } else {
-              setItemFoundSuccessfully(false)
-              setItemFound('')
-            }
-          }
-        })
-        .catch((e) => {
-          console.log('error while searching req', e)
-        })
-    }
-  }
+  // const handleSearch = (e) => {
+  //   setSearchQuery(e.target.value)
+  //   if (e.target.value.length >= 3) {
+  //     axios
+  //       .get(getSearchedLaboratoryService + '/' + e.target.value)
+  //       .then((res) => {
+  //         if (res.data.success) {
+  //           if (res.data.data.length > 0) {
+  //             console.log(res.data.data)
+  //             setItemFoundSuccessfully(true)
+  //             setItemFound(res.data.data)
+  //           } else {
+  //             setItemFoundSuccessfully(false)
+  //             setItemFound('')
+  //           }
+  //         }
+  //       })
+  //       .catch((e) => {
+  //         console.log('error while searching req', e)
+  //       })
+  //   }
+  // }
 
-  function handleAddItem(i) {
-    // console.log("selected item", i);
+  // function handleAddItem(i) {
+  //   // console.log("selected item", i);
 
-    dispatch({ field: 'labServiceId', value: i._id })
-    dispatch({ field: 'labServiceCode', value: i.serviceNo })
-    dispatch({ field: 'labServiceName', value: i.name })
-    dispatch({ field: 'labServiceStatus', value: i.status })
+  //   dispatch({ field: 'labServiceId', value: i._id })
+  //   dispatch({ field: 'labServiceCode', value: i.serviceNo })
+  //   dispatch({ field: 'labServiceName', value: i.name })
+  //   dispatch({ field: 'labServiceStatus', value: i.status })
 
-    setSearchQuery('')
-    setaddLabRequest(true)
-  }
+  //   setSearchQuery('')
+  //   setaddLabRequest(true)
+  // }
 
-  const addSelectedLabItem = () => {
-    // setIsFormSubmitted(true);
-    // if (validateItemsForm()) {
+  // const addSelectedLabItem = () => {
+  //   // setIsFormSubmitted(true);
+  //   // if (validateItemsForm()) {
 
-    let found =
-      labRequestArray &&
-      labRequestArray.find((item) => item.serviceId === labServiceId)
+  //   let found =
+  //     labRequestArray &&
+  //     labRequestArray.find((item) => item.serviceId === labServiceId)
 
-    if (found) {
-      setOpenNotification(true)
-      setErrorMsg('This Service has already been added.')
-    } else {
-      dispatch({
-        field: 'labRequestArray',
-        value: [
-          ...labRequestArray,
-          {
-            serviceId: labServiceId,
-            serviceCode: labServiceCode,
-            serviceName: labServiceName,
-            requester: currentUser.staffId,
-            requesterName: requester,
-            status: labServiceStatus,
-          },
-        ],
-      })
-      // }
-    }
+  //   if (found) {
+  //     setOpenNotification(true)
+  //     setErrorMsg('This Service has already been added.')
+  //   } else {
+  //     dispatch({
+  //       field: 'labRequestArray',
+  //       value: [
+  //         ...labRequestArray,
+  //         {
+  //           serviceId: labServiceId,
+  //           serviceCode: labServiceCode,
+  //           serviceName: labServiceName,
+  //           requester: currentUser.staffId,
+  //           requesterName: requester,
+  //           status: labServiceStatus,
+  //         },
+  //       ],
+  //     })
+  //     // }
+  //   }
 
-    dispatch({ field: 'labServiceId', value: '' })
-    dispatch({ field: 'labServiceName', value: '' })
-    dispatch({ field: 'labServiceStatus', value: '' })
-    dispatch({ field: 'labServiceCode', value: '' })
+  //   dispatch({ field: 'labServiceId', value: '' })
+  //   dispatch({ field: 'labServiceName', value: '' })
+  //   dispatch({ field: 'labServiceStatus', value: '' })
+  //   dispatch({ field: 'labServiceCode', value: '' })
 
-    setaddLabRequest(false)
-  }
+  //   setaddLabRequest(false)
+  // }
 
-  const saveLabReq = () => {
-    let labItems = []
-    for (let i = 0; i < labRequestArray.length; i++) {
-      labItems = [
-        ...labItems,
-        {
-          serviceId: labRequestArray[i].serviceId,
-          serviceCode: labRequestArray[i].serviceCode,
-          requesterName: labRequestArray[i].requesterName,
-          requester: labRequestArray[i].requester,
-          serviceName: labRequestArray[i].serviceName,
-          status: labRequestArray[i].status,
-        },
-      ]
-    }
-    const params = {
-      _id: id,
-      requestType,
-      labRequest: labItems,
-    }
-    console.log('Lab params', params)
-    axios
-      .put(updateEdrIpr, params)
-      .then((res) => {
-        if (res.data.success) {
-          console.log('response after adding Lab Request', res.data)
-          window.location.reload(false)
-        } else if (!res.data.success) {
-          setOpenNotification(true)
-        }
-      })
-      .catch((e) => {
-        console.log('error after adding Lab Request', e)
-        setOpenNotification(true)
-        setErrorMsg('Error while adding the Lab Request')
-      })
-  }
+  // const saveLabReq = () => {
+  //   let labItems = []
+  //   for (let i = 0; i < labRequestArray.length; i++) {
+  //     labItems = [
+  //       ...labItems,
+  //       {
+  //         serviceId: labRequestArray[i].serviceId,
+  //         serviceCode: labRequestArray[i].serviceCode,
+  //         requesterName: labRequestArray[i].requesterName,
+  //         requester: labRequestArray[i].requester,
+  //         serviceName: labRequestArray[i].serviceName,
+  //         status: labRequestArray[i].status,
+  //       },
+  //     ]
+  //   }
+  //   const params = {
+  //     _id: id,
+  //     requestType,
+  //     labRequest: labItems,
+  //   }
+  //   console.log('Lab params', params)
+  //   axios
+  //     .put(updateEdrIpr, params)
+  //     .then((res) => {
+  //       if (res.data.success) {
+  //         console.log('response after adding Lab Request', res.data)
+  //         window.location.reload(false)
+  //       } else if (!res.data.success) {
+  //         setOpenNotification(true)
+  //       }
+  //     })
+  //     .catch((e) => {
+  //       console.log('error after adding Lab Request', e)
+  //       setOpenNotification(true)
+  //       setErrorMsg('Error while adding the Lab Request')
+  //     })
+  // }
 
-  const handleRadioSearch = (e) => {
-    setSearchRadioQuery(e.target.value)
-    if (e.target.value.length >= 3) {
-      axios
-        .get(getSearchedRadiologyService + '/' + e.target.value)
-        .then((res) => {
-          if (res.data.success) {
-            if (res.data.data.length > 0) {
-              console.log(res.data.data)
-              setRadioItemFoundSuccessfully(true)
-              setRadioItemFound(res.data.data)
-            } else {
-              setRadioItemFoundSuccessfully(false)
-              setRadioItemFound('')
-            }
-          }
-        })
-        .catch((e) => {
-          console.log('error while searching req', e)
-        })
-    }
-  }
+  // const handleRadioSearch = (e) => {
+  //   setSearchRadioQuery(e.target.value)
+  //   if (e.target.value.length >= 3) {
+  //     axios
+  //       .get(getSearchedRadiologyService + '/' + e.target.value)
+  //       .then((res) => {
+  //         if (res.data.success) {
+  //           if (res.data.data.length > 0) {
+  //             console.log(res.data.data)
+  //             setRadioItemFoundSuccessfully(true)
+  //             setRadioItemFound(res.data.data)
+  //           } else {
+  //             setRadioItemFoundSuccessfully(false)
+  //             setRadioItemFound('')
+  //           }
+  //         }
+  //       })
+  //       .catch((e) => {
+  //         console.log('error while searching req', e)
+  //       })
+  //   }
+  // }
 
-  function handleAddRadioItem(i) {
-    // console.log("selected item", i);
-    dispatch({ field: 'radioServiceId', value: i._id })
-    dispatch({ field: 'radioServiceCode', value: i.serviceNo })
-    dispatch({ field: 'radioServiceName', value: i.name })
-    dispatch({ field: 'radioServiceStatus', value: i.status })
+  // function handleAddRadioItem(i) {
+  //   // console.log("selected item", i);
+  //   dispatch({ field: 'radioServiceId', value: i._id })
+  //   dispatch({ field: 'radioServiceCode', value: i.serviceNo })
+  //   dispatch({ field: 'radioServiceName', value: i.name })
+  //   dispatch({ field: 'radioServiceStatus', value: i.status })
 
-    setSearchRadioQuery('')
-    setaddRadioRequest(true)
-  }
+  //   setSearchRadioQuery('')
+  //   setaddRadioRequest(true)
+  // }
 
-  const addSelectedRadioItem = () => {
-    // setIsFormSubmitted(true);
-    // if (validateItemsForm()) {
+  // const addSelectedRadioItem = () => {
+  //   // setIsFormSubmitted(true);
+  //   // if (validateItemsForm()) {
 
-    let found =
-      radiologyRequestArray &&
-      radiologyRequestArray.find((item) => item.serviceId === radioServiceId)
+  //   let found =
+  //     radiologyRequestArray &&
+  //     radiologyRequestArray.find((item) => item.serviceId === radioServiceId)
 
-    if (found) {
-      setOpenNotification(true)
-      setErrorMsg('This Service has already been added.')
-    } else {
-      dispatch({
-        field: 'radiologyRequestArray',
-        value: [
-          ...radiologyRequestArray,
-          {
-            serviceId: radioServiceId,
-            serviceCode: radioServiceCode,
-            requesterName: requester,
-            serviceName: radioServiceName,
-            requester: currentUser.staffId,
-            status: radioServiceStatus,
-          },
-        ],
-      })
-      // }
-    }
+  //   if (found) {
+  //     setOpenNotification(true)
+  //     setErrorMsg('This Service has already been added.')
+  //   } else {
+  //     dispatch({
+  //       field: 'radiologyRequestArray',
+  //       value: [
+  //         ...radiologyRequestArray,
+  //         {
+  //           serviceId: radioServiceId,
+  //           serviceCode: radioServiceCode,
+  //           requesterName: requester,
+  //           serviceName: radioServiceName,
+  //           requester: currentUser.staffId,
+  //           status: radioServiceStatus,
+  //         },
+  //       ],
+  //     })
+  //     // }
+  //   }
 
-    dispatch({ field: 'radioServiceId', value: '' })
-    dispatch({ field: 'radioServiceCode', value: '' })
-    dispatch({ field: 'radioServiceName', value: '' })
-    dispatch({ field: 'radioServiceStatus', value: '' })
+  //   dispatch({ field: 'radioServiceId', value: '' })
+  //   dispatch({ field: 'radioServiceCode', value: '' })
+  //   dispatch({ field: 'radioServiceName', value: '' })
+  //   dispatch({ field: 'radioServiceStatus', value: '' })
 
-    setaddLabRequest(false)
-  }
+  //   setaddLabRequest(false)
+  // }
 
-  const saveRadioReq = () => {
-    let radioItems = []
-    for (let i = 0; i < radiologyRequestArray.length; i++) {
-      radioItems = [
-        ...radioItems,
-        {
-          serviceId: radiologyRequestArray[i].serviceId,
-          serviceCode: radiologyRequestArray[i].serviceCode,
-          requester: radiologyRequestArray[i].requester,
-          requesterName: radiologyRequestArray[i].requesterName,
-          serviceName: radiologyRequestArray[i].serviceName,
-          status: radiologyRequestArray[i].status,
-        },
-      ]
-    }
+  // const saveRadioReq = () => {
+  //   let radioItems = []
+  //   for (let i = 0; i < radiologyRequestArray.length; i++) {
+  //     radioItems = [
+  //       ...radioItems,
+  //       {
+  //         serviceId: radiologyRequestArray[i].serviceId,
+  //         serviceCode: radiologyRequestArray[i].serviceCode,
+  //         requester: radiologyRequestArray[i].requester,
+  //         requesterName: radiologyRequestArray[i].requesterName,
+  //         serviceName: radiologyRequestArray[i].serviceName,
+  //         status: radiologyRequestArray[i].status,
+  //       },
+  //     ]
+  //   }
 
-    const params = {
-      _id: id,
-      requestType,
-      radiologyRequest: radioItems,
-    }
-    console.log('Radio params', params)
-    axios
-      .put(updateEdrIpr, params)
-      .then((res) => {
-        if (res.data.success) {
-          console.log('response after adding Radio Request', res.data)
-          window.location.reload(false)
-        } else if (!res.data.success) {
-          setOpenNotification(true)
-        }
-      })
-      .catch((e) => {
-        console.log('error after adding Radio Request', e)
-        setOpenNotification(true)
-        setErrorMsg('Error while adding the Radiology Request')
-      })
-  }
+  //   const params = {
+  //     _id: id,
+  //     requestType,
+  //     radiologyRequest: radioItems,
+  //   }
+  //   console.log('Radio params', params)
+  //   axios
+  //     .put(updateEdrIpr, params)
+  //     .then((res) => {
+  //       if (res.data.success) {
+  //         console.log('response after adding Radio Request', res.data)
+  //         window.location.reload(false)
+  //       } else if (!res.data.success) {
+  //         setOpenNotification(true)
+  //       }
+  //     })
+  //     .catch((e) => {
+  //       console.log('error after adding Radio Request', e)
+  //       setOpenNotification(true)
+  //       setErrorMsg('Error while adding the Radiology Request')
+  //     })
+  // }
 
   // // for Nursing
   // const handleNurseSearch = (e) => {
@@ -845,6 +821,54 @@ function LabRadRequest(props) {
   //         });
   // };
 
+  const onChangeSection = (e) => {
+    if (e.target.value) {
+      dispatch({ field: e.target.name, value: e.target.value })
+      let codes = Object.entries(icdCodesList[0])
+      for (var x in codes) {
+        let arr = codes[x]
+        if (arr[0] === e.target.value) {
+          console.log('codes', arr[1])
+          seticdCode(arr[1])
+        }
+      }
+    } else {
+      dispatch({ field: e.target.name, value: e.target.value })
+      dispatch({ field: 'Code', value: '' })
+      seticdCode('')
+    }
+  }
+
+  const handleCodeSearch=(e)=> {
+    let currentList = [];
+    let newList = [];
+
+    if (e.target.value !== "") 
+    {
+      currentList = icdCode;
+
+      newList = currentList.filter(item => {
+        const lc = item.toLowerCase();
+        const filter = e.target.value.toLowerCase();
+        return lc.includes(filter);
+      });
+    } 
+    else 
+    {
+      let codes = Object.entries(icdCodesList[0])
+      for (var x in codes) 
+      {
+        let arr = codes[x]
+        if (arr[0] === section) 
+        {
+          console.log('codes', arr[1])
+          newList=arr[1]
+        }
+      }
+    }
+    seticdCode(newList)
+  }
+
   //for search patient
   const handlePatientSearch = (e) => {
     setSearchPatientQuery(e.target.value)
@@ -869,12 +893,7 @@ function LabRadRequest(props) {
     }
   }
 
-  function showPatientDetails() {
-    openPatientDetailsDialog(false)
-  }
-
   function handleAddPatient(i) {
-    // setDialogOpen(true);
     console.log('selected banda : ', i)
     setPatientDetails(i)
     getPatientByInfo(i._id)
@@ -906,11 +925,12 @@ function LabRadRequest(props) {
                 // if (key === "patientId") {
                 //     dispatch({ field: "patientId", value: val._id });
                 // } else
-                if (key === 'labRequest') {
-                  dispatch({ field: 'labRequestArray', value: val })
-                } else if (key === 'radiologyRequest') {
-                  dispatch({ field: 'radiologyRequestArray', value: val })
-                } else if (key === 'consultationNote') {
+                // if (key === 'labRequest') {
+                //   dispatch({ field: 'labRequestArray', value: val })
+                // } else if (key === 'radiologyRequest') {
+                //   dispatch({ field: 'radiologyRequestArray', value: val })
+                // } else 
+                if (key === 'consultationNote') {
                   Object.entries(val).map(([key1, val1]) => {
                     if (key1 == 'requester') {
                       dispatch({ field: 'requester', value: val1._id })
@@ -952,6 +972,24 @@ function LabRadRequest(props) {
       })
   }
 
+  const addICDcodes = (item,e) => {
+    if (code.includes(item)) {
+      var index = code.indexOf(item);
+      code.splice(index, 1);
+      e.target.className = "addCode"
+    }
+    else {
+      dispatch({
+        field: "code",
+        value: [
+          ...code,
+          item
+        ],
+      });
+      e.target.className = "addedCode"
+    }
+  }
+
   const TriageAssessment = () => {
     let path = `assessmentdiagnosis/triageAssessment`
     props.history.push({
@@ -966,6 +1004,7 @@ function LabRadRequest(props) {
     setTimeout(() => {
       setOpenNotification(false)
       setErrorMsg('')
+      setsuccessMsg('')
     }, 2000)
   }
 
@@ -1124,18 +1163,18 @@ function LabRadRequest(props) {
                         </Table>
                       )
                     ) : (
-                      <h4
-                        style={{ textAlign: 'center' }}
-                        onClick={() => setSearchPatientQuery('')}
-                      >
-                        Patient Not Found
-                      </h4>
-                    )}
+                        <h4
+                          style={{ textAlign: 'center' }}
+                          onClick={() => setSearchPatientQuery('')}
+                        >
+                          Patient Not Found
+                        </h4>
+                      )}
                   </Paper>
                 </div>
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
             </div>
           </div>
         </div>
@@ -1357,8 +1396,8 @@ function LabRadRequest(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
               </div>
             </div>
           ) : value === 0 ? (
@@ -1378,8 +1417,8 @@ function LabRadRequest(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
               </div>
 
               <div className='row' style={{ marginBottom: '25px' }}>
@@ -1401,510 +1440,512 @@ function LabRadRequest(props) {
                 </div>
               </div>
             </div>
-          ) : value === 2 ? (
-            <div
-              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-              className={`container-fluid ${classes.root}`}
-            >
-              <div style={{ marginTop: '20px' }} className='row'>
-                <div
-                  className='col-md-12 col-sm-12 col-12'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    disabled={enableForm}
-                    label='Lab Test'
-                    name={'searchQuery'}
-                    value={searchQuery}
-                    onChange={handleSearch}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                  />
-                </div>
-              </div>
+          )
+              // : value === 2 ? (
+              //   <div
+              //     style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              //     className={`container-fluid ${classes.root}`}
+              //   >
+              //     <div style={{ marginTop: '20px' }} className='row'>
+              //       <div
+              //         className='col-md-12 col-sm-12 col-12'
+              //         style={{
+              //           ...styles.inputContainerForTextField,
+              //           ...styles.textFieldPadding,
+              //         }}
+              //       >
+              //         <TextField
+              //           required
+              //           disabled={enableForm}
+              //           label='Lab Test'
+              //           name={'searchQuery'}
+              //           value={searchQuery}
+              //           onChange={handleSearch}
+              //           className='textInputStyle'
+              //           variant='filled'
+              //           InputProps={{
+              //             className: classes.input,
+              //             classes: { input: classes.input },
+              //             disableUnderline: true,
+              //           }}
+              //         />
+              //       </div>
+              //     </div>
 
-              {searchQuery ? (
-                <div style={{ zIndex: 10 }}>
-                  <Paper>
-                    {itemFoundSuccessfull ? (
-                      itemFound && (
-                        <Table size='small'>
-                          <TableHead>
-                            <TableRow>
-                              <TableCell>Service Name</TableCell>
-                              <TableCell>Service Number</TableCell>
-                              <TableCell>Price</TableCell>
-                              <TableCell align='center'>Description</TableCell>
-                            </TableRow>
-                          </TableHead>
+              //     {searchQuery ? (
+              //       <div style={{ zIndex: 10 }}>
+              //         <Paper>
+              //           {itemFoundSuccessfull ? (
+              //             itemFound && (
+              //               <Table size='small'>
+              //                 <TableHead>
+              //                   <TableRow>
+              //                     <TableCell>Service Name</TableCell>
+              //                     <TableCell>Service Number</TableCell>
+              //                     <TableCell>Price</TableCell>
+              //                     <TableCell align='center'>Description</TableCell>
+              //                   </TableRow>
+              //                 </TableHead>
 
-                          <TableBody>
-                            {itemFound.map((i, index) => {
-                              return (
-                                <TableRow
-                                  key={i.serviceNo}
-                                  onClick={() => handleAddItem(i)}
-                                  style={{ cursor: 'pointer' }}
-                                >
-                                  <TableCell>{i.name}</TableCell>
-                                  <TableCell>{i.serviceNo}</TableCell>
-                                  <TableCell>{i.price}</TableCell>
-                                  <TableCell>{i.description}</TableCell>
-                                </TableRow>
-                              )
-                            })}
-                          </TableBody>
-                        </Table>
-                      )
-                    ) : (
-                      <h4
-                        style={{ textAlign: 'center' }}
-                        onClick={() => setSearchQuery('')}
-                      >
-                        Service Not Found
-                      </h4>
-                    )}
-                  </Paper>
-                </div>
-              ) : (
+              //                 <TableBody>
+              //                   {itemFound.map((i) => {
+              //                     return (
+              //                       <TableRow
+              //                         key={i.serviceNo}
+              //                         onClick={() => handleAddItem(i)}
+              //                         style={{ cursor: 'pointer' }}
+              //                       >
+              //                         <TableCell>{i.name}</TableCell>
+              //                         <TableCell>{i.serviceNo}</TableCell>
+              //                         <TableCell>{i.price}</TableCell>
+              //                         <TableCell>{i.description}</TableCell>
+              //                       </TableRow>
+              //                     )
+              //                   })}
+              //                 </TableBody>
+              //               </Table>
+              //             )
+              //           ) : (
+              //               <h4
+              //                 style={{ textAlign: 'center' }}
+              //                 onClick={() => setSearchQuery('')}
+              //               >
+              //                 Service Not Found
+              //               </h4>
+              //             )}
+              //         </Paper>
+              //       </div>
+              //     ) : (
+              //         undefined
+              //       )}
+
+              //     <div style={{ marginTop: '20px' }} className='row'>
+              //       <div
+              //         className='col-md-5 col-sm-5 col-3'
+              //         style={{
+              //           ...styles.inputContainerForTextField,
+              //           ...styles.textFieldPadding,
+              //         }}
+              //       >
+              //         <TextField
+              //           required
+              //           disabled
+              //           label='Selected Service'
+              //           name={'labServiceName'}
+              //           value={labServiceName}
+              //           onChange={onChangeValue}
+              //           className='textInputStyle'
+              //           variant='filled'
+              //           InputProps={{
+              //             className: classes.input,
+              //             classes: { input: classes.input },
+              //             disableUnderline: true,
+              //           }}
+              //         />
+              //       </div>
+              //       <div
+              //         className='col-md-5 col-sm-5 col-3'
+              //         style={{
+              //           ...styles.inputContainerForTextField,
+              //           ...styles.textFieldPadding,
+              //         }}
+              //       >
+              //         <TextField
+              //           required
+              //           disabled={enableForm}
+              //           label='Comments / Notes'
+              //           name={'labComments'}
+              //           value={labComments}
+              //           onChange={onChangeValue}
+              //           className='textInputStyle'
+              //           variant='filled'
+              //           InputProps={{
+              //             className: classes.input,
+              //             classes: { input: classes.input },
+              //             disableUnderline: true,
+              //           }}
+              //         />
+              //       </div>
+              //       <div className='col-md-2 col-sm-2 col-6'>
+              //         <Button
+              //           style={{
+              //             ...styles.stylesForButton,
+              //             marginTop: '25px',
+              //             backgroundColor: '#ad6bbf',
+              //           }}
+              //           disabled={!addLabRequest}
+              //           onClick={addSelectedLabItem}
+              //           variant='contained'
+              //           color='primary'
+              //           fullWidth
+              //         >
+              //           Add
+              //         </Button>
+              //       </div>
+              //     </div>
+
+              //     <div className='row' style={{ marginTop: '20px' }}>
+              //       {labRequestArray !== 0 ? (
+              //         <CustomTable
+              //           tableData={labRequestArray}
+              //           tableDataKeys={tableDataKeysForLabReq}
+              //           tableHeading={tableHeadingForLabReq}
+              //           handleView={viewItem}
+              //           action={actions}
+              //           borderBottomColor={'#60d69f'}
+              //           borderBottomWidth={20}
+              //         />
+              //       ) : (
+              //           undefined
+              //         )}
+              //     </div>
+
+              //     <div className='row' style={{ marginBottom: '25px' }}>
+              //       <div className='col-md-12 col-sm-12 col-12 d-flex justify-content-end'>
+              //         <Button
+              //           disabled={enableForm}
+              //           onClick={saveLabReq}
+              //           style={{ ...styles.stylesForButton, width: '100px' }}
+              //           variant='contained'
+              //           color='primary'
+              //         >
+              //           <strong style={{ fontSize: '12px' }}>Save</strong>
+              //         </Button>
+              //       </div>
+              //     </div>
+              //   </div>
+              // ) : value === 3 ? (
+              //   <div
+              //     style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              //     className={`container-fluid ${classes.root}`}
+              //   >
+              //     <div style={{ marginTop: '20px' }} className='row'>
+              //       <div
+              //         className='col-md-12 col-sm-12 col-12'
+              //         style={{
+              //           ...styles.inputContainerForTextField,
+              //           ...styles.textFieldPadding,
+              //         }}
+              //       >
+              //         <TextField
+              //           required
+              //           label='Radiology / Imaging'
+              //           name={'searchRadioQuery'}
+              //           value={searchRadioQuery}
+              //           onChange={handleRadioSearch}
+              //           className='textInputStyle'
+              //           variant='filled'
+              //           InputProps={{
+              //             className: classes.input,
+              //             classes: { input: classes.input },
+              //             disableUnderline: true,
+              //           }}
+              //         />
+              //       </div>
+              //     </div>
+
+              //     {searchRadioQuery ? (
+              //       // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
+              //       <div style={{ zIndex: 10 }}>
+              //         <Paper>
+              //           {radioItemFoundSuccessfull ? (
+              //             radioItemFound && (
+              //               <Table size='small'>
+              //                 <TableHead>
+              //                   <TableRow>
+              //                     <TableCell>Service Name</TableCell>
+              //                     <TableCell>Service Number</TableCell>
+              //                     <TableCell>Price</TableCell>
+              //                     <TableCell align='center'>Description</TableCell>
+              //                   </TableRow>
+              //                 </TableHead>
+
+              //                 <TableBody>
+              //                   {radioItemFound.map((i) => {
+              //                     return (
+              //                       <TableRow
+              //                         key={i.serviceNo}
+              //                         onClick={() => handleAddRadioItem(i)}
+              //                         style={{ cursor: 'pointer' }}
+              //                       >
+              //                         <TableCell>{i.name}</TableCell>
+              //                         <TableCell>{i.serviceNo}</TableCell>
+              //                         <TableCell>{i.price}</TableCell>
+              //                         <TableCell>{i.description}</TableCell>
+              //                       </TableRow>
+              //                     )
+              //                   })}
+              //                 </TableBody>
+              //               </Table>
+              //             )
+              //           ) : (
+              //               <h4
+              //                 style={{ textAlign: 'center' }}
+              //                 onClick={() => setSearchRadioQuery('')}
+              //               >
+              //                 Service Not Found
+              //               </h4>
+              //             )}
+              //         </Paper>
+              //       </div>
+              //     ) : (
+              //         undefined
+              //       )}
+
+              //     <div style={{ marginTop: '20px' }} className='row'>
+              //       <div
+              //         className='col-md-5 col-sm-5 col-3'
+              //         style={{
+              //           ...styles.inputContainerForTextField,
+              //           ...styles.textFieldPadding,
+              //         }}
+              //       >
+              //         <TextField
+              //           required
+              //           disabled
+              //           label='Selected Service'
+              //           name={'radioServiceName'}
+              //           value={radioServiceName}
+              //           // error={radioServiceName === '' && isFormSubmitted}
+              //           onChange={onChangeValue}
+              //           className='textInputStyle'
+              //           variant='filled'
+              //           InputProps={{
+              //             className: classes.input,
+              //             classes: { input: classes.input },
+              //             disableUnderline: true,
+              //           }}
+              //         />
+              //       </div>
+              //       <div
+              //         className='col-md-5 col-sm-5 col-3'
+              //         style={{
+              //           ...styles.inputContainerForTextField,
+              //           ...styles.textFieldPadding,
+              //         }}
+              //       >
+              //         <TextField
+              //           required
+              //           disabled={enableForm}
+              //           label='Comments / Notes'
+              //           name={'radioComments'}
+              //           value={radioComments}
+              //           onChange={onChangeValue}
+              //           className='textInputStyle'
+              //           variant='filled'
+              //           InputProps={{
+              //             className: classes.input,
+              //             classes: { input: classes.input },
+              //             disableUnderline: true,
+              //           }}
+              //         />
+              //       </div>
+              //       <div className='col-md-2 col-sm-2 col-6'>
+              //         <Button
+              //           style={{
+              //             ...styles.stylesForButton,
+              //             marginTop: '25px',
+              //             backgroundColor: '#ad6bbf',
+              //           }}
+              //           disabled={!addRadioRequest}
+              //           onClick={addSelectedRadioItem}
+              //           variant='contained'
+              //           color='primary'
+              //           fullWidth
+              //         >
+              //           Add
+              //         </Button>
+              //       </div>
+              //     </div>
+
+              //     <div className='row' style={{ marginTop: '20px' }}>
+              //       {radiologyRequestArray !== 0 ? (
+              //         <CustomTable
+              //           tableData={radiologyRequestArray}
+              //           tableDataKeys={tableDataKeysForRadiology}
+              //           tableHeading={tableHeadingForRadiology}
+              //           handleView={viewItem}
+              //           action={actions}
+              //           borderBottomColor={'#60d69f'}
+              //           borderBottomWidth={20}
+              //         />
+              //       ) : (
+              //           undefined
+              //         )}
+              //     </div>
+
+              //     <div className='row' style={{ marginBottom: '25px' }}>
+              //       <div className='col-md-12 col-sm-12 col-12 d-flex justify-content-end'>
+              //         <Button
+              //           disabled={enableForm}
+              //           onClick={saveRadioReq}
+              //           style={{ ...styles.stylesForButton, width: '100px' }}
+              //           variant='contained'
+              //           color='primary'
+              //         >
+              //           <strong style={{ fontSize: '12px' }}>Save</strong>
+              //         </Button>
+              //       </div>
+              //     </div>
+              //   </div>
+              // ) 
+              //     : value === 5 ? (
+              //         <div
+              //             style={{ flex: 4, display: "flex", flexDirection: "column" }}
+              //             // className={`container ${classes.root}`}
+              //             className="container-fluid"
+              //         >
+              //             <div style={{ marginTop: "20px" }} className="row">
+              //                 <div
+              //                     className="col-md-12 col-sm-12 col-12"
+              //                     style={{
+              //                         ...styles.inputContainerForTextField,
+              //                         ...styles.textFieldPadding,
+              //                     }}
+              //                 >
+              //                     <TextField
+              //                         required
+              //                         label="Service Name"
+              //                         name={"searchNurseQuery"}
+              //                         value={searchNurseQuery}
+              //                         // error={searchNurseQuery === '' && isFormSubmitted}
+              //                         onChange={handleNurseSearch}
+              //                         className="textInputStyle"
+              //                         variant="filled"
+              //                         InputProps={{
+              //                             className: classes.input,
+              //                             classes: { input: classes.input },
+              //                         }}
+              //                     />
+              //                 </div>
+              //             </div>
+              //             {searchNurseQuery ? (
+              //                 // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
+              //                 <div style={{ zIndex: 10 }}>
+              //                     <Paper>
+              //                         {nurseItemFoundSuccessfull ? (
+              //                             nurseItemFound && (
+              //                                 <Table size="small">
+              //                                     <TableHead>
+              //                                         <TableRow>
+              //                                             <TableCell>Service Name</TableCell>
+              //                                             <TableCell>Service Number</TableCell>
+              //                                             <TableCell>Price</TableCell>
+              //                                             <TableCell align="center">
+              //                                                 Description
+              //                   </TableCell>
+              //                                         </TableRow>
+              //                                     </TableHead>
+              //                                     <TableBody>
+              //                                         {nurseItemFound.map((i, index) => {
+              //                                             return (
+              //                                                 <TableRow
+              //                                                     key={i.serviceNo}
+              //                                                     onClick={() => handleAddNurseItem(i)}
+              //                                                     style={{ cursor: "pointer" }}
+              //                                                 >
+              //                                                     <TableCell>{i.name}</TableCell>
+              //                                                     <TableCell>{i.serviceNo}</TableCell>
+              //                                                     <TableCell>{i.price}</TableCell>
+              //                                                     <TableCell>{i.description}</TableCell>
+              //                                                 </TableRow>
+              //                                             );
+              //                                         })}
+              //                                     </TableBody>
+              //                                 </Table>
+              //                             )
+              //                         ) : (
+              //                                 <h4
+              //                                     style={{ textAlign: "center" }}
+              //                                     onClick={() => setSearchNurseQuery("")}
+              //                                 >
+              //                                     Service Not Found
+              //                                 </h4>
+              //                             )}
+              //                     </Paper>
+              //                 </div>
+              //             ) : (
+              //                     undefined
+              //                 )}
+              //             <div style={{ marginTop: "20px" }} className="row">
+              //                 <div
+              //                     className="col-md-10 col-sm-10 col-6"
+              //                     style={{
+              //                         ...styles.inputContainerForTextField,
+              //                         ...styles.textFieldPadding,
+              //                     }}
+              //                 >
+              //                     <TextField
+              //                         required
+              //                         label="Selected Service"
+              //                         name={"nurseServiceName"}
+              //                         value={nurseServiceName}
+              //                         // error={nurseServiceName === '' && isFormSubmitted}
+              //                         onChange={onChangeValue}
+              //                         className="textInputStyle"
+              //                         variant="filled"
+              //                         InputProps={{
+              //                             className: classes.input,
+              //                             classes: { input: classes.input },
+              //                         }}
+              //                     />
+              //                 </div>
+              //                 <div className="col-md-2 col-sm-2 col-6">
+              //                     <Button
+              //                         style={{
+              //                             ...styles.stylesForButton,
+              //                             marginTop: "25px",
+              //                             backgroundColor: "#ad6bbf",
+              //                         }}
+              //                         disabled={!addNurseRequest}
+              //                         onClick={addSelectedNurseItem}
+              //                         variant="contained"
+              //                         color="primary"
+              //                         fullWidth
+              //                     >
+              //                         Add
+              //       </Button>
+              //                 </div>
+              //             </div>
+              //             <div className="row" style={{ marginTop: "20px" }}>
+              //                 {nurseService !== 0 ? (
+              //                     <CustomTable
+              //                         tableData={nurseService}
+              //                         tableDataKeys={tableDataKeysForNurse}
+              //                         tableHeading={tableHeadingForNurse}
+              //                         handleView={viewItem}
+              //                         action={actions}
+              //                         borderBottomColor={"#60D69F"}
+              //                         borderBottomWidth={20}
+              //                     />
+              //                 ) : (
+              //                         undefined
+              //                     )}
+              //             </div>
+              //             <div className="row" style={{ marginBottom: "25px" }}>
+              //                 <div className="col-md-6 col-sm-6 col-6">
+              //                     <img
+              //                         onClick={() => props.history.goBack()}
+              //                         src={Back}
+              //                         style={{ width: 45, height: 35, cursor: "pointer" }}
+              //                     />
+              //                 </div>
+              //                 <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
+              //                     <Button
+              //                         onClick={saveNurseReq}
+              //                         style={styles.stylesForButton}
+              //                         variant="contained"
+              //                         color="primary"
+              //                     >
+              //                         <strong style={{ fontSize: "12px" }}>Save</strong>
+              //                     </Button>
+              //                 </div>
+              //             </div>
+              //         </div>
+              // )
+              : (
                 undefined
               )}
-
-              <div style={{ marginTop: '20px' }} className='row'>
-                <div
-                  className='col-md-5 col-sm-5 col-3'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    disabled
-                    label='Selected Service'
-                    name={'labServiceName'}
-                    value={labServiceName}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                  />
-                </div>
-                <div
-                  className='col-md-5 col-sm-5 col-3'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    disabled={enableForm}
-                    label='Comments / Notes'
-                    name={'labComments'}
-                    value={labComments}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                  />
-                </div>
-                <div className='col-md-2 col-sm-2 col-6'>
-                  <Button
-                    style={{
-                      ...styles.stylesForButton,
-                      marginTop: '25px',
-                      backgroundColor: '#ad6bbf',
-                    }}
-                    disabled={!addLabRequest}
-                    onClick={addSelectedLabItem}
-                    variant='contained'
-                    color='primary'
-                    fullWidth
-                  >
-                    Add
-                  </Button>
-                </div>
-              </div>
-
-              <div className='row' style={{ marginTop: '20px' }}>
-                {labRequestArray !== 0 ? (
-                  <CustomTable
-                    tableData={labRequestArray}
-                    tableDataKeys={tableDataKeysForLabReq}
-                    tableHeading={tableHeadingForLabReq}
-                    handleView={viewItem}
-                    action={actions}
-                    borderBottomColor={'#60d69f'}
-                    borderBottomWidth={20}
-                  />
-                ) : (
-                  undefined
-                )}
-              </div>
-
-              <div className='row' style={{ marginBottom: '25px' }}>
-                <div className='col-md-12 col-sm-12 col-12 d-flex justify-content-end'>
-                  <Button
-                    disabled={enableForm}
-                    onClick={saveLabReq}
-                    style={{ ...styles.stylesForButton, width: '100px' }}
-                    variant='contained'
-                    color='primary'
-                  >
-                    <strong style={{ fontSize: '12px' }}>Save</strong>
-                  </Button>
-                </div>
-              </div>
-            </div>
-          ) : value === 3 ? (
-            <div
-              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-              className={`container-fluid ${classes.root}`}
-            >
-              <div style={{ marginTop: '20px' }} className='row'>
-                <div
-                  className='col-md-12 col-sm-12 col-12'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    label='Radiology / Imaging'
-                    name={'searchRadioQuery'}
-                    value={searchRadioQuery}
-                    onChange={handleRadioSearch}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                  />
-                </div>
-              </div>
-
-              {searchRadioQuery ? (
-                // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
-                <div style={{ zIndex: 10 }}>
-                  <Paper>
-                    {radioItemFoundSuccessfull ? (
-                      radioItemFound && (
-                        <Table size='small'>
-                          <TableHead>
-                            <TableRow>
-                              <TableCell>Service Name</TableCell>
-                              <TableCell>Service Number</TableCell>
-                              <TableCell>Price</TableCell>
-                              <TableCell align='center'>Description</TableCell>
-                            </TableRow>
-                          </TableHead>
-
-                          <TableBody>
-                            {radioItemFound.map((i, index) => {
-                              return (
-                                <TableRow
-                                  key={i.serviceNo}
-                                  onClick={() => handleAddRadioItem(i)}
-                                  style={{ cursor: 'pointer' }}
-                                >
-                                  <TableCell>{i.name}</TableCell>
-                                  <TableCell>{i.serviceNo}</TableCell>
-                                  <TableCell>{i.price}</TableCell>
-                                  <TableCell>{i.description}</TableCell>
-                                </TableRow>
-                              )
-                            })}
-                          </TableBody>
-                        </Table>
-                      )
-                    ) : (
-                      <h4
-                        style={{ textAlign: 'center' }}
-                        onClick={() => setSearchRadioQuery('')}
-                      >
-                        Service Not Found
-                      </h4>
-                    )}
-                  </Paper>
-                </div>
-              ) : (
-                undefined
-              )}
-
-              <div style={{ marginTop: '20px' }} className='row'>
-                <div
-                  className='col-md-5 col-sm-5 col-3'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    disabled
-                    label='Selected Service'
-                    name={'radioServiceName'}
-                    value={radioServiceName}
-                    // error={radioServiceName === '' && isFormSubmitted}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                  />
-                </div>
-                <div
-                  className='col-md-5 col-sm-5 col-3'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    disabled={enableForm}
-                    label='Comments / Notes'
-                    name={'radioComments'}
-                    value={radioComments}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                  />
-                </div>
-                <div className='col-md-2 col-sm-2 col-6'>
-                  <Button
-                    style={{
-                      ...styles.stylesForButton,
-                      marginTop: '25px',
-                      backgroundColor: '#ad6bbf',
-                    }}
-                    disabled={!addRadioRequest}
-                    onClick={addSelectedRadioItem}
-                    variant='contained'
-                    color='primary'
-                    fullWidth
-                  >
-                    Add
-                  </Button>
-                </div>
-              </div>
-
-              <div className='row' style={{ marginTop: '20px' }}>
-                {radiologyRequestArray !== 0 ? (
-                  <CustomTable
-                    tableData={radiologyRequestArray}
-                    tableDataKeys={tableDataKeysForRadiology}
-                    tableHeading={tableHeadingForRadiology}
-                    handleView={viewItem}
-                    action={actions}
-                    borderBottomColor={'#60d69f'}
-                    borderBottomWidth={20}
-                  />
-                ) : (
-                  undefined
-                )}
-              </div>
-
-              <div className='row' style={{ marginBottom: '25px' }}>
-                <div className='col-md-12 col-sm-12 col-12 d-flex justify-content-end'>
-                  <Button
-                    disabled={enableForm}
-                    onClick={saveRadioReq}
-                    style={{ ...styles.stylesForButton, width: '100px' }}
-                    variant='contained'
-                    color='primary'
-                  >
-                    <strong style={{ fontSize: '12px' }}>Save</strong>
-                  </Button>
-                </div>
-              </div>
-            </div>
-          ) : (
-            //     : value === 5 ? (
-            //         <div
-            //             style={{ flex: 4, display: "flex", flexDirection: "column" }}
-            //             // className={`container ${classes.root}`}
-            //             className="container-fluid"
-            //         >
-            //             <div style={{ marginTop: "20px" }} className="row">
-            //                 <div
-            //                     className="col-md-12 col-sm-12 col-12"
-            //                     style={{
-            //                         ...styles.inputContainerForTextField,
-            //                         ...styles.textFieldPadding,
-            //                     }}
-            //                 >
-            //                     <TextField
-            //                         required
-            //                         label="Service Name"
-            //                         name={"searchNurseQuery"}
-            //                         value={searchNurseQuery}
-            //                         // error={searchNurseQuery === '' && isFormSubmitted}
-            //                         onChange={handleNurseSearch}
-            //                         className="textInputStyle"
-            //                         variant="filled"
-            //                         InputProps={{
-            //                             className: classes.input,
-            //                             classes: { input: classes.input },
-            //                         }}
-            //                     />
-            //                 </div>
-            //             </div>
-            //             {searchNurseQuery ? (
-            //                 // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
-            //                 <div style={{ zIndex: 10 }}>
-            //                     <Paper>
-            //                         {nurseItemFoundSuccessfull ? (
-            //                             nurseItemFound && (
-            //                                 <Table size="small">
-            //                                     <TableHead>
-            //                                         <TableRow>
-            //                                             <TableCell>Service Name</TableCell>
-            //                                             <TableCell>Service Number</TableCell>
-            //                                             <TableCell>Price</TableCell>
-            //                                             <TableCell align="center">
-            //                                                 Description
-            //                   </TableCell>
-            //                                         </TableRow>
-            //                                     </TableHead>
-            //                                     <TableBody>
-            //                                         {nurseItemFound.map((i, index) => {
-            //                                             return (
-            //                                                 <TableRow
-            //                                                     key={i.serviceNo}
-            //                                                     onClick={() => handleAddNurseItem(i)}
-            //                                                     style={{ cursor: "pointer" }}
-            //                                                 >
-            //                                                     <TableCell>{i.name}</TableCell>
-            //                                                     <TableCell>{i.serviceNo}</TableCell>
-            //                                                     <TableCell>{i.price}</TableCell>
-            //                                                     <TableCell>{i.description}</TableCell>
-            //                                                 </TableRow>
-            //                                             );
-            //                                         })}
-            //                                     </TableBody>
-            //                                 </Table>
-            //                             )
-            //                         ) : (
-            //                                 <h4
-            //                                     style={{ textAlign: "center" }}
-            //                                     onClick={() => setSearchNurseQuery("")}
-            //                                 >
-            //                                     Service Not Found
-            //                                 </h4>
-            //                             )}
-            //                     </Paper>
-            //                 </div>
-            //             ) : (
-            //                     undefined
-            //                 )}
-            //             <div style={{ marginTop: "20px" }} className="row">
-            //                 <div
-            //                     className="col-md-10 col-sm-10 col-6"
-            //                     style={{
-            //                         ...styles.inputContainerForTextField,
-            //                         ...styles.textFieldPadding,
-            //                     }}
-            //                 >
-            //                     <TextField
-            //                         required
-            //                         label="Selected Service"
-            //                         name={"nurseServiceName"}
-            //                         value={nurseServiceName}
-            //                         // error={nurseServiceName === '' && isFormSubmitted}
-            //                         onChange={onChangeValue}
-            //                         className="textInputStyle"
-            //                         variant="filled"
-            //                         InputProps={{
-            //                             className: classes.input,
-            //                             classes: { input: classes.input },
-            //                         }}
-            //                     />
-            //                 </div>
-            //                 <div className="col-md-2 col-sm-2 col-6">
-            //                     <Button
-            //                         style={{
-            //                             ...styles.stylesForButton,
-            //                             marginTop: "25px",
-            //                             backgroundColor: "#ad6bbf",
-            //                         }}
-            //                         disabled={!addNurseRequest}
-            //                         onClick={addSelectedNurseItem}
-            //                         variant="contained"
-            //                         color="primary"
-            //                         fullWidth
-            //                     >
-            //                         Add
-            //       </Button>
-            //                 </div>
-            //             </div>
-            //             <div className="row" style={{ marginTop: "20px" }}>
-            //                 {nurseService !== 0 ? (
-            //                     <CustomTable
-            //                         tableData={nurseService}
-            //                         tableDataKeys={tableDataKeysForNurse}
-            //                         tableHeading={tableHeadingForNurse}
-            //                         handleView={viewItem}
-            //                         action={actions}
-            //                         borderBottomColor={"#60D69F"}
-            //                         borderBottomWidth={20}
-            //                     />
-            //                 ) : (
-            //                         undefined
-            //                     )}
-            //             </div>
-            //             <div className="row" style={{ marginBottom: "25px" }}>
-            //                 <div className="col-md-6 col-sm-6 col-6">
-            //                     <img
-            //                         onClick={() => props.history.goBack()}
-            //                         src={Back}
-            //                         style={{ width: 45, height: 35, cursor: "pointer" }}
-            //                     />
-            //                 </div>
-            //                 <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
-            //                     <Button
-            //                         onClick={saveNurseReq}
-            //                         style={styles.stylesForButton}
-            //                         variant="contained"
-            //                         color="primary"
-            //                     >
-            //                         <strong style={{ fontSize: "12px" }}>Save</strong>
-            //                     </Button>
-            //                 </div>
-            //             </div>
-            //         </div>
-            // )
-            undefined
-          )}
 
           {openItemDialog ? (
             <ViewSingleRequest
@@ -1913,8 +1954,8 @@ function LabRadRequest(props) {
               viewItem={viewItem}
             />
           ) : (
-            undefined
-          )}
+              undefined
+            )}
         </div>
 
         <Dialog
@@ -2079,89 +2120,159 @@ function LabRadRequest(props) {
         >
           <DialogContent style={{ backgroundColor: '#31e2aa' }}>
             <DialogTitle id='simple-dialog-title' style={{ color: 'white' }}>
-              Add Resident Note
+              Add New Consultation
             </DialogTitle>
-            <div className='container-fluid'>
+            <div className={`${'container-fluid'} ${classes.root}`}>
               <div className='row'>
                 <div
                   className='col-md-12 col-sm-12 col-12'
                   style={styles.inputContainerForTextField}
                 >
-                  <InputLabelComponent>Description*</InputLabelComponent>
-                  <input
-                    style={styles.inputField}
+                  <TextField
+                    required
+                    multiline
                     type='text'
-                    placeholder='Enter Your description'
+                    error={rdescription === '' && isFormSubmitted}
+                    label='Description / Condition'
                     name={'rdescription'}
                     value={rdescription}
                     onChange={onChangeValue}
+                    rows={4}
                     className='textInputStyle'
-                  />
-                  <ErrorMessage
-                    name={rdescription}
-                    isFormSubmitted={isFormSubmitted}
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                      disableUnderline: true
+                    }}
                   />
                 </div>
               </div>
 
               <div className='row'>
                 <div
-                  className='col-md-12'
+                  className='col-md-12 col-sm-12 col-12'
                   style={styles.inputContainerForTextField}
                 >
-                  <InputLabelComponent>Note*</InputLabelComponent>
-                  <input
-                    style={styles.inputField}
+                  <TextField
+                    required
+                    multiline
                     type='text'
-                    placeholder='Add your note here...'
+                    error={note === '' && isFormSubmitted}
+                    label='Consultation Note'
                     name={'note'}
                     value={note}
                     onChange={onChangeValue}
+                    rows={4}
                     className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                      disableUnderline: true
+                    }}
                   />
-                  <ErrorMessage name={note} isFormSubmitted={isFormSubmitted} />
                 </div>
               </div>
 
               <div className='row'>
                 <div
+                  className='col-md-12 col-sm-12 col-12'
+                  style={styles.inputContainerForTextField}
+                >
+                </div>
+                <span style={{fontWeight:600,color:'white',marginLeft:10}}>ICD Diagnosis</span>
+              </div>
+              <div className='row'>
+                <div
                   className='col-md-6 col-sm-6 col-6'
                   style={styles.inputContainerForTextField}
                 >
-                  <InputLabelComponent>Date*</InputLabelComponent>
-                  <input
-                    disabled
-                    style={styles.inputField}
-                    type='text'
-                    placeholder='Date'
-                    name={'date'}
-                    value={date}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                  />
+                  <TextField
+                    required
+                    select
+                    fullWidth
+                    id='status'
+                    name='section'
+                    value={section}
+                    error={section === '' && isFormSubmitted}
+                    onChange={(e) => onChangeSection(e)}
+                    label='Section'
+                    variant='filled'
+                    className='dropDownStyle'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                      disableUnderline: true
+                    }}
+                  >
+                    <MenuItem value={section}>{section}</MenuItem>
+
+                    {icdSection &&
+                      icdSection.map((val) => {
+                        return (
+                          <MenuItem key={val} value={val}>
+                            {val}
+                          </MenuItem>
+                        )
+                      })}
+                  </TextField>
                 </div>
                 <div
                   className='col-md-6 col-sm-6 col-6'
                   style={styles.inputContainerForTextField}
                 >
-                  <InputLabelComponent>Doctor*</InputLabelComponent>
-                  <input
-                    disabled
-                    style={styles.inputField}
+                  <TextField
                     type='text'
-                    placeholder='Doctor'
-                    name={'doctor'}
-                    value={doctor}
-                    onChange={onChangeValue}
+                    label='Code'
+                    onChange={handleCodeSearch}
                     className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          <AccountCircle />
+                        </InputAdornment>
+                      ),
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                    InputLabelProps={{
+                      className: classes.label,
+                      classes: { label: classes.label },
+                    }}
                   />
                 </div>
               </div>
+
+              {icdCode != null && icdCode.length != null
+                && icdCode.length > 0 ? (
+                  <div className='row' style={{ marginLeft: 0, marginRight: 0 }}>
+                    <div
+                      className={`scrollable ${'col-md-12 col-sm-12 col-12'}`}
+                      style={{ ...styles.inputContainerForTextField, ...styles.patientDetails }}
+                    >
+                      <ul>
+                        {icdCode.map(item => (
+                          <li key={item}>{item} &nbsp;
+                            <span
+                              className="addCode"
+                              onClick={(e) => addICDcodes(item,e)}
+                            /></li>
+                        ))}
+                      </ul>
+                    </div>
+
+                  </div>
+                ) : (
+                  undefined
+                )}
+
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div style={{ marginTop: '2%', marginBottom: '2%' }}>
                   <Button
                     onClick={() => hideDialog()}
-                    style={styles.stylesForButton}
+                    style={{ ...styles.stylesForButton, color: 'gray', backgroundColor: 'white', }}
                     variant='contained'
                   >
                     <strong>Cancel</strong>
@@ -2192,7 +2303,7 @@ function LabRadRequest(props) {
                     variant='contained'
                     color='primary'
                   >
-                    Add Note
+                    Submit
                   </Button>
                 </div>
               </div>
@@ -2200,7 +2311,7 @@ function LabRadRequest(props) {
           </DialogContent>
         </Dialog>
 
-        <Dialog
+        {/* <Dialog
           aria-labelledby='form-dialog-title'
           open={openAddConsultDialog}
           maxWidth='xl'
@@ -2352,7 +2463,7 @@ function LabRadRequest(props) {
               </div>
             </div>
           </DialogContent>
-        </Dialog>
+        </Dialog> */}
         <div
           className='container-fluid'
           style={{ marginBottom: '25px', marginTop: '25px' }}
@@ -2366,7 +2477,7 @@ function LabRadRequest(props) {
           </div>
         </div>
 
-        <Notification msg={errorMsg} open={openNotification} />
+        <Notification msg={errorMsg} open={openNotification} success={successMsg} />
       </div>
     </div>
   )
