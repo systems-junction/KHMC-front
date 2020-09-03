@@ -28,7 +28,7 @@ import cookie from 'react-cookies'
 import Dialog from '@material-ui/core/Dialog'
 import Header from '../../../components/Header/Header'
 import plus_icon from '../../../assets/img/Plus.png'
-import purchase_request from '../../../assets/img/purchase request.png'
+import purchase_request from '../../../assets/img/Doctor - Discharge.png'
 import Back from '../../../assets/img/Back_Arrow.png'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -564,8 +564,8 @@ function AddEditEDR(props) {
             <img src={purchase_request} />
             <h4>
               {comingFor === 'add'
-                ? ' EDR - Discharge Medication'
-                : ' EDR - Discharge Medication'}
+                ? ' Discharge'
+                : ' Discharge'}
             </h4>
           </div>
 

@@ -163,6 +163,20 @@ const pharmacist = [
   },
 ];
 
+const doctorPhysician = [
+  { img: KHMC, text: "KHMC", path: "" },
+  {
+    img: RCM,
+    text: "RCM",
+    path: "/home/rcm",
+  },
+  {
+    img: WMS,
+    text: "WMS",
+    path: "/home/wms",
+  },
+];
+
 const buHead = [
   { img: Control_Room, text: "Control Room", path: "" },
   { img: RCM, text: "RCM", path: "" },
@@ -713,7 +727,9 @@ class HomeScreen extends React.Component {
                 : userType && userType.type === "Lab Technician"
                   ? labTechnician
                 : userType && userType.type === "Pharmacist"
-                  ? pharmacist             
+                  ? pharmacist
+                : userType && userType.type === "Doctor/Physician"
+                  ? doctorPhysician                
                 : admin
           }
         />
