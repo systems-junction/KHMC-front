@@ -52,6 +52,10 @@ const styles = {
     borderRadius: 15,
     padding: '20px',
   },
+  textFieldPadding: {
+    paddingLeft: 5,
+    paddingRight: 5,
+  },
   inputContainerForTextField: {
     marginTop: 25,
   },
@@ -741,6 +745,7 @@ function DischargeRequest(props) {
                 backgroundColor: value === 0 ? '#2c6ddd' : undefined,
               }}
               label='Discharge Summary'
+              disabled={enableForm}
             />
             <Tab
               style={{
@@ -750,6 +755,7 @@ function DischargeRequest(props) {
                 backgroundColor: value === 1 ? '#2c6ddd' : undefined,
               }}
               label='Discharge Medication'
+              disabled={enableForm}
             />
           </Tabs>
         </div>
@@ -763,6 +769,7 @@ function DischargeRequest(props) {
               <div className='col-md-12 col-sm-12 col-12'>
                 <TextArea
                   type='text'
+                  disabled={enableForm}
                   placeholder='Discharge Notes'
                   name={'dischargeNotes'}
                   value={dischargeNotes}
@@ -776,6 +783,7 @@ function DischargeRequest(props) {
               <div className='col-md-12 col-sm-12 col-12'>
                 <TextArea
                   type='text'
+                  disabled={enableForm}
                   placeholder='Other Notes'
                   name={'otherNotes'}
                   value={otherNotes}
@@ -803,6 +811,7 @@ function DischargeRequest(props) {
               </div>
               <div className='p-2'>
                 <Button
+                  disabled={enableForm}
                   style={styles.stylesForButton}
                   //disabled={!validateFormType1()}
                   onClick={onClick}
@@ -856,6 +865,7 @@ function DischargeRequest(props) {
               </div>
               <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
                 <Button
+                  disabled={enableForm}
                   onClick={addNewRequest}
                   style={styles.stylesForButton}
                   variant='contained'
