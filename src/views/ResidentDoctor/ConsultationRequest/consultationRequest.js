@@ -16,7 +16,7 @@ import {
 } from '../../../public/endpoins'
 import cookie from 'react-cookies'
 import Header from '../../../components/Header/Header'
-import Lab_RadIcon from '../../../assets/img/Lab-Rad Request.png'
+import Lab_RadIcon from '../../../assets/img/Consultation Request.png'
 import Back from '../../../assets/img/Back_Arrow.png'
 import '../../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
 import Tabs from '@material-ui/core/Tabs'
@@ -945,7 +945,7 @@ function LabRadRequest(props) {
   }
 
   const TriageAssessment = () => {
-    let path = `assessmentdiagnosis/triageAssessment`
+    let path = `consultationrequest/triageAssessment`
     props.history.push({
       pathname: path,
       state: {
@@ -980,11 +980,12 @@ function LabRadRequest(props) {
           <div>
             <img src={Lab_RadIcon} />
             <h4>
-              {value === 3
+              {/* {value === 3
                 ? 'Lab Request'
                 : value === 4
                 ? 'Radiology Request'
-                : 'Lab / Rad Request'}
+                : 'Lab / Rad Request'} */}
+              Consultation Request
             </h4>
           </div>
 
@@ -1313,7 +1314,7 @@ function LabRadRequest(props) {
                   backgroundColor: value === 2 ? '#2c6ddd' : undefined,
                 }}
                 label='Lab'
-                disabled={enableForm}
+                disabled
               />
               <Tab
                 style={{
@@ -1323,7 +1324,7 @@ function LabRadRequest(props) {
                   backgroundColor: value === 3 ? '#2c6ddd' : undefined,
                 }}
                 label='Rad'
-                disabled={enableForm}
+                disabled
               />
               <Tab
                 style={{
@@ -1332,7 +1333,7 @@ function LabRadRequest(props) {
                   outline: 'none',
                   backgroundColor: value === 4 ? '#2c6ddd' : undefined,
                 }}
-                label='Consultation Requests'
+                label='External Consultation'
                 disabled={enableForm}
               />
             </Tabs>
@@ -1358,6 +1359,22 @@ function LabRadRequest(props) {
                   undefined
                 )}
               </div>
+              <div className='row' style={{ marginBottom: '25px' }}>
+                <div className='col-md-6 col-sm-6 col-6'></div>
+                <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
+                  <Button
+                    onClick={() => setOpenAddConsultDialog(true)}
+                    style={styles.stylesForButton}
+                    variant='contained'
+                    color='primary'
+                    disabled={enableForm}
+                  >
+                    <strong style={{ fontSize: '12px' }}>
+                      Consultation Request
+                    </strong>
+                  </Button>
+                </div>
+              </div>
             </div>
           ) : value === 0 ? (
             <div
@@ -1378,25 +1395,6 @@ function LabRadRequest(props) {
                 ) : (
                   undefined
                 )}
-              </div>
-
-              <div className='row' style={{ marginBottom: '25px' }}>
-                <div className='col-md-6 col-sm-6 col-6'></div>
-                <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
-                  <Button
-                    onClick={() => setOpenAddResidentDialog(true)}
-                    style={styles.stylesForButton}
-                    variant='contained'
-                    color='primary'
-                    disabled={enableForm}
-                  >
-                    <img className='icon-style' src={plus_icon} />
-                    &nbsp;&nbsp;
-                    <strong style={{ fontSize: '12px' }}>
-                      Add New Consultation
-                    </strong>
-                  </Button>
-                </div>
               </div>
             </div>
           ) : value === 2 ? (
