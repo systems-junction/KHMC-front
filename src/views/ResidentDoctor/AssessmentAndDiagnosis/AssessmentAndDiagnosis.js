@@ -264,6 +264,8 @@ function LabRadRequest(props) {
     description: '',
     consultationNotes: '',
     requester: cookie.load('current_user').name,
+    speciality: '',
+    specialist: '',
 
     residentNoteArray: '',
     rdescription: '',
@@ -305,6 +307,8 @@ function LabRadRequest(props) {
     description,
     consultationNotes,
     requester = cookie.load('current_user').name,
+    speciality,
+    specialist,
 
     residentNoteArray,
     rdescription,
@@ -391,11 +395,13 @@ function LabRadRequest(props) {
         consultationNotes: consultationNotes,
         requester: currentUser.staffId,
         date: date,
+        specialist: specialist,
       },
     ]
 
     const params = {
       _id: id,
+      requestType,
       consultationNote: consultationNote,
     }
 
