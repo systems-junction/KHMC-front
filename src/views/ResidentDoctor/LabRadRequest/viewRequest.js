@@ -6,9 +6,9 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 import { makeStyles } from '@material-ui/core/styles'
 import InputLabel from '@material-ui/core/InputLabel'
-import capitilizeLetter from '../../public/capitilizeLetter'
+import capitilizeLetter from '../../../public/capitilizeLetter'
 import cookie from 'react-cookies'
-import CustomTable from '../../components/Table/Table'
+import CustomTable from '../../../components/Table/Table'
 import TextField from '@material-ui/core/TextField'
 
 const tableHeadingForPHR = [
@@ -17,7 +17,7 @@ const tableHeadingForPHR = [
   'Dosage',
   'Frequency',
   'Duration',
-  ''
+  '',
 ]
 const tableDataKeysForPHR = [
   'medicineName',

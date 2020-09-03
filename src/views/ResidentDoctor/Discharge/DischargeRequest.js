@@ -22,12 +22,13 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
-// import Fingerprint from '../../../indexassets/img/fingerprint.png'
+import Fingerprint from '../../../assets/img/fingerprint.png'
 import AccountCircle from '@material-ui/icons/SearchOutlined'
 import InputAdornment from '@material-ui/core/InputAdornment'
-// import BarCode from '../../../indexassets/img/Bar Code.png'
+import BarCode from '../../../assets/img/Bar Code.png'
 import {
   updateIPR,
+  updateEdrIpr,
   getSingleIPRPatient,
   getSearchedpatient,
   searchpatient,
@@ -144,6 +145,7 @@ function DischargeRequest(props) {
 
     otherNotes: '',
     dischargeNotes: '',
+    requestType: '',
   }
 
   function reducer(state, { field, value }) {
@@ -161,6 +163,7 @@ function DischargeRequest(props) {
 
     otherNotes,
     dischargeNotes,
+    requestType,
   } = state
 
   const onChangeValue = (e) => {
@@ -201,57 +204,57 @@ function DischargeRequest(props) {
     // getEDRdetails()
   }, [])
 
-  function getEDRdetails() {
-    axios
-      .get(
-        getSingleIPRPatient +
-          '/' +
-          props.history.location.state.selectedItem._id
-      )
-      .then((res) => {
-        if (res.data.success) {
-          console.log(
-            'response after getting the EDR details',
-            res.data.data[0]
-          )
-          setSelectedItem(res.data.data[0])
-          const selectedRec = res.data.data[0]
+  // function getEDRdetails() {
+  //   axios
+  //     .get(
+  //       getSingleIPRPatient +
+  //         '/' +
+  //         props.history.location.state.selectedItem._id
+  //     )
+  //     .then((res) => {
+  //       if (res.data.success) {
+  //         console.log(
+  //           'response after getting the EDR details',
+  //           res.data.data[0]
+  //         )
+  //         setSelectedItem(res.data.data[0])
+  //         const selectedRec = res.data.data[0]
 
-          if (selectedRec) {
-            Object.entries(selectedRec).map(([key, val]) => {
-              if (val && typeof val === 'object') {
-                if (key === 'dischargeRequest') {
-                  // console.log("INNNN dischargeRequest",key,val)
-                  Object.entries(val).map(([key1, val1]) => {
-                    if (key1 === 'dischargeSummary') {
-                      console.log(key1, val1)
-                      dispatch({
-                        field: 'dischargeNotes',
-                        value: val1.dischargeNotes,
-                      })
-                      dispatch({ field: 'otherNotes', value: val1.otherNotes })
-                    } else if (key1 === 'dischargeMedication') {
-                      // console.log("INNNN dischargeMedication",key1,val1)
-                      dispatch({ field: 'dischargeMedArray', value: [val1] })
-                    }
-                  })
-                  dispatch({ field: 'dischargeRequest', value: val })
-                }
-              } else {
-                dispatch({ field: key, value: val })
-              }
-            })
-          }
-        } else if (!res.data.success) {
-          setErrorMsg(res.data.error)
-          setOpenNotification(true)
-        }
-        return res
-      })
-      .catch((e) => {
-        console.log('error: ', e)
-      })
-  }
+  //         if (selectedRec) {
+  //           Object.entries(selectedRec).map(([key, val]) => {
+  //             if (val && typeof val === 'object') {
+  //               if (key === 'dischargeRequest') {
+  //                 // console.log("INNNN dischargeRequest",key,val)
+  //                 Object.entries(val).map(([key1, val1]) => {
+  //                   if (key1 === 'dischargeSummary') {
+  //                     console.log(key1, val1)
+  //                     dispatch({
+  //                       field: 'dischargeNotes',
+  //                       value: val1.dischargeNotes,
+  //                     })
+  //                     dispatch({ field: 'otherNotes', value: val1.otherNotes })
+  //                   } else if (key1 === 'dischargeMedication') {
+  //                     // console.log("INNNN dischargeMedication",key1,val1)
+  //                     dispatch({ field: 'dischargeMedArray', value: [val1] })
+  //                   }
+  //                 })
+  //                 dispatch({ field: 'dischargeRequest', value: val })
+  //               }
+  //             } else {
+  //               dispatch({ field: key, value: val })
+  //             }
+  //           })
+  //         }
+  //       } else if (!res.data.success) {
+  //         setErrorMsg(res.data.error)
+  //         setOpenNotification(true)
+  //       }
+  //       return res
+  //     })
+  //     .catch((e) => {
+  //       console.log('error: ', e)
+  //     })
+  // }
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
@@ -320,38 +323,23 @@ function DischargeRequest(props) {
 
             Object.entries(res.data.data).map(([key, val]) => {
               if (val && typeof val === 'object') {
-                // if (key === "patientId") {
-                //     dispatch({ field: "patientId", value: val._id });
-                // } else
-                if (key === 'labRequest') {
-                  dispatch({ field: 'labRequestArray', value: val })
-                } else if (key === 'radiologyRequest') {
-                  dispatch({ field: 'radiologyRequestArray', value: val })
+                if (key === 'dischargeRequest') {
+                  // console.log("INNNN dischargeRequest",key,val)
+                  Object.entries(val).map(([key1, val1]) => {
+                    if (key1 === 'dischargeSummary') {
+                      console.log(key1, val1)
+                      dispatch({
+                        field: 'dischargeNotes',
+                        value: val1.dischargeNotes,
+                      })
+                      dispatch({ field: 'otherNotes', value: val1.otherNotes })
+                    } else if (key1 === 'dischargeMedication') {
+                      // console.log("INNNN dischargeMedication",key1,val1)
+                      dispatch({ field: 'dischargeMedArray', value: [val1] })
+                    }
+                  })
+                  dispatch({ field: 'dischargeRequest', value: val })
                 }
-                // else if (key === "consultationNote") {
-                //     Object.entries(val).map(([key1, val1]) => {
-                //         if (key1 == "requester") {
-                //             dispatch({ field: "requester", value: val1._id });
-                //         } else {
-                //             dispatch({ field: key1, value: val1 });
-                //         }
-                //     });
-                //     dispatch({ field: "consultationNoteArray", value: val });
-                // } else if (key === "residentNotes") {
-                //     Object.entries(val).map(([key1, val1]) => {
-                //         if (key1 == "doctor") {
-                //             dispatch({ field: "doctor", value: val1._id });
-                //         } else {
-                //             dispatch({ field: key1, value: val1 });
-                //         }
-                //     });
-                //     dispatch({ field: "residentNoteArray", value: val });
-                // } else if (key === "pharmacyRequest") {
-                //     dispatch({ field: "pharmacyRequestArray", value: val });
-                // }
-                //  else if (key === "nurseService") {
-                //     dispatch({ field: "nurseService", value: val });
-                // }
               } else {
                 dispatch({ field: key, value: val })
                 // console.log("here",key,val)
@@ -384,6 +372,7 @@ function DischargeRequest(props) {
   const submitDischargeSummary = () => {
     const params = {
       _id: id,
+      requestType,
       dischargeRequest: {
         ...dischargeRequest,
         dischargeSummary: {
@@ -394,7 +383,7 @@ function DischargeRequest(props) {
     }
     console.log('params', params)
     axios
-      .put(updateIPR, params)
+      .put(updateEdrIpr, params)
       .then((res) => {
         if (res.data.success) {
           console.log('response while adding Discharge Req', res.data.data)
@@ -502,7 +491,7 @@ function DischargeRequest(props) {
                   height: 55,
                 }}
               >
-                {/* <img src={BarCode} style={{ width: 100, height: 70 }} /> */}
+                <img src={BarCode} style={{ width: 100, height: 70 }} />
               </div>
             </div>
 
@@ -522,7 +511,7 @@ function DischargeRequest(props) {
                   height: 55,
                 }}
               >
-                {/* <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} /> */}
+                <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
               </div>
             </div>
           </div>
@@ -597,119 +586,130 @@ function DischargeRequest(props) {
             height: '20px',
           }}
         />
-        <div className='container' style={styles.patientDetails}>
-          <div className='row'>
-            <div className='col-md-12'>
-              <h4 style={{ color: 'blue', fontWeight: '600' }}>
-                Patient Details
-              </h4>
-            </div>
-          </div>
-          <div className='row'>
-            <div className='col-md-4 col-sm-4'>
-              <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.stylesForLabel} id='status-label'>
-                  Patient Name
-                </InputLabel>
-                <input
-                  disabled={true}
-                  type='text'
-                  placeholder='Patient Name'
-                  name={'patientName'}
-                  value={
-                    selectedPatient.firstName + ` ` + selectedPatient.lastName
-                  }
-                  onChange={onChangeValue}
-                  className='textInputStyle'
-                />
-              </div>
-            </div>
-            <div className='col-md-4 col-sm-4'>
-              <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.stylesForLabel} id='status-label'>
-                  Gender
-                </InputLabel>
-                <input
-                  disabled={true}
-                  type='text'
-                  placeholder='Gender'
-                  name={'gender'}
-                  value={selectedPatient.gender}
-                  onChange={onChangeValue}
-                  className='textInputStyle'
-                />
-              </div>
-            </div>
-            <div className='col-md-4 col-sm-4'>
-              <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.stylesForLabel} id='status-label'>
-                  Age
-                </InputLabel>
-                <input
-                  disabled={true}
-                  type='text'
-                  placeholder='Age'
-                  name={'age'}
-                  value={selectedPatient.age}
-                  onChange={onChangeValue}
-                  className='textInputStyle'
-                />
-              </div>
-            </div>
-          </div>
 
-          <div className='row'>
-            <div className='col-md-4 col-sm-4'>
-              <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.stylesForLabel} id='status-label'>
-                  Patient ID
-                </InputLabel>
-                <input
-                  disabled={true}
-                  type='text'
-                  placeholder='Patient ID'
-                  name={'patientId'}
-                  value={selectedPatient.profileNo}
-                  onChange={onChangeValue}
-                  className='textInputStyle'
-                />
+        <div className='container-fluid'>
+          <h5 style={{ fontWeight: 'bold', color: 'white', marginTop: 25 }}>
+            Patient Details
+          </h5>
+          <div
+            // className="row"
+            style={{
+              marginTop: 25,
+              backgroundColor: 'white',
+              borderRadius: 5,
+              width: '100%',
+            }}
+          >
+            <div
+              className='row'
+              style={{
+                backgroundColor: '#2C6DDD',
+                paddingLeft: 10,
+                height: '30%',
+                borderTopLeftRadius: 5,
+                borderTopRightRadius: 5,
+                paddingBottom: 10,
+                paddingTop: 10,
+                marginLeft: 0,
+                marginRight: 0,
+              }}
+            >
+              <div
+                className={'col-md-3 col-sm-3 col-3'}
+                style={styles.headerHeading}
+              >
+                <h6 style={{ color: 'white', fontWeight: '700' }}>
+                  Patient Info
+                </h6>
+              </div>
+              <div
+                className={'col-md-3 col-sm-3 col-3'}
+                style={styles.headerHeading}
+              >
+                <h6 style={{ color: 'white', fontWeight: '700' }}>Allergy</h6>
+              </div>
+              <div
+                className={'col-md-3 col-sm-3 col-3'}
+                style={styles.headerHeading}
+              >
+                <h6 style={{ color: 'white', fontWeight: '700' }}>
+                  Medication
+                </h6>
+              </div>
+              <div
+                className={'col-md-3 col-sm-3 col-3'}
+                style={styles.headerHeading}
+              >
+                <h6 style={{ color: 'white', fontWeight: '700' }}>Diagnosis</h6>
               </div>
             </div>
 
-            <div className='col-md-4 col-sm-4'>
-              <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.stylesForLabel} id='status-label'>
-                  Insurance No
-                </InputLabel>
-                <input
-                  disabled={true}
-                  type='text'
-                  placeholder='Insurance Number'
-                  name={'insuranceId'}
-                  value={
-                    selectedPatient.insuranceId
-                      ? selectedPatient.insuranceId
-                      : '--'
-                  }
-                  onChange={onChangeValue}
-                  className='textInputStyle'
-                />
+            <div
+              style={{
+                marginTop: 10,
+                paddingLeft: 10,
+                height: '80%',
+                paddingBottom: 10,
+              }}
+            >
+              <div
+                className={'col-md-3 col-sm-3 col-3'}
+                style={{ display: 'flex', flexDirection: 'column' }}
+              >
+                <span style={styles.headingStyles}>MRN</span>
+                <span style={styles.textStyles}>
+                  {patientDetails.profileNo
+                    ? patientDetails.profileNo
+                    : '-----'}
+                  {/* {patientDetails && patientDetails.profileNo} */}
+                </span>
+
+                <span style={styles.headingStyles}>Patient</span>
+                <span style={styles.textStyles}>
+                  {patientDetails.firstName && patientDetails.lastName
+                    ? patientDetails.firstName + ' ' + patientDetails.lastName
+                    : '---- ----'}
+                </span>
+
+                <span style={styles.headingStyles}>Gender</span>
+                <span style={styles.textStyles}>
+                  {patientDetails.gender ? patientDetails.gender : '----'}
+                </span>
+
+                <span style={styles.headingStyles}>Age</span>
+                <span style={styles.textStyles}>
+                  {patientDetails.age ? patientDetails.age : '--'}
+                </span>
+
+                <span style={styles.headingStyles}>Weight</span>
+                <span style={styles.textStyles}>
+                  {patientDetails.weight ? patientDetails.weight : '--'} kg
+                </span>
               </div>
-            </div>
-            <div className='col-md-4 col-sm-4'>
-              <div style={styles.inputContainerForTextField}>
-                <InputLabel style={styles.stylesForLabel} id='status-label'>
-                  Request No
-                </InputLabel>
-                <input
-                  disabled={true}
-                  type='text'
-                  placeholder='Request Number'
-                  name={'requestNo'}
-                  value={requestNo}
-                  onChange={onChangeValue}
-                  className='textInputStyle'
-                />
+
+              <div className={'col-md-3 col-sm-3 col-3'} style={{}}>
+                {patientDetails &&
+                  patientDetails.drugAllergy.map((drug) => {
+                    return <h6 style={styles.textStyles}>{drug}</h6>
+                  })}
+              </div>
+
+              <div className={'col-md-3 col-sm-3 col-3'} style={{}}>
+                {patientDetails &&
+                  patientDetails.drugAllergy.map((drug, index) => {
+                    return (
+                      <h6 style={styles.textStyles}>Medication {index + 1}</h6>
+                    )
+                  })}
+              </div>
+
+              <div className={'col-md-3 col-sm-3 col-3'} style={{}}>
+                {patientDetails &&
+                  patientDetails.drugAllergy.map((drug, index) => {
+                    return (
+                      <h6 style={styles.textStyles}>Diagnosis {index + 1}</h6>
+                    )
+                  })}
               </div>
             </div>
           </div>
