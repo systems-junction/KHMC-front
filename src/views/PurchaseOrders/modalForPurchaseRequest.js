@@ -41,6 +41,8 @@ import TableCell from "@material-ui/core/TableCell";
 import { makeStyles } from "@material-ui/core/styles";
 
 import styles from "../../assets/jss/material-dashboard-react/components/tableStyle";
+import cookie from "react-cookies";
+
 const useStyles = makeStyles(styles);
 
 const stylesB = {
@@ -82,6 +84,9 @@ export default function PurchaseRequest(props) {
   const [openNotification, setOpenNotification] = useState(false);
 
   const [selectedPurchaseRequests, setSelectedPurchaseRequest] = useState([]);
+  const [currentUser, setCurrentUser] = useState(cookie.load("current_user"));
+
+  const [filteredRequests, setFilteredRequests] = useState([]);
 
   if (openNotification) {
     setTimeout(() => {
@@ -97,14 +102,24 @@ export default function PurchaseRequest(props) {
       .get(getPurchaseRequestUrl)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data.purchaseRequest);
+          if (props.comingFor === "add") {
+            setPurchaseRequest(res.data.data.purchaseRequest.reverse());
+            // setFilteredRequests(res.data.data.purchaseRequest.reverse());
+          } else if (props.comingFor === "edit") {
+            let temp = [];
+            temp =
+              res.data.data.purchaseRequest &&
+              res.data.data.purchaseRequest.filter((pr) => {
+                return (
+                  pr.vendorId._id === props.selectedVendor &&
+                  pr.committeeStatus === "approved" &&
+                  pr.generated === "Manual"
+                );
+              });
 
-          let temp = res.data.data.purchaseRequest.filter((pr) => {
-            return (
-              pr.committeeStatus === "approved" && pr.generated === "Manual"
-            );
-          });
-          setPurchaseRequest(temp.reverse());
+            console.log("temp", temp);
+            setFilteredRequests(temp.reverse());
+          }
           setVendor(res.data.data.vendor);
           setStatus(res.data.data.status);
           setItems(res.data.data.items);
@@ -120,12 +135,34 @@ export default function PurchaseRequest(props) {
   }
 
   useEffect(() => {
-    getPurchaseRequests();
+    if (props.comingFor === "add") {
+      getPurchaseRequests();
+    }
+
+    if (props.comingFor === "edit") {
+      getPurchaseRequests();
+      setSelectedPurchaseRequest(props.addedPRs);
+    }
   }, []);
+
+  useEffect(() => {
+    if (props.comingFor === "add") {
+      let temp = [];
+      temp =
+        purchaseRequests &&
+        purchaseRequests.filter((pr) => {
+          return (
+            pr.vendorId._id === props.selectedVendor &&
+            pr.committeeStatus === "approved" &&
+            pr.generated === "Manual"
+          );
+        });
+      setFilteredRequests(temp);
+    }
+  }, [props.selectedVendor]);
 
   const handleAdd = (prObj) => {
     let temp = [...selectedPurchaseRequests];
-
     if (temp.length === 0) {
       temp.push(prObj);
     } else {
@@ -138,15 +175,15 @@ export default function PurchaseRequest(props) {
         }
       }
     }
-
     setSelectedPurchaseRequest(temp);
+    props.handleAddPR(temp);
   };
 
   const handleRemove = (prObj) => {
     let temp;
     temp = selectedPurchaseRequests.filter((item) => item._id !== prObj._id);
-
     setSelectedPurchaseRequest(temp);
+    props.handleAddPR(temp);
   };
 
   // function addNewPR() {
@@ -293,226 +330,151 @@ export default function PurchaseRequest(props) {
   }
 
   return (
-    // <div
-    //   style={{
-    //     display: "flex",
-    //     flexDirection: "column",
-    //     flex: 1,
-    //     position: "fixed",
-    //     width: "100%",
-    //     height: "100%",
-    //     backgroundColor: "#60d69f",
-    //     overflowY: "scroll",
-    //   }}
-    // >
-    //   <div
-    //     style={{
-    //       flex: 4,
-    //       display: "flex",
-    //       flexDirection: "column",
-    //     }}
-    //   >
-
-    <Dialog
-      onClose={() => props.handleAddPR("")}
-      fullWidth={true}
-      maxWidth={"lg"}
-      bodyStyle={{ backgroundColor: "red" }}
-      contentStyle={{ backgroundColor: "red" }}
-      aria-labelledby="simple-dialog-title"
-      open={props.openPRDialog}
-    >
-      <DialogContent style={{ backgroundColor: "#31e2aa" }}>
-        <DialogTitle id="simple-dialog-title">
-          Select Purchase Request
-        </DialogTitle>
-        {/* <Button
-          onClick={() => addNewPR()}
-          style={{ float: "right", marginBottom: "2%" }}
-          color="primary"
-          variant={"contained"}
-        >
-          Add New PR
-        </Button> */}
-
-        {purchaseRequests ? (
-          <div>
-            <div>
-              {/* <CustomTable
-              tableData={purchaseRequests}
-              tableDataKeys={tableDataKeys}
-              tableHeading={tableHeading}
-              action={actions}
-              handleAdd={handleAdd}
-              borderBottomColor={"#60d69f"}
-              borderBottomWidth={20}
-            /> */}
-
-              <Table>
-                {tableHeading !== undefined ? (
-                  <TableHead
-                    className={classes["TableHeader"]}
-                    style={{
-                      backgroundColor: "#2873cf",
-                    }}
-                  >
-                    <TableRow>
-                      {tableHeading.map((prop, index) => {
-                        return (
-                          <>
-                            <TableCell
-                              className={classes.tableHeadCell}
-                              style={{
-                                color: "white",
-                                fontWeight: "700",
-                                paddingTop: 30,
-                                paddingBottom: 30,
-                                textAlign: "center",
-                                borderTopLeftRadius: index === 0 ? 45 : 0,
-                                borderTopRightRadius:
-                                  index === tableHeading.length - 1 ? 45 : 0,
-                              }}
-                              key={prop}
-                            >
-                              {prop}
-                            </TableCell>
-                          </>
-                        );
-                      })}
-                    </TableRow>
-                  </TableHead>
-                ) : null}
-
-                <div style={{ height: 25, width: "100%" }}></div>
-
-                <TableBody style={{ marginTop: 20 }}>
-                  {purchaseRequests &&
-                    purchaseRequests.map((prop, index) => {
-                      return (
-                        <>
-                          <TableRow
-                            key={index}
-                            className={classes.tableBodyRow}
-                            style={{
-                              backgroundColor: "white",
-                              cursor: "pointer",
-                            }}
-                          >
-                            {tableDataKeys
-                              ? tableDataKeys.map((val, key) => {
-                                  // console.log(key);
-                                  if (val === "date") {
-                                    return (
-                                      <TableCell
-                                        className={classes.tableCell}
-                                        key={key}
-                                        style={{
-                                          textAlign: "center",
-                                        }}
-                                      >
-                                        {formatDate(prop[val])}
-                                      </TableCell>
-                                    );
-                                  } else {
-                                    return (
-                                      <TableCell
-                                        className={classes.tableCell}
-                                        key={key}
-                                        onClick={() => handleClick(prop, val)}
-                                        style={{
-                                          textAlign: "center",
-                                          cursor: props.handleModelMaterialReceiving
-                                            ? "pointer"
-                                            : "",
-
-                                          borderTopLeftRadius:
-                                            key === 0 ? 15 : 0,
-                                          borderBottomLeftRadius:
-                                            key === 0 ? 15 : 0,
-
-                                          borderWidth: 0,
-                                        }}
-                                      >
-                                        {Array.isArray(val)
-                                          ? prop[val[0]]
-                                            ? prop[val[0]][val[1]]
-                                            : null
-                                          : val.toLowerCase() === "timestamp"
-                                          ? new Intl.DateTimeFormat(
-                                              "en-US",
-                                              dateOptions
-                                            ).format(Date.parse(prop[val]))
-                                          : // : `${replaceSlugToTitle(prop[val])}`}
-                                            replaceSlugToTitle(prop[val])}
-                                      </TableCell>
-                                    );
-                                  }
-                                })
-                              : null}
-                            <TableCell
-                              style={{
-                                cursor: "pointer",
-                                borderTopRightRadius: 15,
-                                borderBottomRightRadius: 15,
-
-                                borderWidth: 0,
-                              }}
-                              className={classes.tableCell}
-                              colSpan="2"
-                            >
-                              {checkAvailability(prop) ? (
-                                <span onClick={() => handleAdd(prop)}>
-                                  <i
-                                    style={{ color: "blue" }}
-                                    className=" ml-10 zmdi zmdi-plus-circle zmdi-hc-3x"
-                                  />
-                                </span>
-                              ) : (
-                                <span onClick={() => handleRemove(prop)}>
-                                  <i
-                                    style={{ color: "blue" }}
-                                    className=" ml-10 zmdi zmdi-check zmdi-hc-3x"
-                                  />
-                                </span>
-                              )}
-                            </TableCell>
-                          </TableRow>
-
-                          <TableRow style={{ height: 20 }} />
-                        </>
-                      );
-                    })}
-                </TableBody>
-              </Table>
-            </div>
-
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              <Button
-                style={stylesB.stylesForButton}
-                onClick={() => handleDone()}
-                variant={"contained"}
-                color={"primary"}
+    <div>
+      <div>
+        <div>
+          <Table>
+            {tableHeading !== undefined ? (
+              <TableHead
+                className={classes["TableHeader"]}
+                style={{
+                  backgroundColor: "#2873cf",
+                }}
               >
-                Done
-              </Button>
-            </div>
-            <Notification msg={errorMsg} open={openNotification} />
-          </div>
-        ) : (
-          <div
-            style={{
-              width: "100%",
-              height: "100%",
-              position: "fixed",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <Loader type="TailSpin" color="red" height={50} width={50} />
-          </div>
-        )}
-        {/* </div> */}
-      </DialogContent>
-    </Dialog>
+                <TableRow>
+                  {tableHeading.map((prop, index) => {
+                    return (
+                      <>
+                        <TableCell
+                          className={classes.tableHeadCell}
+                          style={{
+                            color: "white",
+                            fontWeight: "700",
+                            textAlign: "center",
+                            borderTopLeftRadius: index === 0 ? 10 : 0,
+                            borderTopRightRadius:
+                              index === tableHeading.length - 1 ? 10 : 0,
+                          }}
+                          key={prop}
+                        >
+                          {prop}
+                        </TableCell>
+                      </>
+                    );
+                  })}
+                </TableRow>
+              </TableHead>
+            ) : null}
+
+            <TableBody>
+              {filteredRequests &&
+                filteredRequests.map((prop, index) => {
+                  return (
+                    <>
+                      <TableRow
+                        key={index}
+                        className={classes.tableBodyRow}
+                        style={{
+                          backgroundColor: "white",
+                        }}
+                      >
+                        {tableDataKeys
+                          ? tableDataKeys.map((val, key) => {
+                              // console.log(key);
+                              if (val === "date") {
+                                return (
+                                  <TableCell
+                                    className={classes.tableCell}
+                                    key={key}
+                                    style={{
+                                      textAlign: "center",
+                                    }}
+                                  >
+                                    {formatDate(prop[val])}
+                                  </TableCell>
+                                );
+                              } else {
+                                return (
+                                  <TableCell
+                                    className={classes.tableCell}
+                                    key={key}
+                                    // onClick={() => handleClick(prop, val)}
+                                    style={{
+                                      textAlign: "center",
+                                    }}
+                                  >
+                                    {Array.isArray(val)
+                                      ? prop[val[0]]
+                                        ? prop[val[0]][val[1]]
+                                        : null
+                                      : val.toLowerCase() === "timestamp"
+                                      ? new Intl.DateTimeFormat(
+                                          "en-US",
+                                          dateOptions
+                                        ).format(Date.parse(prop[val]))
+                                      : // : `${replaceSlugToTitle(prop[val])}`}
+                                        replaceSlugToTitle(prop[val])}
+                                  </TableCell>
+                                );
+                              }
+                            })
+                          : null}
+                        <TableCell
+                          style={{
+                            cursor: "pointer",
+                          }}
+                          className={classes.tableCell}
+                          colSpan="2"
+                        >
+                          {checkAvailability(prop) ? (
+                            <span onClick={() => handleAdd(prop)}>
+                              <i
+                                style={{ color: "blue" }}
+                                className=" ml-10 zmdi zmdi-plus-circle zmdi-hc-3x"
+                              />
+                            </span>
+                          ) : (
+                            <span onClick={() => handleRemove(prop)}>
+                              <i
+                                style={{ color: "blue" }}
+                                className=" ml-10 zmdi zmdi-check zmdi-hc-3x"
+                              />
+                            </span>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    </>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </div>
+
+        {/* <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              style={stylesB.stylesForButton}
+              onClick={() => handleDone()}
+              variant={"contained"}
+              color={"primary"}
+            >
+              Done
+            </Button>
+          </div> */}
+        <Notification msg={errorMsg} open={openNotification} />
+      </div>
+      {/* ) : (
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            position: "fixed",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Loader type="TailSpin" color="red" height={50} width={50} />
+        </div>
+      )} */}
+    </div>
   );
 }

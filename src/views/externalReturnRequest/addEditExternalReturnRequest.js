@@ -254,6 +254,7 @@ function AddEditPurchaseRequest(props) {
     setFUObj(props.history.location.state.fuObj);
 
     const selectedRec = props.history.location.state.selectedItem;
+    setSelectedItem(props.history.location.state.selectedItem);
     console.log(selectedRec);
     if (selectedRec) {
       if (props.history.location.state.comingFor === "add") {
@@ -351,10 +352,10 @@ function AddEditPurchaseRequest(props) {
         dateGenerated: new Date(),
         generated: "Manual",
         expiryDate,
-        currentQty,
+        currentQty: selectedItem.currQty,
         itemId: itemId._id,
         description,
-        prId: _id,
+        prId: selectedItem.prId,
         reason,
         reasonDetail,
         status:
@@ -373,7 +374,7 @@ function AddEditPurchaseRequest(props) {
           if (res.data.success) {
             console.log("response after adding RR", res.data);
             props.history.replace(
-              "/home/wms/materialreceiving/viewpo/externalreturn"
+              "/home/wms//warehouse/materialreceiving/viewpo/externalreturn"
             );
           } else if (!res.data.success) {
             setOpenNotification(true);
@@ -457,7 +458,7 @@ function AddEditPurchaseRequest(props) {
     }, 2000);
   }
 
-  console.log(props.history);
+  console.log(selectedItem);
 
   return (
     <div
@@ -664,7 +665,9 @@ function AddEditPurchaseRequest(props) {
                         color="primary"
                         disabled={
                           currentUser &&
-                          currentUser.staffTypeId.type === "admin" &&
+                          (currentUser.staffTypeId.type === "admin" ||
+                            currentUser.staffTypeId.type ===
+                              "Warehouse Inventory Keeper") &&
                           comingFor !== "view"
                             ? false
                             : true
@@ -683,7 +686,9 @@ function AddEditPurchaseRequest(props) {
                         color="primary"
                         disabled={
                           currentUser &&
-                          currentUser.staffTypeId.type === "admin" &&
+                          (currentUser.staffTypeId.type === "admin" ||
+                            currentUser.staffTypeId.type ===
+                              "Warehouse Inventory Keeper") &&
                           comingFor !== "view"
                             ? false
                             : true
@@ -706,7 +711,9 @@ function AddEditPurchaseRequest(props) {
                         color="primary"
                         disabled={
                           currentUser &&
-                          currentUser.staffTypeId.type === "admin" &&
+                          (currentUser.staffTypeId.type === "admin" ||
+                            currentUser.staffTypeId.type ===
+                              "Warehouse Inventory Keeper") &&
                           comingFor !== "view"
                             ? false
                             : true
@@ -725,7 +732,9 @@ function AddEditPurchaseRequest(props) {
                         color="primary"
                         disabled={
                           currentUser &&
-                          currentUser.staffTypeId.type === "admin" &&
+                          (currentUser.staffTypeId.type === "admin" ||
+                            currentUser.staffTypeId.type ===
+                              "Warehouse Inventory Keeper") &&
                           comingFor !== "view"
                             ? false
                             : true
@@ -748,7 +757,9 @@ function AddEditPurchaseRequest(props) {
                     name={"expiryDate"}
                     disabled={
                       currentUser &&
-                      currentUser.staffTypeId.type === "admin" &&
+                      (currentUser.staffTypeId.type === "admin" ||
+                        currentUser.staffTypeId.type ===
+                          "Warehouse Inventory Keeper") &&
                       comingFor !== "view" &&
                       reason === "expired"
                         ? false
@@ -767,7 +778,7 @@ function AddEditPurchaseRequest(props) {
                           : null
                         : expiryDate
                     }
-                    //   label={"Expiry Date"}
+                    label={"Expiry Date"}
                   />
                 </MuiPickersUtilsProvider>
               </div>
@@ -790,7 +801,9 @@ function AddEditPurchaseRequest(props) {
                   className="textInputStyle"
                   disabled={
                     currentUser &&
-                    currentUser.staffTypeId.type === "admin" &&
+                    (currentUser.staffTypeId.type === "admin" ||
+                      currentUser.staffTypeId.type ===
+                        "Warehouse Inventory Keeper") &&
                     comingFor !== "view"
                       ? false
                       : true
@@ -904,7 +917,7 @@ function AddEditPurchaseRequest(props) {
                   variant="contained"
                   color="primary"
                 >
-                 Confirm
+                  Confirm
                 </Button>
               ) : (
                 undefined

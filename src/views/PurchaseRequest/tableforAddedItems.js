@@ -93,6 +93,7 @@ const tableHeadingForFUMember = [
   "No.",
   "Item Name",
   "Item Code",
+  "Vendor Name",
   "Requested Qty",
   // "FU Item Cost",
   "Actions",
@@ -102,15 +103,17 @@ const tableHeadingForWarehouseMember = [
   "No.",
   "Item Name",
   "Item Code",
+  "Vendor Name",
   "Requested Qty",
   // "FU Item Cost",
-  "Status",
+  // "Status",
 ];
 
 const tableHeadingForOthers = [
   "No.",
   "Item Name",
   "Item Code",
+  "Vendor Name",
   "Requested Qty",
   // "FU Item Cost",
 ];
@@ -138,8 +141,6 @@ export default function DenseTable(props) {
     props.onDelete(id);
   }
 
-  console.log("requestedQty",props.items)
-
   return (
     <Table aria-label="a dense table" size="small">
       <TableHead>
@@ -162,7 +163,7 @@ export default function DenseTable(props) {
             })}
 
           {(currentUser.staffTypeId.type === "Warehouse Member" ||
-            currentUser.staffTypeId.type === "Warehouse Incharge") &&
+            currentUser.staffTypeId.type === "Committe Member") &&
             tableHeadingForWarehouseMember.map((h, index) => {
               return (
                 <TableCell
@@ -228,6 +229,16 @@ export default function DenseTable(props) {
                 // fontSize: "0.9rem",
               }}
             >
+              {row.itemId.vendorId.englishName}
+            </TableCell>
+
+            <TableCell
+              align="center"
+              style={{
+                backgroundColor: "white",
+                // fontSize: "0.9rem",
+              }}
+            >
               {row.reqQty}
             </TableCell>
 
@@ -241,7 +252,7 @@ export default function DenseTable(props) {
               {row.fuItemCost}
             </TableCell> */}
 
-            {currentUser.staffTypeId.type === "FU Member" ? (
+            {currentUser.staffTypeId.type === "Warehouse Member" ? (
               <TableCell
                 align="center"
                 style={{
@@ -273,8 +284,7 @@ export default function DenseTable(props) {
               undefined
             )}
 
-            {currentUser.staffTypeId.type === "Warehouse Member" ||
-            currentUser.staffTypeId.type === "Warehouse Incharge" ? (
+            {currentUser.staffTypeId.type === "Warehouse Incharge" ? (
               <TableCell
                 align="center"
                 style={{

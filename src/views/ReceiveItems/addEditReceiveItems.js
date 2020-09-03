@@ -53,11 +53,11 @@ const statusArray = [
 
 const styles = {
   inputContainerForTextField: {
-    marginTop: 25,
+    marginTop: 6,
   },
 
   inputContainerForDropDown: {
-    marginTop: 35,
+    marginTop: 6,
     // backgroundColor: 'white',
     // borderRadius: 10,
     // paddingLeft: 10,
@@ -96,7 +96,27 @@ const styles = {
     paddingRight: 3,
   },
 };
-const useStyles = makeStyles(tableStyles);
+// const useStyles = makeStyles(tableStyles);
+
+const useStyles = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(0),
+  },
+  input: {
+    backgroundColor: "white",
+    borderRadius: 4,
+    "&:placeholder": {
+      // color: "gray",
+      // fontWeight: "400",
+    },
+    "&:before": {
+      borderBottomWidth: "0px",
+    },
+    "&:after": {
+      color: "black",
+    },
+  },
+}));
 
 const DATE = new Date();
 
@@ -104,7 +124,8 @@ const time = DATE.getHours();
 
 function ReceiveItems(props) {
   // const classes = useStyles();
-  const classes = useStyleforinput();
+
+  const classes = useStyles();
 
   const initialState = {
     _id: "",
@@ -208,29 +229,29 @@ function ReceiveItems(props) {
   useEffect(() => {
     setCurrentUser(cookie.load("current_user"));
 
-    setcomingFor(props.history.location.state.comingFor);
+    // setcomingFor(props.history.location.state.comingFor);
 
-    setVendors(props.history.location.state.vendors);
+    // setVendors(props.history.location.state.vendors);
 
-    setGeneratedArray(props.history.location.state.generatedArray);
+    // setGeneratedArray(props.history.location.state.generatedArray);
 
-    setPaymentTermsArray(props.history.location.state.paymentTerms);
+    // setPaymentTermsArray(props.history.location.state.paymentTerms);
 
-    const selectedRec = props.history.location.state.selectedItem;
+    // const selectedRec = props.history.location.state.selectedItem;
 
-    if (selectedRec) {
-      setSelectedItem(selectedRec);
-    }
+    // if (selectedRec) {
+    //   setSelectedItem(selectedRec);
+    // }
 
-    if (selectedRec) {
-      Object.entries(selectedRec).map(([key, val]) => {
-        if (val && typeof val === "object") {
-          dispatch({ field: key, value: val._id });
-        } else {
-          dispatch({ field: key, value: val });
-        }
-      });
-    }
+    // if (selectedRec) {
+    //   Object.entries(selectedRec).map(([key, val]) => {
+    //     if (val && typeof val === "object") {
+    //       dispatch({ field: key, value: val._id });
+    //     } else {
+    //       dispatch({ field: key, value: val });
+    //     }
+    //   });
+    // }
   }, []);
 
   function validateForm() {
@@ -262,9 +283,9 @@ function ReceiveItems(props) {
     setIsFormSubmitted(true);
     if (validateForm()) {
       let params = {
-        itemId: selectedItem.item.itemId._id,
-        currentQty: selectedItem.item.currQty,
-        requestedQty: selectedItem.item.reqQty,
+        itemId: selectedItem.itemId._id,
+        currentQty: selectedItem.currQty,
+        requestedQty: selectedItem.reqQty,
         receivedQty,
         bonusQty,
         batchNumber,
@@ -284,13 +305,13 @@ function ReceiveItems(props) {
         dateInvoice: date,
         dateReceived: receivedDate,
         notes: comments,
-        materialId: props.history.location.state.materialReceivingId,
-        vendorId: selectedItem.vendorId,
-        prId: selectedItem._id,
+        materialId: props.materialReceivingId,
+        vendorId: selectedItem.itemId.vendorId,
+        prId: selectedItem.prId,
         status: statusForReceivingItem,
       };
 
-      console.log("params", params);
+      console.log("params send while receiving data", params);
 
       axios
         .post(addReceiveItemsUrl, params)
@@ -366,11 +387,12 @@ function ReceiveItems(props) {
     }, 2000);
   }
 
-  console.log("vendor id in receive items", selectedItem);
+  // console.log("selectedItem", selectedItem);
 
   const handleAddReturnRequest = () => {
     console.log("rec", selectedItem);
-    let path = `/home/wms/materialreceiving/viewpo/externalreturn/add`;
+    let path = `/home/wms/warehouse/materialreceiving/viewpo/externalreturn/add`;
+    // /home/wms/warehouse/materialreceiving/viewpo
     props.history.push({
       pathname: path,
       state: {
@@ -386,264 +408,208 @@ function ReceiveItems(props) {
     }
   };
 
+  useEffect(() => {
+    setSelectedItem(props.selectedItem);
+  }, [props.selectedItem]);
+
   return (
     <div
-      style={{
-        backgroundColor: "#60d69f",
-        position: "fixed",
-        display: "flex",
-        width: "100%",
-        height: "100%",
-        flexDirection: "column",
-        flex: 1,
-        overflowY: "scroll",
-      }}
+      style={
+        {
+          // backgroundColor: "#60d69f",
+          // position: "fixed",
+          // display: "flex",
+          // width: "100%",
+          // height: "100%",
+          // flexDirection: "column",
+          // flex: 1,
+          // overflowY: "scroll",
+        }
+      }
     >
-      <Header />
-      <div className="cPadding">
-        <div className="subheader">
+      {/* <Header /> */}
+      <div>
+        {/* <div className="subheader">
           <div>
             <img src={business_Unit} />
             <h4>{comingFor === "add" ? "Receive Items" : "Receive Items"}</h4>
           </div>
 
           <div>
-            {/* <img onClick={() => props.history.goBack()} src={Add_New} /> */}
-            {/* <img src={Search} /> */}
           </div>
-        </div>
+        </div> */}
 
         <div style={{ flex: 4, display: "flex", flexDirection: "column" }}>
           <div className="row">
-            <div className="col-md-6">
-              <div
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
+            <div
+              className="col-md-6"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                // type="number"
+                disabled={true}
+                label="Item Code"
+                name={"itemCode"}
+                value={selectedItem && selectedItem.itemId.itemCode}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
                 }}
-              >
-                {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Item Code
-                </InputLabel> */}
-
-                <TextField
-                  // type="number"
-                  disabled={true}
-                  label="Item Code"
-                  name={"itemCode"}
-                  value={selectedItem && selectedItem.item.itemCode}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  variant="filled"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                />
-              </div>
+              />
             </div>
 
-            <div className="col-md-6">
-              <div
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
+            <div
+              className="col-md-6"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                type="text"
+                disabled={true}
+                label="Item Name"
+                name={"itemName"}
+                value={selectedItem && selectedItem.itemId.name}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
                 }}
-              >
-                {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Item Name
-                </InputLabel> */}
-                <TextField
-                  type="text"
-                  disabled={true}
-                  label="Item Name"
-                  name={"itemName"}
-                  value={selectedItem && selectedItem.item.name}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  variant="filled"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                />
-              </div>
+              />
             </div>
           </div>
 
           <div className="row">
-            <div className="col-md-3">
-              <div
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
+            <div
+              className="col-md-3"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                disabled={true}
+                type="number"
+                label="Current Qty"
+                name={"currentQty"}
+                value={selectedItem && selectedItem.currQty}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
                 }}
-              >
-                {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Current Qty
-                </InputLabel> */}
-
-                <TextField
-                  disabled={true}
-                  type="number"
-                  label="Current Qty"
-                  name={"currentQty"}
-                  value={selectedItem && selectedItem.item.currQty}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  variant="filled"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
             </div>
 
-            <div className="col-md-3">
-              <div
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
+            <div
+              className="col-md-3"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                type="number"
+                disabled={true}
+                label="Required Qty"
+                name={"requiredQty"}
+                value={selectedItem && selectedItem.reqQty}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
                 }}
-              >
-                {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Required Qty
-                </InputLabel> */}
-                <TextField
-                  type="number"
-                  disabled={true}
-                  label="Required Qty"
-                  name={"requiredQty"}
-                  value={selectedItem && selectedItem.item.reqQty}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  variant="filled"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
             </div>
 
-            <div className="col-md-3">
-              <div
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
+            <div
+              className="col-md-3"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                type="number"
+                label="Received Qty"
+                name={"receivedQty"}
+                value={receivedQty}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                error={receivedQty === "" && isFormSubmitted}
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
                 }}
-              >
-                {/* <InputLabelComponent>Received Qty*</InputLabelComponent> */}
-                <TextField
-                  type="number"
-                  label="Received Qty"
-                  name={"receivedQty"}
-                  value={receivedQty}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  error={receivedQty === "" && isFormSubmitted}
-                  variant="filled"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                  // error={receivedQty.includes("e", 0)}
-                />
-              </div>
-              {/* <ErrorMessage
-                name={receivedQty}
-                isFormSubmitted={isFormSubmitted}
-              /> */}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                // error={receivedQty.includes("e", 0)}
+              />
             </div>
 
-            <div className="col-md-3">
-              <div
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
+            <div
+              className="col-md-3"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                type="number"
+                label="Bonus Qty"
+                name={"bonusQty"}
+                value={bonusQty}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                error={bonusQty === "" && isFormSubmitted}
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
                 }}
-              >
-                {/* <InputLabelComponent>Bonus Qty*</InputLabelComponent> */}
-                <TextField
-                  type="number"
-                  label="Bonus Qty"
-                  name={"bonusQty"}
-                  value={bonusQty}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  error={bonusQty === "" && isFormSubmitted}
-                  variant="filled"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
-              {/* <ErrorMessage name={bonusQty} isFormSubmitted={isFormSubmitted} /> */}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
             </div>
           </div>
 
           <div className="row">
-            <div className="col-md-4">
-              <div
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
+            <div
+              className="col-md-4"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                type="number"
+                label="Batch Number"
+                name={"batchNumber"}
+                value={batchNumber}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                error={batchNumber === "" && isFormSubmitted}
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
                 }}
-              >
-                {/* <InputLabelComponent>Batch Number*</InputLabelComponent> */}
-                <TextField
-                  type="number"
-                  label="Batch Number"
-                  name={"batchNumber"}
-                  value={batchNumber}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  error={batchNumber === "" && isFormSubmitted}
-                  variant="filled"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
-              {/* <ErrorMessage
-                name={batchNumber}
-                isFormSubmitted={isFormSubmitted}
-              /> */}
-            </div>
-
-            <div className="col-md-4">
-              <div
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                {/* <InputLabelComponent>LOT No*</InputLabelComponent> */}
-                <TextField
-                  type="number"
-                  label="LOT No"
-                  name={"lotNo"}
-                  value={lotNo}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  error={lotNo === "" && isFormSubmitted}
-                  variant="filled"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
-              {/* <ErrorMessage name={lotNo} isFormSubmitted={isFormSubmitted} /> */}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
             </div>
 
             <div
@@ -653,511 +619,428 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabelComponent>Expiry Date*</InputLabelComponent> */}
+              <TextField
+                type="number"
+                label="LOT No"
+                name={"lotNo"}
+                value={lotNo}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                error={lotNo === "" && isFormSubmitted}
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
+            </div>
+
+            <div
+              className="col-md-4"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DatePicker
                   inputVariant="filled"
                   fullWidth
                   format="dd/MM/yyyy"
-                  // label="Expiry Date"
+                  label="Expiry Date"
                   onChange={(val) => onChangeDate(val, "expiryDate")}
-                  // style={{
-                  //   borderRadius: 10,
-                  //   backgroundColor: "white",
-                  //   height: 47,
-                  //   marginTop: 5,
-                  //   paddingTop:9,
-                  //   paddingLeft:10
-                  // }}
-
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
                   error={expiryDate === "" && isFormSubmitted}
-                  value={
-                    comingFor === "add"
-                      ? expiryDate
-                        ? expiryDate
-                        : null
-                      : expiryDate
-                  }
-
-                  // InputProps={{
-                  //   disableUnderline: true,
-                  // }}
+                  value={expiryDate ? expiryDate : null}
                 />
               </MuiPickersUtilsProvider>
-              {/* <ErrorMessage
-                name={expiryDate}
-                isFormSubmitted={isFormSubmitted}
-              /> */}
             </div>
           </div>
 
           <div className="row">
-            <div className="col-md-3">
-              <div
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
+            <div
+              className="col-md-3"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                type="text"
+                label="Unit"
+                name={"unit"}
+                value={unit}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
                 }}
-              >
-                {/* <InputLabelComponent>Unit*</InputLabelComponent> */}
-                <TextField
-                  type="text"
-                  label="Unit"
-                  name={"unit"}
-                  value={unit}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  error={unit === "" && isFormSubmitted}
-                />
-              </div>
-              {/* <ErrorMessage name={unit} isFormSubmitted={isFormSubmitted} /> */}
+                error={unit === "" && isFormSubmitted}
+              />
             </div>
 
-            <div className="col-md-3">
-              <div
-                syle={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
+            <div
+              className="col-md-3"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                type="number"
+                label="Discount %"
+                name={"discount"}
+                variant={"filled"}
+                value={discount}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
                 }}
-              >
-                {/* <InputLabelComponent>Discount %*</InputLabelComponent> */}
-                <input
-                  type="number"
-                  label="Discount %"
-                  name={"discount"}
-                  value={discount}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  error={discount === "" && isFormSubmitted}
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
-              {/* <ErrorMessage name={discount} isFormSubmitted={isFormSubmitted} /> */}
+                error={discount === "" && isFormSubmitted}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
             </div>
 
-            <div className="col-md-3">
-              <div
-                syle={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
+            <div
+              className="col-md-3"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                label="Unit Discount"
+                name={"uniyDiscount"}
+                value={uniyDiscount}
+                variant={"filled"}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
                 }}
-              >
-                {/* <InputLabelComponent>Unit Discount*</InputLabelComponent> */}
-                <TextField
-                  label="Unit Discount"
-                  name={"uniyDiscount"}
-                  value={uniyDiscount}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  error={uniyDiscount === "" && isFormSubmitted}
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
-              {/* <ErrorMessage
-                name={uniyDiscount}
-                isFormSubmitted={isFormSubmitted}
-              /> */}
+                error={uniyDiscount === "" && isFormSubmitted}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
             </div>
 
-            <div className="col-md-3">
-              <div
-                syle={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
+            <div
+              className="col-md-3"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                type="number"
+                label="Discount Amount"
+                name={"discountAmount"}
+                value={discountAmount}
+                variant={"filled"}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
                 }}
-              >
-                {/* <InputLabelComponent>Discount Amount*</InputLabelComponent> */}
-                <TextField
-                  type="number"
-                  label="Discount Amount"
-                  name={"discountAmount"}
-                  value={discountAmount}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  error={discountAmount === "" && isFormSubmitted}
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
-              {/* <ErrorMessage
-                name={discountAmount}
-                isFormSubmitted={isFormSubmitted}
-              /> */}
+                error={discountAmount === "" && isFormSubmitted}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
             </div>
           </div>
 
           <div className="row">
-            <div className="col-md-6">
-              <div
-                syle={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
+            <div
+              className="col-md-6"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                type="number"
+                label="Tax %"
+                name={"tax"}
+                value={tax}
+                variant={"filled"}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
                 }}
-              >
-                {/* <InputLabelComponent>Tax %*</InputLabelComponent> */}
-
-                <TextField
-                  type="number"
-                  label="Tax %"
-                  name={"tax"}
-                  value={tax}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  error={tax === "" && isFormSubmitted}
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
-              {/* <ErrorMessage name={tax} isFormSubmitted={isFormSubmitted} /> */}
+                error={tax === "" && isFormSubmitted}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
             </div>
 
-            <div className="col-md-6">
-              <div
-                syle={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
+            <div
+              className="col-md-6"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                type="number"
+                label="Tax Amount"
+                name={"taxAmount"}
+                variant={"filled"}
+                value={taxAmount}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
                 }}
-              >
-                {/* <InputLabelComponent>Tax Amount*</InputLabelComponent> */}
-                <TextField
-                  type="number"
-                  label="Tax Amount"
-                  name={"taxAmount"}
-                  value={taxAmount}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  error={taxAmount === "" && isFormSubmitted}
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
-              {/* <ErrorMessage
-                name={taxAmount}
-                isFormSubmitted={isFormSubmitted}
-              /> */}
+                error={taxAmount === "" && isFormSubmitted}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
             </div>
           </div>
 
           <div className="row">
-            <div className="col-md-3">
-              <div
-                syle={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
+            <div
+              className="col-md-3"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                type="number"
+                label="Final Unit Price"
+                name={"finalUnitPrice"}
+                value={finalUnitPrice}
+                variant={"filled"}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
                 }}
-              >
-                {/* <InputLabelComponent>Final Unit Price*</InputLabelComponent> */}
-                <TextField
-                  type="number"
-                  label="Final Unit Price"
-                  name={"finalUnitPrice"}
-                  value={finalUnitPrice}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  error={finalUnitPrice === "" && isFormSubmitted}
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
-              {/* <ErrorMessage
-                name={finalUnitPrice}
-                isFormSubmitted={isFormSubmitted}
-              /> */}
+                error={finalUnitPrice === "" && isFormSubmitted}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
             </div>
 
-            <div className="col-md-3">
-              <div
-                syle={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
+            <div
+              className="col-md-3"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                type="number"
+                label="Sub Total"
+                name={"subTotal"}
+                value={subTotal}
+                variant={"filled"}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
                 }}
-              >
-                {/* <InputLabelComponent>Sub Total*</InputLabelComponent> */}
-                <TextField
-                  type="number"
-                  label="Sub Total"
-                  name={"subTotal"}
-                  value={subTotal}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  error={subTotal === "" && isFormSubmitted}
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
-              {/* <ErrorMessage name={subTotal} isFormSubmitted={isFormSubmitted} /> */}
+                error={subTotal === "" && isFormSubmitted}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
             </div>
 
-            <div className="col-md-3">
-              <div
-                syle={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
+            <div
+              className="col-md-3"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                type="number"
+                label="Total Price"
+                name={"totalPrice"}
+                value={totalPrice}
+                variant={"filled"}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
                 }}
-              >
-                {/* <InputLabelComponent>Total Price*</InputLabelComponent> */}
-                <TextField
-                  type="number"
-                  label="Total Price"
-                  name={"totalPrice"}
-                  value={totalPrice}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  error={totalPrice === "" && isFormSubmitted}
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
-              {/* <ErrorMessage
-                name={totalPrice}
-                isFormSubmitted={isFormSubmitted}
-              /> */}
+                error={totalPrice === "" && isFormSubmitted}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
             </div>
 
-            <div className="col-md-3">
-              <div
-                syle={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
+            <div
+              className="col-md-3"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                type="number"
+                label="Discount Amount"
+                name={"discountAmount2"}
+                value={discountAmount2}
+                variant={"filled"}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
                 }}
-              >
-                {/* <InputLabelComponent>Amount Discount*</InputLabelComponent> */}
-                <TextField
-                  type="number"
-                  label="Discount Amount"
-                  name={"discountAmount2"}
-                  value={discountAmount2}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  error={discountAmount2 === "" && isFormSubmitted}
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                />
-              </div>
-              {/* <ErrorMessage
-                name={discountAmount2}
-                isFormSubmitted={isFormSubmitted}
-              /> */}
+                error={discountAmount2 === "" && isFormSubmitted}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
             </div>
           </div>
 
           <div className="row">
-            <div className="col-md-4">
-              <div
-                syle={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
+            <div
+              className="col-md-4"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                type="number"
+                label="Invoice"
+                name={"invoice"}
+                value={invoice}
+                variant={"filled"}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
                 }}
-              >
-                {/* <InputLabelComponent>Invoice*</InputLabelComponent> */}
-                <TextField
-                  type="number"
-                  label="Invoice"
-                  name={"invoice"}
-                  value={invoice}
-                  onChange={onChangeValue}
+                error={invoice === "" && isFormSubmitted}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
+            </div>
+
+            <div
+              className="col-md-4"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <DateTimePicker
+                  inputVariant="filled"
+                  fullWidth={true}
+                  label="Date/Time Invoice"
                   className="textInputStyle"
+                  onChange={(val) => onChangeDate(val, "date")}
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
-                  error={invoice === "" && isFormSubmitted}
-                  onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                  error={date === "" && isFormSubmitted}
+                  value={date ? date : null}
                 />
-              </div>
-              {/* <ErrorMessage name={invoice} isFormSubmitted={isFormSubmitted} /> */}
+              </MuiPickersUtilsProvider>
             </div>
 
-            <div className="col-md-4">
-              <div
-                syle={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                {/* <InputLabelComponent>Date/Time Invoice*</InputLabelComponent> */}
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <DateTimePicker
-                    inputVariant="filled"
-                    fullWidth={true}
-                    // label="Date/Time Invoice"
-                    onChange={(val) => onChangeDate(val, "date")}
-                    // style={{
-                    //   backgroundColor: "white",
-                    //   borderRadius: 10,
-                    //   height: 47,
-                    //   marginTop: 5,
-                    //   paddingTop:9,
-                    //   paddingLeft:10
-                    // }}
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                    error={date === "" && isFormSubmitted}
-                    value={comingFor === "add" ? (date ? date : null) : date}
-                    // InputProps={{
-                    //   disableUnderline: true,
-                    // }}
-                  />
-                </MuiPickersUtilsProvider>
-                {/* <ErrorMessage name={date} isFormSubmitted={isFormSubmitted} /> */}
-              </div>
-            </div>
-
-            <div className="col-md-4">
-              <div
-                syle={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                {/* <InputLabelComponent>Date/Time Recieved*</InputLabelComponent> */}
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <DateTimePicker
-                    inputVariant="filled"
-                    fullWidth
-                    // label="Date/Time Received"
-                    onChange={(val) => onChangeDate(val, "receivedDate")}
-                    // style={{
-                    //   backgroundColor: "white",
-                    //   borderRadius: 10,
-                    //   height: 47,
-                    //   marginTop: 5,
-                    //   paddingTop:9,
-                    //   paddingLeft:10
-                    // }}
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                    error={receivedDate === "" && isFormSubmitted}
-                    value={
-                      comingFor === "add"
-                        ? receivedDate
-                          ? receivedDate
-                          : null
-                        : receivedDate
-                    }
-                    // InputProps={{
-                    //   disableUnderline: true,
-                    // }}
-                  />
-                </MuiPickersUtilsProvider>
-                {/* <ErrorMessage
-                  name={receivedDate}
-                  isFormSubmitted={isFormSubmitted}
-                /> */}
-              </div>
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-md-12">
-              <div
-                syle={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                {/* <InputLabelComponent>Comments*</InputLabelComponent> */}
-                <TextField
-                  label="Comments"
-                  name={"comments"}
-                  value={comments}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  error={comments === "" && isFormSubmitted}
-                />
-              </div>
-              {/* <ErrorMessage name={comments} isFormSubmitted={isFormSubmitted} /> */}
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-md-12">
-              <div
-                syle={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                {/* <InputLabelComponent>Status*</InputLabelComponent> */}
-                <TextField
-                  required
-                  select
+            <div
+              className="col-md-4"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <DateTimePicker
+                  inputVariant="filled"
                   fullWidth
-                  id="statusForReceivingItem"
-                  name="statusForReceivingItem"
-                  value={statusForReceivingItem}
-                  onChange={onChangeValue}
-                  label="Status"
-                  className="dropDownStyle"
-                  // input={<BootstrapInput />}
+                  label="Date/Time Received"
+                  className="textInputStyle"
+                  onChange={(val) => onChangeDate(val, "receivedDate")}
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
-                  error={statusForReceivingItem === "" && isFormSubmitted}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
+                  error={receivedDate === "" && isFormSubmitted}
+                  value={receivedDate ? receivedDate : null}
+                />
+              </MuiPickersUtilsProvider>
+            </div>
+          </div>
 
-                  {statusArray.map((val) => {
-                    return (
-                      <MenuItem key={val.key} value={val.key}>
-                        {val.value}
-                      </MenuItem>
-                    );
-                  })}
-                </TextField>
-                {/* <ErrorMessage
-                  name={statusForReceivingItem}
-                  isFormSubmitted={isFormSubmitted}
-                /> */}
-              </div>
+          <div className="row">
+            <div
+              className="col-md-12"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                label="Comments"
+                name={"comments"}
+                value={comments}
+                variant={"filled"}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                error={comments === "" && isFormSubmitted}
+              />
+            </div>
+          </div>
+
+          <div className="row">
+            <div
+              className="col-md-12"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                variant={"filled"}
+                select
+                fullWidth
+                id="statusForReceivingItem"
+                name="statusForReceivingItem"
+                value={statusForReceivingItem}
+                onChange={onChangeValue}
+                label="Status"
+                className="dropDownStyle"
+                // input={<BootstrapInput />}
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                error={statusForReceivingItem === "" && isFormSubmitted}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+
+                {statusArray.map((val) => {
+                  return (
+                    <MenuItem key={val.key} value={val.key}>
+                      {val.value}
+                    </MenuItem>
+                  );
+                })}
+              </TextField>
             </div>
           </div>
 
@@ -1167,46 +1050,45 @@ function ReceiveItems(props) {
                 display: "flex",
                 flex: 1,
                 height: 50,
-                marginTop: "2%",
-                marginBottom: "2%",
+                marginTop: "1%",
+                marginBottom: "1%",
               }}
             >
-              {comingFor === "add" ? (
-                <div
-                  style={{
-                    display: "flex",
-                    flex: 1,
-                    height: 50,
-                    justifyContent: "flex-end",
-                    marginTop: "2%",
-                    marginBottom: "2%",
-                    flexDirection: "row",
-                  }}
+              <div
+                style={{
+                  display: "flex",
+                  flex: 1,
+                  height: 50,
+                  justifyContent: "flex-end",
+                  marginTop: "1%",
+                  marginBottom: "1%",
+                  flexDirection: "row",
+                }}
+              >
+                <Button
+                  style={{ minWidth: "20%", marginRight: 30 }}
+                  disabled={true}
+                  // onClick={handleAdd}
+                  variant="contained"
                 >
-                  <Button
-                    style={{ minWidth: "20%", marginRight: 30 }}
-                    disabled={true}
-                    // onClick={handleAdd}
-                    variant="contained"
-                  >
-                    Upload Invoice
-                  </Button>
+                  Upload Invoice
+                </Button>
 
-                  <Button
-                    style={{ minWidth: "10%" }}
-                    disabled={!validateForm()}
-                    onClick={
-                      receivedQty <= selectedItem.item.reqQty
-                        ? handleAdd
-                        : handleExtraQty
-                    }
-                    variant="contained"
-                    color="primary"
-                  >
-                    Receive
-                  </Button>
-                </div>
-              ) : (
+                <Button
+                  style={{ minWidth: "10%" }}
+                  disabled={!validateForm()}
+                  onClick={
+                    receivedQty <= selectedItem.reqQty
+                      ? handleAdd
+                      : handleExtraQty
+                  }
+                  variant="contained"
+                  color="primary"
+                >
+                  Receive
+                </Button>
+              </div>
+              {/* ) : (
                 <div
                   style={{
                     display: "flex",
@@ -1236,20 +1118,19 @@ function ReceiveItems(props) {
                   >
                     Receive
                   </Button>
-                </div>
-              )}
+                </div> */}
             </div>
           </div>
 
           <Notification msg={errorMsg} open={openNotification} />
 
-          <div style={{ marginBottom: 20, marginTop: 20 }}>
+          {/* <div style={{ marginBottom: 20, marginTop: 20 }}>
             <img
               onClick={() => props.history.goBack()}
               src={Back_Arrow}
               style={{ width: 60, height: 40, cursor: "pointer" }}
             />
-          </div>
+          </div> */}
 
           <Dialog
             open={addRetrunRequest}

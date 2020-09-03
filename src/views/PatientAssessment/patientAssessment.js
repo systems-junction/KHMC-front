@@ -5,7 +5,7 @@ import Button from "@material-ui/core/Button";
 import tableStyles from "../../assets/jss/material-dashboard-react/components/tableStyle.js";
 import axios from "axios";
 import TextField from "@material-ui/core/TextField";
-import AutoComplete from "@material-ui/lab/AutoComplete";
+// import AutoComplete from "@material-ui/lab/AutoComplete";
 import {
     getSearchedLaboratoryService,
     getSearchedRadiologyService,
@@ -1391,7 +1391,7 @@ function PatientAssessment(props) {
                                             ...styles.textFieldPadding,
                                         }}
                                     >
-                                        <AutoComplete
+                                        {/* <AutoComplete
                                             // multiple
                                             id="tags-outlined"
                                             // options={[
@@ -1412,7 +1412,7 @@ function PatientAssessment(props) {
                                                     placeholder="Search Service Name"
                                                 />
                                             )}
-                                        />
+                                        /> */}
                                         {/* <TextField
                         required
                         label="Service Name"

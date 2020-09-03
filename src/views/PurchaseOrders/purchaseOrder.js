@@ -85,12 +85,10 @@ const tableDataKeysForCommittee = [
 
 const actionsForCommitteeMemeber = {
   edit: true,
-  delete: false,
 };
 
 const actions = {
   edit: true,
-  delete: true,
 };
 
 export default function PurchaseRequest(props) {
@@ -230,8 +228,8 @@ export default function PurchaseRequest(props) {
 
           <div>
             {currentUser &&
-            currentUser.staffTypeId.type !== 'Committe Member' ? (
-            // {currentUser && currentUser.permission.add ? (
+            currentUser.staffTypeId.type !== "Committe Member" ? (
+              // {currentUser && currentUser.permission.add ? (
               <Button
                 onClick={addNewItem}
                 style={styles.stylesForButton}
