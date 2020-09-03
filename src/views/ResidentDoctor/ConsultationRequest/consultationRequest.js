@@ -303,6 +303,7 @@ function LabRadRequest(props) {
     requester: cookie.load('current_user').name,
     speciality: '',
     specialist: '',
+    status: '',
 
     residentNoteArray: '',
     rdescription: '',
@@ -352,6 +353,7 @@ function LabRadRequest(props) {
     requester = cookie.load('current_user').name,
     speciality,
     specialist,
+    status,
 
     residentNoteArray,
     rdescription,
@@ -454,6 +456,7 @@ function LabRadRequest(props) {
         requester: currentUser.staffId,
         date: date,
         specialist: specialist,
+        status: 'pending',
       },
     ]
 
@@ -465,7 +468,7 @@ function LabRadRequest(props) {
 
     console.log('params', params)
     axios
-      .put(updateIPR, params)
+      .put(updateEdrIpr, params)
       .then((res) => {
         if (res.data.success) {
           console.log('response while adding Consult Req', res.data.data)
