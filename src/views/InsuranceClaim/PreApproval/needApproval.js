@@ -28,6 +28,7 @@ const statusArray = [
   { key: 'Approved', value: 'Approved' },
   { key: 'Partial Approved', value: 'Partial Approved' },
   { key: 'Rejected', value: 'Rejected' },
+  // { key: 'completed', value: "completed" },
 ]
 
 const tableHeadingForNeedApprovalMeds = [
@@ -180,7 +181,7 @@ function AddEditEDR(props) {
 
     setcomingFor(props.history.location.state.comingFor)
 
-    // console.log(props.history.location.state.selectedItem)
+    console.log("Selected Item",props.history.location.state.selectedItem)
 
     if (
       props.history.location.state.selectedItem.RequestType === 'LR' ||
@@ -199,16 +200,24 @@ function AddEditEDR(props) {
         field: 'description',
         value: props.history.location.state.selectedItem.serviceId.description,
       })
+      // dispatch({
+      //   field: 'status',
+      //   value: props.history.location.state.selectedItem.status,
+      // })
     }
 
     const selectedRec = props.history.location.state.selectedItem
 
     if (selectedRec.medicine) {
-      console.log('Item', props.history.location.state.selectedItem.medicine)
+      // console.log('Item', props.history.location.state.selectedItem.medicine)
 
       selectedRec.medicine.map(
         (d) => (d.totalPrice = d.requestedQty * d.itemId.purchasePrice)
       )
+      // dispatch({
+      //   field: 'status',
+      //   value: props.history.location.state.selectedItem.status,
+      // })
       setmedicineDataArray(selectedRec.medicine)
     }
 
