@@ -1254,16 +1254,6 @@ function PatientCare(props) {
                                     color: "white",
                                     borderRadius: 5,
                                     outline: "none",
-                                    backgroundColor: value === 0 ? "#2c6ddd" : undefined,
-                                }}
-                                label="Consultantation Notes" //"Resident Doctor Notes"
-                                disabled
-                            />
-                            <Tab
-                                style={{
-                                    color: "white",
-                                    borderRadius: 5,
-                                    outline: "none",
                                     backgroundColor: value === 1 ? "#2c6ddd" : undefined,
                                 }}
                                 label="Resident Doctor Notes"
@@ -1298,14 +1288,14 @@ function PatientCare(props) {
                                 label="Rad"
                                 disabled
                             />
-                            <Tab
+                             <Tab
                                 style={{
                                     color: "white",
                                     borderRadius: 5,
                                     outline: "none",
-                                    backgroundColor: value === 5 ? "#2c6ddd" : undefined,
+                                    backgroundColor: value === 0 ? "#2c6ddd" : undefined,
                                 }}
-                                label="In Patient Request"
+                                label="External Consultation"
                                 disabled
                             />
                         </Tabs>
