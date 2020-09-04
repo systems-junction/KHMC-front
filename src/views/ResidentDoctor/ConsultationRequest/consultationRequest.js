@@ -10,7 +10,6 @@ import AutoComplete from '@material-ui/lab/AutoComplete'
 import {
   getSearchedLaboratoryService,
   getSearchedRadiologyService,
-  updateIPR,
   updateEdrIpr,
   searchpatient,
   getSearchedpatient,
@@ -67,19 +66,19 @@ const tableDataKeysForConsultation = [
   'specialist',
   ['requester', 'firstName'],
 ]
-// const tableHeadingForPharmacy = [
-//     "Request ID",
-//     "Date/Time",
-//     "Requester",
-//     "Status",
-//     "Action",
-// ];
-// const tableDataKeysForPharmacy = [
-//     "_id",
-//     "date",
-//     ["requester", "firstName"],
-//     "status",
-// ];
+const tableHeadingForPharmacy = [
+  'Request ID',
+  'Date/Time',
+  'Requester',
+  'Status',
+  'Action',
+]
+const tableDataKeysForPharmacy = [
+  '_id',
+  'date',
+  ['requester', 'firstName'],
+  'status',
+]
 const tableHeadingForLabReq = [
   'Request Id',
   'Service Code',
@@ -532,17 +531,17 @@ function LabRadRequest(props) {
     // }
   }
 
-  // const addNewRequest = () => {
-  //     let path = `viewIPR/add`;
-  //     props.history.push({
-  //         pathname: path,
-  //         state: {
-  //             comingFor: "add",
-  //             selectedItem: selectedItem,
-  //             pharmacyRequestArray,
-  //         },
-  //     });
-  // };
+  const addNewRequest = () => {
+    let path = `consultationrequest/add`
+    props.history.push({
+      pathname: path,
+      state: {
+        comingFor: 'add',
+        selectedItem: selectedItem,
+        pharmacyRequestArray,
+      },
+    })
+  }
 
   function hideDialog() {
     setOpenAddConsultDialog(false)
@@ -960,10 +959,9 @@ function LabRadRequest(props) {
                     }
                   })
                   dispatch({ field: 'residentNoteArray', value: val })
+                } else if (key === 'pharmacyRequest') {
+                  dispatch({ field: 'pharmacyRequestArray', value: val })
                 }
-                // } else if (key === "pharmacyRequest") {
-                //     dispatch({ field: "pharmacyRequestArray", value: val });
-                // }
                 //  else if (key === "nurseService") {
                 //     dispatch({ field: "nurseService", value: val });
                 // }
@@ -1344,7 +1342,7 @@ function LabRadRequest(props) {
                   backgroundColor: value === 1 ? '#2c6ddd' : undefined,
                 }}
                 label='Pharm'
-                disabled
+                disabled={enableForm}
               />
               <Tab
                 style={{
@@ -1354,7 +1352,7 @@ function LabRadRequest(props) {
                   backgroundColor: value === 2 ? '#2c6ddd' : undefined,
                 }}
                 label='Lab'
-                disabled
+                disabled={enableForm}
               />
               <Tab
                 style={{
@@ -1364,7 +1362,7 @@ function LabRadRequest(props) {
                   backgroundColor: value === 3 ? '#2c6ddd' : undefined,
                 }}
                 label='Rad'
-                disabled
+                disabled={enableForm}
               />
               <Tab
                 style={{
@@ -1435,6 +1433,51 @@ function LabRadRequest(props) {
                 ) : (
                   undefined
                 )}
+              </div>
+            </div>
+          ) : value === 1 ? (
+            <div
+              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              className='container-fluid'
+            >
+              <div className='row' style={{ marginTop: '20px' }}>
+                {pharmacyRequestArray !== 0 ? (
+                  <CustomTable
+                    tableData={pharmacyRequestArray}
+                    tableDataKeys={tableDataKeysForPharmacy}
+                    tableHeading={tableHeadingForPharmacy}
+                    handleView={viewItem}
+                    action={actions}
+                    borderBottomColor={'#60d69f'}
+                    borderBottomWidth={20}
+                  />
+                ) : (
+                  undefined
+                )}
+              </div>
+
+              <div className='row' style={{ marginBottom: '25px' }}>
+                <div className='col-md-6 col-sm-6 col-6'>
+                  <img
+                    onClick={() => props.history.goBack()}
+                    src={Back}
+                    style={{ width: 45, height: 35, cursor: 'pointer' }}
+                  />
+                </div>
+                <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
+                  <Button
+                    onClick={addNewRequest}
+                    style={styles.stylesForButton}
+                    variant='contained'
+                    color='primary'
+                  >
+                    <img className='icon-style' src={plus_icon} />
+                    &nbsp;&nbsp;
+                    <strong style={{ fontSize: '12px' }}>
+                      Pharmacy Request
+                    </strong>
+                  </Button>
+                </div>
               </div>
             </div>
           ) : value === 2 ? (
@@ -2247,7 +2290,7 @@ function LabRadRequest(props) {
               Add Consultation Note
             </DialogTitle>
             <div className={`container-fluid ${classes.root}`}>
-            <div className='row'>
+              <div className='row'>
                 <div
                   className='col-md-12 col-sm-12 col-12'
                   style={{
@@ -2269,7 +2312,7 @@ function LabRadRequest(props) {
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
-                      disableUnderline: true
+                      disableUnderline: true,
                     }}
                   />
                 </div>
@@ -2297,7 +2340,7 @@ function LabRadRequest(props) {
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
-                      disableUnderline: true
+                      disableUnderline: true,
                     }}
                   />
                 </div>
@@ -2325,7 +2368,7 @@ function LabRadRequest(props) {
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
-                      disableUnderline: true
+                      disableUnderline: true,
                     }}
                   >
                     <MenuItem value=''>
@@ -2362,7 +2405,7 @@ function LabRadRequest(props) {
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
-                      disableUnderline: true
+                      disableUnderline: true,
                     }}
                   >
                     <MenuItem value=''>
@@ -2384,7 +2427,11 @@ function LabRadRequest(props) {
                 <div style={{ marginTop: '2%', marginBottom: '2%' }}>
                   <Button
                     onClick={() => hideDialog()}
-                    style={{...styles.stylesForButton,backgroundColor:'white',color:'grey'}}
+                    style={{
+                      ...styles.stylesForButton,
+                      backgroundColor: 'white',
+                      color: 'grey',
+                    }}
                     variant='contained'
                   >
                     <strong>Cancel</strong>
