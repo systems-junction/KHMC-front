@@ -17,8 +17,8 @@ const baseUrl = 'http://localhost:4000/api'
 export const socketUrl = 'ws://localhost:4001'
 // export const socketUrl = "ws://192.168.10.20:4001";
 
-//export const uploadsUrl = 'https://dev.khmc-staging.com/uploads/'
-//export const uploadsUrl = 'https://test.khmc-staging.com/uploads/'
+//export const uploadsUrl = 'https://dev.khmc-staging.com/'
+//export const uploadsUrl = 'https://test.khmc-staging.com/'
 export const uploadsUrl = 'http://localhost:4000/uploads/'
 // export const uploadsUrl = 'http://ec2-52-14-42-129.us-east-2.compute.amazonaws.com/'
 // export const uploadsUrl = StagingDigitalOceanUploadsUrl
