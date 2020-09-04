@@ -503,7 +503,6 @@ export default function EdrRequest(props) {
       .put(updateEdrIprItem, params)
       .then((res) => {
         if (res.data.success) {
-          console.log("response after submitting followUp Request", res.data);
           window.location.reload(false);
         } else if (!res.data.success) {
           setOpenNotification(true);
@@ -511,9 +510,9 @@ export default function EdrRequest(props) {
         }
       })
       .catch((e) => {
-        console.log("error after submitting followUp Request", e);
+        console.log("error after submitting Request", e);
         setOpenNotification(true);
-        setErrorMsg("Error while submitting the follow Up Request");
+        setErrorMsg("Error while submitting Request");
       });
   }
 
