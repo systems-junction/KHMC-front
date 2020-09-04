@@ -52,6 +52,16 @@ const styles = {
     borderRadius: 15,
     padding: '20px',
   },
+  headingStyles: {
+    fontWeight: 'bold',
+    color: 'grey',
+    fontSize: 12,
+  },
+  textStyles: {
+    fontWeight: '700',
+    color: 'black',
+    fontSize: 14,
+  },
   textFieldPadding: {
     paddingLeft: 5,
     paddingRight: 5,
