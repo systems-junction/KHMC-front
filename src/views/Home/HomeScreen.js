@@ -403,7 +403,7 @@ const fuReturnRequestApprovalMember = [
   {
     img: ReturnItem,
     text: "FU Returns",
-    path: `fus/returnitems`,
+    path: `/home/wms/fus/returnitems`,
   },
 ];
 
