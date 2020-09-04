@@ -247,7 +247,7 @@ function AddEditPurchaseRequest(props) {
   const [errorMsg, setErrorMsg] = useState("");
   const [openNotification, setOpenNotification] = useState(false);
 
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(1);
 
   const [openItemDialog, setOpenItemDialog] = useState(false);
   const [item, setItem] = useState("");
@@ -346,8 +346,6 @@ function AddEditPurchaseRequest(props) {
     }
   }
 
-  console.log("pr details", prId);
-
   return (
     <div
       style={{
@@ -363,14 +361,14 @@ function AddEditPurchaseRequest(props) {
     >
       <Header />
 
-      <div className={`cPadding ${classes.root}`}>
+      <div className={`cPadding`}>
         <div className="subheader">
           <div>
             <img src={business_Unit} />
             <h4>Purchase Order</h4>
           </div>
 
-          <div>
+          {/* <div>
             <Button
               onClick={() => props.history.goBack()}
               style={styles.stylesForButton}
@@ -381,11 +379,10 @@ function AddEditPurchaseRequest(props) {
               &nbsp;&nbsp;
               <strong>View All</strong>
             </Button>
-            {/* <img src={Search} /> */}
-          </div>
+          </div> */}
         </div>
 
-        <div className={classesForTabs.root}>
+        {/* <div className={classesForTabs.root}>
           <Tabs
             value={value}
             onChange={handleChange}
@@ -411,7 +408,7 @@ function AddEditPurchaseRequest(props) {
               label="Items"
             />
           </Tabs>
-        </div>
+        </div> */}
 
         {value === 0 ? (
           <div
@@ -419,11 +416,11 @@ function AddEditPurchaseRequest(props) {
               flex: 4,
               display: "flex",
               flexDirection: "column",
-              marginTop: "25px",
+              // marginTop: "25px",
             }}
             className="container-fluid"
           >
-            <div className="row">
+            {/* <div className="row">
               <div
                 className="col-md-12"
                 style={{
@@ -509,7 +506,6 @@ function AddEditPurchaseRequest(props) {
                   label="Generated"
                   name={"itemName"}
                   value={poId && poId.generated}
-                  // error={selectedItem.vendorId.contactPersonName === '' && isFormSubmitted}
                   onChange={onChangeValue}
                   className="textInputStyle"
                   variant="filled"
@@ -532,7 +528,6 @@ function AddEditPurchaseRequest(props) {
                   label=" Vendor Name"
                   name={"itemName"}
                   value={selectedItem && selectedItem.vendorId.englishName}
-                  // error={selectedItem.vendorId.englishName === '' && isFormSubmitted}
                   onChange={onChangeValue}
                   className="textInputStyle"
                   variant="filled"
@@ -559,7 +554,6 @@ function AddEditPurchaseRequest(props) {
                   value={
                     selectedItem && selectedItem.vendorId.contactPersonName
                   }
-                  // error={selectedItem.vendorId.contactPersonName === '' && isFormSubmitted}
                   onChange={onChangeValue}
                   className="textInputStyle"
                   variant="filled"
@@ -594,9 +588,9 @@ function AddEditPurchaseRequest(props) {
                   }}
                 />
               </div>
-            </div>
+            </div> */}
 
-            <div style={{ marginTop: "5%" }}>
+            {/* <div style={{ marginTop:10 }}>
               {prId.length !== 0 ? (
                 <AddedPurchaseRequestTable
                   tableData={prId}
@@ -611,7 +605,7 @@ function AddEditPurchaseRequest(props) {
               ) : (
                 undefined
               )}
-            </div>
+            </div> */}
 
             {/* <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
             <div style={styles.buttonContainer}>
@@ -641,7 +635,7 @@ function AddEditPurchaseRequest(props) {
           </div>
         ) : (
           <div
-            style={{ flex: 4, display: "flex", flexDirection: "column" }}
+            // style={{ flex: 4, display: "flex", flexDirection: "column" , width:'100%'}}
             className="container-fluid"
           >
             <ViewItems
@@ -649,7 +643,7 @@ function AddEditPurchaseRequest(props) {
               items={purchaseOrderDetails}
               materialReceivingId={selectedItem._id}
             />
-          </div>
+            </div>
         )}
       </div>
     </div>

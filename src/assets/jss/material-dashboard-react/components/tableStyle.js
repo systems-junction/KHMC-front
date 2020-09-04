@@ -34,8 +34,8 @@ const tableStyle = (theme) => ({
     // color: "inherit",
     // ...defaultFont,
     '&, &$tableCell': {
-      fontSize: '1rem',
-      fontWeight: '400',
+      // fontSize: '1rem',
+      fontWeight: 'bold',
       fontFamily: 'Open Sans,sans-serif',
     },
     textAlign: 'center',
@@ -46,9 +46,8 @@ const tableStyle = (theme) => ({
     padding: '12px 8px',
     verticalAlign: 'middle',
     // fontSize: '0.8125rem',
-    // border: '1px solid rgb(165, 165, 165)',
+    // border: '0.5px solid rgb(165, 165, 165)',
     fontFamily: 'Open Sans,sans-serif',
-
     textAlign: 'center',
   },
 

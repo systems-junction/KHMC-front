@@ -40,9 +40,9 @@ const styles = {
   stylesForButton: {
     color: 'white',
     cursor: 'pointer',
-    borderRadius: 10,
+    borderRadius: 5,
     background: '#2c6ddd',
-    width: '110px',
+    width: '115px',
     height: '40px',
     outline: 'none',
   },
@@ -213,9 +213,9 @@ export default function PurchaseRequest(props) {
                 &nbsp;&nbsp;
                 <strong style={{ fontSize: '12px' }}>Add New</strong>
               </Button>
-            ) : (
+             ) : (
               undefined
-            )}
+            )} 
             <img
               className='img-style'
               src={Search}

@@ -43,20 +43,22 @@ import AddedPurchaseRequestTable from "../PurchaseOrders/addedPurchaseRequestTab
 
 import CustomTable from "../../components/Table/Table";
 
+import AddEditReceiveItems from "../ReceiveItems/addEditReceiveItems";
+
 const tableHeading = [
   "Item Code",
   "Item Name",
-  "Description",
-  "Current Quantity",
   "Requested Quantity",
+  "Purchase Price",
+  "Status",
   "Action",
 ];
 const tableDataKeys = [
-  ["item", "itemCode"],
-  ["item", "name"],
-  ["item", "description"],
-  ["item", "currQty"],
-  ["item", "reqQty"],
+  ["itemId", "itemCode"],
+  ["itemId", "name"],
+  "reqQty",
+  ["itemId", "purchasePrice"],
+  'status'
 ];
 
 const actions = { receiveItem: true };
@@ -142,12 +144,16 @@ function AddEditPurchaseRequest(props) {
 
   const [receivedItems, setReceivedItems] = useState("");
 
+  const [items, setItems] = useState([]);
+
+  const [selectedItem, setSelectedItem] = useState("");
+
   function getReceivedItems() {
     axios
       .get(getReceiveItemsUrl)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data.receiveItems);
+          console.log("received Items", res.data.data.receiveItems);
           setReceivedItems(res.data.data.receiveItems);
         } else if (!res.data.success) {
           setErrorMsg(res.data.error);
@@ -200,12 +206,30 @@ function AddEditPurchaseRequest(props) {
     }
   }, []);
 
+  useEffect(() => {
+    console.log(props.items);
+
+    let temp = [];
+    for (let i = 0; i < props.items.length; i++) {
+      for (let j = 0; j < props.items[i].item.length; j++) {
+        // console.log(props.items[i]);
+        temp.push({ ...props.items[i].item[j], prId: props.items[i]._id });
+      }
+    }
+    console.log(temp);
+    setItems(temp);
+  }, [props.items]);
+
   function handleReceive(rec) {
     let found = false;
     // console.log("received item in function", receivedItems);
+    console.log(rec);
 
     for (let i = 0; i < receivedItems.length; i++) {
-      if (receivedItems[i].prId._id === rec._id) {
+      if (
+        receivedItems[i].prId._id === rec.prId &&
+        receivedItems[i].itemId._id === rec.itemId._id
+      ) {
         found = true;
         break;
       }
@@ -217,18 +241,20 @@ function AddEditPurchaseRequest(props) {
       return;
     } else {
       let path = `viewpo/receiveitems/add`;
-      props.history.push({
-        pathname: path,
-        state: {
-          comingFor: "add",
-          selectedItem: rec,
-          vendors,
-          statues,
-          purchaseRequest,
-          purchaseOrders,
-          materialReceivingId: props.materialReceivingId,
-        },
-      });
+
+      setSelectedItem(rec);
+      // props.history.push({
+      //   pathname: path,
+      //   state: {
+      //     comingFor: "add",
+      //     selectedItem: rec,
+      //     vendors,
+      //     statues,
+      //     purchaseRequest,
+      //     purchaseOrders,
+      //     materialReceivingId: props.materialReceivingId,
+      //   },
+      // });
     }
   }
 
@@ -253,8 +279,9 @@ function AddEditPurchaseRequest(props) {
 
   return (
     <div>
+      
       <CustomTable
-        tableData={props.items}
+        tableData={items}
         tableDataKeys={tableDataKeys}
         tableHeading={tableHeading}
         action={actions}
@@ -264,14 +291,23 @@ function AddEditPurchaseRequest(props) {
         borderBottomWidth={20}
       />
 
-      <div style={{ marginBottom: 20, marginTop: 50 }}>
+      <Notification msg={errorMsg} open={openNotification} />
+
+      <AddEditReceiveItems
+        selectedItem={selectedItem}
+        purchaseRequest={purchaseRequest}
+        purchaseOrders={purchaseOrders}
+        materialReceivingId={props.materialReceivingId}
+        history={props.history}
+      />
+
+      <div style={{ marginBottom: 20, marginTop: 10 }}>
         <img
           onClick={() => props.history.goBack()}
           src={Back_Arrow}
           style={{ width: 45, height: 35, cursor: "pointer" }}
         />
       </div>
-      <Notification msg={errorMsg} open={openNotification} />
     </div>
   );
 }

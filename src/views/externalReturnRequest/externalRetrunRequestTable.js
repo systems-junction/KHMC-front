@@ -296,27 +296,31 @@ export default function ReplenishmentRequest(props) {
               <div>
                 <CustomTable
                   tableData={purchaseRequests}
-                  tableDataKeys={
-                    currentUser.staffTypeId.type ===
-                      "FU Internal Request Return Approval Member" ||
-                    currentUser.staffTypeId.type === "admin"
-                      ? tableDataKeysForFUHead
-                      : tableDataKeys
-                  }
-                  tableHeading={
-                    currentUser.staffTypeId.type ===
-                      "FU Internal Request Return Approval Member" ||
-                    currentUser.staffTypeId.type === "admin"
-                      ? tableHeadingForFUHead
-                      : tableHeading
-                  }
-                  action={
-                    currentUser.staffTypeId.type === "admin" ||
-                    currentUser.staffTypeId.type ===
-                      "FU Internal Request Return Approval Member"
-                      ? actionsForFUInventoryKeeper
-                      : actions
-                  }
+                  // tableDataKeys={
+                  //   currentUser.staffTypeId.type ===
+                  //     "FU Internal Request Return Approval Member" ||
+                  //   currentUser.staffTypeId.type === "admin"
+                  //     ? tableDataKeysForFUHead
+                  //     : tableDataKeys
+                  // }
+
+                  tableDataKeys={tableDataKeys}
+                  // tableHeading={
+                  //   currentUser.staffTypeId.type ===
+                  //     "FU Internal Request Return Approval Member" ||
+                  //   currentUser.staffTypeId.type === "admin"
+                  //     ? tableHeadingForFUHead
+                  //     : tableHeading
+                  // }
+                  tableHeading={tableHeading}
+                  // action={
+                  //   currentUser.staffTypeId.type === "admin" ||
+                  //   currentUser.staffTypeId.type ===
+                  //     "FU Internal Request Return Approval Member"
+                  //     ? actionsForFUInventoryKeeper
+                  //     : actions
+                  // }
+                  action={actions}
                   handleEdit={handleEdit}
                   handleDelete={handleDelete}
                   receiveItem={handleReceive}

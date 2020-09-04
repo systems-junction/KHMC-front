@@ -5,7 +5,7 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 // @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
@@ -41,41 +41,60 @@ const useStyles = makeStyles(styles);
 const stylesB = {
   stylesForActive: {
     verticalAlign: "center",
-    fontSize: "0.62rem",
+    fontSize: "0.60rem",
     color: "white",
     cursor: "pointer",
-    borderRadius: 10,
+    borderRadius: 5,
     background: "#2c6ddd",
     width: "100px",
-    height: "45px",
-    outline: "none",
-    boxShadow: "none",
+    height: "40px",
+    // outline: "none",
+    // boxShadow: "none",
+    // paddingBottom:"0.5rem",
+    // display:'flex',
+    // alignItems:'flex-start',
   },
   stylesForInActive: {
     verticalAlign: "center",
-    fontSize: "0.62rem",
+    fontSize: "0.60rem",
     color: "white",
     cursor: "pointer",
-    borderRadius: 10,
+    borderRadius: 5,
     background: "#845DC2",
     width: "100px",
-    height: "45px",
-    outline: "none",
-    boxShadow: "none",
+    height: "40px",
+    // paddingBottom:"0.5rem",
+
+    // outline: "none",
+    // boxShadow: "none",
   },
   stylesForReceived: {
     verticalAlign: "center",
-    fontSize: "0.62rem",
+    fontSize: "0.60rem",
     color: "white",
     cursor: "pointer",
-    borderRadius: 10,
+    borderRadius: 5,
     background: "#845DC2",
     width: "100px",
-    height: "45px",
-    boxShadow: "none",
-    outline: "none",
+    height: "40px",
+    // paddingBottom:"0.5rem",
+
+    // boxShadow: "none",
+    // outline: "none",
   },
 };
+
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    "&:nth-of-type(odd)": {
+      backgroundColor: "#dddddd",
+    },
+
+    "&:nth-of-type(even)": {
+      backgroundColor: "white",
+    },
+  },
+}))(TableRow);
 
 export default function CustomTable(props) {
   const { tableHeading, tableData, tableDataKeys, tableHeaderColor } = props;
@@ -228,6 +247,7 @@ export default function CustomTable(props) {
       val === "pending_approval" ||
       val === "Delivery in Progress" ||
       val === "Fulfillment Initiated" ||
+      val === "Partial Fulfillment Initiated" ||
       val === "pending_administration" ||
       val === "pending_reception"
     ) {
@@ -273,6 +293,14 @@ export default function CustomTable(props) {
             >
               <strong>Delivery in Progress</strong>
             </Button>
+          ) : val === "Partial Delivery in Progress" ? (
+            <Button
+              style={stylesB.stylesForActive}
+              variant="contained"
+              color="primary"
+            >
+              <strong>Partial Delivery in Progress</strong>
+            </Button>
           ) : val === "Fulfillment Initiated" ? (
             <Button
               style={stylesB.stylesForActive}
@@ -280,6 +308,14 @@ export default function CustomTable(props) {
               color="primary"
             >
               <strong>Fulfillment Initiated</strong>
+            </Button>
+          ) : val === "Partial Fulfillment Initiated" ? (
+            <Button
+              style={stylesB.stylesForActive}
+              variant="contained"
+              color="primary"
+            >
+              <strong>Partial Fulfillment Initiated</strong>
             </Button>
           ) : val === "pending_reception" ? (
             <Button
@@ -328,6 +364,7 @@ export default function CustomTable(props) {
       val === "Returned" ||
       val === "receive" ||
       val === "Received" ||
+      val === "Rejected" ||
       val === "Sent for PAR"
     ) {
       return (
@@ -342,7 +379,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "Sent for PAR" ? (
             <Button
-              style={{ ...stylesB.stylesForActive, width: '120px' }}
+              style={{ ...stylesB.stylesForActive, width: "120px" }}
               variant="contained"
               color="primary"
             >
@@ -427,6 +464,14 @@ export default function CustomTable(props) {
               color="primary"
             >
               <strong>Received</strong>
+            </Button>
+          ) : val === "Rejected" ? (
+            <Button
+              style={stylesB.stylesForActive}
+              variant="contained"
+              color="primary"
+            >
+              <strong>Rejected</strong>
             </Button>
           ) : val === "receive" ? (
             <Button
@@ -545,12 +590,12 @@ export default function CustomTable(props) {
                       style={{
                         color: "white",
                         fontWeight: "700",
-                        paddingTop: 30,
-                        paddingBottom: 30,
+                        // paddingTop: 30,
+                        // paddingBottom: 30,
                         textAlign: "center",
-                        borderTopLeftRadius: index === 0 ? 45 : 0,
+                        borderTopLeftRadius: index === 0 ? 5 : 0,
                         borderTopRightRadius:
-                          index === tableHeading.length - 1 ? 45 : 0,
+                          index === tableHeading.length - 1 ? 5 : 0,
                       }}
                       key={prop}
                       onClick={() => console.log(prop)}
@@ -566,79 +611,83 @@ export default function CustomTable(props) {
           </TableHead>
         ) : null}
 
-        <div style={{ height: 25, width: "100%" }}></div>
+        {/* <div style={{ height: 25, width: "100%" }}></div> */}
 
-        <TableBody style={{ marginTop: 20 }}>
+        <TableBody>
           {tableData &&
             tableData
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((prop, index) => {
                 return (
                   <>
-                    <TableRow
+                    <StyledTableRow
                       key={index}
-                      className={classes.tableBodyRow}
-                      style={{
-                        backgroundColor: "white",
-                      }}
-                    // onClick={() => {
-                    //   setRow(prop);
-                    // }}
+                      // className={classes.tableBodyRow}
+                      // style={{
+                      //   backgroundColor: "white",
+                      // }}
+                      // onClick={() => {
+                      //   setRow(prop);
+                      // }}
                     >
                       {tableDataKeys
                         ? tableDataKeys.map((val, key) => {
-                          // console.log(key);
-                          // if (val === 'date') {
-                          //   return (
-                          //     <TableCell
-                          //       className={classes.tableCell}
-                          //       key={key}
-                          //       style={{
-                          //         textAlign: 'center',
-                          //       }}
-                          //     >
-                          //       {formatDate(prop[val])}
-                          //     </TableCell>
-                          //   )
-                          // }
-                          if (mapDateToKeys(val)) {
-                            return (
-                              <TableCell
-                                className={classes.tableCell}
-                                key={key}
-                                style={{
-                                  textAlign: "center",
-                                }}
-                              >
-                                {Array.isArray(val)
-                                  ? prop[val[0]]
-                                    ? formatDate(prop[val[0]][val[1]])
-                                    : prop[val[0]][val[1]]
-                                  : formatDate(prop[val])}
-                              </TableCell>
-                            );
-                          } else {
-                            return (
-                              <TableCell
-                                className={classes.tableCell}
-                                key={key}
-                                onClick={() => handleClick(prop, val)}
-                                style={{
-                                  textAlign: "center",
-                                  cursor: props.handleModelMaterialReceiving
-                                    ? "pointer"
-                                    : "",
-                                  borderTopLeftRadius: key === 0 ? 15 : 0,
-                                  borderBottomLeftRadius: key === 0 ? 15 : 0,
+                            // if (val === 'date') {
+                            //   return (
+                            //     <TableCell
+                            //       className={classes.tableCell}
+                            //       key={key}
+                            //       style={{
+                            //         textAlign: 'center',
+                            //       }}
+                            //     >
+                            //       {formatDate(prop[val])}
+                            //     </TableCell>
+                            //   )
+                            // }
+                            if (mapDateToKeys(val)) {
+                              return (
+                                <TableCell
+                                  className={classes.tableCell}
+                                  key={key}
+                                  style={{
+                                    textAlign: "center",
+                                  }}
+                                >
+                                  {Array.isArray(val)
+                                    ? prop[val[0]]
+                                      ? formatDate(prop[val[0]][val[1]])
+                                      : prop[val[0]][val[1]]
+                                    : formatDate(prop[val])}
+                                </TableCell>
+                              );
+                            } else {
+                              return (
+                                <TableCell
+                                  className={classes.tableCell}
+                                  key={key}
+                                  onClick={() => handleClick(prop, val)}
+                                  style={{
+                                    textAlign: "center",
+                                    cursor: props.handleModelMaterialReceiving
+                                      ? "pointer"
+                                      : "",
+                                    // borderTopLeftRadius: key === 0 ? 5 : 0,
+                                    // borderBottomLeftRadius: key === 0 ? 5 : 0,
 
-                                  borderWidth: 0,
-                                }}
-                              >
-                                {Array.isArray(val)
-                                  ? prop[val[0]]
-                                    ? capitilizeLetter(prop[val[0]][val[1]])
-                                    : null
-                                  : val.toLowerCase() === "timestamp"
+                                    borderBottomLeftRadius:
+                                      props.tableData.length - 1 === index &&
+                                      key === 0
+                                        ? 5
+                                        : 0,
+                                    borderWidth: 0,
+                                  }}
+                                >
+                                  {Array.isArray(val)
+                                    ? prop[val[0]]
+                                      ? capitilizeLetter(prop[val[0]][val[1]])
+                                      : null
+                                    : val.toLowerCase() === "timestamp"
                                     ? new Intl.DateTimeFormat(
                                       "en-US",
                                       dateOptions
@@ -650,121 +699,127 @@ export default function CustomTable(props) {
                           }
                         })
                         : null}
-                      <TableCell
-                        style={{
-                          cursor: "pointer",
-                          borderTopRightRadius: 15,
-                          borderBottomRightRadius: 15,
-                          borderWidth: 0,
-                        }}
-                        className={classes.tableCell}
-                        colSpan="2"
-                      >
-                        {props.action ? (
-                          <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "space-evenly",
-                            }}
-                          >
-                            <RcIf if={props.action.edit}>
-                              <span onClick={() => props.handleEdit(prop)}>
-                                <i
-                                  style={{ color: "grey" }}
-                                  className="zmdi zmdi-edit zmdi-hc-2x"
-                                />
-                              </span>
-                            </RcIf>
-                            <RcIf if={props.action.delete}>
-                              <span onClick={() => props.handleDelete(prop)}>
-                                <i
-                                  style={{
-                                    color: "grey",
-                                  }}
-                                  className=" ml-10 zmdi zmdi-delete zmdi-hc-2x"
-                                />
-                              </span>
-                            </RcIf>
 
-                            <RcIf if={props.action.add}>
-                              <span onClick={() => props.handleAdd(prop)}>
-                                <i
-                                  style={{ color: "grey" }}
-                                  className=" ml-10 zmdi zmdi-plus-circle zmdi-hc-2x"
-                                />
-                              </span>
-                            </RcIf>
-
-                            <RcIf if={props.action.view}>
-                              <span onClick={() => props.handleView(prop)}>
-                                <i
-                                  style={{ color: "grey" }}
-                                  className=" ml-10 zmdi zmdi-eye zmdi-hc-2x"
-                                />
-                              </span>
-                            </RcIf>
-
-                            <RcIf if={props.action.print}>
-                              <Tooltip title="Print">
-                                <img
-                                  src={print}
-                                  onClick={() => props.printItem(prop)}
-                                  style={{
-                                    maxWidth: 40,
-                                    height: 30,
-                                  }}
-                                />
-                              </Tooltip>
-                            </RcIf>
-
-                            <RcIf if={props.action.receiveItem}>
-                              <Tooltip title="Receive Item">
-                                <img
-                                  src={ReceiveItem}
-                                  onClick={() => props.receiveItem(prop)}
-                                  style={{
-                                    maxWidth: 60,
-                                    height: 43,
-                                    backgroundColor: "grey",
-                                    borderRadius: 30,
-                                  }}
-                                />
-                              </Tooltip>
-                            </RcIf>
-
-                            <RcIf if={props.action.returnRequest}>
-                              <Tooltip title="FU Return">
-                                <img
-                                  src={ReturnItem}
-                                  onClick={() => props.addReturnRequest(prop)}
-                                  style={{
-                                    maxWidth: 60,
-                                    height: 45,
-                                    backgroundColor: "grey",
-                                    borderRadius: 30,
-                                  }}
-                                />
-                              </Tooltip>
-                            </RcIf>
-
-                            <RcIf
-                              if={
-                                props.action.active &&
-                                prop.status === "in_active"
-                              }
+                      {props.action !== "" ? (
+                        <TableCell
+                          style={{
+                            cursor: "pointer",
+                            // borderTopRightRadius: 15,
+                            borderBottomRightRadius:
+                              props.tableData.length - 1 === index ? 5 : 0,
+                            borderWidth: 0,
+                          }}
+                          className={classes.tableCell}
+                          colSpan="2"
+                        >
+                          {props.action ? (
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-evenly",
+                              }}
                             >
-                              <span
-                                onClick={() => props.handleStatus(prop._id)}
-                                title="Active"
+                              <RcIf if={props.action.edit}>
+                                <span onClick={() => props.handleEdit(prop)}>
+                                  <i
+                                    style={{ color: "grey" }}
+                                    className="zmdi zmdi-edit zmdi-hc-2x"
+                                  />
+                                </span>
+                              </RcIf>
+                              <RcIf if={props.action.delete}>
+                                <span onClick={() => props.handleDelete(prop)}>
+                                  <i
+                                    style={{
+                                      color: "grey",
+                                    }}
+                                    className=" ml-10 zmdi zmdi-delete zmdi-hc-2x"
+                                  />
+                                </span>
+                              </RcIf>
+
+                              <RcIf if={props.action.add}>
+                                <span onClick={() => props.handleAdd(prop)}>
+                                  <i
+                                    style={{ color: "grey" }}
+                                    className=" ml-10 zmdi zmdi-plus-circle zmdi-hc-2x"
+                                  />
+                                </span>
+                              </RcIf>
+
+                              <RcIf if={props.action.view}>
+                                <span onClick={() => props.handleView(prop)}>
+                                  <i
+                                    style={{ color: "grey" }}
+                                    className=" ml-10 zmdi zmdi-eye zmdi-hc-2x"
+                                  />
+                                </span>
+                              </RcIf>
+
+                              <RcIf if={props.action.print}>
+                                <Tooltip title="Print">
+                                  <img
+                                    src={print}
+                                    onClick={() => props.printItem(prop)}
+                                    style={{
+                                      maxWidth: 40,
+                                      height: 30,
+                                    }}
+                                  />
+                                </Tooltip>
+                              </RcIf>
+
+                              <RcIf if={props.action.receiveItem}>
+                                <Tooltip title="Receive Item">
+                                  <img
+                                    src={ReceiveItem}
+                                    onClick={() => props.receiveItem(prop)}
+                                    style={{
+                                      maxWidth: 60,
+                                      height: 43,
+                                      backgroundColor: "grey",
+                                      borderRadius: 30,
+                                    }}
+                                  />
+                                </Tooltip>
+                              </RcIf>
+
+                              <RcIf if={props.action.returnRequest}>
+                                <Tooltip title="FU Return">
+                                  <img
+                                    src={ReturnItem}
+                                    onClick={() => props.addReturnRequest(prop)}
+                                    style={{
+                                      maxWidth: 60,
+                                      height: 45,
+                                      backgroundColor: "grey",
+                                      borderRadius: 30,
+                                    }}
+                                  />
+                                </Tooltip>
+                              </RcIf>
+
+                              <RcIf
+                                if={
+                                  props.action.active &&
+                                  prop.status === "in_active"
+                                }
                               >
-                                <i className=" ml-10 zmdi zmdi-check zmdi-hc-2x" />
-                              </span>
-                            </RcIf>
-                          </div>
-                        ) : (
+                                <span
+                                  onClick={() => props.handleStatus(prop._id)}
+                                  title="Active"
+                                >
+                                  <i className=" ml-10 zmdi zmdi-check zmdi-hc-2x" />
+                                </span>
+                              </RcIf>
+                            </div>
+                          ) : (
                             undefined
                           )}
-                      </TableCell>
+                        </TableCell>
+                      ) : (
+                        ""
+                      )}
 
                       {/* {selectedRow && selectedRow._id === prop._id ? (
                         <TableCell
@@ -787,9 +842,9 @@ export default function CustomTable(props) {
                       ) : (
                         undefined
                       )} */}
-                    </TableRow>
+                    </StyledTableRow>
 
-                    <TableRow style={{ height: 20 }} />
+                    {/* <TableRow style={{ height: 20 }} /> */}
                   </>
                 );
               })}

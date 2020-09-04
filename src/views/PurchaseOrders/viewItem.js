@@ -81,46 +81,20 @@ const styles = {
 const useStyles = makeStyles(styles);
 
 const useStylesForInput = makeStyles((theme) => ({
-  underline: {
-    "&&&:before": {
-      borderBottom: "none",
-    },
-    "&&:after": {
-      borderBottom: "none",
-    },
-  },
   margin: {
     margin: theme.spacing(0),
   },
   input: {
-    backgroundColor: "white",
-    borderRadius: 6,
-    "&:after": {
-      borderBottomColor: "black",
+    backgroundColor: "#efefef",
+    borderRadius: 4,
+    "&:placeholder": {
+      // color: "gray",
+      // fontWeight: "400",
     },
-    "&:hover": {
-      backgroundColor: "white",
-    },
-    "&:disabled": {
-      color: "gray",
-    },
-  },
-  multilineColor: {
-    backgroundColor: "white",
-    borderRadius: 6,
-    "&:hover": {
-      backgroundColor: "white",
+    "&:before": {
+      borderBottomWidth: "0px",
     },
     "&:after": {
-      borderBottomColor: "black",
-    },
-  },
-  root: {
-    "& .MuiTextField-root": {
-      backgroundColor: "white",
-    },
-    "& .Mui-focused": {
-      backgroundColor: "white",
       color: "black",
     },
   },
@@ -139,13 +113,12 @@ export default function PurchaseRequest(props) {
       onClose={() => props.viewItem("")}
       fullWidth={true}
       maxWidth={"lg"}
-      bodyStyle={{ backgroundColor: "red" }}
-      contentStyle={{ backgroundColor: "red" }}
+      // fullScreen={true}
       aria-labelledby="simple-dialog-title"
       open={props.openItemDialog}
     >
-      <DialogContent style={{ backgroundColor: "#31e2aa" }}>
-        <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
+      <DialogContent style={{ backgroundColor: "#white" }}>
+        <DialogTitle id="simple-dialog-title" style={{ color: "black" }}>
           Item Details
         </DialogTitle>
         <div className="container-fluid">
@@ -156,17 +129,12 @@ export default function PurchaseRequest(props) {
                 ...styles.inputContainerForTextField,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                Item Code
-              </InputLabel> */}
-
               <TextField
                 type="text"
                 disabled={true}
                 label="Item Code"
                 name={"itemCode"}
                 value={props.item.itemCode}
-                // onChange={onChangeValue}
                 className="textInputStyle"
                 variant="filled"
                 InputProps={{
@@ -182,17 +150,12 @@ export default function PurchaseRequest(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                Item Name
-              </InputLabel> */}
-
               <TextField
                 type="text"
                 disabled={true}
                 label="Name"
                 name={"name"}
                 value={props.item.name}
-                // onChange={onChangeValue}
                 className="textInputStyle"
                 variant="filled"
                 InputProps={{
@@ -211,16 +174,12 @@ export default function PurchaseRequest(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                Current Quantity
-              </InputLabel> */}
               <TextField
                 type="number"
                 disabled={true}
                 label="Current Qty"
                 name={"currentQty"}
                 value={props.item.currQty}
-                // onChange={onChangeValue}
                 className="textInputStyle"
                 variant="filled"
                 InputProps={{
@@ -237,16 +196,12 @@ export default function PurchaseRequest(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                Required Quantity
-              </InputLabel> */}
               <TextField
                 disabled={true}
                 type="number"
                 label="Req Qty"
                 name={"reqQty"}
                 value={props.item.reqQty}
-                // onChange={onChangeValue}
                 className="textInputStyle"
                 variant="filled"
                 InputProps={{
@@ -265,16 +220,12 @@ export default function PurchaseRequest(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                Description
-              </InputLabel> */}
               <TextField
                 type="text"
                 disabled={true}
                 label="Description"
                 name={"description"}
                 value={props.item.description}
-                // onChange={onChangeValue}
                 className="textInputStyle"
                 variant="filled"
                 InputProps={{
@@ -293,10 +244,6 @@ export default function PurchaseRequest(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                Comments
-              </InputLabel> */}
-
               <TextField
                 disabled={true}
                 type="text"
@@ -304,7 +251,6 @@ export default function PurchaseRequest(props) {
                 label="Notes/Comments"
                 name={"comments"}
                 value={props.item.comments}
-                // onChange={onChangeValue}
                 className="textInputStyle"
                 variant="filled"
                 InputProps={{
@@ -315,10 +261,15 @@ export default function PurchaseRequest(props) {
             </div>
           </div>
 
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", justifyContent: "center" }}>
             <div style={{ marginTop: "2%", marginBottom: "2%" }}>
-              <Button onClick={() => props.viewItem("")} variant="contained">
-                Cancel
+              <Button
+                color="primary"
+                style={{ paddingLeft: 30, paddingRight: 30 }}
+                onClick={() => props.viewItem("")}
+                variant="contained"
+              >
+                Close
               </Button>
             </div>
           </div>
