@@ -51,6 +51,8 @@ export const generateEDR = `${baseUrl}/edr/addedr`
 export const generateIPR = `${baseUrl}/ipr/addipr`
 export const searchpatient = `${baseUrl}/patient/searchpatient`
 export const updateEdrIpr = `${baseUrl}/patient/updateEdrIpr`
+export const updateEdrIprItem = `${baseUrl}/patient/updateEdrIprItem`
+
 
 // reimbursement endpoints
 export const getSearchedpatient = `${baseUrl}/reimbursementclaim/getpatient`
