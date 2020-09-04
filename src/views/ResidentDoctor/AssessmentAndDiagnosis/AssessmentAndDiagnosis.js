@@ -1004,6 +1004,16 @@ function LabRadRequest(props) {
     })
   }
 
+  function viewLabRadReport(rec) {
+    let path = `assessmentdiagnosis/viewReport`
+    props.history.push({
+      pathname: path,
+      state: {
+        selectedItem: rec,
+      },
+    })
+  }
+
   if (openNotification) {
     setTimeout(() => {
       setOpenNotification(false)
@@ -1638,7 +1648,7 @@ function LabRadRequest(props) {
                     tableData={labRequestArray}
                     tableDataKeys={tableDataKeysForLabReq}
                     tableHeading={tableHeadingForLabReq}
-                    handleView={viewItem}
+                    handleView={viewLabRadReport}
                     action={actions}
                     borderBottomColor={'#60d69f'}
                     borderBottomWidth={20}
@@ -1812,7 +1822,7 @@ function LabRadRequest(props) {
                     tableData={radiologyRequestArray}
                     tableDataKeys={tableDataKeysForRadiology}
                     tableHeading={tableHeadingForRadiology}
-                    handleView={viewItem}
+                    handleView={viewLabRadReport}
                     action={actions}
                     borderBottomColor={'#60d69f'}
                     borderBottomWidth={20}

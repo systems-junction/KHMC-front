@@ -408,7 +408,7 @@ function LabRadRequest(props) {
       setItem('')
     }
   }
-  
+
   function UpdateItem(item) {
     if (item !== '') {
       setopenUpdateItemDialog(true)
@@ -1022,6 +1022,16 @@ function LabRadRequest(props) {
     })
   }
 
+  function viewLabRadReport(rec) {
+    let path = `cn/viewReport`
+    props.history.push({
+      pathname: path,
+      state: {
+        selectedItem: rec,
+      },
+    })
+  }
+
   if (openNotification) {
     setTimeout(() => {
       setOpenNotification(false)
@@ -1354,7 +1364,7 @@ function LabRadRequest(props) {
                   outline: 'none',
                   backgroundColor: value === 0 ? '#2c6ddd' : undefined,
                 }}
-                label='Resident Doctor Notes' //"Resident Doctor Notes"
+                label='consultation Notes' //"Resident Doctor Notes"
                 disabled={enableForm}
               />
               <Tab
@@ -1364,7 +1374,7 @@ function LabRadRequest(props) {
                   outline: 'none',
                   backgroundColor: value === 1 ? '#2c6ddd' : undefined,
                 }}
-                label='Pharm'
+                label='Resident Doctor Notes'
                 disabled={enableForm}
               />
               <Tab
@@ -1374,7 +1384,7 @@ function LabRadRequest(props) {
                   outline: 'none',
                   backgroundColor: value === 2 ? '#2c6ddd' : undefined,
                 }}
-                label='Lab'
+                label='Pharm'
                 disabled={enableForm}
               />
               <Tab
@@ -1384,7 +1394,7 @@ function LabRadRequest(props) {
                   outline: 'none',
                   backgroundColor: value === 3 ? '#2c6ddd' : undefined,
                 }}
-                label='Rad'
+                label='Lab'
                 disabled={enableForm}
               />
               <Tab
@@ -1394,13 +1404,13 @@ function LabRadRequest(props) {
                   outline: 'none',
                   backgroundColor: value === 4 ? '#2c6ddd' : undefined,
                 }}
-                label='consultation Notes'
+                label='Rad'
                 disabled={enableForm}
               />
             </Tabs>
           </div>
 
-          {value === 4 ? (
+          {value === 0 ? (
             <div
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
               className='container-fluid'
@@ -1440,7 +1450,7 @@ function LabRadRequest(props) {
                 </div>
               </div> */}
             </div>
-          ) : value === 0 ? (
+          ) : value === 1 ? (
             <div
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
               className=' container-fluid'
@@ -1480,7 +1490,7 @@ function LabRadRequest(props) {
                 </div>
               </div> */}
             </div>
-          ) : value === 2 ? (
+          ) : value === 3 ? (
             <div
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
               className={`container-fluid ${classes.root}`}
@@ -1559,8 +1569,8 @@ function LabRadRequest(props) {
               )}
 
               <div style={{ marginTop: '20px' }} className='row'>
-                {/* <div
-                  className="col-md-5 col-sm-5 col-3"
+                <div
+                  className='col-md-5 col-sm-5 col-3'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1569,21 +1579,21 @@ function LabRadRequest(props) {
                   <TextField
                     required
                     disabled
-                    label="Selected Service"
-                    name={"labServiceName"}
+                    label='Selected Service'
+                    name={'labServiceName'}
                     value={labServiceName}
                     onChange={onChangeValue}
-                    className="textInputStyle"
-                    variant="filled"
+                    className='textInputStyle'
+                    variant='filled'
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
                       disableUnderline: true,
                     }}
                   />
-                </div> */}
+                </div>
                 <div
-                  className='col-md-10 col-sm-10 col-6'
+                  className='col-md-5 col-sm-5 col-6'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1629,7 +1639,7 @@ function LabRadRequest(props) {
                     tableData={labRequestArray}
                     tableDataKeys={tableDataKeysForLabReq}
                     tableHeading={tableHeadingForLabReq}
-                    handleView={viewItem}
+                    handleView={viewLabRadReport}
                     action={actions}
                     borderBottomColor={'#60d69f'}
                     borderBottomWidth={20}
@@ -1653,7 +1663,7 @@ function LabRadRequest(props) {
                 </div>
               </div>
             </div>
-          ) : value === 3 ? (
+          ) : value === 4 ? (
             <div
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
               className={`container-fluid ${classes.root}`}
@@ -1732,8 +1742,8 @@ function LabRadRequest(props) {
               )}
 
               <div style={{ marginTop: '20px' }} className='row'>
-                {/* <div
-                  className="col-md-5 col-sm-5 col-3"
+                <div
+                  className='col-md-5 col-sm-5 col-3'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1742,22 +1752,22 @@ function LabRadRequest(props) {
                   <TextField
                     required
                     disabled
-                    label="Selected Service"
-                    name={"radioServiceName"}
+                    label='Selected Service'
+                    name={'radioServiceName'}
                     value={radioServiceName}
                     // error={radioServiceName === '' && isFormSubmitted}
                     onChange={onChangeValue}
-                    className="textInputStyle"
-                    variant="filled"
+                    className='textInputStyle'
+                    variant='filled'
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
                       disableUnderline: true,
                     }}
                   />
-                </div> */}
+                </div>
                 <div
-                  className='col-md-10 col-sm-5 col-3'
+                  className='col-md-5 col-sm-5 col-3'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1803,7 +1813,7 @@ function LabRadRequest(props) {
                     tableData={radiologyRequestArray}
                     tableDataKeys={tableDataKeysForRadiology}
                     tableHeading={tableHeadingForRadiology}
-                    handleView={viewItem}
+                    handleView={viewLabRadReport}
                     action={actions}
                     borderBottomColor={'#60d69f'}
                     borderBottomWidth={20}
@@ -1827,7 +1837,7 @@ function LabRadRequest(props) {
                 </div>
               </div>
             </div>
-          ) : value === 1 ? (
+          ) : value === 2 ? (
             (<div
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
               className='container-fluid'
@@ -1847,7 +1857,7 @@ function LabRadRequest(props) {
                   undefined
                 )}
               </div>
-            </div> /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/)
+            </div> /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/)
           ) : (
             //     : value === 5 ? (
             //         <div
@@ -2006,7 +2016,7 @@ function LabRadRequest(props) {
 
             undefined
           )}
-         
+
           {openItemDialog ? (
             <ViewSingleRequest
               item={item}
