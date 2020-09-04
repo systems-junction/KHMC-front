@@ -205,7 +205,7 @@ function AddEditPurchaseRequest(props) {
           if (res.data.data) 
           {
             const selectedfollowUp = res.data.data[0]
-            console.log(selectedfollowUp);
+            console.log("follow Up: ",selectedfollowUp);
 
             setIsLoading(false);
 

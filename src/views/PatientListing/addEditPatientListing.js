@@ -1113,7 +1113,7 @@ function AddEditPatientListing(props) {
                 <TextField
                   required
                   //disabled={isDisabled}
-                  label='Identity'
+                  label='National ID'
                   name={'SIN'} // now Identity
                   value={SIN}
                   error={SIN === '' && isFormSubmitted}

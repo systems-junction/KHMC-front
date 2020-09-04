@@ -984,7 +984,7 @@ function PatientCare(props) {
                 </div>
                 <div className={`${'container-fluid'} ${classes.root}`} style={{ marginTop: "25px" }}>
                     <div className='row'>
-                        <div className="col-md-10 col-sm-9 col-8" style={styles.textFieldPadding}>
+                        <div className="col-md-11 col-sm-10 col-8" style={styles.textFieldPadding}>
                             <TextField
                                 className="textInputStyle"
                                 id="searchPatientQuery"
@@ -1007,7 +1007,7 @@ function PatientCare(props) {
                             />
                         </div>
 
-                        <div className='col-md-1 col-sm-2 col-2'
+                        {/* <div className='col-md-1 col-sm-2 col-2'
                             style={{
                                 ...styles.textFieldPadding,
                             }}>
@@ -1021,10 +1021,10 @@ function PatientCare(props) {
                             }}>
                                 <img src={BarCode} style={{ width: 100, height: 70 }} />
                             </div>
-                        </div>
+                        </div> */}
 
                         <div
-                            className="col-md-1 col-sm-1 col-2"
+                            className="col-md-1 col-sm-2 col-4"
                             style={{
                                 ...styles.textFieldPadding,
                             }}>
@@ -1254,16 +1254,6 @@ function PatientCare(props) {
                                     color: "white",
                                     borderRadius: 5,
                                     outline: "none",
-                                    backgroundColor: value === 0 ? "#2c6ddd" : undefined,
-                                }}
-                                label="Consultantation Notes" //"Resident Doctor Notes"
-                                disabled
-                            />
-                            <Tab
-                                style={{
-                                    color: "white",
-                                    borderRadius: 5,
-                                    outline: "none",
                                     backgroundColor: value === 1 ? "#2c6ddd" : undefined,
                                 }}
                                 label="Resident Doctor Notes"
@@ -1298,14 +1288,14 @@ function PatientCare(props) {
                                 label="Rad"
                                 disabled
                             />
-                            <Tab
+                             <Tab
                                 style={{
                                     color: "white",
                                     borderRadius: 5,
                                     outline: "none",
-                                    backgroundColor: value === 5 ? "#2c6ddd" : undefined,
+                                    backgroundColor: value === 0 ? "#2c6ddd" : undefined,
                                 }}
-                                label="In Patient Request"
+                                label="External Consultation"
                                 disabled
                             />
                         </Tabs>
