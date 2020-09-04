@@ -19,6 +19,8 @@ import triageAssessmentAssessDiagnosis from '../views/ResidentDoctor/AssessmentA
 import triageAssessmentConRequest from '../views/ResidentDoctor/ConsultationRequest/TriageAndAssessment'
 import Discharge from '../views/ResidentDoctor/Discharge/DischargeRequest'
 import ConsultationRequest from '../views/ResidentDoctor/ConsultationRequest/consultationRequest'
+import AddPharm from '../views/ResidentDoctor/ConsultationRequest/addPharm'
+import AddPharmacy from '../views/ResidentDoctor/AssessmentAndDiagnosis/addPharm'
 import AddDischargeMedication from '../views/ResidentDoctor/Discharge/addDischargeMed'
 import ViewIPR from '../views/ResidentDoctor/IPR/viewIPR'
 import iprDischargeRequest from '../views/ResidentDoctor/IPR/DischargeRequest'
@@ -91,6 +93,12 @@ class WMSRoutes extends React.PureComponent {
 
         <Route
           exact
+          path={`${this.props.match.url}/assessmentdiagnosis/add`}
+          component={AddPharmacy}
+        />
+
+        <Route
+          exact
           path={`${this.props.match.url}/assessmentdiagnosis/triageAssessment`}
           component={triageAssessmentAssessDiagnosis}
         />
@@ -105,6 +113,12 @@ class WMSRoutes extends React.PureComponent {
           exact
           path={`${this.props.match.url}/consultationrequest`}
           component={ConsultationRequest}
+        />
+
+        <Route
+          exact
+          path={`${this.props.match.url}/consultationrequest/add`}
+          component={AddPharm}
         />
 
         <Route

@@ -8,7 +8,6 @@ import TextField from '@material-ui/core/TextField'
 import {
   getSearchedLaboratoryService,
   getSearchedRadiologyService,
-  updateIPR,
   updateEdrIpr,
   searchpatient,
   getSearchedpatient,
@@ -39,44 +38,45 @@ import AccountCircle from '@material-ui/icons/SearchOutlined'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import BarCode from '../../../assets/img/Bar Code.png'
 import Loader from 'react-loader-spinner'
+import ViewSingleRequest from './viewRequest'
 
-// const tableHeadingForResident = [
-//     "Date/Time",
-//     "Description",
-//     "Doctor Ref",
-//     "Action",
-// ];
-// const tableDataKeysForResident = [
-//     "date",
-//     "description",
-//     ["doctor", "firstName"],
-// ];
-// const tableHeadingForConsultation = [
-//     "Consultation ID",
-//     "Date/Time",
-//     "Description",
-//     "Doctor Ref",
-//     "Action",
-// ];
-// const tableDataKeysForConsultation = [
-//     "consultationNo",
-//     "date",
-//     "description",
-//     ["requester", "firstName"],
-// ];
-// const tableHeadingForPharmacy = [
-//     "Request ID",
-//     "Date/Time",
-//     "Requester",
-//     "Status",
-//     "Action",
-// ];
-// const tableDataKeysForPharmacy = [
-//     "_id",
-//     "date",
-//     ["requester", "firstName"],
-//     "status",
-// ];
+const tableHeadingForResident = [
+  'Date/Time',
+  'Description',
+  'Doctor Ref',
+  'Action',
+]
+const tableDataKeysForResident = [
+  'date',
+  'description',
+  ['doctor', 'firstName'],
+]
+const tableHeadingForConsultation = [
+  'Consultation ID',
+  'Date/Time',
+  'Description',
+  'Doctor Ref',
+  'Action',
+]
+const tableDataKeysForConsultation = [
+  'consultationNo',
+  'date',
+  'description',
+  ['requester', 'firstName'],
+]
+const tableHeadingForPharmacy = [
+  'Request ID',
+  'Date/Time',
+  'Requester',
+  'Status',
+  'Action',
+]
+const tableDataKeysForPharmacy = [
+  '_id',
+  'date',
+  ['requester', 'firstName'],
+  'status',
+]
 const tableHeadingForLabReq = [
   'Request Id',
   'Service Code',
@@ -399,98 +399,99 @@ function LabRadRequest(props) {
     })
   }
 
-  // function addConsultRequest() {
-  // if (!validateForm()) {
-  //   setIsFormSubmitted(true);
-  //   setOpenNotification(true);
-  //   setErrorMsg("Please fill the fields properly");
-  // } else {
-  // if (validateForm()) {
+  function addConsultRequest() {
+    // if (!validateForm()) {
+    //   setIsFormSubmitted(true)
+    //   setOpenNotification(true)
+    //   setErrorMsg('Please fill the fields properly')
+    // } else {
+    //   if (validateForm()) {
+    let consultationNote = []
 
-  // let consultationNote = [];
+    consultationNote = [
+      ...consultationNoteArray,
+      {
+        consultationNo: id,
+        description: description,
+        consultationNotes: consultationNotes,
+        requester: currentUser.staffId,
+        date: date,
+      },
+    ]
 
-  // consultationNote = [
-  //     ...consultationNoteArray,
-  //     {
-  //         consultationNo: id,
-  //         description: description,
-  //         consultationNotes: consultationNotes,
-  //         requester: currentUser.staffId,
-  //         date: date,
-  //     },
-  // ];
+    const params = {
+      _id: id,
+      requestType,
+      consultationNote: consultationNote,
+    }
 
-  // const params = {
-  //     _id: id,
-  //     consultationNote: consultationNote,
-  // };
+    console.log('params', params)
+    axios
+      .put(updateEdrIpr, params)
+      .then((res) => {
+        if (res.data.success) {
+          console.log('response while adding Consult Req', res.data.data)
+          window.location.reload(false)
+        } else if (!res.data.success) {
+          setOpenNotification(true)
+          setErrorMsg('Error while adding the Consultation request')
+        }
+      })
+      .catch((e) => {
+        console.log('error after adding Consultation request', e)
+        setOpenNotification(true)
+        setErrorMsg('Error after adding the Consultation request')
+      })
+    //   }
+    // }
+  }
 
-  // console.log("params", params);
-  // axios
-  //     .put(updateIPR, params)
-  //     .then((res) => {
-  //         if (res.data.success) {
-  //             console.log("response while adding Consult Req", res.data.data);
-  //             window.location.reload(false);
-  //         } else if (!res.data.success) {
-  //             setOpenNotification(true);
-  //             setErrorMsg("Error while adding the Consultation request");
-  //         }
-  //     })
-  //     .catch((e) => {
-  //         console.log("error after adding Consultation request", e);
-  //         setOpenNotification(true);
-  //         setErrorMsg("Error after adding the Consultation request");
-  //     });
-  //   }
-  // }
-  // }
+  function addResidentRequest() {
+    // if (!validateForm()) {
+    //   setIsFormSubmitted(true);
+    //   setOpenNotification(true);
+    //   setErrorMsg("Please fill the fields properly");
+    // } else {
+    // if (validateForm()) {
 
-  // function addResidentRequest() {
-  // if (!validateForm()) {
-  //   setIsFormSubmitted(true);
-  //   setOpenNotification(true);
-  //   setErrorMsg("Please fill the fields properly");
-  // } else {
-  // if (validateForm()) {
+    let residentNote = []
 
-  //     let residentNote = [];
+    residentNote = [
+      ...residentNoteArray,
+      {
+        date: date,
+        description: rdescription,
+        doctor: currentUser.staffId,
+        note: note,
+      },
+    ]
 
-  //     residentNote = [
-  //         ...residentNoteArray,
-  //         {
-  //             date: date,
-  //             description: rdescription,
-  //             doctor: currentUser.staffId,
-  //             note: note,
-  //         },
-  //     ];
+    const params = {
+      _id: id,
+      requestType,
+      residentNotes: residentNote,
+    }
 
-  //     const params = {
-  //         _id: id,
-  //         residentNotes: residentNote,
-  //     };
-
-  //     // console.log("params", params);
-  //     axios
-  //         .put(updateIPR, params)
-  //         .then((res) => {
-  //             if (res.data.success) {
-  //                 console.log("response while adding Resident Req", res.data.data);
-  //                 window.location.reload(false);
-  //             } else if (!res.data.success) {
-  //                 setOpenNotification(true);
-  //                 setErrorMsg("Error while adding the Resident request");
-  //             }
-  //         })
-  //         .catch((e) => {
-  //             console.log("error after adding Resident request", e);
-  //             setOpenNotification(true);
-  //             setErrorMsg("Error after adding the Resident request");
-  //         });
-  //     //   }
-  //     // }
-  // }
+    // console.log("params", params);
+    axios
+      .put(updateEdrIpr, params)
+      .then((res) => {
+        if (res.data.success) {
+          console.log('response while adding Resident Req', res.data.data)
+          window.location.reload(false)
+        } else if (!res.data.success) {
+          setOpenNotification(true)
+          setErrorMsg('Error while adding the Resident request')
+        }
+      })
+      .catch((e) => {
+        console.log('error after adding Resident request', e)
+        setOpenNotification(true)
+        setErrorMsg('Error after adding the Resident request')
+      })
+    //   }
+    // }
+  }
 
   // const addNewRequest = () => {
   //     let path = `viewIPR/add`;
@@ -504,16 +505,26 @@ function LabRadRequest(props) {
   //     });
   // };
 
-  // function hideDialog() {
-  //     setOpenAddConsultDialog(false);
-  //     setOpenAddResidentDialog(false);
+  function hideDialog() {
+    setOpenAddConsultDialog(false)
+    setOpenAddResidentDialog(false)
 
-  //     dispatch({ field: "consultationNo", value: "" });
-  //     dispatch({ field: "description", value: "" });
-  //     dispatch({ field: "consultationNotes", value: "" });
-  //     dispatch({ field: "rdescription", value: "" });
-  //     dispatch({ field: "note", value: "" });
-  // }
+    dispatch({ field: 'consultationNo', value: '' })
+    dispatch({ field: 'description', value: '' })
+    dispatch({ field: 'consultationNotes', value: '' })
+    dispatch({ field: 'rdescription', value: '' })
+    dispatch({ field: 'note', value: '' })
+  }
+
+  function viewItem(item) {
+    if (item !== '') {
+      setOpenItemDialog(true)
+      setItem(item)
+    } else {
+      setOpenItemDialog(false)
+      setItem('')
+    }
+  }
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value)
@@ -835,7 +846,7 @@ function LabRadRequest(props) {
   //     };
   //     // console.log("params", params);
   //     axios
-  //         .put(updateIPR, params)
+  //         .put(updateEdrIpr, params)
   //         .then((res) => {
   //             if (res.data.success) {
   //                 console.log("response after adding nurse Request", res.data);
@@ -916,31 +927,29 @@ function LabRadRequest(props) {
                   dispatch({ field: 'labRequestArray', value: val })
                 } else if (key === 'radiologyRequest') {
                   dispatch({ field: 'radiologyRequestArray', value: val })
+                } else if (key === 'consultationNote') {
+                  Object.entries(val).map(([key1, val1]) => {
+                    if (key1 == 'requester') {
+                      dispatch({ field: 'requester', value: val1._id })
+                    } else {
+                      dispatch({ field: key1, value: val1 })
+                    }
+                  })
+                  dispatch({ field: 'consultationNoteArray', value: val })
+                } else if (key === 'residentNotes') {
+                  Object.entries(val).map(([key1, val1]) => {
+                    if (key1 == 'doctor') {
+                      dispatch({ field: 'doctor', value: val1._id })
+                    } else {
+                      dispatch({ field: key1, value: val1 })
+                    }
+                  })
+                  dispatch({ field: 'residentNoteArray', value: val })
+                } else if (key === 'pharmacyRequest') {
+                  dispatch({ field: 'pharmacyRequestArray', value: val })
+                } else if (key === 'nurseService') {
+                  dispatch({ field: 'nurseService', value: val })
                 }
-                // else if (key === "consultationNote") {
-                //     Object.entries(val).map(([key1, val1]) => {
-                //         if (key1 == "requester") {
-                //             dispatch({ field: "requester", value: val1._id });
-                //         } else {
-                //             dispatch({ field: key1, value: val1 });
-                //         }
-                //     });
-                //     dispatch({ field: "consultationNoteArray", value: val });
-                // } else if (key === "residentNotes") {
-                //     Object.entries(val).map(([key1, val1]) => {
-                //         if (key1 == "doctor") {
-                //             dispatch({ field: "doctor", value: val1._id });
-                //         } else {
-                //             dispatch({ field: key1, value: val1 });
-                //         }
-                //     });
-                //     dispatch({ field: "residentNoteArray", value: val });
-                // } else if (key === "pharmacyRequest") {
-                //     dispatch({ field: "pharmacyRequestArray", value: val });
-                // }
-                //  else if (key === "nurseService") {
-                //     dispatch({ field: "nurseService", value: val });
-                // }
               } else {
                 dispatch({ field: key, value: val })
                 // console.log("here",key,val)
@@ -1308,7 +1317,7 @@ function LabRadRequest(props) {
                   backgroundColor: value === 0 ? '#2c6ddd' : undefined,
                 }}
                 label='Consultantation Notes' //"Resident Doctor Notes"
-                disabled
+                disabled={enableForm}
               />
               <Tab
                 style={{
@@ -1318,7 +1327,7 @@ function LabRadRequest(props) {
                   backgroundColor: value === 1 ? '#2c6ddd' : undefined,
                 }}
                 label='Resident Doctor Notes'
-                disabled
+                disabled={enableForm}
               />
               <Tab
                 style={{
@@ -1328,7 +1337,7 @@ function LabRadRequest(props) {
                   backgroundColor: value === 2 ? '#2c6ddd' : undefined,
                 }}
                 label='Pharm'
-                disabled
+                disabled={enableForm}
               />
               <Tab
                 style={{
@@ -1363,106 +1372,104 @@ function LabRadRequest(props) {
             </Tabs>
           </div>
 
-          {/* {value === 0 ? (
-                        <div
-                            style={{ flex: 4, display: "flex", flexDirection: "column" }}
-                            className="container-fluid"
-                        >
-                            <div className="row" style={{ marginTop: "20px" }}>
-                                {consultationNoteArray !== 0 ? (
-                                    <CustomTable
-                                        tableData={consultationNoteArray}
-                                        tableDataKeys={tableDataKeysForConsultation}
-                                        tableHeading={tableHeadingForConsultation}
-                                        handleView={viewItem}
-                                        action={actions}
-                                        borderBottomColor={"#60d69f"}
-                                        borderBottomWidth={20}
-                                    />
-                                ) : (
-                                        undefined
-                                    )}
-                            </div>
+          {value === 0 ? (
+            <div
+              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              className='container-fluid'
+            >
+              <div className='row' style={{ marginTop: '20px' }}>
+                {consultationNoteArray !== 0 ? (
+                  <CustomTable
+                    tableData={consultationNoteArray}
+                    tableDataKeys={tableDataKeysForConsultation}
+                    tableHeading={tableHeadingForConsultation}
+                    handleView={viewItem}
+                    action={actions}
+                    borderBottomColor={'#60d69f'}
+                    borderBottomWidth={20}
+                  />
+                ) : (
+                  undefined
+                )}
+              </div>
 
-                            <div className="row" style={{ marginBottom: "25px" }}>
-                                <div className="col-md-6 col-sm-6 col-6">
-                                    <img
-                                        onClick={() => props.history.goBack()}
-                                        src={Back}
-                                        style={{ width: 45, height: 35, cursor: "pointer" }}
-                                    />
-                                </div>
-                                <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
-                                    <Button
-                                        onClick={() => setOpenAddConsultDialog(true)}
-                                        style={styles.stylesForButton}
-                                        variant="contained"
-                                        color="primary"
-                                    >
-                                        <img className="icon-style" src={plus_icon} />
-                        &nbsp;&nbsp;
-                        <strong style={{ fontSize: "12px" }}>
-                                            Add New Consultation
-                        </strong>
-                                    </Button>
-                                </div>
-                            </div>
-                        </div>
-                    ) : value === 1 ? (
-                        <div
-                            style={{ flex: 4, display: "flex", flexDirection: "column" }}
-                            className=" container-fluid"
-                        >
-                            <div className="row" style={{ marginTop: "20px" }}>
-                                {residentNoteArray !== 0 ? (
-                                    <CustomTable
-                                        tableData={residentNoteArray}
-                                        tableDataKeys={tableDataKeysForResident}
-                                        tableHeading={tableHeadingForResident}
-                                        handleView={viewItem}
-                                        action={actions}
-                                        borderBottomColor={"#60d69f"}
-                                        borderBottomWidth={20}
-                                    />
-                                ) : (
-                                        undefined
-                                    )}
-                            </div>
+              {/* <div className='row' style={{ marginBottom: '25px' }}>
+                <div className='col-md-6 col-sm-6 col-6'>
+                  <img
+                    onClick={() => props.history.goBack()}
+                    src={Back}
+                    style={{ width: 45, height: 35, cursor: 'pointer' }}
+                  />
+                </div>
+                <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
+                  <Button
+                    onClick={() => setOpenAddConsultDialog(true)}
+                    style={styles.stylesForButton}
+                    variant='contained'
+                    color='primary'
+                  >
+                    <img className='icon-style' src={plus_icon} />
+                    &nbsp;&nbsp;
+                    <strong style={{ fontSize: '12px' }}>
+                      Add New Consultation
+                    </strong>
+                  </Button>
+                </div>
+              </div> */}
+            </div>
+          ) : value === 1 ? (
+            <div
+              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              className=' container-fluid'
+            >
+              <div className='row' style={{ marginTop: '20px' }}>
+                {residentNoteArray !== 0 ? (
+                  <CustomTable
+                    tableData={residentNoteArray}
+                    tableDataKeys={tableDataKeysForResident}
+                    tableHeading={tableHeadingForResident}
+                    handleView={viewItem}
+                    action={actions}
+                    borderBottomColor={'#60d69f'}
+                    borderBottomWidth={20}
+                  />
+                ) : (
+                  undefined
+                )}
+              </div>
 
-                            <div className="row" style={{ marginBottom: "25px" }}>
-                                <div className="col-md-6 col-sm-6 col-6">
-                                    <img
-                                        onClick={() => props.history.goBack()}
-                                        src={Back}
-                                        style={{ width: 45, height: 35, cursor: "pointer" }}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    ) :  */}
-          {/* value === 2 ? (
-                        <div
-                            style={{ flex: 4, display: "flex", flexDirection: "column" }}
-                            className="container-fluid"
-                        >
-                            <div className="row" style={{ marginTop: "20px" }}>
-                                {pharmacyRequestArray !== 0 ? (
-                                    <CustomTable
-                                        tableData={pharmacyRequestArray}
-                                        tableDataKeys={tableDataKeysForPharmacy}
-                                        tableHeading={tableHeadingForPharmacy}
-                                        handleView={viewItem}
-                                        action={actions}
-                                        borderBottomColor={"#60d69f"}
-                                        borderBottomWidth={20}
-                                    />
-                                ) : (
-                                        undefined
-                                    )}
-                            </div>
-                        </div>
-                        )  */}
-          {value === 3 ? (
+              <div className='row' style={{ marginBottom: '25px' }}>
+                <div className='col-md-6 col-sm-6 col-6'>
+                  <img
+                    onClick={() => props.history.goBack()}
+                    src={Back}
+                    style={{ width: 45, height: 35, cursor: 'pointer' }}
+                  />
+                </div>
+              </div>
+            </div>
+          ) : value === 2 ? (
+            <div
+              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              className='container-fluid'
+            >
+              <div className='row' style={{ marginTop: '20px' }}>
+                {pharmacyRequestArray !== 0 ? (
+                  <CustomTable
+                    tableData={pharmacyRequestArray}
+                    tableDataKeys={tableDataKeysForPharmacy}
+                    tableHeading={tableHeadingForPharmacy}
+                    handleView={viewItem}
+                    action={actions}
+                    borderBottomColor={'#60d69f'}
+                    borderBottomWidth={20}
+                  />
+                ) : (
+                  undefined
+                )}
+              </div>
+            </div>
+          ) : value === 3 ? (
             <div
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
               className={`container-fluid ${classes.root}`}
@@ -1967,6 +1974,16 @@ function LabRadRequest(props) {
             undefined
           )}
         </div>
+
+        {openItemDialog ? (
+          <ViewSingleRequest
+            item={item}
+            openItemDialog={openItemDialog}
+            viewItem={viewItem}
+          />
+        ) : (
+          undefined
+        )}
         {/* 
                 <Dialog
                     aria-labelledby="form-dialog-title"
