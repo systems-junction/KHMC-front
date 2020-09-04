@@ -493,17 +493,17 @@ function LabRadRequest(props) {
     // }
   }
 
-  // const addNewRequest = () => {
-  //     let path = `viewIPR/add`;
-  //     props.history.push({
-  //         pathname: path,
-  //         state: {
-  //             comingFor: "add",
-  //             selectedItem: selectedItem,
-  //             pharmacyRequestArray,
-  //         },
-  //     });
-  // };
+  const addNewRequest = () => {
+    let path = `labradrequest/add`
+    props.history.push({
+      pathname: path,
+      state: {
+        comingFor: 'add',
+        selectedItem: selectedItem,
+        pharmacyRequestArray,
+      },
+    })
+  }
 
   function hideDialog() {
     setOpenAddConsultDialog(false)
@@ -1467,6 +1467,29 @@ function LabRadRequest(props) {
                 ) : (
                   undefined
                 )}
+              </div>
+              <div className='row' style={{ marginBottom: '25px' }}>
+                <div className='col-md-6 col-sm-6 col-6'>
+                  <img
+                    onClick={() => props.history.goBack()}
+                    src={Back}
+                    style={{ width: 45, height: 35, cursor: 'pointer' }}
+                  />
+                </div>
+                <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
+                  <Button
+                    onClick={addNewRequest}
+                    style={styles.stylesForButton}
+                    variant='contained'
+                    color='primary'
+                  >
+                    <img className='icon-style' src={plus_icon} />
+                    &nbsp;&nbsp;
+                    <strong style={{ fontSize: '12px' }}>
+                      Pharmacy Request
+                    </strong>
+                  </Button>
+                </div>
               </div>
             </div>
           ) : value === 3 ? (
