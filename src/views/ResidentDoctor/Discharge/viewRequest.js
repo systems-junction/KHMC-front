@@ -16,6 +16,7 @@ const tableHeadingForPHR = [
   'Dosage',
   'Frequency',
   'Duration',
+  '',
 ]
 const tableDataKeysForPHR = [
   'medicineName',

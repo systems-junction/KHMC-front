@@ -784,9 +784,6 @@ function AddEditPatientListing(props) {
             {comingFor === 'edit' ? (
               <div className={`container ${classes.root}`} style={{marginTop:'10px'}}>
                 <div className='row'>
-                  {/* <div
-                    className='col-md-6 col-sm-6 col-6'
-                  > */}
                     <TextField
                       required
                       select
@@ -815,25 +812,6 @@ function AddEditPatientListing(props) {
                         )
                       })}
                     </TextField>
-                  {/* </div> */}
-                  {/* <div
-                    className='col-md-6 col-sm-6 col-6'
-                  >
-                    <TextField
-                      required
-                      label='Response Code'
-                      name={'responseCode'}
-                      value={responseCode}
-                      error={responseCode === '' && isFormSubmitted}
-                      onChange={onChangeValue}
-                      className='textInputStyle'
-                      variant='filled'
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                      }}
-                    />
-                  </div> */}
                 </div>
               </div>
             ) : (

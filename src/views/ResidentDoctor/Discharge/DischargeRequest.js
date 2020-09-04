@@ -52,6 +52,16 @@ const styles = {
     borderRadius: 15,
     padding: '20px',
   },
+  headingStyles: {
+    fontWeight: 'bold',
+    color: 'grey',
+    fontSize: 12,
+  },
+  textStyles: {
+    fontWeight: '700',
+    color: 'black',
+    fontSize: 14,
+  },
   textFieldPadding: {
     paddingLeft: 5,
     paddingRight: 5,
@@ -70,9 +80,10 @@ const styles = {
   stylesForButton: {
     color: 'white',
     cursor: 'pointer',
-    borderRadius: 15,
+    borderRadius: 5,
     backgroundColor: '#2c6ddd',
-    height: '50px',
+    width: '130px',
+    height: '45px',
     outline: 'none',
   },
   buttonContainer: {
@@ -135,6 +146,10 @@ const useStylesForInput = makeStyles((theme) => ({
     '& .Mui-focused': {
       backgroundColor: 'white',
       color: 'black',
+    },
+    '& .Mui-disabled': {
+      backgroundColor: 'white',
+      color: 'gray',
     },
   },
 }))
@@ -454,7 +469,7 @@ function DischargeRequest(props) {
         >
           <div className='row'>
             <div
-              className='col-md-10 col-sm-9 col-8'
+              className='col-md-11 col-sm-9 col-8'
               style={styles.textFieldPadding}
             >
               <TextField
@@ -479,7 +494,7 @@ function DischargeRequest(props) {
               />
             </div>
 
-            <div
+            {/* <div
               className='col-md-1 col-sm-2 col-2'
               style={{
                 ...styles.textFieldPadding,
@@ -497,7 +512,7 @@ function DischargeRequest(props) {
               >
                 <img src={BarCode} style={{ width: 100, height: 70 }} />
               </div>
-            </div>
+            </div> */}
 
             <div
               className='col-md-1 col-sm-1 col-2'
@@ -763,32 +778,55 @@ function DischargeRequest(props) {
         {value === 0 ? (
           <div
             style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-            className='container'
+            className={`${'container-fluid'} ${classes.root}`}
           >
-            <div style={{ marginTop: '20px' }} className='row'>
-              <div className='col-md-12 col-sm-12 col-12'>
-                <TextArea
+            <div className='row'>
+              <div
+                className='col-md-12'
+                style={{ marginTop: '20px' }}
+                // style={{
+                //   ...styles.inputContainerForTextField,
+                //   ...styles.textFieldPadding,
+                // }}
+              >
+                <TextField
+                  required
+                  multiline
                   type='text'
+                  label='Discharge Notes'
                   disabled={enableForm}
-                  placeholder='Discharge Notes'
                   name={'dischargeNotes'}
                   value={dischargeNotes}
                   onChange={onChangeValue}
-                  rows='4'
+                  rows={4}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
                 />
               </div>
             </div>
 
             <div style={{ marginTop: '20px' }} className='row'>
               <div className='col-md-12 col-sm-12 col-12'>
-                <TextArea
+                <TextField
+                  required
+                  multiline
                   type='text'
+                  label='Other Notes'
                   disabled={enableForm}
-                  placeholder='Other Notes'
                   name={'otherNotes'}
                   value={otherNotes}
                   onChange={onChangeValue}
-                  rows='4'
+                  rows={4}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
                 />
               </div>
             </div>
@@ -809,35 +847,50 @@ function DischargeRequest(props) {
                   }}
                 />
               </div>
-              <div className='p-2'>
-                <Button
-                  disabled={enableForm}
-                  style={styles.stylesForButton}
-                  //disabled={!validateFormType1()}
-                  onClick={onClick}
-                  variant='contained'
-                  color='primary'
+              <div
+                style={{ display: 'flex', flex: 1, justifyContent: 'center' }}
+                className='container-fluid'
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    flex: 1,
+                    justifyContent: 'flex-end',
+                    marginTop: '2%',
+                    marginBottom: '2%',
+                  }}
                 >
-                  Next
-                </Button>
-              </div>
-              <div className='p-2'>
-                <Button
-                  onClick={submitDischargeSummary}
-                  style={styles.stylesForButton}
-                  variant='contained'
-                  color='primary'
-                  disabled={!validateDischargeForm()}
-                >
-                  <strong style={{ fontSize: '12px' }}>Submit</strong>
-                </Button>
+                  <div className='p-2'>
+                    <Button
+                      disabled={enableForm}
+                      style={styles.stylesForButton}
+                      //disabled={!validateFormType1()}
+                      onClick={onClick}
+                      variant='contained'
+                      color='primary'
+                    >
+                      Next
+                    </Button>
+                  </div>
+                  <div className='p-2'>
+                    <Button
+                      onClick={submitDischargeSummary}
+                      style={styles.stylesForButton}
+                      variant='contained'
+                      color='primary'
+                      disabled={!validateDischargeForm()}
+                    >
+                      <strong style={{ fontSize: '12px' }}>Submit</strong>
+                    </Button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         ) : value === 1 ? (
           <div
             style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-            className='container'
+            className='container-fluid'
           >
             <div className='row' style={{ marginTop: '20px' }}>
               {dischargeMedArray !== 0 ? (

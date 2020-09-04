@@ -10,7 +10,6 @@ import MenuItem from '@material-ui/core/MenuItem'
 import {
   getSearchedLaboratoryService,
   getSearchedRadiologyService,
-  updateIPR,
   updateEdrIpr,
   searchpatient,
   getSearchedpatient,
@@ -45,7 +44,7 @@ import Loader from 'react-loader-spinner'
 
 const tableHeadingForResident = [
   'Date/Time',
-  'Description',
+  'Description/Condition',
   'Doctor Ref',
   'Action',
 ]
@@ -55,7 +54,6 @@ const tableDataKeysForResident = [
   ['doctor', 'firstName'],
 ]
 const tableHeadingForConsultation = [
-  // 'Consultation ID',
   'Date/Time',
   'Description/Condition',
   'Doctor',
@@ -63,25 +61,24 @@ const tableHeadingForConsultation = [
   'Action',
 ]
 const tableDataKeysForConsultation = [
-  // 'consultationNo',
   'date',
   'description',
   'specialist',
   ['requester', 'firstName'],
 ]
-// const tableHeadingForPharmacy = [
-//     "Request ID",
-//     "Date/Time",
-//     "Requester",
-//     "Status",
-//     "Action",
-// ];
-// const tableDataKeysForPharmacy = [
-//     "_id",
-//     "date",
-//     ["requester", "firstName"],
-//     "status",
-// ];
+const tableHeadingForPharmacy = [
+  'Request ID',
+  'Date/Time',
+  'Requester',
+  'Status',
+  'Action',
+]
+const tableDataKeysForPharmacy = [
+  '_id',
+  'date',
+  ['requester', 'firstName'],
+  'status',
+]
 const tableHeadingForLabReq = [
   'Request Id',
   'Service Code',
@@ -534,17 +531,17 @@ function LabRadRequest(props) {
     // }
   }
 
-  // const addNewRequest = () => {
-  //     let path = `viewIPR/add`;
-  //     props.history.push({
-  //         pathname: path,
-  //         state: {
-  //             comingFor: "add",
-  //             selectedItem: selectedItem,
-  //             pharmacyRequestArray,
-  //         },
-  //     });
-  // };
+  const addNewRequest = () => {
+    let path = `consultationrequest/add`
+    props.history.push({
+      pathname: path,
+      state: {
+        comingFor: 'add',
+        selectedItem: selectedItem,
+        pharmacyRequestArray,
+      },
+    })
+  }
 
   function hideDialog() {
     setOpenAddConsultDialog(false)
@@ -962,10 +959,9 @@ function LabRadRequest(props) {
                     }
                   })
                   dispatch({ field: 'residentNoteArray', value: val })
+                } else if (key === 'pharmacyRequest') {
+                  dispatch({ field: 'pharmacyRequestArray', value: val })
                 }
-                // } else if (key === "pharmacyRequest") {
-                //     dispatch({ field: "pharmacyRequestArray", value: val });
-                // }
                 //  else if (key === "nurseService") {
                 //     dispatch({ field: "nurseService", value: val });
                 // }
@@ -992,6 +988,16 @@ function LabRadRequest(props) {
       pathname: path,
       state: {
         selectedItem: selectedItem,
+      },
+    })
+  }
+
+  function viewLabRadReport(rec) {
+    let path = `consultationrequest/viewReport`
+    props.history.push({
+      pathname: path,
+      state: {
+        selectedItem: rec,
       },
     })
   }
@@ -1346,7 +1352,7 @@ function LabRadRequest(props) {
                   backgroundColor: value === 1 ? '#2c6ddd' : undefined,
                 }}
                 label='Pharm'
-                disabled
+                disabled={enableForm}
               />
               <Tab
                 style={{
@@ -1356,7 +1362,7 @@ function LabRadRequest(props) {
                   backgroundColor: value === 2 ? '#2c6ddd' : undefined,
                 }}
                 label='Lab'
-                disabled
+                disabled={enableForm}
               />
               <Tab
                 style={{
@@ -1366,7 +1372,7 @@ function LabRadRequest(props) {
                   backgroundColor: value === 3 ? '#2c6ddd' : undefined,
                 }}
                 label='Rad'
-                disabled
+                disabled={enableForm}
               />
               <Tab
                 style={{
@@ -1437,6 +1443,51 @@ function LabRadRequest(props) {
                 ) : (
                   undefined
                 )}
+              </div>
+            </div>
+          ) : value === 1 ? (
+            <div
+              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              className='container-fluid'
+            >
+              <div className='row' style={{ marginTop: '20px' }}>
+                {pharmacyRequestArray !== 0 ? (
+                  <CustomTable
+                    tableData={pharmacyRequestArray}
+                    tableDataKeys={tableDataKeysForPharmacy}
+                    tableHeading={tableHeadingForPharmacy}
+                    handleView={viewItem}
+                    action={actions}
+                    borderBottomColor={'#60d69f'}
+                    borderBottomWidth={20}
+                  />
+                ) : (
+                  undefined
+                )}
+              </div>
+
+              <div className='row' style={{ marginBottom: '25px' }}>
+                <div className='col-md-6 col-sm-6 col-6'>
+                  <img
+                    onClick={() => props.history.goBack()}
+                    src={Back}
+                    style={{ width: 45, height: 35, cursor: 'pointer' }}
+                  />
+                </div>
+                <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
+                  <Button
+                    onClick={addNewRequest}
+                    style={styles.stylesForButton}
+                    variant='contained'
+                    color='primary'
+                  >
+                    <img className='icon-style' src={plus_icon} />
+                    &nbsp;&nbsp;
+                    <strong style={{ fontSize: '12px' }}>
+                      Pharmacy Request
+                    </strong>
+                  </Button>
+                </div>
               </div>
             </div>
           ) : value === 2 ? (
@@ -1588,7 +1639,7 @@ function LabRadRequest(props) {
                     tableData={labRequestArray}
                     tableDataKeys={tableDataKeysForLabReq}
                     tableHeading={tableHeadingForLabReq}
-                    handleView={viewItem}
+                    handleView={viewLabRadReport}
                     action={actions}
                     borderBottomColor={'#60d69f'}
                     borderBottomWidth={20}
@@ -1762,7 +1813,7 @@ function LabRadRequest(props) {
                     tableData={radiologyRequestArray}
                     tableDataKeys={tableDataKeysForRadiology}
                     tableHeading={tableHeadingForRadiology}
-                    handleView={viewItem}
+                    handleView={viewLabRadReport}
                     action={actions}
                     borderBottomColor={'#60d69f'}
                     borderBottomWidth={20}
@@ -2259,6 +2310,36 @@ function LabRadRequest(props) {
                 >
                   <TextField
                     required
+                    multiline
+                    rows={4}
+                    label='Comments/Notes'
+                    name={'consultationNotes'}
+                    value={consultationNotes}
+                    error={consultationNotes === '' && isFormSubmitted}
+                    onChange={onChangeValue}
+                    className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                      disableUnderline: true,
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div className='row'>
+                <div
+                  className='col-md-12 col-sm-12 col-12'
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
+                    multiline
+                    rows={4}
                     label='Description'
                     name={'description'}
                     value={description}
@@ -2269,81 +2350,7 @@ function LabRadRequest(props) {
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className='row'>
-                <div
-                  className='col-md-12'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    label='Comments/Notes'
-                    // label='Consultation Note'
-                    name={'consultationNotes'}
-                    value={consultationNotes}
-                    error={consultationNotes === '' && isFormSubmitted}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className='row'>
-                <div
-                  className='col-md-6 col-sm-6 col-6'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    disabled
-                    label='Date'
-                    name={'date'}
-                    value={date}
-                    // error={date === '' && isFormSubmitted}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
-                </div>
-                <div
-                  className='col-md-6 col-sm-6 col-6'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    disabled
-                    label='Requester'
-                    name={'requester'}
-                    value={requester}
-                    // error={requester === '' && isFormSubmitted}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
+                      disableUnderline: true,
                     }}
                   />
                 </div>
@@ -2371,6 +2378,7 @@ function LabRadRequest(props) {
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
+                      disableUnderline: true,
                     }}
                   >
                     <MenuItem value=''>
@@ -2397,7 +2405,7 @@ function LabRadRequest(props) {
                     required
                     select
                     fullWidth
-                    label='Specialist'
+                    label='Select Consultant/Specialist'
                     name={'specialist'}
                     value={specialist}
                     error={specialist === '' && isFormSubmitted}
@@ -2407,6 +2415,7 @@ function LabRadRequest(props) {
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
+                      disableUnderline: true,
                     }}
                   >
                     <MenuItem value=''>
@@ -2428,7 +2437,11 @@ function LabRadRequest(props) {
                 <div style={{ marginTop: '2%', marginBottom: '2%' }}>
                   <Button
                     onClick={() => hideDialog()}
-                    style={styles.stylesForButton}
+                    style={{
+                      ...styles.stylesForButton,
+                      backgroundColor: 'white',
+                      color: 'grey',
+                    }}
                     variant='contained'
                   >
                     <strong>Cancel</strong>
@@ -2460,7 +2473,7 @@ function LabRadRequest(props) {
                     variant='contained'
                     color='primary'
                   >
-                    Add Note
+                    Submit
                   </Button>
                 </div>
               </div>

@@ -14,11 +14,16 @@ import IPR from '../views/ResidentDoctor/IPR/IPR'
 import LabRadRequest from '../views/ResidentDoctor/LabRadRequest/labRadRequest'
 import viewReport from '../views/ResidentDoctor/LabRadRequest/viewLabRadReport'
 import AssessmentAndDiagnosis from '../views/ResidentDoctor/AssessmentAndDiagnosis/AssessmentAndDiagnosis'
+import viewReportAssDia from '../views/ResidentDoctor/AssessmentAndDiagnosis/viewLabRadReport'
+import viewReportCons from '../views/ResidentDoctor/ConsultationRequest/viewLabRadReport'
 import triageAssessment from '../views/ResidentDoctor/LabRadRequest/TriageAndAssessment'
 import triageAssessmentAssessDiagnosis from '../views/ResidentDoctor/AssessmentAndDiagnosis/TriageAndAssessment'
 import triageAssessmentConRequest from '../views/ResidentDoctor/ConsultationRequest/TriageAndAssessment'
 import Discharge from '../views/ResidentDoctor/Discharge/DischargeRequest'
 import ConsultationRequest from '../views/ResidentDoctor/ConsultationRequest/consultationRequest'
+import AddPharm from '../views/ResidentDoctor/ConsultationRequest/addPharm'
+import AddPharmacy from '../views/ResidentDoctor/AssessmentAndDiagnosis/addPharm'
+import AddPharmLab from '../views/ResidentDoctor/LabRadRequest/addPharm'
 import AddDischargeMedication from '../views/ResidentDoctor/Discharge/addDischargeMed'
 import ViewIPR from '../views/ResidentDoctor/IPR/viewIPR'
 import iprDischargeRequest from '../views/ResidentDoctor/IPR/DischargeRequest'
@@ -91,6 +96,18 @@ class WMSRoutes extends React.PureComponent {
 
         <Route
           exact
+          path={`${this.props.match.url}/assessmentdiagnosis/viewReport`}
+          component={viewReportAssDia}
+        />
+
+        <Route
+          exact
+          path={`${this.props.match.url}/assessmentdiagnosis/add`}
+          component={AddPharmacy}
+        />
+
+        <Route
+          exact
           path={`${this.props.match.url}/assessmentdiagnosis/triageAssessment`}
           component={triageAssessmentAssessDiagnosis}
         />
@@ -105,6 +122,24 @@ class WMSRoutes extends React.PureComponent {
           exact
           path={`${this.props.match.url}/consultationrequest`}
           component={ConsultationRequest}
+        />
+
+        <Route
+          exact
+          path={`${this.props.match.url}/labradrequest/add`}
+          component={AddPharmLab}
+        />
+
+        <Route
+          exact
+          path={`${this.props.match.url}/consultationrequest/viewReport`}
+          component={viewReportCons}
+        />
+
+        <Route
+          exact
+          path={`${this.props.match.url}/consultationrequest/add`}
+          component={AddPharm}
         />
 
         <Route

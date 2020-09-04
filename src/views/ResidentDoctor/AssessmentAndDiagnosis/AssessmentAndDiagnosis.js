@@ -1,15 +1,12 @@
 import React, { useEffect, useState, useReducer } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import InputLabel from '@material-ui/core/InputLabel'
 import Button from '@material-ui/core/Button'
 import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
 import axios from 'axios'
 import TextField from '@material-ui/core/TextField'
-// import AutoComplete from '@material-ui/lab/AutoComplete'
 import {
   getSearchedLaboratoryService,
   getSearchedRadiologyService,
-  updateIPR,
   updateEdrIpr,
   searchpatient,
   getSearchedpatient,
@@ -23,28 +20,28 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import CustomTable from '../../../components/Table/Table'
 import plus_icon from '../../../assets/img/Plus.png'
-import InputLabelComponent from '../../../components/InputLabel/inputLabel'
 import Paper from '@material-ui/core/Paper'
 import Table from '@material-ui/core/Table'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
+import MenuItem from '@material-ui/core/MenuItem'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
-import ErrorMessage from '../../../components/ErrorMessage/errorMessage'
 import Notification from '../../../components/Snackbar/Notification.js'
 import Fingerprint from '../../../assets/img/fingerprint.png'
 import AccountCircle from '@material-ui/icons/SearchOutlined'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import BarCode from '../../../assets/img/Bar Code.png'
 import ViewSingleRequest from './viewRequest'
-import Loader from 'react-loader-spinner'
+
+let icdCodesList = require('../../../assets/icdCodes.json')
 
 const tableHeadingForResident = [
   'Date/Time',
-  'Description',
+  'Description / Condition',
   'Doctor Ref',
   'Action',
 ]
@@ -54,33 +51,31 @@ const tableDataKeysForResident = [
   ['doctor', 'firstName'],
 ]
 const tableHeadingForConsultation = [
-  // 'Consultation ID',
   'Date/Time',
-  'Description/Condition',
+  'Description / Condition',
   'Doctor',
   'Doctor Ref',
   'Action',
 ]
 const tableDataKeysForConsultation = [
-  // 'consultationNo',
   'date',
   'description',
   'specialist',
   ['requester', 'firstName'],
 ]
-// const tableHeadingForPharmacy = [
-//     "Request ID",
-//     "Date/Time",
-//     "Requester",
-//     "Status",
-//     "Action",
-// ];
-// const tableDataKeysForPharmacy = [
-//     "_id",
-//     "date",
-//     ["requester", "firstName"],
-//     "status",
-// ];
+const tableHeadingForPharmacy = [
+  'Request ID',
+  'Date/Time',
+  'Requester',
+  'Status',
+  'Action',
+]
+const tableDataKeysForPharmacy = [
+  '_id',
+  'date',
+  ['requester', 'firstName'],
+  'status',
+]
 const tableHeadingForLabReq = [
   'Request Id',
   'Service Code',
@@ -129,7 +124,7 @@ const styles = {
   patientDetails: {
     backgroundColor: 'white',
     borderRadius: 5,
-    padding: '20px',
+    // padding: '20px',
   },
   inputContainerForTextField: {
     marginTop: 25,
@@ -238,8 +233,6 @@ const useStylesForInput = makeStyles((theme) => ({
   },
 }))
 
-const useStyles = makeStyles(tableStyles)
-
 function LabRadRequest(props) {
   const classesForTabs = useStylesForTabs()
   const classes = useStylesForInput()
@@ -280,6 +273,8 @@ function LabRadRequest(props) {
 
     pharmacyRequestArray: '',
     requestType: '',
+    section: '',
+    code: [],
   }
 
   function reducer(state, { field, value }) {
@@ -306,15 +301,7 @@ function LabRadRequest(props) {
     radioServiceStatus,
     radioComments,
 
-    //for nursing
-    nurseServiceId,
-    nurseServiceCode,
-    nurseServiceName,
-    nurseService,
-    nurseServiceStatus,
-
     consultationNoteArray,
-    consultationNo,
     date = new Date(),
     description,
     consultationNotes,
@@ -322,13 +309,14 @@ function LabRadRequest(props) {
     speciality,
     specialist,
 
+    pharmacyRequestArray,
+
     residentNoteArray,
     rdescription,
     note,
-    doctor = cookie.load('current_user').name,
-
-    pharmacyRequestArray,
     requestType,
+    section,
+    code,
   } = state
 
   const onChangeValue = (e) => {
@@ -337,6 +325,7 @@ function LabRadRequest(props) {
 
   const [currentUser, setCurrentUser] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
+  const [successMsg, setsuccessMsg] = useState('')
   const [openNotification, setOpenNotification] = useState(false)
   const [value, setValue] = useState(0)
   const [selectedItem, setSelectedItem] = useState('')
@@ -344,26 +333,17 @@ function LabRadRequest(props) {
   const [patientFoundSuccessfull, setpatientFoundSuccessfully] = useState(false)
   const [patientFound, setpatientFound] = useState('')
   const [patientDetails, setPatientDetails] = useState('')
-  const [selectedPatientArray, setSelectedPatientArray] = useState([])
-  const [patientDetailsDialog, openPatientDetailsDialog] = useState(false)
+  const [, setSelectedPatientArray] = useState([])
+  const [, openPatientDetailsDialog] = useState(false)
   const [enableForm, setenableForm] = useState(true)
   const [openItemDialog, setOpenItemDialog] = useState(false)
   const [openAddConsultDialog, setOpenAddConsultDialog] = useState(false)
   const [openAddResidentDialog, setOpenAddResidentDialog] = useState(false)
   const [item, setItem] = useState('')
-  const [selectedPatient, setSelectedPatient] = useState('')
-  const [requestNo, setrequestNo] = useState('')
-  const [labRequest, setlabRequest] = useState('')
-  const [pharmacyRequest, setpharmacyRequest] = useState('')
-  const [radiologyRequest, setradiologyRequest] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [itemFound, setItemFound] = useState('')
   const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false)
-  const [selectedSearchedItem, setSelectedSearchedItem] = useState('')
-  const [selectedSearchedRadioItem, setSelectedSearchedRadioItem] = useState('')
-  const [selectedLabArray, setSelectedLabArray] = useState([])
-  const [selectedRadioArray, setSelectedRadioArray] = useState([])
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false)
+  const [isFormSubmitted] = useState(false)
   const [id, setId] = useState('')
   const [searchRadioQuery, setSearchRadioQuery] = useState('')
   const [radioItemFoundSuccessfull, setRadioItemFoundSuccessfully] = useState(
@@ -372,24 +352,20 @@ function LabRadRequest(props) {
   const [radioItemFound, setRadioItemFound] = useState('')
   const [addLabRequest, setaddLabRequest] = useState(false)
   const [addRadioRequest, setaddRadioRequest] = useState(false)
-  const [nurseItemFoundSuccessfull, setNurseItemFoundSuccessfully] = useState(
-    ''
-  )
-  const [nurseItemFound, setNurseItemFound] = useState('')
-  const [addNurseRequest, setaddNurseRequest] = useState(false)
-  const [searchNurseQuery, setSearchNurseQuery] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
+  const [, setIsLoading] = useState(true)
+  const [icdSection, seticdSection] = useState('')
+  const [icdCode, seticdCode] = useState([])
 
   useEffect(() => {
     setCurrentUser(cookie.load('current_user'))
-
+    seticdSection(Object.keys(icdCodesList[0]))
     // getEDRById(props.history.location.state.selectedItem._id);
 
     // setId(props.history.location.state.selectedItem._id);
     // setSelectedItem(props.history.location.state.selectedItem);
     // setrequestNo(props.history.location.state.selectedItem.requestNo);
     // setSelectedPatient(props.history.location.state.selectedItem.patientId);
-  }, [])
+  }, [icdCode])
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
@@ -434,7 +410,7 @@ function LabRadRequest(props) {
 
     console.log('params', params)
     axios
-      .put(updateIPR, params)
+      .put(updateEdrIpr, params)
       .then((res) => {
         if (res.data.success) {
           console.log('response while adding Consult Req', res.data.data)
@@ -470,6 +446,8 @@ function LabRadRequest(props) {
         description: rdescription,
         doctor: currentUser.staffId,
         note: note,
+        section: section,
+        code: code,
       },
     ]
 
@@ -478,14 +456,15 @@ function LabRadRequest(props) {
       requestType,
       residentNotes: residentNote,
     }
-
-    // console.log("params", params);
+    console.log('params', params)
     axios
       .put(updateEdrIpr, params)
       .then((res) => {
         if (res.data.success) {
           console.log('response while adding Resident Req', res.data.data)
           window.location.reload(false)
+          setOpenNotification(true)
+          setsuccessMsg('Submitted')
         } else if (!res.data.success) {
           setOpenNotification(true)
           setErrorMsg('Error while adding the Resident request')
@@ -845,6 +824,49 @@ function LabRadRequest(props) {
   //         });
   // };
 
+  const onChangeSection = (e) => {
+    if (e.target.value) {
+      dispatch({ field: e.target.name, value: e.target.value })
+      let codes = Object.entries(icdCodesList[0])
+      for (var x in codes) {
+        let arr = codes[x]
+        if (arr[0] === e.target.value) {
+          console.log('codes', arr[1])
+          seticdCode(arr[1])
+        }
+      }
+    } else {
+      dispatch({ field: e.target.name, value: e.target.value })
+      dispatch({ field: 'Code', value: '' })
+      seticdCode('')
+    }
+  }
+
+  const handleCodeSearch = (e) => {
+    let currentList = []
+    let newList = []
+
+    if (e.target.value !== '') {
+      currentList = icdCode
+
+      newList = currentList.filter((item) => {
+        const lc = item.toLowerCase()
+        const filter = e.target.value.toLowerCase()
+        return lc.includes(filter)
+      })
+    } else {
+      let codes = Object.entries(icdCodesList[0])
+      for (var x in codes) {
+        let arr = codes[x]
+        if (arr[0] === section) {
+          console.log('codes', arr[1])
+          newList = arr[1]
+        }
+      }
+    }
+    seticdCode(newList)
+  }
+
   //for search patient
   const handlePatientSearch = (e) => {
     setSearchPatientQuery(e.target.value)
@@ -869,12 +891,7 @@ function LabRadRequest(props) {
     }
   }
 
-  function showPatientDetails() {
-    openPatientDetailsDialog(false)
-  }
-
   function handleAddPatient(i) {
-    // setDialogOpen(true);
     console.log('selected banda : ', i)
     setPatientDetails(i)
     getPatientByInfo(i._id)
@@ -928,10 +945,9 @@ function LabRadRequest(props) {
                     }
                   })
                   dispatch({ field: 'residentNoteArray', value: val })
+                } else if (key === 'pharmacyRequest') {
+                  dispatch({ field: 'pharmacyRequestArray', value: val })
                 }
-                // } else if (key === "pharmacyRequest") {
-                //     dispatch({ field: "pharmacyRequestArray", value: val });
-                // }
                 //  else if (key === "nurseService") {
                 //     dispatch({ field: "nurseService", value: val });
                 // }
@@ -952,6 +968,20 @@ function LabRadRequest(props) {
       })
   }
 
+  const addICDcodes = (item, e) => {
+    if (code.includes(item)) {
+      var index = code.indexOf(item)
+      code.splice(index, 1)
+      e.target.className = 'addCode'
+    } else {
+      dispatch({
+        field: 'code',
+        value: [...code, item],
+      })
+      e.target.className = 'addedCode'
+    }
+  }
+
   const TriageAssessment = () => {
     let path = `assessmentdiagnosis/triageAssessment`
     props.history.push({
@@ -962,10 +992,33 @@ function LabRadRequest(props) {
     })
   }
 
+  const addNewRequest = () => {
+    let path = `assessmentdiagnosis/add`
+    props.history.push({
+      pathname: path,
+      state: {
+        comingFor: 'add',
+        selectedItem: selectedItem,
+        pharmacyRequestArray,
+      },
+    })
+  }
+
+  function viewLabRadReport(rec) {
+    let path = `assessmentdiagnosis/viewReport`
+    props.history.push({
+      pathname: path,
+      state: {
+        selectedItem: rec,
+      },
+    })
+  }
+
   if (openNotification) {
     setTimeout(() => {
       setOpenNotification(false)
       setErrorMsg('')
+      setsuccessMsg('')
     }, 2000)
   }
 
@@ -1305,7 +1358,7 @@ function LabRadRequest(props) {
                   backgroundColor: value === 1 ? '#2c6ddd' : undefined,
                 }}
                 label='Pharm'
-                disabled
+                disabled={enableForm}
               />
               <Tab
                 style={{
@@ -1315,7 +1368,7 @@ function LabRadRequest(props) {
                   backgroundColor: value === 2 ? '#2c6ddd' : undefined,
                 }}
                 label='Lab'
-                disabled
+                disabled={enableForm}
               />
               <Tab
                 style={{
@@ -1325,7 +1378,7 @@ function LabRadRequest(props) {
                   backgroundColor: value === 3 ? '#2c6ddd' : undefined,
                 }}
                 label='Rad'
-                disabled
+                disabled={enableForm}
               />
               <Tab
                 style={{
@@ -1401,6 +1454,51 @@ function LabRadRequest(props) {
                 </div>
               </div>
             </div>
+          ) : value === 1 ? (
+            <div
+              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              className='container-fluid'
+            >
+              <div className='row' style={{ marginTop: '20px' }}>
+                {pharmacyRequestArray !== 0 ? (
+                  <CustomTable
+                    tableData={pharmacyRequestArray}
+                    tableDataKeys={tableDataKeysForPharmacy}
+                    tableHeading={tableHeadingForPharmacy}
+                    handleView={viewItem}
+                    action={actions}
+                    borderBottomColor={'#60d69f'}
+                    borderBottomWidth={20}
+                  />
+                ) : (
+                  undefined
+                )}
+              </div>
+
+              <div className='row' style={{ marginBottom: '25px' }}>
+                <div className='col-md-6 col-sm-6 col-6'>
+                  <img
+                    onClick={() => props.history.goBack()}
+                    src={Back}
+                    style={{ width: 45, height: 35, cursor: 'pointer' }}
+                  />
+                </div>
+                <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
+                  <Button
+                    onClick={addNewRequest}
+                    style={styles.stylesForButton}
+                    variant='contained'
+                    color='primary'
+                  >
+                    <img className='icon-style' src={plus_icon} />
+                    &nbsp;&nbsp;
+                    <strong style={{ fontSize: '12px' }}>
+                      Pharmacy Request
+                    </strong>
+                  </Button>
+                </div>
+              </div>
+            </div>
           ) : value === 2 ? (
             <div
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
@@ -1448,7 +1546,7 @@ function LabRadRequest(props) {
                           </TableHead>
 
                           <TableBody>
-                            {itemFound.map((i, index) => {
+                            {itemFound.map((i) => {
                               return (
                                 <TableRow
                                   key={i.serviceNo}
@@ -1550,7 +1648,7 @@ function LabRadRequest(props) {
                     tableData={labRequestArray}
                     tableDataKeys={tableDataKeysForLabReq}
                     tableHeading={tableHeadingForLabReq}
-                    handleView={viewItem}
+                    handleView={viewLabRadReport}
                     action={actions}
                     borderBottomColor={'#60d69f'}
                     borderBottomWidth={20}
@@ -1621,7 +1719,7 @@ function LabRadRequest(props) {
                           </TableHead>
 
                           <TableBody>
-                            {radioItemFound.map((i, index) => {
+                            {radioItemFound.map((i) => {
                               return (
                                 <TableRow
                                   key={i.serviceNo}
@@ -1724,7 +1822,7 @@ function LabRadRequest(props) {
                     tableData={radiologyRequestArray}
                     tableDataKeys={tableDataKeysForRadiology}
                     tableHeading={tableHeadingForRadiology}
-                    handleView={viewItem}
+                    handleView={viewLabRadReport}
                     action={actions}
                     borderBottomColor={'#60d69f'}
                     borderBottomWidth={20}
@@ -2079,89 +2177,171 @@ function LabRadRequest(props) {
         >
           <DialogContent style={{ backgroundColor: '#31e2aa' }}>
             <DialogTitle id='simple-dialog-title' style={{ color: 'white' }}>
-              Add Resident Note
+              Add New Consultation
             </DialogTitle>
-            <div className='container-fluid'>
+            <div className={`${'container-fluid'} ${classes.root}`}>
               <div className='row'>
                 <div
                   className='col-md-12 col-sm-12 col-12'
                   style={styles.inputContainerForTextField}
                 >
-                  <InputLabelComponent>Description*</InputLabelComponent>
-                  <input
-                    style={styles.inputField}
+                  <TextField
+                    required
+                    multiline
                     type='text'
-                    placeholder='Enter Your description'
+                    error={rdescription === '' && isFormSubmitted}
+                    label='Description / Condition'
                     name={'rdescription'}
                     value={rdescription}
                     onChange={onChangeValue}
+                    rows={4}
                     className='textInputStyle'
-                  />
-                  <ErrorMessage
-                    name={rdescription}
-                    isFormSubmitted={isFormSubmitted}
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                      disableUnderline: true,
+                    }}
                   />
                 </div>
               </div>
 
               <div className='row'>
                 <div
-                  className='col-md-12'
+                  className='col-md-12 col-sm-12 col-12'
                   style={styles.inputContainerForTextField}
                 >
-                  <InputLabelComponent>Note*</InputLabelComponent>
-                  <input
-                    style={styles.inputField}
+                  <TextField
+                    required
+                    multiline
                     type='text'
-                    placeholder='Add your note here...'
+                    error={note === '' && isFormSubmitted}
+                    label='Consultation Note'
                     name={'note'}
                     value={note}
                     onChange={onChangeValue}
+                    rows={4}
                     className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                      disableUnderline: true,
+                    }}
                   />
-                  <ErrorMessage name={note} isFormSubmitted={isFormSubmitted} />
                 </div>
               </div>
 
               <div className='row'>
                 <div
+                  className='col-md-12 col-sm-12 col-12'
+                  style={styles.inputContainerForTextField}
+                ></div>
+                <span
+                  style={{ fontWeight: 600, color: 'white', marginLeft: 10 }}
+                >
+                  ICD Diagnosis
+                </span>
+              </div>
+              <div className='row'>
+                <div
                   className='col-md-6 col-sm-6 col-6'
                   style={styles.inputContainerForTextField}
                 >
-                  <InputLabelComponent>Date*</InputLabelComponent>
-                  <input
-                    disabled
-                    style={styles.inputField}
-                    type='text'
-                    placeholder='Date'
-                    name={'date'}
-                    value={date}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                  />
+                  <TextField
+                    required
+                    select
+                    fullWidth
+                    id='status'
+                    name='section'
+                    value={section}
+                    error={section === '' && isFormSubmitted}
+                    onChange={(e) => onChangeSection(e)}
+                    label='Section'
+                    variant='filled'
+                    className='dropDownStyle'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                      disableUnderline: true,
+                    }}
+                  >
+                    <MenuItem value={section}>{section}</MenuItem>
+
+                    {icdSection &&
+                      icdSection.map((val) => {
+                        return (
+                          <MenuItem key={val} value={val}>
+                            {val}
+                          </MenuItem>
+                        )
+                      })}
+                  </TextField>
                 </div>
                 <div
                   className='col-md-6 col-sm-6 col-6'
                   style={styles.inputContainerForTextField}
                 >
-                  <InputLabelComponent>Doctor*</InputLabelComponent>
-                  <input
-                    disabled
-                    style={styles.inputField}
+                  <TextField
                     type='text'
-                    placeholder='Doctor'
-                    name={'doctor'}
-                    value={doctor}
-                    onChange={onChangeValue}
+                    label='Code'
+                    onChange={handleCodeSearch}
                     className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          <AccountCircle />
+                        </InputAdornment>
+                      ),
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                    InputLabelProps={{
+                      className: classes.label,
+                      classes: { label: classes.label },
+                    }}
                   />
                 </div>
               </div>
+
+              {icdCode != null &&
+              icdCode.length != null &&
+              icdCode.length > 0 ? (
+                <div className='row' style={{ marginLeft: 0, marginRight: 0 }}>
+                  <div
+                    className={`scrollable ${'col-md-12 col-sm-12 col-12'}`}
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.patientDetails,
+                    }}
+                  >
+                    <ul>
+                      {icdCode.map((item) => (
+                        <li key={item}>
+                          {item} &nbsp;
+                          <span
+                            className='addCode'
+                            onClick={(e) => addICDcodes(item, e)}
+                          />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ) : (
+                undefined
+              )}
+
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div style={{ marginTop: '2%', marginBottom: '2%' }}>
                   <Button
                     onClick={() => hideDialog()}
-                    style={styles.stylesForButton}
+                    style={{
+                      ...styles.stylesForButton,
+                      color: 'gray',
+                      backgroundColor: 'white',
+                    }}
                     variant='contained'
                   >
                     <strong>Cancel</strong>
@@ -2192,7 +2372,7 @@ function LabRadRequest(props) {
                     variant='contained'
                     color='primary'
                   >
-                    Add Note
+                    Submit
                   </Button>
                 </div>
               </div>
@@ -2200,7 +2380,7 @@ function LabRadRequest(props) {
           </DialogContent>
         </Dialog>
 
-        <Dialog
+        {/* <Dialog
           aria-labelledby='form-dialog-title'
           open={openAddConsultDialog}
           maxWidth='xl'
@@ -2352,7 +2532,7 @@ function LabRadRequest(props) {
               </div>
             </div>
           </DialogContent>
-        </Dialog>
+        </Dialog> */}
         <div
           className='container-fluid'
           style={{ marginBottom: '25px', marginTop: '25px' }}
@@ -2366,7 +2546,11 @@ function LabRadRequest(props) {
           </div>
         </div>
 
-        <Notification msg={errorMsg} open={openNotification} />
+        <Notification
+          msg={errorMsg}
+          open={openNotification}
+          success={successMsg}
+        />
       </div>
     </div>
   )

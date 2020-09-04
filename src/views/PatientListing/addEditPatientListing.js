@@ -801,6 +801,12 @@ function AddEditPatientListing(props) {
     dispatch({ field: 'address', value: i.address })
     dispatch({ field: 'otherDetails', value: i.otherDetails })
 
+    dispatch({ field: 'emergencyContactNo', value: i.emergencyContactNo })
+    dispatch({ field: 'emergencyName', value: i.emergencyName })
+    dispatch({ field: 'emergencyRelation', value: i.emergencyRelation })
+    dispatch({ field: 'coveredFamilyMembers', value: i.coveredFamilyMembers })
+    dispatch({ field: 'otherCoverageDetails', value: i.otherCoverageDetails })
+
     dispatch({ field: 'amountReceived', value: i.amountReceived })
     dispatch({ field: 'bankName', value: i.bankName })
     dispatch({ field: 'depositorName', value: i.depositorName })
@@ -2080,83 +2086,89 @@ function AddEditPatientListing(props) {
                 </div>
 
                 <div className='row'>
-                  {depositSlip !== '' && depositSlip.includes('\\') ? (
+                  {depositSlip ? (
                     <>
-                      {depositSlip !== '' &&
-                        depositSlip.slice(depositSlip.length - 3) !== 'pdf' ? (
-                          <div
-                            className='col-md-6 col-sm-6 col-6'
-                            style={{
-                              ...styles.inputContainerForTextField,
-                              ...styles.textFieldPadding,
-                            }}
-                          >
-                            <img
-                              src={uploadsUrl + depositSlip.split('\\')[1]}
-                              className='depositSlipImg'
-                            />
-                          </div>
-                        ) : depositSlip !== '' &&
-                          depositSlip.slice(depositSlip.length - 3) === 'pdf' ? (
-                            <div
-                              className='col-md-6 col-sm-6 col-6'
-                              style={{
-                                ...styles.inputContainerForTextField,
-                                ...styles.textFieldPadding,
-                                // textAlign:'center',
-                              }}
-                            >
-                              <a
-                                href={uploadsUrl + depositSlip.split('\\')[1]}
-                                style={{ color: '#2c6ddd' }}
+                      {depositSlip !== '' && depositSlip.includes('\\') ? (
+                        <>
+                          {depositSlip !== '' &&
+                            depositSlip.slice(depositSlip.length - 3) !== 'pdf' ? (
+                              <div
+                                className='col-md-6 col-sm-6 col-6'
+                                style={{
+                                  ...styles.inputContainerForTextField,
+                                  ...styles.textFieldPadding,
+                                }}
                               >
-                                Click here to open Deposit Slip
+                                <img
+                                  src={uploadsUrl + depositSlip.split('\\')[1]}
+                                  className='depositSlipImg'
+                                />
+                              </div>
+                            ) : depositSlip !== '' &&
+                              depositSlip.slice(depositSlip.length - 3) === 'pdf' ? (
+                                <div
+                                  className='col-md-6 col-sm-6 col-6'
+                                  style={{
+                                    ...styles.inputContainerForTextField,
+                                    ...styles.textFieldPadding,
+                                    // textAlign:'center',
+                                  }}
+                                >
+                                  <a
+                                    href={uploadsUrl + depositSlip.split('\\')[1]}
+                                    style={{ color: '#2c6ddd' }}
+                                  >
+                                    Click here to open Deposit Slip
                           </a>
-                            </div>
-                          ) : (
-                            undefined
-                          )}
-                    </>
-                  ) : depositSlip !== '' && depositSlip.includes('/') ? (
-                    <>
-                      {depositSlip !== '' &&
-                        depositSlip.slice(depositSlip.length - 3) !== 'pdf' ? (
-                          <div
-                            className='col-md-6 col-sm-6 col-6'
-                            style={{
-                              ...styles.inputContainerForTextField,
-                              ...styles.textFieldPadding,
-                            }}
-                          >
-                            <img
-                              src={uploadsUrl + depositSlip}
-                              className='depositSlipImg'
-                            />
-                          </div>
-                        ) : depositSlip !== '' &&
-                          depositSlip.slice(depositSlip.length - 3) === 'pdf' ? (
-                            <div
-                              className='col-md-6 col-sm-6 col-6'
-                              style={{
-                                ...styles.inputContainerForTextField,
-                                ...styles.textFieldPadding,
-                                // textAlign:'center',
-                              }}
-                            >
-                              <a
-                                href={uploadsUrl + depositSlip}
-                                style={{ color: '#2c6ddd' }}
+                                </div>
+                              ) : (
+                                undefined
+                              )}
+                        </>
+                      ) : depositSlip !== '' && depositSlip.includes('/') ? (
+                        <>
+                          {depositSlip !== '' &&
+                            depositSlip.slice(depositSlip.length - 3) !== 'pdf' ? (
+                              <div
+                                className='col-md-6 col-sm-6 col-6'
+                                style={{
+                                  ...styles.inputContainerForTextField,
+                                  ...styles.textFieldPadding,
+                                }}
                               >
-                                Click here to open Deposit Slip
+                                <img
+                                  src={uploadsUrl + depositSlip}
+                                  className='depositSlipImg'
+                                />
+                              </div>
+                            ) : depositSlip !== '' &&
+                              depositSlip.slice(depositSlip.length - 3) === 'pdf' ? (
+                                <div
+                                  className='col-md-6 col-sm-6 col-6'
+                                  style={{
+                                    ...styles.inputContainerForTextField,
+                                    ...styles.textFieldPadding,
+                                    // textAlign:'center',
+                                  }}
+                                >
+                                  <a
+                                    href={uploadsUrl + depositSlip}
+                                    style={{ color: '#2c6ddd' }}
+                                  >
+                                    Click here to open Deposit Slip
                           </a>
-                            </div>
-                          ) : (
+                                </div>
+                              ) : (
+                                undefined
+                              )}
+                        </>
+                      ) : (
                             undefined
                           )}
                     </>
                   ) : (
-                        undefined
-                      )}
+                      undefined
+                    )}
 
                   {imagePreview !== '' ? (
                     <div
@@ -2179,6 +2191,7 @@ function AddEditPatientListing(props) {
                       undefined
                     )}
                 </div>
+
               </div>
             ) : (
                     <div></div>

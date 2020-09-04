@@ -163,7 +163,7 @@ export default function CustomTable(props) {
             ) : val === "pending" ? (
               <Button
                 // onClick={() => props.handleView(prop)}
-                style={stylesB.stylesForActive}
+                style={{ ...stylesB.stylesForActive, backgroundColor: '#e877a1' }}
                 variant="contained"
                 color="primary"
               >
@@ -194,8 +194,8 @@ export default function CustomTable(props) {
                 <strong>Can be fulfilled</strong>
               </Button>
             ) : (
-              ""
-            )}
+                        ""
+                      )}
           </>
         );
       } else {
@@ -211,7 +211,7 @@ export default function CustomTable(props) {
               </Button>
             ) : val === "pending" ? (
               <Button
-                style={stylesB.stylesForActive}
+                style={{ ...stylesB.stylesForActive, backgroundColor: '#e877a1' }}
                 variant="contained"
                 color="primary"
               >
@@ -234,8 +234,8 @@ export default function CustomTable(props) {
                 <strong>Can be fulfilled</strong>
               </Button>
             ) : (
-              ""
-            )}
+                      ""
+                    )}
           </>
         );
       }
@@ -334,22 +334,29 @@ export default function CustomTable(props) {
               <strong>Pending Administration</strong>
             </Button>
           ) : (
-            <Button
-              style={stylesB.stylesForActive}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Po Sent</strong>
-            </Button>
-          )}
+                            <Button
+                              style={stylesB.stylesForActive}
+                              variant="contained"
+                              color="primary"
+                            >
+                              <strong>Po Sent</strong>
+                            </Button>
+                          )}
         </>
       );
     } else if (
       val === "complete" ||
-      val === "completed" ||
+      val === "Complete" ||
+      val === "pending" ||
+      val === "closed" ||
+      val === "delivered" ||
+      val === "partially completed" ||
       val === "approved" ||
-      val === "approve" ||
       val === "reject" ||
+      val === "response in progress" ||
+      val === "partial approved" ||
+      val === "completed" ||
+      val === "approve" ||
       val === "received" ||
       val === "Partially Received" ||
       val === "Cannot be fulfilled" ||
@@ -362,9 +369,9 @@ export default function CustomTable(props) {
     ) {
       return (
         <>
-          {val === "complete" ? (
+          {val === "complete" || val === "Complete" ? (
             <Button
-              style={stylesB.stylesForActive}
+              style={{ ...stylesB.stylesForActive, backgroundColor: '#ba55d3' }}
               variant="contained"
               color="primary"
             >
@@ -378,9 +385,33 @@ export default function CustomTable(props) {
             >
               <strong>Sent for PAR</strong>
             </Button>
+          ) : val === "closed" ? (
+            <Button
+              style={{ ...stylesB.stylesForActive, backgroundColor: '#2c6ddd' }}
+              variant="contained"
+              color="primary"
+            >
+              <strong>closed</strong>
+            </Button>
+          ) : val === "pending" ? (
+            <Button
+              style={{ ...stylesB.stylesForActive, backgroundColor: '#e877a1' }}
+              variant="contained"
+              color="primary"
+            >
+              <strong>pending</strong>
+            </Button>
+          ) : val === "delivered " ? (
+            <Button
+              style={{ ...stylesB.stylesForActive, backgroundColor: '#2c6ddd' }}
+              variant="contained"
+              color="primary"
+            >
+              <strong>Delivered </strong>
+            </Button>
           ) : val === "completed" ? (
             <Button
-              style={stylesB.stylesForActive}
+              style={{ ...stylesB.stylesForActive, backgroundColor: '#ba55d3' }}
               variant="contained"
               color="primary"
             >
@@ -388,15 +419,39 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "approved" ? (
             <Button
-              style={stylesB.stylesForActive}
+              style={{...stylesB.stylesForActive, backgroundColor: '#ba55d3'}}
               variant="contained"
               color="primary"
             >
               <strong>Approved</strong>
             </Button>
-          ) : val === "reject" ? (
+          ) : val === "partial approved" ? (
             <Button
-              style={stylesB.stylesForActive}
+              style={{...stylesB.stylesForActive, backgroundColor: '#2c6ddd'}}
+              variant="contained"
+              color="primary"
+            >
+              <strong>partial approved</strong>
+            </Button>
+          )  : val === "partially completed" ? (
+            <Button
+              style={{...stylesB.stylesForActive, backgroundColor: ' #2c6ddd'}}
+              variant="contained"
+              color="primary"
+            >
+              <strong>partially completed</strong>
+            </Button>
+          ): val === "response in progress" ? (
+            <Button
+              style={{...stylesB.stylesForActive, backgroundColor: '#e877a1'}}
+              variant="contained"
+              color="primary"
+            >
+              <strong>Response in progress</strong>
+            </Button>
+          )  : val === "reject" ? (
+            <Button
+              style={{...stylesB.stylesForActive, backgroundColor: '#2c6ddd'}}
               variant="contained"
               color="primary"
             >
@@ -467,14 +522,14 @@ export default function CustomTable(props) {
               <strong>Received</strong>
             </Button>
           ) : (
-            <Button
-              style={stylesB.stylesForActive}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Item Returned</strong>
-            </Button>
-          )}
+                                          <Button
+                                            style={stylesB.stylesForActive}
+                                            variant="contained"
+                                            color="primary"
+                                          >
+                                            <strong>Item Returned</strong>
+                                          </Button>
+                                        )}
         </>
       );
     }
@@ -634,15 +689,15 @@ export default function CustomTable(props) {
                                       : null
                                     : val.toLowerCase() === "timestamp"
                                     ? new Intl.DateTimeFormat(
-                                        "en-US",
-                                        dateOptions
-                                      ).format(Date.parse(prop[val]))
+                                      "en-US",
+                                      dateOptions
+                                    ).format(Date.parse(prop[val]))
                                     : // : `${replaceSlugToTitle(prop[val])}`}
-                                      replaceSlugToTitle(prop[val])}
-                                </TableCell>
-                              );
-                            }
-                          })
+                                    replaceSlugToTitle(prop[val])}
+                              </TableCell>
+                            );
+                          }
+                        })
                         : null}
 
                       {props.action !== "" ? (
