@@ -216,6 +216,7 @@ function AddEditPatientListing(props) {
   const [comingFor, setcomingFor] = useState('')
   const [isFormSubmitted, setIsFormSubmitted] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
+  const [successMsg, setsuccessMsg] = useState('')
   const [openNotification, setOpenNotification] = useState(false)
   // const [isDisabled, setDisabled] = useState(false)
   const [value, setValue] = React.useState(0)
@@ -336,8 +337,12 @@ function AddEditPatientListing(props) {
           dispatch({ field: 'insuranceVendor', value: '' })
           dispatch({ field: 'treatmentDetail', value: '' })
           dispatch({ field: 'document', value: '' })
+          
+          setOpenNotification(true)
+          setsuccessMsg('Claim Submitted')
         } else if (!res.data.success) {
           setOpenNotification(true)
+          setErrorMsg('Error submitting Claim details')
         }
       })
       .catch((e) => {
@@ -417,6 +422,7 @@ function AddEditPatientListing(props) {
     setTimeout(() => {
       setOpenNotification(false)
       setErrorMsg('')
+      setsuccessMsg('')
     }, 2000)
   }
 
@@ -464,6 +470,11 @@ function AddEditPatientListing(props) {
       .get(getedripr + '/' + i)
       .then((res) => {
         if (res.data.success) {
+          console.log("response for search", res.data.data)
+
+          dispatch({ field: 'treatmentDetail', value: res.data.data.rc.treatmentDetail })
+          dispatch({ field: 'document', value: res.data.data.rc.document })
+
           let prEDR = []
           for (let i = 0; i < res.data.data.prEdr.length; i++) {
             let amount = 0
@@ -485,6 +496,7 @@ function AddEditPatientListing(props) {
           setbillSummaryArray(
             [].concat(res.data.data.lrEdr, res.data.data.rrEdr, prEDR)
           )
+
           // if(res.data.data.edr)
           // {
           // setbillSummaryArray(res.data.data)
@@ -586,7 +598,6 @@ function AddEditPatientListing(props) {
                       label='Search Patient by Name / MRN / National ID / Mobile Number'
                       name={'searchQuery'}
                       value={searchQuery}
-                      error={searchQuery === '' && isFormSubmitted}
                       onChange={handleSearch}
                       className='textInputStyle'
                       variant='filled'
@@ -598,7 +609,7 @@ function AddEditPatientListing(props) {
                         ),
                         className: classes.input,
                         classes: { input: classes.input },
-                        disableUnderline:true
+                        disableUnderline: true
                       }}
                     />
                   </div>
@@ -760,58 +771,57 @@ function AddEditPatientListing(props) {
               style={styles.patientDetails}
             >
               <div className='row'>
-                  <TextField
-                    required
-                    multiline
-                    type='text'
-                    error={treatmentDetail === '' && isFormSubmitted}
-                    label='Treatment Details'
-                    name={'treatmentDetail'}
-                    value={treatmentDetail}
-                    onChange={onChangeValue}
-                    rows={4}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline:true
-                    }}
-                  />
+                <TextField
+                  required
+                  multiline
+                  type='text'
+                  label='Treatment Details'
+                  name={'treatmentDetail'}
+                  value={treatmentDetail}
+                  onChange={onChangeValue}
+                  rows={4}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true
+                  }}
+                />
               </div>
             </div>
 
             {comingFor === 'edit' ? (
-              <div className={`container ${classes.root}`} style={{marginTop:'10px'}}>
+              <div className={`container ${classes.root}`} style={{ marginTop: '10px' }}>
                 <div className='row'>
-                    <TextField
-                      required
-                      select
-                      fullWidth
-                      id='status'
-                      name='status'
-                      value={status}
-                      error={status === '' && isFormSubmitted}
-                      onChange={onChangeValue}
-                      label='Status'
-                      variant='filled'
-                      className='dropDownStyle'
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                        disableUnderline:true
-                      }}
-                    >
-                      <MenuItem value={status}>{status}</MenuItem>
+                  <TextField
+                    required
+                    select
+                    fullWidth
+                    id='status'
+                    name='status'
+                    value={status}
+                    error={status === '' && isFormSubmitted}
+                    onChange={onChangeValue}
+                    label='Status'
+                    variant='filled'
+                    className='dropDownStyle'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                      disableUnderline: true
+                    }}
+                  >
+                    <MenuItem value={status}>{status}</MenuItem>
 
-                      {statusArray.map((val) => {
-                        return (
-                          <MenuItem key={val.key} value={val.key}>
-                            {val.value}
-                          </MenuItem>
-                        )
-                      })}
-                    </TextField>
+                    {statusArray.map((val) => {
+                      return (
+                        <MenuItem key={val.key} value={val.key}>
+                          {val.value}
+                        </MenuItem>
+                      )
+                    })}
+                  </TextField>
                 </div>
               </div>
             ) : (
@@ -825,26 +835,26 @@ function AddEditPatientListing(props) {
                   ...styles.inputContainerForTextField,
                 }}
               >
-                  <label style={styles.upload}>
-                    <TextField
-                      required
-                      type='file'
-                      style={styles.input}
-                      onChange={onDocumentUpload}
-                      name='document'
-                    />
-                    <FaUpload /> &nbsp;&nbsp;&nbsp;Upload Document
+                <label style={styles.upload}>
+                  <TextField
+                    required
+                    type='file'
+                    style={styles.input}
+                    onChange={onDocumentUpload}
+                    name='document'
+                  />
+                  <FaUpload /> &nbsp;&nbsp;&nbsp;Upload Document
                   </label>
 
-                  {pdfView !== "" ? (
-                    <div
-                      style={{ textAlign: 'center', color: '#2c6ddd', fontStyle: 'italic' }}
-                    >
-                      <span style={{ color: 'black' }}>Selected File : </span>{pdfView}
-                    </div>
-                  ) : (
-                      undefined
-                    )}
+                {pdfView !== "" ? (
+                  <div
+                    style={{ textAlign: 'center', color: '#2c6ddd', fontStyle: 'italic' }}
+                  >
+                    <span style={{ color: 'black' }}>Selected File : </span>{pdfView}
+                  </div>
+                ) : (
+                    undefined
+                  )}
               </div>
 
               <div className='row'>
@@ -1034,7 +1044,7 @@ function AddEditPatientListing(props) {
               undefined
             )}
 
-        <Notification msg={errorMsg} open={openNotification} />
+        <Notification msg={errorMsg} open={openNotification}  success={successMsg} />
       </div>
     </div>
   )

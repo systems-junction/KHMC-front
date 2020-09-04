@@ -352,6 +352,8 @@ export default function CustomTable(props) {
       val === "delivered" ||
       val === "partially completed" ||
       val === "approved" ||
+      val === "Approved" ||
+      val === "Analysis In Progress" ||
       val === "reject" ||
       val === "response in progress" ||
       val === "partial approved" ||
@@ -417,7 +419,7 @@ export default function CustomTable(props) {
             >
               <strong>Completed</strong>
             </Button>
-          ) : val === "approved" ? (
+          ) : val === "approved" || val === "Approved" ? (
             <Button
               style={{...stylesB.stylesForActive, backgroundColor: '#ba55d3'}}
               variant="contained"
@@ -473,6 +475,14 @@ export default function CustomTable(props) {
             >
               <strong>Rejected</strong>
             </Button>
+          ): val === "Analysis In Progress" ? (
+            <Button
+              style={{...stylesB.stylesForActive,width:'150px'}}
+              variant="contained"
+              color="primary"
+            >
+              <strong>Analysis In Progress</strong>
+            </Button>
           ) : val === "receive" ? (
             <Button
               style={stylesB.stylesForActive}
@@ -522,14 +532,14 @@ export default function CustomTable(props) {
               <strong>Received</strong>
             </Button>
           ) : (
-                                          <Button
-                                            style={stylesB.stylesForActive}
-                                            variant="contained"
-                                            color="primary"
-                                          >
-                                            <strong>Item Returned</strong>
-                                          </Button>
-                                        )}
+            <Button
+              style={stylesB.stylesForActive}
+              variant="contained"
+              color="primary"
+            >
+              <strong>Item Returned</strong>
+            </Button>
+          )}
         </>
       );
     }
