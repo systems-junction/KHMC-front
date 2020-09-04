@@ -90,7 +90,9 @@ const tableDataKeys = [
 // }
 
 const actions = { view: true };
-const actionsForFUMemeber = { edit: true, view: true };
+const actionsForFUMemeberForReceive = { edit: false, view: true };
+const actionsForFUMemeberForReplenishment = { edit: true, view: true };
+
 const actionsForWarehouseMember = { edit: true, view: true };
 const actionsForBUDoctor = { view: true };
 
@@ -182,7 +184,7 @@ export default function ReplenishmentRequest(props) {
           //   (order) => order.fuId._id === props.match.params.fuName
           // );
 
-          if (currentUser.staffTypeId.type === "FU Member") {
+          if (currentUser.staffTypeId.type === "FU Inventory Keeper") {
             // let repRequest = res.data.data;
             let temp = [];
             for (let i = 0; i < repRequest.length; i++) {
@@ -193,7 +195,7 @@ export default function ReplenishmentRequest(props) {
             console.log("rep array after filter", temp);
             setPurchaseRequest(temp.reverse());
           } else {
-            if (currentUser.staffTypeId.type === "Warehouse Incharge") {
+            if (currentUser.staffTypeId.type === "Warehouse Inventory Keeper") {
               // let repRequest = res.data.data;
               let temp = [];
               for (let i = 0; i < repRequest.length; i++) {
@@ -319,7 +321,7 @@ export default function ReplenishmentRequest(props) {
     getReturnRequestsForFU();
 
     if (
-      currentUser.staffTypeId.type === "FU Member" ||
+      currentUser.staffTypeId.type === "FU Inventory Keeper" ||
       currentUser.staffTypeId.type === "FU Inventory Keeper" ||
       currentUser.staffTypeId.type === "admin"
     ) {
@@ -581,7 +583,7 @@ export default function ReplenishmentRequest(props) {
           </div>
 
           {currentUser &&
-          (currentUser.staffTypeId.type === "FU Member" ||
+          (currentUser.staffTypeId.type === "FU Inventory Keeper" ||
             currentUser.staffTypeId.type === "admin") ? (
             <div>
               <Button
@@ -623,13 +625,13 @@ export default function ReplenishmentRequest(props) {
                 <CustomTable
                   tableData={purchaseRequests}
                   tableDataKeys={
-                    currentUser.staffTypeId.type === "FU Member" ||
+                    currentUser.staffTypeId.type === "FU Inventory Keeper" ||
                     currentUser.staffTypeId.type === "FU Inventory Keeper"
                       ? tableDataKeysForFUHead
                       : tableDataKeys
                   }
                   tableHeading={
-                    currentUser.staffTypeId.type === "FU Member" ||
+                    currentUser.staffTypeId.type === "FU Inventory Keeper" ||
                     currentUser.staffTypeId.type === "FU Inventory Keeper"
                       ? tableHeadingForFUHead
                       : tableHeading
@@ -653,10 +655,19 @@ export default function ReplenishmentRequest(props) {
                   action={
                     currentUser.staffTypeId.type === "Warehouse Member"
                       ? actionsForWarehouseMember
-                      : currentUser.staffTypeId.type === "Warehouse Incharge"
+                      : currentUser.staffTypeId.type ===
+                        "Warehouse Inventory Keeper"
                       ? actionsForWarehouseMember
-                      : currentUser.staffTypeId.type === "FU Member"
-                      ? actionsForFUMemeber
+                      : currentUser.staffTypeId.type ===
+                          "FU Inventory Keeper" &&
+                        props.history.location.pathname ===
+                          "/home/wms/fus/receive"
+                      ? actionsForFUMemeberForReceive
+                      : currentUser.staffTypeId.type ===
+                          "FU Inventory Keeper" &&
+                        props.history.location.pathname ===
+                          "/home/wms/fus/replenishment"
+                      ? actionsForFUMemeberForReplenishment
                       : actions
                   }
                   handleEdit={handleEdit}
@@ -714,10 +725,11 @@ export default function ReplenishmentRequest(props) {
               tableHeading={
                 currentUser.staffTypeId.type === "Warehouse Member"
                   ? tableHeadingForFUMemberForItems
-                  : currentUser.staffTypeId.type === "Warehouse Incharge"
+                  : currentUser.staffTypeId.type ===
+                    "Warehouse Inventory Keeper"
                   ? tableHeadingForFUMemberForItems
-                  : currentUser.staffTypeId.type === "FU Member"
-                  ? tableHeadingForFUMemberForItems
+                  // : currentUser.staffTypeId.type === "FU Inventory Keeper"
+                  // ? tableHeadingForFUMemberForItems
                   : currentUser.staffTypeId.type === "FU Inventory Keeper"
                   ? tableHeadingForFUInventoryKeeperForItems
                   : tableHeadingForFUMemberForItems
@@ -725,9 +737,10 @@ export default function ReplenishmentRequest(props) {
               tableDataKeys={
                 currentUser.staffTypeId.type === "Warehouse Member"
                   ? tableDataKeysForItemsForWarehouseMember
-                  : currentUser.staffTypeId.type === "Warehouse Incharge"
+                  : currentUser.staffTypeId.type ===
+                    "Warehouse Inventory Keeper"
                   ? tableDataKeysForFUMemberForItems
-                  : currentUser.staffTypeId.type === "FU Member"
+                  : currentUser.staffTypeId.type === "FU Inventory Keeper"
                   ? tableDataKeysForFUMemberForItems
                   : currentUser.staffTypeId.type === "FU Inventory Keeper"
                   ? tableDataKeysForFUMemberForItems
@@ -736,9 +749,10 @@ export default function ReplenishmentRequest(props) {
               action={
                 currentUser.staffTypeId.type === "FU Inventory Keeper"
                   ? actionsForItemsForReceiver
-                  : currentUser.staffTypeId.type === "Warehouse Incharge"
+                  : currentUser.staffTypeId.type ===
+                    "Warehouse Inventory Keeper"
                   ? ""
-                  : currentUser.staffTypeId.type === "FU Member"
+                  : currentUser.staffTypeId.type === "FU Inventory Keeper"
                   ? ""
                   : currentUser.staffTypeId.type === "Warehouse Member"
                   ? ""

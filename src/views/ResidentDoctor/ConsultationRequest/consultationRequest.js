@@ -6,7 +6,7 @@ import tableStyles from '../../../assets/jss/material-dashboard-react/components
 import axios from 'axios'
 import TextField from '@material-ui/core/TextField'
 import MenuItem from '@material-ui/core/MenuItem'
-import AutoComplete from '@material-ui/lab/AutoComplete'
+// import AutoComplete from '@material-ui/lab/AutoComplete'
 import {
   getSearchedLaboratoryService,
   getSearchedRadiologyService,

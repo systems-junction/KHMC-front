@@ -146,7 +146,6 @@ const styles = {
 };
 // const useStyles = makeStyles(tableStyles)
 const useStyles = makeStyles((theme) => ({
-
   margin: {
     margin: theme.spacing(0),
   },
@@ -403,7 +402,7 @@ function AddEditPurchaseRequest(props) {
             {
               // ...requestedItemsArray[i],
               itemId: requestedItemsArray[i].itemId._id,
-              currQty: requestedItemsArray[i].currentQty,
+              currQty: requestedItemsArray[i].currQty,
               reqQty: requestedItemsArray[i].reqQty,
               itemCode: requestedItemsArray[i].itemId.itemCode,
               description: requestedItemsArray[i].itemId.description,
@@ -485,7 +484,7 @@ function AddEditPurchaseRequest(props) {
               {
                 // ...requestedItemsArray[i],
                 itemId: requestedItemsArray[i].itemId._id,
-                currQty: requestedItemsArray[i].currentQty,
+                currQty: requestedItemsArray[i].currQty,
                 reqQty: requestedItemsArray[i].reqQty,
                 itemCode: requestedItemsArray[i].itemId.itemCode,
                 description: requestedItemsArray[i].itemId.description,
@@ -777,7 +776,7 @@ function AddEditPurchaseRequest(props) {
                   maximumLevel,
                 },
                 reqQty: reqQty,
-                currentQty,
+                currQty: currentQty,
                 status: "pending",
                 secondStatus: "pending",
                 // description,

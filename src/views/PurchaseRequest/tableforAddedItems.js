@@ -96,7 +96,7 @@ const tableHeadingForFUMember = [
   "Vendor Name",
   "Requested Qty",
   // "FU Item Cost",
-  "Actions",
+  // "Actions",
 ];
 
 const tableHeadingForWarehouseMember = [
@@ -105,6 +105,7 @@ const tableHeadingForWarehouseMember = [
   "Item Code",
   "Vendor Name",
   "Requested Qty",
+  "Actions"
   // "FU Item Cost",
   // "Status",
 ];
@@ -145,7 +146,7 @@ export default function DenseTable(props) {
     <Table aria-label="a dense table" size="small">
       <TableHead>
         <TableRow>
-          {currentUser.staffTypeId.type === "FU Member" &&
+          {currentUser.staffTypeId.type === "Committe Member" &&
             tableHeadingForFUMember.map((h, index) => {
               return (
                 <TableCell
@@ -162,8 +163,7 @@ export default function DenseTable(props) {
               );
             })}
 
-          {(currentUser.staffTypeId.type === "Warehouse Member" ||
-            currentUser.staffTypeId.type === "Committe Member") &&
+          {currentUser.staffTypeId.type === "Warehouse Inventory Keeper" &&
             tableHeadingForWarehouseMember.map((h, index) => {
               return (
                 <TableCell
@@ -252,7 +252,7 @@ export default function DenseTable(props) {
               {row.fuItemCost}
             </TableCell> */}
 
-            {currentUser.staffTypeId.type === "Warehouse Member" ? (
+            {currentUser.staffTypeId.type === "Warehouse Inventory Keeper" ? (
               <TableCell
                 align="center"
                 style={{
@@ -298,7 +298,7 @@ export default function DenseTable(props) {
                   borderWidth: props.items.length - 1 === index ? 0 : 1,
                 }}
               >
-                {currentUser.staffTypeId.type === "Warehouse Member"
+                {currentUser.staffTypeId.type === "Warehouse Inventory Keeper"
                   ? row.secondStatus
                   : row.status}
               </TableCell>

@@ -659,11 +659,11 @@ function AddEditPurchaseRequest(props) {
           dateGenerated,
           generated,
           status:
-            currentUser.staffTypeId.type === "FU Member" &&
+            currentUser.staffTypeId.type === "FU Inventory Keeper" &&
             status === "pending" &&
             secondStatus === "in_progress"
               ? "in_progress"
-              : currentUser.staffTypeId.type === "FU Member" &&
+              : currentUser.staffTypeId.type === "FU Inventory Keeper" &&
                 status === "in_progress" &&
                 secondStatus === "Delivery in Progress"
               ? "Delivery in Progress"

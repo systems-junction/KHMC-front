@@ -82,7 +82,6 @@ const stylesB = {
     // boxShadow: "none",
     // outline: "none",
   },
-  
 };
 
 const StyledTableRow = withStyles((theme) => ({
@@ -358,6 +357,7 @@ export default function CustomTable(props) {
       val === "Returned" ||
       val === "receive" ||
       val === "Received" ||
+      val === "Rejected" ||
       val === "Sent for PAR"
     ) {
       return (
@@ -409,6 +409,14 @@ export default function CustomTable(props) {
               color="primary"
             >
               <strong>Received</strong>
+            </Button>
+          ) : val === "Rejected" ? (
+            <Button
+              style={stylesB.stylesForActive}
+              variant="contained"
+              color="primary"
+            >
+              <strong>Rejected</strong>
             </Button>
           ) : val === "receive" ? (
             <Button

@@ -374,7 +374,7 @@ function AddEditPurchaseRequest(props) {
           if (res.data.success) {
             console.log("response after adding RR", res.data);
             props.history.replace(
-              "/home/wms//warehouse/materialreceiving/viewpo/externalreturn"
+              "/home/wms/warehouse/materialreceiving/viewpo/externalreturn"
             );
           } else if (!res.data.success) {
             setOpenNotification(true);
@@ -816,7 +816,7 @@ function AddEditPurchaseRequest(props) {
           {comingFor === "edit" &&
           (currentUser.staffTypeId.type ===
             "FU Internal Request Return Approval Member" ||
-            currentUser.staffTypeId.type === "Warehouse Incharge") ? (
+            currentUser.staffTypeId.type === "Purchasing Officer") ? (
             <div className="row">
               <div className="col-md-6">
                 <div style={styles.inputContainerForDropDown}>
@@ -843,7 +843,7 @@ function AddEditPurchaseRequest(props) {
                         );
                       })}
                     </Select>
-                  ) : currentUser.staffTypeId.type === "Warehouse Incharge" ? (
+                  ) : currentUser.staffTypeId.type === "Purchasing Officer" ? (
                     <Select
                       fullWidth
                       id="status"

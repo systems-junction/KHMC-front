@@ -512,7 +512,7 @@ function AddEditPurchaseRequest(props) {
   //     if (validateForm()) {
   //       if (
   //         status === "pending" ||
-  //         currentUser.staffTypeId.type !== "FU Member"
+  //         currentUser.staffTypeId.type !== "FU Inventory Keeper"
   //       ) {
   //         const obj = {
   //           _id,
@@ -526,7 +526,7 @@ function AddEditPurchaseRequest(props) {
   //             status === "pending" &&
   //             secondStatus === "Fulfillment Initiated"
   //               ? "Fulfillment Initiated"
-  //               : (currentUser.staffTypeId.type === "Warehouse Incharge" ||
+  //               : (currentUser.staffTypeId.type === "Warehouse Inventory Keeper" ||
   //                   currentUser.staffTypeId.type === "admin") &&
   //                 status === "Fulfillment Initiated" &&
   //                 secondStatus === "Delivery in Progress"
@@ -608,7 +608,7 @@ function AddEditPurchaseRequest(props) {
       if (validateForm()) {
         if (
           status === "pending" ||
-          currentUser.staffTypeId.type !== "FU Member"
+          currentUser.staffTypeId.type !== "FU Inventory Keeper"
         ) {
           let requestedItems = [];
 
@@ -634,7 +634,7 @@ function AddEditPurchaseRequest(props) {
               status === "pending" &&
               secondStatus === "Fulfillment Initiated"
                 ? "Fulfillment Initiated"
-                : (currentUser.staffTypeId.type === "Warehouse Incharge" ||
+                : (currentUser.staffTypeId.type === "Warehouse Inventory Keeper" ||
                     currentUser.staffTypeId.type === "admin") &&
                   status === "Fulfillment Initiated" &&
                   secondStatus === "Delivery in Progress"
@@ -1202,7 +1202,7 @@ function AddEditPurchaseRequest(props) {
                 fullWidth
                 disabled={
                   currentUser &&
-                  (currentUser.staffTypeId.type === "FU Member" ||
+                  (currentUser.staffTypeId.type === "FU Inventory Keeper" ||
                     currentUser.staffTypeId.type === "admin")
                     ? false
                     : true
@@ -1251,7 +1251,7 @@ function AddEditPurchaseRequest(props) {
                 <TextField
                   disabled={
                     currentUser &&
-                    (currentUser.staffTypeId.type === "FU Member" ||
+                    (currentUser.staffTypeId.type === "FU Inventory Keeper" ||
                       currentUser.staffTypeId.type === "admin")
                       ? false
                       : true
@@ -1285,7 +1285,7 @@ function AddEditPurchaseRequest(props) {
                 <TextField
                   disabled={
                     currentUser &&
-                    (currentUser.staffTypeId.type === "FU Member" ||
+                    (currentUser.staffTypeId.type === "FU Inventory Keeper" ||
                       currentUser.staffTypeId.type === "admin")
                       ? false
                       : true
@@ -1322,7 +1322,7 @@ function AddEditPurchaseRequest(props) {
                   fullWidth
                   disabled={
                     currentUser &&
-                    (currentUser.staffTypeId.type === "FU Member" ||
+                    (currentUser.staffTypeId.type === "FU Inventory Keeper" ||
                       currentUser.staffTypeId.type === "admin")
                       ? false
                       : true
@@ -1375,7 +1375,7 @@ function AddEditPurchaseRequest(props) {
                 type="text"
                 disabled={
                   currentUser &&
-                  (currentUser.staffTypeId.type === "FU Member" ||
+                  (currentUser.staffTypeId.type === "FU Inventory Keeper" ||
                     currentUser.staffTypeId.type === "admin")
                     ? false
                     : true
@@ -1402,7 +1402,7 @@ function AddEditPurchaseRequest(props) {
           issueUnit !== "" &&
           recieptUnit !== "" ? ( */}
 
-          {currentUser && currentUser.staffTypeId.type === "FU Member" ? (
+          {currentUser && currentUser.staffTypeId.type === "FU Inventory Keeper" ? (
             <div>
               <h5 style={{ color: "white", fontWeight: "700", marginTop: 15 }}>
                 Add Item
@@ -1640,7 +1640,7 @@ function AddEditPurchaseRequest(props) {
                   <TextField
                     disabled={
                       currentUser &&
-                      (currentUser.staffTypeId.type === "FU Member" ||
+                      (currentUser.staffTypeId.type === "FU Inventory Keeper" ||
                         currentUser.staffTypeId.type === "admin")
                         ? false
                         : true
@@ -1680,7 +1680,7 @@ function AddEditPurchaseRequest(props) {
                   <TextField
                     disabled={
                       currentUser &&
-                      (currentUser.staffTypeId.type === "FU Member" ||
+                      (currentUser.staffTypeId.type === "FU Inventory Keeper" ||
                         currentUser.staffTypeId.type === "admin")
                         ? false
                         : true
@@ -1771,7 +1771,7 @@ function AddEditPurchaseRequest(props) {
           {comingFor === "edit" &&
           (currentUser.staffTypeId.type === "admin" ||
             currentUser.staffTypeId.type === "Warehouse Member" ||
-            currentUser.staffTypeId.type === "Warehouse Incharge" ||
+            currentUser.staffTypeId.type === "Warehouse Inventory Keeper" ||
             currentUser.staffTypeId.type === "FU Inventory Keeper") ? (
             <div className="row">
               <div
@@ -1812,7 +1812,7 @@ function AddEditPurchaseRequest(props) {
                       );
                     })}
                   </TextField>
-                ) : currentUser.staffTypeId.type === "Warehouse Incharge" ? (
+                ) : currentUser.staffTypeId.type === "Warehouse Inventory Keeper" ? (
                   // <Select
                   //   fullWidth
                   //   id="secondStatus"
@@ -2023,7 +2023,7 @@ function AddEditPurchaseRequest(props) {
                   <strong style={{ fontSize: "12px" }}>
                     {" "}
                     {currentUser &&
-                    currentUser.staffTypeId.type === "Warehouse Incharge"
+                    currentUser.staffTypeId.type === "Warehouse Inventory Keeper"
                       ? "Confirm Request"
                       : "Update"}
                   </strong>

@@ -142,7 +142,7 @@ export default function DenseTable(props) {
     <Table aria-label="a dense table" size="small">
       <TableHead>
         <TableRow>
-          {currentUser.staffTypeId.type === "FU Member" &&
+          {currentUser.staffTypeId.type === "FU Inventory Keeper" &&
             tableHeadingForFUMember.map((h, index) => {
               return (
                 <TableCell
@@ -160,7 +160,7 @@ export default function DenseTable(props) {
             })}
 
           {(currentUser.staffTypeId.type === "Warehouse Member" ||
-            currentUser.staffTypeId.type === "Warehouse Incharge") &&
+            currentUser.staffTypeId.type === "Warehouse Inventory Keeper") &&
             tableHeadingForWarehouseMember.map((h, index) => {
               return (
                 <TableCell
@@ -239,7 +239,7 @@ export default function DenseTable(props) {
               {row.fuItemCost}
             </TableCell>
 
-            {currentUser.staffTypeId.type === "FU Member" ? (
+            {currentUser.staffTypeId.type === "FU Inventory Keeper" ? (
               <TableCell
                 align="center"
                 style={{
@@ -272,7 +272,7 @@ export default function DenseTable(props) {
             )}
 
             {currentUser.staffTypeId.type === "Warehouse Member" ||
-            currentUser.staffTypeId.type === "Warehouse Incharge" ? (
+            currentUser.staffTypeId.type === "Warehouse Inventory Keeper" ? (
               <TableCell
                 align="center"
                 style={{

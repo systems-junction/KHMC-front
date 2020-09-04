@@ -215,7 +215,7 @@ export default function ReplenishmentRequest(props) {
           //   (order) => order.fuId._id === props.match.params.fuName
           // );
 
-          if (currentUser.staffTypeId.type === "BU Member") {
+          if (currentUser.staffTypeId.type === "Doctor/Physician") {
             // let repRequest = res.data.data;
             let temp = [];
             for (let i = 0; i < repRequest.length; i++) {
@@ -226,7 +226,7 @@ export default function ReplenishmentRequest(props) {
             console.log("rep array after filter", temp);
             setPurchaseRequest(temp.reverse());
           } else {
-            if (currentUser.staffTypeId.type === "FU Member") {
+            if (currentUser.staffTypeId.type === "FU Inventory Keeper") {
               // let repRequest = res.data.data;
               let temp = [];
               for (let i = 0; i < repRequest.length; i++) {
@@ -256,7 +256,7 @@ export default function ReplenishmentRequest(props) {
               }
               // console.log("rep array after filter", temp);
               setPurchaseRequest(temp.reverse());
-            } else if (currentUser.staffTypeId.type === "BU Nurse") {
+            } else if (currentUser.staffTypeId.type === "Registered Nurse") {
               // let repRequest = res.data.data;
               // let temp = [];
               // for (let i = 0; i < repRequest.length; i++) {
@@ -371,7 +371,7 @@ export default function ReplenishmentRequest(props) {
     getPurchaseRequests();
     getReceiveRequestsForBU();
 
-    if (currentUser.staffTypeId.type === "BU Member") {
+    if (currentUser.staffTypeId.type === "Doctor/Physician") {
       getBUFromHeadId();
     }
   }, []);
@@ -441,7 +441,7 @@ export default function ReplenishmentRequest(props) {
     //   },
     // });
 
-    // if (currentUser.staffTypeId.type === "BU Member") {
+    // if (currentUser.staffTypeId.type === "Doctor/Physician") {
     //   let repRequest = res.data.da;
     //   let temp = [];
     //   for (let i = 0; i < repRequest.length; i++) {
@@ -455,7 +455,7 @@ export default function ReplenishmentRequest(props) {
 
     // else {
 
-    if (currentUser.staffTypeId.type === "BU Nurse") {
+    if (currentUser.staffTypeId.type === "Registered Nurse") {
       let repRequest = obj.item;
       let temp = [];
       for (let i = 0; i < repRequest.length; i++) {
@@ -593,8 +593,9 @@ export default function ReplenishmentRequest(props) {
           </div>
 
           {currentUser &&
-          (currentUser.staffTypeId.type === "BU Member" ||
-            currentUser.staffTypeId.type === "admin") ? (
+          (currentUser.staffTypeId.type === "Doctor/Physician" ||
+            currentUser.staffTypeId.type === "admin" ||
+            currentUser.staffTypeId.type === "Doctor/Physician") ? (
             <Button
               onClick={addNewItem}
               style={styles.stylesForButton}
@@ -638,31 +639,31 @@ export default function ReplenishmentRequest(props) {
                 <CustomTable
                   tableData={purchaseRequests}
                   // tableDataKeys={
-                  //   currentUser.staffTypeId.type === "BU Member"
+                  //   currentUser.staffTypeId.type === "Doctor/Physician"
                   //     ? tableDataKeysForBUMember
-                  //     : currentUser.staffTypeId.type === "BU Nurse" ||
+                  //     : currentUser.staffTypeId.type === "Registered Nurse" ||
                   //       currentUser.staffTypeId.type === "BU Doctor"
                   //     ? tableDataKeysForDoctorAndNursing
-                  //     : currentUser.staffTypeId.type === "FU Member"
+                  //     : currentUser.staffTypeId.type === "FU Inventory Keeper"
                   //     ? tableDataKeysForFUMember
                   //     : tableDataKeysForBUMember
                   // }
                   // tableHeading={
-                  //   currentUser.staffTypeId.type === "BU Member"
+                  //   currentUser.staffTypeId.type === "Doctor/Physician"
                   //     ? tableHeadingForBUMember
-                  //     : currentUser.staffTypeId.type === "BU Nurse" ||
+                  //     : currentUser.staffTypeId.type === "Registered Nurse" ||
                   //       currentUser.staffTypeId.type === "BU Doctor"
                   //     ? tableHeadingForDoctorAndNursing
-                  //     : currentUser.staffTypeId.type === "FU Member"
+                  //     : currentUser.staffTypeId.type === "FU Inventory Keeper"
                   //     ? tableHeadingForFUMember
                   //     : tableHeadingForBUMember
                   // }
                   action={
-                    currentUser.staffTypeId.type === "BU Nurse"
+                    currentUser.staffTypeId.type === "Registered Nurse"
                       ? actionsForBUNurse
                       : currentUser.staffTypeId.type === "BU Doctor"
                       ? actionsForBUDoctor
-                      : currentUser.staffTypeId.type === "BU Member"
+                      : currentUser.staffTypeId.type === "Doctor/Physician"
                       ? actionsForBUMemeber
                       : actions
                   }
@@ -720,31 +721,37 @@ export default function ReplenishmentRequest(props) {
               <CustomTable
                 tableData={requestedItems}
                 tableHeading={
-                  currentUser.staffTypeId.type === "BU Member"
+                  currentUser.staffTypeId.type === "Doctor/Physician"
                     ? tableHeadingForBUMemberForItems
-                    : currentUser.staffTypeId.type === "BU Nurse" ||
+                    : currentUser.staffTypeId.type === "Registered Nurse" ||
                       currentUser.staffTypeId.type === "BU Doctor"
                     ? tableHeadingForBUMemberForItems
-                    : currentUser.staffTypeId.type === "FU Member"
+                    : currentUser.staffTypeId.type === "FU Inventory Keeper"
+                    ? tableHeadingForFUMemberForItems
+                    : currentUser.staffTypeId.type === "FU Inventory Keeper"
                     ? tableHeadingForFUMemberForItems
                     : tableHeadingForFUMemberForItems
                 }
                 tableDataKeys={
-                  currentUser.staffTypeId.type === "BU Member"
+                  currentUser.staffTypeId.type === "Doctor/Physician"
                     ? tableDataKeysForItemsForBUMember
-                    : currentUser.staffTypeId.type === "BU Nurse" ||
+                    : currentUser.staffTypeId.type === "Registered Nurse" ||
                       currentUser.staffTypeId.type === "BU Doctor"
                     ? tableDataKeysForItemsForBUMember
-                    : currentUser.staffTypeId.type === "FU Member"
+                    : currentUser.staffTypeId.type === "FU Inventory Keeper"
+                    ? tableDataKeysForFUMemberForItems
+                    : currentUser.staffTypeId.type === "FU Inventory Keeper"
                     ? tableDataKeysForFUMemberForItems
                     : tableDataKeysForItemsForBUMember
                 }
                 action={
-                  currentUser.staffTypeId.type === "BU Nurse"
+                  currentUser.staffTypeId.type === "Registered Nurse"
                     ? actionsForItemsForReceiver
                     : currentUser.staffTypeId.type === "BU Doctor"
                     ? actionsForItemsForOther
-                    : currentUser.staffTypeId.type === "FU Member"
+                    : currentUser.staffTypeId.type === "FU Inventory Keeper"
+                    ? actionsForItemsForFUMember
+                    : currentUser.staffTypeId.type === "FU Inventory Keeper"
                     ? actionsForItemsForFUMember
                     : actionsForItemsForOther
                 }

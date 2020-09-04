@@ -497,11 +497,11 @@ function AddEditPurchaseRequest(props) {
               noOfTimes: noOfTimes,
               duration: duration,
               status:
-                currentUser.staffTypeId.type === "FU Member" &&
+                currentUser.staffTypeId.type === "FU Inventory Keeper" &&
                 status === "pending" &&
                 secondStatus === "in_progress"
                   ? "in_progress"
-                  : currentUser.staffTypeId.type === "FU Member" &&
+                  : currentUser.staffTypeId.type === "FU Inventory Keeper" &&
                     status === "in_progress" &&
                     secondStatus === "Delivery in Progress"
                   ? "Delivery in Progress"
@@ -1101,7 +1101,7 @@ function AddEditPurchaseRequest(props) {
 
             {comingFor === "edit" &&
             (currentUser.staffTypeId.type === "admin" ||
-              currentUser.staffTypeId.type === "FU Member" ||
+              currentUser.staffTypeId.type === "FU Inventory Keeper" ||
               currentUser.staffTypeId.type === "FU Incharge" ||
               currentUser.staffTypeId.type === "BU Nurse" ||
               currentUser.staffTypeId.type === "BU Inventory Keeper") ? (
@@ -1114,7 +1114,7 @@ function AddEditPurchaseRequest(props) {
                   }}
                 >
                   {/* <InputLabelComponent>Status*</InputLabelComponent> */}
-                  {currentUser.staffTypeId.type === "FU Member" ? (
+                  {currentUser.staffTypeId.type === "FU Inventory Keeper" ? (
                     <>
                       <TextField
                         required
@@ -1369,7 +1369,7 @@ function AddEditPurchaseRequest(props) {
                   </Button>
                 ) : comingFor === "edit" &&
                   currentUser &&
-                  currentUser.staffTypeId.type === "FU Member" ? (
+                  currentUser.staffTypeId.type === "FU Inventory Keeper" ? (
                   <Button
                     style={styles.stylesForPurchaseButton}
                     // disabled={!validateForm()}

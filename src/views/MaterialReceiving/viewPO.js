@@ -346,10 +346,6 @@ function AddEditPurchaseRequest(props) {
     }
   }
 
-  // console.log("pr details", prId);
-
-  console.log("purchaseOrderDetails",purchaseOrderDetails)
-
   return (
     <div
       style={{
@@ -365,7 +361,7 @@ function AddEditPurchaseRequest(props) {
     >
       <Header />
 
-      <div className={`cPadding ${classes.root}`}>
+      <div className={`cPadding`}>
         <div className="subheader">
           <div>
             <img src={business_Unit} />
@@ -420,7 +416,7 @@ function AddEditPurchaseRequest(props) {
               flex: 4,
               display: "flex",
               flexDirection: "column",
-              marginTop: "25px",
+              // marginTop: "25px",
             }}
             className="container-fluid"
           >
@@ -639,7 +635,7 @@ function AddEditPurchaseRequest(props) {
           </div>
         ) : (
           <div
-            style={{ flex: 4, display: "flex", flexDirection: "column" }}
+            // style={{ flex: 4, display: "flex", flexDirection: "column" , width:'100%'}}
             className="container-fluid"
           >
             <ViewItems
@@ -647,7 +643,7 @@ function AddEditPurchaseRequest(props) {
               items={purchaseOrderDetails}
               materialReceivingId={selectedItem._id}
             />
-          </div>
+            </div>
         )}
       </div>
     </div>
