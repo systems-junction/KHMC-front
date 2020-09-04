@@ -35,11 +35,17 @@ import IPR from "../../assets/img/IPR.png";
 import outPatient from "../../assets/img/OutPatient.png";
 import DM from "../../assets/img/Discharge Medication.png";
 import CN from "../../assets/img/Consultation_Notes.png";
-
+import assessmentIcon from '../../assets/img/PatientAssessment.png'
+import patientCareIcon from '../../assets/img/PatientCare.png'
+import Lab_RadIcon from '../../assets/img/Lab-Rad Request.png'
 import wh_inventory from "../../assets/img/WH Inventory.png";
 import purchase_order from "../../assets/img/Purchase Order.png";
 import purchase_request from "../../assets/img/purchase request.png";
 import MaterialReceiving from "../../assets/img/Material Receiving.png";
+import AssessDiagIcon from '../../assets/img/Assessment & Diagnosis.png'
+import DischargeIcon from '../../assets/img/Doctor - Discharge.png'
+import CRIcon from '../../assets/img/Consultation Request.png'
+import WMS_Back from "../../assets/img/WMS_Back.png";
 
 const admin = [
   { img: KHMC, text: "KHMC", path: "" },
@@ -107,16 +113,20 @@ const insuranceDepartment = [
 const registeredNurse = [
   { img: KHMC, text: "KHMC", path: "" },
   {
-    img: RCM,
-    text: "RCM",
-    path: "/home/rcm",
+    img: assessmentIcon,
+    text: "Patient Assessment",
+    path: "/home/rcm/patientAssessment",
   },
-  // {
-  //   img: WMS,
-  //   text: "WMS",
-  //   path: "/home/wms",
-  // },
-
+  {
+    img: patientCareIcon,
+    text: "Patient Care",
+    path: "/home/rcm/patientCare",
+  },
+  {
+    img: Lab_RadIcon,
+    text: "Lab/Rad Request",
+    path: "/home/rcm/LabRadRequest",
+  },
   {
     img: PurchaseRequest,
     text: "Medication  Order",
@@ -184,20 +194,36 @@ const pharmacist = [
 const doctorPhysician = [
   { img: KHMC, text: "KHMC", path: "" },
   {
+    img: AssessDiagIcon,
+    text: 'Assessment & Diagnosis',
+    path: '/home/rcm/rd/assessmentdiagnosis',
+  },
+  {
+    img: Lab_RadIcon,
+    text: 'Lab/Rad Request',
+    path: '/home/rcm/rd/labradrequest',
+  },
+  {
+    img: CRIcon,
+    text: 'Consultation Request',
+    path: '/home/rcm/rd/consultationrequest',
+  },
+  {
+    img: DischargeIcon,
+    text: 'Discharge',
+    path: '/home/rcm/rd/dischargerequest',
+  },
+  {
+
+  },
+  {
+
+  },
+  {
     img: PurchaseRequest,
     text: "Order Items",
     path: `/home/wms/fus/medicinalorder`,
   },
-  {
-    img: RCM,
-    text: "RCM",
-    path: "/home/rcm",
-  },
-  // {
-  //   img: WMS,
-  //   text: "WMS",
-  //   path: "/home/wms",
-  // },
 ];
 
 const consultantSpecialist = [
@@ -574,6 +600,8 @@ class HomeScreen extends React.Component {
           width: "100%",
           height: "100%",
           backgroundColor: "#2B62CC",
+          backgroundImage: `url("${WMS_Back}")`,
+          backgroundSize: "100%",
         }}
       >
         <Header />
