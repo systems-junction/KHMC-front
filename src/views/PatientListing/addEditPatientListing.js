@@ -801,6 +801,12 @@ function AddEditPatientListing(props) {
     dispatch({ field: 'address', value: i.address })
     dispatch({ field: 'otherDetails', value: i.otherDetails })
 
+    dispatch({ field: 'emergencyContactNo', value: i.emergencyContactNo })
+    dispatch({ field: 'emergencyName', value: i.emergencyName })
+    dispatch({ field: 'emergencyRelation', value: i.emergencyRelation })
+    dispatch({ field: 'coveredFamilyMembers', value: i.coveredFamilyMembers })
+    dispatch({ field: 'otherCoverageDetails', value: i.otherCoverageDetails })
+
     dispatch({ field: 'amountReceived', value: i.amountReceived })
     dispatch({ field: 'bankName', value: i.bankName })
     dispatch({ field: 'depositorName', value: i.depositorName })
