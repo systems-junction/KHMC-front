@@ -1257,17 +1257,17 @@ function PatientAssessment(props) {
                                     outline: "none",
                                     backgroundColor: value === 0 ? "#2c6ddd" : undefined,
                                 }}
-                                label="Consultantation Notes" //"Resident Doctor Notes"
+                                label="Resident Doctor Notes"
                                 disabled
                             />
-                            <Tab
+                             <Tab
                                 style={{
                                     color: "white",
                                     borderRadius: 5,
                                     outline: "none",
                                     backgroundColor: value === 1 ? "#2c6ddd" : undefined,
                                 }}
-                                label="Resident Doctor Notes"
+                                label="External Consultant Notes"
                                 disabled
                             />
                             <Tab
