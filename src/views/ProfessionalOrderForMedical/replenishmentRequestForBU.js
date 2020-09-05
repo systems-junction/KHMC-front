@@ -385,18 +385,18 @@ export default function ReplenishmentRequest(props) {
     });
   };
 
-  // if (
-  //   buObj 
-  //   &&
-  //   statues &&
-  //   items &&
-  //   vendors 
-  //   &&
-  //   currentUser &&
-  //   currentUser.staffTypeId.type === "Doctor/Physician"
-  // ) {
-  //   addNewItem();
-  // }
+  if (
+    currentUser &&
+    currentUser.staffTypeId.type === "Doctor/Physician" &&
+    buObj !== ""
+  ) {
+    let path = `medicinalorder/add`;
+
+    props.history.replace({
+      pathname: path,
+      state: { comingFor: "add", vendors, statues, items, buObj },
+    });
+  }
 
   function handleEdit(rec) {
     let path = `medicinalorder/edit`;
@@ -569,6 +569,8 @@ export default function ReplenishmentRequest(props) {
       orderBy: selectedOrder.orderBy,
       schedule: requestedItem.schedule,
       priority: requestedItem.priority,
+      make_model: requestedItem.make_model,
+      size: requestedItem.size,
     };
 
     props.history.push({
@@ -584,202 +586,189 @@ export default function ReplenishmentRequest(props) {
     });
   }
 
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        flex: 1,
-        position: "fixed",
-        width: "100%",
-        height: "100%",
-        backgroundColor: "#60d69f",
-        overflowY: "scroll",
-      }}
-    >
-      <Header />
-      <div className="cPadding">
-        <div className="subheader">
-          <div>
-            <img src={business_Unit} />
-            {/* <h4>Replenishment Request for BU</h4> */}
-            <h4>ICU Medication Orders</h4>
+  if (currentUser && currentUser.staffTypeId.type !== "Doctor/Physician") {
+    return (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          flex: 1,
+          position: "fixed",
+          width: "100%",
+          height: "100%",
+          backgroundColor: "#60d69f",
+          overflowY: "scroll",
+        }}
+      >
+        <Header />
+        <div className="cPadding">
+          <div className="subheader">
+            <div>
+              <img src={business_Unit} />
+              <h4>Medication Orders</h4>
+            </div>
+
+            {currentUser &&
+            (currentUser.staffTypeId.type === "Doctor/Physician" ||
+              currentUser.staffTypeId.type === "admin" ||
+              currentUser.staffTypeId.type === "Doctor/Physician") ? (
+              <Button
+                onClick={addNewItem}
+                style={styles.stylesForButton}
+                variant="contained"
+                color="primary"
+              >
+                <img src={add_new} style={styles.stylesForIcon} />
+                &nbsp;&nbsp;
+                <strong>Add New</strong>
+              </Button>
+            ) : (
+              undefined
+            )}
           </div>
 
-          {currentUser &&
-          (currentUser.staffTypeId.type === "Doctor/Physician" ||
-            currentUser.staffTypeId.type === "admin" ||
-            currentUser.staffTypeId.type === "Doctor/Physician") ? (
-            <Button
-              onClick={addNewItem}
-              style={styles.stylesForButton}
-              variant="contained"
-              color="primary"
-            >
-              <img src={add_new} style={styles.stylesForIcon} />
-              &nbsp;&nbsp;
-              <strong>Add New</strong>
-            </Button>
-          ) : (
-            undefined
-          )}
-
-          {/* {actionsForTesting.write ? (
-            <Button
-              onClick={addNewItem}
-              style={styles.stylesForButton}
-              variant="contained"
-              color="primary"
-            >
-              <img src={add_new} style={styles.stylesForIcon} />
-              &nbsp;&nbsp;
-              <strong>Add New</strong>
-            </Button>
-          ) : (
-            undefined
-          )} */}
-        </div>
-
-        <div
-          style={{
-            flex: 4,
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          {purchaseRequests ? (
-            <div>
+          <div
+            style={{
+              flex: 4,
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            {purchaseRequests ? (
               <div>
+                <div>
+                  <CustomTable
+                    tableData={purchaseRequests}
+                    action={
+                      currentUser.staffTypeId.type === "Registered Nurse"
+                        ? actionsForBUNurse
+                        : currentUser.staffTypeId.type === "BU Doctor"
+                        ? actionsForBUDoctor
+                        : currentUser.staffTypeId.type === "Doctor/Physician"
+                        ? actionsForBUMemeber
+                        : actions
+                    }
+                    tableDataKeys={tableDataKeysForBUMember}
+                    tableHeading={tableHeadingForBUMember}
+                    // action={actionsForTesting}
+                    handleEdit={handleEdit}
+                    handleDelete={handleDelete}
+                    receiveItem={handleReceive}
+                    handleView={handleView}
+                    borderBottomColor={"#60d69f"}
+                    borderBottomWidth={20}
+                  />
+                </div>
+
+                <ConfirmationModal
+                  modalVisible={modalVisible}
+                  msg="Are you sure want to delete the record?"
+                  hideconfirmationModal={() => setModalVisible(false)}
+                  onConfirmDelete={() => deleteVendor()}
+                  setdeleteItem={() => setdeleteItem("")}
+                />
+
+                <Notification msg={errorMsg} open={openNotification} />
+              </div>
+            ) : (
+              <div className="LoaderStyle">
+                <Loader type="TailSpin" color="red" height={50} width={50} />
+              </div>
+            )}
+          </div>
+          <div style={{ marginBottom: 20 }}>
+            <img
+              onClick={() => props.history.goBack()}
+              src={Back_Arrow}
+              style={{ width: 60, height: 40, cursor: "pointer" }}
+            />
+          </div>
+
+          <Dialog
+            aria-labelledby="form-dialog-title"
+            open={isOpen}
+            maxWidth="xl"
+            fullWidth={true}
+            // fullScreen
+            onBackdropClick={() => {
+              setIsOpen(false);
+            }}
+          >
+            <DialogContent style={{ backgroundColor: "#31e2aa" }}>
+              <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
+                Added Item
+              </DialogTitle>
+              <div className="container-fluid">
                 <CustomTable
-                  tableData={purchaseRequests}
-                  // tableDataKeys={
-                  //   currentUser.staffTypeId.type === "Doctor/Physician"
-                  //     ? tableDataKeysForBUMember
-                  //     : currentUser.staffTypeId.type === "Registered Nurse" ||
-                  //       currentUser.staffTypeId.type === "BU Doctor"
-                  //     ? tableDataKeysForDoctorAndNursing
-                  //     : currentUser.staffTypeId.type === "FU Inventory Keeper"
-                  //     ? tableDataKeysForFUMember
-                  //     : tableDataKeysForBUMember
-                  // }
-                  // tableHeading={
-                  //   currentUser.staffTypeId.type === "Doctor/Physician"
-                  //     ? tableHeadingForBUMember
-                  //     : currentUser.staffTypeId.type === "Registered Nurse" ||
-                  //       currentUser.staffTypeId.type === "BU Doctor"
-                  //     ? tableHeadingForDoctorAndNursing
-                  //     : currentUser.staffTypeId.type === "FU Inventory Keeper"
-                  //     ? tableHeadingForFUMember
-                  //     : tableHeadingForBUMember
-                  // }
+                  tableData={requestedItems}
+                  tableHeading={
+                    currentUser.staffTypeId.type === "Doctor/Physician"
+                      ? tableHeadingForBUMemberForItems
+                      : currentUser.staffTypeId.type === "Registered Nurse" ||
+                        currentUser.staffTypeId.type === "BU Doctor"
+                      ? tableHeadingForBUMemberForItems
+                      : currentUser.staffTypeId.type === "FU Inventory Keeper"
+                      ? tableHeadingForFUMemberForItems
+                      : currentUser.staffTypeId.type === "FU Inventory Keeper"
+                      ? tableHeadingForFUMemberForItems
+                      : tableHeadingForFUMemberForItems
+                  }
+                  tableDataKeys={
+                    currentUser.staffTypeId.type === "Doctor/Physician"
+                      ? tableDataKeysForItemsForBUMember
+                      : currentUser.staffTypeId.type === "Registered Nurse" ||
+                        currentUser.staffTypeId.type === "BU Doctor"
+                      ? tableDataKeysForItemsForBUMember
+                      : currentUser.staffTypeId.type === "FU Inventory Keeper"
+                      ? tableDataKeysForFUMemberForItems
+                      : currentUser.staffTypeId.type === "FU Inventory Keeper"
+                      ? tableDataKeysForFUMemberForItems
+                      : tableDataKeysForItemsForBUMember
+                  }
                   action={
                     currentUser.staffTypeId.type === "Registered Nurse"
-                      ? actionsForBUNurse
+                      ? actionsForItemsForReceiver
                       : currentUser.staffTypeId.type === "BU Doctor"
-                      ? actionsForBUDoctor
-                      : currentUser.staffTypeId.type === "Doctor/Physician"
-                      ? actionsForBUMemeber
-                      : actions
+                      ? actionsForItemsForOther
+                      : currentUser.staffTypeId.type === "FU Inventory Keeper"
+                      ? actionsForItemsForFUMember
+                      : currentUser.staffTypeId.type === "FU Inventory Keeper"
+                      ? actionsForItemsForFUMember
+                      : actionsForItemsForOther
                   }
-                  tableDataKeys={tableDataKeysForBUMember}
-                  tableHeading={tableHeadingForBUMember}
-                  // action={actionsForTesting}
-                  handleEdit={handleEdit}
+                  handleEdit={handleEditRequestedItem}
                   handleDelete={handleDelete}
                   receiveItem={handleReceive}
-                  handleView={handleView}
+                  handleView={handleEditRequestedItem}
                   borderBottomColor={"#60d69f"}
                   borderBottomWidth={20}
                 />
               </div>
-
-              <ConfirmationModal
-                modalVisible={modalVisible}
-                msg="Are you sure want to delete the record?"
-                hideconfirmationModal={() => setModalVisible(false)}
-                onConfirmDelete={() => deleteVendor()}
-                setdeleteItem={() => setdeleteItem("")}
-              />
-
-              <Notification msg={errorMsg} open={openNotification} />
-            </div>
-          ) : (
-            <div className="LoaderStyle">
-              <Loader type="TailSpin" color="red" height={50} width={50} />
-            </div>
-          )}
+            </DialogContent>
+          </Dialog>
         </div>
-        <div style={{ marginBottom: 20 }}>
-          <img
-            onClick={() => props.history.goBack()}
-            src={Back_Arrow}
-            style={{ width: 60, height: 40, cursor: "pointer" }}
-          />
-        </div>
-
-        <Dialog
-          aria-labelledby="form-dialog-title"
-          open={isOpen}
-          maxWidth="xl"
-          fullWidth={true}
-          // fullScreen
-          onBackdropClick={() => {
-            setIsOpen(false);
-          }}
-        >
-          <DialogContent style={{ backgroundColor: "#31e2aa" }}>
-            <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
-              Added Item
-            </DialogTitle>
-            <div className="container-fluid">
-              <CustomTable
-                tableData={requestedItems}
-                tableHeading={
-                  currentUser.staffTypeId.type === "Doctor/Physician"
-                    ? tableHeadingForBUMemberForItems
-                    : currentUser.staffTypeId.type === "Registered Nurse" ||
-                      currentUser.staffTypeId.type === "BU Doctor"
-                    ? tableHeadingForBUMemberForItems
-                    : currentUser.staffTypeId.type === "FU Inventory Keeper"
-                    ? tableHeadingForFUMemberForItems
-                    : currentUser.staffTypeId.type === "FU Inventory Keeper"
-                    ? tableHeadingForFUMemberForItems
-                    : tableHeadingForFUMemberForItems
-                }
-                tableDataKeys={
-                  currentUser.staffTypeId.type === "Doctor/Physician"
-                    ? tableDataKeysForItemsForBUMember
-                    : currentUser.staffTypeId.type === "Registered Nurse" ||
-                      currentUser.staffTypeId.type === "BU Doctor"
-                    ? tableDataKeysForItemsForBUMember
-                    : currentUser.staffTypeId.type === "FU Inventory Keeper"
-                    ? tableDataKeysForFUMemberForItems
-                    : currentUser.staffTypeId.type === "FU Inventory Keeper"
-                    ? tableDataKeysForFUMemberForItems
-                    : tableDataKeysForItemsForBUMember
-                }
-                action={
-                  currentUser.staffTypeId.type === "Registered Nurse"
-                    ? actionsForItemsForReceiver
-                    : currentUser.staffTypeId.type === "BU Doctor"
-                    ? actionsForItemsForOther
-                    : currentUser.staffTypeId.type === "FU Inventory Keeper"
-                    ? actionsForItemsForFUMember
-                    : currentUser.staffTypeId.type === "FU Inventory Keeper"
-                    ? actionsForItemsForFUMember
-                    : actionsForItemsForOther
-                }
-                handleEdit={handleEditRequestedItem}
-                handleDelete={handleDelete}
-                receiveItem={handleReceive}
-                handleView={handleEditRequestedItem}
-                borderBottomColor={"#60d69f"}
-                borderBottomWidth={20}
-              />
-            </div>
-          </DialogContent>
-        </Dialog>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          flex: 1,
+          position: "fixed",
+          width: "100%",
+          height: "100%",
+          backgroundColor: "#60d69f",
+          overflowY: "scroll",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <div className="LoaderStyle">
+          <Loader type="TailSpin" color="red" height={50} width={50} />
+        </div>
+      </div>
+    );
+  }
 }

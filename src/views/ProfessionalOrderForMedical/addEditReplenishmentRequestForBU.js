@@ -1146,10 +1146,15 @@ function AddEditPurchaseRequest(props) {
   function handleRequestedItemEdit(i) {
     console.log(i);
     if (i.status === "pending") {
-      if (i.dosage === null && i.noOfTimes === null && i.duration === null) {
+      if (i.dosage === "" && i.noOfTimes === "" && i.duration === "") {
         dispatch({
           field: "selectedItemToSearch",
           value: "non_pharmaceutical",
+        });
+      } else if (i.dosage !== "" && i.noOfTimes !== "" && i.duration !== "") {
+        dispatch({
+          field: "selectedItemToSearch",
+          value: "pharmaceutical",
         });
       }
 
@@ -1774,7 +1779,7 @@ function AddEditPurchaseRequest(props) {
                   >
                     {/* <InputLabelComponent>Form*</InputLabelComponent> */}
                     <TextField
-                    disabled
+                      disabled
                       required
                       select
                       fullWidth
@@ -2523,15 +2528,6 @@ function AddEditPurchaseRequest(props) {
                         );
                       })}
                     </TextField>
-
-                    {/* {isFormSubmitted && make_model ? (
-                      <ErrorMessage
-                        name={make_model}
-                        isFormSubmitted={isFormSubmitted}
-                      />
-                    ) : (
-                      undefined
-                    )} */}
                   </div>
 
                   <div
@@ -2540,9 +2536,7 @@ function AddEditPurchaseRequest(props) {
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
                     }}
-                    // style={styles.inputContainerForDropDown}
                   >
-                    {/* <InputLabelComponent>Priority*</InputLabelComponent> */}
                     <TextField
                       select
                       required
@@ -2553,8 +2547,6 @@ function AddEditPurchaseRequest(props) {
                       onChange={onChangeValue}
                       label="Size"
                       variant="filled"
-                      // className="dropDownStyle"
-                      // input={<BootstrapInput />}
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
@@ -2573,14 +2565,6 @@ function AddEditPurchaseRequest(props) {
                         );
                       })}
                     </TextField>
-                    {/* {isFormSubmitted && size ? (
-                      <ErrorMessage
-                        name={size}
-                        isFormSubmitted={isFormSubmitted}
-                      />
-                    ) : (
-                      undefined
-                    )} */}
                   </div>
 
                   <div
