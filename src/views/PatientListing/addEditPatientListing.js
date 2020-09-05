@@ -843,7 +843,9 @@ function AddEditPatientListing(props) {
       dispatch({ field: 'coverageDetails', value: '' })
       dispatch({ field: 'coverageTerms', value: '' })
       dispatch({ field: 'payment', value: '' })
-      dispatch({ field: 'coverageFamilyMembers', value: '' })
+      
+      dispatch({ field: 'coveredFamilyMembers', value: '' })
+      dispatch({ field: 'otherCoverageDetails', value: '' })
     } else if (e.target.value === 'Insurance') {
       dispatch({ field: 'depositorName', value: '' })
       dispatch({ field: 'amountReceived', value: '' })
@@ -860,6 +862,8 @@ function AddEditPatientListing(props) {
       dispatch({ field: 'coverageDetails', value: '' })
       dispatch({ field: 'coverageTerms', value: '' })
       dispatch({ field: 'payment', value: '' })
+      dispatch({ field: 'coveredFamilyMembers', value: '' })
+      dispatch({ field: 'otherCoverageDetails', value: '' })
     }
   }
 
