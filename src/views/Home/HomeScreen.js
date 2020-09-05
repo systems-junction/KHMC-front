@@ -35,16 +35,16 @@ import IPR from "../../assets/img/IPR.png";
 import outPatient from "../../assets/img/OutPatient.png";
 import DM from "../../assets/img/Discharge Medication.png";
 import CN from "../../assets/img/Consultation_Notes.png";
-import assessmentIcon from '../../assets/img/PatientAssessment.png'
-import patientCareIcon from '../../assets/img/PatientCare.png'
-import Lab_RadIcon from '../../assets/img/Lab-Rad Request.png'
+import assessmentIcon from "../../assets/img/PatientAssessment.png";
+import patientCareIcon from "../../assets/img/PatientCare.png";
+import Lab_RadIcon from "../../assets/img/Lab-Rad Request.png";
 import wh_inventory from "../../assets/img/WH Inventory.png";
 import purchase_order from "../../assets/img/Purchase Order.png";
 import purchase_request from "../../assets/img/purchase request.png";
 import MaterialReceiving from "../../assets/img/Material Receiving.png";
-import AssessDiagIcon from '../../assets/img/Assessment & Diagnosis.png'
-import DischargeIcon from '../../assets/img/Doctor - Discharge.png'
-import CRIcon from '../../assets/img/Consultation Request.png'
+import AssessDiagIcon from "../../assets/img/Assessment & Diagnosis.png";
+import DischargeIcon from "../../assets/img/Doctor - Discharge.png";
+import CRIcon from "../../assets/img/Consultation Request.png";
 import WMS_Back from "../../assets/img/WMS_Back.png";
 
 const admin = [
@@ -195,30 +195,25 @@ const doctorPhysician = [
   { img: KHMC, text: "KHMC", path: "" },
   {
     img: AssessDiagIcon,
-    text: 'Assessment & Diagnosis',
-    path: '/home/rcm/rd/assessmentdiagnosis',
+    text: "Assessment & Diagnosis",
+    path: "/home/rcm/rd/assessmentdiagnosis",
   },
   {
     img: Lab_RadIcon,
-    text: 'Lab/Rad Request',
-    path: '/home/rcm/rd/labradrequest',
+    text: "Lab/Rad Request",
+    path: "/home/rcm/rd/labradrequest",
   },
   {
     img: CRIcon,
-    text: 'Consultation Request',
-    path: '/home/rcm/rd/consultationrequest',
+    text: "Consultation Request",
+    path: "/home/rcm/rd/consultationrequest",
   },
   {
     img: DischargeIcon,
-    text: 'Discharge',
-    path: '/home/rcm/rd/dischargerequest',
+    text: "Discharge",
+    path: "/home/rcm/rd/dischargerequest",
   },
-  {
 
-  },
-  {
-
-  },
   {
     img: PurchaseRequest,
     text: "Order Items",
