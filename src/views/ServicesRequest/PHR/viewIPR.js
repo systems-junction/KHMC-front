@@ -53,15 +53,13 @@ import '../../../assets/jss/material-dashboard-react/components/loaderStyle.css'
 const tableHeadingForPharmacy = [
   'Medicine Name',
   'Requested Qty',
-  'Unit Price',
-  'Total Price',
+  'Price/Unit',
   '',
 ]
 const tableDataKeysForPharmacy = [
   'medicineName',
   'requestedQty',
   ['itemId', 'receiptUnitCost'],
-  ['itemId', 'issueUnitCost'],
 ]
 
 const tableHeadingForDischarge = [
