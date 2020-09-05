@@ -605,71 +605,71 @@ function AddEditPatientListing(props) {
     if (slipUpload) {
       formData.append('file', slipUpload, slipUpload.name)
     }
-    if (validatePatientForm() && validatePaymentForm()) {
-      const params = {
-        _id: patientId,
-        profileNo,
-        SIN,
-        title,
-        firstName,
-        lastName,
-        gender,
-        nationality,
-        height,
-        age,
-        weight,
-        bloodGroup,
-        dob,
-        phoneNumber,
-        mobileNumber,
-        email,
-        country,
-        city,
-        height,
-        weight,
-        bloodGroup,
-        address,
-        otherDetails,
-        paymentMethod,
-        amountReceived,
-        receiverName,
-        bankName,
-        depositorName,
-        insuranceNo,
-        insuranceVendor,
-        coverageDetails,
-        coverageTerms,
-        payment,
-        emergencyName,
-        emergencyContactNo,
-        emergencyRelation,
-        coveredFamilyMembers,
-        otherCoverageDetails,
-      }
-      formData.append('data', JSON.stringify(params))
-      // console.log('PARAMSS ', params)
-      // console.log("DATAAA ", formData);
-      axios
-        .put(updatePatientUrl, formData)
-        .then((res) => {
-          if (res.data.success) {
-            setPatientId(res.data.data._id)
-            setOpenNotification(true)
-            setsuccessMsg('Done')
-            if (!searchActivated) {
-              props.history.goBack()
-            }
-          } else if (!res.data.success) {
-            setOpenNotification(true)
-            setErrorMsg('Error')
-          }
-        })
-        .catch((e) => {
-          console.log('error after updating patient details', e)
-          setOpenNotification(true)
-          setErrorMsg('Error while editing the patient details')
-        })
+    // if (validatePatientForm() && validatePaymentForm()) {
+    const params = {
+      _id: patientId,
+      profileNo,
+      SIN,
+      title,
+      firstName,
+      lastName,
+      gender,
+      nationality,
+      height,
+      age,
+      weight,
+      bloodGroup,
+      dob,
+      phoneNumber,
+      mobileNumber,
+      email,
+      country,
+      city,
+      height,
+      weight,
+      bloodGroup,
+      address,
+      otherDetails,
+      paymentMethod,
+      amountReceived,
+      receiverName,
+      bankName,
+      depositorName,
+      insuranceNo,
+      insuranceVendor,
+      coverageDetails,
+      coverageTerms,
+      payment,
+      emergencyName,
+      emergencyContactNo,
+      emergencyRelation,
+      coveredFamilyMembers,
+      otherCoverageDetails,
     }
+    formData.append('data', JSON.stringify(params))
+    // console.log('PARAMSS ', params)
+    // console.log("DATAAA ", formData);
+    axios
+      .put(updatePatientUrl, formData)
+      .then((res) => {
+        if (res.data.success) {
+          setPatientId(res.data.data._id)
+          setOpenNotification(true)
+          setsuccessMsg('Done')
+          if (!searchActivated) {
+            props.history.goBack()
+          }
+        } else if (!res.data.success) {
+          setOpenNotification(true)
+          setErrorMsg('Error')
+        }
+      })
+      .catch((e) => {
+        console.log('error after updating patient details', e)
+        setOpenNotification(true)
+        setErrorMsg('Error while editing the patient details')
+      })
+    //}
     setIsFormSubmitted(true)
   }
 
@@ -825,6 +825,9 @@ function AddEditPatientListing(props) {
     dispatch({ field: 'DateTime', value: i.DateTime })
     dispatch({ field: 'paymentMethod', value: i.paymentMethod })
     dispatch({ field: 'insuranceVendor', value: i.insuranceVendor })
+    dispatch({ field: 'emergencyName', value: i.emergencyName })
+    dispatch({ field: 'emergencyContactNo', value: i.emergencyContactNo })
+    dispatch({ field: 'emergencyRelation', value: i.emergencyRelation })
 
     setSearchQuery('')
     setsearchActivated(true)
@@ -1854,8 +1857,8 @@ function AddEditPatientListing(props) {
                   <Button
                     style={styles.save}
                     // disabled={!validateEmergencyForm()}
-                    // onClick={searchActivated ? handleEdit : handleAdd}
-                    onClick={handleAdd}
+                    onClick={searchActivated ? handleEdit : handleAdd}
+                    // onClick={handleAdd}
                     variant='contained'
                     color='default'
                   >
