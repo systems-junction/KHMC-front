@@ -3,7 +3,7 @@ import cookie from 'react-cookies'
 import { Route, Switch, Router, Redirect } from 'react-router-dom'
 import { createBrowserHistory } from 'history'
 import NotFound from '../components/NotFound/NotFound'
-
+import SuccessScreen from '../components/SuccessScreen/SuccessScreen'
 import DischargeMedication from '../views/ServicesRequest/PHR/DischargeMedication/DischargeMedication'
 import EDR from '../views/ServicesRequest/PHR/DischargeMedication/EDR'
 import IPR from '../views/ServicesRequest/PHR/DischargeMedication/IPR'
@@ -26,13 +26,13 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
       {...rest}
       render={(props) =>
         currentUser.staffTypeId.type === 'admin' ||
-        currentUser.staffTypeId.type === 'Committe Member' ||
-        currentUser.staffTypeId.type === 'Accounts Member' ||
-        currentUser.staffTypeId.type === 'Warehouse Member' ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to='notfound' />
-        )
+          currentUser.staffTypeId.type === 'Committe Member' ||
+          currentUser.staffTypeId.type === 'Accounts Member' ||
+          currentUser.staffTypeId.type === 'Warehouse Member' ? (
+            <Component {...props} />
+          ) : (
+            <Redirect to='notfound' />
+          )
       }
     />
   )
@@ -60,6 +60,11 @@ class WMSRoutes extends React.PureComponent {
           exact
           path={`${this.props.match.url}/ipr/viewIPR`}
           component={ViewIPR}
+        />
+        <Route
+          exact
+          path={`${this.props.match.url}/ipr/success`}
+          component={SuccessScreen}
         />
         <Route
           exact

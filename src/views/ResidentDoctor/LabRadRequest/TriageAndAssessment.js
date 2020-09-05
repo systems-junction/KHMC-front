@@ -131,8 +131,10 @@ function TriageAndAssessment(props) {
             .then((res) => {
                 if (res.data.success) {
                     console.log("Update Patient data : ", res.data.data)
-                    setOpenNotification(true);
-                    setsuccessMsg("Assessment Submitted");
+                    props.history.push({
+                        pathname: 'success',
+                        state: { message : 'Triage & Assessment added successfully' },
+                      })
                 } else if (!res.data.success) {
                     setOpenNotification(true);
                     setErrorMsg("Error in Submitting Assessment");

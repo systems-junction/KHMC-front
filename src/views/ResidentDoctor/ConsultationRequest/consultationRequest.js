@@ -473,7 +473,10 @@ function LabRadRequest(props) {
         if (res.data.success) {
           console.log('response while adding Consult Req', res.data.data)
           notifyForConsult(patientId)
-          window.location.reload(false)
+          props.history.push({
+            pathname: 'consultationrequest/success',
+            state: { message : 'Consultation Note submitted successfully' },
+          })
         } else if (!res.data.success) {
           setOpenNotification(true)
           setErrorMsg('Error while adding the Consultation request')
@@ -669,7 +672,10 @@ function LabRadRequest(props) {
       .then((res) => {
         if (res.data.success) {
           console.log('response after adding Lab Request', res.data)
-          window.location.reload(false)
+          props.history.push({
+            pathname: 'consultationrequest/success',
+            state: { message : 'Lab Request added successfully' },
+        })
         } else if (!res.data.success) {
           setOpenNotification(true)
         }
@@ -779,7 +785,10 @@ function LabRadRequest(props) {
       .then((res) => {
         if (res.data.success) {
           console.log('response after adding Radio Request', res.data)
-          window.location.reload(false)
+          props.history.push({
+            pathname: 'consultationrequest/success',
+            state: { message : 'Radio Request added successfully' },
+        })
         } else if (!res.data.success) {
           setOpenNotification(true)
         }
@@ -1483,14 +1492,7 @@ function LabRadRequest(props) {
               </div>
 
               <div className='row' style={{ marginBottom: '25px' }}>
-                <div className='col-md-6 col-sm-6 col-6'>
-                  <img
-                    onClick={() => props.history.goBack()}
-                    src={Back}
-                    style={{ width: 45, height: 35, cursor: 'pointer' }}
-                  />
-                </div>
-                <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
+                <div className='col-md-12 col-sm-12 col-12 d-flex justify-content-end'>
                   <Button
                     onClick={addNewRequest}
                     style={styles.stylesForButton}

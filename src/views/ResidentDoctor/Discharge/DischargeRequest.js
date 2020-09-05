@@ -362,7 +362,10 @@ function DischargeRequest(props) {
         if (res.data.success) {
           console.log('response while adding Discharge Req', res.data.data)
           notifyForDischarge(patientId)
-          window.location.reload(false)
+          props.history.push({
+            pathname: 'dischargerequest/success',
+            state: { message : 'Discharge Summary Submitted successfully' },
+          })
         } else if (!res.data.success) {
           setOpenNotification(true)
           setErrorMsg('Error while adding the Discharge request')
@@ -889,13 +892,13 @@ function DischargeRequest(props) {
                 <Button
                   disabled={enableForm}
                   onClick={addNewRequest}
-                  style={styles.stylesForButton}
+                  style={{...styles.stylesForButton,width:'150' }}
                   variant='contained'
                   color='primary'
                 >
                   <img className='icon-style' src={plus_icon} />
                   &nbsp;&nbsp;
-                  <strong style={{ fontSize: '12px' }}>Pharmacy Request</strong>
+                  <strong style={{ fontSize: '12px'}}>Pharmacy Request</strong>
                 </Button>
               </div>
             </div>

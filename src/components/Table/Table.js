@@ -357,6 +357,7 @@ export default function CustomTable(props) {
       val === "reject" ||
       val === "response in progress" ||
       val === "partial approved" ||
+      val === "Partial Approved" ||
       val === "completed" ||
       val === "approve" ||
       val === "received" ||
@@ -427,9 +428,9 @@ export default function CustomTable(props) {
             >
               <strong>Approved</strong>
             </Button>
-          ) : val === "partial approved" ? (
+          ) : val === "partial approved" || val === "Partial Approved"? (
             <Button
-              style={{...stylesB.stylesForActive, backgroundColor: '#2c6ddd'}}
+              style={{...stylesB.stylesForActive, backgroundColor: '#2c6ddd',width:'150px'}}
               variant="contained"
               color="primary"
             >

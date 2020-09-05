@@ -291,7 +291,10 @@ function AddEditPurchaseRequest(props) {
               }
             })
           }
-          props.history.goBack()
+          props.history.push({
+            pathname: 'success',
+            state: { message : 'Discharge Medication order fulfilled successfully' },
+          })
         }
       })
       .catch((e) => {

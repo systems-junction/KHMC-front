@@ -504,6 +504,8 @@ export default function EdrRequest(props) {
       .put(updateEdrIprItem, params)
       .then((res) => {
         if (res.data.success) {
+          setOpenNotification(true);
+          setsuccessMsg("Submitted")
           window.location.reload(false);
           notifyForConsult(patientId)
         } else if (!res.data.success) {
@@ -554,6 +556,7 @@ export default function EdrRequest(props) {
           Details
         </DialogTitle>
         <div className='container-fluid'>
+        <Notification msg={errorMsg} open={openNotification} success={successMsg} />
           <div className='row'>
             <div
               className='col-md-6 col-sm-6 col-6'
@@ -668,7 +671,7 @@ export default function EdrRequest(props) {
             </div>
           </div>
         </div>
-        <Notification msg={errorMsg} open={openNotification} success={successMsg} />
+        
       </DialogContent>
     </Dialog>
   )
