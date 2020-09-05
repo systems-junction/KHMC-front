@@ -270,41 +270,19 @@ const tableHeading = [
   "Item Name",
   "Description",
   "Current Quantity",
-  "Requested Quantity"
+  "Requested Quantity",
 ];
 const tableDataKeys = [
-  ["item", "itemCode"],
-  ["item", "name"],
-  ["item", "description"],
-  ["item", "currQty"],
-  ["item", "reqQty"],
+  ["itemId", "itemCode"],
+  ["itemId", "name"],
+  ["itemId", "description"],
+  "currQty",
+  "reqQty",
 ];
 
-const actions = { receiveItem: true };
-
-const styles = {
-  inputContainerForTextField: {
-    marginTop: 25,
-  },
-
-  inputContainerForDropDown: {
-    marginTop: 25,
-    backgroundColor: "white",
-    borderRadius: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingTop: 2,
-  },
-
-  buttonContainer: {
-    marginTop: 25,
-  },
-};
-
-const useStyles = makeStyles(tableStyles);
+const actions = { receiveItem: "" };
 
 function AddEditPurchaseRequest(props) {
-  const classes = useStyles();
 
   const initialState = {
     _id: "",
@@ -424,7 +402,7 @@ function AddEditPurchaseRequest(props) {
         tableData={props.items}
         tableDataKeys={tableDataKeys}
         tableHeading={tableHeading}
-        // action={actions}
+        action={actions}
         receiveItem={handleView}
         borderBottomColor={"#60d69f"}
         borderBottomWidth={20}
