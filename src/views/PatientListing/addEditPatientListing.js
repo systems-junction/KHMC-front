@@ -722,9 +722,14 @@ function AddEditPatientListing(props) {
       .then((res) => {
         if (res.data.success) {
           console.log(res.data.data, 'response')
-          props.history.goBack()
+          // props.history.goBack()
+          props.history.push({
+            pathname: 'success',
+            state: { message : 'EDR generated successfully' },
+          })
         } else if (!res.data.success) {
           setOpenNotification(true)
+          setErrorMsg('Error while generating EDR request')
         }
       })
       .catch((e) => {
@@ -746,7 +751,11 @@ function AddEditPatientListing(props) {
       .then((res) => {
         if (res.data.success) {
           console.log(res.data.data, 'response')
-          props.history.goBack()
+         // props.history.goBack()
+         props.history.push({
+          pathname: 'success',
+          state: { message : 'IPR generated successfully' },
+        })
         } else if (!res.data.success) {
           setOpenNotification(true)
         }

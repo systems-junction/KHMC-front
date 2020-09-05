@@ -243,8 +243,11 @@ function AddEditPurchaseRequest(props) {
       .then((res) => {
         if (res.data.success) {
           console.log(res.data, 'res')
-          setOpenNotification(true)
-          setsuccessMsg('Submitted successfully')
+          props.history.push({
+            pathname: 'success',
+            state: { message : 'Radiology services request submitted successfully' },
+          })
+          
         } else {
           setOpenNotification(true)
           setErrorMsg('Error while submitting')
