@@ -608,7 +608,12 @@ function AddEditPurchaseRequest(props) {
           .then((res) => {
             if (res.data.success) {
               console.log("response after adding RR", res.data);
-              props.history.replace("/home/wms/fus/medicinalorder/success");
+              props.history.replace({
+                pathname: "/home/wms/fus/medicinalorder/success",
+                state: {
+                  message: "Your order has been placed succesfully",
+                },
+              });
             } else if (!res.data.success) {
               setOpenNotification(true);
             }
