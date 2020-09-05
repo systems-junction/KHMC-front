@@ -1058,7 +1058,7 @@ function PatientCare(props) {
                                                 <Table size="small">
                                                     <TableHead>
                                                         <TableRow>
-                                                            <TableCell>MRN Number</TableCell>
+                                                            <TableCell>MRN</TableCell>
                                                             <TableCell>Patient Name</TableCell>
                                                             <TableCell>Gender</TableCell>
                                                             <TableCell>Age</TableCell>

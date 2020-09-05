@@ -15,7 +15,7 @@ import '../../../assets/jss/material-dashboard-react/components/loaderStyle.css'
 import socketIOClient from 'socket.io-client'
 
 const tableHeading = [
-  'MRN Number',
+  'MRN',
   'Request Number',
   'Date',
   'Status',

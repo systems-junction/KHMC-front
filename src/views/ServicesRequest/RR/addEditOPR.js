@@ -1014,7 +1014,7 @@ function AddEditPatientListing(props) {
                               <Table size='small'>
                                 <TableHead>
                                   <TableRow>
-                                    <TableCell>MRN Number</TableCell>
+                                    <TableCell>MRN</TableCell>
                                     <TableCell>Patient Name</TableCell>
                                     <TableCell>Gender</TableCell>
                                     <TableCell>Age</TableCell>
@@ -1361,7 +1361,7 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
-                  label='Height'
+                  label='Height (cm)'
                   name={'height'}
                   value={height}
                   onChange={onChangeValue}
@@ -1381,7 +1381,7 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
-                  label='Weight'
+                  label='Weight (kg)'
                   name={'weight'}
                   value={weight}
                   onChange={onChangeValue}
@@ -1448,7 +1448,7 @@ function AddEditPatientListing(props) {
                 <TextField
                   required
                   type='text'
-                  label='Phone Number'
+                  label='Telephone Number'
                   name={'phoneNumber'}
                   error={phoneNumber === '' && isFormSubmitted}
                   value={phoneNumber}
