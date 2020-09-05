@@ -10,7 +10,8 @@ import Back_Arrow from '../../assets/img/Back_Arrow.png'
 import cookie from 'react-cookies'
 import axios from 'axios'
 import {
-    updateEdrIpr
+    updateEdrIpr,
+    notifyTriage
 } from '../../public/endpoins'
 import '../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
 import Notification from '../../components/Snackbar/Notification.js'
@@ -76,11 +77,14 @@ function TriageAndAssessment(props) {
     const [successMsg, setsuccessMsg] = useState('')
     const [requestType, setrequestType] = useState('')
     const [openNotification, setOpenNotification] = useState(false)
+    const [patientId,setpatientId] =useState('')
 
     useEffect(() => {
         setCurrentUser(cookie.load('current_user'))
 
         const selectedRec = props.history.location.state.selectedItem
+        setpatientId(props.history.location.state.selectedItem.patientId._id)
+        console.log("id ..... ",props.history.location.state.selectedItem.patientId._id)
         console.log("In triage : ", selectedRec)
         setId(selectedRec._id)
         setrequestType(selectedRec.requestType)
@@ -126,13 +130,14 @@ function TriageAndAssessment(props) {
                 neurological,
             }
         }
-        console.log(params,"params")
+        console.log(params, "params")
         axios.put(updateEdrIpr, params)
             .then((res) => {
                 if (res.data.success) {
                     console.log("Update Patient data : ", res.data.data)
                     setOpenNotification(true);
                     setsuccessMsg("Assessment Submitted");
+                    notifyForTriage(patientId)
                 } else if (!res.data.success) {
                     setOpenNotification(true);
                     setErrorMsg("Error in Submitting Assessment");
@@ -144,6 +149,20 @@ function TriageAndAssessment(props) {
                 setErrorMsg("Error while submitting Assessment");
             });
     }
+
+    const notifyForTriage = (id) => {
+
+        axios.get(notifyTriage + '/' + id)
+            .then((res) => {
+                console.log(res)
+            })
+            .catch((e) => {
+                console.log("error after notify", e);
+                setOpenNotification(true);
+                setErrorMsg(e);
+            });
+    }
+
 
     if (openNotification) {
         setTimeout(() => {

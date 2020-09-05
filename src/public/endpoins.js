@@ -52,7 +52,13 @@ export const generateIPR = `${baseUrl}/ipr/addipr`
 export const searchpatient = `${baseUrl}/patient/searchpatient`
 export const updateEdrIpr = `${baseUrl}/patient/updateEdrIpr`
 export const updateEdrIprItem = `${baseUrl}/patient/updateEdrIprItem`
-
+// for notifications
+export const notifyTriage = `${baseUrl}/patient/triage`
+export const notifyPharmacy = `${baseUrl}/patient/pharmacy`
+export const notifyLab = `${baseUrl}/patient/lab`
+export const notifyRad = `${baseUrl}/patient/rad`
+export const notifyConsultation = `${baseUrl}/patient/consultation`
+export const notifyDischarge = `${baseUrl}/patient/discharge`
 
 // reimbursement endpoints
 export const getSearchedpatient = `${baseUrl}/reimbursementclaim/getpatient`

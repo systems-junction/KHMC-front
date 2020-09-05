@@ -13,6 +13,7 @@ import {
   updateEdrIpr,
   searchpatient,
   getSearchedpatient,
+  notifyConsultation
 } from '../../../public/endpoins'
 import cookie from 'react-cookies'
 import Header from '../../../components/Header/Header'
@@ -309,6 +310,7 @@ function LabRadRequest(props) {
 
     pharmacyRequestArray: '',
     requestType: '',
+    patientId:''
   }
 
   function reducer(state, { field, value }) {
@@ -359,6 +361,7 @@ function LabRadRequest(props) {
 
     pharmacyRequestArray,
     requestType,
+    patientId
   } = state
 
   const onChangeValue = (e) => {
@@ -469,6 +472,7 @@ function LabRadRequest(props) {
       .then((res) => {
         if (res.data.success) {
           console.log('response while adding Consult Req', res.data.data)
+          notifyForConsult(patientId)
           window.location.reload(false)
         } else if (!res.data.success) {
           setOpenNotification(true)
@@ -482,6 +486,19 @@ function LabRadRequest(props) {
       })
     //   }
     // }
+  }
+
+  const notifyForConsult = (id) => {
+
+    axios.get(notifyConsultation + '/' + id)
+        .then((res) => {
+            console.log(res)
+        })
+        .catch((e) => {
+            console.log("error after notify", e);
+            setOpenNotification(true);
+            setErrorMsg(e);
+        });
   }
 
   function addResidentRequest() {
@@ -934,10 +951,9 @@ function LabRadRequest(props) {
 
             Object.entries(res.data.data).map(([key, val]) => {
               if (val && typeof val === 'object') {
-                // if (key === "patientId") {
-                //     dispatch({ field: "patientId", value: val._id });
-                // } else
-                if (key === 'labRequest') {
+                if (key === "patientId") {
+                    dispatch({ field: "patientId", value: val._id });
+                } else if (key === 'labRequest') {
                   dispatch({ field: 'labRequestArray', value: val })
                 } else if (key === 'radiologyRequest') {
                   dispatch({ field: 'radiologyRequestArray', value: val })

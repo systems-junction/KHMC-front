@@ -11,6 +11,8 @@ import {
   updateEdrIpr,
   searchpatient,
   getSearchedpatient,
+  notifyLab,
+  notifyRad
 } from '../../../public/endpoins'
 import cookie from 'react-cookies'
 import Header from '../../../components/Header/Header'
@@ -274,6 +276,7 @@ function LabRadRequest(props) {
 
     pharmacyRequestArray: '',
     requestType: '',
+    patientId:''
   }
 
   function reducer(state, { field, value }) {
@@ -321,6 +324,7 @@ function LabRadRequest(props) {
 
     pharmacyRequestArray,
     requestType,
+    patientId
   } = state
 
   const onChangeValue = (e) => {
@@ -631,6 +635,7 @@ function LabRadRequest(props) {
           console.log('response after adding Lab Request', res.data)
           setOpenNotification(true)
           setsuccessMsg('Lab Request added')
+          notifyForLab(patientId)
         } else if (!res.data.success) {
           setOpenNotification(true)
           setErrorMsg('Error while adding the Lab Request')
@@ -641,6 +646,19 @@ function LabRadRequest(props) {
         setOpenNotification(true)
         setErrorMsg('Error after adding the Lab Request')
       })
+  }
+
+  const notifyForLab = (id) => {
+
+    axios.get(notifyLab + '/' + id)
+        .then((res) => {
+            console.log(res)
+        })
+        .catch((e) => {
+            console.log("error after notify", e);
+            setOpenNotification(true);
+            setErrorMsg(e);
+        });
   }
 
   const handleRadioSearch = (e) => {
@@ -748,6 +766,7 @@ function LabRadRequest(props) {
           console.log('response after adding Radio Request', res.data)
           setOpenNotification(true)
           setsuccessMsg('Radiology Request Added')
+          notifyForRad(patientId)
         } else if (!res.data.success) {
           setOpenNotification(true)
           setErrorMsg('Error while adding the Radiology Request')
@@ -758,6 +777,19 @@ function LabRadRequest(props) {
         setOpenNotification(true)
         setErrorMsg('Error after adding the Radiology Request', e)
       })
+  }
+
+  const notifyForRad = (id) => {
+
+    axios.get(notifyRad + '/' + id)
+        .then((res) => {
+            console.log(res)
+        })
+        .catch((e) => {
+            console.log("error after notify", e);
+            setOpenNotification(true);
+            setErrorMsg(e);
+        });
   }
 
   // // for Nursing
@@ -920,9 +952,9 @@ function LabRadRequest(props) {
 
             Object.entries(res.data.data).map(([key, val]) => {
               if (val && typeof val === 'object') {
-                // if (key === "patientId") {
-                //     dispatch({ field: "patientId", value: val._id });
-                // } else
+                if (key === "patientId") {
+                    dispatch({ field: "patientId", value: val._id });
+                } else
                 if (key === 'labRequest') {
                   dispatch({ field: 'labRequestArray', value: val })
                 } else if (key === 'radiologyRequest') {
