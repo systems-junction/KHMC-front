@@ -53,10 +53,16 @@ import '../../../assets/jss/material-dashboard-react/components/loaderStyle.css'
 const tableHeadingForPharmacy = [
   'Medicine Name',
   'Requested Qty',
-  'Price/Unit',
+  'Unit Price',
+  'Total Price',
   '',
 ]
-const tableDataKeysForPharmacy = ['medicineName', 'requestedQty', 'unitPrice']
+const tableDataKeysForPharmacy = [
+  'medicineName',
+  'requestedQty',
+  ['itemId', 'receiptUnitCost'],
+  ['itemId', 'issueUnitCost'],
+]
 
 const tableHeadingForDischarge = [
   'Medicine Name',
@@ -106,7 +112,7 @@ const styles = {
   stylesForButton: {
     color: 'white',
     cursor: 'pointer',
-    borderRadius: 15,
+    borderRadius: 5,
     backgroundColor: '#2c6ddd',
     height: '50px',
     outline: 'none',
@@ -221,8 +227,14 @@ function AddEditPurchaseRequest(props) {
       .get(getPHRByIdURL + '/' + id)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data, 'data')
+          console.log(res.data.data, 'data')
+
           if (res.data.data) {
+            // res.data.data.medicine.map(
+            //   (d) =>
+            //     (d.totalPrice =
+            //       d.medicine.ItemId.receiptUnitCost * d.medicine.requestedQty)
+            // )
             setIsLoading(false)
 
             Object.entries(res.data.data).map(([key, val]) => {
@@ -288,8 +300,6 @@ function AddEditPurchaseRequest(props) {
         console.log('error while searching req', e)
       })
   }
-
-  console.log(dischargeMedicationArray, 'name')
 
   useEffect(() => {
     getLRByIdURI(props.history.location.state.selectedItem._id)
