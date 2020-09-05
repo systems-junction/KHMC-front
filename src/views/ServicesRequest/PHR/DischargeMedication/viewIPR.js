@@ -357,7 +357,10 @@ function AddEditPurchaseRequest(props) {
 
             setIsLoading(false)
           }
-          props.history.goBack()
+          props.history.push({
+            pathname: 'success',
+            state: { message : 'Medication order fulfilled successfully' },
+          })
         }
       })
       .catch((e) => {

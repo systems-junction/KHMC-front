@@ -6,6 +6,7 @@ import preApproval from '../views/InsuranceClaim/PreApproval/preApproval'
 import viewPreApproval from '../views/InsuranceClaim/PreApproval/viewPreApproval'
 import needApproval from '../views/InsuranceClaim/PreApproval/needApproval'
 import followUp from '../views/InsuranceClaim/PreApproval/followUp'
+import SuccessScreen from '../components/SuccessScreen/SuccessScreen'
 
 class PreApproval extends React.PureComponent {
   render() {
@@ -17,6 +18,11 @@ class PreApproval extends React.PureComponent {
           exact
           path={`${this.props.match.url}/viewPreApproval`}
           component={viewPreApproval}
+        />
+         <Route
+          exact
+          path={`${this.props.match.url}/viewPreApproval/success`}
+          component={SuccessScreen}
         />
 
         <Route

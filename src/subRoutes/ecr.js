@@ -4,8 +4,6 @@ import { Route, Switch, Router, Redirect } from 'react-router-dom'
 import { createBrowserHistory } from 'history'
 import NotFound from '../components/NotFound/NotFound'
 import ECR from '../views/ECR/ECRMenu'
-// import EDR from './edrRoutes'
-// import IPR from './iprRoutes'
 import EDR from '../views/ECR/EcrEDR'
 import IPR from '../views/ECR/EcrIPR'
 import CN from '../views/ECR/ConsultationNotes'
@@ -17,6 +15,8 @@ import AddEDR from '../views/ECR/addEDR'
 import TriageAndAssessmentEDR from '../views/ECR/TriageAndAssessmentEDR'
 import TriageAndAssessmentIPR from '../views/ECR/TriageAndAssessmentIPR'
 import TriageAndAssessment from '../views/ECR/TriageAndAssessment'
+import SuccessScreen from '../components/SuccessScreen/SuccessScreen'
+
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const [currentUser, setCurrentUser] = React.useState(
     cookie.load('current_user')
@@ -75,6 +75,11 @@ class WMSRoutes extends React.PureComponent {
         <Route
           path={`${this.props.match.url}/cn/TriageAndAssessment`} //for consultation Triage & Assesment
           component={TriageAndAssessment}
+        />
+         <Route
+          exact
+          path={`${this.props.match.url}/cn/success`}
+          component={SuccessScreen}
         />
         <Route
           exact
