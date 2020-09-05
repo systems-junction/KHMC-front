@@ -60,8 +60,8 @@ const tableHeadingForPharmacy = [
 const tableDataKeysForPharmacy = [
   'medicineName',
   'requestedQty',
-  'unitPrice',
-  'totalPrice',
+  ['itemId', 'receiptUnitCost'],
+  ['itemId', 'issueUnitCost'],
 ]
 
 const tableHeadingForDischarge = [
@@ -227,8 +227,14 @@ function AddEditPurchaseRequest(props) {
       .get(getPHRByIdURL + '/' + id)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data, 'data')
+          console.log(res.data.data, 'data')
+
           if (res.data.data) {
+            // res.data.data.medicine.map(
+            //   (d) =>
+            //     (d.totalPrice =
+            //       d.medicine.ItemId.receiptUnitCost * d.medicine.requestedQty)
+            // )
             setIsLoading(false)
 
             Object.entries(res.data.data).map(([key, val]) => {
