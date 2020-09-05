@@ -353,7 +353,10 @@ function AddEditEDR(props) {
       .then((res) => {
         if (res.data.success) {
           console.log('response while adding Medicine Req', res.data.data)
-          props.history.goBack()
+          props.history.push({
+            pathname: 'success',
+            state: { message : 'Pharmacy Request added successfully' },
+          })
           notifyForPharm(patientId)
         } else if (!res.data.success) {
           setOpenNotification(true)

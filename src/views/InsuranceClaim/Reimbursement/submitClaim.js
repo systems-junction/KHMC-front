@@ -338,8 +338,10 @@ function AddEditPatientListing(props) {
           dispatch({ field: 'treatmentDetail', value: '' })
           dispatch({ field: 'document', value: '' })
           
-          setOpenNotification(true)
-          setsuccessMsg('Claim Submitted')
+          props.history.push({
+            pathname: 'success',
+            state: { message : 'Claim Submitted successfully' },
+          })
         } else if (!res.data.success) {
           setOpenNotification(true)
           setErrorMsg('Error submitting Claim details')
@@ -374,7 +376,10 @@ function AddEditPatientListing(props) {
       .put(updateClaim, formData)
       .then((res) => {
         if (res.data.success) {
-          props.history.goBack()
+          props.history.push({
+            pathname: 'success',
+            state: { message : 'Claim Updated successfully' },
+          })
         } else if (!res.data.success) {
           setOpenNotification(true)
         }

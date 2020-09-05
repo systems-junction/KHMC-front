@@ -234,8 +234,10 @@ function AddEditPurchaseRequest(props) {
       .then((res) => {
         if (res.data.success) {
           console.log('res', res.data)
-          setOpenNotification(true)
-          setsuccessMsg('Submitted successfully')
+          props.history.push({
+            pathname: 'success',
+            state: { message : 'Lab services request submitted successfully' },
+          })
         } else {
           setOpenNotification(true)
           setErrorMsg('Error while submitting')
@@ -813,7 +815,7 @@ function AddEditPurchaseRequest(props) {
                   variant='contained'
                   color='primary'
                 >
-                  <strong style={{ fontSize: '12px' }}>Save</strong>
+                  <strong style={{ fontSize: '12px' }}>Submit</strong>
                 </Button>
               </div>
             </div>

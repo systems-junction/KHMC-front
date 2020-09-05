@@ -31,6 +31,7 @@ import iprAddDischargeMed from '../views/ResidentDoctor/IPR/addDischargeMed'
 import addViewFollowUp from '../views/ResidentDoctor/IPR/addViewFollowUp'
 import AddIPR from '../views/ResidentDoctor/IPR/addEditIPR'
 import IPRTriageAndAssessment from '../views/ResidentDoctor/IPR/TriageAndAssessment'
+import SuccessScreen from '../components/SuccessScreen/SuccessScreen'
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const [currentUser, setCurrentUser] = React.useState(
@@ -42,13 +43,13 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
       {...rest}
       render={(props) =>
         currentUser.staffTypeId.type === 'admin' ||
-        currentUser.staffTypeId.type === 'Committe Member' ||
-        currentUser.staffTypeId.type === 'Accounts Member' ||
-        currentUser.staffTypeId.type === 'Warehouse Member' ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to='notfound' />
-        )
+          currentUser.staffTypeId.type === 'Committe Member' ||
+          currentUser.staffTypeId.type === 'Accounts Member' ||
+          currentUser.staffTypeId.type === 'Warehouse Member' ? (
+            <Component {...props} />
+          ) : (
+            <Redirect to='notfound' />
+          )
       }
     />
   )
@@ -93,7 +94,11 @@ class WMSRoutes extends React.PureComponent {
           path={`${this.props.match.url}/assessmentdiagnosis`}
           component={AssessmentAndDiagnosis}
         />
-
+        <Route
+          exact
+          path={`${this.props.match.url}/assessmentdiagnosis/success`}
+          component={SuccessScreen}
+        />
         <Route
           exact
           path={`${this.props.match.url}/assessmentdiagnosis/viewReport`}
@@ -129,11 +134,21 @@ class WMSRoutes extends React.PureComponent {
           path={`${this.props.match.url}/labradrequest/add`}
           component={AddPharmLab}
         />
+        <Route
+          exact
+          path={`${this.props.match.url}/labradrequest/success`}
+          component={SuccessScreen}
+        />
 
         <Route
           exact
           path={`${this.props.match.url}/consultationrequest/viewReport`}
           component={viewReportCons}
+        />
+        <Route
+          exact
+          path={`${this.props.match.url}/consultationrequest/success`}
+          component={SuccessScreen}
         />
 
         <Route
@@ -153,7 +168,11 @@ class WMSRoutes extends React.PureComponent {
           path={`${this.props.match.url}/dischargerequest/addDischargeRequest`}
           component={AddDischargeMedication}
         />
-
+        <Route
+          exact
+          path={`${this.props.match.url}/dischargerequest/success`}
+          component={SuccessScreen}
+        />
         <Route
           exact
           path={`${this.props.match.url}/ipr/viewIPR/add`}

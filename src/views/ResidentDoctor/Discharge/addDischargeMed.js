@@ -256,7 +256,10 @@ function AddEditEDR(props) {
         if (res.data.success) {
           console.log('response while adding Medicine Req', res.data.data)
           notifyForDischarge(patientId)
-          props.history.goBack()
+          props.history.push({
+            pathname: 'success',
+            state: { message : 'Pharmacy request added successfully' },
+          })
         } else if (!res.data.success) {
           setOpenNotification(true)
           setErrorMsg('Error while adding the Medicine request')

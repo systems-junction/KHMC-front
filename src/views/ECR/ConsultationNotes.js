@@ -691,8 +691,10 @@ function LabRadRequest(props) {
       .then((res) => {
         if (res.data.success) {
           console.log("response after adding Lab Request", res.data);
-          setOpenNotification(true)
-          setsuccessMsg('Lab Request added')
+          props.history.push({
+            pathname: 'cn/success',
+            state: { message : 'Lab Request added successfully' },
+          })
           notifyForLab(patientId)
         } else if (!res.data.success) {
           setOpenNotification(true);
@@ -816,8 +818,10 @@ function LabRadRequest(props) {
       .then((res) => {
         if (res.data.success) {
           console.log("response after adding Radio Request", res.data);
-          setOpenNotification(true)
-          setsuccessMsg('Radiology Request Added')
+          props.history.push({
+            pathname: 'cn/success',
+            state: { message : 'Radiology Request added successfully' },
+          })
           notifyForRad(patientId)
         } else if (!res.data.success) {
           setOpenNotification(true);

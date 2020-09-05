@@ -6,6 +6,7 @@ import reimbursement from '../views/InsuranceClaim/Reimbursement/reImbursement'
 import submitClaim from '../views/InsuranceClaim/Reimbursement/submitClaim'
 // import needApproval from '../views/InsuranceClaim/PreApproval/needApproval'
 // import followUp from '../views/InsuranceClaim/PreApproval/followUp'
+import SuccessScreen from '../components/SuccessScreen/SuccessScreen'
 
 class reImbursement extends React.PureComponent {
   render() {
@@ -17,6 +18,12 @@ class reImbursement extends React.PureComponent {
           exact
           path={`${this.props.match.url}/submitClaim`}
           component={submitClaim}
+        />
+        
+        <Route
+          exact
+          path={`${this.props.match.url}/success`}
+          component={SuccessScreen}
         />
 
         {/* <Route
