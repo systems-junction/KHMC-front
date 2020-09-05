@@ -87,11 +87,11 @@ const stylesB = {
 const StyledTableRow = withStyles((theme) => ({
   root: {
     "&:nth-of-type(odd)": {
-      backgroundColor: "#dddddd",
+      backgroundColor: '#f4f4f4',
     },
 
     "&:nth-of-type(even)": {
-      backgroundColor: "white",
+      backgroundColor: "#FFFFFF",
     },
   },
 }))(TableRow);
