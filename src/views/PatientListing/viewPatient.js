@@ -82,7 +82,7 @@ export default function ViewPatient(props) {
               style={styles.inputContainerForTextField}
             >
               <InputLabel style={styles.styleForLabel} id="generated-label">
-                MRN Number
+                MRN
               </InputLabel>
               <h6>{props.item.profileNo}</h6>
             </div>

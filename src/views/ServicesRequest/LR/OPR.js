@@ -15,7 +15,7 @@ import business_Unit from '../../../assets/img/OPR.png'
 import '../../../assets/jss/material-dashboard-react/components/loaderStyle.css'
 import socketIOClient from 'socket.io-client'
 
-const tableHeading = ['MRN Number', 'Request Number', 'Date/Time', 'Status', '']
+const tableHeading = ['MRN', 'Request Number', 'Date/Time', 'Status', '']
 const tableDataKeys = [
   ['patientId', 'profileNo'],
   'requestNo',
