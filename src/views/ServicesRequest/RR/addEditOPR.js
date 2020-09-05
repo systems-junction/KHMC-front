@@ -281,6 +281,7 @@ function AddEditPatientListing(props) {
     title: '',
     firstName: '',
     lastName: '',
+    nationality: '',
     gender: '',
     age: '',
     height: '',
@@ -329,6 +330,7 @@ function AddEditPatientListing(props) {
     title,
     firstName,
     lastName,
+    nationality,
     gender,
     age,
     height,
@@ -443,6 +445,8 @@ function AddEditPatientListing(props) {
       firstName.length > 0 &&
       lastName &&
       lastName.length > 0 &&
+      nationality &&
+      nationality.length > 0 &&
       phoneNumber &&
       phoneNumber.length > 0 &&
       mobileNumber &&
@@ -531,6 +535,7 @@ function AddEditPatientListing(props) {
       title,
       firstName,
       lastName,
+      nationality,
       gender,
       dob,
       age,
@@ -608,6 +613,7 @@ function AddEditPatientListing(props) {
         title,
         firstName,
         lastName,
+        nationality,
         gender,
         height,
         age,
@@ -784,6 +790,7 @@ function AddEditPatientListing(props) {
     setPatientId(i._id)
     dispatch({ field: 'firstName', value: i.firstName })
     dispatch({ field: 'lastName', value: i.lastName })
+    dispatch({ field: 'nationality', value: i.nationality })
     dispatch({ field: 'gender', value: i.gender })
     dispatch({ field: 'age', value: i.age })
     dispatch({ field: 'profileNo', value: i.profileNo })
@@ -1225,7 +1232,7 @@ function AddEditPatientListing(props) {
 
             <div className='row'>
               <div
-                className='col-md-2 col-sm-2'
+                className='col-md-4 col-sm-4'
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -1272,7 +1279,7 @@ function AddEditPatientListing(props) {
               </div>
 
               <div
-                className='col-md-2 col-sm-2'
+                className='col-md-4 col-sm-4'
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -1330,10 +1337,36 @@ function AddEditPatientListing(props) {
                     </>
                   )} */}
               </div>
+              <div
+                className='col-md-4 col-sm-4 col-4'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  required
+                  type='text'
+                  label='Nationality'
+                  name={'nationality'}
+                  value={nationality}
+                  error={nationality === '' && isFormSubmitted}
+                  onChange={(e) => onChangeValue(e)}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                />
+              </div>
 
               {/* here */}
+            </div>
+
+            <div className='row'>
               <div
-                className='col-md-2 col-sm-2'
+                className='col-md-3 col-sm-3'
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -1354,7 +1387,7 @@ function AddEditPatientListing(props) {
                 />
               </div>
               <div
-                className='col-md-2 col-sm-2'
+                className='col-md-3 col-sm-3'
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -1374,7 +1407,7 @@ function AddEditPatientListing(props) {
                 />
               </div>
               <div
-                className='col-md-2 col-sm-2'
+                className='col-md-3 col-sm-3'
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -1395,7 +1428,7 @@ function AddEditPatientListing(props) {
               </div>
 
               <div
-                className='col-md-2 col-sm-2'
+                className='col-md-3 col-sm-3'
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
