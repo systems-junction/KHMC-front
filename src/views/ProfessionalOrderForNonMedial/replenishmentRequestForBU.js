@@ -148,13 +148,13 @@ const tableHeadingForFUMemberForItems = [
 
 const actions = { view: true };
 const actionsForBUMemeber = { edit: true, view: true };
-const actionsForBUNurse = { view: true };
+const actionsForBUNurse = { view: true, edit: true };
 const actionsForBUDoctor = { view: true };
 
 const actionsForItemsForReceiver = {
   // edit: true,
   receiveItem: true,
-  view: true
+  view: true,
 };
 const actionsForItemsForOther = { view: true };
 const actionsForItemsForFUMember = { edit: true };
@@ -384,31 +384,6 @@ export default function ReplenishmentRequest(props) {
 
   const handleView = (obj) => {
     let path = `professionalorder/edit`;
-    // props.history.push({
-    //   pathname: path,
-    //   state: {
-    //     comingFor: "view",
-    //     selectedItem: obj,
-    //     vendors,
-    //     statues,
-    //     items,
-    //     buObj,
-    //   },
-    // });
-
-    // if (currentUser.staffTypeId.type === "Registered Nurse") {
-    //   let repRequest = res.data.da;
-    //   let temp = [];
-    //   for (let i = 0; i < repRequest.length; i++) {
-    //     if (repRequest[i].buId.buHead === currentUser.staffId) {
-    //       temp.push(repRequest[i]);
-    //     }
-    //   }
-    //   console.log("rep array after filter", temp);
-    //   setPurchaseRequest(temp.reverse());
-    // }
-
-    // else {
 
     if (currentUser.staffTypeId.type === "Registered Nurse") {
       let repRequest = obj.item;

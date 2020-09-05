@@ -39,6 +39,7 @@ import AddedPurchaseRequestTable from "../PurchaseOrders/addedPurchaseRequestTab
 import ViewItems from "./viewItems";
 
 import ViewSingleItem from "../PurchaseOrders/viewItem";
+import useStyleforinput from "../../../src/assets/jss/material-dashboard-react/inputStyle.js";
 
 const tableHeadingForPR = [
   "Purchase Request No",
@@ -59,21 +60,21 @@ const generatedArrayForPO = [
 
 const styles = {
   inputContainerForTextField: {
-    marginTop: 25,
+    marginTop: 6,
   },
 
   inputContainerForDropDown: {
-    marginTop: 60,
-    backgroundColor: "white",
-    borderRadius: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingTop: 2,
+    marginTop: 6,
   },
 
   stylesForLabel: {
     fontWeight: "700",
     color: "white",
+  },
+
+  textFieldPadding: {
+    paddingLeft: 3,
+    paddingRight: 3,
   },
 };
 
@@ -90,8 +91,10 @@ const DATE = new Date();
 const time = DATE.getHours();
 
 function AddEditPurchaseRequest(props) {
-  const classes = useStyles();
+  // const classes = useStyles();
   const classesForTabs = useStylesForTabs();
+
+  const classes = useStyleforinput();
 
   const initialState = {
     _id: "",
@@ -228,7 +231,23 @@ function AddEditPurchaseRequest(props) {
       .then((res) => {
         if (res.data.success) {
           console.log("response after getting the PO details", res.data.data);
-          setPurchaseOrderDetails(res.data.data.poId.purchaseRequestId);
+
+          let temp = [];
+          for (
+            let i = 0;
+            i < res.data.data.poId.purchaseRequestId.length;
+            i++
+          ) {
+            for (
+              let j = 0;
+              j < res.data.data.poId.purchaseRequestId[i].item.length;
+              j++
+            ) {
+              temp = [...temp, res.data.data.poId.purchaseRequestId[i].item[j]];
+            }
+          }
+          console.log("temp", temp);
+          setPurchaseOrderDetails(temp);
         } else if (!res.data.success) {
           setErrorMsg(res.data.error);
           setOpenNotification(true);
@@ -307,12 +326,11 @@ function AddEditPurchaseRequest(props) {
         <div className="subheader">
           <div>
             <img src={business_Unit} />
-            <h4>Purchase Order</h4>
+            <h4>Approve Purchase Order</h4>
           </div>
 
           <div>
             <img onClick={() => props.history.goBack()} src={VIewAll} />
-            {/* <img src={Search} /> */}
           </div>
         </div>
 
@@ -327,7 +345,7 @@ function AddEditPurchaseRequest(props) {
               style={{
                 color: "white",
                 borderRadius: 15,
-                backgroundColor: value === 0 ? "#2c6ddd" : undefined,
+                // backgroundColor: value === 0 ? "#2c6ddd" : undefined,
               }}
               label="PO Details"
             />
@@ -335,7 +353,7 @@ function AddEditPurchaseRequest(props) {
               style={{
                 color: "white",
                 borderRadius: 15,
-                backgroundColor: value === 1 ? "#2c6ddd" : undefined,
+                // backgroundColor: value === 1 ? "#2c6ddd" : undefined,
               }}
               label="Items"
             />
@@ -345,187 +363,233 @@ function AddEditPurchaseRequest(props) {
         {value === 0 ? (
           <div
             style={{ flex: 4, display: "flex", flexDirection: "column" }}
-            className="container"
+            className="container-fluid"
           >
             <div className="row">
-              <div className="col-md-12">
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
-                    PO Number
-                  </InputLabel>
-                  <input
-                    disabled={true}
-                    type="text"
-                    placeholder="Item Name"
-                    name={"itemName"}
-                    value={poId.purchaseOrderNo}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                  />
-                </div>
+              <div
+                className="col-md-12"
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  name={"itemName"}
+                  disabled={true}
+                  label="PO Number"
+                  value={poId.purchaseOrderNo}
+                  className="textInputStyle"
+                  variant="filled"
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                />
               </div>
             </div>
 
             <div className="row">
-              <div className="col-md-6">
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
-                    Date/Time Generated
-                  </InputLabel>
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <DateTimePicker
-                      disabled={true}
-                      inputVariant="outlined"
-                      onChange={onChangeDate}
-                      fullWidth
-                      style={{ borderRadius: 10, backgroundColor: "white" }}
-                      value={poId.createdAt}
-                    />
-                  </MuiPickersUtilsProvider>
-                </div>
+              <div
+                className="col-md-6"
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <DateTimePicker
+                    disabled
+                    inputVariant="filled"
+                    fullWidth={true}
+                    format="dd/MM/yyyy"
+                    label="Date/Time Generated"
+                    style={{ borderRadius: 10, backgroundColor: "white" }}
+                    value={poId.createdAt}
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  />
+                </MuiPickersUtilsProvider>
               </div>
 
-              <div className="col-md-6">
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
-                    Date/Time Sent
-                  </InputLabel>
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <DateTimePicker
-                      disabled={true}
-                      inputVariant="outlined"
-                      onChange={onChangeDate}
-                      fullWidth
-                      style={{ borderRadius: 10, backgroundColor: "white" }}
-                      value={poId.sentAt}
-                    />
-                  </MuiPickersUtilsProvider>
-                </div>
+              <div
+                className="col-md-6"
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <DateTimePicker
+                    disabled
+                    inputVariant="filled"
+                    fullWidth={true}
+                    format="dd/MM/yyyy"
+                    label="Date/Time Sent"
+                    style={{ borderRadius: 10, backgroundColor: "white" }}
+                    value={poId.sentAt}
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  />
+                </MuiPickersUtilsProvider>
               </div>
             </div>
 
             <div className="row">
-              <div className="col-md-6">
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
-                    Generated
-                  </InputLabel>
-                  <input
-                    disabled={true}
-                    type="text"
-                    placeholder="Generated"
-                    name={"itemName"}
-                    value={poId.generated}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                  />
-                </div>
+              <div
+                className="col-md-6"
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  name={"itemName"}
+                  disabled={true}
+                  label="Generated"
+                  value={poId.generated}
+                  className="textInputStyle"
+                  variant="filled"
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                />
               </div>
 
-              <div className="col-md-6">
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
-                    Vendor Name
-                  </InputLabel>
-                  <input
-                    disabled={true}
-                    type="text"
-                    placeholder="Venor Name"
-                    name={"itemName"}
-                    value={selectedItem && selectedItem.vendorId.englishName}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="row">
-              <div className="col-md-6">
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
-                    Contact Person
-                  </InputLabel>
-                  <input
-                    disabled={true}
-                    type="text"
-                    placeholder="Item Name"
-                    name={"Contact Person"}
-                    value={
-                      selectedItem && selectedItem.vendorId.contactPersonName
-                    }
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                  />
-                </div>
-              </div>
-
-              <div className="col-md-6">
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
-                    Contact Number
-                  </InputLabel>
-                  <input
-                    disabled={true}
-                    type="text"
-                    placeholder="Contact Number"
-                    name={"itemName"}
-                    value={
-                      selectedItem &&
-                      selectedItem.vendorId.contactPersonTelephone
-                    }
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                  />
-                </div>
+              <div
+                className="col-md-6"
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  name={"itemName"}
+                  disabled={true}
+                  label="Venor Name"
+                  value={selectedItem && selectedItem.vendorId.englishName}
+                  className="textInputStyle"
+                  variant="filled"
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                />
               </div>
             </div>
 
             <div className="row">
-              <div className="col-md-6">
-                <div style={styles.inputContainerForDropDown}>
-                  <InputLabel id="label-for-status">Status</InputLabel>
-                  <Select
-                    fullWidth
-                    id="status"
-                    name="status"
-                    value={status}
-                    onChange={onChangeValue}
-                    // label="Status"
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    {generatedArrayForPO &&
-                      generatedArrayForPO.map((val) => {
-                        return (
-                          <MenuItem key={val.key} value={val.key}>
-                            {val.value}
-                          </MenuItem>
-                        );
-                      })}
-                  </Select>
-                </div>
+              <div
+                className="col-md-6"
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  name={"itemName"}
+                  disabled={true}
+                  label="Contact Person"
+                  value={
+                    selectedItem && selectedItem.vendorId.contactPersonName
+                  }
+                  className="textInputStyle"
+                  variant="filled"
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                />
               </div>
 
-              <div className="col-md-6">
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
-                    Comments
-                  </InputLabel>
-                  <input
-                    type="text"
-                    placeholder="Comments"
-                    name={"comments"}
-                    value={comments}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                  />
-                </div>
+              <div
+                className="col-md-6"
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  name={"itemName"}
+                  disabled={true}
+                  label="Contact Number"
+                  value={
+                    selectedItem && selectedItem.vendorId.contactPersonTelephone
+                  }
+                  className="textInputStyle"
+                  variant="filled"
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                />
               </div>
             </div>
 
-            <div style={{ marginTop: "5%" }}>
+            <div className="row">
+              <div
+                className="col-md-6"
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  select
+                  fullWidth
+                  id="status"
+                  name="status"
+                  value={status}
+                  onChange={onChangeValue}
+                  label="Status"
+                  variant="filled"
+                  // className="dropDownStyle"
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  {generatedArrayForPO &&
+                    generatedArrayForPO.map((val) => {
+                      return (
+                        <MenuItem key={val.key} value={val.key}>
+                          {val.value}
+                        </MenuItem>
+                      );
+                    })}
+                </TextField>
+              </div>
+
+              <div
+                className="col-md-6"
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  name={"comments"}
+                  disabled={true}
+                  label="Comments"
+                  value={comments}
+                  className="textInputStyle"
+                  variant="filled"
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* <div style={{ marginTop: "5%" }}>
               {poId && poId.purchaseRequestId.length !== 0 ? (
                 <AddedPurchaseRequestTable
                   tableData={poId.purchaseRequestId}
@@ -540,26 +604,33 @@ function AddEditPurchaseRequest(props) {
               ) : (
                 undefined
               )}
-            </div>
+            </div> */}
 
-            <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
+            <div
+              style={{
+                display: "flex",
+                flex: 1,
+                justifyContent: "space-between",
+                marginBottom: 40,
+                marginTop: 20,
+              }}
+            >
+              <div style={{}}>
+                <img
+                  onClick={() => props.history.goBack()}
+                  src={Back_Arrow}
+                  style={{ width: 60, height: 40, cursor: "pointer" }}
+                />
+              </div>
               <Button
                 disabled={!validateForm()}
-                style={{ width: "70%", paddingTop: 10, paddingBottom: 10 }}
+                style={{ width: 140, height: 45 }}
                 onClick={handleEdit}
                 variant="contained"
                 color="primary"
               >
                 Update
               </Button>
-            </div>
-
-            <div style={{ marginBottom: 20, marginTop: 50 }}>
-              <img
-                onClick={() => props.history.goBack()}
-                src={Back_Arrow}
-                style={{ width: 60, height: 40, cursor: "pointer" }}
-              />
             </div>
 
             {openItemDialog ? (
@@ -575,7 +646,7 @@ function AddEditPurchaseRequest(props) {
         ) : (
           <div
             style={{ flex: 4, display: "flex", flexDirection: "column" }}
-            className="container"
+            className="container-fluid"
           >
             <ViewItems
               history={props.history}

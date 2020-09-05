@@ -610,7 +610,6 @@ function AddEditPurchaseRequest(props) {
     }, 2000);
   }
 
-  console.log(make_model, size);
 
   return (
     <div
