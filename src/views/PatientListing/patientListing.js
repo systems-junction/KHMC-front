@@ -14,20 +14,20 @@ import ViewPatient from './viewPatient'
 
 const tableHeading = [
   'MRN',
-  'Patient First Name',
-  'Patient Last Name',
-  'City',
-  'Insurance No',
-  'Coverage Terms',
+  'Patient Name',
+  'Gender',
+  'Age',
+  'Phone',
+  'Email',
   'Actions',
 ]
 const tableDataKeys = [
   'profileNo',
-  'firstName',
-  'lastName',
-  'city',
-  'insuranceNo',
-  'coverageTerms',
+  'patientName',
+  'gender',
+  'age',
+  'phoneNumber',
+  'email',
 ]
 
 const actions = { view: true }
@@ -48,6 +48,9 @@ export default function PatientListing(props) {
       .get(getPatientUrl)
       .then((res) => {
         if (res.data.success) {
+          res.data.data.map(
+            (d) => (d.patientName = d.firstName + ' ' + d.lastName)
+          )
           setPatient(res.data.data.reverse())
           console.log(res.data.data, 'get patient')
         } else if (!res.data.success) {

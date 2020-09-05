@@ -288,6 +288,7 @@ function AddEditPatientListing(props) {
     bloodGroup: '',
     dob: '',
     phoneNumber: '',
+    mobileNumber: '',
     email: '',
     country: '',
     city: '',
@@ -335,6 +336,7 @@ function AddEditPatientListing(props) {
     bloodGroup,
     dob,
     phoneNumber,
+    mobileNumber,
     email,
     country,
     city,
@@ -443,6 +445,8 @@ function AddEditPatientListing(props) {
       lastName.length > 0 &&
       phoneNumber &&
       phoneNumber.length > 0 &&
+      mobileNumber &&
+      mobileNumber.length > 0 &&
       age &&
       age != null &&
       gender &&
@@ -534,6 +538,7 @@ function AddEditPatientListing(props) {
       weight,
       bloodGroup,
       phoneNumber,
+      mobileNumber,
       height,
       weight,
       bloodGroup,
@@ -610,6 +615,7 @@ function AddEditPatientListing(props) {
         bloodGroup,
         dob,
         phoneNumber,
+        mobileNumber,
         email,
         country,
         city,
@@ -789,6 +795,7 @@ function AddEditPatientListing(props) {
     dispatch({ field: 'weight', value: i.weight })
     dispatch({ field: 'bloodGroup', value: i.bloodGroup })
     dispatch({ field: 'phoneNumber', value: i.phoneNumber })
+    dispatch({ field: 'mobileNumber', value: i.mobileNumber })
     dispatch({ field: 'email', value: i.email })
     dispatch({ field: 'country', value: i.country })
     dispatch({ field: 'city', value: i.city })
@@ -1583,7 +1590,37 @@ function AddEditPatientListing(props) {
 
             <div className='row'>
               <div
-                className='col-md-12'
+                className='col-md-3'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  required
+                  label='Mobile Number'
+                  name={'mobileNumber'}
+                  value={mobileNumber}
+                  error={mobileNumber === '' && isFormSubmitted}
+                  onChange={onChangeValue}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                  InputLabelProps={{
+                    className: classes.label,
+                    classes: { label: classes.label },
+                  }}
+                />
+                {/* <ErrorMessage
+                  name={mobileNumber}
+                  isFormSubmitted={isFormSubmitted}
+                /> */}
+              </div>
+              <div
+                className='col-md-9'
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
