@@ -293,7 +293,7 @@ function AddEditPurchaseRequest(props) {
                         <div className='col-md-4 col-sm-4 col-4'>
                             <div style={styles.inputContainerForTextField}>
                                 <InputLabel style={styles.stylesForLabel} id='status-label'>
-                                    MRN Number
+                                    MRN
                   </InputLabel>
                                 <input
                                     disabled={true}

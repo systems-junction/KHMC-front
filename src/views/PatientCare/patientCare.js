@@ -325,7 +325,7 @@ function PatientCare(props) {
     const [currentUser, setCurrentUser] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
     const [openNotification, setOpenNotification] = useState(false);
-    const [value, setValue] = useState(2);
+    const [value, setValue] = useState(1);
     const [selectedItem, setSelectedItem] = useState("");
     const [searchPatientQuery, setSearchPatientQuery] = useState("");
     const [patientFoundSuccessfull, setpatientFoundSuccessfully] = useState(false);
@@ -1058,7 +1058,7 @@ function PatientCare(props) {
                                                 <Table size="small">
                                                     <TableHead>
                                                         <TableRow>
-                                                            <TableCell>MRN Number</TableCell>
+                                                            <TableCell>MRN</TableCell>
                                                             <TableCell>Patient Name</TableCell>
                                                             <TableCell>Gender</TableCell>
                                                             <TableCell>Age</TableCell>
@@ -1254,7 +1254,7 @@ function PatientCare(props) {
                                     color: "white",
                                     borderRadius: 5,
                                     outline: "none",
-                                    backgroundColor: value === 1 ? "#2c6ddd" : undefined,
+                                    backgroundColor: value === 0 ? "#2c6ddd" : undefined,
                                 }}
                                 label="Resident Doctor Notes"
                                 disabled
@@ -1264,7 +1264,7 @@ function PatientCare(props) {
                                     color: "white",
                                     borderRadius: 5,
                                     outline: "none",
-                                    backgroundColor: value === 2 ? "#2c6ddd" : undefined,
+                                    backgroundColor: value === 1 ? "#2c6ddd" : undefined,
                                 }}
                                 label="Pharm"
                             />
@@ -1273,7 +1273,7 @@ function PatientCare(props) {
                                     color: "white",
                                     borderRadius: 5,
                                     outline: "none",
-                                    backgroundColor: value === 3 ? "#2c6ddd" : undefined,
+                                    backgroundColor: value === 2 ? "#2c6ddd" : undefined,
                                 }}
                                 label="Lab"
                                 disabled
@@ -1283,7 +1283,7 @@ function PatientCare(props) {
                                     color: "white",
                                     borderRadius: 5,
                                     outline: "none",
-                                    backgroundColor: value === 4 ? "#2c6ddd" : undefined,
+                                    backgroundColor: value === 3 ? "#2c6ddd" : undefined,
                                 }}
                                 label="Rad"
                                 disabled
@@ -1293,7 +1293,7 @@ function PatientCare(props) {
                                     color: "white",
                                     borderRadius: 5,
                                     outline: "none",
-                                    backgroundColor: value === 0 ? "#2c6ddd" : undefined,
+                                    backgroundColor: value === 4 ? "#2c6ddd" : undefined,
                                 }}
                                 label="External Consultation"
                                 disabled
@@ -1301,7 +1301,7 @@ function PatientCare(props) {
                         </Tabs>
                     </div>
 
-                    {/* {value === 0 ? (
+                    {/* {value === 4 ? (
                         <div
                             style={{ flex: 4, display: "flex", flexDirection: "column" }}
                             className="container-fluid"
@@ -1346,7 +1346,7 @@ function PatientCare(props) {
                                 </div>
                             </div>
                         </div>
-                    ) : value === 1 ? (
+                    ) : value === 0 ? (
                         <div
                             style={{ flex: 4, display: "flex", flexDirection: "column" }}
                             className=" container-fluid"
@@ -1378,7 +1378,7 @@ function PatientCare(props) {
                             </div>
                         </div>
                     ) :  */}
-                    {value === 2 ? (
+                    {value === 1 ? (
                         <div
                             style={{ flex: 4, display: "flex", flexDirection: "column" }}
                             className="container-fluid"

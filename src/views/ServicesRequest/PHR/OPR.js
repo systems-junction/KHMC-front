@@ -15,22 +15,12 @@ import business_Unit from '../../../assets/img/OPR.png'
 import '../../../assets/jss/material-dashboard-react/components/loaderStyle.css'
 import socketIOClient from 'socket.io-client'
 
-const tableHeading = [
-  'MRN Number',
-  'Patient First Name',
-  'Patient Last Name',
-  'City',
-  'Insurance No',
-  'Coverage Terms',
-  '',
-]
+const tableHeading = ['MRN', 'Request Number', 'Date/Time', 'Status', '']
 const tableDataKeys = [
-  'profileNo',
-  ['patientId', 'firstName'],
-  ['patientId', 'lastName'],
-  ['patientId', 'city'],
-  ['patientId', 'insuranceNo'],
-  ['patientId', 'coverageTerms'],
+  ['patientId', 'profileNo'],
+  'requestNo',
+  'createdAt',
+  'status',
 ]
 
 const actions = { view: true }
@@ -64,10 +54,10 @@ export default function EDR(props) {
       .then((res) => {
         if (res.data.success) {
           console.log(res.data.data, 'ecr1')
-          res.data.data.map((d) => (d.pharmacyRequest = d.pharmacyRequest[0]))
-          res.data.data.map((d) => (d.profileNo = d.patientId.profileNo))
+          // res.data.data.map((d) => (d.pharmacyRequest = d.pharmacyRequest[0]))
+          // res.data.data.map((d) => (d.profileNo = d.patientId.profileNo))
           // res.data.data.map((d) => (d.date = d.pharmacyRequest.date))
-          // res.data.data.map((d) => (d.status = d.pharmacyRequest.status))
+          res.data.data.map((d) => (d.createdAt = d.patientId.createdAt))
           // res.data.data.map((d) => (d.requestNo = d.pharmacyRequest._id))
           setEdr(res.data.data)
         } else if (!res.data.success) {
