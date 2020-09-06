@@ -11,6 +11,7 @@ import OPR from '../views/ServicesRequest/LR/OPR'
 import ViewIPR from '../views/ServicesRequest/LR/viewIPR'
 import ViewEDR from '../views/ServicesRequest/LR/viewEDR'
 import ViewOPR from '../views/ServicesRequest/LR/viewOPR'
+import UpdateLR from '../views/ServicesRequest/LR/updateLR'
 import EDRTriageAndAssessment from '../views/ServicesRequest/PHR/EDRTriageAndAssessment'
 import IPRTriageAndAssessment from '../views/ServicesRequest/PHR/IPRTriageAndAssessment'
 import AddEditOPR from '../views/ServicesRequest/LR/addEditOPR'
@@ -66,6 +67,12 @@ class WMSRoutes extends React.PureComponent {
           path={`${this.props.match.url}/opr/viewOPR`}
           component={ViewOPR}
         />
+
+        <Route
+          exact
+          path={`${this.props.match.url}/opr/viewOPR/updatelr`}
+          component={UpdateLR}
+        />
         <Route
           exact
           path={`${this.props.match.url}/opr/add`}
@@ -76,6 +83,7 @@ class WMSRoutes extends React.PureComponent {
           path={`${this.props.match.url}/opr/viewOPR/add`}
           component={AddPharmacyOPR}
         />
+
         <Route
           path={`${this.props.match.url}/edr/viewEDR/TriageAndAssessment`}
           component={EDRTriageAndAssessment}

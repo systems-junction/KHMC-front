@@ -14,13 +14,7 @@ import business_Unit from '../../../assets/img/Labortary Department.png'
 import '../../../assets/jss/material-dashboard-react/components/loaderStyle.css'
 import socketIOClient from 'socket.io-client'
 
-const tableHeading = [
-  'MRN',
-  'Request Number',
-  'Date',
-  'Status',
-  'Action',
-]
+const tableHeading = ['MRN', 'Request Number', 'Date', 'Status', 'Action']
 const tableDataKeys = ['profileNo', 'requestNo', 'date', 'status']
 
 const actions = { view: true }
@@ -69,6 +63,7 @@ export default function EDR(props) {
 
   function handleView(rec) {
     let path = `ipr/viewIPR`
+    console.log(rec._id, 'id')
     props.history.push({
       pathname: path,
       state: {

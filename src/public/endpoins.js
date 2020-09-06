@@ -9,7 +9,7 @@ const dev = 'http://ec2-52-14-42-129.us-east-2.compute.amazonaws.com/api'
 //const StagingSocketUrl = 'wss://165.232.66.148:4001'
 
 // const baseUrl = dev;
- //const baseUrl = devSecure;
+//const baseUrl = devSecure;
 const baseUrl = 'http://localhost:4000/api'
 // const baseUrl = stagingDigitalOcean;
 
@@ -52,7 +52,6 @@ export const generateIPR = `${baseUrl}/ipr/addipr`
 export const searchpatient = `${baseUrl}/patient/searchpatient`
 export const updateEdrIpr = `${baseUrl}/patient/updateEdrIpr`
 export const updateEdrIprItem = `${baseUrl}/patient/updateEdrIprItem`
-
 
 // reimbursement endpoints
 export const getSearchedpatient = `${baseUrl}/reimbursementclaim/getpatient`
@@ -319,12 +318,16 @@ export const getOPRFromRadiologyUrl = `${baseUrl}/opr/getoprfromradiology`
 export const generateOPR = `${baseUrl}/opr/addopr`
 export const updateOPR = `${baseUrl}/opr/updateopr`
 export const getOPRById = `${baseUrl}/opr/getopr`
+export const updateRROPRById = `${baseUrl}/opr/updaterad`
+export const updateLROPRById = `${baseUrl}/opr/updatelab`
 
 // LR by ID
 export const getLRById = `${baseUrl}/edr/getlredr`
 export const updateLRById = `${baseUrl}/edr/updatelab`
 export const getLRIPRById = `${baseUrl}/ipr/getlripr`
 export const updateLRIPRById = `${baseUrl}/ipr/updatelab`
+export const getRROPRById = `${baseUrl}/opr/getrroprbyid`
+export const getLROPRById = `${baseUrl}/opr/getlroprbyid`
 
 // RR by ID
 export const getRRById = `${baseUrl}/edr/getrredr`
