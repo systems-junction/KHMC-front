@@ -12,10 +12,10 @@ import { FaUpload } from 'react-icons/fa'
 import {
   getSearchedLaboratoryService,
   getSearchedRadiologyService,
-  updateOPR,
+  updateRROPRById,
   uploadsUrl,
   updateEDR,
-  getOPRById,
+  getRROPRById,
   getAllExternalConsultantsUrl,
   addECRUrl,
 } from '../../../public/endpoins'
@@ -149,6 +149,16 @@ const styles = {
     fontWeight: '700',
     color: 'gray',
   },
+  upload: {
+    backgroundColor: 'white',
+    border: '0px solid #ccc',
+    borderRadius: '5px',
+    color: 'gray',
+    width: '100%',
+    height: '55px',
+    cursor: 'pointer',
+    padding: '15px',
+  },
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -211,8 +221,6 @@ function AddEditPurchaseRequest(props) {
     radioDate: '',
     DateTime: new Date().toISOString().substr(0, 10),
 
-    results: '',
-
     consultationNoteArray: '',
     consultationNo: '',
     date: new Date(),
@@ -226,6 +234,11 @@ function AddEditPurchaseRequest(props) {
     doctor: cookie.load('current_user').name,
 
     pharmacyRequestArray: '',
+
+    name: '',
+    date: '',
+    results: '',
+    comments: '',
   }
 
   function reducer(state, { field, value }) {
@@ -252,7 +265,6 @@ function AddEditPurchaseRequest(props) {
     radioComments,
     radioDate,
     DateTime = new Date().toISOString().substr(0, 10),
-    results,
 
     consultationNoteArray,
     consultationNo,
@@ -260,13 +272,18 @@ function AddEditPurchaseRequest(props) {
     description,
     consultationNotes,
     requester = cookie.load('current_user').name,
-    date,
+    // date,
     residentNoteArray,
     rdescription,
     note,
     doctor = cookie.load('current_user').name,
 
     pharmacyRequestArray,
+
+    name,
+    date,
+    results,
+    comments,
   } = state
 
   const onChangeValue = (e) => {
@@ -305,6 +322,8 @@ function AddEditPurchaseRequest(props) {
   const [radioItemFound, setRadioItemFound] = useState('')
   const [addLabRequest, setaddLabRequest] = useState(false)
   const [addRadioRequest, setaddRadioRequest] = useState(false)
+  const [oprId, setOprId] = useState('')
+  const [radId, setRadId] = useState('')
 
   const [isLoading, setIsLoading] = useState(true)
 
@@ -319,47 +338,65 @@ function AddEditPurchaseRequest(props) {
 
   const getEDRById = (id) => {
     axios
-      .get(getOPRById + '/' + id)
+      .get(getRROPRById + '/' + id)
       .then((res) => {
         if (res.data.success) {
           if (res.data.data) {
-            console.log(res.data.data[0])
+            console.log(res.data.data, 'res')
 
             setIsLoading(false)
 
-            Object.entries(res.data.data[0]).map(([key, val]) => {
+            Object.entries(res.data.data).map(([key, val]) => {
               if (val && typeof val === 'object') {
-                if (key === 'patientId') {
-                  dispatch({ field: 'patientId', value: val._id })
-                } else if (key === 'labRequest') {
-                  dispatch({ field: 'labRequestArray', value: val })
-                } else if (key === 'radiologyRequest') {
-                  dispatch({ field: 'radiologyRequestArray', value: val })
-                } else if (key === 'consultationNote') {
-                  Object.entries(val).map(([key1, val1]) => {
-                    if (key1 == 'requester') {
-                      dispatch({ field: 'requester', value: val1._id })
-                    } else {
-                      dispatch({ field: key1, value: val1 })
-                    }
-                  })
-                  dispatch({ field: 'consultationNoteArray', value: val })
-                } else if (key === 'residentNotes') {
-                  Object.entries(val).map(([key1, val1]) => {
-                    if (key1 == 'doctor') {
-                      dispatch({ field: 'doctor', value: val1._id })
-                    } else {
-                      dispatch({ field: key1, value: val1 })
-                    }
-                  })
-                  dispatch({ field: 'residentNoteArray', value: val })
-                } else if (key === 'pharmacyRequest') {
-                  dispatch({ field: 'pharmacyRequestArray', value: val })
+                if (key === 'serviceId') {
+                  dispatch({ field: 'name', value: val.name })
+                  dispatch({ field: 'price', value: val.price })
                 }
               } else {
-                dispatch({ field: key, value: val })
+                if (key === 'date') {
+                  dispatch({
+                    field: 'date',
+                    value: new Date(val).toISOString().substr(0, 10),
+                  })
+                } else {
+                  dispatch({ field: key, value: val })
+                }
               }
             })
+
+            // Object.entries(res.data.data).map(([key, val]) => {
+            //   if (val && typeof val === 'object') {
+            //     if (key === 'patientId') {
+            //       dispatch({ field: 'patientId', value: val._id })
+            //     } else if (key === 'labRequest') {
+            //       dispatch({ field: 'labRequestArray', value: val })
+            //     } else if (key === 'radiologyRequest') {
+            //       dispatch({ field: 'radiologyRequestArray', value: val })
+            //     } else if (key === 'consultationNote') {
+            //       Object.entries(val).map(([key1, val1]) => {
+            //         if (key1 == 'requester') {
+            //           dispatch({ field: 'requester', value: val1._id })
+            //         } else {
+            //           dispatch({ field: key1, value: val1 })
+            //         }
+            //       })
+            //       dispatch({ field: 'consultationNoteArray', value: val })
+            //     } else if (key === 'residentNotes') {
+            //       Object.entries(val).map(([key1, val1]) => {
+            //         if (key1 == 'doctor') {
+            //           dispatch({ field: 'doctor', value: val1._id })
+            //         } else {
+            //           dispatch({ field: key1, value: val1 })
+            //         }
+            //       })
+            //       dispatch({ field: 'residentNoteArray', value: val })
+            //     } else if (key === 'pharmacyRequest') {
+            //       dispatch({ field: 'pharmacyRequestArray', value: val })
+            //     }
+            //   } else {
+            //     dispatch({ field: key, value: val })
+            //   }
+            // })
           }
         }
       })
@@ -387,6 +424,10 @@ function AddEditPurchaseRequest(props) {
   useEffect(() => {
     getAllExternalConsultants()
     getEDRById(props.history.location.state.selectedItem._id)
+    setOprId(props.history.location.state.id)
+    setRadId(props.history.location.state.selectedItem._id)
+    console.log('oprid', props.history.location.state.id)
+    console.log('rad id', props.history.location.state.selectedItem._id)
 
     setCurrentUser(cookie.load('current_user'))
 
@@ -464,16 +505,14 @@ function AddEditPurchaseRequest(props) {
     setExternalConsultant(event.target.value)
   }
 
-  function handleView(rec) {
-    let path = `viewOPR/updaterr`
-    props.history.push({
-      pathname: path,
-      state: {
-        id: id,
-        selectedItem: rec,
-        comingFor: 'opr',
-      },
-    })
+  function viewItem(item) {
+    if (item !== '') {
+      setOpenItemDialog(true)
+      setItem(item)
+    } else {
+      setOpenItemDialog(false)
+      setItem('')
+    }
   }
 
   function addConsultRequest() {
@@ -763,7 +802,7 @@ function AddEditPurchaseRequest(props) {
             requester: currentUser.staffId,
             status: radioServiceStatus,
             comments: radioComments,
-            results: results,
+            date: DateTime,
           },
         ],
       })
@@ -775,7 +814,6 @@ function AddEditPurchaseRequest(props) {
     dispatch({ field: 'radioServiceName', value: '' })
     dispatch({ field: 'radioServiceStatus', value: '' })
     dispatch({ field: 'radioComments', value: '' })
-    dispatch({ field: 'results', value: '' })
     dispatch({ field: 'DateTime', value: '' })
 
     setaddLabRequest(false)
@@ -784,30 +822,41 @@ function AddEditPurchaseRequest(props) {
   const saveRadioReq = () => {
     console.log('THISSSSS ISS ARRAYY', radiologyRequestArray)
 
-    let radioItems = []
-    for (let i = 0; i < radiologyRequestArray.length; i++) {
-      radioItems = [
-        ...radioItems,
-        {
-          serviceId: radiologyRequestArray[i].serviceId,
-          serviceCode: radiologyRequestArray[i].serviceCode,
-          requester: radiologyRequestArray[i].requester,
-          requesterName: radiologyRequestArray[i].requesterName,
-          serviceName: radiologyRequestArray[i].serviceName,
-          status: radiologyRequestArray[i].status,
-          comments: radiologyRequestArray[i].comments,
-          results: radiologyRequestArray[i].results,
-          date: radiologyRequestArray[i].date,
-        },
-      ]
+    // let radioItems = []
+    // for (let i = 0; i < radiologyRequestArray.length; i++) {
+    //   radioItems = [
+    //     ...radioItems,
+    //     {
+    //       serviceId: radiologyRequestArray[i].serviceId,
+    //       serviceCode: radiologyRequestArray[i].serviceCode,
+    //       requester: radiologyRequestArray[i].requester,
+    //       requesterName: radiologyRequestArray[i].requesterName,
+    //       serviceName: radiologyRequestArray[i].serviceName,
+    //       status: radiologyRequestArray[i].status,
+    //       comments: radiologyRequestArray[i].comments,
+    //       date: radiologyRequestArray[i].date,
+    //     },
+    //   ]
+    // }
+    let formData = new FormData()
+    if (slipUpload) {
+      formData.append('file', slipUpload, slipUpload.name)
     }
     const params = {
-      _id: id,
-      radiologyRequest: radioItems,
+      radiologyRequestId: radId,
+      OPRId: oprId,
+      data: selectedItem,
     }
+    formData.append('data', JSON.stringify(params))
     console.log('params', params)
     axios
-      .put(updateOPR, params)
+      .put(updateRROPRById, formData, {
+        headers: {
+          accept: 'application/json',
+          'Accept-Language': 'en-US,en;q=0.8',
+          'content-type': 'multipart/form-data',
+        },
+      })
       .then((res) => {
         if (res.data.success) {
           console.log('response after adding Radio Request', res.data)
@@ -1019,7 +1068,7 @@ function AddEditPurchaseRequest(props) {
             style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
             className={`container ${classes.root}`}
           >
-            <div style={{ marginTop: '20px' }} className='row'>
+            {/* <div style={{ marginTop: '20px' }} className='row'>
               <div
                 className='col-md-12 col-sm-12 col-12'
                 style={{
@@ -1028,7 +1077,7 @@ function AddEditPurchaseRequest(props) {
                 }}
               >
                 <TextField
-                  label='Radiology / Imaging'
+                  label='Service Name'
                   variant='filled'
                   placeholder='Search service by name'
                   name={'searchRadioQuery'}
@@ -1095,7 +1144,7 @@ function AddEditPurchaseRequest(props) {
               undefined
             )}
 
-            {/* <div className='row'>
+            <div className='row'>
               <div
                 className='col-md-6 col-sm-6 col-6'
                 style={{
@@ -1148,7 +1197,7 @@ function AddEditPurchaseRequest(props) {
                   }}
                 />
               </div>
-            </div> */}
+            </div>
 
             <div style={{ marginTop: '20px' }} className='row'>
               <div
@@ -1218,9 +1267,92 @@ function AddEditPurchaseRequest(props) {
                   Add Service
                 </Button>
               </div>
+            </div> */}
+
+            <div className='row' style={{ marginTop: '20px' }}>
+              <div
+                className='col-md-6 col-sm-6'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  disabled={true}
+                  label='Radiology/Imaging'
+                  name={'name'}
+                  value={name}
+                  // onChange={onChangeValue}
+                  variant='filled'
+                  className='textInputStyle'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                  InputLabelProps={{
+                    className: classes.label,
+                    classes: { label: classes.label },
+                  }}
+                />
+              </div>
+
+              <div
+                className='col-md-6 col-sm-6 col-6'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  disabled={true}
+                  variant='filled'
+                  label='Date/Time'
+                  name={'date'}
+                  value={date}
+                  type='date'
+                  className='textInputStyle'
+                  // onChange={(val) => onChangeValue(val, 'DateTime')}
+                  InputLabelProps={{
+                    shrink: true,
+                    color: 'black',
+                  }}
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                />
+              </div>
             </div>
 
-            {/* <div className='row' style={{ marginTop: '20px' }}>
+            <div className='row' style={{ marginTop: '20px' }}>
+              <div
+                className='col-md-12 col-sm-12'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  disabled={true}
+                  label='Comments'
+                  name={'comments'}
+                  value={comments}
+                  // onChange={onChangeValue}
+                  variant='filled'
+                  className='textInputStyle'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                  InputLabelProps={{
+                    className: classes.label,
+                    classes: { label: classes.label },
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className='row' style={{ marginTop: '20px' }}>
               <div
                 className='col-md-12 col-sm-6 col-12'
                 style={{
@@ -1354,15 +1486,15 @@ function AddEditPurchaseRequest(props) {
               ) : (
                 undefined
               )}
-            </div> */}
+            </div>
 
-            <div className='row' style={{ marginTop: '20px' }}>
+            {/* <div className='row' style={{ marginTop: '20px' }}>
               {radiologyRequestArray !== 0 ? (
                 <CustomTable
                   tableData={radiologyRequestArray}
                   tableDataKeys={tableDataKeysForRadiology}
                   tableHeading={tableHeadingForRadiology}
-                  handleView={handleView}
+                  handleView={viewItem}
                   action={actions}
                   borderBottomColor={'#60d69f'}
                   borderBottomWidth={20}
@@ -1370,7 +1502,7 @@ function AddEditPurchaseRequest(props) {
               ) : (
                 undefined
               )}
-            </div>
+            </div> */}
 
             <div className='row' style={{ marginBottom: '25px' }}>
               <div className='col-md-6 col-sm-6 col-6'>
@@ -1393,7 +1525,7 @@ function AddEditPurchaseRequest(props) {
             </div>
           </div>
 
-          {/* {openItemDialog ? (
+          {openItemDialog ? (
             <ViewSingleRequest
               item={item}
               openItemDialog={openItemDialog}
@@ -1401,7 +1533,7 @@ function AddEditPurchaseRequest(props) {
             />
           ) : (
             undefined
-          )} */}
+          )}
 
           <Dialog
             aria-labelledby='form-dialog-title'

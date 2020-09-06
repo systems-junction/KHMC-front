@@ -11,6 +11,7 @@ import OPR from '../views/ServicesRequest/RR/OPR'
 import ViewIPR from '../views/ServicesRequest/RR/viewIPR'
 import ViewEDR from '../views/ServicesRequest/RR/viewEDR'
 import ViewOPR from '../views/ServicesRequest/RR/viewOPR'
+import UpdateRR from '../views/ServicesRequest/RR/updateRR'
 import EDRTriageAndAssessment from '../views/ServicesRequest/PHR/EDRTriageAndAssessment'
 import IPRTriageAndAssessment from '../views/ServicesRequest/PHR/IPRTriageAndAssessment'
 import AddEditOPR from '../views/ServicesRequest/RR/addEditOPR'
@@ -69,6 +70,11 @@ class WMSRoutes extends React.PureComponent {
           exact
           path={`${this.props.match.url}/opr/viewOPR`}
           component={ViewOPR}
+        />
+        <Route
+          exact
+          path={`${this.props.match.url}/opr/viewOPR/updaterr`}
+          component={UpdateRR}
         />
         <Route
           exact
