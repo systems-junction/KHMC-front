@@ -19,6 +19,14 @@ class ItemRoutes extends React.Component {
         />
 
         <Route
+          path={`${this.props.match.url}/add/manual`}
+          // component={addEditReplenishmentRequest}
+          component={(props) => (
+            <ReplenishmentRequest {...props} match={this.props.match} />
+          )}
+        />
+
+        <Route
           path={`${this.props.match.url}/add`}
           // component={addEditReplenishmentRequest}
           component={(props) => (
@@ -41,8 +49,6 @@ class ItemRoutes extends React.Component {
             <ReceiveItemsForFUInventory {...props} match={this.props.match} />
           )}
         /> */}
-
-     
 
         <Route
           path={`${this.props.match.url}/success`}
