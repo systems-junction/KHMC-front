@@ -40,25 +40,44 @@ export const getSearchedItemsNonPharmaceuticalUrl = `${baseUrl}/item/getsearched
 export const getSearchedNonPharmaceuticalItemsUrl = `${baseUrl}/item/getsearcheditemsnm`;
 
 // patient endpoints
-export const getPatientById = `${baseUrl}/patient/getpatient/:id`
-export const getPatientByProfileNo = `${baseUrl}/patient/getpatientbyprofileno`
-export const getPatientUrl = `${baseUrl}/patient/getpatient`
-export const getPatientUrlById = `${baseUrl}/patient/getpatient`
-export const addPatientUrl = `${baseUrl}/patient/addpatient`
-export const deletePatientUrl = `${baseUrl}/patient/deletepatient`
-export const updatePatientUrl = `${baseUrl}/patient/updatepatient`
-export const generateEDR = `${baseUrl}/edr/addedr`
-export const generateIPR = `${baseUrl}/ipr/addipr`
-export const searchpatient = `${baseUrl}/patient/searchpatient`
-export const updateEdrIpr = `${baseUrl}/patient/updateEdrIpr`
-export const updateEdrIprItem = `${baseUrl}/patient/updateEdrIprItem`
+export const getPatientById = `${baseUrl}/patient/getpatient/:id`;
+export const getPatientByProfileNo = `${baseUrl}/patient/getpatientbyprofileno`;
+export const getPatientUrl = `${baseUrl}/patient/getpatient`;
+export const getPatientUrlById = `${baseUrl}/patient/getpatient`;
+export const addPatientUrl = `${baseUrl}/patient/addpatient`;
+export const deletePatientUrl = `${baseUrl}/patient/deletepatient`;
+export const updatePatientUrl = `${baseUrl}/patient/updatepatient`;
+export const generateEDR = `${baseUrl}/edr/addedr`;
+export const generateIPR = `${baseUrl}/ipr/addipr`;
+export const searchpatient = `${baseUrl}/patient/searchpatient`;
+export const updateEdrIpr = `${baseUrl}/patient/updateEdrIpr`;
+export const updateEdrIprItem = `${baseUrl}/patient/updateEdrIprItem`;
 // for notifications
-export const notifyTriage = `${baseUrl}/patient/triage`
-export const notifyPharmacy = `${baseUrl}/patient/pharmacy`
-export const notifyLab = `${baseUrl}/patient/lab`
-export const notifyRad = `${baseUrl}/patient/rad`
-export const notifyConsultation = `${baseUrl}/patient/consultation`
-export const notifyDischarge = `${baseUrl}/patient/discharge`
+export const notifyTriage = `${baseUrl}/patient/triage`;
+export const notifyPharmacy = `${baseUrl}/patient/pharmacy`;
+export const notifyLab = `${baseUrl}/patient/lab`;
+export const notifyRad = `${baseUrl}/patient/rad`;
+export const notifyConsultation = `${baseUrl}/patient/consultation`;
+export const notifyDischarge = `${baseUrl}/patient/discharge`;
+// export const getPatientById = `${baseUrl}/patient/getpatient/:id`
+// export const getPatientByProfileNo = `${baseUrl}/patient/getpatientbyprofileno`
+// export const getPatientUrl = `${baseUrl}/patient/getpatient`
+// export const getPatientUrlById = `${baseUrl}/patient/getpatient`
+// export const addPatientUrl = `${baseUrl}/patient/addpatient`
+// export const deletePatientUrl = `${baseUrl}/patient/deletepatient`
+// export const updatePatientUrl = `${baseUrl}/patient/updatepatient`
+// export const generateEDR = `${baseUrl}/edr/addedr`
+// export const generateIPR = `${baseUrl}/ipr/addipr`
+// export const searchpatient = `${baseUrl}/patient/searchpatient`
+// export const updateEdrIpr = `${baseUrl}/patient/updateEdrIpr`
+// export const updateEdrIprItem = `${baseUrl}/patient/updateEdrIprItem`
+// for notifications
+// export const notifyTriage = `${baseUrl}/patient/triage`
+// export const notifyPharmacy = `${baseUrl}/patient/pharmacy`
+// export const notifyLab = `${baseUrl}/patient/lab`
+// export const notifyRad = `${baseUrl}/patient/rad`
+// export const notifyConsultation = `${baseUrl}/patient/consultation`
+// export const notifyDischarge = `${baseUrl}/patient/discharge`
 
 // reimbursement endpoints
 export const getSearchedpatient = `${baseUrl}/reimbursementclaim/getpatient`;
