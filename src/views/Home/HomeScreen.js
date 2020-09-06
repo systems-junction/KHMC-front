@@ -46,6 +46,14 @@ import AssessDiagIcon from "../../assets/img/Assessment & Diagnosis.png";
 import DischargeIcon from "../../assets/img/Doctor - Discharge.png";
 import CRIcon from "../../assets/img/Consultation Request.png";
 import WMS_Back from "../../assets/img/WMS_Back.png";
+import OrderItems from "../../assets/img/Order Items.png";
+
+import RepRequestStatus from "../../assets/img/Replenishment Requests Status.png";
+// import FuncUFulfillment from "../../assets/img/FuncUFulfillment.png";
+import ManualRequest from "../../assets/img/Manual Request.png";
+import VendorReturns from "../../assets/img/Vendor Returns.png";
+import FuncUFulfillment from "../../assets/img/FuncU Fulfillment.png";
+import MedicationOrder from "../../assets/img/Medication Order.png";
 
 const admin = [
   { img: KHMC, text: "KHMC", path: "" },
@@ -127,8 +135,21 @@ const registeredNurse = [
     text: "Lab/Rad Request",
     path: "/home/rcm/LabRadRequest",
   },
+
   {
-    img: PurchaseRequest,
+    img: "",
+    text: "",
+    path: "",
+  },
+
+  {
+    img: "",
+    text: "",
+    path: "",
+  },
+
+  {
+    img: MedicationOrder,
     text: "Medication  Order",
     path: `/home/wms/fus/medicinalorder`,
   },
@@ -215,7 +236,19 @@ const doctorPhysician = [
   },
 
   {
-    img: PurchaseRequest,
+    img: "",
+    text: "",
+    path: "",
+  },
+
+  {
+    img: "",
+    text: "",
+    path: "",
+  },
+
+  {
+    img: OrderItems,
     text: "Order Items",
     path: `/home/wms/fus/medicinalorder`,
   },
@@ -238,10 +271,7 @@ const buHead = [
 ];
 
 const committeeMember = [
-  // { img: FunctionalUnit, text: "Functional Unit", path: "" },
-  // { img: RCM, text: "RCM", path: "" },
-  // { img: WMS, text: "WMS", path: "controlroom/wms" },
-  { img: KHMC, text: "KHMC APPS", path: "" },
+  { img: KHMC, text: "KHMC", path: "" },
 
   {
     img: purchase_request,
@@ -257,7 +287,9 @@ const committeeMember = [
 ];
 
 const accountsMember = [
-  { img: Control_Room, text: "Control Room", path: "" },
+  // { img: Control_Room, text: "Control Room", path: "" },
+  { img: KHMC, text: "KHMC", path: "" },
+
   {
     img: WMS,
     text: "Approve Receivings",
@@ -266,18 +298,18 @@ const accountsMember = [
 ];
 
 const warehouseMember = [
-  { img: FunctionalUnit, text: "Functional Unit", path: "" },
+  { img: KHMC, text: "KHMC", path: "" },
 
   {
     img: FunctionalUnit,
-    text: "FU Rep Request",
+    text: "Initiate FU Requests",
     path: `/home/wms/fus/replenishment`,
   },
 
   {
     img: ReturnItem,
     text: "FU Returns",
-    path: `fus/returnitems`,
+    path: `/home/wms/fus/returnitems`,
   },
 
   // {
@@ -288,7 +320,8 @@ const warehouseMember = [
 ];
 
 const warehouseIncharge = [
-  { img: FunctionalUnit, text: "Functional Unit", path: "" },
+  // { img: FunctionalUnit, text: "Functional Unit", path: "" },
+  { img: KHMC, text: "KHMC", path: "" },
 
   {
     img: FunctionalUnit,
@@ -312,7 +345,7 @@ const warehouseIncharge = [
 const fuHead = [
   { img: FunctionalUnit, text: "Functional Unit", path: "" },
   {
-    img: PurchaseRequest,
+    img: MedicationOrder,
     text: "Medication  Order",
     path: `/home/wms/fus/medicinalorder`,
   },
@@ -353,7 +386,7 @@ const buMember = [
   { img: KHMC, text: "KHMC", path: "" },
 
   {
-    img: PurchaseRequest,
+    img: MedicationOrder,
     text: "Medication  Order",
     path: `/home/wms/fus/medicinalorder`,
   },
@@ -374,7 +407,7 @@ const buMember = [
 const buNurse = [
   { img: FunctionalUnit, text: "Functional Unit", path: "" },
   {
-    img: PurchaseRequest,
+    img: MedicationOrder,
     text: "Medication  Order",
     path: `/home/wms/fus/medicinalorder`,
   },
@@ -397,7 +430,7 @@ const fuReturnRequestApprovalMember = [
 
   {
     img: ReturnItem,
-    text: "FU Returns",
+    text: "Approve Returns",
     path: `/home/wms/fus/returnitems`,
   },
 ];
@@ -425,10 +458,41 @@ const fuReturnRequestApprovalMember = [
 // ];
 
 const fuInventoryKeeper = [
-  { img: FunctionalUnit, text: "Functional Unit", path: "" },
+  // { img: FunctionalUnit, text: "Functional Unit", path: "" },
+  { img: KHMC, text: "KHMC", path: "" },
 
   {
-    img: PurchaseRequest,
+    img: RepRequestStatus,
+    text: "Replenishment Request Status",
+    path: `/home/wms/fus/replenishment`,
+  },
+
+  {
+    img: ReceiveItem,
+    text: "Order Receiving/ Return",
+    path: `/home/wms/fus/receive`,
+  },
+
+  {
+    img: ManualRequest,
+    text: "Manual Request",
+    path: `/home/wms/fus/replenishment/add/manual`,
+  },
+
+  {
+    img: ReturnItem,
+    text: "FU Returns",
+    path: `/home/wms/fus/returnitems`,
+  },
+
+  {
+    img: "",
+    text: "",
+    path: "",
+  },
+
+  {
+    img: MedicationOrder,
     text: "Medication  Order",
     path: `/home/wms/fus/medicinalorder`,
   },
@@ -437,23 +501,6 @@ const fuInventoryKeeper = [
     img: PurchaseRequest,
     text: "Professional Order",
     path: `/home/wms/fus/professionalorder`,
-  },
-
-  {
-    img: ReceiveItem,
-    text: "Order Receiving",
-    path: `/home/wms/fus/receive`,
-  },
-  {
-    img: ReturnItem,
-    text: "FU Returns",
-    path: `/home/wms/fus/returnitems`,
-  },
-
-  {
-    img: BU,
-    text: "Manual Request",
-    path: `/home/wms/fus/replenishment`,
   },
 ];
 
@@ -475,15 +522,45 @@ const warehouseInventoryKeeper = [
   { img: KHMC, text: "KHMC APPS", path: "" },
 
   {
-    img: wh_inventory,
-    text: "WH Inventory",
-    path: "/home/wms/warehouse/warehouseinventory",
+    img: purchase_request,
+    text: "Purchase Requests",
+    path: "/home/wms/warehouse/pr",
   },
 
   {
-    img: purchase_request,
-    text: "Purchase Request",
-    path: "/home/wms/warehouse/pr",
+    img: FuncUFulfillment,
+    text: "FuncU Fullfillment",
+    path: `/home/wms/fus/replenishment`,
+  },
+
+  {
+    img: ReceiveItem,
+    text: "Order Receiving/ Return",
+    path: "/home/wms/warehouse/materialreceiving",
+  },
+
+  {
+    img: "",
+    text: "",
+    path: "",
+  },
+
+  {
+    img: "",
+    text: "",
+    path: "",
+  },
+
+  {
+    img: "",
+    text: "",
+    path: "",
+  },
+
+  {
+    img: wh_inventory,
+    text: "WH Inventory",
+    path: "/home/wms/warehouse/warehouseinventory",
   },
 
   // {
@@ -491,18 +568,6 @@ const warehouseInventoryKeeper = [
   //   text: "Purchase Order",
   //   path: "/home/wms/warehouse/po",
   // },
-
-  {
-    img: MaterialReceiving,
-    text: "Material Receiving",
-    path: "/home/wms/warehouse/materialreceiving",
-  },
-
-  {
-    img: FunctionalUnit,
-    text: "FU Rep Request",
-    path: `/home/wms/fus/replenishment`,
-  },
 ];
 
 const purchasingManager = [
@@ -519,7 +584,7 @@ const purchasingOfficer = [
   { img: KHMC, text: "KHMC APPS", path: "" },
 
   {
-    img: ReturnItem,
+    img: VendorReturns,
     text: "Vendor Return",
     path: "/home/wms/warehouse/externalreturn",
   },

@@ -337,6 +337,24 @@ export default function ReplenishmentRequest(props) {
     });
   };
 
+  if (
+    props.history.location.pathname ===
+      "/home/wms/fus/replenishment/add/manual"
+       &&
+    // items &&
+    fuObj
+    //  &&
+    // statues &&
+    // vendors
+  ) {
+    let path = `replenishment/add`;
+
+    props.history.replace({
+      pathname: path,
+      state: { comingFor: "add", vendors, statues, items, fuObj },
+    });
+  }
+
   function handleEdit(rec) {
     let path = `replenishment/edit`;
     props.history.push({
@@ -728,9 +746,9 @@ export default function ReplenishmentRequest(props) {
                   : currentUser.staffTypeId.type ===
                     "Warehouse Inventory Keeper"
                   ? tableHeadingForFUMemberForItems
-                  // : currentUser.staffTypeId.type === "FU Inventory Keeper"
+                  : // : currentUser.staffTypeId.type === "FU Inventory Keeper"
                   // ? tableHeadingForFUMemberForItems
-                  : currentUser.staffTypeId.type === "FU Inventory Keeper"
+                  currentUser.staffTypeId.type === "FU Inventory Keeper"
                   ? tableHeadingForFUInventoryKeeperForItems
                   : tableHeadingForFUMemberForItems
               }
