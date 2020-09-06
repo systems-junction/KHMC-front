@@ -32,6 +32,7 @@ import {
   getSingleIPRPatient,
   getSearchedpatient,
   searchpatient,
+  notifyDischarge
 } from '../../../public/endpoins'
 
 const tableHeadingForDischargeMed = [
@@ -165,6 +166,7 @@ function DischargeRequest(props) {
     otherNotes: '',
     dischargeNotes: '',
     requestType: '',
+    patientId:''
   }
 
   function reducer(state, { field, value }) {
@@ -183,6 +185,7 @@ function DischargeRequest(props) {
     otherNotes,
     dischargeNotes,
     requestType,
+    patientId
   } = state
 
   const onChangeValue = (e) => {
@@ -222,58 +225,6 @@ function DischargeRequest(props) {
 
     // getEDRdetails()
   }, [])
-
-  // function getEDRdetails() {
-  //   axios
-  //     .get(
-  //       getSingleIPRPatient +
-  //         '/' +
-  //         props.history.location.state.selectedItem._id
-  //     )
-  //     .then((res) => {
-  //       if (res.data.success) {
-  //         console.log(
-  //           'response after getting the EDR details',
-  //           res.data.data[0]
-  //         )
-  //         setSelectedItem(res.data.data[0])
-  //         const selectedRec = res.data.data[0]
-
-  //         if (selectedRec) {
-  //           Object.entries(selectedRec).map(([key, val]) => {
-  //             if (val && typeof val === 'object') {
-  //               if (key === 'dischargeRequest') {
-  //                 // console.log("INNNN dischargeRequest",key,val)
-  //                 Object.entries(val).map(([key1, val1]) => {
-  //                   if (key1 === 'dischargeSummary') {
-  //                     console.log(key1, val1)
-  //                     dispatch({
-  //                       field: 'dischargeNotes',
-  //                       value: val1.dischargeNotes,
-  //                     })
-  //                     dispatch({ field: 'otherNotes', value: val1.otherNotes })
-  //                   } else if (key1 === 'dischargeMedication') {
-  //                     // console.log("INNNN dischargeMedication",key1,val1)
-  //                     dispatch({ field: 'dischargeMedArray', value: [val1] })
-  //                   }
-  //                 })
-  //                 dispatch({ field: 'dischargeRequest', value: val })
-  //               }
-  //             } else {
-  //               dispatch({ field: key, value: val })
-  //             }
-  //           })
-  //         }
-  //       } else if (!res.data.success) {
-  //         setErrorMsg(res.data.error)
-  //         setOpenNotification(true)
-  //       }
-  //       return res
-  //     })
-  //     .catch((e) => {
-  //       console.log('error: ', e)
-  //     })
-  // }
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
@@ -342,6 +293,10 @@ function DischargeRequest(props) {
 
             Object.entries(res.data.data).map(([key, val]) => {
               if (val && typeof val === 'object') {
+                if (key === "patientId") {
+                  dispatch({ field: "patientId", value: val._id });
+                  console.log(key,val._id)
+                }
                 if (key === 'dischargeRequest') {
                   // console.log("INNNN dischargeRequest",key,val)
                   Object.entries(val).map(([key1, val1]) => {
@@ -406,7 +361,11 @@ function DischargeRequest(props) {
       .then((res) => {
         if (res.data.success) {
           console.log('response while adding Discharge Req', res.data.data)
-          props.history.goBack()
+          notifyForDischarge(patientId)
+          props.history.push({
+            pathname: 'dischargerequest/success',
+            state: { message : 'Discharge Summary Submitted successfully' },
+          })
         } else if (!res.data.success) {
           setOpenNotification(true)
           setErrorMsg('Error while adding the Discharge request')
@@ -417,6 +376,19 @@ function DischargeRequest(props) {
         setOpenNotification(true)
         setErrorMsg('Error after adding the Discharge request')
       })
+  }
+
+  const notifyForDischarge = (id) => {
+
+    axios.get(notifyDischarge + '/' + id)
+        .then((res) => {
+            console.log(res)
+        })
+        .catch((e) => {
+            console.log("error after notify", e);
+            setOpenNotification(true);
+            setErrorMsg(e);
+        });
   }
 
   const onClick = () => {
@@ -920,13 +892,13 @@ function DischargeRequest(props) {
                 <Button
                   disabled={enableForm}
                   onClick={addNewRequest}
-                  style={styles.stylesForButton}
+                  style={{...styles.stylesForButton,width:'150' }}
                   variant='contained'
                   color='primary'
                 >
                   <img className='icon-style' src={plus_icon} />
                   &nbsp;&nbsp;
-                  <strong style={{ fontSize: '12px' }}>Pharmacy Request</strong>
+                  <strong style={{ fontSize: '12px'}}>Pharmacy Request</strong>
                 </Button>
               </div>
             </div>

@@ -53,8 +53,8 @@ function AddBusinessUnit(props) {
           flexDirection: "column",
         }}
       >
-        <h1 style={{ color: "white", fontWeight: "bold", fontSize: 60 }}>
-          Thank You
+        <h1 style={{ color: "white", fontWeight: "bold", fontSize: 55 }}>
+          Thank You!
         </h1>
 
         <h4
@@ -65,8 +65,7 @@ function AddBusinessUnit(props) {
             textAlign: "center",
           }}
         >
-          Order Number {"12345"} for Patient MRN {"12344433"} has been generated
-          successfully
+          {props.history.location.state.message}
         </h4>
 
         <div
@@ -79,13 +78,13 @@ function AddBusinessUnit(props) {
           <img
             onClick={() => setGoToHome(true)}
             src={Home}
-            style={{ maxWidth: "50%", height: "auto", cursor: "pointer" }}
+            style={{ maxWidth: "40%", height: "auto", cursor: "pointer" }}
           />
 
           <img
-            onClick={() => props.history.replace('/home/wms/fus/medicinalorder')}
+            onClick={() => props.history.goBack()}
             src={Back}
-            style={{ maxWidth: "50%", height: "auto", cursor: "pointer" }}
+            style={{ maxWidth: "40%", height: "auto", cursor: "pointer" }}
           />
         </div>
       </div>

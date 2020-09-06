@@ -657,7 +657,10 @@ function AddEditPatientListing(props) {
           setOpenNotification(true)
           setsuccessMsg('Done')
           if (!searchActivated) {
-            props.history.goBack()
+            props.history.push({
+              pathname: 'success',
+              state: { message : 'Updated successfully' },
+            })
           }
         } else if (!res.data.success) {
           setOpenNotification(true)
@@ -722,9 +725,14 @@ function AddEditPatientListing(props) {
       .then((res) => {
         if (res.data.success) {
           console.log(res.data.data, 'response')
-          props.history.goBack()
+          // props.history.goBack()
+          props.history.push({
+            pathname: 'success',
+            state: { message : 'EDR generated successfully' },
+          })
         } else if (!res.data.success) {
           setOpenNotification(true)
+          setErrorMsg('Error while generating EDR request')
         }
       })
       .catch((e) => {
@@ -746,7 +754,11 @@ function AddEditPatientListing(props) {
       .then((res) => {
         if (res.data.success) {
           console.log(res.data.data, 'response')
-          props.history.goBack()
+         // props.history.goBack()
+         props.history.push({
+          pathname: 'success',
+          state: { message : 'IPR generated successfully' },
+        })
         } else if (!res.data.success) {
           setOpenNotification(true)
         }
@@ -1854,16 +1866,63 @@ function AddEditPatientListing(props) {
                   }}
                 />
                 <>
+                  {comingFor === 'add' ? (
+                  <>
+                    <Button
+                      style={styles.save}
+                      disabled={
+                        !(validatePatientForm() && validatePaymentForm())
+                      }
+                      onClick={searchActivated ? handleEdit : handleAdd}
+                      variant='contained'
+                      color='default'
+                    >
+                      Save
+                    </Button>
+                    <div
+                      style={{
+                        width: '10px',
+                        height: 'auto',
+                        display: 'inline-block',
+                      }}
+                    />
+                  </>
+                ) : (
+                  <></>
+                )}
+                {currentUser.staffTypeId.type === 'EDR Receptionist' ? (
                   <Button
-                    style={styles.save}
-                    // disabled={!validateEmergencyForm()}
-                    onClick={searchActivated ? handleEdit : handleAdd}
-                    // onClick={handleAdd}
+                    style={styles.generate}
+                    //disabled={!validatePatientForm()}
+                    disabled={comingFor === 'add' ? !isFormSubmitted : false}
+                    onClick={
+                      comingFor === 'add' ? handleGenerateEDR : handleEdit
+                    }
                     variant='contained'
-                    color='default'
+                    color='primary'
                   >
-                    Save
+                    {comingFor === 'add' ? 'Generate ED Record' : 'Update'}
                   </Button>
+                ) : (
+                  undefined
+                )}
+
+                {currentUser.staffTypeId.type === 'IPR Receptionist' ? (
+                  <Button
+                    style={styles.generate}
+                    disabled={comingFor === 'add' ? !isFormSubmitted : false}
+                    onClick={
+                      comingFor === 'add' ? handleGenerateIPR : handleEdit
+                    }
+                    variant='contained'
+                    color='primary'
+                  >
+                    {comingFor === 'add' ? 'Generate IP Record' : 'Update'}
+                  </Button>
+                ) : (
+                  undefined
+                )}
+
                   <div
                     style={{
                       width: '10px',

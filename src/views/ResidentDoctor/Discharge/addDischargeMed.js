@@ -17,6 +17,7 @@ import axios from 'axios'
 import Notification from '../../../components/Snackbar/Notification.js'
 import {
   updateIPR,
+  notifyDischarge,
   updateEdrIpr,
   getSearchedPharmaceuticalItemsUrl,
 } from '../../../public/endpoins'
@@ -161,6 +162,7 @@ function AddEditEDR(props) {
   const [searchQuery, setSearchQuery] = useState('')
   const [itemFound, setItemFound] = useState('')
   const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false)
+  const [patientId,setpatientId] =useState('')
 
   useEffect(() => {
     // const soc = socketIOClient(socketUrl);
@@ -173,6 +175,9 @@ function AddEditEDR(props) {
 
     const selectedRec = props.history.location.state.selectedItem
     console.log('Item', props.history.location.state.selectedItem)
+
+    setpatientId(props.history.location.state.selectedItem.patientId._id)
+    console.log('id.......', props.history.location.state.selectedItem.patientId._id)
 
     setId(props.history.location.state.selectedItem._id)
     setrequestNo(props.history.location.state.selectedItem.requestNo)
@@ -250,7 +255,11 @@ function AddEditEDR(props) {
       .then((res) => {
         if (res.data.success) {
           console.log('response while adding Medicine Req', res.data.data)
-          props.history.goBack()
+          notifyForDischarge(patientId)
+          props.history.push({
+            pathname: 'success',
+            state: { message : 'Pharmacy request added successfully' },
+          })
         } else if (!res.data.success) {
           setOpenNotification(true)
           setErrorMsg('Error while adding the Medicine request')
@@ -263,6 +272,19 @@ function AddEditEDR(props) {
       })
     //   }
     // }
+  }
+
+  const notifyForDischarge = (id) => {
+
+    axios.get(notifyDischarge + '/' + id)
+        .then((res) => {
+            console.log(res)
+        })
+        .catch((e) => {
+            console.log("error after notify", e);
+            setOpenNotification(true);
+            setErrorMsg(e);
+        });
   }
 
   // const handleEdit = () => {

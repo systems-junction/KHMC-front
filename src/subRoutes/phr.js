@@ -3,7 +3,7 @@ import cookie from 'react-cookies'
 import { Route, Switch, Router, Redirect } from 'react-router-dom'
 import { createBrowserHistory } from 'history'
 import NotFound from '../components/NotFound/NotFound'
-
+import SuccessScreen from '../components/SuccessScreen/SuccessScreen'
 import PHR from '../views/ServicesRequest/PHR/PHR'
 import DischargeMedication from '../subRoutes/dischargeMedication'
 import EDR from '../views/ServicesRequest/PHR/EDR'
@@ -60,6 +60,11 @@ class WMSRoutes extends React.PureComponent {
           exact
           path={`${this.props.match.url}/ipr/viewIPR`}
           component={ViewIPR}
+        />
+         <Route
+          exact
+          path={`${this.props.match.url}/ipr/success`}
+          component={SuccessScreen}
         />
         <Route
           exact

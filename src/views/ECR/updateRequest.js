@@ -11,7 +11,8 @@ import cookie from 'react-cookies'
 import CustomTable from '../../components/Table/Table'
 import TextField from '@material-ui/core/TextField'
 import {
-  updateEdrIprItem
+  updateEdrIprItem,
+  notifyConsultation
 } from "../../public/endpoins";
 import axios from 'axios'
 import Notification from "../../components/Snackbar/Notification.js";
@@ -168,13 +169,13 @@ export default function EdrRequest(props) {
   const [itemID, setitemID] = useState('')
   const [id, setId] = useState('')
   const [requestType, setrequestType] = useState('')
+  const [patientId, setpatientId] = useState('')
 
   useEffect(() => {
     console.log(props.item, 'Update Data')
-    console.log(props.item._id, 'Array id')
-    console.log(props.id, 'Data id')
-    console.log(props.requestType, 'Request')
+    console.log(props.patientId, 'patient id')
 
+    setpatientId(props.patientId)
     setitemID(props.item._id)
     setId(props.id)
     setrequestType(props.requestType)
@@ -503,7 +504,10 @@ export default function EdrRequest(props) {
       .put(updateEdrIprItem, params)
       .then((res) => {
         if (res.data.success) {
+          setOpenNotification(true);
+          setsuccessMsg("Submitted")
           window.location.reload(false);
+          notifyForConsult(patientId)
         } else if (!res.data.success) {
           setOpenNotification(true);
           setErrorMsg("Error while submitting Request");
@@ -514,6 +518,19 @@ export default function EdrRequest(props) {
         setOpenNotification(true);
         setErrorMsg("Error while submitting Request");
       });
+  }
+
+  const notifyForConsult = (id) => {
+
+    axios.get(notifyConsultation + '/' + id)
+        .then((res) => {
+            console.log(res)
+        })
+        .catch((e) => {
+            console.log("error after notify", e);
+            setOpenNotification(true);
+            setErrorMsg(e);
+        });
   }
 
   if (openNotification) {
@@ -539,6 +556,7 @@ export default function EdrRequest(props) {
           Details
         </DialogTitle>
         <div className='container-fluid'>
+        <Notification msg={errorMsg} open={openNotification} success={successMsg} />
           <div className='row'>
             <div
               className='col-md-6 col-sm-6 col-6'
@@ -653,7 +671,7 @@ export default function EdrRequest(props) {
             </div>
           </div>
         </div>
-        <Notification msg={errorMsg} open={openNotification} success={successMsg} />
+        
       </DialogContent>
     </Dialog>
   )

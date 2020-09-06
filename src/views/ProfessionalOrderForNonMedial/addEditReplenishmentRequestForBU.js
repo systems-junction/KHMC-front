@@ -1550,6 +1550,7 @@ function AddEditPurchaseRequest(props) {
                       variant="contained"
                       color="primary"
                       disabled={!validateItemsForm()}
+                      fullWidth
                     >
                       <strong>Edit Item</strong>
                     </Button>

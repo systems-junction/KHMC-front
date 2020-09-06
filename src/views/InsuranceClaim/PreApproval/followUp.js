@@ -192,7 +192,10 @@ function AddEditPurchaseRequest(props) {
             .then((res) => {
                 if (res.data.success) {
                     console.log("response after Updating followUp Request", res.data);
-                    props.history.goBack();
+                    props.history.push({
+                        pathname: 'success',
+                        state: { message : 'FollowUp Submitted successfully' },
+                      })
                 } else if (!res.data.success) {
                     setOpenNotification(true);
                 }

@@ -16,6 +16,7 @@ import EDRTriageAndAssessment from '../views/ServicesRequest/PHR/EDRTriageAndAss
 import IPRTriageAndAssessment from '../views/ServicesRequest/PHR/IPRTriageAndAssessment'
 import AddEditOPR from '../views/ServicesRequest/LR/addEditOPR'
 import AddPharmacyOPR from '../views/ServicesRequest/LR/addLab'
+import SuccessScreen from '../components/SuccessScreen/SuccessScreen'
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const [currentUser, setCurrentUser] = React.useState(
@@ -56,6 +57,11 @@ class WMSRoutes extends React.PureComponent {
           exact
           path={`${this.props.match.url}/ipr/viewIPR`}
           component={ViewIPR}
+        />
+         <Route
+          exact
+          path={`${this.props.match.url}/ipr/success`}
+          component={SuccessScreen}
         />
         <Route
           exact
