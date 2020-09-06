@@ -54,6 +54,7 @@ import ManualRequest from "../../assets/img/Manual Request.png";
 import VendorReturns from "../../assets/img/Vendor Returns.png";
 import FuncUFulfillment from "../../assets/img/FuncU Fulfillment.png";
 import MedicationOrder from "../../assets/img/Medication Order.png";
+import ProfessionalOrder from "../../assets/img/Professional Order.png";
 
 const admin = [
   { img: KHMC, text: "KHMC", path: "" },
@@ -155,7 +156,7 @@ const registeredNurse = [
   },
 
   {
-    img: PurchaseRequest,
+    img: ProfessionalOrder,
     text: "Professional Order",
     path: `/home/wms/fus/professionalorder`,
   },
@@ -351,7 +352,7 @@ const fuHead = [
   },
 
   {
-    img: PurchaseRequest,
+    img: ProfessionalOrder,
     text: "Professional Order",
     path: `fus/professionalorder`,
   },
@@ -413,7 +414,7 @@ const buNurse = [
   },
 
   {
-    img: PurchaseRequest,
+    img: ProfessionalOrder,
     text: "Professional Order",
     path: `/home/wms/fus/professionalorder`,
   },
@@ -498,7 +499,7 @@ const fuInventoryKeeper = [
   },
 
   {
-    img: PurchaseRequest,
+    img: ProfessionalOrder,
     text: "Professional Order",
     path: `/home/wms/fus/professionalorder`,
   },

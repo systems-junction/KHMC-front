@@ -347,7 +347,7 @@ export default function ReplenishmentRequest(props) {
     // statues &&
     // vendors
   ) {
-    let path = `replenishment/add`;
+    let path = `/home/wms/fus/replenishment/add`;
 
     props.history.replace({
       pathname: path,
@@ -602,7 +602,7 @@ export default function ReplenishmentRequest(props) {
 
           {currentUser &&
           (currentUser.staffTypeId.type === "FU Inventory Keeper" ||
-            currentUser.staffTypeId.type === "admin") ? (
+            currentUser.staffTypeId.type === "admin") && props.history.location.pathname!=='/home/wms/fus/receive' ? (
             <div>
               <Button
                 onClick={addNewItem}
