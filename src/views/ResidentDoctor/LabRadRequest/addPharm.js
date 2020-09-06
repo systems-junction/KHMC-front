@@ -620,7 +620,7 @@ function AddEditEDR(props) {
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value)
-    if (e.target.value.length >= 3) {
+    if (e.target.value.length >= 1) {
       axios
         .get(getSearchedPharmaceuticalItemsUrl + '/' + e.target.value)
         .then((res) => {

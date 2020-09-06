@@ -15,7 +15,7 @@ import business_Unit from '../../../assets/img/OPR.png'
 import '../../../assets/jss/material-dashboard-react/components/loaderStyle.css'
 import socketIOClient from 'socket.io-client'
 
-const tableHeading = ['MRN', 'Request Number', 'Date/Time', 'Status', '']
+const tableHeading = ['MRN', 'Request Number', 'Date/Time', 'Status', 'Action']
 const tableDataKeys = [
   ['patientId', 'profileNo'],
   'requestNo',
@@ -131,7 +131,7 @@ export default function EDR(props) {
                   tableData={Edr}
                   tableDataKeys={tableDataKeys}
                   tableHeading={tableHeading}
-                  // action={actions}
+                  action={actions}
                   handleView={handleView}
                   borderBottomColor={'#60d69f'}
                   borderBottomWidth={20}
