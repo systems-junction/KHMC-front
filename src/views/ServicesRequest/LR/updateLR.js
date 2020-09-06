@@ -113,6 +113,17 @@ const tableDataKeysForRadiology = [
   'requesterName',
   'status',
 ]
+
+const statusArray = [
+  // {
+  //   key: 'pending',
+  //   value: 'Pending',
+  // },
+  {
+    key: 'completed',
+    value: 'Completed',
+  },
+]
 const actions = { view: true }
 const styles = {
   patientDetails: {
@@ -240,6 +251,7 @@ function AddEditPurchaseRequest(props) {
     date: '',
     results: '',
     comments: '',
+    status: '',
   }
 
   function reducer(state, { field, value }) {
@@ -286,6 +298,7 @@ function AddEditPurchaseRequest(props) {
     date,
     results,
     comments,
+    status,
   } = state
 
   const onChangeValue = (e) => {
@@ -748,6 +761,7 @@ function AddEditPurchaseRequest(props) {
       labRequestId: labId,
       OPRId: oprId,
       data: selectedItem,
+      status: status,
     }
     formData.append('data', JSON.stringify(params))
     console.log('params', params)
@@ -851,7 +865,7 @@ function AddEditPurchaseRequest(props) {
           <div className='subheader'>
             <div>
               <img src={business_Unit} />
-              <h4>OPR - Radiology Service Requests</h4>
+              <h4>OPR - Lab Service</h4>
             </div>
 
             {/* <div>
@@ -1161,7 +1175,7 @@ function AddEditPurchaseRequest(props) {
               >
                 <TextField
                   disabled={true}
-                  label='Radiology/Imaging'
+                  label='Lab Test Name'
                   name={'name'}
                   value={name}
                   // onChange={onChangeValue}
@@ -1188,7 +1202,7 @@ function AddEditPurchaseRequest(props) {
                 <TextField
                   disabled={true}
                   variant='filled'
-                  label='Date/Time'
+                  label='Date'
                   name={'date'}
                   value={date}
                   type='date'
@@ -1208,7 +1222,7 @@ function AddEditPurchaseRequest(props) {
 
             <div className='row' style={{ marginTop: '20px' }}>
               <div
-                className='col-md-12 col-sm-12'
+                className='col-md-6 col-sm-6 col-6'
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -1216,7 +1230,33 @@ function AddEditPurchaseRequest(props) {
               >
                 <TextField
                   disabled={true}
-                  label='Comments'
+                  variant='filled'
+                  label='Sample ID'
+                  name={'sampleID'}
+                  // value={DateTime}
+                  type='text'
+                  className='textInputStyle'
+                  // onChange={(val) => onChangeValue(val, 'DateTime')}
+                  InputLabelProps={{
+                    shrink: true,
+                    color: 'black',
+                  }}
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                />
+              </div>
+              <div
+                className='col-md-162 col-sm-6'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  disabled={true}
+                  label='Comments/Notes'
                   name={'comments'}
                   value={comments}
                   // onChange={onChangeValue}
@@ -1231,6 +1271,44 @@ function AddEditPurchaseRequest(props) {
                     classes: { label: classes.label },
                   }}
                 />
+              </div>
+            </div>
+
+            <div className='row' style={{ marginTop: '20px' }}>
+              <div
+                className='col-md-12 col-sm-12'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  fullWidth
+                  select
+                  id='status'
+                  name='status'
+                  value={status}
+                  onChange={onChangeValue}
+                  variant='filled'
+                  label='Status'
+                  className='dropDownStyle'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                  input={<BootstrapInput />}
+                >
+                  <MenuItem value=''>
+                    <em>None</em>
+                  </MenuItem>
+                  {statusArray.map((val) => {
+                    return (
+                      <MenuItem key={val.key} value={val.key}>
+                        {val.value}
+                      </MenuItem>
+                    )
+                  })}
+                </TextField>
               </div>
             </div>
 
