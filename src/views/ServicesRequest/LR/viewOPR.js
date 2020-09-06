@@ -113,7 +113,8 @@ const tableDataKeysForRadiology = [
   'requesterName',
   'status',
 ]
-const actions = { view: true }
+// const actions = { view: true, }
+const actions = { edit: true, }
 const styles = {
   patientDetails: {
     backgroundColor: 'white',
@@ -1253,7 +1254,7 @@ function AddEditPurchaseRequest(props) {
                   tableData={labRequestArray}
                   tableDataKeys={tableDataKeysForLabReq}
                   tableHeading={tableHeadingForLabReq}
-                  handleView={handleView}
+                  handleEdit={handleView}
                   action={actions}
                   borderBottomColor={'#60d69f'}
                   borderBottomWidth={20}

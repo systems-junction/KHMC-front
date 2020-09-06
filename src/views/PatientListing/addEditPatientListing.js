@@ -2009,11 +2009,11 @@ function AddEditPatientListing(props) {
                       control={<Radio />}
                       label='Insurance'
                     />
-                    <FormControlLabel
+                    {/* <FormControlLabel
                       value='WireTransfer'
                       control={<Radio />}
                       label='Wire Transfer'
-                    />
+                    /> */}
                   </RadioGroup>
                 </FormControl>
               </div>

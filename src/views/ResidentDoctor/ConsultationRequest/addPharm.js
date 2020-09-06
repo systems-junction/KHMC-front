@@ -350,8 +350,8 @@ function AddEditEDR(props) {
           console.log('response while adding Medicine Req', res.data.data)
           props.history.push({
             pathname: 'success',
-            state: { message : 'Pharmacy Request added successfully' },
-        })
+            state: { message: 'Pharmacy Request added successfully' },
+          })
         } else if (!res.data.success) {
           setOpenNotification(true)
           setErrorMsg('Error while adding the Medicine request')
@@ -600,7 +600,7 @@ function AddEditEDR(props) {
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value)
-    if (e.target.value.length >= 3) {
+    if (e.target.value.length >= 1) {
       axios
         .get(getSearchedPharmaceuticalItemsUrl + '/' + e.target.value)
         .then((res) => {
