@@ -427,7 +427,7 @@ const buNurse = [
 ];
 
 const fuReturnRequestApprovalMember = [
-  { img: FunctionalUnit, text: "Functional Unit", path: "" },
+  { img: KHMC, text: "KHMC", path: "" },
 
   {
     img: ReturnItem,
@@ -482,7 +482,7 @@ const fuInventoryKeeper = [
 
   {
     img: ReturnItem,
-    text: "FU Returns",
+    text: "FU Returns Status",
     path: `/home/wms/fus/returnitems`,
   },
 
