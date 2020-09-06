@@ -139,7 +139,7 @@ const styles = {
     borderRadius: 5,
     backgroundColor: '#2c6ddd',
     height: '50px',
-    width:  '140px',
+    width: '140px',
     outline: 'none',
   },
   buttonContainer: {
@@ -221,8 +221,6 @@ function AddEditPurchaseRequest(props) {
     radioDate: '',
     DateTime: new Date().toISOString().substr(0, 10),
 
-    results: '',
-
     consultationNoteArray: '',
     consultationNo: '',
     date: new Date(),
@@ -236,6 +234,11 @@ function AddEditPurchaseRequest(props) {
     doctor: cookie.load('current_user').name,
 
     pharmacyRequestArray: '',
+
+    name: '',
+    date: '',
+    results: '',
+    comments: '',
   }
 
   function reducer(state, { field, value }) {
@@ -262,7 +265,6 @@ function AddEditPurchaseRequest(props) {
     radioComments,
     radioDate,
     DateTime = new Date().toISOString().substr(0, 10),
-    results,
 
     consultationNoteArray,
     consultationNo,
@@ -270,13 +272,18 @@ function AddEditPurchaseRequest(props) {
     description,
     consultationNotes,
     requester = cookie.load('current_user').name,
-    date,
+    // date,
     residentNoteArray,
     rdescription,
     note,
     doctor = cookie.load('current_user').name,
 
     pharmacyRequestArray,
+
+    name,
+    date,
+    results,
+    comments,
   } = state
 
   const onChangeValue = (e) => {
@@ -341,37 +348,55 @@ function AddEditPurchaseRequest(props) {
 
             Object.entries(res.data.data).map(([key, val]) => {
               if (val && typeof val === 'object') {
-                if (key === 'patientId') {
-                  dispatch({ field: 'patientId', value: val._id })
-                } else if (key === 'labRequest') {
-                  dispatch({ field: 'labRequestArray', value: val })
-                } else if (key === 'radiologyRequest') {
-                  dispatch({ field: 'radiologyRequestArray', value: val })
-                } else if (key === 'consultationNote') {
-                  Object.entries(val).map(([key1, val1]) => {
-                    if (key1 == 'requester') {
-                      dispatch({ field: 'requester', value: val1._id })
-                    } else {
-                      dispatch({ field: key1, value: val1 })
-                    }
-                  })
-                  dispatch({ field: 'consultationNoteArray', value: val })
-                } else if (key === 'residentNotes') {
-                  Object.entries(val).map(([key1, val1]) => {
-                    if (key1 == 'doctor') {
-                      dispatch({ field: 'doctor', value: val1._id })
-                    } else {
-                      dispatch({ field: key1, value: val1 })
-                    }
-                  })
-                  dispatch({ field: 'residentNoteArray', value: val })
-                } else if (key === 'pharmacyRequest') {
-                  dispatch({ field: 'pharmacyRequestArray', value: val })
+                if (key === 'serviceId') {
+                  dispatch({ field: 'name', value: val.name })
+                  dispatch({ field: 'price', value: val.price })
                 }
               } else {
-                dispatch({ field: key, value: val })
+                if (key === 'date') {
+                  dispatch({
+                    field: 'date',
+                    value: new Date(val).toISOString().substr(0, 10),
+                  })
+                } else {
+                  dispatch({ field: key, value: val })
+                }
               }
             })
+
+            // Object.entries(res.data.data).map(([key, val]) => {
+            //   if (val && typeof val === 'object') {
+            //     if (key === 'patientId') {
+            //       dispatch({ field: 'patientId', value: val._id })
+            //     } else if (key === 'labRequest') {
+            //       dispatch({ field: 'labRequestArray', value: val })
+            //     } else if (key === 'radiologyRequest') {
+            //       dispatch({ field: 'radiologyRequestArray', value: val })
+            //     } else if (key === 'consultationNote') {
+            //       Object.entries(val).map(([key1, val1]) => {
+            //         if (key1 == 'requester') {
+            //           dispatch({ field: 'requester', value: val1._id })
+            //         } else {
+            //           dispatch({ field: key1, value: val1 })
+            //         }
+            //       })
+            //       dispatch({ field: 'consultationNoteArray', value: val })
+            //     } else if (key === 'residentNotes') {
+            //       Object.entries(val).map(([key1, val1]) => {
+            //         if (key1 == 'doctor') {
+            //           dispatch({ field: 'doctor', value: val1._id })
+            //         } else {
+            //           dispatch({ field: key1, value: val1 })
+            //         }
+            //       })
+            //       dispatch({ field: 'residentNoteArray', value: val })
+            //     } else if (key === 'pharmacyRequest') {
+            //       dispatch({ field: 'pharmacyRequestArray', value: val })
+            //     }
+            //   } else {
+            //     dispatch({ field: key, value: val })
+            //   }
+            // })
           }
         }
       })
@@ -1243,6 +1268,89 @@ function AddEditPurchaseRequest(props) {
                 </Button>
               </div>
             </div> */}
+
+            <div className='row' style={{ marginTop: '20px' }}>
+              <div
+                className='col-md-6 col-sm-6'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  disabled={true}
+                  label='Radiology/Imaging'
+                  name={'name'}
+                  value={name}
+                  // onChange={onChangeValue}
+                  variant='filled'
+                  className='textInputStyle'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                  InputLabelProps={{
+                    className: classes.label,
+                    classes: { label: classes.label },
+                  }}
+                />
+              </div>
+
+              <div
+                className='col-md-6 col-sm-6 col-6'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  disabled={true}
+                  variant='filled'
+                  label='Date/Time'
+                  name={'date'}
+                  value={date}
+                  type='date'
+                  className='textInputStyle'
+                  // onChange={(val) => onChangeValue(val, 'DateTime')}
+                  InputLabelProps={{
+                    shrink: true,
+                    color: 'black',
+                  }}
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className='row' style={{ marginTop: '20px' }}>
+              <div
+                className='col-md-12 col-sm-12'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  disabled={true}
+                  label='Comments'
+                  name={'comments'}
+                  value={comments}
+                  // onChange={onChangeValue}
+                  variant='filled'
+                  className='textInputStyle'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                  InputLabelProps={{
+                    className: classes.label,
+                    classes: { label: classes.label },
+                  }}
+                />
+              </div>
+            </div>
 
             <div className='row' style={{ marginTop: '20px' }}>
               <div
