@@ -110,7 +110,7 @@ export default function EDR(props) {
         <div className='subheader'>
           <div>
             <img src={business_Unit} />
-            <h4>OPR - Lab Service Requests</h4>
+            <h4>OPR - Lab Service</h4>
           </div>
           <div>
             <ButtonField onClick={addNewItem} name='add' />

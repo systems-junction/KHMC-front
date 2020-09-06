@@ -112,6 +112,17 @@ const tableDataKeysForRadiology = [
   'requesterName',
   'status',
 ]
+
+const statusArray = [
+  // {
+  //   key: 'pending',
+  //   value: 'Pending',
+  // },
+  {
+    key: 'completed',
+    value: 'Completed',
+  },
+]
 const actions = { view: true }
 const styles = {
   patientDetails: {
@@ -239,6 +250,7 @@ function AddEditPurchaseRequest(props) {
     date: '',
     results: '',
     comments: '',
+    status: '',
   }
 
   function reducer(state, { field, value }) {
@@ -284,6 +296,7 @@ function AddEditPurchaseRequest(props) {
     date,
     results,
     comments,
+    status,
   } = state
 
   const onChangeValue = (e) => {
@@ -846,6 +859,7 @@ function AddEditPurchaseRequest(props) {
       radiologyRequestId: radId,
       OPRId: oprId,
       data: selectedItem,
+      status: status,
     }
     formData.append('data', JSON.stringify(params))
     console.log('params', params)
@@ -969,7 +983,7 @@ function AddEditPurchaseRequest(props) {
           <div className='subheader'>
             <div>
               <img src={business_Unit} />
-              <h4>OPR - Radiology Service Requests</h4>
+              <h4>OPR - Radiology Service</h4>
             </div>
 
             {/* <div>
@@ -1306,7 +1320,7 @@ function AddEditPurchaseRequest(props) {
                 <TextField
                   disabled={true}
                   variant='filled'
-                  label='Date/Time'
+                  label='Date'
                   name={'date'}
                   value={date}
                   type='date'
@@ -1334,7 +1348,7 @@ function AddEditPurchaseRequest(props) {
               >
                 <TextField
                   disabled={true}
-                  label='Comments'
+                  label='Comments/Notes'
                   name={'comments'}
                   value={comments}
                   // onChange={onChangeValue}
@@ -1349,6 +1363,44 @@ function AddEditPurchaseRequest(props) {
                     classes: { label: classes.label },
                   }}
                 />
+              </div>
+            </div>
+
+            <div className='row' style={{ marginTop: '20px' }}>
+              <div
+                className='col-md-12 col-sm-12'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  fullWidth
+                  select
+                  id='status'
+                  name='status'
+                  value={status}
+                  onChange={onChangeValue}
+                  variant='filled'
+                  label='Status'
+                  className='dropDownStyle'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                  input={<BootstrapInput />}
+                >
+                  <MenuItem value=''>
+                    <em>None</em>
+                  </MenuItem>
+                  {statusArray.map((val) => {
+                    return (
+                      <MenuItem key={val.key} value={val.key}>
+                        {val.value}
+                      </MenuItem>
+                    )
+                  })}
+                </TextField>
               </div>
             </div>
 
