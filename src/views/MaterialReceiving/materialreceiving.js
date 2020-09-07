@@ -255,7 +255,7 @@ export default function PurchaseRequest(props) {
         <div className="subheader">
           <div>
             <img src={business_Unit} />
-            <h4>Material Receiving</h4>
+            <h4>Order Receiving / Return</h4>
           </div>
 
           {/* <div>

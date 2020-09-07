@@ -365,7 +365,7 @@ function AddEditPurchaseRequest(props) {
         <div className="subheader">
           <div>
             <img src={business_Unit} />
-            <h4>Purchase Order</h4>
+            <h4>Order Receiving / Return</h4>
           </div>
 
           {/* <div>

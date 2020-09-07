@@ -66,7 +66,7 @@ const styles = {
   stylesForButton: {
     color: "white",
     cursor: "pointer",
-    borderRadius: 15,
+    borderRadius: 5,
     backgroundColor: "#2C6DDD",
     width: "140px",
     height: "50px",
@@ -148,6 +148,7 @@ const tableHeadingForFUMemberForItems = [
 
 const actions = { view: true };
 const actionsForBUMemeber = { edit: true, view: true };
+const actionsForBUMemeberForReceive = { edit: false, view: true };
 const actionsForBUNurse = { view: true, edit: true };
 const actionsForBUDoctor = { view: true };
 
@@ -435,7 +436,7 @@ export default function ReplenishmentRequest(props) {
       setOpenNotification(true);
       setErrorMsg("Item has already been received");
     } else {
-      let path = `professionalorder/receive`;
+      let path = `/home/wms/fus/professionalorder/receive`;
       props.history.push({
         pathname: path,
         state: {
@@ -451,7 +452,7 @@ export default function ReplenishmentRequest(props) {
   }
 
   function handleEditRequestedItem(rec) {
-    let path = `professionalorder/requesteditem/edit`;
+    let path = `/home/wms/fus/professionalorder/requesteditem/edit`;
 
     console.log(rec);
 
@@ -496,6 +497,23 @@ export default function ReplenishmentRequest(props) {
     });
   }
 
+  if (
+    props.history.location.pathname ===
+      "/home/wms/fus/professionalorder/addorder" &&
+    // items &&
+    buObj
+    //  &&
+    // statues &&
+    // vendors
+  ) {
+    let path = "/home/wms/fus/professionalorder/add";
+
+    props.history.replace({
+      pathname: path,
+      state: { comingFor: "add", vendors, statues, items, buObj },
+    });
+  }
+
   return (
     <div
       style={{
@@ -514,12 +532,19 @@ export default function ReplenishmentRequest(props) {
         <div className="subheader">
           <div>
             <img src={business_Unit} />
-            {/* <h4>Replenishment Request for BU</h4> */}
-            <h4>ICU Professional Orders</h4>
+
+            {props.history.location.pathname ===
+            "/home/wms/fus/professionalorder/receiveorder" ? (
+              <h4>Order Receiving</h4>
+            ) : (
+              <h4>Professional Orders</h4>
+            )}
           </div>
 
           {currentUser &&
-          (currentUser.staffTypeId.type === "Registered Nurse" ||
+          ((currentUser.staffTypeId.type === "Registered Nurse" &&
+            props.history.location.pathname ===
+              "/home/wms/fus/professionalorder/addorder") ||
             currentUser.staffTypeId.type === "admin") ? (
             // <div>
             //   <img onClick={addNewItem} src={Add_New} />
@@ -576,12 +601,18 @@ export default function ReplenishmentRequest(props) {
                   tableDataKeys={tableDataKeysForBUMember}
                   tableHeading={tableHeadingForBUMember}
                   action={
-                    currentUser.staffTypeId.type === "Registered Nurse"
-                      ? actionsForBUNurse
-                      : currentUser.staffTypeId.type === "BU Doctor"
+                    // currentUser.staffTypeId.type === "Registered Nurse"
+                    //   ? actionsForBUNurse
+                    currentUser.staffTypeId.type === "BU Doctor"
                       ? actionsForBUDoctor
-                      : currentUser.staffTypeId.type === "Registered Nurse"
+                      : currentUser.staffTypeId.type === "Registered Nurse" &&
+                        props.history.location.pathname ===
+                          "/home/wms/fus/professionalorder/addorder"
                       ? actionsForBUMemeber
+                      : currentUser.staffTypeId.type === "Registered Nurse" &&
+                        props.history.location.pathname ===
+                          "/home/wms/fus/professionalorder/receiveorder"
+                      ? actionsForBUMemeberForReceive
                       : actions
                   }
                   handleEdit={handleEdit}

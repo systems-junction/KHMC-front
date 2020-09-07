@@ -287,8 +287,8 @@ function AddEditPurchaseRequest(props) {
         <div style={{ flex: 4, display: "flex", alignItems: "center" }}>
           <h3 style={{ color: "white", fontWeight: "700" }}>
             {comingFor === "add"
-              ? " Add Material Receiving"
-              : " Edit Material Receiving"}
+              ? "Order Receiving / Return"
+              : "Order Receiving / Return"}
           </h3>
         </div>
 

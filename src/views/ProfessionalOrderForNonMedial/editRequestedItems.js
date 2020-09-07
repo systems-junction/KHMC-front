@@ -1232,7 +1232,7 @@ function AddEditPurchaseRequest(props) {
                     variant="filled"
                     type="text"
                     label="Notes/Comments"
-                    name={"comments"}
+                    name={"commentNote"}
                     value={commentNote}
                     onChange={onChangeValue}
                     className="textInputStyle"
