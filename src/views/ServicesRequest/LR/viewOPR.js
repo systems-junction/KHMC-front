@@ -114,7 +114,7 @@ const tableDataKeysForRadiology = [
   'status',
 ]
 // const actions = { view: true, }
-const actions = { edit: true, }
+const actions = { edit: true }
 const styles = {
   patientDetails: {
     backgroundColor: 'white',
@@ -151,6 +151,7 @@ const styles = {
     borderRadius: 5,
     backgroundColor: '#2c6ddd',
     height: '50px',
+    width: '140px',
     outline: 'none',
   },
   buttonContainer: {
@@ -1099,7 +1100,8 @@ function AddEditPurchaseRequest(props) {
                   style={{
                     ...styles.stylesForButton,
                     marginTop: '7px',
-                    backgroundColor: '#e877a1',
+                    backgroundColor: '#ad6bbf',
+                    width: '190px',
                   }}
                   disabled={!addLabRequest}
                   onClick={addSelectedLabItem}

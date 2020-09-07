@@ -112,7 +112,7 @@ const tableDataKeysForRadiology = [
   'requesterName',
   'status',
 ]
-const actions = { view: true }
+const actions = { edit: true }
 const styles = {
   patientDetails: {
     backgroundColor: 'white',
@@ -1030,7 +1030,6 @@ function AddEditPurchaseRequest(props) {
                 <TextField
                   label='Radiology / Imaging'
                   variant='filled'
-                  placeholder='Search service by name'
                   name={'searchRadioQuery'}
                   value={searchRadioQuery}
                   onChange={handleRadioSearch}
@@ -1160,7 +1159,7 @@ function AddEditPurchaseRequest(props) {
               >
                 <TextField
                   disabled
-                  label='Selected Serive'
+                  label='Selected Service'
                   variant='filled'
                   placeholder='Search from above...'
                   name={'radioServiceName'}
@@ -1207,7 +1206,8 @@ function AddEditPurchaseRequest(props) {
                   style={{
                     ...styles.stylesForButton,
                     marginTop: '7px',
-                    backgroundColor: '#e877a1',
+                    backgroundColor: '#ad6bbf',
+                    width: '190px',
                   }}
                   disabled={!addRadioRequest}
                   onClick={addSelectedRadioItem}
@@ -1362,7 +1362,7 @@ function AddEditPurchaseRequest(props) {
                   tableData={radiologyRequestArray}
                   tableDataKeys={tableDataKeysForRadiology}
                   tableHeading={tableHeadingForRadiology}
-                  handleView={handleView}
+                  handleEdit={handleView}
                   action={actions}
                   borderBottomColor={'#60d69f'}
                   borderBottomWidth={20}

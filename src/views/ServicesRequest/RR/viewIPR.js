@@ -245,9 +245,10 @@ function AddEditPurchaseRequest(props) {
           console.log(res.data, 'res')
           props.history.push({
             pathname: 'success',
-            state: { message : 'Radiology services request submitted successfully' },
+            state: {
+              message: 'Radiology services request submitted successfully',
+            },
           })
-          
         } else {
           setOpenNotification(true)
           setErrorMsg('Error while submitting')
@@ -501,7 +502,7 @@ function AddEditPurchaseRequest(props) {
           </div>
           <br /> */}
 
-          <div className='container' style={styles.patientDetails}>
+          <div className='container-fluid' style={styles.patientDetails}>
             <div className='row'>
               <div className='col-md-12'>
                 <h4 style={{ color: 'blue', fontWeight: '600' }}>
@@ -796,7 +797,7 @@ function AddEditPurchaseRequest(props) {
 
           <div
             style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-            className={`container ${classes.root}`}
+            className={`container-fluid ${classes.root}`}
           >
             <div className='row'>
               <div

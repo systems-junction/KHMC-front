@@ -11,7 +11,7 @@ import ButtonField from '../../../components/common/Button'
 import Loader from 'react-loader-spinner'
 import Back from '../../../assets/img/Back_Arrow.png'
 import Header from '../../../components/Header/Header'
-import business_Unit from '../../../assets/img/OPR.png'
+import business_Unit from '../../../assets/img/PHR.png'
 import '../../../assets/jss/material-dashboard-react/components/loaderStyle.css'
 import socketIOClient from 'socket.io-client'
 
@@ -109,7 +109,7 @@ export default function EDR(props) {
         <div className='subheader'>
           <div>
             <img src={business_Unit} />
-            <h4>OPR - Pharmacy Service Requests</h4>
+            <h4>OPR - Pharmacy Service </h4>
           </div>
           <div>
             <ButtonField onClick={addNewItem} name='add' />

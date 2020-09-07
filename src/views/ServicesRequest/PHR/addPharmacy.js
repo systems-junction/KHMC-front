@@ -28,7 +28,7 @@ import Dialog from '@material-ui/core/Dialog'
 import { tr } from 'date-fns/locale'
 import Header from '../../../components/Header/Header'
 import plus_icon from '../../../assets/img/Plus.png'
-import purchase_request from '../../../assets/img/purchase request.png'
+import purchase_request from '../../../assets/img/PHR.png'
 import Back from '../../../assets/img/Back_Arrow.png'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -69,18 +69,18 @@ const styles = {
   stylesForButton: {
     color: 'white',
     cursor: 'pointer',
-    borderRadius: 10,
+    borderRadius: 5,
     backgroundColor: '#2c6ddd',
-    width: '115px',
+    width: '140px',
     height: '40px',
     outline: 'none',
   },
   stylesForPurchaseButton: {
     color: 'white',
     cursor: 'pointer',
-    borderRadius: 10,
+    borderRadius: 5,
     backgroundColor: '#2c6ddd',
-    width: '60%',
+    width: '140px',
     height: '40px',
     outline: 'none',
   },

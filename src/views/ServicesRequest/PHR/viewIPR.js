@@ -292,7 +292,9 @@ function AddEditPurchaseRequest(props) {
           }
           props.history.push({
             pathname: 'success',
-            state: { message : 'Discharge Medication order fulfilled successfully' },
+            state: {
+              message: 'Discharge Medication order fulfilled successfully',
+            },
           })
         }
       })
@@ -524,7 +526,7 @@ function AddEditPurchaseRequest(props) {
           {/* {value === 0 ? ( */}
           <div
             style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-            className='container'
+            className='container-fluid'
           >
             <div className='row' style={{ marginTop: '20px' }}>
               {medicineDataArray !== 0 ? (
@@ -567,7 +569,7 @@ function AddEditPurchaseRequest(props) {
 
           <div
             style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-            className='container'
+            className='container-fluid'
           >
             <div className='row'>
               {/* <div

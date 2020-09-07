@@ -142,7 +142,7 @@ function AddEditPurchaseRequest(props) {
     date: '',
     results: '',
     sampleID: '',
-    comments:''
+    comments: '',
   }
 
   function reducer(state, { field, value }) {
@@ -236,7 +236,7 @@ function AddEditPurchaseRequest(props) {
           console.log('res', res.data)
           props.history.push({
             pathname: 'success',
-            state: { message : 'Lab services request submitted successfully' },
+            state: { message: 'Lab services request submitted successfully' },
           })
         } else {
           setOpenNotification(true)
@@ -396,7 +396,7 @@ function AddEditPurchaseRequest(props) {
 
           <div
             style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-            className='container'
+            className='container-fluid'
           >
             <div className={classesForTabs.root}>
               <Tabs
