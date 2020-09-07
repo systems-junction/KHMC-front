@@ -13,7 +13,7 @@ import {
   updateEdrIpr,
   searchpatient,
   getSearchedpatient,
-  notifyConsultation
+  notifyConsultation,
 } from '../../../public/endpoins'
 import cookie from 'react-cookies'
 import Header from '../../../components/Header/Header'
@@ -279,12 +279,14 @@ function LabRadRequest(props) {
     labRequestArray: '',
     labServiceName: '',
     labServiceStatus: '',
+    labComments: '',
 
     radioServiceId: '',
     radioServiceCode: '',
     radioServiceName: '',
     radiologyRequestArray: '',
     radioServiceStatus: '',
+    radioComments: '',
 
     //for nurse
     nurseServiceId: '',
@@ -310,7 +312,7 @@ function LabRadRequest(props) {
 
     pharmacyRequestArray: '',
     requestType: '',
-    patientId:''
+    patientId: '',
   }
 
   function reducer(state, { field, value }) {
@@ -361,7 +363,7 @@ function LabRadRequest(props) {
 
     pharmacyRequestArray,
     requestType,
-    patientId
+    patientId,
   } = state
 
   const onChangeValue = (e) => {
@@ -475,7 +477,7 @@ function LabRadRequest(props) {
           notifyForConsult(patientId)
           props.history.push({
             pathname: 'consultationrequest/success',
-            state: { message : 'Consultation Note submitted successfully' },
+            state: { message: 'Consultation Note submitted successfully' },
           })
         } else if (!res.data.success) {
           setOpenNotification(true)
@@ -492,16 +494,16 @@ function LabRadRequest(props) {
   }
 
   const notifyForConsult = (id) => {
-
-    axios.get(notifyConsultation + '/' + id)
-        .then((res) => {
-            console.log(res)
-        })
-        .catch((e) => {
-            console.log("error after notify", e);
-            setOpenNotification(true);
-            setErrorMsg(e);
-        });
+    axios
+      .get(notifyConsultation + '/' + id)
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((e) => {
+        console.log('error after notify', e)
+        setOpenNotification(true)
+        setErrorMsg(e)
+      })
   }
 
   function addResidentRequest() {
@@ -632,6 +634,7 @@ function LabRadRequest(props) {
             requester: currentUser.staffId,
             requesterName: requester,
             status: labServiceStatus,
+            comments: labComments,
           },
         ],
       })
@@ -642,6 +645,7 @@ function LabRadRequest(props) {
     dispatch({ field: 'labServiceName', value: '' })
     dispatch({ field: 'labServiceStatus', value: '' })
     dispatch({ field: 'labServiceCode', value: '' })
+    dispatch({ field: 'labComments', value: '' })
 
     setaddLabRequest(false)
   }
@@ -658,6 +662,7 @@ function LabRadRequest(props) {
           requester: labRequestArray[i].requester,
           serviceName: labRequestArray[i].serviceName,
           status: labRequestArray[i].status,
+          comments: labRequestArray[i].comments,
         },
       ]
     }
@@ -674,8 +679,8 @@ function LabRadRequest(props) {
           console.log('response after adding Lab Request', res.data)
           props.history.push({
             pathname: 'consultationrequest/success',
-            state: { message : 'Lab Request added successfully' },
-        })
+            state: { message: 'Lab Request added successfully' },
+          })
         } else if (!res.data.success) {
           setOpenNotification(true)
         }
@@ -744,6 +749,7 @@ function LabRadRequest(props) {
             serviceName: radioServiceName,
             requester: currentUser.staffId,
             status: radioServiceStatus,
+            comments: radioComments,
           },
         ],
       })
@@ -754,6 +760,7 @@ function LabRadRequest(props) {
     dispatch({ field: 'radioServiceCode', value: '' })
     dispatch({ field: 'radioServiceName', value: '' })
     dispatch({ field: 'radioServiceStatus', value: '' })
+    dispatch({ field: 'radioComments', value: '' })
 
     setaddLabRequest(false)
   }
@@ -770,6 +777,7 @@ function LabRadRequest(props) {
           requesterName: radiologyRequestArray[i].requesterName,
           serviceName: radiologyRequestArray[i].serviceName,
           status: radiologyRequestArray[i].status,
+          comments: radiologyRequestArray[i].comments,
         },
       ]
     }
@@ -787,8 +795,8 @@ function LabRadRequest(props) {
           console.log('response after adding Radio Request', res.data)
           props.history.push({
             pathname: 'consultationrequest/success',
-            state: { message : 'Radio Request added successfully' },
-        })
+            state: { message: 'Radio Request added successfully' },
+          })
         } else if (!res.data.success) {
           setOpenNotification(true)
         }
@@ -960,8 +968,8 @@ function LabRadRequest(props) {
 
             Object.entries(res.data.data).map(([key, val]) => {
               if (val && typeof val === 'object') {
-                if (key === "patientId") {
-                    dispatch({ field: "patientId", value: val._id });
+                if (key === 'patientId') {
+                  dispatch({ field: 'patientId', value: val._id })
                 } else if (key === 'labRequest') {
                   dispatch({ field: 'labRequestArray', value: val })
                 } else if (key === 'radiologyRequest') {
