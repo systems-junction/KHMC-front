@@ -291,7 +291,8 @@ function AddEditPurchaseRequest(props) {
                   classes={{ root: classesForTabs.root, scroller: classesForTabs.scroller }}
                   value={value}
                   onChange={handleChange}
-                  indicatorColor='null'
+                  textColor="primary"
+                  TabIndicatorProps={{style: {background:'#12387a'}}}
                   centered={false}
                   variant='scrollable'
                   fullWidth={true}
@@ -301,7 +302,7 @@ function AddEditPurchaseRequest(props) {
                       color: 'white',
                       borderRadius: 15,
                       outline: 'none',
-                      backgroundColor: value === 0 ? '#2c6ddd' : undefined,
+                      color: value === 0 ? "#12387a" : '#3B988C',
                     }}
                     label='Need Approval'
                   />
@@ -328,7 +329,7 @@ function AddEditPurchaseRequest(props) {
                       color: 'white',
                       borderRadius: 15,
                       outline: 'none',
-                      backgroundColor: value === 1 ? '#2c6ddd' : undefined,
+                      color: value === 1 ? "#12387a" : '#3B988C',
                     }}
                     label='Follow Up'
                   />

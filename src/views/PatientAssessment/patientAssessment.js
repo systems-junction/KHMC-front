@@ -1245,7 +1245,8 @@ function PatientAssessment(props) {
                             }}
                             value={value}
                             onChange={handleChange}
-                            indicatorColor="null"
+                            textColor="primary"
+                            TabIndicatorProps={{style: {background:'#12387a'}}}
                             centered={false}
                             variant="scrollable"
                             fullWidth={true}
@@ -1255,7 +1256,7 @@ function PatientAssessment(props) {
                                     color: "white",
                                     borderRadius: 5,
                                     outline: "none",
-                                    backgroundColor: value === 0 ? "#2c6ddd" : undefined,
+                                    color: value === 0 ? "#12387a" : '#3B988C',
                                 }}
                                 label="Resident Doctor Notes"
                                 disabled
@@ -1265,7 +1266,7 @@ function PatientAssessment(props) {
                                     color: "white",
                                     borderRadius: 5,
                                     outline: "none",
-                                    backgroundColor: value === 1 ? "#2c6ddd" : undefined,
+                                    color: value === 1 ? "#12387a" : '#3B988C',
                                 }}
                                 label="External Consultant Notes"
                                 disabled
@@ -1275,7 +1276,7 @@ function PatientAssessment(props) {
                                     color: "white",
                                     borderRadius: 5,
                                     outline: "none",
-                                    backgroundColor: value === 2 ? "#2c6ddd" : undefined,
+                                    color: value === 2 ? "#12387a" : '#3B988C',
                                 }}
                                 label="Pharm"
                                 disabled
@@ -1285,7 +1286,7 @@ function PatientAssessment(props) {
                                     color: "white",
                                     borderRadius: 5,
                                     outline: "none",
-                                    backgroundColor: value === 3 ? "#2c6ddd" : undefined,
+                                    color: value === 3 ? "#12387a" : '#3B988C',
                                 }}
                                 label="Lab"
                                 disabled
@@ -1295,7 +1296,7 @@ function PatientAssessment(props) {
                                     color: "white",
                                     borderRadius: 5,
                                     outline: "none",
-                                    backgroundColor: value === 4 ? "#2c6ddd" : undefined,
+                                    color: value === 4 ? "#12387a" : '#3B988C',
                                 }}
                                 label="Rad"
                                 disabled
@@ -1305,7 +1306,7 @@ function PatientAssessment(props) {
                                     color: "white",
                                     borderRadius: 5,
                                     outline: "none",
-                                    backgroundColor: value === 5 ? "#2c6ddd" : undefined,
+                                    color: value === 5 ? "#12387a" : '#3B988C',
                                 }}
                                 label="In Patient Request"
                                 disabled
