@@ -874,7 +874,13 @@ function AddEditPurchaseRequest(props) {
       .then((res) => {
         if (res.data.success) {
           console.log('response after adding Radio Request', res.data)
-          props.history.goBack()
+          // props.history.goBack()
+          props.history.push({
+            pathname: 'success',
+            state: {
+              message: 'Radiology Service updated successfully',
+            },
+          })
         } else if (!res.data.success) {
           setOpenNotification(true)
         }
@@ -1571,7 +1577,7 @@ function AddEditPurchaseRequest(props) {
                   variant='contained'
                   color='primary'
                 >
-                  <strong style={{ fontSize: '12px' }}>Save</strong>
+                  <strong style={{ fontSize: '12px' }}>Update</strong>
                 </Button>
               </div>
             </div>
