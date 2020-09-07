@@ -339,8 +339,7 @@ export default function ReplenishmentRequest(props) {
 
   if (
     props.history.location.pathname ===
-      "/home/wms/fus/replenishment/add/manual"
-       &&
+      "/home/wms/fus/replenishment/add/manual" &&
     // items &&
     fuObj
     //  &&
@@ -600,9 +599,9 @@ export default function ReplenishmentRequest(props) {
             <h4>Replenishment Request</h4>
           </div>
 
-          {currentUser &&
-          (currentUser.staffTypeId.type === "FU Inventory Keeper" ||
-            currentUser.staffTypeId.type === "admin") && props.history.location.pathname!=='/home/wms/fus/receive' ? (
+          {/* {currentUser &&
+          currentUser.staffTypeId.type === "FU Inventory Keeper" &&
+          props.history.location.pathname !== "/home/wms/fus/receive" ? (
             <div>
               <Button
                 onClick={addNewItem}
@@ -614,20 +613,12 @@ export default function ReplenishmentRequest(props) {
                 &nbsp;&nbsp;
                 <strong style={{ fontSize: "12px" }}>Add New</strong>
               </Button>
-              {/* <img src={Search} /> */}
-            </div>
-          ) : (
-            undefined
-          )}
-
-          {/* {currentUser &&
-          currentUser.staffTypeId.type === "FU Inventory Keeper" ? (
-            <div>
-              <img onClick={() => viewReturnRequests()} src={view_all} />
             </div>
           ) : (
             undefined
           )} */}
+
+      
         </div>
 
         <div
