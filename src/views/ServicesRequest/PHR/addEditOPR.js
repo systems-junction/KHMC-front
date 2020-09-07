@@ -916,7 +916,8 @@ function AddEditPatientListing(props) {
           <Tabs
             value={value}
             onChange={handleChange}
-            indicatorColor="null"
+            textColor="primary"
+            TabIndicatorProps={{style: {background:'#12387a'}}}
             centered
           >
             <Tab
@@ -924,7 +925,7 @@ function AddEditPatientListing(props) {
                 color: "white",
                 borderRadius: 5,
                 outline: "none",
-                backgroundColor: value === 0 ? "#2c6ddd" : undefined,
+                color: value === 0 ? "#12387a" : '#3B988C',
               }}
               label="Patient Details"
             />
@@ -933,7 +934,7 @@ function AddEditPatientListing(props) {
                 color: "white",
                 borderRadius: 5,
                 outline: "none",
-                backgroundColor: value === 1 ? "#2c6ddd" : undefined,
+                color: value === 1 ? "#12387a" : '#3B988C',
               }}
               label="Emergency Contact"
             />
@@ -942,7 +943,7 @@ function AddEditPatientListing(props) {
                 color: "white",
                 borderRadius: 5,
                 outline: "none",
-                backgroundColor: value === 2 ? "#2c6ddd" : undefined,
+                color: value === 2 ? "#12387a" : '#3B988C',
               }}
               label="Payment Method"
             />
@@ -951,7 +952,7 @@ function AddEditPatientListing(props) {
                 color: "white",
                 borderRadius: 5,
                 outline: "none",
-                backgroundColor: value === 3 ? "#2c6ddd" : undefined,
+                color: value === 3 ? "#12387a" : '#3B988C',
               }}
               label="Insurance Details"
             />

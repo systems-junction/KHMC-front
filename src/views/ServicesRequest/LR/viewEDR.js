@@ -398,7 +398,8 @@ function AddEditPurchaseRequest(props) {
               <Tabs
                 value={value}
                 onChange={handleChange}
-                indicatorColor='null'
+                textColor="primary"
+                TabIndicatorProps={{style: {background:'#12387a'}}}
                 centered
               >
                 <Tab
@@ -406,7 +407,7 @@ function AddEditPurchaseRequest(props) {
                     color: 'white',
                     borderRadius: 15,
                     outline: 'none',
-                    backgroundColor: value === 0 ? '#2c6ddd' : undefined,
+                    color: value === 0 ? "#12387a" : '#3B988C',
                   }}
                   label='Sample Collection'
                 />
@@ -415,7 +416,7 @@ function AddEditPurchaseRequest(props) {
                     color: 'white',
                     borderRadius: 15,
                     outline: 'none',
-                    backgroundColor: value === 1 ? '#2c6ddd' : undefined,
+                    color: value === 1 ? "#12387a" : '#3B988C',
                   }}
                   label='Results'
                 />

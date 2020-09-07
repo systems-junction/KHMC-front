@@ -2704,7 +2704,8 @@ function AddEditPurchaseRequest(props) {
             }}
             value={value}
             onChange={handleChange}
-            indicatorColor='null'
+            textColor="primary"
+            TabIndicatorProps={{style: {background:'#12387a'}}}
             centered={false}
             variant='scrollable'
             fullWidth={true}
@@ -2714,7 +2715,7 @@ function AddEditPurchaseRequest(props) {
                 color: 'white',
                 borderRadius: 15,
                 outline: 'none',
-                backgroundColor: value === 0 ? '#2c6ddd' : undefined,
+                color: value === 0 ? "#12387a" : '#3B988C',
               }}
               label='Resident Doctor Notes'
             />
@@ -2723,7 +2724,7 @@ function AddEditPurchaseRequest(props) {
                 color: 'white',
                 borderRadius: 15,
                 outline: 'none',
-                backgroundColor: value === 1 ? '#2c6ddd' : undefined,
+                color: value === 1 ? "#12387a" : '#3B988C',
               }}
               label='External Consultant Notes'
             />
@@ -2732,7 +2733,7 @@ function AddEditPurchaseRequest(props) {
                 color: 'white',
                 borderRadius: 15,
                 outline: 'none',
-                backgroundColor: value === 2 ? '#2c6ddd' : undefined,
+                color: value === 2 ? "#12387a" : '#3B988C',
               }}
               label='PHR'
             />
@@ -2741,7 +2742,7 @@ function AddEditPurchaseRequest(props) {
                 color: 'white',
                 borderRadius: 15,
                 outline: 'none',
-                backgroundColor: value === 3 ? '#2c6ddd' : undefined,
+                color: value === 3 ? "#12387a" : '#3B988C',
               }}
               label='LR'
             />
@@ -2750,7 +2751,7 @@ function AddEditPurchaseRequest(props) {
                 color: 'white',
                 borderRadius: 15,
                 outline: 'none',
-                backgroundColor: value === 4 ? '#2c6ddd' : undefined,
+                color: value === 4 ? "#12387a" : '#3B988C',
               }}
               label='RR'
             />
@@ -2759,7 +2760,7 @@ function AddEditPurchaseRequest(props) {
                 color: 'white',
                 borderRadius: 15,
                 outline: 'none',
-                backgroundColor: value === 5 ? '#2c6ddd' : undefined,
+                color: value === 5 ? "#12387a" : '#3B988C',
               }}
               label='InPatient Request'
             />

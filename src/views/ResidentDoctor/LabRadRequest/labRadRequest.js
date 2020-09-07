@@ -1341,7 +1341,8 @@ function LabRadRequest(props) {
               }}
               value={value}
               onChange={handleChange}
-              indicatorColor='null'
+              textColor="primary"
+              TabIndicatorProps={{style: {background:'#12387a'}}}
               centered={false}
               variant='scrollable'
               fullWidth={true}
@@ -1351,7 +1352,7 @@ function LabRadRequest(props) {
                   color: 'white',
                   borderRadius: 5,
                   outline: 'none',
-                  backgroundColor: value === 0 ? '#2c6ddd' : undefined,
+                  color: value === 0 ? "#12387a" : '#3B988C',
                 }}
                 label='Resident Doctor Notes'
                 disabled={enableForm}
@@ -1361,7 +1362,7 @@ function LabRadRequest(props) {
                   color: 'white',
                   borderRadius: 5,
                   outline: 'none',
-                  backgroundColor: value === 1 ? '#2c6ddd' : undefined,
+                  color: value === 1 ? "#12387a" : '#3B988C',
                 }}
                 label='Pharm'
                 disabled={enableForm}
@@ -1371,7 +1372,7 @@ function LabRadRequest(props) {
                   color: 'white',
                   borderRadius: 5,
                   outline: 'none',
-                  backgroundColor: value === 2 ? '#2c6ddd' : undefined,
+                  color: value === 2 ? "#12387a" : '#3B988C',
                 }}
                 label='Lab'
                 disabled={enableForm}
@@ -1381,7 +1382,7 @@ function LabRadRequest(props) {
                   color: 'white',
                   borderRadius: 5,
                   outline: 'none',
-                  backgroundColor: value === 3 ? '#2c6ddd' : undefined,
+                  color: value === 3 ? "#12387a" : '#3B988C',
                 }}
                 label='Rad'
                 disabled={enableForm}
@@ -1391,7 +1392,7 @@ function LabRadRequest(props) {
                   color: 'white',
                   borderRadius: 5,
                   outline: 'none',
-                  backgroundColor: value === 4 ? '#2c6ddd' : undefined,
+                  color: value === 4 ? "#12387a" : '#3B988C',
                 }}
                 label='External Consultation'
                 disabled={enableForm}
