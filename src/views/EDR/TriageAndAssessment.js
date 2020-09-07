@@ -176,7 +176,8 @@ function TriageAndAssessment(props)
                     <Tabs
                         value={value}
                         onChange={handleChange}
-                        indicatorColor='null'
+                        textColor="primary"
+                        TabIndicatorProps={{style: {background:'#12387a'}}}
                         centered
                     >
                         <Tab
@@ -184,7 +185,7 @@ function TriageAndAssessment(props)
                                 color: 'white',
                                 borderRadius: 15,
                                 outline: 'none',
-                                backgroundColor: value === 0 ? '#2c6ddd' : undefined,
+                                color: value === 0 ? "#12387a" : '#3B988C',
                             }}
                             label='Triage Level'
                         />
@@ -193,7 +194,7 @@ function TriageAndAssessment(props)
                                 color: 'white',
                                 borderRadius: 15,
                                 outline: 'none',
-                                backgroundColor: value === 1 ? '#2c6ddd' : undefined,
+                                color: value === 1 ? "#12387a" : '#3B988C',
                             }}
                             label='Physical Examination'
                         />
