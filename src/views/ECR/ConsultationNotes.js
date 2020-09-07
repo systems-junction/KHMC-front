@@ -258,12 +258,14 @@ function LabRadRequest(props) {
     labRequestArray: "",
     labServiceName: "",
     labServiceStatus: "",
+    labComments: "",
 
     radioServiceId: "",
     radioServiceCode: "",
     radioServiceName: "",
     radiologyRequestArray: "",
     radioServiceStatus: "",
+    radioComments: "",
 
     //for nurse
     nurseServiceId: "",
@@ -286,7 +288,7 @@ function LabRadRequest(props) {
 
     pharmacyRequestArray: "",
     requestType: "",
-    patientId:''
+    patientId: "",
   };
 
   function reducer(state, { field, value }) {
@@ -334,7 +336,7 @@ function LabRadRequest(props) {
 
     pharmacyRequestArray,
     requestType,
-    patientId
+    patientId,
   } = state;
 
   const onChangeValue = (e) => {
@@ -343,7 +345,7 @@ function LabRadRequest(props) {
 
   const [currentUser, setCurrentUser] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
-  const [successMsg, setsuccessMsg] = useState('')
+  const [successMsg, setsuccessMsg] = useState("");
   const [openNotification, setOpenNotification] = useState(false);
   const [value, setValue] = useState(0);
   const [selectedItem, setSelectedItem] = useState("");
@@ -651,6 +653,7 @@ function LabRadRequest(props) {
             requester: currentUser.staffId,
             requesterName: requester,
             status: labServiceStatus,
+            comments: labComments,
           },
         ],
       });
@@ -661,6 +664,7 @@ function LabRadRequest(props) {
     dispatch({ field: "labServiceName", value: "" });
     dispatch({ field: "labServiceStatus", value: "" });
     dispatch({ field: "labServiceCode", value: "" });
+    dispatch({ field: "labComments", value: "" });
 
     setaddLabRequest(false);
   };
@@ -677,6 +681,7 @@ function LabRadRequest(props) {
           requester: labRequestArray[i].requester,
           serviceName: labRequestArray[i].serviceName,
           status: labRequestArray[i].status,
+          comments: labRequestArray[i].comments,
         },
       ];
     }
@@ -692,10 +697,10 @@ function LabRadRequest(props) {
         if (res.data.success) {
           console.log("response after adding Lab Request", res.data);
           props.history.push({
-            pathname: 'cn/success',
-            state: { message : 'Lab Request added successfully' },
-          })
-          notifyForLab(patientId)
+            pathname: "cn/success",
+            state: { message: "Lab Request added successfully" },
+          });
+          notifyForLab(patientId);
         } else if (!res.data.success) {
           setOpenNotification(true);
         }
@@ -708,17 +713,17 @@ function LabRadRequest(props) {
   };
 
   const notifyForLab = (id) => {
-
-    axios.get(notifyLab + '/' + id)
-        .then((res) => {
-            console.log(res)
-        })
-        .catch((e) => {
-            console.log("error after notify", e);
-            setOpenNotification(true);
-            setErrorMsg(e);
-        });
-  }
+    axios
+      .get(notifyLab + "/" + id)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("error after notify", e);
+        setOpenNotification(true);
+        setErrorMsg(e);
+      });
+  };
 
   const handleRadioSearch = (e) => {
     setSearchRadioQuery(e.target.value);
@@ -777,6 +782,7 @@ function LabRadRequest(props) {
             serviceName: radioServiceName,
             requester: currentUser.staffId,
             status: radioServiceStatus,
+            comments: radioComments,
           },
         ],
       });
@@ -803,6 +809,7 @@ function LabRadRequest(props) {
           requesterName: radiologyRequestArray[i].requesterName,
           serviceName: radiologyRequestArray[i].serviceName,
           status: radiologyRequestArray[i].status,
+          comments: radiologyRequestArray[i].comments,
         },
       ];
     }
@@ -819,10 +826,10 @@ function LabRadRequest(props) {
         if (res.data.success) {
           console.log("response after adding Radio Request", res.data);
           props.history.push({
-            pathname: 'cn/success',
-            state: { message : 'Radiology Request added successfully' },
-          })
-          notifyForRad(patientId)
+            pathname: "cn/success",
+            state: { message: "Radiology Request added successfully" },
+          });
+          notifyForRad(patientId);
         } else if (!res.data.success) {
           setOpenNotification(true);
         }
@@ -835,17 +842,17 @@ function LabRadRequest(props) {
   };
 
   const notifyForRad = (id) => {
-
-    axios.get(notifyRad + '/' + id)
-        .then((res) => {
-            console.log(res)
-        })
-        .catch((e) => {
-            console.log("error after notify", e);
-            setOpenNotification(true);
-            setErrorMsg(e);
-        });
-  }
+    axios
+      .get(notifyRad + "/" + id)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("error after notify", e);
+        setOpenNotification(true);
+        setErrorMsg(e);
+      });
+  };
 
   // // for Nursing
   // const handleNurseSearch = (e) => {
@@ -1011,7 +1018,7 @@ function LabRadRequest(props) {
             Object.entries(res.data.data).map(([key, val]) => {
               if (val && typeof val === "object") {
                 if (key === "patientId") {
-                    dispatch({ field: "patientId", value: val._id });
+                  dispatch({ field: "patientId", value: val._id });
                 } else if (key === "labRequest") {
                   dispatch({ field: "labRequestArray", value: val });
                 } else if (key === "radiologyRequest") {
@@ -1081,7 +1088,7 @@ function LabRadRequest(props) {
     setTimeout(() => {
       setOpenNotification(false);
       setErrorMsg("");
-      setsuccessMsg('')
+      setsuccessMsg("");
     }, 2000);
   }
 
@@ -1903,7 +1910,7 @@ function LabRadRequest(props) {
                   undefined
                 )}
               </div>
-            </div> /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/)
+            </div> /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/)
           ) : (
             //     : value === 5 ? (
             //         <div
@@ -2536,7 +2543,11 @@ function LabRadRequest(props) {
           </div>
         </div>
 
-        <Notification msg={errorMsg} open={openNotification} success={successMsg} />
+        <Notification
+          msg={errorMsg}
+          open={openNotification}
+          success={successMsg}
+        />
       </div>
     </div>
   );

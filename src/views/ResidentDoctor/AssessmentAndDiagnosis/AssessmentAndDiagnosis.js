@@ -243,12 +243,14 @@ function LabRadRequest(props) {
     labRequestArray: '',
     labServiceName: '',
     labServiceStatus: '',
+    labComments: '',
 
     radioServiceId: '',
     radioServiceCode: '',
     radioServiceName: '',
     radiologyRequestArray: '',
     radioServiceStatus: '',
+    radioComments: '',
 
     //for nurse
     nurseServiceId: '',
@@ -467,8 +469,8 @@ function LabRadRequest(props) {
           // window.location.reload(false)
           props.history.push({
             pathname: 'assessmentdiagnosis/success',
-            state: { message : 'Consultation note added successfully' },
-        })
+            state: { message: 'Consultation note added successfully' },
+          })
         } else if (!res.data.success) {
           setOpenNotification(true)
           setErrorMsg('Error while adding the Resident request')
@@ -564,6 +566,7 @@ function LabRadRequest(props) {
             requester: currentUser.staffId,
             requesterName: requester,
             status: labServiceStatus,
+            comments: labComments,
           },
         ],
       })
@@ -574,6 +577,7 @@ function LabRadRequest(props) {
     dispatch({ field: 'labServiceName', value: '' })
     dispatch({ field: 'labServiceStatus', value: '' })
     dispatch({ field: 'labServiceCode', value: '' })
+    dispatch({ field: 'labComments', value: '' })
 
     setaddLabRequest(false)
   }
@@ -590,6 +594,7 @@ function LabRadRequest(props) {
           requester: labRequestArray[i].requester,
           serviceName: labRequestArray[i].serviceName,
           status: labRequestArray[i].status,
+          comments: labRequestArray[i].comments,
         },
       ]
     }
@@ -606,8 +611,8 @@ function LabRadRequest(props) {
           console.log('response after adding Lab Request', res.data)
           props.history.push({
             pathname: 'assessmentdiagnosis/success',
-            state: { message : 'Lab Request added successfully' },
-        })
+            state: { message: 'Lab Request added successfully' },
+          })
         } else if (!res.data.success) {
           setOpenNotification(true)
         }
@@ -676,6 +681,7 @@ function LabRadRequest(props) {
             serviceName: radioServiceName,
             requester: currentUser.staffId,
             status: radioServiceStatus,
+            comments: radioComments,
           },
         ],
       })
@@ -686,6 +692,7 @@ function LabRadRequest(props) {
     dispatch({ field: 'radioServiceCode', value: '' })
     dispatch({ field: 'radioServiceName', value: '' })
     dispatch({ field: 'radioServiceStatus', value: '' })
+    dispatch({ field: 'radioComments', value: '' })
 
     setaddLabRequest(false)
   }
@@ -702,6 +709,7 @@ function LabRadRequest(props) {
           requesterName: radiologyRequestArray[i].requesterName,
           serviceName: radiologyRequestArray[i].serviceName,
           status: radiologyRequestArray[i].status,
+          comments: radiologyRequestArray[i].comments,
         },
       ]
     }
@@ -719,8 +727,8 @@ function LabRadRequest(props) {
           console.log('response after adding Radio Request', res.data)
           props.history.push({
             pathname: 'assessmentdiagnosis/success',
-            state: { message : 'Radio Request added successfully' },
-        })
+            state: { message: 'Radio Request added successfully' },
+          })
         } else if (!res.data.success) {
           setOpenNotification(true)
         }

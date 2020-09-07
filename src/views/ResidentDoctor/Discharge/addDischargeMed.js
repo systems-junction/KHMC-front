@@ -68,18 +68,18 @@ const styles = {
   stylesForButton: {
     color: 'white',
     cursor: 'pointer',
-    borderRadius: 10,
+    borderRadius: 5,
     backgroundColor: '#2c6ddd',
-    width: '115px',
+    width: '140px',
     height: '40px',
     outline: 'none',
   },
   stylesForPurchaseButton: {
     color: 'white',
     cursor: 'pointer',
-    borderRadius: 10,
+    borderRadius: 5,
     backgroundColor: '#2c6ddd',
-    width: '60%',
+    width: '140px',
     height: '40px',
     outline: 'none',
   },
@@ -162,7 +162,7 @@ function AddEditEDR(props) {
   const [searchQuery, setSearchQuery] = useState('')
   const [itemFound, setItemFound] = useState('')
   const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false)
-  const [patientId,setpatientId] =useState('')
+  const [patientId, setpatientId] = useState('')
 
   useEffect(() => {
     // const soc = socketIOClient(socketUrl);
@@ -177,7 +177,10 @@ function AddEditEDR(props) {
     console.log('Item', props.history.location.state.selectedItem)
 
     setpatientId(props.history.location.state.selectedItem.patientId._id)
-    console.log('id.......', props.history.location.state.selectedItem.patientId._id)
+    console.log(
+      'id.......',
+      props.history.location.state.selectedItem.patientId._id
+    )
 
     setId(props.history.location.state.selectedItem._id)
     setrequestNo(props.history.location.state.selectedItem.requestNo)
@@ -258,7 +261,7 @@ function AddEditEDR(props) {
           notifyForDischarge(patientId)
           props.history.push({
             pathname: 'success',
-            state: { message : 'Pharmacy request added successfully' },
+            state: { message: 'Pharmacy request added successfully' },
           })
         } else if (!res.data.success) {
           setOpenNotification(true)
@@ -275,16 +278,16 @@ function AddEditEDR(props) {
   }
 
   const notifyForDischarge = (id) => {
-
-    axios.get(notifyDischarge + '/' + id)
-        .then((res) => {
-            console.log(res)
-        })
-        .catch((e) => {
-            console.log("error after notify", e);
-            setOpenNotification(true);
-            setErrorMsg(e);
-        });
+    axios
+      .get(notifyDischarge + '/' + id)
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((e) => {
+        console.log('error after notify', e)
+        setOpenNotification(true)
+        setErrorMsg(e)
+      })
   }
 
   // const handleEdit = () => {
@@ -584,11 +587,7 @@ function AddEditEDR(props) {
         <div className='subheader'>
           <div>
             <img src={purchase_request} />
-            <h4>
-              {comingFor === 'add'
-                ? ' Discharge'
-                : ' Discharge'}
-            </h4>
+            <h4>{comingFor === 'add' ? ' Discharge' : ' Discharge'}</h4>
           </div>
 
           <div>
@@ -607,7 +606,7 @@ function AddEditEDR(props) {
 
         <div
           style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-          className='container'
+          className='container-fluid'
         >
           <div className='row' style={{ marginTop: '20px' }}>
             {dischargeMedicines !== 0 ? (

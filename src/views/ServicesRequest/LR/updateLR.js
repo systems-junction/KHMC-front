@@ -151,6 +151,7 @@ const styles = {
     borderRadius: 5,
     backgroundColor: '#2c6ddd',
     height: '50px',
+    width: '140px',
     outline: 'none',
   },
   buttonContainer: {
@@ -865,7 +866,7 @@ function AddEditPurchaseRequest(props) {
           <div className='subheader'>
             <div>
               <img src={business_Unit} />
-              <h4>OPR - Lab Service</h4>
+              <h4>OPR - Lab Service </h4>
             </div>
 
             {/* <div>
@@ -1233,7 +1234,7 @@ function AddEditPurchaseRequest(props) {
                   variant='filled'
                   label='Sample ID'
                   name={'sampleID'}
-                  // value={DateTime}
+                  value={'5f54cdc5bd5b025b6190fd90'}
                   type='text'
                   className='textInputStyle'
                   // onChange={(val) => onChangeValue(val, 'DateTime')}

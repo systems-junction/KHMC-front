@@ -359,7 +359,7 @@ function AddEditPurchaseRequest(props) {
           }
           props.history.push({
             pathname: 'success',
-            state: { message : 'Medication order fulfilled successfully' },
+            state: { message: 'Medication order fulfilled successfully' },
           })
         }
       })
@@ -574,7 +574,7 @@ function AddEditPurchaseRequest(props) {
               height: '20px',
             }}
           />
-          <div className='container' style={styles.patientDetails}>
+          <div className='container-fluid' style={styles.patientDetails}>
             <div className='row'>
               <div className='col-md-12'>
                 <h4 style={{ color: '#2c6ddd', fontWeight: '600' }}>
@@ -649,7 +649,7 @@ function AddEditPurchaseRequest(props) {
               height: '20px',
             }}
           />
-          <div className='container'>
+          <div className='container-fluid'>
             <div className='row'>
               <div
                 className='col-md-12 col-sm-12'
@@ -694,7 +694,7 @@ function AddEditPurchaseRequest(props) {
 
           <div
             style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-            className='container'
+            className='container-fluid'
           >
             <div className='row' style={{ marginTop: '10px' }}>
               {medicineDataArray !== 0 ? (
@@ -715,7 +715,7 @@ function AddEditPurchaseRequest(props) {
 
           <div
             style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-            className='container'
+            className='container-fluid'
           >
             <div
               style={{
