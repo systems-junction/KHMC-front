@@ -138,27 +138,27 @@ const registeredNurse = [
   },
 
   {
-    img: "",
-    text: "",
-    path: "",
+    img: OrderItems,
+    text: "Order Items",
+    path: `/home/wms/fus/professionalorder/addorder`,
   },
 
   {
-    img: "",
-    text: "",
-    path: "",
+    img: ReceiveItem,
+    text: "Order Receiving",
+    path: `/home/wms/fus/professionalorder/receiveorder`,
   },
 
   {
     img: MedicationOrder,
-    text: "Medication  Order",
+    text: "Medication  Order Receiving",
     path: `/home/wms/fus/medicinalorder`,
   },
 
   {
-    img: ProfessionalOrder,
-    text: "Professional Order",
-    path: `/home/wms/fus/professionalorder`,
+    img: "",
+    text: "",
+    path: "",
   },
 ];
 

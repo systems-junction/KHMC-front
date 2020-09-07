@@ -127,6 +127,14 @@ const tableHeadingForFUInventoryKeeperForItems = [
   "Requested Qty",
   "FU Item Cost",
   "Status",
+];
+
+const tableHeadingForFUInventoryKeeperForItemsForReceive = [
+  "Item Code",
+  "Name",
+  "Requested Qty",
+  "FU Item Cost",
+  "Status",
   "Actions",
 ];
 
@@ -617,8 +625,6 @@ export default function ReplenishmentRequest(props) {
           ) : (
             undefined
           )} */}
-
-      
         </div>
 
         <div
@@ -739,8 +745,13 @@ export default function ReplenishmentRequest(props) {
                   ? tableHeadingForFUMemberForItems
                   : // : currentUser.staffTypeId.type === "FU Inventory Keeper"
                   // ? tableHeadingForFUMemberForItems
-                  currentUser.staffTypeId.type === "FU Inventory Keeper"
+                  currentUser.staffTypeId.type === "FU Inventory Keeper" &&
+                    props.history.location.pathname ===
+                      "/home/wms/fus/replenishment"
                   ? tableHeadingForFUInventoryKeeperForItems
+                  : currentUser.staffTypeId.type === "FU Inventory Keeper" &&
+                    props.history.location.pathname === "/home/wms/fus/receive"
+                  ? tableHeadingForFUInventoryKeeperForItemsForReceive
                   : tableHeadingForFUMemberForItems
               }
               tableDataKeys={
@@ -756,12 +767,15 @@ export default function ReplenishmentRequest(props) {
                   : tableDataKeysForFUMemberForItems
               }
               action={
-                currentUser.staffTypeId.type === "FU Inventory Keeper"
+                currentUser.staffTypeId.type === "FU Inventory Keeper" &&
+                props.history.location.pathname === "/home/wms/fus/receive"
                   ? actionsForItemsForReceiver
                   : currentUser.staffTypeId.type ===
                     "Warehouse Inventory Keeper"
                   ? ""
-                  : currentUser.staffTypeId.type === "FU Inventory Keeper"
+                  : currentUser.staffTypeId.type === "FU Inventory Keeper" &&
+                    props.history.location.pathname ===
+                      "/home/wms/fus/replenishment"
                   ? ""
                   : currentUser.staffTypeId.type === "Warehouse Member"
                   ? ""

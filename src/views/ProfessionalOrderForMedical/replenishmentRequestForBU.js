@@ -535,13 +535,15 @@ export default function ReplenishmentRequest(props) {
   }
 
   function handleEditRequestedItem(rec) {
+    if (rec.secondStatus === "Cannot be fulfilled") {
+      setErrorMsg("Request cannot be entertained for now");
+      setOpenNotification(true);
+      setIsOpen(false);
+      return;
+    }
     let path = `medicinalorder/requesteditem/edit`;
 
-    console.log(rec);
-
     let requestedItem = requestedItems.find((item) => item._id === rec._id);
-
-    console.log(requestedItem);
 
     let obj = {
       _id: selectedOrder._id,

@@ -22,6 +22,22 @@ class ItemRoutes extends React.Component {
         />
 
         <Route
+          exact
+          path={`${this.props.match.url}/addorder`}
+          component={(props) => (
+            <ReplenishmentRequest {...props} match={this.props.match} />
+          )}
+        />
+
+        <Route
+          exact
+          path={`${this.props.match.url}/receiveorder`}
+          component={(props) => (
+            <ReplenishmentRequest {...props} match={this.props.match} />
+          )}
+        />
+
+        <Route
           path={`${this.props.match.url}/add`}
           // component={AddEditReplenishmentRequest}
           component={(props) => (
