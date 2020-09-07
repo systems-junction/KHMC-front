@@ -61,7 +61,7 @@ class WMSRoutes extends React.PureComponent {
           path={`${this.props.match.url}/ipr/viewIPR`}
           component={ViewIPR}
         />
-         <Route
+        <Route
           exact
           path={`${this.props.match.url}/ipr/success`}
           component={SuccessScreen}
@@ -75,6 +75,11 @@ class WMSRoutes extends React.PureComponent {
           exact
           path={`${this.props.match.url}/opr/add`}
           component={AddEditOPR}
+        />
+        <Route
+          exact
+          path={`${this.props.match.url}/opr/success`}
+          component={SuccessScreen}
         />
         <Route
           exact

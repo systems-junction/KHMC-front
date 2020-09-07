@@ -777,7 +777,13 @@ function AddEditPurchaseRequest(props) {
       .then((res) => {
         if (res.data.success) {
           console.log('response after adding Lab Request', res.data)
-          props.history.goBack()
+          // props.history.goBack()
+          props.history.push({
+            pathname: 'success',
+            state: {
+              message: 'Lab Service updated successfully',
+            },
+          })
         } else if (!res.data.success) {
           setOpenNotification(true)
         }

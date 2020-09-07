@@ -52,27 +52,16 @@ import '../../../assets/jss/material-dashboard-react/components/loaderStyle.css'
 
 const tableHeadingForPharmacy = [
   'Medicine Name',
-  'Requested Qty',
-  'Price/Unit',
+  'Quantity',
+  'Unit Price',
+  'Total Price',
   '',
 ]
 const tableDataKeysForPharmacy = [
   'medicineName',
   'requestedQty',
   ['itemId', 'receiptUnitCost'],
-]
-
-const tableHeadingForDischarge = [
-  'Medicine Name',
-  'Requested Qty',
-  'Unit Price',
-  'Total Price',
-]
-const tableDataKeysForDischarge = [
-  'medicineName',
-  'requestedQty',
-  'unitPrice',
-  'totalPrice',
+  'total',
 ]
 
 const statusArray = [
@@ -226,11 +215,9 @@ function AddEditPurchaseRequest(props) {
       .then((res) => {
         if (res.data.success) {
           console.log(res.data.data.medicine, 'data')
-          // res.data.data.medicine.map(
-          //   (d) =>
-          //     (d.totalPrice =
-          //       d.medicine.ItemId.receiptUnitCost * d.medicine.requestedQty)
-          // )
+          res.data.data.medicine.map(
+            (d) => (d.total = d.itemId.receiptUnitCost * d.requestedQty)
+          )
           if (res.data.data) {
             setIsLoading(false)
 
