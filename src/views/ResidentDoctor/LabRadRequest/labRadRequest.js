@@ -54,16 +54,18 @@ const tableDataKeysForResident = [
   ['doctor', 'firstName'],
 ]
 const tableHeadingForConsultation = [
-  'Consultation ID',
+  // 'Consultation ID',
   'Date/Time',
-  'Description',
+  'Description/Condition',
+  'Specialist',
   'Doctor Ref',
   'Action',
 ]
 const tableDataKeysForConsultation = [
-  'consultationNo',
+  // 'consultationNo',
   'date',
   'description',
+  'specialist',
   ['requester', 'firstName'],
 ]
 const tableHeadingForPharmacy = [
@@ -270,6 +272,7 @@ function LabRadRequest(props) {
     description: '',
     consultationNotes: '',
     requester: cookie.load('current_user').name,
+    specialist: '',
 
     residentNoteArray: '',
     rdescription: '',
@@ -318,6 +321,7 @@ function LabRadRequest(props) {
     description,
     consultationNotes,
     requester = cookie.load('current_user').name,
+    specialist,
 
     residentNoteArray,
     rdescription,
@@ -422,6 +426,7 @@ function LabRadRequest(props) {
         consultationNotes: consultationNotes,
         requester: currentUser.staffId,
         date: date,
+        specialist: specialist,
       },
     ]
 
@@ -1487,7 +1492,7 @@ function LabRadRequest(props) {
                 )}
               </div>
 
-              <div className='row' style={{ marginBottom: '25px' }}>
+              {/* <div className='row' style={{ marginBottom: '25px' }}>
                 <div className='col-md-6 col-sm-6 col-6'>
                   <img
                     onClick={() => props.history.goBack()}
@@ -1495,7 +1500,7 @@ function LabRadRequest(props) {
                     style={{ width: 45, height: 35, cursor: 'pointer' }}
                   />
                 </div>
-              </div>
+              </div> */}
             </div>
           ) : value === 1 ? (
             <div
@@ -1519,11 +1524,11 @@ function LabRadRequest(props) {
               </div>
               <div className='row' style={{ marginBottom: '25px' }}>
                 <div className='col-md-6 col-sm-6 col-6'>
-                  <img
+                  {/* <img
                     onClick={() => props.history.goBack()}
                     src={Back}
                     style={{ width: 45, height: 35, cursor: 'pointer' }}
-                  />
+                  /> */}
                 </div>
                 <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
                   <Button

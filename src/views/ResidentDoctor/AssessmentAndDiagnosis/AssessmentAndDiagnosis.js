@@ -53,7 +53,7 @@ const tableDataKeysForResident = [
 const tableHeadingForConsultation = [
   'Date/Time',
   'Description / Condition',
-  'Doctor',
+  'Specialist',
   'Doctor Ref',
   'Action',
 ]

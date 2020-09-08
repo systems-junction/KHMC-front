@@ -57,7 +57,7 @@ const tableDataKeysForResident = [
 const tableHeadingForConsultation = [
   'Date/Time',
   'Description/Condition',
-  'Doctor',
+  'Specialist',
   'Doctor Ref',
   'Action',
 ]
@@ -373,7 +373,7 @@ function LabRadRequest(props) {
   const [currentUser, setCurrentUser] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
   const [openNotification, setOpenNotification] = useState(false)
-  const [value, setValue] = useState(0)
+  const [value, setValue] = useState(4)
   const [selectedItem, setSelectedItem] = useState('')
   const [searchPatientQuery, setSearchPatientQuery] = useState('')
   const [patientFoundSuccessfull, setpatientFoundSuccessfully] = useState(false)
