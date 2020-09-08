@@ -41,11 +41,7 @@ const tableHeadingForDischargeMed = [
   'Status',
   'Action',
 ]
-const tableDataKeysForDischargeMed = [
-  ['requester', 'identificationNumber'],
-  'date',
-  'status',
-]
+const tableDataKeysForDischargeMed = [['requester', '_id'], 'date', 'status']
 const actions = { view: true }
 const styles = {
   patientDetails: {
@@ -719,8 +715,9 @@ function DischargeRequest(props) {
             }}
             value={value}
             onChange={handleChange}
-            textColor="primary"
-            TabIndicatorProps={{style: {background:'#12387a'}}}ndicatorColor='null'
+            textColor='primary'
+            TabIndicatorProps={{ style: { background: '#12387a' } }}
+            ndicatorColor='null'
             centered={false}
             variant='scrollable'
             fullWidth={true}
@@ -730,7 +727,7 @@ function DischargeRequest(props) {
                 color: 'white',
                 borderRadius: 5,
                 outline: 'none',
-                color: value === 0 ? "#12387a" : '#3B988C',
+                color: value === 0 ? '#12387a' : '#3B988C',
               }}
               label='Discharge Summary'
               disabled={enableForm}
@@ -740,7 +737,7 @@ function DischargeRequest(props) {
                 color: 'white',
                 borderRadius: 5,
                 outline: 'none',
-                color: value === 1 ? "#12387a" : '#3B988C',
+                color: value === 1 ? '#12387a' : '#3B988C',
               }}
               label='Discharge Medication'
               disabled={enableForm}

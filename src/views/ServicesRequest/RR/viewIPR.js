@@ -184,6 +184,7 @@ function AddEditPurchaseRequest(props) {
   const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false)
   const [, setsearchActivated] = useState(false)
   const [patientPopulate, setpatientPopulate] = useState(false)
+  const [requestId, setRequestId] = useState('')
 
   const getLRByIdURI = (id) => {
     axios
@@ -192,6 +193,7 @@ function AddEditPurchaseRequest(props) {
         if (res.data.success) {
           if (res.data.data) {
             console.log(res.data.data, 'IPRs RR')
+            setRequestId(res.data.data._id)
             setIsLoading(false)
 
             Object.entries(res.data.data).map(([key, val]) => {
@@ -246,7 +248,7 @@ function AddEditPurchaseRequest(props) {
           props.history.push({
             pathname: 'success',
             state: {
-              message: 'Radiology services request submitted successfully',
+              message: `Radiology services request of Request No ${requestId} submitted successfully`,
             },
           })
         } else {

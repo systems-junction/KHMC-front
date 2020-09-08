@@ -724,7 +724,16 @@ function AddEditPurchaseRequest(props) {
       .then((res) => {
         if (res.data.success) {
           console.log('response after adding Lab Request', res.data)
-          props.history.goBack()
+          // props.history.goBack()
+          props.history.push({
+            pathname: 'viewOPR/success',
+            state: {
+              message: `Lab Request of Request Id ${
+                res.data.data.labRequest[res.data.data.labRequest.length - 1]
+                  ._id
+              } added successfully`,
+            },
+          })
         } else if (!res.data.success) {
           setOpenNotification(true)
         }

@@ -469,7 +469,13 @@ function LabRadRequest(props) {
           // window.location.reload(false)
           props.history.push({
             pathname: 'assessmentdiagnosis/success',
-            state: { message: 'Consultation note added successfully' },
+            state: {
+              message: `Consultation note of Request Id ${
+                res.data.data.residentNotes[
+                  res.data.data.residentNotes.length - 1
+                ]._id
+              } added successfully`,
+            },
           })
         } else if (!res.data.success) {
           setOpenNotification(true)
@@ -611,7 +617,12 @@ function LabRadRequest(props) {
           console.log('response after adding Lab Request', res.data)
           props.history.push({
             pathname: 'assessmentdiagnosis/success',
-            state: { message: 'Lab Request added successfully' },
+            state: {
+              message: `Lab Request of Request Id ${
+                res.data.data.labRequest[res.data.data.labRequest.length - 1]
+                  ._id
+              } added successfully`,
+            },
           })
         } else if (!res.data.success) {
           setOpenNotification(true)
@@ -727,7 +738,13 @@ function LabRadRequest(props) {
           console.log('response after adding Radio Request', res.data)
           props.history.push({
             pathname: 'assessmentdiagnosis/success',
-            state: { message: 'Radio Request added successfully' },
+            state: {
+              message: `Radio Request of Request Id ${
+                res.data.data.radiologyRequest[
+                  res.data.data.radiologyRequest.length - 1
+                ]._id
+              } added successfully`,
+            },
           })
         } else if (!res.data.success) {
           setOpenNotification(true)
@@ -1353,8 +1370,8 @@ function LabRadRequest(props) {
               }}
               value={value}
               onChange={handleChange}
-              textColor="primary"
-              TabIndicatorProps={{style: {background:'#12387a'}}}
+              textColor='primary'
+              TabIndicatorProps={{ style: { background: '#12387a' } }}
               centered={false}
               variant='scrollable'
               fullWidth={true}
@@ -1364,7 +1381,7 @@ function LabRadRequest(props) {
                   color: 'white',
                   borderRadius: 5,
                   outline: 'none',
-                  color: value === 0 ? "#12387a" : '#3B988C',
+                  color: value === 0 ? '#12387a' : '#3B988C',
                 }}
                 label='Resident Doctor Notes'
                 disabled={enableForm}
@@ -1374,7 +1391,7 @@ function LabRadRequest(props) {
                   color: 'white',
                   borderRadius: 5,
                   outline: 'none',
-                  color: value === 1 ? "#12387a" : '#3B988C',
+                  color: value === 1 ? '#12387a' : '#3B988C',
                 }}
                 label='Pharm'
                 disabled={enableForm}
@@ -1384,7 +1401,7 @@ function LabRadRequest(props) {
                   color: 'white',
                   borderRadius: 5,
                   outline: 'none',
-                  color: value === 2 ? "#12387a" : '#3B988C',
+                  color: value === 2 ? '#12387a' : '#3B988C',
                 }}
                 label='Lab'
                 disabled={enableForm}
@@ -1394,7 +1411,7 @@ function LabRadRequest(props) {
                   color: 'white',
                   borderRadius: 5,
                   outline: 'none',
-                  color: value === 3 ? "#12387a" : '#3B988C',
+                  color: value === 3 ? '#12387a' : '#3B988C',
                 }}
                 label='Rad'
                 disabled={enableForm}
@@ -1404,7 +1421,7 @@ function LabRadRequest(props) {
                   color: 'white',
                   borderRadius: 5,
                   outline: 'none',
-                  color: value === 4 ? "#12387a" : '#3B988C',
+                  color: value === 4 ? '#12387a' : '#3B988C',
                 }}
                 label='External Consultation'
                 disabled={enableForm}

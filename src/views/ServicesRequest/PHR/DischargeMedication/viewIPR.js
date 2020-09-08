@@ -359,7 +359,9 @@ function AddEditPurchaseRequest(props) {
           }
           props.history.push({
             pathname: 'success',
-            state: { message: 'Medication order fulfilled successfully' },
+            state: {
+              message: `Medication order of Request No ${res.data.data.dischargeRequest.dischargeMedication.requester} fulfilled successfully`,
+            },
           })
         }
       })

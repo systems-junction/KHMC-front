@@ -224,7 +224,7 @@ function AddEditPurchaseRequest(props) {
     labServiceName: '',
     labServiceStatus: '',
     labComments: '',
-    sampleID: '',
+    sampleId: '',
 
     radioServiceId: '',
     radioServiceCode: '',
@@ -271,7 +271,7 @@ function AddEditPurchaseRequest(props) {
     labServiceName,
     labServiceStatus,
     labComments,
-    sampleID,
+    sampleId,
 
     radioServiceId,
     radioServiceCode,
@@ -340,7 +340,7 @@ function AddEditPurchaseRequest(props) {
   const [addRadioRequest, setaddRadioRequest] = useState(false)
   const [oprId, setOprId] = useState('')
   const [labId, setLabId] = useState('')
-
+  const [requestId, setRequestId] = useState('')
   const [isLoading, setIsLoading] = useState(true)
 
   const [externalConsultant, setExternalConsultant] = useState('')
@@ -359,7 +359,7 @@ function AddEditPurchaseRequest(props) {
         if (res.data.success) {
           if (res.data.data) {
             console.log(res.data.data, 'res')
-
+            setRequestId(res.data.data._id)
             setIsLoading(false)
 
             Object.entries(res.data.data).map(([key, val]) => {
@@ -717,7 +717,7 @@ function AddEditPurchaseRequest(props) {
             requesterName: requester,
             status: labServiceStatus,
             comments: labComments,
-            sampleId: sampleID,
+            sampleId: sampleId,
           },
         ],
       })
@@ -729,7 +729,7 @@ function AddEditPurchaseRequest(props) {
     dispatch({ field: 'labServiceStatus', value: '' })
     dispatch({ field: 'labServiceCode', value: '' })
     dispatch({ field: 'labComments', value: '' })
-    dispatch({ field: 'sampleID', value: '' })
+    dispatch({ field: 'sampleId', value: '' })
 
     setaddLabRequest(false)
   }
@@ -763,6 +763,7 @@ function AddEditPurchaseRequest(props) {
       OPRId: oprId,
       data: selectedItem,
       status: status,
+      sampleId: sampleId,
     }
     formData.append('data', JSON.stringify(params))
     console.log('params', params)
@@ -781,7 +782,7 @@ function AddEditPurchaseRequest(props) {
           props.history.push({
             pathname: 'success',
             state: {
-              message: 'Lab Service updated successfully',
+              message: `Lab Service of Request No ${requestId} updated successfully`,
             },
           })
         } else if (!res.data.success) {
@@ -1085,8 +1086,8 @@ function AddEditPurchaseRequest(props) {
                   disabled={true}
                   variant='filled'
                   label='Sample ID'
-                  name={'sampleID'}
-                  value={sampleID}
+                  name={'sampleId'}
+                  value={sampleId}
                   type='text'
                   className='textInputStyle'
                   // onChange={(val) => onChangeValue(val, 'DateTime')}
@@ -1236,14 +1237,14 @@ function AddEditPurchaseRequest(props) {
                 }}
               >
                 <TextField
-                  disabled={true}
+                  // disabled={true}
                   variant='filled'
                   label='Sample ID'
-                  name={'sampleID'}
-                  value={'5f54cdc5bd5b025b6190fd90'}
+                  name={'sampleId'}
+                  value={sampleId}
                   type='text'
                   className='textInputStyle'
-                  // onChange={(val) => onChangeValue(val, 'DateTime')}
+                  onChange={onChangeValue}
                   InputLabelProps={{
                     shrink: true,
                     color: 'black',

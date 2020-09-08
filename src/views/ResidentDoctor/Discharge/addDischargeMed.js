@@ -261,7 +261,9 @@ function AddEditEDR(props) {
           notifyForDischarge(patientId)
           props.history.push({
             pathname: 'success',
-            state: { message: 'Pharmacy request added successfully' },
+            state: {
+              message: `Pharmacy request of Request Id ${res.data.data.dischargeRequest.dischargeMedication.requester} added successfully`,
+            },
           })
         } else if (!res.data.success) {
           setOpenNotification(true)
@@ -538,7 +540,7 @@ function AddEditEDR(props) {
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value)
-    if (e.target.value.length >= 3) {
+    if (e.target.value.length >= 1) {
       axios
         .get(getSearchedPharmaceuticalItemsUrl + '/' + e.target.value)
         .then((res) => {

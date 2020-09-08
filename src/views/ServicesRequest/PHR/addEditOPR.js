@@ -403,6 +403,7 @@ function AddEditPatientListing(props) {
   const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false)
   const [searchActivated, setsearchActivated] = useState(false)
   const [Insuranceform, setInsuranceForm] = useState(true)
+  const [MRN, setMRN] = useState('')
 
   useEffect(() => {
     setcomingFor(props.history.location.state.comingFor)
@@ -582,9 +583,10 @@ function AddEditPatientListing(props) {
       })
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data, 'patients data')
-          // console.log(res.data.data._id, "patient id");
+          console.log(res.data.data, 'patients dataaa')
+          console.log('patient id', res.data.data.profileNo)
           setPatientId(res.data.data._id)
+          setMRN(res.data.data.profileNo)
           setOpenNotification(true)
           setsuccessMsg('Patient details saved successfully')
         } else if (!res.data.success) {
@@ -647,15 +649,16 @@ function AddEditPatientListing(props) {
       otherCoverageDetails,
     }
     formData.append('data', JSON.stringify(params))
-    // console.log('PARAMSS ', params)
-    // console.log("DATAAA ", formData);
+    console.log('PARAMSS ', params)
+    console.log('DATAAA ', formData)
     axios
       .put(updatePatientUrl, formData)
       .then((res) => {
         if (res.data.success) {
           setPatientId(res.data.data._id)
+          setMRN(res.data.data.profileNo)
           setOpenNotification(true)
-          setsuccessMsg('Done')
+          setsuccessMsg('Patient details updated successfully')
           if (!searchActivated) {
             props.history.goBack()
           }
@@ -717,7 +720,7 @@ function AddEditPatientListing(props) {
       generatedFrom: 'pharmacyRequest',
       status: 'pending',
     }
-    // console.log(params)
+    console.log(params)
     axios
       .post(generateOPR, params, {})
       .then((res) => {
@@ -726,7 +729,7 @@ function AddEditPatientListing(props) {
           props.history.push({
             pathname: 'success',
             state: {
-              message: 'OP Record generated successfully',
+              message: `OP Record for patient ${MRN} has been generated`,
             },
           })
           // props.history.goBack();
@@ -922,16 +925,16 @@ function AddEditPatientListing(props) {
           <Tabs
             value={value}
             onChange={handleChange}
-            textColor="primary"
-            TabIndicatorProps={{style: {background:'#12387a'}}}
+            textColor='primary'
+            TabIndicatorProps={{ style: { background: '#12387a' } }}
             centered
           >
             <Tab
               style={{
                 color: 'white',
                 borderRadius: 5,
-                outline: "none",
-                color: value === 0 ? "#12387a" : '#3B988C',
+                outline: 'none',
+                color: value === 0 ? '#12387a' : '#3B988C',
               }}
               label='Patient Details'
             />
@@ -939,8 +942,8 @@ function AddEditPatientListing(props) {
               style={{
                 color: 'white',
                 borderRadius: 5,
-                outline: "none",
-                color: value === 1 ? "#12387a" : '#3B988C',
+                outline: 'none',
+                color: value === 1 ? '#12387a' : '#3B988C',
               }}
               label='Emergency Contact'
             />
@@ -948,8 +951,8 @@ function AddEditPatientListing(props) {
               style={{
                 color: 'white',
                 borderRadius: 5,
-                outline: "none",
-                color: value === 2 ? "#12387a" : '#3B988C',
+                outline: 'none',
+                color: value === 2 ? '#12387a' : '#3B988C',
               }}
               label='Payment Method'
             />
@@ -957,8 +960,8 @@ function AddEditPatientListing(props) {
               style={{
                 color: 'white',
                 borderRadius: 5,
-                outline: "none",
-                color: value === 3 ? "#12387a" : '#3B988C',
+                outline: 'none',
+                color: value === 3 ? '#12387a' : '#3B988C',
               }}
               label='Insurance Details'
             />
@@ -1928,6 +1931,7 @@ function AddEditPatientListing(props) {
                   <Button
                     style={styles.save}
                     // disabled={!validateEmergencyForm()}
+                    disabled={!(validatePatientForm() && validatePaymentForm())}
                     onClick={searchActivated ? handleEdit : handleAdd}
                     // onClick={handleAdd}
                     variant='contained'
