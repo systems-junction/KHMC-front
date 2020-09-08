@@ -141,7 +141,7 @@ function AddEditPurchaseRequest(props) {
     status: '',
     date: '',
     results: '',
-    sampleID: '',
+    sampleId: '',
     comments: '',
   }
 
@@ -154,7 +154,7 @@ function AddEditPurchaseRequest(props) {
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const { name, price, status, date, results, sampleID, comments } = state
+  const { name, price, status, date, results, sampleId, comments } = state
 
   const onChangeValue = (e) => {
     dispatch({ field: e.target.name, value: e.target.value })
@@ -175,6 +175,7 @@ function AddEditPurchaseRequest(props) {
   const [isLoading, setIsLoading] = useState(true)
   const [value, setValue] = React.useState(0)
   const [pdfView, setpdfView] = useState('')
+  const [requestId, setRequestId] = useState('')
 
   const getLRByIdURI = (id) => {
     axios
@@ -183,6 +184,7 @@ function AddEditPurchaseRequest(props) {
         if (res.data.success) {
           if (res.data.data) {
             console.log(res.data.data, 'IPRs LR')
+            setRequestId(res.data.data._id)
             setIsLoading(false)
 
             Object.entries(res.data.data).map(([key, val]) => {
@@ -220,6 +222,7 @@ function AddEditPurchaseRequest(props) {
       EDRId: iprId,
       labRequestId: lrId,
       status: status,
+      sampleId: sampleId,
     }
     formData.append('data', JSON.stringify(params))
     // console.log('PARAMSS ', params)
@@ -236,7 +239,9 @@ function AddEditPurchaseRequest(props) {
           console.log('res', res.data)
           props.history.push({
             pathname: 'success',
-            state: { message: 'Lab services request submitted successfully' },
+            state: {
+              message: `Lab services request of request Id ${requestId} submitted successfully`,
+            },
           })
         } else {
           setOpenNotification(true)
@@ -402,8 +407,8 @@ function AddEditPurchaseRequest(props) {
               <Tabs
                 value={value}
                 onChange={handleChange}
-                textColor="primary"
-                TabIndicatorProps={{style: {background:'#12387a'}}}
+                textColor='primary'
+                TabIndicatorProps={{ style: { background: '#12387a' } }}
                 centered
               >
                 <Tab
@@ -411,7 +416,7 @@ function AddEditPurchaseRequest(props) {
                     color: 'white',
                     borderRadius: 5,
                     outline: 'none',
-                    color: value === 0 ? "#12387a" : '#3B988C',
+                    color: value === 0 ? '#12387a' : '#3B988C',
                   }}
                   label='Sample Collection'
                 />
@@ -420,7 +425,7 @@ function AddEditPurchaseRequest(props) {
                     color: 'white',
                     borderRadius: 5,
                     outline: 'none',
-                    color: value === 1 ? "#12387a" : '#3B988C',
+                    color: value === 1 ? '#12387a' : '#3B988C',
                   }}
                   label='Results'
                 />
@@ -557,7 +562,7 @@ function AddEditPurchaseRequest(props) {
                         disabled={true}
                         variant='filled'
                         label='Sample ID'
-                        name={'sampleID'}
+                        name={'sampleId'}
                         // value={DateTime}
                         type='text'
                         className='textInputStyle'
@@ -610,14 +615,14 @@ function AddEditPurchaseRequest(props) {
                     }}
                   >
                     <TextField
-                      disabled={true}
+                      // disabled={true}
                       variant='filled'
                       label='Sample ID'
-                      name={'sampleID'}
-                      // value={DateTime}
+                      name={'sampleId'}
+                      value={sampleId}
                       type='text'
                       className='textInputStyle'
-                      // onChange={(val) => onChangeValue(val, 'DateTime')}
+                      onChange={onChangeValue}
                       InputLabelProps={{
                         shrink: true,
                         color: 'black',

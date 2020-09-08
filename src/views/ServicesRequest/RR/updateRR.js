@@ -337,7 +337,7 @@ function AddEditPurchaseRequest(props) {
   const [addRadioRequest, setaddRadioRequest] = useState(false)
   const [oprId, setOprId] = useState('')
   const [radId, setRadId] = useState('')
-
+  const [requestId, setRequestId] = useState('')
   const [isLoading, setIsLoading] = useState(true)
 
   const [externalConsultant, setExternalConsultant] = useState('')
@@ -356,7 +356,7 @@ function AddEditPurchaseRequest(props) {
         if (res.data.success) {
           if (res.data.data) {
             console.log(res.data.data, 'res')
-
+            setRequestId(res.data.data._id)
             setIsLoading(false)
 
             Object.entries(res.data.data).map(([key, val]) => {
@@ -878,7 +878,7 @@ function AddEditPurchaseRequest(props) {
           props.history.push({
             pathname: 'success',
             state: {
-              message: 'Radiology Service updated successfully',
+              message: `Radiology Service of Request No ${requestId} updated successfully`,
             },
           })
         } else if (!res.data.success) {

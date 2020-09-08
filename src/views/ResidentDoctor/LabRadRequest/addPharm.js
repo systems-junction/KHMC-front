@@ -198,7 +198,7 @@ function AddEditEDR(props) {
   const [selectedSearchedItem, setSelectedSearchedItem] = useState('')
   const [selectedLabArray, setSelectedLabArray] = useState([])
   const [pharmacyReqArray, setPharmacyRequest] = useState('')
-  const [patientId,setpatientId] =useState('')
+  const [patientId, setpatientId] = useState('')
 
   useEffect(() => {
     // const soc = socketIOClient(socketUrl);
@@ -213,7 +213,10 @@ function AddEditEDR(props) {
     console.log('Item', props.history.location.state.selectedItem)
 
     setpatientId(props.history.location.state.selectedItem.patientId._id)
-    console.log("id ..... ",props.history.location.state.selectedItem.patientId._id)
+    console.log(
+      'id ..... ',
+      props.history.location.state.selectedItem.patientId._id
+    )
 
     setId(props.history.location.state.selectedItem._id)
     setrequestNo(props.history.location.state.selectedItem.requestNo)
@@ -355,7 +358,13 @@ function AddEditEDR(props) {
           console.log('response while adding Medicine Req', res.data.data)
           props.history.push({
             pathname: 'success',
-            state: { message : 'Pharmacy Request added successfully' },
+            state: {
+              message: `Pharmacy Request of Request Id ${
+                res.data.data.pharmacyRequest[
+                  res.data.data.pharmacyRequest.length - 1
+                ]._id
+              } added successfully`,
+            },
           })
           notifyForPharm(patientId)
         } else if (!res.data.success) {
@@ -373,18 +382,17 @@ function AddEditEDR(props) {
   }
 
   const notifyForPharm = (id) => {
-
-    axios.get(notifyPharmacy + '/' + id)
-        .then((res) => {
-            console.log(res)
-        })
-        .catch((e) => {
-            console.log("error after notify", e);
-            setOpenNotification(true);
-            setErrorMsg(e);
-        });
+    axios
+      .get(notifyPharmacy + '/' + id)
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((e) => {
+        console.log('error after notify', e)
+        setOpenNotification(true)
+        setErrorMsg(e)
+      })
   }
-
 
   // const handleEdit = () => {
   //   if (!validateForm()) {

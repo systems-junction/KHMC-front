@@ -60,7 +60,7 @@ export default function EDR(props) {
           // res.data.data.map((d) => (d.date = d.pharmacyRequest.date))
           // res.data.data.map((d) => (d.status = d.pharmacyRequest.status))
           // res.data.data.map((d) => (d.requestNo = d.pharmacyRequest._id))
-          setEdr(res.data.data)
+          setEdr(res.data.data.reverse())
         } else if (!res.data.success) {
           setErrorMsg(res.data.error)
           setOpenNotification(true)
