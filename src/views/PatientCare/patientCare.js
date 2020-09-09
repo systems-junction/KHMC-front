@@ -992,7 +992,7 @@ function PatientCare(props) {
         >
           <div className="row">
             <div
-              className="col-md-11 col-sm-10 col-8"
+              className="col-md-10 col-sm-8 col-8"
               style={styles.textFieldPadding}
             >
               <TextField
@@ -1017,38 +1017,35 @@ function PatientCare(props) {
               />
             </div>
 
-            {/* <div className='col-md-1 col-sm-2 col-2'
-                            style={{
-                                ...styles.textFieldPadding,
-                            }}>
-                            <div style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                backgroundColor: 'white',
-                                borderRadius: 5,
-                                height: 55,
-                            }}>
-                                <img src={BarCode} style={{ width: 100, height: 70 }} />
-                            </div>
-                        </div> */}
-
-            <div
-              className="col-md-1 col-sm-2 col-4"
+            <div className='col-md-1 col-sm-2 col-2'
               style={{
                 ...styles.textFieldPadding,
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  backgroundColor: "white",
-                  borderRadius: 5,
-                  height: 55,
-                }}
-              >
+              }}>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: 'white',
+                borderRadius: 5,
+                height: 55,
+              }}>
+                <img src={BarCode} style={{ width: 80, height: 75 }} />
+              </div>
+            </div>
+
+            <div
+              className="col-md-1 col-sm-2 col-2"
+              style={{
+                ...styles.textFieldPadding,
+              }}>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: 'white',
+                borderRadius: 5,
+                height: 55,
+              }}>
                 <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
               </div>
             </div>
