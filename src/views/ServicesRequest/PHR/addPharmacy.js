@@ -391,7 +391,17 @@ function AddEditEDR(props) {
       .then((res) => {
         if (res.data.success) {
           console.log('response while adding Medicine Req', res.data.data)
-          props.history.goBack()
+          // props.history.goBack()
+          props.history.push({
+            pathname: 'success',
+            state: {
+              message: `Pharmacy Request of Request Id ${
+                res.data.data.pharmacyRequest[
+                  res.data.data.pharmacyRequest.length - 1
+                ]._id
+              } added successfully`,
+            },
+          })
         } else if (!res.data.success) {
           setOpenNotification(true)
           setErrorMsg('Error while adding the Medicine request')

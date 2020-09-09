@@ -48,7 +48,7 @@ import Loader from "react-loader-spinner";
 const tableHeadingForResident = [
   "Date/Time",
   "Description/Condition",
-  "Doctor",
+  // 'Doctor',
   "Doctor Ref",
   "Action",
 ];
@@ -56,13 +56,13 @@ const tableDataKeysForResident = [
   "date",
   "description",
   ["doctor", "firstName"],
-  ["requester", "firstName"],
+  // ['requester', 'firstName'],
 ];
 const tableHeadingForConsultation = [
   "Date/Time",
   "Description/Condition",
   "Doctor Ref",
-  "Consultant",
+  "Specialist",
   // "Doctor",
   "Status",
   "Action",
@@ -83,7 +83,7 @@ const tableHeadingForPharmacy = [
   "Action",
 ];
 const tableDataKeysForPharmacy = [
-  "_id",
+  "PRrequestNo",
   "date",
   ["requester", "firstName"],
   "status",
@@ -97,7 +97,7 @@ const tableHeadingForLabReq = [
   "Action",
 ];
 const tableDataKeysForLabReq = [
-  "_id",
+  "LRrequestNo",
   "serviceCode",
   "serviceName",
   "requesterName",
@@ -112,7 +112,7 @@ const tableHeadingForRadiology = [
   "Action",
 ];
 const tableDataKeysForRadiology = [
-  "_id",
+  "RRrequestNo",
   "serviceCode",
   "serviceName",
   "requesterName",
@@ -631,6 +631,25 @@ function LabRadRequest(props) {
   }
 
   const addSelectedLabItem = () => {
+    var now = new Date();
+    var start = new Date(now.getFullYear(), 0, 0);
+    var diff =
+      now -
+      start +
+      (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000;
+    var oneDay = 1000 * 60 * 60 * 24;
+    var day = Math.floor(diff / oneDay);
+
+    var dateNow = new Date();
+    var YYYY = dateNow
+      .getFullYear()
+      .toString()
+      .substr(-2);
+    var HH = dateNow.getHours();
+    var mm = dateNow.getMinutes();
+    let ss = dateNow.getSeconds();
+
+    const LRrequestNo = "LR" + day + YYYY + HH + mm + ss;
     // setIsFormSubmitted(true);
     // if (validateItemsForm()) {
 
@@ -654,6 +673,7 @@ function LabRadRequest(props) {
             requesterName: requester,
             status: labServiceStatus,
             comments: labComments,
+            LRrequestNo: LRrequestNo,
           },
         ],
       });
@@ -682,6 +702,7 @@ function LabRadRequest(props) {
           serviceName: labRequestArray[i].serviceName,
           status: labRequestArray[i].status,
           comments: labRequestArray[i].comments,
+          LRrequestNo: labRequestArray[i].LRrequestNo,
         },
       ];
     }
@@ -698,7 +719,12 @@ function LabRadRequest(props) {
           console.log("response after adding Lab Request", res.data);
           props.history.push({
             pathname: "cn/success",
-            state: { message: "Lab Request added successfully" },
+            state: {
+              message: `Lab Request of Request Id ${
+                res.data.data.labRequest[res.data.data.labRequest.length - 1]
+                  .LRrequestNo
+              } added successfully`,
+            },
           });
           notifyForLab(patientId);
         } else if (!res.data.success) {
@@ -760,6 +786,25 @@ function LabRadRequest(props) {
   }
 
   const addSelectedRadioItem = () => {
+    var now = new Date();
+    var start = new Date(now.getFullYear(), 0, 0);
+    var diff =
+      now -
+      start +
+      (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000;
+    var oneDay = 1000 * 60 * 60 * 24;
+    var day = Math.floor(diff / oneDay);
+
+    var dateNow = new Date();
+    var YYYY = dateNow
+      .getFullYear()
+      .toString()
+      .substr(-2);
+    var HH = dateNow.getHours();
+    var mm = dateNow.getMinutes();
+    let ss = dateNow.getSeconds();
+
+    const RRrequestNo = "RR" + day + YYYY + HH + mm + ss;
     // setIsFormSubmitted(true);
     // if (validateItemsForm()) {
 
@@ -783,6 +828,7 @@ function LabRadRequest(props) {
             requester: currentUser.staffId,
             status: radioServiceStatus,
             comments: radioComments,
+            RRrequestNo: RRrequestNo,
           },
         ],
       });
@@ -810,6 +856,7 @@ function LabRadRequest(props) {
           serviceName: radiologyRequestArray[i].serviceName,
           status: radiologyRequestArray[i].status,
           comments: radiologyRequestArray[i].comments,
+          RRrequestNo: radiologyRequestArray[i].RRrequestNo,
         },
       ];
     }
@@ -827,7 +874,13 @@ function LabRadRequest(props) {
           console.log("response after adding Radio Request", res.data);
           props.history.push({
             pathname: "cn/success",
-            state: { message: "Radiology Request added successfully" },
+            state: {
+              message: `Radio Request of Request Id ${
+                res.data.data.radiologyRequest[
+                  res.data.data.radiologyRequest.length - 1
+                ].RRrequestNo
+              } added successfully`,
+            },
           });
           notifyForRad(patientId);
         } else if (!res.data.success) {
@@ -1156,7 +1209,7 @@ function LabRadRequest(props) {
               />
             </div>
 
-            {/* <div
+            <div
               className="col-md-1 col-sm-2 col-2"
               style={{
                 ...styles.textFieldPadding,
@@ -1172,12 +1225,12 @@ function LabRadRequest(props) {
                   height: 55,
                 }}
               >
-                <img src={BarCode} style={{ width: 100, height: 70 }} />
+                <img src={BarCode} style={{ width: 80, height: 75 }} />
               </div>
-            </div> */}
+            </div>
 
             <div
-              className="col-md-1 col-sm-1 col-2"
+              className="col-md-1 col-sm-2 col-2"
               style={{
                 ...styles.textFieldPadding,
               }}
@@ -1405,7 +1458,7 @@ function LabRadRequest(props) {
               }}
               value={value}
               onChange={handleChange}
-              TabIndicatorProps={{style: {background:'#12387a'}}}
+              TabIndicatorProps={{ style: { background: "#12387a" } }}
               centered={false}
               variant="scrollable"
               fullWidth={true}
@@ -1415,7 +1468,7 @@ function LabRadRequest(props) {
                   color: "white",
                   borderRadius: 5,
                   outline: "none",
-                  color: value === 0 ? "#12387a" : '#3B988C',
+                  color: value === 0 ? "#12387a" : "#3B988C",
                 }}
                 label="consultation Notes"
                 disabled={enableForm}
@@ -1425,7 +1478,7 @@ function LabRadRequest(props) {
                   color: "white",
                   borderRadius: 5,
                   outline: "none",
-                  color: value === 1 ? "#12387a" : '#3B988C',
+                  color: value === 1 ? "#12387a" : "#3B988C",
                 }}
                 label="Resident Doctor Notes"
                 disabled={enableForm}
@@ -1435,7 +1488,7 @@ function LabRadRequest(props) {
                   color: "white",
                   borderRadius: 5,
                   outline: "none",
-                  color: value === 2 ? "#12387a" : '#3B988C',
+                  color: value === 2 ? "#12387a" : "#3B988C",
                 }}
                 label="Pharm"
                 disabled={enableForm}
@@ -1445,7 +1498,7 @@ function LabRadRequest(props) {
                   color: "white",
                   borderRadius: 5,
                   outline: "none",
-                  color: value === 3 ? "#12387a" : '#3B988C',
+                  color: value === 3 ? "#12387a" : "#3B988C",
                 }}
                 label="Lab"
                 disabled={enableForm}
@@ -1455,7 +1508,7 @@ function LabRadRequest(props) {
                   color: "white",
                   borderRadius: 5,
                   outline: "none",
-                  color: value === 4 ? "#12387a" : '#3B988C',
+                  color: value === 4 ? "#12387a" : "#3B988C",
                 }}
                 label="Rad"
                 disabled={enableForm}
@@ -1910,7 +1963,7 @@ function LabRadRequest(props) {
                   undefined
                 )}
               </div>
-            </div> /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/)
+            </div> /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/)
           ) : (
             //     : value === 5 ? (
             //         <div

@@ -208,6 +208,7 @@ function AddEditPurchaseRequest(props) {
   const [selectedItem, setSelectedItem] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const [value, setValue] = React.useState(0)
+  const [requestId, setRequestId] = useState('')
 
   const getLRByIdURI = (id) => {
     axios
@@ -215,10 +216,12 @@ function AddEditPurchaseRequest(props) {
       .then((res) => {
         if (res.data.success) {
           console.log(res.data.data.medicine, 'data')
+
           res.data.data.medicine.map(
             (d) => (d.total = d.itemId.receiptUnitCost * d.requestedQty)
           )
           if (res.data.data) {
+            setRequestId(res.data.data._id)
             setIsLoading(false)
 
             Object.entries(res.data.data).map(([key, val]) => {
@@ -280,7 +283,7 @@ function AddEditPurchaseRequest(props) {
           props.history.push({
             pathname: 'success',
             state: {
-              message: 'Discharge Medication order fulfilled successfully',
+              message: `Discharge Medication order of Request No ${requestId} fulfilled successfully`,
             },
           })
         }

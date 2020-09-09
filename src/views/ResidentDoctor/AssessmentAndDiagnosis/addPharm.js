@@ -299,6 +299,21 @@ function AddEditEDR(props) {
   }
 
   const handleAdd = () => {
+
+    var now = new Date();
+    var start = new Date(now.getFullYear(), 0, 0);
+    var diff = (now - start) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
+    var oneDay = 1000 * 60 * 60 * 24;
+    var day = Math.floor(diff / oneDay);
+
+    var dateNow = new Date();
+    var YYYY = dateNow.getFullYear().toString().substr(-2)
+    var HH = dateNow.getHours();
+    var mm = dateNow.getMinutes()
+    let ss = dateNow.getSeconds();
+
+    const PRrequestNo='PR' + day + YYYY+HH+mm +ss
+
     // if (!validateForm()) {
     //   setIsFormSubmitted(true);
     //   setOpenNotification(true);
@@ -330,6 +345,7 @@ function AddEditEDR(props) {
     pharmacyRequestArray = [
       ...pharmacyReqArray,
       {
+        PRrequestNo:PRrequestNo,
         date: date,
         status: status,
         requester: currentUser.staffId,
@@ -350,7 +366,13 @@ function AddEditEDR(props) {
           console.log('response while adding Medicine Req', res.data.data)
           props.history.push({
             pathname: 'success',
-            state: { message: 'Pharmacy Request added successfully' },
+            state: {
+              message: `Pharmacy Request of Request Id ${
+                res.data.data.pharmacyRequest[
+                  res.data.data.pharmacyRequest.length - 1
+                ].PRrequestNo
+              } added successfully`,
+            },
           })
         } else if (!res.data.success) {
           setOpenNotification(true)
