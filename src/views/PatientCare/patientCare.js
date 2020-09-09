@@ -872,10 +872,8 @@ function PatientCare(props) {
         axios
             .get(searchpatient + "/" + id)
             .then((res) => {
-                if (res.data.success) 
-                {
-                    if (res.data.data) 
-                    {
+                if (res.data.success) {
+                    if (res.data.data) {
                         console.log("Response after getting EDR/IPR data : ", res.data.data);
 
                         setIsLoading(false);
@@ -984,7 +982,7 @@ function PatientCare(props) {
                 </div>
                 <div className={`${'container-fluid'} ${classes.root}`} style={{ marginTop: "25px" }}>
                     <div className='row'>
-                        <div className="col-md-11 col-sm-10 col-8" style={styles.textFieldPadding}>
+                        <div className="col-md-10 col-sm-8 col-8" style={styles.textFieldPadding}>
                             <TextField
                                 className="textInputStyle"
                                 id="searchPatientQuery"
@@ -1007,7 +1005,7 @@ function PatientCare(props) {
                             />
                         </div>
 
-                        {/* <div className='col-md-1 col-sm-2 col-2'
+                        <div className='col-md-1 col-sm-2 col-2'
                             style={{
                                 ...styles.textFieldPadding,
                             }}>
@@ -1019,12 +1017,12 @@ function PatientCare(props) {
                                 borderRadius: 5,
                                 height: 55,
                             }}>
-                                <img src={BarCode} style={{ width: 100, height: 70 }} />
+                                <img src={BarCode} style={{ width: 80, height: 75 }} />
                             </div>
-                        </div> */}
+                        </div>
 
                         <div
-                            className="col-md-1 col-sm-2 col-4"
+                            className="col-md-1 col-sm-2 col-2"
                             style={{
                                 ...styles.textFieldPadding,
                             }}>
@@ -1245,7 +1243,7 @@ function PatientCare(props) {
                             value={value}
                             onChange={handleChange}
                             textColor="primary"
-                            TabIndicatorProps={{style: {background:'#12387a'}}}
+                            TabIndicatorProps={{ style: { background: '#12387a' } }}
                             centered={false}
                             variant="scrollable"
                             fullWidth={true}
@@ -1289,7 +1287,7 @@ function PatientCare(props) {
                                 label="Rad"
                                 disabled
                             />
-                             <Tab
+                            <Tab
                                 style={{
                                     color: "white",
                                     borderRadius: 5,

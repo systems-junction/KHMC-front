@@ -1020,7 +1020,7 @@ function PatientAssessment(props) {
                                 borderRadius: 5,
                                 height: 55,
                             }}>
-                                <img src={BarCode} style={{ width: 100, height: 70 }} />
+                                <img src={BarCode} style={{ width: 80, height: 75 }} />
                             </div>
                         </div>
 
