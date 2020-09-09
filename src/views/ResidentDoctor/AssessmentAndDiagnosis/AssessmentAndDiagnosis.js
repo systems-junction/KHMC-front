@@ -71,7 +71,7 @@ const tableHeadingForPharmacy = [
   'Action',
 ]
 const tableDataKeysForPharmacy = [
-  '_id',
+  'PRrequestNo',
   'date',
   ['requester', 'firstName'],
   'status',
@@ -385,6 +385,7 @@ function LabRadRequest(props) {
   }
 
   function addConsultRequest() {
+    
     // if (!validateForm()) {
     //   setIsFormSubmitted(true)
     //   setOpenNotification(true)
@@ -458,7 +459,7 @@ function LabRadRequest(props) {
     residentNote = [
       ...residentNoteArray,
       {
-        residentNoteNo:residentNoteNo,
+        residentNoteNo: residentNoteNo,
         date: date,
         description: rdescription,
         doctor: currentUser.staffId,
