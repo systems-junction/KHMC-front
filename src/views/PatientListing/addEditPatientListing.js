@@ -598,7 +598,7 @@ function AddEditPatientListing(props) {
           setPatientId(res.data.data._id)
           setMRN(res.data.data.profileNo)
           setOpenNotification(true)
-          setsuccessMsg('Patient details saved successfully')
+          setsuccessMsg('Patient details saved successfully, Generate IPR/EDR now.')
         } else if (!res.data.success) {
           setOpenNotification(true)
         }
@@ -606,7 +606,7 @@ function AddEditPatientListing(props) {
       .catch((e) => {
         console.log('error after adding patient details', e)
         setOpenNotification(true)
-        setErrorMsg('Error while adding the patient details')
+        setErrorMsg('This Patient Already exists')
       })
     // }
     setIsFormSubmitted(true)
