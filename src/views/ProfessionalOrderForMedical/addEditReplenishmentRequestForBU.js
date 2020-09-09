@@ -73,6 +73,8 @@ import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import { ThemeProvider } from "@material-ui/styles";
 
+import BarCode from "../../assets/img/Bar Code.png";
+
 const reasonArray = [
   { key: "jit", value: "JIT" },
   { key: "new_item", value: "New Item" },
@@ -1264,7 +1266,10 @@ function AddEditPurchaseRequest(props) {
             <div>
               <div className="row">
                 {/* <span class="fa fa-search"></span> */}
-                <div className="col-sm-11" style={styles.textFieldPadding}>
+                <div
+                  className="col-md-10 col-sm-12"
+                  style={styles.textFieldPadding}
+                >
                   <TextField
                     className="textInputStyle"
                     id="searchPatientQuery"
@@ -1291,7 +1296,27 @@ function AddEditPurchaseRequest(props) {
                 </div>
 
                 <div
-                  className="col-sm-1"
+                  className="col-md-1 col-sm-6"
+                  style={{
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      backgroundColor: "white",
+                      borderRadius: 5,
+                      height: 55,
+                    }}
+                  >
+                    <img src={BarCode} style={{ width: 80, height: 75 }} />
+                  </div>
+                </div>
+
+                <div
+                  className="col-md-1 col-sm-6"
                   style={{
                     ...styles.textFieldPadding,
                     display: "flex",
