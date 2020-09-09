@@ -700,7 +700,7 @@ function AddEditEDR(props) {
         <div className='subheader'>
           <div>
             <img src={purchase_request} />
-            <h4>{comingFor === 'add' ? ' Pharmacy Request' : ''}</h4>
+            <h4>{comingFor === 'add' ? 'OPR - Pharmacy Request' : ''}</h4>
           </div>
 
           <div>

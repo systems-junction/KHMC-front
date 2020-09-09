@@ -3,8 +3,9 @@ export default function ValidateEmail(mail) {
     /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
       mail
     )
+    // /\S+@\S+\.\S+/.test(mail)
   ) {
-    return true;
+    return true
   }
-  return false;
+  return false
 }
