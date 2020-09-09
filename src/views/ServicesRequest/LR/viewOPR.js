@@ -22,7 +22,7 @@ import {
 } from '../../../public/endpoins'
 import cookie from 'react-cookies'
 import Header from '../../../components/Header/Header'
-import business_Unit from '../../../assets/img/OPR.png'
+import business_Unit from '../../../assets/img/Labortary Department.png'
 import Back from '../../../assets/img/Back_Arrow.png'
 import '../../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
 import Tabs from '@material-ui/core/Tabs'
