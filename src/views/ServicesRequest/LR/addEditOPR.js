@@ -1012,7 +1012,7 @@ function AddEditPatientListing(props) {
               <>
                 <div className='row' style={{ marginTop: '20px' }}>
                   <div
-                    className='col-md-11 col-sm-10 col-10'
+                    className='col-md-10 col-sm-8 col-8'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1042,16 +1042,39 @@ function AddEditPatientListing(props) {
                     />
                   </div>
 
-                  <div className='col-md-1 col-sm-2 col-2'>
+                  <div
+                    className='col-md-1 col-sm-2 col-2'
+                    style={{
+                      ...styles.inputContainerForTextField,
+                    }}>
                     <div
                       style={{
-                        ...styles.inputContainerForTextField,
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
+                        height: 55,
                         backgroundColor: 'white',
                         borderRadius: 5,
+                        width: 100,
+                      }}
+                    >
+                      <img src={BarCode} style={{ width: 80, height: 75 }} />
+                    </div>
+                  </div>
+
+                  <div className='col-md-1 col-sm-2 col-2'
+                    style={{
+                      ...styles.inputContainerForTextField
+                    }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
                         height: 55,
+                        backgroundColor: 'white',
+                        borderRadius: 5,
+                        width: 100,
                       }}
                     >
                       <img
@@ -2482,7 +2505,7 @@ function AddEditPatientListing(props) {
             >
               <div className='row' style={{ marginTop: '20px' }}>
                 <div
-                  className='col-md-8 col-sm-7 col-6'
+                  className='col-md-8 col-sm-8 col-9'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -2510,7 +2533,7 @@ function AddEditPatientListing(props) {
                 </div>
 
                 <div
-                  className='col-md-1 col-sm-2 col-2'
+                  className='col-md-1 col-sm-1 col-1'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -2526,7 +2549,7 @@ function AddEditPatientListing(props) {
                       height: 55,
                     }}
                   >
-                    <img src={BarCode} style={{ width: 100, height: 70 }} />
+                    <img src={BarCode} style={{ width: 80, height: 75 }} />
                   </div>
                 </div>
 
