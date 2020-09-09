@@ -150,15 +150,14 @@ const registeredNurse = [
   },
 
   {
+    img: ProfessionalOrder,
+    text: "View Orders",
+    path: `/home/wms/fus/professionalorder`,
+  },
+  {
     img: MedicationOrder,
     text: "Medication  Order Receiving",
     path: `/home/wms/fus/medicinalorder`,
-  },
-
-  {
-    img: "",
-    text: "",
-    path: "",
   },
 ];
 
@@ -243,9 +242,9 @@ const doctorPhysician = [
   },
 
   {
-    img: "",
-    text: "",
-    path: "",
+    img: OrderItems,
+    text: "View Orders",
+    path: `/home/wms/fus/medicinalorder/view`,
   },
 
   {
@@ -302,8 +301,8 @@ const warehouseMember = [
   { img: KHMC, text: "KHMC", path: "" },
 
   {
-    img: FunctionalUnit,
-    text: "Initiate FU Requests",
+    img: FuncUFulfillment,
+    text: "FuncU Fulfillment",
     path: `/home/wms/fus/replenishment`,
   },
 

@@ -611,7 +611,7 @@ function AddEditPurchaseRequest(props) {
               props.history.replace({
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
-                  message: "Your order has been placed succesfully",
+                  message: `Medication Order for patient with MRN ${patientDetails.profileNo} has been placed succesfully`,
                 },
               });
             } else if (!res.data.success) {
@@ -717,7 +717,13 @@ function AddEditPurchaseRequest(props) {
           .put(updateReplenishmentRequestUrlBU, obj)
           .then((res) => {
             if (res.data.success) {
-              props.history.goBack();
+              // props.history.goBack();
+              props.history.replace({
+                pathname: "/home/wms/fus/medicinalorder/success",
+                state: {
+                  message: `Medication Order for patient with MRN ${patientDetails.profileNo} has been updated`,
+                },
+              });
             } else if (!res.data.success) {
               setOpenNotification(true);
             }

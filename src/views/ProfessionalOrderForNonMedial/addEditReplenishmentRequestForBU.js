@@ -40,7 +40,7 @@ import { tr } from "date-fns/locale";
 
 import Header from "../../components/Header/Header";
 import view_all from "../../assets/img/Eye.png";
-import purchase_request from "../../assets/img/purchase request.png";
+import purchase_request from "../../assets/img/Professional Order.png";
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -139,9 +139,9 @@ const styles = {
   stylesForPurchaseButton: {
     color: "white",
     cursor: "pointer",
-    borderRadius: 15,
-    backgroundColor: "#2C6DDD",
-    width: "60%",
+    borderRadius: 5,
+    // backgroundColor: "#2C6DDD",
+    // width: "60%",
     height: "50px",
     outline: "none",
   },
@@ -210,7 +210,7 @@ function AddEditPurchaseRequest(props) {
     item: "",
 
     orderFor: "",
-    orderBy: "Admin",
+    orderBy: "Nurse",
   };
 
   function reducer(state, { field, value }) {
@@ -448,7 +448,12 @@ function AddEditPurchaseRequest(props) {
           .then((res) => {
             if (res.data.success) {
               console.log("response after adding RR", res.data);
-              props.history.goBack();
+              props.history.replace({
+                pathname: "/home/wms/fus/medicinalorder/success",
+                state: {
+                  message: `Order has been generated successfully`,
+                },
+              });
             } else if (!res.data.success) {
               setOpenNotification(true);
             }
@@ -830,28 +835,17 @@ function AddEditPurchaseRequest(props) {
           <div>
             <img src={purchase_request} />
             <h4>
-              {/* {comingFor === "add"
-                ? " Add Replenishment Request For BU"
-                : comingFor === "edit"
-                ? " Edit Replenishment Request For BU"
-                : comingFor === "view"
-                ? "Replenishment Request Details"
-                : undefined} */}
-
               {comingFor === "add"
-                ? " Add Professional Order"
+                ? " Add Order"
                 : comingFor === "edit"
-                ? " Update Professional Order"
+                ? " Update Order"
                 : comingFor === "view"
-                ? "Professional Request Order"
+                ? "View Order"
                 : undefined}
             </h4>
           </div>
 
-          <div>
-            {/* <img onClick={() => props.history.goBack()} src={view_all} /> */}
-            {/* <img src={Search} /> */}
-
+          {/* <div>
             <Button
               onClick={() => props.history.goBack()}
               style={styles.stylesForButton}
@@ -862,7 +856,7 @@ function AddEditPurchaseRequest(props) {
               &nbsp;&nbsp;
               <strong>View All</strong>
             </Button>
-          </div>
+          </div> */}
         </div>
 
         {fuArray && fuArray !== "" ? (
@@ -1232,9 +1226,7 @@ function AddEditPurchaseRequest(props) {
             </div>
 
             <div style={{ marginTop: 30 }}>
-              <h3 style={{ color: "white", fontWeight: "700" }}>
-                Add New Item
-              </h3>
+              <h5 style={{ color: "white", fontWeight: "700" }}>Order Item</h5>
               <div className="row">
                 <div className="col-sm-12" style={styles.textFieldPadding}>
                   <TextField
@@ -1413,7 +1405,7 @@ function AddEditPurchaseRequest(props) {
                     id="itemName"
                     type="text"
                     disabled={true}
-                    label="itemName"
+                    label="Item Name"
                     name={"itemName"}
                     value={itemName}
                     onChange={onChangeValue}
@@ -1766,7 +1758,7 @@ function AddEditPurchaseRequest(props) {
               undefined
             )} */}
 
-            <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
+            {/* <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
               <div
                 style={{
                   display: "flex",
@@ -1777,7 +1769,7 @@ function AddEditPurchaseRequest(props) {
                   marginBottom: "2%",
                 }}
               >
-                {/* {comingFor === "add" ||
+                {comingFor === "add" ||
                 (currentUser &&
                   currentUser.staffTypeId.type === "BU Member") ? (
           
@@ -1793,82 +1785,55 @@ function AddEditPurchaseRequest(props) {
                   </Button>
                 ) : (
                   undefined
-                )} */}
-              </div>
-            </div>
-
-            <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
-              {/* <div
-                style={{
-                  display: "flex",
-                  flex: 1,
-                  height: 50,
-                  justifyContent: "center",
-                  marginTop: "2%",
-                  marginBottom: "2%",
-                }}
-              >
-                {comingFor === "add" ? (
-                  <Button
-                    style={{ width: "60%" }}
-                    onClick={handleAdd}
-                    variant="contained"
-                    color="primary"
-                  >
-                    Generate Professional Request
-                  </Button>
-                ) : comingFor === "edit" ? (
-                  <Button
-                    style={{ width: "60%" }}
-                    onClick={handleEdit}
-                    variant="contained"
-                    color="primary"
-                  >
-                    Update Professional Request
-                  </Button>
-                ) : comingFor === "view" ? (
-                  undefined
-                ) : (
-                  undefined
-                )}
-              </div> */}
-
-              <div
-                style={{
-                  display: "flex",
-                  flex: 1,
-                  height: 50,
-                  justifyContent: "center",
-                  marginTop: "2%",
-                  marginBottom: "2%",
-                }}
-              >
-                {comingFor === "add" ? (
-                  <Button
-                    style={styles.stylesForPurchaseButton}
-                    // disabled={!validateForm()}
-                    onClick={handleAdd}
-                    variant="contained"
-                    color="primary"
-                  >
-                    Generate Professional Order
-                  </Button>
-                ) : comingFor === "edit" ? (
-                  <Button
-                    style={styles.stylesForPurchaseButton}
-                    // disabled={!validateForm()}
-                    onClick={handleEdit}
-                    variant="contained"
-                    color="primary"
-                  >
-                    Update Professional Order
-                  </Button>
-                ) : comingFor === "view" ? (
-                  undefined
-                ) : (
-                  undefined
                 )}
               </div>
+            </div> */}
+
+            <div
+              style={{
+                display: "flex",
+                flex: 1,
+                justifyContent: "space-between",
+                marginTop: "2%",
+                marginBottom: "2%",
+              }}
+            >
+              <div>
+                <img
+                  onClick={() => props.history.goBack()}
+                  src={Back_Arrow}
+                  style={{ width: 60, height: 40, cursor: "pointer" }}
+                />
+              </div>
+
+              {comingFor === "add" ? (
+                <Button
+                  style={{
+                    ...styles.stylesForPurchaseButton,
+                    backgroundColor: "#845DC2",
+                  }}
+                  // disabled={!validateForm()}
+                  onClick={handleAdd}
+                  variant="contained"
+                  // color="primary"
+                >
+                  Generate Order
+                </Button>
+              ) : comingFor === "edit" ? (
+                <Button
+                  style={styles.stylesForPurchaseButton}
+                  // disabled={!validateForm()}
+                  onClick={handleEdit}
+                  variant="contained"
+                  color="primary"
+                >
+                  Update
+                </Button>
+              ) : comingFor === "view" ? (
+                undefined
+              ) : (
+                undefined
+              )}
             </div>
 
             <Notification msg={errorMsg} open={openNotification} />
@@ -1890,14 +1855,6 @@ function AddEditPurchaseRequest(props) {
 
             {/* </DialogContent>
             </Dialog> */}
-
-            <div style={{ marginBottom: 20 }}>
-              <img
-                onClick={() => props.history.goBack()}
-                src={Back_Arrow}
-                style={{ width: 60, height: 40, cursor: "pointer" }}
-              />
-            </div>
           </div>
         ) : (
           <div className="LoaderStyle">

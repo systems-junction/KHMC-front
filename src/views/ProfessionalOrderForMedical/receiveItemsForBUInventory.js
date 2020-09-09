@@ -28,7 +28,7 @@ import cookie from "react-cookies";
 import Header from "../../components/Header/Header";
 
 import Add_New from "../../assets/img/Add_New.png";
-import business_Unit from "../../assets/img/business_Unit.png";
+import business_Unit from "../../assets/img/Receive Item.png";
 
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 
@@ -108,13 +108,13 @@ function ReceiveItems(props) {
     tax: "10",
     taxAmount: "10",
     finalUnitPrice: "",
-    discountAmount2: "",
+    discountAmount2: "0",
     subTotal: "",
     totalPrice: "",
     invoice: "FUINV-0091",
     date: "",
     receivedDate: new Date(),
-    expiryDate: "Mon Jul 13 2020 16:07:47 GMT+0500 (Pakistan Standard Time)",
+    expiryDate: "Mon Sep 30 2020 16:07:47 GMT+0500 (Pakistan Standard Time)",
     discountPercentage: "",
 
     _id: "",
@@ -287,6 +287,8 @@ function ReceiveItems(props) {
 
     const selectedRec = props.history.location.state.selectedItem;
 
+    console.log(selectedRec, "selected rec");
+
     if (selectedRec) {
       setSelectedItem(selectedRec);
     }
@@ -313,8 +315,8 @@ function ReceiveItems(props) {
       discount.length > 0 &&
       uniyDiscount.length > 0 &&
       discountAmount.length > 0 &&
-      tax.length > 0 &&
-      taxAmount.length > 0 &&
+      // tax.length > 0 &&
+      // taxAmount.length > 0 &&
       finalUnitPrice.length > 0 &&
       subTotal.length > 0 &&
       discountAmount2.length > 0 &&
@@ -369,7 +371,12 @@ function ReceiveItems(props) {
         .post(addReceiveRequestBUUrl, params)
         .then((res) => {
           if (res.data.success) {
-            props.history.goBack();
+            props.history.replace({
+              pathname: "/home/wms/fus/medicinalorder/success",
+              state: {
+                message: `${selectedItem.itemId.name} has been received successfully`,
+              },
+            });
           } else if (!res.data.success) {
             setOpenNotification(true);
           }
@@ -456,12 +463,7 @@ function ReceiveItems(props) {
         <div className="subheader">
           <div>
             <img src={business_Unit} />
-            <h4>{comingFor === "add" ? "Receive Items" : "Receive Items"}</h4>
-          </div>
-
-          <div>
-            {/* <img onClick={() => props.history.goBack()} src={Add_New} /> */}
-            {/* <img src={Search} /> */}
+            <h4>Receive Items</h4>
           </div>
         </div>
 
@@ -648,6 +650,7 @@ function ReceiveItems(props) {
               /> */}
 
               <TextField
+                required
                 className="textInputStyle"
                 id="receivedQty"
                 type="number"
@@ -686,6 +689,7 @@ function ReceiveItems(props) {
               /> */}
 
               <TextField
+                required
                 className="textInputStyle"
                 id="bonusQty"
                 type="number"
@@ -726,6 +730,7 @@ function ReceiveItems(props) {
               /> */}
 
               <TextField
+                required
                 className="textInputStyle"
                 id="batchNumber"
                 variant="filled"
@@ -762,6 +767,7 @@ function ReceiveItems(props) {
                 onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
               /> */}
               <TextField
+                required
                 className="textInputStyle"
                 id="lotNo"
                 type={"number"}
@@ -792,6 +798,7 @@ function ReceiveItems(props) {
               {/* <InputLabelComponent>Expiry Date</InputLabelComponent> */}
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DatePicker
+                  required
                   inputVariant="filled"
                   fullWidth={true}
                   format="dd/MM/yyyy"
@@ -837,6 +844,7 @@ function ReceiveItems(props) {
               /> */}
 
               <TextField
+                required
                 className="textInputStyle"
                 id="unit"
                 variant="filled"
@@ -874,6 +882,7 @@ function ReceiveItems(props) {
               /> */}
 
               <TextField
+                required
                 className="textInputStyle"
                 type={"number"}
                 id="discount"
@@ -911,6 +920,7 @@ function ReceiveItems(props) {
                 onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
               /> */}
               <TextField
+                required
                 className="textInputStyle"
                 id="uniyDiscount"
                 variant="filled"
@@ -936,18 +946,8 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabelComponent>Discount Amount</InputLabelComponent>
-              <input
-                type="number"
-                placeholder="Discount Amount"
-                name={"discountAmount"}
-                value={discountAmount}
-                onChange={onChangeValue}
-                className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              /> */}
-
               <TextField
+                required
                 className="textInputStyle"
                 id="discountAmount"
                 type={"number"}
@@ -969,7 +969,7 @@ function ReceiveItems(props) {
             </div>
           </div>
 
-          <div className="row">
+          {/* <div className="row">
             <div
               className="col-md-6"
               style={{
@@ -977,17 +977,8 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabelComponent>Tax %</InputLabelComponent>
-              <input
-                type="number"
-                placeholder="Tax %"
-                name={"tax"}
-                value={tax}
-                onChange={onChangeValue}
-                className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              /> */}
               <TextField
+                required
                 className="textInputStyle"
                 id="tax"
                 type={"number"}
@@ -1015,17 +1006,8 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabelComponent>Tax Amount</InputLabelComponent>
-              <input
-                type="number"
-                placeholder="Tax Amount"
-                name={"taxAmount"}
-                value={taxAmount}
-                onChange={onChangeValue}
-                className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              /> */}
               <TextField
+                required
                 className="textInputStyle"
                 id="taxAmount"
                 type={"number"}
@@ -1045,7 +1027,7 @@ function ReceiveItems(props) {
                 onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
               />
             </div>
-          </div>
+          </div> */}
 
           <div className="row">
             <div
@@ -1055,17 +1037,8 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabelComponent>Final Unit Price</InputLabelComponent>
-              <input
-                type="number"
-                placeholder="Final Unit Price"
-                name={"finalUnitPrice"}
-                value={finalUnitPrice}
-                onChange={onChangeValue}
-                className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              /> */}
               <TextField
+                required
                 className="textInputStyle"
                 id="finalUnitPrice"
                 type={"number"}
@@ -1093,17 +1066,8 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabelComponent> Sub Total</InputLabelComponent>
-              <input
-                type="number"
-                placeholder="Sub Total"
-                name={"subTotal"}
-                value={subTotal}
-                onChange={onChangeValue}
-                className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              /> */}
               <TextField
+                required
                 className="textInputStyle"
                 id="subTotal"
                 type={"number"}
@@ -1131,17 +1095,8 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabelComponent>Total Price</InputLabelComponent>
-              <input
-                type="number"
-                placeholder="Total Price"
-                name={"totalPrice"}
-                value={totalPrice}
-                onChange={onChangeValue}
-                className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              /> */}
               <TextField
+                required
                 className="textInputStyle"
                 id="totalPrice"
                 type={"number"}
@@ -1169,18 +1124,8 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabelComponent>Discount Amount</InputLabelComponent>
-              <input
-                type="number"
-                placeholder="Discount Amount"
-                name={"discountAmount2"}
-                value={discountAmount2}
-                onChange={onChangeValue}
-                className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              /> */}
-
               <TextField
+                required
                 className="textInputStyle"
                 id="discountAmount2"
                 type={"number"}
@@ -1210,21 +1155,11 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabelComponent>Invoice</InputLabelComponent>
-              <input
-                // type="number"
-                placeholder="Invoice"
-                name={"invoice"}
-                value={invoice}
-                onChange={onChangeValue}
-                className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              /> */}
-
               <TextField
+                required
                 className="textInputStyle"
                 id="invoice"
-                type={"number"}
+                // type={"number"}
                 variant="filled"
                 label="Invoice"
                 name={"invoice"}
@@ -1249,10 +1184,9 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabelComponent>Date/Time Invoice</InputLabelComponent> */}
-
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DateTimePicker
+                  required
                   inputVariant={"filled"}
                   fullWidth={true}
                   label="Date/Time Invoice"
@@ -1278,10 +1212,9 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabelComponent>Date/Time received</InputLabelComponent> */}
-
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DateTimePicker
+                  required
                   inputVariant={"filled"}
                   fullWidth={true}
                   label="Date/Time Received"
@@ -1315,16 +1248,8 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabelComponent> Notes</InputLabelComponent>
-              <input
-                placeholder="Notes"
-                name={"notes"}
-                value={notes}
-                onChange={onChangeValue}
-                className="textInputStyle"
-              /> */}
-
               <TextField
+                required
                 className="textInputStyle"
                 id="notes"
                 variant="filled"

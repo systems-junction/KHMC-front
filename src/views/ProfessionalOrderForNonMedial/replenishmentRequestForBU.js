@@ -20,7 +20,7 @@ import Loader from "react-loader-spinner";
 import Header from "../../components/Header/Header";
 
 import Add_New from "../../assets/img/Add_New.png";
-import business_Unit from "../../assets/img/Purchase Order.png";
+import business_Unit from "../../assets/img/Professional Order.png";
 
 import cookie from "react-cookies";
 
@@ -149,6 +149,7 @@ const tableHeadingForFUMemberForItems = [
 const actions = { view: true };
 const actionsForBUMemeber = { edit: true, view: true };
 const actionsForBUMemeberForReceive = { edit: false, view: true };
+const actionsForBUMemeberForEdit = { edit: true, view: false };
 const actionsForBUNurse = { view: true, edit: true };
 const actionsForBUDoctor = { view: true };
 
@@ -537,7 +538,7 @@ export default function ReplenishmentRequest(props) {
             "/home/wms/fus/professionalorder/receiveorder" ? (
               <h4>Order Receiving</h4>
             ) : (
-              <h4>Professional Orders</h4>
+              <h4>Added Orders</h4>
             )}
           </div>
 
@@ -613,6 +614,10 @@ export default function ReplenishmentRequest(props) {
                         props.history.location.pathname ===
                           "/home/wms/fus/professionalorder/receiveorder"
                       ? actionsForBUMemeberForReceive
+                      : currentUser.staffTypeId.type === "Registered Nurse" &&
+                        props.history.location.pathname ===
+                          "/home/wms/fus/professionalorder"
+                      ? actionsForBUMemeberForEdit
                       : actions
                   }
                   handleEdit={handleEdit}
