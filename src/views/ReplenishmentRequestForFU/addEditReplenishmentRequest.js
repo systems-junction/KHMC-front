@@ -41,7 +41,7 @@ import { tr } from "date-fns/locale";
 
 import Header from "../../components/Header/Header";
 import view_all from "../../assets/img/Eye.png";
-import purchase_request from "../../assets/img/business_Unit.png";
+import purchase_request from "../../assets/img/FuncU Fulfillment.png";
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -489,7 +489,13 @@ function AddEditPurchaseRequest(props) {
           .then((res) => {
             if (res.data.success) {
               console.log("response after adding RR", res.data);
-              props.history.goBack();
+              // props.history.goBack();
+              props.history.replace({
+                pathname: "/home/wms/fus/medicinalorder/success",
+                state: {
+                  message: `Replenisment request ${res.data.data.requestNo} has been addded successfully`,
+                },
+              });
             } else if (!res.data.success) {
               setOpenNotification(true);
             }
@@ -634,7 +640,8 @@ function AddEditPurchaseRequest(props) {
               status === "pending" &&
               secondStatus === "Fulfillment Initiated"
                 ? "Fulfillment Initiated"
-                : (currentUser.staffTypeId.type === "Warehouse Inventory Keeper" ||
+                : (currentUser.staffTypeId.type ===
+                    "Warehouse Inventory Keeper" ||
                     currentUser.staffTypeId.type === "admin") &&
                   status === "Fulfillment Initiated" &&
                   secondStatus === "Delivery in Progress"
@@ -696,6 +703,140 @@ function AddEditPurchaseRequest(props) {
             .then((res) => {
               if (res.data.success) {
                 props.history.goBack();
+              } else if (!res.data.success) {
+                setOpenNotification(true);
+              }
+            })
+            .catch((e) => {
+              console.log("error after updating purchase request", e);
+              setOpenNotification(true);
+              setErrorMsg("Error while editing the purchase request");
+            });
+        } else {
+          setOpenNotification(true);
+          setErrorMsg("Request can not be updated once it is in progress");
+        }
+      }
+    }
+  };
+
+  function validateInitiateForm() {
+    return (
+      secondStatus === "Fulfillment Initiated" ||
+      secondStatus === "Partial Fulfillment Initiated"
+    );
+  }
+
+  function validateDeliveryForm() {
+    return (
+      secondStatus === "Delivery in Progress" ||
+      secondStatus === "Partial Delivery in Progress"
+    );
+  }
+
+  const handleInitiate = () => {
+    if (!(validateInitiateForm() || validateDeliveryForm())) {
+      setIsFormSubmitted(true);
+      setOpenNotification(true);
+      setErrorMsg("Please fill the fields properly");
+    } else {
+      if (validateForm()) {
+        if (
+          status === "pending" ||
+          currentUser.staffTypeId.type !== "FU Inventory Keeper"
+        ) {
+          let requestedItems = [];
+
+          for (let i = 0; i < requestedItemsArray.length; i++) {
+            requestedItems = [
+              ...requestedItems,
+              {
+                ...requestedItemsArray[i],
+                itemId: requestedItemsArray[i].itemId._id,
+              },
+            ];
+          }
+
+          const obj = {
+            _id,
+            requestNo,
+            generatedBy,
+            dateGenerated,
+            generated,
+            status:
+              (currentUser.staffTypeId.type === "Warehouse Member" ||
+                currentUser.staffTypeId.type === "admin") &&
+              status === "pending" &&
+              secondStatus === "Fulfillment Initiated"
+                ? "Fulfillment Initiated"
+                : (currentUser.staffTypeId.type ===
+                    "Warehouse Inventory Keeper" ||
+                    currentUser.staffTypeId.type === "admin") &&
+                  status === "Fulfillment Initiated" &&
+                  secondStatus === "Delivery in Progress"
+                ? "Delivery in Progress"
+                : (currentUser.staffTypeId.type === "FU Inventory Keeper" ||
+                    currentUser.staffTypeId.type === "admin") &&
+                  status === "Delivery in Progress" &&
+                  secondStatus === "Received"
+                ? "Received"
+                : status,
+            reason,
+            comments,
+
+            // itemId,
+            // currentQty,
+            // requestedQty,
+            // description,
+            // issueUnit,
+            // recieptUnit,
+            // fuItemCost,
+            items: requestedItems,
+            to: to,
+            from: from,
+            commentNote,
+            fuId: fuId._id,
+            secondStatus,
+
+            requesterName,
+            orderType,
+            department,
+          };
+
+          let params;
+
+          if (
+            currentUser.staffTypeId.type === "Warehouse Member" ||
+            currentUser.staffTypeId.type === "admin"
+          ) {
+            params = {
+              ...obj,
+              approvedBy: approvedBy === "" ? currentUser.staffId : approvedBy,
+            };
+          } else if (approvedBy === "") {
+            params = {
+              ...obj,
+              // approvedBy: approvedBy === "" ? "" : approvedBy,
+            };
+          } else {
+            params = {
+              ...obj,
+              approvedBy: approvedBy === "" ? "" : approvedBy,
+            };
+          }
+
+          console.log("params for edit rep request FU", params);
+
+          axios
+            .put(updateReplenishmentRequestUrl, params)
+            .then((res) => {
+              if (res.data.success) {
+                props.history.replace({
+                  pathname: "/home/wms/fus/medicinalorder/success",
+                  state: {
+                    message: `${secondStatus} for ${requestNo}`,
+                  },
+                });
               } else if (!res.data.success) {
                 setOpenNotification(true);
               }
@@ -1024,8 +1165,8 @@ function AddEditPurchaseRequest(props) {
             <img src={purchase_request} />
             <h4>
               {comingFor === "add"
-                ? " Add Replenishment Request"
-                : " Update Replenishment Request"}
+                ? " Add Func Fulfillment"
+                : " Edit Func Fulfillment"}
             </h4>
           </div>
 
@@ -1049,7 +1190,6 @@ function AddEditPurchaseRequest(props) {
                   ...styles.textFieldPadding,
                 }}
               >
-                {/* <InputLabelComponent>Request No</InputLabelComponent> */}
                 <TextField
                   disabled={true}
                   label="Request No"
@@ -1064,10 +1204,6 @@ function AddEditPurchaseRequest(props) {
                   }}
                   error={requestNo === "" && isFormSubmitted}
                 />
-                {/* <ErrorMessage
-                name={requestNo}
-                isFormSubmitted={isFormSubmitted}
-              /> */}
               </div>
 
               <div
@@ -1077,7 +1213,6 @@ function AddEditPurchaseRequest(props) {
                   ...styles.textFieldPadding,
                 }}
               >
-                {/* <InputLabelComponent>Generated</InputLabelComponent> */}
                 <TextField
                   required
                   select
@@ -1108,10 +1243,6 @@ function AddEditPurchaseRequest(props) {
                       );
                     })}
                 </TextField>
-                {/* <ErrorMessage
-                  name={generated}
-                  isFormSubmitted={isFormSubmitted}
-                /> */}
               </div>
 
               <div
@@ -1121,7 +1252,6 @@ function AddEditPurchaseRequest(props) {
                   ...styles.textFieldPadding,
                 }}
               >
-                {/* <InputLabelComponent>Generated By</InputLabelComponent> */}
                 <TextField
                   disabled={true}
                   type="text"
@@ -1143,10 +1273,6 @@ function AddEditPurchaseRequest(props) {
                   }}
                   error={generatedBy === "" && isFormSubmitted}
                 />
-                {/* <ErrorMessage
-                name={generatedBy}
-                isFormSubmitted={isFormSubmitted}
-              /> */}
               </div>
             </div>
           ) : (
@@ -1162,7 +1288,6 @@ function AddEditPurchaseRequest(props) {
               }}
             >
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                {/* <InputLabelComponent>Date Generated</InputLabelComponent> */}
                 <DateTimePicker
                   inputVariant="filled"
                   onChange={onChangeDate}
@@ -1194,8 +1319,6 @@ function AddEditPurchaseRequest(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabelComponent>Manual RR Reason*</InputLabelComponent> */}
-
               <TextField
                 required
                 select
@@ -1233,8 +1356,6 @@ function AddEditPurchaseRequest(props) {
                   );
                 })}
               </TextField>
-
-              {/* <ErrorMessage name={reason} isFormSubmitted={isFormSubmitted} /> */}
             </div>
           </div>
 
@@ -1247,7 +1368,6 @@ function AddEditPurchaseRequest(props) {
                   ...styles.textFieldPadding,
                 }}
               >
-                {/* <InputLabelComponent>Requester*</InputLabelComponent> */}
                 <TextField
                   disabled={
                     currentUser &&
@@ -1266,12 +1386,8 @@ function AddEditPurchaseRequest(props) {
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
-                  verror={requesterName === "" && isFormSubmitted}
+                  error={requesterName === "" && isFormSubmitted}
                 />
-                {/* <ErrorMessage
-                  name={requesterName}
-                  isFormSubmitted={isFormSubmitted}
-                /> */}
               </div>
 
               <div
@@ -1281,7 +1397,6 @@ function AddEditPurchaseRequest(props) {
                   ...styles.textFieldPadding,
                 }}
               >
-                {/* <InputLabelComponent>Department*</InputLabelComponent> */}
                 <TextField
                   disabled={
                     currentUser &&
@@ -1302,10 +1417,6 @@ function AddEditPurchaseRequest(props) {
                   }}
                   error={department === "" && isFormSubmitted}
                 />
-                {/* <ErrorMessage
-                    name={department}
-                    isFormSubmitted={isFormSubmitted}
-                  /> */}
               </div>
 
               <div
@@ -1315,7 +1426,6 @@ function AddEditPurchaseRequest(props) {
                   ...styles.textFieldPadding,
                 }}
               >
-                {/* <InputLabelComponent>Order Type*</InputLabelComponent> */}
                 <TextField
                   required
                   select
@@ -1352,10 +1462,6 @@ function AddEditPurchaseRequest(props) {
                     );
                   })}
                 </TextField>
-                {/* <ErrorMessage
-                    name={orderType}
-                    isFormSubmitted={isFormSubmitted}
-                  /> */}
               </div>
             </div>
           ) : (
@@ -1370,7 +1476,6 @@ function AddEditPurchaseRequest(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabelComponent>Notes/Comments*</InputLabelComponent> */}
               <TextField
                 type="text"
                 disabled={
@@ -1393,7 +1498,6 @@ function AddEditPurchaseRequest(props) {
                 }}
                 error={comments === "" && isFormSubmitted}
               />
-              {/* <ErrorMessage name={comments} isFormSubmitted={isFormSubmitted} /> */}
             </div>
           </div>
           {/* 
@@ -1402,7 +1506,8 @@ function AddEditPurchaseRequest(props) {
           issueUnit !== "" &&
           recieptUnit !== "" ? ( */}
 
-          {currentUser && currentUser.staffTypeId.type === "FU Inventory Keeper" ? (
+          {currentUser &&
+          currentUser.staffTypeId.type === "FU Inventory Keeper" ? (
             <div>
               <h5 style={{ color: "white", fontWeight: "700", marginTop: 15 }}>
                 Add Item
@@ -1512,8 +1617,6 @@ function AddEditPurchaseRequest(props) {
                     ...styles.textFieldPadding,
                   }}
                 >
-                  {/* <InputLabelComponent>Item Code</InputLabelComponent> */}
-
                   <TextField
                     disabled={true}
                     type="text"
@@ -1536,7 +1639,6 @@ function AddEditPurchaseRequest(props) {
                     ...styles.textFieldPadding,
                   }}
                 >
-                  {/* <InputLabelComponent>Item Name</InputLabelComponent> */}
                   <TextField
                     type="text"
                     disabled={true}
@@ -1562,8 +1664,6 @@ function AddEditPurchaseRequest(props) {
                     ...styles.textFieldPadding,
                   }}
                 >
-                  {/* <InputLabelComponent>Receipt Unit</InputLabelComponent> */}
-
                   <TextField
                     disabled={true}
                     label="Receipt Unit"
@@ -1586,8 +1686,6 @@ function AddEditPurchaseRequest(props) {
                     ...styles.textFieldPadding,
                   }}
                 >
-                  {/* <InputLabelComponent>Issue Unit</InputLabelComponent> */}
-
                   <TextField
                     disabled={true}
                     label="Issue Unit"
@@ -1610,8 +1708,6 @@ function AddEditPurchaseRequest(props) {
                     ...styles.textFieldPadding,
                   }}
                 >
-                  {/* <InputLabelComponent>Current Qty</InputLabelComponent> */}
-
                   <TextField
                     type="number"
                     disabled={true}
@@ -1635,8 +1731,6 @@ function AddEditPurchaseRequest(props) {
                     ...styles.textFieldPadding,
                   }}
                 >
-                  {/* <InputLabelComponent>Requested Qty*</InputLabelComponent> */}
-
                   <TextField
                     disabled={
                       currentUser &&
@@ -1675,8 +1769,6 @@ function AddEditPurchaseRequest(props) {
                     ...styles.textFieldPadding,
                   }}
                 >
-                  {/* <InputLabelComponent>FU Item Cost*</InputLabelComponent> */}
-
                   <TextField
                     disabled={
                       currentUser &&
@@ -1712,8 +1804,6 @@ function AddEditPurchaseRequest(props) {
                     ...styles.textFieldPadding,
                   }}
                 >
-                  {/* <InputLabelComponent>Description</InputLabelComponent> */}
-
                   <TextField
                     disabled={true}
                     type="text"
@@ -1769,10 +1859,8 @@ function AddEditPurchaseRequest(props) {
           )}
 
           {comingFor === "edit" &&
-          (currentUser.staffTypeId.type === "admin" ||
-            currentUser.staffTypeId.type === "Warehouse Member" ||
-            currentUser.staffTypeId.type === "Warehouse Inventory Keeper" ||
-            currentUser.staffTypeId.type === "FU Inventory Keeper") ? (
+          (currentUser.staffTypeId.type === "Warehouse Member" ||
+            currentUser.staffTypeId.type === "Warehouse Inventory Keeper") ? (
             <div className="row">
               <div
                 className="col-md-6"
@@ -1781,7 +1869,6 @@ function AddEditPurchaseRequest(props) {
                   ...styles.textFieldPadding,
                 }}
               >
-                {/* <InputLabelComponent>Status</InputLabelComponent> */}
                 {currentUser.staffTypeId.type === "Warehouse Member" ? (
                   <TextField
                     required
@@ -1812,17 +1899,8 @@ function AddEditPurchaseRequest(props) {
                       );
                     })}
                   </TextField>
-                ) : currentUser.staffTypeId.type === "Warehouse Inventory Keeper" ? (
-                  // <Select
-                  //   fullWidth
-                  //   id="secondStatus"
-                  //   name="secondStatus"
-                  //   value={secondStatus}
-                  //   onChange={onChangeValue}
-                  //   label="Status"
-                  //   className="dropDownStyle"
-                  //   input={<BootstrapInput />}
-                  // >
+                ) : currentUser.staffTypeId.type ===
+                  "Warehouse Inventory Keeper" ? (
                   <TextField
                     required
                     select
@@ -1852,86 +1930,8 @@ function AddEditPurchaseRequest(props) {
                       );
                     })}
                   </TextField>
-                ) : currentUser.staffTypeId.type === "admin" ? (
-                  // <Select
-                  //   fullWidth
-                  //   id="secondStatus"
-                  //   name="secondStatus"
-                  //   value={secondStatus}
-                  //   onChange={onChangeValue}
-                  //   label="Status"
-                  //   className="dropDownStyle"
-                  //   input={<BootstrapInput />}
-                  // >
-                  <TextField
-                    required
-                    select
-                    fullWidth
-                    id="secondStatus"
-                    name="secondStatus"
-                    value={secondStatus}
-                    onChange={onChangeValue}
-                    label="Status"
-                    className="dropDownStyle"
-                    // input={<BootstrapInput />}
-                    variant="filled"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-
-                    {statusArrayForAdmin.map((val) => {
-                      return (
-                        <MenuItem key={val.key} value={val.key}>
-                          {val.value}
-                        </MenuItem>
-                      );
-                    })}
-                  </TextField>
                 ) : (
-                  // <Select
-                  //   fullWidth
-                  //   id="secondStatus"
-                  //   name="secondStatus"
-                  //   value={secondStatus}
-                  //   onChange={onChangeValue}
-                  //   label="Status"
-                  //   className="dropDownStyle"
-                  //   input={<BootstrapInput />}
-                  // >
-                  <TextField
-                    required
-                    select
-                    fullWidth
-                    id="secondStatus"
-                    name="secondStatus"
-                    value={secondStatus}
-                    onChange={onChangeValue}
-                    label="Status"
-                    className="dropDownStyle"
-                    // input={<BootstrapInput />}
-                    variant="filled"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-
-                    {statusArrayForFUInventoryKeeper.map((val) => {
-                      return (
-                        <MenuItem key={val.key} value={val.key}>
-                          {val.value}
-                        </MenuItem>
-                      );
-                    })}
-                  </TextField>
+                  undefined
                 )}
               </div>
 
@@ -1942,8 +1942,6 @@ function AddEditPurchaseRequest(props) {
                   ...styles.textFieldPadding,
                 }}
               >
-                {/* <InputLabelComponent>Comment Note</InputLabelComponent> */}
-
                 <TextField
                   type="text"
                   label="Comment Note"
@@ -2011,23 +2009,44 @@ function AddEditPurchaseRequest(props) {
                 >
                   <strong style={{ fontSize: "12px" }}>Submit</strong>
                 </Button>
-              ) : (
+              ) : currentUser &&
+                currentUser.staffTypeId.type === "FU Inventory Keeper" &&
+                comingFor === "edit" ? (
                 <Button
-                  // style={{ width: '60%' }}
                   style={styles.stylesForWHButton}
                   // disabled={!validateForm()}
                   onClick={handleEdit}
                   variant="contained"
                   color="primary"
                 >
-                  <strong style={{ fontSize: "12px" }}>
-                    {" "}
-                    {currentUser &&
-                    currentUser.staffTypeId.type === "Warehouse Inventory Keeper"
-                      ? "Confirm Request"
-                      : "Update"}
-                  </strong>
+                  <strong style={{ fontSize: "12px" }}>Update</strong>
                 </Button>
+              ) : currentUser &&
+                currentUser.staffTypeId.type === "Warehouse Member" &&
+                comingFor === "edit" ? (
+                <Button
+                  style={styles.stylesForWHButton}
+                  disabled={!validateInitiateForm()}
+                  onClick={handleInitiate}
+                  variant="contained"
+                  color="primary"
+                >
+                  <strong style={{ fontSize: "12px" }}>Submit</strong>
+                </Button>
+              ) : currentUser &&
+                currentUser.staffTypeId.type === "Warehouse Inventory Keeper" &&
+                comingFor === "edit" ? (
+                <Button
+                  style={styles.stylesForWHButton}
+                  disabled={!validateDeliveryForm()}
+                  onClick={handleInitiate}
+                  variant="contained"
+                  color="primary"
+                >
+                  <strong style={{ fontSize: "12px" }}>Submit</strong>
+                </Button>
+              ) : (
+                undefined
               )}
             </div>
           </div>

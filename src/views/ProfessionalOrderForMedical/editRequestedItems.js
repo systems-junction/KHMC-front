@@ -589,7 +589,12 @@ function AddEditPurchaseRequest(props) {
           .put(updateReplenishmentRequestUrlBU, obj)
           .then((res) => {
             if (res.data.success) {
-              props.history.goBack();
+              props.history.replace({
+                pathname: "/home/wms/fus/medicinalorder/success",
+                state: {
+                  message: `Order ${requestNo} with item name ${itemName} is set to ${secondStatus}`,
+                },
+              });
             } else if (!res.data.success) {
               setOpenNotification(true);
             }
@@ -609,7 +614,6 @@ function AddEditPurchaseRequest(props) {
       setErrorMsg("");
     }, 2000);
   }
-
 
   return (
     <div

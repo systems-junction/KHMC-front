@@ -20,7 +20,7 @@ import Loader from "react-loader-spinner";
 import Header from "../../components/Header/Header";
 
 import Add_New from "../../assets/img/Add_New.png";
-import business_Unit from "../../assets/img/Purchase Order.png";
+import business_Unit from "../../assets/img/Medication Order.png";
 
 import cookie from "react-cookies";
 
@@ -388,10 +388,10 @@ export default function ReplenishmentRequest(props) {
   if (
     currentUser &&
     currentUser.staffTypeId.type === "Doctor/Physician" &&
-    buObj !== ""
+    buObj !== "" &&
+    props.history.location.pathname !== `/home/wms/fus/medicinalorder/view`
   ) {
-    let path = `medicinalorder/add`;
-
+    let path = `/home/wms/fus/medicinalorder/add`;
     props.history.replace({
       pathname: path,
       state: { comingFor: "add", vendors, statues, items, buObj },
@@ -399,7 +399,7 @@ export default function ReplenishmentRequest(props) {
   }
 
   function handleEdit(rec) {
-    let path = `medicinalorder/edit`;
+    let path = `/home/wms/fus/medicinalorder/edit`;
     props.history.push({
       pathname: path,
       state: {
@@ -442,7 +442,7 @@ export default function ReplenishmentRequest(props) {
   }
 
   const handleView = (obj) => {
-    let path = `medicinalorder/edit`;
+    let path = `/home/wms/fus/medicinalorder/edit`;
     // props.history.push({
     //   pathname: path,
     //   state: {
@@ -519,7 +519,7 @@ export default function ReplenishmentRequest(props) {
       setOpenNotification(true);
       setErrorMsg("Item has already been received");
     } else {
-      let path = `medicinalorder/receive`;
+      let path = `/home/wms/fus/medicinalorder/receive`;
       props.history.push({
         pathname: path,
         state: {
@@ -541,7 +541,7 @@ export default function ReplenishmentRequest(props) {
       setIsOpen(false);
       return;
     }
-    let path = `medicinalorder/requesteditem/edit`;
+    let path = `/home/wms/fus/medicinalorder/requesteditem/edit`;
 
     let requestedItem = requestedItems.find((item) => item._id === rec._id);
 
@@ -588,7 +588,11 @@ export default function ReplenishmentRequest(props) {
     });
   }
 
-  if (currentUser && currentUser.staffTypeId.type !== "Doctor/Physician") {
+  if (
+    (currentUser &&
+    currentUser.staffTypeId.type !== "Doctor/Physician") ||
+    props.history.location.pathname === `/home/wms/fus/medicinalorder/view`
+  ) {
     return (
       <div
         style={{
@@ -610,7 +614,7 @@ export default function ReplenishmentRequest(props) {
               <h4>Medication Orders</h4>
             </div>
 
-            {currentUser &&
+            {/* {currentUser &&
             (currentUser.staffTypeId.type === "Doctor/Physician" ||
               currentUser.staffTypeId.type === "admin" ||
               currentUser.staffTypeId.type === "Doctor/Physician") ? (
@@ -626,7 +630,7 @@ export default function ReplenishmentRequest(props) {
               </Button>
             ) : (
               undefined
-            )}
+            )} */}
           </div>
 
           <div

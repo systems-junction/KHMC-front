@@ -30,7 +30,7 @@ import cookie from "react-cookies";
 import Header from "../../components/Header/Header";
 
 import Add_New from "../../assets/img/Add_New.png";
-import business_Unit from "../../assets/img/business_Unit.png";
+import business_Unit from "../../assets/img/Receive Item.png";
 
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 
@@ -381,7 +381,13 @@ function ReceiveItems(props) {
         .post(addReceiveRequestFUUrl, params)
         .then((res) => {
           if (res.data.success) {
-            props.history.goBack();
+            // props.history.goBack();
+            props.history.replace({
+              pathname: "/home/wms/fus/medicinalorder/success",
+              state: {
+                message: `${selectedItem.itemId.name} has been received`,
+              },
+            });
           } else if (!res.data.success) {
             setOpenNotification(true);
           }
@@ -469,12 +475,7 @@ function ReceiveItems(props) {
         <div className="subheader">
           <div>
             <img src={business_Unit} />
-            <h4>{comingFor === "add" ? "Receive Items" : "Receive Items"}</h4>
-          </div>
-
-          <div>
-            {/* <img onClick={() => props.history.goBack()} src={Add_New} /> */}
-            {/* <img src={Search} /> */}
+            <h4>Order Receiving / Return</h4>
           </div>
         </div>
 
@@ -487,12 +488,6 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Item Code
-                </InputLabel> */}
-
-              {/* <InputLabelComponent>Item Code</InputLabelComponent> */}
-
               <TextField
                 // type="number"
                 disabled={true}
@@ -516,9 +511,6 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Item Name
-                </InputLabel> */}
               <TextField
                 type="text"
                 disabled={true}
@@ -544,10 +536,6 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Current Qty
-                </InputLabel> */}
-
               <TextField
                 disabled={true}
                 type="number"
@@ -572,9 +560,6 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Required Qty
-                </InputLabel> */}
               <TextField
                 type="number"
                 disabled={true}
@@ -599,10 +584,8 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Received Qty
-                </InputLabel> */}
               <TextField
+                required
                 type="number"
                 label="Received Qty"
                 name={"receivedQty"}
@@ -614,7 +597,13 @@ function ReceiveItems(props) {
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                onKeyDown={(evt) => {
+                  (evt.key === "e" ||
+                    evt.key === "E" ||
+                    evt.key === "-" ||
+                    evt.key === "+") &&
+                    evt.preventDefault();
+                }}
                 style={{
                   borderColor:
                     ((receivedQty > requestedQty ||
@@ -644,10 +633,8 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Bonus Qty
-                </InputLabel> */}
               <TextField
+                required
                 type="number"
                 label="Bonus Qty"
                 name={"bonusQty"}
@@ -659,7 +646,13 @@ function ReceiveItems(props) {
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                onKeyDown={(evt) => {
+                  (evt.key === "e" ||
+                    evt.key === "E" ||
+                    evt.key === "-" ||
+                    evt.key === "+") &&
+                    evt.preventDefault();
+                }}
               />
             </div>
           </div>
@@ -672,10 +665,8 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Batch Number
-                </InputLabel> */}
               <TextField
+                required
                 type="number"
                 label="Batch Number"
                 name={"batchNumber"}
@@ -687,7 +678,13 @@ function ReceiveItems(props) {
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                onKeyDown={(evt) => {
+                  (evt.key === "e" ||
+                    evt.key === "E" ||
+                    evt.key === "-" ||
+                    evt.key === "+") &&
+                    evt.preventDefault();
+                }}
               />
             </div>
 
@@ -698,10 +695,8 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                  LOT No
-                </InputLabel> */}
               <TextField
+                required
                 type="number"
                 label="LOT No"
                 name={"lotNo"}
@@ -713,7 +708,13 @@ function ReceiveItems(props) {
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                onKeyDown={(evt) => {
+                  (evt.key === "e" ||
+                    evt.key === "E" ||
+                    evt.key === "-" ||
+                    evt.key === "+") &&
+                    evt.preventDefault();
+                }}
               />
             </div>
 
@@ -724,13 +725,10 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                Expiry Date
-              </InputLabel> */}
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DatePicker
+                  required
                   inputVariant="filled"
-                  // style={styles.inputContainerForDate}
                   fullWidth={true}
                   format="dd/MM/yyyy"
                   label="Expiry Date"
@@ -747,9 +745,6 @@ function ReceiveItems(props) {
                         : null
                       : expiryDate
                   }
-                  // InputProps={{
-                  //   disableUnderline: true,
-                  // }}
                 />
               </MuiPickersUtilsProvider>
             </div>
@@ -761,10 +756,8 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Unit
-                </InputLabel> */}
               <TextField
+                required
                 type="text"
                 label="Unit"
                 name={"unit"}
@@ -788,10 +781,8 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Discount %
-                </InputLabel> */}
               <TextField
+                required
                 type="number"
                 label="Discount %"
                 name={"discount"}
@@ -803,7 +794,13 @@ function ReceiveItems(props) {
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                onKeyDown={(evt) => {
+                  (evt.key === "e" ||
+                    evt.key === "E" ||
+                    evt.key === "-" ||
+                    evt.key === "+") &&
+                    evt.preventDefault();
+                }}
               />
             </div>
 
@@ -814,10 +811,8 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Unit Discount
-                </InputLabel> */}
               <TextField
+                required
                 label="Unit Discount"
                 name={"uniyDiscount"}
                 value={uniyDiscount}
@@ -828,7 +823,6 @@ function ReceiveItems(props) {
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
               />
             </div>
 
@@ -839,10 +833,8 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Discount Amount
-                </InputLabel> */}
               <TextField
+                required
                 type="number"
                 label="Discount Amount"
                 name={"discountAmount"}
@@ -854,7 +846,13 @@ function ReceiveItems(props) {
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                onKeyDown={(evt) => {
+                  (evt.key === "e" ||
+                    evt.key === "E" ||
+                    evt.key === "-" ||
+                    evt.key === "+") &&
+                    evt.preventDefault();
+                }}
               />
             </div>
 
@@ -865,11 +863,8 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Tax %
-                </InputLabel> */}
-
               <TextField
+                required
                 type="number"
                 label="Tax %"
                 name={"tax"}
@@ -881,7 +876,13 @@ function ReceiveItems(props) {
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                onKeyDown={(evt) => {
+                  (evt.key === "e" ||
+                    evt.key === "E" ||
+                    evt.key === "-" ||
+                    evt.key === "+") &&
+                    evt.preventDefault();
+                }}
               />
             </div>
           </div>
@@ -894,10 +895,8 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Tax Amount
-                </InputLabel> */}
               <TextField
+                required
                 type="number"
                 label="Tax Amount"
                 name={"taxAmount"}
@@ -909,7 +908,13 @@ function ReceiveItems(props) {
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                onKeyDown={(evt) => {
+                  (evt.key === "e" ||
+                    evt.key === "E" ||
+                    evt.key === "-" ||
+                    evt.key === "+") &&
+                    evt.preventDefault();
+                }}
               />
             </div>
 
@@ -920,10 +925,8 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Final Unit Price
-                </InputLabel> */}
               <TextField
+                required
                 type="number"
                 label="Final Unit Price"
                 name={"finalUnitPrice"}
@@ -935,7 +938,13 @@ function ReceiveItems(props) {
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                onKeyDown={(evt) => {
+                  (evt.key === "e" ||
+                    evt.key === "E" ||
+                    evt.key === "-" ||
+                    evt.key === "+") &&
+                    evt.preventDefault();
+                }}
               />
             </div>
 
@@ -946,10 +955,8 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Sub Total
-                </InputLabel> */}
               <TextField
+                required
                 type="number"
                 label="Sub Total"
                 name={"subTotal"}
@@ -961,7 +968,13 @@ function ReceiveItems(props) {
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                onKeyDown={(evt) => {
+                  (evt.key === "e" ||
+                    evt.key === "E" ||
+                    evt.key === "-" ||
+                    evt.key === "+") &&
+                    evt.preventDefault();
+                }}
               />
             </div>
 
@@ -972,10 +985,8 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Total Price
-                </InputLabel> */}
               <TextField
+                required
                 type="number"
                 label="Total Price"
                 name={"totalPrice"}
@@ -987,7 +998,13 @@ function ReceiveItems(props) {
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                onKeyDown={(evt) => {
+                  (evt.key === "e" ||
+                    evt.key === "E" ||
+                    evt.key === "-" ||
+                    evt.key === "+") &&
+                    evt.preventDefault();
+                }}
               />
             </div>
           </div>
@@ -1000,10 +1017,8 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Discount Amount
-                </InputLabel> */}
               <TextField
+                required
                 type="number"
                 label="Discount Amount"
                 name={"discountAmount2"}
@@ -1015,7 +1030,13 @@ function ReceiveItems(props) {
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                onKeyDown={(evt) => {
+                  (evt.key === "e" ||
+                    evt.key === "E" ||
+                    evt.key === "-" ||
+                    evt.key === "+") &&
+                    evt.preventDefault();
+                }}
               />
             </div>
             <div
@@ -1025,11 +1046,8 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Invoice
-                </InputLabel> */}
               <TextField
-                type="number"
+                required
                 label="Invoice"
                 name={"invoice"}
                 value={invoice}
@@ -1040,7 +1058,6 @@ function ReceiveItems(props) {
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
               />
             </div>
 
@@ -1051,11 +1068,9 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Date/Time Invoice
-                </InputLabel> */}
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DateTimePicker
+                  required
                   inputVariant="filled"
                   fullWidth={true}
                   label="Date/Time Invoice"
@@ -1078,11 +1093,9 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Date/Time received
-                </InputLabel> */}
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DateTimePicker
+                  required
                   inputVariant="filled"
                   fullWidth={true}
                   label="Date/Time Received"
@@ -1104,10 +1117,6 @@ function ReceiveItems(props) {
               </MuiPickersUtilsProvider>
             </div>
           </div>
-          {/* 
-          <div className="row">
-         
-          </div> */}
 
           <div className="row">
             <div
@@ -1117,10 +1126,8 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel style={styles.styleForLabel} id="generated-label">
-                  Notes
-                </InputLabel> */}
               <TextField
+                required
                 label="Notes"
                 name={"notes"}
                 value={notes}
@@ -1141,9 +1148,6 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabel id="status-label" style={styles.styleForLabel}>
-                  Status
-                </InputLabel> */}
               <TextField
                 required
                 select
@@ -1185,29 +1189,25 @@ function ReceiveItems(props) {
             </div>
           </div>
 
-          <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
-            <div
-              style={{
-                display: "flex",
-                flex: 1,
-                height: 50,
-                marginTop: "2%",
-                marginBottom: "2%",
-              }}
-            >
-              {comingFor === "add" ? (
-                <div
-                  style={{
-                    display: "flex",
-                    flex: 1,
-                    height: 50,
-                    justifyContent: "flex-end",
-                    marginTop: "2%",
-                    marginBottom: "2%",
-                    flexDirection: "row",
-                  }}
-                >
-                  {/* <Button
+          <div
+            style={{
+              display: "flex",
+              flex: 1,
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 20,
+              marginTop: 20,
+            }}
+          >
+            <img
+              onClick={() => props.history.goBack()}
+              src={Back_Arrow}
+              style={{ width: 60, height: 40, cursor: "pointer" }}
+            />
+
+            {comingFor === "add" ? (
+              <div style={{}}>
+                {/* <Button
                     style={{ minWidth: "20%", marginRight: 30 }}
                     // disabled={true}
                     // onClick={handleAdd}
@@ -1216,29 +1216,19 @@ function ReceiveItems(props) {
                     Upload Invoice
                   </Button> */}
 
-                  <Button
-                    style={{ minWidth: "10%" }}
-                    disabled={!validateForm()}
-                    onClick={handleAdd}
-                    variant="contained"
-                    color="primary"
-                  >
-                    Receive
-                  </Button>
-                </div>
-              ) : (
-                <div
-                  style={{
-                    display: "flex",
-                    flex: 1,
-                    height: 50,
-                    justifyContent: "space-between",
-                    marginTop: "2%",
-                    marginBottom: "2%",
-                    flexDirection: "row",
-                  }}
+                <Button
+                  style={{ width: 100, height: 50 }}
+                  disabled={!validateForm()}
+                  onClick={handleAdd}
+                  variant="contained"
+                  color="primary"
                 >
-                  {/* <Button
+                  Receive
+                </Button>
+              </div>
+            ) : (
+              <div style={{}}>
+                {/* <Button
                     style={{ minWidth: "20%" }}
                     // disabled={true}
                     // onClick={handleAdd}
@@ -1247,29 +1237,20 @@ function ReceiveItems(props) {
                   >
                     Upload Invoice
                   </Button> */}
-                  <Button
-                    style={{ minWidth: "10%" }}
-                    disabled={!validateForm()}
-                    onClick={handleEdit}
-                    variant="contained"
-                    color="primary"
-                  >
-                    Receive
-                  </Button>
-                </div>
-              )}
-            </div>
+                <Button
+                  style={{ width: 100, height: 50 }}
+                  disabled={!validateForm()}
+                  onClick={handleEdit}
+                  variant="contained"
+                  color="primary"
+                >
+                  Receive
+                </Button>
+              </div>
+            )}
           </div>
 
           <Notification msg={errorMsg} open={openNotification} />
-
-          <div style={{ marginBottom: 20, marginTop: 20 }}>
-            <img
-              onClick={() => props.history.goBack()}
-              src={Back_Arrow}
-              style={{ width: 60, height: 40, cursor: "pointer" }}
-            />
-          </div>
         </div>
       </div>
     </div>
