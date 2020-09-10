@@ -410,6 +410,7 @@ function AddEditPatientListing(props) {
   const [Insuranceform, setInsuranceForm] = useState(true)
   const [MRN, setMRN] = useState('')
   const [isPatientSubmitted, setIsPatientSubmitted] = useState(false)
+  const [enableForm, setenableForm] = useState(true)
 
   useEffect(() => {
     setcomingFor(props.history.location.state.comingFor)
@@ -882,8 +883,9 @@ function AddEditPatientListing(props) {
   const onChangeValue = (e) => {
     dispatch({
       field: e.target.name,
-      value: e.target.value.replace(/[^\w\s]/gi, ''),
+      value: e.target.value.replace(/[^\w.\s]/gi, ''),
     })
+
     if (e.target.value === 'Cash') {
       dispatch({ field: 'bankName', value: '' })
       setSlipUpload('')
@@ -897,6 +899,7 @@ function AddEditPatientListing(props) {
       dispatch({ field: 'payment', value: '' })
       dispatch({ field: 'coveredFamilyMembers', value: '' })
       dispatch({ field: 'otherCoverageDetails', value: '' })
+      setenableForm(true)
     } else if (e.target.value === 'Insurance') {
       dispatch({ field: 'depositorName', value: '' })
       dispatch({ field: 'amountReceived', value: '' })
@@ -905,6 +908,7 @@ function AddEditPatientListing(props) {
       setImagePreview('')
       setpdfView('')
       setInsuranceForm(false)
+      setenableForm(false)
     } else if (e.target.value === 'WireTransfer') {
       dispatch({ field: 'amountReceived', value: '' })
       setInsuranceForm(true)
@@ -1003,6 +1007,7 @@ function AddEditPatientListing(props) {
                 color: value === 3 ? '#12387a' : '#3B988C',
               }}
               label='Insurance Details'
+              disabled={enableForm}
             />
           </Tabs>
         </div>
