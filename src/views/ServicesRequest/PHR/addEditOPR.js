@@ -495,6 +495,7 @@ function AddEditPatientListing(props) {
       // validateInput(otherDetails) &&
       emergencyName &&
       emergencyName.length > 0 &&
+      validateInput(emergencyName) &&
       emergencyContactNo &&
       emergencyContactNo.length > 0 &&
       validateNumber(emergencyContactNo) &&
@@ -508,7 +509,7 @@ function AddEditPatientListing(props) {
       return (
         depositorName &&
         depositorName.length > 0 &&
-        // validateInput(depositorName) &&
+        validateInput(depositorName) &&
         amountReceived &&
         amountReceived != null &&
         validateNumbers(amountReceived)
@@ -875,7 +876,7 @@ function AddEditPatientListing(props) {
     dispatch({ field: 'emergencyName', value: i.emergencyName })
     dispatch({ field: 'emergencyContactNo', value: i.emergencyContactNo })
     dispatch({ field: 'emergencyRelation', value: i.emergencyRelation })
-
+    // setenableForm(false)
     setSearchQuery('')
     setsearchActivated(true)
   }
@@ -885,7 +886,8 @@ function AddEditPatientListing(props) {
       e.target.name === 'email' ||
       e.target.name === 'phoneNumber' ||
       e.target.name === 'mobileNumber' ||
-      e.target.name === 'emergencyContactNo'
+      e.target.name === 'emergencyContactNo' ||
+      e.target.name === 'dob'
     ) {
       dispatch({
         field: e.target.name,
@@ -903,7 +905,7 @@ function AddEditPatientListing(props) {
       setSlipUpload('')
       setImagePreview('')
       setpdfView('')
-      setInsuranceForm(true)
+      // setInsuranceForm(true)
       dispatch({ field: 'insuranceNo', value: '' })
       dispatch({ field: 'insuranceVendor', value: '' })
       dispatch({ field: 'coverageDetails', value: '' })
@@ -923,7 +925,7 @@ function AddEditPatientListing(props) {
       setenableForm(false)
     } else if (e.target.value === 'WireTransfer') {
       dispatch({ field: 'amountReceived', value: '' })
-      setInsuranceForm(true)
+      // setInsuranceForm(true)
       dispatch({ field: 'insuranceNo', value: '' })
       dispatch({ field: 'insuranceVendor', value: '' })
       dispatch({ field: 'coverageDetails', value: '' })
@@ -1019,7 +1021,7 @@ function AddEditPatientListing(props) {
                 color: value === 3 ? '#12387a' : '#3B988C',
               }}
               label='Insurance Details'
-              disabled={enableForm}
+              // disabled={enableForm}
             />
           </Tabs>
         </div>
@@ -1902,6 +1904,7 @@ function AddEditPatientListing(props) {
                   />
                   <ErrorMessage
                     name={emergencyName}
+                    type='text'
                     isFormSubmitted={isFormSubmitted}
                   />
                 </div>
@@ -2194,7 +2197,7 @@ function AddEditPatientListing(props) {
                   />
                   <ErrorMessage
                     name={depositorName}
-                    // type='text'
+                    type='text'
                     isFormSubmitted={isFormSubmitted}
                   />
                 </div>
