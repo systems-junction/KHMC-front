@@ -29,7 +29,7 @@ import cookie from "react-cookies";
 import Header from "../../components/Header/Header";
 
 import VIewAll from "../../assets/img/view_all.png";
-import business_Unit from "../../assets/img/Purchase Order.png";
+import business_Unit from "../../assets/img/Receive Item.png";
 import view_all from "../../assets/img/Eye.png";
 import Back from "../../assets/img/Back_Arrow.png";
 

@@ -49,7 +49,6 @@ import BootstrapInput from "../../components/Dropdown/dropDown.js";
 
 import ViewAllBtn from "../../components/ViewAllBtn/viewAll";
 
-
 const tableHeading = [
   "Request No",
   "Date",
@@ -253,6 +252,13 @@ function AddEditPurchaseRequest(props) {
   } = state;
 
   const onChangeValue = (e) => {
+    var pattern = /^[a-zA-Z0-9 ]*$/;
+    if (e.target.type === "text") {
+      if (pattern.test(e.target.value) === false) {
+        console.log("tested");
+        return;
+      }
+    }
     dispatch({ field: e.target.name, value: e.target.value });
   };
 
@@ -366,7 +372,14 @@ function AddEditPurchaseRequest(props) {
         .post(addPurchaseOrderUrl, params)
         .then((res) => {
           if (res.data.success) {
-            props.history.goBack();
+            // props.history.goBack();
+            console.log(res.data);
+            props.history.replace({
+              pathname: "/home/wms/fus/medicinalorder/success",
+              state: {
+                message: `Purchase order ${res.data.data.purchaseOrderNo} has been added successfully`,
+              },
+            });
           } else if (!res.data.success) {
             setOpenNotification(true);
           }
@@ -431,10 +444,11 @@ function AddEditPurchaseRequest(props) {
           date: new Date(),
           vendorId: vendorId,
           sentAt: "",
-          committeeStatus:
-            currentUser.staffTypeId.type === "Committe Member"
-              ? committeeStatus
-              : "po_created",
+          // committeeStatus:
+          //   currentUser.staffTypeId.type === "Committe Member"
+          //     ? committeeStatus
+          //     : "po_created",
+          committeeStatus: committeeStatus,
           comments,
 
           // committeeStatus:
@@ -451,7 +465,17 @@ function AddEditPurchaseRequest(props) {
         .put(updatePurchaseOrderUrl, params)
         .then((res) => {
           if (res.data.success) {
-            props.history.goBack();
+            let message = `Purchase order ${res.data.data.purchaseOrderNo} has been updated successfully`;
+            if (currentUser.staffTypeId.type === "Committe Member") {
+              message = `Purchase order ${res.data.data.purchaseOrderNo} has been set to ${committeeStatus}`;
+            }
+
+            props.history.replace({
+              pathname: "/home/wms/fus/medicinalorder/success",
+              state: {
+                message: message,
+              },
+            });
           } else if (!res.data.success) {
             setOpenNotification(true);
           }
@@ -479,6 +503,15 @@ function AddEditPurchaseRequest(props) {
       // paymentTerm.length > 0 &&
       // generated.length > 0
       purchaseRequest.length > 0
+    );
+  }
+
+  function validateApprovalForm() {
+    return (
+      committeeStatus !== "approved" &&
+      committeeStatus !== "reject" &&
+      committeeStatus !== "modify" &&
+      committeeStatus !== "hold"
     );
   }
 
@@ -939,6 +972,7 @@ function AddEditPurchaseRequest(props) {
                 <TextField
                   // required
                   fullWidth
+                  type="text"
                   id="comments"
                   name="comments"
                   value={comments}
@@ -950,8 +984,8 @@ function AddEditPurchaseRequest(props) {
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
-                  multiline={true}
-                  rows={3}
+                  // multiline={true}
+                  // rows={3}
                 ></TextField>
               </div>
             </div>
@@ -982,9 +1016,10 @@ function AddEditPurchaseRequest(props) {
                     Add Purchase Order
                   </strong>
                 </Button>
-              ) : (
+              ) : comingFor === "edit" &&
+                currentUser.staffTypeId.type === "Purchasing Manager" ? (
                 <Button
-                  style={styles.stylesForPurchaseButton}
+                  style={{ ...styles.stylesForPurchaseButton, width: 200 }}
                   disabled={!validateForm()}
                   onClick={handleEdit}
                   variant="contained"
@@ -994,6 +1029,21 @@ function AddEditPurchaseRequest(props) {
                     Update Purchase Order
                   </strong>
                 </Button>
+              ) : comingFor === "edit" &&
+                currentUser.staffTypeId.type === "Committe Member" ? (
+                <Button
+                  style={{ ...styles.stylesForPurchaseButton, width: 200 }}
+                  disabled={validateApprovalForm()}
+                  onClick={handleEdit}
+                  variant="contained"
+                  color="primary"
+                >
+                  <strong style={{ fontSize: "12px" }}>
+                    Update Purchase Order
+                  </strong>
+                </Button>
+              ) : (
+                undefined
               )}
             </div>
           </div>
@@ -1046,7 +1096,7 @@ function AddEditPurchaseRequest(props) {
 
           <Notification msg={errorMsg} open={openNotification} />
 
-          <div style={{ marginBottom: 20 ,marginTop: 20 }}>
+          <div style={{ marginBottom: 20, marginTop: 20 }}>
             <img
               onClick={() => props.history.goBack()}
               src={Back}

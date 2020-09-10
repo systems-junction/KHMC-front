@@ -277,11 +277,20 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "pending_approval_from_accounts" ? (
             <Button
-              style={stylesB.stylesForActive}
+              // style={stylesB.stylesForActive}
+              style={{
+                // verticalAlign: "center",
+                fontSize: "0.6rem",
+                color: "white",
+                cursor: "pointer",
+                borderRadius: 5,
+                background: "#2c6ddd",
+                height: "40px",
+              }}
               variant="contained"
               color="primary"
             >
-              <strong>Pending Approval From Accounts</strong>
+              <strong>Pending Approval</strong>
             </Button>
           ) : val === "pending_approval" ? (
             <Button
