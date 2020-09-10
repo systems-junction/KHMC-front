@@ -602,10 +602,11 @@ function LabRadRequest(props) {
   }
 
   const handleSearch = (e) => {
-    setSearchQuery(e.target.value)
-    if (e.target.value.length >= 3) {
+    const a = e.target.value.replace(/[^\w\s]/gi, '')
+    setSearchQuery(a)
+    if (a.length >= 3) {
       axios
-        .get(getSearchedLaboratoryService + '/' + e.target.value)
+        .get(getSearchedLaboratoryService + '/' + a)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
@@ -744,10 +745,11 @@ function LabRadRequest(props) {
   }
 
   const handleRadioSearch = (e) => {
-    setSearchRadioQuery(e.target.value)
-    if (e.target.value.length >= 3) {
+    const a = e.target.value.replace(/[^\w\s]/gi, '')
+    setSearchRadioQuery(a)
+    if (a.length >= 3) {
       axios
-        .get(getSearchedRadiologyService + '/' + e.target.value)
+        .get(getSearchedRadiologyService + '/' + a)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {

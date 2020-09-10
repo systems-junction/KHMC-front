@@ -881,10 +881,22 @@ function AddEditPatientListing(props) {
   }
 
   const onChangeValue = (e) => {
-    dispatch({
-      field: e.target.name,
-      value: e.target.value.replace(/[^\w.\s]/gi, ''),
-    })
+    if (
+      e.target.name === 'email' ||
+      e.target.name === 'phoneNumber' ||
+      e.target.name === 'mobileNumber'
+    ) {
+      dispatch({
+        field: e.target.name,
+        value: e.target.value,
+      })
+    } else {
+      dispatch({
+        field: e.target.name,
+        value: e.target.value.replace(/[^\w.\s]/gi, ''),
+      })
+    }
+
     if (e.target.value === 'Cash') {
       dispatch({ field: 'bankName', value: '' })
       setSlipUpload('')
@@ -1452,7 +1464,7 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
-                  type='number'
+                  // type='number'
                   label='Height (cm)'
                   name={'height'}
                   value={height}
@@ -1479,7 +1491,7 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
-                  type='number'
+                  // type='number'
                   label='Weight (kg)'
                   name={'weight'}
                   value={weight}

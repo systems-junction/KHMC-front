@@ -16,15 +16,15 @@ const ErrorMsg = (props) => {
           : undefined
         : props.type && props.type === 'number' && props.isFormSubmitted
         ? !validateNumber(props.name)
-          ? 'Enter valid field field'
+          ? 'Enter valid field data'
           : undefined
         : props.type && props.type === 'numbers' && props.isFormSubmitted
         ? !validateNumbers(props.name)
-          ? 'Enter valid field field'
+          ? 'Enter valid field data'
           : undefined
         : props.type && props.type === 'float' && props.isFormSubmitted
         ? !validateFloat(props.name)
-          ? 'Enter valid field field'
+          ? 'Enter valid field data'
           : undefined
         : props.type && props.type === 'text' && props.isFormSubmitted
         ? !validateInput(props.name) && props.isFormSubmitted
