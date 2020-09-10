@@ -901,7 +901,8 @@ function AddEditPatientListing(props) {
     if (
       e.target.name === 'email' ||
       e.target.name === 'phoneNumber' ||
-      e.target.name === 'mobileNumber'
+      e.target.name === 'mobileNumber' ||
+      e.target.name === 'emergencyContactNo'
     ) {
       dispatch({
         field: e.target.name,
