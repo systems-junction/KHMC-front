@@ -530,6 +530,13 @@ function AddEditPurchaseRequest(props) {
   }
 
   const onChangeValue = (e) => {
+    var pattern = /^[a-zA-Z0-9]*$/;
+    if (e.target.type === "text") {
+      if (pattern.test(e.target.value) === false) {
+        return;
+      }
+    }
+
     dispatch({ field: e.target.name, value: e.target.value });
   };
 
@@ -719,7 +726,6 @@ function AddEditPurchaseRequest(props) {
           .put(updateReplenishmentRequestUrlBU, obj)
           .then((res) => {
             if (res.data.success) {
-              // props.history.goBack();
               props.history.replace({
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
@@ -747,8 +753,15 @@ function AddEditPurchaseRequest(props) {
   }
 
   const handlePatientSearch = (e) => {
+    var pattern = /^[a-zA-Z0-9]*$/;
+    if (e.target.type === "text") {
+      if (pattern.test(e.target.value) === false) {
+        return;
+      }
+    }
+
     setSearchPatientQuery(e.target.value);
-    if (e.target.value.length >= 3) {
+    if (e.target.value.length >= 1) {
       axios
         .get(getSearchedpatient + "/" + e.target.value)
         .then((res) => {
@@ -799,6 +812,13 @@ function AddEditPurchaseRequest(props) {
   }
 
   const handleSearch = (e) => {
+    var pattern = /^[a-zA-Z0-9]*$/;
+    if (e.target.type === "text") {
+      if (pattern.test(e.target.value) === false) {
+        return;
+      }
+    }
+
     setSearchQuery(e.target.value);
     // if (e.target.value.length >= 3) {
     let url = "";

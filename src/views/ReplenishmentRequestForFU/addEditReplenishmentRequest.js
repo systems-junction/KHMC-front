@@ -1062,7 +1062,7 @@ function AddEditPurchaseRequest(props) {
       dispatch({ field: "recieptUnit", value: i.itemId.recieptUnit });
       dispatch({ field: "currentQty", value: i.currentQty });
       dispatch({ field: "requestedQty", value: i.requestedQty });
-      dispatch({ field: "fuItemCost", value: i.requestedQty });
+      dispatch({ field: "fuItemCost", value: i.fuItemCost });
     } else {
       setOpenNotification(true);
       setErrorMsg("Item can not be updated once it is in progess");

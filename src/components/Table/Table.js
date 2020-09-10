@@ -87,7 +87,7 @@ const stylesB = {
 const StyledTableRow = withStyles((theme) => ({
   root: {
     "&:nth-of-type(odd)": {
-      backgroundColor: '#f4f4f4',
+      backgroundColor: "#f4f4f4",
     },
 
     "&:nth-of-type(even)": {
@@ -163,7 +163,10 @@ export default function CustomTable(props) {
             ) : val === "pending" ? (
               <Button
                 // onClick={() => props.handleView(prop)}
-                style={{ ...stylesB.stylesForActive, backgroundColor: '#e877a1' }}
+                style={{
+                  ...stylesB.stylesForActive,
+                  backgroundColor: "#e877a1",
+                }}
                 variant="contained"
                 color="primary"
               >
@@ -194,8 +197,8 @@ export default function CustomTable(props) {
                 <strong>Can be fulfilled</strong>
               </Button>
             ) : (
-                        ""
-                      )}
+              ""
+            )}
           </>
         );
       } else {
@@ -211,7 +214,10 @@ export default function CustomTable(props) {
               </Button>
             ) : val === "pending" ? (
               <Button
-                style={{ ...stylesB.stylesForActive, backgroundColor: '#e877a1' }}
+                style={{
+                  ...stylesB.stylesForActive,
+                  backgroundColor: "#e877a1",
+                }}
                 variant="contained"
                 color="primary"
               >
@@ -234,8 +240,8 @@ export default function CustomTable(props) {
                 <strong>Can be fulfilled</strong>
               </Button>
             ) : (
-                      ""
-                    )}
+              ""
+            )}
           </>
         );
       }
@@ -334,20 +340,21 @@ export default function CustomTable(props) {
               <strong>Pending Administration</strong>
             </Button>
           ) : (
-                            <Button
-                              style={stylesB.stylesForActive}
-                              variant="contained"
-                              color="primary"
-                            >
-                              <strong>Po Sent</strong>
-                            </Button>
-                          )}
+            <Button
+              style={stylesB.stylesForActive}
+              variant="contained"
+              color="primary"
+            >
+              <strong>Po Sent</strong>
+            </Button>
+          )}
         </>
       );
     } else if (
       val === "complete" ||
       val === "Complete" ||
       val === "pending" ||
+      val === "modify" ||
       val === "closed" ||
       val === "delivered" ||
       val === "partially completed" ||
@@ -374,7 +381,7 @@ export default function CustomTable(props) {
         <>
           {val === "complete" || val === "Complete" ? (
             <Button
-              style={{ ...stylesB.stylesForActive, backgroundColor: '#ba55d3' }}
+              style={{ ...stylesB.stylesForActive, backgroundColor: "#ba55d3" }}
               variant="contained"
               color="primary"
             >
@@ -390,7 +397,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "closed" ? (
             <Button
-              style={{ ...stylesB.stylesForActive, backgroundColor: '#2c6ddd' }}
+              style={{ ...stylesB.stylesForActive, backgroundColor: "#2c6ddd" }}
               variant="contained"
               color="primary"
             >
@@ -398,15 +405,23 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "pending" ? (
             <Button
-              style={{ ...stylesB.stylesForActive, backgroundColor: '#e877a1' }}
+              style={{ ...stylesB.stylesForActive, backgroundColor: "#e877a1" }}
               variant="contained"
               color="primary"
             >
               <strong>pending</strong>
             </Button>
+          ) : val === "modify" ? (
+            <Button
+              style={{ ...stylesB.stylesForActive, backgroundColor: "#e877a1" }}
+              variant="contained"
+              color="primary"
+            >
+              <strong>Modify</strong>
+            </Button>
           ) : val === "delivered " ? (
             <Button
-              style={{ ...stylesB.stylesForActive, backgroundColor: '#2c6ddd' }}
+              style={{ ...stylesB.stylesForActive, backgroundColor: "#2c6ddd" }}
               variant="contained"
               color="primary"
             >
@@ -414,7 +429,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "completed" ? (
             <Button
-              style={{ ...stylesB.stylesForActive, backgroundColor: '#ba55d3' }}
+              style={{ ...stylesB.stylesForActive, backgroundColor: "#ba55d3" }}
               variant="contained"
               color="primary"
             >
@@ -422,39 +437,46 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "approved" || val === "Approved" ? (
             <Button
-              style={{...stylesB.stylesForActive, backgroundColor: '#ba55d3'}}
+              style={{ ...stylesB.stylesForActive, backgroundColor: "#ba55d3" }}
               variant="contained"
               color="primary"
             >
               <strong>Approved</strong>
             </Button>
-          ) : val === "partial approved" || val === "Partial Approved"? (
+          ) : val === "partial approved" || val === "Partial Approved" ? (
             <Button
-              style={{...stylesB.stylesForActive, backgroundColor: '#2c6ddd',width:'150px'}}
+              style={{
+                ...stylesB.stylesForActive,
+                backgroundColor: "#2c6ddd",
+                width: "150px",
+              }}
               variant="contained"
               color="primary"
             >
               <strong>partial approved</strong>
             </Button>
-          )  : val === "partially completed" ? (
+          ) : val === "partially completed" ? (
             <Button
-              style={{...stylesB.stylesForActive, backgroundColor: ' #2c6ddd'}}
+              style={{
+                ...stylesB.stylesForActive,
+                backgroundColor: " #2c6ddd",
+              }}
               variant="contained"
               color="primary"
             >
               <strong>partially completed</strong>
             </Button>
-          ): val === "response in progress" ? (
+          ) : val === "response in progress" ? (
             <Button
-              style={{...stylesB.stylesForActive, backgroundColor: '#e877a1'}}
+              style={{ ...stylesB.stylesForActive, backgroundColor: "#e877a1" }}
               variant="contained"
               color="primary"
             >
               <strong>Response in progress</strong>
             </Button>
-          )  : val === "reject" ? (
+          ) : val === "reject" ? (
             <Button
-              style={{...stylesB.stylesForActive, backgroundColor: '#2c6ddd'}}
+              style={{ ...stylesB.stylesForActive, backgroundColor: "#2c6ddd" }}
               variant="contained"
               color="primary"
             >
@@ -476,9 +498,9 @@ export default function CustomTable(props) {
             >
               <strong>Rejected</strong>
             </Button>
-          ): val === "Analysis In Progress" ? (
+          ) : val === "Analysis In Progress" ? (
             <Button
-              style={{...stylesB.stylesForActive,width:'150px'}}
+              style={{ ...stylesB.stylesForActive, width: "150px" }}
               variant="contained"
               color="primary"
             >
@@ -700,15 +722,15 @@ export default function CustomTable(props) {
                                       : null
                                     : val.toLowerCase() === "timestamp"
                                     ? new Intl.DateTimeFormat(
-                                      "en-US",
-                                      dateOptions
-                                    ).format(Date.parse(prop[val]))
+                                        "en-US",
+                                        dateOptions
+                                      ).format(Date.parse(prop[val]))
                                     : // : `${replaceSlugToTitle(prop[val])}`}
-                                    replaceSlugToTitle(prop[val])}
-                              </TableCell>
-                            );
-                          }
-                        })
+                                      replaceSlugToTitle(prop[val])}
+                                </TableCell>
+                              );
+                            }
+                          })
                         : null}
 
                       {props.action !== "" ? (

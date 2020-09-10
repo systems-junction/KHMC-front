@@ -32,7 +32,7 @@ import { tr } from "date-fns/locale";
 
 import Header from "../../components/Header/Header";
 import view_all from "../../assets/img/view_all.png";
-import purchase_request from "../../assets/img/purchase request.png";
+import purchase_request from "../../assets/img/Return Item.png";
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -310,6 +310,7 @@ function AddEditPurchaseRequest(props) {
             dispatch({ field: "itemId", value: val });
             dispatch({ field: "itemName", value: val.name });
             dispatch({ field: "itemCode", value: val.itemCode });
+            dispatch({ field: "description", value: val.description });
           } else if (key === "fuId") {
             dispatch({ field: "fuId", value: val });
           } else if (key === "damageReport") {
@@ -411,14 +412,23 @@ function AddEditPurchaseRequest(props) {
       //   recieptUnit !== "" &&
       //   issueUnit !== ""
       returnedQty !== "" &&
-      returnedQty > 0 &&
-      returnedQty <= receivedQty
+      returnedQty > 0
+      // && returnedQty <= receivedQty
     );
+  }
+
+  function validateApproveForm() {
+    return status === "approved" || status === "reject";
   }
 
   const handleAdd = () => {
     setIsFormSubmitted(true);
     if (validateForm()) {
+      if (returnedQty > receivedQty) {
+        setOpenNotification(true);
+        setErrorMsg("Return qty can not greater than received qty");
+        return;
+      }
       const params = {
         returnRequestNo,
         generatedBy: currentUser.name,
@@ -454,7 +464,12 @@ function AddEditPurchaseRequest(props) {
         .then((res) => {
           if (res.data.success) {
             console.log("response after adding RR", res.data);
-            props.history.goBack();
+            props.history.replace({
+              pathname: "/home/wms/fus/medicinalorder/success",
+              state: {
+                message: `Internal Return Request ${res.data.data.returnRequestNo} has been generated successfully`,
+              },
+            });
           } else if (!res.data.success) {
             setOpenNotification(true);
           }
@@ -470,6 +485,11 @@ function AddEditPurchaseRequest(props) {
   const handleEdit = () => {
     setIsFormSubmitted(true);
     if (validateForm()) {
+      if (returnedQty > receivedQty) {
+        setOpenNotification(true);
+        setErrorMsg("Return qty can not greater than received qty");
+        return;
+      }
       const obj = {
         _id,
         returnRequestNo,
@@ -509,9 +529,83 @@ function AddEditPurchaseRequest(props) {
           approvedBy: approvedBy === "" ? currentUser.staffId : approvedBy,
         };
       } else {
+        if (approvedBy) {
+          params = {
+            ...obj,
+            approvedBy: approvedBy ? approvedBy : "",
+          };
+        } else {
+          params = {
+            ...obj,
+          };
+        }
+      }
+
+      console.log(params);
+
+      axios
+        .put(updateInternalReturnRequest, params)
+        .then((res) => {
+          if (res.data.success) {
+            // props.history.goBack();
+            console.log("response after adding RR", res.data);
+            props.history.replace({
+              pathname: "/home/wms/fus/medicinalorder/success",
+              state: {
+                message: `Internal Return Request ${res.data.data.returnRequestNo} has been updated`,
+              },
+            });
+          } else if (!res.data.success) {
+            setOpenNotification(true);
+          }
+        })
+        .catch((e) => {
+          console.log("error after updating purchase request", e);
+          setOpenNotification(true);
+          setErrorMsg("Error while editing the purchase request");
+        });
+    }
+  };
+
+  const handleApprove = () => {
+    setIsFormSubmitted(true);
+    if (validateForm()) {
+      const obj = {
+        _id,
+        returnRequestNo,
+        generatedBy,
+        dateGenerated,
+        expiryDate,
+        to,
+        from,
+        currentQty,
+        itemId: itemId._id,
+        description,
+        fuId: fuId._id,
+        reason,
+        reasonDetail,
+        damageReport: {
+          causedBy: reason === "damaged" ? causedBy : "",
+          totalDamageCost: reason === "damaged" ? totalDamageCost : "",
+          date: reason === "damaged" ? date : "",
+          itemCostPerUnit: reason === "damaged" ? itemCostPerUnit : "",
+        },
+
+        status,
+        replenishmentRequestFU: replenishmentRequestFU._id,
+        commentNote,
+        returnedQty,
+      };
+
+      let params;
+
+      if (
+        currentUser.staffTypeId.type ===
+        "FU Internal Request Return Approval Member"
+      ) {
         params = {
           ...obj,
-          approvedBy: approvedBy ? approvedBy : "",
+          approvedBy: approvedBy === "" ? currentUser.staffId : approvedBy,
         };
       }
 
@@ -521,7 +615,14 @@ function AddEditPurchaseRequest(props) {
         .put(updateInternalReturnRequest, params)
         .then((res) => {
           if (res.data.success) {
-            props.history.goBack();
+            // props.history.goBack();
+            console.log("response after adding RR", res.data);
+            props.history.replace({
+              pathname: "/home/wms/fus/medicinalorder/success",
+              state: {
+                message: `Internal Return Request ${res.data.data.returnRequestNo} has been ${status}`,
+              },
+            });
           } else if (!res.data.success) {
             setOpenNotification(true);
           }
@@ -605,12 +706,16 @@ function AddEditPurchaseRequest(props) {
 
   function validateItemsForm() {
     return (
-      itemCode !== "" &&
-      description !== "" &&
-      itemName !== "" &&
+      // itemCode !== "" &&
+      // description !== "" &&
+      // itemName !== "" &&
+      causedBy &&
       causedBy !== "" &&
+      totalDamageCost &&
       totalDamageCost !== "" &&
-      itemCostPerUnit.length !== "" &&
+      itemCostPerUnit &&
+      itemCostPerUnit !== "" &&
+      date &&
       date !== ""
     );
   }
@@ -652,68 +757,66 @@ function AddEditPurchaseRequest(props) {
                 : " Edit Internal Return Request"}
             </h4>
           </div>
-          {/* 
-          <div>
-            <img onClick={() => props.history.goBack()} src={view_all} />
-          </div> */}
         </div>
 
         {receivedQty ? (
           <div style={{ flex: 4, display: "flex", flexDirection: "column" }}>
-            <div className="row">
-              <div
-                className="col-md-6"
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-
-                <TextField
-                  disabled={true}
-                  label=" Return Request No"
-                  name={"returnRequestNo"}
-                  value={returnRequestNo}
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  variant="filled"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
+            {comingFor === "edit" ? (
+              <div className="row">
+                <div
+                  className="col-md-6"
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
                   }}
-                />
-              </div>
+                >
+                  <TextField
+                    disabled={true}
+                    label=" Return Request No"
+                    name={"returnRequestNo"}
+                    value={returnRequestNo}
+                    onChange={onChangeValue}
+                    className="textInputStyle"
+                    variant="filled"
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  />
+                </div>
 
-              <div
-                className="col-md-6"
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-
-                <TextField
-                  disabled={true}
-                  type="text"
-                  label="Generated By"
-                  name={generatedBy}
-                  value={
-                    comingFor === "add"
-                      ? currentUser
-                        ? currentUser.name
-                        : ""
-                      : generatedBy
-                  }
-                  onChange={onChangeValue}
-                  className="textInputStyle"
-                  variant="filled"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
+                <div
+                  className="col-md-6"
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
                   }}
-                />
+                >
+                  <TextField
+                    disabled={true}
+                    type="text"
+                    label="Generated By"
+                    name={generatedBy}
+                    value={
+                      comingFor === "add"
+                        ? currentUser
+                          ? currentUser.name
+                          : ""
+                        : generatedBy
+                    }
+                    onChange={onChangeValue}
+                    className="textInputStyle"
+                    variant="filled"
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  />
+                </div>
               </div>
-            </div>
+            ) : (
+              undefined
+            )}
 
             <div className="row">
               <div
@@ -723,7 +826,6 @@ function AddEditPurchaseRequest(props) {
                   ...styles.textFieldPadding,
                 }}
               >
-
                 <TextField
                   disabled={true}
                   type="text"
@@ -746,7 +848,6 @@ function AddEditPurchaseRequest(props) {
                   ...styles.textFieldPadding,
                 }}
               >
-
                 <TextField
                   type="text"
                   disabled={true}
@@ -770,7 +871,6 @@ function AddEditPurchaseRequest(props) {
                   ...styles.textFieldPadding,
                 }}
               >
-
                 <TextField
                   type="number"
                   disabled={true}
@@ -796,13 +896,12 @@ function AddEditPurchaseRequest(props) {
                   ...styles.textFieldPadding,
                 }}
               >
-
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <DateTimePicker
                     inputVariant="filled"
                     onChange={(val) => onChangeDate(val, "dateGenerated")}
                     name={"dateGenerated"}
-                    label="dateGenerated"
+                    label="Date Generated"
                     disabled={true}
                     fullWidth
                     // style={styles.inputContainerForDate}
@@ -818,10 +917,6 @@ function AddEditPurchaseRequest(props) {
                           : new Date()
                         : dateGenerated
                     }
-                    //   label={"Date Generated"}
-                    // InputProps={{
-                    //   disableUnderline: true,
-                    // }}
                   />
                 </MuiPickersUtilsProvider>
               </div>
@@ -833,13 +928,13 @@ function AddEditPurchaseRequest(props) {
                   ...styles.textFieldPadding,
                 }}
               >
-
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <DateTimePicker
+                    required
                     inputVariant="filled"
                     onChange={(val) => onChangeDate(val, "expiryDate")}
                     name={"expiryDate"}
-                    label="expiryDate"
+                    label="Expiry Date"
                     disabled={
                       currentUser &&
                       (currentUser.staffTypeId.type === "FU Inventory Keeper" ||
@@ -862,10 +957,6 @@ function AddEditPurchaseRequest(props) {
                           : null
                         : expiryDate
                     }
-                    //   label={"Expiry Date"}
-                    // InputProps={{
-                    //   disableUnderline: true,
-                    // }}
                   />
                 </MuiPickersUtilsProvider>
               </div>
@@ -877,8 +968,8 @@ function AddEditPurchaseRequest(props) {
                   ...styles.textFieldPadding,
                 }}
               >
-
                 <TextField
+                  required
                   type="number"
                   label="Return Qty"
                   name={"returnedQty"}
@@ -932,7 +1023,6 @@ function AddEditPurchaseRequest(props) {
                   ...styles.textFieldPadding,
                 }}
               >
-
                 <TextField
                   disabled={true}
                   type="text"
@@ -950,10 +1040,12 @@ function AddEditPurchaseRequest(props) {
               </div>
             </div>
 
-            <div>
-              <h4 style={{ color: "white", fontWeight: "700", marginTop: 30 }}>
-                Reason
-              </h4>
+            <div
+              style={{
+                marginTop: 30,
+              }}
+            >
+              <h4 style={{ fontWeight: "700" }}>Reason</h4>
 
               <FormGroup
                 row
@@ -1075,44 +1167,39 @@ function AddEditPurchaseRequest(props) {
                   label="Other"
                 />
               </FormGroup>
+            </div>
 
-              <div className="row">
-                <div
-                  className="col-md-12"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
+            <div className="row">
+              <div
+                className="col-md-12"
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  // multiline
+                  required
+                  rows={4}
+                  label="Details"
+                  name={"reasonDetail"}
+                  value={reasonDetail}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                  variant="filled"
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
                   }}
-                >
-                  {/* <InputLabel
-                    id="generated-label"
-                    style={styles.stylesForLabel}
-                  >
-                    Details
-                  </InputLabel> */}
-                  <TextField
-                    // multiline
-                    rows={4}
-                    label="Details"
-                    name={"reasonDetail"}
-                    value={reasonDetail}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                    disabled={
-                      currentUser &&
-                      (currentUser.staffTypeId.type === "FU Inventory Keeper" ||
-                        currentUser.staffTypeId.type === "admin") &&
-                      comingFor !== "view"
-                        ? false
-                        : true
-                    }
-                  />
-                </div>
+                  disabled={
+                    currentUser &&
+                    (currentUser.staffTypeId.type === "FU Inventory Keeper" ||
+                      currentUser.staffTypeId.type === "admin") &&
+                    comingFor !== "view"
+                      ? false
+                      : true
+                  }
+                />
               </div>
             </div>
 
@@ -1122,51 +1209,80 @@ function AddEditPurchaseRequest(props) {
                 "FU Internal Request Return Approval Member" ||
               currentUser.staffTypeId.type === "Warehouse Incharge") ? (
               <div className="row">
-                <div className="col-md-6">
-                  <div style={styles.inputContainerForDropDown}>
+                <div
+                  className="col-md-6"
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  {currentUser.staffTypeId.type ===
+                    "FU Internal Request Return Approval Member" ||
+                  currentUser.staffTypeId.type === "admin" ? (
+                    // <Select
+                    //   fullWidth
+                    //   id="status"
+                    //   name="status"
+                    //   value={status}
+                    //   onChange={onChangeValue}
+                    //   label="Status"
+                    //   className="dropDownStyle"
+                    //   input={<BootstrapInput />}
+                    // >
 
-                    {currentUser.staffTypeId.type ===
-                      "FU Internal Request Return Approval Member" ||
-                    currentUser.staffTypeId.type === "admin" ? (
-                      <Select
-                        fullWidth
-                        id="status"
-                        name="status"
-                        value={status}
-                        onChange={onChangeValue}
-                        label="Status"
-                        className="dropDownStyle"
-                        input={<BootstrapInput />}
-                      >
-                        <MenuItem value="">
-                          <em>None</em>
-                        </MenuItem>
+                    <TextField
+                      required
+                      select
+                      fullWidth
+                      id="status"
+                      name="status"
+                      value={status}
+                      onChange={onChangeValue}
+                      label="Status"
+                      variant="filled"
+                      // className="dropDownStyle"
+                      // input={<BootstrapInput />}
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
 
-                        {statusArrayApprovalMember.map((val) => {
-                          return (
-                            <MenuItem key={val.key} value={val.key}>
-                              {val.value}
-                            </MenuItem>
-                          );
-                        })}
-                      </Select>
-                    ) : (
-                      undefined
-                    )}
-                  </div>
+                      {statusArrayApprovalMember.map((val) => {
+                        return (
+                          <MenuItem key={val.key} value={val.key}>
+                            {val.value}
+                          </MenuItem>
+                        );
+                      })}
+                    </TextField>
+                  ) : (
+                    undefined
+                  )}
                 </div>
 
                 <div
                   className="col-md-6"
-                  style={styles.inputContainerForTextField}
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
                 >
-                  <input
+                  <TextField
                     type="text"
                     label="Comment Note"
                     name={"commentNote"}
                     value={commentNote}
                     onChange={onChangeValue}
                     className="textInputStyle"
+                    variant="filled"
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
                   />
                 </div>
               </div>
@@ -1195,7 +1311,9 @@ function AddEditPurchaseRequest(props) {
                   >
                     Generate
                   </Button>
-                ) : comingFor === "edit" ? (
+                ) : comingFor === "edit" &&
+                  currentUser &&
+                  currentUser.staffTypeId.type === "FU Inventory Keeper" ? (
                   <Button
                     style={{ width: "60%" }}
                     disabled={!validateForm()}
@@ -1206,7 +1324,15 @@ function AddEditPurchaseRequest(props) {
                     Update
                   </Button>
                 ) : (
-                  undefined
+                  <Button
+                    style={{ width: "60%" }}
+                    disabled={!validateApproveForm()}
+                    onClick={handleApprove}
+                    variant="contained"
+                    color="primary"
+                  >
+                    Submit
+                  </Button>
                 )}
               </div>
             </div>
