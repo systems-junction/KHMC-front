@@ -530,10 +530,10 @@ function AddEditPatientListing(props) {
         insuranceNo.length > 0 &&
         insuranceVendor &&
         insuranceVendor.length > 0 &&
-        // validateInput(insuranceVendor) &&
+        validateInput(insuranceVendor) &&
         coverageDetails &&
         coverageDetails.length > 0 &&
-        validateInput(coverageDetails) &&
+        // validateInput(coverageDetails) &&
         coverageTerms &&
         coverageTerms.length > 0 &&
         payment &&
@@ -2659,7 +2659,7 @@ function AddEditPatientListing(props) {
                     />
                     <ErrorMessage
                       name={insuranceVendor}
-                      // type='text'
+                      type='text'
                       isFormSubmitted={isFormSubmitted}
                     />
                   </div>
