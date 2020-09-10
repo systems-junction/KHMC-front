@@ -51,7 +51,7 @@ const stylesB = {
 
 const tableHeading = ["Item Name", "Quantity", "Action"];
 const tableDataKeys = [["itemId", "name"], "qty"];
-const actions = { edit: true, delete: true };
+const actions = { edit: true, delete: false };
 
 export default function WareHouseInventory(props) {
   const classes = useStyles();

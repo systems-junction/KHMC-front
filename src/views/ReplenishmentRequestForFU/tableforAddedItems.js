@@ -286,9 +286,12 @@ export default function DenseTable(props) {
                   borderWidth: props.items.length - 1 === index ? 0 : 1,
                 }}
               >
-                {currentUser.staffTypeId.type === "Warehouse Member"
+                {/* {currentUser.staffTypeId.type === "Warehouse Member"
                   ? row.secondStatus
-                  : row.status}
+                  : row.status} */}
+                <Button style={{fontSize:10}} color="primary" variant="contained">
+                  {row.secondStatus}
+                </Button>
               </TableCell>
             ) : (
               undefined

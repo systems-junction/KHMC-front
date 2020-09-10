@@ -24,8 +24,8 @@ import Header from "../../components/Header/Header";
 import Add_New from "../../assets/img/Add_New.png";
 import view_all from "../../assets/img/view_all.png";
 
-import business_Unit from "../../assets/img/business_Unit.png";
-
+import ReceiveItem from "../../assets/img/Receive Item.png";
+import business_Unit from "../../assets/img/FuncU Fulfillment.png";
 import cookie from "react-cookies";
 
 import Search from "../../assets/img/Search.png";
@@ -209,23 +209,23 @@ export default function ReplenishmentRequest(props) {
               for (let i = 0; i < repRequest.length; i++) {
                 if (
                   repRequest[i].status === "Fulfillment Initiated" ||
-                  repRequest[i].status === "Delivery in Progress" ||
-                  repRequest[i].status === "Received"
+                  repRequest[i].status === "Delivery in Progress"
+                  //  || repRequest[i].status === "Received"
                 ) {
                   temp.push(repRequest[i]);
                 }
               }
               // console.log("rep array after filter", temp);
               setPurchaseRequest(temp.reverse());
-            } else if (currentUser.staffTypeId.type === "FU Inventory Keeper") {
+            } else if (currentUser.staffTypeId.type === "Warehouse Member") {
               // let repRequest = res.data.data;
               let temp = [];
               for (let i = 0; i < repRequest.length; i++) {
                 if (
-                  repRequest[i].status === "Delivery in Progress" ||
-                  repRequest[i].status === "Received" ||
-                  repRequest[i].status === "Returned because of Issue" ||
-                  repRequest[i].status === "Partially Received"
+                  repRequest[i].status === "pending" ||
+                  repRequest[i].status === "Pending" ||
+                  repRequest[i].status === "Fulfillment Initiated" ||
+                  repRequest[i].status === "Partial Fulfillment Initiated"
                 ) {
                   temp.push(repRequest[i]);
                 }
@@ -602,10 +602,17 @@ export default function ReplenishmentRequest(props) {
       <Header />
       <div className="cPadding">
         <div className="subheader">
-          <div>
-            <img src={business_Unit} />
-            <h4>Replenishment Request</h4>
-          </div>
+          {props.history.location.pathname === "/home/wms/fus/receive" ? (
+            <div>
+              <img src={ReceiveItem} />
+              <h4>Order Receiving / Return</h4>
+            </div>
+          ) : (
+            <div>
+              <img src={business_Unit} />
+              <h4>FuncU Fulfillment</h4>
+            </div>
+          )}
 
           {/* {currentUser &&
           currentUser.staffTypeId.type === "FU Inventory Keeper" &&
