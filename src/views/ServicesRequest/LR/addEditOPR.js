@@ -494,7 +494,6 @@ function AddEditPatientListing(props) {
       // validateInput(otherDetails) &&
       emergencyName &&
       emergencyName.length > 0 &&
-      validateInput(emergencyName) &&
       emergencyContactNo &&
       emergencyContactNo.length > 0 &&
       validateNumber(emergencyContactNo) &&
@@ -520,7 +519,7 @@ function AddEditPatientListing(props) {
         validateInput(bankName) &&
         depositorName &&
         depositorName.length > 0 &&
-        validateInput(depositorName) &&
+        // validateInput(depositorName) &&
         slipUpload
       )
     } else if (paymentMethod === 'Insurance') {
@@ -574,8 +573,8 @@ function AddEditPatientListing(props) {
         gender,
         dob,
         age,
-        height,
-        weight,
+        // height,
+        // weight,
         bloodGroup,
         phoneNumber,
         mobileNumber,
@@ -652,7 +651,7 @@ function AddEditPatientListing(props) {
         lastName,
         nationality,
         gender,
-        height,
+        // height,
         age,
         weight,
         bloodGroup,
@@ -805,10 +804,11 @@ function AddEditPatientListing(props) {
   }
 
   const handleSearch = (e) => {
-    setSearchQuery(e.target.value)
-    if (e.target.value.length >= 3) {
+    const a = e.target.value.replace(/[^\w\s]/gi, '')
+    setSearchQuery(a)
+    if (a.length >= 3) {
       axios
-        .get(getSearchedpatient + '/' + e.target.value)
+        .get(getSearchedpatient + '/' + a)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
@@ -880,7 +880,10 @@ function AddEditPatientListing(props) {
   }
 
   const onChangeValue = (e) => {
-    dispatch({ field: e.target.name, value: e.target.value })
+    dispatch({
+      field: e.target.name,
+      value: e.target.value.replace(/[^\w\s]/gi, ''),
+    })
     if (e.target.value === 'Cash') {
       dispatch({ field: 'bankName', value: '' })
       setSlipUpload('')
@@ -1046,7 +1049,8 @@ function AddEditPatientListing(props) {
                     className='col-md-1 col-sm-2 col-2'
                     style={{
                       ...styles.inputContainerForTextField,
-                    }}>
+                    }}
+                  >
                     <div
                       style={{
                         display: 'flex',
@@ -1062,10 +1066,12 @@ function AddEditPatientListing(props) {
                     </div>
                   </div>
 
-                  <div className='col-md-1 col-sm-2 col-2'
+                  <div
+                    className='col-md-1 col-sm-2 col-2'
                     style={{
-                      ...styles.inputContainerForTextField
-                    }}>
+                      ...styles.inputContainerForTextField,
+                    }}
+                  >
                     <div
                       style={{
                         display: 'flex',
@@ -1420,6 +1426,7 @@ function AddEditPatientListing(props) {
                   name={'age'}
                   value={age}
                   onChange={onChangeValue}
+                  error={age === '' && isFormSubmitted}
                   className='textInputStyle'
                   variant='filled'
                   InputProps={{
@@ -1441,10 +1448,12 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
+                  type='number'
                   label='Height (cm)'
                   name={'height'}
                   value={height}
                   onChange={onChangeValue}
+                  error={height === '' && isFormSubmitted}
                   className='textInputStyle'
                   variant='filled'
                   InputProps={{
@@ -1466,10 +1475,12 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
+                  type='number'
                   label='Weight (kg)'
                   name={'weight'}
                   value={weight}
                   onChange={onChangeValue}
+                  error={weight === '' && isFormSubmitted}
                   className='textInputStyle'
                   variant='filled'
                   InputProps={{
@@ -1498,6 +1509,7 @@ function AddEditPatientListing(props) {
                   name='bloodGroup'
                   value={bloodGroup}
                   onChange={onChangeValue}
+                  error={bloodGroup === '' && isFormSubmitted}
                   label='Blood Group'
                   variant='filled'
                   className='dropDownStyle'
@@ -1759,6 +1771,7 @@ function AddEditPatientListing(props) {
                   name={'otherDetails'}
                   value={otherDetails}
                   onChange={onChangeValue}
+                  error={otherDetails === '' && isFormSubmitted}
                   rows={4}
                   className='textInputStyle'
                   variant='filled'
@@ -1872,7 +1885,6 @@ function AddEditPatientListing(props) {
                   />
                   <ErrorMessage
                     name={emergencyName}
-                    type='text'
                     isFormSubmitted={isFormSubmitted}
                   />
                 </div>
@@ -2165,7 +2177,7 @@ function AddEditPatientListing(props) {
                   />
                   <ErrorMessage
                     name={depositorName}
-                    type='text'
+                    // type='text'
                     isFormSubmitted={isFormSubmitted}
                   />
                 </div>
@@ -2252,7 +2264,7 @@ function AddEditPatientListing(props) {
                     />
                     <ErrorMessage
                       name={depositorName}
-                      type='text'
+                      // type='text'
                       isFormSubmitted={isFormSubmitted}
                     />
                   </div>
