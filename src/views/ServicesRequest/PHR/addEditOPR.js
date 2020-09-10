@@ -879,6 +879,10 @@ function AddEditPatientListing(props) {
     // setenableForm(false)
     setSearchQuery('')
     setsearchActivated(true)
+    if (i.paymentMethod === 'Insurance') {
+      setenableForm(false)
+      setInsuranceForm(false)
+    }
   }
 
   const onChangeValue = (e) => {
@@ -905,7 +909,7 @@ function AddEditPatientListing(props) {
       setSlipUpload('')
       setImagePreview('')
       setpdfView('')
-      // setInsuranceForm(true)
+      setInsuranceForm(true)
       dispatch({ field: 'insuranceNo', value: '' })
       dispatch({ field: 'insuranceVendor', value: '' })
       dispatch({ field: 'coverageDetails', value: '' })
@@ -925,7 +929,7 @@ function AddEditPatientListing(props) {
       setenableForm(false)
     } else if (e.target.value === 'WireTransfer') {
       dispatch({ field: 'amountReceived', value: '' })
-      // setInsuranceForm(true)
+      setInsuranceForm(true)
       dispatch({ field: 'insuranceNo', value: '' })
       dispatch({ field: 'insuranceVendor', value: '' })
       dispatch({ field: 'coverageDetails', value: '' })
@@ -1021,7 +1025,7 @@ function AddEditPatientListing(props) {
                 color: value === 3 ? '#12387a' : '#3B988C',
               }}
               label='Insurance Details'
-              // disabled={enableForm}
+              disabled={enableForm}
             />
           </Tabs>
         </div>
