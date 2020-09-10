@@ -895,6 +895,11 @@ function AddEditPatientListing(props) {
 
     setSearchQuery('')
     setsearchActivated(true)
+    if(i.paymentMethod === "Insurance")
+    {
+      setenableForm(false)
+      setInsuranceForm(false)
+    }
   }
 
   const onChangeValue = (e) => {
@@ -1210,11 +1215,6 @@ function AddEditPatientListing(props) {
                   variant='filled'
                   error={profileNo === '' && isFormSubmitted}
                   InputProps={{
-                    // endAdornment: (
-                    //   <InputAdornment position="end">
-                    //     <AccountCircle />
-                    //   </InputAdornment>
-                    // ),
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
@@ -1237,7 +1237,6 @@ function AddEditPatientListing(props) {
               >
                 <TextField
                   required
-                  //disabled={isDisabled}
                   label='National ID'
                   name={'SIN'} // now Identity
                   value={SIN}
