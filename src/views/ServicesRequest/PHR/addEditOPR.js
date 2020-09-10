@@ -494,7 +494,6 @@ function AddEditPatientListing(props) {
       // validateInput(otherDetails) &&
       emergencyName &&
       emergencyName.length > 0 &&
-      validateInput(emergencyName) &&
       emergencyContactNo &&
       emergencyContactNo.length > 0 &&
       validateNumber(emergencyContactNo) &&
@@ -520,7 +519,7 @@ function AddEditPatientListing(props) {
         validateInput(bankName) &&
         depositorName &&
         depositorName.length > 0 &&
-        validateInput(depositorName) &&
+        // validateInput(depositorName) &&
         slipUpload
       )
     } else if (paymentMethod === 'Insurance') {
@@ -574,8 +573,8 @@ function AddEditPatientListing(props) {
         gender,
         dob,
         age,
-        height,
-        weight,
+        // height,
+        // weight,
         bloodGroup,
         phoneNumber,
         mobileNumber,
@@ -617,8 +616,8 @@ function AddEditPatientListing(props) {
         })
         .then((res) => {
           if (res.data.success) {
-            console.log(res.data.data, 'patients dataaa')
-            console.log('patient id', res.data.data.profileNo)
+            console.log(res.data.data, 'patients data')
+            // console.log(res.data.data._id, "patient id");
             setPatientId(res.data.data._id)
             setMRN(res.data.data.profileNo)
             setIsPatientSubmitted(true)
@@ -652,7 +651,7 @@ function AddEditPatientListing(props) {
         lastName,
         nationality,
         gender,
-        height,
+        // height,
         age,
         weight,
         bloodGroup,
@@ -684,8 +683,8 @@ function AddEditPatientListing(props) {
         otherCoverageDetails,
       }
       formData.append('data', JSON.stringify(params))
-      console.log('PARAMSS ', params)
-      console.log('DATAAA ', formData)
+      // console.log('PARAMSS ', params)
+      // console.log("DATAAA ", formData);
       axios
         .put(updatePatientUrl, formData)
         .then((res) => {
@@ -693,8 +692,8 @@ function AddEditPatientListing(props) {
             setPatientId(res.data.data._id)
             setMRN(res.data.data.profileNo)
             setOpenNotification(true)
-            setIsPatientSubmitted(true)
             setsuccessMsg('Patient details updated successfully')
+            setIsPatientSubmitted(true)
             if (!searchActivated) {
               props.history.goBack()
             }
@@ -756,19 +755,19 @@ function AddEditPatientListing(props) {
       generatedFrom: 'pharmacyRequest',
       status: 'pending',
     }
-    console.log(params)
+    // console.log(params)
     axios
       .post(generateOPR, params, {})
       .then((res) => {
         if (res.data.success) {
           console.log(res.data.data, 'response')
+          // props.history.goBack();
           props.history.push({
             pathname: 'success',
             state: {
               message: `OP Record for patient ${MRN} has been generated`,
             },
           })
-          // props.history.goBack();
         } else if (!res.data.success) {
           setOpenNotification(true)
         }
@@ -1046,7 +1045,8 @@ function AddEditPatientListing(props) {
                     className='col-md-1 col-sm-2 col-2'
                     style={{
                       ...styles.inputContainerForTextField,
-                    }}>
+                    }}
+                  >
                     <div
                       style={{
                         display: 'flex',
@@ -1062,10 +1062,12 @@ function AddEditPatientListing(props) {
                     </div>
                   </div>
 
-                  <div className='col-md-1 col-sm-2 col-2'
+                  <div
+                    className='col-md-1 col-sm-2 col-2'
                     style={{
-                      ...styles.inputContainerForTextField
-                    }}>
+                      ...styles.inputContainerForTextField,
+                    }}
+                  >
                     <div
                       style={{
                         display: 'flex',
@@ -1149,7 +1151,7 @@ function AddEditPatientListing(props) {
             ) : (
               undefined
             )}
-
+            {/* <br /> */}
             <div className='row'>
               <div
                 className='col-md-6 col-sm-6'
@@ -1420,6 +1422,7 @@ function AddEditPatientListing(props) {
                   name={'age'}
                   value={age}
                   onChange={onChangeValue}
+                  error={age === '' && isFormSubmitted}
                   className='textInputStyle'
                   variant='filled'
                   InputProps={{
@@ -1441,10 +1444,12 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
+                  type='number'
                   label='Height (cm)'
                   name={'height'}
                   value={height}
                   onChange={onChangeValue}
+                  error={height === '' && isFormSubmitted}
                   className='textInputStyle'
                   variant='filled'
                   InputProps={{
@@ -1466,10 +1471,12 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
+                  type='number'
                   label='Weight (kg)'
                   name={'weight'}
                   value={weight}
                   onChange={onChangeValue}
+                  error={weight === '' && isFormSubmitted}
                   className='textInputStyle'
                   variant='filled'
                   InputProps={{
@@ -1498,6 +1505,7 @@ function AddEditPatientListing(props) {
                   name='bloodGroup'
                   value={bloodGroup}
                   onChange={onChangeValue}
+                  error={bloodGroup === '' && isFormSubmitted}
                   label='Blood Group'
                   variant='filled'
                   className='dropDownStyle'
@@ -1759,6 +1767,7 @@ function AddEditPatientListing(props) {
                   name={'otherDetails'}
                   value={otherDetails}
                   onChange={onChangeValue}
+                  error={otherDetails === '' && isFormSubmitted}
                   rows={4}
                   className='textInputStyle'
                   variant='filled'
@@ -1862,7 +1871,7 @@ function AddEditPatientListing(props) {
                     name={'emergencyName'}
                     value={emergencyName}
                     onChange={onChangeValue}
-                    // error={emergencyName === '' && isFormSubmitted}
+                    error={emergencyName === '' && isFormSubmitted}
                     className='textInputStyle'
                     variant='filled'
                     InputProps={{
@@ -1872,7 +1881,6 @@ function AddEditPatientListing(props) {
                   />
                   <ErrorMessage
                     name={emergencyName}
-                    type='text'
                     isFormSubmitted={isFormSubmitted}
                   />
                 </div>
@@ -1894,7 +1902,7 @@ function AddEditPatientListing(props) {
                     name={'emergencyContactNo'}
                     value={emergencyContactNo}
                     onChange={onChangeValue}
-                    //error={emergencyContactNo === '' && isFormSubmitted}
+                    error={emergencyContactNo === '' && isFormSubmitted}
                     className='textInputStyle'
                     variant='filled'
                     InputProps={{
@@ -1927,7 +1935,7 @@ function AddEditPatientListing(props) {
                     name={'emergencyRelation'}
                     value={emergencyRelation}
                     onChange={onChangeValue}
-                    //error={emergencyRelation === '' && isFormSubmitted}
+                    error={emergencyRelation === '' && isFormSubmitted}
                     className='textInputStyle'
                     variant='filled'
                     InputProps={{
@@ -2165,7 +2173,7 @@ function AddEditPatientListing(props) {
                   />
                   <ErrorMessage
                     name={depositorName}
-                    type='text'
+                    // type='text'
                     isFormSubmitted={isFormSubmitted}
                   />
                 </div>
@@ -2223,6 +2231,11 @@ function AddEditPatientListing(props) {
                         classes: { input: classes.input },
                       }}
                     />
+                    <ErrorMessage
+                      name={bankName}
+                      type='text'
+                      isFormSubmitted={isFormSubmitted}
+                    />
                   </div>
                   <div
                     className='col-md-6 col-sm-6 col-6'
@@ -2244,6 +2257,11 @@ function AddEditPatientListing(props) {
                         className: classes.input,
                         classes: { input: classes.input },
                       }}
+                    />
+                    <ErrorMessage
+                      name={depositorName}
+                      // type='text'
+                      isFormSubmitted={isFormSubmitted}
                     />
                   </div>
                 </div>
@@ -2495,7 +2513,7 @@ function AddEditPatientListing(props) {
             >
               <div className='row' style={{ marginTop: '20px' }}>
                 <div
-                  className='col-md-8 col-sm-7 col-6'
+                  className='col-md-8 col-sm-8 col-9'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -2523,7 +2541,7 @@ function AddEditPatientListing(props) {
                 </div>
 
                 <div
-                  className='col-md-1 col-sm-2 col-2'
+                  className='col-md-1 col-sm-1 col-1'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,

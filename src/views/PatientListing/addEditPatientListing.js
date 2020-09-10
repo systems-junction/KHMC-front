@@ -584,8 +584,8 @@ function AddEditPatientListing(props) {
         nationality,
         dob,
         age,
-        height,
-        weight,
+        // height,
+        // weight,
         bloodGroup,
         phoneNumber,
         mobileNumber,
@@ -662,7 +662,7 @@ function AddEditPatientListing(props) {
         lastName,
         gender,
         nationality,
-        height,
+        // height,
         age,
         weight,
         bloodGroup,
@@ -1029,7 +1029,7 @@ function AddEditPatientListing(props) {
               <>
                 <div className='row' style={{ marginTop: '20px' }}>
                   <div
-                    className='col-md-11 col-sm-10 col-10'
+                    className='col-md-10 col-sm-10 col-10'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1057,6 +1057,27 @@ function AddEditPatientListing(props) {
                         classes: { label: classes.label },
                       }}
                     />
+                  </div>
+
+                  <div
+                    className='col-md-1 col-sm-2 col-2'
+                    style={{
+                      ...styles.inputContainerForTextField,
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: 55,
+                        backgroundColor: 'white',
+                        borderRadius: 5,
+                        width: 100,
+                      }}
+                    >
+                      <img src={BarCode} style={{ width: 80, height: 75 }} />
+                    </div>
                   </div>
 
                   <div className='col-md-1 col-sm-2 col-2'>
@@ -1414,6 +1435,7 @@ function AddEditPatientListing(props) {
                   name={'age'}
                   value={age}
                   onChange={onChangeValue}
+                  error={age === '' && isFormSubmitted}
                   className='textInputStyle'
                   variant='filled'
                   InputProps={{
@@ -1435,10 +1457,12 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
+                  type='number'
                   label='Height (cm)'
                   name={'height'}
                   value={height}
                   onChange={onChangeValue}
+                  error={height === '' && isFormSubmitted}
                   className='textInputStyle'
                   variant='filled'
                   InputProps={{
@@ -1460,10 +1484,12 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
+                  type='number'
                   label='Weight (kg)'
                   name={'weight'}
                   value={weight}
                   onChange={onChangeValue}
+                  error={weight === '' && isFormSubmitted}
                   className='textInputStyle'
                   variant='filled'
                   InputProps={{
@@ -1492,6 +1518,7 @@ function AddEditPatientListing(props) {
                   name='bloodGroup'
                   value={bloodGroup}
                   onChange={onChangeValue}
+                  error={bloodGroup === '' && isFormSubmitted}
                   label='Blood Group'
                   variant='filled'
                   className='dropDownStyle'
@@ -1752,6 +1779,7 @@ function AddEditPatientListing(props) {
                   label='Other Details'
                   name={'otherDetails'}
                   value={otherDetails}
+                  error={otherDetails === '' && isFormSubmitted}
                   onChange={onChangeValue}
                   rows={4}
                   className='textInputStyle'
@@ -1866,7 +1894,7 @@ function AddEditPatientListing(props) {
                   />
                   <ErrorMessage
                     name={emergencyName}
-                    type='text'
+                    // type='text'
                     isFormSubmitted={isFormSubmitted}
                   />
                 </div>
@@ -2214,7 +2242,7 @@ function AddEditPatientListing(props) {
                   />
                   <ErrorMessage
                     name={depositorName}
-                    type='text'
+                    // type='text'
                     isFormSubmitted={isFormSubmitted}
                   />
                 </div>
