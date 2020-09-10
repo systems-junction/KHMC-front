@@ -495,6 +495,7 @@ function AddEditPatientListing(props) {
       // validateInput(otherDetails) &&
       emergencyName &&
       emergencyName.length > 0 &&
+      validateInput(emergencyName) &&
       emergencyContactNo &&
       emergencyContactNo.length > 0 &&
       validateNumber(emergencyContactNo) &&
@@ -508,7 +509,7 @@ function AddEditPatientListing(props) {
       return (
         depositorName &&
         depositorName.length > 0 &&
-        // validateInput(depositorName) &&
+        validateInput(depositorName) &&
         amountReceived &&
         amountReceived != null &&
         validateNumbers(amountReceived)
@@ -875,9 +876,13 @@ function AddEditPatientListing(props) {
     dispatch({ field: 'emergencyName', value: i.emergencyName })
     dispatch({ field: 'emergencyContactNo', value: i.emergencyContactNo })
     dispatch({ field: 'emergencyRelation', value: i.emergencyRelation })
-
+    // setenableForm(false)
     setSearchQuery('')
     setsearchActivated(true)
+    if (i.paymentMethod === 'Insurance') {
+      setenableForm(false)
+      setInsuranceForm(false)
+    }
   }
 
   const onChangeValue = (e) => {
@@ -885,7 +890,8 @@ function AddEditPatientListing(props) {
       e.target.name === 'email' ||
       e.target.name === 'phoneNumber' ||
       e.target.name === 'mobileNumber' ||
-      e.target.name === 'emergencyContactNo'
+      e.target.name === 'emergencyContactNo' ||
+      e.target.name === 'dob'
     ) {
       dispatch({
         field: e.target.name,
@@ -1902,6 +1908,7 @@ function AddEditPatientListing(props) {
                   />
                   <ErrorMessage
                     name={emergencyName}
+                    type='text'
                     isFormSubmitted={isFormSubmitted}
                   />
                 </div>
@@ -2194,7 +2201,7 @@ function AddEditPatientListing(props) {
                   />
                   <ErrorMessage
                     name={depositorName}
-                    // type='text'
+                    type='text'
                     isFormSubmitted={isFormSubmitted}
                   />
                 </div>
