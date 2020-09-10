@@ -11,7 +11,7 @@ import ButtonField from '../../../components/common/Button'
 import Loader from 'react-loader-spinner'
 import Back from '../../../assets/img/Back_Arrow.png'
 import Header from '../../../components/Header/Header'
-import business_Unit from '../../../assets/img/Labortary Department.png'
+import business_Unit from '../../../assets/img/Out Patient.png'
 import '../../../assets/jss/material-dashboard-react/components/loaderStyle.css'
 import socketIOClient from 'socket.io-client'
 
