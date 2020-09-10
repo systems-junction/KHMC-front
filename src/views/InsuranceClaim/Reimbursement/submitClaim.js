@@ -32,6 +32,8 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Loader from "react-loader-spinner";
 import AccountCircle from '@material-ui/icons/SearchOutlined'
 import InputAdornment from '@material-ui/core/InputAdornment'
+import BarCode from '../../../assets/img/Bar Code.png'
+import Fingerprint from '../../../assets/img/fingerprint.png'
 
 const tableHeadingForBillSummary = [
   'Date/Time',
@@ -337,10 +339,10 @@ function AddEditPatientListing(props) {
           dispatch({ field: 'insuranceVendor', value: '' })
           dispatch({ field: 'treatmentDetail', value: '' })
           dispatch({ field: 'document', value: '' })
-          
+
           props.history.push({
             pathname: 'success',
-            state: { message : 'Claim Submitted successfully' },
+            state: { message: 'Claim Submitted successfully' },
           })
         } else if (!res.data.success) {
           setOpenNotification(true)
@@ -378,7 +380,7 @@ function AddEditPatientListing(props) {
         if (res.data.success) {
           props.history.push({
             pathname: 'success',
-            state: { message : 'Claim Updated successfully' },
+            state: { message: 'Claim Updated successfully' },
           })
         } else if (!res.data.success) {
           setOpenNotification(true)
@@ -561,7 +563,7 @@ function AddEditPatientListing(props) {
             value={value}
             onChange={handleChange}
             textColor="primary"
-            TabIndicatorProps={{style: {background:'#12387a'}}}
+            TabIndicatorProps={{ style: { background: '#12387a' } }}
             centered
           >
             <Tab
@@ -592,32 +594,80 @@ function AddEditPatientListing(props) {
             >
               {comingFor === 'add' ? (
                 <div>
-                  <div
-                    className='row'
-                    style={{
-                      ...styles.inputContainerForTextField,
-                      ...styles.textFieldPadding,
-                    }}
-                  >
-                    <TextField
-                      required
-                      label='Search Patient by Name / MRN / National ID / Mobile Number'
-                      name={'searchQuery'}
-                      value={searchQuery}
-                      onChange={handleSearch}
-                      className='textInputStyle'
-                      variant='filled'
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position='end'>
-                            <AccountCircle />
-                          </InputAdornment>
-                        ),
-                        className: classes.input,
-                        classes: { input: classes.input },
-                        disableUnderline: true
+                  <div className='row'>
+                    <div
+                      className='col-md-10 col-sm-8 col-8'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        paddingLeft:0,
+                        paddingRight:0
                       }}
-                    />
+                    >
+                      <TextField
+                        required
+                        label='Search Patient by Name / MRN / National ID / Mobile Number'
+                        name={'searchQuery'}
+                        value={searchQuery}
+                        onChange={handleSearch}
+                        className='textInputStyle'
+                        variant='filled'
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position='end'>
+                              <AccountCircle />
+                            </InputAdornment>
+                          ),
+                          className: classes.input,
+                          classes: { input: classes.input },
+                          disableUnderline: true
+                        }}
+                      />
+                    </div>
+
+                    <div
+                      className='col-md-1 col-sm-2 col-2'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          height: 55,
+                          backgroundColor: 'white',
+                          borderRadius: 5,
+                          width: 80,
+                        }}
+                      >
+                        <img src={BarCode} style={{ width: 80, height: 75 }} />
+                      </div>
+                    </div>
+
+                    <div
+                      className='col-md-1 col-sm-2 col-2'
+                      style={{
+                        ...styles.inputContainerForTextField,
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          height: 55,
+                          backgroundColor: 'white',
+                          borderRadius: 5,
+                          width: 80,
+                        }}
+                      >
+                        <img
+                          src={Fingerprint}
+                          style={{ maxWidth: 43, height: 43 }}
+                        />
+                      </div>
+                    </div>
                   </div>
 
                   {searchQuery ? (
@@ -1050,7 +1100,7 @@ function AddEditPatientListing(props) {
               undefined
             )}
 
-        <Notification msg={errorMsg} open={openNotification}  success={successMsg} />
+        <Notification msg={errorMsg} open={openNotification} success={successMsg} />
       </div>
     </div>
   )

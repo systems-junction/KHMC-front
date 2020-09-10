@@ -18,6 +18,7 @@ import Tab from '@material-ui/core/Tab'
 import CustomTable from '../../../components/Table/Table'
 import Notification from '../../../components/Snackbar/Notification.js'
 import Loader from 'react-loader-spinner'
+import InputLabel from '@material-ui/core/InputLabel'
 
 const tableHeadingForNeedApproval = [
   'Request No',
@@ -81,6 +82,40 @@ const tableDataKeysForFollowUp = [
 ]
 const actions = { view: true }
 
+const styles = {
+  patientDetails: {
+    backgroundColor: 'white',
+    borderRadius: 15,
+    padding: '20px',
+  },
+  inputContainerForTextField: {
+    marginTop: 25,
+  },
+  inputContainerForDropDown: {
+    marginTop: 25,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 2,
+  },
+  stylesForButton: {
+    color: 'white',
+    cursor: 'pointer',
+    borderRadius: 15,
+    backgroundColor: '#2c6ddd',
+    height: '50px',
+    outline: 'none',
+  },
+  buttonContainer: {
+    marginTop: 25,
+  },
+  stylesForLabel: {
+    fontWeight: '700',
+    color: 'gray',
+  },
+}
+
 const useStylesForTabs = makeStyles({
   root: {
     justifyContent: "center"
@@ -142,8 +177,8 @@ function AddEditPurchaseRequest(props) {
   const [openNotification, setOpenNotification] = useState(false)
   const [value, setValue] = React.useState(0)
   const [selectedItem, setSelectedItem] = useState('')
-  const [, setSelectedPatient] = useState('')
-  const [, setrequestNo] = useState('')
+  const [selectedPatient, setSelectedPatient] = useState('')
+  const [requestNo, setrequestNo] = useState('')
   const [, setId] = useState('')
   const [needApprovalArray, setneedApprovalArray] = useState('')
   const [isLoading, setIsLoading] = useState(true)
@@ -200,12 +235,10 @@ function AddEditPurchaseRequest(props) {
     axios
       .get(getSingleIPRPatient + "/" + id)
       .then((res) => {
-        if (res.data.success) 
-        {
-          if (res.data.data) 
-          {
+        if (res.data.success) {
+          if (res.data.data) {
             const selectedfollowUp = res.data.data[0]
-            console.log("follow Up: ",selectedfollowUp);
+            console.log("follow Up: ", selectedfollowUp);
 
             setIsLoading(false);
 
@@ -283,6 +316,88 @@ function AddEditPurchaseRequest(props) {
         }}
         />
 
+        <div className='container-fluid' style={styles.patientDetails}>
+          <div className='row'>
+            <div className='col-md-12'>
+              <h4 style={{ color: 'blue', fontWeight: '600' }}>
+                Patient Details
+              </h4>
+            </div>
+          </div>
+          <div className='row'>
+            <div className='col-md-4 col-sm-4'>
+              <div style={styles.inputContainerForTextField}>
+                <InputLabel style={styles.stylesForLabel} id='status-label'>
+                  Patient Name
+                </InputLabel>
+                <span style={styles.styleForPatientDetails}>
+                  {selectedPatient.firstName + ` ` + selectedPatient.lastName}{' '}
+                </span>
+              </div>
+            </div>
+            <div className='col-md-4 col-sm-4'>
+              <div style={styles.inputContainerForTextField}>
+                <InputLabel style={styles.stylesForLabel} id='status-label'>
+                  Gender
+                </InputLabel>
+                <span style={styles.styleForPatientDetails}>
+                  {selectedPatient.gender}
+                </span>
+              </div>
+            </div>
+            <div className='col-md-4 col-sm-4'>
+              <div style={styles.inputContainerForTextField}>
+                <InputLabel style={styles.stylesForLabel} id='status-label'>
+                  Age
+                </InputLabel>
+                <span style={styles.styleForPatientDetails}>
+                  {selectedPatient.age ? selectedPatient.age : 30}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className='row'>
+            <div className='col-md-4 col-sm-4'>
+              <div style={styles.inputContainerForTextField}>
+                <InputLabel style={styles.stylesForLabel} id='status-label'>
+                  Patient MRN
+                </InputLabel>
+
+                <span style={styles.styleForPatientDetails}>
+                  {selectedPatient.profileNo}
+                </span>
+              </div>
+            </div>
+
+            <div className='col-md-4 col-sm-4'>
+              <div style={styles.inputContainerForTextField}>
+                <InputLabel style={styles.stylesForLabel} id='status-label'>
+                  Insurance No
+                </InputLabel>
+                <span style={styles.styleForPatientDetails}>
+                  {selectedPatient.insuranceId
+                    ? selectedPatient.insuranceId
+                    : '--'}
+                </span>
+              </div>
+            </div>
+            <div className='col-md-4 col-sm-4'>
+              <div style={styles.inputContainerForTextField}>
+                <InputLabel style={styles.stylesForLabel} id='status-label'>
+                  Request No
+                </InputLabel>
+                <span style={styles.styleForPatientDetails}>{requestNo}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style={{
+          height: '20px'
+        }}
+        />
+
         {needApprovalArray !== 0 && coveredArray !== 0 && notCoveredArray !== 0 && followUpArray !== 0 ?
           (
             <div>
@@ -292,7 +407,7 @@ function AddEditPurchaseRequest(props) {
                   value={value}
                   onChange={handleChange}
                   textColor="primary"
-                  TabIndicatorProps={{style: {background:'#12387a'}}}
+                  TabIndicatorProps={{ style: { background: '#12387a' } }}
                   centered={false}
                   variant='scrollable'
                   fullWidth={true}
@@ -444,28 +559,28 @@ function AddEditPurchaseRequest(props) {
                       className='container-fluid'
                     >
                       {!isLoading ? (
-                      <div className='row' style={{ marginTop: '20px' }}>
-                        {followUpArray !== 0 ? (
-                          <CustomTable
-                            tableData={followUpArray}
-                            tableDataKeys={tableDataKeysForFollowUp}
-                            tableHeading={tableHeadingForFollowUp}
-                            handleView={viewFollowUp}
-                            action={actions}
-                            borderBottomColor={'#60d69f'}
-                            borderBottomWidth={20}
-                          />
-                        ) : (
-                            <div className='LoaderStyle'>
-                              <Loader type='TailSpin' color='red' height={50} width={50} />
-                            </div>
-                          )}
-                      </div>
-                      ):(
-                        <div className='LoaderStyle'>
-                          <Loader type='TailSpin' color='red' height={50} width={50} />
+                        <div className='row' style={{ marginTop: '20px' }}>
+                          {followUpArray !== 0 ? (
+                            <CustomTable
+                              tableData={followUpArray}
+                              tableDataKeys={tableDataKeysForFollowUp}
+                              tableHeading={tableHeadingForFollowUp}
+                              handleView={viewFollowUp}
+                              action={actions}
+                              borderBottomColor={'#60d69f'}
+                              borderBottomWidth={20}
+                            />
+                          ) : (
+                              <div className='LoaderStyle'>
+                                <Loader type='TailSpin' color='red' height={50} width={50} />
+                              </div>
+                            )}
                         </div>
-                      )}
+                      ) : (
+                          <div className='LoaderStyle'>
+                            <Loader type='TailSpin' color='red' height={50} width={50} />
+                          </div>
+                        )}
 
                       <div className='row' style={{ marginTop: '20px', marginBottom: '25px' }}>
                         <div className='col-md-6 col-sm-6 col-6'>
