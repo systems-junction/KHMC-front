@@ -69,7 +69,7 @@ const tableHeadingForPharmacy = [
 const tableDataKeysForPharmacy = [
   'PRrequestNo',
   'date',
-  ['requester', 'firstName'],
+  'doctorName',
   'status',
 ]
 // const tableHeadingForLabReq = [
@@ -909,6 +909,8 @@ function PatientCare(props) {
                 //     dispatch({ field: "residentNoteArray", value: val });
                 // } else
                 if (key === 'pharmacyRequest') {
+                  val.map(
+                    (d) => (d.doctorName = d.requester ? d.requester.firstName + ' ' + d.requester.lastName : ''))
                   dispatch({ field: 'pharmacyRequestArray', value: val })
                 }
                 //  else if (key === "nurseService") {

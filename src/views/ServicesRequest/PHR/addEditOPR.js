@@ -495,6 +495,7 @@ function AddEditPatientListing(props) {
       // validateInput(otherDetails) &&
       emergencyName &&
       emergencyName.length > 0 &&
+      validateInput(emergencyName) &&
       emergencyContactNo &&
       emergencyContactNo.length > 0 &&
       validateNumber(emergencyContactNo) &&
@@ -508,7 +509,7 @@ function AddEditPatientListing(props) {
       return (
         depositorName &&
         depositorName.length > 0 &&
-        // validateInput(depositorName) &&
+        validateInput(depositorName) &&
         amountReceived &&
         amountReceived != null &&
         validateNumbers(amountReceived)
@@ -529,10 +530,10 @@ function AddEditPatientListing(props) {
         insuranceNo.length > 0 &&
         insuranceVendor &&
         insuranceVendor.length > 0 &&
-        // validateInput(insuranceVendor) &&
+        validateInput(insuranceVendor) &&
         coverageDetails &&
         coverageDetails.length > 0 &&
-        validateInput(coverageDetails) &&
+        // validateInput(coverageDetails) &&
         coverageTerms &&
         coverageTerms.length > 0 &&
         payment &&
@@ -574,8 +575,6 @@ function AddEditPatientListing(props) {
         gender,
         dob,
         age,
-        // height,
-        // weight,
         bloodGroup,
         phoneNumber,
         mobileNumber,
@@ -606,7 +605,6 @@ function AddEditPatientListing(props) {
       }
       formData.append('data', JSON.stringify(params))
       console.log('PARAMSS ', params)
-      // console.log("DATAAA ", formData);
       axios
         .post(addPatientUrl, formData, {
           headers: {
@@ -623,7 +621,7 @@ function AddEditPatientListing(props) {
             setMRN(res.data.data.profileNo)
             setIsPatientSubmitted(true)
             setOpenNotification(true)
-            setsuccessMsg('Patient details saved successfully')
+            setsuccessMsg('Patient details saved successfully, Generate OP now')
           } else if (!res.data.success) {
             setOpenNotification(true)
           }
@@ -631,7 +629,7 @@ function AddEditPatientListing(props) {
         .catch((e) => {
           console.log('error after adding patient details', e)
           setOpenNotification(true)
-          setErrorMsg('Error while adding the patient details')
+          setErrorMsg('Patient already exists')
         })
     }
     setIsFormSubmitted(true)
@@ -652,9 +650,7 @@ function AddEditPatientListing(props) {
         lastName,
         nationality,
         gender,
-        // height,
         age,
-        weight,
         bloodGroup,
         dob,
         phoneNumber,
@@ -684,8 +680,7 @@ function AddEditPatientListing(props) {
         otherCoverageDetails,
       }
       formData.append('data', JSON.stringify(params))
-      // console.log('PARAMSS ', params)
-      // console.log("DATAAA ", formData);
+      console.log('PARAMSS ', params)
       axios
         .put(updatePatientUrl, formData)
         .then((res) => {
@@ -875,16 +870,34 @@ function AddEditPatientListing(props) {
     dispatch({ field: 'emergencyName', value: i.emergencyName })
     dispatch({ field: 'emergencyContactNo', value: i.emergencyContactNo })
     dispatch({ field: 'emergencyRelation', value: i.emergencyRelation })
-
+    // setenableForm(false)
     setSearchQuery('')
     setsearchActivated(true)
+    if (i.paymentMethod === 'Insurance') {
+      setenableForm(false)
+      setInsuranceForm(false)
+    }
   }
 
   const onChangeValue = (e) => {
-    dispatch({
-      field: e.target.name,
-      value: e.target.value.replace(/[^\w\s]/gi, ''),
-    })
+    if (
+      e.target.name === 'email' ||
+      e.target.name === 'phoneNumber' ||
+      e.target.name === 'mobileNumber' ||
+      e.target.name === 'emergencyContactNo' ||
+      e.target.name === 'dob'
+    ) {
+      dispatch({
+        field: e.target.name,
+        value: e.target.value,
+      })
+    } else {
+      dispatch({
+        field: e.target.name,
+        value: e.target.value.replace(/[^\w.\s]/gi, ''),
+      })
+    }
+
     if (e.target.value === 'Cash') {
       dispatch({ field: 'bankName', value: '' })
       setSlipUpload('')
@@ -1017,7 +1030,7 @@ function AddEditPatientListing(props) {
           >
             {comingFor === 'add' ? (
               <>
-                <div className='row' style={{ marginTop: '20px' }}>
+                <div className='row' style={{ marginTop: '20px',marginBottom:'10px'  }}>
                   <div
                     className='col-md-10 col-sm-8 col-8'
                     style={{
@@ -1452,7 +1465,7 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
-                  type='number'
+                  // type='number'
                   label='Height (cm)'
                   name={'height'}
                   value={height}
@@ -1479,7 +1492,7 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
-                  type='number'
+                  // type='number'
                   label='Weight (kg)'
                   name={'weight'}
                   value={weight}
@@ -1889,6 +1902,7 @@ function AddEditPatientListing(props) {
                   />
                   <ErrorMessage
                     name={emergencyName}
+                    type='text'
                     isFormSubmitted={isFormSubmitted}
                   />
                 </div>
@@ -2181,7 +2195,7 @@ function AddEditPatientListing(props) {
                   />
                   <ErrorMessage
                     name={depositorName}
-                    // type='text'
+                    type='text'
                     isFormSubmitted={isFormSubmitted}
                   />
                 </div>
@@ -2639,7 +2653,7 @@ function AddEditPatientListing(props) {
                     />
                     <ErrorMessage
                       name={insuranceVendor}
-                      // type='text'
+                      type='text'
                       isFormSubmitted={isFormSubmitted}
                     />
                   </div>

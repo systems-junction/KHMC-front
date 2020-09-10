@@ -299,20 +299,25 @@ function AddEditEDR(props) {
   }
 
   const handleAdd = () => {
+    var now = new Date()
+    var start = new Date(now.getFullYear(), 0, 0)
+    var diff =
+      now -
+      start +
+      (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000
+    var oneDay = 1000 * 60 * 60 * 24
+    var day = Math.floor(diff / oneDay)
 
-    var now = new Date();
-    var start = new Date(now.getFullYear(), 0, 0);
-    var diff = (now - start) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
-    var oneDay = 1000 * 60 * 60 * 24;
-    var day = Math.floor(diff / oneDay);
-
-    var dateNow = new Date();
-    var YYYY = dateNow.getFullYear().toString().substr(-2)
-    var HH = dateNow.getHours();
+    var dateNow = new Date()
+    var YYYY = dateNow
+      .getFullYear()
+      .toString()
+      .substr(-2)
+    var HH = dateNow.getHours()
     var mm = dateNow.getMinutes()
-    let ss = dateNow.getSeconds();
+    let ss = dateNow.getSeconds()
 
-    const PRrequestNo='PR' + day + YYYY+HH+mm +ss
+    const PRrequestNo = 'PR' + day + YYYY + HH + mm + ss
 
     // if (!validateForm()) {
     //   setIsFormSubmitted(true);
@@ -345,7 +350,7 @@ function AddEditEDR(props) {
     pharmacyRequestArray = [
       ...pharmacyReqArray,
       {
-        PRrequestNo:PRrequestNo,
+        PRrequestNo: PRrequestNo,
         date: date,
         status: status,
         requester: currentUser.staffId,
@@ -621,10 +626,11 @@ function AddEditEDR(props) {
   }
 
   const handleSearch = (e) => {
-    setSearchQuery(e.target.value)
-    if (e.target.value.length >= 1) {
+    const a = e.target.value.replace(/[^\w\s]/gi, '')
+    setSearchQuery(a)
+    if (a.length >= 1) {
       axios
-        .get(getSearchedPharmaceuticalItemsUrl + '/' + e.target.value)
+        .get(getSearchedPharmaceuticalItemsUrl + '/' + a)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.items.length > 0) {
