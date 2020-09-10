@@ -898,10 +898,23 @@ function AddEditPatientListing(props) {
   }
 
   const onChangeValue = (e) => {
-    dispatch({
-      field: e.target.name,
-      value: e.target.value.replace(/[^\w.\s]/gi, ''),
-    })
+    if (
+      e.target.name === 'email' ||
+      e.target.name === 'phoneNumber' ||
+      e.target.name === 'mobileNumber' ||
+      e.target.name === 'emergencyContactNo'
+    ) {
+      dispatch({
+        field: e.target.name,
+        value: e.target.value,
+      })
+    } else {
+      dispatch({
+        field: e.target.name,
+        value: e.target.value.replace(/[^\w.\s]/gi, ''),
+      })
+    }
+
     if (e.target.value === 'Cash') {
       dispatch({ field: 'bankName', value: '' })
       setSlipUpload('')
@@ -1465,7 +1478,7 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
-                  type='number'
+                  // type='number'
                   label='Height (cm)'
                   name={'height'}
                   value={height}
@@ -1492,7 +1505,7 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
-                  type='number'
+                  // type='number'
                   label='Weight (kg)'
                   name={'weight'}
                   value={weight}
@@ -1562,12 +1575,12 @@ function AddEditPatientListing(props) {
               >
                 <TextField
                   required
-                  type='text'
+                  // type='text'
                   label='Telephone Number'
                   name={'phoneNumber'}
-                  error={phoneNumber === '' && isFormSubmitted}
                   value={phoneNumber}
                   onChange={onChangeValue}
+                  error={phoneNumber === '' && isFormSubmitted}
                   className='textInputStyle'
                   variant='filled'
                   InputProps={{
