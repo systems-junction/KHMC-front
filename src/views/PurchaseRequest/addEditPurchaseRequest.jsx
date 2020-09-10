@@ -330,6 +330,8 @@ function AddEditPurchaseRequest(props) {
 
   const [itemAdded, setItemAdded] = useState(false);
 
+  const [isItemFormSubmitted, setIsItemFormSubmitted] = useState(false);
+
   useEffect(() => {
     // const soc = socketIOClient(socketUrl);
     // setSocket(soc);
@@ -444,15 +446,27 @@ function AddEditPurchaseRequest(props) {
           .then((res) => {
             if (res.data.success) {
               if (props.history.location.state.manualAddPO) {
+                console.log("res after addng pr manually", res.data.data);
+                props.history.replace({
+                  pathname: "/home/wms/fus/medicinalorder/success",
+                  state: {
+                    message: `Purchase request ${res.data.data.requestNo} has been added successfully`,
+                  },
+                });
+                socket.emit("purchaseRequest");
+              } else {
+                // props.history.replace({
+                //   pathname: "/home/controlroom/wms/po/add",
+                //   state: { pr: res.data.data, comingFor: "add" },
+                // });
                 console.log("res after addng pr", res.data.data);
-                // socket.emit("purchaseRequest");
 
                 props.history.replace({
-                  pathname: "/home/controlroom/wms/po/add",
-                  state: { pr: res.data.data, comingFor: "add" },
+                  pathname: "/home/wms/fus/medicinalorder/success",
+                  state: {
+                    message: `Purchase request ${res.data.data.requestNo} has been added successfully`,
+                  },
                 });
-              } else {
-                props.history.goBack();
                 socket.emit("purchaseRequest");
               }
             } else if (!res.data.success) {
@@ -534,7 +548,13 @@ function AddEditPurchaseRequest(props) {
             .put(updatePurchaseRequestUrl, params)
             .then((res) => {
               if (res.data.success) {
-                props.history.goBack();
+                // props.history.goBack();
+                props.history.replace({
+                  pathname: "/home/wms/fus/medicinalorder/success",
+                  state: {
+                    message: `Purchase request ${requestNo} has been updated successfully`,
+                  },
+                });
               } else if (!res.data.success) {
                 setOpenNotification(true);
               }
@@ -617,7 +637,13 @@ function AddEditPurchaseRequest(props) {
           .put(updatePurchaseRequestUrl, params)
           .then((res) => {
             if (res.data.success) {
-              props.history.goBack();
+              // props.history.goBack();
+              props.history.replace({
+                pathname: "/home/wms/fus/medicinalorder/success",
+                state: {
+                  message: `Purchase request ${requestNo} status has been set to ${committeeStatus}`,
+                },
+              });
             } else if (!res.data.success) {
               setOpenNotification(true);
             }
@@ -709,6 +735,15 @@ function AddEditPurchaseRequest(props) {
     );
   }
 
+  function validateApproveForm() {
+    return (
+      committeeStatus !== "approved" &&
+      committeeStatus !== "reject" &&
+      committeeStatus !== "modify" &&
+      committeeStatus !== "hold"
+    );
+  }
+
   function hideDialog() {
     if (!itemAdded) {
       setDialogOpen(false);
@@ -739,6 +774,7 @@ function AddEditPurchaseRequest(props) {
     if (!validateItemsForm()) {
       setOpenNotification(true);
       setErrorMsg("Please fill the fields properly");
+      setIsItemFormSubmitted(true);
     }
     if (validateItemsForm()) {
       setDialogOpen(false);
@@ -788,6 +824,7 @@ function AddEditPurchaseRequest(props) {
       }
       setSelectedItem("");
       setSelectItemToEditId("");
+      setIsItemFormSubmitted(false);
 
       dispatch({ field: "itemId", value: "" });
       dispatch({ field: "description", value: "" });
@@ -798,6 +835,7 @@ function AddEditPurchaseRequest(props) {
       dispatch({ field: "vendorId", value: "" });
       dispatch({ field: "requestedQty", value: "" });
       dispatch({ field: "comments", value: "" });
+      dispatch({ field: "maximumLevel", value: "" });
     }
   };
 
@@ -817,7 +855,8 @@ function AddEditPurchaseRequest(props) {
   const editSelectedItem = () => {
     if (!validateItemsForm()) {
       setOpenNotification(true);
-      setErrorMsg("Please add the item first");
+      setErrorMsg("Please fill the fields properly");
+      setIsItemFormSubmitted(true);
     }
     if (validateItemsForm()) {
       setDialogOpen(false);
@@ -856,16 +895,18 @@ function AddEditPurchaseRequest(props) {
       setDialogOpen(false);
       setSelectedItem("");
       setSelectItemToEditId("");
+      setIsItemFormSubmitted(false);
 
       dispatch({ field: "itemId", value: "" });
       dispatch({ field: "description", value: "" });
       dispatch({ field: "currentQty", value: "" });
       dispatch({ field: "reqQty", value: "" });
-      dispatch({ field: "itemName", value: "" });
+      dispatch({ field: "name", value: "" });
       dispatch({ field: "itemCode", value: "" });
       dispatch({ field: "vendorId", value: "" });
       dispatch({ field: "requestedQty", value: "" });
       dispatch({ field: "comments", value: "" });
+      dispatch({ field: "maximumLevel", value: "" });
     }
   };
 
@@ -1537,7 +1578,7 @@ function AddEditPurchaseRequest(props) {
                       label="Item Code"
                       name={"itemCode"}
                       value={itemCode}
-                      error={itemCode === "" && isFormSubmitted}
+                      error={itemCode === "" && isItemFormSubmitted}
                       onChange={onChangeValue}
                       className="textInputStyle"
                       variant="filled"
@@ -1560,7 +1601,7 @@ function AddEditPurchaseRequest(props) {
                       label="Item Name"
                       name={"name"}
                       value={name}
-                      error={name === "" && isFormSubmitted}
+                      error={name === "" && isItemFormSubmitted}
                       onChange={onChangeValue}
                       className="textInputStyle"
                       variant="filled"
@@ -1587,7 +1628,7 @@ function AddEditPurchaseRequest(props) {
                       label="Current Qty"
                       name={"currentQty"}
                       value={currentQty}
-                      error={currentQty === "" && isFormSubmitted}
+                      error={currentQty === "" && isItemFormSubmitted}
                       onChange={onChangeValue}
                       className="textInputStyle"
                       variant="filled"
@@ -1611,7 +1652,7 @@ function AddEditPurchaseRequest(props) {
                       label="Maximum Level"
                       name={"maximumLevel"}
                       value={maximumLevel}
-                      error={maximumLevel === "" && isFormSubmitted}
+                      error={maximumLevel === "" && isItemFormSubmitted}
                       onChange={onChangeValue}
                       className="textInputStyle"
                       variant="filled"
@@ -1641,7 +1682,7 @@ function AddEditPurchaseRequest(props) {
                       label="Requested Qty"
                       name={"reqQty"}
                       value={reqQty}
-                      error={reqQty === "" && isFormSubmitted}
+                      error={reqQty === "" && isItemFormSubmitted}
                       onChange={onChangeValue}
                       className="textInputStyle"
                       variant="filled"
@@ -1667,7 +1708,7 @@ function AddEditPurchaseRequest(props) {
                       label="Description"
                       name={"description"}
                       value={description}
-                      error={description === "" && isFormSubmitted}
+                      error={description === "" && isItemFormSubmitted}
                       onChange={onChangeValue}
                       className="textInputStyle"
                       variant="filled"
@@ -1698,7 +1739,7 @@ function AddEditPurchaseRequest(props) {
                       label="Comments"
                       name={"comments"}
                       value={comments}
-                      error={comments === "" && isFormSubmitted}
+                      error={comments === "" && isItemFormSubmitted}
                       onChange={onChangeValue}
                       className="textInputStyle"
                       variant="filled"
@@ -1763,12 +1804,12 @@ function AddEditPurchaseRequest(props) {
             >
               <Button
                 style={styles.stylesForPurchaseButton}
-                // disabled={!validateForm()}
+                disabled={validateApproveForm()}
                 onClick={handleApprove}
                 variant="contained"
                 color="primary"
               >
-                <strong style={{ fontSize: "12px" }}> Submit</strong>
+                <strong style={{ fontSize: "12px" }}>Submit</strong>
               </Button>
             </div>
           ) : (
