@@ -634,7 +634,7 @@ function AddEditPatientListing(props)
     if (slipUpload) {
       formData.append('file', slipUpload, slipUpload.name)
     }
-    if (validatePatientForm() && validatePaymentForm()) {
+    // if (validatePatientForm() && validatePaymentForm()) {
       const params = {
         _id: patientId,
         profileNo,
@@ -703,7 +703,7 @@ function AddEditPatientListing(props)
           setOpenNotification(true)
           setErrorMsg('Patient with same MRN already exists')
         })
-    }
+    // }
     setIsFormSubmitted(true)
   }
 
@@ -1984,14 +1984,17 @@ function AddEditPatientListing(props)
                 
                 {currentUser.staffTypeId.type === 'EDR Receptionist' ? (
                   <Button
-                    style={comingFor === 'add' ? styles.generate : styles.None}
+                    style={styles.generate}
                     // disabled={comingFor === 'add' ? !isFormSubmitted : false}
                     disabled={
+                      comingFor === 'add' ?
                       !(
                         validatePatientForm() &&
                         validatePaymentForm() &&
                         isPatientSubmitted
                       )
+                      :
+                      false
                     }
                     onClick={
                       comingFor === 'add' ? handleGenerateEDR : handleEdit
@@ -2007,14 +2010,17 @@ function AddEditPatientListing(props)
 
                 {currentUser.staffTypeId.type === 'IPR Receptionist' ? (
                   <Button
-                    style={comingFor === 'add' ? styles.generate : styles.None}
+                    style={styles.generate}
                     // disabled={comingFor === 'add' ? !isFormSubmitted : false}
                     disabled={
+                      comingFor === 'add' ?
                       !(
                         validatePatientForm() &&
                         validatePaymentForm() &&
                         isPatientSubmitted
                       )
+                      :
+                      false
                     }
                     onClick={
                       comingFor === 'add' ? handleGenerateIPR : handleEdit
@@ -2436,14 +2442,15 @@ function AddEditPatientListing(props)
                 {currentUser.staffTypeId.type === 'EDR Receptionist' ? (
                   <Button
                     style={styles.generate}
-                    //disabled={!validatePatientForm()}
-                    // disabled={comingFor === 'add' ? !isFormSubmitted : false}
                     disabled={
+                      comingFor === 'add' ?
                       !(
                         validatePatientForm() &&
                         validatePaymentForm() &&
                         isPatientSubmitted
                       )
+                      :
+                      false
                     }
                     onClick={
                       comingFor === 'add' ? handleGenerateEDR : handleEdit
@@ -2462,11 +2469,14 @@ function AddEditPatientListing(props)
                     style={styles.generate}
                     // disabled={comingFor === 'add' ? !isFormSubmitted : false}
                     disabled={
+                      comingFor === 'add' ?
                       !(
                         validatePatientForm() &&
                         validatePaymentForm() &&
                         isPatientSubmitted
                       )
+                      :
+                      false
                     }
                     onClick={
                       comingFor === 'add' ? handleGenerateIPR : handleEdit
@@ -2848,11 +2858,14 @@ function AddEditPatientListing(props)
                     style={styles.generate}
                     // disabled={comingFor === 'add' ? !isFormSubmitted : false}
                     disabled={
+                      comingFor === 'add' ?
                       !(
                         validatePatientForm() &&
                         validatePaymentForm() &&
                         isPatientSubmitted
                       )
+                      :
+                      false
                     }
                     onClick={
                       comingFor === 'add' ? handleGenerateEDR : handleEdit
@@ -2868,14 +2881,15 @@ function AddEditPatientListing(props)
                 {currentUser.staffTypeId.type === 'IPR Receptionist' ? (
                   <Button
                     style={styles.generate}
-                    // disabled={comingFor === 'add' ? !isFormSubmitted : false}
-
                     disabled={
+                      comingFor === 'add' ?
                       !(
                         validatePatientForm() &&
                         validatePaymentForm() &&
                         isPatientSubmitted
                       )
+                      :
+                      false
                     }
                     onClick={
                       comingFor === 'add' ? handleGenerateIPR : handleEdit

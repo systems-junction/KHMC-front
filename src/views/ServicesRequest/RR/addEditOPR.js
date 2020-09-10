@@ -575,8 +575,6 @@ function AddEditPatientListing(props) {
         gender,
         dob,
         age,
-        // height,
-        // weight,
         bloodGroup,
         phoneNumber,
         mobileNumber,
@@ -607,7 +605,6 @@ function AddEditPatientListing(props) {
       }
       formData.append('data', JSON.stringify(params))
       console.log('PARAMSS ', params)
-      // console.log("DATAAA ", formData);
       axios
         .post(addPatientUrl, formData, {
           headers: {
@@ -619,12 +616,11 @@ function AddEditPatientListing(props) {
         .then((res) => {
           if (res.data.success) {
             console.log(res.data.data, 'patients data')
-            // console.log(res.data.data._id, "patient id");
             setPatientId(res.data.data._id)
             setMRN(res.data.data.profileNo)
             setIsPatientSubmitted(true)
             setOpenNotification(true)
-            setsuccessMsg('Patient details saved successfully')
+            setsuccessMsg('Patient details saved successfully, Generate OP now')
           } else if (!res.data.success) {
             setOpenNotification(true)
           }
@@ -632,7 +628,7 @@ function AddEditPatientListing(props) {
         .catch((e) => {
           console.log('error after adding patient details', e)
           setOpenNotification(true)
-          setErrorMsg('Error while adding the patient details')
+          setErrorMsg('Patient already exists')
         })
     }
     setIsFormSubmitted(true)
@@ -653,9 +649,7 @@ function AddEditPatientListing(props) {
         lastName,
         nationality,
         gender,
-        // height,
         age,
-        weight,
         bloodGroup,
         dob,
         phoneNumber,
@@ -685,8 +679,7 @@ function AddEditPatientListing(props) {
         otherCoverageDetails,
       }
       formData.append('data', JSON.stringify(params))
-      // console.log('PARAMSS ', params)
-      // console.log("DATAAA ", formData);
+      console.log('PARAMSS ', params)
       axios
         .put(updatePatientUrl, formData)
         .then((res) => {
@@ -1036,7 +1029,7 @@ function AddEditPatientListing(props) {
           >
             {comingFor === 'add' ? (
               <>
-                <div className='row' style={{ marginTop: '20px' }}>
+                <div className='row' style={{ marginTop: '20px',marginBottom:'10px' }}>
                   <div
                     className='col-md-10 col-sm-8 col-8'
                     style={{
