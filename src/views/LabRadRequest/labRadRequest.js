@@ -996,9 +996,9 @@ function LabRadRequest(props) {
           <div>
             <img src={Lab_RadIcon} />
             <h4>
-              {value === 3
+              {value === 2
                 ? 'Lab Request'
-                : value === 4
+                : value === 3
                 ? 'Radiology Request'
                 : 'Lab / Rad Request'}
             </h4>

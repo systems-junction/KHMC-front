@@ -51,7 +51,7 @@ const tableHeadingForResident = [
 const tableDataKeysForResident = [
   'date',
   'description',
-  ['doctor', 'firstName'],
+  'doctorName'
 ]
 const tableHeadingForConsultation = [
   // 'Consultation ID',
@@ -66,7 +66,7 @@ const tableDataKeysForConsultation = [
   'date',
   'description',
   'specialist',
-  ['requester', 'firstName'],
+  'doctorName'
 ]
 const tableHeadingForPharmacy = [
   'Request ID',
@@ -78,7 +78,7 @@ const tableHeadingForPharmacy = [
 const tableDataKeysForPharmacy = [
   'PRrequestNo',
   'date',
-  ['requester', 'firstName'],
+  'doctorName',
   'status',
 ]
 const tableHeadingForLabReq = [
@@ -1029,38 +1029,35 @@ function LabRadRequest(props) {
 
             Object.entries(res.data.data).map(([key, val]) => {
               if (val && typeof val === 'object') {
-                if (key === 'patientId') {
-                  dispatch({ field: 'patientId', value: val._id })
-                } else if (key === 'labRequest') {
+              if (key === "patientId") {
+                    dispatch({ field: "patientId", value: val._id });
+                } else if (key === 'labRequest') 
+                {
                   dispatch({ field: 'labRequestArray', value: val })
-                } else if (key === 'radiologyRequest') {
+                } else if (key === 'radiologyRequest') 
+                {
                   dispatch({ field: 'radiologyRequestArray', value: val })
-                } else if (key === 'consultationNote') {
-                  Object.entries(val).map(([key1, val1]) => {
-                    if (key1 == 'requester') {
-                      dispatch({ field: 'requester', value: val1._id })
-                    } else {
-                      dispatch({ field: key1, value: val1 })
-                    }
-                  })
+                } else if (key === 'consultationNote') 
+                {
+                  val.map(
+                    (d) => (d.doctorName = d.requester ? d.requester.firstName + ' ' + d.requester.lastName : ''))
                   dispatch({ field: 'consultationNoteArray', value: val })
-                } else if (key === 'residentNotes') {
-                  Object.entries(val).map(([key1, val1]) => {
-                    if (key1 == 'doctor') {
-                      dispatch({ field: 'doctor', value: val1._id })
-                    } else {
-                      dispatch({ field: key1, value: val1 })
-                    }
-                  })
+                } else if (key === 'residentNotes') 
+                {
+                  val.map(
+                    (d) => (d.doctorName = d.doctor ? d.doctor.firstName + ' ' + d.doctor.lastName : ''))
                   dispatch({ field: 'residentNoteArray', value: val })
-                } else if (key === 'pharmacyRequest') {
+                } else if (key === 'pharmacyRequest') 
+                {
+                  val.map(
+                    (d) => (d.doctorName = d.requester ? d.requester.firstName + ' ' + d.requester.lastName : ''))
                   dispatch({ field: 'pharmacyRequestArray', value: val })
-                } else if (key === 'nurseService') {
-                  dispatch({ field: 'nurseService', value: val })
                 }
+                //  else if (key === "nurseService") {
+                //     dispatch({ field: "nurseService", value: val });
+                // }
               } else {
                 dispatch({ field: key, value: val })
-                // console.log("here",key,val)
               }
             })
           }
@@ -1112,9 +1109,9 @@ function LabRadRequest(props) {
           <div>
             <img src={Lab_RadIcon} />
             <h4>
-              {value === 3
+              {value === 2
                 ? 'Lab Request'
-                : value === 4
+                : value === 3
                 ? 'Radiology Request'
                 : 'Lab / Rad Request'}
             </h4>
