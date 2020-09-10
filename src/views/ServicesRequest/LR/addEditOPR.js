@@ -804,10 +804,11 @@ function AddEditPatientListing(props) {
   }
 
   const handleSearch = (e) => {
-    setSearchQuery(e.target.value)
-    if (e.target.value.length >= 3) {
+    const a = e.target.value.replace(/[^\w\s]/gi, '')
+    setSearchQuery(a)
+    if (a.length >= 3) {
       axios
-        .get(getSearchedpatient + '/' + e.target.value)
+        .get(getSearchedpatient + '/' + a)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
