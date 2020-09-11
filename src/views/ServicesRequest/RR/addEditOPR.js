@@ -412,6 +412,7 @@ function AddEditPatientListing(props) {
   const [MRN, setMRN] = useState('')
   const [isPatientSubmitted, setIsPatientSubmitted] = useState(false)
   const [enableForm, setenableForm] = useState(true)
+  const [enableNext, setenableNext] = useState(true)
 
   useEffect(() => {
     setcomingFor(props.history.location.state.comingFor)
@@ -876,6 +877,11 @@ function AddEditPatientListing(props) {
     if (i.paymentMethod === 'Insurance') {
       setenableForm(false)
       setInsuranceForm(false)
+      setenableNext(false)
+    }
+    if (i.paymentMethod === 'Cash') {
+      setenableForm(true)
+      setenableNext(true)
     }
   }
 
@@ -912,6 +918,7 @@ function AddEditPatientListing(props) {
       dispatch({ field: 'coveredFamilyMembers', value: '' })
       dispatch({ field: 'otherCoverageDetails', value: '' })
       setenableForm(true)
+      setenableNext(true)
     } else if (e.target.value === 'Insurance') {
       dispatch({ field: 'depositorName', value: '' })
       dispatch({ field: 'amountReceived', value: '' })
@@ -921,6 +928,7 @@ function AddEditPatientListing(props) {
       setpdfView('')
       setInsuranceForm(false)
       setenableForm(false)
+      setenableNext(false)
     } else if (e.target.value === 'WireTransfer') {
       dispatch({ field: 'amountReceived', value: '' })
       setInsuranceForm(true)
@@ -2452,6 +2460,7 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <Button
+                  disabled={enableNext}
                   style={styles.stylesForButton}
                   onClick={onClick}
                   variant='contained'
