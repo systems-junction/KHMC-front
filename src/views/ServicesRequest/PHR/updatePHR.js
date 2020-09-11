@@ -218,7 +218,12 @@ function AddEditPurchaseRequest(props) {
           console.log(res.data.data.medicine, 'data')
 
           res.data.data.medicine.map(
-            (d) => (d.total = d.itemId.receiptUnitCost * d.requestedQty)
+            (d) =>
+              (d.itemId.receiptUnitCost = d.itemId.receiptUnitCost.toFixed(2))
+          )
+          res.data.data.medicine.map(
+            (d) =>
+              (d.total = (d.itemId.receiptUnitCost * d.requestedQty).toFixed(2))
           )
           if (res.data.data) {
             setRequestId(res.data.data._id)
@@ -505,6 +510,54 @@ function AddEditPurchaseRequest(props) {
                   </InputLabel>
                   <span>{requestNo}</span>
                 </div>
+              </div>
+            </div>
+          </div> */}
+
+          <div
+            style={{
+              height: '20px',
+            }}
+          />
+          {/* <div className='container-fluid'>
+            <div className='row'>
+              <div
+                className='col-md-12 col-sm-12'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  fullWidth
+                  select
+                  labelId='status-label'
+                  id='status'
+                  variant='filled'
+                  name='status'
+                  value={status}
+                  onChange={(e) => onChangeValue(e)}
+                  label='Status'
+                  className='dropDownStyle'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                  input={<BootstrapInput />}
+                >
+                  <MenuItem value=''>
+                    <em>None</em>
+                  </MenuItem>
+                  {console.log(statusArray, 'status')}
+                  {statusArray &&
+                    statusArray.map((val) => {
+                      return (
+                        <MenuItem key={val.key} value={val.key}>
+                          {val.value}
+                        </MenuItem>
+                      )
+                    })}
+                </TextField>
               </div>
             </div>
           </div> */}
