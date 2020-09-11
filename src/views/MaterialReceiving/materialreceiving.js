@@ -19,7 +19,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import Header from "../../components/Header/Header";
 
 import Add_New from "../../assets/img/Add_New.png";
-import business_Unit from "../../assets/img/Material Receiving.png";
+import business_Unit from "../../assets/img/Receive Item.png";
 
 import Search from "../../assets/img/Search.png";
 import Control_Room from "../../assets/img/Control_Room.png";

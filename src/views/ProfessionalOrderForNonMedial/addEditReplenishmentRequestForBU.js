@@ -359,6 +359,12 @@ function AddEditPurchaseRequest(props) {
   }, []);
 
   const onChangeValue = (e) => {
+    var pattern = /^[a-zA-Z0-9 ]*$/;
+    if (e.target.type === "text") {
+      if (pattern.test(e.target.value) === false) {
+        return;
+      }
+    }
     dispatch({ field: e.target.name, value: e.target.value });
   };
 
@@ -570,6 +576,12 @@ function AddEditPurchaseRequest(props) {
   }
 
   const handleSearch = (e) => {
+    var pattern = /^[a-zA-Z0-9 ]*$/;
+    if (e.target.type === "text") {
+      if (pattern.test(e.target.value) === false) {
+        return;
+      }
+    }
     setSearchQuery(e.target.value);
     // if (e.target.value.length >= 3) {
     axios
@@ -1180,16 +1192,11 @@ function AddEditPurchaseRequest(props) {
                   type="text"
                   label="Notes/Comments"
                   name={"comments"}
-                  //  value={searchQuery}
-                  //  onChange={handleSearch}
+                  value={comments}
+                  onChange={onChangeValue}
                   className={classes.margin}
                   variant="filled"
                   InputProps={{
-                    // endAdornment: (
-                    //   <InputAdornment position="end">
-                    //     <AccountCircle />
-                    //   </InputAdornment>
-                    // ),
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
