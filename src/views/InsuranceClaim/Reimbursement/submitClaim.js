@@ -10,7 +10,7 @@ import {
   getSearchedpatient,
   addClaim,
   getedripr,
-  uploadsUrl
+  uploadsUrl,
 } from '../../../public/endpoins'
 import axios from 'axios'
 import Notification from '../../../components/Snackbar/Notification.js'
@@ -29,7 +29,7 @@ import InputLabel from '@material-ui/core/InputLabel'
 import Paper from '@material-ui/core/Paper'
 import CustomTable from '../../../components/Table/Table'
 import MenuItem from '@material-ui/core/MenuItem'
-import Loader from "react-loader-spinner";
+import Loader from 'react-loader-spinner'
 import AccountCircle from '@material-ui/icons/SearchOutlined'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import BarCode from '../../../assets/img/Bar Code.png'
@@ -235,7 +235,7 @@ function AddEditPatientListing(props) {
     setcomingFor(props.history.location.state.comingFor)
 
     const selectedRec = props.history.location.state.selectedItem
-    console.log("selected rec is ... ", selectedRec)
+    console.log('selected rec is ... ', selectedRec)
 
     if (selectedRec) {
       setClaimId(selectedRec._id)
@@ -401,13 +401,12 @@ function AddEditPatientListing(props) {
 
     setDocumentUpload(file)
     var reader = new FileReader()
-    var url = reader.readAsDataURL(file);
+    var url = reader.readAsDataURL(file)
 
-    reader.onloadend = function () {
+    reader.onloadend = function() {
       if (fileType === 'pdf') {
         setpdfView(file.name)
-      }
-      else {
+      } else {
         setImagePreview([reader.result])
       }
     }
@@ -434,10 +433,11 @@ function AddEditPatientListing(props) {
   }
 
   const handleSearch = (e) => {
-    setSearchQuery(e.target.value)
-    if (e.target.value.length >= 3) {
+    const a = e.target.value.replace(/[^\w\s]/gi, '')
+    setSearchQuery(a)
+    if (a.length >= 3) {
       axios
-        .get(getSearchedpatient + '/' + e.target.value)
+        .get(getSearchedpatient + '/' + a)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
@@ -477,9 +477,12 @@ function AddEditPatientListing(props) {
       .get(getedripr + '/' + i)
       .then((res) => {
         if (res.data.success) {
-          console.log("response for search", res.data.data)
+          console.log('response for search', res.data.data)
 
-          dispatch({ field: 'treatmentDetail', value: res.data.data.rc.treatmentDetail })
+          dispatch({
+            field: 'treatmentDetail',
+            value: res.data.data.rc.treatmentDetail,
+          })
           dispatch({ field: 'document', value: res.data.data.rc.document })
 
           let prEDR = []
@@ -549,9 +552,7 @@ function AddEditPatientListing(props) {
             <img src={claimsReview} />
             <div style={{ flex: 4, display: 'flex', alignItems: 'center' }}>
               <h4>
-                {comingFor === 'add'
-                  ? ' Claim Review'
-                  : ' Edit Claim Review'}
+                {comingFor === 'add' ? ' Claim Review' : ' Edit Claim Review'}
               </h4>
             </div>
           </div>
@@ -562,7 +563,7 @@ function AddEditPatientListing(props) {
           <Tabs
             value={value}
             onChange={handleChange}
-            textColor="primary"
+            textColor='primary'
             TabIndicatorProps={{ style: { background: '#12387a' } }}
             centered
           >
@@ -571,7 +572,7 @@ function AddEditPatientListing(props) {
                 color: 'white',
                 borderRadius: 10,
                 outline: 'none',
-                color: value === 0 ? "#12387a" : '#3B988C',
+                color: value === 0 ? '#12387a' : '#3B988C',
               }}
               label='Treatment Details'
             />
@@ -580,7 +581,7 @@ function AddEditPatientListing(props) {
                 color: 'white',
                 borderRadius: 10,
                 outline: 'none',
-                color: value === 1 ? "#12387a" : '#3B988C',
+                color: value === 1 ? '#12387a' : '#3B988C',
               }}
               label='Bill Summary'
             />
@@ -599,8 +600,8 @@ function AddEditPatientListing(props) {
                       className='col-md-10 col-sm-8 col-8'
                       style={{
                         ...styles.inputContainerForTextField,
-                        paddingLeft:0,
-                        paddingRight:0
+                        paddingLeft: 0,
+                        paddingRight: 0,
                       }}
                     >
                       <TextField
@@ -619,7 +620,7 @@ function AddEditPatientListing(props) {
                           ),
                           className: classes.input,
                           classes: { input: classes.input },
-                          disableUnderline: true
+                          disableUnderline: true,
                         }}
                       />
                     </div>
@@ -708,22 +709,22 @@ function AddEditPatientListing(props) {
                             </Table>
                           )
                         ) : (
-                            <h4
-                              style={{ textAlign: 'center' }}
-                              onClick={() => setSearchQuery('')}
-                            >
-                              Patient Not Found
-                            </h4>
-                          )}
+                          <h4
+                            style={{ textAlign: 'center' }}
+                            onClick={() => setSearchQuery('')}
+                          >
+                            Patient Not Found
+                          </h4>
+                        )}
                       </Paper>
                     </div>
                   ) : (
-                      undefined
-                    )}
+                    undefined
+                  )}
                 </div>
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
             </div>
 
             <div className='container' style={styles.patientDetails}>
@@ -841,14 +842,17 @@ function AddEditPatientListing(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
-                    disableUnderline: true
+                    disableUnderline: true,
                   }}
                 />
               </div>
             </div>
 
             {comingFor === 'edit' ? (
-              <div className={`container ${classes.root}`} style={{ marginTop: '10px' }}>
+              <div
+                className={`container ${classes.root}`}
+                style={{ marginTop: '10px' }}
+              >
                 <div className='row'>
                   <TextField
                     required
@@ -865,7 +869,7 @@ function AddEditPatientListing(props) {
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
-                      disableUnderline: true
+                      disableUnderline: true,
                     }}
                   >
                     <MenuItem value={status}>{status}</MenuItem>
@@ -881,8 +885,8 @@ function AddEditPatientListing(props) {
                 </div>
               </div>
             ) : (
-                undefined
-              )}
+              undefined
+            )}
 
             <div className='container'>
               <div
@@ -900,87 +904,116 @@ function AddEditPatientListing(props) {
                     name='document'
                   />
                   <FaUpload /> &nbsp;&nbsp;&nbsp;Upload Document
-                  </label>
+                </label>
 
-                {pdfView !== "" ? (
+                {pdfView !== '' ? (
                   <div
-                    style={{ textAlign: 'center', color: '#2c6ddd', fontStyle: 'italic' }}
+                    style={{
+                      textAlign: 'center',
+                      color: '#2c6ddd',
+                      fontStyle: 'italic',
+                    }}
                   >
-                    <span style={{ color: 'black' }}>Selected File : </span>{pdfView}
+                    <span style={{ color: 'black' }}>Selected File : </span>
+                    {pdfView}
                   </div>
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
 
               <div className='row'>
-                {document !== "" && document.includes('\\') ? (
+                {document !== '' && document.includes('\\') ? (
                   <>
-                    {document !== "" && document.slice(document.length - 3) !== 'pdf' ? (
-                      <div className='col-md-6 col-sm-6 col-6'
+                    {document !== '' &&
+                    document.slice(document.length - 3) !== 'pdf' ? (
+                      <div
+                        className='col-md-6 col-sm-6 col-6'
                         style={{
                           ...styles.inputContainerForTextField,
-                        }}>
-
-                        <img src={uploadsUrl + document.split('\\')[1]} className="depositSlipImg" />
+                        }}
+                      >
+                        <img
+                          src={uploadsUrl + document.split('\\')[1]}
+                          className='depositSlipImg'
+                        />
                       </div>
-                    ) : document !== "" && document.slice(document.length - 3) === 'pdf' ? (
-                      <div className='col-md-6 col-sm-6 col-6'
+                    ) : document !== '' &&
+                      document.slice(document.length - 3) === 'pdf' ? (
+                      <div
+                        className='col-md-6 col-sm-6 col-6'
                         style={{
                           ...styles.inputContainerForTextField,
-                        }}>
-                        <a href={uploadsUrl + document.split('\\')[1]} style={{ color: '#2c6ddd' }}>Click here to open document</a>
+                        }}
+                      >
+                        <a
+                          href={uploadsUrl + document.split('\\')[1]}
+                          style={{ color: '#2c6ddd' }}
+                        >
+                          Click here to open document
+                        </a>
                       </div>
                     ) : (
-                          undefined
-                        )}
-                  </>
-                ) : document !== "" && document.includes('/') ? (
-                  <>
-                    {document !== "" && document.slice(document.length - 3) !== 'pdf' ? (
-                      <div className='col-md-6 col-sm-6 col-6'
-                        style={{
-                          ...styles.inputContainerForTextField,
-                        }}>
-
-                        <img src={uploadsUrl + document} className="depositSlipImg" />
-                      </div>
-                    ) : document !== "" && document.slice(document.length - 3) === 'pdf' ? (
-                      <div className='col-md-6 col-sm-6 col-6'
-                        style={{
-                          ...styles.inputContainerForTextField,
-                        }}>
-                        <a href={uploadsUrl + document} style={{ color: '#2c6ddd' }}>Click here to open document</a>
-                      </div>
-                    ) : (
-                          undefined
-                        )}
-                  </>
-                ) : (
                       undefined
                     )}
+                  </>
+                ) : document !== '' && document.includes('/') ? (
+                  <>
+                    {document !== '' &&
+                    document.slice(document.length - 3) !== 'pdf' ? (
+                      <div
+                        className='col-md-6 col-sm-6 col-6'
+                        style={{
+                          ...styles.inputContainerForTextField,
+                        }}
+                      >
+                        <img
+                          src={uploadsUrl + document}
+                          className='depositSlipImg'
+                        />
+                      </div>
+                    ) : document !== '' &&
+                      document.slice(document.length - 3) === 'pdf' ? (
+                      <div
+                        className='col-md-6 col-sm-6 col-6'
+                        style={{
+                          ...styles.inputContainerForTextField,
+                        }}
+                      >
+                        <a
+                          href={uploadsUrl + document}
+                          style={{ color: '#2c6ddd' }}
+                        >
+                          Click here to open document
+                        </a>
+                      </div>
+                    ) : (
+                      undefined
+                    )}
+                  </>
+                ) : (
+                  undefined
+                )}
 
-                {imagePreview !== "" ? (
-                  <div className='col-md-6 col-sm-6 col-6'
+                {imagePreview !== '' ? (
+                  <div
+                    className='col-md-6 col-sm-6 col-6'
                     style={{
                       ...styles.inputContainerForTextField,
-                    }}>
-                    <img src={imagePreview} className="depositSlipImg" />
-                    {document !== "" ? (
-                      <div
-                        style={{ color: 'black', textAlign: 'center' }}
-                      >
+                    }}
+                  >
+                    <img src={imagePreview} className='depositSlipImg' />
+                    {document !== '' ? (
+                      <div style={{ color: 'black', textAlign: 'center' }}>
                         New document
                       </div>
-
                     ) : (
-                        undefined
-                      )}
-
+                      undefined
+                    )}
                   </div>
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
             </div>
 
@@ -1017,16 +1050,16 @@ function AddEditPatientListing(props) {
                     Next
                   </Button>
                 ) : (
-                    <Button
-                      style={styles.stylesForButton}
-                      //disabled={!validateFormType1()}
-                      onClick={handleEdit}
-                      variant='contained'
-                      color='default'
-                    >
-                      Update
-                    </Button>
-                  )}
+                  <Button
+                    style={styles.stylesForButton}
+                    //disabled={!validateFormType1()}
+                    onClick={handleEdit}
+                    variant='contained'
+                    color='default'
+                  >
+                    Update
+                  </Button>
+                )}
               </div>
             </div>
           </div>
@@ -1047,8 +1080,8 @@ function AddEditPatientListing(props) {
                   borderBottomWidth={20}
                 />
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
             </div>
 
             <div
@@ -1083,24 +1116,28 @@ function AddEditPatientListing(props) {
                     Submit
                   </Button>
                 ) : (
-                    <Button
-                      style={styles.stylesForButton}
-                      //disabled={!validateFormType1()}
-                      onClick={handleEdit}
-                      variant='contained'
-                      color='default'
-                    >
-                      Update
-                    </Button>
-                  )}
+                  <Button
+                    style={styles.stylesForButton}
+                    //disabled={!validateFormType1()}
+                    onClick={handleEdit}
+                    variant='contained'
+                    color='default'
+                  >
+                    Update
+                  </Button>
+                )}
               </div>
             </div>
           </div>
         ) : (
-              undefined
-            )}
+          undefined
+        )}
 
-        <Notification msg={errorMsg} open={openNotification} success={successMsg} />
+        <Notification
+          msg={errorMsg}
+          open={openNotification}
+          success={successMsg}
+        />
       </div>
     </div>
   )

@@ -49,11 +49,7 @@ const tableHeadingForResident = [
   'Doctor Ref',
   'Action',
 ]
-const tableDataKeysForResident = [
-  'date',
-  'description',
-  'doctorName'
-]
+const tableDataKeysForResident = ['date', 'description', 'doctorName']
 const tableHeadingForConsultation = [
   'Date/Time',
   'Description/Condition',
@@ -65,7 +61,7 @@ const tableDataKeysForConsultation = [
   'date',
   'description',
   'specialist',
-  'doctorName'
+  'doctorName',
 ]
 const tableHeadingForPharmacy = [
   'Request ID',
@@ -74,12 +70,7 @@ const tableHeadingForPharmacy = [
   'Status',
   'Action',
 ]
-const tableDataKeysForPharmacy = [
-  'PRrequestNo',
-  'date',
-  'doctorName',
-  'status',
-]
+const tableDataKeysForPharmacy = ['PRrequestNo', 'date', 'doctorName', 'status']
 const tableHeadingForLabReq = [
   'Request Id',
   'Service Code',
@@ -414,6 +405,7 @@ function LabRadRequest(props) {
   const [addNurseRequest, setaddNurseRequest] = useState(false)
   const [searchNurseQuery, setSearchNurseQuery] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+  const [enableSave, setEnableSave] = useState(true)
 
   useEffect(() => {
     setCurrentUser(cookie.load('current_user'))
@@ -694,6 +686,7 @@ function LabRadRequest(props) {
     dispatch({ field: 'labComments', value: '' })
 
     setaddLabRequest(false)
+    setEnableSave(false)
   }
 
   const saveLabReq = () => {
@@ -836,6 +829,7 @@ function LabRadRequest(props) {
     dispatch({ field: 'radioComments', value: '' })
 
     setaddLabRequest(false)
+    setEnableSave(false)
   }
 
   const saveRadioReq = () => {
@@ -1049,28 +1043,35 @@ function LabRadRequest(props) {
 
             Object.entries(res.data.data).map(([key, val]) => {
               if (val && typeof val === 'object') {
-               if (key === "patientId") {
-                    dispatch({ field: "patientId", value: val._id });
-                } else if (key === 'labRequest') 
-                {
+                if (key === 'patientId') {
+                  dispatch({ field: 'patientId', value: val._id })
+                } else if (key === 'labRequest') {
                   dispatch({ field: 'labRequestArray', value: val })
-                } else if (key === 'radiologyRequest') 
-                {
+                } else if (key === 'radiologyRequest') {
                   dispatch({ field: 'radiologyRequestArray', value: val })
-                } else if (key === 'consultationNote') 
-                {
+                } else if (key === 'consultationNote') {
                   val.map(
-                    (d) => (d.doctorName = d.requester ? d.requester.firstName + ' ' + d.requester.lastName : ''))
+                    (d) =>
+                      (d.doctorName = d.requester
+                        ? d.requester.firstName + ' ' + d.requester.lastName
+                        : '')
+                  )
                   dispatch({ field: 'consultationNoteArray', value: val })
-                } else if (key === 'residentNotes') 
-                {
+                } else if (key === 'residentNotes') {
                   val.map(
-                    (d) => (d.doctorName = d.doctor ? d.doctor.firstName + ' ' + d.doctor.lastName : ''))
+                    (d) =>
+                      (d.doctorName = d.doctor
+                        ? d.doctor.firstName + ' ' + d.doctor.lastName
+                        : '')
+                  )
                   dispatch({ field: 'residentNoteArray', value: val })
-                } else if (key === 'pharmacyRequest') 
-                {
+                } else if (key === 'pharmacyRequest') {
                   val.map(
-                    (d) => (d.doctorName = d.requester ? d.requester.firstName + ' ' + d.requester.lastName : ''))
+                    (d) =>
+                      (d.doctorName = d.requester
+                        ? d.requester.firstName + ' ' + d.requester.lastName
+                        : '')
+                  )
                   dispatch({ field: 'pharmacyRequestArray', value: val })
                 }
                 //  else if (key === "nurseService") {
@@ -1138,9 +1139,7 @@ function LabRadRequest(props) {
         <div className='subheader'>
           <div>
             <img src={Lab_RadIcon} />
-            <h4>
-              Consultation Request
-            </h4>
+            <h4>Consultation Request</h4>
           </div>
 
           <div>
@@ -1752,7 +1751,8 @@ function LabRadRequest(props) {
               <div className='row' style={{ marginBottom: '25px' }}>
                 <div className='col-md-12 col-sm-12 col-12 d-flex justify-content-end'>
                   <Button
-                    disabled={enableForm}
+                    // disabled={enableForm}
+                    disabled={enableSave}
                     onClick={saveLabReq}
                     style={{ ...styles.stylesForButton, width: '100px' }}
                     variant='contained'
@@ -1926,7 +1926,8 @@ function LabRadRequest(props) {
               <div className='row' style={{ marginBottom: '25px' }}>
                 <div className='col-md-12 col-sm-12 col-12 d-flex justify-content-end'>
                   <Button
-                    disabled={enableForm}
+                    // disabled={enableForm}
+                    disabled={enableSave}
                     onClick={saveRadioReq}
                     style={{ ...styles.stylesForButton, width: '100px' }}
                     variant='contained'
