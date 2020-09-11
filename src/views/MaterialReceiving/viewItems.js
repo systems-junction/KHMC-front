@@ -43,7 +43,7 @@ import AddedPurchaseRequestTable from "../PurchaseOrders/addedPurchaseRequestTab
 
 import CustomTable from "../../components/Table/Table";
 
-import AddEditReceiveItems from "../ReceiveItems/addEditReceiveItems";
+import AddEditReceiveItems from "./addEditReceiveItems";
 
 const tableHeading = [
   "Item Code",
@@ -58,7 +58,7 @@ const tableDataKeys = [
   ["itemId", "name"],
   "reqQty",
   ["itemId", "purchasePrice"],
-  'status'
+  "status",
 ];
 
 const actions = { receiveItem: true };
@@ -279,7 +279,6 @@ function AddEditPurchaseRequest(props) {
 
   return (
     <div>
-      
       <CustomTable
         tableData={items}
         tableDataKeys={tableDataKeys}

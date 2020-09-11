@@ -530,7 +530,7 @@ function AddEditPurchaseRequest(props) {
   }
 
   const onChangeValue = (e) => {
-    var pattern = /^[a-zA-Z0-9]*$/;
+    var pattern = /^[a-zA-Z0-9 ]*$/;
     if (e.target.type === "text") {
       if (pattern.test(e.target.value) === false) {
         return;
@@ -753,7 +753,7 @@ function AddEditPurchaseRequest(props) {
   }
 
   const handlePatientSearch = (e) => {
-    var pattern = /^[a-zA-Z0-9]*$/;
+    var pattern = /^[a-zA-Z0-9 ]*$/;
     if (e.target.type === "text") {
       if (pattern.test(e.target.value) === false) {
         return;
@@ -812,7 +812,7 @@ function AddEditPurchaseRequest(props) {
   }
 
   const handleSearch = (e) => {
-    var pattern = /^[a-zA-Z0-9]*$/;
+    var pattern = /^[a-zA-Z0-9 ]*$/;
     if (e.target.type === "text") {
       if (pattern.test(e.target.value) === false) {
         return;

@@ -382,6 +382,12 @@ function AddEditPurchaseRequest(props) {
   }
 
   const onChangeValue = (e) => {
+    var pattern = /^[a-zA-Z0-9 ]*$/;
+    if (e.target.type === "text") {
+      if (pattern.test(e.target.value) === false) {
+        return;
+      }
+    }
     dispatch({ field: e.target.name, value: e.target.value });
   };
 
