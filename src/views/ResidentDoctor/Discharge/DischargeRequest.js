@@ -185,7 +185,10 @@ function DischargeRequest(props) {
   } = state
 
   const onChangeValue = (e) => {
-    dispatch({ field: e.target.name, value: e.target.value })
+    dispatch({
+      field: e.target.name,
+      value: e.target.value.replace(/[^\w\s]/gi, ''),
+    })
   }
 
   const [, setCurrentUser] = useState('')

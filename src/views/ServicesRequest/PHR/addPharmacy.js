@@ -671,10 +671,11 @@ function AddEditEDR(props) {
   }
 
   const handleSearch = (e) => {
-    setSearchQuery(e.target.value)
-    if (e.target.value.length >= 1) {
+    const a = e.target.value.replace(/[^\w\s]/gi, '')
+    setSearchQuery(a)
+    if (a.length >= 1) {
       axios
-        .get(getSearchedPharmaceuticalItemsUrl + '/' + e.target.value)
+        .get(getSearchedPharmaceuticalItemsUrl + '/' + a)
         .then((res) => {
           if (res.data.success) {
             console.log('res', res)
