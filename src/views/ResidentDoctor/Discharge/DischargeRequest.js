@@ -408,8 +408,8 @@ function DischargeRequest(props) {
   function validateDischargeForm() 
   {
     return (
-      dischargeMedArray &&
-      dischargeMedArray[0].medicine.length !== 0 &&
+      // dischargeMedArray &&
+      // dischargeMedArray[0].medicine.length !== 0 &&
       dischargeNotes !== '' &&
       otherNotes !== ''
     )
