@@ -592,7 +592,7 @@ export default function EdrRequest(props) {
                 // multiline
                 label="consultation Notes "
                 name={"consultationNotes"}
-                value={props.item.consultationNotes}
+                value={consultationNotes}
                 // onChange={(e) => setconsultationNotes(e.target.value)}
                 onChange={onChangeValue}
                 className="textInputStyle"
