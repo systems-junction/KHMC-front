@@ -132,16 +132,16 @@ const specialistArray = [
 
 const specialityArray = [
   {
-    key: 'Cardiolgy',
-    value: 'Cardiolgy',
+    key: 'Cardiologists',
+    value: 'Cardiologists',
   },
   {
-    key: 'Heart',
-    value: 'Heart',
+    key: 'Orthopedic',
+    value: 'Orthopedic',
   },
   {
-    key: 'ENT',
-    value: 'ENT',
+    key: 'Dermatologist',
+    value: 'Dermatologist',
   },
 ]
 const actions = { view: true }
@@ -291,6 +291,8 @@ function LabRadRequest(props) {
     date: new Date(),
     description: '',
     consultationNotes: '',
+    doctorconsultationNotes: '',
+
     requester: cookie.load('current_user').name,
     speciality: '',
     specialist: '',
@@ -342,6 +344,7 @@ function LabRadRequest(props) {
     date = new Date(),
     description,
     consultationNotes,
+    doctorconsultationNotes,
     requester = cookie.load('current_user').name,
     speciality,
     specialist,
@@ -468,7 +471,8 @@ function LabRadRequest(props) {
       {
         consultationNo: consultationNoteNo,
         description: description,
-        consultationNotes: consultationNotes,
+        // consultationNotes: consultationNotes,
+        doctorNotes: doctorconsultationNotes,
         requester: currentUser.staffId,
         date: date,
         specialist: specialist,
@@ -591,7 +595,7 @@ function LabRadRequest(props) {
 
     dispatch({ field: 'consultationNo', value: '' })
     dispatch({ field: 'description', value: '' })
-    dispatch({ field: 'consultationNotes', value: '' })
+    dispatch({ field: 'doctorconsultationNotes', value: '' })
     dispatch({ field: 'rdescription', value: '' })
     dispatch({ field: 'note', value: '' })
   }
@@ -2417,9 +2421,9 @@ function LabRadRequest(props) {
                     multiline
                     rows={4}
                     label='Comments/Notes'
-                    name={'consultationNotes'}
-                    value={consultationNotes}
-                    error={consultationNotes === '' && isFormSubmitted}
+                    name={'doctorconsultationNotes'}
+                    value={doctorconsultationNotes}
+                    error={doctorconsultationNotes === '' && isFormSubmitted}
                     onChange={onChangeValue}
                     className='textInputStyle'
                     variant='filled'

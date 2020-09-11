@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import React, { useEffect, useState } from 'react'
+import React, { useReducer, useEffect, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Dialog from '@material-ui/core/Dialog'
@@ -159,6 +159,18 @@ const useStyles = makeStyles(styles)
 export default function EdrRequest(props) {
   const classes = useStylesForInput()
 
+  const initialState = { consultationNotes: '' }
+
+  function reducer(state, { field, value }) {
+    return {
+      ...state,
+      [field]: value,
+    }
+  }
+  const [state, dispatch] = useReducer(reducer, initialState)
+
+  const { consultationNotes } = state
+
   const [currentUser, setCurrentUser] = React.useState(
     cookie.load('current_user')
   )
@@ -169,6 +181,11 @@ export default function EdrRequest(props) {
   const [id, setId] = useState('')
   const [requestType, setrequestType] = useState('')
   const [patientId, setpatientId] = useState('')
+  // const [consultationNotes, setconsultationNotes] = useState("");
+
+  const onChangeValue = (e) => {
+    dispatch({ field: e.target.name, value: e.target.value })
+  }
 
   useEffect(() => {
     console.log(props.item, 'Update Data')
@@ -176,6 +193,7 @@ export default function EdrRequest(props) {
 
     setpatientId(props.patientId)
     setitemID(props.item._id)
+
     setId(props.id)
     setrequestType(props.requestType)
   }, [])
@@ -491,6 +509,9 @@ export default function EdrRequest(props) {
 
   const handleSubmit = () => {
     const params = {
+      consultationNotes: consultationNotes,
+      doctorNotes: props.item.doctorNotes,
+
       id: id,
       itemID: itemID,
       requestType: requestType,
@@ -504,7 +525,8 @@ export default function EdrRequest(props) {
         if (res.data.success) {
           setOpenNotification(true)
           setsuccessMsg('Submitted')
-          window.location.reload(false)
+          // window.location.reload(false);
+          console.log(res.data, 'test')
           notifyForConsult(patientId)
         } else if (!res.data.success) {
           setOpenNotification(true)
@@ -561,17 +583,42 @@ export default function EdrRequest(props) {
           />
           <div className='row'>
             <div
-              className='col-md-6 col-sm-6 col-6'
+              className='col-md-12 col-sm-12 col-12 d-flex justify-content-center text-center'
               style={styles.inputContainerForTextField}
             >
-              {props.item.description ? (
+              <TextField
+                required
+                // disabled={true}
+                // multiline
+                label='consultation Notes '
+                name={'consultationNotes'}
+                value={props.item.consultationNotes}
+                // onChange={(e) => setconsultationNotes(e.target.value)}
+                onChange={onChangeValue}
+                className='textInputStyle'
+                rows={4}
+                variant='filled'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              />
+            </div>
+          </div>
+          <div className='row'>
+            <div
+              className='col-md-12 col-sm-12 col-12'
+              style={styles.inputContainerForTextField}
+            >
+              {props.item.doctorNotes ? (
                 <div>
                   <TextField
                     required
+                    // multiline
                     disabled={true}
-                    label='Description'
-                    name={'description'}
-                    value={props.item.description}
+                    label='Doctor Notes'
+                    name={'doctorNotes'}
+                    value={props.item.doctorNotes}
                     rows={4}
                     className='textInputStyle'
                     variant='filled'
@@ -586,7 +633,7 @@ export default function EdrRequest(props) {
               )}
             </div>
             <div
-              className='col-md-6 col-sm-6 col-6'
+              className='col-md-12 col-sm-12 col-12'
               style={styles.inputContainerForTextField}
             >
               {props.item.note ? (
@@ -606,24 +653,25 @@ export default function EdrRequest(props) {
                     }}
                   />
                 </div>
-              ) : props.item.consultationNotes ? (
-                <div>
-                  <TextField
-                    required
-                    // disabled={true}
-                    label='Doctor Notes'
-                    name={'consultationNotes'}
-                    value={props.item.consultationNotes}
-                    className='textInputStyle'
-                    rows={4}
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
-                </div>
               ) : (
+                //  : props.item.consultationNotes ? (
+                //   <div>
+                //     <TextField
+                //       required
+                //       // disabled={true}
+                //       label="Doctor Notes"
+                //       name={"consultationNotes"}
+                //       value={props.item.consultationNotes}
+                //       className="textInputStyle"
+                //       rows={4}
+                //       variant="filled"
+                //       InputProps={{
+                //         className: classes.input,
+                //         classes: { input: classes.input },
+                //       }}
+                //     />
+                //   </div>
+                //  )
                 undefined
               )}
             </div>
