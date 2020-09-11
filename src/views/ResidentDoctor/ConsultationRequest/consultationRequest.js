@@ -604,7 +604,7 @@ function LabRadRequest(props) {
 
     dispatch({ field: "consultationNo", value: "" });
     dispatch({ field: "description", value: "" });
-    dispatch({ field: "doctorconsultationNotes", value: "" });
+    // dispatch({ field: "doctorconsultationNotes", value: "" });
     dispatch({ field: "rdescription", value: "" });
     dispatch({ field: "note", value: "" });
   }
