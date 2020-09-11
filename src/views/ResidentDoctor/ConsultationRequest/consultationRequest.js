@@ -137,16 +137,16 @@ const specialistArray = [
 
 const specialityArray = [
   {
-    key: "Cardiolgy",
-    value: "Cardiolgy",
+    key: "Cardiologists",
+    value: "Cardiologists",
   },
   {
-    key: "Heart",
-    value: "Heart",
+    key: "Orthopedic",
+    value: "Orthopedic",
   },
   {
-    key: "ENT",
-    value: "ENT",
+    key: "Dermatologist",
+    value: "Dermatologist",
   },
 ];
 const actions = { view: true };
