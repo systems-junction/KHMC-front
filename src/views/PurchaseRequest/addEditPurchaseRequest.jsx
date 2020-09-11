@@ -466,7 +466,6 @@ function AddEditPurchaseRequest(props) {
                 //   state: { pr: res.data.data, comingFor: "add" },
                 // });
                 console.log("res after addng pr", res.data.data);
-
                 props.history.replace({
                   pathname: "/home/wms/fus/medicinalorder/success",
                   state: {

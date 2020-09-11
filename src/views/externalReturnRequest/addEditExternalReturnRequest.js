@@ -363,6 +363,10 @@ function AddEditPurchaseRequest(props) {
     //   itemName !== ""
   }
 
+  function validateApproveForm() {
+    return status !== "approved" && status !== "rejected";
+  }
+
   const handleAdd = () => {
     setIsFormSubmitted(true);
     if (validateForm()) {
@@ -392,9 +396,16 @@ function AddEditPurchaseRequest(props) {
         .then((res) => {
           if (res.data.success) {
             console.log("response after adding RR", res.data);
-            props.history.replace(
-              "/home/wms/warehouse/materialreceiving/viewpo/externalreturn"
-            );
+            // props.history.replace(
+            //   "/home/wms/warehouse/materialreceiving/viewpo/externalreturn"
+            // );
+
+            props.history.replace({
+              pathname: "/home/wms/fus/medicinalorder/success",
+              state: {
+                message: `External Return request ${res.data.data.returnRequestNo} has been generated successfully`,
+              },
+            });
           } else if (!res.data.success) {
             setOpenNotification(true);
           }
@@ -457,7 +468,16 @@ function AddEditPurchaseRequest(props) {
         .put(updateExternalReturnRequest, params)
         .then((res) => {
           if (res.data.success) {
-            props.history.goBack();
+            if (currentUser.staffTypeId.type === "Purchasing Officer") {
+              props.history.replace({
+                pathname: "/home/wms/fus/medicinalorder/success",
+                state: {
+                  message: `External Return request ${res.data.data.returnRequestNo} has been ${status}`,
+                },
+              });
+            } else {
+              props.history.goBack();
+            }
           } else if (!res.data.success) {
             setOpenNotification(true);
           }
@@ -941,7 +961,7 @@ function AddEditPurchaseRequest(props) {
             </div>
           </div>
 
-          {comingFor === "add" &&
+          {comingFor === "edit" &&
           (currentUser.staffTypeId.type ===
             "FU Internal Request Return Approval Member" ||
             currentUser.staffTypeId.type === "Purchasing Officer") ? (
@@ -984,7 +1004,8 @@ function AddEditPurchaseRequest(props) {
                       );
                     })}
                   </TextField>
-                ) : currentUser.staffTypeId.type === "Purchasing Officer" ? (
+                ) : currentUser.staffTypeId.type === "Purchasing Officer" &&
+                  comingFor === "edit" ? (
                   <TextField
                     required
                     variant={"filled"}
@@ -1053,20 +1074,29 @@ function AddEditPurchaseRequest(props) {
             undefined
           )}
 
-          <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
-            <div
-              style={{
-                display: "flex",
-                flex: 1,
-                height: 50,
-                justifyContent: "center",
-                marginTop: "2%",
-                marginBottom: "2%",
-              }}
-            >
-              {comingFor === "add" ? (
+          <div
+            style={{
+              display: "flex",
+              flex: 1,
+              justifyContent: "space-between",
+              marginTop: "2%",
+              marginBottom: "2%",
+              alignItems: "center",
+            }}
+          >
+            <div>
+              <img
+                onClick={() => props.history.goBack()}
+                src={Back_Arrow}
+                style={{ width: 60, height: 40, cursor: "pointer" }}
+              />
+            </div>
+            <div style={{}}>
+              {comingFor === "add" &&
+              currentUser &&
+              currentUser.staffTypeId.type === "Warehouse Inventory Keeper" ? (
                 <Button
-                  style={{ width: "60%" }}
+                  style={{ height: 50 }}
                   disabled={!validateForm()}
                   onClick={handleAdd}
                   variant="contained"
@@ -1074,10 +1104,24 @@ function AddEditPurchaseRequest(props) {
                 >
                   Generate
                 </Button>
-              ) : comingFor === "edit" ? (
+              ) : currentUser &&
+                currentUser.staffTypeId.type === "Warehouse Inventory Keeper" &&
+                comingFor === "edit" ? (
                 <Button
-                  style={{ width: "60%" }}
+                  style={{ height: 50 }}
                   disabled={!validateForm()}
+                  onClick={handleEdit}
+                  variant="contained"
+                  color="primary"
+                >
+                  Confirm
+                </Button>
+              ) : currentUser &&
+                currentUser.staffTypeId.type === "Purchasing Officer" &&
+                comingFor === "edit" ? (
+                <Button
+                  style={{ height: 50 }}
+                  disabled={validateApproveForm()}
                   onClick={handleEdit}
                   variant="contained"
                   color="primary"
@@ -1091,14 +1135,6 @@ function AddEditPurchaseRequest(props) {
           </div>
 
           <Notification msg={errorMsg} open={openNotification} />
-
-          <div style={{ marginBottom: 20 }}>
-            <img
-              onClick={() => props.history.goBack()}
-              src={Back_Arrow}
-              style={{ width: 60, height: 40, cursor: "pointer" }}
-            />
-          </div>
         </div>
       </div>
     </div>
