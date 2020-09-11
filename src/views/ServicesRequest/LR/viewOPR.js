@@ -319,7 +319,7 @@ function AddEditPurchaseRequest(props) {
   const [radioItemFound, setRadioItemFound] = useState('')
   const [addLabRequest, setaddLabRequest] = useState(false)
   const [addRadioRequest, setaddRadioRequest] = useState(false)
-
+  const [enableSave, setEnableSave] = useState(true)
   const [isLoading, setIsLoading] = useState(true)
 
   const [externalConsultant, setExternalConsultant] = useState('')
@@ -712,6 +712,7 @@ function AddEditPurchaseRequest(props) {
     dispatch({ field: 'sampleID', value: '' })
 
     setaddLabRequest(false)
+    setEnableSave(false)
   }
 
   const saveLabReq = () => {
@@ -1306,6 +1307,7 @@ function AddEditPurchaseRequest(props) {
               </div>
               <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
                 <Button
+                  disabled={enableSave}
                   onClick={saveLabReq}
                   style={styles.stylesForButton}
                   variant='contained'

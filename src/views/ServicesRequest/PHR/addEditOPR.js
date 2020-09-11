@@ -15,6 +15,7 @@ import validateInput from '../../../public/inputValidator'
 import validateNumber from '../../../public/numberValidator'
 import validateNumbers from '../../../public/numbersValidator'
 import validateFloat from '../../../public/FloatValidator'
+import validateNumberFloat from '../../../public/numberFloatValidator'
 import {
   uploadsUrl,
   updatePatientUrl,
@@ -475,7 +476,7 @@ function AddEditPatientListing(props) {
       validateFloat(height) &&
       weight &&
       weight != null &&
-      validateFloat(weight) &&
+      validateNumberFloat(weight) &&
       email &&
       email.length > 0 &&
       validateEmail(email) &&
@@ -538,7 +539,7 @@ function AddEditPatientListing(props) {
         coverageTerms.length > 0 &&
         payment &&
         payment.length > 0 &&
-        validateFloat(payment) &&
+        validateNumberFloat(payment) &&
         coveredFamilyMembers &&
         coveredFamilyMembers.length > 0 &&
         otherCoverageDetails &&
@@ -1030,7 +1031,10 @@ function AddEditPatientListing(props) {
           >
             {comingFor === 'add' ? (
               <>
-                <div className='row' style={{ marginTop: '20px',marginBottom:'10px'  }}>
+                <div
+                  className='row'
+                  style={{ marginTop: '20px', marginBottom: '10px' }}
+                >
                   <div
                     className='col-md-10 col-sm-8 col-8'
                     style={{
@@ -1507,7 +1511,7 @@ function AddEditPatientListing(props) {
                 />
                 <ErrorMessage
                   name={weight}
-                  type='float'
+                  type='numberFloat'
                   isFormSubmitted={isFormSubmitted}
                 />
               </div>
@@ -2727,7 +2731,7 @@ function AddEditPatientListing(props) {
                     />
                     <ErrorMessage
                       name={payment}
-                      type='float'
+                      type='numberFloat'
                       isFormSubmitted={isFormSubmitted}
                     />
                   </div>

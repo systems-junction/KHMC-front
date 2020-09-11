@@ -16,6 +16,7 @@ import EDRTriageAndAssessment from '../views/ServicesRequest/PHR/EDRTriageAndAss
 import IPRTriageAndAssessment from '../views/ServicesRequest/PHR/IPRTriageAndAssessment'
 import AddEditOPR from '../views/ServicesRequest/PHR/addEditOPR'
 import AddPharmacyOPR from '../views/ServicesRequest/PHR/addPharmacy'
+import UpdatePharmacyOPR from '../views/ServicesRequest/PHR/updatePHR'
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const [currentUser, setCurrentUser] = React.useState(
@@ -90,6 +91,12 @@ class WMSRoutes extends React.PureComponent {
           exact
           path={`${this.props.match.url}/opr/viewOPR/add`}
           component={AddPharmacyOPR}
+        />
+
+        <Route
+          exact
+          path={`${this.props.match.url}/opr/viewOPR/updatephr`}
+          component={UpdatePharmacyOPR}
         />
 
         <Route
