@@ -164,7 +164,10 @@ function AddEditEDR(props) {
   } = state
 
   const onChangeValue = (e) => {
-    dispatch({ field: e.target.name, value: e.target.value })
+    dispatch({
+      field: e.target.name,
+      value: e.target.value.replace(/[^\w.\s]/gi, ''),
+    })
   }
 
   const [, setcomingFor] = useState('')
@@ -181,7 +184,7 @@ function AddEditEDR(props) {
 
     setcomingFor(props.history.location.state.comingFor)
 
-    console.log("Selected Item",props.history.location.state.selectedItem)
+    console.log('Selected Item', props.history.location.state.selectedItem)
 
     if (
       props.history.location.state.selectedItem.RequestType === 'LR' ||
@@ -242,7 +245,7 @@ function AddEditEDR(props) {
           console.log('response while adding Approval Req', res.data.data)
           props.history.push({
             pathname: 'success',
-            state: { message : 'Request Submitted successfully' },
+            state: { message: 'Request Submitted successfully' },
           })
         } else if (!res.data.success) {
           setOpenNotification(true)
