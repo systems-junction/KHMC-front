@@ -402,7 +402,7 @@ function AddEditPurchaseRequest(props) {
         tableData={props.items}
         tableDataKeys={tableDataKeys}
         tableHeading={tableHeading}
-        action={actions}
+        action={""}
         receiveItem={handleView}
         borderBottomColor={"#60d69f"}
         borderBottomWidth={20}

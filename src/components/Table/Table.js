@@ -383,7 +383,7 @@ export default function CustomTable(props) {
       val === "Returned" ||
       val === "receive" ||
       val === "Received" ||
-      val === "Rejected" ||
+      val === "rejected" ||
       val === "Sent for PAR"
     ) {
       return (
@@ -499,7 +499,7 @@ export default function CustomTable(props) {
             >
               <strong>Received</strong>
             </Button>
-          ) : val === "Rejected" ? (
+          ) : val === "rejected" ? (
             <Button
               style={stylesB.stylesForActive}
               variant="contained"
