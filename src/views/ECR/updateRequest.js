@@ -10,12 +10,9 @@ import capitilizeLetter from '../../public/capitilizeLetter'
 import cookie from 'react-cookies'
 import CustomTable from '../../components/Table/Table'
 import TextField from '@material-ui/core/TextField'
-import {
-  updateEdrIprItem,
-  notifyConsultation
-} from "../../public/endpoins";
+import { updateEdrIprItem, notifyConsultation } from '../../public/endpoins'
 import axios from 'axios'
-import Notification from "../../components/Snackbar/Notification.js";
+import Notification from '../../components/Snackbar/Notification.js'
 
 const tableHeadingForPHR = [
   'Medicine Name',
@@ -23,7 +20,7 @@ const tableHeadingForPHR = [
   'Dosage',
   'Frequency',
   'Duration',
-  ''
+  '',
 ]
 const tableDataKeysForPHR = [
   'medicineName',
@@ -63,13 +60,13 @@ const styles = {
     fontWeight: '700',
   },
   stylesForButton: {
-    color: "white",
-    cursor: "pointer",
+    color: 'white',
+    cursor: 'pointer',
     borderRadius: 5,
-    backgroundColor: "#2c6ddd",
-    width: "130px",
-    height: "45px",
-    outline: "none",
+    backgroundColor: '#2c6ddd',
+    width: '130px',
+    height: '45px',
+    outline: 'none',
   },
 }
 const stylesB = {
@@ -162,10 +159,12 @@ const useStyles = makeStyles(styles)
 export default function EdrRequest(props) {
   const classes = useStylesForInput()
 
-  const [currentUser, setCurrentUser] = React.useState(cookie.load('current_user'))
-  const [errorMsg, setErrorMsg] = useState("");
+  const [currentUser, setCurrentUser] = React.useState(
+    cookie.load('current_user')
+  )
+  const [errorMsg, setErrorMsg] = useState('')
   const [successMsg, setsuccessMsg] = useState('')
-  const [openNotification, setOpenNotification] = useState(false);
+  const [openNotification, setOpenNotification] = useState(false)
   const [itemID, setitemID] = useState('')
   const [id, setId] = useState('')
   const [requestType, setrequestType] = useState('')
@@ -246,8 +245,8 @@ export default function EdrRequest(props) {
                 <strong>Hold</strong>
               </Button>
             ) : (
-                      ''
-                    )}
+              ''
+            )}
           </>
         )
       } else {
@@ -286,8 +285,8 @@ export default function EdrRequest(props) {
                 <strong>Can be fulfilled</strong>
               </Button>
             ) : (
-                      ''
-                    )}
+              ''
+            )}
           </>
         )
       }
@@ -369,14 +368,14 @@ export default function EdrRequest(props) {
               <strong>Pending Administration</strong>
             </Button>
           ) : (
-                            <Button
-                              style={stylesB.stylesForActive}
-                              variant='contained'
-                              color='primary'
-                            >
-                              <strong>Po Sent</strong>
-                            </Button>
-                          )}
+            <Button
+              style={stylesB.stylesForActive}
+              variant='contained'
+              color='primary'
+            >
+              <strong>Po Sent</strong>
+            </Button>
+          )}
         </>
       )
     } else if (
@@ -475,14 +474,14 @@ export default function EdrRequest(props) {
               <strong>Received</strong>
             </Button>
           ) : (
-                                <Button
-                                  style={stylesB.stylesForActive}
-                                  variant='contained'
-                                  color='primary'
-                                >
-                                  <strong>Item Returned</strong>
-                                </Button>
-                              )}
+            <Button
+              style={stylesB.stylesForActive}
+              variant='contained'
+              color='primary'
+            >
+              <strong>Item Returned</strong>
+            </Button>
+          )}
         </>
       )
     }
@@ -491,54 +490,53 @@ export default function EdrRequest(props) {
   }
 
   const handleSubmit = () => {
-
     const params = {
       id: id,
       itemID: itemID,
       requestType: requestType,
       status: 'Complete',
       // desc
-    };
+    }
     console.log('PARAMSS ', params)
     axios
       .put(updateEdrIprItem, params)
       .then((res) => {
         if (res.data.success) {
-          setOpenNotification(true);
-          setsuccessMsg("Submitted")
-          window.location.reload(false);
+          setOpenNotification(true)
+          setsuccessMsg('Submitted')
+          window.location.reload(false)
           notifyForConsult(patientId)
         } else if (!res.data.success) {
-          setOpenNotification(true);
-          setErrorMsg("Error while submitting Request");
+          setOpenNotification(true)
+          setErrorMsg('Error while submitting Request')
         }
       })
       .catch((e) => {
-        console.log("error after submitting Request", e);
-        setOpenNotification(true);
-        setErrorMsg("Error while submitting Request");
-      });
+        console.log('error after submitting Request', e)
+        setOpenNotification(true)
+        setErrorMsg('Error while submitting Request')
+      })
   }
 
   const notifyForConsult = (id) => {
-
-    axios.get(notifyConsultation + '/' + id)
-        .then((res) => {
-            console.log(res)
-        })
-        .catch((e) => {
-            console.log("error after notify", e);
-            setOpenNotification(true);
-            setErrorMsg(e);
-        });
+    axios
+      .get(notifyConsultation + '/' + id)
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((e) => {
+        console.log('error after notify', e)
+        setOpenNotification(true)
+        setErrorMsg(e)
+      })
   }
 
   if (openNotification) {
     setTimeout(() => {
-      setOpenNotification(false);
-      setErrorMsg("");
-      setsuccessMsg('');
-    }, 2000);
+      setOpenNotification(false)
+      setErrorMsg('')
+      setsuccessMsg('')
+    }, 2000)
   }
 
   return (
@@ -556,7 +554,11 @@ export default function EdrRequest(props) {
           Details
         </DialogTitle>
         <div className='container-fluid'>
-        <Notification msg={errorMsg} open={openNotification} success={successMsg} />
+          <Notification
+            msg={errorMsg}
+            open={openNotification}
+            success={successMsg}
+          />
           <div className='row'>
             <div
               className='col-md-6 col-sm-6 col-6'
@@ -580,8 +582,8 @@ export default function EdrRequest(props) {
                   />
                 </div>
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
             </div>
             <div
               className='col-md-6 col-sm-6 col-6'
@@ -622,11 +624,10 @@ export default function EdrRequest(props) {
                   />
                 </div>
               ) : (
-                    undefined
-                  )}
+                undefined
+              )}
             </div>
           </div>
-
 
           <div className='row'>
             <div
@@ -641,8 +642,8 @@ export default function EdrRequest(props) {
                   {replaceSlugToTitle(props.item.status)}
                 </div>
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
             </div>
           </div>
 
@@ -654,24 +655,23 @@ export default function EdrRequest(props) {
             </div>
             <div
               style={{
-                display: "flex",
+                display: 'flex',
                 flex: 1,
-                justifyContent: "flex-end",
+                justifyContent: 'flex-end',
               }}
             >
               <Button
                 style={styles.stylesForButton}
                 //disabled={!validateFormType1()}
                 onClick={handleSubmit}
-                variant="contained"
-                color="primary"
+                variant='contained'
+                color='primary'
               >
                 Submit
-                </Button>
+              </Button>
             </div>
           </div>
         </div>
-        
       </DialogContent>
     </Dialog>
   )

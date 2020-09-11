@@ -678,6 +678,44 @@ function AddEditPurchaseRequest(props) {
                     />
                   </div>
                 </div>
+
+                <div className='row' style={{ marginTop: '20px' }}>
+                  <div
+                    className='col-md-12 col-sm-12'
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      fullWidth
+                      select
+                      id='status'
+                      name='status'
+                      value={status}
+                      onChange={onChangeValue}
+                      variant='filled'
+                      label='Status'
+                      className='dropDownStyle'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                      input={<BootstrapInput />}
+                    >
+                      <MenuItem value=''>
+                        <em>None</em>
+                      </MenuItem>
+                      {statusArray.map((val) => {
+                        return (
+                          <MenuItem key={val.key} value={val.key}>
+                            {val.value}
+                          </MenuItem>
+                        )
+                      })}
+                    </TextField>
+                  </div>
+                </div>
               </>
             ) : value === 1 ? (
               <>

@@ -391,11 +391,18 @@ function AddEditEDR(props) {
 
     let pharmacyRequestArray = []
 
+    for (let i = 0; i < pharmacyReqArray.length; i++) {
+      pharmacyRequestArray = [
+        ...pharmacyRequestArray,
+        { ...pharmacyReqArray[i], status: 'completed' },
+      ]
+    }
+
     pharmacyRequestArray = [
-      ...pharmacyReqArray,
+      ...pharmacyRequestArray,
       {
         date: new Date(),
-        status: status,
+        status: 'completed',
         requester: currentUser.staffId,
         medicine: medicineData,
         PRrequestNo: PRrequestNo,
@@ -405,6 +412,7 @@ function AddEditEDR(props) {
     const params = {
       _id: id,
       pharmacyRequest: pharmacyRequestArray,
+      status: 'completed',
     }
     console.log('params', params)
     axios
@@ -433,8 +441,8 @@ function AddEditEDR(props) {
         setOpenNotification(true)
         setErrorMsg('Error after adding the medicine request')
       })
-    //   }
-    // }
+    //}
+    //}
   }
 
   // const handleEdit = () => {
