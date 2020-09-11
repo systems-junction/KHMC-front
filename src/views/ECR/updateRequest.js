@@ -525,7 +525,7 @@ export default function EdrRequest(props) {
         if (res.data.success) {
           setOpenNotification(true);
           setsuccessMsg("Submitted");
-          // window.location.reload(false);
+          window.location.reload(false);
           console.log(res.data, "test");
           notifyForConsult(patientId);
         } else if (!res.data.success) {
