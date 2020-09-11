@@ -611,7 +611,7 @@ export default function ReplenishmentRequest(props) {
           <div className="subheader">
             <div>
               <img src={business_Unit} />
-              <h4>Medication Orders</h4>
+              <h4>Orders</h4>
             </div>
 
             {/* {currentUser &&
