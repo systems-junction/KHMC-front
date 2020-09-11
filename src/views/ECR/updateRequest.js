@@ -618,7 +618,7 @@ export default function EdrRequest(props) {
               )}
             </div>
             <div
-              className="col-md-6 col-sm-6 col-6"
+              className="col-md-12 col-sm-12 col-12"
               style={styles.inputContainerForTextField}
             >
               {props.item.note ? (
