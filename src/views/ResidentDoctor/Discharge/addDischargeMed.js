@@ -164,34 +164,32 @@ function AddEditEDR(props) {
   const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false)
   const [patientId, setpatientId] = useState('')
   const [enableSave, setEnableSave] = useState(true)
+  const [dischargeNotes, setdischargeNotes] = useState('')
+  const [otherNotes, setotherNotes] = useState('')
 
   useEffect(() => {
     // const soc = socketIOClient(socketUrl);
     // setSocket(soc);
     // soc.emit("connection");
-
     setCurrentUser(cookie.load('current_user'))
 
     setcomingFor(props.history.location.state.comingFor)
 
     const selectedRec = props.history.location.state.selectedItem
-    console.log('Item', props.history.location.state.selectedItem)
+    console.log('Other... ', props.history.location.state.otherNotes)
+    console.log('Discharge... ', props.history.location.state.dischargeNotes)
 
-    setpatientId(props.history.location.state.selectedItem.patientId._id)
-    console.log(
-      'id.......',
-      props.history.location.state.selectedItem.patientId._id
-    )
-
-    setId(props.history.location.state.selectedItem._id)
-    setrequestNo(props.history.location.state.selectedItem.requestNo)
+    setpatientId(selectedRec.patientId._id)
+    setotherNotes(props.history.location.state.otherNotes)
+    setdischargeNotes(props.history.location.state.dischargeNotes)
+    setId(selectedRec._id)
+    setrequestNo(selectedRec.requestNo)
 
     if (selectedRec) {
       Object.entries(selectedRec).map(([key, val]) => {
         if (val && typeof val === 'object') {
           if (key === 'dischargeRequest') {
             Object.entries(val).map(([key1, val1]) => {
-              // console.log("pharmacy k andr",key1,val1)
               if (key1 === 'dischargeMedication') {
                 Object.entries(val1).map(([key2, val2]) => {
                   if (key2 === 'medicine') {
@@ -269,7 +267,7 @@ function AddEditEDR(props) {
       _id: id,
       requestType,
       dischargeRequest: {
-        ...dischargeRequest,
+        dischargeSummary:{otherNotes,dischargeNotes},
         dischargeMedication: dischargeMedicationObject,
       },
     }
@@ -492,8 +490,6 @@ function AddEditEDR(props) {
     // if (validateItemsForm()) {
     setDialogOpen(false)
     let temp = []
-
-    // console.log("MEDSSS",medicines)
 
     for (let i = 0; i < dischargeMedicines.length; i++) {
       if (dischargeMedicines[i].itemId === selectItemToEditId) {
@@ -948,7 +944,7 @@ function AddEditEDR(props) {
                     ) : (
                       <Button
                         style={{ paddingLeft: 30, paddingRight: 30 }}
-                        disabled={!validateItemsForm()}
+                        // disabled={!validateItemsForm()}
                         onClick={editSelectedItem}
                         variant='contained'
                         color='primary'

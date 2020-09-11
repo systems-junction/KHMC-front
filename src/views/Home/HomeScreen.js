@@ -151,11 +151,11 @@ const registeredNurse = [
     path: `/home/wms/fus/professionalorder/receiveorder`,
   },
 
-  {
-    img: ProfessionalOrder,
-    text: 'View Orders',
-    path: `/home/wms/fus/professionalorder`,
-  },
+  // {
+  //   img: ProfessionalOrder,
+  //   text: 'View Orders',
+  //   path: `/home/wms/fus/professionalorder`,
+  // },
   {
     img: MedicationOrder,
     text: 'Medication  Order Receiving',

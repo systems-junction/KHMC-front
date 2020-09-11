@@ -59,6 +59,8 @@ import add_new from "../../assets/img/Plus.png";
 
 import TableForAddedItems from "./tableforAddedItems";
 
+import ViewAllBtn from "../../components/ViewAllBtn/viewAll";
+
 const reasonArray = [
   { key: "jit", value: "JIT" },
   { key: "new_item", value: "New Item" },
@@ -857,10 +859,12 @@ function AddEditPurchaseRequest(props) {
             </h4>
           </div>
 
-          {/* <div>
+          <div>
             <Button
-              onClick={() => props.history.goBack()}
-              style={styles.stylesForButton}
+              onClick={() =>
+                props.history.push("/home/wms/fus/professionalorder")
+              }
+              style={{...styles.stylesForButton,height:45}}
               variant="contained"
               color="primary"
             >
@@ -868,7 +872,9 @@ function AddEditPurchaseRequest(props) {
               &nbsp;&nbsp;
               <strong>View All</strong>
             </Button>
-          </div> */}
+          </div>
+
+          {/* <ViewAllBtn history={props.history} /> */}
         </div>
 
         {fuArray && fuArray !== "" ? (
