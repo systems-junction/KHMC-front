@@ -327,6 +327,8 @@ export const updateOPR = `${baseUrl}/opr/updateopr`
 export const getOPRById = `${baseUrl}/opr/getopr`
 export const updateRROPRById = `${baseUrl}/opr/updaterad`
 export const updateLROPRById = `${baseUrl}/opr/updatelab`
+export const getPHROPRById = `${baseUrl}/opr/getphroprbyid`
+export const updatePHROPRById = `${baseUrl}/opr/updatephr`
 
 // LR by ID
 export const getLRById = `${baseUrl}/edr/getlredr`

@@ -163,6 +163,7 @@ function AddEditEDR(props) {
   const [itemFound, setItemFound] = useState('')
   const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false)
   const [patientId, setpatientId] = useState('')
+  const [enableSave, setEnableSave] = useState(true)
 
   useEffect(() => {
     // const soc = socketIOClient(socketUrl);
@@ -484,6 +485,7 @@ function AddEditEDR(props) {
     dispatch({ field: 'medicineName', value: '' })
     dispatch({ field: 'unitPrice', value: '' })
     dispatch({ field: 'totalPrice', value: '' })
+    setEnableSave(false)
   }
 
   const editSelectedItem = () => {
@@ -533,6 +535,7 @@ function AddEditEDR(props) {
     dispatch({ field: 'medicineName', value: '' })
     dispatch({ field: 'unitPrice', value: '' })
     dispatch({ field: 'totalPrice', value: '' })
+    setEnableSave(false)
   }
 
   function handleRequestedItemEdit(i) {
@@ -663,6 +666,7 @@ function AddEditEDR(props) {
               <Button
                 style={styles.stylesForPurchaseButton}
                 // disabled={!validateForm()}
+                disabled={enableSave}
                 onClick={handleAdd}
                 variant='contained'
                 color='primary'

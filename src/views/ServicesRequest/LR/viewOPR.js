@@ -284,7 +284,10 @@ function AddEditPurchaseRequest(props) {
   } = state
 
   const onChangeValue = (e) => {
-    dispatch({ field: e.target.name, value: e.target.value })
+    dispatch({
+      field: e.target.name,
+      value: e.target.value.replace(/[^\w\s]/gi, ''),
+    })
   }
 
   const [currentUser, setCurrentUser] = useState('')
@@ -319,7 +322,7 @@ function AddEditPurchaseRequest(props) {
   const [radioItemFound, setRadioItemFound] = useState('')
   const [addLabRequest, setaddLabRequest] = useState(false)
   const [addRadioRequest, setaddRadioRequest] = useState(false)
-
+  const [enableSave, setEnableSave] = useState(true)
   const [isLoading, setIsLoading] = useState(true)
 
   const [externalConsultant, setExternalConsultant] = useState('')
@@ -617,10 +620,11 @@ function AddEditPurchaseRequest(props) {
   }
 
   const handleSearch = (e) => {
-    setSearchQuery(e.target.value)
-    if (e.target.value.length >= 3) {
+    const a = e.target.value.replace(/[^\w\s]/gi, '')
+    setSearchQuery(a)
+    if (a.length >= 3) {
       axios
-        .get(getSearchedLaboratoryService + '/' + e.target.value)
+        .get(getSearchedLaboratoryService + '/' + a)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
@@ -712,6 +716,7 @@ function AddEditPurchaseRequest(props) {
     dispatch({ field: 'sampleID', value: '' })
 
     setaddLabRequest(false)
+    setEnableSave(false)
   }
 
   const saveLabReq = () => {
@@ -1306,6 +1311,7 @@ function AddEditPurchaseRequest(props) {
               </div>
               <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
                 <Button
+                  disabled={enableSave}
                   onClick={saveLabReq}
                   style={styles.stylesForButton}
                   variant='contained'

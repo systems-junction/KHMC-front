@@ -157,7 +157,11 @@ function AddEditPurchaseRequest(props) {
   const { name, price, status, date, results, sampleId, comments } = state
 
   const onChangeValue = (e) => {
-    dispatch({ field: e.target.name, value: e.target.value })
+    dispatch({
+      field: e.target.name,
+      value: e.target.value.replace(/[^\w\s]/gi, ''),
+      e,
+    })
   }
 
   const classesForTabs = useStylesForTabs()
@@ -212,11 +216,21 @@ function AddEditPurchaseRequest(props) {
       })
   }
 
+  // function validateForm() {
+  //   return (
+  //     sampleId &&
+  //     sampleId.length > 0 &&
+  //     results &&
+  //     results.length > 0
+  //   )
+  // }
+
   const updateLRByIdURI = () => {
     let formData = new FormData()
     if (slipUpload) {
       formData.append('file', slipUpload, slipUpload.name)
     }
+    // if (validateForm()) {
     const params = {
       IPRId: iprId,
       EDRId: iprId,
@@ -252,6 +266,7 @@ function AddEditPurchaseRequest(props) {
       .catch((e) => {
         console.log('error while searching req', e)
       })
+    //}
   }
 
   useEffect(() => {
@@ -817,6 +832,7 @@ function AddEditPurchaseRequest(props) {
               </div>
               <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
                 <Button
+                  // disabled={!validateForm()}
                   onClick={updateLRByIdURI}
                   style={styles.stylesForButton}
                   variant='contained'

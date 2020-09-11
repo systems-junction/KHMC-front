@@ -5,6 +5,7 @@ import validateInput from '../../public/inputValidator'
 import validateNumber from '../../public/numberValidator'
 import validateNumbers from '../../public/numbersValidator'
 import validateFloat from '../../public/FloatValidator'
+import validateNumberFloat from '../../public/numberFloatValidator'
 const ErrorMsg = (props) => {
   return (
     <p style={{ color: '#ff0000', fontSize: 13 }}>
@@ -24,6 +25,10 @@ const ErrorMsg = (props) => {
           : undefined
         : props.type && props.type === 'float' && props.isFormSubmitted
         ? !validateFloat(props.name)
+          ? 'Enter valid field data'
+          : undefined
+        : props.type && props.type === 'numberFloat' && props.isFormSubmitted
+        ? !validateNumberFloat(props.name)
           ? 'Enter valid field data'
           : undefined
         : props.type && props.type === 'text' && props.isFormSubmitted

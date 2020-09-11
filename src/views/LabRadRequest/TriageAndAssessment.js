@@ -106,6 +106,13 @@ function TriageAndAssessment(props) {
     const [requestType, setrequestType] = useState('')
     const [openNotification, setOpenNotification] = useState(false)
 
+    const [specifyGeneralAppearance,setSpecifyGeneralAppearance] = useState(false)
+    const [specifyAbdomen,setSpecifyAbdomen] = useState(false)
+    const [specifyCardiac,setSpecifyCardiac] = useState(false)
+    const [specifyHeadNeck,setSpecifyHeadNeck] = useState(false)
+    const [specifyNeurological,setSpecifyNeurological] = useState(false)
+    const [specifyRespiratory,setSpecifyRespiratory] = useState(false)
+
     useEffect(() => {
         setCurrentUser(cookie.load('current_user'))
 
@@ -124,6 +131,38 @@ function TriageAndAssessment(props) {
 
     const onCheckedValue = (e) => {
         dispatch({ field: e.target.name, value: e.target.value })
+        if(e.target.value === "OthergeneralAppearance")
+        {
+            setSpecifyGeneralAppearance(true)
+        }
+        else if(e.target.value === "Otherrespiratory")
+        {
+            setSpecifyRespiratory(true)
+        }
+        else if(e.target.value === "Otherneurological")
+        {
+            setSpecifyNeurological(true)
+        }
+        else if(e.target.value === "OtherheadNeck")
+        {
+            setSpecifyHeadNeck(true)
+        }
+        else if(e.target.value === "Otherabdomen")
+        {
+            setSpecifyAbdomen(true)
+        }
+        else if(e.target.value === "Othercardiac")
+        {
+            setSpecifyCardiac(true)
+        }
+        else{
+            setSpecifyCardiac(false)
+            setSpecifyAbdomen(false)
+            setSpecifyHeadNeck(false)
+            setSpecifyNeurological(false)
+            setSpecifyRespiratory(false)
+            setSpecifyGeneralAppearance(false)
+        }
     }
 
     const handleChange = (event, newValue) => {
@@ -132,6 +171,11 @@ function TriageAndAssessment(props) {
 
     const onNext = () => {
         setValue(value + 1)
+    }
+
+    const onSpecify = (e)=>{
+        console.log(e.target.name,e.target.value)
+        dispatch({ field: e.target.name, value: e.target.value })
     }
 
     const handleSubmitAssessment = (e) => {
@@ -276,10 +320,10 @@ function TriageAndAssessment(props) {
                                         <input
                                             type='radio'
                                             name='triageLevel'
-                                            value='Resucsitation'
-                                            checked={triageLevel === 'Resucsitation'}
+                                            value='Resuscitation'
+                                            checked={triageLevel === 'Resuscitation'}
                                         />
-                                        <label for='male'>&nbsp;&nbsp;1 - Resucsitation</label>
+                                        <label for='male'>&nbsp;&nbsp;1 - Resuscitation</label>
                                     </div>
                                     <div className='col-md-4'>
                                         <input
@@ -388,10 +432,10 @@ function TriageAndAssessment(props) {
                                     <div className='form-group col-md-3'>
                                         <div class='radio'>
                                             <label class='radio-inline control-label'>
-                                                <input type='radio' name='generalAppearance' value='Ill'
-                                                    checked={generalAppearance === 'Ill'}
+                                                <input type='radio' name='generalAppearance' value='Sick'
+                                                    checked={generalAppearance === 'Sick'}
                                                 />
-                                                    &nbsp;&nbsp;Ill
+                                                    &nbsp;&nbsp;Sick
                                                 </label>
                                         </div>
                                     </div>
@@ -414,8 +458,8 @@ function TriageAndAssessment(props) {
                                                 <input
                                                     type='radio'
                                                     name='generalAppearance'
-                                                    value='Other'
-                                                    checked={generalAppearance === 'Other'}
+                                                    value='OthergeneralAppearance'
+                                                    checked={specifyGeneralAppearance}
                                                 />
                                                     &nbsp;&nbsp;Other
                                                 </label>
@@ -431,8 +475,10 @@ function TriageAndAssessment(props) {
                                     <div className='form-group col-md-12'>
                                         <input
                                             style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
+                                            disabled={!specifyGeneralAppearance}
                                             type='text'
                                             placeholder='Specify'
+                                            onChange={onSpecify}
                                             name='generalAppearance'
                                             value={generalAppearance}
                                             className='control-label textInputStyle'
@@ -479,18 +525,18 @@ function TriageAndAssessment(props) {
                                                 <input
                                                     type='radio'
                                                     name='headNeck'
-                                                    value='Thyroid'
-                                                    checked={headNeck === 'Thyroid'}
+                                                    value='Thyroid Enlargement'
+                                                    checked={specifyHeadNeck}
                                                 />
-                                                    &nbsp;&nbsp;Thyroid
+                                                    &nbsp;&nbsp;Thyroid Enlargement
                                                 </label>
                                         </div>
                                     </div>
                                     <div className='form-group col-md-3'>
                                         <div class='radio'>
                                             <label class='radio-inline control-label'>
-                                                <input type='radio' name='headNeck' value='Other'
-                                                    checked={headNeck === 'Other'}
+                                                <input type='radio' name='headNeck' value='OtherheadNeck'
+                                                    checked={headNeck === 'OtherheadNeck'}
                                                 />
                                                     &nbsp;&nbsp;Other
                                                 </label>
@@ -502,9 +548,11 @@ function TriageAndAssessment(props) {
                                     <div className='form-group col-md-12'>
                                         <input
                                             style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
+                                            disabled={!specifyHeadNeck}
                                             type='text'
+                                            onChange={onSpecify}
                                             placeholder='Specify'
-                                            name='specify'
+                                            name='headNeck'
                                             value={headNeck}
                                             className='control-label textInputStyle'
                                         />
@@ -531,7 +579,7 @@ function TriageAndAssessment(props) {
                                                     checked={respiratory === 'GBAE'}
                                                 />
                                                     &nbsp;&nbsp;GBAE
-                                                </label>
+                                            </label>
                                         </div>
                                     </div>
                                     <div className='form-group col-md-3'>
@@ -544,17 +592,7 @@ function TriageAndAssessment(props) {
                                                     checked={respiratory === 'Wheezing'}
                                                 />
                                                     &nbsp;&nbsp;Wheezing
-                                                </label>
-                                        </div>
-                                    </div>
-                                    <div className='form-group col-md-3'>
-                                        <div class='radio'>
-                                            <label class='radio-inline control-label'>
-                                                <input type='radio' name='respiratory' value='Other'
-                                                    checked={respiratory === 'Other'}
-                                                />
-                                                    &nbsp;&nbsp;Other
-                                                </label>
+                                            </label>
                                         </div>
                                     </div>
                                     <div className='form-group col-md-3'>
@@ -567,14 +605,9 @@ function TriageAndAssessment(props) {
                                                     checked={respiratory === 'Crackles'}
                                                 />
                                                     &nbsp;&nbsp;Crackles
-                                                </label>
+                                            </label>
                                         </div>
                                     </div>
-                                </form>
-                                <form className='form-inline row' role='form'
-                                    onChange={onCheckedValue}
-                                    value={respiratory}
-                                >
                                     <div className='form-group col-md-3'>
                                         <div class='radio'>
                                             <label class='radio-inline control-label'>
@@ -585,15 +618,32 @@ function TriageAndAssessment(props) {
                                                     checked={respiratory === 'Crepitation'}
                                                 />
                                                     &nbsp;&nbsp;Crepitation
-                                                </label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </form>
+                                <form className='form-inline row' role='form'
+                                    onChange={onCheckedValue}
+                                    value={respiratory}
+                                >
+                                    <div className='form-group col-md-3'>
+                                        <div class='radio'>
+                                            <label class='radio-inline control-label'>
+                                                <input type='radio' name='respiratory' value='Otherrespiratory'
+                                                    checked={specifyRespiratory}
+                                                />
+                                                    &nbsp;&nbsp;Other
+                                            </label>
                                         </div>
                                     </div>
                                     <div className='form-group col-md-9'>
                                         <input
                                             style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
+                                            disabled={!specifyRespiratory}
                                             type='text'
                                             placeholder='Specify'
-                                            name='specify'
+                                            onChange={onSpecify}
+                                            name='respiratory'
                                             value={respiratory}
                                             className='control-label textInputStyle'
                                         />
@@ -639,8 +689,8 @@ function TriageAndAssessment(props) {
                                     <div className='form-group col-md-4 col-sm-4'>
                                         <div class='radio'>
                                             <label class='radio-inline control-label'>
-                                                <input type='radio' name='cardiac' value='Other'
-                                                    checked={cardiac === 'Other'}
+                                                <input type='radio' name='cardiac' value='Othercardiac'
+                                                    checked={specifyCardiac}
                                                 />
                                                     &nbsp;&nbsp;Other
                                                 </label>
@@ -654,9 +704,11 @@ function TriageAndAssessment(props) {
                                     <div className='form-group col-md-12'>
                                         <input
                                             style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
+                                            disabled={!specifyCardiac}
                                             type='text'
                                             placeholder='Specify'
-                                            name='specify'
+                                            onChange={onSpecify}
+                                            name='cardiac'
                                             value={cardiac}
                                             className='control-label textInputStyle'
                                         />
@@ -730,8 +782,8 @@ function TriageAndAssessment(props) {
                                     <div className='form-group col-md-3'>
                                         <div class='radio'>
                                             <label class='radio-inline control-label'>
-                                                <input type='radio' name='abdomen' value='Other'
-                                                    checked={abdomen === 'Other'}
+                                                <input type='radio' name='abdomen' value='Otherabdomen'
+                                                    checked={specifyAbdomen}
                                                 />
                                                     &nbsp;&nbsp;Other
                                                 </label>
@@ -740,9 +792,11 @@ function TriageAndAssessment(props) {
                                     <div className='col-md-9'>
                                         <input
                                             style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
+                                            disabled={!specifyAbdomen}
                                             type='text'
                                             placeholder='Specify'
-                                            name='specify'
+                                            onChange={onSpecify}
+                                            name='abdomen'
                                             value={abdomen}
                                             className=' textInputStyle'
                                         />
@@ -804,8 +858,8 @@ function TriageAndAssessment(props) {
                                     <div className='form-group col-md-3'>
                                         <div class='radio'>
                                             <label class='radio-inline control-label'>
-                                                <input type='radio' name='neurological' value='Other'
-                                                    checked={neurological === 'Other'}
+                                                <input type='radio' name='neurological' value='Otherneurological'
+                                                    checked={specifyNeurological}
                                                 />
                                                     &nbsp;&nbsp;Other
                                                 </label>
@@ -819,9 +873,11 @@ function TriageAndAssessment(props) {
                                     <div classNames='col-md-12'>
                                         <input
                                             style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
+                                            disabled={!specifyNeurological}
                                             type='text'
                                             placeholder='Specify'
-                                            name='specify'
+                                            onChange={onSpecify}
+                                            name='neurological'
                                             value={neurological}
                                             className='control-label textInputStyle'
                                         />

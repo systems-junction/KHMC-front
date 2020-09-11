@@ -15,6 +15,7 @@ import validateInput from '../../../public/inputValidator'
 import validateNumber from '../../../public/numberValidator'
 import validateNumbers from '../../../public/numbersValidator'
 import validateFloat from '../../../public/FloatValidator'
+import validateNumberFloat from '../../../public/numberFloatValidator'
 import {
   uploadsUrl,
   updatePatientUrl,
@@ -411,6 +412,7 @@ function AddEditPatientListing(props) {
   const [MRN, setMRN] = useState('')
   const [isPatientSubmitted, setIsPatientSubmitted] = useState(false)
   const [enableForm, setenableForm] = useState(true)
+  const [enableNext, setenableNext] = useState(true)
 
   useEffect(() => {
     setcomingFor(props.history.location.state.comingFor)
@@ -475,7 +477,7 @@ function AddEditPatientListing(props) {
       validateFloat(height) &&
       weight &&
       weight != null &&
-      validateFloat(weight) &&
+      validateNumberFloat(weight) &&
       email &&
       email.length > 0 &&
       validateEmail(email) &&
@@ -538,7 +540,7 @@ function AddEditPatientListing(props) {
         coverageTerms.length > 0 &&
         payment &&
         payment.length > 0 &&
-        validateFloat(payment) &&
+        validateNumberFloat(payment) &&
         coveredFamilyMembers &&
         coveredFamilyMembers.length > 0 &&
         otherCoverageDetails &&
@@ -876,6 +878,11 @@ function AddEditPatientListing(props) {
     if (i.paymentMethod === 'Insurance') {
       setenableForm(false)
       setInsuranceForm(false)
+      setenableNext(false)
+    }
+    if (i.paymentMethod === 'Cash') {
+      setenableForm(true)
+      setenableNext(true)
     }
   }
 
@@ -912,6 +919,7 @@ function AddEditPatientListing(props) {
       dispatch({ field: 'coveredFamilyMembers', value: '' })
       dispatch({ field: 'otherCoverageDetails', value: '' })
       setenableForm(true)
+      setenableNext(true)
     } else if (e.target.value === 'Insurance') {
       dispatch({ field: 'depositorName', value: '' })
       dispatch({ field: 'amountReceived', value: '' })
@@ -921,6 +929,7 @@ function AddEditPatientListing(props) {
       setpdfView('')
       setInsuranceForm(false)
       setenableForm(false)
+      setenableNext(false)
     } else if (e.target.value === 'WireTransfer') {
       dispatch({ field: 'amountReceived', value: '' })
       setInsuranceForm(true)
@@ -1030,7 +1039,10 @@ function AddEditPatientListing(props) {
           >
             {comingFor === 'add' ? (
               <>
-                <div className='row' style={{ marginTop: '20px',marginBottom:'10px' }}>
+                <div
+                  className='row'
+                  style={{ marginTop: '20px', marginBottom: '10px' }}
+                >
                   <div
                     className='col-md-10 col-sm-8 col-8'
                     style={{
@@ -1507,7 +1519,7 @@ function AddEditPatientListing(props) {
                 />
                 <ErrorMessage
                   name={weight}
-                  type='float'
+                  type='numberFloat'
                   isFormSubmitted={isFormSubmitted}
                 />
               </div>
@@ -2449,6 +2461,7 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <Button
+                  disabled={enableNext}
                   style={styles.stylesForButton}
                   onClick={onClick}
                   variant='contained'
@@ -2727,7 +2740,7 @@ function AddEditPatientListing(props) {
                     />
                     <ErrorMessage
                       name={payment}
-                      type='float'
+                      type='numberFloat'
                       isFormSubmitted={isFormSubmitted}
                     />
                   </div>

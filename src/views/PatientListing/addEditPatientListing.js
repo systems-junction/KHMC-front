@@ -15,6 +15,7 @@ import validateInput from '../../public/inputValidator'
 import validateNumber from '../../public/numberValidator'
 import validateNumbers from '../../public/numbersValidator'
 import validateFloat from '../../public/FloatValidator'
+import validateNumberFloat from '../../public/numberFloatValidator'
 import {
   uploadsUrl,
   updatePatientUrl,
@@ -276,8 +277,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-function AddEditPatientListing(props) 
-{
+function AddEditPatientListing(props) {
   const classes = useStyles()
 
   const initialState = {
@@ -409,6 +409,7 @@ function AddEditPatientListing(props)
   const [MRN, setMRN] = useState('')
   const [isPatientSubmitted, setIsPatientSubmitted] = useState(false)
   const [enableForm, setenableForm] = useState(true)
+  const [enableNext, setenableNext] = useState(true)
 
   useEffect(() => {
     setcomingFor(props.history.location.state.comingFor)
@@ -416,10 +417,9 @@ function AddEditPatientListing(props)
 
     const selectedRec = props.history.location.state.selectedItem
 
-    if (selectedRec) 
-    {
+    if (selectedRec) {
       setPatientId(selectedRec._id)
-  
+
       Object.entries(selectedRec).map(([key, val]) => {
         if (val && typeof val === 'object') {
           dispatch({ field: key, value: val._id })
@@ -435,9 +435,8 @@ function AddEditPatientListing(props)
         }
       })
     }
-    if(props.history.location.state.comingFor === 'edit'){
-      if(selectedRec.paymentMethod === "Insurance")
-      {
+    if (props.history.location.state.comingFor === 'edit') {
+      if (selectedRec.paymentMethod === 'Insurance') {
         setenableForm(false)
         setInsuranceForm(false)
       }
@@ -478,7 +477,7 @@ function AddEditPatientListing(props)
       validateFloat(height) &&
       weight &&
       weight != null &&
-      validateFloat(weight) &&
+      validateNumberFloat(weight) &&
       email &&
       email.length > 0 &&
       validateEmail(email) &&
@@ -541,7 +540,7 @@ function AddEditPatientListing(props)
         coverageTerms.length > 0 &&
         payment &&
         payment.length > 0 &&
-        validateFloat(payment) &&
+        validateNumberFloat(payment) &&
         coveredFamilyMembers &&
         coveredFamilyMembers.length > 0 &&
         otherCoverageDetails &&
@@ -635,74 +634,74 @@ function AddEditPatientListing(props)
       formData.append('file', slipUpload, slipUpload.name)
     }
     // if (validatePatientForm() && validatePaymentForm()) {
-      const params = {
-        _id: patientId,
-        profileNo,
-        SIN,
-        title,
-        firstName,
-        lastName,
-        gender,
-        nationality,
-        age,
-        bloodGroup,
-        dob,
-        phoneNumber,
-        mobileNumber,
-        email,
-        country,
-        city,
-        height,
-        weight,
-        bloodGroup,
-        address,
-        otherDetails,
-        paymentMethod,
-        amountReceived,
-        receiverName,
-        bankName,
-        depositorName,
-        insuranceNo,
-        insuranceVendor,
-        coverageDetails,
-        coverageTerms,
-        payment,
-        emergencyName,
-        emergencyContactNo,
-        emergencyRelation,
-        coveredFamilyMembers,
-        otherCoverageDetails,
-      }
-      formData.append('data', JSON.stringify(params))
-      console.log('PARAMSS ', params)
-      axios
-        .put(updatePatientUrl, formData)
-        .then((res) => {
-          if (res.data.success) {
-            setPatientId(res.data.data._id)
-            setMRN(res.data.data.profileNo)
-            setOpenNotification(true)
-            setMRN(res.data.data.profileNo)
-            setsuccessMsg(
-              'Patient details updated successfully, Generate IPR/EDR now'
-            )
-            setIsPatientSubmitted(true)
-            if (!searchActivated) {
-              props.history.push({
-                pathname: 'success',
-                state: { message: 'Updated successfully' },
-              })
-            }
-          } else if (!res.data.success) {
-            setOpenNotification(true)
-            setErrorMsg('Error')
-          }
-        })
-        .catch((e) => {
-          console.log('error after updating patient details', e)
+    const params = {
+      _id: patientId,
+      profileNo,
+      SIN,
+      title,
+      firstName,
+      lastName,
+      gender,
+      nationality,
+      age,
+      bloodGroup,
+      dob,
+      phoneNumber,
+      mobileNumber,
+      email,
+      country,
+      city,
+      height,
+      weight,
+      bloodGroup,
+      address,
+      otherDetails,
+      paymentMethod,
+      amountReceived,
+      receiverName,
+      bankName,
+      depositorName,
+      insuranceNo,
+      insuranceVendor,
+      coverageDetails,
+      coverageTerms,
+      payment,
+      emergencyName,
+      emergencyContactNo,
+      emergencyRelation,
+      coveredFamilyMembers,
+      otherCoverageDetails,
+    }
+    formData.append('data', JSON.stringify(params))
+    console.log('PARAMSS ', params)
+    axios
+      .put(updatePatientUrl, formData)
+      .then((res) => {
+        if (res.data.success) {
+          setPatientId(res.data.data._id)
+          setMRN(res.data.data.profileNo)
           setOpenNotification(true)
-          setErrorMsg('Patient with same MRN already exists')
-        })
+          setMRN(res.data.data.profileNo)
+          setsuccessMsg(
+            'Patient details updated successfully, Generate IPR/EDR now'
+          )
+          setIsPatientSubmitted(true)
+          if (!searchActivated) {
+            props.history.push({
+              pathname: 'success',
+              state: { message: 'Updated successfully' },
+            })
+          }
+        } else if (!res.data.success) {
+          setOpenNotification(true)
+          setErrorMsg('Error')
+        }
+      })
+      .catch((e) => {
+        console.log('error after updating patient details', e)
+        setOpenNotification(true)
+        setErrorMsg('Patient with same MRN already exists')
+      })
     // }
     setIsFormSubmitted(true)
   }
@@ -876,6 +875,11 @@ function AddEditPatientListing(props)
     if (i.paymentMethod === 'Insurance') {
       setenableForm(false)
       setInsuranceForm(false)
+      setenableNext(false)
+    }
+    if (i.paymentMethod === 'Cash') {
+      setenableForm(true)
+      setenableNext(true)
     }
   }
 
@@ -912,6 +916,7 @@ function AddEditPatientListing(props)
       dispatch({ field: 'coveredFamilyMembers', value: '' })
       dispatch({ field: 'otherCoverageDetails', value: '' })
       setenableForm(true)
+      setenableNext(true)
     } else if (e.target.value === 'Insurance') {
       dispatch({ field: 'depositorName', value: '' })
       dispatch({ field: 'amountReceived', value: '' })
@@ -921,6 +926,7 @@ function AddEditPatientListing(props)
       setpdfView('')
       setInsuranceForm(false)
       setenableForm(false)
+      setenableNext(false)
     } else if (e.target.value === 'WireTransfer') {
       dispatch({ field: 'amountReceived', value: '' })
       setInsuranceForm(true)
@@ -1503,7 +1509,7 @@ function AddEditPatientListing(props)
                 />
                 <ErrorMessage
                   name={weight}
-                  type='float'
+                  type='numberFloat'
                   isFormSubmitted={isFormSubmitted}
                 />
               </div>
@@ -1981,20 +1987,19 @@ function AddEditPatientListing(props)
                     }}
                   />
                 </>
-                
+
                 {currentUser.staffTypeId.type === 'EDR Receptionist' ? (
                   <Button
                     style={styles.generate}
                     // disabled={comingFor === 'add' ? !isFormSubmitted : false}
                     disabled={
-                      comingFor === 'add' ?
-                      !(
-                        validatePatientForm() &&
-                        validatePaymentForm() &&
-                        isPatientSubmitted
-                      )
-                      :
-                      false
+                      comingFor === 'add'
+                        ? !(
+                            validatePatientForm() &&
+                            validatePaymentForm() &&
+                            isPatientSubmitted
+                          )
+                        : false
                     }
                     onClick={
                       comingFor === 'add' ? handleGenerateEDR : handleEdit
@@ -2013,14 +2018,13 @@ function AddEditPatientListing(props)
                     style={styles.generate}
                     // disabled={comingFor === 'add' ? !isFormSubmitted : false}
                     disabled={
-                      comingFor === 'add' ?
-                      !(
-                        validatePatientForm() &&
-                        validatePaymentForm() &&
-                        isPatientSubmitted
-                      )
-                      :
-                      false
+                      comingFor === 'add'
+                        ? !(
+                            validatePatientForm() &&
+                            validatePaymentForm() &&
+                            isPatientSubmitted
+                          )
+                        : false
                     }
                     onClick={
                       comingFor === 'add' ? handleGenerateIPR : handleEdit
@@ -2401,6 +2405,7 @@ function AddEditPatientListing(props)
                 }}
               >
                 <Button
+                  disabled={enableNext}
                   style={styles.stylesForButton}
                   onClick={onClick}
                   variant='contained'
@@ -2443,14 +2448,13 @@ function AddEditPatientListing(props)
                   <Button
                     style={styles.generate}
                     disabled={
-                      comingFor === 'add' ?
-                      !(
-                        validatePatientForm() &&
-                        validatePaymentForm() &&
-                        isPatientSubmitted
-                      )
-                      :
-                      false
+                      comingFor === 'add'
+                        ? !(
+                            validatePatientForm() &&
+                            validatePaymentForm() &&
+                            isPatientSubmitted
+                          )
+                        : false
                     }
                     onClick={
                       comingFor === 'add' ? handleGenerateEDR : handleEdit
@@ -2469,14 +2473,13 @@ function AddEditPatientListing(props)
                     style={styles.generate}
                     // disabled={comingFor === 'add' ? !isFormSubmitted : false}
                     disabled={
-                      comingFor === 'add' ?
-                      !(
-                        validatePatientForm() &&
-                        validatePaymentForm() &&
-                        isPatientSubmitted
-                      )
-                      :
-                      false
+                      comingFor === 'add'
+                        ? !(
+                            validatePatientForm() &&
+                            validatePaymentForm() &&
+                            isPatientSubmitted
+                          )
+                        : false
                     }
                     onClick={
                       comingFor === 'add' ? handleGenerateIPR : handleEdit
@@ -2692,7 +2695,7 @@ function AddEditPatientListing(props)
                     />
                     <ErrorMessage
                       name={payment}
-                      type='float'
+                      type='numberFloat'
                       isFormSubmitted={isFormSubmitted}
                     />
                   </div>
@@ -2858,14 +2861,13 @@ function AddEditPatientListing(props)
                     style={styles.generate}
                     // disabled={comingFor === 'add' ? !isFormSubmitted : false}
                     disabled={
-                      comingFor === 'add' ?
-                      !(
-                        validatePatientForm() &&
-                        validatePaymentForm() &&
-                        isPatientSubmitted
-                      )
-                      :
-                      false
+                      comingFor === 'add'
+                        ? !(
+                            validatePatientForm() &&
+                            validatePaymentForm() &&
+                            isPatientSubmitted
+                          )
+                        : false
                     }
                     onClick={
                       comingFor === 'add' ? handleGenerateEDR : handleEdit
@@ -2882,14 +2884,13 @@ function AddEditPatientListing(props)
                   <Button
                     style={styles.generate}
                     disabled={
-                      comingFor === 'add' ?
-                      !(
-                        validatePatientForm() &&
-                        validatePaymentForm() &&
-                        isPatientSubmitted
-                      )
-                      :
-                      false
+                      comingFor === 'add'
+                        ? !(
+                            validatePatientForm() &&
+                            validatePaymentForm() &&
+                            isPatientSubmitted
+                          )
+                        : false
                     }
                     onClick={
                       comingFor === 'add' ? handleGenerateIPR : handleEdit
