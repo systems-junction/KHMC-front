@@ -995,7 +995,7 @@ function PatientAssessment(props) {
                 id='searchPatientQuery'
                 type='text'
                 variant='filled'
-                label='Search Patient by Name / MRN / National ID / Mobile Number/'
+                label='Search Patient by Name / MRN / National ID / Mobile Number'
                 name={'searchPatientQuery'}
                 value={searchPatientQuery}
                 onChange={handlePatientSearch}
