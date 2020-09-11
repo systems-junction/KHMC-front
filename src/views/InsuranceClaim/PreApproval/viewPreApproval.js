@@ -439,7 +439,7 @@ function AddEditPurchaseRequest(props) {
                     }}
                     label='Not Covered'
                   /> */}
-                  <Tab
+                  {/* <Tab
                     style={{
                       color: 'white',
                       borderRadius: 15,
@@ -447,7 +447,7 @@ function AddEditPurchaseRequest(props) {
                       color: value === 1 ? "#12387a" : '#3B988C',
                     }}
                     label='Follow Up'
-                  />
+                  /> */}
                 </Tabs>
               </div>
 

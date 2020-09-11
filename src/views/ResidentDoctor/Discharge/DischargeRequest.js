@@ -158,7 +158,7 @@ function DischargeRequest(props) {
   const initialState = {
     dischargeMedArray: '',
     dischargeRequest: '',
-
+    dischargeSummary:'',
     otherNotes: '',
     dischargeNotes: '',
     requestType: '',
@@ -177,7 +177,7 @@ function DischargeRequest(props) {
   const {
     dischargeMedArray,
     dischargeRequest,
-
+    dischargeSummary,
     otherNotes,
     dischargeNotes,
     requestType,
@@ -266,6 +266,8 @@ function DischargeRequest(props) {
   function handleAddPatient(i) {
     // setDialogOpen(true);
     console.log('selected banda : ', i)
+    dispatch({ field: 'dischargeNotes',value: ''})
+    dispatch({ field: 'otherNotes', value: '' })
     setPatientDetails(i)
     getPatientByInfo(i._id)
     openPatientDetailsDialog(true)
@@ -297,18 +299,18 @@ function DischargeRequest(props) {
                   dispatch({ field: 'patientId', value: val._id })
                   console.log(key, val._id)
                 }
-                if (key === 'dischargeRequest') {
-                  // console.log("INNNN dischargeRequest",key,val)
-                  Object.entries(val).map(([key1, val1]) => {
-                    if (key1 === 'dischargeSummary') {
-                      console.log(key1, val1)
-                      dispatch({
-                        field: 'dischargeNotes',
-                        value: val1.dischargeNotes,
-                      })
+                if (key === 'dischargeRequest') 
+                {
+                  Object.entries(val).map(([key1, val1]) => 
+                  {
+                    if (key1 === 'dischargeSummary') 
+                    {
+                      dispatch({ field: 'dischargeSummary',value: val1 })
+                      dispatch({ field: 'dischargeNotes',value: val1.dischargeNotes })
                       dispatch({ field: 'otherNotes', value: val1.otherNotes })
-                    } else if (key1 === 'dischargeMedication') {
-                      // console.log("INNNN dischargeMedication",key1,val1)
+                    } 
+                    else if (key1 === 'dischargeMedication') 
+                    {
                       dispatch({ field: 'dischargeMedArray', value: [val1] })
                     }
                   })
@@ -316,7 +318,6 @@ function DischargeRequest(props) {
                 }
               } else {
                 dispatch({ field: key, value: val })
-                // console.log("here",key,val)
               }
             })
           }
@@ -339,6 +340,8 @@ function DischargeRequest(props) {
         comingFor: 'add',
         selectedItem: selectedItem,
         dischargeMedArray,
+        otherNotes,
+        dischargeNotes
       },
     })
   }
@@ -402,11 +405,11 @@ function DischargeRequest(props) {
     }, 2000)
   }
 
-  function validateDischargeForm() {
-    console.log(dischargeMedArray[0])
+  function validateDischargeForm() 
+  {
     return (
-      dischargeMedArray &&
-      dischargeMedArray[0].medicine.length !== 0 &&
+      // dischargeMedArray &&
+      // dischargeMedArray[0].medicine.length !== 0 &&
       dischargeNotes !== '' &&
       otherNotes !== ''
     )
@@ -583,7 +586,6 @@ function DischargeRequest(props) {
             Patient Details
           </h5>
           <div
-            // className="row"
             style={{
               marginTop: 25,
               backgroundColor: 'white',
