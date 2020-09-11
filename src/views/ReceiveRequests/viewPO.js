@@ -26,6 +26,7 @@ import Header from "../../components/Header/Header";
 
 import VIewAll from "../../assets/img/view_all.png";
 import business_Unit from "../../assets/img/Purchase Order.png";
+import ViewAllBtn from "../../components/ViewAllBtn/viewAll";
 
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 
@@ -139,6 +140,12 @@ function AddEditPurchaseRequest(props) {
   } = state;
 
   const onChangeValue = (e) => {
+    var pattern = /^[a-zA-Z0-9 ]*$/;
+    if (e.target.type === "text") {
+      if (pattern.test(e.target.value) === false) {
+        return;
+      }
+    }
     dispatch({ field: e.target.name, value: e.target.value });
   };
 
@@ -146,9 +153,6 @@ function AddEditPurchaseRequest(props) {
     dispatch({ field: "poSentDate", value });
   };
 
-  function validateForm() {
-    return status !== "";
-  }
 
   const [comingFor, setcomingFor] = useState("");
 
@@ -278,7 +282,7 @@ function AddEditPurchaseRequest(props) {
     setIsFormSubmitted(true);
     console.log("purchase request", purchaseRequest);
 
-    if (validateForm()) {
+    if (!validateForm()) {
       let params = {
         _id,
         mrId: mrId._id,
@@ -294,7 +298,13 @@ function AddEditPurchaseRequest(props) {
         .then((res) => {
           if (res.data.success) {
             console.log("updated", res.data);
-            props.history.goBack();
+            // props.history.goBack();
+            props.history.replace({
+              pathname: "/home/wms/fus/medicinalorder/success",
+              state: {
+                message: `Purchase Order ${poId.purchaseOrderNo} has been ${status}ed successfully`,
+              },
+            });
           } else if (!res.data.success) {
             setOpenNotification(true);
           }
@@ -306,6 +316,11 @@ function AddEditPurchaseRequest(props) {
         });
     }
   };
+
+
+  function validateForm() {
+    return status !== "approve" && status !== "reject";
+  }
 
   return (
     <div
@@ -329,9 +344,7 @@ function AddEditPurchaseRequest(props) {
             <h4>Approve Purchase Order</h4>
           </div>
 
-          <div>
-            <img onClick={() => props.history.goBack()} src={VIewAll} />
-          </div>
+          <ViewAllBtn history={props.history} />
         </div>
 
         <div className={classesForTabs.root}>
@@ -343,17 +356,13 @@ function AddEditPurchaseRequest(props) {
           >
             <Tab
               style={{
-                color: "white",
-                borderRadius: 15,
-                // backgroundColor: value === 0 ? "#2c6ddd" : undefined,
+                color: value === 0 ? "#052766" : "#3B988C",
               }}
               label="PO Details"
             />
             <Tab
               style={{
-                color: "white",
-                borderRadius: 15,
-                // backgroundColor: value === 1 ? "#2c6ddd" : undefined,
+                color: value === 1 ? "#052766" : "#3B988C",
               }}
               label="Items"
             />
@@ -576,11 +585,11 @@ function AddEditPurchaseRequest(props) {
               >
                 <TextField
                   name={"comments"}
-                  disabled={true}
                   label="Comments"
                   value={comments}
                   className="textInputStyle"
                   variant="filled"
+                  onChange={onChangeValue}
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
@@ -606,31 +615,38 @@ function AddEditPurchaseRequest(props) {
               )}
             </div> */}
 
-            <div
-              style={{
-                display: "flex",
-                flex: 1,
-                justifyContent: "space-between",
-                marginBottom: 40,
-                marginTop: 20,
-              }}
-            >
-              <div style={{}}>
-                <img
-                  onClick={() => props.history.goBack()}
-                  src={Back_Arrow}
-                  style={{ width: 60, height: 40, cursor: "pointer" }}
-                />
-              </div>
-              <Button
-                disabled={!validateForm()}
-                style={{ width: 140, height: 45 }}
-                onClick={handleEdit}
-                variant="contained"
-                color="primary"
+            <div class="row">
+              <div
+                style={{
+                  display: "flex",
+                  flex: 1,
+                  justifyContent: "space-between",
+                  marginBottom: 40,
+                  marginTop: 20,
+                }}
               >
-                Update
-              </Button>
+                <div style={{}}>
+                  <img
+                    onClick={() => props.history.goBack()}
+                    src={Back_Arrow}
+                    style={{ width: 60, height: 40, cursor: "pointer" }}
+                  />
+                </div>
+                <Button
+                  disabled={validateForm()}
+                  style={{
+                    width: 140,
+                    height: 45,
+                    color: "white",
+                    backgroundColor: "#845ec2",
+                  }}
+                  onClick={handleEdit}
+                  variant="contained"
+                  color="primary"
+                >
+                  Update
+                </Button>
+              </div>
             </div>
 
             {openItemDialog ? (
