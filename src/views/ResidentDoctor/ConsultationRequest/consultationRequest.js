@@ -366,8 +366,10 @@ function LabRadRequest(props) {
   } = state;
 
   const onChangeValue = (e) => {
-<<<<<<< HEAD
-    dispatch({ field: e.target.name, value: e.target.value });
+    dispatch({
+      field: e.target.name,
+      value: e.target.value.replace(/[^\w\s]/gi, ""),
+    });
   };
 
   const [currentUser, setCurrentUser] = useState("");
@@ -405,45 +407,6 @@ function LabRadRequest(props) {
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [id, setId] = useState("");
   const [searchRadioQuery, setSearchRadioQuery] = useState("");
-=======
-    dispatch({
-      field: e.target.name,
-      value: e.target.value.replace(/[^\w\s]/gi, ''),
-    })
-  }
-
-  const [currentUser, setCurrentUser] = useState('')
-  const [errorMsg, setErrorMsg] = useState('')
-  const [openNotification, setOpenNotification] = useState(false)
-  const [value, setValue] = useState(4)
-  const [selectedItem, setSelectedItem] = useState('')
-  const [searchPatientQuery, setSearchPatientQuery] = useState('')
-  const [patientFoundSuccessfull, setpatientFoundSuccessfully] = useState(false)
-  const [patientFound, setpatientFound] = useState('')
-  const [patientDetails, setPatientDetails] = useState('')
-  const [selectedPatientArray, setSelectedPatientArray] = useState([])
-  const [patientDetailsDialog, openPatientDetailsDialog] = useState(false)
-  const [enableForm, setenableForm] = useState(true)
-  const [openItemDialog, setOpenItemDialog] = useState(false)
-  const [openAddConsultDialog, setOpenAddConsultDialog] = useState(false)
-  const [openAddResidentDialog, setOpenAddResidentDialog] = useState(false)
-  const [item, setItem] = useState('')
-  const [selectedPatient, setSelectedPatient] = useState('')
-  const [requestNo, setrequestNo] = useState('')
-  const [labRequest, setlabRequest] = useState('')
-  const [pharmacyRequest, setpharmacyRequest] = useState('')
-  const [radiologyRequest, setradiologyRequest] = useState('')
-  const [searchQuery, setSearchQuery] = useState('')
-  const [itemFound, setItemFound] = useState('')
-  const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false)
-  const [selectedSearchedItem, setSelectedSearchedItem] = useState('')
-  const [selectedSearchedRadioItem, setSelectedSearchedRadioItem] = useState('')
-  const [selectedLabArray, setSelectedLabArray] = useState([])
-  const [selectedRadioArray, setSelectedRadioArray] = useState([])
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false)
-  const [id, setId] = useState('')
-  const [searchRadioQuery, setSearchRadioQuery] = useState('')
->>>>>>> aa1679d3df77c9eccde4a301a711a52f5ff5af14
   const [radioItemFoundSuccessfull, setRadioItemFoundSuccessfully] = useState(
     ""
   );
@@ -517,7 +480,6 @@ function LabRadRequest(props) {
       {
         consultationNo: consultationNoteNo,
         description: description,
-
         // consultationNotes: consultationNotes,
         doctorNotes: doctorconsultationNotes,
         requester: currentUser.staffId,
