@@ -958,6 +958,10 @@ function AddEditPatientListing(props) {
         value: e.target.value.replace(/[^\w.\s]/gi, ''),
       })
     }
+    if(e.target.name === 'dob')
+    {
+      calculate_age(e.target.value)
+    }
 
     if (e.target.value === 'Cash') {
       dispatch({ field: 'bankName', value: '' })
@@ -998,6 +1002,18 @@ function AddEditPatientListing(props) {
     } else {
       dispatch({ field: e.target.name, value: e.target.value })
     }
+  }
+
+  const calculate_age = (dob) => {
+    var today = new Date();
+    var birthDate = new Date(dob);
+    var age_now = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) 
+    {
+        age_now--;
+    }
+    dispatch({ field: 'age', value: age_now })
   }
 
   if (openNotification) {
