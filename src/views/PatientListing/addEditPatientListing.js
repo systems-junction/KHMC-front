@@ -1,21 +1,31 @@
-import React, { useEffect, useState, useReducer } from "react";
-import TextField from "@material-ui/core/TextField";
-import { makeStyles } from "@material-ui/core/styles";
-import { FaUpload } from "react-icons/fa";
-import Paper from "@material-ui/core/Paper";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import MenuItem from "@material-ui/core/MenuItem";
-import Button from "@material-ui/core/Button";
-import Fingerprint from "../../assets/img/fingerprint.png";
-import BarCode from "../../assets/img/Bar Code.png";
-import ErrorMessage from "../../components/ErrorMessage/errorMessage";
-import validateEmail from "../../public/emailValidator";
-import validateInput from "../../public/inputValidator";
-import validateNumber from "../../public/numberValidator";
-import validateNumbers from "../../public/numbersValidator";
-import validateFloat from "../../public/FloatValidator";
-import validateNumberFloat from "../../public/numberFloatValidator";
+import React, { useEffect, useState, useReducer } from 'react'
+import TextField from '@material-ui/core/TextField'
+import { makeStyles } from '@material-ui/core/styles'
+import { FaUpload } from 'react-icons/fa'
+import Paper from '@material-ui/core/Paper'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
+import MenuItem from '@material-ui/core/MenuItem'
+import Button from '@material-ui/core/Button'
+import Fingerprint from '../../assets/img/fingerprint.png'
+import BarCode from '../../assets/img/Bar Code.png'
+import ErrorMessage from '../../components/ErrorMessage/errorMessage'
+import validateEmail from '../../public/emailValidator'
+import validateFirstName from '../../public/inputValidator'
+import validateLastName from '../../public/inputValidator'
+import validateEmergencyName from '../../public/inputValidator'
+import validateInsuranceVendor from '../../public/inputValidator'
+import validateNationName from '../../public/inputValidator'
+import validateNumber from '../../public/numberValidator'
+import validateNumbers from '../../public/numbersValidator'
+import validateNationalId from '../../public/numbersValidator'
+import validateAmount from '../../public/numbersValidator'
+import validateInsuranceNo from '../../public/numbersValidator'
+import validateFloat from '../../public/FloatValidator'
+import validateInput from '../../public/FloatValidator'
+import validateNumberFloat from '../../public/numberFloatValidator'
+import validateWeight from '../../public/numberFloatValidator'
+import validateCoPayment from '../../public/numberFloatValidator'
 import {
   uploadsUrl,
   updatePatientUrl,
@@ -384,32 +394,33 @@ function AddEditPatientListing(props) {
       dispatch({ field: "city", value: "" });
       setCities("");
     }
-  };
+  }
 
-  const classesForTabs = useStylesForTabs();
+  const classesForTabs = useStylesForTabs()
 
-  const [comingFor, setcomingFor] = useState("");
-  const [currentUser] = useState(cookie.load("current_user"));
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
-  const [successMsg, setsuccessMsg] = useState("");
-  const [openNotification, setOpenNotification] = useState(false);
-  const [countries, setCountries] = useState("");
-  const [cities, setCities] = useState("");
-  const [value, setValue] = React.useState(0);
-  const [slipUpload, setSlipUpload] = useState("");
-  const [imagePreview, setImagePreview] = useState("");
-  const [pdfView, setpdfView] = useState("");
-  const [patientId, setPatientId] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [itemFound, setItemFound] = useState("");
-  const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false);
-  const [searchActivated, setsearchActivated] = useState(false);
-  const [Insuranceform, setInsuranceForm] = useState(true);
-  const [MRN, setMRN] = useState("");
-  const [isPatientSubmitted, setIsPatientSubmitted] = useState(false);
-  const [enableForm, setenableForm] = useState(true);
-  const [enableNext, setenableNext] = useState(true);
+  const [comingFor, setcomingFor] = useState('')
+  const [currentUser] = useState(cookie.load('current_user'))
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
+  const [successMsg, setsuccessMsg] = useState('')
+  const [openNotification, setOpenNotification] = useState(false)
+  const [countries, setCountries] = useState('')
+  const [cities, setCities] = useState('')
+  const [value, setValue] = React.useState(0)
+  const [slipUpload, setSlipUpload] = useState('')
+  const [imagePreview, setImagePreview] = useState('')
+  const [pdfView, setpdfView] = useState('')
+  const [patientId, setPatientId] = useState('')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [itemFound, setItemFound] = useState('')
+  const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false)
+  const [searchActivated, setsearchActivated] = useState(false)
+  const [Insuranceform, setInsuranceForm] = useState(true)
+  const [MRN, setMRN] = useState('')
+  const [isPatientSubmitted, setIsPatientSubmitted] = useState(false)
+  const [enableForm, setenableForm] = useState(true)
+  const [enableNext, setenableNext] = useState(true)
+  const [coPaymentField, setCoPaymentField] = useState(true)
 
   useEffect(() => {
     setcomingFor(props.history.location.state.comingFor);
@@ -449,18 +460,18 @@ function AddEditPatientListing(props) {
       profileNo.length > 0 &&
       SIN &&
       SIN.length > 0 &&
-      validateNumbers(SIN) &&
+      validateNationalId(SIN) &&
       title &&
       title.length > 0 &&
       firstName &&
       firstName.length > 0 &&
-      validateInput(firstName) &&
+      validateFirstName(firstName) &&
       lastName &&
       lastName.length > 0 &&
-      validateInput(lastName) &&
+      validateLastName(lastName) &&
       nationality &&
       nationality.length > 0 &&
-      validateInput(nationality) &&
+      validateNationName(nationality) &&
       phoneNumber &&
       phoneNumber.length > 0 &&
       validateNumber(phoneNumber) &&
@@ -477,7 +488,7 @@ function AddEditPatientListing(props) {
       validateFloat(height) &&
       weight &&
       weight != null &&
-      validateNumberFloat(weight) &&
+      validateWeight(weight) &&
       email &&
       email.length > 0 &&
       validateEmail(email) &&
@@ -490,33 +501,38 @@ function AddEditPatientListing(props) {
       // validateInput(address) &&
       dob &&
       dob.length > 0 &&
-      bloodGroup &&
-      bloodGroup != null &&
+      // bloodGroup &&
+      // bloodGroup != null &&
       otherDetails &&
-      otherDetails.length > 0 &&
+      otherDetails.length > 0
       // validateInput(otherDetails) &&
+    )
+  }
+
+  function validateEmergencyForm() {
+    return (
       emergencyName &&
       emergencyName.length > 0 &&
-      validateInput(emergencyName) &&
+      validateEmergencyName(emergencyName) &&
       emergencyContactNo &&
       emergencyContactNo.length > 0 &&
       validateNumber(emergencyContactNo) &&
       emergencyRelation &&
-      emergencyRelation.length > 0 &&
-      validateInput(emergencyRelation)
-    );
+      emergencyRelation.length > 0
+      // validateInput(emergencyRelation)
+    )
   }
   function validatePaymentForm() {
     if (paymentMethod === "Cash") {
       return (
         depositorName &&
         depositorName.length > 0 &&
-        validateInput(depositorName) &&
+        validateEmergencyName(depositorName) &&
         amountReceived &&
         amountReceived != null &&
-        validateNumbers(amountReceived)
-      );
-    } else if (paymentMethod === "WireTransfer") {
+        validateAmount(amountReceived)
+      )
+    } else if (paymentMethod === 'WireTransfer') {
       return (
         bankName &&
         bankName.length > 0 &&
@@ -530,9 +546,10 @@ function AddEditPatientListing(props) {
       return (
         insuranceNo &&
         insuranceNo.length > 0 &&
+        validateInsuranceNo(insuranceNo) &&
         insuranceVendor &&
         insuranceVendor.length > 0 &&
-        validateInput(insuranceVendor) &&
+        validateInsuranceVendor(insuranceVendor) &&
         coverageDetails &&
         coverageDetails.length > 0 &&
         // validateInput(coverageDetails) &&
@@ -540,7 +557,7 @@ function AddEditPatientListing(props) {
         coverageTerms.length > 0 &&
         payment &&
         payment.length > 0 &&
-        validateNumberFloat(payment) &&
+        validateCoPayment(payment) &&
         coveredFamilyMembers &&
         coveredFamilyMembers.length > 0 &&
         otherCoverageDetails &&
@@ -555,7 +572,11 @@ function AddEditPatientListing(props) {
     if (slipUpload) {
       formData.append("file", slipUpload, slipUpload.name);
     }
-    if (validatePatientForm() && validatePaymentForm()) {
+    if (
+      validatePatientForm() &&
+      validatePaymentForm() &&
+      validateEmergencyForm()
+    ) {
       const params = {
         profileNo,
         SIN,
@@ -620,10 +641,13 @@ function AddEditPatientListing(props) {
           }
         })
         .catch((e) => {
-          console.log("error after adding patient details", e);
-          setOpenNotification(true);
-          setErrorMsg("Patient with same MRN already exists");
-        });
+          console.log('error after adding patient details', e)
+          setOpenNotification(true)
+          setErrorMsg('Patient with same MRN already exists')
+        })
+    } else {
+      setOpenNotification(true)
+      setErrorMsg('Please Fill the the empty fields with valid data')
     }
     setIsFormSubmitted(true);
   };
@@ -633,83 +657,85 @@ function AddEditPatientListing(props) {
     if (slipUpload) {
       formData.append("file", slipUpload, slipUpload.name);
     }
-    // if (validatePatientForm() && validatePaymentForm()) {
-    const params = {
-      _id: patientId,
-      profileNo,
-      SIN,
-      title,
-      firstName,
-      lastName,
-      gender,
-      nationality,
-      age,
-      bloodGroup,
-      dob,
-      phoneNumber,
-      mobileNumber,
-      email,
-      country,
-      city,
-      height,
-      weight,
-      bloodGroup,
-      address,
-      otherDetails,
-      paymentMethod,
-      amountReceived,
-      receiverName,
-      bankName,
-      depositorName,
-      insuranceNo,
-      insuranceVendor,
-      coverageDetails,
-      coverageTerms,
-      payment,
-      emergencyName,
-      emergencyContactNo,
-      emergencyRelation,
-      coveredFamilyMembers,
-      otherCoverageDetails,
-    };
-    formData.append("data", JSON.stringify(params));
-    console.log("PARAMSS ", params);
-    axios
-      .put(updatePatientUrl, formData)
-      .then((res) => {
-        if (res.data.success) {
-          setPatientId(res.data.data._id);
-          setMRN(res.data.data.profileNo);
-          setOpenNotification(true);
-          setMRN(res.data.data.profileNo);
-          console.log("====================================");
-          console.log(res.data.data);
-          console.log("====================================");
-          setsuccessMsg(
-            "Patient details updated successfully, Generate IPR/EDR now"
-          );
-          setIsPatientSubmitted(true);
-          if (!searchActivated) {
-            props.history.push({
-              pathname: "success",
-              state: {
-                message: `Patient with MRN ${res.data.data.profileNo} has been updated successfully`,
-              },
-            });
+    if (
+      validatePatientForm() &&
+      validatePaymentForm() &&
+      validateEmergencyForm()
+    ) {
+      const params = {
+        _id: patientId,
+        profileNo,
+        SIN,
+        title,
+        firstName,
+        lastName,
+        gender,
+        nationality,
+        age,
+        bloodGroup,
+        dob,
+        phoneNumber,
+        mobileNumber,
+        email,
+        country,
+        city,
+        height,
+        weight,
+        bloodGroup,
+        address,
+        otherDetails,
+        paymentMethod,
+        amountReceived,
+        receiverName,
+        bankName,
+        depositorName,
+        insuranceNo,
+        insuranceVendor,
+        coverageDetails,
+        coverageTerms,
+        payment,
+        emergencyName,
+        emergencyContactNo,
+        emergencyRelation,
+        coveredFamilyMembers,
+        otherCoverageDetails,
+      }
+      formData.append('data', JSON.stringify(params))
+      console.log('PARAMSS ', params)
+      axios
+        .put(updatePatientUrl, formData)
+        .then((res) => {
+          if (res.data.success) {
+            setPatientId(res.data.data._id)
+            setMRN(res.data.data.profileNo)
+            setOpenNotification(true)
+            setMRN(res.data.data.profileNo)
+            setsuccessMsg(
+              'Patient details updated successfully, Generate IPR/EDR now'
+            )
+            setIsPatientSubmitted(true)
+            if (!searchActivated) {
+              props.history.push({
+                pathname: 'success',
+                state: { message: 'Updated successfully' },
+              })
+            }
+          } else if (!res.data.success) {
+            setOpenNotification(true)
+            setErrorMsg('Error')
           }
-        } else if (!res.data.success) {
-          setOpenNotification(true);
-          setErrorMsg("Error");
-        }
-      })
-      .catch((e) => {
-        console.log("error after updating patient details", e);
-        setOpenNotification(true);
-        setErrorMsg("Patient with same MRN already exists");
-      });
-    // }
-    setIsFormSubmitted(true);
-  };
+        })
+        .catch((e) => {
+          console.log('error after updating patient details', e)
+          setOpenNotification(true)
+          setErrorMsg('Patient with same MRN already exists')
+        })
+    } else {
+      setOpenNotification(true)
+      setErrorMsg('Please Fill the the empty fields with valid data')
+    }
+    setIsFormSubmitted(true)
+  }
 
   const onSlipUpload = (event) => {
     var file = event.target.files[0];
@@ -735,9 +761,29 @@ function AddEditPatientListing(props) {
     setValue(newValue);
   };
 
+  const DetailsOnClick = () => {
+    if (validatePatientForm()) {
+      setValue(value + 1)
+    } else {
+      setErrorMsg('Please Check the form for errors')
+      setOpenNotification(true)
+    }
+    setIsFormSubmitted(true)
+  }
+
   const onClick = () => {
     setValue(value + 1);
   };
+
+  const EmergencyOnClick = () => {
+    if (validatePatientForm() && validateEmergencyForm()) {
+      setValue(value + 1)
+    } else {
+      setErrorMsg('Please Check the form for errors')
+      setOpenNotification(true)
+    }
+    setIsFormSubmitted(true)
+  }
 
   const onTabNavigation = () => {
     value === 1
@@ -893,6 +939,13 @@ function AddEditPatientListing(props) {
   }
 
   const onChangeValue = (e) => {
+    if (e.target.name === 'coverageTerms' && e.target.value === 'fullPayment') {
+      setCoPaymentField(false)
+      console.log(e.target.name, e.target.value)
+    } else {
+      setCoPaymentField(true)
+    }
+
     if (
       e.target.name === "email" ||
       e.target.name === "phoneNumber" ||
@@ -908,6 +961,10 @@ function AddEditPatientListing(props) {
         field: e.target.name,
         value: e.target.value.replace(/[^\w.\s]/gi, ""),
       });
+    }
+    if(e.target.name === 'dob')
+    {
+      calculate_age(e.target.value)
     }
 
     if (e.target.value === "Cash") {
@@ -950,6 +1007,18 @@ function AddEditPatientListing(props) {
       dispatch({ field: e.target.name, value: e.target.value });
     }
   };
+
+  const calculate_age = (dob) => {
+    var today = new Date();
+    var birthDate = new Date(dob);
+    var age_now = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) 
+    {
+        age_now--;
+    }
+    dispatch({ field: 'age', value: age_now })
+  }
 
   if (openNotification) {
     setTimeout(() => {
@@ -1244,7 +1313,7 @@ function AddEditPatientListing(props) {
                 />
                 <ErrorMessage
                   name={SIN}
-                  type="numbers"
+                  type='nationalId'
                   isFormSubmitted={isFormSubmitted}
                 />
               </div>
@@ -1307,7 +1376,7 @@ function AddEditPatientListing(props) {
                 />
                 <ErrorMessage
                   name={firstName}
-                  type="text"
+                  type='firstName'
                   isFormSubmitted={isFormSubmitted}
                 />
               </div>
@@ -1335,7 +1404,7 @@ function AddEditPatientListing(props) {
                 />
                 <ErrorMessage
                   name={lastName}
-                  type="text"
+                  type='lastName'
                   isFormSubmitted={isFormSubmitted}
                 />
               </div>
@@ -1434,7 +1503,7 @@ function AddEditPatientListing(props) {
                 />
                 <ErrorMessage
                   name={nationality}
-                  type="text"
+                  type='nationName'
                   isFormSubmitted={isFormSubmitted}
                 />
               </div>
@@ -1477,8 +1546,8 @@ function AddEditPatientListing(props) {
               >
                 <TextField
                   // type='number'
-                  label="Height (cm)"
-                  name={"height"}
+                  label='Height (inches)'
+                  name={'height'}
                   value={height}
                   onChange={onChangeValue}
                   error={height === "" && isFormSubmitted}
@@ -1518,7 +1587,7 @@ function AddEditPatientListing(props) {
                 />
                 <ErrorMessage
                   name={weight}
-                  type="numberFloat"
+                  type='weight'
                   isFormSubmitted={isFormSubmitted}
                 />
               </div>
@@ -1811,9 +1880,9 @@ function AddEditPatientListing(props) {
                 <Button
                   style={styles.stylesForButton}
                   //disabled={!validateFormType1()}
-                  onClick={onClick}
-                  variant="contained"
-                  color="primary"
+                  onClick={DetailsOnClick}
+                  variant='contained'
+                  color='primary'
                 >
                   Next
                 </Button>
@@ -1854,7 +1923,7 @@ function AddEditPatientListing(props) {
                   />
                   <ErrorMessage
                     name={emergencyName}
-                    type="text"
+                    type='emergencyName'
                     isFormSubmitted={isFormSubmitted}
                   />
                 </div>
@@ -1949,9 +2018,9 @@ function AddEditPatientListing(props) {
               >
                 <Button
                   style={styles.stylesForButton}
-                  onClick={onClick}
-                  variant="contained"
-                  color="primary"
+                  onClick={EmergencyOnClick}
+                  variant='contained'
+                  color='primary'
                 >
                   Next
                 </Button>
@@ -2160,7 +2229,7 @@ function AddEditPatientListing(props) {
                   />
                   <ErrorMessage
                     name={depositorName}
-                    type="text"
+                    type='emergencyName'
                     isFormSubmitted={isFormSubmitted}
                   />
                 </div>
@@ -2187,7 +2256,7 @@ function AddEditPatientListing(props) {
                   />
                   <ErrorMessage
                     name={amountReceived}
-                    type="numbers"
+                    type='amount'
                     isFormSubmitted={isFormSubmitted}
                   />
                 </div>
@@ -2534,7 +2603,7 @@ function AddEditPatientListing(props) {
                   />
                   <ErrorMessage
                     name={insuranceNo}
-                    type="numbers"
+                    type='insuranceNo'
                     isFormSubmitted={isFormSubmitted}
                   />
                 </div>
@@ -2630,7 +2699,7 @@ function AddEditPatientListing(props) {
                     />
                     <ErrorMessage
                       name={insuranceVendor}
-                      type="text"
+                      type='vendor'
                       isFormSubmitted={isFormSubmitted}
                     />
                   </div>
@@ -2687,11 +2756,10 @@ function AddEditPatientListing(props) {
                 >
                   <div>
                     <TextField
-                      required
-                      label="Co-Payment %"
-                      name={"payment"}
+                      label='Co-Payment %'
+                      name={'payment'}
                       value={payment}
-                      disabled={Insuranceform}
+                      disabled={Insuranceform || !coPaymentField}
                       onChange={onChangeValue}
                       error={payment === "" && isFormSubmitted}
                       type="number"
@@ -2704,7 +2772,7 @@ function AddEditPatientListing(props) {
                     />
                     <ErrorMessage
                       name={payment}
-                      type="numberFloat"
+                      type='coPayment'
                       isFormSubmitted={isFormSubmitted}
                     />
                   </div>
