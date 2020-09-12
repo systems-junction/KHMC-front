@@ -881,7 +881,8 @@ function AddEditPurchaseRequest(props) {
             pathname: "success",
             state: {
               //of Request No ${requestId}
-              message: `Radiology Service  updated successfully`,
+              // request #
+              message: `Radiology Service for patient MRN ${res.data.data.patientId.profileNo} updated successfully`,
             },
           });
         } else if (!res.data.success) {

@@ -763,7 +763,7 @@ function AddEditPatientListing(props) {
           props.history.push({
             pathname: 'success',
             state: {
-              message: `OP Record for patient ${MRN} has been generated`,
+              message: `OP Record for patient MRN ${MRN} has been generated successfully`,
             },
           })
         } else if (!res.data.success) {
