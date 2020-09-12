@@ -555,9 +555,9 @@ function AddEditPatientListing(props) {
         // validateInput(coverageDetails) &&
         coverageTerms &&
         coverageTerms.length > 0 &&
-        payment &&
-        payment.length > 0 &&
-        validateCoPayment(payment) &&
+        // payment &&
+        // payment.length > 0 &&
+        // validateCoPayment(payment) &&
         coveredFamilyMembers &&
         coveredFamilyMembers.length > 0 &&
         otherCoverageDetails &&
@@ -1600,7 +1600,7 @@ function AddEditPatientListing(props) {
                   name='bloodGroup'
                   value={bloodGroup}
                   onChange={onChangeValue}
-                  error={bloodGroup === '' && isFormSubmitted}
+                  // error={bloodGroup === '' && isFormSubmitted}
                   label='Blood Group'
                   variant='filled'
                   className='dropDownStyle'
@@ -1619,10 +1619,10 @@ function AddEditPatientListing(props) {
                     )
                   })}
                 </TextField>
-                <ErrorMessage
+                {/* <ErrorMessage
                   name={bloodGroup}
                   isFormSubmitted={isFormSubmitted}
-                />
+                /> */}
               </div>
             </div>
 
@@ -2755,7 +2755,7 @@ function AddEditPatientListing(props) {
                       value={payment}
                       disabled={Insuranceform || !coPaymentField}
                       onChange={onChangeValue}
-                      error={payment === '' && isFormSubmitted}
+                      // error={payment === '' && isFormSubmitted}
                       type='number'
                       className='textInputStyle'
                       variant='filled'
@@ -2764,11 +2764,11 @@ function AddEditPatientListing(props) {
                         classes: { input: classes.input },
                       }}
                     />
-                    <ErrorMessage
+                    {/* <ErrorMessage
                       name={payment}
                       type='coPayment'
                       isFormSubmitted={isFormSubmitted}
-                    />
+                    /> */}
                   </div>
                 </div>
               </div>

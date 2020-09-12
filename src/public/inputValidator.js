@@ -1,7 +1,7 @@
 export default function ValidateInput(input) {
   if (
     // /^[A-Za-z]+$/.test(input)
-    /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/.test(input)
+    /^[a-zA-Z_ ]*$/.test(input)
   ) {
     return true
   }
