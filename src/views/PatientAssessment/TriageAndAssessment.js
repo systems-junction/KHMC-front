@@ -119,12 +119,14 @@ function TriageAndAssessment(props) {
     const [successMsg, setsuccessMsg] = useState('')
     const [requestType, setrequestType] = useState('')
     const [openNotification, setOpenNotification] = useState(false)
+    const [MRN, setMRN] = useState('')
 
     useEffect(() => {
         setCurrentUser(cookie.load('current_user'))
 
         const selectedRec = props.history.location.state.selectedItem
-        console.log("In triage : ", selectedRec)
+        console.log("In triage : ", selectedRec.patientId.profileNo)
+        setMRN(selectedRec.patientId.profileNo)
         setId(selectedRec._id)
         setrequestType(selectedRec.requestType)
 
@@ -225,7 +227,7 @@ function TriageAndAssessment(props) {
                     console.log("Update Patient data : ", res.data.data)
                     props.history.push({
                         pathname: 'success',
-                        state: { message: 'Triage & Assessment added successfully' },
+                        state: { message: `Triage & Assessment for patient ${MRN} added successfully` },
                     })
                 } else if (!res.data.success) {
                     setOpenNotification(true);
