@@ -557,7 +557,7 @@ function AddEditPurchaseRequest(props) {
                 props.history.replace({
                   pathname: "/home/wms/fus/medicinalorder/success",
                   state: {
-                    message: `Purchase request ${requestNo} has been updated successfully`,
+                    message: `Purchase request # ${requestNo} has been updated successfully`,
                   },
                 });
               } else if (!res.data.success) {
