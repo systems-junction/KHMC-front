@@ -153,7 +153,6 @@ function AddEditPurchaseRequest(props) {
     dispatch({ field: "poSentDate", value });
   };
 
-
   const [comingFor, setcomingFor] = useState("");
 
   const [vendorsArray, setVendors] = useState("");
@@ -302,7 +301,7 @@ function AddEditPurchaseRequest(props) {
             props.history.replace({
               pathname: "/home/wms/fus/medicinalorder/success",
               state: {
-                message: `Purchase Order ${poId.purchaseOrderNo} has been ${status}ed successfully`,
+                message: `Purchase Order ${poId.purchaseOrderNo} has been set to status ${status} successfully`,
               },
             });
           } else if (!res.data.success) {
@@ -316,7 +315,6 @@ function AddEditPurchaseRequest(props) {
         });
     }
   };
-
 
   function validateForm() {
     return status !== "approve" && status !== "reject";
