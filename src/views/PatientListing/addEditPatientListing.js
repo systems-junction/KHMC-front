@@ -2752,12 +2752,10 @@ function AddEditPatientListing(props) {
                 >
                   <div>
                     <TextField
-                      // required
-                      disabled={coPaymentField}
                       label='Co-Payment %'
                       name={'payment'}
                       value={payment}
-                      disabled={Insuranceform}
+                      disabled={Insuranceform || !coPaymentField}
                       onChange={onChangeValue}
                       error={payment === '' && isFormSubmitted}
                       type='number'
