@@ -588,9 +588,9 @@ function LabRadRequest(props) {
   }
 
   const handleSearch = (e) => {
-    const a = e.target.value.replace(/[^\w\s]/gi, "");
-    setSearchQuery(a);
-    if (a.length >= 3) {
+    const a = e.target.value.replace(/[^\w\s]/gi, '')
+    setSearchQuery(a)
+    if (a.length >= 5) {
       axios
         .get(getSearchedLaboratoryService + "/" + a)
         .then((res) => {
@@ -667,6 +667,7 @@ function LabRadRequest(props) {
             status: labServiceStatus,
             comments: labComments,
             LRrequestNo: LRrequestNo,
+            view: true
           },
         ],
       });
@@ -823,6 +824,7 @@ function LabRadRequest(props) {
             status: radioServiceStatus,
             comments: radioComments,
             RRrequestNo: RRrequestNo,
+            view: true
           },
         ],
       });
@@ -1128,13 +1130,18 @@ function LabRadRequest(props) {
   };
 
   function viewLabRadReport(rec) {
-    let path = `cn/viewReport`;
+    if (!rec.view) {
+    let path = `cn/viewReport`
     props.history.push({
       pathname: path,
       state: {
         selectedItem: rec,
       },
     });
+  }
+  else{
+    viewItem(rec)
+  }
   }
 
   if (openNotification) {
