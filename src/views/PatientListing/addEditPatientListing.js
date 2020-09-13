@@ -26,6 +26,11 @@ import validateInput from "../../public/FloatValidator";
 import validateNumberFloat from "../../public/numberFloatValidator";
 import validateWeight from "../../public/numberFloatValidator";
 import validateCoPayment from "../../public/numberFloatValidator";
+import MuiPhoneNumber from "material-ui-phone-number";
+import validatePhone from "../../public/validatePhone";
+import CurrencyTextField from "@unicef/material-ui-currency-textfield";
+import validateHeight from "../../public/numberFloatValidator";
+
 import {
   uploadsUrl,
   updatePatientUrl,
