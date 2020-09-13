@@ -216,11 +216,11 @@ export default function PurchaseRequest(props) {
              ) : (
               undefined
             )} 
-            <img
+            {/* <img
               className='img-style'
               src={Search}
-              // style={{ maxWidth: '22.5%', height: 'auto' }}
-            />
+              style={{ maxWidth: '22.5%', height: 'auto' }}
+            /> */}
           </div>
         </div>
 

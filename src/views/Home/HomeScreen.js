@@ -156,17 +156,17 @@ const registeredNurse = [
   //   text: 'View Orders',
   //   path: `/home/wms/fus/professionalorder`,
   // },
-  // {
-  //   img: MedicationOrder,
-  //   text: 'Medication  Order Receiving',
-  //   path: `/home/wms/fus/medicinalorder`,
-  // },
-
   {
-    img: ReceiveItem,
-    text: "Order Receiving",
+    img: MedicationOrder,
+    text: 'Medication  Order Receiving',
     path: `/home/wms/fus/medicinalorder`,
   },
+
+  // {
+  //   img: ReceiveItem,
+  //   text: "Order Receiving",
+  //   path: `/home/wms/fus/medicinalorder`,
+  // },
 ];
 
 const radiologyImagingDepartment = [
@@ -250,9 +250,9 @@ const doctorPhysician = [
   },
 
   {
-    img: OrderItems,
-    text: "View Orders",
-    path: `/home/wms/fus/medicinalorder/view`,
+    img: "",
+    text: "",
+    path: "",
   },
 
   {
@@ -316,7 +316,7 @@ const warehouseMember = [
 
   {
     img: ReturnItem,
-    text: "FU Returns",
+    text: "FuncU Returns",
     path: `/home/wms/fus/returnitems`,
   },
 
@@ -489,7 +489,7 @@ const fuInventoryKeeper = [
 
   {
     img: ReturnItem,
-    text: "FU Returns Status",
+    text: "FuncU Return Status",
     path: `/home/wms/fus/returnitems`,
   },
 

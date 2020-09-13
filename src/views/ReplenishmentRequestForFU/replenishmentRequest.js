@@ -205,36 +205,36 @@ export default function ReplenishmentRequest(props) {
           } else {
             if (currentUser.staffTypeId.type === "Warehouse Inventory Keeper") {
               // let repRequest = res.data.data;
-              let temp = [];
-              for (let i = 0; i < repRequest.length; i++) {
-                if (
-                  repRequest[i].status === "Fulfillment Initiated" ||
-                  repRequest[i].status === "Delivery in Progress"
-                  //  || repRequest[i].status === "Received"
-                ) {
-                  temp.push(repRequest[i]);
-                }
-              }
+              // let temp = [];
+              // for (let i = 0; i < repRequest.length; i++) {
+              //   if (
+              //     repRequest[i].status === "Fulfillment Initiated" ||
+              //     repRequest[i].status === "Delivery in Progress"
+              //     //  || repRequest[i].status === "Received"
+              //   ) {
+              //     temp.push(repRequest[i]);
+              //   }
+              // }
               // console.log("rep array after filter", temp);
-              setPurchaseRequest(temp.reverse());
+              setPurchaseRequest(repRequest.reverse());
             } else if (currentUser.staffTypeId.type === "Warehouse Member") {
               // let repRequest = res.data.data;
-              let temp = [];
-              for (let i = 0; i < repRequest.length; i++) {
-                if (
-                  repRequest[i].status === "pending" ||
-                  repRequest[i].status === "Pending" ||
-                  repRequest[i].status === "Fulfillment Initiated" ||
-                  repRequest[i].status === "Partial Fulfillment Initiated"
-                ) {
-                  temp.push(repRequest[i]);
-                }
-              }
-              console.log(
-                "rep array after filter for fu inventory keeper",
-                temp
-              );
-              setPurchaseRequest(temp.reverse());
+              // let temp = [];
+              // for (let i = 0; i < repRequest.length; i++) {
+              //   if (
+              //     repRequest[i].status === "pending" ||
+              //     repRequest[i].status === "Pending" ||
+              //     repRequest[i].status === "Fulfillment Initiated" ||
+              //     repRequest[i].status === "Partial Fulfillment Initiated"
+              //   ) {
+              //     temp.push(repRequest[i]);
+              //   }
+              // }
+              // console.log(
+              //   "rep array after filter for fu inventory keeper",
+              //   temp
+              // );
+              setPurchaseRequest(repRequest.reverse());
             } else {
               setPurchaseRequest(repRequest.reverse());
             }

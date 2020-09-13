@@ -27,6 +27,7 @@ import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 import AddedPurchaseRequestTable from "../PurchaseOrders/addedPurchaseRequestTable";
 
 import socketIOClient from "socket.io-client";
+import Back_Arrow from "../../assets/img/Back_Arrow.png";
 
 const tableHeading = [
   "PO No",
@@ -187,10 +188,11 @@ export default function PurchaseRequest(props) {
             display: "flex",
             flexDirection: "column",
           }}
+          className="container-fluid"
         >
           {materialReceivings ? (
             <div>
-              <div>
+              <div class="row">
                 <CustomTable
                   tableData={materialReceivings}
                   tableDataKeys={tableDataKeys}
@@ -203,6 +205,26 @@ export default function PurchaseRequest(props) {
               </div>
 
               <Notification msg={errorMsg} open={openNotification} />
+
+              <div class="row">
+                <div
+                  style={{
+                    display: "flex",
+                    flex: 1,
+                    justifyContent: "space-between",
+                    marginBottom: 40,
+                    marginTop: 20,
+                  }}
+                >
+                  <div style={{}}>
+                    <img
+                      onClick={() => props.history.goBack()}
+                      src={Back_Arrow}
+                      style={{ width: 60, height: 40, cursor: "pointer" }}
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
           ) : (
             <div className="LoaderStyle">

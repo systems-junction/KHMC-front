@@ -1146,7 +1146,8 @@ function AddEditPurchaseRequest(props) {
                   inputVariant="filled"
                   // onChange={onChangeDate}
                   disabled={true}
-                  label="Date"
+                  label="Date (MM/DD/YYYY)"
+                  format="MM/dd/yyyy hh:mm a"
                   fullWidth
                   // style={{
                   //   backgroundColor: "white",
@@ -1460,8 +1461,7 @@ function AddEditPurchaseRequest(props) {
                     }}
                   >
                     <TextField
-                      required
-                      label="Search Item"
+                      label="Trade Name / Scientific Name / Item Code"
                       name={"searchQuery"}
                       value={searchQuery}
                       // error={searchQuery === "" && isFormSubmitted}
@@ -1498,14 +1498,21 @@ function AddEditPurchaseRequest(props) {
                                     align="center"
                                     style={styles.forTableCell}
                                   >
-                                    Item Name
+                                    Trade Name
                                   </TableCell>
 
                                   <TableCell
                                     align="center"
                                     style={styles.forTableCell}
                                   >
-                                    Form
+                                    Item Code
+                                  </TableCell>
+
+                                  <TableCell
+                                    align="center"
+                                    style={styles.forTableCell}
+                                  >
+                                    Item Name
                                   </TableCell>
 
                                   <TableCell
@@ -1522,12 +1529,12 @@ function AddEditPurchaseRequest(props) {
                                     Vendor Name
                                   </TableCell>
 
-                                  <TableCell
+                                  {/* <TableCell
                                     style={styles.forTableCell}
                                     align="center"
                                   >
                                     Description
-                                  </TableCell>
+                                  </TableCell> */}
                                 </TableRow>
                               </TableHead>
 
@@ -1540,10 +1547,13 @@ function AddEditPurchaseRequest(props) {
                                       style={{ cursor: "pointer" }}
                                     >
                                       <TableCell align="center">
-                                        {i.name}
+                                        {i.tradeName}
                                       </TableCell>
                                       <TableCell align="center">
-                                        {i.form}
+                                        {i.itemCode}
+                                      </TableCell>
+                                      <TableCell align="center">
+                                        {i.name}
                                       </TableCell>
                                       <TableCell align="center">
                                         {i.vendorId.vendorNo}
@@ -1551,9 +1561,9 @@ function AddEditPurchaseRequest(props) {
                                       <TableCell align="center">
                                         {i.vendorId.englishName}
                                       </TableCell>
-                                      <TableCell align="center">
+                                      {/* <TableCell align="center">
                                         {i.description}
-                                      </TableCell>
+                                      </TableCell> */}
                                     </TableRow>
                                   );
                                 })}

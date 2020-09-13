@@ -69,7 +69,7 @@ class Header extends React.Component {
             style={{
               float: 'right',
               width: 300,
-              marginRight: 40,
+              marginRight: 10,
               top: 50,
               right: 0,
               bottom: 0,

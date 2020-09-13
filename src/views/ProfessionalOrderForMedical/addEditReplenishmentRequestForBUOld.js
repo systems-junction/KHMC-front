@@ -1194,6 +1194,7 @@ function AddEditPurchaseRequest(props) {
                       <DateTimePicker
                         // inputVariant="outlined"
                         onChange={onChangeDate}
+                        format="MM/dd/yyyy hh:mm a"
                         disabled={true}
                         fullWidth
                         style={{

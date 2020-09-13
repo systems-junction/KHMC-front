@@ -616,6 +616,7 @@ function AddEditPurchaseRequest(props) {
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DateTimePicker
                   inputVariant="filled"
+                  format="MM/dd/yyyy hh:mm a"
                   onChange={(val) => onChangeDate(val, "dateGenerated")}
                   name={"dateGenerated"}
                   disabled={true}
@@ -627,7 +628,7 @@ function AddEditPurchaseRequest(props) {
                         : new Date()
                       : dateGenerated
                   }
-                  label={"Date Generated"}
+                  label={"Date Generated (MM/DD/YYYY)"}
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
@@ -879,6 +880,7 @@ function AddEditPurchaseRequest(props) {
               >
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <DateTimePicker
+                    format="MM/dd/yyyy hh:mm a"
                     inputVariant="filled"
                     onChange={(val) => onChangeDate(val, "expiryDate")}
                     name={"expiryDate"}
@@ -900,7 +902,7 @@ function AddEditPurchaseRequest(props) {
                           : null
                         : expiryDate
                     }
-                    label={"Expiry Date"}
+                    label={"Expiry Date (MM/DD/YYYY)"}
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },

@@ -22,8 +22,8 @@ import { dateOptions } from "../../variables/public";
 
 import Active from "../../assets/img/Active.png";
 import In_Active from "../../assets/img/Inactive.png";
-import ReturnItem from "../../assets/img/Return Item.png";
-import ReceiveItem from "../../assets/img/Receive Item.png";
+import ReturnItem from "../../assets/img/Return Item Grey.png";
+import ReceiveItem from "../../assets/img/Receive Item Grey.png";
 import print from "../../assets/img/print.png";
 
 import EditIcon from "../../assets/img/Edit.png";
@@ -64,7 +64,6 @@ const stylesB = {
     width: "100px",
     height: "40px",
     // paddingBottom:"0.5rem",
-
     // outline: "none",
     // boxShadow: "none",
   },
@@ -190,7 +189,7 @@ export default function CustomTable(props) {
               </Button>
             ) : val === "Can be fulfilled" ? (
               <Button
-                style={stylesB.stylesForActive}
+                style={{...stylesB.stylesForActive,backgroundColor:"#845dc2"}}
                 variant="contained"
                 color="primary"
               >
@@ -261,7 +260,7 @@ export default function CustomTable(props) {
         <>
           {val === "in_progress" ? (
             <Button
-              style={stylesB.stylesForActive}
+              style={{...stylesB.stylesForActive,   backgroundColor: "#e877a1"}}
               variant="contained"
               color="primary"
             >
@@ -541,7 +540,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "Cannot be fulfilled" ? (
             <Button
-              style={stylesB.stylesForActive}
+            style={{...stylesB.stylesForActive,   backgroundColor: "#e877a1"}}
               variant="contained"
               color="primary"
             >
@@ -587,9 +586,12 @@ export default function CustomTable(props) {
   const formatDate = (date) => {
     const d = new Date(date);
     return (
-      d.getDate() +
+      // d.getDate() +
+      d.getMonth() +
+      1 +
       "/" +
-      (d.getMonth() + 1) +
+      // (d.getMonth() + 1) +
+      d.getDate() +
       "/" +
       d.getFullYear() +
       " " +
@@ -819,7 +821,7 @@ export default function CustomTable(props) {
                                     style={{
                                       maxWidth: 60,
                                       height: 43,
-                                      backgroundColor: "grey",
+                                      // backgroundColor: "grey",
                                       borderRadius: 30,
                                     }}
                                   />
@@ -834,7 +836,7 @@ export default function CustomTable(props) {
                                     style={{
                                       maxWidth: 60,
                                       height: 45,
-                                      backgroundColor: "grey",
+                                      // backgroundColor: "grey",
                                       borderRadius: 30,
                                     }}
                                   />
