@@ -392,6 +392,8 @@ function AddEditPurchaseRequest(props) {
     }
   }, []);
 
+  console.log("comments", comments);
+
   const onChangeValue = (e) => {
     dispatch({ field: e.target.name, value: e.target.value });
   };
@@ -733,7 +735,9 @@ function AddEditPurchaseRequest(props) {
                   <DateTimePicker
                     inputVariant="filled"
                     disabled={true}
+                    ampm={false}
                     fullWidth
+                    format="MM/dd/yyyy hh:mm a"
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
@@ -745,7 +749,7 @@ function AddEditPurchaseRequest(props) {
                           : new Date()
                         : dateGenerated
                     }
-                    label={"Date Generated"}
+                    label={"Date Generated (MM/DD/YYYY)"}
                   />
                 </MuiPickersUtilsProvider>
               </div>
@@ -839,7 +843,12 @@ function AddEditPurchaseRequest(props) {
               </h5>
               <div className="row">
                 <div
-                  className="col-md-4"
+                  className={
+                    currentUser &&
+                    currentUser.staffTypeId.type === "FU Inventory Keeper"
+                      ? "col-md-3"
+                      : "col-md-4"
+                  }
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -861,7 +870,12 @@ function AddEditPurchaseRequest(props) {
                   />
                 </div>
                 <div
-                  className="col-md-4"
+                  className={
+                    currentUser &&
+                    currentUser.staffTypeId.type === "FU Inventory Keeper"
+                      ? "col-md-3"
+                      : "col-md-4"
+                  }
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -884,7 +898,12 @@ function AddEditPurchaseRequest(props) {
                 </div>
 
                 <div
-                  className="col-md-4"
+                  className={
+                    currentUser &&
+                    currentUser.staffTypeId.type === "FU Inventory Keeper"
+                      ? "col-md-3"
+                      : "col-md-4"
+                  }
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -906,134 +925,178 @@ function AddEditPurchaseRequest(props) {
                     error={requestedQty === "" && isFormSubmitted}
                   />
                 </div>
+
+                {currentUser &&
+                currentUser.staffTypeId.type === "FU Inventory Keeper" ? (
+                  <div
+                    className={
+                      currentUser &&
+                      currentUser.staffTypeId.type === "FU Inventory Keeper"
+                        ? "col-md-3"
+                        : "col-md-4"
+                    }
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      disabled={true}
+                      type="number"
+                      label="Current Qty"
+                      name={"currentQty"}
+                      value={currentQty}
+                      onChange={onChangeValue}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                      error={currentQty === "" && isFormSubmitted}
+                    />
+                  </div>
+                ) : (
+                  undefined
+                )}
               </div>
 
-              {dosage && noOfTimes && duration ? (
-                <div className="row">
-                  <div
-                    className="col-md-4"
-                    style={{
-                      ...styles.inputContainerForTextField,
-                      ...styles.textFieldPadding,
-                    }}
-                  >
-                    <TextField
-                      disabled={true}
-                      type="number"
-                      label="Dosage"
-                      name={"dosage"}
-                      value={dosage}
-                      onChange={onChangeValue}
-                      className="textInputStyle"
-                      variant="filled"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
+              {currentUser &&
+              currentUser.staffTypeId.type !== "FU Inventory Keeper" ? (
+                dosage && noOfTimes && duration ? (
+                  <div className="row">
+                    <div
+                      className="col-md-4"
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
                       }}
-                      error={dosage === "" && isFormSubmitted}
-                    />
-                  </div>
+                    >
+                      <TextField
+                        disabled={true}
+                        type="number"
+                        label="Dosage"
+                        name={"dosage"}
+                        value={dosage}
+                        onChange={onChangeValue}
+                        className="textInputStyle"
+                        variant="filled"
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                        error={dosage === "" && isFormSubmitted}
+                      />
+                    </div>
 
-                  <div
-                    className="col-md-4"
-                    style={{
-                      ...styles.inputContainerForTextField,
-                      ...styles.textFieldPadding,
-                    }}
-                  >
-                    <TextField
-                      disabled={true}
-                      type="number"
-                      label="No of times"
-                      name={"noOfTimes"}
-                      value={noOfTimes}
-                      onChange={onChangeValue}
-                      className="textInputStyle"
-                      variant="filled"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
+                    <div
+                      className="col-md-4"
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
                       }}
-                      error={noOfTimes === "" && isFormSubmitted}
-                    />
-                  </div>
+                    >
+                      <TextField
+                        disabled={true}
+                        type="number"
+                        label="No of times"
+                        name={"noOfTimes"}
+                        value={noOfTimes}
+                        onChange={onChangeValue}
+                        className="textInputStyle"
+                        variant="filled"
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                        error={noOfTimes === "" && isFormSubmitted}
+                      />
+                    </div>
 
-                  <div
-                    className="col-md-4"
-                    style={{
-                      ...styles.inputContainerForTextField,
-                      ...styles.textFieldPadding,
-                    }}
-                  >
-                    <TextField
-                      disabled={true}
-                      type="number"
-                      label="Duration"
-                      name={"duration"}
-                      value={duration}
-                      onChange={onChangeValue}
-                      className="textInputStyle"
-                      variant="filled"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
+                    <div
+                      className="col-md-4"
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
                       }}
-                      error={duration === "" && isFormSubmitted}
-                    />
+                    >
+                      <TextField
+                        disabled={true}
+                        type="number"
+                        label="Duration"
+                        name={"duration"}
+                        value={duration}
+                        onChange={onChangeValue}
+                        className="textInputStyle"
+                        variant="filled"
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                        error={duration === "" && isFormSubmitted}
+                      />
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  undefined
+                )
               ) : (
                 undefined
               )}
             </div>
 
-            {priority && schedule ? (
-              <div className="row">
-                <div
-                  className="col-md-6"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    disabled={true}
-                    label="Priority"
-                    name={"priority"}
-                    value={priority}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
+            {currentUser &&
+            currentUser.staffTypeId.type !== "FU Inventory Keeper" ? (
+              priority && schedule ? (
+                <div className="row">
+                  <div
+                    className="col-md-6"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
                     }}
-                    // error={secondStatus === "" && isFormSubmitted}
-                  />
-                </div>
+                  >
+                    <TextField
+                      disabled={true}
+                      label="Priority"
+                      name={"priority"}
+                      value={priority}
+                      onChange={onChangeValue}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                      // error={secondStatus === "" && isFormSubmitted}
+                    />
+                  </div>
 
-                <div
-                  className="col-md-6"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    disabled={true}
-                    label={"Schedule"}
-                    name={"schedule"}
-                    value={schedule}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
+                  <div
+                    className="col-md-6"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
                     }}
-                  />
+                  >
+                    <TextField
+                      disabled={true}
+                      label={"Schedule"}
+                      name={"schedule"}
+                      value={schedule}
+                      onChange={onChangeValue}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
+              ) : (
+                undefined
+              )
             ) : (
               undefined
             )}

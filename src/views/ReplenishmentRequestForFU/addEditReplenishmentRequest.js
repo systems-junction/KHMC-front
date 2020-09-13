@@ -76,6 +76,11 @@ const statusArrayForWareHouseMember = [
 ];
 
 const statusArrayForWareHouseDeliveryMan = [
+  { key: "Fulfillment Initiated", value: "Fulfillment Initiated" },
+  {
+    key: "Partial Fulfillment Initiated",
+    value: "Partial  Fulfillment Initiated",
+  },
   { key: "Delivery in Progress", value: "Delivery in Progress" },
   {
     key: "Partial Delivery in Progress",
@@ -362,6 +367,13 @@ function AddEditPurchaseRequest(props) {
         return;
       }
     }
+
+    if (e.target.type === "number") {
+      if (e.target.value < 0) {
+        return;
+      }
+    }
+
     dispatch({ field: e.target.name, value: e.target.value });
   };
 
@@ -771,7 +783,9 @@ function AddEditPurchaseRequest(props) {
             generated,
             status:
               (currentUser.staffTypeId.type === "Warehouse Member" ||
-                currentUser.staffTypeId.type === "admin") &&
+                currentUser.staffTypeId.type === "admin" ||
+                currentUser.staffTypeId.type ===
+                  "Warehouse Inventory Keeper") &&
               status === "pending" &&
               secondStatus === "Fulfillment Initiated"
                 ? "Fulfillment Initiated"
@@ -813,7 +827,7 @@ function AddEditPurchaseRequest(props) {
 
           if (
             currentUser.staffTypeId.type === "Warehouse Member" ||
-            currentUser.staffTypeId.type === "admin"
+            currentUser.staffTypeId.type === "Warehouse Inventory Keeper"
           ) {
             params = {
               ...obj,
@@ -1301,9 +1315,10 @@ function AddEditPurchaseRequest(props) {
             >
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DateTimePicker
+                  ampm={false}
                   inputVariant="filled"
                   onChange={onChangeDate}
-                  disabled={true}
+                  // disabled={true}
                   fullWidth
                   InputProps={{
                     className: classes.input,
@@ -1316,10 +1331,8 @@ function AddEditPurchaseRequest(props) {
                         : new Date()
                       : dateGenerated
                   }
-                  label={"Date"}
-                  // InputProps={{
-                  //   disableUnderline: true,
-                  // }}
+                  label={"Date (MM/DD/YYYY)"}
+                  format="MM/dd/yyyy hh:mm a"
                 />
               </MuiPickersUtilsProvider>
             </div>
@@ -1525,30 +1538,34 @@ function AddEditPurchaseRequest(props) {
                 Add Item
               </h5>
 
-              <div className="row">
-                <div
-                  className="col-md-12"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    label="Search Item"
-                    name={"searchQuery"}
-                    value={searchQuery}
-                    // error={searchQuery === "" && isFormSubmitted}
-                    onChange={handleSearch}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
+              {selectItemToEditId === "" ? (
+                <div className="row">
+                  <div
+                    className="col-md-12"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
                     }}
-                  />
+                  >
+                    <TextField
+                      required
+                      label="Search Item"
+                      name={"searchQuery"}
+                      value={searchQuery}
+                      // error={searchQuery === "" && isFormSubmitted}
+                      onChange={handleSearch}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
+              ) : (
+                undefined
+              )}
 
               <div className="row">
                 {searchQuery ? (
@@ -1572,7 +1589,7 @@ function AddEditPurchaseRequest(props) {
                                 <TableCell align="center">Name</TableCell>
                                 <TableCell align="center">Item Code</TableCell>
                                 <TableCell align="center">
-                                  Puschase Price
+                                  Purchase Price
                                 </TableCell>
                                 <TableCell align="center">
                                   Description
@@ -1790,7 +1807,7 @@ function AddEditPurchaseRequest(props) {
                         : true
                     }
                     type="number"
-                    label="FU Item Cost"
+                    label="FuncU Cost"
                     name={"fuItemCost"}
                     value={fuItemCost}
                     onChange={onChangeValue}
@@ -1936,7 +1953,25 @@ function AddEditPurchaseRequest(props) {
 
                     {statusArrayForWareHouseDeliveryMan.map((val) => {
                       return (
-                        <MenuItem key={val.key} value={val.key}>
+                        <MenuItem
+                          key={val.key}
+                          value={val.key}
+                          disabled={
+                            status === "Fulfillment Initiated" &&
+                            val.key === "Fulfillment Initiated"
+                              ? true
+                              : status === "Fulfillment Initiated" &&
+                                val.key === "Partial Fulfillment Initiated"
+                              ? true
+                              : status === "pending" &&
+                                val.key === "Delivery in Progress"
+                              ? true
+                              : status === "pending" &&
+                                val.key === "Partial Delivery in Progress"
+                              ? true
+                              : false
+                          }
+                        >
                           {val.value}
                         </MenuItem>
                       );
@@ -2050,7 +2085,7 @@ function AddEditPurchaseRequest(props) {
                 comingFor === "edit" ? (
                 <Button
                   style={styles.stylesForWHButton}
-                  disabled={!validateDeliveryForm()}
+                  disabled={!(validateInitiateForm() || validateDeliveryForm())}
                   onClick={handleInitiate}
                   variant="contained"
                   color="primary"

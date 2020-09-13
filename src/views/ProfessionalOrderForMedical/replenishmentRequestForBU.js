@@ -91,6 +91,7 @@ const tableHeadingForBUMember = [
   "Order No",
   "Patient MRN",
   "Date Generated",
+  "Status",
   "Actions",
 ];
 const tableDataKeysForBUMember = [
@@ -98,6 +99,7 @@ const tableDataKeysForBUMember = [
   "requestNo",
   "patientReferenceNo",
   "createdAt",
+  "status",
 ];
 
 // const tableHeadingForDoctorAndNursing = [
@@ -210,7 +212,7 @@ export default function ReplenishmentRequest(props) {
       .get(getRepRequestUrlBUForPharmaceutical)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data);
+          // console.log(res.data.data);
           let repRequest = res.data.data;
           // repRequest = res.data.data.filter(
           //   (order) => order.fuId._id === props.match.params.fuName
@@ -270,6 +272,7 @@ export default function ReplenishmentRequest(props) {
               //   }
               // }
               // console.log("rep array after filter", temp);
+              console.log(repRequest);
               setPurchaseRequest(repRequest.reverse());
             } else if (currentUser.staffTypeId.type === "BU Inventory Keeper") {
               // let repRequest = res.data.data;
@@ -476,16 +479,22 @@ export default function ReplenishmentRequest(props) {
         if (
           repRequest[i].status === "Delivery in Progress" ||
           repRequest[i].status === "pending_administration" ||
-          repRequest[i].status === "complete"
+          repRequest[i].status === "Received" ||
+          repRequest[i].status === "Partially Received"
         ) {
           temp.push(repRequest[i]);
         }
       }
-
       console.log("rep array after filter", temp);
-      setSelectedOrder(obj);
-      setIsOpen(true);
-      setRequestedItems(temp);
+
+      if (temp.length === 0) {
+        setOpenNotification(true);
+        setErrorMsg("Order is still pending from the pharmacy/sub store.");
+      } else {
+        setSelectedOrder(obj);
+        setIsOpen(true);
+        setRequestedItems(temp);
+      }
     } else {
       setSelectedOrder(obj);
       setIsOpen(true);
@@ -554,7 +563,7 @@ export default function ReplenishmentRequest(props) {
       fuId: selectedOrder.fuId,
       buId: selectedOrder.buId,
       selectedRequestedItem: requestedItem,
-      comments: selectedOrder.comments,
+      // comments: selectedOrder.comments,
       patientReferenceNo: selectedOrder.patientReferenceNo,
       requestedQty: requestedItem.requestedQty,
       duration: requestedItem.duration,
@@ -573,7 +582,10 @@ export default function ReplenishmentRequest(props) {
       priority: requestedItem.priority,
       make_model: requestedItem.make_model,
       size: requestedItem.size,
+      comments: requestedItem.comments,
     };
+
+    console.log("sending obj", obj)
 
     props.history.push({
       pathname: path,
@@ -589,8 +601,7 @@ export default function ReplenishmentRequest(props) {
   }
 
   if (
-    (currentUser &&
-    currentUser.staffTypeId.type !== "Doctor/Physician") ||
+    (currentUser && currentUser.staffTypeId.type !== "Doctor/Physician") ||
     props.history.location.pathname === `/home/wms/fus/medicinalorder/view`
   ) {
     return (

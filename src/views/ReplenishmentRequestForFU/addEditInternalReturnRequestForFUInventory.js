@@ -907,9 +907,10 @@ function AddEditPurchaseRequest(props) {
                     inputVariant="filled"
                     onChange={(val) => onChangeDate(val, "dateGenerated")}
                     name={"dateGenerated"}
-                    label="Date Generated"
+                    label="Date Generated (MM/DD/YYYY)"
                     disabled={true}
                     fullWidth
+                    format="MM/dd/yyyy hh:mm a"
                     // style={styles.inputContainerForDate}
 
                     InputProps={{
@@ -940,7 +941,8 @@ function AddEditPurchaseRequest(props) {
                     inputVariant="filled"
                     onChange={(val) => onChangeDate(val, "expiryDate")}
                     name={"expiryDate"}
-                    label="Expiry Date"
+                    label="Expiry Date (MM/DD/YYYY)"
+                    format="MM/dd/yyyy hh:mm a"
                     disabled={
                       currentUser &&
                       (currentUser.staffTypeId.type === "FU Inventory Keeper" ||
@@ -1531,12 +1533,13 @@ function AddEditPurchaseRequest(props) {
                     </div>
 
                     <div className="col-md-6" style={{ marginTop: 35 }}>
-                      <InputLabelComponent>Date/Time</InputLabelComponent>
+                      <InputLabelComponent>Date/Time (MM/DD/YYYY)</InputLabelComponent>
                       <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <DateTimePicker
                           inputVariant="outlined"
                           onChange={(val) => onChangeDate(val, "date")}
                           name={"date"}
+                          format="MM/dd/yyyy hh:mm a"
                           disabled={
                             (currentUser &&
                               currentUser.staffTypeId.type ===

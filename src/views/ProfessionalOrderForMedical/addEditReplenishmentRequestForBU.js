@@ -43,7 +43,7 @@ import { tr } from "date-fns/locale";
 
 import Header from "../../components/Header/Header";
 import view_all from "../../assets/img/Eye.png";
-import purchase_request from "../../assets/img/purchase request.png";
+import purchase_request from "../../assets/img/Medication Order.png";
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -102,8 +102,8 @@ const statusArrayForBUNurse = [
 ];
 
 const statusArrayForBUInventoryKeeper = [
-  { key: "complete", value: "Complete" },
-  // { key: "Partially Recieved", value: "Partially Recieved" },
+  { key: "Recieved", value: "Recieved" },
+  { key: "Partially Recieved", value: "Partially Recieved" },
 ];
 
 const orderArray = [
@@ -537,6 +537,12 @@ function AddEditPurchaseRequest(props) {
       }
     }
 
+    if (e.target.type === "number") {
+      if (e.target.value < 0) {
+        return;
+      }
+    }
+
     dispatch({ field: e.target.name, value: e.target.value });
   };
 
@@ -584,6 +590,7 @@ function AddEditPurchaseRequest(props) {
               priority: requestedItemsArray[i].priority,
               make_model: requestedItemsArray[i].make_model,
               size: requestedItemsArray[i].size,
+              comments: requestedItemsArray[i].comments,
             },
           ];
         }
@@ -630,7 +637,7 @@ function AddEditPurchaseRequest(props) {
           .catch((e) => {
             console.log("error after adding purchase request", e);
             setOpenNotification(true);
-            setErrorMsg("Error while adding the replenishment request");
+            setErrorMsg("Error while generating the order");
           });
       }
     }
@@ -663,6 +670,7 @@ function AddEditPurchaseRequest(props) {
               priority: requestedItemsArray[i].priority,
               make_model: requestedItemsArray[i].make_model,
               size: requestedItemsArray[i].size,
+              comments: requestedItemsArray[i].comments,
             },
           ];
         }
@@ -739,7 +747,7 @@ function AddEditPurchaseRequest(props) {
           .catch((e) => {
             console.log("error after updating purchase request", e);
             setOpenNotification(true);
-            setErrorMsg("Error while editing the purchase request");
+            setErrorMsg("Error while updating the order");
           });
       }
     }
@@ -855,7 +863,6 @@ function AddEditPurchaseRequest(props) {
       // buId: buObj._id,
       fuId: fuArray[0]._id,
     };
-    console.log("parasm", params);
     axios
       .post(getCurrentQtyForFURepRequestUrl, params)
       .then((res) => {
@@ -865,9 +872,9 @@ function AddEditPurchaseRequest(props) {
         }
       })
       .catch((e) => {
-        // console.log("error after adding purchase request", e);
-        setOpenNotification(true);
-        setErrorMsg("Error while adding the purchase request");
+        console.log("error while getting the current quantity", e);
+        // setOpenNotification(true);
+        // setErrorMsg("Error while adding the purchase request");
       });
   };
 
@@ -877,6 +884,8 @@ function AddEditPurchaseRequest(props) {
   }
 
   function handleAddItem(i) {
+    console.log("selected item", i);
+
     if (patientDetails) {
       getCurrentQty(i._id);
       // setDialogOpen(true);
@@ -926,11 +935,9 @@ function AddEditPurchaseRequest(props) {
     let checkForNonpharma = true;
 
     if (selectedItemToSearch === "non_pharmaceutical") {
-      checkForpharma =
-        requestedQty !== "" &&
-        requestedQty !== 0 &&
-        size !== "" &&
-        make_model !== "";
+      checkForpharma = requestedQty !== "" && requestedQty !== 0;
+      // && size !== "" &&
+      // make_model !== "";
     }
 
     if (selectedItemToSearch === "pharmaceutical") {
@@ -940,10 +947,10 @@ function AddEditPurchaseRequest(props) {
         duration !== "" &&
         dosage !== "0" &&
         noOfTimes !== "0" &&
-        duration !== "0" &&
-        schedule !== "" &&
-        priority !== "" &&
-        form !== "";
+        duration !== "0";
+      // && schedule !== "" &&
+      // priority !== "" &&
+      // form !== "";
     }
 
     return (
@@ -952,7 +959,7 @@ function AddEditPurchaseRequest(props) {
       itemName !== "" &&
       tradeName !== "" &&
       scientificName !== "" &&
-      maximumLevel >= requestedQty &&
+      // maximumLevel >= requestedQty &&
       checkForpharma &&
       checkForNonpharma
     );
@@ -1045,6 +1052,7 @@ function AddEditPurchaseRequest(props) {
               priority,
               make_model,
               size,
+              comments,
             },
           ],
         });
@@ -1072,6 +1080,7 @@ function AddEditPurchaseRequest(props) {
       dispatch({ field: "schedule", value: "" });
       dispatch({ field: "size", value: "" });
       dispatch({ field: "make_model", value: "" });
+      dispatch({ field: "comments", value: "" });
     }
   };
 
@@ -1118,6 +1127,7 @@ function AddEditPurchaseRequest(props) {
             secondStatus: requestedItemsArray[i].secondStatus,
             make_model,
             size,
+            comments,
           };
           temp[i] = obj;
         } else {
@@ -1156,6 +1166,7 @@ function AddEditPurchaseRequest(props) {
       dispatch({ field: "selectedItemToSearch", value: "pharmaceutical" });
       dispatch({ field: "size", value: "" });
       dispatch({ field: "make_model", value: "" });
+      dispatch({ field: "comments", value: "" });
     }
   };
 
@@ -1216,6 +1227,7 @@ function AddEditPurchaseRequest(props) {
       dispatch({ field: "schedule", value: i.schedule });
       dispatch({ field: "make_model", value: i.make_model });
       dispatch({ field: "size", value: i.size });
+      dispatch({ field: "comments", value: i.comments });
     } else {
       setOpenNotification(true);
       setErrorMsg("Item can not be updated once it is in progess");
@@ -1250,27 +1262,26 @@ function AddEditPurchaseRequest(props) {
     >
       <Header />
       <div className="cPadding">
-        {/* <div className="subheader">
-          <div>
-            <img src={purchase_request} />
-            <h4>
+        <div className="row">
+          <div className="subheader">
+            <div>
+              <img src={purchase_request} />
+              <h4>
+                {comingFor === "add"
+                  ? " Add Medication Order"
+                  : comingFor === "edit"
+                  ? " Update Medication Order"
+                  : comingFor === "view"
+                  ? "Medication Order Details"
+                  : undefined}
+              </h4>
+            </div>
 
-
-              {comingFor === "add"
-                ? " Add Medication Order"
-                : comingFor === "edit"
-                ? " Update Medication Order"
-                : comingFor === "view"
-                ? "Medication Order Details"
-                : undefined}
-            </h4>
-          </div>
-
-          <div>
-        
             <Button
-              onClick={() => props.history.goBack()}
-              style={styles.stylesForButton}
+              onClick={() =>
+                props.history.push("/home/wms/fus/medicinalorder/view")
+              }
+              style={{ ...styles.stylesForButton, height: 50 }}
               variant="contained"
               color="primary"
             >
@@ -1279,7 +1290,7 @@ function AddEditPurchaseRequest(props) {
               <strong>View All</strong>
             </Button>
           </div>
-        </div> */}
+        </div>
 
         <div style={{ marginTop: "5px", marginBottom: "5px" }}>
           {comingFor === "add" ? (
@@ -1425,123 +1436,6 @@ function AddEditPurchaseRequest(props) {
 
         {fuArray && fuArray !== "" ? (
           <div style={{ flex: 4, display: "flex", flexDirection: "column" }}>
-            {/* {comingFor === "edit" || comingFor === "view" ? (
-              <div className="row">
-                <div
-                  className="col-md-7"
-                  style={styles.inputContainerForTextField}
-                >
-                  <InputLabelComponent>Request No</InputLabelComponent>
-                  <input
-                    disabled={true}
-                    placeholder="Request No"
-                    name={"requestNo"}
-                    value={requestNo}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                  />
-                </div>
-
-                <div
-                  className={"col-md-5"}
-                  style={styles.inputContainerForTextField}
-                >
-                  <InputLabelComponent id="status-label">
-                    Generated By
-                  </InputLabelComponent>
-                  <input
-                    disabled={true}
-                    type="text"
-                    placeholder="Generated By"
-                    name={generatedBy}
-                    value={
-                      comingFor === "add"
-                        ? currentUser
-                          ? currentUser.name
-                          : ""
-                        : generatedBy
-                    }
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                  />
-                </div>
-
-              </div>
-            ) : (
-              undefined
-            )} */}
-
-            {/* <div className="row">
-              {comingFor === "edit" || comingFor === "view" ? (
-                <>
-                  <div
-                    className={"col-md-6"}
-                    style={styles.inputContainerForTextField}
-                  >
-                    <InputLabelComponent>Date Generated</InputLabelComponent>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                      <DateTimePicker
-                        // inputVariant="outlined"
-                        onChange={onChangeDate}
-                        disabled={true}
-                        fullWidth
-                        style={{
-                          backgroundColor: "white",
-                          borderRadius: 10,
-                          borderWidth: 0,
-                          height: 47,
-                          marginTop: 5,
-                          paddingLeft: 10,
-                          paddingTop: 9,
-                        }}
-                        InputProps={{
-                          disableUnderline: true,
-                        }}
-                        value={
-                          comingFor === "add"
-                            ? dateGenerated
-                              ? dateGenerated
-                              : new Date()
-                            : dateGenerated
-                        }
-                      />
-                    </MuiPickersUtilsProvider>
-                  </div>
-
-                  <div className="col-md-6">
-                    <div style={styles.inputContainerForDropDown}>
-                      <InputLabelComponent id="status-label">
-                        Requested FU
-                      </InputLabelComponent>
-
-                      {fuArray &&
-                        fuArray.map((val) => {
-                          if (val._id === fuId) {
-                            return (
-                              <input
-                                disabled={true}
-                                type="text"
-                                placeholder="Fu Id"
-                                name={"fuId"}
-                                value={val.fuName}
-                                onChange={onChangeValue}
-                                className="textInputStyle"
-                              />
-                            );
-                          }
-                        })}
-                    </div>
-                    <ErrorMessage
-                      name={fuId}
-                      isFormSubmitted={isFormSubmitted}
-                    />
-                  </div>
-                </>
-              ) : (
-                undefined
-              )}
-            </div> */}
-
             <h5 style={{ fontWeight: "bold", color: "white", marginTop: 25 }}>
               Order Item
             </h5>
@@ -1561,12 +1455,12 @@ function AddEditPurchaseRequest(props) {
                   display: "flex",
                   alignItems: "center",
                   borderRadius: 5,
-                  paddingTop: 3,
+                  paddingTop: 8,
                 }}
               >
                 <h6
                   className="col-md-4 col-sm-4 col-4"
-                  style={{ fontWeight: "bold" }}
+                  style={{ verticalAlign: "center" }}
                 >
                   Item Type
                 </h6>
@@ -1716,12 +1610,12 @@ function AddEditPurchaseRequest(props) {
                                     Scientific Name
                                   </TableCell>
 
-                                  <TableCell
+                                  {/* <TableCell
                                     align="center"
                                     style={styles.forTableCell}
                                   >
                                     Form
-                                  </TableCell>
+                                  </TableCell> */}
 
                                   <TableCell
                                     style={styles.forTableCell}
@@ -1747,9 +1641,9 @@ function AddEditPurchaseRequest(props) {
                                         {i.scientificName}
                                       </TableCell>
 
-                                      <TableCell align="center">
+                                      {/* <TableCell align="center">
                                         {i.form}
-                                      </TableCell>
+                                      </TableCell> */}
 
                                       <TableCell align="center">
                                         {i.description}
@@ -1783,21 +1677,6 @@ function AddEditPurchaseRequest(props) {
                       ...styles.textFieldPadding,
                     }}
                   >
-                    {/* <InputLabelComponent>Trade Name*</InputLabelComponent>
-
-                  <input
-                    type="text"
-                    disabled={true}
-                    placeholder="Trade Name"
-                    name={"tradeName"}
-                    value={tradeName}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                  />
-                  <ErrorMessage
-                    name={tradeName}
-                    isFormSubmitted={isFormSubmitted}
-                  /> */}
                     <TextField
                       required
                       id="tradeName"
@@ -1815,15 +1694,6 @@ function AddEditPurchaseRequest(props) {
                         classes: { input: classes.input },
                       }}
                     />
-
-                    {/* {tradeName === "" && isFormSubmitted ? (
-                      <ErrorMessage
-                        name={tradeName}
-                        isFormSubmitted={isFormSubmitted}
-                      />
-                    ) : (
-                      undefined
-                    )} */}
                   </div>
 
                   <div
@@ -1833,10 +1703,9 @@ function AddEditPurchaseRequest(props) {
                       ...styles.textFieldPadding,
                     }}
                   >
-                    {/* <InputLabelComponent>Form*</InputLabelComponent> */}
                     <TextField
                       disabled
-                      required
+                      // required
                       select
                       fullWidth
                       id="Form"
@@ -1851,7 +1720,7 @@ function AddEditPurchaseRequest(props) {
                         className: classes.input,
                         classes: { input: classes.input },
                       }}
-                      error={form === "" && isFormSubmitted}
+                      // error={form === "" && isFormSubmitted}
                     >
                       <MenuItem value="">
                         <em>None</em>
@@ -1865,15 +1734,6 @@ function AddEditPurchaseRequest(props) {
                         );
                       })}
                     </TextField>
-
-                    {/* {form === "" && isFormSubmitted ? (
-                      <ErrorMessage
-                        name={form}
-                        isFormSubmitted={isFormSubmitted}
-                      />
-                    ) : (
-                      undefined
-                    )} */}
                   </div>
 
                   <div
@@ -1883,9 +1743,8 @@ function AddEditPurchaseRequest(props) {
                       ...styles.textFieldPadding,
                     }}
                   >
-                    {/* <InputLabelComponent>Priority*</InputLabelComponent> */}
                     <TextField
-                      required
+                      // required
                       select
                       fullWidth
                       id="priority"
@@ -1894,13 +1753,11 @@ function AddEditPurchaseRequest(props) {
                       onChange={onChangeValue}
                       label="Priority"
                       variant="filled"
-                      // className="dropDownStyle"
-                      // input={<BootstrapInput />}
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
                       }}
-                      error={priority === "" && isFormSubmitted}
+                      // error={priority === "" && isFormSubmitted}
                     >
                       <MenuItem value="">
                         <em>None</em>
@@ -1914,15 +1771,6 @@ function AddEditPurchaseRequest(props) {
                         );
                       })}
                     </TextField>
-
-                    {/* {priority === "" && isFormSubmitted ? (
-                      <ErrorMessage
-                        name={priority}
-                        isFormSubmitted={isFormSubmitted}
-                      />
-                    ) : (
-                      undefined
-                    )} */}
                   </div>
 
                   <div
@@ -1932,9 +1780,8 @@ function AddEditPurchaseRequest(props) {
                     }}
                     className="col-md-3 col-sm-3 col-3"
                   >
-                    {/* <InputLabelComponent>Schedule*</InputLabelComponent> */}
                     <TextField
-                      required
+                      // required
                       select
                       fullWidth
                       id="schedule"
@@ -1943,13 +1790,11 @@ function AddEditPurchaseRequest(props) {
                       onChange={onChangeValue}
                       label="Schedule"
                       variant="filled"
-                      // className="dropDownStyle"
-                      // input={<BootstrapInput />}
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
                       }}
-                      error={schedule === "" && isFormSubmitted}
+                      // error={schedule === "" && isFormSubmitted}
                     >
                       <MenuItem value="">
                         <em>None</em>
@@ -1963,87 +1808,7 @@ function AddEditPurchaseRequest(props) {
                         );
                       })}
                     </TextField>
-                    {/* {schedule === "" && isFormSubmitted ? (
-                      <ErrorMessage
-                        name={schedule}
-                        isFormSubmitted={isFormSubmitted}
-                      />
-                    ) : (
-                      undefined
-                    )} */}
                   </div>
-
-                  {/* <div
-                      className="col-md-3"
-                      style={styles.inputContainerForTextField}
-                    >
-                      <InputLabelComponent>Item Type*</InputLabelComponent>
-
-                      <input
-                        type="text"
-                        disabled={true}
-                        placeholder="Item Type"
-                        name={"itemType"}
-                        value={itemType === "medical" ? "Medical" : itemType}
-                        onChange={onChangeValue}
-                        className="textInputStyle"
-                      />
-
-                      <ErrorMessage
-                        name={itemType}
-                        isFormSubmitted={isFormSubmitted}
-                      />
-                    </div>
-
-                    <div
-                      className="col-md-3"
-                      style={styles.inputContainerForTextField}
-                    >
-                      <InputLabelComponent>Form*</InputLabelComponent>
-
-                      <input
-                        type="text"
-                        disabled={true}
-                        placeholder="Form"
-                        name={"form"}
-                        value={form}
-                        onChange={onChangeValue}
-                        className="textInputStyle"
-                      />
-
-                      <ErrorMessage
-                        name={form}
-                        isFormSubmitted={isFormSubmitted}
-                      />
-                    </div>
-
-                    <div
-                      className="col-md-3"
-                      style={styles.inputContainerForTextField}
-                    >
-                      <InputLabelComponent>Item Class*</InputLabelComponent>
-
-                      <input
-                        type="text"
-                        disabled={true}
-                        placeholder="Item Class"
-                        name={""}
-                        value={
-                          medClass === "pharmaceutical"
-                            ? "Pharmaceutical"
-                            : medClass === "non_pharmaceutical"
-                            ? "Non Pharmaceutical"
-                            : ""
-                        }
-                        onChange={onChangeValue}
-                        className="textInputStyle"
-                      />
-
-                      <ErrorMessage
-                        name={medClass}
-                        isFormSubmitted={isFormSubmitted}
-                      />
-                    </div> */}
                 </div>
 
                 {/* <div> */}
@@ -2055,22 +1820,6 @@ function AddEditPurchaseRequest(props) {
                       ...styles.textFieldPadding,
                     }}
                   >
-                    {/* <InputLabelComponent>Dosage*</InputLabelComponent>
-                      <input
-                        type="number"
-                        placeholder="Dosage"
-                        name={"dosage"}
-                        value={dosage}
-                        onChange={onChangeValue}
-                        className="textInputStyle"
-                        onKeyDown={(evt) => {
-                          (evt.key === "e" ||
-                            evt.key === "E" ||
-                            evt.key === "-" ||
-                            evt.key === "+") &&
-                            evt.preventDefault();
-                        }}
-                      /> */}
                     <TextField
                       required
                       id="dosage"
@@ -2091,17 +1840,10 @@ function AddEditPurchaseRequest(props) {
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
+                        min: "0",
                       }}
                       error={dosage === "" && isFormSubmitted}
                     />
-                    {/* {dosage === "" && isFormSubmitted ? (
-                      <ErrorMessage
-                        name={dosage}
-                        isFormSubmitted={isFormSubmitted}
-                      />
-                    ) : (
-                      undefined
-                    )} */}
                   </div>
 
                   <div
@@ -2111,22 +1853,6 @@ function AddEditPurchaseRequest(props) {
                       ...styles.textFieldPadding,
                     }}
                   >
-                    {/* <InputLabelComponent>Frequency*</InputLabelComponent>
-                      <input
-                        type="number"
-                        placeholder="Frequency"
-                        name={"noOfTimes"}
-                        value={noOfTimes}
-                        onChange={onChangeValue}
-                        className="textInputStyle"
-                        onKeyDown={(evt) => {
-                          (evt.key === "e" ||
-                            evt.key === "E" ||
-                            evt.key === "-" ||
-                            evt.key === "+") &&
-                            evt.preventDefault();
-                        }}
-                      /> */}
                     <TextField
                       required
                       id="noOfTimes"
@@ -2150,14 +1876,6 @@ function AddEditPurchaseRequest(props) {
                           evt.preventDefault();
                       }}
                     />
-                    {/* {noOfTimes === "" && isFormSubmitted ? (
-                      <ErrorMessage
-                        name={noOfTimes}
-                        isFormSubmitted={isFormSubmitted}
-                      />
-                    ) : (
-                      undefined
-                    )} */}
                   </div>
 
                   <div
@@ -2167,22 +1885,6 @@ function AddEditPurchaseRequest(props) {
                       ...styles.textFieldPadding,
                     }}
                   >
-                    {/* <InputLabelComponent>Duration*</InputLabelComponent>
-                      <input
-                        type="number"
-                        placeholder="Duration"
-                        name={"duration"}
-                        value={duration}
-                        onChange={onChangeValue}
-                        className="textInputStyle"
-                        onKeyDown={(evt) => {
-                          (evt.key === "e" ||
-                            evt.key === "E" ||
-                            evt.key === "-" ||
-                            evt.key === "+") &&
-                            evt.preventDefault();
-                        }}
-                      /> */}
                     <TextField
                       required
                       id="duration"
@@ -2206,14 +1908,6 @@ function AddEditPurchaseRequest(props) {
                       }}
                       error={duration === "" && isFormSubmitted}
                     />
-                    {/* {duration === "" && isFormSubmitted ? (
-                      <ErrorMessage
-                        name={duration}
-                        isFormSubmitted={isFormSubmitted}
-                      />
-                    ) : (
-                      undefined
-                    )} */}
                   </div>
                   <div
                     className="col-md-3 col-sm-3 col-3"
@@ -2222,27 +1916,6 @@ function AddEditPurchaseRequest(props) {
                       ...styles.textFieldPadding,
                     }}
                   >
-                    {/* <InputLabelComponent>Requested Qty*</InputLabelComponent>
-                      <input
-                        disabled
-                        type="number"
-                        placeholder="Req Qty"
-                        name={"requestedQty"}
-                        value={
-                          selectedItemToSearch === "pharmaceutical"
-                            ? dosage * noOfTimes * duration
-                            : requestedQty
-                        }
-                        onChange={onChangeValue}
-                        className="textInputStyle"
-                        onKeyDown={(evt) => {
-                          (evt.key === "e" ||
-                            evt.key === "E" ||
-                            evt.key === "-" ||
-                            evt.key === "+") &&
-                            evt.preventDefault();
-                        }}
-                      /> */}
                     <TextField
                       required
                       disabled
@@ -2271,16 +1944,7 @@ function AddEditPurchaseRequest(props) {
                       }}
                       error={requestedQty === "" && isFormSubmitted}
                     />
-                    {/* {requestedQty === "" && isFormSubmitted ? (
-                      <ErrorMessage
-                        name={requestedQty}
-                        isFormSubmitted={isFormSubmitted}
-                      />
-                    ) : (
-                      undefined
-                    )} */}
                   </div>
-                  {/* </div> */}
                 </div>
 
                 <div className="row">
@@ -2305,14 +1969,6 @@ function AddEditPurchaseRequest(props) {
                         classes: { input: classes.input },
                       }}
                     />
-                    {/* {comments === "" && isFormSubmitted ? (
-                      <ErrorMessage
-                        name={comments}
-                        isFormSubmitted={isFormSubmitted}
-                      />
-                    ) : (
-                      undefined
-                    )} */}
                   </div>
                   <div
                     className="col-md-3 col-sm-3 col-3"
@@ -2356,8 +2012,6 @@ function AddEditPurchaseRequest(props) {
                           ...styles.textFieldPadding,
                         }}
                       >
-                        {/* <div className="search"> */}
-                        {/* <span class="fa fa-search"></span> */}
                         <TextField
                           type="text"
                           label="Item Name / Manufacturer / Vendor"
@@ -2367,11 +2021,6 @@ function AddEditPurchaseRequest(props) {
                           className={classes.margin}
                           variant="filled"
                           InputProps={{
-                            // endAdornment: (
-                            //   <InputAdornment position="end">
-                            //     <AccountCircle />
-                            //   </InputAdornment>
-                            // ),
                             className: classes.input,
                             classes: { input: classes.input },
                           }}
@@ -2386,7 +2035,6 @@ function AddEditPurchaseRequest(props) {
                           ...styles.textFieldPadding,
                         }}
                       >
-                        {/* <span class="fa fa-search"></span> */}
                         <TextField
                           id="indication"
                           variant="filled"
@@ -2398,11 +2046,6 @@ function AddEditPurchaseRequest(props) {
                           className={classes.margin}
                           variant="filled"
                           InputProps={{
-                            // endAdornment: (
-                            //   <InputAdornment position="end">
-                            //     <AccountCircle />
-                            //   </InputAdornment>
-                            // ),
                             className: classes.input,
                             classes: { input: classes.input },
                           }}
@@ -2416,7 +2059,6 @@ function AddEditPurchaseRequest(props) {
                 </div>
 
                 {searchQuery ? (
-                  // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
                   <div style={{ zIndex: 3 }}>
                     <Paper>
                       {itemFoundSuccessfull ? (
@@ -2437,12 +2079,12 @@ function AddEditPurchaseRequest(props) {
                                   Scientific Name
                                 </TableCell>
 
-                                <TableCell
+                                {/* <TableCell
                                   align="center"
                                   style={styles.forTableCell}
                                 >
                                   Form
-                                </TableCell>
+                                </TableCell> */}
 
                                 <TableCell
                                   style={styles.forTableCell}
@@ -2468,9 +2110,9 @@ function AddEditPurchaseRequest(props) {
                                       {i.scientificName}
                                     </TableCell>
 
-                                    <TableCell align="center">
+                                    {/* <TableCell align="center">
                                       {i.form}
-                                    </TableCell>
+                                    </TableCell> */}
 
                                     <TableCell align="center">
                                       {i.description}
@@ -2503,21 +2145,6 @@ function AddEditPurchaseRequest(props) {
                       ...styles.textFieldPadding,
                     }}
                   >
-                    {/* <InputLabelComponent>Trade Name*</InputLabelComponent>
-
-                  <input
-                    type="text"
-                    disabled={true}
-                    placeholder="Trade Name"
-                    name={"tradeName"}
-                    value={tradeName}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                  />
-                  <ErrorMessage
-                    name={tradeName}
-                    isFormSubmitted={isFormSubmitted}
-                  /> */}
                     <TextField
                       required
                       id="itemName"
@@ -2535,28 +2162,18 @@ function AddEditPurchaseRequest(props) {
                       }}
                       error={itemName === "" && isFormSubmitted}
                     />
-                    {/* {isFormSubmitted && itemName ? (
-                      <ErrorMessage
-                        name={itemName}
-                        isFormSubmitted={isFormSubmitted}
-                      />
-                    ) : (
-                      undefined
-                    )} */}
                   </div>
 
                   <div
                     className="col-md-3 col-sm-3 col-3"
-                    // style={styles.inputContainerForDropDown}
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
                     }}
                   >
-                    {/* <InputLabelComponent>Form*</InputLabelComponent> */}
                     <TextField
                       select
-                      required
+                      // required
                       fullWidth
                       id="make_model"
                       name="make_model"
@@ -2564,8 +2181,6 @@ function AddEditPurchaseRequest(props) {
                       onChange={onChangeValue}
                       label="Make/Model"
                       variant="filled"
-                      // className="dropDownStyle"
-                      // input={<BootstrapInput />}
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
@@ -2595,7 +2210,7 @@ function AddEditPurchaseRequest(props) {
                   >
                     <TextField
                       select
-                      required
+                      // required
                       fullWidth
                       id="size"
                       name="size"
@@ -2653,14 +2268,6 @@ function AddEditPurchaseRequest(props) {
                       }}
                       error={requestedQty === "" && isFormSubmitted}
                     />
-                    {/* {isFormSubmitted && requestedQty ? (
-                      <ErrorMessage
-                        name={requestedQty}
-                        isFormSubmitted={isFormSubmitted}
-                      />
-                    ) : (
-                      undefined
-                    )} */}
                   </div>
                 </div>
 
@@ -2686,14 +2293,6 @@ function AddEditPurchaseRequest(props) {
                         classes: { input: classes.input },
                       }}
                     />
-                    {/* {isFormSubmitted && comments ? (
-                      <ErrorMessage
-                        name={comments}
-                        isFormSubmitted={isFormSubmitted}
-                      />
-                    ) : (
-                      undefined
-                    )} */}
                   </div>
                   <div
                     className="col-md-3 col-sm-3 col-3"
@@ -2727,40 +2326,6 @@ function AddEditPurchaseRequest(props) {
               </div>
             )}
 
-            {/* </DialogContent>
-            </Dialog> */}
-
-            {/* <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
-              <div
-                style={{
-                  display: "flex",
-                  flex: 1,
-                  // height: 50,
-                  justifyContent: "flex-end",
-                  marginTop: "2%",
-                  marginBottom: "2%",
-                }}
-              >
-                {comingFor === "add" ||
-                (currentUser &&
-                  currentUser.staffTypeId.type === "BU Member") ? (
-                  <Button
-                    // disabled={patientDetails ? false : true}
-                    onClick={() => addNewItem()}
-                    style={styles.stylesForButton}
-                    variant="contained"
-                    color="primary"
-                  >
-                    <img src={add_new} style={styles.stylesForIcon} />
-                    &nbsp;&nbsp;
-                    <strong>Add Item</strong>
-                  </Button>
-                ) : (
-                  undefined
-                )}
-              </div>
-            </div> */}
-
             {requestedItemsArray && (
               <div className="row">
                 <h5
@@ -2781,7 +2346,6 @@ function AddEditPurchaseRequest(props) {
               </div>
             )}
 
-            {/* <div className="container-fluid"> */}
             <div
               className="row"
               style={{ marginBottom: "25px", marginTop: "25px" }}
@@ -2841,68 +2405,6 @@ function AddEditPurchaseRequest(props) {
             ) : (
               undefined
             )}
-
-            {/* <Dialog
-              aria-labelledby="form-dialog-title"
-              open={patientDetails ? false : true}
-              maxWidth="md"
-                fullWidth={true}
-              //   fullScreen
-            >
-              <DialogContent style={{ backgroundColor: "#31e2aa" }}>
-                <div
-                  className={"col-md-12"}
-                  style={styles.inputContainerForTextField}
-                >
-                  <InputLabelComponent id="status-label">
-                    Patient MRN*
-                  </InputLabelComponent>
-                  <input
-                    disabled={
-                      currentUser &&
-                      currentUser.staffTypeId.type === "BU Member" &&
-                      comingFor &&
-                      comingFor !== "view"
-                        ? false
-                        : true
-                    }
-                    type="text"
-                    placeholder="Patient MRN"
-                    name={"patientReferenceNo"}
-                    value={patientReferenceNo}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                  />
-                  <ErrorMessage
-                    name={patientReferenceNo}
-                    isFormSubmitted={isFormSubmitted}
-                  />
-                </div>
-
-                {comingFor === "add" ? (
-                  <div
-                    className={"col-md-12"}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Button
-                      onClick={getPatientDetails}
-                      style={styles.stylesForPatientButton}
-                      variant="contained"
-                      color="primary"
-                    >
-                      &nbsp;&nbsp;
-                      <strong>Get Details</strong>
-                    </Button>
-                  </div>
-                ) : (
-                  undefined
-                )}
-              </DialogContent>
-            </Dialog> */}
           </div>
         ) : (
           <div className="LoaderStyle">

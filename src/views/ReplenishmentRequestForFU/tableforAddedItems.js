@@ -94,7 +94,7 @@ const tableHeadingForFUMember = [
   "Trade Name",
   "Item Code",
   "Requested Qty",
-  "FU Item Cost",
+  "FuncU Cost",
   "Actions",
 ];
 
@@ -103,7 +103,7 @@ const tableHeadingForWarehouseMember = [
   "Trade Name",
   "Item Code",
   "Requested Qty",
-  "FU Item Cost",
+  "FuncU Cost",
   "Status",
 ];
 
@@ -112,7 +112,7 @@ const tableHeadingForOthers = [
   "Trade Name",
   "Item Code",
   "Requested Qty",
-  "FU Item Cost",
+  "FuncU Cost",
 ];
 
 const actions = { edit: true, view: false, delete: true };

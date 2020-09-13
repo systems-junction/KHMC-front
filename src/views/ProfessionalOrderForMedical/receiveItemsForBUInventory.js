@@ -39,9 +39,9 @@ import BootstrapInput from "../../components/Dropdown/dropDown.js";
 import MUIInputStyle from "../../assets/jss/material-dashboard-react/inputStyle.js";
 
 const statusArray = [
-  // { key: "pending_administration", value: "Pending Administration" },
-  // { key: "Received", value: "Received" },
-  { key: "complete", value: "Complete" },
+  // { key: "complete", value: "Complete" },
+  { key: "Received", value: "Received" },
+  { key: "Partially Received", value: "Partially Received" },
 ];
 
 const styles = {
@@ -246,6 +246,19 @@ function ReceiveItems(props) {
   } = state;
 
   const onChangeValue = (e) => {
+    var pattern = /^[a-zA-Z0-9 ]*$/;
+    if (e.target.type === "text") {
+      if (pattern.test(e.target.value) === false) {
+        return;
+      }
+    }
+
+    if (e.target.type === "number") {
+      if (e.target.value < 0) {
+        return;
+      }
+    }
+
     dispatch({ field: e.target.name, value: e.target.value });
   };
 
@@ -319,7 +332,7 @@ function ReceiveItems(props) {
       // taxAmount.length > 0 &&
       finalUnitPrice.length > 0 &&
       subTotal.length > 0 &&
-      discountAmount2.length > 0 &&
+      // discountAmount2.length > 0 &&
       totalPrice.length > 0 &&
       invoice.length > 0 &&
       date !== "" &&
@@ -333,6 +346,10 @@ function ReceiveItems(props) {
 
   const handleAdd = () => {
     if (validateForm()) {
+      if (date > receivedDate) {
+        setOpenNotification(true);
+        setErrorMsg("Invoice date can not be greater than received date");
+      }
       let params = {
         itemId: selectedItem.itemId._id,
         currentQty: currentQty,
@@ -367,25 +384,25 @@ function ReceiveItems(props) {
 
       console.log("params", params);
 
-      axios
-        .post(addReceiveRequestBUUrl, params)
-        .then((res) => {
-          if (res.data.success) {
-            props.history.replace({
-              pathname: "/home/wms/fus/medicinalorder/success",
-              state: {
-                message: `${selectedItem.itemId.name} has been received successfully`,
-              },
-            });
-          } else if (!res.data.success) {
-            setOpenNotification(true);
-          }
-        })
-        .catch((e) => {
-          console.log("error after adding purchase request", e);
-          setOpenNotification(true);
-          setErrorMsg("Error while adding the purchase request");
-        });
+      // axios
+      //   .post(addReceiveRequestBUUrl, params)
+      //   .then((res) => {
+      //     if (res.data.success) {
+      //       props.history.replace({
+      //         pathname: "/home/wms/fus/medicinalorder/success",
+      //         state: {
+      //           message: `${selectedItem.itemId.name} has been received successfully`,
+      //         },
+      //       });
+      //     } else if (!res.data.success) {
+      //       setOpenNotification(true);
+      //     }
+      //   })
+      //   .catch((e) => {
+      //     console.log("error after adding purchase request", e);
+      //     setOpenNotification(true);
+      //     setErrorMsg("Error while adding the purchase request");
+      //   });
     }
   };
 
@@ -504,16 +521,6 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <input
-                type="text"
-                disabled={true}
-                placeholder="Item Name"
-                name={"itemName"}
-                value={selectedItem && selectedItem.itemId.name}
-                onChange={onChangeValue}
-                className="textInputStyle"
-              /> */}
-
               <TextField
                 disabled={true}
                 className="textInputStyle"
@@ -544,17 +551,6 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <input
-          
-                type="number"
-                placeholder="Current Qty"
-                name={"currentQty"}
-                value={selectedItem && currentQty}
-                onChange={onChangeValue}
-                className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              /> */}
-
               <TextField
                 disabled={true}
                 className="textInputStyle"
@@ -584,16 +580,6 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <input
-                type="number"
-                disabled={true}
-                placeholder="Required Qty"
-                name={"requiredQty"}
-                onChange={onChangeValue}
-                className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              /> */}
-
               <TextField
                 disabled={true}
                 className="textInputStyle"
@@ -623,32 +609,6 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* 
-              <input
-                type="number"
-                placeholder="Received Qty"
-                name={"receivedQty"}
-                value={receivedQty}
-                onChange={onChangeValue}
-                className="textInputStyle"
-                style={{
-                  borderColor:
-                    receivedQty > requestedQty ||
-                    (replenishmentRequestStatus &&
-                      replenishmentRequestStatus === "Received" &&
-                      receivedQty !== requestedQty)
-                      ? "red"
-                      : null,
-                  borderWidth:
-                    receivedQty > requestedQty ||
-                    (replenishmentRequestStatus &&
-                      replenishmentRequestStatus === "Received" &&
-                      receivedQty !== requestedQty)
-                      ? 2.5
-                      : null,
-                }}
-              /> */}
-
               <TextField
                 required
                 className="textInputStyle"
@@ -678,16 +638,6 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <input
-                type="number"
-                placeholder="Bonus Qty"
-                name={"bonusQty"}
-                value={bonusQty}
-                onChange={onChangeValue}
-                className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              /> */}
-
               <TextField
                 required
                 className="textInputStyle"
@@ -719,16 +669,6 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <input
-                type="number"
-                placeholder="Batch Number"
-                name={"batchNumber"}
-                value={batchNumber}
-                onChange={onChangeValue}
-                className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              /> */}
-
               <TextField
                 required
                 className="textInputStyle"
@@ -756,16 +696,6 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabelComponent>LOT No</InputLabelComponent>
-              <input
-                type="number"
-                placeholder="LOT No"
-                name={"lotNo"}
-                value={lotNo}
-                onChange={onChangeValue}
-                className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              /> */}
               <TextField
                 required
                 className="textInputStyle"
@@ -795,13 +725,12 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabelComponent>Expiry Date</InputLabelComponent> */}
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DatePicker
                   required
                   inputVariant="filled"
                   fullWidth={true}
-                  format="dd/MM/yyyy"
+                  format="MM/dd/yyyy"
                   label="Expiry Date"
                   onChange={(val) => onChangeDate(val, "expiryDate")}
                   style={{ borderRadius: 10, backgroundColor: "white" }}
@@ -833,16 +762,6 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabelComponent>Unit</InputLabelComponent>
-              <input
-                type="text"
-                placeholder="Unit"
-                name={"unit"}
-                value={unit}
-                onChange={onChangeValue}
-                className="textInputStyle"
-              /> */}
-
               <TextField
                 required
                 className="textInputStyle"
@@ -870,17 +789,6 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabelComponent>Discount %</InputLabelComponent>
-              <input
-                type="number"
-                placeholder="Discount %"
-                name={"discount"}
-                value={discount}
-                onChange={onChangeValue}
-                className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              /> */}
-
               <TextField
                 required
                 className="textInputStyle"
@@ -910,15 +818,6 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabelComponent>Unit Discount</InputLabelComponent>
-              <input
-                placeholder="Unit Discount"
-                name={"uniyDiscount"}
-                value={uniyDiscount}
-                onChange={onChangeValue}
-                className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              /> */}
               <TextField
                 required
                 className="textInputStyle"
@@ -969,69 +868,9 @@ function ReceiveItems(props) {
             </div>
           </div>
 
-          {/* <div className="row">
-            <div
-              className="col-md-6"
-              style={{
-                ...styles.inputContainerForTextField,
-                ...styles.textFieldPadding,
-              }}
-            >
-              <TextField
-                required
-                className="textInputStyle"
-                id="tax"
-                type={"number"}
-                variant="filled"
-                label="Tax %"
-                name={"tax"}
-                value={tax}
-                onChange={onChangeValue}
-                InputProps={{
-                  className: classesForInput.input,
-                  classes: { input: classesForInput.input },
-                }}
-                InputLabelProps={{
-                  className: classesForInput.label,
-                  classes: { label: classesForInput.label },
-                }}
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              />
-            </div>
-
-            <div
-              className="col-md-6"
-              style={{
-                ...styles.inputContainerForTextField,
-                ...styles.textFieldPadding,
-              }}
-            >
-              <TextField
-                required
-                className="textInputStyle"
-                id="taxAmount"
-                type={"number"}
-                variant="filled"
-                label="Tax Amount"
-                name={"taxAmount"}
-                value={taxAmount}
-                onChange={onChangeValue}
-                InputProps={{
-                  className: classesForInput.input,
-                  classes: { input: classesForInput.input },
-                }}
-                InputLabelProps={{
-                  className: classesForInput.label,
-                  classes: { label: classesForInput.label },
-                }}
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              />
-            </div>
-          </div> */}
-
           <div className="row">
             <div
-              className="col-md-3"
+              className="col-md-4"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -1060,7 +899,7 @@ function ReceiveItems(props) {
             </div>
 
             <div
-              className="col-md-3"
+              className="col-md-4"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -1089,7 +928,7 @@ function ReceiveItems(props) {
             </div>
 
             <div
-              className="col-md-3"
+              className="col-md-4"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -1117,7 +956,7 @@ function ReceiveItems(props) {
               />
             </div>
 
-            <div
+            {/* <div
               className="col-md-3"
               style={{
                 ...styles.inputContainerForTextField,
@@ -1144,7 +983,7 @@ function ReceiveItems(props) {
                 }}
                 onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
               />
-            </div>
+            </div> */}
           </div>
 
           <div className="row">
@@ -1186,10 +1025,12 @@ function ReceiveItems(props) {
             >
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DateTimePicker
+                  format="MM/dd/yyyy HH:mm a"
                   required
                   inputVariant={"filled"}
                   fullWidth={true}
-                  label="Date/Time Invoice"
+                  disableFuture
+                  label="Date/Time Invoice (MM/DD/YYYY)"
                   onChange={(val) => onChangeDate(val, "date")}
                   // style={styles.styleForDate}
                   value={comingFor === "add" ? (date ? date : null) : date}
@@ -1197,10 +1038,10 @@ function ReceiveItems(props) {
                     className: classesForInput.input,
                     classes: { input: classesForInput.input },
                   }}
-                  InputLabelProps={{
-                    className: classesForInput.label,
-                    classes: { label: classesForInput.label },
-                  }}
+                  // InputLabelProps={{
+                  //   className: classesForInput.label,
+                  //   classes: { label: classesForInput.label },
+                  // }}
                 />
               </MuiPickersUtilsProvider>
             </div>
@@ -1214,19 +1055,20 @@ function ReceiveItems(props) {
             >
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DateTimePicker
+                  format="MM/dd/yyyy HH:mm a"
                   required
                   inputVariant={"filled"}
                   fullWidth={true}
-                  label="Date/Time Received"
+                  label="Date/Time Received (MM/DD/YYYY)"
                   onChange={(val) => onChangeDate(val, "receivedDate")}
-                  // style={styles.styleForDate}
                   value={
                     comingFor === "add"
                       ? receivedDate
                         ? receivedDate
-                        : new Date()
+                        : null
                       : receivedDate
                   }
+                  // disableFuture
                   InputProps={{
                     className: classesForInput.input,
                     classes: { input: classesForInput.input },
@@ -1275,40 +1117,6 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <InputLabelComponent> Status</InputLabelComponent>
-
-              <Select
-                fullWidth
-                id="replenishmentRequestStatus"
-                name="replenishmentRequestStatus"
-                value={replenishmentRequestStatus}
-                onChange={onChangeValue}
-                label="Status"
-                className="dropDownStyle"
-                input={<BootstrapInput />}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                {statusArray.map((val) => {
-                  return (
-                    <MenuItem
-                      disabled={
-                        receivedQty &&
-                        ((val.key === "Received" &&
-                          receivedQty < requestedQty) ||
-                          (val.key === "Partially Recieved" &&
-                            receivedQty >= requestedQty))
-                      }
-                      key={val.key}
-                      value={val.key}
-                    >
-                      {val.value}
-                    </MenuItem>
-                  );
-                })}
-              </Select> */}
-
               <TextField
                 required
                 select
@@ -1393,15 +1201,6 @@ function ReceiveItems(props) {
                     flexDirection: "row",
                   }}
                 >
-                  {/* <Button
-                    // disabled={true}
-                    // onClick={handleAdd}
-                    variant="contained"
-                    style={{ height: 54, marginRight: 6 }}
-                  >
-                    Upload Invoice
-                  </Button> */}
-
                   <Button
                     disabled={!validateForm()}
                     onClick={handleAdd}
@@ -1451,3 +1250,76 @@ function ReceiveItems(props) {
   );
 }
 export default ReceiveItems;
+
+{
+  /* <div className="row">
+            <div
+              className="col-md-6"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                className="textInputStyle"
+                id="tax"
+                type={"number"}
+                variant="filled"
+                label="Tax %"
+                name={"tax"}
+                value={tax}
+                onChange={onChangeValue}
+                InputProps={{
+                  className: classesForInput.input,
+                  classes: { input: classesForInput.input },
+                }}
+                InputLabelProps={{
+                  className: classesForInput.label,
+                  classes: { label: classesForInput.label },
+                }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
+            </div>
+
+            <div
+              className="col-md-6"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                className="textInputStyle"
+                id="taxAmount"
+                type={"number"}
+                variant="filled"
+                label="Tax Amount"
+                name={"taxAmount"}
+                value={taxAmount}
+                onChange={onChangeValue}
+                InputProps={{
+                  className: classesForInput.input,
+                  classes: { input: classesForInput.input },
+                }}
+                InputLabelProps={{
+                  className: classesForInput.label,
+                  classes: { label: classesForInput.label },
+                }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
+            </div>
+          </div> */
+}
+
+{
+  /* <Button
+                    // disabled={true}
+                    // onClick={handleAdd}
+                    variant="contained"
+                    style={{ height: 54, marginRight: 6 }}
+                  >
+                    Upload Invoice
+                  </Button> */
+}

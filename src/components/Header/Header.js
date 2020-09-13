@@ -53,12 +53,12 @@ class Header extends React.Component {
         <img
           src={Influence_white}
           className="header2-style"
-          // style={{
-          //   maxWidth: '60%',
-          //   height: 'auto',
-          //   cursor: 'pointer',
-          //   boxShadow: this.state.hover ? '2px 2px 2px 2px #b2b0b0' : '',
-          // }}
+          style={{
+            // maxWidth: '60%',
+            // height: 'auto',
+            cursor: 'pointer',
+            // boxShadow: this.state.hover ? '2px 2px 2px 2px #b2b0b0' : '',
+          }}
           // onMouseEnter={() => this.setState({ hover: true })}
           // onMouseLeave={() => this.setState({ hover: false })}
           onClick={() => this.setState({ open: !this.state.open })}
@@ -69,22 +69,36 @@ class Header extends React.Component {
             style={{
               float: "right",
               width: 300,
-              marginRight: 40,
+              marginRight: 10,
               top: 50,
               right: 0,
               bottom: 0,
-              position: "fixed",
+              position: "absolute",
               zIndex: 5,
             }}
           >
-            <Card style={{ marginTop: 20 }}>
+            <Card style={{ marginTop: 15 }}>
               <CardContent>
                 <Typography
                   // variant="h6"
                   color="textSecondary"
                   gutterBottom
-                  style={{ display: "flex", justifyContent: "space-between" }}
+                  style={{ display: "flex" }}
                 >
+                  <strong>Role:</strong>
+                  &nbsp;
+                  {this.state.currentUser &&
+                    this.state.currentUser.staffTypeId.type}
+                </Typography>
+
+                <Typography
+                  // variant="h6"
+                  color="textSecondary"
+                  gutterBottom
+                  style={{ display: "flex" }}
+                >
+                  <strong>Name:</strong>
+                  &nbsp;
                   {this.state.currentUser && this.state.currentUser.name}
                 </Typography>
 
@@ -92,15 +106,17 @@ class Header extends React.Component {
                   // variant="h6"
                   color="textSecondary"
                   // gutterBottom
-                  style={{ display: "flex", justifyContent: "space-between" }}
+                  style={{ display: "flex" }}
                 >
+                  <strong>Email:</strong>
+                  &nbsp;
                   {this.state.currentUser && this.state.currentUser.email}
                 </Typography>
 
                 <hr />
 
                 <Typography
-                  variant="h6"
+                  // variant="h6"
                   color="textSecondary"
                   gutterBottom
                   style={{
@@ -110,7 +126,7 @@ class Header extends React.Component {
                   }}
                   onClick={() => this.logoutUser()}
                 >
-                  Logout
+                  <strong> Logout</strong>
                   <i class="zmdi zmdi-power"></i>
                 </Typography>
               </CardContent>

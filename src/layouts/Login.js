@@ -256,7 +256,7 @@ class Login extends React.Component {
                   className="row"
                   style={{
                     marginTop: 20,
-                    width: "70%",
+                    width: "55%",
                   }}
                 >
                   <input
@@ -284,7 +284,7 @@ class Login extends React.Component {
                   className="row"
                   style={{
                     marginTop: 25,
-                    width: "70%",
+                    width: "55%",
                   }}
                 >
                   <input
@@ -306,25 +306,28 @@ class Login extends React.Component {
                 </div>
               </div>
 
-              <div
-                className="col-sm-12"
-                style={{ display: "flex", justifyContent: "center" }}
-              >
-                {!this.state.buttonPressed ? (
-                  <div
-                    className="row"
-                    style={{
-                      marginTop: 25,
-                      width: "73%",
-                    }}
-                  >
-                    <div style={{}} className="container">
+              <div className="row">
+                <div
+                  className="col-sm-12"
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                  }}
+                >
+                  {!this.state.buttonPressed ? (
+                    <div
+                      style={{
+                        marginTop: 25,
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
                       <Button
                         style={{
-                          width: "100%",
+                          width: "25%",
                           paddingTop: 12,
                           paddingBottom: 12,
-
                           backgroundColor: "#002164",
                           borderRadius: 10,
                         }}
@@ -335,25 +338,25 @@ class Login extends React.Component {
                         Login
                       </Button>
                     </div>
-                  </div>
-                ) : (
-                  <div
-                    className="row"
-                    style={{
-                      marginTop: 25,
-                      width: "100%",
-                      display: "flex",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Loader
-                      type="TailSpin"
-                      color="white"
-                      height={50}
-                      width={50}
-                    />
-                  </div>
-                )}
+                  ) : (
+                    <div
+                      className="row"
+                      style={{
+                        marginTop: 25,
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Loader
+                        type="TailSpin"
+                        color="white"
+                        height={50}
+                        width={50}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 

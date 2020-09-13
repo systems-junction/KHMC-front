@@ -426,8 +426,6 @@ function ReceiveItems(props) {
     setSelectedItem(props.selectedItem);
   }, [props.selectedItem]);
 
-
-
   return (
     <div
       style={
@@ -1060,11 +1058,12 @@ function ReceiveItems(props) {
             >
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DateTimePicker
+                  format="MM/dd/yyyy hh:mm a"
                   required
                   inputVariant="filled"
                   disabled={selectedItem ? false : true}
                   fullWidth={true}
-                  label="Date/Time Invoice"
+                  label="Date/Time Invoice (MM/DD/YYYY)"
                   className="textInputStyle"
                   onChange={(val) => onChangeDate(val, "date")}
                   InputProps={{
@@ -1087,11 +1086,12 @@ function ReceiveItems(props) {
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DateTimePicker
                   required
+                  format="MM/dd/yyyy hh:mm a"
                   inputVariant="filled"
                   fullWidth
                   disabled={selectedItem ? false : true}
                   label="Date/Time Received"
-                  className="textInputStyle"
+                  className="textInputStyle (MM/DD/YYYY)"
                   onChange={(val) => onChangeDate(val, "receivedDate")}
                   InputProps={{
                     className: classes.input,

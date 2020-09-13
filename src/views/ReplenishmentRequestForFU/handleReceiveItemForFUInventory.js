@@ -262,6 +262,18 @@ function ReceiveItems(props) {
   } = state;
 
   const onChangeValue = (e) => {
+    var pattern = /^[a-zA-Z0-9 ]*$/;
+    if (e.target.type === "text") {
+      if (pattern.test(e.target.value) === false) {
+        return;
+      }
+    }
+
+    if (e.target.type === "number") {
+      if (e.target.value < 0) {
+        return;
+      }
+    }
     dispatch({ field: e.target.name, value: e.target.value });
   };
 
@@ -346,6 +358,12 @@ function ReceiveItems(props) {
   }
 
   const handleAdd = () => {
+    if (date > receivedDate) {
+      setOpenNotification(true);
+      setErrorMsg("Inovice date can not be greater then received date");
+      return;
+    }
+
     if (validateForm()) {
       let params = {
         itemId: selectedItem.itemId._id,
@@ -730,7 +748,7 @@ function ReceiveItems(props) {
                   required
                   inputVariant="filled"
                   fullWidth={true}
-                  format="dd/MM/yyyy"
+                  format="MM/dd/yyyy"
                   label="Expiry Date"
                   // variant="filled"
                   InputProps={{
@@ -1010,7 +1028,7 @@ function ReceiveItems(props) {
           </div>
 
           <div className="row">
-            <div
+            {/* <div
               className="col-md-3"
               style={{
                 ...styles.inputContainerForTextField,
@@ -1038,9 +1056,9 @@ function ReceiveItems(props) {
                     evt.preventDefault();
                 }}
               />
-            </div>
+            </div> */}
             <div
-              className="col-md-3"
+              className="col-md-4"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -1062,7 +1080,7 @@ function ReceiveItems(props) {
             </div>
 
             <div
-              className="col-md-3"
+              className="col-md-4"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -1073,7 +1091,8 @@ function ReceiveItems(props) {
                   required
                   inputVariant="filled"
                   fullWidth={true}
-                  label="Date/Time Invoice"
+                  label="Date/Time Invoice (MM/DD/YYYY)"
+                  format="MM/dd/yyyy hh:mm a"
                   onChange={(val) => onChangeDate(val, "date")}
                   // style={styles.inputContainerForDate}
                   value={comingFor === "add" ? (date ? date : null) : date}
@@ -1087,7 +1106,7 @@ function ReceiveItems(props) {
             </div>
 
             <div
-              className="col-md-3"
+              className="col-md-4"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -1098,10 +1117,10 @@ function ReceiveItems(props) {
                   required
                   inputVariant="filled"
                   fullWidth={true}
-                  label="Date/Time Received"
+                  label="Date/Time Received (MM/DD/YYYY)"
+                  format="MM/dd/yyyy hh:mm a"
+                  minDate={new Date()}
                   onChange={(val) => onChangeDate(val, "receivedDate")}
-                  // style={styles.inputContainerForDate}
-                  // variant="filled"
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
