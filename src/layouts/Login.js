@@ -98,7 +98,8 @@ class Login extends React.Component {
     this.setState({ [key]: e.target.value });
   }
 
-  handleLogin() {
+  handleLogin(e) {
+    e.preventDefault();
     if (this.state.userName === "" && this.state.password === "") {
       this.setState({ null_userName: true, null_password: true });
     } else if (this.state.userName === "") {
@@ -243,8 +244,9 @@ class Login extends React.Component {
               Please enter username and password
             </h6>
           </div>
-
+ 
           <div style={{ marginLeft: "1%", marginRight: "1%" }}>
+            <form onSubmit={(e) => this.handleLogin(e)}>
             {/* <Notification msg={this.state.msg} open={this.state.tr} /> */}
 
             <div className="container">
@@ -331,7 +333,8 @@ class Login extends React.Component {
                           backgroundColor: "#002164",
                           borderRadius: 10,
                         }}
-                        onClick={() => this.handleLogin()}
+                        //onClick={() => this.handleLogin()}
+                        type="submit"
                         variant="contained"
                         color="primary"
                       >
@@ -374,6 +377,7 @@ class Login extends React.Component {
                 Forgot Password?
               </h6>
             </div>
+            </form>
           </div>
         </div>
       </div>

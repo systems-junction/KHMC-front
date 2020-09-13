@@ -108,7 +108,7 @@ const tableDataKeysForRadiology = [
   'requesterName',
   'status',
 ]
-const actions = { view: true, edit: true }
+const actions = { view: true }
 const styles = {
   patientDetails: {
     backgroundColor: 'white',
@@ -819,17 +819,17 @@ function AddEditPurchaseRequest(props) {
       })
   }
 
-  function handleEdit(rec) {
-    let path = `viewOPR/updatephr`
-    props.history.push({
-      pathname: path,
-      state: {
-        id: id,
-        selectedItem: rec,
-        comingFor: 'opr',
-      },
-    })
-  }
+  // function handleEdit(rec) {
+  //   let path = `viewOPR/updatephr`
+  //   props.history.push({
+  //     pathname: path,
+  //     state: {
+  //       id: id,
+  //       selectedItem: rec,
+  //       comingFor: 'opr',
+  //     },
+  //   })
+  // }
 
   return (
     <div
@@ -957,7 +957,7 @@ function AddEditPurchaseRequest(props) {
                   tableDataKeys={tableDataKeysForPharmacy}
                   tableHeading={tableHeadingForPharmacy}
                   handleView={viewItem}
-                  handleEdit={handleEdit}
+                  // handleEdit={handleEdit}
                   action={actions}
                   borderBottomColor={'#60d69f'}
                   borderBottomWidth={20}

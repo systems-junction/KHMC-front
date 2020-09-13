@@ -72,6 +72,13 @@ function TriageAndAssessment(props) {
         cardiac: 'N/A',
         abdomen: 'N/A',
         neurological: 'N/A',
+
+        generalAppearanceText: null,
+        headNeckText: null,
+        respiratoryText: null,
+        cardiacText: null,
+        abdomenText: null,
+        neurologicalText: null,
     }
 
 
@@ -94,6 +101,13 @@ function TriageAndAssessment(props) {
         cardiac,
         abdomen,
         neurological,
+
+        generalAppearanceText,
+        headNeckText,
+        respiratoryText,
+        cardiacText,
+        abdomenText,
+        neurologicalText,
     } = state
 
     const classesForTabs = useStylesForTabs()
@@ -105,19 +119,14 @@ function TriageAndAssessment(props) {
     const [successMsg, setsuccessMsg] = useState('')
     const [requestType, setrequestType] = useState('')
     const [openNotification, setOpenNotification] = useState(false)
-
-    const [specifyGeneralAppearance,setSpecifyGeneralAppearance] = useState(false)
-    const [specifyAbdomen,setSpecifyAbdomen] = useState(false)
-    const [specifyCardiac,setSpecifyCardiac] = useState(false)
-    const [specifyHeadNeck,setSpecifyHeadNeck] = useState(false)
-    const [specifyNeurological,setSpecifyNeurological] = useState(false)
-    const [specifyRespiratory,setSpecifyRespiratory] = useState(false)
+    const [MRN, setMRN] = useState('')
 
     useEffect(() => {
         setCurrentUser(cookie.load('current_user'))
 
         const selectedRec = props.history.location.state.selectedItem
-        console.log("In triage : ", selectedRec)
+        console.log("In triage : ", selectedRec.patientId.profileNo)
+        setMRN(selectedRec.patientId.profileNo)
         setId(selectedRec._id)
         setrequestType(selectedRec.requestType)
 
@@ -130,39 +139,33 @@ function TriageAndAssessment(props) {
     }, [])
 
     const onCheckedValue = (e) => {
+        if (e.target.value === "generalAppearanceText") {
+            dispatch({ field: "generalAppearanceText", value: "" })
+        }
+        else if (e.target.value === "respiratoryText") {
+            dispatch({ field: "respiratoryText", value: "" })
+        }
+        else if (e.target.value === "neurologicalText") {
+            dispatch({ field: "neurologicalText", value: "" })
+        }
+        else if (e.target.value === "headNeckText") {
+            dispatch({ field: "headNeckText", value: "" })
+        }
+        else if (e.target.value === "abdomenText") {
+            dispatch({ field: "abdomenText", value: "" })
+        }
+        else if (e.target.value === "cardiacText") {
+            dispatch({ field: "cardiacText", value: "" })
+        }
+        else {
+            dispatch({ field: "generalAppearanceText", value: null })
+            dispatch({ field: "respiratoryText", value: null })
+            dispatch({ field: "neurologicalText", value: null })
+            dispatch({ field: "headNeckText", value: null })
+            dispatch({ field: "abdomenText", value: null })
+            dispatch({ field: "cardiacText", value: null })
+        }
         dispatch({ field: e.target.name, value: e.target.value })
-        if(e.target.value === "OthergeneralAppearance")
-        {
-            setSpecifyGeneralAppearance(true)
-        }
-        else if(e.target.value === "Otherrespiratory")
-        {
-            setSpecifyRespiratory(true)
-        }
-        else if(e.target.value === "Otherneurological")
-        {
-            setSpecifyNeurological(true)
-        }
-        else if(e.target.value === "OtherheadNeck")
-        {
-            setSpecifyHeadNeck(true)
-        }
-        else if(e.target.value === "Otherabdomen")
-        {
-            setSpecifyAbdomen(true)
-        }
-        else if(e.target.value === "Othercardiac")
-        {
-            setSpecifyCardiac(true)
-        }
-        else{
-            setSpecifyCardiac(false)
-            setSpecifyAbdomen(false)
-            setSpecifyHeadNeck(false)
-            setSpecifyNeurological(false)
-            setSpecifyRespiratory(false)
-            setSpecifyGeneralAppearance(false)
-        }
     }
 
     const handleChange = (event, newValue) => {
@@ -173,8 +176,25 @@ function TriageAndAssessment(props) {
         setValue(value + 1)
     }
 
-    const onSpecify = (e)=>{
-        console.log(e.target.name,e.target.value)
+    const onSpecify = (e) => {
+        if (e.target.name === "generalAppearance") {
+            dispatch({ field: "generalAppearanceText", value: e.target.value })
+        }
+        else if (e.target.name === "headNeck") {
+            dispatch({ field: "headNeckText", value: e.target.value })
+        }
+        else if (e.target.name === "respiratory") {
+            dispatch({ field: "respiratoryText", value: e.target.value })
+        }
+        else if (e.target.name === "abdomen") {
+            dispatch({ field: "abdomenText", value: e.target.value })
+        }
+        else if (e.target.name === "neurological") {
+            dispatch({ field: "neurologicalText", value: e.target.value })
+        }
+        else if (e.target.name === "cardiac") {
+            dispatch({ field: "cardiacText", value: e.target.value })
+        }
         dispatch({ field: e.target.name, value: e.target.value })
     }
 
@@ -204,10 +224,10 @@ function TriageAndAssessment(props) {
         axios.put(updateEdrIpr, params)
             .then((res) => {
                 if (res.data.success) {
-                    console.log("Update Patient data : ", res.data.data)
+                    console.log("Update Patient data assessment and diagnosis: ", res.data.data)
                     props.history.push({
                         pathname: 'success',
-                        state: { message: 'Triage & Assessment added successfully' },
+                        state: { message: `Triage & Assessment for patient ${MRN} added successfully` },
                     })
                 } else if (!res.data.success) {
                     setOpenNotification(true);
@@ -458,33 +478,33 @@ function TriageAndAssessment(props) {
                                                 <input
                                                     type='radio'
                                                     name='generalAppearance'
-                                                    value='OthergeneralAppearance'
-                                                    checked={specifyGeneralAppearance}
+                                                    value='generalAppearanceText'
+                                                    checked={generalAppearanceText !== null}
                                                 />
                                                     &nbsp;&nbsp;Other
-                                                </label>
+                                            </label>
                                         </div>
                                     </div>
                                 </form>
-                                <form
+                                {/* <form
                                     className='form-inline row'
                                     role='form'
                                     onChange={onCheckedValue}
                                     value={generalAppearance}
-                                >
-                                    <div className='form-group col-md-12'>
-                                        <input
-                                            style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
-                                            disabled={!specifyGeneralAppearance}
-                                            type='text'
-                                            placeholder='Specify'
-                                            onChange={onSpecify}
-                                            name='generalAppearance'
-                                            value={generalAppearance}
-                                            className='control-label textInputStyle'
-                                        />
-                                    </div>
-                                </form>
+                                > */}
+                                <div className='form-group col-md-12'>
+                                    <input
+                                        style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
+                                        disabled={generalAppearanceText === null}
+                                        type='text'
+                                        placeholder='Specify'
+                                        onChange={onSpecify}
+                                        name='generalAppearance'
+                                        value={generalAppearanceText}
+                                        className='control-label textInputStyle'
+                                    />
+                                </div>
+                                {/* </form> */}
                             </div>
                             <br />
                             <div className='container-fluid'>
@@ -526,7 +546,7 @@ function TriageAndAssessment(props) {
                                                     type='radio'
                                                     name='headNeck'
                                                     value='Thyroid Enlargement'
-                                                    checked={specifyHeadNeck}
+                                                    checked={headNeck === 'Thyroid Enlargement'}
                                                 />
                                                     &nbsp;&nbsp;Thyroid Enlargement
                                                 </label>
@@ -535,29 +555,29 @@ function TriageAndAssessment(props) {
                                     <div className='form-group col-md-3'>
                                         <div class='radio'>
                                             <label class='radio-inline control-label'>
-                                                <input type='radio' name='headNeck' value='OtherheadNeck'
-                                                    checked={headNeck === 'OtherheadNeck'}
+                                                <input type='radio' name='headNeck' value='headNeckText'
+                                                    checked={headNeckText !== null}
                                                 />
                                                     &nbsp;&nbsp;Other
                                                 </label>
                                         </div>
                                     </div>
                                 </form>
-                                <form className='form-inline row' role='form' onChange={onCheckedValue}
-                                    value={headNeck}>
-                                    <div className='form-group col-md-12'>
-                                        <input
-                                            style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
-                                            disabled={!specifyHeadNeck}
-                                            type='text'
-                                            onChange={onSpecify}
-                                            placeholder='Specify'
-                                            name='headNeck'
-                                            value={headNeck}
-                                            className='control-label textInputStyle'
-                                        />
-                                    </div>
-                                </form>
+                                {/* <form className='form-inline row' role='form' onChange={onCheckedValue}
+                                    value={headNeck}> */}
+                                <div className='form-group col-md-12'>
+                                    <input
+                                        style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
+                                        disabled={headNeckText === null}
+                                        type='text'
+                                        onChange={onSpecify}
+                                        placeholder='Specify'
+                                        name='headNeck'
+                                        value={headNeckText}
+                                        className='control-label textInputStyle'
+                                    />
+                                </div>
+                                {/* </form> */}
                             </div>
                             <br />
                             <div className='container-fluid'>
@@ -622,33 +642,35 @@ function TriageAndAssessment(props) {
                                         </div>
                                     </div>
                                 </form>
-                                <form className='form-inline row' role='form'
-                                    onChange={onCheckedValue}
-                                    value={respiratory}
-                                >
-                                    <div className='form-group col-md-3'>
-                                        <div class='radio'>
-                                            <label class='radio-inline control-label'>
-                                                <input type='radio' name='respiratory' value='Otherrespiratory'
-                                                    checked={specifyRespiratory}
-                                                />
+                                <div className='row'>
+                                    <form className='form-inline' role='form'
+                                        onChange={onCheckedValue}
+                                        value={respiratory}
+                                    >
+                                        <div className='form-group col-md-3'>
+                                            <div class='radio'>
+                                                <label class='radio-inline control-label'>
+                                                    <input type='radio' name='respiratory' value='respiratoryText'
+                                                        checked={respiratoryText !== null}
+                                                    />
                                                     &nbsp;&nbsp;Other
                                             </label>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </form>
                                     <div className='form-group col-md-9'>
                                         <input
                                             style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
-                                            disabled={!specifyRespiratory}
+                                            disabled={respiratoryText === null}
                                             type='text'
                                             placeholder='Specify'
                                             onChange={onSpecify}
                                             name='respiratory'
-                                            value={respiratory}
+                                            value={respiratoryText}
                                             className='control-label textInputStyle'
                                         />
                                     </div>
-                                </form>
+                                </div>
                             </div>
                             <br />
                             <div className='container-fluid'>
@@ -689,31 +711,31 @@ function TriageAndAssessment(props) {
                                     <div className='form-group col-md-4 col-sm-4'>
                                         <div class='radio'>
                                             <label class='radio-inline control-label'>
-                                                <input type='radio' name='cardiac' value='Othercardiac'
-                                                    checked={specifyCardiac}
+                                                <input type='radio' name='cardiac' value='cardiacText'
+                                                    checked={cardiacText !== null}
                                                 />
                                                     &nbsp;&nbsp;Other
                                                 </label>
                                         </div>
                                     </div>
                                 </form>
-                                <form className='form-inline row' role='form'
+                                {/* <form className='form-inline row' role='form'
                                     onChange={onCheckedValue}
                                     value={cardiac}
-                                >
-                                    <div className='form-group col-md-12'>
-                                        <input
-                                            style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
-                                            disabled={!specifyCardiac}
-                                            type='text'
-                                            placeholder='Specify'
-                                            onChange={onSpecify}
-                                            name='cardiac'
-                                            value={cardiac}
-                                            className='control-label textInputStyle'
-                                        />
-                                    </div>
-                                </form>
+                                > */}
+                                <div className='form-group col-md-12'>
+                                    <input
+                                        style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
+                                        disabled={cardiacText === null}
+                                        type='text'
+                                        placeholder='Specify'
+                                        onChange={onSpecify}
+                                        name='cardiac'
+                                        value={cardiacText}
+                                        className='control-label textInputStyle'
+                                    />
+                                </div>
+                                {/* </form> */}
                             </div>
                             <br />
                             <div className='container-fluid'>
@@ -775,33 +797,35 @@ function TriageAndAssessment(props) {
                                         </div>
                                     </div>
                                 </form>
-                                <form className='form-inline row' role='form'
-                                    onChange={onCheckedValue}
-                                    value={abdomen}
-                                >
-                                    <div className='form-group col-md-3'>
-                                        <div class='radio'>
-                                            <label class='radio-inline control-label'>
-                                                <input type='radio' name='abdomen' value='Otherabdomen'
-                                                    checked={specifyAbdomen}
-                                                />
+                                <div class="row">
+                                    <form className='form-inline' role='form'
+                                        onChange={onCheckedValue}
+                                        value={abdomen}
+                                    >
+                                        <div className='form-group col-md-3'>
+                                            <div class='radio'>
+                                                <label class='radio-inline control-label'>
+                                                    <input type='radio' name='abdomen' value='abdomenText'
+                                                        checked={abdomenText !== null}
+                                                    />
                                                     &nbsp;&nbsp;Other
                                                 </label>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </form>
                                     <div className='col-md-9'>
                                         <input
                                             style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
-                                            disabled={!specifyAbdomen}
+                                            disabled={abdomenText === null}
                                             type='text'
                                             placeholder='Specify'
                                             onChange={onSpecify}
                                             name='abdomen'
-                                            value={abdomen}
+                                            value={abdomenText}
                                             className=' textInputStyle'
                                         />
                                     </div>
-                                </form>
+                                </div>
                             </div>
                             <br />
                             <div className='container-fluid'>
@@ -858,31 +882,31 @@ function TriageAndAssessment(props) {
                                     <div className='form-group col-md-3'>
                                         <div class='radio'>
                                             <label class='radio-inline control-label'>
-                                                <input type='radio' name='neurological' value='Otherneurological'
-                                                    checked={specifyNeurological}
+                                                <input type='radio' name='neurological' value='neurologicalText'
+                                                    checked={neurologicalText !== null}
                                                 />
                                                     &nbsp;&nbsp;Other
                                                 </label>
                                         </div>
                                     </div>
                                 </form>
-                                <form className='form-inline row' role='form'
+                                {/* <form className='form-inline row' role='form'
                                     onChange={onCheckedValue}
                                     value={neurological}
-                                >
+                                > */}
                                     <div classNames='col-md-12'>
                                         <input
                                             style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
-                                            disabled={!specifyNeurological}
+                                            disabled={neurologicalText === null}
                                             type='text'
                                             placeholder='Specify'
                                             onChange={onSpecify}
                                             name='neurological'
-                                            value={neurological}
-                                            className='control-label textInputStyle'
+                                            value={neurologicalText}
+                                            className='textInputStyle'
                                         />
                                     </div>
-                                </form>
+                                {/* </form> */}
                             </div>
                         </div>
                         <div style={{ display: 'flex', flex: 1, justifyContent: 'center' }}>

@@ -829,7 +829,7 @@ function PatientAssessment(props) {
   const handlePatientSearch = (e) => {
     const a = e.target.value.replace(/[^\w\s]/gi, '')
     setSearchPatientQuery(a)
-    if (a.length >= 3) {
+    if (a.length >= 5) {
       axios
         .get(getSearchedpatient + '/' + a)
         .then((res) => {

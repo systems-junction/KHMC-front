@@ -403,7 +403,7 @@ function AddEditPurchaseRequest(props) {
             props.history.replace({
               pathname: "/home/wms/fus/medicinalorder/success",
               state: {
-                message: `External Return request ${res.data.data.returnRequestNo} has been generated successfully`,
+                message: `External Return request ${res.data.data.returnRequestNo} for patient MRN ${res.data.data.patientId} has been generated successfully`,
               },
             });
           } else if (!res.data.success) {
@@ -472,7 +472,7 @@ function AddEditPurchaseRequest(props) {
               props.history.replace({
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
-                  message: `External Return request ${res.data.data.returnRequestNo} has been ${status}`,
+                  message: `External Return request ${res.data.data.returnRequestNo} for patient MRN ${res.data.data.patientId.profileNo} has been ${status}`,
                 },
               });
             } else {
