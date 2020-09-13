@@ -144,15 +144,15 @@ const titles = [
 
 const genderArray = [
   {
-    key: 'male',
+    key: 'Male',
     value: 'Male',
   },
   {
-    key: 'female',
+    key: 'Female',
     value: 'Female',
   },
   {
-    key: 'others',
+    key: 'Others',
     value: 'Others',
   },
 ]
