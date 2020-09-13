@@ -155,236 +155,6 @@ export default function EdrRequest(props) {
     console.log(props.item, 'view Data')
   }, [])
 
-  const replaceSlugToTitle = (val) => {
-    if (
-      val === "active" ||
-      val === "complete" ||
-      val === "Complete" ||
-      val === "pending" ||
-      val === "modify" ||
-      val === "closed" ||
-      val === "delivered" ||
-      val === "partially completed" ||
-      val === "approved" ||
-      val === "Approved" ||
-      val === "Analysis In Progress" ||
-      val === "reject" ||
-      val === "response in progress" ||
-      val === "partial approved" ||
-      val === "Partial Approved" ||
-      val === "completed" ||
-      val === "approve" ||
-      val === "received" ||
-      val === "Partially Received" ||
-      val === "Cannot be fulfilled" ||
-      val === "Item Returned to Warehouse" ||
-      val === "Returned" ||
-      val === "receive" ||
-      val === "Received" ||
-      val === "rejected" ||
-      val === "Sent for PAR"
-    ) {
-      return (
-        <>
-          {val === "complete" || val === "Complete" ? (
-            <Button
-              style={{ ...stylesB.stylesForActive, backgroundColor: "#ba55d3" }}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Complete</strong>
-            </Button>
-          ) : val === "active" ? (
-            <Button
-              style={stylesB.stylesForActive}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Active</strong>
-            </Button>
-          ) : val === "Sent for PAR" ? (
-            <Button
-              style={{ ...stylesB.stylesForActive, width: "120px" }}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Sent for PAR</strong>
-            </Button>
-          ) : val === "closed" ? (
-            <Button
-              style={{ ...stylesB.stylesForActive, backgroundColor: "#2c6ddd" }}
-              variant="contained"
-              color="primary"
-            >
-              <strong>closed</strong>
-            </Button>
-          ) : val === "pending" ? (
-            <Button
-              style={{ ...stylesB.stylesForActive, backgroundColor: "#e877a1" }}
-              variant="contained"
-              color="primary"
-            >
-              <strong>pending</strong>
-            </Button>
-          ) : val === "modify" ? (
-            <Button
-              style={{ ...stylesB.stylesForActive, backgroundColor: "#e877a1" }}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Modify</strong>
-            </Button>
-          ) : val === "delivered " ? (
-            <Button
-              style={{ ...stylesB.stylesForActive, backgroundColor: "#2c6ddd" }}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Delivered </strong>
-            </Button>
-          ) : val === "completed" ? (
-            <Button
-              style={{ ...stylesB.stylesForActive, backgroundColor: "#ba55d3" }}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Completed</strong>
-            </Button>
-          ) : val === "approved" || val === "Approved" ? (
-            <Button
-              style={{ ...stylesB.stylesForActive, backgroundColor: "#ba55d3" }}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Approved</strong>
-            </Button>
-          ) : val === "partial approved" || val === "Partial Approved" ? (
-            <Button
-              style={{
-                ...stylesB.stylesForActive,
-                backgroundColor: "#2c6ddd",
-                width: "150px",
-              }}
-              variant="contained"
-              color="primary"
-            >
-              <strong>partial approved</strong>
-            </Button>
-          ) : val === "partially completed" ? (
-            <Button
-              style={{
-                ...stylesB.stylesForActive,
-                backgroundColor: " #2c6ddd",
-              }}
-              variant="contained"
-              color="primary"
-            >
-              <strong>partially completed</strong>
-            </Button>
-          ) : val === "response in progress" ? (
-            <Button
-              style={{ ...stylesB.stylesForActive, backgroundColor: "#e877a1" }}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Response in progress</strong>
-            </Button>
-          ) : val === "reject" ? (
-            <Button
-              style={{ ...stylesB.stylesForActive, backgroundColor: "#2c6ddd" }}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Reject</strong>
-            </Button>
-          ) : val === "received" ? (
-            <Button
-              style={stylesB.stylesForActive}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Received</strong>
-            </Button>
-          ) : val === "rejected" ? (
-            <Button
-              style={stylesB.stylesForActive}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Rejected</strong>
-            </Button>
-          ) : val === "Analysis In Progress" ? (
-            <Button
-              style={{ ...stylesB.stylesForActive, width: "150px" }}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Analysis In Progress</strong>
-            </Button>
-          ) : val === "receive" ? (
-            <Button
-              style={stylesB.stylesForActive}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Receive</strong>
-            </Button>
-          ) : val === "Partially Received" ? (
-            <Button
-              style={stylesB.stylesForActive}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Partially Received</strong>
-            </Button>
-          ) : val === "approve" ? (
-            <Button
-              style={stylesB.stylesForActive}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Approve</strong>
-            </Button>
-          ) : val === "Cannot be fulfilled" ? (
-            <Button
-              style={stylesB.stylesForActive}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Cannot be fulfilled</strong>
-            </Button>
-          ) : val === "Returned" ? (
-            <Button
-              style={stylesB.stylesForActive}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Item Returned</strong>
-            </Button>
-          ) : val === "Received" ? (
-            <Button
-              style={stylesB.stylesForActive}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Received</strong>
-            </Button>
-          ) : (
-                                                        <Button
-                                                          style={stylesB.stylesForActive}
-                                                          variant="contained"
-                                                          color="primary"
-                                                        >
-                                                          <strong>Item Returned</strong>
-                                                        </Button>
-                                                      )}
-        </>
-      );
-    }
-
-    return capitilizeLetter(val)
-  }
-
   const formatDate = (date) => {
     const d = new Date(date);
     return (
@@ -632,6 +402,27 @@ export default function EdrRequest(props) {
                   }}
                 />
               </div>
+            )  : props.item.doctorNotes ? (
+              <div
+                className='col-md-6 col-sm-6 col-6'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  required
+                  multiline
+                  disabled={true}
+                  label='Doctor Notes'
+                  name={'doctorNotes'}
+                  value={props.item.doctorNotes}
+                  className='textInputStyle'
+                  rows={4}
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                />
+              </div>
             ) : props.item.comments ? (
               <div
                 className='col-md-6 col-sm-6 col-6'
@@ -684,24 +475,6 @@ export default function EdrRequest(props) {
             ) : (
                 undefined
               )}
-          </div>
-
-          <div className='row'>
-            <div
-              className='col-md-12 col-sm-12 col-12 d-flex justify-content-center text-center'
-              style={styles.inputContainerForTextField}
-            >
-              {props.item.status ? (
-                <div>
-                  <InputLabel style={styles.styleForLabel} id='generated-label'>
-                    Status
-                  </InputLabel>
-                  {replaceSlugToTitle(props.item.status)}
-                </div>
-              ) : (
-                  undefined
-                )}
-            </div>
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
