@@ -3,12 +3,12 @@ import './Header.css'
 import KHMC_White from '../../assets/img/KHMC_White.png'
 import Influence_white from '../../assets/img/Influence_white.png'
 import { Redirect } from 'react-router-dom'
-
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
+import Fade from '@material-ui/core/Fade'
 
 import cookie from 'react-cookies'
 
@@ -77,45 +77,57 @@ class Header extends React.Component {
               zIndex: 5,
             }}
           >
-            <Card style={{ marginTop: 20 }}>
-              <CardContent>
-                <Typography
-                  // variant="h6"
-                  color='textSecondary'
-                  gutterBottom
-                  style={{ display: 'flex', justifyContent: 'space-between' }}
-                >
-                  {this.state.currentUser && this.state.currentUser.name}
-                </Typography>
+            <Fade in={this.state.open} timeout={1000}>
+              <Card style={{ marginTop: 20 }}>
+                <CardContent>
+                  <Typography
+                    // variant="h6"
+                    color='textPrimary'
+                    gutterBottom
+                    style={{ display: 'flex', justifyContent: 'space-between' }}
+                  >
+                    {this.state.currentUser && this.state.currentUser.name}
+                  </Typography>
 
-                <Typography
-                  // variant="h6"
-                  color='textSecondary'
-                  // gutterBottom
-                  style={{ display: 'flex', justifyContent: 'space-between' }}
-                >
-                  {this.state.currentUser && this.state.currentUser.email}
-                </Typography>
+                  <Typography
+                    variant='body2'
+                    color='textSecondary'
+                    // gutterBottom
+                    style={{ display: 'flex', justifyContent: 'space-between' }}
+                  >
+                    {this.state.currentUser &&
+                      this.state.currentUser.staffTypeId.type}
+                  </Typography>
 
-                <hr />
+                  <Typography
+                    // variant="h6"
+                    color='textSecondary'
+                    // gutterBottom
+                    style={{ display: 'flex', justifyContent: 'space-between' }}
+                  >
+                    {this.state.currentUser && this.state.currentUser.email}
+                  </Typography>
 
-                <Typography
-                  variant='h6'
-                  color='textSecondary'
-                  gutterBottom
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => this.logoutUser()}
-                >
-                  Logout
-                  <i class='zmdi zmdi-power'></i>
-                </Typography>
-              </CardContent>
-              <CardActions></CardActions>
-            </Card>
+                  <hr />
+
+                  <Typography
+                    variant='h6'
+                    color='textSecondary'
+                    gutterBottom
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => this.logoutUser()}
+                  >
+                    Logout
+                    <i class='zmdi zmdi-power'></i>
+                  </Typography>
+                </CardContent>
+                <CardActions></CardActions>
+              </Card>
+            </Fade>
           </div>
         ) : (
           undefined
