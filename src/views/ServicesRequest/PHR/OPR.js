@@ -53,7 +53,6 @@ export default function EDR(props) {
       .get(getOPRFromPharmacyUrl)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data, 'ecr1')
           // res.data.data.map((d) => (d.pharmacyRequest = d.pharmacyRequest[0]))
           // res.data.data.map((d) => (d.profileNo = d.patientId.profileNo))
           // res.data.data.map((d) => (d.date = d.pharmacyRequest.date))

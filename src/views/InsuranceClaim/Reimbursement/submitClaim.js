@@ -98,7 +98,7 @@ const styles = {
   patientDetails: {
     backgroundColor: "white",
     borderRadius: 10,
-    padding: "20px",
+    padding: "10px",
   },
   inputContainerForTextField: {
     marginTop: 10,
@@ -110,6 +110,16 @@ const styles = {
   },
   inputStyles: {
     outline: "none",
+  },
+  headingStyles: {
+    fontWeight: "bold",
+    color: "grey",
+    fontSize: 12,
+  },
+  textStyles: {
+    fontWeight: "700",
+    color: "black",
+    fontSize: 14,
   },
 };
 
@@ -173,6 +183,7 @@ function AddEditPatientListing(props) {
     lastName: "-----",
     gender: "-----",
     age: "--",
+    weight: "--",
     document: "",
     generatedBy: cookie.load("current_user").staffId,
     insuranceNumber: "----",
@@ -201,6 +212,7 @@ function AddEditPatientListing(props) {
     lastName = "-----",
     gender = "----",
     age = "--",
+    weight = "--",
     document,
     generatedBy = cookie.load("current_user").staffId,
     insuranceNumber = "-----",
@@ -334,6 +346,7 @@ function AddEditPatientListing(props) {
           dispatch({ field: "lastName", value: "" });
           dispatch({ field: "gender", value: "" });
           dispatch({ field: "age", value: "" });
+          dispatch({ field: "weight", value: "" });
           dispatch({ field: "profileNo", value: "" });
           dispatch({ field: "insuranceNumber", value: "" });
           dispatch({ field: "insuranceVendor", value: "" });
@@ -342,8 +355,7 @@ function AddEditPatientListing(props) {
 
           props.history.push({
             pathname: "success",
-            // TODO: discussion should be made here
-            state: { message: "Claim Submitted successfully" },
+            state: { message: `Claim against Patient MRN ${profileNo} Submitted successfully`},
           });
         } else if (!res.data.success) {
           setOpenNotification(true);
@@ -381,7 +393,7 @@ function AddEditPatientListing(props) {
         if (res.data.success) {
           props.history.push({
             pathname: "success",
-            state: { message: "Claim Updated successfully" },
+            state: { message:  `Claim against Patient MRN ${profileNo} Updated successfully` },
           });
         } else if (!res.data.success) {
           setOpenNotification(true);
@@ -404,7 +416,7 @@ function AddEditPatientListing(props) {
     var reader = new FileReader();
     var url = reader.readAsDataURL(file);
 
-    reader.onloadend = function() {
+    reader.onloadend = function () {
       if (fileType === "pdf") {
         setpdfView(file.name);
       } else {
@@ -468,6 +480,7 @@ function AddEditPatientListing(props) {
     dispatch({ field: "lastName", value: i.lastName });
     dispatch({ field: "gender", value: i.gender });
     dispatch({ field: "age", value: i.age });
+    dispatch({ field: "weight", value: i.weight });
     dispatch({ field: "profileNo", value: i.profileNo });
     dispatch({ field: "insuranceNumber", value: i.insuranceNumber });
     dispatch({ field: "insuranceVendor", value: i.insuranceVendor });
@@ -595,7 +608,7 @@ function AddEditPatientListing(props) {
           <div>
             <div
               style={{ marginTop: "20px", marginBottom: "10px" }}
-              className={`container ${classes.root}`}
+              className={`container-fluid ${classes.root}`}
             >
               {comingFor === "add" ? (
                 <div>
@@ -604,8 +617,6 @@ function AddEditPatientListing(props) {
                       className="col-md-10 col-sm-8 col-8"
                       style={{
                         ...styles.inputContainerForTextField,
-                        paddingLeft: 0,
-                        paddingRight: 0,
                       }}
                     >
                       <TextField
@@ -643,28 +654,23 @@ function AddEditPatientListing(props) {
                           height: 55,
                           backgroundColor: "white",
                           borderRadius: 5,
-                          width: 80,
+                          width: 100,
                         }}
                       >
                         <img src={BarCode} style={{ width: 80, height: 75 }} />
                       </div>
                     </div>
 
-                    <div
-                      className="col-md-1 col-sm-2 col-2"
-                      style={{
-                        ...styles.inputContainerForTextField,
-                      }}
-                    >
+                    <div className="col-md-1 col-sm-2 col-2">
                       <div
                         style={{
+                          ...styles.inputContainerForTextField,
                           display: "flex",
                           justifyContent: "center",
                           alignItems: "center",
-                          height: 55,
                           backgroundColor: "white",
                           borderRadius: 5,
-                          width: 80,
+                          height: 55,
                         }}
                       >
                         <img
@@ -675,147 +681,186 @@ function AddEditPatientListing(props) {
                     </div>
                   </div>
 
-                  {searchQuery ? (
-                    <div style={{ zIndex: 3 }}>
-                      <Paper>
-                        {itemFoundSuccessfull ? (
-                          itemFound && (
-                            <Table size="small">
-                              <TableHead>
-                                <TableRow>
-                                  <TableCell>MRN</TableCell>
-                                  <TableCell>Patient Name</TableCell>
-                                  <TableCell>Gender</TableCell>
-                                  <TableCell>Age</TableCell>
-                                  <TableCell>Payment Method</TableCell>
-                                </TableRow>
-                              </TableHead>
-
-                              <TableBody>
-                                {itemFound.map((i) => {
-                                  return (
-                                    <TableRow
-                                      key={i._id}
-                                      onClick={() => handleAddItem(i)}
-                                      style={{ cursor: "pointer" }}
-                                    >
-                                      <TableCell>{i.profileNo}</TableCell>
-                                      <TableCell>
-                                        {i.firstName + ` ` + i.lastName}
-                                      </TableCell>
-                                      <TableCell>{i.gender}</TableCell>
-                                      <TableCell>{i.age}</TableCell>
-                                      <TableCell>{i.paymentMethod}</TableCell>
+                  <div className="row">
+                    <div
+                      className="col-md-10 col-sm-8 col-8"
+                    >
+                      {searchQuery ? (
+                        <div style={{ zIndex: 3 }}>
+                          <Paper>
+                            {itemFoundSuccessfull ? (
+                              itemFound && (
+                                <Table size="small">
+                                  <TableHead>
+                                    <TableRow>
+                                      <TableCell>MRN</TableCell>
+                                      <TableCell>Patient Name</TableCell>
+                                      <TableCell>Gender</TableCell>
+                                      <TableCell>Age</TableCell>
+                                      <TableCell>Payment Method</TableCell>
                                     </TableRow>
-                                  );
-                                })}
-                              </TableBody>
-                            </Table>
-                          )
-                        ) : (
-                          <h4
-                            style={{ textAlign: "center" }}
-                            onClick={() => setSearchQuery("")}
-                          >
-                            Patient Not Found
-                          </h4>
+                                  </TableHead>
+
+                                  <TableBody>
+                                    {itemFound.map((i) => {
+                                      return (
+                                        <TableRow
+                                          key={i._id}
+                                          onClick={() => handleAddItem(i)}
+                                          style={{ cursor: "pointer" }}
+                                        >
+                                          <TableCell>{i.profileNo}</TableCell>
+                                          <TableCell>
+                                            {i.firstName + ` ` + i.lastName}
+                                          </TableCell>
+                                          <TableCell>{i.gender}</TableCell>
+                                          <TableCell>{i.age}</TableCell>
+                                          <TableCell>{i.paymentMethod}</TableCell>
+                                        </TableRow>
+                                      );
+                                    })}
+                                  </TableBody>
+                                </Table>
+                              )
+                            ) : (
+                                <h4
+                                  style={{ textAlign: "center" }}
+                                  onClick={() => setSearchQuery("")}
+                                >
+                                  Patient Not Found
+                                </h4>
+                              )}
+                          </Paper>
+                        </div>
+                      ) : (
+                          undefined
                         )}
-                      </Paper>
                     </div>
-                  ) : (
-                    undefined
-                  )}
+                  </div>
                 </div>
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
             </div>
 
-            <div className="container" style={styles.patientDetails}>
-              <div className="row">
-                <div className="col-md-12">
-                  <h4 style={{ color: "blue", fontWeight: "600" }}>
-                    Patient Details
-                  </h4>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-md-4 col-sm-4 col-4">
-                  <div style={styles.inputContainerForTextField}>
-                    <InputLabel style={styles.stylesForLabel} id="status-label">
-                      Patient Name
-                    </InputLabel>
-                    <span style={styles.styleForPatientDetails}>
-                      {firstName + ` ` + lastName}{" "}
-                    </span>
+            <div className="container-fluid">
+              <h5 style={{ fontWeight: "bold", color: "white", marginTop: 25, paddingLeft: 0, paddingRight: 0 }}>
+                Patient Details
+              </h5>
+              <div
+                // className="row"
+                style={{
+                  marginTop: 25,
+                  backgroundColor: "white",
+                  borderRadius: 5,
+                  width: "100%",
+                }}
+              >
+                <div
+                  className="row"
+                  style={{
+                    backgroundColor: "#2C6DDD",
+                    paddingLeft: 10,
+                    height: "30%",
+                    borderTopLeftRadius: 5,
+                    borderTopRightRadius: 5,
+                    paddingBottom: 10,
+                    paddingTop: 10,
+                    marginLeft: 0,
+                    marginRight: 0,
+                  }}
+                >
+                  <div
+                    className={"col-md-3 col-sm-3 col-3"}
+                    style={styles.headerHeading}
+                  >
+                    <h6 style={{ color: "white", fontWeight: "700" }}>
+                      Patient Info
+                </h6>
+                  </div>
+                  <div
+                    className={"col-md-3 col-sm-3 col-3"}
+                    style={styles.headerHeading}
+                  >
+                    <h6 style={{ color: "white", fontWeight: "700" }}>Allergy</h6>
+                  </div>
+                  <div
+                    className={"col-md-3 col-sm-3 col-3"}
+                    style={styles.headerHeading}
+                  >
+                    <h6 style={{ color: "white", fontWeight: "700" }}>
+                      Medication
+                </h6>
+                  </div>
+                  <div
+                    className={"col-md-3 col-sm-3 col-3"}
+                    style={styles.headerHeading}
+                  >
+                    <h6 style={{ color: "white", fontWeight: "700" }}>Diagnosis</h6>
                   </div>
                 </div>
-                <div className="col-md-4 col-sm-4 col-4">
-                  <div style={styles.inputContainerForTextField}>
-                    <InputLabel style={styles.stylesForLabel} id="status-label">
-                      Gender
-                    </InputLabel>
-                    <span style={styles.styleForPatientDetails}>{gender}</span>
-                  </div>
-                </div>
-                <div className="col-md-4 col-sm-4 col-4">
-                  <div style={styles.inputContainerForTextField}>
-                    <InputLabel style={styles.stylesForLabel} id="status-label">
-                      Age
-                    </InputLabel>
-                    <span style={styles.styleForPatientDetails}>{age}</span>
-                  </div>
-                </div>
-              </div>
 
-              <div className="row">
-                <div className="col-md-4 col-sm-4 col-4">
-                  <div style={styles.inputContainerForTextField}>
-                    <InputLabel style={styles.stylesForLabel} id="status-label">
-                      Patient MRN
-                    </InputLabel>
-                    <span style={styles.styleForPatientDetails}>
+                <div
+                  style={{
+                    marginTop: 10,
+                    paddingLeft: 10,
+                    height: "80%",
+                    paddingBottom: 10,
+                  }}
+                >
+                  <div
+                    className={"col-md-3 col-sm-3 col-3"}
+                    style={{ display: "flex", flexDirection: "column" }}
+                  >
+                    <span style={styles.headingStyles}>MRN</span>
+                    <span style={styles.textStyles}>
                       {profileNo}
                     </span>
-                  </div>
-                </div>
 
-                <div className="col-md-4 col-sm-4 col-4">
-                  <div style={styles.inputContainerForTextField}>
-                    <InputLabel style={styles.stylesForLabel} id="status-label">
-                      Insurance No
-                    </InputLabel>
-                    <span style={styles.styleForPatientDetails}>
-                      {insuranceNumber}
+                    <span style={styles.headingStyles}>Patient</span>
+                    <span style={styles.textStyles}>
+                      {firstName + ` ` + lastName}{" "}
                     </span>
-                    {/* <input
-                      disabled={true}
-                      type='text'
-                      placeholder='Insurance Number'
-                      name={'insuranceId'}
-                      value={insuranceNumber}
-                      onChange={onChangeValue}
-                      className='textInputStyle'
-                    /> */}
+
+                    <span style={styles.headingStyles}>Gender</span>
+                    <span style={styles.textStyles}>
+                      {gender}
+                    </span>
+
+                    <span style={styles.headingStyles}>Age</span>
+                    <span style={styles.textStyles}>
+                      {age}
+                    </span>
+
+                    <span style={styles.headingStyles}>Weight</span>
+                    <span style={styles.textStyles}>
+                      {weight} kg
+                </span>
                   </div>
-                </div>
-                <div className="col-md-4 col-sm-4 col-4">
-                  <div style={styles.inputContainerForTextField}>
-                    <InputLabel style={styles.stylesForLabel} id="status-label">
-                      Insurance Provider
-                    </InputLabel>
-                    <span style={styles.styleForPatientDetails}>
-                      {insuranceVendor}
-                    </span>
-                    {/* <input
-                      disabled={true}
-                      type='text'
-                      placeholder='Insurance Provider'
-                      name={'insuranceVendor'}
-                      value={insuranceVendor}
-                      onChange={onChangeValue}
-                      className='textInputStyle'
-                    /> */}
+
+                  <div className={"col-md-3 col-sm-3 col-3"} style={{}}>
+                    {/* {patientDetails &&
+                      patientDetails.drugAllergy.map((drug) => {
+                        return <h6 style={styles.textStyles}>{drug}</h6>;
+                      })} */}
+                  </div>
+
+                  <div className={"col-md-3 col-sm-3 col-3"} style={{}}>
+                    {/* {patientDetails &&
+                      patientDetails.drugAllergy.map((drug, index) => {
+                        return (
+                          <h6 style={styles.textStyles}>Medication {index + 1}</h6>
+                        );
+                      })} */}
+                  </div>
+
+                  <div className={"col-md-3 col-sm-3 col-3"} style={{}}>
+                    {/* {patientDetails &&
+                      patientDetails.drugAllergy.map((drug, index) => {
+                        return (
+                          <h6 style={styles.textStyles}>Diagnosis {index + 1}</h6>
+                        );
+                      })} */}
                   </div>
                 </div>
               </div>
@@ -828,10 +873,10 @@ function AddEditPatientListing(props) {
             />
 
             <div
-              className={`container ${classes.root}`}
-              style={styles.patientDetails}
+              className={`container-fluid ${classes.root}`}
             >
-              <div className="row">
+              <div className="row"
+                style={{...styles.patientDetails,marginRight:0,marginLeft:0}}>
                 <TextField
                   required
                   multiline
@@ -854,10 +899,10 @@ function AddEditPatientListing(props) {
 
             {comingFor === "edit" ? (
               <div
-                className={`container ${classes.root}`}
+                className={`container-fluid ${classes.root}`}
                 style={{ marginTop: "10px" }}
               >
-                <div className="row">
+                <div className="row" style={{marginLeft:0,marginRight:0}}>
                   <TextField
                     required
                     select
@@ -889,14 +934,15 @@ function AddEditPatientListing(props) {
                 </div>
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
-            <div className="container">
+            <div className="container-fluid">
               <div
                 className="row"
                 style={{
                   ...styles.inputContainerForTextField,
+                  marginLeft:0,marginRight:0
                 }}
               >
                 <label style={styles.upload}>
@@ -922,82 +968,82 @@ function AddEditPatientListing(props) {
                     {pdfView}
                   </div>
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
               </div>
 
               <div className="row">
                 {document !== "" && document.includes("\\") ? (
                   <>
                     {document !== "" &&
-                    document.slice(document.length - 3) !== "pdf" ? (
-                      <div
-                        className="col-md-6 col-sm-6 col-6"
-                        style={{
-                          ...styles.inputContainerForTextField,
-                        }}
-                      >
-                        <img
-                          src={uploadsUrl + document.split("\\")[1]}
-                          className="depositSlipImg"
-                        />
-                      </div>
-                    ) : document !== "" &&
-                      document.slice(document.length - 3) === "pdf" ? (
-                      <div
-                        className="col-md-6 col-sm-6 col-6"
-                        style={{
-                          ...styles.inputContainerForTextField,
-                        }}
-                      >
-                        <a
-                          href={uploadsUrl + document.split("\\")[1]}
-                          style={{ color: "#2c6ddd" }}
+                      document.slice(document.length - 3) !== "pdf" ? (
+                        <div
+                          className="col-md-6 col-sm-6 col-6"
+                          style={{
+                            ...styles.inputContainerForTextField,
+                          }}
                         >
-                          Click here to open document
+                          <img
+                            src={uploadsUrl + document.split("\\")[1]}
+                            className="depositSlipImg"
+                          />
+                        </div>
+                      ) : document !== "" &&
+                        document.slice(document.length - 3) === "pdf" ? (
+                          <div
+                            className="col-md-6 col-sm-6 col-6"
+                            style={{
+                              ...styles.inputContainerForTextField,
+                            }}
+                          >
+                            <a
+                              href={uploadsUrl + document.split("\\")[1]}
+                              style={{ color: "#2c6ddd" }}
+                            >
+                              Click here to open document
                         </a>
-                      </div>
-                    ) : (
-                      undefined
-                    )}
+                          </div>
+                        ) : (
+                          undefined
+                        )}
                   </>
                 ) : document !== "" && document.includes("/") ? (
                   <>
                     {document !== "" &&
-                    document.slice(document.length - 3) !== "pdf" ? (
-                      <div
-                        className="col-md-6 col-sm-6 col-6"
-                        style={{
-                          ...styles.inputContainerForTextField,
-                        }}
-                      >
-                        <img
-                          src={uploadsUrl + document}
-                          className="depositSlipImg"
-                        />
-                      </div>
-                    ) : document !== "" &&
-                      document.slice(document.length - 3) === "pdf" ? (
-                      <div
-                        className="col-md-6 col-sm-6 col-6"
-                        style={{
-                          ...styles.inputContainerForTextField,
-                        }}
-                      >
-                        <a
-                          href={uploadsUrl + document}
-                          style={{ color: "#2c6ddd" }}
+                      document.slice(document.length - 3) !== "pdf" ? (
+                        <div
+                          className="col-md-6 col-sm-6 col-6"
+                          style={{
+                            ...styles.inputContainerForTextField,
+                          }}
                         >
-                          Click here to open document
+                          <img
+                            src={uploadsUrl + document}
+                            className="depositSlipImg"
+                          />
+                        </div>
+                      ) : document !== "" &&
+                        document.slice(document.length - 3) === "pdf" ? (
+                          <div
+                            className="col-md-6 col-sm-6 col-6"
+                            style={{
+                              ...styles.inputContainerForTextField,
+                            }}
+                          >
+                            <a
+                              href={uploadsUrl + document}
+                              style={{ color: "#2c6ddd" }}
+                            >
+                              Click here to open document
                         </a>
-                      </div>
-                    ) : (
-                      undefined
-                    )}
+                          </div>
+                        ) : (
+                          undefined
+                        )}
                   </>
                 ) : (
-                  undefined
-                )}
+                      undefined
+                    )}
 
                 {imagePreview !== "" ? (
                   <div
@@ -1012,12 +1058,12 @@ function AddEditPatientListing(props) {
                         New document
                       </div>
                     ) : (
-                      undefined
-                    )}
+                        undefined
+                      )}
                   </div>
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
               </div>
             </div>
 
@@ -1029,7 +1075,7 @@ function AddEditPatientListing(props) {
                 marginTop: "2%",
                 marginBottom: "2%",
               }}
-              className="container"
+              className="container-fluid"
             >
               <img
                 onClick={() => props.history.goBack()}
@@ -1054,23 +1100,23 @@ function AddEditPatientListing(props) {
                     Next
                   </Button>
                 ) : (
-                  <Button
-                    style={styles.stylesForButton}
-                    //disabled={!validateFormType1()}
-                    onClick={handleEdit}
-                    variant="contained"
-                    color="default"
-                  >
-                    Update
-                  </Button>
-                )}
+                    <Button
+                      style={styles.stylesForButton}
+                      //disabled={!validateFormType1()}
+                      onClick={handleEdit}
+                      variant="contained"
+                      color="default"
+                    >
+                      Update
+                    </Button>
+                  )}
               </div>
             </div>
           </div>
         ) : value === 1 ? (
           <div
             style={{ flex: 4, display: "flex", flexDirection: "column" }}
-            className="container"
+            className="container-fluid"
           >
             <div className="row" style={{ marginTop: "20px" }}>
               {billSummaryArray !== 0 ? (
@@ -1084,8 +1130,8 @@ function AddEditPatientListing(props) {
                   borderBottomWidth={20}
                 />
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
             </div>
 
             <div
@@ -1120,22 +1166,22 @@ function AddEditPatientListing(props) {
                     Submit
                   </Button>
                 ) : (
-                  <Button
-                    style={styles.stylesForButton}
-                    //disabled={!validateFormType1()}
-                    onClick={handleEdit}
-                    variant="contained"
-                    color="default"
-                  >
-                    Update
-                  </Button>
-                )}
+                    <Button
+                      style={styles.stylesForButton}
+                      //disabled={!validateFormType1()}
+                      onClick={handleEdit}
+                      variant="contained"
+                      color="default"
+                    >
+                      Update
+                    </Button>
+                  )}
               </div>
             </div>
           </div>
         ) : (
-          undefined
-        )}
+              undefined
+            )}
 
         <Notification
           msg={errorMsg}
