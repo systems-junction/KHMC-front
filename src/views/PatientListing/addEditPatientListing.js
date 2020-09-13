@@ -1820,11 +1820,16 @@ function AddEditPatientListing(props) {
                     classes: { label: classes.label },
                   }}
                 />
-                <ErrorMessage
-                  name={mobileNumber}
-                  type="phone"
-                  isFormSubmitted={isFormSubmitted}
-                />
+
+                {mobileNumber && !validatePhone(mobileNumber) ? (
+                  undefined
+                ) : (
+                  <ErrorMessage
+                    name={mobileNumber}
+                    type="phone"
+                    isFormSubmitted={isFormSubmitted}
+                  />
+                )}
               </div>
 
               <div
@@ -1986,11 +1991,15 @@ function AddEditPatientListing(props) {
                     }}
                   />
 
-                  <ErrorMessage
-                    name={emergencyContactNo}
-                    type="phone"
-                    isFormSubmitted={isFormSubmitted}
-                  />
+                  {emergencyContactNo && !validatePhone(emergencyContactNo) ? (
+                    undefined
+                  ) : (
+                    <ErrorMessage
+                      name={emergencyContactNo}
+                      type="phone"
+                      isFormSubmitted={isFormSubmitted}
+                    />
+                  )}
                 </div>
               </div>
             </div>
