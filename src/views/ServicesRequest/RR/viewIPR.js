@@ -307,8 +307,11 @@ function AddEditPurchaseRequest(props) {
     reader.onloadend = function() {
       if (fileType === "pdf") {
         setpdfView(file.name);
-      } else {
+      } else if (fileType === "jpeg" || "jpg" || "png") {
         setImagePreview([reader.result]);
+      } else {
+        setOpenNotification(true);
+        setErrorMsg("only pdf, jpeg, png should be allowed");
       }
     };
   };
@@ -987,9 +990,11 @@ function AddEditPurchaseRequest(props) {
                   <TextField
                     required
                     type="file"
+                    // helperText="only pdf, jpeg, png should be allowed"
                     style={styles.input}
                     onChange={onSlipUpload}
                     name="results"
+                    // error={errorMsg}
                   />
                   <FaUpload /> Results
                 </label>
