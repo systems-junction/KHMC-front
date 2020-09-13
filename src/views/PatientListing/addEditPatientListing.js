@@ -5,6 +5,7 @@ import { FaUpload } from 'react-icons/fa'
 import Paper from '@material-ui/core/Paper'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
+import CurrencyTextField from '@unicef/material-ui-currency-textfield'
 import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
 import Fingerprint from '../../assets/img/fingerprint.png'
@@ -19,12 +20,13 @@ import validateNationName from '../../public/inputValidator'
 import validateNumber from '../../public/numberValidator'
 import validateNumbers from '../../public/numbersValidator'
 import validateNationalId from '../../public/numbersValidator'
-import validateAmount from '../../public/numbersValidator'
+import validateAmount from '../../public/FloatValidator'
 import validateInsuranceNo from '../../public/numbersValidator'
 import validateFloat from '../../public/FloatValidator'
 import validateInput from '../../public/FloatValidator'
 import validateNumberFloat from '../../public/numberFloatValidator'
 import validateWeight from '../../public/numberFloatValidator'
+import validateHeight from '../../public/numberFloatValidator'
 import validateCoPayment from '../../public/numberFloatValidator'
 import {
   uploadsUrl,
@@ -254,12 +256,18 @@ const useStyles = makeStyles((theme) => ({
   },
   input: {
     backgroundColor: 'white',
+    boxShadow: 'none',
+
     borderRadius: 5,
     '&:after': {
       borderBottomColor: 'black',
     },
     '&:hover': {
       backgroundColor: 'white',
+    },
+    '&:focused': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
     },
   },
   multilineColor: {
@@ -271,6 +279,10 @@ const useStyles = makeStyles((theme) => ({
     '&:after': {
       borderBottomColor: 'black',
     },
+    '&:after': {
+      borderBottomColor: 'black',
+      boxShadow: 'none',
+    },
   },
   root: {
     '& .MuiTextField-root': {
@@ -279,6 +291,7 @@ const useStyles = makeStyles((theme) => ({
     '& .Mui-focused': {
       backgroundColor: 'white',
       color: 'black',
+      boxShadow: 'none',
     },
     '& .Mui-disabled': {
       backgroundColor: 'white',
@@ -321,6 +334,7 @@ function AddEditPatientListing(props) {
     depositSlip: '',
     DateTime: new Date().toISOString().substr(0, 10),
     receiverName: cookie.load('current_user').name,
+    // receiverName: '',
     insuranceVendor: '',
     paymentMethod: '',
     emergencyName: '',
@@ -369,6 +383,7 @@ function AddEditPatientListing(props) {
     depositSlip,
     DateTime = new Date().toISOString().substr(0, 10),
     receiverName = cookie.load('current_user').name,
+    // receiverName,
     insuranceVendor,
     paymentMethod,
     emergencyName,
@@ -420,7 +435,7 @@ function AddEditPatientListing(props) {
   const [isPatientSubmitted, setIsPatientSubmitted] = useState(false)
   const [enableForm, setenableForm] = useState(true)
   const [enableNext, setenableNext] = useState(true)
-  const [coPaymentField, setCoPaymentField] = useState(true)
+  const [coPaymentField, setCoPaymentField] = useState(false)
 
   useEffect(() => {
     setcomingFor(props.history.location.state.comingFor)
@@ -450,14 +465,15 @@ function AddEditPatientListing(props) {
       if (selectedRec.paymentMethod === 'Insurance') {
         setenableForm(false)
         setInsuranceForm(false)
+        setenableNext(false)
       }
     }
   }, [])
 
   function validatePatientForm() {
     return (
-      profileNo &&
-      profileNo.length > 0 &&
+      // profileNo &&
+      // profileNo.length > 0 &&
       SIN &&
       SIN.length > 0 &&
       validateNationalId(SIN) &&
@@ -471,21 +487,21 @@ function AddEditPatientListing(props) {
       validateLastName(lastName) &&
       nationality &&
       nationality.length > 0 &&
-      validateNationName(nationality) &&
+      // validateNationName(nationality) &&
       phoneNumber &&
       phoneNumber.length > 0 &&
-      validateNumber(phoneNumber) &&
+      // validateNumber(phoneNumber) &&
       mobileNumber &&
       mobileNumber.length > 0 &&
-      validateNumber(mobileNumber) &&
-      // age &&
-      // age != null &&
+      // validateNumber(mobileNumber) &&
+      age &&
+      age != null &&
       // validateNumbers(age) &&
       gender &&
       gender.length > 0 &&
       height &&
       height != null &&
-      validateFloat(height) &&
+      validateHeight(height) &&
       weight &&
       weight != null &&
       validateWeight(weight) &&
@@ -516,7 +532,7 @@ function AddEditPatientListing(props) {
       validateEmergencyName(emergencyName) &&
       emergencyContactNo &&
       emergencyContactNo.length > 0 &&
-      validateNumber(emergencyContactNo) &&
+      // validateNumber(emergencyContactNo) &&
       emergencyRelation &&
       emergencyRelation.length > 0
       // validateInput(emergencyRelation)
@@ -529,8 +545,8 @@ function AddEditPatientListing(props) {
         depositorName.length > 0 &&
         validateEmergencyName(depositorName) &&
         amountReceived &&
-        amountReceived != null &&
-        validateAmount(amountReceived)
+        amountReceived != null
+        // validateAmount(amountReceived)
       )
     } else if (paymentMethod === 'WireTransfer') {
       return (
@@ -564,6 +580,12 @@ function AddEditPatientListing(props) {
         otherCoverageDetails.length > 0
         // validateInput(otherCoverageDetails)
       )
+      // } else {
+      //   return (
+      //     receiverName &&
+      //     receiverName.length > 0 &&
+      //     validateEmergencyName(receiverName)
+      //   )
     }
   }
 
@@ -906,6 +928,8 @@ function AddEditPatientListing(props) {
     dispatch({ field: 'coveredFamilyMembers', value: i.coveredFamilyMembers })
     dispatch({ field: 'otherCoverageDetails', value: i.otherCoverageDetails })
 
+    // dispatch({ field: 'receiverName', value: i.receiverName })
+
     dispatch({ field: 'amountReceived', value: i.amountReceived })
     dispatch({ field: 'bankName', value: i.bankName })
     dispatch({ field: 'depositorName', value: i.depositorName })
@@ -935,19 +959,26 @@ function AddEditPatientListing(props) {
   }
 
   const onChangeValue = (e) => {
-    if (e.target.name === 'coverageTerms' && e.target.value === 'fullPayment') {
-      setCoPaymentField(false)
-      console.log(e.target.name, e.target.value)
-    } else {
-      setCoPaymentField(true)
-    }
-
     if (
-      e.target.name === 'email' ||
+      e.target.name === 'email'
+      // e.target.name === 'phoneNumber' ||
+      // e.target.name === 'mobileNumber' ||
+      // e.target.name === 'emergencyContactNo' ||
+    ) {
+      dispatch({
+        field: e.target.name,
+        value: e.target.value.replace(/[^\w@.\s]/gi, ''),
+      })
+    } else if (
       e.target.name === 'phoneNumber' ||
       e.target.name === 'mobileNumber' ||
       e.target.name === 'emergencyContactNo'
     ) {
+      dispatch({
+        field: e.target.name,
+        value: e.target.value.replace(/[^\w+\s]/gi, ''),
+      })
+    } else if (e.target.name === 'dob') {
       dispatch({
         field: e.target.name,
         value: e.target.value,
@@ -958,6 +989,14 @@ function AddEditPatientListing(props) {
         value: e.target.value.replace(/[^\w.\s]/gi, ''),
       })
     }
+
+    if (e.target.name === 'coverageTerms' && e.target.value === 'coPayment') {
+      setCoPaymentField(true)
+      console.log(e.target.name, e.target.value)
+    } else {
+      setCoPaymentField(false)
+    }
+
     if (e.target.name === 'dob') {
       calculate_age(e.target.value)
     }
@@ -973,7 +1012,6 @@ function AddEditPatientListing(props) {
       dispatch({ field: 'coverageDetails', value: '' })
       dispatch({ field: 'coverageTerms', value: '' })
       dispatch({ field: 'payment', value: '' })
-
       dispatch({ field: 'coveredFamilyMembers', value: '' })
       dispatch({ field: 'otherCoverageDetails', value: '' })
       setenableForm(true)
@@ -998,10 +1036,28 @@ function AddEditPatientListing(props) {
       dispatch({ field: 'payment', value: '' })
       dispatch({ field: 'coveredFamilyMembers', value: '' })
       dispatch({ field: 'otherCoverageDetails', value: '' })
-    } else {
-      dispatch({ field: e.target.name, value: e.target.value })
     }
   }
+
+  console.log('amout', amountReceived, typeof amountReceived)
+
+  // const addZeroes = (num) => {
+  //   // Cast as number
+  //   var num = Number(num)
+  //   // If not a number, return 0
+  //   if (isNaN(num)) {
+  //     return 0
+  //   }
+  //   // If there is no decimal, or the decimal is less than 2 digits, toFixed
+  //   if (
+  //     String(num).split('.').length < 2 ||
+  //     String(num).split('.')[1].length <= 2
+  //   ) {
+  //     num = num.toFixed(2)
+  //   }
+  //   // Return the number
+  //   return num
+  // }
 
   const calculate_age = (dob) => {
     var today = new Date()
@@ -1266,10 +1322,11 @@ function AddEditPatientListing(props) {
                   label='Patient MRN'
                   name={'profileNo'} // now Patient MRN
                   value={profileNo}
+                  disabled={true}
                   onChange={onChangeValue}
                   className='textInputStyle'
                   variant='filled'
-                  error={profileNo === '' && isFormSubmitted}
+                  // error={profileNo === '' && isFormSubmitted}
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
@@ -1279,10 +1336,10 @@ function AddEditPatientListing(props) {
                     classes: { label: classes.label },
                   }}
                 />
-                <ErrorMessage
+                {/* <ErrorMessage
                   name={profileNo}
                   isFormSubmitted={isFormSubmitted}
-                />
+                /> */}
               </div>
               <div
                 className='col-md-6 col-sm-6'
@@ -1293,6 +1350,7 @@ function AddEditPatientListing(props) {
               >
                 <TextField
                   required
+                  type='number'
                   label='National ID'
                   name={'SIN'} // now Identity
                   value={SIN}
@@ -1359,8 +1417,8 @@ function AddEditPatientListing(props) {
                   label='First Name'
                   name={'firstName'}
                   value={firstName}
+                  onChange={onChangeValue}
                   error={firstName === '' && isFormSubmitted}
-                  onChange={(e) => onChangeValue(e)}
                   className='textInputStyle'
                   variant='filled'
                   InputProps={{
@@ -1483,6 +1541,7 @@ function AddEditPatientListing(props) {
                 <TextField
                   required
                   type='text'
+                  select
                   label='Nationality'
                   name={'nationality'}
                   value={nationality}
@@ -1494,10 +1553,24 @@ function AddEditPatientListing(props) {
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
-                />
+                >
+                  <MenuItem value=''>
+                    <em>None</em>
+                  </MenuItem>
+
+                  {countries &&
+                    countries.map((val) => {
+                      return (
+                        <MenuItem key={val} value={val}>
+                          {val}
+                        </MenuItem>
+                      )
+                    })}
+                </TextField>
+
                 <ErrorMessage
                   name={nationality}
-                  type='nationName'
+                  // type='nationName'
                   isFormSubmitted={isFormSubmitted}
                 />
               </div>
@@ -1513,6 +1586,7 @@ function AddEditPatientListing(props) {
               >
                 <TextField
                   type='number'
+                  disabled
                   label='Age'
                   name={'age'}
                   value={age}
@@ -1539,7 +1613,7 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
-                  // type='number'
+                  type='number'
                   label='Height (inches)'
                   name={'height'}
                   value={height}
@@ -1554,7 +1628,7 @@ function AddEditPatientListing(props) {
                 />
                 <ErrorMessage
                   name={height}
-                  type='float'
+                  type='height'
                   isFormSubmitted={isFormSubmitted}
                 />
               </div>
@@ -1566,7 +1640,7 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
-                  // type='number'
+                  type='number'
                   label='Weight (kg)'
                   name={'weight'}
                   value={weight}
@@ -1636,7 +1710,7 @@ function AddEditPatientListing(props) {
               >
                 <TextField
                   required
-                  // type='text'
+                  // type='number'
                   label='Telephone Number'
                   name={'phoneNumber'}
                   value={phoneNumber}
@@ -1651,7 +1725,7 @@ function AddEditPatientListing(props) {
                 />
                 <ErrorMessage
                   name={phoneNumber}
-                  type='number'
+                  // type='number'
                   isFormSubmitted={isFormSubmitted}
                 />
               </div>
@@ -1773,6 +1847,7 @@ function AddEditPatientListing(props) {
               >
                 <TextField
                   required
+                  // type='number'
                   label='Mobile Number'
                   name={'mobileNumber'}
                   value={mobileNumber}
@@ -1791,7 +1866,7 @@ function AddEditPatientListing(props) {
                 />
                 <ErrorMessage
                   name={mobileNumber}
-                  type='number'
+                  // type='number'
                   isFormSubmitted={isFormSubmitted}
                 />
               </div>
@@ -1949,7 +2024,7 @@ function AddEditPatientListing(props) {
                   />
                   <ErrorMessage
                     name={emergencyContactNo}
-                    type='number'
+                    // type='number'
                     isFormSubmitted={isFormSubmitted}
                   />
                 </div>
@@ -2189,6 +2264,8 @@ function AddEditPatientListing(props) {
                   value={receiverName}
                   onChange={onChangeValue}
                   disabled={true}
+                  // error={receiverName === '' && isFormSubmitted}
+                  // disabled={true}
                   className='textInputStyle'
                   variant='filled'
                   InputProps={{
@@ -2196,6 +2273,11 @@ function AddEditPatientListing(props) {
                     classes: { input: classes.input },
                   }}
                 />
+                {/* <ErrorMessage
+                  name={receiverName}
+                  type='emergencyName'
+                  isFormSubmitted={isFormSubmitted}
+                /> */}
               </div>
             </div>
 
@@ -2234,25 +2316,54 @@ function AddEditPatientListing(props) {
                     ...styles.textFieldPadding,
                   }}
                 >
-                  <TextField
+                  <CurrencyTextField
                     label='Amount Received'
                     name={'amountReceived'}
                     value={amountReceived}
                     error={amountReceived === '' && isFormSubmitted}
+                    // onChange={onChangeValue}
+                    // type='number'
+                    onBlur={onChangeValue}
+                    className='textInputStyle'
+                    variant='filled'
+                    textAlign='left'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                    currencySymbol='JD'
+                    outputFormat='number'
+                    // onChange={(event, value) => setValue(value)}
+                  />
+                  <ErrorMessage
+                    name={amountReceived}
+                    isFormSubmitted={isFormSubmitted}
+                  />
+                  {/* <TextField
+                    label='Amount Received'
+                    name={'amountReceived'}
+                    value={amountReceived}
+                    // error={amountReceived === '' && isFormSubmitted}
                     onChange={onChangeValue}
-                    type={'number'}
+                    type='number'
+                    // startAdornment={
+                    //   <InputAdornment position='start'>DR</InputAdornment>
+                    // }
                     className='textInputStyle'
                     variant='filled'
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
+                      startAdornment: (
+                        <InputAdornment position='start'>JD</InputAdornment>
+                      ),
                     }}
-                  />
-                  <ErrorMessage
+                  /> */}
+                  {/* <ErrorMessage
                     name={amountReceived}
                     type='amount'
                     isFormSubmitted={isFormSubmitted}
-                  />
+                  /> */}
                 </div>
               </div>
             ) : paymentMethod === 'Insurance' ? (

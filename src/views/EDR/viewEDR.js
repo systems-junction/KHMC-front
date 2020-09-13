@@ -2704,8 +2704,8 @@ function AddEditPurchaseRequest(props) {
             }}
             value={value}
             onChange={handleChange}
-            textColor="primary"
-            TabIndicatorProps={{style: {background:'#12387a'}}}
+            textColor='primary'
+            TabIndicatorProps={{ style: { background: '#12387a' } }}
             centered={false}
             variant='scrollable'
             fullWidth={true}
@@ -2715,7 +2715,7 @@ function AddEditPurchaseRequest(props) {
                 color: 'white',
                 borderRadius: 15,
                 outline: 'none',
-                color: value === 0 ? "#12387a" : '#3B988C',
+                color: value === 0 ? '#12387a' : '#3B988C',
               }}
               label='Resident Doctor Notes'
             />
@@ -2724,7 +2724,7 @@ function AddEditPurchaseRequest(props) {
                 color: 'white',
                 borderRadius: 15,
                 outline: 'none',
-                color: value === 1 ? "#12387a" : '#3B988C',
+                color: value === 1 ? '#12387a' : '#3B988C',
               }}
               label='External Consultant Notes'
             />
@@ -2733,7 +2733,7 @@ function AddEditPurchaseRequest(props) {
                 color: 'white',
                 borderRadius: 15,
                 outline: 'none',
-                color: value === 2 ? "#12387a" : '#3B988C',
+                color: value === 2 ? '#12387a' : '#3B988C',
               }}
               label='PHR'
             />
@@ -2742,7 +2742,7 @@ function AddEditPurchaseRequest(props) {
                 color: 'white',
                 borderRadius: 15,
                 outline: 'none',
-                color: value === 3 ? "#12387a" : '#3B988C',
+                color: value === 3 ? '#12387a' : '#3B988C',
               }}
               label='LR'
             />
@@ -2751,7 +2751,7 @@ function AddEditPurchaseRequest(props) {
                 color: 'white',
                 borderRadius: 15,
                 outline: 'none',
-                color: value === 4 ? "#12387a" : '#3B988C',
+                color: value === 4 ? '#12387a' : '#3B988C',
               }}
               label='RR'
             />
@@ -2760,7 +2760,7 @@ function AddEditPurchaseRequest(props) {
                 color: 'white',
                 borderRadius: 15,
                 outline: 'none',
-                color: value === 5 ? "#12387a" : '#3B988C',
+                color: value === 5 ? '#12387a' : '#3B988C',
               }}
               label='InPatient Request'
             />
@@ -3177,7 +3177,17 @@ function AddEditPurchaseRequest(props) {
           <div
             style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
             className='container'
-          ></div>
+          >
+            <div className='row' style={{ marginBottom: '25px' }}>
+              <div className='col-md-6 col-sm-6 col-6'>
+                <img
+                  onClick={() => props.history.goBack()}
+                  src={Back}
+                  style={{ width: 45, height: 35, cursor: 'pointer' }}
+                />
+              </div>
+            </div>
+          </div>
         )}
 
         {openItemDialog ? (
