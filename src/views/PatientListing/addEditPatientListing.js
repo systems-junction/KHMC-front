@@ -256,7 +256,6 @@ const useStyles = makeStyles((theme) => ({
   },
   input: {
     backgroundColor: 'white',
-    boxShadow: 'none',
 
     borderRadius: 5,
     '&:after': {
@@ -265,8 +264,7 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: 'white',
     },
-    '&:focused': {
-      backgroundColor: 'white',
+    '&:focus': {
       boxShadow: 'none',
     },
   },

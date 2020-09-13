@@ -262,6 +262,9 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: 'white',
     },
+    '&:focus': {
+      boxShadow: 'none',
+    },
   },
   multilineColor: {
     backgroundColor: 'white',

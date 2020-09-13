@@ -263,12 +263,7 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: 'white',
     },
-    '&:focused': {
-      backgroundColor: 'white',
-      boxShadow: 'none',
-    },
-    '&:focuse': {
-      backgroundColor: 'white',
+    '&:focus': {
       boxShadow: 'none',
     },
   },
