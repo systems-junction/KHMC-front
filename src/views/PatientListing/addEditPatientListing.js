@@ -1,31 +1,31 @@
-import React, { useEffect, useState, useReducer } from 'react'
-import TextField from '@material-ui/core/TextField'
-import { makeStyles } from '@material-ui/core/styles'
-import { FaUpload } from 'react-icons/fa'
-import Paper from '@material-ui/core/Paper'
-import Tabs from '@material-ui/core/Tabs'
-import Tab from '@material-ui/core/Tab'
-import MenuItem from '@material-ui/core/MenuItem'
-import Button from '@material-ui/core/Button'
-import Fingerprint from '../../assets/img/fingerprint.png'
-import BarCode from '../../assets/img/Bar Code.png'
-import ErrorMessage from '../../components/ErrorMessage/errorMessage'
-import validateEmail from '../../public/emailValidator'
-import validateFirstName from '../../public/inputValidator'
-import validateLastName from '../../public/inputValidator'
-import validateEmergencyName from '../../public/inputValidator'
-import validateInsuranceVendor from '../../public/inputValidator'
-import validateNationName from '../../public/inputValidator'
-import validateNumber from '../../public/numberValidator'
-import validateNumbers from '../../public/numbersValidator'
-import validateNationalId from '../../public/numbersValidator'
-import validateAmount from '../../public/numbersValidator'
-import validateInsuranceNo from '../../public/numbersValidator'
-import validateFloat from '../../public/FloatValidator'
-import validateInput from '../../public/FloatValidator'
-import validateNumberFloat from '../../public/numberFloatValidator'
-import validateWeight from '../../public/numberFloatValidator'
-import validateCoPayment from '../../public/numberFloatValidator'
+import React, { useEffect, useState, useReducer } from "react";
+import TextField from "@material-ui/core/TextField";
+import { makeStyles } from "@material-ui/core/styles";
+import { FaUpload } from "react-icons/fa";
+import Paper from "@material-ui/core/Paper";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import MenuItem from "@material-ui/core/MenuItem";
+import Button from "@material-ui/core/Button";
+import Fingerprint from "../../assets/img/fingerprint.png";
+import BarCode from "../../assets/img/Bar Code.png";
+import ErrorMessage from "../../components/ErrorMessage/errorMessage";
+import validateEmail from "../../public/emailValidator";
+import validateFirstName from "../../public/inputValidator";
+import validateLastName from "../../public/inputValidator";
+import validateEmergencyName from "../../public/inputValidator";
+import validateInsuranceVendor from "../../public/inputValidator";
+import validateNationName from "../../public/inputValidator";
+import validateNumber from "../../public/numberValidator";
+import validateNumbers from "../../public/numbersValidator";
+import validateNationalId from "../../public/numbersValidator";
+import validateAmount from "../../public/numbersValidator";
+import validateInsuranceNo from "../../public/numbersValidator";
+import validateFloat from "../../public/FloatValidator";
+import validateInput from "../../public/FloatValidator";
+import validateNumberFloat from "../../public/numberFloatValidator";
+import validateWeight from "../../public/numberFloatValidator";
+import validateCoPayment from "../../public/numberFloatValidator";
 import {
   uploadsUrl,
   updatePatientUrl,
@@ -254,22 +254,35 @@ const useStyles = makeStyles((theme) => ({
   },
   input: {
     backgroundColor: "white",
+    boxShadow: "none",
     borderRadius: 5,
     "&:after": {
       borderBottomColor: "black",
+      boxShadow: "none",
     },
     "&:hover": {
       backgroundColor: "white",
+      boxShadow: "none",
+    },
+    "&:focused": {
+      backgroundColor: "white",
+      boxShadow: "none",
     },
   },
   multilineColor: {
+    boxShadow: "none",
     backgroundColor: "white",
     borderRadius: 5,
     "&:hover": {
       backgroundColor: "white",
+      boxShadow: "none",
     },
     "&:after": {
       borderBottomColor: "black",
+      boxShadow: "none",
+    },
+    "&:focused": {
+      boxShadow: "none",
     },
   },
   root: {
@@ -279,6 +292,7 @@ const useStyles = makeStyles((theme) => ({
     "& .Mui-focused": {
       backgroundColor: "white",
       color: "black",
+      boxShadow: "none",
     },
     "& .Mui-disabled": {
       backgroundColor: "white",
@@ -394,33 +408,33 @@ function AddEditPatientListing(props) {
       dispatch({ field: "city", value: "" });
       setCities("");
     }
-  }
+  };
 
-  const classesForTabs = useStylesForTabs()
+  const classesForTabs = useStylesForTabs();
 
-  const [comingFor, setcomingFor] = useState('')
-  const [currentUser] = useState(cookie.load('current_user'))
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false)
-  const [errorMsg, setErrorMsg] = useState('')
-  const [successMsg, setsuccessMsg] = useState('')
-  const [openNotification, setOpenNotification] = useState(false)
-  const [countries, setCountries] = useState('')
-  const [cities, setCities] = useState('')
-  const [value, setValue] = React.useState(0)
-  const [slipUpload, setSlipUpload] = useState('')
-  const [imagePreview, setImagePreview] = useState('')
-  const [pdfView, setpdfView] = useState('')
-  const [patientId, setPatientId] = useState('')
-  const [searchQuery, setSearchQuery] = useState('')
-  const [itemFound, setItemFound] = useState('')
-  const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false)
-  const [searchActivated, setsearchActivated] = useState(false)
-  const [Insuranceform, setInsuranceForm] = useState(true)
-  const [MRN, setMRN] = useState('')
-  const [isPatientSubmitted, setIsPatientSubmitted] = useState(false)
-  const [enableForm, setenableForm] = useState(true)
-  const [enableNext, setenableNext] = useState(true)
-  const [coPaymentField, setCoPaymentField] = useState(true)
+  const [comingFor, setcomingFor] = useState("");
+  const [currentUser] = useState(cookie.load("current_user"));
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, setsuccessMsg] = useState("");
+  const [openNotification, setOpenNotification] = useState(false);
+  const [countries, setCountries] = useState("");
+  const [cities, setCities] = useState("");
+  const [value, setValue] = React.useState(0);
+  const [slipUpload, setSlipUpload] = useState("");
+  const [imagePreview, setImagePreview] = useState("");
+  const [pdfView, setpdfView] = useState("");
+  const [patientId, setPatientId] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [itemFound, setItemFound] = useState("");
+  const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false);
+  const [searchActivated, setsearchActivated] = useState(false);
+  const [Insuranceform, setInsuranceForm] = useState(true);
+  const [MRN, setMRN] = useState("");
+  const [isPatientSubmitted, setIsPatientSubmitted] = useState(false);
+  const [enableForm, setenableForm] = useState(true);
+  const [enableNext, setenableNext] = useState(true);
+  const [coPaymentField, setCoPaymentField] = useState(true);
 
   useEffect(() => {
     setcomingFor(props.history.location.state.comingFor);
@@ -506,7 +520,7 @@ function AddEditPatientListing(props) {
       otherDetails &&
       otherDetails.length > 0
       // validateInput(otherDetails) &&
-    )
+    );
   }
 
   function validateEmergencyForm() {
@@ -520,7 +534,7 @@ function AddEditPatientListing(props) {
       emergencyRelation &&
       emergencyRelation.length > 0
       // validateInput(emergencyRelation)
-    )
+    );
   }
   function validatePaymentForm() {
     if (paymentMethod === "Cash") {
@@ -531,8 +545,8 @@ function AddEditPatientListing(props) {
         amountReceived &&
         amountReceived != null &&
         validateAmount(amountReceived)
-      )
-    } else if (paymentMethod === 'WireTransfer') {
+      );
+    } else if (paymentMethod === "WireTransfer") {
       return (
         bankName &&
         bankName.length > 0 &&
@@ -641,13 +655,13 @@ function AddEditPatientListing(props) {
           }
         })
         .catch((e) => {
-          console.log('error after adding patient details', e)
-          setOpenNotification(true)
-          setErrorMsg('Patient with same MRN already exists')
-        })
+          console.log("error after adding patient details", e);
+          setOpenNotification(true);
+          setErrorMsg("Patient with same MRN already exists");
+        });
     } else {
-      setOpenNotification(true)
-      setErrorMsg('Please Fill the the empty fields with valid data')
+      setOpenNotification(true);
+      setErrorMsg("Please Fill the the empty fields with valid data");
     }
     setIsFormSubmitted(true);
   };
@@ -699,43 +713,43 @@ function AddEditPatientListing(props) {
         emergencyRelation,
         coveredFamilyMembers,
         otherCoverageDetails,
-      }
-      formData.append('data', JSON.stringify(params))
-      console.log('PARAMSS ', params)
+      };
+      formData.append("data", JSON.stringify(params));
+      console.log("PARAMSS ", params);
       axios
         .put(updatePatientUrl, formData)
         .then((res) => {
           if (res.data.success) {
-            setPatientId(res.data.data._id)
-            setMRN(res.data.data.profileNo)
-            setOpenNotification(true)
-            setMRN(res.data.data.profileNo)
+            setPatientId(res.data.data._id);
+            setMRN(res.data.data.profileNo);
+            setOpenNotification(true);
+            setMRN(res.data.data.profileNo);
             setsuccessMsg(
-              'Patient details updated successfully, Generate IPR/EDR now'
-            )
-            setIsPatientSubmitted(true)
+              "Patient details updated successfully, Generate IPR/EDR now"
+            );
+            setIsPatientSubmitted(true);
             if (!searchActivated) {
               props.history.push({
-                pathname: 'success',
-                state: { message: 'Updated successfully' },
-              })
+                pathname: "success",
+                state: { message: "Updated successfully" },
+              });
             }
           } else if (!res.data.success) {
-            setOpenNotification(true)
-            setErrorMsg('Error')
+            setOpenNotification(true);
+            setErrorMsg("Error");
           }
         })
         .catch((e) => {
-          console.log('error after updating patient details', e)
-          setOpenNotification(true)
-          setErrorMsg('Patient with same MRN already exists')
-        })
+          console.log("error after updating patient details", e);
+          setOpenNotification(true);
+          setErrorMsg("Patient with same MRN already exists");
+        });
     } else {
-      setOpenNotification(true)
-      setErrorMsg('Please Fill the the empty fields with valid data')
+      setOpenNotification(true);
+      setErrorMsg("Please Fill the the empty fields with valid data");
     }
-    setIsFormSubmitted(true)
-  }
+    setIsFormSubmitted(true);
+  };
 
   const onSlipUpload = (event) => {
     var file = event.target.files[0];
@@ -763,13 +777,13 @@ function AddEditPatientListing(props) {
 
   const DetailsOnClick = () => {
     if (validatePatientForm()) {
-      setValue(value + 1)
+      setValue(value + 1);
     } else {
-      setErrorMsg('Please Check the form for errors')
-      setOpenNotification(true)
+      setErrorMsg("Please Check the form for errors");
+      setOpenNotification(true);
     }
-    setIsFormSubmitted(true)
-  }
+    setIsFormSubmitted(true);
+  };
 
   const onClick = () => {
     setValue(value + 1);
@@ -777,13 +791,13 @@ function AddEditPatientListing(props) {
 
   const EmergencyOnClick = () => {
     if (validatePatientForm() && validateEmergencyForm()) {
-      setValue(value + 1)
+      setValue(value + 1);
     } else {
-      setErrorMsg('Please Check the form for errors')
-      setOpenNotification(true)
+      setErrorMsg("Please Check the form for errors");
+      setOpenNotification(true);
     }
-    setIsFormSubmitted(true)
-  }
+    setIsFormSubmitted(true);
+  };
 
   const onTabNavigation = () => {
     value === 1
@@ -939,11 +953,11 @@ function AddEditPatientListing(props) {
   }
 
   const onChangeValue = (e) => {
-    if (e.target.name === 'coverageTerms' && e.target.value === 'fullPayment') {
-      setCoPaymentField(false)
-      console.log(e.target.name, e.target.value)
+    if (e.target.name === "coverageTerms" && e.target.value === "fullPayment") {
+      setCoPaymentField(false);
+      console.log(e.target.name, e.target.value);
     } else {
-      setCoPaymentField(true)
+      setCoPaymentField(true);
     }
 
     if (
@@ -962,9 +976,8 @@ function AddEditPatientListing(props) {
         value: e.target.value.replace(/[^\w.\s]/gi, ""),
       });
     }
-    if(e.target.name === 'dob')
-    {
-      calculate_age(e.target.value)
+    if (e.target.name === "dob") {
+      calculate_age(e.target.value);
     }
 
     if (e.target.value === "Cash") {
@@ -1013,12 +1026,11 @@ function AddEditPatientListing(props) {
     var birthDate = new Date(dob);
     var age_now = today.getFullYear() - birthDate.getFullYear();
     var m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) 
-    {
-        age_now--;
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age_now--;
     }
-    dispatch({ field: 'age', value: age_now })
-  }
+    dispatch({ field: "age", value: age_now });
+  };
 
   if (openNotification) {
     setTimeout(() => {
@@ -1313,7 +1325,7 @@ function AddEditPatientListing(props) {
                 />
                 <ErrorMessage
                   name={SIN}
-                  type='nationalId'
+                  type="nationalId"
                   isFormSubmitted={isFormSubmitted}
                 />
               </div>
@@ -1376,7 +1388,7 @@ function AddEditPatientListing(props) {
                 />
                 <ErrorMessage
                   name={firstName}
-                  type='firstName'
+                  type="firstName"
                   isFormSubmitted={isFormSubmitted}
                 />
               </div>
@@ -1404,7 +1416,7 @@ function AddEditPatientListing(props) {
                 />
                 <ErrorMessage
                   name={lastName}
-                  type='lastName'
+                  type="lastName"
                   isFormSubmitted={isFormSubmitted}
                 />
               </div>
@@ -1503,7 +1515,7 @@ function AddEditPatientListing(props) {
                 />
                 <ErrorMessage
                   name={nationality}
-                  type='nationName'
+                  type="nationName"
                   isFormSubmitted={isFormSubmitted}
                 />
               </div>
@@ -1546,8 +1558,8 @@ function AddEditPatientListing(props) {
               >
                 <TextField
                   // type='number'
-                  label='Height (inches)'
-                  name={'height'}
+                  label="Height (inches)"
+                  name={"height"}
                   value={height}
                   onChange={onChangeValue}
                   error={height === "" && isFormSubmitted}
@@ -1587,7 +1599,7 @@ function AddEditPatientListing(props) {
                 />
                 <ErrorMessage
                   name={weight}
-                  type='weight'
+                  type="weight"
                   isFormSubmitted={isFormSubmitted}
                 />
               </div>
@@ -1881,8 +1893,8 @@ function AddEditPatientListing(props) {
                   style={styles.stylesForButton}
                   //disabled={!validateFormType1()}
                   onClick={DetailsOnClick}
-                  variant='contained'
-                  color='primary'
+                  variant="contained"
+                  color="primary"
                 >
                   Next
                 </Button>
@@ -1923,7 +1935,7 @@ function AddEditPatientListing(props) {
                   />
                   <ErrorMessage
                     name={emergencyName}
-                    type='emergencyName'
+                    type="emergencyName"
                     isFormSubmitted={isFormSubmitted}
                   />
                 </div>
@@ -2019,8 +2031,8 @@ function AddEditPatientListing(props) {
                 <Button
                   style={styles.stylesForButton}
                   onClick={EmergencyOnClick}
-                  variant='contained'
-                  color='primary'
+                  variant="contained"
+                  color="primary"
                 >
                   Next
                 </Button>
@@ -2229,7 +2241,7 @@ function AddEditPatientListing(props) {
                   />
                   <ErrorMessage
                     name={depositorName}
-                    type='emergencyName'
+                    type="emergencyName"
                     isFormSubmitted={isFormSubmitted}
                   />
                 </div>
@@ -2256,7 +2268,7 @@ function AddEditPatientListing(props) {
                   />
                   <ErrorMessage
                     name={amountReceived}
-                    type='amount'
+                    type="amount"
                     isFormSubmitted={isFormSubmitted}
                   />
                 </div>
@@ -2603,7 +2615,7 @@ function AddEditPatientListing(props) {
                   />
                   <ErrorMessage
                     name={insuranceNo}
-                    type='insuranceNo'
+                    type="insuranceNo"
                     isFormSubmitted={isFormSubmitted}
                   />
                 </div>
@@ -2699,7 +2711,7 @@ function AddEditPatientListing(props) {
                     />
                     <ErrorMessage
                       name={insuranceVendor}
-                      type='vendor'
+                      type="vendor"
                       isFormSubmitted={isFormSubmitted}
                     />
                   </div>
@@ -2756,8 +2768,8 @@ function AddEditPatientListing(props) {
                 >
                   <div>
                     <TextField
-                      label='Co-Payment %'
-                      name={'payment'}
+                      label="Co-Payment %"
+                      name={"payment"}
                       value={payment}
                       disabled={Insuranceform || !coPaymentField}
                       onChange={onChangeValue}
@@ -2772,7 +2784,7 @@ function AddEditPatientListing(props) {
                     />
                     <ErrorMessage
                       name={payment}
-                      type='coPayment'
+                      type="coPayment"
                       isFormSubmitted={isFormSubmitted}
                     />
                   </div>
