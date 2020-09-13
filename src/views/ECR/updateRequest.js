@@ -151,6 +151,10 @@ const useStylesForInput = makeStyles((theme) => ({
       backgroundColor: "white",
       color: "black",
     },
+    '& .Mui-disabled': {
+      backgroundColor: 'white',
+      color: 'gray',
+    },
   },
 }));
 
@@ -199,237 +203,133 @@ export default function EdrRequest(props) {
   }, []);
 
   const replaceSlugToTitle = (val) => {
-    if (val === "in_active") {
-      return (
-        <Button
-          style={stylesB.stylesForInActive}
-          variant="contained"
-          color="primary"
-        >
-          <strong>In active</strong>
-        </Button>
-      );
-    } else if (val === "active") {
-      return (
-        <Button
-          style={stylesB.stylesForActive}
-          variant="contained"
-          color="primary"
-        >
-          <strong>Active</strong>
-        </Button>
-      );
-    }
     if (
-      val === "pending" ||
-      val === "to_do" ||
-      val === "po_created" ||
-      val === "Can be fulfilled" ||
-      val === "hold"
-    ) {
-      if (currentUser && currentUser.staffTypeId.type === "Committe Member") {
-        return (
-          <>
-            {val === "to_do" ? (
-              <Button
-                style={stylesB.stylesForActive}
-                variant="contained"
-                color="primary"
-              >
-                <strong>To Do</strong>
-              </Button>
-            ) : val === "pending" ? (
-              <Button
-                style={stylesB.stylesForActive}
-                variant="contained"
-                color="primary"
-              >
-                <strong>Pending</strong>
-              </Button>
-            ) : val === "po_created" ? (
-              <Button
-                style={stylesB.stylesForActive}
-                variant="contained"
-                color="primary"
-              >
-                <strong>PO Created</strong>
-              </Button>
-            ) : val === "hold" ? (
-              <Button
-                style={stylesB.stylesForActive}
-                variant="contained"
-                color="primary"
-              >
-                <strong>Hold</strong>
-              </Button>
-            ) : (
-              ""
-            )}
-          </>
-        );
-      } else {
-        return (
-          <>
-            {val === "to_do" ? (
-              <Button
-                style={stylesB.stylesForActive}
-                variant="contained"
-                color="primary"
-              >
-                <strong>To Do</strong>
-              </Button>
-            ) : val === "pending" ? (
-              <Button
-                style={stylesB.stylesForActive}
-                variant="contained"
-                color="primary"
-              >
-                <strong>Pending</strong>
-              </Button>
-            ) : val === "po_created" ? (
-              <Button
-                style={stylesB.stylesForActive}
-                variant="contained"
-                color="primary"
-              >
-                <strong>PO Created</strong>
-              </Button>
-            ) : val === "Can be fulfilled" ? (
-              <Button
-                style={stylesB.stylesForActive}
-                variant="contained"
-                color="primary"
-              >
-                <strong>Can be fulfilled</strong>
-              </Button>
-            ) : (
-              ""
-            )}
-          </>
-        );
-      }
-    } else if (
-      val === "in_progress" ||
-      val === "po_sent" ||
-      val === "items_in_transit" ||
-      val === "pending_approval_from_accounts" ||
-      val === "pending_approval" ||
-      val === "Delivery in Progress" ||
-      val === "Fulfillment Initiated" ||
-      val === "pending_administration" ||
-      val === "pending_reception"
-    ) {
-      return (
-        <>
-          {val === "in_progress" ? (
-            <Button
-              style={stylesB.stylesForActive}
-              variant="contained"
-              color="primary"
-            >
-              <strong>In Progress</strong>
-            </Button>
-          ) : val === "items_in_transit" ? (
-            <Button
-              style={stylesB.stylesForReceived}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Items in Transit</strong>
-            </Button>
-          ) : val === "pending_approval_from_accounts" ? (
-            <Button
-              style={stylesB.stylesForActive}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Pending Approval From Accounts</strong>
-            </Button>
-          ) : val === "pending_approval" ? (
-            <Button
-              style={stylesB.stylesForActive}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Pending Approval</strong>
-            </Button>
-          ) : val === "Delivery in Progress" ? (
-            <Button
-              style={stylesB.stylesForActive}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Delivery in Progress</strong>
-            </Button>
-          ) : val === "Fulfillment Initiated" ? (
-            <Button
-              style={stylesB.stylesForActive}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Fulfillment Initiated</strong>
-            </Button>
-          ) : val === "pending_reception" ? (
-            <Button
-              style={stylesB.stylesForActive}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Pending Reception</strong>
-            </Button>
-          ) : val === "pending_administration" ? (
-            <Button
-              style={stylesB.stylesForActive}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Pending Administration</strong>
-            </Button>
-          ) : (
-            <Button
-              style={stylesB.stylesForActive}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Po Sent</strong>
-            </Button>
-          )}
-        </>
-      );
-    } else if (
       val === "complete" ||
+      val === "Complete" ||
+      val === "pending" ||
+      val === "modify" ||
+      val === "closed" ||
+      val === "delivered" ||
+      val === "partially completed" ||
       val === "approved" ||
-      val === "approve" ||
+      val === "Approved" ||
+      val === "Analysis In Progress" ||
       val === "reject" ||
+      val === "response in progress" ||
+      val === "partial approved" ||
+      val === "Partial Approved" ||
+      val === "completed" ||
+      val === "approve" ||
       val === "received" ||
       val === "Partially Received" ||
       val === "Cannot be fulfilled" ||
       val === "Item Returned to Warehouse" ||
       val === "Returned" ||
       val === "receive" ||
-      val === "Received"
+      val === "Received" ||
+      val === "rejected" ||
+      val === "Sent for PAR"
     ) {
       return (
         <>
-          {val === "complete" ? (
+          {val === "complete" || val === "Complete" ? (
             <Button
-              style={stylesB.stylesForActive}
+              style={{ ...stylesB.stylesForActive, backgroundColor: "#ba55d3" }}
               variant="contained"
               color="primary"
             >
               <strong>Complete</strong>
             </Button>
-          ) : val === "approved" ? (
+          ) : val === "Sent for PAR" ? (
             <Button
-              style={stylesB.stylesForActive}
+              style={{ ...stylesB.stylesForActive, width: "120px" }}
+              variant="contained"
+              color="primary"
+            >
+              <strong>Sent for PAR</strong>
+            </Button>
+          ) : val === "closed" ? (
+            <Button
+              style={{ ...stylesB.stylesForActive, backgroundColor: "#2c6ddd" }}
+              variant="contained"
+              color="primary"
+            >
+              <strong>closed</strong>
+            </Button>
+          ) : val === "pending" ? (
+            <Button
+              style={{ ...stylesB.stylesForActive, backgroundColor: "#e877a1" }}
+              variant="contained"
+              color="primary"
+            >
+              <strong>pending</strong>
+            </Button>
+          ) : val === "modify" ? (
+            <Button
+              style={{ ...stylesB.stylesForActive, backgroundColor: "#e877a1" }}
+              variant="contained"
+              color="primary"
+            >
+              <strong>Modify</strong>
+            </Button>
+          ) : val === "delivered " ? (
+            <Button
+              style={{ ...stylesB.stylesForActive, backgroundColor: "#2c6ddd" }}
+              variant="contained"
+              color="primary"
+            >
+              <strong>Delivered </strong>
+            </Button>
+          ) : val === "completed" ? (
+            <Button
+              style={{ ...stylesB.stylesForActive, backgroundColor: "#ba55d3" }}
+              variant="contained"
+              color="primary"
+            >
+              <strong>Completed</strong>
+            </Button>
+          ) : val === "approved" || val === "Approved" ? (
+            <Button
+              style={{ ...stylesB.stylesForActive, backgroundColor: "#ba55d3" }}
               variant="contained"
               color="primary"
             >
               <strong>Approved</strong>
             </Button>
+          ) : val === "partial approved" || val === "Partial Approved" ? (
+            <Button
+              style={{
+                ...stylesB.stylesForActive,
+                backgroundColor: "#2c6ddd",
+                width: "150px",
+              }}
+              variant="contained"
+              color="primary"
+            >
+              <strong>partial approved</strong>
+            </Button>
+          ) : val === "partially completed" ? (
+            <Button
+              style={{
+                ...stylesB.stylesForActive,
+                backgroundColor: " #2c6ddd",
+              }}
+              variant="contained"
+              color="primary"
+            >
+              <strong>partially completed</strong>
+            </Button>
+          ) : val === "response in progress" ? (
+            <Button
+              style={{ ...stylesB.stylesForActive, backgroundColor: "#e877a1" }}
+              variant="contained"
+              color="primary"
+            >
+              <strong>Response in progress</strong>
+            </Button>
           ) : val === "reject" ? (
             <Button
-              style={stylesB.stylesForActive}
+              style={{ ...stylesB.stylesForActive, backgroundColor: "#2c6ddd" }}
               variant="contained"
               color="primary"
             >
@@ -442,6 +342,22 @@ export default function EdrRequest(props) {
               color="primary"
             >
               <strong>Received</strong>
+            </Button>
+          ) : val === "rejected" ? (
+            <Button
+              style={stylesB.stylesForActive}
+              variant="contained"
+              color="primary"
+            >
+              <strong>Rejected</strong>
+            </Button>
+          ) : val === "Analysis In Progress" ? (
+            <Button
+              style={{ ...stylesB.stylesForActive, width: "150px" }}
+              variant="contained"
+              color="primary"
+            >
+              <strong>Analysis In Progress</strong>
             </Button>
           ) : val === "receive" ? (
             <Button
@@ -504,19 +420,17 @@ export default function EdrRequest(props) {
       );
     }
 
-    return capitilizeLetter(val);
-  };
+    return capitilizeLetter(val)
+  }
 
   const handleSubmit = () => {
     const params = {
       consultationNotes: consultationNotes,
       doctorNotes: props.item.doctorNotes,
-
       id: id,
       itemID: itemID,
       requestType: requestType,
       status: "Complete",
-      // desc
     };
     console.log("PARAMSS ", params);
     axios
@@ -575,7 +489,7 @@ export default function EdrRequest(props) {
         <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
           Details
         </DialogTitle>
-        <div className="container-fluid">
+        <div className={`container-fluid ${classes.root}`}>
           <Notification
             msg={errorMsg}
             open={openNotification}
@@ -589,11 +503,10 @@ export default function EdrRequest(props) {
               <TextField
                 required
                 // disabled={true}
-                // multiline
-                label="consultation Notes "
+                multiline
+                label="Consultation Notes "
                 name={"consultationNotes"}
                 value={consultationNotes}
-                // onChange={(e) => setconsultationNotes(e.target.value)}
                 onChange={onChangeValue}
                 className="textInputStyle"
                 rows={4}

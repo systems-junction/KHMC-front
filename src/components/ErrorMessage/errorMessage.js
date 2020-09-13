@@ -6,6 +6,16 @@ import validateLastName from '../../public/inputValidator'
 import validateEmergencyName from '../../public/inputValidator'
 import validateInsuranceVendor from '../../public/inputValidator'
 
+// import validateNationName from "../../public/inputValidator";
+// import validateNumber from "../../public/numberValidator";
+// import validateNationalId from "../../public/numbersValidator";
+// import validateAmount from "../../public/numbersValidator";
+// import validateInsuranceNo from "../../public/numbersValidator";
+// import validateFloat from "../../public/FloatValidator";
+// import validateWeight from "../../public/numberFloatValidator";
+// import validateCoPayment from "../../public/numberFloatValidator";
+// import validatePhone from "../../public/validatePhone";
+
 import validateNationName from '../../public/inputValidator'
 import validateNumber from '../../public/numberValidator'
 import validateNationalId from '../../public/numbersValidator'
@@ -14,6 +24,7 @@ import validateInsuranceNo from '../../public/numbersValidator'
 import validateHeight from '../../public/numberFloatValidator'
 import validateWeight from '../../public/numberFloatValidator'
 import validateCoPayment from '../../public/numberFloatValidator'
+import validatePhone from '../../public/validatePhone'
 const ErrorMsg = (props) => {
   return (
     <p style={{ color: '#ff0000', fontSize: 13 }}>
@@ -70,6 +81,10 @@ const ErrorMsg = (props) => {
         : props.type && props.type === 'nationName' && props.isFormSubmitted
         ? !validateNationName(props.name) && props.isFormSubmitted
           ? 'Enter valid nation name with english letters only (e.g: USA, United Kingdom, etc)'
+          : undefined
+        : props.type && props.type === 'phone' && props.isFormSubmitted
+        ? validatePhone(props.name) && props.isFormSubmitted
+          ? 'Please enter a valid phone number +962xxxxxxxxx or +962xxxxxxxx'
           : undefined
         : undefined}
     </p>

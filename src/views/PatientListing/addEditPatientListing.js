@@ -28,6 +28,8 @@ import validateNumberFloat from '../../public/numberFloatValidator'
 import validateWeight from '../../public/numberFloatValidator'
 import validateHeight from '../../public/numberFloatValidator'
 import validateCoPayment from '../../public/numberFloatValidator'
+import MuiPhoneNumber from 'material-ui-phone-number'
+import validatePhone from '../../public/validatePhone'
 import {
   uploadsUrl,
   updatePatientUrl,
@@ -57,6 +59,7 @@ import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import AccountCircle from '@material-ui/icons/SearchOutlined'
 import InputAdornment from '@material-ui/core/InputAdornment'
+// import validatePhone from '../../public/validatePhone'
 
 let countriesList = require('../../assets/countries.json')
 
@@ -130,30 +133,30 @@ const useStylesForTabs = makeStyles((theme) => ({
 
 const titles = [
   {
-    key: 'mr',
+    key: 'mr' || 'Mr',
     value: 'Mr',
   },
   {
-    key: 'miss',
+    key: 'miss' || 'Miss',
     value: 'Miss',
   },
   {
-    key: 'mrs',
+    key: 'mrs' || 'Mrs',
     value: 'Mrs',
   },
 ]
 
 const genderArray = [
   {
-    key: 'Male',
+    key: 'Male' || 'male',
     value: 'Male',
   },
   {
-    key: 'Female',
+    key: 'female' || 'Female',
     value: 'Female',
   },
   {
-    key: 'Others',
+    key: 'Others' || 'others',
     value: 'Others',
   },
 ]
@@ -828,7 +831,9 @@ function AddEditPatientListing(props) {
           console.log(res.data.data, 'response')
           props.history.push({
             pathname: 'success',
-            state: { message: `EDR for patient ${MRN} generated successfully` },
+            state: {
+              message: `EDR # ${res.data.data.requestNo} for patient MRN ${MRN} generated successfully`,
+            },
           })
         } else if (!res.data.success) {
           setOpenNotification(true)
@@ -856,7 +861,9 @@ function AddEditPatientListing(props) {
           console.log(res.data.data, 'response')
           props.history.push({
             pathname: 'success',
-            state: { message: `IPR for patient ${MRN} generated successfully` },
+            state: {
+              message: `IPR # ${res.data.data.requestNo} for patient MRN ${MRN} generated successfully`,
+            },
           })
         } else if (!res.data.success) {
           setOpenNotification(true)
@@ -954,6 +961,18 @@ function AddEditPatientListing(props) {
       setenableForm(true)
       setenableNext(true)
     }
+  }
+
+  const onPhoneNumberChange = (value) => {
+    dispatch({ field: 'phoneNumber', value: value })
+  }
+
+  const onEmergencyNumberChange = (value) => {
+    dispatch({ field: 'emergencyContactNo', value: value })
+  }
+
+  const onMobileNumberChange = (value) => {
+    dispatch({ field: 'mobileNumber', value: value })
   }
 
   const onChangeValue = (e) => {
@@ -1491,8 +1510,15 @@ function AddEditPatientListing(props) {
 
                   {genderArray.map((val) => {
                     return (
-                      <MenuItem key={val.key} value={val.key}>
-                        {val.value}
+                      <MenuItem
+                        key={
+                          val.key.charAt(0).toUpperCase() + val.value.slice(1)
+                        }
+                        value={
+                          val.key.charAt(0).toUpperCase() + val.value.slice(1)
+                        }
+                      >
+                        {val.value.charAt(0).toUpperCase() + val.value.slice(1)}
                       </MenuItem>
                     )
                   })}
@@ -1706,26 +1732,35 @@ function AddEditPatientListing(props) {
                   ...styles.textFieldPadding,
                 }}
               >
-                <TextField
+                <MuiPhoneNumber
                   required
-                  // type='number'
                   label='Telephone Number'
                   name={'phoneNumber'}
                   value={phoneNumber}
-                  onChange={onChangeValue}
+                  hyperText='Telephone format +962xxxxxxxx'
                   error={phoneNumber === '' && isFormSubmitted}
+                  defaultCountry={'jo'}
+                  onChange={onPhoneNumberChange}
                   className='textInputStyle'
                   variant='filled'
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
+                  InputLabelProps={{
+                    className: classes.label,
+                    classes: { label: classes.label },
+                  }}
                 />
-                <ErrorMessage
-                  name={phoneNumber}
-                  // type='number'
-                  isFormSubmitted={isFormSubmitted}
-                />
+                {phoneNumber && !validatePhone(phoneNumber) ? (
+                  undefined
+                ) : (
+                  <ErrorMessage
+                    name={phoneNumber}
+                    type='phone'
+                    isFormSubmitted={isFormSubmitted}
+                  />
+                )}
               </div>
               <div
                 className='col-md-3 col-sm-3'
@@ -1837,20 +1872,22 @@ function AddEditPatientListing(props) {
 
             <div className='row'>
               <div
-                className='col-md-3'
+                className='col-md-3 col-sm-3'
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
                 }}
               >
-                <TextField
+                <MuiPhoneNumber
+                  value={phoneNumber}
+                  defaultCountry={'jo'}
+                  onChange={onMobileNumberChange}
                   required
-                  // type='number'
                   label='Mobile Number'
                   name={'mobileNumber'}
                   value={mobileNumber}
                   error={mobileNumber === '' && isFormSubmitted}
-                  onChange={onChangeValue}
+                  hyperText='Mobile phone format +962xxxxxxxxx'
                   className='textInputStyle'
                   variant='filled'
                   InputProps={{
@@ -1862,12 +1899,18 @@ function AddEditPatientListing(props) {
                     classes: { label: classes.label },
                   }}
                 />
-                <ErrorMessage
-                  name={mobileNumber}
-                  // type='number'
-                  isFormSubmitted={isFormSubmitted}
-                />
+
+                {mobileNumber && !validatePhone(mobileNumber) ? (
+                  undefined
+                ) : (
+                  <ErrorMessage
+                    name={mobileNumber}
+                    type='phone'
+                    isFormSubmitted={isFormSubmitted}
+                  />
+                )}
               </div>
+
               <div
                 className='col-md-9'
                 style={{
@@ -2006,12 +2049,14 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <div>
-                  <TextField
+                  <MuiPhoneNumber
                     required
                     label='Contact No'
                     name={'emergencyContactNo'}
                     value={emergencyContactNo}
-                    onChange={onChangeValue}
+                    hyperText='emergency contact format +962xxxxxxxx'
+                    defaultCountry={'jo'}
+                    onChange={onEmergencyNumberChange}
                     error={emergencyContactNo === '' && isFormSubmitted}
                     className='textInputStyle'
                     variant='filled'
@@ -2019,12 +2064,21 @@ function AddEditPatientListing(props) {
                       className: classes.input,
                       classes: { input: classes.input },
                     }}
+                    InputLabelProps={{
+                      className: classes.label,
+                      classes: { label: classes.label },
+                    }}
                   />
-                  <ErrorMessage
-                    name={emergencyContactNo}
-                    // type='number'
-                    isFormSubmitted={isFormSubmitted}
-                  />
+
+                  {emergencyContactNo && !validatePhone(emergencyContactNo) ? (
+                    undefined
+                  ) : (
+                    <ErrorMessage
+                      name={emergencyContactNo}
+                      type='phone'
+                      isFormSubmitted={isFormSubmitted}
+                    />
+                  )}
                 </div>
               </div>
             </div>
@@ -2875,7 +2929,7 @@ function AddEditPatientListing(props) {
                     />
                     {/* <ErrorMessage
                       name={payment}
-                      type='coPayment'
+                      type="coPayment"
                       isFormSubmitted={isFormSubmitted}
                     /> */}
                   </div>

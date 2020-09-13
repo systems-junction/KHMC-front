@@ -499,7 +499,7 @@ function AddEditPurchaseRequest(props) {
               props.history.replace({
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
-                  message: `Replenisment request ${res.data.data.requestNo} has been addded successfully`,
+                  message: `Replenisment request ${res.data.data.requestNo} for patient MRN ${res.data.data.patientId.profileNo} has been addded successfully`,
                 },
               });
             } else if (!res.data.success) {
