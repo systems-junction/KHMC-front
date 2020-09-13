@@ -307,7 +307,11 @@ function AddEditPurchaseRequest(props) {
     reader.onloadend = function() {
       if (fileType === "pdf") {
         setpdfView(file.name);
-      } else if (fileType === "jpeg" || "jpg" || "png") {
+      } else if (fileType === "jpeg") {
+        setImagePreview([reader.result]);
+      } else if (fileType === "jpg") {
+        setImagePreview([reader.result]);
+      } else if (fileType === "png") {
         setImagePreview([reader.result]);
       } else {
         setOpenNotification(true);
@@ -994,7 +998,7 @@ function AddEditPurchaseRequest(props) {
                     style={styles.input}
                     onChange={onSlipUpload}
                     name="results"
-                    // error={errorMsg}
+                    error={errorMsg}
                   />
                   <FaUpload /> Results
                 </label>
