@@ -74,7 +74,7 @@ const ErrorMsg = (props) => {
           ? "Enter valid nation name with english letters only (e.g: USA, United Kingdom, etc)"
           : undefined
         : props.type && props.type === "phone" && props.isFormSubmitted
-        ? !validatePhone(props.name) && props.isFormSubmitted
+        ? validatePhone(props.name) && props.isFormSubmitted
           ? "Please enter a valid phone number +962xxxxxxxxx or +962xxxxxxxx"
           : undefined
         : undefined}

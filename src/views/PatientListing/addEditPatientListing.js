@@ -57,6 +57,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import AccountCircle from "@material-ui/icons/SearchOutlined";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import validatePhone from "../../public/validatePhone";
 
 let countriesList = require("../../assets/countries.json");
 
@@ -944,6 +945,10 @@ function AddEditPatientListing(props) {
     dispatch({ field: "phoneNumber", value: value });
   };
 
+  const onEmergencyNumberChange = (value) => {
+    dispatch({ field: "emergencyContactNo", value: value });
+  };
+
   const onMobileNumberChange = (value) => {
     dispatch({ field: "mobileNumber", value: value });
   };
@@ -1652,10 +1657,9 @@ function AddEditPatientListing(props) {
                   required
                   label="Telephone Number"
                   name={"phoneNumber"}
-                  value={
-                    phoneNumber == undefined || null ? undefined : phoneNumber
-                  }
+                  value={phoneNumber}
                   hyperText="Telephone format +962xxxxxxxx"
+                  error={phoneNumber === "" && isFormSubmitted}
                   defaultCountry={"jo"}
                   onChange={onPhoneNumberChange}
                   className="textInputStyle"
@@ -1669,11 +1673,15 @@ function AddEditPatientListing(props) {
                     classes: { label: classes.label },
                   }}
                 />
-                <ErrorMessage
-                  name={phoneNumber}
-                  type="phone"
-                  isFormSubmitted={isFormSubmitted}
-                />
+                {phoneNumber && !validatePhone(phoneNumber) ? (
+                  undefined
+                ) : (
+                  <ErrorMessage
+                    name={phoneNumber}
+                    type="phone"
+                    isFormSubmitted={isFormSubmitted}
+                  />
+                )}
               </div>
               <div
                 className="col-md-3 col-sm-3"
@@ -1798,9 +1806,8 @@ function AddEditPatientListing(props) {
                   required
                   label="Mobile Number"
                   name={"mobileNumber"}
-                  value={
-                    mobileNumber == undefined || null ? undefined : mobileNumber
-                  }
+                  value={mobileNumber}
+                  error={mobileNumber === "" && isFormSubmitted}
                   hyperText="Mobile phone format +962xxxxxxxxx"
                   className="textInputStyle"
                   variant="filled"
@@ -1814,11 +1821,15 @@ function AddEditPatientListing(props) {
                   }}
                 />
 
-                <ErrorMessage
-                  name={mobileNumber}
-                  type="phone"
-                  isFormSubmitted={isFormSubmitted}
-                />
+                {mobileNumber && !validatePhone(mobileNumber) ? (
+                  undefined
+                ) : (
+                  <ErrorMessage
+                    name={mobileNumber}
+                    type="phone"
+                    isFormSubmitted={isFormSubmitted}
+                  />
+                )}
               </div>
 
               <div
@@ -1959,12 +1970,14 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <div>
-                  <TextField
+                  <MuiPhoneNumber
                     required
                     label="Contact No"
                     name={"emergencyContactNo"}
                     value={emergencyContactNo}
-                    onChange={onChangeValue}
+                    hyperText="emergency contact format +962xxxxxxxx"
+                    defaultCountry={"jo"}
+                    onChange={onEmergencyNumberChange}
                     error={emergencyContactNo === "" && isFormSubmitted}
                     className="textInputStyle"
                     variant="filled"
@@ -1972,12 +1985,21 @@ function AddEditPatientListing(props) {
                       className: classes.input,
                       classes: { input: classes.input },
                     }}
+                    InputLabelProps={{
+                      className: classes.label,
+                      classes: { label: classes.label },
+                    }}
                   />
-                  <ErrorMessage
-                    name={emergencyContactNo}
-                    type="number"
-                    isFormSubmitted={isFormSubmitted}
-                  />
+
+                  {emergencyContactNo && !validatePhone(emergencyContactNo) ? (
+                    undefined
+                  ) : (
+                    <ErrorMessage
+                      name={emergencyContactNo}
+                      type="phone"
+                      isFormSubmitted={isFormSubmitted}
+                    />
+                  )}
                 </div>
               </div>
             </div>
