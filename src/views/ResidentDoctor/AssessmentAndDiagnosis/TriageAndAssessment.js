@@ -224,7 +224,7 @@ function TriageAndAssessment(props) {
         axios.put(updateEdrIpr, params)
             .then((res) => {
                 if (res.data.success) {
-                    console.log("Update Patient data : ", res.data.data)
+                    console.log("Update Patient data assessment and diagnosis: ", res.data.data)
                     props.history.push({
                         pathname: 'success',
                         state: { message: `Triage & Assessment for patient ${MRN} added successfully` },
