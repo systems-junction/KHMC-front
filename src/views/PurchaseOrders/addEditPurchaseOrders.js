@@ -150,6 +150,10 @@ const styles = {
     paddingLeft: 3,
     paddingRight: 3,
   },
+  textFieldPaddingNew: {
+    paddingLeft: 15,
+    paddingRight: 15,
+  },
 };
 
 // const useStyles = makeStyles(tableStyles);
@@ -583,7 +587,7 @@ function AddEditPurchaseRequest(props) {
             className="col-md-12"
             style={{
               ...styles.inputContainerForTextField,
-              ...styles.textFieldPadding,
+              ...styles.textFieldPaddingNew,
             }}
           >
             <TextField
@@ -966,7 +970,7 @@ function AddEditPurchaseRequest(props) {
                 className="col-md-12"
                 style={{
                   ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
+                  ...styles.textFieldPaddingNew,
                 }}
               >
                 <TextField
