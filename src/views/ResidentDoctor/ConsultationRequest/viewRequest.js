@@ -26,7 +26,6 @@ const tableDataKeysForPHR = [
   'frequency',
   'duration',
 ]
-// const actions = { view: false };
 
 const styles = {
   inputContainer: {
@@ -54,44 +53,6 @@ const styles = {
   },
   styleForLabel: {
     fontWeight: '700',
-  },
-}
-const stylesB = {
-  stylesForActive: {
-    verticalAlign: 'center',
-    fontSize: '0.62rem',
-    color: 'white',
-    cursor: 'pointer',
-    borderRadius: 10,
-    background: '#2c6ddd',
-    width: '100px',
-    height: '45px',
-    outline: 'none',
-    boxShadow: 'none',
-  },
-  stylesForInActive: {
-    verticalAlign: 'center',
-    fontSize: '0.62rem',
-    color: 'white',
-    cursor: 'pointer',
-    borderRadius: 10,
-    background: '#845DC2',
-    width: '100px',
-    height: '45px',
-    outline: 'none',
-    boxShadow: 'none',
-  },
-  stylesForReceived: {
-    verticalAlign: 'center',
-    fontSize: '0.62rem',
-    color: 'white',
-    cursor: 'pointer',
-    borderRadius: 10,
-    background: '#845DC2',
-    width: '100px',
-    height: '45px',
-    boxShadow: 'none',
-    outline: 'none',
   },
 }
 
@@ -184,7 +145,55 @@ export default function EdrRequest(props) {
         </DialogTitle>
         <div className={`container-fluid ${classes.root}`}>
           <div className='row'>
+            {props.item.serviceCode ? (
+              <div
+                className='col-md-6 col-sm-6 col-6'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  required
+                  label='Service Code'
+                  disabled={true}
+                  placeholder='serviceCode'
+                  name={'serviceCode'}
+                  value={props.item.serviceCode}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                />
+              </div>
+            ) : (
+                undefined
+              )}
 
+            {props.item.serviceName ? (
+              <div
+                className='col-md-6 col-sm-6 col-6'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  required
+                  label='Service Name'
+                  disabled={true}
+                  placeholder='serviceName'
+                  name={'serviceName'}
+                  value={props.item.serviceName}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                />
+              </div>
+            ) : (
+                undefined
+              )}
+          </div>
+          <div className='row'>
             {props.item.doctor ? (
               <div
                 className='col-md-6 col-sm-6 col-6'
@@ -231,7 +240,7 @@ export default function EdrRequest(props) {
                   }}
                 />
               </div>
-            ) : props.item.requesterName ? (
+            ) : props.item.requesterName && !props.item.comments ? (
               <div
                 className='col-md-6 col-sm-6 col-6'
                 style={styles.inputContainerForTextField}
@@ -275,66 +284,33 @@ export default function EdrRequest(props) {
                   }}
                 />
               </div>
+            ) : props.item.comments ? (
+              <div
+                className='col-md-6 col-sm-6 col-6'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  required
+                  multiline
+                  disabled={true}
+                  label='Comments'
+                  name={'comments'}
+                  value={props.item.comments}
+                  className='textInputStyle'
+                  rows={4}
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                />
+              </div>
             ) : (
                 undefined
               )}
           </div>
 
           <div className='row'>
-            <div
-              className='col-md-6 col-sm-6 col-6'
-              style={styles.inputContainerForTextField}
-            >
-              {props.item.serviceCode ? (
-                <div>
-                  <TextField
-                    required
-                    label='Service Code'
-                    disabled={true}
-                    placeholder='serviceCode'
-                    name={'serviceCode'}
-                    value={props.item.serviceCode}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
-                </div>
-              ) : (
-                  undefined
-                )}
-            </div>
-            <div
-              className='col-md-6 col-sm-6 col-6'
-              style={styles.inputContainerForTextField}
-            >
-              {props.item.serviceName ? (
-                <div>
-                  <TextField
-                    required
-                    label='Service Name'
-                    disabled={true}
-                    placeholder='serviceName'
-                    name={'serviceName'}
-                    value={props.item.serviceName}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
-                </div>
-              ) : (
-                  undefined
-                )}
-            </div>
-          </div>
-
-          <div className='row'>
-
             {props.item.description ? (
               <div
                 className='col-md-6 col-sm-6 col-6'
@@ -402,48 +378,6 @@ export default function EdrRequest(props) {
                   }}
                 />
               </div>
-            )  : props.item.doctorNotes ? (
-              <div
-                className='col-md-6 col-sm-6 col-6'
-                style={styles.inputContainerForTextField}
-              >
-                <TextField
-                  required
-                  multiline
-                  disabled={true}
-                  label='Doctor Notes'
-                  name={'doctorNotes'}
-                  value={props.item.doctorNotes}
-                  className='textInputStyle'
-                  rows={4}
-                  variant='filled'
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                />
-              </div>
-            ) : props.item.comments ? (
-              <div
-                className='col-md-6 col-sm-6 col-6'
-                style={styles.inputContainerForTextField}
-              >
-                <TextField
-                  required
-                  multiline
-                  disabled={true}
-                  label='Comments'
-                  name={'comments'}
-                  value={props.item.comments}
-                  className='textInputStyle'
-                  rows={4}
-                  variant='filled'
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                />
-              </div>
             ) : (
                     undefined
                   )}
@@ -451,7 +385,6 @@ export default function EdrRequest(props) {
 
           <div
             className='container'
-          // style={styles.inputContainerForTextField}
           >
             {props.item.medicine ? (
               <div>
@@ -463,10 +396,7 @@ export default function EdrRequest(props) {
                     tableData={props.item.medicine}
                     tableDataKeys={tableDataKeysForPHR}
                     tableHeading={tableHeadingForPHR}
-                    // handleView={viewItem}
-                    // action={actions}
                     borderBottomColor={'#60d69f'}
-                  // borderBottomWidth={20}
                   />
                 ) : (
                     undefined

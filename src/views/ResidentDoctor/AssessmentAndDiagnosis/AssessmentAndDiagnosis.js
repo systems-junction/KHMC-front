@@ -51,6 +51,7 @@ const tableHeadingForConsultation = [
   "Description / Condition",
   "Specialist",
   "Doctor Ref",
+  "Status",
   "Action",
 ];
 const tableDataKeysForConsultation = [
@@ -58,6 +59,7 @@ const tableDataKeysForConsultation = [
   "description",
   "specialist",
   "doctorName",
+  "status"
 ];
 const tableHeadingForPharmacy = [
   "Request ID",
