@@ -244,7 +244,7 @@ export default function PurchaseRequest(props) {
             ) : (
               undefined
             )}
-            <img className="img-style" src={Search} />
+            {/* <img className="img-style" src={Search} /> */}
           </div>
         </div>
 

@@ -408,8 +408,8 @@ function AddEditPurchaseRequest(props) {
                     disabled
                     inputVariant="filled"
                     fullWidth={true}
-                    format="dd/MM/yyyy"
-                    label="Date/Time Generated"
+                    format="MM/dd/yyyy hh:mm a"
+                    label="Date/Time Generated (MM/DD/YYYY)"
                     style={{ borderRadius: 10, backgroundColor: "white" }}
                     value={poId.createdAt}
                     InputProps={{
@@ -432,8 +432,8 @@ function AddEditPurchaseRequest(props) {
                     disabled
                     inputVariant="filled"
                     fullWidth={true}
-                    format="dd/MM/yyyy"
-                    label="Date/Time Sent"
+                    format="MM/dd/yyyy hh:mm a"
+                    label="Date/Time Sent (MM/DD/YYYY)"
                     style={{ borderRadius: 10, backgroundColor: "white" }}
                     value={poId.sentAt}
                     InputProps={{
