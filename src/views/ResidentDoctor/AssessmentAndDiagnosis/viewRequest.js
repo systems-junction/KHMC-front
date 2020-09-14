@@ -384,13 +384,10 @@ export default function EdrRequest(props) {
           </div>
 
           <div
-            className='container'
+            className='container-fluid'
           >
             {props.item.medicine ? (
-              <div>
-                <InputLabel style={styles.styleForLabel} id='generated-label'>
-                  Your PHR Medicine
-                </InputLabel>{' '}
+              <div className='row'>
                 {props.item.medicine ? (
                   <CustomTable
                     tableData={props.item.medicine}

@@ -673,7 +673,7 @@ function AddEditPatientListing(props) {
         .catch((e) => {
           console.log('error after adding patient details', e)
           setOpenNotification(true)
-          setErrorMsg('Patient with same MRN already exists')
+          setErrorMsg('Patient already exists')
         })
     } else {
       setOpenNotification(true)
@@ -756,7 +756,7 @@ function AddEditPatientListing(props) {
             if (!searchActivated) {
               props.history.push({
                 pathname: 'success',
-                state: { message: 'Updated successfully' },
+                state: { message: `Details of Patient with MRN ${res.data.data.profileNo} Updated Successfully` },
               })
             }
           } else if (!res.data.success) {
