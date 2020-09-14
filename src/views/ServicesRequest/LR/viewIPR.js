@@ -306,8 +306,15 @@ function AddEditPurchaseRequest(props) {
     reader.onloadend = function() {
       if (fileType === "pdf") {
         setpdfView(file.name);
-      } else {
+      } else if (fileType === "png") {
         setImagePreview([reader.result]);
+      } else if (fileType === "jpeg") {
+        setImagePreview([reader.result]);
+      } else if (fileType === "jpg") {
+        setImagePreview([reader.result]);
+      } else {
+        setErrorMsg("only pdf, jpeg, png should be allowed");
+        setOpenNotification(true);
       }
     };
   };
@@ -605,7 +612,7 @@ function AddEditPurchaseRequest(props) {
                     }}
                   >
                     <TextField
-                      disabled={true}
+                      // disabled={false}
                       variant="filled"
                       label="Date/Time"
                       name={"date"}
@@ -734,6 +741,7 @@ function AddEditPurchaseRequest(props) {
                         style={styles.input}
                         onChange={onSlipUpload}
                         name="results"
+                        Error={errorMsg}
                       />
                       <FaUpload /> Results
                     </label>
