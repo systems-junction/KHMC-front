@@ -914,9 +914,9 @@ function LabRadRequest(props) {
                 //     dispatch({ field: "patientId", value: val._id });
                 // } else
                 if (key === 'labRequest') {
-                  dispatch({ field: 'labRequestArray', value: val })
+                  dispatch({ field: 'labRequestArray', value: val.reverse() })
                 } else if (key === 'radiologyRequest') {
-                  dispatch({ field: 'radiologyRequestArray', value: val })
+                  dispatch({ field: 'radiologyRequestArray', value: val.reverse() })
                 }
                 // else if (key === "consultationNote") {
                 //     Object.entries(val).map(([key1, val1]) => {

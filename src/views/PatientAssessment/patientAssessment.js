@@ -899,7 +899,7 @@ function PatientAssessment(props) {
                         ? d.requester.firstName + " " + d.requester.lastName
                         : "")
                   );
-                  dispatch({ field: "consultationNoteArray", value: val });
+                  dispatch({ field: "consultationNoteArray", value: val.reverse() });
                 } else if (key === "residentNotes") {
                   val.map(
                     (d) =>
@@ -907,7 +907,7 @@ function PatientAssessment(props) {
                         ? d.doctor.firstName + " " + d.doctor.lastName
                         : "")
                   );
-                  dispatch({ field: "residentNoteArray", value: val });
+                  dispatch({ field: "residentNoteArray", value: val.reverse() });
                 }
                 // else if (key === "pharmacyRequest") {
                 //   val.map(

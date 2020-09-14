@@ -51,7 +51,7 @@ export default function PatientListing(props) {
           res.data.data.map(
             (d) => (d.patientName = d.firstName + ' ' + d.lastName)
           )
-          setPatient(res.data.data.reverse())
+          setPatient(res.data.data)
           console.log(res.data.data, 'get patient')
         } else if (!res.data.success) {
           setErrorMsg(res.data.error)
