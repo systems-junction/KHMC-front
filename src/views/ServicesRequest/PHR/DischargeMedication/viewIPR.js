@@ -354,16 +354,18 @@ function AddEditPurchaseRequest(props) {
           console.log(res.data.data, "data");
           if (res.data.data) {
             console.log(res.data.data, "data2");
-
-            setIsLoading(false);
+            // setIsLoading(false);
+            props.history.push({
+              pathname: "success",
+              state: {
+                //of Request No ${res.data.data.dischargeRequest.dischargeMedication.requester}
+                message: `Medication order # ${res.data.data.requestNo} for patient MRN ${res.data.data.patientId.profileNo} updated successfully`,
+              },
+            });
+          } else if (!res.data.success) {
+            setOpenNotification(true);
+            setErrorMsg("Error while updating");
           }
-          props.history.push({
-            pathname: "success",
-            state: {
-              //of Request No ${res.data.data.dischargeRequest.dischargeMedication.requester}
-              message: `Medication order # ${res.data.data.requestNo} for patient MRN ${res.data.data.patientId.profileNo} fulfilled successfully`,
-            },
-          });
         }
       })
       .catch((e) => {
