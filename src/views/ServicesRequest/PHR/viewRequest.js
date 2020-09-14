@@ -451,7 +451,6 @@ export default function EdrRequest(props) {
 
           <div
             className='container-fluid'
-          // style={styles.inputContainerForTextField}
           >
             {props.item.medicine ? (
               <div className='row'>
@@ -460,10 +459,7 @@ export default function EdrRequest(props) {
                     tableData={props.item.medicine}
                     tableDataKeys={tableDataKeysForPHR}
                     tableHeading={tableHeadingForPHR}
-                    // handleView={viewItem}
-                    // action={actions}
                     borderBottomColor={'#60d69f'}
-                  // borderBottomWidth={20}
                   />
                 ) : (
                     undefined

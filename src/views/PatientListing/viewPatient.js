@@ -54,6 +54,20 @@ export default function ViewPatient(props) {
   useEffect(() => {
     console.log("props.item", props.item);
   });
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    return (
+      d.getDate() +
+      "/" +
+      (d.getMonth() + 1) +
+      "/" +
+      d.getFullYear() +
+      " " +
+      d.toLocaleTimeString()
+    );
+  };
+
   return (
     <Dialog
       onClose={() => props.viewItem("")}
@@ -227,7 +241,7 @@ export default function ViewPatient(props) {
                   <InputLabel style={styles.styleForLabel} id="generated-label">
                     Date/Time
                   </InputLabel>
-                  <h6>{props.item.updatedAt}</h6>
+                  <h6>{formatDate(props.item.updatedAt)}</h6>
                 </div>
                 <div
                   className="col-md-4 col-sm-4 col-6"
