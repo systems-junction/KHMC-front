@@ -49,7 +49,6 @@ const tableHeading = [
   "Item Code",
   "Item Name",
   "Requested Quantity",
-  "Purchase Price",
   "Status",
   "Action",
 ];
@@ -57,7 +56,6 @@ const tableDataKeys = [
   ["itemId", "itemCode"],
   ["itemId", "name"],
   "reqQty",
-  ["itemId", "purchasePrice"],
   "status",
 ];
 
@@ -292,13 +290,17 @@ function AddEditPurchaseRequest(props) {
 
       <Notification msg={errorMsg} open={openNotification} />
 
-      <AddEditReceiveItems
-        selectedItem={selectedItem}
-        purchaseRequest={purchaseRequest}
-        purchaseOrders={purchaseOrders}
-        materialReceivingId={props.materialReceivingId}
-        history={props.history}
-      />
+      {selectedItem ? (
+        <AddEditReceiveItems
+          selectedItem={selectedItem}
+          purchaseRequest={purchaseRequest}
+          purchaseOrders={purchaseOrders}
+          materialReceivingId={props.materialReceivingId}
+          history={props.history}
+        />
+      ) : (
+        undefined
+      )}
 
       <div style={{ marginBottom: 20, marginTop: 10 }}>
         <img

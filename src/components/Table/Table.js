@@ -189,7 +189,10 @@ export default function CustomTable(props) {
               </Button>
             ) : val === "Can be fulfilled" ? (
               <Button
-                style={{...stylesB.stylesForActive,backgroundColor:"#845dc2"}}
+                style={{
+                  ...stylesB.stylesForActive,
+                  backgroundColor: "#845dc2",
+                }}
                 variant="contained"
                 color="primary"
               >
@@ -260,7 +263,7 @@ export default function CustomTable(props) {
         <>
           {val === "in_progress" ? (
             <Button
-              style={{...stylesB.stylesForActive,   backgroundColor: "#e877a1"}}
+              style={{ ...stylesB.stylesForActive, backgroundColor: "#e877a1" }}
               variant="contained"
               color="primary"
             >
@@ -377,13 +380,15 @@ export default function CustomTable(props) {
       val === "approve" ||
       val === "received" ||
       val === "Partially Received" ||
+      val === "Partially Completed" ||
       val === "Cannot be fulfilled" ||
       val === "Item Returned to Warehouse" ||
       val === "Returned" ||
       val === "receive" ||
       val === "Received" ||
       val === "rejected" ||
-      val === "Sent for PAR"
+      val === "Sent for PAR" ||
+      val === "Completed"
     ) {
       return (
         <>
@@ -394,6 +399,22 @@ export default function CustomTable(props) {
               color="primary"
             >
               <strong>Complete</strong>
+            </Button>
+          ) : val === "Partially Completed" ? (
+            <Button
+              style={{ ...stylesB.stylesForActive, width: "120px" }}
+              variant="contained"
+              color="primary"
+            >
+              <strong>Partially Completed</strong>
+            </Button>
+          ) : val === "Completed" ? (
+            <Button
+              style={{ ...stylesB.stylesForActive, width: "120px" }}
+              variant="contained"
+              color="primary"
+            >
+              <strong>Completed</strong>
             </Button>
           ) : val === "Sent for PAR" ? (
             <Button
@@ -540,7 +561,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "Cannot be fulfilled" ? (
             <Button
-            style={{...stylesB.stylesForActive,   backgroundColor: "#e877a1"}}
+              style={{ ...stylesB.stylesForActive, backgroundColor: "#e877a1" }}
               variant="contained"
               color="primary"
             >

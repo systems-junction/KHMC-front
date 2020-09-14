@@ -40,11 +40,61 @@ import useStyleforinput from "../../../src/assets/jss/material-dashboard-react/i
 import InputLabelComponent from "../../components/InputLabel/inputLabel";
 
 import BootstrapInput from "../../components/Dropdown/dropDown.js";
+import CurrencyTextField from "@unicef/material-ui-currency-textfield";
 
 const statusArray = [
   { key: "Partially Received", value: "Partially Received" },
   { key: "Received", value: "Received" },
 ];
+
+const inputStyles = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(0),
+  },
+  input: {
+    backgroundColor: "white",
+    borderRadius: 5,
+    "&": {
+      backgroundColor: "white",
+    },
+    "&:after": {
+      backgroundColor: "white",
+    },
+
+    "&:hover": {
+      backgroundColor: "white",
+    },
+
+    "&:focus": {
+      boxShadow: "none",
+      backgroundColor: "white",
+    },
+  },
+  // multilineColor: {
+  //   backgroundColor: "white",
+  //   borderRadius: 5,
+  //   "&:hover": {
+  //     backgroundColor: "white",
+  //   },
+  //   "&:after": {
+  //     borderBottomColor: "black",
+  //   },
+  // },
+  // root: {
+  //   "& .MuiTextField-root": {
+  //     backgroundColor: "white",
+  //     color: "blue",
+  //   },
+  //   "& .Mui-focused": {
+  //     backgroundColor: "white",
+  //     color: "blue",
+  //   },
+  //   "& .Mui-disabled": {
+  //     backgroundColor: undefined,
+  //     // color: "gray",
+  //   },
+  // },
+}));
 
 const styles = {
   // inputContainer: {
@@ -120,6 +170,7 @@ const time = DATE.getHours();
 function ReceiveItems(props) {
   // const classes = useStyles();
   const classes = useStyleforinput();
+  const classesForInput = inputStyles();
 
   const initialState = {
     requiredQty: "",
@@ -128,16 +179,16 @@ function ReceiveItems(props) {
     batchNumber: "123",
     lotNo: "123",
     unit: "kg",
-    discount: "0",
+    discount: "5",
     uniyDiscount: "kg",
-    discountAmount: "0",
-    tax: "0",
-    taxAmount: "0",
-    finalUnitPrice: "1000",
+    discountAmount: "",
+    tax: "",
+    taxAmount: "",
+    finalUnitPrice: "",
     discountAmount2: "0",
-    subTotal: "1000",
-    totalPrice: "1000",
-    invoice: "123",
+    subTotal: "",
+    totalPrice: "",
+    invoice: "FU-INV-123",
     date: "",
     receivedDate: new Date(),
     expiryDate: "",
@@ -330,23 +381,50 @@ function ReceiveItems(props) {
     }
   }, []);
 
+  // function validateForm() {
+  //   return (
+  //     receivedQty.length > 0 &&
+  //     bonusQty.length > 0 &&
+  //     batchNumber.length > 0 &&
+  //     lotNo.length > 0 &&
+  //     expiryDate !== "" &&
+  //     unit.length > 0 &&
+  //     discount.length > 0 &&
+  //     uniyDiscount.length > 0 &&
+  //     discountAmount.length > 0 &&
+  //     tax.length > 0 &&
+  //     taxAmount.length > 0 &&
+  //     finalUnitPrice.length > 0 &&
+  //     subTotal.length > 0 &&
+  //     discountAmount2.length > 0 &&
+  //     totalPrice.length > 0 &&
+  //     invoice.length > 0 &&
+  //     date !== "" &&
+  //     receivedDate !== "" &&
+  //     notes.length > 0 &&
+  //     replenishmentRequestStatus !== "" &&
+  //     receivedQty <= requestedQty
+  //     // discountPercentage.length > 0
+  //   );
+  // }
+
   function validateForm() {
     return (
       receivedQty.length > 0 &&
       bonusQty.length > 0 &&
-      batchNumber.length > 0 &&
-      lotNo.length > 0 &&
+      // batchNumber.length > 0 &&
+      // lotNo.length > 0 &&
       expiryDate !== "" &&
-      unit.length > 0 &&
-      discount.length > 0 &&
-      uniyDiscount.length > 0 &&
-      discountAmount.length > 0 &&
-      tax.length > 0 &&
-      taxAmount.length > 0 &&
-      finalUnitPrice.length > 0 &&
-      subTotal.length > 0 &&
-      discountAmount2.length > 0 &&
-      totalPrice.length > 0 &&
+      // unit.length > 0 &&
+      // discount.length > 0 &&
+      // uniyDiscount.length > 0 &&
+      // discountAmount.length > 0 &&
+      // tax.length > 0 &&
+      // taxAmount.length > 0 &&
+      // finalUnitPrice !== "" &&
+      // subTotal !== "" &&
+      // discountAmount2.length > 0 &&
+      totalPrice !== "" &&
       invoice.length > 0 &&
       date !== "" &&
       receivedDate !== "" &&
@@ -365,6 +443,10 @@ function ReceiveItems(props) {
     }
 
     if (validateForm()) {
+      if (date > receivedDate) {
+        setOpenNotification(true);
+        setErrorMsg("Invoice date can not be greater than received date");
+      }
       let params = {
         itemId: selectedItem.itemId._id,
         currentQty: currentQty,
@@ -474,6 +556,25 @@ function ReceiveItems(props) {
   }
 
   console.log("vendor id in receive items", selectedItem);
+
+  function calculateTotal() {
+    if (receivedQty && receivedQty !== "0") {
+      let taxValueAmountForSingleItem =
+        (selectedItem.itemId.tax * selectedItem.itemId.issueUnitCost) / 100;
+
+      let totalTax = receivedQty * taxValueAmountForSingleItem;
+
+      let subTotal = receivedQty * selectedItem.itemId.issueUnitCost + totalTax;
+
+      let discountedAmount = (discount * subTotal) / 100;
+      let totalPrice = subTotal - discountedAmount;
+
+      dispatch({ field: "subTotal", value: subTotal });
+      dispatch({ field: "taxAmount", value: totalTax });
+      dispatch({ field: "totalPrice", value: totalPrice });
+      dispatch({ field: "discountAmount", value: discountedAmount });
+    }
+  }
 
   return (
     <div
@@ -641,6 +742,7 @@ function ReceiveItems(props) {
                       ? 2.5
                       : null,
                 }}
+                onBlur={calculateTotal}
               />
             </div>
 
@@ -684,6 +786,7 @@ function ReceiveItems(props) {
               }}
             >
               <TextField
+                disabled
                 required
                 type="number"
                 label="Batch Number"
@@ -714,6 +817,7 @@ function ReceiveItems(props) {
               }}
             >
               <TextField
+                disabled
                 required
                 type="number"
                 label="LOT No"
@@ -774,7 +878,7 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              <TextField
+              {/* <TextField
                 required
                 type="text"
                 label="Unit"
@@ -786,6 +890,26 @@ function ReceiveItems(props) {
                 InputProps={{
                   className: classes.input,
                   classes: { input: classes.input },
+                }}
+              /> */}
+
+              <TextField
+                required
+                disabled
+                className="textInputStyle"
+                id="unit"
+                variant="filled"
+                label="Unit"
+                name={"unit"}
+                value={selectedItem && selectedItem.itemId.issueUnit}
+                onChange={onChangeValue}
+                InputProps={{
+                  className: classesForInput.input,
+                  classes: { input: classesForInput.input },
+                }}
+                InputLabelProps={{
+                  className: classesForInput.label,
+                  classes: { label: classesForInput.label },
                 }}
               />
             </div>
@@ -800,6 +924,7 @@ function ReceiveItems(props) {
               }}
             >
               <TextField
+                disabled
                 required
                 type="number"
                 label="Discount %"
@@ -829,7 +954,7 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              <TextField
+              {/* <TextField
                 required
                 label="Unit Discount"
                 name={"uniyDiscount"}
@@ -841,6 +966,26 @@ function ReceiveItems(props) {
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
+              /> */}
+
+              <TextField
+                required
+                disabled
+                className="textInputStyle"
+                id="uniyDiscount"
+                variant="filled"
+                label="Unit Discount"
+                name={"uniyDiscount"}
+                value={selectedItem && selectedItem.itemId.issueUnit}
+                onChange={onChangeValue}
+                InputProps={{
+                  className: classesForInput.input,
+                  classes: { input: classesForInput.input },
+                }}
+                InputLabelProps={{
+                  className: classesForInput.label,
+                  classes: { label: classesForInput.label },
+                }}
               />
             </div>
 
@@ -851,7 +996,7 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              <TextField
+              {/* <TextField
                 required
                 type="number"
                 label="Discount Amount"
@@ -871,6 +1016,29 @@ function ReceiveItems(props) {
                     evt.key === "+") &&
                     evt.preventDefault();
                 }}
+              /> */}
+              <CurrencyTextField
+                disabled
+                style={{ backgroundColor: "white", borderRadius: 5 }}
+                className="textInputStyle"
+                id="discountAmount"
+                label="Discount Amount"
+                name={"discountAmount"}
+                value={discountAmount}
+                onBlur={onChangeValue}
+                variant="filled"
+                textAlign="left"
+                InputProps={{
+                  className: classesForInput.input,
+                  classes: { input: classesForInput.input },
+                }}
+                InputLabelProps={{
+                  className: classesForInput.label,
+                  classes: { label: classesForInput.label },
+                }}
+                currencySymbol="JD"
+                outputFormat="number"
+                onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
               />
             </div>
 
@@ -881,7 +1049,7 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              <TextField
+              {/* <TextField
                 required
                 type="number"
                 label="Tax %"
@@ -901,6 +1069,28 @@ function ReceiveItems(props) {
                     evt.key === "+") &&
                     evt.preventDefault();
                 }}
+              /> */}
+
+              <TextField
+                required
+                disabled
+                className="textInputStyle"
+                id="tax"
+                type={"number"}
+                variant="filled"
+                label="Tax %"
+                name={"tax"}
+                value={selectedItem && selectedItem.itemId.tax}
+                onChange={onChangeValue}
+                InputProps={{
+                  className: classesForInput.input,
+                  classes: { input: classesForInput.input },
+                }}
+                InputLabelProps={{
+                  className: classesForInput.label,
+                  classes: { label: classesForInput.label },
+                }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
               />
             </div>
           </div>
@@ -915,6 +1105,7 @@ function ReceiveItems(props) {
             >
               <TextField
                 required
+                disabled
                 type="number"
                 label="Tax Amount"
                 name={"taxAmount"}
@@ -943,7 +1134,7 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              <TextField
+              {/* <TextField
                 required
                 type="number"
                 label="Final Unit Price"
@@ -963,6 +1154,31 @@ function ReceiveItems(props) {
                     evt.key === "+") &&
                     evt.preventDefault();
                 }}
+              /> */}
+
+              <CurrencyTextField
+                disabled
+                style={{ backgroundColor: "white", borderRadius: 5 }}
+                className="textInputStyle"
+                id="finalUnitPrice"
+                label="Final Unit Price"
+                name={"finalUnitPrice"}
+                // value={finalUnitPrice}
+                value={selectedItem && selectedItem.itemId.issueUnitCost}
+                onBlur={onChangeValue}
+                variant="filled"
+                textAlign="left"
+                InputProps={{
+                  className: classesForInput.input,
+                  classes: { input: classesForInput.input },
+                }}
+                InputLabelProps={{
+                  className: classesForInput.label,
+                  classes: { label: classesForInput.label },
+                }}
+                currencySymbol="JD"
+                outputFormat="number"
+                onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
               />
             </div>
 
@@ -973,7 +1189,7 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              <TextField
+              {/* <TextField
                 required
                 type="number"
                 label="Sub Total"
@@ -993,6 +1209,29 @@ function ReceiveItems(props) {
                     evt.key === "+") &&
                     evt.preventDefault();
                 }}
+              /> */}
+              <CurrencyTextField
+                disabled
+                style={{ backgroundColor: "white", borderRadius: 5 }}
+                className="textInputStyle"
+                id="subTotal"
+                label="Sub Total"
+                name={"subTotal"}
+                value={subTotal}
+                onBlur={onChangeValue}
+                variant="filled"
+                textAlign="left"
+                InputProps={{
+                  className: classesForInput.input,
+                  classes: { input: classesForInput.input },
+                }}
+                InputLabelProps={{
+                  className: classesForInput.label,
+                  classes: { label: classesForInput.label },
+                }}
+                currencySymbol="JD"
+                outputFormat="number"
+                onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
               />
             </div>
 
@@ -1003,7 +1242,7 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              <TextField
+              {/* <TextField
                 required
                 type="number"
                 label="Total Price"
@@ -1023,6 +1262,30 @@ function ReceiveItems(props) {
                     evt.key === "+") &&
                     evt.preventDefault();
                 }}
+              /> */}
+
+              <CurrencyTextField
+                disabled
+                style={{ backgroundColor: "white", borderRadius: 5 }}
+                className="textInputStyle"
+                id="totalPrice"
+                label="Total Price"
+                name={"totalPrice"}
+                value={totalPrice}
+                onBlur={onChangeValue}
+                variant="filled"
+                textAlign="left"
+                InputProps={{
+                  className: classesForInput.input,
+                  classes: { input: classesForInput.input },
+                }}
+                InputLabelProps={{
+                  className: classesForInput.label,
+                  classes: { label: classesForInput.label },
+                }}
+                currencySymbol="JD"
+                outputFormat="number"
+                onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
               />
             </div>
           </div>
@@ -1066,6 +1329,7 @@ function ReceiveItems(props) {
             >
               <TextField
                 required
+                disabled
                 label="Invoice"
                 name={"invoice"}
                 value={invoice}
@@ -1089,10 +1353,11 @@ function ReceiveItems(props) {
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DateTimePicker
                   required
+                  disableFuture
                   inputVariant="filled"
                   fullWidth={true}
                   label="Date/Time Invoice (MM/DD/YYYY)"
-                  format="MM/dd/yyyy hh:mm a"
+                  format="MM/dd/yyyy HH:mm a"
                   onChange={(val) => onChangeDate(val, "date")}
                   // style={styles.inputContainerForDate}
                   value={comingFor === "add" ? (date ? date : null) : date}
@@ -1118,8 +1383,7 @@ function ReceiveItems(props) {
                   inputVariant="filled"
                   fullWidth={true}
                   label="Date/Time Received (MM/DD/YYYY)"
-                  format="MM/dd/yyyy hh:mm a"
-                  minDate={new Date()}
+                  format="MM/dd/yyyy HH:mm a"
                   onChange={(val) => onChangeDate(val, "receivedDate")}
                   InputProps={{
                     className: classes.input,

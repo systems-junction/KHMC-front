@@ -203,6 +203,8 @@ function AddEditPurchaseRequest(props) {
 
     itemName: "",
     requestedQty: "",
+
+    commentNotes: "",
   };
 
   function reducer(state, { field, value }) {
@@ -249,6 +251,7 @@ function AddEditPurchaseRequest(props) {
 
     itemName,
     requestedQty,
+    commentNotes,
   } = state;
 
   const onChangeValue = (e) => {
@@ -443,6 +446,7 @@ function AddEditPurchaseRequest(props) {
           requesterName,
           orderType,
           department,
+          commentNotes,
         };
 
         console.log("params", params);
@@ -548,6 +552,7 @@ function AddEditPurchaseRequest(props) {
             orderType,
             department,
             rejectionReason,
+            commentNotes,
           };
           axios
             .put(updatePurchaseRequestUrl, params)
@@ -584,6 +589,12 @@ function AddEditPurchaseRequest(props) {
       setErrorMsg("Please fill the fields properly");
     } else {
       if (validateForm()) {
+        // if (committeeStatus === "approved" || status === "in_progress") {
+        //   setOpenNotification(true);
+        //   setErrorMsg("Approved PRs can not be updated");
+        //   return;
+        // }
+
         let requestedItems = [];
 
         for (let i = 0; i < requestedItemsArray.length; i++) {
@@ -637,6 +648,7 @@ function AddEditPurchaseRequest(props) {
           orderType,
           department,
           rejectionReason,
+          commentNotes,
         };
         axios
           .put(updatePurchaseRequestUrl, params)
@@ -701,8 +713,13 @@ function AddEditPurchaseRequest(props) {
           console.log("current quantity", res.data.data);
           if (res.data.data) {
             dispatch({ field: "currentQty", value: res.data.data.qty });
+            dispatch({
+              field: "maximumLevel",
+              value: res.data.data.maximumLevel,
+            });
           } else {
             dispatch({ field: "currentQty", value: 0 });
+            dispatch({ field: "maximumLevel", value: 0 });
           }
         }
       })
@@ -723,7 +740,7 @@ function AddEditPurchaseRequest(props) {
     dispatch({ field: "name", value: i.name });
     dispatch({ field: "vendorId", value: i.vendorId });
     dispatch({ field: "description", value: i.description });
-    dispatch({ field: "maximumLevel", value: i.maximumLevel });
+    // dispatch({ field: "maximumLevel", value: i.maximumLevel });
 
     const obj = {
       itemCode: i.itemCode,
@@ -740,8 +757,8 @@ function AddEditPurchaseRequest(props) {
       name.length > 0 &&
       reqQty.length > 0 &&
       // currentQty.length > 0 &&
-      comments.length > 0 &&
-      maximumLevel >= reqQty
+      comments.length > 0
+      // && maximumLevel >= reqQty
       //  &&currentQty >= reqQty
     );
   }
@@ -786,51 +803,62 @@ function AddEditPurchaseRequest(props) {
       setOpenNotification(true);
       setErrorMsg("Please fill the fields properly");
       setIsItemFormSubmitted(true);
+      return;
     }
+
     if (validateItemsForm()) {
-      setDialogOpen(false);
-      let found =
-        requestedItemsArray &&
-        requestedItemsArray.find((item) => item.itemId._id === itemId);
-
-      if (found) {
+      if (reqQty > maximumLevel - currentQty) {
+        setErrorMsg(
+          `You can not add qty which exceeds the maximum level ${maximumLevel}`
+        );
         setOpenNotification(true);
-        setErrorMsg("This item has already been added");
+        return;
       } else {
-        let sameVendorFound = true;
-        for (let i = 0; i < requestedItemsArray.length; i++) {
-          if (requestedItemsArray[i].itemId.vendorId._id !== vendorId._id) {
-            sameVendorFound = false;
-          }
-        }
+        setDialogOpen(false);
+        let found =
+          requestedItemsArray &&
+          requestedItemsArray.find((item) => item.itemId._id === itemId);
 
-        if (!sameVendorFound) {
+        if (found) {
           setOpenNotification(true);
-          setErrorMsg("You can add items with the same vendors only");
-          return;
+          setErrorMsg("This item has already been added");
         } else {
-          dispatch({
-            field: "requestedItemsArray",
-            value: [
-              ...requestedItemsArray,
-              {
-                itemId: {
-                  _id: itemId,
-                  itemCode,
-                  name: name,
-                  vendorId,
-                  description,
+          let sameVendorFound = true;
+          for (let i = 0; i < requestedItemsArray.length; i++) {
+            if (requestedItemsArray[i].itemId.vendorId._id !== vendorId._id) {
+              sameVendorFound = false;
+            }
+          }
+
+          if (!sameVendorFound) {
+            setOpenNotification(true);
+            setErrorMsg("You can add items with the same vendors only");
+            return;
+          } else {
+            dispatch({
+              field: "requestedItemsArray",
+              value: [
+                ...requestedItemsArray,
+                {
+                  itemId: {
+                    _id: itemId,
+                    itemCode,
+                    name: name,
+                    vendorId,
+                    description,
+                    // maximumLevel,
+                  },
+                  reqQty: reqQty,
+                  currQty: currentQty,
+                  status: "pending",
+                  secondStatus: "pending",
+                  // description,
+                  comments,
                   maximumLevel,
                 },
-                reqQty: reqQty,
-                currQty: currentQty,
-                status: "pending",
-                secondStatus: "pending",
-                // description,
-                comments,
-              },
-            ],
-          });
+              ],
+            });
+          }
         }
       }
       setSelectedItem("");
@@ -870,54 +898,63 @@ function AddEditPurchaseRequest(props) {
       setIsItemFormSubmitted(true);
     }
     if (validateItemsForm()) {
-      setDialogOpen(false);
-      let temp = [];
+      if (reqQty > maximumLevel - currentQty) {
+        setErrorMsg(
+          `You can not add qty which exceeds the maximum level ${maximumLevel}`
+        );
+        setOpenNotification(true);
+        return;
+      } else {
+        setDialogOpen(false);
+        let temp = [];
 
-      for (let i = 0; i < requestedItemsArray.length; i++) {
-        if (
-          requestedItemsArray[i].itemId._id === selectItemToEditId.itemId._id
-        ) {
-          let obj = {
-            itemId: {
-              _id: requestedItemsArray[i].itemId._id,
-              itemCode,
-              name: name,
-              vendorId,
-              description,
+        for (let i = 0; i < requestedItemsArray.length; i++) {
+          if (
+            requestedItemsArray[i].itemId._id === selectItemToEditId.itemId._id
+          ) {
+            let obj = {
+              itemId: {
+                _id: requestedItemsArray[i].itemId._id,
+                itemCode,
+                name: name,
+                vendorId,
+                description,
+                // maximumLevel,
+              },
+              reqQty: reqQty,
+              currentQty,
+              status: requestedItemsArray[i].status,
+              secondStatus: requestedItemsArray[i].secondStatus,
+              comments: comments,
               maximumLevel,
-            },
-            reqQty: reqQty,
-            currentQty,
-            status: requestedItemsArray[i].status,
-            secondStatus: requestedItemsArray[i].secondStatus,
-            comments: comments,
-          };
-          temp[i] = obj;
-        } else {
-          temp = [...temp, requestedItemsArray[i]];
+            };
+            temp[i] = obj;
+          } else {
+            temp = [...temp, requestedItemsArray[i]];
+          }
         }
+
+        dispatch({
+          field: "requestedItemsArray",
+          value: temp,
+        });
+
+        setDialogOpen(false);
+        setSelectedItem("");
+        setSelectItemToEditId("");
+        setIsItemFormSubmitted(false);
+
+        dispatch({ field: "itemId", value: "" });
+        dispatch({ field: "description", value: "" });
+        dispatch({ field: "currentQty", value: "" });
+        dispatch({ field: "reqQty", value: "" });
+        dispatch({ field: "name", value: "" });
+        dispatch({ field: "itemCode", value: "" });
+        dispatch({ field: "vendorId", value: "" });
+        dispatch({ field: "requestedQty", value: "" });
+        dispatch({ field: "comments", value: "" });
+        dispatch({ field: "maximumLevel", value: "" });
       }
-
-      dispatch({
-        field: "requestedItemsArray",
-        value: temp,
-      });
-
-      setDialogOpen(false);
-      setSelectedItem("");
-      setSelectItemToEditId("");
-      setIsItemFormSubmitted(false);
-
-      dispatch({ field: "itemId", value: "" });
-      dispatch({ field: "description", value: "" });
-      dispatch({ field: "currentQty", value: "" });
-      dispatch({ field: "reqQty", value: "" });
-      dispatch({ field: "name", value: "" });
-      dispatch({ field: "itemCode", value: "" });
-      dispatch({ field: "vendorId", value: "" });
-      dispatch({ field: "requestedQty", value: "" });
-      dispatch({ field: "comments", value: "" });
-      dispatch({ field: "maximumLevel", value: "" });
     }
   };
 
@@ -949,10 +986,11 @@ function AddEditPurchaseRequest(props) {
       dispatch({ field: "name", value: i.itemId.name });
       dispatch({ field: "vendorId", value: i.itemId.vendorId });
       dispatch({ field: "description", value: i.itemId.description });
-      dispatch({ field: "maximumLevel", value: i.itemId.maximumLevel });
+      // dispatch({ field: "maximumLevel", value: i.itemId.maximumLevel });
       dispatch({ field: "currentQty", value: i.currQty });
       dispatch({ field: "reqQty", value: i.reqQty });
       dispatch({ field: "comments", value: i.comments });
+      dispatch({ field: "maximumLevel", value: i.maximumLevel });
     } else {
       setOpenNotification(true);
       setErrorMsg("Item can not be updated once it is in progess");
@@ -988,6 +1026,9 @@ function AddEditPurchaseRequest(props) {
             <h4>
               {comingFor === "add"
                 ? "MWIK - Add Purchase Request"
+                : comingFor === "edit" &&
+                  currentUser.staffTypeId.type === "Committe Member"
+                ? "Edit Purchase Request"
                 : "MWIK - Edit Purchase Request"}
             </h4>
           </div>
@@ -1242,6 +1283,7 @@ function AddEditPurchaseRequest(props) {
                     error={committeeStatus === "" && isFormSubmitted}
                     onChange={onChangeValue}
                     label="Status"
+                    disabled={committeeStatus === "approved" && status === "in_progress" ? true : false}
                     variant="filled"
                     className="dropDownStyle"
                     InputProps={{
@@ -1426,6 +1468,39 @@ function AddEditPurchaseRequest(props) {
                   name={"rejectionReason"}
                   value={rejectionReason}
                   error={rejectionReason === "" && isFormSubmitted}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                  variant="filled"
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                />
+              </div>
+            </div>
+          ) : (
+            undefined
+          )}
+
+          {currentUser && currentUser.staffTypeId.type === "Committe Member" ? (
+            <div className="row">
+              <div
+                className="col-md-12"
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  disabled={
+                    currentUser &&
+                    currentUser.staffTypeId.type === "Committe Member"
+                      ? false
+                      : true
+                  }
+                  label="Comments/Notes"
+                  name={"commentNotes"}
+                  value={commentNotes}
                   onChange={onChangeValue}
                   className="textInputStyle"
                   variant="filled"

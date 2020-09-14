@@ -11,6 +11,7 @@ export default makeStyles((theme) => ({
       // color: "gray",
       // fontWeight: "400",
     },
+
     "&:before": {
       borderBottomWidth: "0px",
     },
@@ -18,6 +19,7 @@ export default makeStyles((theme) => ({
       color: "black",
     },
   },
+
   // label: {
   //   "&:focused": {
   //     color: "black",

@@ -46,6 +46,8 @@ import Back_Arrow from "../../assets/img/Back_Arrow.png";
 import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
 import useStyleforinput from "../../../src/assets/jss/material-dashboard-react/inputStyle.js";
 
+import CurrencyTextField from "@unicef/material-ui-currency-textfield";
+
 const statusArray = [
   { key: "received", value: "Received" },
   { key: "rejected", value: "Rejected" },
@@ -118,6 +120,55 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const inputStyles = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(0),
+  },
+  input: {
+    backgroundColor: "white",
+    borderRadius: 5,
+    "&": {
+      backgroundColor: "white",
+    },
+    "&:after": {
+      backgroundColor: "white",
+    },
+
+    "&:hover": {
+      backgroundColor: "white",
+    },
+
+    "&:focus": {
+      boxShadow: "none",
+      backgroundColor: "white",
+    },
+  },
+  // multilineColor: {
+  //   backgroundColor: "white",
+  //   borderRadius: 5,
+  //   "&:hover": {
+  //     backgroundColor: "white",
+  //   },
+  //   "&:after": {
+  //     borderBottomColor: "black",
+  //   },
+  // },
+  // root: {
+  //   "& .MuiTextField-root": {
+  //     backgroundColor: "white",
+  //     color: "blue",
+  //   },
+  //   "& .Mui-focused": {
+  //     backgroundColor: "white",
+  //     color: "blue",
+  //   },
+  //   "& .Mui-disabled": {
+  //     backgroundColor: undefined,
+  //     // color: "gray",
+  //   },
+  // },
+}));
+
 const DATE = new Date();
 
 const time = DATE.getHours();
@@ -126,6 +177,7 @@ function ReceiveItems(props) {
   // const classes = useStyles();
 
   const classes = useStyles();
+  const classesForInput = inputStyles();
 
   const initialState = {
     _id: "",
@@ -137,17 +189,17 @@ function ReceiveItems(props) {
     bonusQty: "0",
     batchNumber: "123",
     lotNo: "123",
-    unit: "kg",
-    discount: "0",
-    uniyDiscount: "0",
-    discountAmount: "0",
-    tax: "0",
-    taxAmount: "0",
-    finalUnitPrice: "1000",
+    unit: "",
+    discount: "5",
+    uniyDiscount: "",
+    discountAmount: "",
+    tax: "",
+    taxAmount: "",
+    finalUnitPrice: "",
     discountAmount2: "0",
-    subTotal: "1000",
-    totalPrice: "1000",
-    invoice: "12345",
+    subTotal: "",
+    totalPrice: "",
+    invoice: "WHI-12345",
     date: "",
     receivedDate: new Date(),
     comments: "Some comments for receiving",
@@ -264,19 +316,19 @@ function ReceiveItems(props) {
     return (
       receivedQty.length > 0 &&
       bonusQty.length > 0 &&
-      batchNumber.length > 0 &&
-      lotNo.length > 0 &&
+      // batchNumber.length > 0 &&
+      // lotNo.length > 0 &&
       expiryDate !== "" &&
-      unit.length > 0 &&
-      discount.length > 0 &&
-      uniyDiscount.length > 0 &&
-      discountAmount.length > 0 &&
-      tax.length > 0 &&
-      taxAmount.length > 0 &&
-      finalUnitPrice.length > 0 &&
-      subTotal.length > 0 &&
-      discountAmount2.length > 0 &&
-      totalPrice.length > 0 &&
+      // unit.length > 0 &&
+      // discount.length > 0 &&
+      // uniyDiscount.length > 0 &&
+      // discountAmount.length > 0 &&
+      // tax.length > 0 &&
+      // taxAmount.length > 0 &&
+      // finalUnitPrice.length > 0 &&
+      // subTotal.length > 0 &&
+      // discountAmount2.length > 0 &&
+      totalPrice !== "" &&
       invoice.length > 0 &&
       date !== "" &&
       receivedDate !== "" &&
@@ -288,6 +340,12 @@ function ReceiveItems(props) {
   const handleAdd = () => {
     setIsFormSubmitted(true);
     if (validateForm()) {
+      if (date > receivedDate) {
+        setOpenNotification(true);
+        setErrorMsg("Invoice date can not be greater than received date");
+
+        return;
+      }
       let params = {
         itemId: selectedItem.itemId._id,
         currentQty: selectedItem.currQty,
@@ -297,13 +355,13 @@ function ReceiveItems(props) {
         batchNumber,
         lotNumber: lotNo,
         expiryDate,
-        unit,
+        unit: selectedItem.itemId.issueUnit,
         discount: discount,
-        unitDiscount: uniyDiscount,
+        unitDiscount: selectedItem.itemId.issueUnit,
         discountAmount,
-        tax,
+        tax: selectedItem.itemId.tax,
         taxAmount,
-        finalUnitPrice,
+        finalUnitPrice: selectedItem.itemId.issueUnitCost,
         subTotal,
         discountAmount2,
         totalPrice,
@@ -425,6 +483,27 @@ function ReceiveItems(props) {
   useEffect(() => {
     setSelectedItem(props.selectedItem);
   }, [props.selectedItem]);
+
+  console.log(selectedItem);
+
+  function calculateTotal() {
+    if (receivedQty && receivedQty !== "0") {
+      let taxValueAmountForSingleItem =
+        (selectedItem.itemId.tax * selectedItem.itemId.issueUnitCost) / 100;
+
+      let totalTax = receivedQty * taxValueAmountForSingleItem;
+
+      let subTotal = receivedQty * selectedItem.itemId.issueUnitCost + totalTax;
+
+      let discountedAmount = (discount * subTotal) / 100;
+      let totalPrice = subTotal - discountedAmount;
+
+      dispatch({ field: "subTotal", value: subTotal });
+      dispatch({ field: "taxAmount", value: totalTax });
+      dispatch({ field: "totalPrice", value: totalPrice });
+      dispatch({ field: "discountAmount", value: discountedAmount });
+    }
+  }
 
   return (
     <div
@@ -585,6 +664,7 @@ function ReceiveItems(props) {
                     evt.preventDefault();
                 }}
                 // error={receivedQty.includes("e", 0)}
+                onBlur={calculateTotal}
               />
             </div>
 
@@ -631,7 +711,7 @@ function ReceiveItems(props) {
             >
               <TextField
                 required
-                disabled={selectedItem ? false : true}
+                disabled={true}
                 type="number"
                 label="Batch Number"
                 name={"batchNumber"}
@@ -663,7 +743,7 @@ function ReceiveItems(props) {
             >
               <TextField
                 required
-                disabled={selectedItem ? false : true}
+                disabled={true}
                 type="number"
                 label="LOT No"
                 name={"lotNo"}
@@ -699,7 +779,7 @@ function ReceiveItems(props) {
                   disabled={selectedItem ? false : true}
                   inputVariant="filled"
                   fullWidth
-                  format="dd/MM/yyyy"
+                  format="MM/dd/yyyy"
                   label="Expiry Date"
                   onChange={(val) => onChangeDate(val, "expiryDate")}
                   InputProps={{
@@ -723,11 +803,11 @@ function ReceiveItems(props) {
             >
               <TextField
                 required
-                disabled={selectedItem ? false : true}
+                disabled={true}
                 type="text"
                 label="Unit"
                 name={"unit"}
-                value={unit}
+                value={selectedItem && selectedItem.itemId.issueUnit}
                 onChange={onChangeValue}
                 className="textInputStyle"
                 variant="filled"
@@ -735,7 +815,7 @@ function ReceiveItems(props) {
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
-                error={unit === "" && isFormSubmitted}
+                // error={unit === "" && isFormSubmitted}
               />
             </div>
 
@@ -780,10 +860,10 @@ function ReceiveItems(props) {
             >
               <TextField
                 required
-                disabled={selectedItem ? false : true}
+                disabled={true}
                 label="Unit Discount"
                 name={"uniyDiscount"}
-                value={uniyDiscount}
+                value={selectedItem && selectedItem.itemId.issueUnit}
                 variant={"filled"}
                 onChange={onChangeValue}
                 className="textInputStyle"
@@ -791,7 +871,7 @@ function ReceiveItems(props) {
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
-                error={uniyDiscount === "" && isFormSubmitted}
+                // error={uniyDiscount === "" && isFormSubmitted}
               />
             </div>
 
@@ -802,9 +882,9 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              <TextField
+              {/* <TextField
                 required
-                disabled={selectedItem ? false : true}
+                disabled={true}
                 type="number"
                 label="Discount Amount"
                 name={"discountAmount"}
@@ -824,6 +904,30 @@ function ReceiveItems(props) {
                     evt.key === "+") &&
                     evt.preventDefault();
                 }}
+              /> */}
+
+              <CurrencyTextField
+                disabled
+                style={{ backgroundColor: "white", borderRadius: 5 }}
+                className="textInputStyle"
+                id="discountAmount"
+                label="Discount Amount"
+                name={"discountAmount"}
+                value={discountAmount}
+                onBlur={onChangeValue}
+                variant="filled"
+                textAlign="left"
+                InputProps={{
+                  className: classesForInput.input,
+                  classes: { input: classesForInput.input },
+                }}
+                InputLabelProps={{
+                  className: classesForInput.label,
+                  classes: { label: classesForInput.label },
+                }}
+                currencySymbol="JD"
+                outputFormat="number"
+                onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
               />
             </div>
           </div>
@@ -838,11 +942,11 @@ function ReceiveItems(props) {
             >
               <TextField
                 required
-                disabled={selectedItem ? false : true}
+                disabled={true}
                 type="number"
                 label="Tax %"
                 name={"tax"}
-                value={tax}
+                value={selectedItem && selectedItem.itemId.tax}
                 variant={"filled"}
                 onChange={onChangeValue}
                 className="textInputStyle"
@@ -850,7 +954,7 @@ function ReceiveItems(props) {
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
-                error={tax === "" && isFormSubmitted}
+                // error={tax === "" && isFormSubmitted}
                 onKeyDown={(evt) => {
                   (evt.key === "e" ||
                     evt.key === "E" ||
@@ -870,7 +974,7 @@ function ReceiveItems(props) {
             >
               <TextField
                 required
-                disabled={selectedItem ? false : true}
+                disabled={true}
                 type="number"
                 label="Tax Amount"
                 name={"taxAmount"}
@@ -896,13 +1000,13 @@ function ReceiveItems(props) {
 
           <div className="row">
             <div
-              className="col-md-3"
+              className="col-md-4"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
               }}
             >
-              <TextField
+              {/* <TextField
                 required
                 disabled={selectedItem ? false : true}
                 type="number"
@@ -924,17 +1028,41 @@ function ReceiveItems(props) {
                     evt.key === "+") &&
                     evt.preventDefault();
                 }}
+              /> */}
+              <CurrencyTextField
+                disabled
+                style={{ backgroundColor: "white", borderRadius: 5 }}
+                className="textInputStyle"
+                id="finalUnitPrice"
+                label="Final Unit Price"
+                name={"finalUnitPrice"}
+                // value={finalUnitPrice}
+                value={selectedItem && selectedItem.itemId.issueUnitCost}
+                onBlur={onChangeValue}
+                variant="filled"
+                textAlign="left"
+                InputProps={{
+                  className: classesForInput.input,
+                  classes: { input: classesForInput.input },
+                }}
+                InputLabelProps={{
+                  className: classesForInput.label,
+                  classes: { label: classesForInput.label },
+                }}
+                currencySymbol="JD"
+                outputFormat="number"
+                onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
               />
             </div>
 
             <div
-              className="col-md-3"
+              className="col-md-4"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
               }}
             >
-              <TextField
+              {/* <TextField
                 required
                 disabled={selectedItem ? false : true}
                 type="number"
@@ -956,17 +1084,41 @@ function ReceiveItems(props) {
                     evt.key === "+") &&
                     evt.preventDefault();
                 }}
+              /> */}
+
+              <CurrencyTextField
+                disabled
+                style={{ backgroundColor: "white", borderRadius: 5 }}
+                className="textInputStyle"
+                id="subTotal"
+                label="Sub Total"
+                name={"subTotal"}
+                value={subTotal}
+                onBlur={onChangeValue}
+                variant="filled"
+                textAlign="left"
+                InputProps={{
+                  className: classesForInput.input,
+                  classes: { input: classesForInput.input },
+                }}
+                InputLabelProps={{
+                  className: classesForInput.label,
+                  classes: { label: classesForInput.label },
+                }}
+                currencySymbol="JD"
+                outputFormat="number"
+                onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
               />
             </div>
 
             <div
-              className="col-md-3"
+              className="col-md-4"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
               }}
             >
-              <TextField
+              {/* <TextField
                 required
                 disabled={selectedItem ? false : true}
                 type="number"
@@ -988,10 +1140,34 @@ function ReceiveItems(props) {
                     evt.key === "+") &&
                     evt.preventDefault();
                 }}
+              /> */}
+
+              <CurrencyTextField
+                disabled
+                style={{ backgroundColor: "white", borderRadius: 5 }}
+                className="textInputStyle"
+                id="totalPrice"
+                label="Total Price"
+                name={"totalPrice"}
+                value={totalPrice}
+                onBlur={onChangeValue}
+                variant="filled"
+                textAlign="left"
+                InputProps={{
+                  className: classesForInput.input,
+                  classes: { input: classesForInput.input },
+                }}
+                InputLabelProps={{
+                  className: classesForInput.label,
+                  classes: { label: classesForInput.label },
+                }}
+                currencySymbol="JD"
+                outputFormat="number"
+                onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
               />
             </div>
 
-            <div
+            {/* <div
               className="col-md-3"
               style={{
                 ...styles.inputContainerForTextField,
@@ -1021,7 +1197,7 @@ function ReceiveItems(props) {
                     evt.preventDefault();
                 }}
               />
-            </div>
+            </div> */}
           </div>
 
           <div className="row">
@@ -1034,7 +1210,7 @@ function ReceiveItems(props) {
             >
               <TextField
                 required
-                disabled={selectedItem ? false : true}
+                disabled={true}
                 label="Invoice"
                 name={"invoice"}
                 value={invoice}
@@ -1058,7 +1234,7 @@ function ReceiveItems(props) {
             >
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DateTimePicker
-                  format="MM/dd/yyyy hh:mm a"
+                  format="MM/dd/yyyy HH:mm a"
                   required
                   inputVariant="filled"
                   disabled={selectedItem ? false : true}
@@ -1066,6 +1242,7 @@ function ReceiveItems(props) {
                   label="Date/Time Invoice (MM/DD/YYYY)"
                   className="textInputStyle"
                   onChange={(val) => onChangeDate(val, "date")}
+                  disableFuture
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
@@ -1086,7 +1263,7 @@ function ReceiveItems(props) {
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DateTimePicker
                   required
-                  format="MM/dd/yyyy hh:mm a"
+                  format="MM/dd/yyyy HH:mm a"
                   inputVariant="filled"
                   fullWidth
                   disabled={selectedItem ? false : true}

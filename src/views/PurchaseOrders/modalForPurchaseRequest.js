@@ -55,6 +55,16 @@ const stylesB = {
     height: "50px",
     outline: "none",
   },
+
+  stylesForActive: {
+    color: "white",
+    borderRadius: 5,
+    backgroundColor: "#2c6ddd",
+    width: "100px",
+    height: "35px",
+    outline: "none",
+    fontSize:'0.7rem'
+  },
 };
 
 const tableHeading = [
@@ -333,121 +343,137 @@ export default function PurchaseRequest(props) {
     <div>
       <div>
         <div>
-          <Table>
-            {tableHeading !== undefined ? (
-              <TableHead
-                className={classes["TableHeader"]}
-                style={{
-                  backgroundColor: "#2873cf",
-                }}
-              >
-                <TableRow>
-                  {tableHeading.map((prop, index) => {
+          {filteredRequests.length > 0 && props.selectedVendor ? (
+            <Table>
+              {tableHeading !== undefined ? (
+                <TableHead
+                  className={classes["TableHeader"]}
+                  style={{
+                    backgroundColor: "#2873cf",
+                  }}
+                >
+                  <TableRow>
+                    {tableHeading.map((prop, index) => {
+                      return (
+                        <>
+                          <TableCell
+                            className={classes.tableHeadCell}
+                            style={{
+                              color: "white",
+                              fontWeight: "700",
+                              textAlign: "center",
+                              borderTopLeftRadius: index === 0 ? 10 : 0,
+                              borderTopRightRadius:
+                                index === tableHeading.length - 1 ? 10 : 0,
+                            }}
+                            key={prop}
+                          >
+                            {prop}
+                          </TableCell>
+                        </>
+                      );
+                    })}
+                  </TableRow>
+                </TableHead>
+              ) : null}
+
+              <TableBody>
+                {filteredRequests &&
+                  filteredRequests.map((prop, index) => {
                     return (
                       <>
-                        <TableCell
-                          className={classes.tableHeadCell}
+                        <TableRow
+                          key={index}
+                          className={classes.tableBodyRow}
                           style={{
-                            color: "white",
-                            fontWeight: "700",
-                            textAlign: "center",
-                            borderTopLeftRadius: index === 0 ? 10 : 0,
-                            borderTopRightRadius:
-                              index === tableHeading.length - 1 ? 10 : 0,
+                            backgroundColor: "white",
                           }}
-                          key={prop}
                         >
-                          {prop}
-                        </TableCell>
+                          {tableDataKeys
+                            ? tableDataKeys.map((val, key) => {
+                                // console.log(key);
+                                if (val === "date") {
+                                  return (
+                                    <TableCell
+                                      className={classes.tableCell}
+                                      key={key}
+                                      style={{
+                                        textAlign: "center",
+                                      }}
+                                    >
+                                      {formatDate(prop[val])}
+                                    </TableCell>
+                                  );
+                                } else {
+                                  return (
+                                    <TableCell
+                                      className={classes.tableCell}
+                                      key={key}
+                                      // onClick={() => handleClick(prop, val)}
+                                      style={{
+                                        textAlign: "center",
+                                      }}
+                                    >
+                                      {Array.isArray(val)
+                                        ? prop[val[0]]
+                                          ? prop[val[0]][val[1]]
+                                          : null
+                                        : val.toLowerCase() === "timestamp"
+                                        ? new Intl.DateTimeFormat(
+                                            "en-US",
+                                            dateOptions
+                                          ).format(Date.parse(prop[val]))
+                                        : // : `${replaceSlugToTitle(prop[val])}`}
+                                          replaceSlugToTitle(prop[val])}
+                                    </TableCell>
+                                  );
+                                }
+                              })
+                            : null}
+                          <TableCell
+                            style={{
+                              cursor: "pointer",
+                            }}
+                            className={classes.tableCell}
+                            colSpan="2"
+                          >
+                            {checkAvailability(prop) ? (
+                              <span onClick={() => handleAdd(prop)}>
+                                <i
+                                  style={{ color: "blue" }}
+                                  className=" ml-10 zmdi zmdi-plus-circle zmdi-hc-3x"
+                                />
+                              </span>
+                            ) : (
+                              <span onClick={() => handleRemove(prop)}>
+                                <i
+                                  style={{ color: "blue" }}
+                                  className=" ml-10 zmdi zmdi-check zmdi-hc-3x"
+                                />
+                              </span>
+                            )}
+                          </TableCell>
+                        </TableRow>
                       </>
                     );
                   })}
-                </TableRow>
-              </TableHead>
-            ) : null}
-
-            <TableBody>
-              {filteredRequests &&
-                filteredRequests.map((prop, index) => {
-                  return (
-                    <>
-                      <TableRow
-                        key={index}
-                        className={classes.tableBodyRow}
-                        style={{
-                          backgroundColor: "white",
-                        }}
-                      >
-                        {tableDataKeys
-                          ? tableDataKeys.map((val, key) => {
-                              // console.log(key);
-                              if (val === "date") {
-                                return (
-                                  <TableCell
-                                    className={classes.tableCell}
-                                    key={key}
-                                    style={{
-                                      textAlign: "center",
-                                    }}
-                                  >
-                                    {formatDate(prop[val])}
-                                  </TableCell>
-                                );
-                              } else {
-                                return (
-                                  <TableCell
-                                    className={classes.tableCell}
-                                    key={key}
-                                    // onClick={() => handleClick(prop, val)}
-                                    style={{
-                                      textAlign: "center",
-                                    }}
-                                  >
-                                    {Array.isArray(val)
-                                      ? prop[val[0]]
-                                        ? prop[val[0]][val[1]]
-                                        : null
-                                      : val.toLowerCase() === "timestamp"
-                                      ? new Intl.DateTimeFormat(
-                                          "en-US",
-                                          dateOptions
-                                        ).format(Date.parse(prop[val]))
-                                      : // : `${replaceSlugToTitle(prop[val])}`}
-                                        replaceSlugToTitle(prop[val])}
-                                  </TableCell>
-                                );
-                              }
-                            })
-                          : null}
-                        <TableCell
-                          style={{
-                            cursor: "pointer",
-                          }}
-                          className={classes.tableCell}
-                          colSpan="2"
-                        >
-                          {checkAvailability(prop) ? (
-                            <span onClick={() => handleAdd(prop)}>
-                              <i
-                                style={{ color: "blue" }}
-                                className=" ml-10 zmdi zmdi-plus-circle zmdi-hc-3x"
-                              />
-                            </span>
-                          ) : (
-                            <span onClick={() => handleRemove(prop)}>
-                              <i
-                                style={{ color: "blue" }}
-                                className=" ml-10 zmdi zmdi-check zmdi-hc-3x"
-                              />
-                            </span>
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    </>
-                  );
-                })}
-            </TableBody>
-          </Table>
+              </TableBody>
+            </Table>
+          ) : props.selectedVendor && filteredRequests.length === 0 ? (
+            <h5
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+                color: "white",
+                fontWeight: "bold",
+              }}
+            >
+              No Purchase Request Found for that selected vendor
+            </h5>
+          ) : (
+            undefined
+          )}
         </div>
 
         {/* <div style={{ display: "flex", justifyContent: "flex-end" }}>
