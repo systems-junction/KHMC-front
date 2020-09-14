@@ -596,7 +596,7 @@ function AddEditPurchaseRequest(props) {
         }
 
         const params = {
-          requestNo,
+          // requestNo,
           generatedBy: currentUser.name,
           dateGenerated: new Date(),
           generated,

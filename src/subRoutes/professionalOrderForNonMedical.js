@@ -3,6 +3,7 @@ import { Router, Route, Switch, Redirect } from "react-router-dom";
 import NotFound from "../components/NotFound/NotFound";
 import ReplenishmentRequest from "../views/ProfessionalOrderForNonMedial/replenishmentRequestForBU";
 import AddEditReplenishmentRequest from "../views/ProfessionalOrderForNonMedial/addEditReplenishmentRequestForBU";
+import AddEditNonMedicalItem from "../views/ProfessionalOrderForNonMedial/addEditNonMedicalItem";
 import ReceiveItemsForBUInventory from "../views/ProfessionalOrderForNonMedial/receiveItemsForBUInventory";
 import EditRequestedItems from "../views/ProfessionalOrderForNonMedial/editRequestedItems";
 
@@ -26,6 +27,30 @@ class ItemRoutes extends React.Component {
           path={`${this.props.match.url}/addorder`}
           component={(props) => (
             <ReplenishmentRequest {...props} match={this.props.match} />
+          )}
+        />
+
+        <Route
+          exact
+          path={`${this.props.match.url}/addnonmedicalorder`}
+          component={(props) => (
+            <ReplenishmentRequest {...props} match={this.props.match} />
+          )}
+        />
+
+        <Route
+          exact
+          path={`${this.props.match.url}/addnonmedicalorder/add`}
+          component={(props) => (
+            <AddEditNonMedicalItem {...props} match={this.props.match} />
+          )}
+        />
+
+        <Route
+          exact
+          path={`${this.props.match.url}/addnonmedicalorder/edit`}
+          component={(props) => (
+            <AddEditNonMedicalItem {...props} match={this.props.match} />
           )}
         />
 

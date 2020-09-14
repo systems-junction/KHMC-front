@@ -342,7 +342,7 @@ export default function ReplenishmentRequest(props) {
   };
 
   function handleEdit(rec) {
-    let path = `professionalorder/edit`;
+    let path = `/home/wms/fus/professionalorder/addnonmedicalorder/edit`;
     props.history.push({
       pathname: path,
       state: {
@@ -394,7 +394,11 @@ export default function ReplenishmentRequest(props) {
         if (
           repRequest[i].status === "Delivery in Progress" ||
           repRequest[i].status === "pending_administration" ||
-          repRequest[i].status === "complete"
+          repRequest[i].status === "complete" ||
+          repRequest[i].status === "Received" ||
+          repRequest[i].status === "Partially Received"
+
+
         ) {
           temp.push(repRequest[i]);
         }
@@ -514,6 +518,28 @@ export default function ReplenishmentRequest(props) {
       state: { comingFor: "add", vendors, statues, items, buObj },
     });
   }
+
+
+
+  if (
+    props.history.location.pathname ===
+      "/home/wms/fus/professionalorder/addnonmedicalorder" &&
+    // items &&
+    buObj
+    //  &&
+    // statues &&
+    // vendors
+  ) {
+    let path = "/home/wms/fus/professionalorder/addnonmedicalorder/add";
+
+    props.history.replace({
+      pathname: path,
+      state: { comingFor: "add", vendors, statues, items, buObj },
+    });
+  }
+
+
+
   if (
     props.history.location.pathname !==
     "/home/wms/fus/professionalorder/addorder"
