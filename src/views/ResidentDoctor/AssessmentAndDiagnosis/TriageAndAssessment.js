@@ -133,7 +133,7 @@ function TriageAndAssessment(props) {
         if (selectedRec.triageAssessment) {
             selectedRec.triageAssessment.map(
                 (d) => (d.doctorName = d.requester ? d.requester.firstName + ' ' + d.requester.lastName : ''))
-            dispatch({ field: "triageAssessmentArray", value: selectedRec.triageAssessment })
+            dispatch({ field: "triageAssessmentArray", value: selectedRec.triageAssessment.reverse() })
         }
 
     }, [])

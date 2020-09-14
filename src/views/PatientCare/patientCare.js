@@ -923,7 +923,7 @@ function PatientCare(props) {
                         ? d.requester.firstName + " " + d.requester.lastName
                         : "")
                   );
-                  dispatch({ field: "pharmacyRequestArray", value: val });
+                  dispatch({ field: "pharmacyRequestArray", value: val.reverse() });
                 }
                 //  else if (key === "nurseService") {
                 //     dispatch({ field: "nurseService", value: val });
