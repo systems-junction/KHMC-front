@@ -491,12 +491,12 @@ function AddEditPatientListing(props) {
       // validateNumbers(age) &&
       gender &&
       gender.length > 0 &&
-      height &&
-      height != null &&
-      validateHeight(height) &&
-      weight &&
-      weight != null &&
-      validateWeight(weight) &&
+      // height &&
+      // height != null &&
+      // validateHeight(height) &&
+      // weight &&
+      // weight != null &&
+      // validateWeight(weight) &&
       email &&
       email.length > 0 &&
       validateEmail(email) &&
@@ -1613,7 +1613,7 @@ function AddEditPatientListing(props) {
                   name={'height'}
                   value={height}
                   onChange={onChangeValue}
-                  error={height === '' && isFormSubmitted}
+                  // error={height === '' && isFormSubmitted}
                   className='textInputStyle'
                   variant='filled'
                   InputProps={{
@@ -1621,11 +1621,11 @@ function AddEditPatientListing(props) {
                     classes: { input: classes.input },
                   }}
                 />
-                <ErrorMessage
+                {/* <ErrorMessage
                   name={height}
                   type='height'
                   isFormSubmitted={isFormSubmitted}
-                />
+                /> */}
               </div>
               <div
                 className='col-md-3 col-sm-3 col-3'
@@ -1640,7 +1640,7 @@ function AddEditPatientListing(props) {
                   name={'weight'}
                   value={weight}
                   onChange={onChangeValue}
-                  error={weight === '' && isFormSubmitted}
+                  // error={weight === '' && isFormSubmitted}
                   className='textInputStyle'
                   variant='filled'
                   InputProps={{
@@ -1648,11 +1648,11 @@ function AddEditPatientListing(props) {
                     classes: { input: classes.input },
                   }}
                 />
-                <ErrorMessage
+                {/* <ErrorMessage
                   name={weight}
                   type='weight'
                   isFormSubmitted={isFormSubmitted}
-                />
+                /> */}
               </div>
 
               <div
