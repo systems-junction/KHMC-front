@@ -58,7 +58,7 @@ export default function Ipr(props) {
             (d) => (d.date = d.dischargeRequest.dischargeMedication.date)
           )
           res.data.data[0].map((d) => (d.status = d.dischargeRequest.status))
-          setIpr(res.data.data[0])
+          setIpr(res.data.data[0].reverse())
           // setIpr(res.data.data.reverse())
         } else if (!res.data.success) {
           setErrorMsg(res.data.error)

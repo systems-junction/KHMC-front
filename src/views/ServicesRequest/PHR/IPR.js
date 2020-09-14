@@ -55,7 +55,7 @@ export default function EDR(props) {
         if (res.data.success) {
           console.log(res.data.data[0], 'ecr1')
           res.data.data[0].map((d) => (d.profileNo = d.patientData.profileNo))
-          setEdr(res.data.data[0])
+          setEdr(res.data.data[0].reverse())
         } else if (!res.data.success) {
           setErrorMsg(res.data.error)
           setOpenNotification(true)

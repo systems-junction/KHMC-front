@@ -136,7 +136,7 @@ function TriageAndAssessment(props) {
       );
       dispatch({
         field: "triageAssessmentArray",
-        value: selectedRec.triageAssessment,
+        value: selectedRec.triageAssessment.reverse(),
       });
     }
   }, []);
