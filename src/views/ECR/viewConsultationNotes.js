@@ -12,6 +12,7 @@ import Loader from "react-loader-spinner";
 import Back from "../../assets/img/Back_Arrow.png";
 import Header from "../../components/Header/Header";
 import business_Unit from "../../assets/img/PHR.png";
+import ConsultationIcon from "../../assets/img/Consultation_Notes.png";
 import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 import socketIOClient from "socket.io-client";
 
@@ -68,7 +69,7 @@ export default function EDR(props) {
           //   console.log(res.data, "consultation request");
           console.log(res.data.data, "consultation");
           //   res.data.data[0].map((d) => (d.profileNo = d.patientData.profileNo));
-          setConsultationNoteArray(res.data.data);
+          setConsultationNoteArray(res.data.data.reverse());
           console.log(consultationNoteArray, "consultation");
         } else if (!res.data.success) {
           setErrorMsg(res.data.error);
@@ -110,7 +111,7 @@ export default function EDR(props) {
       <div className="cPadding">
         <div className="subheader">
           <div>
-            <img src={business_Unit} />
+            <img src={ConsultationIcon} />
             <h4>Consultation Requests</h4>
           </div>
           {/* <div>
