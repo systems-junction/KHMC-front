@@ -64,19 +64,19 @@ const ErrorMsg = (props) => {
           : undefined
         : props.type && props.type === 'firstName' && props.isFormSubmitted
         ? !validateFirstName(props.name) && props.isFormSubmitted
-          ? 'Enter valid first name with english letters only (e.g: abc, pqrs xyz, etc)'
+          ? 'Enter valid first name with english letters only (e.g: John, Michael Jordan, etc)'
           : undefined
         : props.type && props.type === 'lastName' && props.isFormSubmitted
         ? !validateLastName(props.name) && props.isFormSubmitted
-          ? 'Enter valid last name with english letters only (e.g: abc, pqrs xyz, etc)'
+          ? 'Enter valid last name with english letters only (e.g: John, Michael Jordan, etc)'
           : undefined
         : props.type && props.type === 'emergencyName' && props.isFormSubmitted
         ? !validateEmergencyName(props.name) && props.isFormSubmitted
-          ? 'Enter valid name with english letters only (e.g: abc, pqrs xyz, etc)'
+          ? 'Enter valid name with english letters only (e.g: John, Michael Jordan, etc)'
           : undefined
         : props.type && props.type === 'vendor' && props.isFormSubmitted
         ? !validateInsuranceVendor(props.name) && props.isFormSubmitted
-          ? 'Enter valid Vendor name with english letters only (e.g: abc, pqrs xyz, etc)'
+          ? 'Enter valid Vendor name with english letters only (e.g: John, Michael Jordan, etc)'
           : undefined
         : props.type && props.type === 'nationName' && props.isFormSubmitted
         ? !validateNationName(props.name) && props.isFormSubmitted

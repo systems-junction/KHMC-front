@@ -391,3 +391,7 @@ export const getIPREDRById = `${baseUrl}/ipr/getipredrbyid`;
 
 // searchPatients
 export const searchPatients = `${baseUrl}/patient/searchpatient`;
+
+//http://localhost:4000/api/ipr/getallconsultations
+//get consultation
+export const getallconsultations = `${baseUrl}/ipr/getallconsultations`;

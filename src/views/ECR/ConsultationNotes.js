@@ -588,8 +588,8 @@ function LabRadRequest(props) {
   }
 
   const handleSearch = (e) => {
-    const a = e.target.value.replace(/[^\w\s]/gi, '')
-    setSearchQuery(a)
+    const a = e.target.value.replace(/[^\w\s]/gi, "");
+    setSearchQuery(a);
     if (a.length >= 5) {
       axios
         .get(getSearchedLaboratoryService + "/" + a)
@@ -667,7 +667,7 @@ function LabRadRequest(props) {
             status: labServiceStatus,
             comments: labComments,
             LRrequestNo: LRrequestNo,
-            view: true
+            view: true,
           },
         ],
       });
@@ -824,7 +824,7 @@ function LabRadRequest(props) {
             status: radioServiceStatus,
             comments: radioComments,
             RRrequestNo: RRrequestNo,
-            view: true
+            view: true,
           },
         ],
       });
@@ -1128,20 +1128,28 @@ function LabRadRequest(props) {
       },
     });
   };
-
-  function viewLabRadReport(rec) {
-    if (!rec.view) {
-    let path = `cn/viewReport`
+  const ViewConsultationNotes = () => {
+    let path = `cn/viewConsultationNotes`;
     props.history.push({
       pathname: path,
       state: {
-        selectedItem: rec,
+        selectedItem: selectedItem,
       },
     });
-  }
-  else{
-    viewItem(rec)
-  }
+  };
+
+  function viewLabRadReport(rec) {
+    if (!rec.view) {
+      let path = `cn/viewReport`;
+      props.history.push({
+        pathname: path,
+        state: {
+          selectedItem: rec,
+        },
+      });
+    } else {
+      viewItem(rec);
+    }
   }
 
   if (openNotification) {
@@ -1168,7 +1176,7 @@ function LabRadRequest(props) {
       <Header />
       <div className="cPadding">
         <div className="subheader">
-          <div>
+          <div style={{ width: "220%" }}>
             <img src={ConsultationIcon} />
             <h4>Consultation Notes</h4>
           </div>
@@ -1182,6 +1190,17 @@ function LabRadRequest(props) {
               color="primary"
             >
               Triage & Assessment
+            </Button>
+          </div>
+          <div style={{ textAlign: "right", marginLeft: "8px", width: "24%" }}>
+            <Button
+              // disabled={enableForm}
+              onClick={ViewConsultationNotes}
+              style={styles.stylesForButton}
+              variant="contained"
+              color="primary"
+            >
+              View All
             </Button>
           </div>
         </div>
@@ -1970,7 +1989,7 @@ function LabRadRequest(props) {
                   undefined
                 )}
               </div>
-            </div> /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/)
+            </div> /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/)
           ) : (
             //     : value === 5 ? (
             //         <div
