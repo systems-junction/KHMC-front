@@ -509,8 +509,8 @@ function AddEditPatientListing(props) {
       mobileNumber &&
       mobileNumber.length > 0 &&
       !validatePhone(mobileNumber) &&
-      age &&
-      age != null &&
+      // age &&
+      // age != null &&
       // validateNumbers(age) &&
       gender &&
       gender.length > 0 &&
@@ -1638,7 +1638,7 @@ function AddEditPatientListing(props) {
                   name={'age'}
                   value={age}
                   onChange={onChangeValue}
-                  error={age === '' && detailsForm}
+                  // error={age === '' && detailsForm}
                   className='textInputStyle'
                   variant='filled'
                   InputProps={{
@@ -1646,11 +1646,11 @@ function AddEditPatientListing(props) {
                     classes: { input: classes.input },
                   }}
                 />
-                <ErrorMessage
+                {/* <ErrorMessage
                   name={age}
                   // type='numbers'
                   isFormSubmitted={detailsForm}
-                />
+                /> */}
               </div>
               <div
                 className='col-md-3 col-sm-3 col-3'
@@ -2215,7 +2215,7 @@ function AddEditPatientListing(props) {
                       comingFor === 'add'
                         ? !(
                             validatePatientForm() &&
-                            // validatePaymentForm() &&
+                            validateEmergencyForm() && (validateInsuranceForm() || validateCashForm()) &&
                             isPatientSubmitted
                           )
                         : false
@@ -2240,7 +2240,7 @@ function AddEditPatientListing(props) {
                       comingFor === 'add'
                         ? !(
                             validatePatientForm() &&
-                            // validatePaymentForm() &&
+                            validateEmergencyForm() && (validateInsuranceForm() || validateCashForm()) &&
                             isPatientSubmitted
                           )
                         : false
@@ -2725,7 +2725,7 @@ function AddEditPatientListing(props) {
                       comingFor === 'add'
                         ? !(
                             validatePatientForm() &&
-                            // validatePaymentForm() &&
+                            validateEmergencyForm() && (validateInsuranceForm() || validateCashForm()) &&
                             isPatientSubmitted
                           )
                         : false
@@ -2750,7 +2750,7 @@ function AddEditPatientListing(props) {
                       comingFor === 'add'
                         ? !(
                             validatePatientForm() &&
-                            // validatePaymentForm() &&
+                            validateEmergencyForm() && (validateInsuranceForm() || validateCashForm()) &&
                             isPatientSubmitted
                           )
                         : false
@@ -3137,7 +3137,7 @@ function AddEditPatientListing(props) {
                       comingFor === 'add'
                         ? !(
                             validatePatientForm() &&
-                            // validatePaymentForm() &&
+                            validateEmergencyForm() && (validateInsuranceForm() || validateCashForm()) &&
                             isPatientSubmitted
                           )
                         : false
@@ -3160,7 +3160,7 @@ function AddEditPatientListing(props) {
                       comingFor === 'add'
                         ? !(
                             validatePatientForm() &&
-                            // validatePaymentForm() &&
+                            validateEmergencyForm() && (validateInsuranceForm() || validateCashForm()) &&
                             isPatientSubmitted
                           )
                         : false
