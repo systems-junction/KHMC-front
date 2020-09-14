@@ -6,6 +6,8 @@ import Paper from '@material-ui/core/Paper'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import MenuItem from '@material-ui/core/MenuItem'
+import DateFnsUtils from '@date-io/date-fns'
+import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
 import Button from '@material-ui/core/Button'
 import CurrencyTextField from '@unicef/material-ui-currency-textfield'
 import Fingerprint from '../../../assets/img/fingerprint.png'
@@ -146,15 +148,15 @@ const titles = [
 
 const genderArray = [
   {
-    key: 'Male' || 'male',
+    key: 'Male',
     value: 'Male',
   },
   {
-    key: 'female' || 'Female',
+    key: 'Female',
     value: 'Female',
   },
   {
-    key: 'Others' || 'others',
+    key: 'Others',
     value: 'Others',
   },
 ]
@@ -324,7 +326,8 @@ function AddEditPatientListing(props) {
     coverageTerms: '',
     payment: '',
     depositSlip: '',
-    DateTime: new Date().toISOString().substr(0, 10),
+    // DateTime: new Date().toISOString().substr(0, 10),
+    DateTime: new Date(),
     receiverName: cookie.load('current_user').name,
     // receiverName: '',
     // insuranceNo: "",
@@ -374,7 +377,8 @@ function AddEditPatientListing(props) {
     coverageTerms,
     payment,
     depositSlip,
-    DateTime = new Date().toISOString().substr(0, 10),
+    // DateTime = new Date().toISOString().substr(0, 10),
+    DateTime = new Date(),
     receiverName = cookie.load('current_user').name,
     // receiverName,
     // insuranceNo,
@@ -482,10 +486,10 @@ function AddEditPatientListing(props) {
       // validateInput(nationality) &&
       phoneNumber &&
       phoneNumber.length > 0 &&
-      // validateNumber(phoneNumber) &&
+      !validatePhone(phoneNumber) &&
       mobileNumber &&
       mobileNumber.length > 0 &&
-      // validateNumber(mobileNumber) &&
+      !validatePhone(mobileNumber) &&
       age &&
       age != null &&
       // validateNumbers(age) &&
@@ -523,7 +527,7 @@ function AddEditPatientListing(props) {
       validateEmergencyName(emergencyName) &&
       emergencyContactNo &&
       emergencyContactNo.length > 0 &&
-      // validateNumber(emergencyContactNo) &&
+      !validatePhone(emergencyContactNo) &&
       emergencyRelation &&
       emergencyRelation.length > 0
       // validateInput(emergencyRelation)
@@ -2303,7 +2307,25 @@ function AddEditPatientListing(props) {
                   ...styles.textFieldPadding,
                 }}
               >
-                <TextField
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <DateTimePicker
+                    // required
+                    disabled
+                    inputVariant='filled'
+                    fullWidth={true}
+                    label='Date/Time'
+                    format='MM/dd/yyyy HH:mm a'
+                    minDate={DateTime}
+                    // onChange={(val) => onChangeDate(val, 'DateTime')}
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                    style={{ borderRadius: '10px' }}
+                    value={DateTime}
+                  />
+                </MuiPickersUtilsProvider>
+                {/* <TextField
                   disabled={true}
                   variant='filled'
                   label='Date/Time'
@@ -2317,7 +2339,7 @@ function AddEditPatientListing(props) {
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
-                />
+                /> */}
               </div>
               <div
                 className='col-md-6 col-sm-6'

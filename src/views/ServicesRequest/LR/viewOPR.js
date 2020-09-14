@@ -328,7 +328,7 @@ function AddEditPurchaseRequest(props) {
   const [addRadioRequest, setaddRadioRequest] = useState(false)
   const [enableSave, setEnableSave] = useState(true)
   const [isLoading, setIsLoading] = useState(true)
-  const [labSaved, setLabSaved] = useState(true)
+  const [rowId, setRowId] = useState('')
 
   const [externalConsultant, setExternalConsultant] = useState('')
 
@@ -498,7 +498,12 @@ function AddEditPurchaseRequest(props) {
 
   function handleView(rec) {
     let path = `viewOPR/updatelr`
-    if (labSaved) {
+
+    console.log('rec', rec)
+    if (rec.serviceId === rowId) {
+      setOpenNotification(true)
+      setErrorMsg('Please save the new added lab service first')
+    } else {
       props.history.push({
         pathname: path,
         state: {
@@ -507,9 +512,6 @@ function AddEditPurchaseRequest(props) {
           comingFor: 'opr',
         },
       })
-    } else {
-      setOpenNotification(true)
-      setErrorMsg('Please save the lab service first')
     }
   }
 
@@ -725,9 +727,10 @@ function AddEditPurchaseRequest(props) {
     dispatch({ field: 'results', value: '' })
     dispatch({ field: 'sampleID', value: '' })
 
+    setRowId(labServiceId)
+
     setaddLabRequest(false)
     setEnableSave(false)
-    setLabSaved(false)
   }
 
   const saveLabReq = () => {
@@ -755,14 +758,13 @@ function AddEditPurchaseRequest(props) {
       _id: id,
       labRequest: labItems,
     }
-    // console.log("params", params);
+    console.log('params', params)
     axios
       .put(updateOPR, params)
       .then((res) => {
         if (res.data.success) {
           console.log('response after adding Lab Request', res.data)
           // props.history.goBack()
-          setLabSaved(true)
           props.history.push({
             pathname: 'viewOPR/success',
             state: {
