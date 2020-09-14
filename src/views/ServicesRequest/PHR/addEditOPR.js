@@ -310,7 +310,7 @@ function AddEditPatientListing(props) {
     height: '',
     weight: '',
     bloodGroup: '',
-    dob: '',
+    dob: new Date().toISOString().substr(0, 10),
     phoneNumber: '',
     mobileNumber: '',
     email: '',
@@ -580,6 +580,12 @@ function AddEditPatientListing(props) {
       //   )
     }
   }
+
+  const handleChangeDate = (value) => {
+    dispatch({ field: "dob", value: value.toISOString().substr(0, 10) });
+    calculate_age(value.toISOString().substr(0, 10));
+  };
+
 
   const handleAdd = () => {
     let formData = new FormData()
@@ -1508,25 +1514,25 @@ function AddEditPatientListing(props) {
                   ...styles.textFieldPadding,
                 }}
               >
-                <TextField
-                  required
-                  variant='filled'
-                  label='Date of birth'
-                  name={'dob'}
-                  value={dob}
-                  type='date'
-                  error={dob === '' && detailsForm}
-                  className='textInputStyle'
-                  onChange={(e) => onChangeValue(e)}
-                  InputLabelProps={{
-                    shrink: true,
-                    color: 'black',
-                  }}
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                />
+                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <DateTimePicker
+                    required
+                    inputVariant="filled"
+                    fullWidth={true}
+                    label="Date of birth"
+                    format="MM/dd/yyyy"
+                    // minDate={dob}
+                    error={dob === "" && detailsForm}
+                    onChange={(val) => handleChangeDate(val, "dob")}
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                    style={{ borderRadius: "10px" }}
+                    value={dob}
+                  />
+                </MuiPickersUtilsProvider>
+
                 <ErrorMessage name={dob} isFormSubmitted={detailsForm} />
               </div>
 
