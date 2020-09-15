@@ -313,7 +313,9 @@ function LabRadRequest(props) {
     requestType: "",
     section: "",
     code: [],
-    patientId: ''
+    patientId: '',
+    diagnosisArray:'',
+    medicationArray:''
   };
 
   function reducer(state, { field, value }) {
@@ -356,7 +358,9 @@ function LabRadRequest(props) {
     requestType,
     section,
     code,
-    patientId
+    patientId,
+    diagnosisArray,
+    medicationArray
   } = state;
 
   const onChangeValue = (e) => {
@@ -1149,6 +1153,8 @@ function LabRadRequest(props) {
 
 
   function handleAddPatient(i) {
+    dispatch({field:"diagnosisArray",value:""})
+    dispatch({field:"medicationArray",value:""})
     // setDialogOpen(true);
     console.log("selected banda : ", i);
     setPatientDetails(i);
@@ -1203,6 +1209,9 @@ function LabRadRequest(props) {
                         : "")
                   );
                   dispatch({ field: "residentNoteArray", value: val.reverse() });
+                  if(val && val.length > 0){
+                  dispatch({ field: "diagnosisArray", value: val[0].code });
+                  }
                 } else if (key === "pharmacyRequest") {
                   val.map(
                     (d) =>
@@ -1211,6 +1220,9 @@ function LabRadRequest(props) {
                         : "")
                   );
                   dispatch({ field: "pharmacyRequestArray", value: val.reverse() });
+                  if(val && val.length > 0){
+                  dispatch({ field: "medicationArray", value: val[0].medicine });
+                  }
                 }
                 //  else if (key === "nurseService") {
                 //     dispatch({ field: "nurseService", value: val });
@@ -1498,6 +1510,7 @@ function LabRadRequest(props) {
             </div>
 
             <div
+            className="row"
               style={{
                 marginTop: 10,
                 paddingLeft: 10,
@@ -1540,29 +1553,30 @@ function LabRadRequest(props) {
                 </span>
               </div>
 
-              <div className={"col-md-3 col-sm-3 col-3"} style={{}}>
-                {patientDetails &&
-                  patientDetails.drugAllergy.map((drug) => {
-                    return <h6 style={styles.textStyles}>{drug}</h6>;
-                  })}
+              <div className={'col-md-3 col-sm-3 col-3'} style={styles.textStyles}>
+                {"None"}
               </div>
 
-              <div className={"col-md-3 col-sm-3 col-3"} style={{}}>
-                {patientDetails &&
-                  patientDetails.drugAllergy.map((drug, index) => {
+              <div className={'col-md-3 col-sm-3 col-3'} style={styles.textStyles}>
+                {medicationArray ? 
+                  medicationArray.map((drug, index) => {
                     return (
-                      <h6 style={styles.textStyles}>Medication {index + 1}</h6>
-                    );
-                  })}
+                    <h6 style={styles.textStyles}>{drug.medicineName}</h6>
+                    )
+                  }) :
+                  "None"
+                }
               </div>
 
-              <div className={"col-md-3 col-sm-3 col-3"} style={{}}>
-                {patientDetails &&
-                  patientDetails.drugAllergy.map((drug, index) => {
+              <div className={'col-md-3 col-sm-3 col-3'} style={styles.textStyles}>
+                {diagnosisArray ?
+                  diagnosisArray.map((drug, index) => {
                     return (
-                      <h6 style={styles.textStyles}>Diagnosis {index + 1}</h6>
-                    );
-                  })}
+                      <h6 style={styles.textStyles}>{drug}</h6>
+                    )
+                  }) :
+                  "None"
+                }
               </div>
             </div>
           </div>
