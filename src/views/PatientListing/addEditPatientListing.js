@@ -8,7 +8,8 @@ import Tab from '@material-ui/core/Tab'
 import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
 import DateFnsUtils from '@date-io/date-fns'
-import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
+import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
+import { DateTimePicker } from '@material-ui/pickers'
 import Fingerprint from '../../assets/img/fingerprint.png'
 import BarCode from '../../assets/img/Bar Code.png'
 import ErrorMessage from '../../components/ErrorMessage/errorMessage'
@@ -289,7 +290,7 @@ const useStyles = makeStyles((theme) => ({
       borderBottomColor: 'black',
       boxShadow: 'none',
     },
-    '&:focused': {
+    '&:focus': {
       boxShadow: 'none',
     },
   },
@@ -305,6 +306,10 @@ const useStyles = makeStyles((theme) => ({
     '& .Mui-disabled': {
       backgroundColor: 'white',
       color: 'gray',
+    },
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
     },
   },
 }))
@@ -325,7 +330,7 @@ function AddEditPatientListing(props) {
     height: '',
     weight: '',
     bloodGroup: '',
-    dob: '',
+    dob: new Date().toISOString().substr(0, 10),
     phoneNumber: '',
     mobileNumber: '',
     email: '',
@@ -446,7 +451,7 @@ function AddEditPatientListing(props) {
   const [isPatientSubmitted, setIsPatientSubmitted] = useState(false)
   const [enableForm, setenableForm] = useState(true)
   const [enableNext, setenableNext] = useState(true)
-  const [coPaymentField, setCoPaymentField] = useState(true)
+  const [coPaymentField, setCoPaymentField] = useState(false)
   const [detailsForm, setDetailsForm] = useState(false)
   const [emergencyForm, setEmergencyForm] = useState(false)
   const [paymentForm, setPaymentForm] = useState(false)
@@ -597,6 +602,11 @@ function AddEditPatientListing(props) {
     }
   }
 
+  const handleChangeDate = (value) => {
+    dispatch({ field: 'dob', value: value.toISOString().substr(0, 10) })
+    calculate_age(value.toISOString().substr(0, 10))
+  }
+
   const handleAdd = () => {
     let formData = new FormData()
     if (slipUpload) {
@@ -673,7 +683,7 @@ function AddEditPatientListing(props) {
         .catch((e) => {
           console.log('error after adding patient details', e)
           setOpenNotification(true)
-          setErrorMsg('Patient with same MRN already exists')
+          setErrorMsg('Patient already exists')
         })
     } else {
       setOpenNotification(true)
@@ -756,7 +766,9 @@ function AddEditPatientListing(props) {
             if (!searchActivated) {
               props.history.push({
                 pathname: 'success',
-                state: { message: 'Updated successfully' },
+                state: {
+                  message: `Details of Patient with MRN ${res.data.data.profileNo} Updated Successfully`,
+                },
               })
             }
           } else if (!res.data.success) {
@@ -998,7 +1010,26 @@ function AddEditPatientListing(props) {
     dispatch({ field: 'mobileNumber', value: value })
   }
 
+  const onChangeBloodGroup = (e) => {
+    dispatch({
+      field: e.target.name,
+      value: e.target.value,
+    })
+  }
+
   const onChangeValue = (e) => {
+    var pattern = /^[a-zA-Z ]*$/
+    if (
+      e.target.name === 'firstName' ||
+      e.target.name === 'lastName' ||
+      e.target.name === 'emergencyName' ||
+      e.target.name === 'depositorName'
+    ) {
+      if (pattern.test(e.target.value) === false) {
+        return
+      }
+    }
+
     if (
       e.target.name === 'email'
       // e.target.name === 'phoneNumber' ||
@@ -1033,7 +1064,9 @@ function AddEditPatientListing(props) {
     if (e.target.name === 'coverageTerms' && e.target.value === 'coPayment') {
       setCoPaymentField(true)
       console.log(e.target.name, e.target.value)
-    } else {
+    }
+    if (e.target.name === 'coverageTerms' && e.target.value === 'fullPayment') {
+      dispatch({ field: 'payment', value: '' })
       setCoPaymentField(false)
     }
 
@@ -1556,25 +1589,26 @@ function AddEditPatientListing(props) {
                   ...styles.textFieldPadding,
                 }}
               >
-                <TextField
-                  required
-                  variant='filled'
-                  label='Date of birth'
-                  name={'dob'}
-                  value={dob}
-                  type='date'
-                  error={dob === '' && detailsForm}
-                  className='textInputStyle'
-                  onChange={(e) => onChangeValue(e)}
-                  InputLabelProps={{
-                    shrink: true,
-                    color: 'black',
-                  }}
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                />
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <DatePicker
+                    required
+                    inputVariant='filled'
+                    fullWidth={true}
+                    label='Date of birth'
+                    format='MM/dd/yyyy'
+                    // minDate={dob}
+
+                    error={dob === '' && detailsForm}
+                    onChange={(val) => handleChangeDate(val, 'dob')}
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                    style={{ borderRadius: '10px' }}
+                    value={dob}
+                  />
+                </MuiPickersUtilsProvider>
+
                 <ErrorMessage name={dob} isFormSubmitted={detailsForm} />
               </div>
 
@@ -1720,7 +1754,7 @@ function AddEditPatientListing(props) {
                   id='bloodGroup'
                   name='bloodGroup'
                   value={bloodGroup}
-                  onChange={onChangeValue}
+                  onChange={onChangeBloodGroup}
                   // error={bloodGroup === '' && isFormSubmitted}
                   label='Blood Group'
                   variant='filled'
@@ -2215,7 +2249,8 @@ function AddEditPatientListing(props) {
                       comingFor === 'add'
                         ? !(
                             validatePatientForm() &&
-                            validateEmergencyForm() && (validateInsuranceForm() || validateCashForm()) &&
+                            validateEmergencyForm() &&
+                            (validateInsuranceForm() || validateCashForm()) &&
                             isPatientSubmitted
                           )
                         : false
@@ -2240,7 +2275,8 @@ function AddEditPatientListing(props) {
                       comingFor === 'add'
                         ? !(
                             validatePatientForm() &&
-                            validateEmergencyForm() && (validateInsuranceForm() || validateCashForm()) &&
+                            validateEmergencyForm() &&
+                            (validateInsuranceForm() || validateCashForm()) &&
                             isPatientSubmitted
                           )
                         : false
@@ -2725,7 +2761,8 @@ function AddEditPatientListing(props) {
                       comingFor === 'add'
                         ? !(
                             validatePatientForm() &&
-                            validateEmergencyForm() && (validateInsuranceForm() || validateCashForm()) &&
+                            validateEmergencyForm() &&
+                            (validateInsuranceForm() || validateCashForm()) &&
                             isPatientSubmitted
                           )
                         : false
@@ -2750,7 +2787,8 @@ function AddEditPatientListing(props) {
                       comingFor === 'add'
                         ? !(
                             validatePatientForm() &&
-                            validateEmergencyForm() && (validateInsuranceForm() || validateCashForm()) &&
+                            validateEmergencyForm() &&
+                            (validateInsuranceForm() || validateCashForm()) &&
                             isPatientSubmitted
                           )
                         : false
@@ -2785,6 +2823,7 @@ function AddEditPatientListing(props) {
                 >
                   <TextField
                     label='Insurance Number'
+                    type='number'
                     name={'insuranceNo'}
                     value={insuranceNo}
                     onChange={onChangeValue}
@@ -3137,7 +3176,8 @@ function AddEditPatientListing(props) {
                       comingFor === 'add'
                         ? !(
                             validatePatientForm() &&
-                            validateEmergencyForm() && (validateInsuranceForm() || validateCashForm()) &&
+                            validateEmergencyForm() &&
+                            (validateInsuranceForm() || validateCashForm()) &&
                             isPatientSubmitted
                           )
                         : false
@@ -3160,7 +3200,8 @@ function AddEditPatientListing(props) {
                       comingFor === 'add'
                         ? !(
                             validatePatientForm() &&
-                            validateEmergencyForm() && (validateInsuranceForm() || validateCashForm()) &&
+                            validateEmergencyForm() &&
+                            (validateInsuranceForm() || validateCashForm()) &&
                             isPatientSubmitted
                           )
                         : false
@@ -3187,13 +3228,24 @@ function AddEditPatientListing(props) {
           success={successMsg}
         />
 
-        <div style={{ marginBottom: 20, marginTop: 50 }}>
-          <img
+         <div style={{ marginBottom: 40, marginTop: 0, paddingLeft: 10 }}>
+         {/* <img
             onClick={onTabNavigation}
             src={Back_Arrow}
-            style={{ width: 45, height: 35, cursor: 'pointer' }}
-          />
+            style={{ width: 45, height: 35, cursor: "pointer" }}
+          /> */}
+
+          <Button
+            style={styles.stylesForButton}
+            //disabled={!validateFormType1()}
+            onClick={onTabNavigation}
+            variant="contained"
+            color="primary"
+          >
+            Cancel
+          </Button>
         </div>
+
       </div>
     </div>
   )

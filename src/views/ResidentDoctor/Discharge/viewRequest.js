@@ -53,47 +53,6 @@ const styles = {
     fontWeight: '700',
   },
 }
-const stylesB = {
-  stylesForActive: {
-    verticalAlign: 'center',
-    fontSize: '0.62rem',
-    color: 'white',
-    cursor: 'pointer',
-    borderRadius: 10,
-    background: '#2c6ddd',
-    width: '100px',
-    height: '45px',
-    outline: 'none',
-    boxShadow: 'none',
-    // paddingBottom:"0.5rem",
-    // display:'flex',
-    // alignItems:'flex-start',
-  },
-  stylesForInActive: {
-    verticalAlign: 'center',
-    fontSize: '0.62rem',
-    color: 'white',
-    cursor: 'pointer',
-    borderRadius: 10,
-    background: '#845DC2',
-    width: '100px',
-    height: '45px',
-    outline: 'none',
-    boxShadow: 'none',
-  },
-  stylesForReceived: {
-    verticalAlign: 'center',
-    fontSize: '0.62rem',
-    color: 'white',
-    cursor: 'pointer',
-    borderRadius: 10,
-    background: '#845DC2',
-    width: '100px',
-    height: '45px',
-    boxShadow: 'none',
-    outline: 'none',
-  },
-}
 
 const useStyles = makeStyles(styles)
 
@@ -461,6 +420,19 @@ export default function EdrRequest(props) {
     return capitilizeLetter(val)
   }
 
+  const formatDate = (date) => {
+    const d = new Date(date)
+    return (
+      d.getDate() +
+      '/' +
+      (d.getMonth() + 1) +
+      '/' +
+      d.getFullYear() +
+      ' ' +
+      d.toLocaleTimeString()
+    )
+  }
+
   return (
     <Dialog
       onClose={() => props.viewItem('')}
@@ -488,7 +460,7 @@ export default function EdrRequest(props) {
                     disabled={true}
                     label='Date'
                     name={'date'}
-                    value={props.item.date}
+                    value={formatDate(props.item.date)}
                     className='textInputStyle'
                     variant='filled'
                     InputProps={{
@@ -676,23 +648,21 @@ export default function EdrRequest(props) {
             </div>
           </div>
           <div
-            className='container'
+            className='container-fluid'
             // style={styles.inputContainerForTextField}
           >
             {props.item.medicine ? (
               <div>
-                <InputLabel style={styles.styleForLabel} id='generated-label'>
+                {/* <InputLabel style={styles.styleForLabel} id='generated-label'>
                   Your PHR Medicine
-                </InputLabel>{' '}
+                </InputLabel>{' '} */}
                 {props.item.medicine ? (
                   <CustomTable
                     tableData={props.item.medicine}
                     tableDataKeys={tableDataKeysForPHR}
                     tableHeading={tableHeadingForPHR}
-                    // handleView={viewItem}
-                    // action={actions}
                     borderBottomColor={'#60d69f'}
-                    // borderBottomWidth={20}
+                    borderBottomWidth={20}
                   />
                 ) : (
                   undefined
@@ -702,25 +672,9 @@ export default function EdrRequest(props) {
               undefined
             )}
           </div>
-          {/* <div className="row">
-            <div
-              className="col-md-6 col-sm-6 col-6"
-              style={styles.inputContainerForTextField}
-            >
-              {props.item.serviceCode ? (
-                <div>
-                  <InputLabel style={styles.styleForLabel} id="generated-label">
-                    Service Code
-                  </InputLabel>
-                  <li> {props.item.medicine}</li>
-                </div>
-              ) : (
-                undefined
-              )}
-            </div>
-          </div> */}
+          {/* </div> */}
 
-          <div className='row'>
+          {/* <div className='row'>
             <div
               className='col-md-12 col-sm-12 col-12 d-flex justify-content-center text-center'
               style={styles.inputContainerForTextField}
@@ -736,7 +690,7 @@ export default function EdrRequest(props) {
                 undefined
               )}
             </div>
-          </div>
+          </div> */}
 
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <div style={{ marginTop: '2%', marginBottom: '2%' }}>

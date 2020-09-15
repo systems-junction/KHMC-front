@@ -185,16 +185,12 @@ export default function EdrRequest(props) {
   const [id, setId] = useState("");
   const [requestType, setrequestType] = useState("");
   const [patientId, setpatientId] = useState("");
-  // const [consultationNotes, setconsultationNotes] = useState("");
 
   const onChangeValue = (e) => {
     dispatch({ field: e.target.name, value: e.target.value });
   };
 
   useEffect(() => {
-    console.log(props.item, "Update Data");
-    console.log(props.patientId, "patient id");
-
     setpatientId(props.patientId);
     setitemID(props.item._id);
 
@@ -514,6 +510,7 @@ export default function EdrRequest(props) {
                 InputProps={{
                   className: classes.input,
                   classes: { input: classes.input },
+                  disableUnderline:true
                 }}
               />
             </div>
@@ -538,6 +535,7 @@ export default function EdrRequest(props) {
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
+                      disableUnderline:true
                     }}
                   />
                 </div>
@@ -563,28 +561,11 @@ export default function EdrRequest(props) {
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
+                      disableUnderline:true
                     }}
                   />
                 </div>
               ) : (
-                //  : props.item.consultationNotes ? (
-                //   <div>
-                //     <TextField
-                //       required
-                //       // disabled={true}
-                //       label="Doctor Notes"
-                //       name={"consultationNotes"}
-                //       value={props.item.consultationNotes}
-                //       className="textInputStyle"
-                //       rows={4}
-                //       variant="filled"
-                //       InputProps={{
-                //         className: classes.input,
-                //         classes: { input: classes.input },
-                //       }}
-                //     />
-                //   </div>
-                //  )
                 undefined
               )}
             </div>
@@ -623,7 +604,6 @@ export default function EdrRequest(props) {
             >
               <Button
                 style={styles.stylesForButton}
-                //disabled={!validateFormType1()}
                 onClick={handleSubmit}
                 variant="contained"
                 color="primary"

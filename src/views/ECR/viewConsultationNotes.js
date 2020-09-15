@@ -127,7 +127,7 @@ export default function EDR(props) {
             flexDirection: "column",
           }}
         >
-          {consultationNoteArray ? (
+          {consultationNoteArray && consultationNoteArray.length !== " " ? (
             <div>
               <div>
                 <CustomTable
@@ -154,8 +154,39 @@ export default function EDR(props) {
               <Notification msg={errorMsg} open={openNotification} />
             </div>
           ) : (
-            <div className="LoaderStyle">
-              <Loader type="TailSpin" color="red" height={50} width={50} />
+            // <h3
+            //   style={{
+            //     color: "white",
+            //     textAlign: "center",
+            //     width: "100%",
+            //     position: "absolute",
+            //   }}
+            // >
+            //   Opps...No Data Found
+            // </h3>
+            // <div className="LoaderStyle">
+            //   <Loader type="TailSpin" color="red" height={50} width={50} />
+            // </div>
+            <div className="row " style={{ marginTop: "25px" }}>
+              <div className="col-11">
+                <h3
+                  style={{
+                    color: "white",
+                    textAlign: "center",
+                    width: "100%",
+                    position: "absolute",
+                  }}
+                >
+                  Opps...No Data Found
+                </h3>
+              </div>
+              <div className="col-1" style={{ marginTop: 45 }}>
+                <img
+                  onClick={() => props.history.goBack()}
+                  src={Back}
+                  style={{ maxWidth: "60%", height: "auto", cursor: "pointer" }}
+                />
+              </div>
             </div>
           )}
         </div>

@@ -11,6 +11,8 @@ import {
   uploadsUrl,
   updateLRByIdURL,
 } from '../../../public/endpoins'
+import DateFnsUtils from '@date-io/date-fns'
+import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
 import cookie from 'react-cookies'
 import Header from '../../../components/Header/Header'
 import business_Unit from '../../../assets/img/Out Patient.png'
@@ -49,15 +51,15 @@ const styles = {
     padding: '20px',
   },
   inputContainerForTextField: {
-    marginTop: 6,
+    marginTop: 10,
   },
 
   inputContainerForDropDown: {
     marginTop: 6,
   },
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
   input: {
     display: 'none',
@@ -199,6 +201,7 @@ function AddEditPurchaseRequest(props) {
             Object.entries(res.data.data).map(([key, val]) => {
               if (val && typeof val === 'object') {
                 if (key === 'serviceId') {
+                  console.log('sxervice Id', val)
                   dispatch({ field: 'name', value: val.name })
                   dispatch({ field: 'price', value: val.price })
                 }
@@ -206,9 +209,20 @@ function AddEditPurchaseRequest(props) {
                 if (key === 'date') {
                   dispatch({
                     field: 'date',
-                    value: new Date(val).toISOString().substr(0, 10),
+                    value: new Date(val).toISOString(),
                   })
                 } else {
+                  // if (key === 'status') {
+                  //   if (val === 'pending') {
+                  //     let p = 'None'
+                  //     val = p
+                  //     dispatch({ field: 'status', value: p })
+                  //     console.log('====================================')
+                  //     console.log(p)
+                  //     console.log('====================================')
+                  //   }
+                  // }
+
                   dispatch({ field: key, value: val })
                 }
               }
@@ -275,6 +289,12 @@ function AddEditPurchaseRequest(props) {
   }
 
   useEffect(() => {
+    // console.log("selected", props.history.location.state.selectedItem);
+
+    // if (props.history.location.state.selectedItem.serviceId === "") {
+    //   dispatch({ field: "status", value: "" });
+    // }
+
     setCurrentUser(cookie.load('current_user'))
     getLRByIdURI(props.history.location.state.selectedItem._id)
 
@@ -296,6 +316,10 @@ function AddEditPurchaseRequest(props) {
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
+
+  // const onSampleIdEntered = () => {
+  //   dispatch({ field: 'status', value: 'pending' })
+  // }
 
   const onSlipUpload = (event) => {
     var file = event.target.files[0]
@@ -616,24 +640,26 @@ function AddEditPurchaseRequest(props) {
                       ...styles.textFieldPadding,
                     }}
                   >
-                    <TextField
-                      // disabled={false}
-                      variant='filled'
-                      label='Date/Time'
-                      name={'date'}
-                      value={date}
-                      type='date'
-                      className='textInputStyle'
-                      // onChange={(val) => onChangeValue(val, 'DateTime')}
-                      InputLabelProps={{
-                        shrink: true,
-                        color: 'black',
-                      }}
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                      }}
-                    />
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                      <DateTimePicker
+                        required
+                        disabled={true}
+                        inputVariant='filled'
+                        fullWidth={true}
+                        label='Date/Time'
+                        format='MM/dd/yyyy HH:mm a'
+                        // minDate={dob}
+
+                        // error={dob === '' && detailsForm}
+                        // onChange={(val) => handleChangeDate(val, 'dob')}
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                        style={{ borderRadius: '10px' }}
+                        value={date}
+                      />
+                    </MuiPickersUtilsProvider>
                   </div>
                   <div
                     className='col-md-6 col-sm-6 col-6'
@@ -648,6 +674,7 @@ function AddEditPurchaseRequest(props) {
                       label='Sample ID'
                       name={'sampleId'}
                       value={sampleId}
+                      // onBlur={onSampleIdEntered}
                       type='text'
                       className='textInputStyle'
                       onChange={onChangeValue}

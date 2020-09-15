@@ -56,7 +56,7 @@ export default function EDR(props) {
           // res.data.data.map((d) => (d.pharmacyRequest = d.pharmacyRequest[0]))
           // res.data.data.map((d) => (d.profileNo = d.patientId.profileNo))
           // res.data.data.map((d) => (d.date = d.pharmacyRequest.date))
-          res.data.data.map((d) => (d.createdAt = d.patientId.createdAt))
+          // res.data.data.map((d) => (d.createdAt = d.patientId.createdAt));
           // res.data.data.map((d) => (d.requestNo = d.pharmacyRequest._id))
           setEdr(res.data.data.reverse())
         } else if (!res.data.success) {
@@ -123,7 +123,7 @@ export default function EDR(props) {
             flexDirection: 'column',
           }}
         >
-          {Edr ? (
+          {Edr !== ' ' ? (
             <div>
               <div>
                 <CustomTable
@@ -150,8 +150,29 @@ export default function EDR(props) {
               <Notification msg={errorMsg} open={openNotification} />
             </div>
           ) : (
-            <div className='LoaderStyle'>
-              <Loader type='TailSpin' color='red' height={50} width={50} />
+            // <div className='LoaderStyle'>
+            //   <Loader type='TailSpin' color='red' height={50} width={50} />
+            // </div>
+            <div className='row ' style={{ marginTop: '25px' }}>
+              <div className='col-11'>
+                <h3
+                  style={{
+                    color: 'white',
+                    textAlign: 'center',
+                    width: '100%',
+                    position: 'absolute',
+                  }}
+                >
+                  Opps...No Data Found
+                </h3>
+              </div>
+              <div className='col-1' style={{ marginTop: 45 }}>
+                <img
+                  onClick={() => props.history.goBack()}
+                  src={Back_Arrow}
+                  style={{ maxWidth: '60%', height: 'auto', cursor: 'pointer' }}
+                />
+              </div>
             </div>
           )}
         </div>

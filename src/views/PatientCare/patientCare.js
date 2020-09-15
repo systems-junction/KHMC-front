@@ -268,6 +268,8 @@ function PatientCare(props) {
     doctor: cookie.load("current_user").name,
 
     pharmacyRequestArray: "",
+    c:'',
+    diagnosisArray:''
   };
 
   function reducer(state, { field, value }) {
@@ -312,6 +314,8 @@ function PatientCare(props) {
     doctor = cookie.load("current_user").name,
 
     pharmacyRequestArray,
+    medicationArray,
+    diagnosisArray
   } = state;
 
   const onChangeValue = (e) => {
@@ -860,6 +864,8 @@ function PatientCare(props) {
   }
 
   function handleAddPatient(i) {
+    dispatch({field:"diagnosisArray",value:""})
+    dispatch({field:"medicationArray",value:""})
     // setDialogOpen(true);
     console.log("selected banda : ", i);
     setPatientDetails(i);
@@ -906,17 +912,13 @@ function PatientCare(props) {
                 //         }
                 //     });
                 //     dispatch({ field: "consultationNoteArray", value: val });
-                // } else if (key === "residentNotes") {
-                //     Object.entries(val).map(([key1, val1]) => {
-                //         if (key1 == "doctor") {
-                //             dispatch({ field: "doctor", value: val1._id });
-                //         } else {
-                //             dispatch({ field: key1, value: val1 });
-                //         }
-                //     });
-                //     dispatch({ field: "residentNoteArray", value: val });
-                // } else
-                if (key === "pharmacyRequest") {
+                // } 
+                if (key === "residentNotes") {
+                  if(val && val.length > 0){
+                  dispatch({ field: "diagnosisArray", value: val.reverse()[0].code });
+                  }
+                } 
+                else if (key === "pharmacyRequest") {
                   val.map(
                     (d) =>
                       (d.doctorName = d.requester
@@ -924,6 +926,9 @@ function PatientCare(props) {
                         : "")
                   );
                   dispatch({ field: "pharmacyRequestArray", value: val.reverse() });
+                  if(val && val.length > 0){
+                  dispatch({ field: "medicationArray", value: val[0].medicine });
+                  }
                 }
                 //  else if (key === "nurseService") {
                 //     dispatch({ field: "nurseService", value: val });
@@ -1191,6 +1196,7 @@ function PatientCare(props) {
             </div>
 
             <div
+            className="row"
               style={{
                 marginTop: 10,
                 paddingLeft: 10,
@@ -1233,29 +1239,30 @@ function PatientCare(props) {
                 </span>
               </div>
 
-              <div className={"col-md-3 col-sm-3 col-3"} style={{}}>
-                {patientDetails &&
-                  patientDetails.drugAllergy.map((drug) => {
-                    return <h6 style={styles.textStyles}>{drug}</h6>;
-                  })}
+              <div className={'col-md-3 col-sm-3 col-3'} style={styles.textStyles}>
+                {"None"}
               </div>
 
-              <div className={"col-md-3 col-sm-3 col-3"} style={{}}>
-                {patientDetails &&
-                  patientDetails.drugAllergy.map((drug, index) => {
+              <div className={'col-md-3 col-sm-3 col-3'} style={styles.textStyles}>
+                {medicationArray ? 
+                  medicationArray.map((drug, index) => {
                     return (
-                      <h6 style={styles.textStyles}>Medication {index + 1}</h6>
-                    );
-                  })}
+                    <h6 style={styles.textStyles}>{drug.medicineName}</h6>
+                    )
+                  }) :
+                  "None"
+                }
               </div>
 
-              <div className={"col-md-3 col-sm-3 col-3"} style={{}}>
-                {patientDetails &&
-                  patientDetails.drugAllergy.map((drug, index) => {
+              <div className={'col-md-3 col-sm-3 col-3'} style={styles.textStyles}>
+                {diagnosisArray ?
+                  diagnosisArray.map((drug, index) => {
                     return (
-                      <h6 style={styles.textStyles}>Diagnosis {index + 1}</h6>
-                    );
-                  })}
+                      <h6 style={styles.textStyles}>{drug}</h6>
+                    )
+                  }) :
+                  "None"
+                }
               </div>
             </div>
           </div>

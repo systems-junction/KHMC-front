@@ -5,8 +5,6 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 import { makeStyles } from '@material-ui/core/styles'
-import InputLabel from '@material-ui/core/InputLabel'
-import capitilizeLetter from '../../../public/capitilizeLetter'
 import cookie from 'react-cookies'
 import CustomTable from '../../../components/Table/Table'
 import TextField from '@material-ui/core/TextField'
@@ -26,7 +24,6 @@ const tableDataKeysForPHR = [
   'frequency',
   'duration',
 ]
-// const actions = { view: false };
 
 const styles = {
   inputContainer: {
@@ -54,44 +51,6 @@ const styles = {
   },
   styleForLabel: {
     fontWeight: '700',
-  },
-}
-const stylesB = {
-  stylesForActive: {
-    verticalAlign: 'center',
-    fontSize: '0.62rem',
-    color: 'white',
-    cursor: 'pointer',
-    borderRadius: 10,
-    background: '#2c6ddd',
-    width: '100px',
-    height: '45px',
-    outline: 'none',
-    boxShadow: 'none',
-  },
-  stylesForInActive: {
-    verticalAlign: 'center',
-    fontSize: '0.62rem',
-    color: 'white',
-    cursor: 'pointer',
-    borderRadius: 10,
-    background: '#845DC2',
-    width: '100px',
-    height: '45px',
-    outline: 'none',
-    boxShadow: 'none',
-  },
-  stylesForReceived: {
-    verticalAlign: 'center',
-    fontSize: '0.62rem',
-    color: 'white',
-    cursor: 'pointer',
-    borderRadius: 10,
-    background: '#845DC2',
-    width: '100px',
-    height: '45px',
-    boxShadow: 'none',
-    outline: 'none',
   },
 }
 
@@ -182,9 +141,8 @@ export default function EdrRequest(props) {
         <DialogTitle id='simple-dialog-title' style={{ color: 'white' }}>
           Details
         </DialogTitle>
-        <div className={`container-fluid ${classes.root}`}>
-          <div className='row'>
-
+        <div className='container-fluid'>
+          <div className={`row ${classes.root}`}>
             {props.item.doctor ? (
               <div
                 className='col-md-6 col-sm-6 col-6'
@@ -280,7 +238,7 @@ export default function EdrRequest(props) {
               )}
           </div>
 
-          <div className='row'>
+          <div className={`row ${classes.root}`}>
             <div
               className='col-md-6 col-sm-6 col-6'
               style={styles.inputContainerForTextField}
@@ -333,8 +291,7 @@ export default function EdrRequest(props) {
             </div>
           </div>
 
-          <div className='row'>
-
+          <div className={`row ${classes.root}`}>
             {props.item.description ? (
               <div
                 className='col-md-6 col-sm-6 col-6'
@@ -402,7 +359,7 @@ export default function EdrRequest(props) {
                   }}
                 />
               </div>
-            )  : props.item.doctorNotes ? (
+            ) : props.item.doctorNotes ? (
               <div
                 className='col-md-6 col-sm-6 col-6'
                 style={styles.inputContainerForTextField}
@@ -445,13 +402,12 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
           </div>
 
           <div
             className='container-fluid'
-          // style={styles.inputContainerForTextField}
           >
             {props.item.medicine ? (
               <div className='row'>
@@ -460,10 +416,7 @@ export default function EdrRequest(props) {
                     tableData={props.item.medicine}
                     tableDataKeys={tableDataKeysForPHR}
                     tableHeading={tableHeadingForPHR}
-                    // handleView={viewItem}
-                    // action={actions}
                     borderBottomColor={'#60d69f'}
-                  // borderBottomWidth={20}
                   />
                 ) : (
                     undefined

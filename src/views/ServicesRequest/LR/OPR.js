@@ -19,6 +19,7 @@ const tableHeading = ['MRN', 'Request Number', 'Date/Time', 'Status', 'Action']
 const tableDataKeys = [
   ['patientId', 'profileNo'],
   'requestNo',
+  // 'DateTime',
   'createdAt',
   'status',
 ]
@@ -48,18 +49,30 @@ export default function EDR(props) {
     // return () => socket.disconnect();
   }, [])
 
+  // const formatDate = (date) => {
+  //   const d = new Date(date);
+  //   return (
+  //     // d.getDate() +
+  //     d.getMonth() +
+  //     1 +
+  //     "/" +
+  //     // (d.getMonth() + 1) +
+  //     d.getDate() +
+  //     "/" +
+  //     d.getFullYear() +
+  //     " " +
+  //     d.toLocaleTimeString()
+  //   );
+  // };
+
   function getEDRsData() {
     axios
       .get(getOPRFromLabUrl)
       .then((res) => {
         if (res.data.success) {
           console.log(res.data.data, 'ecr1')
-          res.data.data.map((d) => (d.createdAt = d.patientId.createdAt))
-          // res.data.data.map((d) => (d.labRequest = d.labRequest[0]))
-          // res.data.data.map((d) => (d.profileNo = d.patientId.profileNo))
-          // res.data.data.map((d) => (d.date = d.pharmacyRequest.date))
-          // res.data.data.map((d) => (d.status = d.pharmacyRequest.status))
-          // res.data.data.map((d) => (d.requestNo = d.pharmacyRequest._id))
+          // res.data.data.map((d) => (d.createdAt = d.patientId.createdAt))
+          // res.data.data.map((d) => (d.DateTime = formatDate(d.patientId.DateTime)))
           setEdr(res.data.data.reverse())
         } else if (!res.data.success) {
           setErrorMsg(res.data.error)
@@ -125,7 +138,7 @@ export default function EDR(props) {
             flexDirection: 'column',
           }}
         >
-          {Edr ? (
+          {Edr !== ' ' ? (
             <div>
               <div>
                 <CustomTable
@@ -152,8 +165,29 @@ export default function EDR(props) {
               <Notification msg={errorMsg} open={openNotification} />
             </div>
           ) : (
-            <div className='LoaderStyle'>
-              <Loader type='TailSpin' color='red' height={50} width={50} />
+            // <div className="LoaderStyle">
+            //   <Loader type="TailSpin" color="red" height={50} width={50} />
+            // </div>
+            <div className='row ' style={{ marginTop: '25px' }}>
+              <div className='col-11'>
+                <h3
+                  style={{
+                    color: 'white',
+                    textAlign: 'center',
+                    width: '100%',
+                    position: 'absolute',
+                  }}
+                >
+                  Opps...No Data Found
+                </h3>
+              </div>
+              <div className='col-1' style={{ marginTop: 45 }}>
+                <img
+                  onClick={() => props.history.goBack()}
+                  src={Back_Arrow}
+                  style={{ maxWidth: '60%', height: 'auto', cursor: 'pointer' }}
+                />
+              </div>
             </div>
           )}
         </div>
