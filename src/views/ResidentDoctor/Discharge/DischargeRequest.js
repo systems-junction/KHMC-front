@@ -156,7 +156,6 @@ function DischargeRequest(props) {
   const classes = useStylesForInput()
 
   const initialState = {
-<<<<<<< HEAD
     dischargeMedArray: '',
     dischargeRequest: '',
     dischargeSummary: '',
@@ -164,19 +163,9 @@ function DischargeRequest(props) {
     dischargeNotes: '',
     requestType: '',
     patientId: '',
+    diagnosisArray: '',
+    medicationArray: '',
   }
-=======
-    dischargeMedArray: "",
-    dischargeRequest: "",
-    dischargeSummary: "",
-    otherNotes: "",
-    dischargeNotes: "",
-    requestType: "",
-    patientId: "",
-    diagnosisArray:'',
-    medicationArray:''
-  };
->>>>>>> 6879f07ba6051bf67a9b0959b2acdd29e749688e
 
   function reducer(state, { field, value }) {
     return {
@@ -195,13 +184,9 @@ function DischargeRequest(props) {
     dischargeNotes,
     requestType,
     patientId,
-<<<<<<< HEAD
-  } = state
-=======
     diagnosisArray,
-    medicationArray
-  } = state;
->>>>>>> 6879f07ba6051bf67a9b0959b2acdd29e749688e
+    medicationArray,
+  } = state
 
   const onChangeValue = (e) => {
     dispatch({
@@ -284,8 +269,8 @@ function DischargeRequest(props) {
   }
 
   function handleAddPatient(i) {
-    dispatch({field:"diagnosisArray",value:""})
-    dispatch({field:"medicationArray",value:""})
+    dispatch({ field: 'diagnosisArray', value: '' })
+    dispatch({ field: 'medicationArray', value: '' })
     // setDialogOpen(true);
     console.log('selected banda : ', i)
     dispatch({ field: 'dischargeNotes', value: '' })
@@ -320,12 +305,7 @@ function DischargeRequest(props) {
                 if (key === 'patientId') {
                   dispatch({ field: 'patientId', value: val._id })
                   console.log(key, val._id)
-                }
-<<<<<<< HEAD
-                if (key === 'dischargeRequest') {
-=======
-                else if (key === "dischargeRequest") {
->>>>>>> 6879f07ba6051bf67a9b0959b2acdd29e749688e
+                } else if (key === 'dischargeRequest') {
                   Object.entries(val).map(([key1, val1]) => {
                     if (key1 === 'dischargeSummary') {
                       dispatch({ field: 'dischargeSummary', value: val1 })
@@ -348,14 +328,19 @@ function DischargeRequest(props) {
                     }
                   })
                   dispatch({ field: 'dischargeRequest', value: val })
-                }
-                else if (key === "residentNotes") {
-                  if(val && val.length > 0){
-                  dispatch({ field: "diagnosisArray", value: val.reverse()[0].code });
+                } else if (key === 'residentNotes') {
+                  if (val && val.length > 0) {
+                    dispatch({
+                      field: 'diagnosisArray',
+                      value: val.reverse()[0].code,
+                    })
                   }
-                } else if (key === "pharmacyRequest") {
-                  if(val && val.length > 0){
-                  dispatch({ field: "medicationArray", value: val.reverse()[0].medicine });
+                } else if (key === 'pharmacyRequest') {
+                  if (val && val.length > 0) {
+                    dispatch({
+                      field: 'medicationArray',
+                      value: val.reverse()[0].medicine,
+                    })
                   }
                 }
               } else {
@@ -681,7 +666,7 @@ function DischargeRequest(props) {
             </div>
 
             <div
-            className="row"
+              className='row'
               style={{
                 marginTop: 10,
                 paddingLeft: 10,
@@ -724,56 +709,35 @@ function DischargeRequest(props) {
                 </span>
               </div>
 
-<<<<<<< HEAD
-              <div className={'col-md-3 col-sm-3 col-3'} style={{}}>
-                {patientDetails &&
-                  patientDetails.drugAllergy.map((drug) => {
-                    return <h6 style={styles.textStyles}>{drug}</h6>
-                  })}
+              <div
+                className={'col-md-3 col-sm-3 col-3'}
+                style={styles.textStyles}
+              >
+                {'None'}
               </div>
 
-              <div className={'col-md-3 col-sm-3 col-3'} style={{}}>
-                {patientDetails &&
-                  patientDetails.drugAllergy.map((drug, index) => {
-                    return (
-                      <h6 style={styles.textStyles}>Medication {index + 1}</h6>
-                    )
-                  })}
+              <div
+                className={'col-md-3 col-sm-3 col-3'}
+                style={styles.textStyles}
+              >
+                {medicationArray
+                  ? medicationArray.map((drug, index) => {
+                      return (
+                        <h6 style={styles.textStyles}>{drug.medicineName}</h6>
+                      )
+                    })
+                  : 'None'}
               </div>
 
-              <div className={'col-md-3 col-sm-3 col-3'} style={{}}>
-                {patientDetails &&
-                  patientDetails.drugAllergy.map((drug, index) => {
-                    return (
-                      <h6 style={styles.textStyles}>Diagnosis {index + 1}</h6>
-                    )
-                  })}
-=======
-              <div className={'col-md-3 col-sm-3 col-3'} style={styles.textStyles}>
-                {"None"}
-              </div>
-
-              <div className={'col-md-3 col-sm-3 col-3'} style={styles.textStyles}>
-                {medicationArray ?
-                  medicationArray.map((drug, index) => {
-                    return (
-                      <h6 style={styles.textStyles}>{drug.medicineName}</h6>
-                    )
-                  }) :
-                  "None"
-                }
-              </div>
-
-              <div className={'col-md-3 col-sm-3 col-3'} style={styles.textStyles}>
-                {diagnosisArray ?
-                  diagnosisArray.map((drug, index) => {
-                    return (
-                      <h6 style={styles.textStyles}>{drug}</h6>
-                    )
-                  }) :
-                  "None"
-                }
->>>>>>> 6879f07ba6051bf67a9b0959b2acdd29e749688e
+              <div
+                className={'col-md-3 col-sm-3 col-3'}
+                style={styles.textStyles}
+              >
+                {diagnosisArray
+                  ? diagnosisArray.map((drug, index) => {
+                      return <h6 style={styles.textStyles}>{drug}</h6>
+                    })
+                  : 'None'}
               </div>
             </div>
           </div>

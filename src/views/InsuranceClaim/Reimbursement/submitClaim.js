@@ -11,7 +11,7 @@ import {
   addClaim,
   getedripr,
   uploadsUrl,
-<<<<<<< HEAD
+  searchpatient,
 } from '../../../public/endpoins'
 import axios from 'axios'
 import Notification from '../../../components/Snackbar/Notification.js'
@@ -35,32 +35,6 @@ import AccountCircle from '@material-ui/icons/SearchOutlined'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import BarCode from '../../../assets/img/Bar Code.png'
 import Fingerprint from '../../../assets/img/fingerprint.png'
-=======
-  searchpatient
-} from "../../../public/endpoins";
-import axios from "axios";
-import Notification from "../../../components/Snackbar/Notification.js";
-import cookie from "react-cookies";
-import Header from "../../../components/Header/Header";
-import Back_Arrow from "../../../assets/img/Back_Arrow.png";
-import "../../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
-import FormData from "form-data";
-import claimsReview from "../../../assets/img/ClaimsReview.png";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import InputLabel from "@material-ui/core/InputLabel";
-import Paper from "@material-ui/core/Paper";
-import CustomTable from "../../../components/Table/Table";
-import MenuItem from "@material-ui/core/MenuItem";
-import Loader from "react-loader-spinner";
-import AccountCircle from "@material-ui/icons/SearchOutlined";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import BarCode from "../../../assets/img/Bar Code.png";
-import Fingerprint from "../../../assets/img/fingerprint.png";
->>>>>>> 6879f07ba6051bf67a9b0959b2acdd29e749688e
 
 const tableHeadingForBillSummary = [
   'Date/Time',
@@ -209,7 +183,6 @@ const useStyles = makeStyles((theme) => ({
 function AddEditPatientListing(props) {
   const classes = useStyles()
   const initialState = {
-<<<<<<< HEAD
     profileNo: '-----',
     firstName: '-----',
     lastName: '-----',
@@ -225,25 +198,8 @@ function AddEditPatientListing(props) {
     patientId: '',
     status: '',
     responseCode: '',
-=======
-    profileNo: "-----",
-    firstName: "-----",
-    lastName: "-----",
-    gender: "-----",
-    age: "--",
-    weight: "--",
-    document: "",
-    generatedBy: cookie.load("current_user").staffId,
-    insuranceNumber: "----",
-    insuranceVendor: "----",
-    paymentMethod: "",
-    treatmentDetail: "",
-    patientId: "",
-    status: "",
-    responseCode: "",
     diagnosisArray: '',
-    medicationArray: ''
->>>>>>> 6879f07ba6051bf67a9b0959b2acdd29e749688e
+    medicationArray: '',
 
     // billSummaryArray: "",
   }
@@ -273,7 +229,7 @@ function AddEditPatientListing(props) {
     status,
     responseCode,
     diagnosisArray,
-    medicationArray
+    medicationArray,
 
     // billSummaryArray,
   } = state
@@ -302,7 +258,7 @@ function AddEditPatientListing(props) {
     const selectedRec = props.history.location.state.selectedItem
     console.log('selected rec is ... ', selectedRec)
 
-    if (props.history.location.state.comingFor === "edit") {
+    if (props.history.location.state.comingFor === 'edit') {
       getPatientByInfo(selectedRec.patient._id)
     }
 
@@ -411,17 +367,11 @@ function AddEditPatientListing(props) {
           dispatch({ field: 'document', value: '' })
 
           props.history.push({
-<<<<<<< HEAD
             pathname: 'success',
             state: {
               message: `Claim against Patient MRN ${profileNo} Submitted successfully`,
             },
           })
-=======
-            pathname: "success",
-            state: { message: `Claim against Patient MRN ${profileNo} Submitted successfully` },
-          });
->>>>>>> 6879f07ba6051bf67a9b0959b2acdd29e749688e
         } else if (!res.data.success) {
           setOpenNotification(true)
           setErrorMsg('Error submitting Claim details')
@@ -457,17 +407,11 @@ function AddEditPatientListing(props) {
       .then((res) => {
         if (res.data.success) {
           props.history.push({
-<<<<<<< HEAD
             pathname: 'success',
             state: {
               message: `Claim against Patient MRN ${profileNo} Updated successfully`,
             },
           })
-=======
-            pathname: "success",
-            state: { message: `Claim against Patient MRN ${profileNo} Updated successfully` },
-          });
->>>>>>> 6879f07ba6051bf67a9b0959b2acdd29e749688e
         } else if (!res.data.success) {
           setOpenNotification(true)
         }
@@ -546,7 +490,9 @@ function AddEditPatientListing(props) {
   }
 
   function handleAddItem(i) {
-<<<<<<< HEAD
+    dispatch({ field: 'medicationArray', value: '' })
+    dispatch({ field: 'diagnosisArray', value: '' })
+
     console.log('selected banda', i)
 
     dispatch({ field: 'patientId', value: i._id })
@@ -561,26 +507,7 @@ function AddEditPatientListing(props) {
 
     setSearchQuery('')
     getBillSummary(i._id)
-=======
-    dispatch({field:"medicationArray", value:""})
-    dispatch({field:"diagnosisArray", value:""})
-
-    console.log("selected banda", i);
-
-    dispatch({ field: "patientId", value: i._id });
-    dispatch({ field: "firstName", value: i.firstName });
-    dispatch({ field: "lastName", value: i.lastName });
-    dispatch({ field: "gender", value: i.gender });
-    dispatch({ field: "age", value: i.age });
-    dispatch({ field: "weight", value: i.weight });
-    dispatch({ field: "profileNo", value: i.profileNo });
-    dispatch({ field: "insuranceNumber", value: i.insuranceNumber });
-    dispatch({ field: "insuranceVendor", value: i.insuranceVendor });
-
-    setSearchQuery("");
-    getBillSummary(i._id);
-    getPatientByInfo(i._id);
->>>>>>> 6879f07ba6051bf67a9b0959b2acdd29e749688e
+    getPatientByInfo(i._id)
   }
 
   function getBillSummary(i) {
@@ -641,41 +568,44 @@ function AddEditPatientListing(props) {
 
   const getPatientByInfo = (id) => {
     axios
-      .get(searchpatient + "/" + id)
+      .get(searchpatient + '/' + id)
       .then((res) => {
         if (res.data.success) {
           if (res.data.data) {
-            console.log(
-              "Response after getting EDR/IPR data : ",
-              res.data.data
-            );
+            console.log('Response after getting EDR/IPR data : ', res.data.data)
 
             Object.entries(res.data.data).map(([key, val]) => {
-              if (val && typeof val === "object") {
-                if (key === "residentNotes") {
-                  if(val && val.length > 0){
-                  dispatch({ field: "diagnosisArray", value: val.reverse()[0].code });
-                }
-                } else if (key === "pharmacyRequest") {
-                  if(val && val.length > 0){
-                  dispatch({ field: "medicationArray", value: val.reverse()[0].medicine });
+              if (val && typeof val === 'object') {
+                if (key === 'residentNotes') {
+                  if (val && val.length > 0) {
+                    dispatch({
+                      field: 'diagnosisArray',
+                      value: val.reverse()[0].code,
+                    })
+                  }
+                } else if (key === 'pharmacyRequest') {
+                  if (val && val.length > 0) {
+                    dispatch({
+                      field: 'medicationArray',
+                      value: val.reverse()[0].medicine,
+                    })
                   }
                 }
               } else {
-                dispatch({ field: key, value: val });
+                dispatch({ field: key, value: val })
               }
-            });
+            })
           }
         } else {
-          setOpenNotification(true);
-          setErrorMsg("EDR/IPR not generated for patient");
+          setOpenNotification(true)
+          setErrorMsg('EDR/IPR not generated for patient')
         }
       })
       .catch((e) => {
-        setOpenNotification(true);
-        setErrorMsg(e);
-      });
-  };
+        setOpenNotification(true)
+        setErrorMsg(e)
+      })
+  }
 
   const handleInvoicePrint = () => {
     alert('Printer not attached')
@@ -945,7 +875,7 @@ function AddEditPatientListing(props) {
                 </div>
 
                 <div
-                  className="row"
+                  className='row'
                   style={{
                     marginTop: 10,
                     paddingLeft: 10,
@@ -975,49 +905,37 @@ function AddEditPatientListing(props) {
                     <span style={styles.textStyles}>{weight} kg</span>
                   </div>
 
-<<<<<<< HEAD
-                  <div className={'col-md-3 col-sm-3 col-3'} style={{}}>
-                    {/* {patientDetails &&
-                      patientDetails.drugAllergy.map((drug) => {
-                        return <h6 style={styles.textStyles}>{drug}</h6>;
-                      })} */}
+                  <div
+                    className={'col-md-3 col-sm-3 col-3'}
+                    style={styles.textStyles}
+                  >
+                    {'None'}
                   </div>
 
-                  <div className={'col-md-3 col-sm-3 col-3'} style={{}}>
-                    {/* {patientDetails &&
-                      patientDetails.drugAllergy.map((drug, index) => {
-=======
-                  <div className={'col-md-3 col-sm-3 col-3'} style={styles.textStyles}>
-                    {"None"}
+                  <div
+                    className={'col-md-3 col-sm-3 col-3'}
+                    style={styles.textStyles}
+                  >
+                    {medicationArray
+                      ? medicationArray.map((drug, index) => {
+                          return (
+                            <h6 style={styles.textStyles}>
+                              {drug.medicineName}
+                            </h6>
+                          )
+                        })
+                      : 'None'}
                   </div>
 
-                  <div className={'col-md-3 col-sm-3 col-3'} style={styles.textStyles}>
-                    {medicationArray ?
-                      medicationArray.map((drug, index) => {
->>>>>>> 6879f07ba6051bf67a9b0959b2acdd29e749688e
-                        return (
-                          <h6 style={styles.textStyles}>{drug.medicineName}</h6>
-                        )
-                      }) :
-                      "None"
-                    }
-                  </div>
-
-<<<<<<< HEAD
-                  <div className={'col-md-3 col-sm-3 col-3'} style={{}}>
-                    {/* {patientDetails &&
-                      patientDetails.drugAllergy.map((drug, index) => {
-=======
-                  <div className={'col-md-3 col-sm-3 col-3'} style={styles.textStyles}>
-                    {diagnosisArray ?
-                      diagnosisArray.map((drug, index) => {
->>>>>>> 6879f07ba6051bf67a9b0959b2acdd29e749688e
-                        return (
-                          <h6 style={styles.textStyles}>{drug}</h6>
-                        )
-                      }) :
-                      "None"
-                    }
+                  <div
+                    className={'col-md-3 col-sm-3 col-3'}
+                    style={styles.textStyles}
+                  >
+                    {diagnosisArray
+                      ? diagnosisArray.map((drug, index) => {
+                          return <h6 style={styles.textStyles}>{drug}</h6>
+                        })
+                      : 'None'}
                   </div>
                 </div>
               </div>
@@ -1029,7 +947,6 @@ function AddEditPatientListing(props) {
               }}
             />
 
-<<<<<<< HEAD
             <div className={`container-fluid ${classes.root}`}>
               <div
                 className='row'
@@ -1039,13 +956,6 @@ function AddEditPatientListing(props) {
                   marginLeft: 0,
                 }}
               >
-=======
-            <div
-              className={`container-fluid ${classes.root}`}
-            >
-              <div className="row"
-                style={{ ...styles.patientDetails, marginRight: 0, marginLeft: 0 }}>
->>>>>>> 6879f07ba6051bf67a9b0959b2acdd29e749688e
                 <TextField
                   required
                   multiline
@@ -1071,11 +981,7 @@ function AddEditPatientListing(props) {
                 className={`container-fluid ${classes.root}`}
                 style={{ marginTop: '10px' }}
               >
-<<<<<<< HEAD
                 <div className='row' style={{ marginLeft: 0, marginRight: 0 }}>
-=======
-                <div className="row" style={{ marginLeft: 0, marginRight: 0 }}>
->>>>>>> 6879f07ba6051bf67a9b0959b2acdd29e749688e
                   <TextField
                     required
                     select
@@ -1115,12 +1021,8 @@ function AddEditPatientListing(props) {
                 className='row'
                 style={{
                   ...styles.inputContainerForTextField,
-<<<<<<< HEAD
                   marginLeft: 0,
                   marginRight: 0,
-=======
-                  marginLeft: 0, marginRight: 0
->>>>>>> 6879f07ba6051bf67a9b0959b2acdd29e749688e
                 }}
               >
                 <label style={styles.upload}>
