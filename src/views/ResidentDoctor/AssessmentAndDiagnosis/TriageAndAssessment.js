@@ -228,6 +228,7 @@ function TriageAndAssessment(props) {
                     props.history.push({
                         pathname: 'success',
                         state: { message: `Triage & Assessment for patient ${MRN} added successfully` },
+                        comingFor:'Triage'
                     })
                 } else if (!res.data.success) {
                     setOpenNotification(true);

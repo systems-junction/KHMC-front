@@ -223,6 +223,7 @@ function TriageAndAssessment(props) {
             state: {
               message: `Triage & Assessment for patient MRN ${res.data.data.patientId.profileNo} added successfully`,
             },
+            comingFor:'Triage'
           });
         } else if (!res.data.success) {
           setOpenNotification(true);
