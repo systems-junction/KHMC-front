@@ -111,6 +111,328 @@ export default function EdrRequest(props) {
     console.log(props.item)
   }, [])
 
+  const replaceSlugToTitle = (val) => {
+    if (val === 'in_active') {
+      return (
+        <Button
+          style={stylesB.stylesForInActive}
+          variant='contained'
+          color='primary'
+        >
+          <strong>In active</strong>
+        </Button>
+      )
+    } else if (val === 'active') {
+      return (
+        <Button
+          style={stylesB.stylesForActive}
+          variant='contained'
+          color='primary'
+        >
+          <strong>Active</strong>
+        </Button>
+      )
+    }
+    if (
+      val === 'pending' ||
+      val === 'to_do' ||
+      val === 'po_created' ||
+      val === 'Can be fulfilled' ||
+      val === 'hold'
+    ) {
+      if (currentUser && currentUser.staffTypeId.type === 'Committe Member') {
+        return (
+          <>
+            {val === 'to_do' ? (
+              <Button
+                style={stylesB.stylesForActive}
+                variant='contained'
+                color='primary'
+              >
+                <strong>To Do</strong>
+              </Button>
+            ) : val === 'pending' ? (
+              <Button
+                style={stylesB.stylesForActive}
+                variant='contained'
+                color='primary'
+              >
+                <strong>Pending</strong>
+              </Button>
+            ) : val === 'po_created' ? (
+              <Button
+                style={stylesB.stylesForActive}
+                variant='contained'
+                color='primary'
+              >
+                <strong>PO Created</strong>
+              </Button>
+            ) : val === 'hold' ? (
+              <Button
+                style={stylesB.stylesForActive}
+                variant='contained'
+                color='primary'
+              >
+                <strong>Hold</strong>
+              </Button>
+            ) : (
+              ''
+            )}
+          </>
+        )
+      } else {
+        return (
+          <>
+            {val === 'to_do' ? (
+              <Button
+                style={stylesB.stylesForActive}
+                variant='contained'
+                color='primary'
+              >
+                <strong>To Do</strong>
+              </Button>
+            ) : val === 'pending' ? (
+              <Button
+                style={stylesB.stylesForActive}
+                variant='contained'
+                color='primary'
+              >
+                <strong>Pending</strong>
+              </Button>
+            ) : val === 'po_created' ? (
+              <Button
+                style={stylesB.stylesForActive}
+                variant='contained'
+                color='primary'
+              >
+                <strong>PO Created</strong>
+              </Button>
+            ) : val === 'Can be fulfilled' ? (
+              <Button
+                style={stylesB.stylesForActive}
+                variant='contained'
+                color='primary'
+              >
+                <strong>Can be fulfilled</strong>
+              </Button>
+            ) : (
+              ''
+            )}
+          </>
+        )
+      }
+    } else if (
+      val === 'in_progress' ||
+      val === 'po_sent' ||
+      val === 'items_in_transit' ||
+      val === 'pending_approval_from_accounts' ||
+      val === 'pending_approval' ||
+      val === 'Delivery in Progress' ||
+      val === 'Fulfillment Initiated' ||
+      val === 'pending_administration' ||
+      val === 'pending_reception'
+    ) {
+      return (
+        <>
+          {val === 'in_progress' ? (
+            <Button
+              style={stylesB.stylesForActive}
+              variant='contained'
+              color='primary'
+            >
+              <strong>In Progress</strong>
+            </Button>
+          ) : val === 'items_in_transit' ? (
+            <Button
+              style={stylesB.stylesForReceived}
+              variant='contained'
+              color='primary'
+            >
+              <strong>Items in Transit</strong>
+            </Button>
+          ) : val === 'pending_approval_from_accounts' ? (
+            <Button
+              style={stylesB.stylesForActive}
+              variant='contained'
+              color='primary'
+            >
+              <strong>Pending Approval From Accounts</strong>
+            </Button>
+          ) : val === 'pending_approval' ? (
+            <Button
+              style={stylesB.stylesForActive}
+              variant='contained'
+              color='primary'
+            >
+              <strong>Pending Approval</strong>
+            </Button>
+          ) : val === 'Delivery in Progress' ? (
+            <Button
+              style={stylesB.stylesForActive}
+              variant='contained'
+              color='primary'
+            >
+              <strong>Delivery in Progress</strong>
+            </Button>
+          ) : val === 'Fulfillment Initiated' ? (
+            <Button
+              style={stylesB.stylesForActive}
+              variant='contained'
+              color='primary'
+            >
+              <strong>Fulfillment Initiated</strong>
+            </Button>
+          ) : val === 'pending_reception' ? (
+            <Button
+              style={stylesB.stylesForActive}
+              variant='contained'
+              color='primary'
+            >
+              <strong>Pending Reception</strong>
+            </Button>
+          ) : val === 'pending_administration' ? (
+            <Button
+              style={stylesB.stylesForActive}
+              variant='contained'
+              color='primary'
+            >
+              <strong>Pending Administration</strong>
+            </Button>
+          ) : (
+            <Button
+              style={stylesB.stylesForActive}
+              variant='contained'
+              color='primary'
+            >
+              <strong>Po Sent</strong>
+            </Button>
+          )}
+        </>
+      )
+    } else if (
+      val === 'complete' ||
+      val === 'approved' ||
+      val === 'approve' ||
+      val === 'reject' ||
+      val === 'received' ||
+      val === 'Partially Received' ||
+      val === 'Cannot be fulfilled' ||
+      val === 'Item Returned to Warehouse' ||
+      val === 'Returned' ||
+      val === 'receive' ||
+      val === 'Received'
+    ) {
+      return (
+        <>
+          {val === 'complete' ? (
+            <Button
+              style={stylesB.stylesForActive}
+              variant='contained'
+              color='primary'
+            >
+              <strong>Complete</strong>
+            </Button>
+          ) : val === 'approved' ? (
+            <Button
+              style={stylesB.stylesForActive}
+              variant='contained'
+              color='primary'
+            >
+              <strong>Approved</strong>
+            </Button>
+          ) : val === 'reject' ? (
+            <Button
+              style={stylesB.stylesForActive}
+              variant='contained'
+              color='primary'
+            >
+              <strong>Reject</strong>
+            </Button>
+          ) : val === 'received' ? (
+            <Button
+              style={stylesB.stylesForActive}
+              variant='contained'
+              color='primary'
+            >
+              <strong>Received</strong>
+            </Button>
+          ) : val === 'receive' ? (
+            <Button
+              style={stylesB.stylesForActive}
+              variant='contained'
+              color='primary'
+            >
+              <strong>Receive</strong>
+            </Button>
+          ) : val === 'Partially Received' ? (
+            <Button
+              style={stylesB.stylesForActive}
+              variant='contained'
+              color='primary'
+            >
+              <strong>Partially Received</strong>
+            </Button>
+          ) : val === 'approve' ? (
+            <Button
+              style={stylesB.stylesForActive}
+              variant='contained'
+              color='primary'
+            >
+              <strong>Approve</strong>
+            </Button>
+          ) : val === 'Cannot be fulfilled' ? (
+            <Button
+              style={stylesB.stylesForActive}
+              variant='contained'
+              color='primary'
+            >
+              <strong>Cannot be fulfilled</strong>
+            </Button>
+          ) : val === 'Returned' ? (
+            <Button
+              style={stylesB.stylesForActive}
+              variant='contained'
+              color='primary'
+            >
+              <strong>Item Returned</strong>
+            </Button>
+          ) : val === 'Received' ? (
+            <Button
+              style={stylesB.stylesForActive}
+              variant='contained'
+              color='primary'
+            >
+              <strong>Received</strong>
+            </Button>
+          ) : (
+            <Button
+              style={stylesB.stylesForActive}
+              variant='contained'
+              color='primary'
+            >
+              <strong>Item Returned</strong>
+            </Button>
+          )}
+        </>
+      )
+    }
+
+    return capitilizeLetter(val)
+  }
+
+  const formatDate = (date) => {
+    const d = new Date(date)
+    return (
+      d.getDate() +
+      '/' +
+      (d.getMonth() + 1) +
+      '/' +
+      d.getFullYear() +
+      ' ' +
+      d.toLocaleTimeString()
+    )
+  }
+
   return (
     <Dialog
       onClose={() => props.viewItem('')}
@@ -138,7 +460,7 @@ export default function EdrRequest(props) {
                     disabled={true}
                     label='Date'
                     name={'date'}
-                    value={props.item.date}
+                    value={formatDate(props.item.date)}
                     className='textInputStyle'
                     variant='filled'
                     InputProps={{
@@ -327,9 +649,13 @@ export default function EdrRequest(props) {
           </div>
           <div
             className='container-fluid'
+            // style={styles.inputContainerForTextField}
           >
             {props.item.medicine ? (
-              <div className='row'>
+              <div>
+                {/* <InputLabel style={styles.styleForLabel} id='generated-label'>
+                  Your PHR Medicine
+                </InputLabel>{' '} */}
                 {props.item.medicine ? (
                   <CustomTable
                     tableData={props.item.medicine}
@@ -339,15 +665,32 @@ export default function EdrRequest(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
             ) : (
+              undefined
+            )}
+          </div>
+          {/* </div> */}
+
+          {/* <div className='row'>
+            <div
+              className='col-md-12 col-sm-12 col-12 d-flex justify-content-center text-center'
+              style={styles.inputContainerForTextField}
+            >
+              {props.item.status ? (
+                <div>
+                  <InputLabel style={styles.styleForLabel} id='generated-label'>
+                    Status
+                  </InputLabel>
+                  {replaceSlugToTitle(props.item.status)}
+                </div>
+              ) : (
                 undefined
               )}
-          </div>
-         
-
+            </div>
+          </div> */}
 
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <div style={{ marginTop: '2%', marginBottom: '2%' }}>
