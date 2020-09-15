@@ -9,6 +9,7 @@ import {
   getSearchedRadiologyService,
   updateEdrIpr,
   searchpatient,
+  notifyConsultation,
   getSearchedpatient,
 } from "../../../public/endpoins";
 import cookie from "react-cookies";
@@ -118,6 +119,37 @@ const tableDataKeysForRadiology = [
 //     "status",
 // ];
 const actions = { view: true };
+
+const specialistArray = [
+  {
+    key: "Dr.Hammad",
+    value: "Dr.Hammad",
+  },
+  {
+    key: "Dr.Asad",
+    value: "Dr.Asad",
+  },
+  {
+    key: "Dr.Hameed",
+    value: "Dr.Hameed",
+  },
+];
+
+const specialityArray = [
+  {
+    key: "Cardiologists",
+    value: "Cardiologists",
+  },
+  {
+    key: "Orthopedic",
+    value: "Orthopedic",
+  },
+  {
+    key: "Dermatologist",
+    value: "Dermatologist",
+  },
+];
+
 const styles = {
   patientDetails: {
     backgroundColor: "white",
@@ -261,6 +293,8 @@ function LabRadRequest(props) {
     date: new Date(),
     description: "",
     consultationNotes: "",
+    doctorconsultationNotes: "",
+
     requester: cookie.load("current_user").name,
     speciality: "",
     specialist: "",
@@ -274,6 +308,7 @@ function LabRadRequest(props) {
     requestType: "",
     section: "",
     code: [],
+    patientId: ''
   };
 
   function reducer(state, { field, value }) {
@@ -304,6 +339,8 @@ function LabRadRequest(props) {
     date = new Date(),
     description,
     consultationNotes,
+    doctorconsultationNotes,
+
     requester = cookie.load("current_user").name,
     speciality,
     specialist,
@@ -316,13 +353,22 @@ function LabRadRequest(props) {
     requestType,
     section,
     code,
+    patientId
   } = state;
 
   const onChangeValue = (e) => {
-    dispatch({
-      field: e.target.name,
-      value: e.target.value.replace(/[^\w\s]/gi, ""),
-    });
+    if (e.target.name === "specialist") {
+      dispatch({
+        field: e.target.name,
+        value: e.target.value,
+      });
+    }
+    else {
+      dispatch({
+        field: e.target.name,
+        value: e.target.value.replace(/[^\w\s]/gi, ""),
+      });
+    }
   };
 
   const [currentUser, setCurrentUser] = useState("");
@@ -388,6 +434,25 @@ function LabRadRequest(props) {
   }
 
   function addConsultRequest() {
+    var now = new Date();
+    var start = new Date(now.getFullYear(), 0, 0);
+    var diff =
+      now -
+      start +
+      (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000;
+    var oneDay = 1000 * 60 * 60 * 24;
+    var day = Math.floor(diff / oneDay);
+
+    var dateNow = new Date();
+    var YYYY = dateNow
+      .getFullYear()
+      .toString()
+      .substr(-2);
+    var HH = dateNow.getHours();
+    var mm = dateNow.getMinutes();
+    let ss = dateNow.getSeconds();
+
+    const consultationNoteNo = "CN" + day + YYYY + HH + mm + ss;
     // if (!validateForm()) {
     //   setIsFormSubmitted(true)
     //   setOpenNotification(true)
@@ -399,12 +464,13 @@ function LabRadRequest(props) {
     consultationNote = [
       ...consultationNoteArray,
       {
-        consultationNo: id,
+        consultationNo: consultationNoteNo,
         description: description,
-        consultationNotes: consultationNotes,
+        doctorNotes: doctorconsultationNotes,
         requester: currentUser.staffId,
         date: date,
         specialist: specialist,
+        status: "pending",
       },
     ];
 
@@ -420,7 +486,17 @@ function LabRadRequest(props) {
       .then((res) => {
         if (res.data.success) {
           console.log("response while adding Consult Req", res.data.data);
-          window.location.reload(false);
+          notifyForConsult(patientId);
+          props.history.push({
+            pathname: "consultationrequest/success",
+            state: {
+              message: `Consultation Note of Request # ${res.data.data.consultationNote[
+                res.data.data.consultationNote.length - 1
+              ].consultationNo
+                } for patient MRN ${res.data.data.patientId.profileNo
+                } submitted successfully`,
+            },
+          });
         } else if (!res.data.success) {
           setOpenNotification(true);
           setErrorMsg("Error while adding the Consultation request");
@@ -434,6 +510,19 @@ function LabRadRequest(props) {
     //   }
     // }
   }
+
+  const notifyForConsult = (id) => {
+    axios
+      .get(notifyConsultation + "/" + id)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("error after notify", e);
+        setOpenNotification(true);
+        setErrorMsg(e);
+      });
+  };
 
   function addResidentRequest() {
     var now = new Date();
@@ -491,13 +580,11 @@ function LabRadRequest(props) {
           props.history.push({
             pathname: "assessmentdiagnosis/success",
             state: {
-              message: `Consultation note # ${
-                res.data.data.residentNotes[
-                  res.data.data.residentNotes.length - 1
-                ].residentNoteNo
-              } for patient MRN ${
-                res.data.data.patientId.profileNo
-              } added successfully`,
+              message: `Consultation note # ${res.data.data.residentNotes[
+                res.data.data.residentNotes.length - 1
+              ].residentNoteNo
+                } for patient MRN ${res.data.data.patientId.profileNo
+                } added successfully`,
             },
           });
         } else if (!res.data.success) {
@@ -666,12 +753,10 @@ function LabRadRequest(props) {
           props.history.push({
             pathname: "assessmentdiagnosis/success",
             state: {
-              message: `Lab Request # ${
-                res.data.data.labRequest[res.data.data.labRequest.length - 1]
-                  .LRrequestNo
-              } for patient MRN ${
-                res.data.data.patientId.profileNo
-              } added successfully`,
+              message: `Lab Request # ${res.data.data.labRequest[res.data.data.labRequest.length - 1]
+                .LRrequestNo
+                } for patient MRN ${res.data.data.patientId.profileNo
+                } added successfully`,
             },
           });
         } else if (!res.data.success) {
@@ -813,13 +898,11 @@ function LabRadRequest(props) {
           props.history.push({
             pathname: "assessmentdiagnosis/success",
             state: {
-              message: `Radiology Request # ${
-                res.data.data.radiologyRequest[
-                  res.data.data.radiologyRequest.length - 1
-                ].RRrequestNo
-              } for patient MRN ${
-                res.data.data.patientId.profileNo
-              } added successfully`,
+              message: `Radiology Request # ${res.data.data.radiologyRequest[
+                res.data.data.radiologyRequest.length - 1
+              ].RRrequestNo
+                } for patient MRN ${res.data.data.patientId.profileNo
+                } added successfully`,
             },
           });
         } else if (!res.data.success) {
@@ -1035,10 +1118,9 @@ function LabRadRequest(props) {
 
             Object.entries(res.data.data).map(([key, val]) => {
               if (val && typeof val === "object") {
-                // if (key === "patientId") {
-                //     dispatch({ field: "patientId", value: val._id });
-                // } else
-                if (key === "labRequest") {
+                if (key === "patientId") {
+                  dispatch({ field: "patientId", value: val._id });
+                } else if (key === "labRequest") {
                   dispatch({ field: "labRequestArray", value: val.reverse() });
                 } else if (key === "radiologyRequest") {
                   dispatch({ field: "radiologyRequestArray", value: val.reverse() });
@@ -1132,7 +1214,7 @@ function LabRadRequest(props) {
         },
       })
     }
-    else{
+    else {
       viewItem(rec)
     }
   }
@@ -1300,13 +1382,13 @@ function LabRadRequest(props) {
                         </Table>
                       )
                     ) : (
-                      <h4
-                        style={{ textAlign: "center" }}
-                        onClick={() => setSearchPatientQuery("")}
-                      >
-                        Patient Not Found
-                      </h4>
-                    )}
+                        <h4
+                          style={{ textAlign: "center" }}
+                          onClick={() => setSearchPatientQuery("")}
+                        >
+                          Patient Not Found
+                        </h4>
+                      )}
                   </Paper>
                 </div>
               ) : (
@@ -1537,6 +1619,22 @@ function LabRadRequest(props) {
                     undefined
                   )}
               </div>
+              <div className="row" style={{ marginBottom: "25px" }}>
+                <div className="col-md-6 col-sm-6 col-6"></div>
+                <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
+                  <Button
+                    onClick={() => setOpenAddConsultDialog(true)}
+                    style={styles.stylesForButton}
+                    variant="contained"
+                    color="primary"
+                    disabled={enableForm}
+                  >
+                    <strong style={{ fontSize: "12px" }}>
+                      Consultation Request
+                    </strong>
+                  </Button>
+                </div>
+              </div>
             </div>
           ) : value === 0 ? (
             <div
@@ -1681,13 +1779,13 @@ function LabRadRequest(props) {
                         </Table>
                       )
                     ) : (
-                      <h4
-                        style={{ textAlign: "center" }}
-                        onClick={() => setSearchQuery("")}
-                      >
-                        Service Not Found
-                      </h4>
-                    )}
+                        <h4
+                          style={{ textAlign: "center" }}
+                          onClick={() => setSearchQuery("")}
+                        >
+                          Service Not Found
+                        </h4>
+                      )}
                   </Paper>
                 </div>
               ) : (
@@ -1855,13 +1953,13 @@ function LabRadRequest(props) {
                         </Table>
                       )
                     ) : (
-                      <h4
-                        style={{ textAlign: "center" }}
-                        onClick={() => setSearchRadioQuery("")}
-                      >
-                        Service Not Found
-                      </h4>
-                    )}
+                        <h4
+                          style={{ textAlign: "center" }}
+                          onClick={() => setSearchRadioQuery("")}
+                        >
+                          Service Not Found
+                        </h4>
+                      )}
                   </Paper>
                 </div>
               ) : (
@@ -2136,160 +2234,6 @@ function LabRadRequest(props) {
 
         <Dialog
           aria-labelledby="form-dialog-title"
-          open={openAddConsultDialog}
-          maxWidth="xl"
-          fullWidth={true}
-        >
-          <DialogContent style={{ backgroundColor: "#31e2aa" }}>
-            <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
-              Add Consultation Note
-            </DialogTitle>
-            <div className={`container-fluid ${classes.root}`}>
-              <div className="row">
-                <div
-                  className="col-md-12 col-sm-12 col-12"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    label="Description"
-                    name={"description"}
-                    value={description}
-                    error={description === "" && isFormSubmitted}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className="row">
-                <div
-                  className="col-md-12"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    label="Consultation Note"
-                    name={"consultationNotes"}
-                    value={consultationNotes}
-                    error={consultationNotes === "" && isFormSubmitted}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className="row">
-                <div
-                  className="col-md-6 col-sm-6 col-6"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    disabled
-                    label="Date"
-                    name={"date"}
-                    value={date}
-                    // error={date === '' && isFormSubmitted}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
-                </div>
-                <div
-                  className="col-md-6 col-sm-6 col-6"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    disabled
-                    label="Requester"
-                    name={"requester"}
-                    value={requester}
-                    // error={requester === '' && isFormSubmitted}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div style={{ marginTop: "2%", marginBottom: "2%" }}>
-                  <Button
-                    onClick={() => hideDialog()}
-                    style={styles.stylesForButton}
-                    variant="contained"
-                  >
-                    <strong>Cancel</strong>
-                  </Button>
-                </div>
-
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    marginTop: "2%",
-                    marginBottom: "2%",
-                  }}
-                >
-                  <Button
-                    style={{
-                      color: "white",
-                      cursor: "pointer",
-                      borderRadius: 5,
-                      backgroundColor: "#2c6ddd",
-                      width: "140px",
-                      height: "50px",
-                      outline: "none",
-                      paddingLeft: 30,
-                      paddingRight: 30,
-                    }}
-                    // disabled={!validateItemsForm()}
-                    onClick={addConsultRequest}
-                    variant="contained"
-                    color="primary"
-                  >
-                    Add Note
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
-
-        <Dialog
-          aria-labelledby="form-dialog-title"
           open={openAddResidentDialog}
           maxWidth="xl"
           fullWidth={true}
@@ -2499,20 +2443,20 @@ function LabRadRequest(props) {
           </DialogContent>
         </Dialog>
 
-        {/* <Dialog
-          aria-labelledby='form-dialog-title'
+        <Dialog
+          aria-labelledby="form-dialog-title"
           open={openAddConsultDialog}
-          maxWidth='xl'
+          maxWidth="xl"
           fullWidth={true}
         >
-          <DialogContent style={{ backgroundColor: '#31e2aa' }}>
-            <DialogTitle id='simple-dialog-title' style={{ color: 'white' }}>
+          <DialogContent style={{ backgroundColor: "#31e2aa" }}>
+            <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
               Add Consultation Note
             </DialogTitle>
             <div className={`container-fluid ${classes.root}`}>
-              <div className='row'>
+              <div className="row">
                 <div
-                  className='col-md-12 col-sm-12 col-12'
+                  className="col-md-12 col-sm-12 col-12"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -2520,24 +2464,55 @@ function LabRadRequest(props) {
                 >
                   <TextField
                     required
-                    label='Description'
-                    name={'description'}
+                    multiline
+                    rows={4}
+                    label="Comments/Notes"
+                    name={"doctorconsultationNotes"}
+                    value={doctorconsultationNotes}
+                    error={doctorconsultationNotes === "" && isFormSubmitted}
+                    onChange={onChangeValue}
+                    className="textInputStyle"
+                    variant="filled"
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                      disableUnderline: true,
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div className="row">
+                <div
+                  className="col-md-12 col-sm-12 col-12"
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
+                    multiline
+                    rows={4}
+                    label="Description"
+                    name={"description"}
                     value={description}
-                    error={description === '' && isFormSubmitted}
+                    error={description === "" && isFormSubmitted}
                     onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
+                    className="textInputStyle"
+                    variant="filled"
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
+                      disableUnderline: true,
                     }}
                   />
                 </div>
               </div>
 
-              <div className='row'>
+              <div className="row">
                 <div
-                  className='col-md-12'
+                  className="col-md-6"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -2545,24 +2520,36 @@ function LabRadRequest(props) {
                 >
                   <TextField
                     required
-                    label='Consultation Note'
-                    name={'consultationNotes'}
-                    value={consultationNotes}
-                    error={consultationNotes === '' && isFormSubmitted}
+                    select
+                    fullWidth
+                    label="Speciality"
+                    name={"speciality"}
+                    value={speciality}
+                    error={speciality === "" && isFormSubmitted}
                     onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
+                    variant="filled"
+                    className="dropDownStyle"
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
+                      disableUnderline: true,
                     }}
-                  />
-                </div>
-              </div>
+                  >
+                    <MenuItem value="">
+                      <em>Speciality</em>
+                    </MenuItem>
 
-              <div className='row'>
+                    {specialityArray.map((val) => {
+                      return (
+                        <MenuItem key={val.key} value={val.key}>
+                          {val.value}
+                        </MenuItem>
+                      );
+                    })}
+                  </TextField>
+                </div>
                 <div
-                  className='col-md-6 col-sm-6 col-6'
+                  className="col-md-6"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -2570,51 +2557,46 @@ function LabRadRequest(props) {
                 >
                   <TextField
                     required
-                    disabled
-                    label='Date'
-                    name={'date'}
-                    value={date}
-                    // error={date === '' && isFormSubmitted}
+                    select
+                    fullWidth
+                    label="Select Consultant/Specialist"
+                    name={"specialist"}
+                    value={specialist}
+                    error={specialist === "" && isFormSubmitted}
                     onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
+                    variant="filled"
+                    className="dropDownStyle"
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
+                      disableUnderline: true,
                     }}
-                  />
-                </div>
-                <div
-                  className='col-md-6 col-sm-6 col-6'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    disabled
-                    label='Requester'
-                    name={'requester'}
-                    value={requester}
-                    // error={requester === '' && isFormSubmitted}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
+                  >
+                    <MenuItem value="">
+                      <em>Specialist</em>
+                    </MenuItem>
+
+                    {specialistArray.map((val) => {
+                      return (
+                        <MenuItem key={val.key} value={val.key}>
+                          {val.value}
+                        </MenuItem>
+                      );
+                    })}
+                  </TextField>
                 </div>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <div style={{ marginTop: '2%', marginBottom: '2%' }}>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div style={{ marginTop: "2%", marginBottom: "2%" }}>
                   <Button
                     onClick={() => hideDialog()}
-                    style={styles.stylesForButton}
-                    variant='contained'
+                    style={{
+                      ...styles.stylesForButton,
+                      backgroundColor: "white",
+                      color: "grey",
+                    }}
+                    variant="contained"
                   >
                     <strong>Cancel</strong>
                   </Button>
@@ -2622,36 +2604,37 @@ function LabRadRequest(props) {
 
                 <div
                   style={{
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                    marginTop: '2%',
-                    marginBottom: '2%',
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginTop: "2%",
+                    marginBottom: "2%",
                   }}
                 >
                   <Button
                     style={{
-                      color: 'white',
-                      cursor: 'pointer',
+                      color: "white",
+                      cursor: "pointer",
                       borderRadius: 5,
-                      backgroundColor: '#2c6ddd',
-                      width: '140px',
-                      height: '50px',
-                      outline: 'none',
+                      backgroundColor: "#2c6ddd",
+                      width: "140px",
+                      height: "50px",
+                      outline: "none",
                       paddingLeft: 30,
                       paddingRight: 30,
                     }}
                     // disabled={!validateItemsForm()}
                     onClick={addConsultRequest}
-                    variant='contained'
-                    color='primary'
+                    variant="contained"
+                    color="primary"
                   >
-                    Add Note
+                    Submit
                   </Button>
                 </div>
               </div>
             </div>
           </DialogContent>
-        </Dialog> */}
+        </Dialog>
+
         <div
           className="container-fluid"
           style={{ marginBottom: "25px", marginTop: "25px" }}
