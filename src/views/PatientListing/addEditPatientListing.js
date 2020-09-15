@@ -1038,6 +1038,7 @@ function AddEditPatientListing(props) {
     }
 
     if (e.target.name === 'dob') {
+      console.log('data', e.target.value)
       calculate_age(e.target.value)
     }
 
@@ -2215,7 +2216,8 @@ function AddEditPatientListing(props) {
                       comingFor === 'add'
                         ? !(
                             validatePatientForm() &&
-                            validateEmergencyForm() && (validateInsuranceForm() || validateCashForm()) &&
+                            validateEmergencyForm() &&
+                            (validateInsuranceForm() || validateCashForm()) &&
                             isPatientSubmitted
                           )
                         : false
@@ -2240,7 +2242,8 @@ function AddEditPatientListing(props) {
                       comingFor === 'add'
                         ? !(
                             validatePatientForm() &&
-                            validateEmergencyForm() && (validateInsuranceForm() || validateCashForm()) &&
+                            validateEmergencyForm() &&
+                            (validateInsuranceForm() || validateCashForm()) &&
                             isPatientSubmitted
                           )
                         : false
@@ -2725,7 +2728,8 @@ function AddEditPatientListing(props) {
                       comingFor === 'add'
                         ? !(
                             validatePatientForm() &&
-                            validateEmergencyForm() && (validateInsuranceForm() || validateCashForm()) &&
+                            validateEmergencyForm() &&
+                            (validateInsuranceForm() || validateCashForm()) &&
                             isPatientSubmitted
                           )
                         : false
@@ -2750,7 +2754,8 @@ function AddEditPatientListing(props) {
                       comingFor === 'add'
                         ? !(
                             validatePatientForm() &&
-                            validateEmergencyForm() && (validateInsuranceForm() || validateCashForm()) &&
+                            validateEmergencyForm() &&
+                            (validateInsuranceForm() || validateCashForm()) &&
                             isPatientSubmitted
                           )
                         : false
@@ -3137,7 +3142,8 @@ function AddEditPatientListing(props) {
                       comingFor === 'add'
                         ? !(
                             validatePatientForm() &&
-                            validateEmergencyForm() && (validateInsuranceForm() || validateCashForm()) &&
+                            validateEmergencyForm() &&
+                            (validateInsuranceForm() || validateCashForm()) &&
                             isPatientSubmitted
                           )
                         : false
@@ -3160,7 +3166,8 @@ function AddEditPatientListing(props) {
                       comingFor === 'add'
                         ? !(
                             validatePatientForm() &&
-                            validateEmergencyForm() && (validateInsuranceForm() || validateCashForm()) &&
+                            validateEmergencyForm() &&
+                            (validateInsuranceForm() || validateCashForm()) &&
                             isPatientSubmitted
                           )
                         : false
