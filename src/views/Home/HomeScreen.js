@@ -141,32 +141,38 @@ const registeredNurse = [
 
   {
     img: OrderItems,
-    text: "Order Items",
+    text: "Medical Order Items",
     path: `/home/wms/fus/professionalorder/addorder`,
   },
 
-  // {
-  //   img: ReceiveItem,
-  //   text: "Order Receiving",
-  //   path: `/home/wms/fus/professionalorder/receiveorder`,
-  // },
+  {
+    img: ReceiveItem,
+    text: "Medical Order Receiving",
+    path: `/home/wms/fus/medicinalorder`,
+  },
+
+  {
+    img: OrderItems,
+    text: "Non Medical Order Items",
+    path: `/home/wms/fus/professionalorder/addnonmedicalorder`,
+  },
 
   // {
   //   img: ProfessionalOrder,
   //   text: 'View Orders',
   //   path: `/home/wms/fus/professionalorder`,
   // },
-  {
-    img: MedicationOrder,
-    text: 'Medication  Order Receiving',
-    path: `/home/wms/fus/medicinalorder`,
-  },
-
   // {
-  //   img: ReceiveItem,
-  //   text: "Order Receiving",
+  //   img: MedicationOrder,
+  //   text: 'Medication  Order Receiving',
   //   path: `/home/wms/fus/medicinalorder`,
   // },
+
+  {
+    img: ReceiveItem,
+    text: "Non Medical Order Receiving",
+    path: `/home/wms/fus/professionalorder/receiveorder`,
+  },
 ];
 
 const radiologyImagingDepartment = [
@@ -499,29 +505,29 @@ const fuInventoryKeeper = [
     path: "",
   },
 
-  {
-    img: "",
-    text: "",
-    path: "",
-  },
-
   // {
-  //   img: MedicationOrder,
-  //   text: "Medication  Order",
-  //   path: `/home/wms/fus/medicinalorder`,
-  // },
-
-  // {
-  //   img: ProfessionalOrder,
-  //   text: "Professional Order",
-  //   path: `/home/wms/fus/professionalorder`,
+  //   img: "",
+  //   text: "",
+  //   path: "",
   // },
 
   {
-    img: OrderItems,
-    text: "Items Order",
+    img: MedicationOrder,
+    text: "Medication  Order",
     path: `/home/wms/fus/medicinalorder`,
   },
+
+  {
+    img: ProfessionalOrder,
+    text: "Professional Order",
+    path: `/home/wms/fus/professionalorder`,
+  },
+
+  // {
+  //   img: OrderItems,
+  //   text: "Items Order",
+  //   path: `/home/wms/fus/medicinalorder`,
+  // },
 ];
 
 const fuIncharge = [

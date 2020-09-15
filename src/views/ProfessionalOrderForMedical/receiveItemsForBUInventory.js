@@ -38,6 +38,8 @@ import InputLabelComponent from "../../components/InputLabel/inputLabel";
 import BootstrapInput from "../../components/Dropdown/dropDown.js";
 import MUIInputStyle from "../../assets/jss/material-dashboard-react/inputStyle.js";
 
+import CurrencyTextField from "@unicef/material-ui-currency-textfield";
+
 const statusArray = [
   // { key: "complete", value: "Complete" },
   { key: "Received", value: "Received" },
@@ -85,14 +87,65 @@ const styles = {
     outline: "none",
   },
 };
+
+const inputStyles = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(0),
+  },
+  input: {
+    backgroundColor: "white",
+    borderRadius: 5,
+    "&": {
+      backgroundColor: "white",
+    },
+    "&:after": {
+      backgroundColor: "white",
+    },
+
+    "&:hover": {
+      backgroundColor: "white",
+    },
+
+    "&:focus": {
+      boxShadow: "none",
+      backgroundColor: "white",
+    },
+  },
+  // multilineColor: {
+  //   backgroundColor: "white",
+  //   borderRadius: 5,
+  //   "&:hover": {
+  //     backgroundColor: "white",
+  //   },
+  //   "&:after": {
+  //     borderBottomColor: "black",
+  //   },
+  // },
+  // root: {
+  //   "& .MuiTextField-root": {
+  //     backgroundColor: "white",
+  //     color: "blue",
+  //   },
+  //   "& .Mui-focused": {
+  //     backgroundColor: "white",
+  //     color: "blue",
+  //   },
+  //   "& .Mui-disabled": {
+  //     backgroundColor: undefined,
+  //     // color: "gray",
+  //   },
+  // },
+}));
+
 const useStyles = makeStyles(tableStyles);
+// const useStylesForInput = makeStyles(inputStyles);
 
 const DATE = new Date();
 
 const time = DATE.getHours();
 
 function ReceiveItems(props) {
-  const classesForInput = MUIInputStyle();
+  const classesForInput = inputStyles();
   const classes = useStyles();
 
   const initialState = {
@@ -104,9 +157,9 @@ function ReceiveItems(props) {
     unit: "kg",
     discount: "10",
     uniyDiscount: "10",
-    discountAmount: "10",
-    tax: "10",
-    taxAmount: "10",
+    discountAmount: "",
+    tax: "",
+    taxAmount: "",
     finalUnitPrice: "",
     discountAmount2: "0",
     subTotal: "",
@@ -321,19 +374,19 @@ function ReceiveItems(props) {
     return (
       receivedQty.length > 0 &&
       bonusQty.length > 0 &&
-      batchNumber.length > 0 &&
-      lotNo.length > 0 &&
+      // batchNumber.length > 0 &&
+      // lotNo.length > 0 &&
       expiryDate !== "" &&
-      unit.length > 0 &&
-      discount.length > 0 &&
-      uniyDiscount.length > 0 &&
-      discountAmount.length > 0 &&
+      // unit.length > 0 &&
+      // discount.length > 0 &&
+      // uniyDiscount.length > 0 &&
+      // discountAmount.length > 0 &&
       // tax.length > 0 &&
       // taxAmount.length > 0 &&
-      finalUnitPrice.length > 0 &&
-      subTotal.length > 0 &&
+      // finalUnitPrice !== "" &&
+      // subTotal !== "" &&
       // discountAmount2.length > 0 &&
-      totalPrice.length > 0 &&
+      totalPrice !== "" &&
       invoice.length > 0 &&
       date !== "" &&
       receivedDate !== "" &&
@@ -359,13 +412,13 @@ function ReceiveItems(props) {
         batchNumber,
         lotNumber: lotNo,
         expiryDate,
-        unit,
+        unit: selectedItem.itemId.issueUnit,
         discount: discount,
-        unitDiscount: uniyDiscount,
+        unitDiscount: selectedItem.itemId.issueUnit,
         discountAmount,
-        tax,
+        tax:selectedItem.itemId.issueUnitCost,
         taxAmount,
-        finalUnitPrice,
+        finalUnitPrice: selectedItem.itemId.issueUnitCost,
         subTotal,
         discountAmount2,
         totalPrice,
@@ -384,25 +437,25 @@ function ReceiveItems(props) {
 
       console.log("params", params);
 
-      // axios
-      //   .post(addReceiveRequestBUUrl, params)
-      //   .then((res) => {
-      //     if (res.data.success) {
-      //       props.history.replace({
-      //         pathname: "/home/wms/fus/medicinalorder/success",
-      //         state: {
-      //           message: `${selectedItem.itemId.name} has been received successfully`,
-      //         },
-      //       });
-      //     } else if (!res.data.success) {
-      //       setOpenNotification(true);
-      //     }
-      //   })
-      //   .catch((e) => {
-      //     console.log("error after adding purchase request", e);
-      //     setOpenNotification(true);
-      //     setErrorMsg("Error while adding the purchase request");
-      //   });
+      axios
+        .post(addReceiveRequestBUUrl, params)
+        .then((res) => {
+          if (res.data.success) {
+            props.history.replace({
+              pathname: "/home/wms/fus/medicinalorder/success",
+              state: {
+                message: `${selectedItem.itemId.name} has been received successfully`,
+              },
+            });
+          } else if (!res.data.success) {
+            setOpenNotification(true);
+          }
+        })
+        .catch((e) => {
+          console.log("error after adding purchase request", e);
+          setOpenNotification(true);
+          setErrorMsg("Error while adding the purchase request");
+        });
     }
   };
 
@@ -460,7 +513,24 @@ function ReceiveItems(props) {
     }, 2000);
   }
 
-  // console.log("vendor id in receive items", selectedItem);
+  function calculateTotal() {
+    if (receivedQty && receivedQty !== "0") {
+      let taxValueAmountForSingleItem =
+        (selectedItem.itemId.tax * selectedItem.itemId.issueUnitCost) / 100;
+
+      let totalTax = receivedQty * taxValueAmountForSingleItem;
+
+      let subTotal = receivedQty * selectedItem.itemId.issueUnitCost + totalTax;
+
+      let discountedAmount = (discount * subTotal) / 100;
+      let totalPrice = subTotal - discountedAmount;
+
+      dispatch({ field: "subTotal", value: subTotal });
+      dispatch({ field: "taxAmount", value: totalTax });
+      dispatch({ field: "totalPrice", value: totalPrice });
+      dispatch({ field: "discountAmount", value: discountedAmount });
+    }
+  }
 
   return (
     <div
@@ -628,6 +698,7 @@ function ReceiveItems(props) {
                   classes: { label: classesForInput.label },
                 }}
                 onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                onBlur={calculateTotal}
               />
             </div>
 
@@ -671,6 +742,7 @@ function ReceiveItems(props) {
             >
               <TextField
                 required
+                disabled={true}
                 className="textInputStyle"
                 id="batchNumber"
                 variant="filled"
@@ -698,6 +770,7 @@ function ReceiveItems(props) {
             >
               <TextField
                 required
+                disabled={true}
                 className="textInputStyle"
                 id="lotNo"
                 type={"number"}
@@ -764,12 +837,13 @@ function ReceiveItems(props) {
             >
               <TextField
                 required
+                disabled
                 className="textInputStyle"
                 id="unit"
                 variant="filled"
                 label="Unit"
                 name={"unit"}
-                value={unit}
+                value={selectedItem && selectedItem.itemId.issueUnit}
                 onChange={onChangeValue}
                 InputProps={{
                   className: classesForInput.input,
@@ -791,6 +865,7 @@ function ReceiveItems(props) {
             >
               <TextField
                 required
+                disabled
                 className="textInputStyle"
                 type={"number"}
                 id="discount"
@@ -820,12 +895,13 @@ function ReceiveItems(props) {
             >
               <TextField
                 required
+                disabled
                 className="textInputStyle"
                 id="uniyDiscount"
                 variant="filled"
                 label="Unit Discount"
                 name={"uniyDiscount"}
-                value={uniyDiscount}
+                value={selectedItem && selectedItem.itemId.issueUnit}
                 onChange={onChangeValue}
                 InputProps={{
                   className: classesForInput.input,
@@ -845,7 +921,7 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              <TextField
+              {/* <TextField
                 required
                 className="textInputStyle"
                 id="discountAmount"
@@ -854,6 +930,91 @@ function ReceiveItems(props) {
                 label="Discount Amount"
                 name={"discountAmount"}
                 value={discountAmount}
+                onChange={onChangeValue}
+                InputProps={{
+                  className: classesForInput.input,
+                  classes: { input: classesForInput.input },
+                }}
+                InputLabelProps={{
+                  className: classesForInput.label,
+                  classes: { label: classesForInput.label },
+                }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              /> */}
+              <CurrencyTextField
+                disabled
+                style={{ backgroundColor: "white", borderRadius: 5 }}
+                className="textInputStyle"
+                id="discountAmount"
+                label="Discount Amount"
+                name={"discountAmount"}
+                value={discountAmount}
+                onBlur={onChangeValue}
+                variant="filled"
+                textAlign="left"
+                InputProps={{
+                  className: classesForInput.input,
+                  classes: { input: classesForInput.input },
+                }}
+                InputLabelProps={{
+                  className: classesForInput.label,
+                  classes: { label: classesForInput.label },
+                }}
+                currencySymbol="JD"
+                outputFormat="number"
+                onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
+              />
+            </div>
+          </div>
+
+          <div className="row">
+            <div
+              className="col-md-6"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                disabled
+                className="textInputStyle"
+                id="tax"
+                type={"number"}
+                variant="filled"
+                label="Tax %"
+                name={"tax"}
+                value={selectedItem && selectedItem.itemId.tax}
+                onChange={onChangeValue}
+                InputProps={{
+                  className: classesForInput.input,
+                  classes: { input: classesForInput.input },
+                }}
+                InputLabelProps={{
+                  className: classesForInput.label,
+                  classes: { label: classesForInput.label },
+                }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
+            </div>
+
+            <div
+              className="col-md-6"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                disabled
+                className="textInputStyle"
+                id="taxAmount"
+                type={"number"}
+                variant="filled"
+                label="Tax Amount"
+                name={"taxAmount"}
+                value={taxAmount}
                 onChange={onChangeValue}
                 InputProps={{
                   className: classesForInput.input,
@@ -876,7 +1037,7 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              <TextField
+              {/* <TextField
                 required
                 className="textInputStyle"
                 id="finalUnitPrice"
@@ -895,6 +1056,31 @@ function ReceiveItems(props) {
                   classes: { label: classesForInput.label },
                 }}
                 onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              /> */}
+
+              <CurrencyTextField
+                disabled
+                style={{ backgroundColor: "white", borderRadius: 5 }}
+                className="textInputStyle"
+                id="finalUnitPrice"
+                label="Final Unit Price"
+                name={"finalUnitPrice"}
+                // value={finalUnitPrice}
+                value={selectedItem && selectedItem.itemId.issueUnitCost}
+                onBlur={onChangeValue}
+                variant="filled"
+                textAlign="left"
+                InputProps={{
+                  className: classesForInput.input,
+                  classes: { input: classesForInput.input },
+                }}
+                InputLabelProps={{
+                  className: classesForInput.label,
+                  classes: { label: classesForInput.label },
+                }}
+                currencySymbol="JD"
+                outputFormat="number"
+                onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
               />
             </div>
 
@@ -905,7 +1091,7 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              <TextField
+              {/* <TextField
                 required
                 className="textInputStyle"
                 id="subTotal"
@@ -924,6 +1110,29 @@ function ReceiveItems(props) {
                   classes: { label: classesForInput.label },
                 }}
                 onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              /> */}
+              <CurrencyTextField
+                disabled
+                style={{ backgroundColor: "white", borderRadius: 5 }}
+                className="textInputStyle"
+                id="subTotal"
+                label="Sub Total"
+                name={"subTotal"}
+                value={subTotal}
+                onBlur={onChangeValue}
+                variant="filled"
+                textAlign="left"
+                InputProps={{
+                  className: classesForInput.input,
+                  classes: { input: classesForInput.input },
+                }}
+                InputLabelProps={{
+                  className: classesForInput.label,
+                  classes: { label: classesForInput.label },
+                }}
+                currencySymbol="JD"
+                outputFormat="number"
+                onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
               />
             </div>
 
@@ -934,7 +1143,7 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              <TextField
+              {/* <TextField
                 required
                 className="textInputStyle"
                 id="totalPrice"
@@ -953,6 +1162,30 @@ function ReceiveItems(props) {
                   classes: { label: classesForInput.label },
                 }}
                 onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              /> */}
+
+              <CurrencyTextField
+                disabled
+                style={{ backgroundColor: "white", borderRadius: 5 }}
+                className="textInputStyle"
+                id="totalPrice"
+                label="Total Price"
+                name={"totalPrice"}
+                value={totalPrice}
+                onBlur={onChangeValue}
+                variant="filled"
+                textAlign="left"
+                InputProps={{
+                  className: classesForInput.input,
+                  classes: { input: classesForInput.input },
+                }}
+                InputLabelProps={{
+                  className: classesForInput.label,
+                  classes: { label: classesForInput.label },
+                }}
+                currencySymbol="JD"
+                outputFormat="number"
+                onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
               />
             </div>
 
@@ -996,6 +1229,7 @@ function ReceiveItems(props) {
             >
               <TextField
                 required
+                disabled
                 className="textInputStyle"
                 id="invoice"
                 // type={"number"}
@@ -1250,68 +1484,6 @@ function ReceiveItems(props) {
   );
 }
 export default ReceiveItems;
-
-{
-  /* <div className="row">
-            <div
-              className="col-md-6"
-              style={{
-                ...styles.inputContainerForTextField,
-                ...styles.textFieldPadding,
-              }}
-            >
-              <TextField
-                required
-                className="textInputStyle"
-                id="tax"
-                type={"number"}
-                variant="filled"
-                label="Tax %"
-                name={"tax"}
-                value={tax}
-                onChange={onChangeValue}
-                InputProps={{
-                  className: classesForInput.input,
-                  classes: { input: classesForInput.input },
-                }}
-                InputLabelProps={{
-                  className: classesForInput.label,
-                  classes: { label: classesForInput.label },
-                }}
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              />
-            </div>
-
-            <div
-              className="col-md-6"
-              style={{
-                ...styles.inputContainerForTextField,
-                ...styles.textFieldPadding,
-              }}
-            >
-              <TextField
-                required
-                className="textInputStyle"
-                id="taxAmount"
-                type={"number"}
-                variant="filled"
-                label="Tax Amount"
-                name={"taxAmount"}
-                value={taxAmount}
-                onChange={onChangeValue}
-                InputProps={{
-                  className: classesForInput.input,
-                  classes: { input: classesForInput.input },
-                }}
-                InputLabelProps={{
-                  className: classesForInput.label,
-                  classes: { label: classesForInput.label },
-                }}
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              />
-            </div>
-          </div> */
-}
 
 {
   /* <Button

@@ -150,6 +150,10 @@ const styles = {
     paddingLeft: 3,
     paddingRight: 3,
   },
+  textFieldPaddingNew: {
+    paddingLeft: 15,
+    paddingRight: 15,
+  },
 };
 
 // const useStyles = makeStyles(tableStyles);
@@ -216,6 +220,7 @@ function AddEditPurchaseRequest(props) {
     purchaseRequestId: [],
 
     selectedVendor: "",
+    commentNotes: "",
   };
 
   function reducer(state, { field, value }) {
@@ -249,6 +254,8 @@ function AddEditPurchaseRequest(props) {
 
     selectedVendor,
     comments,
+
+    commentNotes,
   } = state;
 
   const onChangeValue = (e) => {
@@ -367,6 +374,7 @@ function AddEditPurchaseRequest(props) {
         // vendorPhoneNo: v.telephone1,
         // vendorAddress: v.address,
         comments,
+        commentNotes,
       };
       axios
         .post(addPurchaseOrderUrl, params)
@@ -396,6 +404,106 @@ function AddEditPurchaseRequest(props) {
   };
 
   const handleEdit = () => {
+    setIsFormSubmitted(true);
+    // console.log("purchase request", purchaseRequest);
+    if (validateForm()) {
+      if (status === "pending_reception" && committeeStatus === "approved") {
+        setOpenNotification(true);
+        setErrorMsg("PO can not be updated once it is in progress");
+        return;
+      }
+
+      let temp = [];
+
+      for (let i = 0; i < purchaseRequest.length; i++) {
+        temp.push({ id: purchaseRequest[i]._id });
+      }
+
+      let params = "";
+
+      // if (currentUser.staffTypeId.type === "Committe Member") {
+      //   // if (
+      //   //   currentUser.permission.add === false &&
+      //   //   currentUser.permission.edit === true
+      //   // ) {
+      //   params = {
+      //     _id,
+      //     status,
+      //     generated,
+      //     purchaseRequestId: purchaseRequest,
+      //     generatedBy: generatedBy,
+      //     date: new Date(),
+      //     vendorId: vendorId,
+      //     sentAt: "",
+      //     committeeStatus:
+      //       currentUser.staffTypeId.type === "Committe Member"
+      //         ? committeeStatus
+      //         : "po_created",
+
+      //     // committeeStatus:
+      //     //  ( currentUser.permission.add === false &&
+      //     //   currentUser.permission.edit === true)
+      //     //     ? committeeStatus
+      //     //     : "po_created",
+      //     prId: temp,
+      //     comments,
+      //     commentNotes,
+      //   };
+      // } else {
+      params = {
+        _id,
+        status,
+        generated,
+        purchaseRequestId: purchaseRequest,
+        generatedBy: generatedBy,
+        date: new Date(),
+        vendorId: vendorId,
+        sentAt: "",
+        // committeeStatus:
+        //   currentUser.staffTypeId.type === "Committe Member"
+        //     ? committeeStatus
+        //     : "po_created",
+        committeeStatus: committeeStatus,
+        comments,
+        commentNotes,
+        // committeeStatus:
+        //   currentUser.permission.add === false &&
+        //   currentUser.permission.edit === true
+        //     ? committeeStatus
+        //     : "po_created",
+        // };
+      };
+
+      console.log("params", params);
+
+      axios
+        .put(updatePurchaseOrderUrl, params)
+        .then((res) => {
+          if (res.data.success) {
+            let message = `Purchase order ${res.data.data.purchaseOrderNo} has been updated successfully`;
+            if (currentUser.staffTypeId.type === "Committe Member") {
+              message = `Purchase order ${res.data.data.purchaseOrderNo} has been set to ${committeeStatus}`;
+            }
+
+            props.history.replace({
+              pathname: "/home/wms/fus/medicinalorder/success",
+              state: {
+                message: message,
+              },
+            });
+          } else if (!res.data.success) {
+            setOpenNotification(true);
+          }
+        })
+        .catch((e) => {
+          console.log("error after updating purchase request", e);
+          setOpenNotification(true);
+          setErrorMsg("Error while editing the purchase request");
+        });
+    }
+  };
+
+  const handleApprove = () => {
     setIsFormSubmitted(true);
     // console.log("purchase request", purchaseRequest);
     if (validateForm()) {
@@ -433,31 +541,34 @@ function AddEditPurchaseRequest(props) {
           //     : "po_created",
           prId: temp,
           comments,
-        };
-      } else {
-        params = {
-          _id,
-          status,
-          generated,
-          purchaseRequestId: purchaseRequest,
-          generatedBy: generatedBy,
-          date: new Date(),
-          vendorId: vendorId,
-          sentAt: "",
-          // committeeStatus:
-          //   currentUser.staffTypeId.type === "Committe Member"
-          //     ? committeeStatus
-          //     : "po_created",
-          committeeStatus: committeeStatus,
-          comments,
-
-          // committeeStatus:
-          //   currentUser.permission.add === false &&
-          //   currentUser.permission.edit === true
-          //     ? committeeStatus
-          //     : "po_created",
+          commentNotes,
         };
       }
+
+      // else {
+      //   params = {
+      //     _id,
+      //     status,
+      //     generated,
+      //     purchaseRequestId: purchaseRequest,
+      //     generatedBy: generatedBy,
+      //     date: new Date(),
+      //     vendorId: vendorId,
+      //     sentAt: "",
+      //     // committeeStatus:
+      //     //   currentUser.staffTypeId.type === "Committe Member"
+      //     //     ? committeeStatus
+      //     //     : "po_created",
+      //     committeeStatus: committeeStatus,
+      //     comments,
+      //     commentNotes,
+      //     // committeeStatus:
+      //     //   currentUser.permission.add === false &&
+      //     //   currentUser.permission.edit === true
+      //     //     ? committeeStatus
+      //     //     : "po_created",
+      //   };
+      // }
 
       console.log("params", params);
 
@@ -550,6 +661,8 @@ function AddEditPurchaseRequest(props) {
     }
   }
 
+  console.log(purchaseRequest);
+
   return (
     <div
       style={{
@@ -583,7 +696,7 @@ function AddEditPurchaseRequest(props) {
             className="col-md-12"
             style={{
               ...styles.inputContainerForTextField,
-              ...styles.textFieldPadding,
+              ...styles.textFieldPaddingNew,
             }}
           >
             <TextField
@@ -699,7 +812,7 @@ function AddEditPurchaseRequest(props) {
                   required
                   disabled
                   id="generatedBy"
-                  label="Super admin"
+                  label="Generated By"
                   name={"generatedBy"}
                   value={
                     comingFor === "add"
@@ -753,6 +866,12 @@ function AddEditPurchaseRequest(props) {
                         className: classes.input,
                         classes: { input: classes.input },
                       }}
+                      disabled={
+                        committeeStatus === "approved" &&
+                        status === "pending_reception"
+                          ? true
+                          : false
+                      }
                     >
                       <MenuItem value="">
                         <em>None</em>
@@ -804,6 +923,7 @@ function AddEditPurchaseRequest(props) {
             ) : (
               undefined
             )}
+
             {/* <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
             <div
               style={{
@@ -847,6 +967,40 @@ function AddEditPurchaseRequest(props) {
               )}
             </div> */}
           </div>
+
+          {currentUser && currentUser.staffTypeId.type === "Committe Member" ? (
+            <div className="row">
+              <div
+                className="col-md-12"
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  disabled={
+                    currentUser &&
+                    currentUser.staffTypeId.type === "Committe Member"
+                      ? false
+                      : true
+                  }
+                  label="Comments/Notes"
+                  name={"commentNotes"}
+                  value={commentNotes}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                  variant="filled"
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                />
+              </div>
+            </div>
+          ) : (
+            undefined
+          )}
+
           {/* {comingFor === "edit" &&
 
             currentUser.permission.edit ? (
@@ -904,23 +1058,24 @@ function AddEditPurchaseRequest(props) {
             undefined
           )} */}
 
-          {comingFor &&
-          currentUser &&
-          currentUser.staffTypeId.type !== "Committe Member" ? (
-            <div style={{ marginTop: 10 }}>
-              <AddPurchaseRequest
-                handleAddPR={handleAddPR}
-                openPRDialog={openPRDialog}
-                history={props.history}
-                selectedVendor={selectedVendor}
-                addedPRs={purchaseRequest}
-                comingFor={comingFor}
-              />
-            </div>
-          ) : (
-            undefined
-          )}
-
+          <div>
+            {comingFor &&
+            currentUser &&
+            currentUser.staffTypeId.type !== "Committe Member" ? (
+              <div style={{ marginTop: 10 }}>
+                <AddPurchaseRequest
+                  handleAddPR={handleAddPR}
+                  openPRDialog={openPRDialog}
+                  history={props.history}
+                  selectedVendor={selectedVendor}
+                  addedPRs={purchaseRequest}
+                  comingFor={comingFor}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
+          </div>
           {/* <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
             <div
               style={{
@@ -966,7 +1121,7 @@ function AddEditPurchaseRequest(props) {
                 className="col-md-12"
                 style={{
                   ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
+                  ...styles.textFieldPaddingNew,
                 }}
               >
                 <TextField
@@ -1034,7 +1189,7 @@ function AddEditPurchaseRequest(props) {
                 <Button
                   style={{ ...styles.stylesForPurchaseButton, width: 200 }}
                   disabled={validateApprovalForm()}
-                  onClick={handleEdit}
+                  onClick={handleApprove}
                   variant="contained"
                   color="primary"
                 >

@@ -391,7 +391,6 @@ export default function PurchaseRequest(props) {
                         </span>
                       </TableCell>
                     </TableRow>
-
                   </>
                 );
               })}

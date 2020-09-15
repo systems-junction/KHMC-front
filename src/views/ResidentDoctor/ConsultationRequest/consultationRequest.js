@@ -1083,9 +1083,9 @@ function LabRadRequest(props) {
                 if (key === "patientId") {
                   dispatch({ field: "patientId", value: val._id });
                 } else if (key === "labRequest") {
-                  dispatch({ field: "labRequestArray", value: val });
+                  dispatch({ field: "labRequestArray", value: val.reverse() });
                 } else if (key === "radiologyRequest") {
-                  dispatch({ field: "radiologyRequestArray", value: val });
+                  dispatch({ field: "radiologyRequestArray", value: val.reverse() });
                 } else if (key === "consultationNote") {
                   val.map(
                     (d) =>
@@ -1093,7 +1093,7 @@ function LabRadRequest(props) {
                         ? d.requester.firstName + " " + d.requester.lastName
                         : "")
                   );
-                  dispatch({ field: "consultationNoteArray", value: val });
+                  dispatch({ field: "consultationNoteArray", value: val.reverse() });
                 } else if (key === "residentNotes") {
                   val.map(
                     (d) =>
@@ -1101,7 +1101,7 @@ function LabRadRequest(props) {
                         ? d.doctor.firstName + " " + d.doctor.lastName
                         : "")
                   );
-                  dispatch({ field: "residentNoteArray", value: val });
+                  dispatch({ field: "residentNoteArray", value: val.reverse() });
                 } else if (key === "pharmacyRequest") {
                   val.map(
                     (d) =>
@@ -1109,7 +1109,7 @@ function LabRadRequest(props) {
                         ? d.requester.firstName + " " + d.requester.lastName
                         : "")
                   );
-                  dispatch({ field: "pharmacyRequestArray", value: val });
+                  dispatch({ field: "pharmacyRequestArray", value: val.reverse() });
                 }
                 //  else if (key === "nurseService") {
                 //     dispatch({ field: "nurseService", value: val });

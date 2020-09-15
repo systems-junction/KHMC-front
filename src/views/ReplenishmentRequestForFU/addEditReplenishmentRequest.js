@@ -511,7 +511,7 @@ function AddEditPurchaseRequest(props) {
               props.history.replace({
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
-                  message: `Replenisment request ${res.data.data.requestNo} for patient MRN ${res.data.data.patientId.profileNo} has been addded successfully`,
+                  message: `Replenisment request ${res.data.data.requestNo} has been addded successfully`,
                 },
               });
             } else if (!res.data.success) {
@@ -1191,8 +1191,8 @@ function AddEditPurchaseRequest(props) {
             <img src={purchase_request} />
             <h4>
               {comingFor === "add"
-                ? " Add Func Fulfillment"
-                : " Edit Func Fulfillment"}
+                ? " Add FuncU Fulfillment"
+                : " Edit FuncU Fulfillment"}
             </h4>
           </div>
 
@@ -1307,7 +1307,12 @@ function AddEditPurchaseRequest(props) {
 
           <div className="row">
             <div
-              className="col-md-6"
+              className={
+                currentUser &&
+                currentUser.staffTypeId.type === "Warehouse Inventory Keeper"
+                  ? "col-md-4"
+                  : "col-md-6"
+              }
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -1315,7 +1320,8 @@ function AddEditPurchaseRequest(props) {
             >
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DateTimePicker
-                  ampm={false}
+                  disabled
+                  // ampm={false}
                   inputVariant="filled"
                   onChange={onChangeDate}
                   // disabled={true}
@@ -1332,13 +1338,18 @@ function AddEditPurchaseRequest(props) {
                       : dateGenerated
                   }
                   label={"Date (MM/DD/YYYY)"}
-                  format="MM/dd/yyyy hh:mm a"
+                  format="MM/dd/yyyy HH:mm a"
                 />
               </MuiPickersUtilsProvider>
             </div>
 
             <div
-              className="col-md-6"
+              className={
+                currentUser &&
+                currentUser.staffTypeId.type === "Warehouse Inventory Keeper"
+                  ? "col-md-4"
+                  : "col-md-6"
+              }
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -1382,6 +1393,34 @@ function AddEditPurchaseRequest(props) {
                 })}
               </TextField>
             </div>
+
+            {currentUser &&
+            currentUser.staffTypeId.type === "Warehouse Inventory Keeper" ? (
+              <div
+                className={"col-md-4"}
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  disabled={true}
+                  label="Requested FU"
+                  name={"requestNo"}
+                  value={fuId.fuName}
+                  onChange={onChangeValue}
+                  className="textInputStyle"
+                  variant="filled"
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                  error={requestNo === "" && isFormSubmitted}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
           </div>
 
           {reason === "jit" ? (
@@ -1588,9 +1627,9 @@ function AddEditPurchaseRequest(props) {
                               <TableRow>
                                 <TableCell align="center">Name</TableCell>
                                 <TableCell align="center">Item Code</TableCell>
-                                <TableCell align="center">
+                                {/* <TableCell align="center">
                                   Purchase Price
-                                </TableCell>
+                                </TableCell> */}
                                 <TableCell align="center">
                                   Description
                                 </TableCell>
@@ -1611,9 +1650,9 @@ function AddEditPurchaseRequest(props) {
                                     <TableCell align="center">
                                       {i.itemCode}
                                     </TableCell>
-                                    <TableCell align="center">
+                                    {/* <TableCell align="center">
                                       {i.purchasePrice}
-                                    </TableCell>
+                                    </TableCell> */}
                                     <TableCell align="center">
                                       {i.description}
                                     </TableCell>
