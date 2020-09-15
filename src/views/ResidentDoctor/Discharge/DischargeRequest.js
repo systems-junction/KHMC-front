@@ -344,6 +344,7 @@ function DischargeRequest(props) {
     })
   }
 
+  console.log(dischargeMedArray, 'discharge Med aarray')
   const submitDischargeSummary = () => {
     const params = {
       _id: id,
