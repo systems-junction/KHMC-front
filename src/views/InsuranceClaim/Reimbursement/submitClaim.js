@@ -11,6 +11,7 @@ import {
   addClaim,
   getedripr,
   uploadsUrl,
+  searchpatient
 } from "../../../public/endpoins";
 import axios from "axios";
 import Notification from "../../../components/Snackbar/Notification.js";
@@ -193,6 +194,8 @@ function AddEditPatientListing(props) {
     patientId: "",
     status: "",
     responseCode: "",
+    diagnosisArray: '',
+    medicationArray: ''
 
     // billSummaryArray: "",
   };
@@ -221,6 +224,8 @@ function AddEditPatientListing(props) {
     patientId,
     status,
     responseCode,
+    diagnosisArray,
+    medicationArray
 
     // billSummaryArray,
   } = state;
@@ -248,6 +253,10 @@ function AddEditPatientListing(props) {
 
     const selectedRec = props.history.location.state.selectedItem;
     console.log("selected rec is ... ", selectedRec);
+
+    if (props.history.location.state.comingFor === "edit") {
+      getPatientByInfo(selectedRec.patient._id)
+    }
 
     if (selectedRec) {
       setClaimId(selectedRec._id);
@@ -355,7 +364,7 @@ function AddEditPatientListing(props) {
 
           props.history.push({
             pathname: "success",
-            state: { message: `Claim against Patient MRN ${profileNo} Submitted successfully`},
+            state: { message: `Claim against Patient MRN ${profileNo} Submitted successfully` },
           });
         } else if (!res.data.success) {
           setOpenNotification(true);
@@ -393,7 +402,7 @@ function AddEditPatientListing(props) {
         if (res.data.success) {
           props.history.push({
             pathname: "success",
-            state: { message:  `Claim against Patient MRN ${profileNo} Updated successfully` },
+            state: { message: `Claim against Patient MRN ${profileNo} Updated successfully` },
           });
         } else if (!res.data.success) {
           setOpenNotification(true);
@@ -473,6 +482,9 @@ function AddEditPatientListing(props) {
   };
 
   function handleAddItem(i) {
+    dispatch({field:"medicationArray", value:""})
+    dispatch({field:"diagnosisArray", value:""})
+
     console.log("selected banda", i);
 
     dispatch({ field: "patientId", value: i._id });
@@ -487,6 +499,7 @@ function AddEditPatientListing(props) {
 
     setSearchQuery("");
     getBillSummary(i._id);
+    getPatientByInfo(i._id);
   }
 
   function getBillSummary(i) {
@@ -544,6 +557,44 @@ function AddEditPatientListing(props) {
         console.log("error: ", e);
       });
   }
+
+  const getPatientByInfo = (id) => {
+    axios
+      .get(searchpatient + "/" + id)
+      .then((res) => {
+        if (res.data.success) {
+          if (res.data.data) {
+            console.log(
+              "Response after getting EDR/IPR data : ",
+              res.data.data
+            );
+
+            Object.entries(res.data.data).map(([key, val]) => {
+              if (val && typeof val === "object") {
+                if (key === "residentNotes") {
+                  if(val && val.length > 0){
+                  dispatch({ field: "diagnosisArray", value: val.reverse()[0].code });
+                }
+                } else if (key === "pharmacyRequest") {
+                  if(val && val.length > 0){
+                  dispatch({ field: "medicationArray", value: val.reverse()[0].medicine });
+                  }
+                }
+              } else {
+                dispatch({ field: key, value: val });
+              }
+            });
+          }
+        } else {
+          setOpenNotification(true);
+          setErrorMsg("EDR/IPR not generated for patient");
+        }
+      })
+      .catch((e) => {
+        setOpenNotification(true);
+        setErrorMsg(e);
+      });
+  };
 
   const handleInvoicePrint = () => {
     alert("Printer not attached");
@@ -801,6 +852,7 @@ function AddEditPatientListing(props) {
                 </div>
 
                 <div
+                  className="row"
                   style={{
                     marginTop: 10,
                     paddingLeft: 10,
@@ -838,29 +890,30 @@ function AddEditPatientListing(props) {
                 </span>
                   </div>
 
-                  <div className={"col-md-3 col-sm-3 col-3"} style={{}}>
-                    {/* {patientDetails &&
-                      patientDetails.drugAllergy.map((drug) => {
-                        return <h6 style={styles.textStyles}>{drug}</h6>;
-                      })} */}
+                  <div className={'col-md-3 col-sm-3 col-3'} style={styles.textStyles}>
+                    {"None"}
                   </div>
 
-                  <div className={"col-md-3 col-sm-3 col-3"} style={{}}>
-                    {/* {patientDetails &&
-                      patientDetails.drugAllergy.map((drug, index) => {
+                  <div className={'col-md-3 col-sm-3 col-3'} style={styles.textStyles}>
+                    {medicationArray ?
+                      medicationArray.map((drug, index) => {
                         return (
-                          <h6 style={styles.textStyles}>Medication {index + 1}</h6>
-                        );
-                      })} */}
+                          <h6 style={styles.textStyles}>{drug.medicineName}</h6>
+                        )
+                      }) :
+                      "None"
+                    }
                   </div>
 
-                  <div className={"col-md-3 col-sm-3 col-3"} style={{}}>
-                    {/* {patientDetails &&
-                      patientDetails.drugAllergy.map((drug, index) => {
+                  <div className={'col-md-3 col-sm-3 col-3'} style={styles.textStyles}>
+                    {diagnosisArray ?
+                      diagnosisArray.map((drug, index) => {
                         return (
-                          <h6 style={styles.textStyles}>Diagnosis {index + 1}</h6>
-                        );
-                      })} */}
+                          <h6 style={styles.textStyles}>{drug}</h6>
+                        )
+                      }) :
+                      "None"
+                    }
                   </div>
                 </div>
               </div>
@@ -876,7 +929,7 @@ function AddEditPatientListing(props) {
               className={`container-fluid ${classes.root}`}
             >
               <div className="row"
-                style={{...styles.patientDetails,marginRight:0,marginLeft:0}}>
+                style={{ ...styles.patientDetails, marginRight: 0, marginLeft: 0 }}>
                 <TextField
                   required
                   multiline
@@ -902,7 +955,7 @@ function AddEditPatientListing(props) {
                 className={`container-fluid ${classes.root}`}
                 style={{ marginTop: "10px" }}
               >
-                <div className="row" style={{marginLeft:0,marginRight:0}}>
+                <div className="row" style={{ marginLeft: 0, marginRight: 0 }}>
                   <TextField
                     required
                     select
@@ -942,7 +995,7 @@ function AddEditPatientListing(props) {
                 className="row"
                 style={{
                   ...styles.inputContainerForTextField,
-                  marginLeft:0,marginRight:0
+                  marginLeft: 0, marginRight: 0
                 }}
               >
                 <label style={styles.upload}>
