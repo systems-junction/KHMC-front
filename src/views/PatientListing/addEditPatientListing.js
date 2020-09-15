@@ -8,7 +8,8 @@ import Tab from '@material-ui/core/Tab'
 import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
 import DateFnsUtils from '@date-io/date-fns'
-import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
+import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
+import { DateTimePicker } from '@material-ui/pickers'
 import Fingerprint from '../../assets/img/fingerprint.png'
 import BarCode from '../../assets/img/Bar Code.png'
 import ErrorMessage from '../../components/ErrorMessage/errorMessage'
@@ -289,7 +290,7 @@ const useStyles = makeStyles((theme) => ({
       borderBottomColor: 'black',
       boxShadow: 'none',
     },
-    '&:focused': {
+    '&:focus': {
       boxShadow: 'none',
     },
   },
@@ -305,6 +306,10 @@ const useStyles = makeStyles((theme) => ({
     '& .Mui-disabled': {
       backgroundColor: 'white',
       color: 'gray',
+    },
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
     },
   },
 }))
@@ -325,7 +330,7 @@ function AddEditPatientListing(props) {
     height: '',
     weight: '',
     bloodGroup: '',
-    dob: '',
+    dob: new Date().toISOString().substr(0, 10),
     phoneNumber: '',
     mobileNumber: '',
     email: '',
@@ -597,6 +602,11 @@ function AddEditPatientListing(props) {
     }
   }
 
+  const handleChangeDate = (value) => {
+    dispatch({ field: 'dob', value: value.toISOString().substr(0, 10) })
+    calculate_age(value.toISOString().substr(0, 10))
+  }
+
   const handleAdd = () => {
     let formData = new FormData()
     if (slipUpload) {
@@ -756,7 +766,9 @@ function AddEditPatientListing(props) {
             if (!searchActivated) {
               props.history.push({
                 pathname: 'success',
-                state: { message: `Details of Patient with MRN ${res.data.data.profileNo} Updated Successfully` },
+                state: {
+                  message: `Details of Patient with MRN ${res.data.data.profileNo} Updated Successfully`,
+                },
               })
             }
           } else if (!res.data.success) {
@@ -1038,7 +1050,6 @@ function AddEditPatientListing(props) {
     }
 
     if (e.target.name === 'dob') {
-      console.log('data', e.target.value)
       calculate_age(e.target.value)
     }
 
@@ -1557,25 +1568,26 @@ function AddEditPatientListing(props) {
                   ...styles.textFieldPadding,
                 }}
               >
-                <TextField
-                  required
-                  variant='filled'
-                  label='Date of birth'
-                  name={'dob'}
-                  value={dob}
-                  type='date'
-                  error={dob === '' && detailsForm}
-                  className='textInputStyle'
-                  onChange={(e) => onChangeValue(e)}
-                  InputLabelProps={{
-                    shrink: true,
-                    color: 'black',
-                  }}
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                />
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <DatePicker
+                    required
+                    inputVariant='filled'
+                    fullWidth={true}
+                    label='Date of birth'
+                    format='MM/dd/yyyy'
+                    // minDate={dob}
+
+                    error={dob === '' && detailsForm}
+                    onChange={(val) => handleChangeDate(val, 'dob')}
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                    style={{ borderRadius: '10px' }}
+                    value={dob}
+                  />
+                </MuiPickersUtilsProvider>
+
                 <ErrorMessage name={dob} isFormSubmitted={detailsForm} />
               </div>
 

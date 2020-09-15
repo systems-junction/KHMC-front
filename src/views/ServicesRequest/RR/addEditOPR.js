@@ -7,7 +7,11 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import MenuItem from '@material-ui/core/MenuItem'
 import DateFnsUtils from '@date-io/date-fns'
-import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
+import {
+  DateTimePicker,
+  DatePicker,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers'
 import Button from '@material-ui/core/Button'
 import CurrencyTextField from '@unicef/material-ui-currency-textfield'
 import Fingerprint from '../../../assets/img/fingerprint.png'
@@ -279,6 +283,10 @@ const useStyles = makeStyles((theme) => ({
     '&:after': {
       borderBottomColor: 'black',
     },
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
   },
   root: {
     '& .MuiTextField-root': {
@@ -291,6 +299,10 @@ const useStyles = makeStyles((theme) => ({
     '& .Mui-disabled': {
       backgroundColor: 'white',
       color: 'gray',
+    },
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
     },
   },
 }))
@@ -310,7 +322,7 @@ function AddEditPatientListing(props) {
     height: '',
     weight: '',
     bloodGroup: '',
-    dob: '',
+    dob: new Date().toISOString().substr(0, 10),
     phoneNumber: '',
     mobileNumber: '',
     email: '',
@@ -579,6 +591,11 @@ function AddEditPatientListing(props) {
       //     validateEmergencyName(receiverName)
       //   )
     }
+  }
+
+  const handleChangeDate = (value) => {
+    dispatch({ field: 'dob', value: value.toISOString().substr(0, 10) })
+    calculate_age(value.toISOString().substr(0, 10))
   }
 
   const handleAdd = () => {
@@ -1508,25 +1525,25 @@ function AddEditPatientListing(props) {
                   ...styles.textFieldPadding,
                 }}
               >
-                <TextField
-                  required
-                  variant='filled'
-                  label='Date of birth'
-                  name={'dob'}
-                  value={dob}
-                  type='date'
-                  error={dob === '' && detailsForm}
-                  className='textInputStyle'
-                  onChange={(e) => onChangeValue(e)}
-                  InputLabelProps={{
-                    shrink: true,
-                    color: 'black',
-                  }}
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                />
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <DatePicker
+                    required
+                    inputVariant='filled'
+                    fullWidth={true}
+                    label='Date of birth'
+                    format='MM/dd/yyyy'
+                    // minDate={dob}
+                    error={dob === '' && detailsForm}
+                    onChange={(val) => handleChangeDate(val, 'dob')}
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                    style={{ borderRadius: '10px' }}
+                    value={dob}
+                  />
+                </MuiPickersUtilsProvider>
+
                 <ErrorMessage name={dob} isFormSubmitted={detailsForm} />
               </div>
 
