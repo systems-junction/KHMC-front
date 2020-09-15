@@ -83,7 +83,7 @@ function AddBusinessUnit(props) {
           />
 
           <img
-            onClick={() => props.history.goBack()}
+            onClick={() => props.history.location.comingFor && props.history.location.comingFor === "Triage" ? props.history.go(-2) : props.history.goBack()}
             src={Back}
             style={{ maxWidth: '40%', height: 'auto', cursor: 'pointer' }}
           />
