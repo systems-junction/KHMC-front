@@ -3228,13 +3228,24 @@ function AddEditPatientListing(props) {
           success={successMsg}
         />
 
-        <div style={{ marginBottom: 20, marginTop: 50 }}>
-          <img
+         <div style={{ marginBottom: 40, marginTop: 0, paddingLeft: 10 }}>
+         {/* <img
             onClick={onTabNavigation}
             src={Back_Arrow}
-            style={{ width: 45, height: 35, cursor: 'pointer' }}
-          />
+            style={{ width: 45, height: 35, cursor: "pointer" }}
+          /> */}
+
+          <Button
+            style={styles.stylesForButton}
+            //disabled={!validateFormType1()}
+            onClick={onTabNavigation}
+            variant="contained"
+            color="primary"
+          >
+            Cancel
+          </Button>
         </div>
+
       </div>
     </div>
   )
