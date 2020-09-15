@@ -71,7 +71,7 @@ export default function EDR(props) {
       .then((res) => {
         if (res.data.success) {
           console.log(res.data.data, 'ecr1')
-          res.data.data.map((d) => (d.createdAt = d.patientId.createdAt))
+          // res.data.data.map((d) => (d.createdAt = d.patientId.createdAt))
           // res.data.data.map((d) => (d.DateTime = formatDate(d.patientId.DateTime)))
           setEdr(res.data.data.reverse())
         } else if (!res.data.success) {

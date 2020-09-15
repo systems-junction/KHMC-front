@@ -451,7 +451,7 @@ function AddEditPatientListing(props) {
   const [isPatientSubmitted, setIsPatientSubmitted] = useState(false)
   const [enableForm, setenableForm] = useState(true)
   const [enableNext, setenableNext] = useState(true)
-  const [coPaymentField, setCoPaymentField] = useState(true)
+  const [coPaymentField, setCoPaymentField] = useState(false)
   const [detailsForm, setDetailsForm] = useState(false)
   const [emergencyForm, setEmergencyForm] = useState(false)
   const [paymentForm, setPaymentForm] = useState(false)
@@ -1064,7 +1064,9 @@ function AddEditPatientListing(props) {
     if (e.target.name === 'coverageTerms' && e.target.value === 'coPayment') {
       setCoPaymentField(true)
       console.log(e.target.name, e.target.value)
-    } else {
+    }
+    if (e.target.name === 'coverageTerms' && e.target.value === 'fullPayment') {
+      dispatch({ field: 'payment', value: '' })
       setCoPaymentField(false)
     }
 
@@ -2821,6 +2823,7 @@ function AddEditPatientListing(props) {
                 >
                   <TextField
                     label='Insurance Number'
+                    type='number'
                     name={'insuranceNo'}
                     value={insuranceNo}
                     onChange={onChangeValue}
