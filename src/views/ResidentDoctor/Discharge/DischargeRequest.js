@@ -209,6 +209,7 @@ function DischargeRequest(props) {
   const [patientDetailsDialog, openPatientDetailsDialog] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [enableForm, setenableForm] = useState(true)
+  const [backIsEmpty, setBackIsEmpty] = useState(false)
 
   useEffect(() => {
     setCurrentUser(cookie.load('current_user'))
@@ -310,6 +311,15 @@ function DischargeRequest(props) {
                       dispatch({ field: 'otherNotes', value: val1.otherNotes })
                     } else if (key1 === 'dischargeMedication') {
                       dispatch({ field: 'dischargeMedArray', value: [val1] })
+                      console.log('====================================')
+                      console.log(
+                        'dischargeMedArray',
+                        res.data.data.dischargeRequest.dischargeMedication
+                          .status === undefined
+                          ? setBackIsEmpty(true)
+                          : undefined
+                      )
+                      console.log('====================================')
                     }
                   })
                   dispatch({ field: 'dischargeRequest', value: val })
@@ -868,7 +878,7 @@ function DischargeRequest(props) {
             className='container-fluid'
           >
             <div className='row' style={{ marginTop: '20px' }}>
-              {dischargeMedArray !== 0 ? (
+              {dischargeMedArray !== 0 && backIsEmpty === false ? (
                 <CustomTable
                   tableData={dischargeMedArray}
                   tableDataKeys={tableDataKeysForDischargeMed}
@@ -879,7 +889,15 @@ function DischargeRequest(props) {
                   borderBottomWidth={20}
                 />
               ) : (
-                undefined
+                <CustomTable
+                  tableData={[]}
+                  tableDataKeys={tableDataKeysForDischargeMed}
+                  tableHeading={tableHeadingForDischargeMed}
+                  handleView={viewItem}
+                  action={actions}
+                  borderBottomColor={'#60d69f'}
+                  borderBottomWidth={20}
+                />
               )}
             </div>
 

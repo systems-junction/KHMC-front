@@ -51,15 +51,15 @@ const styles = {
     padding: '20px',
   },
   inputContainerForTextField: {
-    marginTop: 6,
+    marginTop: 10,
   },
 
   inputContainerForDropDown: {
     marginTop: 6,
   },
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
   input: {
     display: 'none',
@@ -212,16 +212,16 @@ function AddEditPurchaseRequest(props) {
                     value: new Date(val).toISOString(),
                   })
                 } else {
-                  if (key === 'status') {
-                    if (val === 'pending') {
-                      let p = 'None'
-                      val = p
-                      dispatch({ field: 'status', value: p })
-                      console.log('====================================')
-                      console.log(p)
-                      console.log('====================================')
-                    }
-                  }
+                  // if (key === 'status') {
+                  //   if (val === 'pending') {
+                  //     let p = 'None'
+                  //     val = p
+                  //     dispatch({ field: 'status', value: p })
+                  //     console.log('====================================')
+                  //     console.log(p)
+                  //     console.log('====================================')
+                  //   }
+                  // }
 
                   dispatch({ field: key, value: val })
                 }
@@ -317,9 +317,9 @@ function AddEditPurchaseRequest(props) {
     setValue(newValue)
   }
 
-  const onSampleIdEntered = () => {
-    dispatch({ field: 'status', value: 'pending' })
-  }
+  // const onSampleIdEntered = () => {
+  //   dispatch({ field: 'status', value: 'pending' })
+  // }
 
   const onSlipUpload = (event) => {
     var file = event.target.files[0]
@@ -642,11 +642,16 @@ function AddEditPurchaseRequest(props) {
                   >
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                       <DateTimePicker
+                        required
                         disabled={true}
-                        variant='filled'
+                        inputVariant='filled'
+                        fullWidth={true}
                         label='Date/Time'
-                        name={'date'}
                         format='MM/dd/yyyy HH:mm a'
+                        // minDate={dob}
+
+                        // error={dob === '' && detailsForm}
+                        // onChange={(val) => handleChangeDate(val, 'dob')}
                         InputProps={{
                           className: classes.input,
                           classes: { input: classes.input },
@@ -669,7 +674,7 @@ function AddEditPurchaseRequest(props) {
                       label='Sample ID'
                       name={'sampleId'}
                       value={sampleId}
-                      onBlur={onSampleIdEntered}
+                      // onBlur={onSampleIdEntered}
                       type='text'
                       className='textInputStyle'
                       onChange={onChangeValue}

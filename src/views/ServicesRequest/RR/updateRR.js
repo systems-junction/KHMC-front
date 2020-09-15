@@ -7,6 +7,8 @@ import InputLabel from '@material-ui/core/InputLabel'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
+import DateFnsUtils from '@date-io/date-fns'
+import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
 import axios from 'axios'
 import { FaUpload } from 'react-icons/fa'
 import {
@@ -912,8 +914,23 @@ function AddEditPurchaseRequest(props) {
     reader.onloadend = function() {
       if (fileType === 'pdf') {
         setpdfView(file.name)
-      } else {
+      } else if (fileType === 'PDF') {
+        setpdfView(file.name)
+      } else if (fileType === 'PNG') {
         setImagePreview([reader.result])
+      } else if (fileType === 'png') {
+        setImagePreview([reader.result])
+      } else if (fileType === 'jpeg') {
+        setImagePreview([reader.result])
+      } else if (fileType === 'JPEG') {
+        setImagePreview([reader.result])
+      } else if (fileType === 'jpg') {
+        setImagePreview([reader.result])
+      } else if (fileType === 'JPG') {
+        setImagePreview([reader.result])
+      } else {
+        setErrorMsg('only pdf, jpeg, png should be allowed')
+        setOpenNotification(true)
       }
     }
   }
@@ -1329,24 +1346,44 @@ function AddEditPurchaseRequest(props) {
                   ...styles.textFieldPadding,
                 }}
               >
-                <TextField
+                {/* <TextField
                   disabled={true}
-                  variant='filled'
-                  label='Date'
-                  name={'date'}
+                  variant="filled"
+                  label="Date"
+                  name={"date"}
                   value={date}
-                  type='date'
-                  className='textInputStyle'
+                  type="date"
+                  className="textInputStyle"
                   // onChange={(val) => onChangeValue(val, 'DateTime')}
                   InputLabelProps={{
                     shrink: true,
-                    color: 'black',
+                    color: "black",
                   }}
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
-                />
+                /> */}
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <DateTimePicker
+                    required
+                    disabled={true}
+                    inputVariant='filled'
+                    fullWidth={true}
+                    label='Date/Time'
+                    format='MM/dd/yyyy HH:mm a'
+                    // minDate={dob}
+
+                    // error={dob === '' && detailsForm}
+                    // onChange={(val) => handleChangeDate(val, 'dob')}
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                    style={{ borderRadius: '10px' }}
+                    value={date}
+                  />
+                </MuiPickersUtilsProvider>
               </div>
             </div>
 

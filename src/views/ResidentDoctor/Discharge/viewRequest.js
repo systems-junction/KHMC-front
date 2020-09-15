@@ -53,47 +53,6 @@ const styles = {
     fontWeight: '700',
   },
 }
-const stylesB = {
-  stylesForActive: {
-    verticalAlign: 'center',
-    fontSize: '0.62rem',
-    color: 'white',
-    cursor: 'pointer',
-    borderRadius: 10,
-    background: '#2c6ddd',
-    width: '100px',
-    height: '45px',
-    outline: 'none',
-    boxShadow: 'none',
-    // paddingBottom:"0.5rem",
-    // display:'flex',
-    // alignItems:'flex-start',
-  },
-  stylesForInActive: {
-    verticalAlign: 'center',
-    fontSize: '0.62rem',
-    color: 'white',
-    cursor: 'pointer',
-    borderRadius: 10,
-    background: '#845DC2',
-    width: '100px',
-    height: '45px',
-    outline: 'none',
-    boxShadow: 'none',
-  },
-  stylesForReceived: {
-    verticalAlign: 'center',
-    fontSize: '0.62rem',
-    color: 'white',
-    cursor: 'pointer',
-    borderRadius: 10,
-    background: '#845DC2',
-    width: '100px',
-    height: '45px',
-    boxShadow: 'none',
-    outline: 'none',
-  },
-}
 
 const useStyles = makeStyles(styles)
 
@@ -702,10 +661,8 @@ export default function EdrRequest(props) {
                     tableData={props.item.medicine}
                     tableDataKeys={tableDataKeysForPHR}
                     tableHeading={tableHeadingForPHR}
-                    // handleView={viewItem}
-                    // action={actions}
                     borderBottomColor={'#60d69f'}
-                    // borderBottomWidth={20}
+                    borderBottomWidth={20}
                   />
                 ) : (
                   undefined
@@ -715,23 +672,7 @@ export default function EdrRequest(props) {
               undefined
             )}
           </div>
-          {/* <div className="row">
-            <div
-              className="col-md-6 col-sm-6 col-6"
-              style={styles.inputContainerForTextField}
-            >
-              {props.item.serviceCode ? (
-                <div>
-                  <InputLabel style={styles.styleForLabel} id="generated-label">
-                    Service Code
-                  </InputLabel>
-                  <li> {props.item.medicine}</li>
-                </div>
-              ) : (
-                undefined
-              )}
-            </div>
-          </div> */}
+          {/* </div> */}
 
           {/* <div className='row'>
             <div

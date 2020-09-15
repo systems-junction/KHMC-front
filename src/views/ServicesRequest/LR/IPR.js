@@ -1,34 +1,34 @@
 /*eslint-disable*/
-import React, { useState, useEffect } from 'react'
-import Notification from '../../../components/Snackbar/Notification.js'
-import CustomTable from '../../../components/Table/Table'
-import axios from 'axios'
+import React, { useState, useEffect } from "react";
+import Notification from "../../../components/Snackbar/Notification.js";
+import CustomTable from "../../../components/Table/Table";
+import axios from "axios";
 import {
   getLRPatient,
   // getMaterialReceivingUrl
-} from '../../../public/endpoins'
-import Loader from 'react-loader-spinner'
-import Back from '../../../assets/img/Back_Arrow.png'
-import Header from '../../../components/Header/Header'
-import business_Unit from '../../../assets/img/Out Patient.png'
-import '../../../assets/jss/material-dashboard-react/components/loaderStyle.css'
-import socketIOClient from 'socket.io-client'
+} from "../../../public/endpoins";
+import Loader from "react-loader-spinner";
+import Back from "../../../assets/img/Back_Arrow.png";
+import Header from "../../../components/Header/Header";
+import business_Unit from "../../../assets/img/Out Patient.png";
+import "../../../assets/jss/material-dashboard-react/components/loaderStyle.css";
+import socketIOClient from "socket.io-client";
 
-const tableHeading = ['MRN', 'Request Number', 'Date', 'Status', 'Action']
-const tableDataKeys = ['profileNo', 'requestNo', 'date', 'status']
+const tableHeading = ["MRN", "Request Number", "Date", "Status", "Action"];
+const tableDataKeys = ["profileNo", "requestNo", "date", "status"];
 
-const actions = { view: true }
+const actions = { view: true };
 
 export default function EDR(props) {
-  const [Edr, setEdr] = useState('')
-  const [errorMsg, setErrorMsg] = useState('')
-  const [openNotification, setOpenNotification] = useState(false)
+  const [Edr, setEdr] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [openNotification, setOpenNotification] = useState(false);
 
   if (openNotification) {
     setTimeout(() => {
-      setOpenNotification(false)
-      setErrorMsg('')
-    }, 2000)
+      setOpenNotification(false);
+      setErrorMsg("");
+    }, 2000);
   }
 
   useEffect(() => {
@@ -38,58 +38,58 @@ export default function EDR(props) {
     //   setMaterialReceivings(data.reverse());
     //   console.log("res after adding through socket", data);
     // });
-    getEDRsData()
+    getEDRsData();
     // return () => socket.disconnect();
-  }, [])
+  }, []);
 
   function getEDRsData() {
     axios
       .get(getLRPatient)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data[0], 'ecr')
-          res.data.data[0].map((d) => (d.profileNo = d.patientData.profileNo))
-          setEdr(res.data.data[0].reverse())
+          console.log(res.data.data[0], "ecr");
+          res.data.data[0].map((d) => (d.profileNo = d.patientData.profileNo));
+          setEdr(res.data.data[0].reverse());
         } else if (!res.data.success) {
-          setErrorMsg(res.data.error)
-          setOpenNotification(true)
+          setErrorMsg(res.data.error);
+          setOpenNotification(true);
         }
-        return res
+        return res;
       })
       .catch((e) => {
-        console.log('error: ', e)
-      })
+        console.log("error: ", e);
+      });
   }
 
   function handleView(rec) {
-    let path = `ipr/viewIPR`
-    console.log(rec._id, 'id')
+    let path = `ipr/viewIPR`;
+    console.log(rec._id, "id");
     props.history.push({
       pathname: path,
       state: {
         selectedItem: rec,
-        comingFor: 'edr',
+        comingFor: "edr",
       },
-    })
+    });
   }
 
   return (
     <div
       style={{
-        display: 'flex',
-        flexDirection: 'column',
+        display: "flex",
+        flexDirection: "column",
         flex: 1,
-        position: 'fixed',
-        width: '100%',
-        height: '100%',
-        backgroundColor: '#60d69f',
-        overflowY: 'scroll',
+        position: "fixed",
+        width: "100%",
+        height: "100%",
+        backgroundColor: "#60d69f",
+        overflowY: "scroll",
       }}
     >
       <Header />
 
-      <div className='cPadding'>
-        <div className='subheader'>
+      <div className="cPadding">
+        <div className="subheader">
           <div>
             <img src={business_Unit} />
             <h4>In Patient</h4>
@@ -103,11 +103,11 @@ export default function EDR(props) {
         <div
           style={{
             flex: 4,
-            display: 'flex',
-            flexDirection: 'column',
+            display: "flex",
+            flexDirection: "column",
           }}
         >
-          {Edr ? (
+          {Edr !== " " ? (
             <div>
               <div>
                 <CustomTable
@@ -116,7 +116,7 @@ export default function EDR(props) {
                   tableHeading={tableHeading}
                   action={actions}
                   handleView={handleView}
-                  borderBottomColor={'#60d69f'}
+                  borderBottomColor={"#60d69f"}
                   borderBottomWidth={20}
                 />
               </div>
@@ -127,19 +127,40 @@ export default function EDR(props) {
                   style={{
                     width: 45,
                     height: 35,
-                    cursor: 'pointer',
+                    cursor: "pointer",
                   }}
                 />
               </div>
               <Notification msg={errorMsg} open={openNotification} />
             </div>
           ) : (
-            <div className='LoaderStyle'>
-              <Loader type='TailSpin' color='red' height={50} width={50} />
+            // <div className="LoaderStyle">
+            //   <Loader type="TailSpin" color="red" height={50} width={50} />
+            // </div>
+            <div className="row " style={{ marginTop: "25px" }}>
+              <div className="col-11">
+                <h3
+                  style={{
+                    color: "white",
+                    textAlign: "center",
+                    width: "100%",
+                    position: "absolute",
+                  }}
+                >
+                  Opps...No Data Found
+                </h3>
+              </div>
+              <div className="col-1" style={{ marginTop: 45 }}>
+                <img
+                  onClick={() => props.history.goBack()}
+                  src={Back_Arrow}
+                  style={{ maxWidth: "60%", height: "auto", cursor: "pointer" }}
+                />
+              </div>
             </div>
           )}
         </div>
       </div>
     </div>
-  )
+  );
 }
