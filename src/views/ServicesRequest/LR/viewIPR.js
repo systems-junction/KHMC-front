@@ -35,11 +35,6 @@ const statusArray = [
     key: "completed",
     value: "Completed",
   },
-
-  {
-    key: "active",
-    value: "Active",
-  },
 ];
 
 const styles = {
@@ -311,19 +306,11 @@ function AddEditPurchaseRequest(props) {
     reader.onloadend = function() {
       if (fileType === "pdf") {
         setpdfView(file.name);
-      } else if (fileType === "PDF") {
-        setpdfView(file.name);
-      } else if (fileType === "PNG") {
-        setImagePreview([reader.result]);
       } else if (fileType === "png") {
         setImagePreview([reader.result]);
       } else if (fileType === "jpeg") {
         setImagePreview([reader.result]);
-      } else if (fileType === "JPEG") {
-        setImagePreview([reader.result]);
       } else if (fileType === "jpg") {
-        setImagePreview([reader.result]);
-      } else if (fileType === "JPG") {
         setImagePreview([reader.result]);
       } else {
         setErrorMsg("only pdf, jpeg, png should be allowed");
@@ -625,7 +612,7 @@ function AddEditPurchaseRequest(props) {
                     }}
                   >
                     <TextField
-                      // disabled={false}
+                      disabled={true}
                       variant="filled"
                       label="Date/Time"
                       name={"date"}
