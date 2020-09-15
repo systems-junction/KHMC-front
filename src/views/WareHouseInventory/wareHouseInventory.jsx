@@ -41,7 +41,7 @@ const stylesB = {
   stylesForButton: {
     color: "white",
     cursor: "pointer",
-    borderRadius: 10,
+    borderRadius: 5,
     background: "#2c6ddd",
     width: "110px",
     height: "40px",
@@ -49,8 +49,22 @@ const stylesB = {
   },
 };
 
-const tableHeading = ["Item Name", "Quantity", "Action"];
-const tableDataKeys = [["itemId", "name"], "qty"];
+const tableHeading = [
+  "Item Name",
+  "Quantity",
+  "Maximum Level",
+  "Minimum Level",
+  ,
+  "Reorder Level",
+  "Action",
+];
+const tableDataKeys = [
+  ["itemId", "name"],
+  "qty",
+  "maximumLevel",
+  "minimumLevel",
+  "reorderLevel",
+];
 const actions = { edit: true, delete: false };
 
 export default function WareHouseInventory(props) {
@@ -117,7 +131,7 @@ export default function WareHouseInventory(props) {
     let path = `warehouseinventory/add`;
     props.history.push({
       pathname: path,
-      state: { comingFor: "add", items, staff, businessUnit },
+      state: { comingFor: "add", items, staff, businessUnit, whInventory },
     });
   };
 
@@ -131,6 +145,7 @@ export default function WareHouseInventory(props) {
         items,
         staff,
         businessUnit,
+        whInventory,
       },
     });
   }
