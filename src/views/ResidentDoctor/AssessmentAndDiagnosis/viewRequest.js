@@ -143,7 +143,7 @@ export default function EdrRequest(props) {
         <DialogTitle id='simple-dialog-title' style={{ color: 'white' }}>
           Details
         </DialogTitle>
-        <div className={`container-fluid ${classes.root}`}>
+        <div className='container-fluid'>
           <div className='row'>
             {props.item.serviceCode ? (
               <div
@@ -162,6 +162,7 @@ export default function EdrRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
+                    disableUnderline:true
                   }}
                 />
               </div>
@@ -186,6 +187,7 @@ export default function EdrRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
+                    disableUnderline:true
                   }}
                 />
               </div>
@@ -193,7 +195,7 @@ export default function EdrRequest(props) {
                 undefined
               )}
           </div>
-          <div className='row'>
+          <div className={`row ${classes.root}`}>
             {props.item.doctor ? (
               <div
                 className='col-md-6 col-sm-6 col-6'
@@ -214,6 +216,7 @@ export default function EdrRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
+                    disableUnderline:true
                   }}
                 />
               </div>
@@ -237,6 +240,7 @@ export default function EdrRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
+                    disableUnderline:true
                   }}
                 />
               </div>
@@ -258,6 +262,7 @@ export default function EdrRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
+                    disableUnderline:true
                   }}
                 />
               </div>
@@ -281,6 +286,7 @@ export default function EdrRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
+                    disableUnderline:true
                   }}
                 />
               </div>
@@ -302,15 +308,16 @@ export default function EdrRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
+                    disableUnderline:true
                   }}
                 />
               </div>
             ) : (
-                undefined
-              )}
+                  undefined
+                )}
           </div>
 
-          <div className='row'>
+          <div className={`row ${classes.root}`}>
             {props.item.description ? (
               <div
                 className='col-md-6 col-sm-6 col-6'
@@ -329,6 +336,7 @@ export default function EdrRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
+                    disableUnderline:true
                   }}
                 />
               </div>
@@ -354,6 +362,7 @@ export default function EdrRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
+                    disableUnderline:true
                   }}
                 />
               </div>
@@ -375,12 +384,13 @@ export default function EdrRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
+                    disableUnderline:true
                   }}
                 />
               </div>
             ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
           </div>
 
           <div
@@ -394,6 +404,7 @@ export default function EdrRequest(props) {
                     tableDataKeys={tableDataKeysForPHR}
                     tableHeading={tableHeadingForPHR}
                     borderBottomColor={'#60d69f'}
+                    borderBottomWidth={20}
                   />
                 ) : (
                     undefined
