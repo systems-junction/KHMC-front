@@ -985,7 +985,25 @@ function AddEditPatientListing(props) {
     }
   }
 
+  const onChangeBloodGroup = (e) => {
+    dispatch({
+      field: e.target.name,
+      value: e.target.value,
+    })
+  }
+
   const onChangeValue = (e) => {
+    var pattern = /^[a-zA-Z ]*$/
+    if (
+      e.target.name === 'firstName' ||
+      e.target.name === 'lastName' ||
+      e.target.name === 'emergencyName' ||
+      e.target.name === 'depositorName'
+    ) {
+      if (pattern.test(e.target.value) === false) {
+        return
+      }
+    }
     if (
       e.target.name === 'email'
       // e.target.name === 'phoneNumber' ||
@@ -1689,7 +1707,7 @@ function AddEditPatientListing(props) {
                   id='bloodGroup'
                   name='bloodGroup'
                   value={bloodGroup}
-                  onChange={onChangeValue}
+                  onChange={onChangeBloodGroup}
                   // error={bloodGroup === '' && isFormSubmitted}
                   label='Blood Group'
                   variant='filled'
