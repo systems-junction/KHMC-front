@@ -461,6 +461,19 @@ export default function EdrRequest(props) {
     return capitilizeLetter(val)
   }
 
+  const formatDate = (date) => {
+    const d = new Date(date)
+    return (
+      d.getDate() +
+      '/' +
+      (d.getMonth() + 1) +
+      '/' +
+      d.getFullYear() +
+      ' ' +
+      d.toLocaleTimeString()
+    )
+  }
+
   return (
     <Dialog
       onClose={() => props.viewItem('')}
@@ -488,7 +501,7 @@ export default function EdrRequest(props) {
                     disabled={true}
                     label='Date'
                     name={'date'}
-                    value={props.item.date}
+                    value={formatDate(props.item.date)}
                     className='textInputStyle'
                     variant='filled'
                     InputProps={{
@@ -676,14 +689,14 @@ export default function EdrRequest(props) {
             </div>
           </div>
           <div
-            className='container'
+            className='container-fluid'
             // style={styles.inputContainerForTextField}
           >
             {props.item.medicine ? (
               <div>
-                <InputLabel style={styles.styleForLabel} id='generated-label'>
+                {/* <InputLabel style={styles.styleForLabel} id='generated-label'>
                   Your PHR Medicine
-                </InputLabel>{' '}
+                </InputLabel>{' '} */}
                 {props.item.medicine ? (
                   <CustomTable
                     tableData={props.item.medicine}
@@ -720,7 +733,7 @@ export default function EdrRequest(props) {
             </div>
           </div> */}
 
-          <div className='row'>
+          {/* <div className='row'>
             <div
               className='col-md-12 col-sm-12 col-12 d-flex justify-content-center text-center'
               style={styles.inputContainerForTextField}
@@ -736,7 +749,7 @@ export default function EdrRequest(props) {
                 undefined
               )}
             </div>
-          </div>
+          </div> */}
 
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <div style={{ marginTop: '2%', marginBottom: '2%' }}>
