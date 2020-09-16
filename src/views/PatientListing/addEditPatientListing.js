@@ -2036,6 +2036,24 @@ function AddEditPatientListing(props) {
                 style={{
                   display: 'flex',
                   flex: 1,
+                  justifyContent: 'flex',
+                  marginTop: '2%',
+                  marginBottom: '2%',
+                }}
+              >
+                <Button
+                  style={styles.stylesForButton}
+                  onClick={onTabNavigation}
+                  variant='contained'
+                  color='default'
+                >
+                  Cancel
+                </Button>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  flex: 1,
                   justifyContent: 'flex-end',
                   marginTop: '2%',
                   marginBottom: '2%',
@@ -2182,6 +2200,24 @@ function AddEditPatientListing(props) {
             </div>
 
             <div style={{ display: 'flex', flex: 1, justifyContent: 'center' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  flex: 1,
+                  justifyContent: 'flex',
+                  marginTop: '2%',
+                  marginBottom: '2%',
+                }}
+              >
+                <Button
+                  style={styles.stylesForButton}
+                  onClick={onTabNavigation}
+                  variant='contained'
+                  color='default'
+                >
+                  Cancel
+                </Button>
+              </div>
               <div
                 style={{
                   display: 'flex',
@@ -2709,6 +2745,24 @@ function AddEditPatientListing(props) {
                 style={{
                   display: 'flex',
                   flex: 1,
+                  justifyContent: 'flex',
+                  marginTop: '2%',
+                  marginBottom: '2%',
+                }}
+              >
+                <Button
+                  style={styles.stylesForButton}
+                  onClick={onTabNavigation}
+                  variant='contained'
+                  color='default'
+                >
+                  Cancel
+                </Button>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  flex: 1,
                   justifyContent: 'flex-end',
                   marginTop: '2%',
                   marginBottom: '2%',
@@ -3138,6 +3192,24 @@ function AddEditPatientListing(props) {
                 style={{
                   display: 'flex',
                   flex: 1,
+                  justifyContent: 'flex',
+                  marginTop: '2%',
+                  marginBottom: '2%',
+                }}
+              >
+                <Button
+                  style={styles.stylesForButton}
+                  onClick={onTabNavigation}
+                  variant='contained'
+                  color='default'
+                >
+                  Cancel
+                </Button>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  flex: 1,
                   justifyContent: 'flex-end',
                   marginTop: '2%',
                   marginBottom: '2%',
@@ -3228,24 +3300,23 @@ function AddEditPatientListing(props) {
           success={successMsg}
         />
 
-         <div style={{ marginBottom: 40, marginTop: 0, paddingLeft: 10 }}>
-         {/* <img
+        <div style={{ marginBottom: 40, marginTop: 0, paddingLeft: 10 }}>
+          {/* <img
             onClick={onTabNavigation}
             src={Back_Arrow}
             style={{ width: 45, height: 35, cursor: "pointer" }}
           /> */}
 
-          <Button
+          {/* <Button
             style={styles.stylesForButton}
             //disabled={!validateFormType1()}
             onClick={onTabNavigation}
-            variant="contained"
-            color="primary"
+            variant='contained'
+            color='primary'
           >
             Cancel
-          </Button>
+          </Button> */}
         </div>
-
       </div>
     </div>
   )

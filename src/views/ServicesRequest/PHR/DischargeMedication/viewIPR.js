@@ -48,7 +48,7 @@ const tableDataKeysForPharmacy = [
   'requestedQty',
   // "unitPrice",
   // "totalPrice",
-  ['itemId', 'receiptUnitCost'],
+  ['itemId', 'issueUnitCost'],
   'total',
 ]
 
@@ -317,12 +317,11 @@ function AddEditPurchaseRequest(props) {
             'data'
           )
           res.data.data.dischargeRequest.dischargeMedication.medicine.map(
-            (d) =>
-              (d.itemId.receiptUnitCost = d.itemId.receiptUnitCost.toFixed(2))
+            (d) => (d.itemId.issueUnitCost = d.itemId.issueUnitCost.toFixed(2))
           )
           res.data.data.dischargeRequest.dischargeMedication.medicine.map(
             (d) =>
-              (d.total = (d.itemId.receiptUnitCost * d.requestedQty).toFixed(2))
+              (d.total = (d.itemId.issueUnitCost * d.requestedQty).toFixed(2))
           )
           if (res.data.data) {
             setIsLoading(false)

@@ -587,7 +587,7 @@ function AddEditEDR(props) {
 
     dispatch({ field: 'itemId', value: i._id })
     dispatch({ field: 'medicineName', value: i.name })
-    dispatch({ field: 'unitPrice', value: i.receiptUnitCost })
+    dispatch({ field: 'unitPrice', value: i.issueUnitCost })
     // dispatch({ field: 'totalPrice', value: i.purchasePrice + i.tax })
 
     setSearchQuery('')
