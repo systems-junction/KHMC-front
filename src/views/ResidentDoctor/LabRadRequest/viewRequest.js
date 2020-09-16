@@ -10,6 +10,9 @@ import capitilizeLetter from '../../../public/capitilizeLetter'
 import cookie from 'react-cookies'
 import CustomTable from '../../../components/Table/Table'
 import TextField from '@material-ui/core/TextField'
+import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
+import { DateTimePicker } from '@material-ui/pickers'
+import DateFnsUtils from '@date-io/date-fns'
 
 const tableHeadingForPHR = [
   'Medicine Name',
@@ -108,26 +111,24 @@ const useStylesForInput = makeStyles((theme) => ({
 
 export default function EdrRequest(props) {
   const classes = useStylesForInput()
-  const [currentUser] = React.useState(
-    cookie.load('current_user')
-  )
+  const [currentUser] = React.useState(cookie.load('current_user'))
 
   useEffect(() => {
     console.log(props.item, 'view Data')
   }, [])
 
   const formatDate = (date) => {
-    const d = new Date(date);
+    const d = new Date(date)
     return (
       d.getDate() +
-      "/" +
+      '/' +
       (d.getMonth() + 1) +
-      "/" +
+      '/' +
       d.getFullYear() +
-      " " +
+      ' ' +
       d.toLocaleTimeString()
-    );
-  };
+    )
+  }
 
   return (
     <Dialog
@@ -162,13 +163,13 @@ export default function EdrRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
-                    disableUnderline:true
+                    disableUnderline: true,
                   }}
                 />
               </div>
             ) : (
-                undefined
-              )}
+              undefined
+            )}
 
             {props.item.serviceName ? (
               <div
@@ -187,13 +188,13 @@ export default function EdrRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
-                    disableUnderline:true
+                    disableUnderline: true,
                   }}
                 />
               </div>
             ) : (
-                undefined
-              )}
+              undefined
+            )}
           </div>
           <div className={`row ${classes.root}`}>
             {props.item.doctor ? (
@@ -216,7 +217,7 @@ export default function EdrRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
-                    disableUnderline:true
+                    disableUnderline: true,
                   }}
                 />
               </div>
@@ -240,7 +241,7 @@ export default function EdrRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
-                    disableUnderline:true
+                    disableUnderline: true,
                   }}
                 />
               </div>
@@ -254,28 +255,26 @@ export default function EdrRequest(props) {
                   disabled={true}
                   label='Requester'
                   name={'requester'}
-                  value={
-                    props.item.requesterName
-                  }
+                  value={props.item.requesterName}
                   className='textInputStyle'
                   variant='filled'
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
-                    disableUnderline:true
+                    disableUnderline: true,
                   }}
                 />
               </div>
             ) : (
-                    undefined
-                  )}
+              undefined
+            )}
 
             {props.item.date ? (
               <div
                 className='col-md-6 col-sm-6 col-6'
                 style={styles.inputContainerForTextField}
               >
-                <TextField
+                {/* <TextField
                   required
                   disabled={true}
                   label='Date'
@@ -288,7 +287,25 @@ export default function EdrRequest(props) {
                     classes: { input: classes.input },
                     disableUnderline:true
                   }}
-                />
+                /> */}
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <DateTimePicker
+                    // required
+                    disabled
+                    inputVariant='filled'
+                    fullWidth={true}
+                    label='Date'
+                    format='MM-dd-yyyy HH:mm'
+                    // minDate={DateTime}
+                    // onChange={(val) => onChangeDate(val, 'DateTime')}
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                    style={{ borderRadius: '10px' }}
+                    value={props.item.date}
+                  />
+                </MuiPickersUtilsProvider>
               </div>
             ) : props.item.comments ? (
               <div
@@ -308,13 +325,13 @@ export default function EdrRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
-                    disableUnderline:true
+                    disableUnderline: true,
                   }}
                 />
               </div>
             ) : (
-                  undefined
-                )}
+              undefined
+            )}
           </div>
 
           <div className={`row ${classes.root}`}>
@@ -336,13 +353,13 @@ export default function EdrRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
-                    disableUnderline:true
+                    disableUnderline: true,
                   }}
                 />
               </div>
             ) : (
-                undefined
-              )}
+              undefined
+            )}
 
             {props.item.note ? (
               <div
@@ -362,7 +379,7 @@ export default function EdrRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
-                    disableUnderline:true
+                    disableUnderline: true,
                   }}
                 />
               </div>
@@ -384,18 +401,16 @@ export default function EdrRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
-                    disableUnderline:true
+                    disableUnderline: true,
                   }}
                 />
               </div>
             ) : (
-                  undefined
-                )}
+              undefined
+            )}
           </div>
 
-          <div
-            className='container-fluid'
-          >
+          <div className='container-fluid'>
             {props.item.medicine ? (
               <div className='row'>
                 {props.item.medicine ? (
@@ -407,12 +422,12 @@ export default function EdrRequest(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
             ) : (
-                undefined
-              )}
+              undefined
+            )}
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>

@@ -43,7 +43,7 @@ let icdCodesList = require('../../../assets/icdCodes.json')
 const tableHeadingForResident = [
   'Date/Time',
   'Description / Condition',
-  'Doctor Ref',
+  'Referring  doctor',
   'Action',
 ]
 const tableDataKeysForResident = ['date', 'description', 'doctorName']
@@ -51,7 +51,7 @@ const tableHeadingForConsultation = [
   'Date/Time',
   'Description / Condition',
   'Specialist',
-  'Doctor Ref',
+  'Referring  doctor',
   'Status',
   'Action',
 ]
@@ -72,8 +72,8 @@ const tableHeadingForPharmacy = [
 const tableDataKeysForPharmacy = ['PRrequestNo', 'date', 'doctorName', 'status']
 const tableHeadingForLabReq = [
   'Request Id',
-  'Service Code',
-  'Service Name',
+  'Test Code',
+  'Test',
   'Requester',
   'Status',
   'Action',
@@ -87,8 +87,8 @@ const tableDataKeysForLabReq = [
 ]
 const tableHeadingForRadiology = [
   'Request Id',
-  'Service Code',
-  'Service Name',
+  'Test Code',
+  'Test',
   'Requester',
   'Status',
   'Action',
@@ -1069,7 +1069,7 @@ function LabRadRequest(props) {
   const handlePatientSearch = (e) => {
     const a = e.target.value.replace(/[^\w\s]/gi, '')
     setSearchPatientQuery(a)
-    if (a.length >= 5) {
+    if (a.length >= 3) {
       axios
         .get(getSearchedpatient + '/' + a)
         .then((res) => {
@@ -1580,7 +1580,7 @@ function LabRadRequest(props) {
                   outline: 'none',
                   color: value === 0 ? '#12387a' : '#3B988C',
                 }}
-                label='Resident Doctor Notes'
+                label='Doctor/Physician Notes'
                 disabled={enableForm}
               />
               <Tab
@@ -1620,7 +1620,7 @@ function LabRadRequest(props) {
                   outline: 'none',
                   color: value === 4 ? '#12387a' : '#3B988C',
                 }}
-                label='External Consultation'
+                label='Consultant/Specialist Notes'
                 disabled={enableForm}
               />
             </Tabs>

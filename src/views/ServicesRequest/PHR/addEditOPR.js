@@ -2006,7 +2006,7 @@ function AddEditPatientListing(props) {
             </div>
 
             <div style={{ display: 'flex', flex: 1, justifyContent: 'center' }}>
-            <div
+              <div
                 style={{
                   display: 'flex',
                   flex: 1,
@@ -2213,7 +2213,7 @@ function AddEditPatientListing(props) {
             </div>
 
             <div style={{ display: 'flex', flex: 1, justifyContent: 'center' }}>
-            <div
+              <div
                 style={{
                   display: 'flex',
                   flex: 1,
@@ -2385,7 +2385,7 @@ function AddEditPatientListing(props) {
                     inputVariant='filled'
                     fullWidth={true}
                     label='Date/Time'
-                    format='MM/dd/yyyy HH:mm a'
+                    format='MM-dd-yyyy HH:mm'
                     minDate={DateTime}
                     // onChange={(val) => onChangeDate(val, 'DateTime')}
                     InputProps={{
@@ -2718,7 +2718,7 @@ function AddEditPatientListing(props) {
             )}
 
             <div style={{ display: 'flex', flex: 1, justifyContent: 'center' }}>
-            <div
+              <div
                 style={{
                   display: 'flex',
                   flex: 1,

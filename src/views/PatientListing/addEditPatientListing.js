@@ -2402,7 +2402,7 @@ function AddEditPatientListing(props) {
                     inputVariant='filled'
                     fullWidth={true}
                     label='Date/Time'
-                    format='MM/dd/yyyy HH:mm a'
+                    format='MM-dd-yyyy HH:mm'
                     minDate={DateTime}
                     // onChange={(val) => onChangeDate(val, 'DateTime')}
                     InputProps={{
