@@ -202,6 +202,8 @@ function AddEditPurchaseRequest(props) {
   const [, setsearchActivated] = useState(false);
   const [patientPopulate, setpatientPopulate] = useState(false);
   const [requestId, setRequestId] = useState("");
+  const [statusOnResult, setStatusOnResult] = useState("");
+  const [statusOnResultStatus, setStatusOnResultStatus] = useState(false);
 
   const getLRByIdURI = (id) => {
     axios
@@ -226,6 +228,15 @@ function AddEditPurchaseRequest(props) {
                     value: new Date(val).toISOString().substr(0, 10),
                   });
                 } else {
+                  if (key === "status") {
+                    setStatusOnResult(val);
+                    console.log("====================================");
+                    console.log(
+                      `params status: ${status} ${statusOnResult} ${statusOnResultStatus}`
+                    );
+                    console.log("====================================");
+                  }
+
                   dispatch({ field: key, value: val });
                 }
               }
@@ -253,8 +264,15 @@ function AddEditPurchaseRequest(props) {
       IPRId: iprId,
       EDRId: iprId,
       radiologyRequestId: rrId,
-      status: status,
+      status: statusOnResultStatus === true ? statusOnResult : status,
     };
+
+    console.log("====================================");
+    console.log(
+      `params status: ${status} ${statusOnResult} ${statusOnResultStatus}`
+    );
+    console.log("====================================");
+
     formData.append("data", JSON.stringify(params));
     console.log("PARAMSS ", params);
     axios
@@ -330,6 +348,22 @@ function AddEditPurchaseRequest(props) {
         setOpenNotification(true);
       }
     };
+    if (statusOnResult === "pending") {
+      setStatusOnResult("completed");
+      setStatusOnResultStatus(true);
+    } else if (statusOnResult === "active") {
+      setStatusOnResult("completed");
+      setStatusOnResultStatus(true);
+    } else {
+      setStatusOnResult("completed");
+      setStatusOnResultStatus(true);
+    }
+
+    console.log("====================================");
+    console.log(
+      `params status: ${status} ${statusOnResult} ${statusOnResultStatus}`
+    );
+    console.log("====================================");
   };
 
   // const handleSearch = (e) => {
