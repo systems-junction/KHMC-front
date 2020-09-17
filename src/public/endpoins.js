@@ -52,6 +52,7 @@ export const generateIPR = `${baseUrl}/ipr/addipr`;
 export const searchpatient = `${baseUrl}/patient/searchpatient`;
 export const updateEdrIpr = `${baseUrl}/patient/updateEdrIpr`;
 export const updateEdrIprItem = `${baseUrl}/patient/updateEdrIprItem`;
+export const searchPatientsURL = `${baseUrl}/patient/getpatientall`;
 // for notifications
 export const notifyTriage = `${baseUrl}/patient/triage`;
 export const notifyPharmacy = `${baseUrl}/patient/pharmacy`;
