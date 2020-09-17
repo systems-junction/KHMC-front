@@ -40,7 +40,7 @@ import {
   addPatientUrl,
   generateEDR,
   generateIPR,
-  getSearchedpatient,
+  searchPatientsURL,
 } from '../../public/endpoins'
 import axios from 'axios'
 import Notification from '../../components/Snackbar/Notification.js'
@@ -916,7 +916,7 @@ function AddEditPatientListing(props) {
     setSearchQuery(a)
     if (a.length >= 3) {
       axios
-        .get(getSearchedpatient + '/' + a)
+        .get(searchPatientsURL + '/' + a)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
