@@ -5,7 +5,7 @@
 
 ul li {
   list-style-type: none;
-  margin-top: 12px;
+  padding-top: 4px;
 }
 
 .cPadding {
@@ -20,9 +20,8 @@ ul li {
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size: 23px;
+  font-size: 24px;
   color: #2c6ddd;
-  float: right;
 }
 
 .addedCode:before {
@@ -31,9 +30,8 @@ ul li {
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size: 22px;
+  font-size: 24px;
   color: rgb(87, 206, 87);
-  float: right;
 }
 
 .scrollable {
