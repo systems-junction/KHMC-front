@@ -89,6 +89,12 @@ const styles = {
   },
 };
 
+const useStylesForTabs = makeStyles({
+  root: {
+    flexGrow: 1,
+  },
+});
+
 const useStyles = makeStyles((theme) => ({
   scroller: {
     flexGrow: "0",
@@ -173,8 +179,8 @@ function AddEditPurchaseRequest(props) {
       value: e.target.value.replace(/[^\w\s]/gi, ""),
     });
   };
-
-  const [, setCurrentUser] = useState("");
+  const classesForTabs = useStylesForTabs();
+  const [currentUser, setCurrentUser] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const [openNotification, setOpenNotification] = useState(false);
   const [selectedItem, setSelectedItem] = useState("");
@@ -188,9 +194,16 @@ function AddEditPurchaseRequest(props) {
   const [labId, setLabId] = useState("");
   const [, setRequestId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [, setAllExternalConsultants] = useState([]);
   const [checkStatus, setcheckStatus] = useState('')
   const [isFormSubmitted,setisFormSubmitted ]= useState(false)
+  const [statusOnResult, setStatusOnResult] = useState("");
+  const [statusOnResultStatus, setStatusOnResultStatus] = useState(false);
+  const [externalConsultant, setExternalConsultant] = useState("");
+  const [allExternalConsultants, setAllExternalConsultants] = useState([]);
+  const [
+    openExtenalConsultantDialog,
+    setOpenExtenalConsultantDialog,
+  ] = useState(false);
 
   const getEDRById = (id) => {
     axios
@@ -361,6 +374,22 @@ function AddEditPurchaseRequest(props) {
         setOpenNotification(true);
       }
     };
+    if (statusOnResult === "pending") {
+      setStatusOnResult("completed");
+      setStatusOnResultStatus(true);
+    } else if (statusOnResult === "active") {
+      setStatusOnResult("completed");
+      setStatusOnResultStatus(true);
+    } else {
+      setStatusOnResult("completed");
+      setStatusOnResultStatus(true);
+    }
+
+    console.log("====================================");
+    console.log(
+      `params status: ${status} ${statusOnResult} ${statusOnResultStatus}`
+    );
+    console.log("====================================");
   };
 
   const removeUploadedSlip = () => {

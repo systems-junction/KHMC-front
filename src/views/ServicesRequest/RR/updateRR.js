@@ -185,8 +185,14 @@ function AddEditPurchaseRequest(props) {
   const [, setRequestId] = useState("");
   const [, setId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [, setAllExternalConsultants] = useState([]);
-  const [checkStatus, setcheckStatus] = useState('')
+  const [statusOnResult, setStatusOnResult] = useState("");
+  const [checkStatus,setcheckStatus] = useState('')
+  const [statusOnResultStatus, setStatusOnResultStatus] = useState(false);
+  const [allExternalConsultants, setAllExternalConsultants] = useState([]);
+  const [
+    openExtenalConsultantDialog,
+    setOpenExtenalConsultantDialog,
+  ] = useState(false);
 
   const getEDRById = (id) => {
     axios
@@ -211,8 +217,23 @@ function AddEditPurchaseRequest(props) {
                   value: new Date(val).toISOString().substr(0, 10),
                 });
               } else {
-                if (key === 'status') {
-                  setcheckStatus(val)
+                if (key === "date") {
+                  dispatch({
+                    field: "date",
+                    value: new Date(val).toISOString().substr(0, 10),
+                  });
+                } else {
+                  if (key === "status") {
+                    setStatusOnResult(val);
+                    setcheckStatus(val)
+                    console.log("====================================");
+                    console.log(
+                      `params status: ${status} ${statusOnResult} ${statusOnResultStatus}`
+                    );
+                    console.log("====================================");
+                  }
+
+                  dispatch({ field: key, value: val });
                 }
                 dispatch({ field: key, value: val });
               }
@@ -269,7 +290,7 @@ function AddEditPurchaseRequest(props) {
       radiologyRequestId: radId,
       OPRId: oprId,
       data: selectedItem,
-      status: status,
+      status: statusOnResultStatus === true ? statusOnResult : status,
     };
     formData.append("data", JSON.stringify(params));
     console.log("params", params);
@@ -342,6 +363,16 @@ function AddEditPurchaseRequest(props) {
         setOpenNotification(true);
       }
     };
+    if (statusOnResult === "pending") {
+      setStatusOnResult("completed");
+      setStatusOnResultStatus(true);
+    } else if (statusOnResult === "active") {
+      setStatusOnResult("completed");
+      setStatusOnResultStatus(true);
+    } else {
+      setStatusOnResult("completed");
+      setStatusOnResultStatus(true);
+    }
   };
 
   const removeUploadedSlip = () => {
