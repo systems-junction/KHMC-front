@@ -102,8 +102,8 @@ const tableDataKeysForLabReq = [
   'status',
 ]
 const tableHeadingForRadiology = [
-  'Service Code',
-  'Service Name',
+  'Test Code',
+  'Test',
   'Requester',
   'Status',
   'Action',
@@ -1371,7 +1371,7 @@ function AddEditPurchaseRequest(props) {
                     inputVariant='filled'
                     fullWidth={true}
                     label='Date/Time'
-                    format='MM/dd/yyyy HH:mm a'
+                    format='MM-dd-yyyy HH:mm'
                     // minDate={dob}
 
                     // error={dob === '' && detailsForm}

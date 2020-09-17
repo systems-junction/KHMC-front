@@ -92,8 +92,8 @@ const tableDataKeysForPharmacy = [
   'status',
 ]
 const tableHeadingForLabReq = [
-  'Service Code',
-  'Service Name',
+  'Test Code',
+  'Test',
   'Requester',
   'Status',
   'Action',
