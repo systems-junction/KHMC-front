@@ -187,7 +187,8 @@ function AddEditPurchaseRequest(props) {
   const [value, setValue] = React.useState(0)
   const [pdfView, setpdfView] = useState('')
   const [requestId, setRequestId] = useState('')
-
+  const [statusOnResult, setStatusOnResult] = useState('')
+  const [statusOnResultStatus, setStatusOnResultStatus] = useState(false)
   const getLRByIdURI = (id) => {
     axios
       .get(getLRByIdURL + '/' + id)
@@ -212,6 +213,15 @@ function AddEditPurchaseRequest(props) {
                     value: new Date(val).toISOString(),
                   })
                 } else {
+                  if (key === 'status') {
+                    setStatusOnResult(val)
+                    console.log('====================================')
+                    console.log(
+                      `params status: ${status} ${statusOnResult} ${statusOnResultStatus}`
+                    )
+                    console.log('====================================')
+                  }
+
                   // if (key === 'status') {
                   //   if (val === 'pending') {
                   //     let p = 'None'
@@ -254,11 +264,18 @@ function AddEditPurchaseRequest(props) {
       IPRId: iprId,
       EDRId: iprId,
       labRequestId: lrId,
-      status: status,
+      status: statusOnResultStatus === true ? statusOnResult : status,
       sampleId: sampleId,
     }
+
+    console.log('====================================')
+    console.log(
+      `params status: ${status} ${statusOnResult} ${statusOnResultStatus}`
+    )
+    console.log('====================================')
+
     formData.append('data', JSON.stringify(params))
-    // console.log('PARAMSS ', params)
+    console.log('PARAMSS ', params)
     axios
       .put(updateLRByIdURL, formData, {
         headers: {
@@ -274,7 +291,7 @@ function AddEditPurchaseRequest(props) {
             pathname: 'success',
             state: {
               //of request Id ${requestId}
-              message: `Lab services request patient MRN ${res.data.data.patientId.profileNo} submitted successfully`,
+              message: `Lab services request # ${res.data.data.requestNo} for patient MRN ${res.data.data.patientId.profileNo} submitted successfully`,
             },
           })
         } else {
@@ -335,17 +352,46 @@ function AddEditPurchaseRequest(props) {
     reader.onloadend = function() {
       if (fileType === 'pdf') {
         setpdfView(file.name)
+      } else if (fileType === 'PDF') {
+        setpdfView(file.name)
       } else if (fileType === 'png') {
+        setImagePreview([reader.result])
+      } else if (fileType === 'PNG') {
         setImagePreview([reader.result])
       } else if (fileType === 'jpeg') {
         setImagePreview([reader.result])
+      } else if (fileType === 'JPEG') {
+        setImagePreview([reader.result])
       } else if (fileType === 'jpg') {
         setImagePreview([reader.result])
+      } else if (fileType === 'JPG') {
+        setImagePreview([reader.result])
+      } else if (fileType === 'rtf') {
+        setImagePreview([reader.result])
+      } else if (fileType === 'RTF') {
+        setImagePreview([reader.result])
       } else {
-        setErrorMsg('only pdf, jpeg, png should be allowed')
+        setErrorMsg('only pdf, jpeg, png and rtf should be allowed')
         setOpenNotification(true)
       }
     }
+
+    if (statusOnResult === 'pending') {
+      setStatusOnResult('completed')
+      setStatusOnResultStatus(true)
+    } else if (statusOnResult === 'active') {
+      setStatusOnResult('completed')
+      setStatusOnResultStatus(true)
+    } else {
+      setStatusOnResult('completed')
+      setStatusOnResultStatus(true)
+    }
+
+    console.log('====================================')
+    console.log(
+      `params status: ${status} ${statusOnResult} ${statusOnResultStatus}`
+    )
+    console.log('====================================')
   }
   return (
     <div

@@ -822,9 +822,9 @@ function AddEditPurchaseRequest(props) {
         setpdfView(file.name)
       } else if (fileType === 'PDF') {
         setpdfView(file.name)
-      } else if (fileType === 'PNG') {
-        setImagePreview([reader.result])
       } else if (fileType === 'png') {
+        setImagePreview([reader.result])
+      } else if (fileType === 'PNG') {
         setImagePreview([reader.result])
       } else if (fileType === 'jpeg') {
         setImagePreview([reader.result])
@@ -834,8 +834,12 @@ function AddEditPurchaseRequest(props) {
         setImagePreview([reader.result])
       } else if (fileType === 'JPG') {
         setImagePreview([reader.result])
+      } else if (fileType === 'rtf') {
+        setImagePreview([reader.result])
+      } else if (fileType === 'RTF') {
+        setImagePreview([reader.result])
       } else {
-        setErrorMsg('only pdf, jpeg, png should be allowed')
+        setErrorMsg('only pdf, jpeg, png and rtf should be allowed')
         setOpenNotification(true)
       }
     }
