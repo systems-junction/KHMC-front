@@ -3,17 +3,14 @@
 /* eslint-disable react/jsx-indent */
 import React, { useEffect, useState, useReducer } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
 import MenuItem from "@material-ui/core/MenuItem";
 import BootstrapInput from "../../../components/Dropdown/dropDown.js";
 import {
   uploadsUrl,
-  getRRIPRById,
   getRRByIdURL,
   updateRRByIdURL,
-  getRRPatientById,
 } from "../../../public/endpoins";
 import cookie from "react-cookies";
 import Header from "../../../components/Header/Header";
@@ -25,15 +22,22 @@ import TextField from "@material-ui/core/TextField";
 import { FaUpload } from "react-icons/fa";
 import Loader from "react-loader-spinner";
 import "../../../assets/jss/material-dashboard-react/components/loaderStyle.css";
-import Paper from "@material-ui/core/Paper";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import Fingerprint from "../../../assets/img/fingerprint.png";
-import AccountCircle from "@material-ui/icons/SearchOutlined";
-import InputAdornment from "@material-ui/core/InputAdornment";
+import { MdRemoveCircle } from 'react-icons/md'
+
+const statusArray = [
+  {
+    key: "pending",
+    value: "Pending",
+  },
+  {
+    key: "completed",
+    value: "Completed",
+  },
+  {
+    key: "active",
+    value: "Active",
+  },
+];
 
 const styles = {
   patientDetails: {
@@ -42,7 +46,7 @@ const styles = {
     padding: "20px",
   },
   inputContainerForTextField: {
-    marginTop: 6,
+    marginTop: 15,
   },
 
   inputContainerForDropDown: {
@@ -86,21 +90,6 @@ const styles = {
   },
 };
 
-const statusArray = [
-  {
-    key: "pending",
-    value: "Pending",
-  },
-  {
-    key: "completed",
-    value: "Completed",
-  },
-  {
-    key: "active",
-    value: "Active",
-  },
-];
-
 const useStyles = makeStyles((theme) => ({
   scroller: {
     flexGrow: "0",
@@ -139,6 +128,9 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: "white",
       color: "black",
     },
+    "& .Mui-disabled": {
+      color: "gray",
+    },
   },
 }));
 
@@ -146,18 +138,9 @@ function AddEditPurchaseRequest(props) {
   const classes = useStyles();
 
   const initialState = {
-    name: "",
-    price: "",
+    serviceName: "",
     status: "",
-    date: "",
     results: "",
-    gender: "",
-    age: "",
-    profileNo: "",
-    firstName: "",
-    lastName: "",
-    insuranceId: "",
-    requestNo: "",
     comments: "",
   };
 
@@ -171,16 +154,9 @@ function AddEditPurchaseRequest(props) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const {
-    name,
+    serviceName,
     status,
     results,
-    gender,
-    age,
-    profileNo,
-    firstName,
-    lastName,
-    insuranceId,
-    requestNo,
     comments,
   } = state;
 
@@ -188,22 +164,18 @@ function AddEditPurchaseRequest(props) {
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setsuccessMsg] = useState("");
   const [openNotification, setOpenNotification] = useState(false);
-  const [selectedItem, setSelectedItem] = useState("");
-  const [selectedPatient, setSelectedPatient] = useState("");
+  const [, setSelectedItem] = useState("");
+  const [, setSelectedPatient] = useState("");
   const [rrId, setrrId] = useState("");
   const [iprId, setiprId] = useState("");
   const [slipUpload, setSlipUpload] = useState("");
   const [imagePreview, setImagePreview] = useState("");
   const [pdfView, setpdfView] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [itemFound, setItemFound] = useState("");
-  const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false);
-  const [, setsearchActivated] = useState(false);
-  const [patientPopulate, setpatientPopulate] = useState(false);
-  const [requestId, setRequestId] = useState("");
+  const [, setRequestId] = useState("");
   const [statusOnResult, setStatusOnResult] = useState("");
   const [statusOnResultStatus, setStatusOnResultStatus] = useState(false);
+  const [checkStatus,setcheckStatus] = useState('')
 
   const getLRByIdURI = (id) => {
     axios
@@ -216,29 +188,28 @@ function AddEditPurchaseRequest(props) {
             setIsLoading(false);
 
             Object.entries(res.data.data).map(([key, val]) => {
-              if (val && typeof val === "object") {
-                if (key === "serviceId") {
-                  dispatch({ field: "name", value: val.name });
-                  dispatch({ field: "price", value: val.price });
-                }
+              // if (val && typeof val === "object") {
+              //   if (key === "serviceId") {
+              //     dispatch({ field: "serviceName", value: val.serviceName });
+              //     dispatch({ field: "price", value: val.price });
+              //   }
+              // }
+              if (key === "date") {
+                dispatch({
+                  field: "date",
+                  value: new Date(val).toISOString().substr(0, 10),
+                });
               } else {
-                if (key === "date") {
-                  dispatch({
-                    field: "date",
-                    value: new Date(val).toISOString().substr(0, 10),
-                  });
-                } else {
-                  if (key === "status") {
-                    setStatusOnResult(val);
-                    console.log("====================================");
-                    console.log(
-                      `params status: ${status} ${statusOnResult} ${statusOnResultStatus}`
-                    );
-                    console.log("====================================");
-                  }
-
-                  dispatch({ field: key, value: val });
+                if (key === "status") {
+                  setStatusOnResult(val);
+                  setcheckStatus(val)
+                  // console.log("====================================");
+                  // console.log(
+                  //   `params status: ${status} ${statusOnResult} ${statusOnResultStatus}`
+                  // );
+                  // console.log("====================================");
                 }
+                dispatch({ field: key, value: val });
               }
             });
           }
@@ -248,6 +219,7 @@ function AddEditPurchaseRequest(props) {
         console.log("error while searching req", e);
       });
   };
+
   const onChangeValue = (e) => {
     dispatch({
       field: e.target.name,
@@ -316,6 +288,7 @@ function AddEditPurchaseRequest(props) {
   }, []);
 
   const onSlipUpload = (event) => {
+    event.preventDefault()
     var file = event.target.files[0];
     var fileType = file.name.slice(file.name.length - 3);
 
@@ -326,7 +299,7 @@ function AddEditPurchaseRequest(props) {
     var reader = new FileReader();
     var url = reader.readAsDataURL(file);
 
-    reader.onloadend = function() {
+    reader.onloadend = function () {
       if (fileType === "pdf") {
         setpdfView(file.name);
       } else if (fileType === "PDF") {
@@ -362,62 +335,43 @@ function AddEditPurchaseRequest(props) {
       setStatusOnResult("completed");
       setStatusOnResultStatus(true);
     }
-
-    console.log("====================================");
-    console.log(
-      `params status: ${status} ${statusOnResult} ${statusOnResultStatus}`
-    );
-    console.log("====================================");
   };
 
-  // const handleSearch = (e) => {
-  //   setSearchQuery(e.target.value)
-  //   if (e.target.value.length >= 3) {
-  //     axios
-  //       .get(getRRPatientById + '/' + e.target.value)
-  //       .then((res) => {
-  //         if (res.data.success) {
-  //           console.log('patient data ', res.data)
-  //           if (res.data.data[0].length > 0) {
-  //             setItemFoundSuccessfully(true)
-  //             setItemFound(res.data.data[0])
-  //           } else {
-  //             setItemFoundSuccessfully(false)
-  //             setItemFound('')
-  //           }
-  //         }
-  //       })
-  //       .catch((e) => {
-  //         console.log('error while searching patient', e)
-  //       })
-  //   }
-  // }
+  const removeUploadedSlip = () => {
+    console.log("Slip ..... ", slipUpload)
 
-  // function handleAddItem(i) {
-  //   console.log('selected banda', i)
-  //   setpatientPopulate(true)
-  //   // const dob = new Date(i.dob).toISOString().substr(0, 10)
+    var fileType = slipUpload.name.slice(slipUpload.name.length - 3)
 
-  //   // setPatientId(i._id)
-  //   dispatch({ field: 'name', value: i.serviceName })
-  //   if (i.results != null) {
-  //     dispatch({ field: 'results', value: i.results })
-  //   }
+    // console.log("Selected file : ", file.name)
+    // console.log("file type : ", fileType)
 
-  //   dispatch({ field: 'gender', value: i.patientData.gender })
-  //   dispatch({ field: 'age', value: i.patientData.age })
-  //   dispatch({ field: 'profileNo', value: i.patientData.profileNo })
-  //   dispatch({ field: 'firstName', value: i.patientData.firstName })
-  //   dispatch({ field: 'lastName', value: i.patientData.lastName })
-  //   dispatch({ field: 'insuranceId', value: i.patientData.insuranceId })
-  //   dispatch({ field: 'requestNo', value: i.edipId.requestNo })
+    setSlipUpload('')
 
-  //   setrrId(i._id)
-  //   setiprId(i.edipId._id)
-
-  //   setSearchQuery('')
-  //   setsearchActivated(true)
-  // }
+    if (fileType === "pdf") {
+      setpdfView('');
+    } else if (fileType === "PDF") {
+      setpdfView('');
+    } else if (fileType === "png") {
+      setImagePreview('');
+    } else if (fileType === "PNG") {
+      setImagePreview('');
+    } else if (fileType === "jpeg") {
+      setImagePreview('');
+    } else if (fileType === "JPEG") {
+      setImagePreview('');
+    } else if (fileType === "jpg") {
+      setImagePreview('');
+    } else if (fileType === "JPG") {
+      setImagePreview('');
+    } else if (fileType === "rtf") {
+      setImagePreview('');
+    } else if (fileType === "RTF") {
+      setImagePreview('');
+    } else {
+      setErrorMsg("Cannot remove file");
+      setOpenNotification(true);
+    }
+  }
 
   if (openNotification) {
     setTimeout(() => {
@@ -456,424 +410,6 @@ function AddEditPurchaseRequest(props) {
             }}
           />
 
-          {/* <div
-            style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-            className={`container ${classes.root}`}
-          >
-            <div className='row' style={{ marginTop: '20px' }}>
-              <div
-                className='col-md-11 col-sm-10 col-10'
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <TextField
-                  type='text'
-                  label='Search Patient by Name / MRN / National ID / Mobile Number'
-                  name={'searchQuery'}
-                  value={searchQuery}
-                  onChange={handleSearch}
-                  className='textInputStyle'
-                  variant='filled'
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position='end'>
-                        <AccountCircle />
-                      </InputAdornment>
-                    ),
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  InputLabelProps={{
-                    className: classes.label,
-                    classes: { label: classes.label },
-                  }}
-                />
-              </div>
-
-              <div className='col-md-1 col-sm-2 col-2'>
-                <div
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    backgroundColor: 'white',
-                    borderRadius: 5,
-                    height: 55,
-                  }}
-                >
-                  <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
-                </div>
-              </div>
-            </div>
-            <div className='row'>
-              <div
-                className='col-md-11 col-sm-11 col-10'
-                style={{
-                  //  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                {searchQuery ? (
-                  <div style={{ zIndex: 3 }}>
-                    <Paper>
-                      {itemFoundSuccessfull ? (
-                        itemFound && (
-                          <Table size='small'>
-                            <TableHead>
-                              <TableRow>
-                                <TableCell>MRN</TableCell>
-                                <TableCell>Patient Name</TableCell>
-                                <TableCell>Gender</TableCell>
-                                <TableCell>Age</TableCell>
-                                <TableCell>Payment Method</TableCell>
-                                <TableCell>Service Name</TableCell>
-                              </TableRow>
-                            </TableHead>
-
-                            <TableBody>
-                              {itemFound.map((i) => {
-                                return (
-                                  <TableRow
-                                    key={i._id}
-                                    onClick={() => handleAddItem(i)}
-                                    style={{ cursor: 'pointer' }}
-                                  >
-                                    <TableCell>
-                                      {i.patientData.profileNo}
-                                    </TableCell>
-                                    <TableCell>
-                                      {i.patientData.firstName +
-                                        ` ` +
-                                        i.patientData.lastName}
-                                    </TableCell>
-                                    <TableCell>
-                                      {i.patientData.gender}
-                                    </TableCell>
-                                    <TableCell>{i.patientData.age}</TableCell>
-                                    <TableCell>
-                                      {i.patientData.paymentMethod}
-                                    </TableCell>
-                                    <TableCell>{i.serviceName}</TableCell>
-                                  </TableRow>
-                                )
-                              })}
-                            </TableBody>
-                          </Table>
-                        )
-                      ) : (
-                        <h4
-                          style={{ textAlign: 'center' }}
-                          onClick={() => setSearchQuery('')}
-                        >
-                          Patient Not Found
-                        </h4>
-                      )}
-                    </Paper>
-                  </div>
-                ) : (
-                  undefined
-                )}
-              </div>
-            </div>
-          </div>
-          <br /> */}
-
-          <div className="container-fluid" style={styles.patientDetails}>
-            <div className="row">
-              <div className="col-md-12">
-                <h4 style={{ color: "blue", fontWeight: "600" }}>
-                  Patient Details
-                </h4>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-4 col-sm-4">
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
-                    Patient Name
-                  </InputLabel>
-                  <span>
-                    {selectedPatient.firstName + ` ` + selectedPatient.lastName}{" "}
-                  </span>
-                </div>
-              </div>
-              <div className="col-md-4 col-sm-4">
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
-                    Gender
-                  </InputLabel>
-                  <span>{selectedPatient.gender}</span>
-                </div>
-              </div>
-              <div className="col-md-4 col-sm-4">
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
-                    Age
-                  </InputLabel>
-                  <span>{selectedPatient.age}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="row">
-              <div className="col-md-4 col-sm-4">
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
-                    MRN
-                  </InputLabel>
-                  {selectedPatient.profileNo}
-                </div>
-              </div>
-
-              <div className="col-md-4 col-sm-4">
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
-                    Insurance No
-                  </InputLabel>
-                  <span>
-                    {selectedPatient.insuranceId
-                      ? selectedPatient.insuranceId
-                      : "--"}
-                  </span>
-                </div>
-              </div>
-              <div className="col-md-4 col-sm-4">
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
-                    Request No
-                  </InputLabel>
-                  <span>{selectedItem.requestNo}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* {patientPopulate ? (
-            <div className='container' style={styles.patientDetails}>
-              <div className='row'>
-                <div className='col-md-12'>
-                  <h4 style={{ color: '#2c6ddd', fontWeight: '600' }}>
-                    Patient Details
-                  </h4>
-                </div>
-              </div>
-
-              <div className='row'>
-                <div className='col-md-4 col-sm-4'>
-                  <div style={styles.inputContainerForTextField}>
-                    <TextField
-                      disabled={true}
-                      label='Patient Name'
-                      value={firstName + ` ` + lastName}
-                      variant='filled'
-                      className='textInputStyle'
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                        disableUnderline: true,
-                      }}
-                      InputLabelProps={{
-                        className: classes.label,
-                        classes: { label: classes.label },
-                      }}
-                    />
-                  </div>
-                </div>
-
-                <div className='col-md-4 col-sm-4'>
-                  <div style={styles.inputContainerForTextField}>
-                    <TextField
-                      disabled={true}
-                      label='gender'
-                      name={'gender'}
-                      value={gender}
-                      variant='filled'
-                      className='textInputStyle'
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                        disableUnderline: true,
-                      }}
-                      InputLabelProps={{
-                        className: classes.label,
-                        classes: { label: classes.label },
-                      }}
-                    />
-                  </div>
-                </div>
-                <div className='col-md-4 col-sm-4'>
-                  <div style={styles.inputContainerForTextField}>
-                    <TextField
-                      disabled={true}
-                      label='Age'
-                      name={'age'}
-                      value={age}
-                      variant='filled'
-                      className='textInputStyle'
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                        disableUnderline: true,
-                      }}
-                      InputLabelProps={{
-                        className: classes.label,
-                        classes: { label: classes.label },
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className='row'>
-                <div className='col-md-4 col-sm-4'>
-                  <div style={styles.inputContainerForTextField}>
-                    <TextField
-                      disabled={true}
-                      label='Patient MRN'
-                      name={'profileNo'}
-                      value={profileNo}
-                      variant='filled'
-                      className='textInputStyle'
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                        disableUnderline: true,
-                      }}
-                      InputLabelProps={{
-                        className: classes.label,
-                        classes: { label: classes.label },
-                      }}
-                    />
-                  </div>
-                </div>
-
-                <div className='col-md-4 col-sm-4'>
-                  <div style={styles.inputContainerForTextField}>
-                    <TextField
-                      disabled={true}
-                      label='Insurance No'
-                      name={'insuranceId'}
-                      value={insuranceId}
-                      variant='filled'
-                      className='textInputStyle'
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                        disableUnderline: true,
-                      }}
-                      InputLabelProps={{
-                        className: classes.label,
-                        classes: { label: classes.label },
-                      }}
-                    />
-                  </div>
-                </div>
-                <div className='col-md-4 col-sm-4'>
-                  <div style={styles.inputContainerForTextField}>
-                    <TextField
-                      disabled={true}
-                      label='Request No'
-                      name={'requestNo'}
-                      value={requestNo}
-                      variant='filled'
-                      className='textInputStyle'
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                        disableUnderline: true,
-                      }}
-                      InputLabelProps={{
-                        className: classes.label,
-                        classes: { label: classes.label },
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className='container' style={styles.patientDetails}>
-              <div className='row'>
-                <div className='col-md-12'>
-                  <h4 style={{ color: 'blue', fontWeight: '600' }}>
-                    Patient Details
-                  </h4>
-                </div>
-              </div>
-              <div className='row'>
-                <div className='col-md-4 col-sm-4'>
-                  <div style={styles.inputContainerForTextField}>
-                    <InputLabel style={styles.stylesForLabel} id='status-label'>
-                      Patient Name
-                    </InputLabel>
-                    <span>
-                      {selectedPatient.firstName +
-                        ` ` +
-                        selectedPatient.lastName}{' '}
-                    </span>
-                  </div>
-                </div>
-                <div className='col-md-4 col-sm-4'>
-                  <div style={styles.inputContainerForTextField}>
-                    <InputLabel style={styles.stylesForLabel} id='status-label'>
-                      Gender
-                    </InputLabel>
-                    <span>{selectedPatient.gender}</span>
-                  </div>
-                </div>
-                <div className='col-md-4 col-sm-4'>
-                  <div style={styles.inputContainerForTextField}>
-                    <InputLabel style={styles.stylesForLabel} id='status-label'>
-                      Age
-                    </InputLabel>
-                    <span>{selectedPatient.age}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className='row'>
-                <div className='col-md-4 col-sm-4'>
-                  <div style={styles.inputContainerForTextField}>
-                    <InputLabel style={styles.stylesForLabel} id='status-label'>
-                      MRN
-                    </InputLabel>
-                    {selectedPatient.profileNo}
-                  </div>
-                </div>
-
-                <div className='col-md-4 col-sm-4'>
-                  <div style={styles.inputContainerForTextField}>
-                    <InputLabel style={styles.stylesForLabel} id='status-label'>
-                      Insurance No
-                    </InputLabel>
-                    <span>
-                      {selectedPatient.insuranceId
-                        ? selectedPatient.insuranceId
-                        : '--'}
-                    </span>
-                  </div>
-                </div>
-                <div className='col-md-4 col-sm-4'>
-                  <div style={styles.inputContainerForTextField}>
-                    <InputLabel style={styles.stylesForLabel} id='status-label'>
-                      Request No
-                    </InputLabel>
-                    <span>{selectedItem.requestNo}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )} */}
-
-          <div
-            style={{
-              height: "20px",
-            }}
-          />
-
           <div
             style={{ flex: 4, display: "flex", flexDirection: "column" }}
             className={`container-fluid ${classes.root}`}
@@ -889,14 +425,14 @@ function AddEditPurchaseRequest(props) {
                 <TextField
                   disabled={true}
                   label="Radiology / Imaging"
-                  name={"name"}
-                  value={name}
-                  // onChange={onChangeValue}
+                  name={"serviceName"}
+                  value={serviceName}
                   variant="filled"
                   className="textInputStyle"
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
+                    disableUnderline: true
                   }}
                   InputLabelProps={{
                     className: classes.label,
@@ -904,69 +440,8 @@ function AddEditPurchaseRequest(props) {
                   }}
                 />
               </div>
-              {/* <div
-                className='col-md-4 col-sm-4'
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <TextField
-                  disabled={true}
-                  label='Price'
-                  variant='filled'
-                  name={'price'}
-                  value={price}
-                  // onChange={onChangeValue}
-                  className='textInputStyle'
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  InputLabelProps={{
-                    className: classes.label,
-                    classes: { label: classes.label },
-                  }}
-                />
-              </div>
-
-              <div
-                className='col-md-4 col-sm-4'
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <TextField
-                  fullWidth
-                  select
-                  id='status'
-                  name='status'
-                  value={status}
-                  onChange={onChangeValue}
-                  variant='filled'
-                  label='Status'
-                  className='dropDownStyle'
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  input={<BootstrapInput />}
-                >
-                  <MenuItem value=''>
-                    <em>None</em>
-                  </MenuItem>
-                  {statusArray.map((val) => {
-                    return (
-                      <MenuItem key={val.key} value={val.key}>
-                        {val.value}
-                      </MenuItem>
-                    )
-                  })}
-                </TextField>
-              </div> */}
             </div>
-            <br />
+
             <div className="row">
               <div
                 className="col-md-12 col-sm-12"
@@ -985,6 +460,7 @@ function AddEditPurchaseRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
+                    disableUnderline: true
                   }}
                   InputLabelProps={{
                     className: classes.label,
@@ -993,8 +469,8 @@ function AddEditPurchaseRequest(props) {
                 />
               </div>
             </div>
-            <br />
-            <div className="row" style={{ marginTop: "20px" }}>
+
+            <div className="row">
               <div
                 className="col-md-12 col-sm-12"
                 style={{
@@ -1005,6 +481,7 @@ function AddEditPurchaseRequest(props) {
                 <TextField
                   fullWidth
                   select
+                  disabled={checkStatus === "completed" ? true : false}
                   id="status"
                   name="status"
                   value={status}
@@ -1031,7 +508,7 @@ function AddEditPurchaseRequest(props) {
                 </TextField>
               </div>
             </div>
-            <br />
+
             <div className="row">
               <div
                 className="col-md-12 col-sm-12 col-12"
@@ -1044,134 +521,127 @@ function AddEditPurchaseRequest(props) {
                   <TextField
                     required
                     type="file"
-                    // helperText="only pdf, jpeg, png should be allowed"
                     style={styles.input}
-                    onChange={onSlipUpload}
+                    onChange={checkStatus === "completed" ? 
+                    (e) => {
+                      e.preventDefault()
+                      setErrorMsg("Request is already completed")
+                      setOpenNotification(true)
+                    }:
+                    onSlipUpload}
                     name="results"
                     error={errorMsg}
                   />
                   <FaUpload /> Results
                 </label>
-                {pdfView !== "" ? (
-                  <div
-                    style={{
-                      textAlign: "center",
-                      color: "#2c6ddd",
-                      fontStyle: "italic",
-                    }}
-                  >
-                    <span style={{ color: "black" }}>Selected File : </span>
-                    {pdfView}
+
+                {pdfView !== '' ? (
+                  <div className='row' style={{
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}>
+                    <div
+                      style={{
+                        color: '#2c6ddd',
+                        fontStyle: 'italic',
+                      }}
+                    >
+                      <span style={{ color: 'black' }}>Selected File : </span>
+                      {pdfView}
+                    </div>
+                    <div>
+                      <a
+                        onClick={removeUploadedSlip}
+                        style={{ marginLeft: '25px', color: '#e877a1' }}
+                        href=''
+                      >
+                        <MdRemoveCircle /> Remove
+                          </a>
+                    </div>
                   </div>
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
               </div>
-              {/* <div
-                className='col-md-6 col-sm-6 col-6'
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <TextField
-                  disabled={true}
-                  variant='filled'
-                  label='Date/Time'
-                  name={'date'}
-                  value={date}
-                  type='date'
-                  className='textInputStyle'
-                  // onChange={(val) => onChangeValue(val, 'DateTime')}
-                  InputLabelProps={{
-                    shrink: true,
-                    color: 'black',
-                  }}
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                />
-              </div> */}
             </div>
 
             <div className="row">
               {results !== "" && results.includes("\\") ? (
                 <>
                   {results !== "" &&
-                  results.slice(results.length - 3) !== "pdf" ? (
-                    <div
-                      className="col-md-6 col-sm-6 col-6"
-                      style={{
-                        ...styles.inputContainerForTextField,
-                        ...styles.textFieldPadding,
-                      }}
-                    >
-                      <img
-                        src={uploadsUrl + results.split("\\")[1]}
-                        className="depositSlipImg"
-                      />
-                    </div>
-                  ) : results !== "" &&
-                    results.slice(results.length - 3) === "pdf" ? (
-                    <div
-                      className="col-md-6 col-sm-6 col-6"
-                      style={{
-                        ...styles.inputContainerForTextField,
-                        ...styles.textFieldPadding,
-                        // textAlign:'center',
-                      }}
-                    >
-                      <a
-                        href={uploadsUrl + results.split("\\")[1]}
-                        style={{ color: "#2c6ddd" }}
+                    results.slice(results.length - 3) !== "pdf" ? (
+                      <div
+                        className="col-md-6 col-sm-6 col-6"
+                        style={{
+                          ...styles.inputContainerForTextField,
+                          ...styles.textFieldPadding,
+                        }}
                       >
-                        Click here to open results
+                        <img
+                          src={uploadsUrl + results.split("\\")[1]}
+                          className="depositSlipImg"
+                        />
+                      </div>
+                    ) : results !== "" &&
+                      results.slice(results.length - 3) === "pdf" ? (
+                        <div
+                          className="col-md-6 col-sm-6 col-6"
+                          style={{
+                            ...styles.inputContainerForTextField,
+                            ...styles.textFieldPadding,
+                            // textAlign:'center',
+                          }}
+                        >
+                          <a
+                            href={uploadsUrl + results.split("\\")[1]}
+                            style={{ color: "#2c6ddd" }}
+                          >
+                            Click here to open results
                       </a>
-                    </div>
-                  ) : (
-                    undefined
-                  )}
+                        </div>
+                      ) : (
+                        undefined
+                      )}
                 </>
               ) : results !== "" && results.includes("/") ? (
                 <>
                   {results !== "" &&
-                  results.slice(results.length - 3) !== "pdf" ? (
-                    <div
-                      className="col-md-6 col-sm-6 col-6"
-                      style={{
-                        ...styles.inputContainerForTextField,
-                        ...styles.textFieldPadding,
-                      }}
-                    >
-                      <img
-                        src={uploadsUrl + results}
-                        className="depositSlipImg"
-                      />
-                    </div>
-                  ) : results !== "" &&
-                    results.slice(results.length - 3) === "pdf" ? (
-                    <div
-                      className="col-md-6 col-sm-6 col-6"
-                      style={{
-                        ...styles.inputContainerForTextField,
-                        ...styles.textFieldPadding,
-                      }}
-                    >
-                      <a
-                        href={uploadsUrl + results}
-                        style={{ color: "#2c6ddd" }}
+                    results.slice(results.length - 3) !== "pdf" ? (
+                      <div
+                        className="col-md-6 col-sm-6 col-6"
+                        style={{
+                          ...styles.inputContainerForTextField,
+                          ...styles.textFieldPadding,
+                        }}
                       >
-                        Click here to open results
+                        <img
+                          src={uploadsUrl + results}
+                          className="depositSlipImg"
+                        />
+                      </div>
+                    ) : results !== "" &&
+                      results.slice(results.length - 3) === "pdf" ? (
+                        <div
+                          className="col-md-6 col-sm-6 col-6"
+                          style={{
+                            ...styles.inputContainerForTextField,
+                            ...styles.textFieldPadding,
+                          }}
+                        >
+                          <a
+                            href={uploadsUrl + results}
+                            style={{ color: "#2c6ddd" }}
+                          >
+                            Click here to open results
                       </a>
-                    </div>
-                  ) : (
-                    undefined
-                  )}
+                        </div>
+                      ) : (
+                        undefined
+                      )}
                 </>
               ) : (
-                undefined
-              )}
+                    undefined
+                  )}
 
               {imagePreview !== "" ? (
                 <div
@@ -1182,22 +652,32 @@ function AddEditPurchaseRequest(props) {
                   }}
                 >
                   <img src={imagePreview} className="depositSlipImg" />
-                  {results !== "" ? (
-                    <div style={{ color: "black", textAlign: "center" }}>
-                      New results
+                  <div className="row">
+                    <div className="col-md-4 col-sm-5 col-5">
+                      <Button
+                        onClick={removeUploadedSlip}
+                        style={{ ...styles.stylesForButton, backgroundColor: "#e877a1" }}
+                        variant='contained'
+                        color='primary'
+                      >
+                        <MdRemoveCircle size='16px' /><strong style={{ marginLeft: '5px', fontSize: '13px' }}>Remove</strong>
+                      </Button>
                     </div>
-                  ) : (
-                    undefined
-                  )}
+                    {results !== '' ? (
+                      <div className="col-md-4 col-sm-5 col-5" style={{ marginTop: '10px', fontWeight: '500', color: 'gray', textAlign: 'center' }}>
+                        New results
+                      </div>
+                    ) : (
+                        undefined
+                      )}
+                  </div>
                 </div>
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
             </div>
 
-            <br />
-            <br />
-            <div className="row" style={{ marginBottom: "25px" }}>
+            <div className="row" style={{ marginBottom: "25px", marginTop: '25px' }}>
               <div className="col-md-6 col-sm-6 col-6">
                 <img
                   onClick={() => props.history.goBack()}
@@ -1207,6 +687,7 @@ function AddEditPurchaseRequest(props) {
               </div>
               <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
                 <Button
+                  disabled={checkStatus === "completed" ? true : false}
                   onClick={updateLRByIdURI}
                   style={styles.stylesForButton}
                   variant="contained"
@@ -1225,10 +706,10 @@ function AddEditPurchaseRequest(props) {
           />
         </div>
       ) : (
-        <div className="LoaderStyle">
-          <Loader type="TailSpin" color="red" height={50} width={50} />
-        </div>
-      )}
+          <div className="LoaderStyle">
+            <Loader type="TailSpin" color="red" height={50} width={50} />
+          </div>
+        )}
     </div>
   );
 }

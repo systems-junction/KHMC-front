@@ -157,7 +157,6 @@ const styles = {
   patientDetails: {
     backgroundColor: "white",
     borderRadius: 5,
-    padding: "20px",
   },
   inputContainerForTextField: {
     marginTop: 25,
@@ -314,8 +313,8 @@ function LabRadRequest(props) {
     section: "",
     code: [],
     patientId: '',
-    diagnosisArray:'',
-    medicationArray:''
+    diagnosisArray: '',
+    medicationArray: ''
   };
 
   function reducer(state, { field, value }) {
@@ -1153,8 +1152,8 @@ function LabRadRequest(props) {
 
 
   function handleAddPatient(i) {
-    dispatch({field:"diagnosisArray",value:""})
-    dispatch({field:"medicationArray",value:""})
+    dispatch({ field: "diagnosisArray", value: "" })
+    dispatch({ field: "medicationArray", value: "" })
     // setDialogOpen(true);
     console.log("selected banda : ", i);
     setPatientDetails(i);
@@ -1209,8 +1208,8 @@ function LabRadRequest(props) {
                         : "")
                   );
                   dispatch({ field: "residentNoteArray", value: val.reverse() });
-                  if(val && val.length > 0){
-                  dispatch({ field: "diagnosisArray", value: val[0].code });
+                  if (val && val.length > 0) {
+                    dispatch({ field: "diagnosisArray", value: val[0].code });
                   }
                 } else if (key === "pharmacyRequest") {
                   val.map(
@@ -1220,8 +1219,8 @@ function LabRadRequest(props) {
                         : "")
                   );
                   dispatch({ field: "pharmacyRequestArray", value: val.reverse() });
-                  if(val && val.length > 0){
-                  dispatch({ field: "medicationArray", value: val[0].medicine });
+                  if (val && val.length > 0) {
+                    dispatch({ field: "medicationArray", value: val[0].medicine });
                   }
                 }
                 //  else if (key === "nurseService") {
@@ -1510,7 +1509,7 @@ function LabRadRequest(props) {
             </div>
 
             <div
-            className="row"
+              className="row"
               style={{
                 marginTop: 10,
                 paddingLeft: 10,
@@ -1558,10 +1557,10 @@ function LabRadRequest(props) {
               </div>
 
               <div className={'col-md-3 col-sm-3 col-3'} style={styles.textStyles}>
-                {medicationArray ? 
+                {medicationArray ?
                   medicationArray.map((drug, index) => {
                     return (
-                    <h6 style={styles.textStyles}>{drug.medicineName}</h6>
+                      <h6 style={styles.textStyles}>{drug.medicineName}</h6>
                     )
                   }) :
                   "None"
@@ -2452,11 +2451,12 @@ function LabRadRequest(props) {
                       <ul>
                         {icdCode.map((item) => (
                           <li key={item}>
-                            {item} &nbsp;
                             <span
                               className='addCode'
                               onClick={(e) => addICDcodes(item, e)}
+                              style={{ marginRight: 20, marginTop: 5 }}
                             />
+                            {item}
                           </li>
                         ))}
                       </ul>

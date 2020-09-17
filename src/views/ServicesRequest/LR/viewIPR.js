@@ -10,23 +10,24 @@ import {
   getLRByIdURL,
   uploadsUrl,
   updateLRByIdURL,
-} from "../../../public/endpoins";
-import DateFnsUtils from "@date-io/date-fns";
-import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import cookie from "react-cookies";
-import Header from "../../../components/Header/Header";
-import business_Unit from "../../../assets/img/Out Patient.png";
-import Back from "../../../assets/img/Back_Arrow.png";
-import "../../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Notification from "../../../components/Snackbar/Notification.js";
-import TextField from "@material-ui/core/TextField";
-import MenuItem from "@material-ui/core/MenuItem";
-import BootstrapInput from "../../../components/Dropdown/dropDown.js";
-import Loader from "react-loader-spinner";
-import { FaUpload } from "react-icons/fa";
-import "../../../assets/jss/material-dashboard-react/components/loaderStyle.css";
+} from '../../../public/endpoins'
+import DateFnsUtils from '@date-io/date-fns'
+import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
+import cookie from 'react-cookies'
+import Header from '../../../components/Header/Header'
+import business_Unit from '../../../assets/img/Out Patient.png'
+import Back from '../../../assets/img/Back_Arrow.png'
+import '../../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
+import Notification from '../../../components/Snackbar/Notification.js'
+import TextField from '@material-ui/core/TextField'
+import MenuItem from '@material-ui/core/MenuItem'
+import BootstrapInput from '../../../components/Dropdown/dropDown.js'
+import Loader from 'react-loader-spinner'
+import { FaUpload } from 'react-icons/fa'
+import { MdRemoveCircle } from 'react-icons/md'
+import '../../../assets/jss/material-dashboard-react/components/loaderStyle.css'
 
 const statusArray = [
   {
@@ -136,6 +137,9 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: "white",
       color: "black",
     },
+    '& .Mui-disabled': {
+      color: 'gray'
+    }
   },
 }));
 
@@ -143,14 +147,13 @@ function AddEditPurchaseRequest(props) {
   const classes = useStyles();
 
   const initialState = {
-    name: "",
-    price: "",
-    status: "",
-    date: "",
-    results: "",
-    sampleId: "",
-    comments: "",
-  };
+    serviceName: '',
+    status: '',
+    date: '',
+    results: '',
+    sampleId: '',
+    comments: '',
+  }
 
   function reducer(state, { field, value }) {
     return {
@@ -161,7 +164,7 @@ function AddEditPurchaseRequest(props) {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const { name, price, status, date, results, sampleId, comments } = state;
+  const { serviceName, status, date, results, sampleId, comments } = state
 
   const onChangeValue = (e) => {
     dispatch({
@@ -189,6 +192,9 @@ function AddEditPurchaseRequest(props) {
   const [requestId, setRequestId] = useState("");
   const [statusOnResult, setStatusOnResult] = useState("");
   const [statusOnResultStatus, setStatusOnResultStatus] = useState(false);
+  const [checkStatus,setcheckStatus] = useState('')
+  const [isFormSubmitted,setisFormSubmitted ]= useState(false)
+
   const getLRByIdURI = (id) => {
     axios
       .get(getLRByIdURL + "/" + id)
@@ -200,41 +206,30 @@ function AddEditPurchaseRequest(props) {
             setIsLoading(false);
 
             Object.entries(res.data.data).map(([key, val]) => {
-              if (val && typeof val === "object") {
-                if (key === "serviceId") {
-                  console.log("sxervice Id", val);
-                  dispatch({ field: "name", value: val.name });
-                  dispatch({ field: "price", value: val.price });
-                }
+              // if (val && typeof val === 'object') {
+              //   if (key === 'serviceId') {
+              //     dispatch({ field: 'serviceName', value: val.serviceName })
+              //     dispatch({ field: 'price', value: val.price })
+              //   }
+              // } 
+              if (key === 'date') {
+                dispatch({
+                  field: 'date',
+                  value: new Date(val).toISOString(),
+                })
               } else {
-                if (key === "date") {
-                  dispatch({
-                    field: "date",
-                    value: new Date(val).toISOString(),
-                  });
-                } else {
-                  if (key === "status") {
-                    setStatusOnResult(val);
-                    console.log("====================================");
-                    console.log(
-                      `params status: ${status} ${statusOnResult} ${statusOnResultStatus}`
-                    );
-                    console.log("====================================");
-                  }
-
-                  // if (key === 'status') {
-                  //   if (val === 'pending') {
-                  //     let p = 'None'
-                  //     val = p
-                  //     dispatch({ field: 'status', value: p })
-                  //     console.log('====================================')
-                  //     console.log(p)
-                  //     console.log('====================================')
-                  //   }
-                  // }
-
-                  dispatch({ field: key, value: val });
+                if (key === 'status') {
+                  setcheckStatus(val)
+                //   if (val === 'pending') {
+                //     let p = 'None'
+                //     val = p
+                //     dispatch({ field: 'status', value: p })
+                //     console.log('====================================')
+                //     console.log(p)
+                //     console.log('====================================')
+                //   }
                 }
+                dispatch({ field: key, value: val })
               }
             });
           }
@@ -255,6 +250,7 @@ function AddEditPurchaseRequest(props) {
   // }
 
   const updateLRByIdURI = () => {
+    if (validateForm()) {
     let formData = new FormData();
     if (slipUpload) {
       formData.append("file", slipUpload, slipUpload.name);
@@ -302,8 +298,20 @@ function AddEditPurchaseRequest(props) {
       .catch((e) => {
         console.log("error while searching req", e);
       });
-    //}
+    }
+    else{
+      setOpenNotification(true);
+      setErrorMsg("Enter the sample ID")
+    }
+    setisFormSubmitted(true)
   };
+
+  const validateForm = () => {
+    return (
+    sampleId &&
+    sampleId.length > 0
+    )
+  }
 
   useEffect(() => {
     // console.log("selected", props.history.location.state.selectedItem);
@@ -334,11 +342,8 @@ function AddEditPurchaseRequest(props) {
     setValue(newValue);
   };
 
-  // const onSampleIdEntered = () => {
-  //   dispatch({ field: 'status', value: 'pending' })
-  // }
-
   const onSlipUpload = (event) => {
+    event.preventDefault()
     var file = event.target.files[0];
     var fileType = file.name.slice(file.name.length - 3);
 
@@ -349,7 +354,7 @@ function AddEditPurchaseRequest(props) {
     var reader = new FileReader();
     var url = reader.readAsDataURL(file);
 
-    reader.onloadend = function() {
+    reader.onloadend = function () {
       if (fileType === "pdf") {
         setpdfView(file.name);
       } else if (fileType === "PDF") {
@@ -386,13 +391,44 @@ function AddEditPurchaseRequest(props) {
       setStatusOnResult("completed");
       setStatusOnResultStatus(true);
     }
+  }
 
-    console.log("====================================");
-    console.log(
-      `params status: ${status} ${statusOnResult} ${statusOnResultStatus}`
-    );
-    console.log("====================================");
-  };
+  const removeUploadedSlip = () => {
+    console.log("Slip ..... ", slipUpload)
+
+    var fileType = slipUpload.name.slice(slipUpload.name.length - 3)
+
+    // console.log("Selected file : ", file.name)
+    // console.log("file type : ", fileType)
+
+    setSlipUpload('')
+
+    if (fileType === "pdf") {
+      setpdfView('');
+    } else if (fileType === "PDF") {
+      setpdfView('');
+    } else if (fileType === "png") {
+      setImagePreview('');
+    } else if (fileType === "PNG") {
+      setImagePreview('');
+    } else if (fileType === "jpeg") {
+      setImagePreview('');
+    } else if (fileType === "JPEG") {
+      setImagePreview('');
+    } else if (fileType === "jpg") {
+      setImagePreview('');
+    } else if (fileType === "JPG") {
+      setImagePreview('');
+    } else if (fileType === "rtf") {
+      setImagePreview('');
+    } else if (fileType === "RTF") {
+      setImagePreview('');
+    } else {
+      setErrorMsg("Cannot remove file");
+      setOpenNotification(true);
+    }
+  }
+
   return (
     <div
       style={{
@@ -416,81 +452,6 @@ function AddEditPurchaseRequest(props) {
               <h4>In Patient</h4>
             </div>
           </div>
-          <div
-            style={{
-              height: "20px",
-            }}
-          />
-          {/* <div className='container' style={styles.patientDetails}>
-            <div className='row'>
-              <div className='col-md-12'>
-                <h4 style={{ color: 'blue', fontWeight: '600' }}>
-                  Patient Details
-                </h4>
-              </div>
-            </div>
-            <div className='row'>
-              <div className='col-md-4 col-sm-4'>
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id='status-label'>
-                    Patient Name
-                  </InputLabel>
-                  <span>
-                    {selectedPatient.firstName + ` ` + selectedPatient.lastName}{' '}
-                  </span>
-                </div>
-              </div>
-              <div className='col-md-4 col-sm-4'>
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id='status-label'>
-                    Gender
-                  </InputLabel>
-                  <span>{selectedPatient.gender}</span>
-                </div>
-              </div>
-              <div className='col-md-4 col-sm-4'>
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id='status-label'>
-                    Age
-                  </InputLabel>
-                  <span>{selectedPatient.age}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className='row'>
-              <div className='col-md-4 col-sm-4'>
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id='status-label'>
-                    MRN
-                  </InputLabel>
-                  <span>{selectedPatient.profileNo}</span>
-                </div>
-              </div>
-
-              <div className='col-md-4 col-sm-4'>
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id='status-label'>
-                    Insurance No
-                  </InputLabel>
-                  <span>
-                    {selectedPatient.insuranceId
-                      ? selectedPatient.insuranceId
-                      : '--'}
-                  </span>
-                </div>
-              </div>
-              <div className='col-md-4 col-sm-4'>
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id='status-label'>
-                    Request No
-                  </InputLabel>
-                  <span>{requestNo}</span>
-                </div>
-              </div>
-            </div>
-          </div> */}
-
           <div
             style={{
               height: "20px",
@@ -541,41 +502,15 @@ function AddEditPurchaseRequest(props) {
                   >
                     <TextField
                       disabled={true}
-                      label="Lab Test Name"
-                      name={"name"}
-                      value={name}
-                      // onChange={onChangeValue}
-                      variant="filled"
-                      className="textInputStyle"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                      }}
-                      InputLabelProps={{
-                        className: classes.label,
-                        classes: { label: classes.label },
-                      }}
-                    />
-                  </div>
-
-                  {/* <div
-                    className='col-md-4 col-sm-4'
-                    style={{
-                      ...styles.inputContainerForTextField,
-                      ...styles.textFieldPadding,
-                    }}
-                  >
-                    <TextField
-                      disabled={true}
-                      label='Price'
+                      label='Lab Test Name'
+                      name={'serviceName'}
+                      value={serviceName}
                       variant='filled'
-                      name={'price'}
-                      value={price}
-                      // onChange={onChangeValue}
                       className='textInputStyle'
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
+                        disableUnderline: true
                       }}
                       InputLabelProps={{
                         className: classes.label,
@@ -583,100 +518,7 @@ function AddEditPurchaseRequest(props) {
                       }}
                     />
                   </div>
-
-                  <div
-                    className='col-md-4 col-sm-4'
-                    style={{
-                      ...styles.inputContainerForTextField,
-                      ...styles.textFieldPadding,
-                    }}
-                  >
-                    <TextField
-                      fullWidth
-                      select
-                      id='status'
-                      name='status'
-                      value={status}
-                      onChange={onChangeValue}
-                      variant='filled'
-                      label='Status'
-                      className='dropDownStyle'
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                      }}
-                      input={<BootstrapInput />}
-                    >
-                      <MenuItem value=''>
-                        <em>None</em>
-                      </MenuItem>
-                      {statusArray.map((val) => {
-                        return (
-                          <MenuItem key={val.key} value={val.key}>
-                            {val.value}
-                          </MenuItem>
-                        )
-                      })}
-                    </TextField>
-                  </div> */}
                 </div>
-                <br />
-                {/* <div className='row' style={{ marginTop: '20px' }}>
-                  <div
-                    className='col-md-6 col-sm-6 col-6'
-                    style={{
-                      ...styles.inputContainerForTextField,
-                      ...styles.textFieldPadding,
-                    }}
-                  >
-                    <TextField
-                      disabled={true}
-                      variant='filled'
-                      label='Date/Time'
-                      name={'date'}
-                      value={date}
-                      type='date'
-                      className='textInputStyle'
-                      // onChange={(val) => onChangeValue(val, 'DateTime')}
-                      InputLabelProps={{
-                        shrink: true,
-                        color: 'black',
-                      }}
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                      }}
-                    />
-                  </div>
-
-                  <div className='col-md-6 col-sm-6 col-6'>
-                    <div
-                      style={{
-                        ...styles.inputContainerForTextField,
-                        ...styles.textFieldPadding,
-                      }}
-                    >
-                      <TextField
-                        disabled={true}
-                        variant='filled'
-                        label='Sample ID'
-                        name={'sampleId'}
-                        // value={DateTime}
-                        type='text'
-                        className='textInputStyle'
-                        // onChange={(val) => onChangeValue(val, 'DateTime')}
-                        InputLabelProps={{
-                          shrink: true,
-                          color: 'black',
-                        }}
-                        InputProps={{
-                          className: classes.input,
-                          classes: { input: classes.input },
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div> */}
 
                 <div className="row">
                   <div
@@ -692,15 +534,12 @@ function AddEditPurchaseRequest(props) {
                         disabled={true}
                         inputVariant="filled"
                         fullWidth={true}
-                        label="Date/Time"
-                        format="MM/dd/yyyy HH:mm a"
-                        // minDate={dob}
-
-                        // error={dob === '' && detailsForm}
-                        // onChange={(val) => handleChangeDate(val, 'dob')}
+                        label='Date/Time'
+                        format='MM/dd/yyyy HH:mm a'
                         InputProps={{
                           className: classes.input,
                           classes: { input: classes.input },
+                          disableUnderline: true
                         }}
                         style={{ borderRadius: "10px" }}
                         value={date}
@@ -715,14 +554,14 @@ function AddEditPurchaseRequest(props) {
                     }}
                   >
                     <TextField
-                      // disabled={true}
-                      variant="filled"
-                      label="Sample ID"
-                      name={"sampleId"}
+                      disabled={checkStatus === "completed" ? true : false}
+                      variant='filled'
+                      error={!validateForm() && isFormSubmitted}
+                      label='Sample ID'
+                      name={'sampleId'}
                       value={sampleId}
-                      // onBlur={onSampleIdEntered}
-                      type="text"
-                      className="textInputStyle"
+                      type='text'
+                      className='textInputStyle'
                       onChange={onChangeValue}
                       InputLabelProps={{
                         shrink: true,
@@ -736,7 +575,7 @@ function AddEditPurchaseRequest(props) {
                   </div>
                 </div>
 
-                <div className="row" style={{ marginTop: "20px" }}>
+                <div className='row'>
                   <div
                     className="col-md-12 col-sm-12"
                     style={{
@@ -749,12 +588,12 @@ function AddEditPurchaseRequest(props) {
                       label="Comments / Notes"
                       name={"comments"}
                       value={comments}
-                      // onChange={onChangeValue}
-                      variant="filled"
-                      className="textInputStyle"
+                      variant='filled'
+                      className='textInputStyle'
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
+                        disableUnderline: true
                       }}
                       InputLabelProps={{
                         className: classes.label,
@@ -764,7 +603,7 @@ function AddEditPurchaseRequest(props) {
                   </div>
                 </div>
 
-                <div className="row" style={{ marginTop: "20px" }}>
+                <div className='row'>
                   <div
                     className="col-md-12 col-sm-12"
                     style={{
@@ -775,8 +614,9 @@ function AddEditPurchaseRequest(props) {
                     <TextField
                       fullWidth
                       select
-                      id="status"
-                      name="status"
+                      disabled={checkStatus === "completed" ? true : false}
+                      id='status'
+                      name='status'
                       value={status}
                       onChange={onChangeValue}
                       variant="filled"
@@ -785,7 +625,9 @@ function AddEditPurchaseRequest(props) {
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
+                        disableUnderline: true
                       }}
+
                       input={<BootstrapInput />}
                     >
                       <MenuItem value="">
@@ -806,7 +648,7 @@ function AddEditPurchaseRequest(props) {
               <>
                 <div className="row" style={{ marginTop: "20px" }}>
                   <div
-                    className="col-md-12 col-sm-6 col-12"
+                    className='col-md-12 col-sm-12 col-12'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -815,109 +657,128 @@ function AddEditPurchaseRequest(props) {
                     <label style={styles.upload}>
                       <TextField
                         required
-                        type="file"
+                        type='file'
                         style={styles.input}
-                        onChange={onSlipUpload}
-                        name="results"
+                        onChange={checkStatus === "completed" ? 
+                        (e) => {
+                          e.preventDefault()
+                          setErrorMsg("Request is already completed")
+                          setOpenNotification(true)
+                        }: 
+                        onSlipUpload}
+                        name='results'
                         Error={errorMsg}
                       />
                       <FaUpload /> Results
                     </label>
 
-                    {pdfView !== "" ? (
-                      <div
-                        style={{
-                          textAlign: "center",
-                          color: "#2c6ddd",
-                          fontStyle: "italic",
-                        }}
-                      >
-                        <span style={{ color: "black" }}>Selected File : </span>
-                        {pdfView}
+                    {pdfView !== '' ? (
+                      <div className='row' style={{
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                      }}>
+                        <div
+                          style={{
+                            color: '#2c6ddd',
+                            fontStyle: 'italic',
+                          }}
+                        >
+                          <span style={{ color: 'black' }}>Selected File : </span>
+                          {pdfView}
+                        </div>
+                        <div>
+                          <a
+                            onClick={removeUploadedSlip}
+                            style={{ marginLeft: '25px', color: '#e877a1' }}
+                            href=''
+                          >
+                            <MdRemoveCircle /> Remove
+                          </a>
+                        </div>
                       </div>
                     ) : (
-                      undefined
-                    )}
+                        undefined
+                      )}
                   </div>
                 </div>
 
-                <div className="row">
-                  {results !== "" && results.includes("\\") ? (
+                <div className='row'>
+                  {results !== '' && results.includes('\\') ? (
                     <>
-                      {results !== "" &&
-                      results.slice(results.length - 3) !== "pdf" ? (
-                        <div
-                          className="col-md-6 col-sm-6 col-6"
-                          style={{
-                            ...styles.inputContainerForTextField,
-                            ...styles.textFieldPadding,
-                          }}
-                        >
-                          <img
-                            src={uploadsUrl + results.split("\\")[1]}
-                            className="depositSlipImg"
-                          />
-                        </div>
-                      ) : results !== "" &&
-                        results.slice(results.length - 3) === "pdf" ? (
-                        <div
-                          className="col-md-6 col-sm-6 col-6"
-                          style={{
-                            ...styles.inputContainerForTextField,
-                            ...styles.textFieldPadding,
-                            // textAlign:'center',
-                          }}
-                        >
-                          <a
-                            href={uploadsUrl + results.split("\\")[1]}
-                            style={{ color: "#2c6ddd" }}
+                      {results !== '' &&
+                        results.slice(results.length - 3) !== 'pdf' ? (
+                          <div
+                            className='col-md-6 col-sm-6 col-6'
+                            style={{
+                              ...styles.inputContainerForTextField,
+                              ...styles.textFieldPadding,
+                            }}
                           >
-                            Click here to open results
+                            <img
+                              src={uploadsUrl + results.split('\\')[1]}
+                              className='depositSlipImg'
+                            />
+                          </div>
+                        ) : results !== '' &&
+                          results.slice(results.length - 3) === 'pdf' ? (
+                            <div
+                              className='col-md-6 col-sm-6 col-6'
+                              style={{
+                                ...styles.inputContainerForTextField,
+                                ...styles.textFieldPadding,
+                                // textAlign:'center',
+                              }}
+                            >
+                              <a
+                                href={uploadsUrl + results.split('\\')[1]}
+                                style={{ color: '#2c6ddd' }}
+                              >
+                                Click here to open results
                           </a>
-                        </div>
-                      ) : (
-                        undefined
-                      )}
+                            </div>
+                          ) : (
+                            undefined
+                          )}
                     </>
                   ) : results !== "" && results.includes("/") ? (
                     <>
-                      {results !== "" &&
-                      results.slice(results.length - 3) !== "pdf" ? (
-                        <div
-                          className="col-md-6 col-sm-6 col-6"
-                          style={{
-                            ...styles.inputContainerForTextField,
-                            ...styles.textFieldPadding,
-                          }}
-                        >
-                          <img
-                            src={uploadsUrl + results}
-                            className="depositSlipImg"
-                          />
-                        </div>
-                      ) : results !== "" &&
-                        results.slice(results.length - 3) === "pdf" ? (
-                        <div
-                          className="col-md-6 col-sm-6 col-6"
-                          style={{
-                            ...styles.inputContainerForTextField,
-                            ...styles.textFieldPadding,
-                          }}
-                        >
-                          <a
-                            href={uploadsUrl + results}
-                            style={{ color: "#2c6ddd" }}
+                      {results !== '' &&
+                        results.slice(results.length - 3) !== 'pdf' ? (
+                          <div
+                            className='col-md-6 col-sm-6 col-6'
+                            style={{
+                              ...styles.inputContainerForTextField,
+                              ...styles.textFieldPadding,
+                            }}
                           >
-                            Click here to open results
+                            <img
+                              src={uploadsUrl + results}
+                              className='depositSlipImg'
+                            />
+                          </div>
+                        ) : results !== '' &&
+                          results.slice(results.length - 3) === 'pdf' ? (
+                            <div
+                              className='col-md-6 col-sm-6 col-6'
+                              style={{
+                                ...styles.inputContainerForTextField,
+                                ...styles.textFieldPadding,
+                              }}
+                            >
+                              <a
+                                href={uploadsUrl + results}
+                                style={{ color: '#2c6ddd' }}
+                              >
+                                Click here to open results
                           </a>
-                        </div>
-                      ) : (
-                        undefined
-                      )}
+                            </div>
+                          ) : (
+                            undefined
+                          )}
                     </>
                   ) : (
-                    undefined
-                  )}
+                        undefined
+                      )}
 
                   {imagePreview !== "" ? (
                     <div
@@ -927,27 +788,38 @@ function AddEditPurchaseRequest(props) {
                         ...styles.textFieldPadding,
                       }}
                     >
-                      <img src={imagePreview} className="depositSlipImg" />
-                      {results !== "" ? (
-                        <div style={{ color: "black", textAlign: "center" }}>
-                          New results
+                      <img src={imagePreview} className='depositSlipImg' />
+                      <div className="row">
+                        <div className="col-md-4 col-sm-5 col-5">
+                          <Button
+                            onClick={removeUploadedSlip}
+                            style={{ ...styles.stylesForButton, backgroundColor: "#e877a1" }}
+                            variant='contained'
+                            color='primary'
+                          >
+                            <MdRemoveCircle size='16px' /><strong style={{ marginLeft: '5px', fontSize: '13px' }}>Remove</strong>
+                          </Button>
                         </div>
-                      ) : (
-                        undefined
-                      )}
+                        {results !== '' ? (
+                          <div className="col-md-4 col-sm-5 col-5" style={{ marginTop: '10px', fontWeight: '500', color: 'gray', textAlign: 'center' }}>
+                            New results
+                          </div>
+                        ) : (
+                            undefined
+                          )}
+                      </div>
                     </div>
                   ) : (
-                    undefined
-                  )}
+                      undefined
+                    )}
                 </div>
               </>
             ) : (
-              undefined
-            )}
-            <br />
-            <br />
-            <div className="row" style={{ marginBottom: "25px" }}>
-              <div className="col-md-6 col-sm-6 col-6">
+                  undefined
+                )}
+
+            <div className='row' style={{ marginBottom: '25px', marginTop: '25px' }}>
+              <div className='col-md-6 col-sm-6 col-6'>
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back}
@@ -956,7 +828,7 @@ function AddEditPurchaseRequest(props) {
               </div>
               <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
                 <Button
-                  // disabled={!validateForm()}
+                  disabled={checkStatus === "completed" ? true : false}
                   onClick={updateLRByIdURI}
                   style={styles.stylesForButton}
                   variant="contained"
@@ -975,10 +847,10 @@ function AddEditPurchaseRequest(props) {
           />
         </div>
       ) : (
-        <div className="LoaderStyle">
-          <Loader type="TailSpin" color="red" height={50} width={50} />
-        </div>
-      )}
+          <div className='LoaderStyle'>
+            <Loader type='TailSpin' color='red' height={50} width={50} />
+          </div>
+        )}
     </div>
   );
 }

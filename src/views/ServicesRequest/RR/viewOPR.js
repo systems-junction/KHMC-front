@@ -836,13 +836,11 @@ function AddEditPurchaseRequest(props) {
           props.history.push({
             pathname: "viewOPR/success",
             state: {
-              message: `Radiology Request # ${
-                res.data.data.radiologyRequest[
-                  res.data.data.radiologyRequest.length - 1
-                ].RRrequestNo
-              } for patient MRN ${
-                res.data.data.patientId.profileNo
-              } added successfully`,
+              message: `Radiology Request # ${res.data.data.radiologyRequest[
+                res.data.data.radiologyRequest.length - 1
+              ].RRrequestNo
+                } for patient MRN ${res.data.data.patientId.profileNo
+                } added successfully`,
             },
           });
         } else if (!res.data.success) {
@@ -867,7 +865,7 @@ function AddEditPurchaseRequest(props) {
     var reader = new FileReader();
     var url = reader.readAsDataURL(file);
 
-    reader.onloadend = function() {
+    reader.onloadend = function () {
       if (fileType === "pdf") {
         setpdfView(file.name);
       } else if (fileType === "PDF") {
@@ -988,92 +986,7 @@ function AddEditPurchaseRequest(props) {
               <img src={business_Unit} />
               <h4>OPR - Radiology Service</h4>
             </div>
-
-            {/* <div>
-              <Button
-                onClick={TriageAssessment}
-                style={styles.stylesForButton}
-                variant='contained'
-                color='primary'
-              >
-                Triage And Assessment
-              </Button>
-            </div> */}
           </div>
-          <div
-            style={{
-              height: "20px",
-            }}
-          />
-          {/* <div className="container" style={styles.patientDetails}>
-            <div className="row">
-              <div className="col-md-12">
-                <h4 style={{ color: "blue", fontWeight: "600" }}>
-                  Patient Details
-                </h4>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-4 col-sm-4">
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
-                    Patient Name
-                  </InputLabel>
-                  <span>
-                    {selectedPatient.firstName + ` ` + selectedPatient.lastName}{" "}
-                  </span>
-                </div>
-              </div>
-              <div className="col-md-4 col-sm-4">
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
-                    Gender
-                  </InputLabel>
-                  <span>{selectedPatient.gender}</span>
-                </div>
-              </div>
-              <div className="col-md-4 col-sm-4">
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
-                    Age
-                  </InputLabel>
-                  <span>{selectedPatient.age}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="row">
-              <div className="col-md-4 col-sm-4">
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
-                    Patient ID
-                  </InputLabel>
-                  <span>{selectedPatient.profileNo}</span>
-                </div>
-              </div>
-
-              <div className="col-md-4 col-sm-4">
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
-                    Insurance No
-                  </InputLabel>
-                  <span>
-                    {selectedPatient.insuranceId
-                      ? selectedPatient.insuranceId
-                      : "--"}
-                  </span>
-                </div>
-              </div>
-              <div className="col-md-4 col-sm-4">
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
-                    Request No
-                  </InputLabel>
-                  <span>{requestNo}</span>
-                </div>
-              </div>
-            </div>
-          </div> */}
 
           <div
             style={{
@@ -1085,25 +998,36 @@ function AddEditPurchaseRequest(props) {
             style={{ flex: 4, display: "flex", flexDirection: "column" }}
             className={`container-fluid ${classes.root}`}
           >
-            {
-              /* <div style={{ marginTop: '20px' }} className='row'>
+            <div
+              className="row"
+              style={{
+                marginBottom: 10,
+              }}
+            >
               <div
-                className='col-md-12 col-sm-12 col-12'
+                className="col-md-11 col-sm-11 col-11"
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
                 }}
               >
                 <TextField
-                  label='Radiology / Imaging'
-                  variant='filled'
-                  name={'searchRadioQuery'}
+                  type="text"
+                  label="Search by Radiology / Imaging"
+                  name={"searchRadioQuery"}
                   value={searchRadioQuery}
                   onChange={handleRadioSearch}
-                  className='textInputStyle'
+                  className="textInputStyle"
+                  variant="filled"
                   InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <AccountCircle />
+                      </InputAdornment>
+                    ),
                     className: classes.input,
                     classes: { input: classes.input },
+                    disableUnderline:true
                   }}
                   InputLabelProps={{
                     className: classes.label,
@@ -1111,88 +1035,27 @@ function AddEditPurchaseRequest(props) {
                   }}
                 />
               </div>
-            </div> */
-              <div
-                className="row"
-                style={{
-                  marginBottom: 10,
-                }}
-              >
+
+              <div className="col-md-1 col-sm-2 col-2">
                 <div
-                  className="col-md-11 col-sm-11 col-11"
                   style={{
                     ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "white",
+                    borderRadius: 5,
+                    height: 55,
                   }}
                 >
-                  <TextField
-                    type="text"
-                    label="Search by Radiology / Imaging"
-                    name={"searchRadioQuery"}
-                    value={searchRadioQuery}
-                    onChange={handleRadioSearch}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <AccountCircle />
-                        </InputAdornment>
-                      ),
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                    InputLabelProps={{
-                      className: classes.label,
-                      classes: { label: classes.label },
-                    }}
+                  <img
+                    src={Fingerprint}
+                    style={{ maxWidth: 43, height: 43 }}
                   />
                 </div>
-
-                {/* <div
-                className='col-md-1 col-sm-2 col-2'
-                style={{
-                  ...styles.inputContainerForTextField,
-                }}
-              >
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: 55,
-                    backgroundColor: 'white',
-                    borderRadius: 5,
-                    width: 100,
-                  }}
-                >
-                  <img src={BarCode} style={{ width: 80, height: 75 }} />
-                </div>
-              </div> */}
-
-                <div className="col-md-1 col-sm-2 col-2">
-                  <div
-                    style={{
-                      ...styles.inputContainerForTextField,
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      backgroundColor: "white",
-                      borderRadius: 5,
-                      height: 55,
-                    }}
-                  >
-                    <img
-                      src={Fingerprint}
-                      style={{ maxWidth: 43, height: 43 }}
-                    />
-                  </div>
-                </div>
               </div>
-            }
-
+            </div>
             {searchRadioQuery ? (
-              // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
               <div style={{ zIndex: 10 }}>
                 <Paper>
                   {radioItemFoundSuccessfull ? (
@@ -1226,73 +1089,18 @@ function AddEditPurchaseRequest(props) {
                       </Table>
                     )
                   ) : (
-                    <h4
-                      style={{ textAlign: "center" }}
-                      onClick={() => setSearchRadioQuery("")}
-                    >
-                      Service Not Found
-                    </h4>
-                  )}
+                      <h4
+                        style={{ textAlign: "center" }}
+                        onClick={() => setSearchRadioQuery("")}
+                      >
+                        Service Not Found
+                      </h4>
+                    )}
                 </Paper>
               </div>
             ) : (
-              undefined
-            )}
-
-            {/* <div className='row'>
-              <div
-                className='col-md-6 col-sm-6 col-6'
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <TextField
-                  disabled={true}
-                  variant='filled'
-                  label='Date/Time'
-                  name={'DateTime'}
-                  value={DateTime}
-                  type='date'
-                  className='textInputStyle'
-                  // onChange={(val) => onChangeValue(val, 'DateTime')}
-                  InputLabelProps={{
-                    shrink: true,
-                    color: 'black',
-                  }}
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                />
-              </div>
-              <div
-                className='col-md-6 col-sm-6 col-6'
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <TextField
-                  disabled={true}
-                  variant='filled'
-                  label='Sample ID'
-                  name={'sampleID'}
-                  // value={DateTime}
-                  type='text'
-                  className='textInputStyle'
-                  // onChange={(val) => onChangeValue(val, 'DateTime')}
-                  InputLabelProps={{
-                    shrink: true,
-                    color: 'black',
-                  }}
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                />
-              </div>
-            </div> */}
+                undefined
+              )}
 
             <div style={{ marginTop: "20px" }} className="row">
               <div
@@ -1314,6 +1122,7 @@ function AddEditPurchaseRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
+                    disableUnderline:true
                   }}
                   InputLabelProps={{
                     className: classes.label,
@@ -1365,142 +1174,6 @@ function AddEditPurchaseRequest(props) {
               </div>
             </div>
 
-            {/* <div className='row' style={{ marginTop: '20px' }}>
-              <div
-                className='col-md-12 col-sm-6 col-12'
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <label style={styles.upload}>
-                  <TextField
-                    required
-                    type='file'
-                    style={styles.input}
-                    onChange={onSlipUpload}
-                    name='results'
-                  />
-                  <FaUpload /> Results
-                </label>
-
-                {pdfView !== '' ? (
-                  <div
-                    style={{
-                      textAlign: 'center',
-                      color: '#2c6ddd',
-                      fontStyle: 'italic',
-                    }}
-                  >
-                    <span style={{ color: 'black' }}>Selected File : </span>
-                    {pdfView}
-                  </div>
-                ) : (
-                  undefined
-                )}
-              </div>
-            </div>
-
-            <div className='row'>
-              {results !== '' && results.includes('\\') ? (
-                <>
-                  {results !== '' &&
-                  results.slice(results.length - 3) !== 'pdf' ? (
-                    <div
-                      className='col-md-6 col-sm-6 col-6'
-                      style={{
-                        ...styles.inputContainerForTextField,
-                        ...styles.textFieldPadding,
-                      }}
-                    >
-                      <img
-                        src={uploadsUrl + results.split('\\')[1]}
-                        className='depositSlipImg'
-                      />
-                    </div>
-                  ) : results !== '' &&
-                    results.slice(results.length - 3) === 'pdf' ? (
-                    <div
-                      className='col-md-6 col-sm-6 col-6'
-                      style={{
-                        ...styles.inputContainerForTextField,
-                        ...styles.textFieldPadding,
-                        // textAlign:'center',
-                      }}
-                    >
-                      <a
-                        href={uploadsUrl + results.split('\\')[1]}
-                        style={{ color: '#2c6ddd' }}
-                      >
-                        Click here to open results
-                      </a>
-                    </div>
-                  ) : (
-                    undefined
-                  )}
-                </>
-              ) : results !== '' && results.includes('/') ? (
-                <>
-                  {results !== '' &&
-                  results.slice(results.length - 3) !== 'pdf' ? (
-                    <div
-                      className='col-md-6 col-sm-6 col-6'
-                      style={{
-                        ...styles.inputContainerForTextField,
-                        ...styles.textFieldPadding,
-                      }}
-                    >
-                      <img
-                        src={uploadsUrl + results}
-                        className='depositSlipImg'
-                      />
-                    </div>
-                  ) : results !== '' &&
-                    results.slice(results.length - 3) === 'pdf' ? (
-                    <div
-                      className='col-md-6 col-sm-6 col-6'
-                      style={{
-                        ...styles.inputContainerForTextField,
-                        ...styles.textFieldPadding,
-                      }}
-                    >
-                      <a
-                        href={uploadsUrl + results}
-                        style={{ color: '#2c6ddd' }}
-                      >
-                        Click here to open results
-                      </a>
-                    </div>
-                  ) : (
-                    undefined
-                  )}
-                </>
-              ) : (
-                undefined
-              )}
-
-              {imagePreview !== '' ? (
-                <div
-                  className='col-md-6 col-sm-6 col-6'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <img src={imagePreview} className='depositSlipImg' />
-                  {results !== '' ? (
-                    <div style={{ color: 'black', textAlign: 'center' }}>
-                      New results
-                    </div>
-                  ) : (
-                    undefined
-                  )}
-                </div>
-              ) : (
-                undefined
-              )}
-            </div> */}
-
             <div className="row" style={{ marginTop: "20px" }}>
               {radiologyRequestArray !== 0 ? (
                 <CustomTable
@@ -1513,8 +1186,8 @@ function AddEditPurchaseRequest(props) {
                   borderBottomWidth={20}
                 />
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
             </div>
 
             <div className="row" style={{ marginBottom: "25px" }}>
@@ -1539,394 +1212,13 @@ function AddEditPurchaseRequest(props) {
             </div>
           </div>
 
-          {/* {openItemDialog ? (
-            <ViewSingleRequest
-              item={item}
-              openItemDialog={openItemDialog}
-              viewItem={viewItem}
-            />
-          ) : (
-            undefined
-          )} */}
-
-          <Dialog
-            aria-labelledby="form-dialog-title"
-            open={openAddConsultDialog}
-            maxWidth="xl"
-            fullWidth={true}
-          >
-            <DialogContent style={{ backgroundColor: "#31e2aa" }}>
-              <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
-                Add Consultation Note
-              </DialogTitle>
-              <div className="container-fluid">
-                <div className="row">
-                  <div
-                    className="col-md-12 col-sm-12 col-12"
-                    style={styles.inputContainerForTextField}
-                  >
-                    <InputLabelComponent>Description*</InputLabelComponent>
-                    <input
-                      style={styles.inputField}
-                      type="text"
-                      placeholder="Enter Your description"
-                      name={"description"}
-                      value={description}
-                      onChange={onChangeValue}
-                      className="textInputStyle"
-                    />
-                    <ErrorMessage
-                      name={description}
-                      isFormSubmitted={isFormSubmitted}
-                    />
-                  </div>
-                </div>
-
-                <div className="row">
-                  <div
-                    className="col-md-12"
-                    style={styles.inputContainerForTextField}
-                  >
-                    <InputLabelComponent>
-                      Consultation Note*
-                    </InputLabelComponent>
-                    <input
-                      style={styles.inputField}
-                      type="text"
-                      placeholder="Add your consultation here..."
-                      name={"consultationNotes"}
-                      value={consultationNotes}
-                      onChange={onChangeValue}
-                      className="textInputStyle"
-                    />
-                    <ErrorMessage
-                      name={consultationNotes}
-                      isFormSubmitted={isFormSubmitted}
-                    />
-                  </div>
-                </div>
-
-                <div className="row">
-                  <div
-                    className="col-md-6 col-sm-6 col-6"
-                    style={styles.inputContainerForTextField}
-                  >
-                    <InputLabelComponent>Date*</InputLabelComponent>
-                    <input
-                      disabled
-                      style={styles.inputField}
-                      type="text"
-                      placeholder="Date"
-                      name={"date"}
-                      value={date}
-                      onChange={onChangeValue}
-                      className="textInputStyle"
-                    />
-                  </div>
-                  <div
-                    className="col-md-6 col-sm-6 col-6"
-                    style={styles.inputContainerForTextField}
-                  >
-                    <InputLabelComponent>Requester*</InputLabelComponent>
-                    <input
-                      disabled
-                      style={styles.inputField}
-                      type="text"
-                      placeholder="Requester"
-                      name={"requester"}
-                      value={requester}
-                      onChange={onChangeValue}
-                      className="textInputStyle"
-                    />
-                  </div>
-                </div>
-
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <div style={{ marginTop: "2%", marginBottom: "2%" }}>
-                    <Button
-                      onClick={() => hideDialog()}
-                      style={styles.stylesForButton}
-                      variant="contained"
-                    >
-                      <strong>Cancel</strong>
-                    </Button>
-                  </div>
-
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      marginTop: "2%",
-                      marginBottom: "2%",
-                    }}
-                  >
-                    <Button
-                      style={{
-                        color: "white",
-                        cursor: "pointer",
-                        borderRadius: 15,
-                        backgroundColor: "#2c6ddd",
-                        width: "140px",
-                        height: "50px",
-                        outline: "none",
-                        paddingLeft: 30,
-                        paddingRight: 30,
-                      }}
-                      // disabled={!validateItemsForm()}
-                      onClick={addConsultRequest}
-                      variant="contained"
-                      color="primary"
-                    >
-                      Add Note
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </DialogContent>
-          </Dialog>
-
-          <Dialog
-            aria-labelledby="form-dialog-title"
-            open={openAddResidentDialog}
-            maxWidth="xl"
-            fullWidth={true}
-          >
-            <DialogContent style={{ backgroundColor: "#31e2aa" }}>
-              <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
-                Add Resident Note
-              </DialogTitle>
-              <div className="container-fluid">
-                <div className="row">
-                  <div
-                    className="col-md-12 col-sm-12 col-12"
-                    style={styles.inputContainerForTextField}
-                  >
-                    <InputLabelComponent>Description*</InputLabelComponent>
-                    <input
-                      style={styles.inputField}
-                      type="text"
-                      placeholder="Enter Your description"
-                      name={"rdescription"}
-                      value={rdescription}
-                      onChange={onChangeValue}
-                      className="textInputStyle"
-                    />
-                    <ErrorMessage
-                      name={rdescription}
-                      isFormSubmitted={isFormSubmitted}
-                    />
-                  </div>
-                </div>
-
-                <div className="row">
-                  <div
-                    className="col-md-12"
-                    style={styles.inputContainerForTextField}
-                  >
-                    <InputLabelComponent>Note*</InputLabelComponent>
-                    <input
-                      style={styles.inputField}
-                      type="text"
-                      placeholder="Add your note here..."
-                      name={"note"}
-                      value={note}
-                      onChange={onChangeValue}
-                      className="textInputStyle"
-                    />
-                    <ErrorMessage
-                      name={note}
-                      isFormSubmitted={isFormSubmitted}
-                    />
-                  </div>
-                </div>
-
-                <div className="row">
-                  <div
-                    className="col-md-6 col-sm-6 col-6"
-                    style={styles.inputContainerForTextField}
-                  >
-                    <InputLabelComponent>Date*</InputLabelComponent>
-                    <input
-                      disabled
-                      style={styles.inputField}
-                      type="text"
-                      placeholder="Date"
-                      name={"date"}
-                      value={date}
-                      onChange={onChangeValue}
-                      className="textInputStyle"
-                    />
-                  </div>
-                  <div
-                    className="col-md-6 col-sm-6 col-6"
-                    style={styles.inputContainerForTextField}
-                  >
-                    <InputLabelComponent>Doctor*</InputLabelComponent>
-                    <input
-                      disabled
-                      style={styles.inputField}
-                      type="text"
-                      placeholder="Doctor"
-                      name={"doctor"}
-                      value={doctor}
-                      onChange={onChangeValue}
-                      className="textInputStyle"
-                    />
-                  </div>
-                </div>
-
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <div style={{ marginTop: "2%", marginBottom: "2%" }}>
-                    <Button
-                      onClick={() => hideDialog()}
-                      style={styles.stylesForButton}
-                      variant="contained"
-                    >
-                      <strong>Cancel</strong>
-                    </Button>
-                  </div>
-
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      marginTop: "2%",
-                      marginBottom: "2%",
-                    }}
-                  >
-                    <Button
-                      style={{
-                        color: "white",
-                        cursor: "pointer",
-                        borderRadius: 15,
-                        backgroundColor: "#2c6ddd",
-                        width: "140px",
-                        height: "50px",
-                        outline: "none",
-                        paddingLeft: 30,
-                        paddingRight: 30,
-                      }}
-                      disabled={!validateItemsForm()}
-                      onClick={addResidentRequest}
-                      variant="contained"
-                      color="primary"
-                    >
-                      Add Note
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </DialogContent>
-          </Dialog>
-
-          <Dialog
-            aria-labelledby="form-dialog-title"
-            open={openExtenalConsultantDialog}
-            maxWidth="xs"
-            fullWidth={true}
-          >
-            <DialogContent style={{ backgroundColor: "#31e2aa" }}>
-              <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
-                Add External Consultant
-              </DialogTitle>
-              <div className="container-fluid">
-                <div className="row">
-                  <div
-                    className="col-md-12 col-sm-12 col-12"
-                    style={styles.inputContainerForTextField}
-                  >
-                    <InputLabelComponent>
-                      External Consultant*
-                    </InputLabelComponent>
-                    <Select
-                      style={styles.inputField}
-                      fullWidth
-                      labelId="receiptUnit-label"
-                      id="externalConsultant"
-                      name="externalConsultant"
-                      value={externalConsultant}
-                      onChange={handleChangeExternalConsultant}
-                      label="External Consultant"
-                      className="dropDownStyle"
-                      input={<BootstrapInput />}
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      {allExternalConsultants.map((val) => {
-                        return (
-                          <MenuItem key={val._id} value={val._id}>
-                            {val.firstName + " " + val.lastName}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-
-                    <ErrorMessage
-                      name={externalConsultant}
-                      isFormSubmitted={isFormSubmitted}
-                    />
-                  </div>
-                </div>
-
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <div style={{ marginTop: "2%", marginBottom: "2%" }}>
-                    <Button
-                      onClick={() => setOpenExtenalConsultantDialog(false)}
-                      style={styles.stylesForButton}
-                      variant="contained"
-                    >
-                      <strong>Cancel</strong>
-                    </Button>
-                  </div>
-
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      marginTop: "2%",
-                      marginBottom: "2%",
-                    }}
-                  >
-                    <Button
-                      style={{
-                        color: "white",
-                        cursor: "pointer",
-                        borderRadius: 15,
-                        backgroundColor: "#2c6ddd",
-                        width: "140px",
-                        height: "50px",
-                        outline: "none",
-                        paddingLeft: 30,
-                        paddingRight: 30,
-                      }}
-                      // disabled={!validateItemsForm()}
-                      onClick={handleGenerateECR}
-                      disabled={!externalConsultant}
-                      variant="contained"
-                      color="primary"
-                    >
-                      Add
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </DialogContent>
-          </Dialog>
-
           <Notification msg={errorMsg} open={openNotification} />
         </div>
       ) : (
-        <div className="LoaderStyle">
-          <Loader type="TailSpin" color="red" height={50} width={50} />
-        </div>
-      )}
+          <div className="LoaderStyle">
+            <Loader type="TailSpin" color="red" height={50} width={50} />
+          </div>
+        )}
     </div>
   );
 }
