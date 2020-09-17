@@ -179,6 +179,12 @@ const styles = {
   },
 };
 
+const useStylesForTabs = makeStyles({
+  root: {
+    flexGrow: 1,
+  },
+});
+
 const useStyles = makeStyles((theme) => ({
   scroller: {
     flexGrow: "0",
@@ -314,7 +320,7 @@ function AddEditPurchaseRequest(props) {
       value: e.target.value.replace(/[^\w\s]/gi, ""),
     });
   };
-
+  const classesForTabs = useStylesForTabs();
   const [currentUser, setCurrentUser] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const [openNotification, setOpenNotification] = useState(false);
@@ -353,7 +359,8 @@ function AddEditPurchaseRequest(props) {
   const [labId, setLabId] = useState("");
   const [requestId, setRequestId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-
+  const [statusOnResult, setStatusOnResult] = useState("");
+  const [statusOnResultStatus, setStatusOnResultStatus] = useState(false);
   const [externalConsultant, setExternalConsultant] = useState("");
 
   const [allExternalConsultants, setAllExternalConsultants] = useState([]);
@@ -386,6 +393,14 @@ function AddEditPurchaseRequest(props) {
                     value: new Date(val).toISOString().substr(0, 10),
                   });
                 } else {
+                  if (key === "status") {
+                    setStatusOnResult(val);
+                    console.log("====================================");
+                    console.log(
+                      `params status: ${status} ${statusOnResult} ${statusOnResultStatus}`
+                    );
+                    console.log("====================================");
+                  }
                   dispatch({ field: key, value: val });
                 }
               }
@@ -773,9 +788,15 @@ function AddEditPurchaseRequest(props) {
       labRequestId: labId,
       OPRId: oprId,
       data: selectedItem,
-      status: status,
+      status: statusOnResultStatus === true ? statusOnResult : status,
       sampleId: sampleId,
     };
+    console.log("====================================");
+    console.log(
+      `params status: ${status} ${statusOnResult} ${statusOnResultStatus}`
+    );
+    console.log("====================================");
+
     formData.append("data", JSON.stringify(params));
     console.log("params", params);
     axios
@@ -845,6 +866,22 @@ function AddEditPurchaseRequest(props) {
         setOpenNotification(true);
       }
     };
+    if (statusOnResult === "pending") {
+      setStatusOnResult("completed");
+      setStatusOnResultStatus(true);
+    } else if (statusOnResult === "active") {
+      setStatusOnResult("completed");
+      setStatusOnResultStatus(true);
+    } else {
+      setStatusOnResult("completed");
+      setStatusOnResultStatus(true);
+    }
+
+    console.log("====================================");
+    console.log(
+      `params status: ${status} ${statusOnResult} ${statusOnResultStatus}`
+    );
+    console.log("====================================");
   };
 
   if (openNotification) {
@@ -1003,6 +1040,354 @@ function AddEditPurchaseRequest(props) {
             style={{ flex: 4, display: "flex", flexDirection: "column" }}
             className={`container-fluid ${classes.root}`}
           >
+            <div className={classesForTabs.root}>
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                textColor="primary"
+                TabIndicatorProps={{ style: { background: "#12387a" } }}
+                centered
+              >
+                <Tab
+                  style={{
+                    color: "white",
+                    borderRadius: 5,
+                    outline: "none",
+                    color: value === 0 ? "#12387a" : "#3B988C",
+                  }}
+                  label="Sample Collection"
+                />
+                <Tab
+                  style={{
+                    color: "white",
+                    borderRadius: 5,
+                    outline: "none",
+                    color: value === 1 ? "#12387a" : "#3B988C",
+                  }}
+                  label="Results"
+                />
+              </Tabs>
+            </div>
+
+            {value === 0 ? (
+              <div>
+                {" "}
+                {/* <h1> Sample collection </h1>{" "} */}
+                <div className="row" style={{ marginTop: "20px" }}>
+                  <div
+                    className="col-md-12 col-sm-12"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      disabled={true}
+                      label="Lab Test Name"
+                      name={"name"}
+                      value={name}
+                      // onChange={onChangeValue}
+                      variant="filled"
+                      className="textInputStyle"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                      InputLabelProps={{
+                        className: classes.label,
+                        classes: { label: classes.label },
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="row" style={{ marginTop: "20px" }}>
+                  <div
+                    className="col-md-6 col-sm-6 col-6"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                      <DateTimePicker
+                        required
+                        disabled={true}
+                        inputVariant="filled"
+                        fullWidth={true}
+                        label="Date/Time"
+                        format="MM/dd/yyyy HH:mm a"
+                        // minDate={dob}
+
+                        // error={dob === '' && detailsForm}
+                        // onChange={(val) => handleChangeDate(val, 'dob')}
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                        style={{ borderRadius: "10px" }}
+                        value={date}
+                      />
+                    </MuiPickersUtilsProvider>
+                  </div>
+
+                  {/* <div className="row" style={{ marginTop: "20px" }}> */}
+                  <div
+                    className="col-md-6 col-sm-6 col-6"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      // disabled={true}
+                      variant="filled"
+                      label="Sample ID"
+                      name={"sampleId"}
+                      value={sampleId}
+                      type="text"
+                      className="textInputStyle"
+                      onChange={onChangeValue}
+                      InputLabelProps={{
+                        shrink: true,
+                        color: "black",
+                      }}
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="row" style={{ marginTop: "20px" }}>
+                  <div
+                    className="col-md-12 col-sm-12"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      disabled={true}
+                      label="Comments/Notes"
+                      name={"comments"}
+                      value={comments}
+                      // onChange={onChangeValue}
+                      variant="filled"
+                      className="textInputStyle"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                      InputLabelProps={{
+                        className: classes.label,
+                        classes: { label: classes.label },
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="row" style={{ marginTop: "20px" }}>
+                  <div
+                    className="col-md-12 col-sm-12"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      fullWidth
+                      select
+                      id="status"
+                      name="status"
+                      value={status}
+                      onChange={onChangeValue}
+                      variant="filled"
+                      label="Status"
+                      className="dropDownStyle"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                      input={<BootstrapInput />}
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      {statusArray.map((val) => {
+                        return (
+                          <MenuItem key={val.key} value={val.key}>
+                            {val.value}
+                          </MenuItem>
+                        );
+                      })}
+                    </TextField>
+                  </div>
+                </div>
+              </div>
+            ) : value === 1 ? (
+              <div>
+                {" "}
+                {/* <h1> Results </h1>{" "} */}
+                <div className="row" style={{ marginTop: "20px" }}>
+                  <div
+                    className="col-md-12 col-sm-6 col-12"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <label style={styles.upload}>
+                      <TextField
+                        required
+                        type="file"
+                        style={styles.input}
+                        onChange={onSlipUpload}
+                        name="results"
+                        Error={errorMsg}
+                      />
+                      <FaUpload /> Results
+                    </label>
+
+                    {pdfView !== "" ? (
+                      <div
+                        style={{
+                          textAlign: "center",
+                          color: "#2c6ddd",
+                          fontStyle: "italic",
+                        }}
+                      >
+                        <span style={{ color: "black" }}>Selected File : </span>
+                        {pdfView}
+                      </div>
+                    ) : (
+                      undefined
+                    )}
+                  </div>
+                </div>
+                <div className="row">
+                  {results !== "" && results.includes("\\") ? (
+                    <>
+                      {results !== "" &&
+                      results.slice(results.length - 3) !== "pdf" ? (
+                        <div
+                          className="col-md-6 col-sm-6 col-6"
+                          style={{
+                            ...styles.inputContainerForTextField,
+                            ...styles.textFieldPadding,
+                          }}
+                        >
+                          <img
+                            src={uploadsUrl + results.split("\\")[1]}
+                            className="depositSlipImg"
+                          />
+                        </div>
+                      ) : results !== "" &&
+                        results.slice(results.length - 3) === "pdf" ? (
+                        <div
+                          className="col-md-6 col-sm-6 col-6"
+                          style={{
+                            ...styles.inputContainerForTextField,
+                            ...styles.textFieldPadding,
+                            // textAlign:'center',
+                          }}
+                        >
+                          <a
+                            href={uploadsUrl + results.split("\\")[1]}
+                            style={{ color: "#2c6ddd" }}
+                          >
+                            Click here to open results
+                          </a>
+                        </div>
+                      ) : (
+                        undefined
+                      )}
+                    </>
+                  ) : results !== "" && results.includes("/") ? (
+                    <>
+                      {results !== "" &&
+                      results.slice(results.length - 3) !== "pdf" ? (
+                        <div
+                          className="col-md-6 col-sm-6 col-6"
+                          style={{
+                            ...styles.inputContainerForTextField,
+                            ...styles.textFieldPadding,
+                          }}
+                        >
+                          <img
+                            src={uploadsUrl + results}
+                            className="depositSlipImg"
+                          />
+                        </div>
+                      ) : results !== "" &&
+                        results.slice(results.length - 3) === "pdf" ? (
+                        <div
+                          className="col-md-6 col-sm-6 col-6"
+                          style={{
+                            ...styles.inputContainerForTextField,
+                            ...styles.textFieldPadding,
+                          }}
+                        >
+                          <a
+                            href={uploadsUrl + results}
+                            style={{ color: "#2c6ddd" }}
+                          >
+                            Click here to open results
+                          </a>
+                        </div>
+                      ) : (
+                        undefined
+                      )}
+                    </>
+                  ) : (
+                    undefined
+                  )}
+
+                  {imagePreview !== "" ? (
+                    <div
+                      className="col-md-6 col-sm-6 col-6"
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
+                    >
+                      <img src={imagePreview} className="depositSlipImg" />
+                      {results !== "" ? (
+                        <div style={{ color: "black", textAlign: "center" }}>
+                          New results
+                        </div>
+                      ) : (
+                        undefined
+                      )}
+                    </div>
+                  ) : (
+                    undefined
+                  )}
+                </div>
+              </div>
+            ) : (
+              undefined
+            )}
+            <br />
+            <br />
+
+            <div className="row" style={{ marginBottom: "25px" }}>
+              <div className="col-md-6 col-sm-6 col-6">
+                <img
+                  onClick={() => props.history.goBack()}
+                  src={Back}
+                  style={{ width: 45, height: 35, cursor: "pointer" }}
+                />
+              </div>
+              <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
+                <Button
+                  onClick={saveLabReq}
+                  style={styles.stylesForButton}
+                  variant="contained"
+                  color="primary"
+                >
+                  <strong style={{ fontSize: "12px" }}>Update</strong>
+                </Button>
+              </div>
+            </div>
             {/* <div style={{ marginTop: '20px' }} className='row'>
               <div
                 className='col-md-12 col-sm-12 col-12'
@@ -1204,292 +1589,6 @@ function AddEditPurchaseRequest(props) {
               </div>
             </div> */}
 
-            <div className="row" style={{ marginTop: "20px" }}>
-              <div
-                className="col-md-6 col-sm-6"
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <TextField
-                  disabled={true}
-                  label="Lab Test Name"
-                  name={"name"}
-                  value={name}
-                  // onChange={onChangeValue}
-                  variant="filled"
-                  className="textInputStyle"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  InputLabelProps={{
-                    className: classes.label,
-                    classes: { label: classes.label },
-                  }}
-                />
-              </div>
-
-              <div
-                className="col-md-6 col-sm-6 col-6"
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <DateTimePicker
-                    required
-                    disabled={true}
-                    inputVariant="filled"
-                    fullWidth={true}
-                    label="Date/Time"
-                    format="MM/dd/yyyy HH:mm a"
-                    // minDate={dob}
-
-                    // error={dob === '' && detailsForm}
-                    // onChange={(val) => handleChangeDate(val, 'dob')}
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                    style={{ borderRadius: "10px" }}
-                    value={date}
-                  />
-                </MuiPickersUtilsProvider>
-              </div>
-            </div>
-
-            <div className="row" style={{ marginTop: "20px" }}>
-              <div
-                className="col-md-6 col-sm-6 col-6"
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <TextField
-                  // disabled={true}
-                  variant="filled"
-                  label="Sample ID"
-                  name={"sampleId"}
-                  value={sampleId}
-                  type="text"
-                  className="textInputStyle"
-                  onChange={onChangeValue}
-                  InputLabelProps={{
-                    shrink: true,
-                    color: "black",
-                  }}
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                />
-              </div>
-              <div
-                className="col-md-162 col-sm-6"
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <TextField
-                  disabled={true}
-                  label="Comments/Notes"
-                  name={"comments"}
-                  value={comments}
-                  // onChange={onChangeValue}
-                  variant="filled"
-                  className="textInputStyle"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  InputLabelProps={{
-                    className: classes.label,
-                    classes: { label: classes.label },
-                  }}
-                />
-              </div>
-            </div>
-
-            <div className="row" style={{ marginTop: "20px" }}>
-              <div
-                className="col-md-12 col-sm-12"
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <TextField
-                  fullWidth
-                  select
-                  id="status"
-                  name="status"
-                  value={status}
-                  onChange={onChangeValue}
-                  variant="filled"
-                  label="Status"
-                  className="dropDownStyle"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  input={<BootstrapInput />}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  {statusArray.map((val) => {
-                    return (
-                      <MenuItem key={val.key} value={val.key}>
-                        {val.value}
-                      </MenuItem>
-                    );
-                  })}
-                </TextField>
-              </div>
-            </div>
-
-            <div className="row" style={{ marginTop: "20px" }}>
-              <div
-                className="col-md-12 col-sm-6 col-12"
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <label style={styles.upload}>
-                  <TextField
-                    required
-                    type="file"
-                    style={styles.input}
-                    onChange={onSlipUpload}
-                    name="results"
-                    Error={errorMsg}
-                  />
-                  <FaUpload /> Results
-                </label>
-
-                {pdfView !== "" ? (
-                  <div
-                    style={{
-                      textAlign: "center",
-                      color: "#2c6ddd",
-                      fontStyle: "italic",
-                    }}
-                  >
-                    <span style={{ color: "black" }}>Selected File : </span>
-                    {pdfView}
-                  </div>
-                ) : (
-                  undefined
-                )}
-              </div>
-            </div>
-
-            <div className="row">
-              {results !== "" && results.includes("\\") ? (
-                <>
-                  {results !== "" &&
-                  results.slice(results.length - 3) !== "pdf" ? (
-                    <div
-                      className="col-md-6 col-sm-6 col-6"
-                      style={{
-                        ...styles.inputContainerForTextField,
-                        ...styles.textFieldPadding,
-                      }}
-                    >
-                      <img
-                        src={uploadsUrl + results.split("\\")[1]}
-                        className="depositSlipImg"
-                      />
-                    </div>
-                  ) : results !== "" &&
-                    results.slice(results.length - 3) === "pdf" ? (
-                    <div
-                      className="col-md-6 col-sm-6 col-6"
-                      style={{
-                        ...styles.inputContainerForTextField,
-                        ...styles.textFieldPadding,
-                        // textAlign:'center',
-                      }}
-                    >
-                      <a
-                        href={uploadsUrl + results.split("\\")[1]}
-                        style={{ color: "#2c6ddd" }}
-                      >
-                        Click here to open results
-                      </a>
-                    </div>
-                  ) : (
-                    undefined
-                  )}
-                </>
-              ) : results !== "" && results.includes("/") ? (
-                <>
-                  {results !== "" &&
-                  results.slice(results.length - 3) !== "pdf" ? (
-                    <div
-                      className="col-md-6 col-sm-6 col-6"
-                      style={{
-                        ...styles.inputContainerForTextField,
-                        ...styles.textFieldPadding,
-                      }}
-                    >
-                      <img
-                        src={uploadsUrl + results}
-                        className="depositSlipImg"
-                      />
-                    </div>
-                  ) : results !== "" &&
-                    results.slice(results.length - 3) === "pdf" ? (
-                    <div
-                      className="col-md-6 col-sm-6 col-6"
-                      style={{
-                        ...styles.inputContainerForTextField,
-                        ...styles.textFieldPadding,
-                      }}
-                    >
-                      <a
-                        href={uploadsUrl + results}
-                        style={{ color: "#2c6ddd" }}
-                      >
-                        Click here to open results
-                      </a>
-                    </div>
-                  ) : (
-                    undefined
-                  )}
-                </>
-              ) : (
-                undefined
-              )}
-
-              {imagePreview !== "" ? (
-                <div
-                  className="col-md-6 col-sm-6 col-6"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <img src={imagePreview} className="depositSlipImg" />
-                  {results !== "" ? (
-                    <div style={{ color: "black", textAlign: "center" }}>
-                      New results
-                    </div>
-                  ) : (
-                    undefined
-                  )}
-                </div>
-              ) : (
-                undefined
-              )}
-            </div>
-
             {/* <div className='row' style={{ marginTop: '20px' }}>
               {labRequestArray !== 0 ? (
                 <CustomTable
@@ -1505,26 +1604,6 @@ function AddEditPurchaseRequest(props) {
                 undefined
               )}
             </div> */}
-
-            <div className="row" style={{ marginBottom: "25px" }}>
-              <div className="col-md-6 col-sm-6 col-6">
-                <img
-                  onClick={() => props.history.goBack()}
-                  src={Back}
-                  style={{ width: 45, height: 35, cursor: "pointer" }}
-                />
-              </div>
-              <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
-                <Button
-                  onClick={saveLabReq}
-                  style={styles.stylesForButton}
-                  variant="contained"
-                  color="primary"
-                >
-                  <strong style={{ fontSize: "12px" }}>Update</strong>
-                </Button>
-              </div>
-            </div>
           </div>
 
           {openItemDialog ? (

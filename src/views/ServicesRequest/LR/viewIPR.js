@@ -291,7 +291,7 @@ function AddEditPurchaseRequest(props) {
             pathname: "success",
             state: {
               //of request Id ${requestId}
-              message: `Lab services request # ${res.data.data.requestNo} for patient MRN ${res.data.data.patientId.profileNo} submitted successfully`,
+              message: `Lab services request # ${res.data.data.requestNo} for patient MRN ${res.data.data.patientId.profileNo} Updated successfully`,
             },
           });
         } else {
@@ -962,7 +962,7 @@ function AddEditPurchaseRequest(props) {
                   variant="contained"
                   color="primary"
                 >
-                  <strong style={{ fontSize: "12px" }}>Submit</strong>
+                  <strong style={{ fontSize: "12px" }}>Update</strong>
                 </Button>
               </div>
             </div>
