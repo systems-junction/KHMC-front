@@ -41,6 +41,7 @@ import {
   addPatientUrl,
   generateEDR,
   generateIPR,
+  getSearchedpatient,
   searchPatientsURL,
 } from '../../public/endpoins'
 import axios from 'axios'
