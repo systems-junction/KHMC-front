@@ -468,7 +468,7 @@ function AddEditPatientListing(props) {
   const handleSearch = (e) => {
     const a = e.target.value.replace(/[^\w\s]/gi, '')
     setSearchQuery(a)
-    if (a.length >= 5) {
+    if (a.length >= 3) {
       axios
         .get(getSearchedpatient + '/' + a)
         .then((res) => {
@@ -747,7 +747,7 @@ function AddEditPatientListing(props) {
                     <div className='col-md-10 col-sm-8 col-8'>
                       {searchQuery ? (
                         <div style={{ zIndex: 3 }}>
-                          <Paper>
+                          <Paper style={{ maxHeight: 300, overflow: 'auto' }}>
                             {itemFoundSuccessfull ? (
                               itemFound && (
                                 <Table size='small'>

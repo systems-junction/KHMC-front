@@ -10,6 +10,9 @@ import capitilizeLetter from '../../../public/capitilizeLetter'
 import cookie from 'react-cookies'
 import CustomTable from '../../../components/Table/Table'
 import TextField from '@material-ui/core/TextField'
+import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
+import { DateTimePicker } from '@material-ui/pickers'
+import DateFnsUtils from '@date-io/date-fns'
 const tableHeadingForPHR = [
   'Medicine Name',
   'Requested Qty',
@@ -455,7 +458,7 @@ export default function EdrRequest(props) {
             >
               {props.item.date ? (
                 <div>
-                  <TextField
+                  {/* <TextField
                     required
                     disabled={true}
                     label='Date'
@@ -467,7 +470,25 @@ export default function EdrRequest(props) {
                       className: classes.input,
                       classes: { input: classes.input },
                     }}
-                  />
+                  /> */}
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <DateTimePicker
+                      // required
+                      disabled
+                      inputVariant='filled'
+                      fullWidth={true}
+                      label='Date'
+                      format='MM-dd-yyyy HH:mm'
+                      // minDate={DateTime}
+                      // onChange={(val) => onChangeDate(val, 'DateTime')}
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                      style={{ borderRadius: '10px' }}
+                      value={props.item.date}
+                    />
+                  </MuiPickersUtilsProvider>
                 </div>
               ) : (
                 undefined

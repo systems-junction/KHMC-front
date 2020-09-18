@@ -998,7 +998,8 @@ function AddEditPatientListing(props) {
       e.target.name === 'firstName' ||
       e.target.name === 'lastName' ||
       e.target.name === 'emergencyName' ||
-      e.target.name === 'depositorName'
+      e.target.name === 'depositorName' ||
+      e.target.name === 'insuranceVendor'
     ) {
       if (pattern.test(e.target.value) === false) {
         return
@@ -1283,7 +1284,7 @@ function AddEditPatientListing(props) {
                   >
                     {searchQuery ? (
                       <div style={{ zIndex: 3 }}>
-                        <Paper>
+                        <Paper style={{ maxHeight: 300, overflow: 'auto' }}>
                           {itemFoundSuccessfull ? (
                             itemFound && (
                               <Table size='small'>
@@ -2010,6 +2011,24 @@ function AddEditPatientListing(props) {
                 style={{
                   display: 'flex',
                   flex: 1,
+                  justifyContent: 'flex',
+                  marginTop: '2%',
+                  marginBottom: '2%',
+                }}
+              >
+                <Button
+                  style={styles.stylesForButton}
+                  onClick={onTabNavigation}
+                  variant='contained'
+                  color='default'
+                >
+                  Cancel
+                </Button>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  flex: 1,
                   justifyContent: 'flex-end',
                   marginTop: '2%',
                   marginBottom: '2%',
@@ -2199,6 +2218,24 @@ function AddEditPatientListing(props) {
                 style={{
                   display: 'flex',
                   flex: 1,
+                  justifyContent: 'flex',
+                  marginTop: '2%',
+                  marginBottom: '2%',
+                }}
+              >
+                <Button
+                  style={styles.stylesForButton}
+                  onClick={onTabNavigation}
+                  variant='contained'
+                  color='default'
+                >
+                  Cancel
+                </Button>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  flex: 1,
                   justifyContent: 'flex-end',
                   marginTop: '2%',
                   marginBottom: '2%',
@@ -2317,12 +2354,12 @@ function AddEditPatientListing(props) {
                     <FormControlLabel
                       value='Cash'
                       control={<Radio />}
-                      label='Cash'
+                      label='Uninsured'
                     />
                     <FormControlLabel
                       value='Insurance'
                       control={<Radio />}
-                      label='Insurance'
+                      label='Insured'
                     />
                     {/* <FormControlLabel
                       value='WireTransfer'
@@ -2349,7 +2386,7 @@ function AddEditPatientListing(props) {
                     inputVariant='filled'
                     fullWidth={true}
                     label='Date/Time'
-                    format='MM/dd/yyyy HH:mm a'
+                    format='MM-dd-yyyy HH:mm'
                     minDate={DateTime}
                     // onChange={(val) => onChangeDate(val, 'DateTime')}
                     InputProps={{
@@ -2682,6 +2719,24 @@ function AddEditPatientListing(props) {
             )}
 
             <div style={{ display: 'flex', flex: 1, justifyContent: 'center' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  flex: 1,
+                  justifyContent: 'flex',
+                  marginTop: '2%',
+                  marginBottom: '2%',
+                }}
+              >
+                <Button
+                  style={styles.stylesForButton}
+                  onClick={onTabNavigation}
+                  variant='contained'
+                  color='default'
+                >
+                  Cancel
+                </Button>
+              </div>
               <div
                 style={{
                   display: 'flex',
@@ -3104,6 +3159,24 @@ function AddEditPatientListing(props) {
                 style={{
                   display: 'flex',
                   flex: 1,
+                  justifyContent: 'flex',
+                  marginTop: '2%',
+                  marginBottom: '2%',
+                }}
+              >
+                <Button
+                  style={styles.stylesForButton}
+                  onClick={onTabNavigation}
+                  variant='contained'
+                  color='default'
+                >
+                  Cancel
+                </Button>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  flex: 1,
                   justifyContent: 'flex-end',
                   marginTop: '2%',
                   marginBottom: '2%',
@@ -3182,13 +3255,13 @@ function AddEditPatientListing(props) {
           success={successMsg}
         />
 
-        <div style={{ marginBottom: 20, marginTop: 50 }}>
+        {/* <div style={{ marginBottom: 20, marginTop: 50 }}>
           <img
             onClick={onTabNavigation}
             src={Back_Arrow}
             style={{ width: 45, height: 35, cursor: 'pointer' }}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   )

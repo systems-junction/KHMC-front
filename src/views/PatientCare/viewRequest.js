@@ -10,6 +10,9 @@ import capitilizeLetter from '../../public/capitilizeLetter'
 import cookie from 'react-cookies'
 import CustomTable from '../../components/Table/Table'
 import TextField from '@material-ui/core/TextField'
+import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
+import { DateTimePicker } from '@material-ui/pickers'
+import DateFnsUtils from '@date-io/date-fns'
 
 const tableHeadingForPHR = [
   'Medicine Name',
@@ -17,7 +20,7 @@ const tableHeadingForPHR = [
   'Dosage',
   'Frequency',
   'Duration',
-  ''
+  '',
 ]
 const tableDataKeysForPHR = [
   'medicineName',
@@ -136,7 +139,7 @@ export default function EdrRequest(props) {
             >
               {props.item.date ? (
                 <div>
-                  <TextField
+                  {/* <TextField
                     required
                     disabled={true}
                     label='Date'
@@ -149,7 +152,25 @@ export default function EdrRequest(props) {
                       classes: { input: classes.input },
                       disableUnderline:true
                     }}
-                  />
+                  /> */}
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <DateTimePicker
+                      // required
+                      disabled
+                      inputVariant='filled'
+                      fullWidth={true}
+                      label='Date'
+                      format='MM-dd-yyyy HH:mm'
+                      // minDate={DateTime}
+                      // onChange={(val) => onChangeDate(val, 'DateTime')}
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                      style={{ borderRadius: '10px' }}
+                      value={props.item.date}
+                    />
+                  </MuiPickersUtilsProvider>
                 </div>
               ) : (
                 undefined
@@ -178,7 +199,7 @@ export default function EdrRequest(props) {
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
-                      disableUnderline:true
+                      disableUnderline: true,
                     }}
                   />
                 </div>
@@ -199,7 +220,7 @@ export default function EdrRequest(props) {
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
-                      disableUnderline:true
+                      disableUnderline: true,
                     }}
                   />
                 </div>
@@ -228,7 +249,7 @@ export default function EdrRequest(props) {
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
-                      disableUnderline:true
+                      disableUnderline: true,
                     }}
                   />
                 </div>
@@ -254,7 +275,7 @@ export default function EdrRequest(props) {
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
-                      disableUnderline:true
+                      disableUnderline: true,
                     }}
                   />
                 </div>
@@ -272,7 +293,7 @@ export default function EdrRequest(props) {
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
-                      disableUnderline:true
+                      disableUnderline: true,
                     }}
                   />
                 </div>
@@ -301,7 +322,7 @@ export default function EdrRequest(props) {
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
-                      disableUnderline:true
+                      disableUnderline: true,
                     }}
                   />
                 </div>
@@ -327,7 +348,7 @@ export default function EdrRequest(props) {
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
-                      disableUnderline:true
+                      disableUnderline: true,
                     }}
                   />
                 </div>
@@ -337,9 +358,7 @@ export default function EdrRequest(props) {
             </div>
           </div>
 
-          <div
-            className='container-fluid'
-          >
+          <div className='container-fluid'>
             {props.item.medicine ? (
               <div className='row'>
                 {props.item.medicine ? (
@@ -351,12 +370,12 @@ export default function EdrRequest(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
             ) : (
-                undefined
-              )}
+              undefined
+            )}
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>

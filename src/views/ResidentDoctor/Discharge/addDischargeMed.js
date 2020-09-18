@@ -467,7 +467,7 @@ function AddEditEDR(props) {
               requestedQty,
               medicineName,
               unitPrice,
-              totalPrice: unitPrice * requestedQty,
+              totalPrice: (unitPrice * requestedQty).toFixed(2),
             },
           ],
         })
@@ -587,7 +587,7 @@ function AddEditEDR(props) {
 
     dispatch({ field: 'itemId', value: i._id })
     dispatch({ field: 'medicineName', value: i.name })
-    dispatch({ field: 'unitPrice', value: i.receiptUnitCost })
+    dispatch({ field: 'unitPrice', value: i.issueUnitCost })
     // dispatch({ field: 'totalPrice', value: i.purchasePrice + i.tax })
 
     setSearchQuery('')
@@ -704,7 +704,7 @@ function AddEditEDR(props) {
                 {searchQuery ? (
                   // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
                   <div style={{ zIndex: 3 }}>
-                    <Paper>
+                    <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
                       {itemFoundSuccessfull ? (
                         itemFound && (
                           <Table size='small'>

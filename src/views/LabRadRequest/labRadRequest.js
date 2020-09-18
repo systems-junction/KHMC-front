@@ -79,8 +79,8 @@ import Loader from 'react-loader-spinner'
 // ];
 const tableHeadingForLabReq = [
   'Request Id',
-  'Service Code',
-  'Service Name',
+  'Test Code',
+  'Test',
   'Requester',
   'Status',
   'Action',
@@ -94,8 +94,8 @@ const tableDataKeysForLabReq = [
 ]
 const tableHeadingForRadiology = [
   'Request Id',
-  'Service Code',
-  'Service Name',
+  'Test Code',
+  'Test',
   'Requester',
   'Status',
   'Action',
@@ -274,8 +274,8 @@ function LabRadRequest(props) {
 
     pharmacyRequestArray: '',
     requestType: '',
-    diagnosisArray:'',
-    medicationArray:''
+    diagnosisArray: '',
+    medicationArray: '',
   }
 
   function reducer(state, { field, value }) {
@@ -324,7 +324,7 @@ function LabRadRequest(props) {
     pharmacyRequestArray,
     requestType,
     medicationArray,
-    diagnosisArray
+    diagnosisArray,
   } = state
 
   const onChangeValue = (e) => {
@@ -859,7 +859,7 @@ function LabRadRequest(props) {
   const handlePatientSearch = (e) => {
     const a = e.target.value.replace(/[^\w\s]/gi, '')
     setSearchPatientQuery(a)
-    if (a.length >= 5) {
+    if (a.length >= 3) {
       axios
         .get(getSearchedpatient + '/' + a)
         .then((res) => {
@@ -885,8 +885,8 @@ function LabRadRequest(props) {
   }
 
   function handleAddPatient(i) {
-    dispatch({field:"diagnosisArray",value:""})
-    dispatch({field:"medicationArray",value:""})
+    dispatch({ field: 'diagnosisArray', value: '' })
+    dispatch({ field: 'medicationArray', value: '' })
     // setDialogOpen(true);
     console.log('selected banda : ', i)
     setPatientDetails(i)
@@ -922,7 +922,10 @@ function LabRadRequest(props) {
                 if (key === 'labRequest') {
                   dispatch({ field: 'labRequestArray', value: val.reverse() })
                 } else if (key === 'radiologyRequest') {
-                  dispatch({ field: 'radiologyRequestArray', value: val.reverse() })
+                  dispatch({
+                    field: 'radiologyRequestArray',
+                    value: val.reverse(),
+                  })
                 }
                 // else if (key === "consultationNote") {
                 //     Object.entries(val).map(([key1, val1]) => {
@@ -933,14 +936,20 @@ function LabRadRequest(props) {
                 //         }
                 //     });
                 //     dispatch({ field: "consultationNoteArray", value: val });
-                // } 
-                else if (key === "residentNotes") {
-                  if(val && val.length > 0){
-                  dispatch({ field: "diagnosisArray", value: val.reverse()[0].code });
+                // }
+                else if (key === 'residentNotes') {
+                  if (val && val.length > 0) {
+                    dispatch({
+                      field: 'diagnosisArray',
+                      value: val.reverse()[0].code,
+                    })
                   }
-                }else if (key === "pharmacyRequest") {
-                  if(val && val.length > 0){
-                  dispatch({ field: "medicationArray", value: val.reverse()[0].medicine });
+                } else if (key === 'pharmacyRequest') {
+                  if (val && val.length > 0) {
+                    dispatch({
+                      field: 'medicationArray',
+                      value: val.reverse()[0].medicine,
+                    })
                   }
                 }
                 //  else if (key === "nurseService") {
@@ -1106,7 +1115,7 @@ function LabRadRequest(props) {
                     marginTop: 5,
                   }}
                 >
-                  <Paper>
+                  <Paper style={{ maxHeight: 300, overflow: 'auto' }}>
                     {patientFoundSuccessfull ? (
                       patientFound && (
                         <Table size='small'>
@@ -1216,7 +1225,7 @@ function LabRadRequest(props) {
             </div>
 
             <div
-              className="row"
+              className='row'
               style={{
                 marginTop: 10,
                 paddingLeft: 10,
@@ -1258,31 +1267,36 @@ function LabRadRequest(props) {
                   {patientDetails.weight ? patientDetails.weight : '--'} kg
                 </span>
               </div>
-            
-              <div className={'col-md-3 col-sm-3 col-3'} style={styles.textStyles}>
-                {"None"}
+
+              <div
+                className={'col-md-3 col-sm-3 col-3'}
+                style={styles.textStyles}
+              >
+                {'None'}
               </div>
 
-              <div className={'col-md-3 col-sm-3 col-3'} style={styles.textStyles}>
-                {medicationArray ? 
-                  medicationArray.map((drug, index) => {
-                    return (
-                    <h6 style={styles.textStyles}>{drug.medicineName}</h6>
-                    )
-                  }) :
-                  "None"
-                }
+              <div
+                className={'col-md-3 col-sm-3 col-3'}
+                style={styles.textStyles}
+              >
+                {medicationArray
+                  ? medicationArray.map((drug, index) => {
+                      return (
+                        <h6 style={styles.textStyles}>{drug.medicineName}</h6>
+                      )
+                    })
+                  : 'None'}
               </div>
 
-              <div className={'col-md-3 col-sm-3 col-3'} style={styles.textStyles}>
-                {diagnosisArray ?
-                  diagnosisArray.map((drug, index) => {
-                    return (
-                      <h6 style={styles.textStyles}>{drug}</h6>
-                    )
-                  }) :
-                  "None"
-                }
+              <div
+                className={'col-md-3 col-sm-3 col-3'}
+                style={styles.textStyles}
+              >
+                {diagnosisArray
+                  ? diagnosisArray.map((drug, index) => {
+                      return <h6 style={styles.textStyles}>{drug}</h6>
+                    })
+                  : 'None'}
               </div>
             </div>
           </div>
@@ -1315,7 +1329,7 @@ function LabRadRequest(props) {
                   outline: 'none',
                   color: value === 0 ? '#12387a' : '#3B988C',
                 }}
-                label='Resident Doctor Notes'
+                label='Doctor/Physician Notes'
                 disabled
               />
               <Tab
@@ -1355,7 +1369,7 @@ function LabRadRequest(props) {
                   outline: 'none',
                   color: value === 4 ? '#12387a' : '#3B988C',
                 }}
-                label='External Consultation'
+                label='Consultant/Specialist Notes'
                 disabled
               />
               {/* <Tab

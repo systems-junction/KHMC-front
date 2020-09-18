@@ -125,6 +125,10 @@ const useStylesForInput = makeStyles((theme) => ({
     '&:disabled': {
       color: 'gray',
     },
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
   },
   multilineColor: {
     backgroundColor: 'white',
@@ -552,7 +556,7 @@ function DischargeRequest(props) {
                     marginTop: 5,
                   }}
                 >
-                  <Paper>
+                  <Paper style={{ maxHeight: 300, overflow: 'auto' }}>
                     {patientFoundSuccessfull ? (
                       patientFound && (
                         <Table size='small'>
