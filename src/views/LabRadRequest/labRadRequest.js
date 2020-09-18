@@ -859,7 +859,7 @@ function LabRadRequest(props) {
   const handlePatientSearch = (e) => {
     const a = e.target.value.replace(/[^\w\s]/gi, '')
     setSearchPatientQuery(a)
-    if (a.length >= 5) {
+    if (a.length >= 3) {
       axios
         .get(getSearchedpatient + '/' + a)
         .then((res) => {
@@ -1115,7 +1115,7 @@ function LabRadRequest(props) {
                     marginTop: 5,
                   }}
                 >
-                  <Paper>
+                  <Paper style={{ maxHeight: 300, overflow: 'auto' }}>
                     {patientFoundSuccessfull ? (
                       patientFound && (
                         <Table size='small'>

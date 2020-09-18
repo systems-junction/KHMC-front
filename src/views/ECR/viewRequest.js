@@ -336,7 +336,7 @@ export default function EdrRequest(props) {
           <div className={`row ${classes.root}`}>
             {props.item.description ? (
               <div
-                className='col-md-6 col-sm-6 col-6'
+                className='col-md-12 col-sm-12 col-12'
                 style={styles.inputContainerForTextField}
               >
                 <TextField
@@ -359,10 +359,11 @@ export default function EdrRequest(props) {
             ) : (
               undefined
             )}
-
+          </div>
+          <div className={`row ${classes.root}`}>
             {props.item.note ? (
               <div
-                className='col-md-6 col-sm-6 col-6'
+                className='col-md-12 col-sm-12 col-12'
                 style={styles.inputContainerForTextField}
               >
                 <TextField
@@ -384,7 +385,7 @@ export default function EdrRequest(props) {
               </div>
             ) : props.item.consultationNotes ? (
               <div
-                className='col-md-6 col-sm-6 col-6'
+                className='col-md-12 col-sm-12 col-12'
                 style={styles.inputContainerForTextField}
               >
                 <TextField

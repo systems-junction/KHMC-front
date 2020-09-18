@@ -8,6 +8,7 @@ import Tab from '@material-ui/core/Tab'
 import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
 import DateFnsUtils from '@date-io/date-fns'
+import Autocomplete from '@material-ui/lab/Autocomplete'
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
 import { DateTimePicker } from '@material-ui/pickers'
 import Fingerprint from '../../assets/img/fingerprint.png'
@@ -40,7 +41,7 @@ import {
   addPatientUrl,
   generateEDR,
   generateIPR,
-  getSearchedpatient,
+  searchPatientsURL,
 } from '../../public/endpoins'
 import axios from 'axios'
 import Notification from '../../components/Snackbar/Notification.js'
@@ -916,7 +917,7 @@ function AddEditPatientListing(props) {
     setSearchQuery(a)
     if (a.length >= 3) {
       axios
-        .get(getSearchedpatient + '/' + a)
+        .get(searchPatientsURL + '/' + a)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
@@ -998,6 +999,10 @@ function AddEditPatientListing(props) {
     }
   }
 
+  const onDropDownChange = (e) => {
+    console.log('value', e.target)
+  }
+
   const onPhoneNumberChange = (value) => {
     dispatch({ field: 'phoneNumber', value: value })
   }
@@ -1018,6 +1023,8 @@ function AddEditPatientListing(props) {
   }
 
   const onChangeValue = (e) => {
+    console.log('title', e)
+
     var pattern = /^[a-zA-Z ]*$/
     if (
       e.target.name === 'firstName' ||
@@ -1327,7 +1334,7 @@ function AddEditPatientListing(props) {
                   >
                     {searchQuery ? (
                       <div style={{ zIndex: 3 }}>
-                        <Paper>
+                        <Paper style={{ maxHeight: 300, overflow: 'auto' }}>
                           {itemFoundSuccessfull ? (
                             itemFound && (
                               <Table size='small'>
@@ -1449,6 +1456,26 @@ function AddEditPatientListing(props) {
                   ...styles.textFieldPadding,
                 }}
               >
+                {/* <Autocomplete
+                  id='combo-box-demo'
+                  options={titles}
+                  name='title'
+                  getOptionLabel={(option) => option.value}
+                  // onChange={onDropDownChange}
+                  onChange={(val, e) => {
+                    onDropDownChange({
+                      target: { name: 'title', value: e.value },
+                    })
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      // value={title}
+                      label='Combo box'
+                      variant='outlined'
+                    />
+                  )}
+                /> */}
                 <TextField
                   required
                   select

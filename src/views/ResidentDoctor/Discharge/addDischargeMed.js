@@ -704,7 +704,7 @@ function AddEditEDR(props) {
                 {searchQuery ? (
                   // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
                   <div style={{ zIndex: 3 }}>
-                    <Paper>
+                    <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
                       {itemFoundSuccessfull ? (
                         itemFound && (
                           <Table size='small'>

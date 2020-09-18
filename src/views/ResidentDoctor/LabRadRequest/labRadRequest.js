@@ -1408,7 +1408,7 @@ function LabRadRequest(props) {
                     marginTop: 5,
                   }}
                 >
-                  <Paper>
+                  <Paper style={{ maxHeight: 300, overflow: 'auto' }}>
                     {patientFoundSuccessfull ? (
                       patientFound && (
                         <Table size='small'>
@@ -1831,7 +1831,7 @@ function LabRadRequest(props) {
 
               {searchQuery ? (
                 <div style={{ zIndex: 10 }}>
-                  <Paper>
+                  <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
                     {itemFoundSuccessfull ? (
                       itemFound && (
                         <Table size='small'>
@@ -2005,7 +2005,7 @@ function LabRadRequest(props) {
               {searchRadioQuery ? (
                 // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
                 <div style={{ zIndex: 10 }}>
-                  <Paper>
+                  <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
                     {radioItemFoundSuccessfull ? (
                       radioItemFound && (
                         <Table size='small'>
