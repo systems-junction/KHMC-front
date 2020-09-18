@@ -2,8 +2,9 @@ import React from 'react'
 import './Header.css'
 import KHMC_White from '../../assets/img/KHMC_White.png'
 import Influence_white from '../../assets/img/Influence_white.png'
-import Logout from '../../assets/img/Logout_Yellow.png'
-import InnerLogout from '../../assets/img/Logout_Grey.png'
+import Logout from '../../assets/img/Logout_Blue (1).png'
+import Bar from '../../assets/img/Bar.png'
+import InnerLogout from '../../assets/img/Logout_Grey (1).png'
 import { Redirect } from 'react-router-dom'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
@@ -47,7 +48,9 @@ class Header extends React.Component {
   }
   componentDidMount() {
     this.setState({ currentUser: cookie.load('current_user') })
+    console.log('user', this.currentUser)
   }
+
   handleClickOpen() {
     console.log('====================================')
     console.log('clicked logout')
@@ -98,17 +101,32 @@ class Header extends React.Component {
               // onMouseLeave={() => this.setState({ hover: false })}
               // onClick={() => this.setState({ open: !this.state.open })}
             />
+            {this.state.currentUser !== undefined ? (
+              <>
+                <img
+                  src={Bar}
+                  // className='header2-style'
+                  style={{
+                    maxWidth: '40%',
+                    height: '52%',
+                    marginLeft: 10,
+                  }}
+                />
 
-            <img
-              src={Logout}
-              // className='header2-style'
-              style={{
-                cursor: 'pointer',
-                maxWidth: '40%',
-                height: '52%',
-              }}
-              onClick={() => this.setState({ open: !this.state.open })}
-            />
+                <img
+                  src={Logout}
+                  // className='header2-style'
+                  style={{
+                    cursor: 'pointer',
+                    maxWidth: '30%',
+                    height: '30%',
+                  }}
+                  onClick={() => this.setState({ open: !this.state.open })}
+                />
+              </>
+            ) : (
+              undefined
+            )}
           </div>
 
           {this.state.open ? (
@@ -169,7 +187,7 @@ class Header extends React.Component {
                       gutterBottom
                       style={{
                         display: 'flex',
-                        justifyContent: 'space-between',
+                        justifyContent: 'flex-start',
                         cursor: 'pointer',
                       }}
                       // onClick={() => this.logoutUser()}
@@ -179,11 +197,12 @@ class Header extends React.Component {
                         src={InnerLogout}
                         className='logout-style'
                         style={{
-                          height: '40px',
-                          width: '40px',
+                          height: '20px',
+                          width: '20px',
+                          marginTop: 6,
                         }}
                       />
-                      Logout
+                      <span style={{ marginLeft: 10 }}>Logout</span>
                     </Typography>
                   </CardContent>
                   <CardActions></CardActions>

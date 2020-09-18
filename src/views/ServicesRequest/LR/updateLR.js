@@ -9,6 +9,7 @@ import TextField from '@material-ui/core/TextField'
 import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
 import DateFnsUtils from '@date-io/date-fns'
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
+import CurrencyTextField from '@unicef/material-ui-currency-textfield'
 import axios from 'axios'
 import { FaUpload } from 'react-icons/fa'
 import {
@@ -217,6 +218,10 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: 'white',
       color: 'black',
     },
+    '& .Mui-disabled': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
   },
 }))
 
@@ -258,6 +263,7 @@ function AddEditPurchaseRequest(props) {
     date: '',
     results: '',
     comments: '',
+    price: '',
     status: '',
   }
 
@@ -305,6 +311,7 @@ function AddEditPurchaseRequest(props) {
     date,
     results,
     comments,
+    price,
     status,
   } = state
 
@@ -1315,7 +1322,35 @@ function AddEditPurchaseRequest(props) {
 
             <div className='row' style={{ marginTop: '20px' }}>
               <div
-                className='col-md-12 col-sm-12'
+                className='col-md-6 col-sm-6'
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <CurrencyTextField
+                  disabled={true}
+                  label='Price'
+                  name={'price'}
+                  value={price}
+                  // error={Price === '' && paymentForm}
+                  // onChange={onChangeValue}
+                  // type='number'
+                  // onBlur={onChangeValue}
+                  className='textInputStyle'
+                  variant='filled'
+                  textAlign='left'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                  currencySymbol='JD'
+                  outputFormat='number'
+                  // onChange={(event, value) => setValue(value)}
+                />
+              </div>
+              <div
+                className='col-md-6 col-sm-6'
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,

@@ -215,7 +215,7 @@ function AddEditPurchaseRequest(props) {
         //     )),
         //     (d.RequestType = 'PHR'),
         //     (d.insurance = 'Uncovered'),
-        //     (d.item = d.serviceName)
+        //     (d.item = 'Medicine')
         //   )
         // )
       }
@@ -224,7 +224,7 @@ function AddEditPurchaseRequest(props) {
           (d) => (
             (d.RequestType = 'LR'),
             (d.item = d.serviceName),
-            // (d.totalCost = d.serviceId.price),
+            (d.totalCost = d.serviceId.price),
             (d.insurance = 'Uncovered')
           )
         )
@@ -234,7 +234,7 @@ function AddEditPurchaseRequest(props) {
           (d) => (
             (d.RequestType = 'RR'),
             (d.item = d.serviceName),
-            // (d.totalCost = d.serviceId.price),
+            (d.totalCost = d.serviceId.price),
             (d.insurance = 'Uncovered')
           )
         )

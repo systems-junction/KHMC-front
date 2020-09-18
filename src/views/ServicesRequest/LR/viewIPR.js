@@ -13,6 +13,7 @@ import {
 } from '../../../public/endpoins'
 import DateFnsUtils from '@date-io/date-fns'
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
+import CurrencyTextField from '@unicef/material-ui-currency-textfield'
 import cookie from 'react-cookies'
 import Header from '../../../components/Header/Header'
 import business_Unit from '../../../assets/img/Out Patient.png'
@@ -117,6 +118,7 @@ const useStyles = makeStyles((theme) => ({
     '&:disabled': {
       color: 'gray',
     },
+    boxShadow: 'none',
   },
   multilineColor: {
     backgroundColor: 'white',
@@ -135,6 +137,10 @@ const useStyles = makeStyles((theme) => ({
     '& .Mui-focused': {
       backgroundColor: 'white',
       color: 'black',
+    },
+    '& .Mui-disabled': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
     },
   },
 }))
@@ -202,7 +208,7 @@ function AddEditPurchaseRequest(props) {
             Object.entries(res.data.data).map(([key, val]) => {
               if (val && typeof val === 'object') {
                 if (key === 'serviceId') {
-                  console.log('sxervice Id', val)
+                  console.log('service Id', val)
                   dispatch({ field: 'name', value: val.name })
                   dispatch({ field: 'price', value: val.price })
                 }
@@ -533,7 +539,7 @@ function AddEditPurchaseRequest(props) {
               <>
                 <div className='row' style={{ marginTop: '20px' }}>
                   <div
-                    className='col-md-12 col-sm-12'
+                    className='col-md-6 col-sm-6'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -558,32 +564,35 @@ function AddEditPurchaseRequest(props) {
                     />
                   </div>
 
-                  {/* <div
-                    className='col-md-4 col-sm-4'
+                  <div
+                    className='col-md-6 col-sm-6'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
                     }}
                   >
-                    <TextField
+                    <CurrencyTextField
                       disabled={true}
                       label='Price'
-                      variant='filled'
                       name={'price'}
                       value={price}
+                      // error={Price === '' && paymentForm}
                       // onChange={onChangeValue}
+                      // type='number'
+                      // onBlur={onChangeValue}
                       className='textInputStyle'
+                      variant='filled'
+                      textAlign='left'
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
                       }}
-                      InputLabelProps={{
-                        className: classes.label,
-                        classes: { label: classes.label },
-                      }}
+                      currencySymbol='JD'
+                      outputFormat='number'
+                      // onChange={(event, value) => setValue(value)}
                     />
                   </div>
-
+                  {/*
                   <div
                     className='col-md-4 col-sm-4'
                     style={{
