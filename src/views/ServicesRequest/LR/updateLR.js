@@ -16,6 +16,8 @@ import {
   getAllExternalConsultantsUrl,
 } from "../../../public/endpoins";
 import cookie from "react-cookies";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
 import Header from "../../../components/Header/Header";
 import business_Unit from "../../../assets/img/OPR.png";
 import Back from "../../../assets/img/Back_Arrow.png";
@@ -25,7 +27,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import BootstrapInput from "../../../components/Dropdown/dropDown.js";
 import Loader from "react-loader-spinner";
 import "../../../assets/jss/material-dashboard-react/components/loaderStyle.css";
-import { MdRemoveCircle } from 'react-icons/md'
+import { MdRemoveCircle } from "react-icons/md";
 
 const statusArray = [
   {
@@ -134,8 +136,8 @@ const useStyles = makeStyles((theme) => ({
       color: "black",
     },
     "& .Mui-disabled": {
-      color: "gray"
-    }
+      color: "gray",
+    },
   },
 }));
 
@@ -192,10 +194,11 @@ function AddEditPurchaseRequest(props) {
   const [slipUpload, setSlipUpload] = useState("");
   const [oprId, setOprId] = useState("");
   const [labId, setLabId] = useState("");
+  const [value, setValue] = React.useState(0);
   const [, setRequestId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [checkStatus, setcheckStatus] = useState('')
-  const [isFormSubmitted,setisFormSubmitted ]= useState(false)
+  const [checkStatus, setcheckStatus] = useState("");
+  const [isFormSubmitted, setisFormSubmitted] = useState(false);
   const [statusOnResult, setStatusOnResult] = useState("");
   const [statusOnResultStatus, setStatusOnResultStatus] = useState(false);
   const [externalConsultant, setExternalConsultant] = useState("");
@@ -228,8 +231,8 @@ function AddEditPurchaseRequest(props) {
                   value: new Date(val).toISOString().substr(0, 10),
                 });
               } else {
-                if (key === 'status') {
-                  setcheckStatus(val)
+                if (key === "status") {
+                  setcheckStatus(val);
                 }
                 dispatch({ field: key, value: val });
               }
@@ -269,13 +272,15 @@ function AddEditPurchaseRequest(props) {
 
     setCurrentUser(cookie.load("current_user"));
 
-
     setId(props.history.location.state.selectedItem._id);
     setSelectedItem(props.history.location.state.selectedItem);
     setrequestNo(props.history.location.state.selectedItem.requestNo);
     setSelectedPatient(props.history.location.state.selectedItem.patientId);
-
   }, []);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   const saveLabReq = () => {
     if (validateForm()) {
@@ -313,7 +318,7 @@ function AddEditPurchaseRequest(props) {
             });
           } else if (!res.data.success) {
             setOpenNotification(true);
-            setErrorMsg("Error while updating")
+            setErrorMsg("Error while updating");
           }
         })
         .catch((e) => {
@@ -321,23 +326,19 @@ function AddEditPurchaseRequest(props) {
           setOpenNotification(true);
           setErrorMsg("Error after updating the Lab Request");
         });
-    }
-    else {
+    } else {
       setOpenNotification(true);
-      setErrorMsg("Enter the sample ID")
+      setErrorMsg("Enter the sample ID");
     }
-    setisFormSubmitted(true)
+    setisFormSubmitted(true);
   };
 
   const validateForm = () => {
-    return (
-    sampleId &&
-    sampleId.length > 0
-    )
-  }
+    return sampleId && sampleId.length > 0;
+  };
 
   const onSlipUpload = (event) => {
-    event.preventDefault()
+    event.preventDefault();
     var file = event.target.files[0];
     var fileType = file.name.slice(file.name.length - 3);
 
@@ -348,7 +349,7 @@ function AddEditPurchaseRequest(props) {
     var reader = new FileReader();
     var url = reader.readAsDataURL(file);
 
-    reader.onloadend = function () {
+    reader.onloadend = function() {
       if (fileType === "pdf") {
         setpdfView(file.name);
       } else if (fileType === "PDF") {
@@ -393,40 +394,40 @@ function AddEditPurchaseRequest(props) {
   };
 
   const removeUploadedSlip = () => {
-    console.log("Slip ..... ", slipUpload)
+    console.log("Slip ..... ", slipUpload);
 
-    var fileType = slipUpload.name.slice(slipUpload.name.length - 3)
+    var fileType = slipUpload.name.slice(slipUpload.name.length - 3);
 
     // console.log("Selected file : ", file.name)
     // console.log("file type : ", fileType)
 
-    setSlipUpload('')
+    setSlipUpload("");
 
     if (fileType === "pdf") {
-      setpdfView('');
+      setpdfView("");
     } else if (fileType === "PDF") {
-      setpdfView('');
+      setpdfView("");
     } else if (fileType === "png") {
-      setImagePreview('');
+      setImagePreview("");
     } else if (fileType === "PNG") {
-      setImagePreview('');
+      setImagePreview("");
     } else if (fileType === "jpeg") {
-      setImagePreview('');
+      setImagePreview("");
     } else if (fileType === "JPEG") {
-      setImagePreview('');
+      setImagePreview("");
     } else if (fileType === "jpg") {
-      setImagePreview('');
+      setImagePreview("");
     } else if (fileType === "JPG") {
-      setImagePreview('');
+      setImagePreview("");
     } else if (fileType === "rtf") {
-      setImagePreview('');
+      setImagePreview("");
     } else if (fileType === "RTF") {
-      setImagePreview('');
+      setImagePreview("");
     } else {
       setErrorMsg("Cannot remove file");
       setOpenNotification(true);
     }
-  }
+  };
 
   if (openNotification) {
     setTimeout(() => {
@@ -469,231 +470,274 @@ function AddEditPurchaseRequest(props) {
             style={{ flex: 4, display: "flex", flexDirection: "column" }}
             className={`container-fluid ${classes.root}`}
           >
-            <div className="row">
-              <div
-                className="col-md-6 col-sm-6"
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
+            <div className={classesForTabs.root}>
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                textColor="primary"
+                TabIndicatorProps={{ style: { background: "#12387a" } }}
+                centered
               >
-                <TextField
-                  disabled={true}
-                  label="Lab Test Name"
-                  name={"serviceName"}
-                  value={serviceName}
-                  variant="filled"
-                  className="textInputStyle"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                    disableUnderline: true
+                <Tab
+                  style={{
+                    color: "white",
+                    borderRadius: 5,
+                    outline: "none",
+                    color: value === 0 ? "#12387a" : "#3B988C",
                   }}
-                  InputLabelProps={{
-                    className: classes.label,
-                    classes: { label: classes.label },
-                  }}
+                  label="Sample Collection"
                 />
-              </div>
-
-              <div
-                className="col-md-6 col-sm-6 col-6"
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <DateTimePicker
-                    required
-                    disabled={true}
-                    inputVariant="filled"
-                    fullWidth={true}
-                    label="Date/Time"
-                    format="MM/dd/yyyy HH:mm a"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true
+                <Tab
+                  style={{
+                    color: "white",
+                    borderRadius: 5,
+                    outline: "none",
+                    color: value === 1 ? "#12387a" : "#3B988C",
+                  }}
+                  label="Results"
+                />
+              </Tabs>
+            </div>
+            {value === 0 ? (
+              <div>
+                {/* {" "}
+                <h1>sample collection </h1> */}
+                <div className="row">
+                  <div
+                    className="col-md-12 col-sm-12"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
                     }}
-                    style={{ borderRadius: "10px" }}
-                    value={date}
-                  />
-                </MuiPickersUtilsProvider>
-              </div>
-            </div>
-
-            <div className="row">
-              <div
-                className="col-md-6 col-sm-6 col-6"
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <TextField
-                  // disabled={true}
-                  disabled={checkStatus === "completed" ? true : false}
-                  error={!validateForm() && isFormSubmitted}
-                  variant="filled"
-                  label="Sample ID"
-                  name={"sampleId"}
-                  value={sampleId}
-                  type="text"
-                  className="textInputStyle"
-                  onChange={onChangeValue}
-                  InputLabelProps={{
-                    shrink: true,
-                    color: "black",
-                  }}
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                />
-              </div>
-              <div
-                className="col-md-162 col-sm-6"
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <TextField
-                  disabled={true}
-                  label="Comments/Notes"
-                  name={"comments"}
-                  value={comments}
-                  // onChange={onChangeValue}
-                  variant="filled"
-                  className="textInputStyle"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                    disableUnderline: true
-                  }}
-                  InputLabelProps={{
-                    className: classes.label,
-                    classes: { label: classes.label },
-                  }}
-                />
-              </div>
-            </div>
-
-            <div className="row">
-              <div
-                className="col-md-12 col-sm-12"
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <TextField
-                  fullWidth
-                  select
-                  disabled={checkStatus === "completed" ? true : false}
-                  id="status"
-                  name="status"
-                  value={status}
-                  onChange={onChangeValue}
-                  variant="filled"
-                  label="Status"
-                  className="dropDownStyle"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  input={<BootstrapInput />}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  {statusArray.map((val) => {
-                    return (
-                      <MenuItem key={val.key} value={val.key}>
-                        {val.value}
-                      </MenuItem>
-                    );
-                  })}
-                </TextField>
-              </div>
-            </div>
-
-            <div className="row">
-              <div
-                className="col-md-12 col-sm-6 col-12"
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <label style={styles.upload}>
-                  <TextField
-                    required
-                    type="file"
-                    style={styles.input}
-                    onChange={checkStatus === "completed" ?
-                      (e) => {
-                        e.preventDefault()
-                        setErrorMsg("Request is already completed")
-                        setOpenNotification(true)
-                      } :
-                      onSlipUpload}
-                    name="results"
-                    Error={errorMsg}
-                  />
-                  <FaUpload /> Results
-                </label>
-
-                {pdfView !== '' ? (
-                  <div className='row' style={{
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                  }}>
-                    <div
-                      style={{
-                        color: '#2c6ddd',
-                        fontStyle: 'italic',
+                  >
+                    <TextField
+                      disabled={true}
+                      label="Lab Test Name"
+                      name={"serviceName"}
+                      value={serviceName}
+                      variant="filled"
+                      className="textInputStyle"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                        disableUnderline: true,
                       }}
-                    >
-                      <span style={{ color: 'black' }}>Selected File : </span>
-                      {pdfView}
-                    </div>
-                    <div>
-                      <a
-                        onClick={removeUploadedSlip}
-                        style={{ marginLeft: '25px', color: '#e877a1' }}
-                        href=''
-                      >
-                        <MdRemoveCircle /> Remove
-                          </a>
-                    </div>
+                      InputLabelProps={{
+                        className: classes.label,
+                        classes: { label: classes.label },
+                      }}
+                    />
                   </div>
-                ) : (
-                    undefined
-                  )}
-              </div>
-            </div>
+                </div>
+                <div className="row">
+                  <div
+                    className="col-md-6 col-sm-6 col-6"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                      <DateTimePicker
+                        required
+                        disabled={true}
+                        inputVariant="filled"
+                        fullWidth={true}
+                        label="Date/Time"
+                        format="MM/dd/yyyy HH:mm a"
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                          disableUnderline: true,
+                        }}
+                        style={{ borderRadius: "10px" }}
+                        value={date}
+                      />
+                    </MuiPickersUtilsProvider>
+                  </div>
 
-            <div className="row">
-              {results !== "" && results.includes("\\") ? (
-                <>
-                  {results !== "" &&
-                    results.slice(results.length - 3) !== "pdf" ? (
+                  {/* <div className="row"> */}
+                  <div
+                    className="col-md-6 col-sm-6 col-6"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      // disabled={true}
+                      disabled={checkStatus === "completed" ? true : false}
+                      error={!validateForm() && isFormSubmitted}
+                      variant="filled"
+                      label="Sample ID"
+                      name={"sampleId"}
+                      value={sampleId}
+                      type="text"
+                      className="textInputStyle"
+                      onChange={onChangeValue}
+                      InputLabelProps={{
+                        shrink: true,
+                        color: "black",
+                      }}
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="row">
+                  <div
+                    className="col-md-12 col-sm-12"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      disabled={true}
+                      label="Comments/Notes"
+                      name={"comments"}
+                      value={comments}
+                      // onChange={onChangeValue}
+                      variant="filled"
+                      className="textInputStyle"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                        disableUnderline: true,
+                      }}
+                      InputLabelProps={{
+                        className: classes.label,
+                        classes: { label: classes.label },
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="row">
+                  <div
+                    className="col-md-12 col-sm-12"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      fullWidth
+                      select
+                      disabled={checkStatus === "completed" ? true : false}
+                      id="status"
+                      name="status"
+                      value={status}
+                      onChange={onChangeValue}
+                      variant="filled"
+                      label="Status"
+                      className="dropDownStyle"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                      input={<BootstrapInput />}
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      {statusArray.map((val) => {
+                        return (
+                          <MenuItem key={val.key} value={val.key}>
+                            {val.value}
+                          </MenuItem>
+                        );
+                      })}
+                    </TextField>
+                  </div>
+                </div>
+              </div>
+            ) : value === 1 ? (
+              <div>
+                {/* {" "} */}
+                {/* <h1>results</h1>{" "} */}
+                <div className="row">
+                  <div
+                    className="col-md-12 col-sm-6 col-12"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <label style={styles.upload}>
+                      <TextField
+                        required
+                        type="file"
+                        style={styles.input}
+                        onChange={
+                          checkStatus === "completed"
+                            ? (e) => {
+                                e.preventDefault();
+                                setErrorMsg("Request is already completed");
+                                setOpenNotification(true);
+                              }
+                            : onSlipUpload
+                        }
+                        name="results"
+                        Error={errorMsg}
+                      />
+                      <FaUpload /> Results
+                    </label>
+
+                    {pdfView !== "" ? (
                       <div
-                        className="col-md-6 col-sm-6 col-6"
+                        className="row"
                         style={{
-                          ...styles.inputContainerForTextField,
-                          ...styles.textFieldPadding,
+                          justifyContent: "center",
+                          alignItems: "center",
                         }}
                       >
-                        <img
-                          src={uploadsUrl + results.split("\\")[1]}
-                          className="depositSlipImg"
-                        />
+                        <div
+                          style={{
+                            color: "#2c6ddd",
+                            fontStyle: "italic",
+                          }}
+                        >
+                          <span style={{ color: "black" }}>
+                            Selected File :{" "}
+                          </span>
+                          {pdfView}
+                        </div>
+                        <div>
+                          <a
+                            onClick={removeUploadedSlip}
+                            style={{ marginLeft: "25px", color: "#e877a1" }}
+                            href=""
+                          >
+                            <MdRemoveCircle /> Remove
+                          </a>
+                        </div>
                       </div>
-                    ) : results !== "" &&
-                      results.slice(results.length - 3) === "pdf" ? (
+                    ) : (
+                      undefined
+                    )}
+                  </div>
+                </div>
+                <div className="row">
+                  {results !== "" && results.includes("\\") ? (
+                    <>
+                      {results !== "" &&
+                      results.slice(results.length - 3) !== "pdf" ? (
+                        <div
+                          className="col-md-6 col-sm-6 col-6"
+                          style={{
+                            ...styles.inputContainerForTextField,
+                            ...styles.textFieldPadding,
+                          }}
+                        >
+                          <img
+                            src={uploadsUrl + results.split("\\")[1]}
+                            className="depositSlipImg"
+                          />
+                        </div>
+                      ) : results !== "" &&
+                        results.slice(results.length - 3) === "pdf" ? (
                         <div
                           className="col-md-6 col-sm-6 col-6"
                           style={{
@@ -707,30 +751,30 @@ function AddEditPurchaseRequest(props) {
                             style={{ color: "#2c6ddd" }}
                           >
                             Click here to open results
-                      </a>
+                          </a>
                         </div>
                       ) : (
                         undefined
                       )}
-                </>
-              ) : results !== "" && results.includes("/") ? (
-                <>
-                  {results !== "" &&
-                    results.slice(results.length - 3) !== "pdf" ? (
-                      <div
-                        className="col-md-6 col-sm-6 col-6"
-                        style={{
-                          ...styles.inputContainerForTextField,
-                          ...styles.textFieldPadding,
-                        }}
-                      >
-                        <img
-                          src={uploadsUrl + results}
-                          className="depositSlipImg"
-                        />
-                      </div>
-                    ) : results !== "" &&
-                      results.slice(results.length - 3) === "pdf" ? (
+                    </>
+                  ) : results !== "" && results.includes("/") ? (
+                    <>
+                      {results !== "" &&
+                      results.slice(results.length - 3) !== "pdf" ? (
+                        <div
+                          className="col-md-6 col-sm-6 col-6"
+                          style={{
+                            ...styles.inputContainerForTextField,
+                            ...styles.textFieldPadding,
+                          }}
+                        >
+                          <img
+                            src={uploadsUrl + results}
+                            className="depositSlipImg"
+                          />
+                        </div>
+                      ) : results !== "" &&
+                        results.slice(results.length - 3) === "pdf" ? (
                         <div
                           className="col-md-6 col-sm-6 col-6"
                           style={{
@@ -743,51 +787,74 @@ function AddEditPurchaseRequest(props) {
                             style={{ color: "#2c6ddd" }}
                           >
                             Click here to open results
-                      </a>
+                          </a>
                         </div>
                       ) : (
                         undefined
                       )}
-                </>
-              ) : (
+                    </>
+                  ) : (
                     undefined
                   )}
 
-              {imagePreview !== "" ? (
-                <div
-                  className="col-md-6 col-sm-6 col-6"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <img src={imagePreview} className="depositSlipImg" />
-                  <div className="row">
-                    <div className="col-md-4 col-sm-5 col-5">
-                      <Button
-                        onClick={removeUploadedSlip}
-                        style={{ ...styles.stylesForButton, backgroundColor: "#e877a1" }}
-                        variant='contained'
-                        color='primary'
-                      >
-                        <MdRemoveCircle size='16px' /><strong style={{ marginLeft: '5px', fontSize: '13px' }}>Remove</strong>
-                      </Button>
-                    </div>
-                    {results !== '' ? (
-                      <div className="col-md-4 col-sm-5 col-5" style={{ marginTop: '10px', fontWeight: '500', color: 'gray', textAlign: 'center' }}>
-                        New results
+                  {imagePreview !== "" ? (
+                    <div
+                      className="col-md-6 col-sm-6 col-6"
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
+                    >
+                      <img src={imagePreview} className="depositSlipImg" />
+                      <div className="row">
+                        <div className="col-md-4 col-sm-5 col-5">
+                          <Button
+                            onClick={removeUploadedSlip}
+                            style={{
+                              ...styles.stylesForButton,
+                              backgroundColor: "#e877a1",
+                            }}
+                            variant="contained"
+                            color="primary"
+                          >
+                            <MdRemoveCircle size="16px" />
+                            <strong
+                              style={{ marginLeft: "5px", fontSize: "13px" }}
+                            >
+                              Remove
+                            </strong>
+                          </Button>
+                        </div>
+                        {results !== "" ? (
+                          <div
+                            className="col-md-4 col-sm-5 col-5"
+                            style={{
+                              marginTop: "10px",
+                              fontWeight: "500",
+                              color: "gray",
+                              textAlign: "center",
+                            }}
+                          >
+                            New results
+                          </div>
+                        ) : (
+                          undefined
+                        )}
                       </div>
-                    ) : (
-                        undefined
-                      )}
-                  </div>
+                    </div>
+                  ) : (
+                    undefined
+                  )}
                 </div>
-              ) : (
-                  undefined
-                )}
-            </div>
+              </div>
+            ) : (
+              undefined
+            )}
 
-            <div className="row" style={{ marginBottom: "25px", marginTop: '25px' }}>
+            <div
+              className="row"
+              style={{ marginBottom: "25px", marginTop: "25px" }}
+            >
               <div className="col-md-6 col-sm-6 col-6">
                 <img
                   onClick={() => props.history.goBack()}
@@ -812,10 +879,10 @@ function AddEditPurchaseRequest(props) {
           <Notification msg={errorMsg} open={openNotification} />
         </div>
       ) : (
-          <div className="LoaderStyle">
-            <Loader type="TailSpin" color="red" height={50} width={50} />
-          </div>
-        )}
+        <div className="LoaderStyle">
+          <Loader type="TailSpin" color="red" height={50} width={50} />
+        </div>
+      )}
     </div>
   );
 }
