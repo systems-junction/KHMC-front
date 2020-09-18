@@ -198,6 +198,7 @@ function AddEditPurchaseRequest(props) {
 
           for (let j = 0; j < singlePR.medicine.length; j++) {
             amount = amount + singlePR.medicine[j].itemId.purchasePrice
+            // amount = amount + (singlePR.medicine[j].itemId.issueUnitCost * singlePR.medicine[j].requestedQty)
           }
 
           selectedRec.pharmacyRequest[i] = {
