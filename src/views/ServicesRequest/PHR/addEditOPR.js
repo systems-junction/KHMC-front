@@ -2354,12 +2354,12 @@ function AddEditPatientListing(props) {
                     <FormControlLabel
                       value='Cash'
                       control={<Radio />}
-                      label='Cash'
+                      label='Uninsured'
                     />
                     <FormControlLabel
                       value='Insurance'
                       control={<Radio />}
-                      label='Insurance'
+                      label='Insured'
                     />
                     {/* <FormControlLabel
                       value='WireTransfer'
