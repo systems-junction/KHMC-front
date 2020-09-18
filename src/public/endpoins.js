@@ -53,10 +53,6 @@ export const searchpatient = `${baseUrl}/patient/searchpatient`;
 export const updateEdrIpr = `${baseUrl}/patient/updateEdrIpr`;
 export const updateEdrIprItem = `${baseUrl}/patient/updateEdrIprItem`;
 export const searchPatientsURL = `${baseUrl}/patient/getpatientall`;
-<<<<<<< HEAD
-=======
-
->>>>>>> ea5cf818fb8003487d294b7cc6184263d0369c8e
 // for notifications
 export const notifyTriage = `${baseUrl}/patient/triage`;
 export const notifyPharmacy = `${baseUrl}/patient/pharmacy`;
