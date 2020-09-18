@@ -281,8 +281,8 @@ function LabRadRequest(props) {
     pharmacyRequestArray: "",
     requestType: "",
     patientId: "",
-    diagnosisArray:'',
-    medicationArray:''
+    diagnosisArray: "",
+    medicationArray: "",
   };
 
   function reducer(state, { field, value }) {
@@ -332,7 +332,7 @@ function LabRadRequest(props) {
     requestType,
     patientId,
     diagnosisArray,
-    medicationArray
+    medicationArray,
   } = state;
 
   const onChangeValue = (e) => {
@@ -1041,8 +1041,8 @@ function LabRadRequest(props) {
   }
 
   function handleAddPatient(i) {
-    dispatch({field:"diagnosisArray",value:""})
-    dispatch({field:"medicationArray",value:""})
+    dispatch({ field: "diagnosisArray", value: "" });
+    dispatch({ field: "medicationArray", value: "" });
 
     // setDialogOpen(true);
     console.log("selected banda : ", i);
@@ -1081,7 +1081,10 @@ function LabRadRequest(props) {
                 } else if (key === "labRequest") {
                   dispatch({ field: "labRequestArray", value: val.reverse() });
                 } else if (key === "radiologyRequest") {
-                  dispatch({ field: "radiologyRequestArray", value: val.reverse() });
+                  dispatch({
+                    field: "radiologyRequestArray",
+                    value: val.reverse(),
+                  });
                 } else if (key === "consultationNote") {
                   val.map(
                     (d) =>
@@ -1089,7 +1092,10 @@ function LabRadRequest(props) {
                         ? d.requester.firstName + " " + d.requester.lastName
                         : "")
                   );
-                  dispatch({ field: "consultationNoteArray", value: val.reverse() });
+                  dispatch({
+                    field: "consultationNoteArray",
+                    value: val.reverse(),
+                  });
                 } else if (key === "residentNotes") {
                   val.map(
                     (d) =>
@@ -1097,9 +1103,12 @@ function LabRadRequest(props) {
                         ? d.doctor.firstName + " " + d.doctor.lastName
                         : "")
                   );
-                  dispatch({ field: "residentNoteArray", value: val.reverse() });
-                  if(val && val.length > 0){
-                  dispatch({ field: "diagnosisArray", value: val[0].code });
+                  dispatch({
+                    field: "residentNoteArray",
+                    value: val.reverse(),
+                  });
+                  if (val && val.length > 0) {
+                    dispatch({ field: "diagnosisArray", value: val[0].code });
                   }
                 } else if (key === "pharmacyRequest") {
                   val.map(
@@ -1108,9 +1117,15 @@ function LabRadRequest(props) {
                         ? d.requester.firstName + " " + d.requester.lastName
                         : "")
                   );
-                  dispatch({ field: "pharmacyRequestArray", value: val.reverse() });
-                  if(val && val.length > 0){
-                  dispatch({ field: "medicationArray", value: val[0].medicine });
+                  dispatch({
+                    field: "pharmacyRequestArray",
+                    value: val.reverse(),
+                  });
+                  if (val && val.length > 0) {
+                    dispatch({
+                      field: "medicationArray",
+                      value: val[0].medicine,
+                    });
                   }
                 }
                 //  else if (key === "nurseService") {
@@ -1189,12 +1204,12 @@ function LabRadRequest(props) {
       <Header />
       <div className="cPadding">
         <div className="subheader">
-          <div style={{ width: "220%" }}>
+          <div style={{}}>
             <img src={ConsultationIcon} />
             <h4>Consultation Notes</h4>
           </div>
 
-          <div>
+          <div style={{ width: "50%" }}>
             <Button
               disabled={enableForm}
               onClick={TriageAssessment}
@@ -1204,17 +1219,18 @@ function LabRadRequest(props) {
             >
               Triage & Assessment
             </Button>
-          </div>
-          <div style={{ textAlign: "right", marginLeft: "8px", width: "24%" }}>
+            <></>
+            {/* <div style={{}}> */}
             <Button
               // disabled={enableForm}
               onClick={ViewConsultationNotes}
-              style={styles.stylesForButton}
+              style={{...styles.stylesForButton, marginLeft: "5px"}}
               variant="contained"
               color="primary"
             >
               View All
             </Button>
+            {/* </div> */}
           </div>
         </div>
         <div
@@ -1413,7 +1429,7 @@ function LabRadRequest(props) {
             </div>
 
             <div
-            className="row"
+              className="row"
               style={{
                 marginTop: 10,
                 paddingLeft: 10,
@@ -1456,30 +1472,35 @@ function LabRadRequest(props) {
                 </span>
               </div>
 
-              <div className={'col-md-3 col-sm-3 col-3'} style={styles.textStyles}>
+              <div
+                className={"col-md-3 col-sm-3 col-3"}
+                style={styles.textStyles}
+              >
                 {"None"}
               </div>
 
-              <div className={'col-md-3 col-sm-3 col-3'} style={styles.textStyles}>
-                {medicationArray ? 
-                  medicationArray.map((drug, index) => {
-                    return (
-                    <h6 style={styles.textStyles}>{drug.medicineName}</h6>
-                    )
-                  }) :
-                  "None"
-                }
+              <div
+                className={"col-md-3 col-sm-3 col-3"}
+                style={styles.textStyles}
+              >
+                {medicationArray
+                  ? medicationArray.map((drug, index) => {
+                      return (
+                        <h6 style={styles.textStyles}>{drug.medicineName}</h6>
+                      );
+                    })
+                  : "None"}
               </div>
 
-              <div className={'col-md-3 col-sm-3 col-3'} style={styles.textStyles}>
-                {diagnosisArray ?
-                  diagnosisArray.map((drug, index) => {
-                    return (
-                      <h6 style={styles.textStyles}>{drug}</h6>
-                    )
-                  }) :
-                  "None"
-                }
+              <div
+                className={"col-md-3 col-sm-3 col-3"}
+                style={styles.textStyles}
+              >
+                {diagnosisArray
+                  ? diagnosisArray.map((drug, index) => {
+                      return <h6 style={styles.textStyles}>{drug}</h6>;
+                    })
+                  : "None"}
               </div>
             </div>
           </div>
@@ -2004,7 +2025,7 @@ function LabRadRequest(props) {
                   undefined
                 )}
               </div>
-            </div> /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/)
+            </div> /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/)
           ) : (
             //     : value === 5 ? (
             //         <div
