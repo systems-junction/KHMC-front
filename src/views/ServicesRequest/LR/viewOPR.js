@@ -396,7 +396,7 @@ function AddEditPurchaseRequest(props) {
       .then((res) => {
         if (res.data.success) {
           if (res.data.data) {
-            console.log(res.data.data)
+            console.log(res.data.data, 'status data')
             setAllExternalConsultants(res.data.data)
           }
         }
@@ -866,135 +866,17 @@ function AddEditPurchaseRequest(props) {
               <img src={business_Unit} />
               <h4>OPR - Lab Service</h4>
             </div>
-
-            {/* <div>
-              <Button
-                onClick={TriageAssessment}
-                style={styles.stylesForButton}
-                variant='contained'
-                color='primary'
-              >
-                Triage And Assessment
-              </Button>
-            </div> */}
           </div>
           <div
             style={{
               height: '20px',
             }}
           />
-          {/* <div className="container" style={styles.patientDetails}>
-            <div className="row">
-              <div className="col-md-12">
-                <h4 style={{ color: "blue", fontWeight: "600" }}>
-                  Patient Details
-                </h4>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-4 col-sm-4">
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
-                    Patient Name
-                  </InputLabel>
-                  <span>
-                    {selectedPatient.firstName + ` ` + selectedPatient.lastName}{" "}
-                  </span>
-                </div>
-              </div>
-              <div className="col-md-4 col-sm-4">
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
-                    Gender
-                  </InputLabel>
-                  <span>{selectedPatient.gender}</span>
-                </div>
-              </div>
-              <div className="col-md-4 col-sm-4">
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
-                    Age
-                  </InputLabel>
-                  <span>{selectedPatient.age}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="row">
-              <div className="col-md-4 col-sm-4">
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
-                    Patient ID
-                  </InputLabel>
-                  <span>{selectedPatient.profileNo}</span>
-                </div>
-              </div>
-
-              <div className="col-md-4 col-sm-4">
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
-                    Insurance No
-                  </InputLabel>
-                  <span>
-                    {selectedPatient.insuranceId
-                      ? selectedPatient.insuranceId
-                      : "--"}
-                  </span>
-                </div>
-              </div>
-              <div className="col-md-4 col-sm-4">
-                <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id="status-label">
-                    Request No
-                  </InputLabel>
-                  <span>{requestNo}</span>
-                </div>
-              </div>
-            </div>
-          </div> */}
-
-          <div
-            style={{
-              height: '20px',
-            }}
-          />
-
           <div
             style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
             className={`container-fluid ${classes.root}`}
           >
-            {/* <div style={{ marginTop: "20px" }} className="row">
-              <div
-                className="col-md-12 col-sm-12 col-12"
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <TextField
-                  label="Lab Test Name"
-                  variant="filled"
-                  name={"searchQuery"}
-                  value={searchQuery}
-                  onChange={handleSearch}
-                  className="textInputStyle"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  InputLabelProps={{
-                    className: classes.label,
-                    classes: { label: classes.label },
-                  }}
-                />
-              </div>
-            </div> */}
-            <div
-              className='row'
-              style={{
-                marginBottom: 10,
-              }}
-            >
+            <div className='row'>
               <div
                 className='col-md-11 col-sm-11 col-11'
                 style={{
@@ -1018,6 +900,7 @@ function AddEditPurchaseRequest(props) {
                     ),
                     className: classes.input,
                     classes: { input: classes.input },
+                    disableUnderline: true,
                   }}
                   InputLabelProps={{
                     className: classes.label,
@@ -1025,28 +908,6 @@ function AddEditPurchaseRequest(props) {
                   }}
                 />
               </div>
-
-              {/* <div
-                className='col-md-1 col-sm-2 col-2'
-                style={{
-                  ...styles.inputContainerForTextField,
-                }}
-              >
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: 55,
-                    backgroundColor: 'white',
-                    borderRadius: 5,
-                    width: 100,
-                  }}
-                >
-                  <img src={BarCode} style={{ width: 80, height: 75 }} />
-                </div>
-              </div> */}
-
               <div className='col-md-1 col-sm-2 col-2'>
                 <div
                   style={{
@@ -1065,7 +926,6 @@ function AddEditPurchaseRequest(props) {
             </div>
 
             {searchQuery ? (
-              // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
               <div style={{ zIndex: 10 }}>
                 <Paper>
                   {setItemFoundSuccessfully ? (
@@ -1111,62 +971,6 @@ function AddEditPurchaseRequest(props) {
             ) : (
               undefined
             )}
-            <br />
-
-            {/* <div className='row'>
-              <div
-                className='col-md-6 col-sm-6 col-6'
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <TextField
-                  disabled={true}
-                  variant='filled'
-                  label='Date/Time'
-                  name={'DateTime'}
-                  value={DateTime}
-                  type='date'
-                  className='textInputStyle'
-                  // onChange={(val) => onChangeValue(val, 'DateTime')}
-                  InputLabelProps={{
-                    shrink: true,
-                    color: 'black',
-                  }}
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                />
-              </div>
-              <div
-                className='col-md-6 col-sm-6 col-6'
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <TextField
-                  disabled={true}
-                  variant='filled'
-                  label='Sample ID'
-                  name={'sampleID'}
-                  value={sampleID}
-                  type='text'
-                  className='textInputStyle'
-                  // onChange={(val) => onChangeValue(val, 'DateTime')}
-                  InputLabelProps={{
-                    shrink: true,
-                    color: 'black',
-                  }}
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                />
-              </div>
-            </div> */}
 
             <div style={{ marginTop: '20px' }} className='row'>
               <div
@@ -1188,6 +992,7 @@ function AddEditPurchaseRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
+                    disableUnderline: true,
                   }}
                   InputLabelProps={{
                     className: classes.label,
@@ -1239,142 +1044,6 @@ function AddEditPurchaseRequest(props) {
               </div>
             </div>
 
-            {/* <div className='row' style={{ marginTop: '20px' }}>
-              <div
-                className='col-md-12 col-sm-6 col-12'
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <label style={styles.upload}>
-                  <TextField
-                    required
-                    type='file'
-                    style={styles.input}
-                    onChange={onSlipUpload}
-                    name='results'
-                  />
-                  <FaUpload /> Results
-                </label>
-
-                {pdfView !== '' ? (
-                  <div
-                    style={{
-                      textAlign: 'center',
-                      color: '#2c6ddd',
-                      fontStyle: 'italic',
-                    }}
-                  >
-                    <span style={{ color: 'black' }}>Selected File : </span>
-                    {pdfView}
-                  </div>
-                ) : (
-                  undefined
-                )}
-              </div>
-            </div>
-
-            <div className='row'>
-              {results !== '' && results.includes('\\') ? (
-                <>
-                  {results !== '' &&
-                  results.slice(results.length - 3) !== 'pdf' ? (
-                    <div
-                      className='col-md-6 col-sm-6 col-6'
-                      style={{
-                        ...styles.inputContainerForTextField,
-                        ...styles.textFieldPadding,
-                      }}
-                    >
-                      <img
-                        src={uploadsUrl + results.split('\\')[1]}
-                        className='depositSlipImg'
-                      />
-                    </div>
-                  ) : results !== '' &&
-                    results.slice(results.length - 3) === 'pdf' ? (
-                    <div
-                      className='col-md-6 col-sm-6 col-6'
-                      style={{
-                        ...styles.inputContainerForTextField,
-                        ...styles.textFieldPadding,
-                        // textAlign:'center',
-                      }}
-                    >
-                      <a
-                        href={uploadsUrl + results.split('\\')[1]}
-                        style={{ color: '#2c6ddd' }}
-                      >
-                        Click here to open results
-                      </a>
-                    </div>
-                  ) : (
-                    undefined
-                  )}
-                </>
-              ) : results !== '' && results.includes('/') ? (
-                <>
-                  {results !== '' &&
-                  results.slice(results.length - 3) !== 'pdf' ? (
-                    <div
-                      className='col-md-6 col-sm-6 col-6'
-                      style={{
-                        ...styles.inputContainerForTextField,
-                        ...styles.textFieldPadding,
-                      }}
-                    >
-                      <img
-                        src={uploadsUrl + results}
-                        className='depositSlipImg'
-                      />
-                    </div>
-                  ) : results !== '' &&
-                    results.slice(results.length - 3) === 'pdf' ? (
-                    <div
-                      className='col-md-6 col-sm-6 col-6'
-                      style={{
-                        ...styles.inputContainerForTextField,
-                        ...styles.textFieldPadding,
-                      }}
-                    >
-                      <a
-                        href={uploadsUrl + results}
-                        style={{ color: '#2c6ddd' }}
-                      >
-                        Click here to open results
-                      </a>
-                    </div>
-                  ) : (
-                    undefined
-                  )}
-                </>
-              ) : (
-                undefined
-              )}
-
-              {imagePreview !== '' ? (
-                <div
-                  className='col-md-6 col-sm-6 col-6'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <img src={imagePreview} className='depositSlipImg' />
-                  {results !== '' ? (
-                    <div style={{ color: 'black', textAlign: 'center' }}>
-                      New results
-                    </div>
-                  ) : (
-                    undefined
-                  )}
-                </div>
-              ) : (
-                undefined
-              )}
-            </div> */}
-
             <div className='row' style={{ marginTop: '20px' }}>
               {labRequestArray !== 0 ? (
                 <CustomTable
@@ -1412,16 +1081,6 @@ function AddEditPurchaseRequest(props) {
               </div>
             </div>
           </div>
-
-          {/* {openItemDialog ? (
-            <ViewSingleRequest
-              item={item}
-              openItemDialog={openItemDialog}
-              viewItem={viewItem}
-            />
-          ) : (
-            undefined
-          )} */}
 
           <Dialog
             aria-labelledby='form-dialog-title'

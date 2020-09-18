@@ -1023,8 +1023,6 @@ function AddEditPatientListing(props) {
   }
 
   const onChangeValue = (e) => {
-    console.log('title', e)
-
     var pattern = /^[a-zA-Z ]*$/
     if (
       e.target.name === 'firstName' ||

@@ -152,7 +152,6 @@ const styles = {
   patientDetails: {
     backgroundColor: 'white',
     borderRadius: 5,
-    padding: '20px',
   },
   inputContainerForTextField: {
     marginTop: 25,
@@ -2465,11 +2464,12 @@ function LabRadRequest(props) {
                     <ul>
                       {icdCode.map((item) => (
                         <li key={item}>
-                          {item} &nbsp;
                           <span
                             className='addCode'
                             onClick={(e) => addICDcodes(item, e)}
+                            style={{ marginRight: 20, marginTop: 5 }}
                           />
+                          {item}
                         </li>
                       ))}
                     </ul>
