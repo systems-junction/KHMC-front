@@ -467,7 +467,7 @@ function AddEditEDR(props) {
               requestedQty,
               medicineName,
               unitPrice,
-              totalPrice: unitPrice * requestedQty,
+              totalPrice: (unitPrice * requestedQty).toFixed(2),
             },
           ],
         })

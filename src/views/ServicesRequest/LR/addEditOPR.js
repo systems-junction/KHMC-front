@@ -998,7 +998,8 @@ function AddEditPatientListing(props) {
       e.target.name === 'firstName' ||
       e.target.name === 'lastName' ||
       e.target.name === 'emergencyName' ||
-      e.target.name === 'depositorName'
+      e.target.name === 'depositorName' ||
+      e.target.name === 'insuranceVendor'
     ) {
       if (pattern.test(e.target.value) === false) {
         return

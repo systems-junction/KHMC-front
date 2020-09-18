@@ -125,6 +125,10 @@ const useStylesForInput = makeStyles((theme) => ({
     '&:disabled': {
       color: 'gray',
     },
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
   },
   multilineColor: {
     backgroundColor: 'white',
