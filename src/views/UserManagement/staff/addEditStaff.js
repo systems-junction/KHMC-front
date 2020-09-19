@@ -22,12 +22,14 @@ import { addStaffUrl, updateStaffTUrl } from "../../../public/endpoins";
 import Header from "../../../components/Header/Header";
 
 import View_all from "../../../assets/img/Eye.png";
-import business_Unit from "../../../assets/img/business_Unit.png";
+import business_Unit from "../../../assets/img/Staff.png";
 
 import Back_Arrow from "../../../assets/img/Back_Arrow.png";
 import "./staff.css";
 
 import "../../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
+
+import ViewAllBtn from "../../../components/ViewAllBtn/viewAll";
 
 const styles = {
   stylesForButton: {
@@ -43,10 +45,10 @@ const styles = {
   stylesForPurchaseButton: {
     color: "white",
     cursor: "pointer",
-    borderRadius: 10,
-    backgroundColor: "#2c6ddd",
-    width: "60%",
-    height: "40px",
+    // borderRadius: 10,
+    // backgroundColor: "#2c6ddd",
+    width: "100px",
+    height: "45px",
     outline: "none",
   },
   inputField: {
@@ -74,38 +76,55 @@ const styles = {
 };
 
 const useStyles = makeStyles((theme) => ({
+  // margin: {
+  //   margin: theme.spacing(0),
+  // },
+  // input: {
+  //   backgroundColor: "white",
+  //   borderRadius: 6,
+  //   "&:after": {
+  //     borderBottomColor: "black",
+  //   },
+  //   "&:hover": {
+  //     backgroundColor: "white",
+  //   },
+  //   "&:disabled": {
+  //     color: "gray",
+  //   },
+  // },
+  // multilineColor: {
+  //   backgroundColor: "white",
+  //   borderRadius: 6,
+  //   "&:hover": {
+  //     backgroundColor: "white",
+  //   },
+  //   "&:after": {
+  //     borderBottomColor: "black",
+  //   },
+  // },
+  // root: {
+  //   "& .MuiTextField-root": {
+  //     backgroundColor: "white",
+  //   },
+  //   "& .Mui-focused": {
+  //     backgroundColor: "white",
+  //     color: "black",
+  //   },
+  // },
   margin: {
     margin: theme.spacing(0),
   },
   input: {
     backgroundColor: "white",
-    borderRadius: 6,
-    "&:after": {
-      borderBottomColor: "black",
+    borderRadius: 4,
+    "&:placeholder": {
+      // color: "gray",
+      // fontWeight: "400",
     },
-    "&:hover": {
-      backgroundColor: "white",
-    },
-    "&:disabled": {
-      color: "gray",
-    },
-  },
-  multilineColor: {
-    backgroundColor: "white",
-    borderRadius: 6,
-    "&:hover": {
-      backgroundColor: "white",
+    "&:before": {
+      borderBottomWidth: "0px",
     },
     "&:after": {
-      borderBottomColor: "black",
-    },
-  },
-  root: {
-    "& .MuiTextField-root": {
-      backgroundColor: "white",
-    },
-    "& .Mui-focused": {
-      backgroundColor: "white",
       color: "black",
     },
   },
@@ -154,6 +173,8 @@ function AddEditStaff(props) {
     address: "",
     systemAdminId: "",
     status: "",
+
+    functionalUnit: "",
   };
 
   function reducer(state, { field, value }) {
@@ -180,6 +201,7 @@ function AddEditStaff(props) {
     address,
     systemAdminId,
     status,
+    functionalUnit,
   } = state;
 
   const [comingFor, setcomingFor] = useState("");
@@ -192,14 +214,15 @@ function AddEditStaff(props) {
   const [openNotification, setOpenNotification] = useState(false);
 
   const [systemAdminArray, setSystemAdminArray] = useState("");
-
   const [staffTypeArray, setStaffTypesArray] = useState("");
+  const [functinalUnits, setFUs] = useState("");
 
   useEffect(() => {
     setCurrentUser(cookie.load("current_user"));
     setcomingFor(props.history.location.state.comingFor);
     setSystemAdminArray(props.history.location.state.systemAdminArray);
     setStaffTypesArray(props.history.location.state.staffTypeArray);
+    setFUs(props.history.location.state.functinalUnits);
 
     const selectedRec = props.history.location.state.selectedItem;
 
@@ -240,13 +263,12 @@ function AddEditStaff(props) {
       gender.length > 0 &&
       dob !== "" &&
       status &&
-      status.length > 0
+      status.length > 0 &&
+      address &&
+      address.length > 0 &&
+      systemAdminId !== ""
     );
   }
-
-  const handleCancel = () => {
-    props.history.goBack();
-  };
 
   const handleAdd = () => {
     setIsFormSubmitted(true);
@@ -265,6 +287,7 @@ function AddEditStaff(props) {
         address,
         systemAdminId,
         status,
+        functionalUnit,
       };
       axios
         .post(addStaffUrl, params)
@@ -301,6 +324,7 @@ function AddEditStaff(props) {
         address,
         systemAdminId,
         status,
+        functionalUnit,
       };
       axios
         .put(updateStaffTUrl, params)
@@ -350,7 +374,7 @@ function AddEditStaff(props) {
             <img src={business_Unit} />
             <h4>{comingFor === "add" ? " Add Staff" : " Edit Staff"}</h4>
           </div>
-          <div>
+          {/* <div>
             <Button
               onClick={() => props.history.goBack()}
               style={styles.stylesForButton}
@@ -361,7 +385,8 @@ function AddEditStaff(props) {
               &nbsp;&nbsp;
               <strong style={{ fontSize: "12px" }}>View All</strong>
             </Button>
-          </div>
+          </div> */}
+          <ViewAllBtn history={props.history} />
         </div>
         <div className="container-fluid">
           <div className="row">
@@ -428,11 +453,18 @@ function AddEditStaff(props) {
             >
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DateTimePicker
-                  inputVariant="outlined"
+                  required
+                  format="MM/dd/yyyy hh:mm a"
+                  label="Date of Birth (MM/DD/YYYY)"
+                  inputVariant="filled"
                   onChange={(val) => onChangeDate(val, "dob")}
                   fullWidth
                   style={{ backgroundColor: "white" }}
                   value={comingFor === "add" ? (dob ? dob : new Date()) : dob}
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
                 />
               </MuiPickersUtilsProvider>
             </div>
@@ -675,7 +707,7 @@ function AddEditStaff(props) {
             >
               <TextField
                 required
-                type="password"
+                // type="password"
                 label="Password"
                 name={"password"}
                 value={password}
@@ -696,7 +728,7 @@ function AddEditStaff(props) {
 
           <div className="row">
             <div
-              className="col-md-6"
+              className="col-md-4"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -722,7 +754,7 @@ function AddEditStaff(props) {
             </div>
 
             <div
-              className="col-md-6"
+              className="col-md-4"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -747,21 +779,61 @@ function AddEditStaff(props) {
                 }}
               />
             </div>
+
+            <div
+              className="col-md-4"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                fullWidth
+                select
+                id="functionalUnit"
+                name="functionalUnit"
+                value={functionalUnit}
+                variant="filled"
+                onChange={onChangeValue}
+                label="Functional Unit"
+                input={<BootstrapInput />}
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {functinalUnits &&
+                  functinalUnits.map((val) => {
+                    return (
+                      <MenuItem key={val._id} value={val._id}>
+                        {val.fuName}
+                      </MenuItem>
+                    );
+                  })}
+              </TextField>
+            </div>
           </div>
 
-          <div className="row"></div>
-
-          <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
+          <div className="row">
             <div
               style={{
                 display: "flex",
                 flex: 1,
-                height: 50,
-                justifyContent: "center",
-                marginTop: "2%",
-                marginBottom: "2%",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginTop: 20,
+                marginBottom: 20,
               }}
             >
+              <img
+                onClick={() => props.history.goBack()}
+                src={Back_Arrow}
+                style={{ width: 45, height: 35, cursor: "pointer" }}
+              />
+
               {comingFor === "add" ? (
                 <Button
                   style={styles.stylesForPurchaseButton}
@@ -787,14 +859,6 @@ function AddEditStaff(props) {
           </div>
 
           <Notification msg={errorMsg} open={openNotification} />
-
-          <div style={{ marginBottom: 20 }}>
-            <img
-              onClick={() => props.history.goBack()}
-              src={Back_Arrow}
-              style={{ width: 45, height: 35, cursor: "pointer" }}
-            />
-          </div>
         </div>
       </div>
     </div>

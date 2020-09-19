@@ -51,15 +51,18 @@ const stylesB = {
 
 const tableHeading = [
   "Item Name",
+  "Item Class",
+  "Item Type",
   "Quantity",
   "Maximum Level",
   "Minimum Level",
-  ,
   "Reorder Level",
   "Action",
 ];
 const tableDataKeys = [
   ["itemId", "name"],
+  ["itemId", "cls"],
+  ["itemId", "medClass"],
   "qty",
   "maximumLevel",
   "minimumLevel",
@@ -110,6 +113,7 @@ export default function WareHouseInventory(props) {
       .get(getItemsUrl)
       .then((res) => {
         if (res.data.success) {
+          console.log(res.data.data.items);
           setItems(res.data.data.items);
         } else if (!res.data.success) {
           setErrorMsg(res.data.error);
@@ -222,7 +226,7 @@ export default function WareHouseInventory(props) {
             flexDirection: "column",
           }}
         >
-          {whInventory ? (
+          {whInventory && items ? (
             <div>
               <div>
                 <CustomTable

@@ -75,6 +75,8 @@ import { ThemeProvider } from "@material-ui/styles";
 
 import BarCode from "../../assets/img/Bar Code.png";
 
+import stylesForPaper from "../../assets/jss/material-dashboard-react/components/paper.js";
+
 const reasonArray = [
   { key: "jit", value: "JIT" },
   { key: "new_item", value: "New Item" },
@@ -614,9 +616,11 @@ function AddEditPurchaseRequest(props) {
           orderType,
           reason,
           patientReferenceNo,
-          fuId: fuArray[0]._id,
+          // fuId: fuArray[0]._id,
+          fuId: currentUser.functionalUnit._id,
           orderFor: "Medical",
           orderBy,
+          pId: selectedPatient._id,
         };
         console.log("params", params);
         axios
@@ -628,7 +632,7 @@ function AddEditPurchaseRequest(props) {
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
                   // order #
-                  message: `Medication Order # ${res.data.data.requestNo} for patient with MRN ${patientDetails.profileNo} has been placed succesfully`,
+                  message: `Medical Order # ${res.data.data.requestNo} for patient with MRN ${patientDetails.profileNo} has been placed succesfully`,
                 },
               });
             } else if (!res.data.success) {
@@ -643,6 +647,8 @@ function AddEditPurchaseRequest(props) {
       }
     }
   };
+
+  console.log(currentUser);
 
   const handleEdit = () => {
     if (!validateForm()) {
@@ -729,7 +735,7 @@ function AddEditPurchaseRequest(props) {
         //     approvedBy: approvedBy === "" ? currentUser.staffId : approvedBy,
         //   };
         // }
-        console.log(obj);
+        console.log("updating the medical request obj", obj);
 
         axios
           .put(updateReplenishmentRequestUrlBU, obj)
@@ -739,7 +745,7 @@ function AddEditPurchaseRequest(props) {
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
                   // order #
-                  message: `Medication Order for patient with MRN ${patientDetails.profileNo} has been updated`,
+                  message: `Medical Order for patient with MRN ${patientDetails.profileNo} has been updated`,
                 },
               });
             } else if (!res.data.success) {
@@ -773,7 +779,13 @@ function AddEditPurchaseRequest(props) {
     setSearchPatientQuery(e.target.value);
     if (e.target.value.length >= 1) {
       axios
-        .get(getSearchedpatient + "/" + e.target.value)
+        .get(
+          getSearchedpatient +
+            "/" +
+            currentUser.functionalUnit._id +
+            "/" +
+            e.target.value
+        )
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
@@ -1270,11 +1282,11 @@ function AddEditPurchaseRequest(props) {
               <img src={purchase_request} />
               <h4>
                 {comingFor === "add"
-                  ? " Add Medication Order"
+                  ? "Add Order Items (Medical)"
                   : comingFor === "edit"
-                  ? " Update Medication Order"
+                  ? "Update Order Items (Medical)"
                   : comingFor === "view"
-                  ? "Medication Order Details"
+                  ? "Order Items (Medical) Details"
                   : undefined}
               </h4>
             </div>
@@ -1373,7 +1385,7 @@ function AddEditPurchaseRequest(props) {
                     marginTop: 5,
                   }}
                 >
-                  <Paper>
+                  <Paper style={{ ...stylesForPaper.paperStyle }}>
                     {patientFoundSuccessfull ? (
                       patientFound && (
                         <Table size="small">
@@ -1460,17 +1472,11 @@ function AddEditPurchaseRequest(props) {
                   paddingTop: 8,
                 }}
               >
-                <h6
-                  className="col-md-4 col-sm-4 col-4"
-                  style={{ verticalAlign: "center" }}
-                >
+                <h6 className="col-md-4" style={{ verticalAlign: "center" }}>
                   Item Type
                 </h6>
 
-                <FormControl
-                  className="col-md-7 col-sm-7 col-7"
-                  component="fieldset"
-                >
+                <FormControl className="col-md-8" component="fieldset">
                   <RadioGroup
                     row
                     aria-label="position"
@@ -1516,7 +1522,7 @@ function AddEditPurchaseRequest(props) {
                   {selectItemToEditId === "" ? (
                     <>
                       <div
-                        className="col-md-9 col-sm-9 col-9"
+                        className="col-md-9"
                         style={{
                           ...styles.inputContainerForTextField,
                           ...styles.textFieldPadding,
@@ -1546,7 +1552,7 @@ function AddEditPurchaseRequest(props) {
                         {/* </div> */}
                       </div>
                       <div
-                        className="col-md-3 col-sm-3 col-3"
+                        className="col-md-3"
                         style={{
                           ...styles.inputContainerForTextField,
                           ...styles.textFieldPadding,
@@ -1581,7 +1587,7 @@ function AddEditPurchaseRequest(props) {
                   )}
                 </div>
 
-                <div className="row">
+                <div>
                   {searchQuery ? (
                     // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
                     <div
@@ -1593,7 +1599,7 @@ function AddEditPurchaseRequest(props) {
                         marginTop: 5,
                       }}
                     >
-                      <Paper>
+                      <Paper style={{ ...stylesForPaper.paperStyle }}>
                         {itemFoundSuccessfull ? (
                           itemFound && (
                             <Table size="small">
@@ -1673,7 +1679,7 @@ function AddEditPurchaseRequest(props) {
 
                 <div className="row">
                   <div
-                    className="col-md-3 col-sm-3 col-3"
+                    className="col-md-3"
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1699,7 +1705,7 @@ function AddEditPurchaseRequest(props) {
                   </div>
 
                   <div
-                    className="col-md-3 col-sm-3 col-3"
+                    className="col-md-3"
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1739,7 +1745,7 @@ function AddEditPurchaseRequest(props) {
                   </div>
 
                   <div
-                    className="col-md-3 col-sm-3 col-3"
+                    className="col-md-3"
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1780,7 +1786,7 @@ function AddEditPurchaseRequest(props) {
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
                     }}
-                    className="col-md-3 col-sm-3 col-3"
+                    className="col-md-3"
                   >
                     <TextField
                       // required
@@ -1849,7 +1855,7 @@ function AddEditPurchaseRequest(props) {
                   </div>
 
                   <div
-                    className="col-md-3 col-sm-3 col-3"
+                    className="col-md-3"
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1881,7 +1887,7 @@ function AddEditPurchaseRequest(props) {
                   </div>
 
                   <div
-                    className="col-md-3 col-sm-3 col-3"
+                    className="col-md-3"
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1912,7 +1918,7 @@ function AddEditPurchaseRequest(props) {
                     />
                   </div>
                   <div
-                    className="col-md-3 col-sm-3 col-3"
+                    className="col-md-3"
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1973,7 +1979,7 @@ function AddEditPurchaseRequest(props) {
                     />
                   </div>
                   <div
-                    className="col-md-3 col-sm-3 col-3"
+                    className="col-md-3"
                     style={styles.inputContainerForTextField}
                   >
                     {selectItemToEditId === "" ? (
@@ -2008,7 +2014,7 @@ function AddEditPurchaseRequest(props) {
                   {selectItemToEditId === "" ? (
                     <>
                       <div
-                        className="col-md-9 col-sm-9 col-9"
+                        className="col-md-9"
                         style={{
                           ...styles.inputContainerForTextField,
                           ...styles.textFieldPadding,
@@ -2031,7 +2037,7 @@ function AddEditPurchaseRequest(props) {
                         {/* </div> */}
                       </div>
                       <div
-                        className="col-md-3 col-sm-3 col-3"
+                        className="col-md-3"
                         style={{
                           ...styles.inputContainerForTextField,
                           ...styles.textFieldPadding,
@@ -2062,7 +2068,7 @@ function AddEditPurchaseRequest(props) {
 
                 {searchQuery ? (
                   <div style={{ zIndex: 3 }}>
-                    <Paper>
+                    <Paper style={{ ...stylesForPaper.paperStyle }}>
                       {itemFoundSuccessfull ? (
                         itemFound && (
                           <Table size="small">
@@ -2141,7 +2147,7 @@ function AddEditPurchaseRequest(props) {
 
                 <div className="row">
                   <div
-                    className="col-md-3 col-sm-3 col-3"
+                    className="col-md-3"
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -2167,7 +2173,7 @@ function AddEditPurchaseRequest(props) {
                   </div>
 
                   <div
-                    className="col-md-3 col-sm-3 col-3"
+                    className="col-md-3"
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -2204,7 +2210,7 @@ function AddEditPurchaseRequest(props) {
                   </div>
 
                   <div
-                    className="col-md-3 col-sm-3 col-3"
+                    className="col-md-3"
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -2241,7 +2247,7 @@ function AddEditPurchaseRequest(props) {
                   </div>
 
                   <div
-                    className="col-md-3 col-sm-3 col-3"
+                    className="col-md-3"
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -2275,7 +2281,7 @@ function AddEditPurchaseRequest(props) {
 
                 <div className="row">
                   <div
-                    className="col-md-9 col-sm-9 col-9"
+                    className="col-md-9"
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -2297,7 +2303,7 @@ function AddEditPurchaseRequest(props) {
                     />
                   </div>
                   <div
-                    className="col-md-3 col-sm-3 col-3"
+                    className="col-md-3"
                     style={styles.inputContainerForTextField}
                   >
                     {selectItemToEditId === "" ? (
@@ -2350,48 +2356,44 @@ function AddEditPurchaseRequest(props) {
 
             <div
               className="row"
-              style={{ marginBottom: "25px", marginTop: "25px" }}
+              style={{
+                marginBottom: "25px",
+                marginTop: "25px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
             >
-              <div
-                className="col-md-6 col-sm-6 col-6"
-                style={styles.textFieldPadding}
-              >
-                <img
-                  onClick={() => props.history.goBack()}
-                  src={Back_Arrow}
-                  style={{ width: 45, height: 35, cursor: "pointer" }}
-                />
-              </div>
-              <div
-                className="col-md-6 col-sm-6 col-6 d-flex justify-content-end"
-                style={styles.textFieldPadding}
-              >
-                {comingFor === "add" ? (
-                  <Button
-                    style={styles.stylesForPurchaseButton}
-                    // disabled={!validateForm()}
-                    onClick={handleAdd}
-                    variant="contained"
-                    color="primary"
-                  >
-                    Generate Order
-                  </Button>
-                ) : comingFor === "edit" ? (
-                  <Button
-                    style={styles.stylesForPurchaseButton}
-                    // disabled={!validateForm()}
-                    onClick={handleEdit}
-                    variant="contained"
-                    color="primary"
-                  >
-                    Update Order
-                  </Button>
-                ) : comingFor === "view" ? (
-                  undefined
-                ) : (
-                  undefined
-                )}
-              </div>
+              <img
+                onClick={() => props.history.goBack()}
+                src={Back_Arrow}
+                style={{ width: 45, height: 35, cursor: "pointer" }}
+              />
+              {comingFor === "add" ? (
+                <Button
+                  style={styles.stylesForPurchaseButton}
+                  // disabled={!validateForm()}
+                  onClick={handleAdd}
+                  variant="contained"
+                  color="primary"
+                >
+                  Generate Order
+                </Button>
+              ) : comingFor === "edit" ? (
+                <Button
+                  style={styles.stylesForPurchaseButton}
+                  // disabled={!validateForm()}
+                  onClick={handleEdit}
+                  variant="contained"
+                  color="primary"
+                >
+                  Update Order
+                </Button>
+              ) : comingFor === "view" ? (
+                undefined
+              ) : (
+                undefined
+              )}
             </div>
             {/* </div> */}
 

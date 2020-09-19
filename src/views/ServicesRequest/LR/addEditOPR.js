@@ -849,9 +849,16 @@ function AddEditPatientListing(props) {
     const params = {
       patientId,
       // generatedBy: currentUser.staffId,
+<<<<<<< HEAD
       generatedFrom: "labRequest",
       status: "pending",
     };
+=======
+      generatedFrom: 'labRequest',
+      status: 'pending',
+      functionalUnit: currentUser.functionalUnit._id,
+    }
+>>>>>>> 66b7e379bb82b757acfbf333c16fcecd4a1da6e2
     // console.log(params)
     axios
       .post(generateOPR, params, {})

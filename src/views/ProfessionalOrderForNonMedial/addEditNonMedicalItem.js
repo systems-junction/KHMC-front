@@ -26,6 +26,7 @@ import {
   getCurrentQtyForBUUrl,
   getFUFromBUUrl,
   getCurrentQtyForFURepRequestUrl,
+  getFunctionalUnitUrl,
 } from "../../public/endpoins";
 import useStyleforinput from "../../../src/assets/jss/material-dashboard-react/inputStyle.js";
 
@@ -60,6 +61,8 @@ import add_new from "../../assets/img/Plus.png";
 import TableForAddedItems from "./tableforAddedItems";
 
 import ViewAllBtn from "../../components/ViewAllBtn/viewAll";
+
+import stylesForPaper from "../../assets/jss/material-dashboard-react/components/paper.js";
 
 const reasonArray = [
   { key: "jit", value: "JIT" },
@@ -300,11 +303,14 @@ function AddEditPurchaseRequest(props) {
 
   function getFUsFromBU(buId) {
     axios
-      .get(getFUFromBUUrl + "/" + buId)
+      // .get(getFUFromBUUrl + "/" + buId)
+
+      .get(getFunctionalUnitUrl)
+
       .then((res) => {
         if (res.data.success) {
-          console.log("FU array", res.data.data);
-          setFUs(res.data.data);
+          console.log("FU array", res.data.data.functionalUnits);
+          setFUs(res.data.data.functionalUnits);
         } else if (!res.data.success) {
           setErrorMsg(res.data.error);
           setOpenNotification(true);
@@ -450,7 +456,8 @@ function AddEditPurchaseRequest(props) {
 
           patientReferenceNo,
 
-          fuId: fuArray[0]._id,
+          // fuId: fuArray[0]._id,
+          fuId: currentUser.functionalUnit._id,
 
           orderFor: "Non Medical",
           orderBy,
@@ -466,7 +473,7 @@ function AddEditPurchaseRequest(props) {
               props.history.replace({
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
-                  message: `Order has been generated successfully`,
+                  message: `Non Medical Order has been generated successfully`,
                 },
               });
             } else if (!res.data.success) {
@@ -620,7 +627,7 @@ function AddEditPurchaseRequest(props) {
     const params = {
       itemId: id,
       // buId: buObj._id,
-      fuId: fuArray[0]._id,
+      fuId: currentUser.functionalUnit._id,
     };
     console.log("parasm", params);
     axios
@@ -671,7 +678,7 @@ function AddEditPurchaseRequest(props) {
     return (
       itemCode !== "" &&
       description !== "" &&
-      itemName !== "" &&
+      // itemName !== "" &&
       requestedQty !== "" &&
       requestedQty !== "0" &&
       // && fuItemCost !== ""
@@ -862,11 +869,11 @@ function AddEditPurchaseRequest(props) {
             <img src={purchase_request} />
             <h4>
               {comingFor === "add"
-                ? " Add Order"
+                ? " Add Order Items (Non-Medical)"
                 : comingFor === "edit"
-                ? " Update Order"
+                ? " Update Order Items (Non-Medical)"
                 : comingFor === "view"
-                ? "View Order"
+                ? "View Order Items (Non-Medical)"
                 : undefined}
             </h4>
           </div>
@@ -959,6 +966,7 @@ function AddEditPurchaseRequest(props) {
                   {/* <InputLabelComponent>Order Type</InputLabelComponent> */}
                   <TextField
                     className="textInputStyle"
+                    label={"Order Type"}
                     disabled={true}
                     value={"Non Medical Order"}
                     variant="filled"
@@ -1060,7 +1068,7 @@ function AddEditPurchaseRequest(props) {
                             <TextField
                               disabled={true}
                               type="text"
-                              label="Fu Id"
+                              label="Functional Unit"
                               name={"fuId"}
                               value={val.fuName}
                               onChange={onChangeValue}
@@ -1095,7 +1103,8 @@ function AddEditPurchaseRequest(props) {
               >
                 {/* <InputLabelComponent>Form*</InputLabelComponent> */}
                 <TextField
-                  required
+                  // required
+                  disabled
                   select
                   fullWidth
                   id="orderBy"
@@ -1298,18 +1307,18 @@ function AddEditPurchaseRequest(props) {
               {searchQuery ? (
                 // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
                 <div style={{ zIndex: 3 }}>
-                  <Paper>
+                  <Paper style={{ ...stylesForPaper.paperStyle }}>
                     {itemFoundSuccessfull ? (
                       itemFound && (
                         <Table size="small">
                           <TableHead>
                             <TableRow>
-                              <TableCell
+                              {/* <TableCell
                                 align="center"
                                 style={styles.forTableCell}
                               >
                                 Name
-                              </TableCell>
+                              </TableCell> */}
                               <TableCell
                                 align="center"
                                 style={styles.forTableCell}
@@ -1339,7 +1348,7 @@ function AddEditPurchaseRequest(props) {
                                   onClick={() => handleAddItem(i)}
                                   style={{ cursor: "pointer" }}
                                 >
-                                  <TableCell align="center">{i.name}</TableCell>
+                                  {/* <TableCell align="center">{i.name}</TableCell> */}
                                   <TableCell align="center">
                                     {i.itemCode}
                                   </TableCell>
@@ -1427,16 +1436,16 @@ function AddEditPurchaseRequest(props) {
 
                   <TextField
                     required
-                    id="itemName"
+                    id="itemCode"
                     type="text"
                     disabled={true}
-                    label="Item Name"
-                    name={"itemName"}
-                    value={itemName}
+                    label="Item Code"
+                    name={"itemCode"}
+                    value={itemCode}
                     onChange={onChangeValue}
                     variant="filled"
                     className="textInputStyle"
-                    error={itemName === "" && isFormSubmitted}
+                    error={itemCode === "" && isFormSubmitted}
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },

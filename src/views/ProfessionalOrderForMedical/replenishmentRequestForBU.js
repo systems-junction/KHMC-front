@@ -134,14 +134,14 @@ const tableDataKeysForBUMember = [
 
 const tableDataKeysForItemsForBUMember = [
   ["itemId", "name"],
-  ["itemId", "cls"],
+  ["itemId", "medClass"],
   "requestedQty",
   "status",
 ];
 
 const tableDataKeysForFUMemberForItems = [
   ["itemId", "name"],
-  ["itemId", "cls"],
+  ["itemId", "medClass"],
   "requestedQty",
   "secondStatus",
 ];
@@ -585,7 +585,7 @@ export default function ReplenishmentRequest(props) {
       comments: requestedItem.comments,
     };
 
-    console.log("sending obj", obj)
+    console.log("sending obj", obj);
 
     props.history.push({
       pathname: path,
@@ -622,7 +622,7 @@ export default function ReplenishmentRequest(props) {
           <div className="subheader">
             <div>
               <img src={business_Unit} />
-              <h4>Orders</h4>
+              <h4>Order Items (Medical)</h4>
             </div>
 
             {/* {currentUser &&
@@ -713,7 +713,7 @@ export default function ReplenishmentRequest(props) {
           >
             <DialogContent style={{ backgroundColor: "#31e2aa" }}>
               <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
-                Added Item
+                Added Items
               </DialogTitle>
               <div className="container-fluid">
                 <CustomTable
@@ -726,8 +726,6 @@ export default function ReplenishmentRequest(props) {
                       ? tableHeadingForBUMemberForItems
                       : currentUser.staffTypeId.type === "FU Inventory Keeper"
                       ? tableHeadingForFUMemberForItems
-                      : currentUser.staffTypeId.type === "FU Inventory Keeper"
-                      ? tableHeadingForFUMemberForItems
                       : tableHeadingForFUMemberForItems
                   }
                   tableDataKeys={
@@ -738,8 +736,6 @@ export default function ReplenishmentRequest(props) {
                       ? tableDataKeysForItemsForBUMember
                       : currentUser.staffTypeId.type === "FU Inventory Keeper"
                       ? tableDataKeysForFUMemberForItems
-                      : currentUser.staffTypeId.type === "FU Inventory Keeper"
-                      ? tableDataKeysForFUMemberForItems
                       : tableDataKeysForItemsForBUMember
                   }
                   action={
@@ -747,8 +743,6 @@ export default function ReplenishmentRequest(props) {
                       ? actionsForItemsForReceiver
                       : currentUser.staffTypeId.type === "BU Doctor"
                       ? actionsForItemsForOther
-                      : currentUser.staffTypeId.type === "FU Inventory Keeper"
-                      ? actionsForItemsForFUMember
                       : currentUser.staffTypeId.type === "FU Inventory Keeper"
                       ? actionsForItemsForFUMember
                       : actionsForItemsForOther

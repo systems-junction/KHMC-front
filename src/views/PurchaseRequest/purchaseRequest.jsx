@@ -53,6 +53,7 @@ const tableHeading = [
   "Date",
   "Generated",
   "Vendor",
+  "Approved By",
   "Status",
   "Action",
 ];
@@ -61,6 +62,7 @@ const tableDataKeys = [
   "createdAt",
   "generated",
   ["vendorId", "englishName"],
+  ["approvedBy", "firstName"],
   "status",
 ];
 
@@ -69,6 +71,7 @@ const tableHeadingForCommittee = [
   "Date",
   "Generated",
   "Vendor",
+  "Approved By",
   "Status",
   "Action",
 ];
@@ -77,6 +80,7 @@ const tableDataKeysForCommittee = [
   "createdAt",
   "generated",
   ["vendorId", "englishName"],
+  ["approvedBy", "firstName"],
   "committeeStatus",
 ];
 

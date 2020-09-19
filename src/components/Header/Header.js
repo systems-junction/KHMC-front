@@ -1,23 +1,19 @@
-import React from 'react'
-import './Header.css'
-import KHMC_White from '../../assets/img/KHMC_White.png'
-import Influence_white from '../../assets/img/Influence_white.png'
-import Logout from '../../assets/img/Logout_Blue (1).png'
-import Bar from '../../assets/img/Bar.png'
-import InnerLogout from '../../assets/img/Logout_Grey (1).png'
-import { Redirect } from 'react-router-dom'
-import Card from '@material-ui/core/Card'
-import CardActions from '@material-ui/core/CardActions'
-import CardContent from '@material-ui/core/CardContent'
-import Button from '@material-ui/core/Button'
-import Typography from '@material-ui/core/Typography'
-import Fade from '@material-ui/core/Fade'
-import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogContentText from '@material-ui/core/DialogContentText'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import cookie from 'react-cookies'
+import React from "react";
+import "./Header.css";
+import KHMC_White from "../../assets/img/KHMC_White.png";
+import Influence_white from "../../assets/img/Influence_white.png";
+import { Redirect } from "react-router-dom";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import Fade from "@material-ui/core/Fade";
+
+import cookie from "react-cookies";
+
+import Fab from "@material-ui/core/Fab";
+import AddIcon from "@material-ui/icons/Add";
 
 const styles = {
   stylesForButton: {
@@ -43,12 +39,11 @@ class Header extends React.Component {
     goBack: false,
     hover: false,
     open: false,
-    currentUser: '',
-    dialogue: false,
-  }
+    currentUser: "",
+  };
+
   componentDidMount() {
-    this.setState({ currentUser: cookie.load('current_user') })
-    console.log('user', this.currentUser)
+    this.setState({ currentUser: cookie.load("current_user") });
   }
 
   handleClickOpen() {
@@ -61,75 +56,92 @@ class Header extends React.Component {
     this.setState({ dialogue: false })
   }
   logoutUser() {
-    console.log('called')
-    cookie.remove('token', { path: '/' })
-    cookie.remove('current_user', { path: '/' })
-    cookie.remove('user_staff', { path: '/' })
-    window.location.reload()
+    console.log("called");
+    cookie.remove("token", { path: "/" });
+    cookie.remove("current_user", { path: "/" });
+    cookie.remove("user_staff", { path: "/" });
+    window.location.reload();
   }
   render() {
     if (this.state.goBack) {
-      var currentLocation = window.location.pathname
-      if (currentLocation !== '/home') {
-        return <Redirect to={'/home'} />
+      var currentLocation = window.location.pathname;
+      if (currentLocation !== "/home") {
+        return <Redirect to={"/home"} />;
       }
     }
     return (
-      <>
-        <div className='header'>
-          <img
-            src={KHMC_White}
-            className='header1-style'
-            // style={{ maxWidth: '50%', height: 'auto' }}
-            onClick={() => {
-              return this.setState({ goBack: true })
+      <div className="header">
+        <img
+          src={KHMC_White}
+          className="header1-style"
+          // style={{ maxWidth: '50%', height: 'auto' }}
+          onClick={() => {
+            return this.setState({ goBack: true });
+          }}
+        />
+        <img
+          src={Influence_white}
+          className="header2-style"
+          style={{
+            // maxWidth: '60%',
+            // height: 'auto',
+            cursor: "pointer",
+            // boxShadow: this.state.hover ? '2px 2px 2px 2px #b2b0b0' : '',
+          }}
+          // onMouseEnter={() => this.setState({ hover: true })}
+          // onMouseLeave={() => this.setState({ hover: false })}
+          onClick={() => this.setState({ open: !this.state.open })}
+        />
+
+        {this.state.open ? (
+          <div
+            style={{
+              float: "right",
+              width: 300,
+              marginRight: 10,
+              top: 50,
+              right: 0,
+              bottom: 0,
+              position: "fixed",
+              zIndex: 5,
             }}
-          />
-          <div style={{ textAlign: 'right' }}>
-            <img
-              src={Influence_white}
-              className='header2-style'
-              style={
-                {
-                  // maxWidth: '60%',
-                  // height: 'auto',
-                  // cursor: 'pointer',
-                  // boxShadow: this.state.hover ? '2px 2px 2px 2px #B2B0B0' : '',
-                }
-              }
-              // onMouseEnter={() => this.setState({ hover: true })}
-              // onMouseLeave={() => this.setState({ hover: false })}
-              // onClick={() => this.setState({ open: !this.state.open })}
-            />
-            {this.state.currentUser !== undefined ? (
-              <>
-                <img
-                  src={Bar}
-                  // className='header2-style'
-                  style={{
-                    maxWidth: '40%',
-                    height: '52%',
-                    marginLeft: 10,
-                  }}
-                />
+          >
+            <Fade in={this.state.open} timeout={1000}>
+              <Card style={{ marginTop: 20 }}>
+                <CardContent>
+                  <Typography
+                    // variant="h6"
+                    color="textPrimary"
+                    gutterBottom
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    {this.state.currentUser && this.state.currentUser.name}
+                  </Typography>
 
-                <img
-                  src={Logout}
-                  // className='header2-style'
-                  style={{
-                    cursor: 'pointer',
-                    maxWidth: '30%',
-                    height: '30%',
-                  }}
-                  onClick={() => this.setState({ open: !this.state.open })}
-                />
-              </>
-            ) : (
-              undefined
-            )}
-          </div>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    // gutterBottom
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    {this.state.currentUser &&
+                      this.state.currentUser.staffTypeId.type}
+                  </Typography>
 
-          {this.state.open ? (
+                  <Typography
+                    // variant="h6"
+                    color="textSecondary"
+                    // gutterBottom
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      fontSize: 13,
+                    }}
+                  >
+                    {this.state.currentUser && this.state.currentUser.email}
+                  </Typography>
+
+          {/* {this.state.open ? (
             <div
               style={{
                 float: 'right',
@@ -211,58 +223,48 @@ class Header extends React.Component {
             </div>
           ) : (
             undefined
-          )}
-        </div>
+          )} */}
 
-        <div>
-          <Dialog
-            open={this.state.dialogue}
-            onClose={() => this.handleClose()}
-            fullWidth={true}
-            maxWidth={'md'}
-            aria-labelledby='alert-dialog-title'
-            aria-describedby='alert-dialog-description'
-          >
-            {/* <DialogTitle id='alert-dialog-title'>
-              {'Do you want to logout?'}
-            </DialogTitle> */}
-            <DialogContent style={{ paddingTop: '60px' }}>
-              <DialogContentText id='alert-dialog-description'>
-                <h4 style={{ textAlign: 'center', color: '#000' }}>
-                  <strong>Do you want to logout ?</strong>
-                </h4>
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions
-              style={{
-                justifyContent: 'center',
-                paddingBottom: '60px',
-                marginTop: '25px',
-              }}
+                  {/* <Typography
+                    variant="h6"
+                    color="textSecondary"
+                    gutterBottom
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => this.logoutUser()}
+                  >
+                    Logout
+                    <i class="zmdi zmdi-power"></i>
+                  </Typography> */}
+                </CardContent>
+              </Card>
+            </Fade>
+          </div>
+        ) : (
+          undefined
+        )}
+
+        {this.state.currentUser ? (
+          <div style={{ position: "fixed", right: 30, bottom: 30, zIndex: 5 }}>
+            <Fab
+              // color="primary"
+              aria-label="add"
+              onClick={() => this.logoutUser()}
+              style={{backgroundColor:'#ba02ed'}}
             >
-              <Button
-                onClick={() => this.handleClose()}
-                style={styles.stylesForCancel}
-                variant='contained'
-                color='default'
-              >
-                <strong>Cancel</strong>
-              </Button>
-              <Button
-                onClick={() => this.logoutUser()}
-                // color='primary'
-                // autoFocus
-                style={styles.stylesForButton}
-                variant='contained'
-                color='default'
-              >
-                <strong>Logout</strong>
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </div>
-      </>
-    )
+              {/* <AddIcon /> */}
+              <i class="zmdi zmdi-power zmdi-hc-3x" style={{color:'white'}}></i>
+            </Fab>
+          </div>
+        ) : (
+          undefined
+        )}
+      </div>
+    );
   }
 }
-export default Header
+
+export default Header;

@@ -14,6 +14,7 @@ import {
   getReceiveRequestFUUrl,
   getInternalReturnRequestsFU,
   getFunctionalUnitByIdUrl,
+  getFunctionalUnitUrl,
 } from "../../public/endpoins";
 import plus_icon from "../../assets/img/Plus.png";
 
@@ -46,7 +47,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 
 const tableHeadingForFUHead = [
-  "Rep Request No",
+  "Replenishemt Request No",
   "Generated",
   "Date/Time Generated",
   "Status",
@@ -60,10 +61,10 @@ const tableDataKeysForFUHead = [
 ];
 
 const tableHeading = [
-  "Rep Request No",
+  "Replenishemt Request No",
   "Generated",
   "Date/Time Generated",
-  "FU Name",
+  "Functional Unit Name",
   "Approved By",
   "Status",
   "Actions",
@@ -116,7 +117,7 @@ const tableHeadingForFUMemberForItems = [
   "Item Code",
   "Name",
   "Requested Qty",
-  "FU Item Cost",
+  "Functional Unit Item Cost",
   "Status",
   // "Actions",
 ];
@@ -125,7 +126,7 @@ const tableHeadingForFUInventoryKeeperForItems = [
   "Item Code",
   "Name",
   "Requested Qty",
-  "FU Item Cost",
+  "Functional Unit Item Cost",
   "Status",
 ];
 
@@ -133,7 +134,7 @@ const tableHeadingForFUInventoryKeeperForItemsForReceive = [
   "Item Code",
   "Name",
   "Requested Qty",
-  "FU Item Cost",
+  "Functional Unit Item Cost",
   "Status",
   "Actions",
 ];
@@ -255,11 +256,13 @@ export default function ReplenishmentRequest(props) {
 
   function getFUFromHeadId() {
     axios
-      .get(getFunctionalUnitFromHeadIdUrl + "/" + currentUser.staffId)
+      // .get(getFunctionalUnitFromHeadIdUrl + "/" + currentUser.staffId)
+      .get(getFunctionalUnitUrl)
+
       .then((res) => {
         if (res.data.success) {
-          console.log("FU Obj", res.data.data[0]);
-          setFUObj(res.data.data[0]);
+          console.log("FU Obj", res.data.data.functionalUnits);
+          setFUObj(res.data.data.functionalUnits);
         } else if (!res.data.success) {
           setErrorMsg(res.data.error);
           setOpenNotification(true);
@@ -610,7 +613,7 @@ export default function ReplenishmentRequest(props) {
           ) : (
             <div>
               <img src={business_Unit} />
-              <h4>FuncU Fulfillment</h4>
+              <h4>Functional Unit Fulfillment</h4>
             </div>
           )}
 
@@ -739,7 +742,7 @@ export default function ReplenishmentRequest(props) {
       >
         <DialogContent style={{ backgroundColor: "#31e2aa" }}>
           <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
-            Added Item
+            Added Items
           </DialogTitle>
           <div className="container-fluid">
             <CustomTable

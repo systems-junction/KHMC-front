@@ -849,6 +849,7 @@ function AddEditPatientListing(props) {
       // generatedBy: currentUser.staffId,
       generatedFrom: 'radiologyRequest',
       status: 'pending',
+      functionalUnit: currentUser.functionalUnit._id,
     }
     // console.log(params)
     axios
