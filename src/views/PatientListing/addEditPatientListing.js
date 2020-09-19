@@ -860,7 +860,6 @@ function AddEditPatientListing(props) {
       generatedBy: currentUser.staffId,
       status: 'pending',
     }
-    // console.log(params)
     axios
       .post(generateEDR, params, {})
       .then((res) => {
