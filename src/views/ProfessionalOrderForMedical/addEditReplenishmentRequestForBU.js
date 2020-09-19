@@ -620,6 +620,7 @@ function AddEditPurchaseRequest(props) {
           fuId: currentUser.functionalUnit._id,
           orderFor: "Medical",
           orderBy,
+          pId: selectedPatient._id,
         };
         console.log("params", params);
         axios
@@ -734,7 +735,7 @@ function AddEditPurchaseRequest(props) {
         //     approvedBy: approvedBy === "" ? currentUser.staffId : approvedBy,
         //   };
         // }
-        console.log("updating the medical request obj",obj);
+        console.log("updating the medical request obj", obj);
 
         axios
           .put(updateReplenishmentRequestUrlBU, obj)

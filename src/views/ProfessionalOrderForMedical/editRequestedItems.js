@@ -645,9 +645,9 @@ function AddEditPurchaseRequest(props) {
               {comingFor === "add"
                 ? "Add Request"
                 : comingFor === "edit"
-                ? "Order(Medical) Details"
+                ? "Order Details (Medical)"
                 : comingFor === "view"
-                ? "Order(Medical) Details"
+                ? "Order Details (Medical)"
                 : undefined}
             </h4>
           </div>
@@ -845,7 +845,7 @@ function AddEditPurchaseRequest(props) {
 
             <div>
               <h5 style={{ color: "white", fontWeight: "700", marginTop: 20 }}>
-                Item details
+                Item Details
               </h5>
               <div className="row">
                 <div

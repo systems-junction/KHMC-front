@@ -175,7 +175,7 @@ function AddEditPurchaseRequest(props) {
     generatedBy: "",
     createdAt: new Date(),
     vendorId: "",
-    status: "to_do",
+    status: "pending",
     itemId: "",
     itemCode: "",
     name: "",
@@ -209,6 +209,8 @@ function AddEditPurchaseRequest(props) {
     commentNotes: "",
 
     approvedBy: "",
+
+    receiptUnitCost: "",
   };
 
   function reducer(state, { field, value }) {
@@ -258,6 +260,8 @@ function AddEditPurchaseRequest(props) {
     commentNotes,
 
     approvedBy,
+
+    receiptUnitCost,
   } = state;
 
   const onChangeValue = (e) => {
@@ -427,9 +431,13 @@ function AddEditPurchaseRequest(props) {
               status: requestedItemsArray[i].status,
               secondStatus: requestedItemsArray[i].secondStatus,
               comments: requestedItemsArray[i].comments,
+              maximumLevel: requestedItemsArray[i].maximumLevel,
+
             },
           ];
         }
+
+        console.log(requestedItems)
         const params = {
           generatedBy: currentUser.name,
           date: new Date(),
@@ -759,6 +767,7 @@ function AddEditPurchaseRequest(props) {
     dispatch({ field: "vendorId", value: i.vendorId });
     dispatch({ field: "description", value: i.description });
     // dispatch({ field: "maximumLevel", value: i.maximumLevel });
+    dispatch({ field: "receiptUnitCost", value: i.receiptUnitCost });
 
     const obj = {
       itemCode: i.itemCode,
@@ -864,6 +873,8 @@ function AddEditPurchaseRequest(props) {
                     name: name,
                     vendorId,
                     description,
+                    receiptUnitCost,
+
                     // maximumLevel,
                   },
                   reqQty: reqQty,
@@ -893,6 +904,7 @@ function AddEditPurchaseRequest(props) {
       dispatch({ field: "requestedQty", value: "" });
       dispatch({ field: "comments", value: "" });
       dispatch({ field: "maximumLevel", value: "" });
+      dispatch({ field: "receiptUnitCost", value: "" });
     }
   };
 
@@ -937,10 +949,12 @@ function AddEditPurchaseRequest(props) {
                 name: name,
                 vendorId,
                 description,
+                receiptUnitCost,
                 // maximumLevel,
+                receiptUnitCost,
               },
               reqQty: reqQty,
-              currentQty,
+              currQty: currentQty,
               status: requestedItemsArray[i].status,
               secondStatus: requestedItemsArray[i].secondStatus,
               comments: comments,
@@ -972,6 +986,7 @@ function AddEditPurchaseRequest(props) {
         dispatch({ field: "requestedQty", value: "" });
         dispatch({ field: "comments", value: "" });
         dispatch({ field: "maximumLevel", value: "" });
+        dispatch({ field: "receiptUnitCost", value: "" });
       }
     }
   };
@@ -1004,6 +1019,7 @@ function AddEditPurchaseRequest(props) {
       dispatch({ field: "name", value: i.itemId.name });
       dispatch({ field: "vendorId", value: i.itemId.vendorId });
       dispatch({ field: "description", value: i.itemId.description });
+      dispatch({ field: "receiptUnitCost", value: i.itemId.receiptUnitCost });
       // dispatch({ field: "maximumLevel", value: i.itemId.maximumLevel });
       dispatch({ field: "currentQty", value: i.currQty });
       dispatch({ field: "reqQty", value: i.reqQty });
@@ -1045,7 +1061,7 @@ function AddEditPurchaseRequest(props) {
                 ? "MWIK - Add Purchase Request"
                 : comingFor === "edit" &&
                   currentUser.staffTypeId.type === "Committe Member"
-                ? "Edit Purchase Request"
+                ? "Approve Purchase Request"
                 : "MWIK - Edit Purchase Request"}
             </h4>
           </div>
