@@ -200,7 +200,11 @@ export default function PurchaseRequest(props) {
           </Button>
         </>
       );
-    } else if (val === "complete" || val === "approved") {
+    } else if (
+      val === "complete" ||
+      val === "approved" ||
+      val === "completed"
+    ) {
       return (
         <>
           {val === "complete" ? (
@@ -210,6 +214,14 @@ export default function PurchaseRequest(props) {
               color="primary"
             >
               <strong>Complete</strong>
+            </Button>
+          ) : val === "completed" ? (
+            <Button
+              style={stylesB.stylesForActive}
+              variant="contained"
+              color="primary"
+            >
+              <strong>Completed</strong>
             </Button>
           ) : (
             <Button
@@ -349,7 +361,7 @@ export default function PurchaseRequest(props) {
                                 <TableCell
                                   className={classes.tableCell}
                                   key={key}
-                                  onClick={() => handleClick(prop, val)}
+                                  // onClick={() => handleClick(prop, val)}
                                   style={{
                                     textAlign: "center",
                                     cursor: props.handleModelMaterialReceiving

@@ -95,7 +95,8 @@ const tableHeadingForFUMember = [
   "Item Code",
   "Vendor Name",
   "Requested Qty",
-  // "FU Item Cost",
+  "Receipt Unit Cost(JD)",
+  "Total Cost(JD)",
   // "Actions",
 ];
 
@@ -105,7 +106,8 @@ const tableHeadingForWarehouseMember = [
   "Item Code",
   "Vendor Name",
   "Requested Qty",
-  "Actions"
+  "Receipt Unit Cost(JD)",
+  "Actions",
   // "FU Item Cost",
   // "Status",
 ];
@@ -116,6 +118,7 @@ const tableHeadingForOthers = [
   "Item Code",
   "Vendor Name",
   "Requested Qty",
+  "Receipt Unit Cost(JD)",
   // "FU Item Cost",
 ];
 
@@ -242,15 +245,30 @@ export default function DenseTable(props) {
               {row.reqQty}
             </TableCell>
 
-            {/* <TableCell
+            <TableCell
               align="center"
               style={{
                 backgroundColor: "white",
                 // fontSize: "0.9rem",
               }}
             >
-              {row.fuItemCost}
-            </TableCell> */}
+              {row.itemId.receiptUnitCost}
+            </TableCell>
+
+            {currentUser &&
+            currentUser.staffTypeId.type === "Committe Member" ? (
+              <TableCell
+                align="center"
+                style={{
+                  backgroundColor: "white",
+                  // fontSize: "0.9rem",
+                }}
+              >
+                {row.itemId.receiptUnitCost * row.reqQty}
+              </TableCell>
+            ) : (
+              undefined
+            )}
 
             {currentUser.staffTypeId.type === "Warehouse Inventory Keeper" ? (
               <TableCell

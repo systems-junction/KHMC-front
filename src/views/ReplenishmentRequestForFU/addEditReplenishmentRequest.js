@@ -57,6 +57,9 @@ import useStyleforinput from "../../../src/assets/jss/material-dashboard-react/i
 import ViewAllBtn from "../../components/ViewAllBtn/viewAll";
 import TableForAddedItems from "./tableforAddedItems";
 
+import stylesForPaper from "../../assets/jss/material-dashboard-react/components/paper.js";
+
+
 const reasonArray = [
   { key: "jit", value: "JIT" },
   { key: "new_item", value: "New Item" },
@@ -493,7 +496,8 @@ function AddEditPurchaseRequest(props) {
           to: "Warehouse",
           from: "FU",
           commentNote: "",
-          fuId: fuObj._id,
+          // fuId: fuObj._id,
+          fuId: currentUser.functionalUnit._id,
 
           requesterName,
           orderType,
@@ -1191,12 +1195,12 @@ function AddEditPurchaseRequest(props) {
             <img src={purchase_request} />
             <h4>
               {comingFor === "add"
-                ? " Add FuncU Fulfillment"
-                : " Edit FuncU Fulfillment"}
+                ? " Add Functional Unit  Fulfillment"
+                : " Edit Functional Unit  Fulfillment"}
             </h4>
           </div>
 
-          <ViewAllBtn history={props.history} />
+          {/* <ViewAllBtn history={props.history} /> */}
         </div>
 
         <div
@@ -1405,7 +1409,7 @@ function AddEditPurchaseRequest(props) {
               >
                 <TextField
                   disabled={true}
-                  label="Requested FU"
+                  label="Requested Functional Unit"
                   name={"requestNo"}
                   value={fuId.fuName}
                   onChange={onChangeValue}
@@ -1619,20 +1623,19 @@ function AddEditPurchaseRequest(props) {
                       marginTop: 5,
                     }}
                   >
-                    <Paper>
+                    <Paper  style={{ ...stylesForPaper.paperStyle }}>
                       {itemFoundSuccessfull ? (
                         itemFound && (
                           <Table size="small">
                             <TableHead>
                               <TableRow>
-                                <TableCell align="center">Name</TableCell>
-                                <TableCell align="center">Item Code</TableCell>
+                                <TableCell>Item Code</TableCell>
+
+                                <TableCell>Name</TableCell>
                                 {/* <TableCell align="center">
                                   Purchase Price
                                 </TableCell> */}
-                                <TableCell align="center">
-                                  Description
-                                </TableCell>
+                                <TableCell>Description</TableCell>
                               </TableRow>
                             </TableHead>
 
@@ -1644,18 +1647,12 @@ function AddEditPurchaseRequest(props) {
                                     onClick={() => handleAddItem(i)}
                                     style={{ cursor: "pointer" }}
                                   >
-                                    <TableCell align="center">
-                                      {i.name}
-                                    </TableCell>
-                                    <TableCell align="center">
-                                      {i.itemCode}
-                                    </TableCell>
+                                    <TableCell>{i.itemCode}</TableCell>
+                                    <TableCell col={3}>{i.name}</TableCell>
                                     {/* <TableCell align="center">
                                       {i.purchasePrice}
                                     </TableCell> */}
-                                    <TableCell align="center">
-                                      {i.description}
-                                    </TableCell>
+                                    <TableCell>{i.description}</TableCell>
                                   </TableRow>
                                 );
                               })}
@@ -1846,7 +1843,7 @@ function AddEditPurchaseRequest(props) {
                         : true
                     }
                     type="number"
-                    label="FuncU Cost"
+                    label="Functional Unit  Cost"
                     name={"fuItemCost"}
                     value={fuItemCost}
                     onChange={onChangeValue}

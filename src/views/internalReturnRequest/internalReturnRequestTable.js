@@ -38,7 +38,7 @@ import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 
 const tableHeadingForFUHead = [
   "Return Request No",
-  "FU Name",
+  "Functional Unit Name",
   "Date Generated",
   "Item Code",
   "Item Name",
@@ -49,7 +49,7 @@ const tableHeadingForFUHead = [
 
 const tableHeadingForWareHouseMembers = [
   "Return Request No",
-  "FU Name",
+  "Functional Unit Name",
   "Date Generated",
   "Item Code",
   "Item Name",
@@ -80,7 +80,7 @@ const tableDataKeysForFUHead = [
 
 const tableHeading = [
   "Return Request No",
-  "FU Name",
+  "Functional Unit Name",
   "Date Generated",
   "Item Code",
   "Item Name",
