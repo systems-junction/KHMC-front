@@ -15,6 +15,25 @@ import cookie from "react-cookies";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 
+const styles = {
+  stylesForButton: {
+    color: 'white',
+    cursor: 'pointer',
+    borderRadius: 5,
+    backgroundColor: '#2c6ddd',
+    width: '140px',
+    height: '45px',
+    outline: 'none',
+  },
+  stylesForCancel: {
+    color: '#000',
+    cursor: 'pointer',
+    borderRadius: 5,
+    width: '140px',
+    height: '45px',
+    outline: 'none',
+  },
+}
 class Header extends React.Component {
   state = {
     goBack: false,
@@ -27,6 +46,15 @@ class Header extends React.Component {
     this.setState({ currentUser: cookie.load("current_user") });
   }
 
+  handleClickOpen() {
+    console.log('====================================')
+    console.log('clicked logout')
+    console.log('====================================')
+    this.setState({ dialogue: true, open: !this.state.open })
+  }
+  handleClose() {
+    this.setState({ dialogue: false })
+  }
   logoutUser() {
     console.log("called");
     cookie.remove("token", { path: "/" });
@@ -34,7 +62,6 @@ class Header extends React.Component {
     cookie.remove("user_staff", { path: "/" });
     window.location.reload();
   }
-
   render() {
     if (this.state.goBack) {
       var currentLocation = window.location.pathname;
@@ -42,7 +69,6 @@ class Header extends React.Component {
         return <Redirect to={"/home"} />;
       }
     }
-
     return (
       <div className="header">
         <img
@@ -115,7 +141,89 @@ class Header extends React.Component {
                     {this.state.currentUser && this.state.currentUser.email}
                   </Typography>
 
-                  <hr />
+          {this.state.open ? (
+            <div
+              style={{
+                float: 'right',
+                width: 300,
+                marginTop: 20,
+                marginRight: 10,
+                top: 50,
+                right: 0,
+                bottom: 0,
+                position: 'absolute',
+                zIndex: 5,
+              }}
+            >
+              <Fade in={this.state.open} timeout={1000}>
+                <Card style={{ marginTop: 20 }}>
+                  <CardContent style={{ paddingBottom: 0 }}>
+                    <Typography
+                      // variant="h6"
+                      color='textPrimary'
+                      gutterBottom
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      {this.state.currentUser && this.state.currentUser.name}
+                    </Typography>
+                    <Typography
+                      variant='body2'
+                      color='textSecondary'
+                      // gutterBottom
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      {this.state.currentUser &&
+                        this.state.currentUser.staffTypeId.type}
+                    </Typography>
+                    <Typography
+                      // variant="h6"
+                      color='textSecondary'
+                      // gutterBottom
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      {this.state.currentUser && this.state.currentUser.email}
+                    </Typography>
+                    <hr />
+                    <Typography
+                      variant='h6'
+                      color='textSecondary'
+                      gutterBottom
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'flex-start',
+                        cursor: 'pointer',
+                      }}
+                      // onClick={() => this.logoutUser()}
+                      onClick={() => this.handleClickOpen()}
+                    >
+                      <img
+                        src={InnerLogout}
+                        className='logout-style'
+                        style={{
+                          height: '20px',
+                          width: '20px',
+                          marginTop: 6,
+                        }}
+                      />
+                      <span style={{ marginLeft: 10 }}>Logout</span>
+                    </Typography>
+                  </CardContent>
+                  <CardActions></CardActions>
+                </Card>
+              </Fade>
+            </div>
+          ) : (
+            undefined
+          )}
 
                   {/* <Typography
                     variant="h6"
@@ -132,7 +240,6 @@ class Header extends React.Component {
                     <i class="zmdi zmdi-power"></i>
                   </Typography> */}
                 </CardContent>
-                {/* <CardActions></CardActions> */}
               </Card>
             </Fade>
           </div>

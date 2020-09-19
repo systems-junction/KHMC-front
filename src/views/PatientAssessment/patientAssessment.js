@@ -32,34 +32,30 @@ import AccountCircle from '@material-ui/icons/SearchOutlined'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import BarCode from '../../assets/img/Bar Code.png'
 import Loader from 'react-loader-spinner'
-import ViewSingleRequest from "./viewRequest";
+import ViewSingleRequest from './viewRequest'
 
 const tableHeadingForResident = [
-  "Date / Time",
-  "Description / Condition",
-  "Doctor Ref",
-  "Action",
-];
-const tableDataKeysForResident = [
-  "date",
-  "description",
-  "doctorName"
-];
+  'Date / Time',
+  'Description / Condition',
+  'Referring Doctor',
+  'Action',
+]
+const tableDataKeysForResident = ['date', 'description', 'doctorName']
 const tableHeadingForConsultation = [
-  "Date/Time",
-  "Description / Condition",
-  "Specialist",
-  "Doctor Ref",
-  "Status",
-  "Action",
-];
+  'Date/Time',
+  'Description / Condition',
+  'Specialist',
+  'Referring Doctor',
+  'Status',
+  'Action',
+]
 const tableDataKeysForConsultation = [
-  "date",
-  "description",
-  "specialist",
-  "doctorName",
-  "status"
-];
+  'date',
+  'description',
+  'specialist',
+  'doctorName',
+  'status',
+]
 // const tableHeadingForPharmacy = [
 //     "Request ID",
 //     "Date/Time",
@@ -116,7 +112,7 @@ const tableDataKeysForConsultation = [
 //     "requesterName",
 //     "status",
 // ];
-const actions = { view: true };
+const actions = { view: true }
 const styles = {
   patientDetails: {
     backgroundColor: 'white',
@@ -270,7 +266,7 @@ function PatientAssessment(props) {
 
     pharmacyRequestArray: '',
     diagnosisArray: '',
-    medicationArray: ''
+    medicationArray: '',
   }
 
   function reducer(state, { field, value }) {
@@ -316,7 +312,7 @@ function PatientAssessment(props) {
 
     pharmacyRequestArray,
     diagnosisArray,
-    medicationArray
+    medicationArray,
   } = state
 
   const onChangeValue = (e) => {
@@ -385,12 +381,12 @@ function PatientAssessment(props) {
   }
 
   function viewItem(item) {
-    if (item !== "") {
-      setOpenItemDialog(true);
-      setItem(item);
+    if (item !== '') {
+      setOpenItemDialog(true)
+      setItem(item)
     } else {
-      setOpenItemDialog(false);
-      setItem("");
+      setOpenItemDialog(false)
+      setItem('')
     }
   }
 
@@ -834,9 +830,11 @@ function PatientAssessment(props) {
   const handlePatientSearch = (e) => {
     const a = e.target.value.replace(/[^\w\s]/gi, '')
     setSearchPatientQuery(a)
-    if (a.length >= 5) {
+    if (a.length >= 3) {
       axios
-        .get(getSearchedpatient + '/' + a)
+        .get(
+          getSearchedpatient + '/' + currentUser.functionalUnit._id + '/' + a
+        )
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
@@ -860,8 +858,8 @@ function PatientAssessment(props) {
   }
 
   function handleAddPatient(i) {
-    dispatch({field:"diagnosisArray",value:""})
-    dispatch({field:"medicationArray",value:""})
+    dispatch({ field: 'diagnosisArray', value: '' })
+    dispatch({ field: 'medicationArray', value: '' })
     // setDialogOpen(true);
     console.log('selected banda : ', i)
     setPatientDetails(i)
@@ -889,7 +887,7 @@ function PatientAssessment(props) {
             setenableAssessment(false)
 
             Object.entries(res.data.data).map(([key, val]) => {
-              if (val && typeof val === "object") {
+              if (val && typeof val === 'object') {
                 // if (key === "patientId") {
                 //     dispatch({ field: "patientId", value: val._id });
                 // } else
@@ -897,39 +895,44 @@ function PatientAssessment(props) {
                 //   dispatch({ field: "labRequestArray", value: val });
                 // } else if (key === "radiologyRequest") {
                 //   dispatch({ field: "radiologyRequestArray", value: val });
-                // } else 
-                if (key === "consultationNote") {
+                // } else
+                if (key === 'consultationNote') {
                   val.map(
                     (d) =>
                       (d.doctorName = d.requester
-                        ? d.requester.firstName + " " + d.requester.lastName
-                        : "")
-                  );
-                  dispatch({ field: "consultationNoteArray", value: val.reverse() });
-                } else if (key === "residentNotes") {
+                        ? d.requester.firstName + ' ' + d.requester.lastName
+                        : '')
+                  )
+                  dispatch({
+                    field: 'consultationNoteArray',
+                    value: val.reverse(),
+                  })
+                } else if (key === 'residentNotes') {
                   val.map(
                     (d) =>
                       (d.doctorName = d.doctor
-                        ? d.doctor.firstName + " " + d.doctor.lastName
-                        : "")
-                  );
-                  dispatch({ field: "residentNoteArray", value: val.reverse() });
-                  if(val && val.length > 0){
-                  dispatch({ field: "diagnosisArray", value: val[0].code });
+                        ? d.doctor.firstName + ' ' + d.doctor.lastName
+                        : '')
+                  )
+                  dispatch({ field: 'residentNoteArray', value: val.reverse() })
+                  if (val && val.length > 0) {
+                    dispatch({ field: 'diagnosisArray', value: val[0].code })
                   }
-                }
-                else if (key === "pharmacyRequest") {
-                  if(val && val.length > 0){
-                  dispatch({ field: "medicationArray", value: val[0].medicine });
+                } else if (key === 'pharmacyRequest') {
+                  if (val && val.length > 0) {
+                    dispatch({
+                      field: 'medicationArray',
+                      value: val[0].medicine,
+                    })
                   }
                 }
                 //  else if (key === "nurseService") {
                 //     dispatch({ field: "nurseService", value: val });
                 // }
               } else {
-                dispatch({ field: key, value: val });
+                dispatch({ field: key, value: val })
               }
-            });
+            })
           }
         } else {
           setOpenNotification(true)
@@ -1078,7 +1081,7 @@ function PatientAssessment(props) {
                     marginTop: 5,
                   }}
                 >
-                  <Paper>
+                  <Paper style={{ maxHeight: 300, overflow: 'auto' }}>
                     {patientFoundSuccessfull ? (
                       patientFound && (
                         <Table size='small'>
@@ -1114,18 +1117,18 @@ function PatientAssessment(props) {
                         </Table>
                       )
                     ) : (
-                        <h4
-                          style={{ textAlign: 'center' }}
-                          onClick={() => setSearchPatientQuery('')}
-                        >
-                          Patient Not Found
-                        </h4>
-                      )}
+                      <h4
+                        style={{ textAlign: 'center' }}
+                        onClick={() => setSearchPatientQuery('')}
+                      >
+                        Patient Not Found
+                      </h4>
+                    )}
                   </Paper>
                 </div>
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
             </div>
           </div>
         </div>
@@ -1231,30 +1234,35 @@ function PatientAssessment(props) {
                 </span>
               </div>
 
-              <div className={'col-md-3 col-sm-3 col-3'} style={styles.textStyles}>
-                {"None"}
+              <div
+                className={'col-md-3 col-sm-3 col-3'}
+                style={styles.textStyles}
+              >
+                {'None'}
               </div>
 
-              <div className={'col-md-3 col-sm-3 col-3'} style={styles.textStyles}>
-                {medicationArray ? 
-                  medicationArray.map((drug, index) => {
-                    return (
-                    <h6 style={styles.textStyles}>{drug.medicineName}</h6>
-                    )
-                  }) :
-                  "None"
-                }
+              <div
+                className={'col-md-3 col-sm-3 col-3'}
+                style={styles.textStyles}
+              >
+                {medicationArray
+                  ? medicationArray.map((drug, index) => {
+                      return (
+                        <h6 style={styles.textStyles}>{drug.medicineName}</h6>
+                      )
+                    })
+                  : 'None'}
               </div>
 
-              <div className={'col-md-3 col-sm-3 col-3'} style={styles.textStyles}>
-                {diagnosisArray ?
-                  diagnosisArray.map((drug, index) => {
-                    return (
-                      <h6 style={styles.textStyles}>{drug}</h6>
-                    )
-                  }) :
-                  "None"
-                }
+              <div
+                className={'col-md-3 col-sm-3 col-3'}
+                style={styles.textStyles}
+              >
+                {diagnosisArray
+                  ? diagnosisArray.map((drug, index) => {
+                      return <h6 style={styles.textStyles}>{drug}</h6>
+                    })
+                  : 'None'}
               </div>
             </div>
           </div>
@@ -1287,25 +1295,16 @@ function PatientAssessment(props) {
                   outline: 'none',
                   color: value === 0 ? '#12387a' : '#3B988C',
                 }}
-                label='Resident Doctor Notes'
+                label='Doctor/Physician Notes'
                 disabled={enableAssessment}
               />
+
               <Tab
                 style={{
                   color: 'white',
                   borderRadius: 5,
                   outline: 'none',
                   color: value === 1 ? '#12387a' : '#3B988C',
-                }}
-                label='External Consultant Notes'
-                disabled={enableAssessment}
-              />
-              <Tab
-                style={{
-                  color: 'white',
-                  borderRadius: 5,
-                  outline: 'none',
-                  color: value === 2 ? '#12387a' : '#3B988C',
                 }}
                 label='Pharm'
                 disabled
@@ -1315,7 +1314,7 @@ function PatientAssessment(props) {
                   color: 'white',
                   borderRadius: 5,
                   outline: 'none',
-                  color: value === 3 ? '#12387a' : '#3B988C',
+                  color: value === 2 ? '#12387a' : '#3B988C',
                 }}
                 label='Lab'
                 disabled
@@ -1325,12 +1324,12 @@ function PatientAssessment(props) {
                   color: 'white',
                   borderRadius: 5,
                   outline: 'none',
-                  color: value === 4 ? '#12387a' : '#3B988C',
+                  color: value === 3 ? '#12387a' : '#3B988C',
                 }}
                 label='Rad'
                 disabled
               />
-              <Tab
+              {/* <Tab
                 style={{
                   color: 'white',
                   borderRadius: 5,
@@ -1339,15 +1338,25 @@ function PatientAssessment(props) {
                 }}
                 label='In Patient Request'
                 disabled
+              /> */}
+              <Tab
+                style={{
+                  color: 'white',
+                  borderRadius: 5,
+                  outline: 'none',
+                  color: value === 4 ? '#12387a' : '#3B988C',
+                }}
+                label='Consultant/Specialist Notes'
+                disabled={enableAssessment}
               />
             </Tabs>
           </div>
-          {value === 1 ? (
+          {value === 4 ? (
             <div
-              style={{ flex: 4, display: "flex", flexDirection: "column" }}
-              className="container-fluid"
+              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              className='container-fluid'
             >
-              <div className="row" style={{ marginTop: "20px" }}>
+              <div className='row' style={{ marginTop: '20px' }}>
                 {consultationNoteArray !== 0 ? (
                   <CustomTable
                     tableData={consultationNoteArray}
@@ -1355,20 +1364,20 @@ function PatientAssessment(props) {
                     tableHeading={tableHeadingForConsultation}
                     handleView={viewItem}
                     action={actions}
-                    borderBottomColor={"#60d69f"}
+                    borderBottomColor={'#60d69f'}
                     borderBottomWidth={20}
                   />
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
             </div>
           ) : value === 0 ? (
             <div
-              style={{ flex: 4, display: "flex", flexDirection: "column" }}
-              className=" container-fluid"
+              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              className=' container-fluid'
             >
-              <div className="row" style={{ marginTop: "20px" }}>
+              <div className='row' style={{ marginTop: '20px' }}>
                 {residentNoteArray !== 0 ? (
                   <CustomTable
                     tableData={residentNoteArray}
@@ -1376,17 +1385,17 @@ function PatientAssessment(props) {
                     tableHeading={tableHeadingForResident}
                     handleView={viewItem}
                     action={actions}
-                    borderBottomColor={"#60d69f"}
+                    borderBottomColor={'#60d69f'}
                     borderBottomWidth={20}
                   />
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
             </div>
           ) : (
-                undefined
-              )}
+            undefined
+          )}
 
           {/* {value === 0 ? (
                         <div
@@ -1991,8 +2000,8 @@ function PatientAssessment(props) {
               viewItem={viewItem}
             />
           ) : (
-              undefined
-            )}
+            undefined
+          )}
         </div>
 
         <div

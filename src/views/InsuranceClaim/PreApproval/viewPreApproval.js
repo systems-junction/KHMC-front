@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import axios from 'axios'
 import {
   getSingleEDRPatient,
-  getSingleIPRPatient
+  getSingleIPRPatient,
 } from '../../../public/endpoins'
 import cookie from 'react-cookies'
 import Header from '../../../components/Header/Header'
@@ -27,7 +27,7 @@ const tableHeadingForNeedApproval = [
   'Total Cost',
   'Status',
   'Insurance',
-  'Action'
+  'Action',
 ]
 const tableDataKeysForNeedApproval = [
   '_id',
@@ -35,7 +35,7 @@ const tableDataKeysForNeedApproval = [
   'item',
   'totalCost',
   'status',
-  'insurance'
+  'insurance',
 ]
 const tableHeadingForCovered = [
   'ICD Code',
@@ -43,7 +43,7 @@ const tableHeadingForCovered = [
   'Item',
   'Qty',
   'Covered Amount',
-  'Status'
+  'Status',
 ]
 const tableDataKeysForCovered = [
   'consultationNo',
@@ -57,7 +57,7 @@ const tableHeadingForNotCovered = [
   'Item',
   'Qty',
   'Covered Amount',
-  'Status'
+  'Status',
 ]
 const tableDataKeysForNotCovered = [
   'requestNo',
@@ -71,7 +71,7 @@ const tableHeadingForFollowUp = [
   'Description',
   'Doctor',
   'Status',
-  'Action'
+  'Action',
 ]
 const tableDataKeysForFollowUp = [
   'date',
@@ -118,13 +118,12 @@ const styles = {
 
 const useStylesForTabs = makeStyles({
   root: {
-    justifyContent: "center"
+    justifyContent: 'center',
   },
   scroller: {
-    flexGrow: "0"
-  }
+    flexGrow: '0',
+  },
 })
-
 
 function AddEditPurchaseRequest(props) {
   const classesForTabs = useStylesForTabs()
@@ -154,7 +153,7 @@ function AddEditPurchaseRequest(props) {
     note: '',
     doctor: cookie.load('current_user').name,
 
-    notCoveredArray: ''
+    notCoveredArray: '',
   }
 
   function reducer(state, { field, value }) {
@@ -166,11 +165,7 @@ function AddEditPurchaseRequest(props) {
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const {
-    followUpArray,
-    coveredArray,
-    notCoveredArray
-  } = state
+  const { followUpArray, coveredArray, notCoveredArray } = state
 
   const [, setCurrentUser] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
@@ -190,70 +185,101 @@ function AddEditPurchaseRequest(props) {
     setrequestNo(props.history.location.state.selectedItem.requestNo)
     setSelectedPatient(props.history.location.state.selectedItem.patientId)
     setSelectedItem(props.history.location.state.selectedItem)
-    getIPRById(props.history.location.state.selectedItem._id);
+    getIPRById(props.history.location.state.selectedItem._id)
 
     const selectedRec = props.history.location.state.selectedItem
-    console.log("Record", selectedRec)
+    console.log('Record', selectedRec)
 
     if (selectedRec) {
       if (selectedRec.pharmacyRequest) {
-
         for (let i = 0; i < selectedRec.pharmacyRequest.length; i++) {
           let amount = 0
           let singlePR = selectedRec.pharmacyRequest[i]
 
           for (let j = 0; j < singlePR.medicine.length; j++) {
             amount = amount + singlePR.medicine[j].itemId.purchasePrice
+            // amount = amount + (singlePR.medicine[j].itemId.issueUnitCost * singlePR.medicine[j].requestedQty)
           }
 
           selectedRec.pharmacyRequest[i] = {
             ...selectedRec.pharmacyRequest[i],
             totalCost: amount,
-            RequestType: "PHR",
-            item: "Medicine",
-            insurance: "Uncovered"
+            RequestType: 'PHR',
+            item: 'Medicine',
+            insurance: 'Uncovered',
           }
         }
+        // selectedRec.pharmacyRequest.map(
+        //   (d) => (
+        //     (d.totalCost = d.medicine.map(
+        //       (a) => a.requestedQty * a.itemId.issueUnitCost
+        //     )),
+        //     (d.RequestType = 'PHR'),
+        //     (d.insurance = 'Uncovered'),
+        //     (d.item = 'Medicine')
+        //   )
+        // )
       }
       if (selectedRec.labRequest) {
         selectedRec.labRequest.map(
-          (d) => (d.RequestType = "LR", d.item = d.serviceName, d.totalCost = d.serviceId.price, d.insurance = "Uncovered")
+          (d) => (
+            (d.RequestType = 'LR'),
+            (d.item = d.serviceName),
+            (d.totalCost = d.serviceId.price),
+            (d.insurance = 'Uncovered')
+          )
         )
-
       }
       if (selectedRec.radiologyRequest) {
         selectedRec.radiologyRequest.map(
-          (d) => (d.RequestType = "RR", d.item = d.serviceName, d.totalCost = d.serviceId.price, d.insurance = "Uncovered")
+          (d) => (
+            (d.RequestType = 'RR'),
+            (d.item = d.serviceName),
+            (d.totalCost = d.serviceId.price),
+            (d.insurance = 'Uncovered')
+          )
         )
       }
     }
-    setneedApprovalArray([].concat(selectedRec.labRequest, selectedRec.radiologyRequest, selectedRec.pharmacyRequest))
-
+    setneedApprovalArray(
+      [].concat(
+        selectedRec.labRequest,
+        selectedRec.radiologyRequest,
+        selectedRec.pharmacyRequest
+      )
+    )
   }, [])
 
   const getIPRById = (id) => {
     axios
-      .get(getSingleIPRPatient + "/" + id)
+      .get(getSingleIPRPatient + '/' + id)
       .then((res) => {
         if (res.data.success) {
           if (res.data.data) {
             const selectedfollowUp = res.data.data[0]
-            console.log("follow Up: ", selectedfollowUp);
+            console.log('follow Up: ', selectedfollowUp)
 
-            setIsLoading(false);
+            setIsLoading(false)
 
             if (selectedfollowUp.followUp) {
               selectedfollowUp.followUp.map(
-                (d) => (d.mrn = selectedfollowUp.patientId, d.requestNo = selectedfollowUp.requestNo))
-              dispatch({ field: 'followUpArray', value: selectedfollowUp.followUp })
+                (d) => (
+                  (d.mrn = selectedfollowUp.patientId),
+                  (d.requestNo = selectedfollowUp.requestNo)
+                )
+              )
+              dispatch({
+                field: 'followUpArray',
+                value: selectedfollowUp.followUp,
+              })
             }
           }
         }
       })
       .catch((e) => {
-        console.log("error while searching req", e);
-      });
-  };
+        console.log('error while searching req', e)
+      })
+  }
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
@@ -275,7 +301,7 @@ function AddEditPurchaseRequest(props) {
       pathname: path,
       state: {
         selectedItem: rec,
-        followUp: selectedItem
+        followUp: selectedItem,
       },
     })
   }
@@ -308,12 +334,12 @@ function AddEditPurchaseRequest(props) {
             <img src={PreApproval} />
             <h4>Pre-Approval</h4>
           </div>
-
         </div>
 
-        <div style={{
-          height: '20px'
-        }}
+        <div
+          style={{
+            height: '20px',
+          }}
         />
 
         <div className='container-fluid' style={styles.patientDetails}>
@@ -393,35 +419,41 @@ function AddEditPurchaseRequest(props) {
           </div>
         </div>
 
-        <div style={{
-          height: '20px'
-        }}
+        <div
+          style={{
+            height: '20px',
+          }}
         />
 
-        {needApprovalArray !== 0 && coveredArray !== 0 && notCoveredArray !== 0 && followUpArray !== 0 ?
-          (
-            <div>
-              <div className={classesForTabs.root}>
-                <Tabs
-                  classes={{ root: classesForTabs.root, scroller: classesForTabs.scroller }}
-                  value={value}
-                  onChange={handleChange}
-                  textColor="primary"
-                  TabIndicatorProps={{ style: { background: '#12387a' } }}
-                  centered={false}
-                  variant='scrollable'
-                  fullWidth={true}
-                >
-                  <Tab
-                    style={{
-                      color: 'white',
-                      borderRadius: 15,
-                      outline: 'none',
-                      color: value === 0 ? "#12387a" : '#3B988C',
-                    }}
-                    label='Need Approval'
-                  />
-                  {/* <Tab
+        {needApprovalArray !== 0 &&
+        coveredArray !== 0 &&
+        notCoveredArray !== 0 &&
+        followUpArray !== 0 ? (
+          <div>
+            <div className={classesForTabs.root}>
+              <Tabs
+                classes={{
+                  root: classesForTabs.root,
+                  scroller: classesForTabs.scroller,
+                }}
+                value={value}
+                onChange={handleChange}
+                textColor='primary'
+                TabIndicatorProps={{ style: { background: '#12387a' } }}
+                centered={false}
+                variant='scrollable'
+                fullWidth={true}
+              >
+                <Tab
+                  style={{
+                    color: 'white',
+                    borderRadius: 15,
+                    outline: 'none',
+                    color: value === 0 ? '#12387a' : '#3B988C',
+                  }}
+                  label='Need Approval'
+                />
+                {/* <Tab
                     style={{
                       color: 'white',
                       borderRadius: 15,
@@ -439,7 +471,7 @@ function AddEditPurchaseRequest(props) {
                     }}
                     label='Not Covered'
                   /> */}
-                  {/* <Tab
+                {/* <Tab
                     style={{
                       color: 'white',
                       borderRadius: 15,
@@ -448,163 +480,179 @@ function AddEditPurchaseRequest(props) {
                     }}
                     label='Follow Up'
                   /> */}
-                </Tabs>
-              </div>
+              </Tabs>
+            </div>
 
-              {value === 0 ? (
+            {value === 0 ? (
+              <div
+                style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+                className='container-fluid'
+              >
+                <div className='row' style={{ marginTop: '20px' }}>
+                  {needApprovalArray !== 0 ? (
+                    <CustomTable
+                      tableData={needApprovalArray}
+                      tableDataKeys={tableDataKeysForNeedApproval}
+                      tableHeading={tableHeadingForNeedApproval}
+                      handleView={viewNeedApproval}
+                      action={actions}
+                      borderBottomColor={'#60d69f'}
+                      borderBottomWidth={20}
+                    />
+                  ) : (
+                    <div className='LoaderStyle'>
+                      <Loader
+                        type='TailSpin'
+                        color='red'
+                        height={50}
+                        width={50}
+                      />
+                    </div>
+                  )}
+                </div>
+
                 <div
-                  style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-                  className='container-fluid'
+                  className='row'
+                  style={{ marginTop: '20px', marginBottom: '25px' }}
                 >
+                  <div className='col-md-6 col-sm-6 col-6'>
+                    <img
+                      onClick={() => props.history.goBack()}
+                      src={Back}
+                      style={{ width: 45, height: 35, cursor: 'pointer' }}
+                    />
+                  </div>
+                </div>
+              </div>
+            ) : // : value === 1 ?
+            // (
+            //   <div
+            //     style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+            //     className='container-fluid'
+            //   >
+            //     <div className='row' style={{ marginTop: '20px' }}>
+            //       {coveredArray !== 0 ? (
+            //         <CustomTable
+            //           tableData={coveredArray}
+            //           tableDataKeys={tableDataKeysForCovered}
+            //           tableHeading={tableHeadingForCovered}
+            //           borderBottomColor={'#60d69f'}
+            //           borderBottomWidth={20}
+            //         />
+            //       ) : (
+            //           <div className='LoaderStyle'>
+            //             <Loader type='TailSpin' color='red' height={50} width={50} />
+            //           </div>
+            //         )}
+            //     </div>
+
+            //     <div className='row' style={{ marginTop: '20px', marginBottom: '25px' }}>
+            //       <div className='col-md-6 col-sm-6 col-6'>
+            //         <img
+            //           onClick={() => props.history.goBack()}
+            //           src={Back}
+            //           style={{ width: 45, height: 35, cursor: 'pointer' }}
+            //         />
+            //       </div>
+            //     </div>
+            //   </div>
+            // ) : value === 2 ?
+            //   (
+            //     <div
+            //       style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+            //       className='container-fluid'
+            //     >
+            //       <div className='row' style={{ marginTop: '20px' }}>
+            //         {notCoveredArray !== 0 ? (
+            //           <CustomTable
+            //             tableData={notCoveredArray}
+            //             tableDataKeys={tableDataKeysForNotCovered}
+            //             tableHeading={tableHeadingForNotCovered}
+            //             borderBottomColor={'#60d69f'}
+            //             borderBottomWidth={20}
+            //           />
+            //         ) : (
+            //             <div className='LoaderStyle'>
+            //               <Loader type='TailSpin' color='red' height={50} width={50} />
+            //             </div>
+            //           )}
+            //       </div>
+
+            //       <div className='row' style={{ marginTop: '20px', marginBottom: '25px' }}>
+            //         <div className='col-md-6 col-sm-6 col-6'>
+            //           <img
+            //             onClick={() => props.history.goBack()}
+            //             src={Back}
+            //             style={{ width: 45, height: 35, cursor: 'pointer' }}
+            //           />
+            //         </div>
+            //       </div>
+
+            //     </div>
+            // )
+            value === 1 ? (
+              <div
+                style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+                className='container-fluid'
+              >
+                {!isLoading ? (
                   <div className='row' style={{ marginTop: '20px' }}>
-                    {needApprovalArray !== 0 ? (
+                    {followUpArray !== 0 ? (
                       <CustomTable
-                        tableData={needApprovalArray}
-                        tableDataKeys={tableDataKeysForNeedApproval}
-                        tableHeading={tableHeadingForNeedApproval}
-                        handleView={viewNeedApproval}
+                        tableData={followUpArray}
+                        tableDataKeys={tableDataKeysForFollowUp}
+                        tableHeading={tableHeadingForFollowUp}
+                        handleView={viewFollowUp}
                         action={actions}
                         borderBottomColor={'#60d69f'}
                         borderBottomWidth={20}
                       />
                     ) : (
-                        <div className='LoaderStyle'>
-                          <Loader type='TailSpin' color='red' height={50} width={50} />
-                        </div>
-                      )}
-                  </div>
-
-                  <div className='row' style={{ marginTop: '20px', marginBottom: '25px' }}>
-                    <div className='col-md-6 col-sm-6 col-6'>
-                      <img
-                        onClick={() => props.history.goBack()}
-                        src={Back}
-                        style={{ width: 45, height: 35, cursor: 'pointer' }}
-                      />
-                    </div>
-                  </div>
-
-                </div>
-              )
-                // : value === 1 ?
-                // (
-                //   <div
-                //     style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-                //     className='container-fluid'
-                //   >
-                //     <div className='row' style={{ marginTop: '20px' }}>
-                //       {coveredArray !== 0 ? (
-                //         <CustomTable
-                //           tableData={coveredArray}
-                //           tableDataKeys={tableDataKeysForCovered}
-                //           tableHeading={tableHeadingForCovered}
-                //           borderBottomColor={'#60d69f'}
-                //           borderBottomWidth={20}
-                //         />
-                //       ) : (
-                //           <div className='LoaderStyle'>
-                //             <Loader type='TailSpin' color='red' height={50} width={50} />
-                //           </div>
-                //         )}
-                //     </div>
-
-                //     <div className='row' style={{ marginTop: '20px', marginBottom: '25px' }}>
-                //       <div className='col-md-6 col-sm-6 col-6'>
-                //         <img
-                //           onClick={() => props.history.goBack()}
-                //           src={Back}
-                //           style={{ width: 45, height: 35, cursor: 'pointer' }}
-                //         />
-                //       </div>
-                //     </div>
-                //   </div>
-                // ) : value === 2 ?
-                //   (
-                //     <div
-                //       style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-                //       className='container-fluid'
-                //     >
-                //       <div className='row' style={{ marginTop: '20px' }}>
-                //         {notCoveredArray !== 0 ? (
-                //           <CustomTable
-                //             tableData={notCoveredArray}
-                //             tableDataKeys={tableDataKeysForNotCovered}
-                //             tableHeading={tableHeadingForNotCovered}
-                //             borderBottomColor={'#60d69f'}
-                //             borderBottomWidth={20}
-                //           />
-                //         ) : (
-                //             <div className='LoaderStyle'>
-                //               <Loader type='TailSpin' color='red' height={50} width={50} />
-                //             </div>
-                //           )}
-                //       </div>
-
-                //       <div className='row' style={{ marginTop: '20px', marginBottom: '25px' }}>
-                //         <div className='col-md-6 col-sm-6 col-6'>
-                //           <img
-                //             onClick={() => props.history.goBack()}
-                //             src={Back}
-                //             style={{ width: 45, height: 35, cursor: 'pointer' }}
-                //           />
-                //         </div>
-                //       </div>
-
-                //     </div>
-                // ) 
-                : value === 1 ?
-                  (
-                    <div
-                      style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-                      className='container-fluid'
-                    >
-                      {!isLoading ? (
-                        <div className='row' style={{ marginTop: '20px' }}>
-                          {followUpArray !== 0 ? (
-                            <CustomTable
-                              tableData={followUpArray}
-                              tableDataKeys={tableDataKeysForFollowUp}
-                              tableHeading={tableHeadingForFollowUp}
-                              handleView={viewFollowUp}
-                              action={actions}
-                              borderBottomColor={'#60d69f'}
-                              borderBottomWidth={20}
-                            />
-                          ) : (
-                              <div className='LoaderStyle'>
-                                <Loader type='TailSpin' color='red' height={50} width={50} />
-                              </div>
-                            )}
-                        </div>
-                      ) : (
-                          <div className='LoaderStyle'>
-                            <Loader type='TailSpin' color='red' height={50} width={50} />
-                          </div>
-                        )}
-
-                      <div className='row' style={{ marginTop: '20px', marginBottom: '25px' }}>
-                        <div className='col-md-6 col-sm-6 col-6'>
-                          <img
-                            onClick={() => props.history.goBack()}
-                            src={Back}
-                            style={{ width: 45, height: 35, cursor: 'pointer' }}
-                          />
-                        </div>
+                      <div className='LoaderStyle'>
+                        <Loader
+                          type='TailSpin'
+                          color='red'
+                          height={50}
+                          width={50}
+                        />
                       </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className='LoaderStyle'>
+                    <Loader
+                      type='TailSpin'
+                      color='red'
+                      height={50}
+                      width={50}
+                    />
+                  </div>
+                )}
 
-                    </div>
-                  ) : (
-                    undefined
-                  )}
-            </div>
-          ) : (
-            <div className='LoaderStyle'>
-              <Loader type='TailSpin' color='red' height={50} width={50} />
-            </div>
-          )}
+                <div
+                  className='row'
+                  style={{ marginTop: '20px', marginBottom: '25px' }}
+                >
+                  <div className='col-md-6 col-sm-6 col-6'>
+                    <img
+                      onClick={() => props.history.goBack()}
+                      src={Back}
+                      style={{ width: 45, height: 35, cursor: 'pointer' }}
+                    />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              undefined
+            )}
+          </div>
+        ) : (
+          <div className='LoaderStyle'>
+            <Loader type='TailSpin' color='red' height={50} width={50} />
+          </div>
+        )}
 
         <Notification msg={errorMsg} open={openNotification} />
-
       </div>
     </div>
   )

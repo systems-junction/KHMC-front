@@ -60,7 +60,7 @@ const tableHeadingForPharmacy = [
 const tableDataKeysForPharmacy = [
   'medicineName',
   'requestedQty',
-  ['itemId', 'receiptUnitCost'],
+  ['itemId', 'issueUnitCost'],
   'total',
 ]
 
@@ -224,12 +224,11 @@ function AddEditPurchaseRequest(props) {
         if (res.data.success) {
           console.log(res.data.data.medicine, 'data')
           res.data.data.medicine.map(
-            (d) =>
-              (d.itemId.receiptUnitCost = d.itemId.receiptUnitCost.toFixed(2))
+            (d) => (d.itemId.issueUnitCost = d.itemId.issueUnitCost.toFixed(2))
           )
           res.data.data.medicine.map(
             (d) =>
-              (d.total = (d.itemId.receiptUnitCost * d.requestedQty).toFixed(2))
+              (d.total = (d.itemId.issueUnitCost * d.requestedQty).toFixed(2))
           )
           if (res.data.data) {
             setRequestId(res.data.data._id)

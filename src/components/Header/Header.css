@@ -3,18 +3,19 @@
   padding-left: 25px;
   padding-right: 25px;
   padding-top: 28px;
-  /* padding-bottom: 10px; */
 
   display: flex;
   justify-content: space-between;
 }
 .header1-style {
-  max-width: 32%;
-  height: 52%;
+  max-width: 35%;
+  height: 38%;
+  /* margin-top: 10px; */
 }
 .header2-style {
-  max-width: 32%;
-  height: 52%;
+  max-width: 30%;
+  height: 38%;
+  margin-top: -5px;
 }
 
 @media screen and (max-width: 768px) {
