@@ -141,7 +141,7 @@ class Header extends React.Component {
                     {this.state.currentUser && this.state.currentUser.email}
                   </Typography>
 
-          {this.state.open ? (
+          {/* {this.state.open ? (
             <div
               style={{
                 float: 'right',
@@ -223,7 +223,7 @@ class Header extends React.Component {
             </div>
           ) : (
             undefined
-          )}
+          )} */}
 
                   {/* <Typography
                     variant="h6"
