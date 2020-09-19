@@ -199,7 +199,7 @@ function DischargeRequest(props) {
     })
   }
 
-  const [, setCurrentUser] = useState('')
+  const [currentUser, setCurrentUser] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
   const [openNotification, setOpenNotification] = useState(false)
   const [value, setValue] = React.useState(0)
@@ -253,7 +253,9 @@ function DischargeRequest(props) {
     setSearchPatientQuery(a)
     if (a.length >= 3) {
       axios
-        .get(getSearchedpatient + '/' + a)
+        .get(
+          getSearchedpatient + '/' + currentUser.functionalUnit._id + '/' + a
+        )
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
