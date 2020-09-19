@@ -927,7 +927,7 @@ function AddEditPurchaseRequest(props) {
 
             {searchQuery ? (
               <div style={{ zIndex: 10 }}>
-                <Paper>
+                <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
                   {setItemFoundSuccessfully ? (
                     itemFound && (
                       <Table size='small'>
