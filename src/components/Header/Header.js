@@ -109,7 +109,8 @@ class Header extends React.Component {
                   style={{
                     maxWidth: '40%',
                     height: '52%',
-                    marginLeft: 10,
+                    marginLeft: 5,
+                    marginTop: -5,
                   }}
                 />
 
@@ -120,6 +121,7 @@ class Header extends React.Component {
                     cursor: 'pointer',
                     maxWidth: '30%',
                     height: '30%',
+                    marginTop: -5,
                   }}
                   onClick={() => this.setState({ open: !this.state.open })}
                 />

@@ -859,8 +859,8 @@ function AddEditPatientListing(props) {
       patientId,
       generatedBy: currentUser.staffId,
       status: 'pending',
+      functionalUnit: currentUser.functionalUnit._id,
     }
-    // console.log(params)
     axios
       .post(generateEDR, params, {})
       .then((res) => {
@@ -889,6 +889,7 @@ function AddEditPatientListing(props) {
       patientId,
       generatedBy: currentUser.staffId,
       status: 'pending',
+      functionalUnit: currentUser.functionalUnit._id,
     }
     // console.log(params)
     axios

@@ -831,7 +831,9 @@ function PatientCare(props) {
     setSearchPatientQuery(a)
     if (a.length >= 3) {
       axios
-        .get(getSearchedpatient + '/' + a)
+        .get(
+          getSearchedpatient + '/' + currentUser.functionalUnit._id + '/' + a
+        )
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
@@ -1082,7 +1084,7 @@ function PatientCare(props) {
                     marginTop: 5,
                   }}
                 >
-                  <Paper>
+                  <Paper style={{ maxHeight: 300, overflow: 'auto' }}>
                     {patientFoundSuccessfull ? (
                       patientFound && (
                         <Table size='small'>

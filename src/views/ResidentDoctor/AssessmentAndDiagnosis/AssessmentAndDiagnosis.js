@@ -406,9 +406,7 @@ function LabRadRequest(props) {
   useEffect(() => {
     setCurrentUser(cookie.load('current_user'))
     seticdSection(Object.keys(icdCodesList[0]))
-
     // getEDRById(props.history.location.state.selectedItem._id);
-
     // setId(props.history.location.state.selectedItem._id);
     // setSelectedItem(props.history.location.state.selectedItem);
     // setrequestNo(props.history.location.state.selectedItem.requestNo);
@@ -1071,7 +1069,9 @@ function LabRadRequest(props) {
     setSearchPatientQuery(a)
     if (a.length >= 3) {
       axios
-        .get(getSearchedpatient + '/' + a)
+        .get(
+          getSearchedpatient + '/' + currentUser.functionalUnit._id + '/' + a
+        )
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {

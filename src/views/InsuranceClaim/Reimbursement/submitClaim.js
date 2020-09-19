@@ -251,10 +251,11 @@ function AddEditPatientListing(props) {
   const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false)
   const [billSummaryArray, setbillSummaryArray] = useState(false)
   const [ClaimId, setClaimId] = useState(false)
+  const [currentUser, setCurrentUser] = useState('')
 
   useEffect(() => {
     setcomingFor(props.history.location.state.comingFor)
-
+    setCurrentUser(cookie.load('current_user'))
     const selectedRec = props.history.location.state.selectedItem
     console.log('selected rec is ... ', selectedRec)
 
@@ -470,7 +471,9 @@ function AddEditPatientListing(props) {
     setSearchQuery(a)
     if (a.length >= 3) {
       axios
-        .get(getSearchedpatient + '/' + a)
+        .get(
+          getSearchedpatient + '/' + currentUser.functionalUnit._id + '/' + a
+        )
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {

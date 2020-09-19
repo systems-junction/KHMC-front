@@ -1067,7 +1067,7 @@ function AddEditPurchaseRequest(props) {
             </div>
             {searchRadioQuery ? (
               <div style={{ zIndex: 10 }}>
-                <Paper>
+                <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
                   {radioItemFoundSuccessfull ? (
                     radioItemFound && (
                       <Table size="small">
