@@ -62,6 +62,8 @@ import ViewAllBtn from "../../components/ViewAllBtn/viewAll";
 
 import TableForAddedItems from "./tableforAddedItems";
 
+import stylesForPaper from "../../assets/jss/material-dashboard-react/components/paper.js";
+
 const reasonArray = [
   { key: "jit", value: "JIT" },
   { key: "new_item", value: "New Item" },
@@ -75,11 +77,11 @@ const reasonArray = [
 const statusArray = [
   // { key: "pending", value: "Pending" },
   // { key: "pending_recieving", value: "Pending Receiving" },
-  // { key: "reject", value: "Reject" },
+  // { key: "rejected", value: "Reject" },
   // { key: "hold", value: "Hold" },
   // { key: "modify", value: "Modify" },
 
-  { key: "reject", value: "Reject" },
+  { key: "rejected", value: "Rejected" },
   { key: "hold", value: "Hold" },
   { key: "modify", value: "Modify" },
   { key: "approved", value: "Approved" },
@@ -205,6 +207,8 @@ function AddEditPurchaseRequest(props) {
     requestedQty: "",
 
     commentNotes: "",
+
+    approvedBy: "",
   };
 
   function reducer(state, { field, value }) {
@@ -252,6 +256,8 @@ function AddEditPurchaseRequest(props) {
     itemName,
     requestedQty,
     commentNotes,
+
+    approvedBy,
   } = state;
 
   const onChangeValue = (e) => {
@@ -283,7 +289,7 @@ function AddEditPurchaseRequest(props) {
     //   setErrorMsg("Requested Qty can not exceed maximum level");
     // }
 
-    if (committeeStatus === "reject") {
+    if (committeeStatus === "rejected") {
       rejection = rejectionReason !== "" ? true : false;
     }
 
@@ -528,8 +534,8 @@ function AddEditPurchaseRequest(props) {
             generated,
             status:
               currentUser.staffTypeId.type === "Committe Member"
-                ? committeeStatus === "reject"
-                  ? "reject"
+                ? committeeStatus === "rejected"
+                  ? "rejected"
                   : status
                 : status,
             // item: {
@@ -554,8 +560,16 @@ function AddEditPurchaseRequest(props) {
             rejectionReason,
             commentNotes,
           };
+
+          let objApproved;
+          if (approvedBy) {
+            objApproved = { ...params, approvedBy: approvedBy };
+          } else {
+            objApproved = { ...params };
+          }
+
           axios
-            .put(updatePurchaseRequestUrl, params)
+            .put(updatePurchaseRequestUrl, objApproved)
             .then((res) => {
               if (res.data.success) {
                 // props.history.goBack();
@@ -624,8 +638,8 @@ function AddEditPurchaseRequest(props) {
           generated,
           status:
             currentUser.staffTypeId.type === "Committe Member"
-              ? committeeStatus === "reject"
-                ? "reject"
+              ? committeeStatus === "rejected"
+                ? "rejected"
                 : status
               : status,
           // item: {
@@ -649,7 +663,11 @@ function AddEditPurchaseRequest(props) {
           department,
           rejectionReason,
           commentNotes,
+          approvedBy: currentUser.staffId,
         };
+
+        console.log("params for approve", params);
+
         axios
           .put(updatePurchaseRequestUrl, params)
           .then((res) => {
@@ -766,7 +784,7 @@ function AddEditPurchaseRequest(props) {
   function validateApproveForm() {
     return (
       committeeStatus !== "approved" &&
-      committeeStatus !== "reject" &&
+      committeeStatus !== "rejected" &&
       committeeStatus !== "modify" &&
       committeeStatus !== "hold"
     );
@@ -999,10 +1017,9 @@ function AddEditPurchaseRequest(props) {
 
   if (openNotification) {
     setTimeout(() => {
-      console.log("called");
       setOpenNotification(false);
       setErrorMsg("");
-    }, 2000);
+    }, 4000);
   }
 
   return (
@@ -1283,7 +1300,11 @@ function AddEditPurchaseRequest(props) {
                     error={committeeStatus === "" && isFormSubmitted}
                     onChange={onChangeValue}
                     label="Status"
-                    disabled={committeeStatus === "approved" && status === "in_progress" ? true : false}
+                    disabled={
+                      committeeStatus === "approved" && status === "in_progress"
+                        ? true
+                        : false
+                    }
                     variant="filled"
                     className="dropDownStyle"
                     InputProps={{
@@ -1447,7 +1468,7 @@ function AddEditPurchaseRequest(props) {
             undefined
           )}
 
-          {committeeStatus === "reject" ? (
+          {committeeStatus === "rejected" ? (
             <div className="row">
               <div
                 className="col-md-12"
@@ -1563,44 +1584,36 @@ function AddEditPurchaseRequest(props) {
                         marginTop: 5,
                       }}
                     >
-                      <Paper>
+                      <Paper style={{ ...stylesForPaper.paperStyle }}>
                         {itemFoundSuccessfull ? (
                           itemFound && (
                             <Table size="small">
                               <TableHead>
                                 <TableRow>
-                                  <TableCell
-                                    align="center"
-                                    style={styles.forTableCell}
-                                  >
+                                  <TableCell style={styles.forTableCell}>
                                     Trade Name
                                   </TableCell>
 
-                                  <TableCell
-                                    align="center"
-                                    style={styles.forTableCell}
-                                  >
+                                  <TableCell style={styles.forTableCell}>
                                     Item Code
                                   </TableCell>
 
-                                  <TableCell
+                                  {/* <TableCell
                                     align="center"
                                     style={styles.forTableCell}
                                   >
                                     Item Name
+                                  </TableCell> */}
+
+                                  <TableCell style={styles.forTableCell}>
+                                    Receipt Unit Cost
                                   </TableCell>
 
-                                  <TableCell
-                                    align="center"
-                                    style={styles.forTableCell}
-                                  >
+                                  {/* <TableCell style={styles.forTableCell}>
                                     Vendor No
-                                  </TableCell>
+                                  </TableCell> */}
 
-                                  <TableCell
-                                    style={styles.forTableCell}
-                                    align="center"
-                                  >
+                                  <TableCell style={styles.forTableCell}>
                                     Vendor Name
                                   </TableCell>
 
@@ -1621,19 +1634,18 @@ function AddEditPurchaseRequest(props) {
                                       onClick={() => handleAddItem(i)}
                                       style={{ cursor: "pointer" }}
                                     >
-                                      <TableCell align="center">
-                                        {i.tradeName}
-                                      </TableCell>
-                                      <TableCell align="center">
-                                        {i.itemCode}
-                                      </TableCell>
-                                      <TableCell align="center">
+                                      <TableCell>{i.tradeName}</TableCell>
+                                      <TableCell>{i.itemCode}</TableCell>
+                                      {/* <TableCell align="center">
                                         {i.name}
-                                      </TableCell>
-                                      <TableCell align="center">
+                                      </TableCell> */}
+
+                                      <TableCell>{i.receiptUnitCost}</TableCell>
+
+                                      {/* <TableCell>
                                         {i.vendorId.vendorNo}
-                                      </TableCell>
-                                      <TableCell align="center">
+                                      </TableCell> */}
+                                      <TableCell>
                                         {i.vendorId.englishName}
                                       </TableCell>
                                       {/* <TableCell align="center">

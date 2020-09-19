@@ -100,7 +100,7 @@ export default function CustomTable(props) {
 
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const [selectedRow, setSelectedRow] = React.useState("");
 
@@ -916,7 +916,7 @@ export default function CustomTable(props) {
         </TableBody>
       </Table>
       <TablePagination
-        rowsPerPageOptions={[5, 10]}
+        rowsPerPageOptions={[10, 20]}
         component="div"
         count={props.tableData && props.tableData.length}
         rowsPerPage={rowsPerPage}

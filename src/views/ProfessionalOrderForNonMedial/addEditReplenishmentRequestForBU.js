@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState, useReducer } from "react";
 import TextField from "@material-ui/core/TextField";
 import Select from "@material-ui/core/Select";
@@ -45,7 +43,7 @@ import { tr } from "date-fns/locale";
 
 import Header from "../../components/Header/Header";
 import view_all from "../../assets/img/Eye.png";
-import purchase_request from "../../assets/img/purchase request.png";
+import purchase_request from "../../assets/img/Medication Order.png";
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -75,6 +73,9 @@ import FormLabel from "@material-ui/core/FormLabel";
 import { ThemeProvider } from "@material-ui/styles";
 
 import BarCode from "../../assets/img/Bar Code.png";
+
+import ViewAllBtn from "../../components/ViewAllBtn/viewAll";
+import stylesForPaper from "../../assets/jss/material-dashboard-react/components/paper.js";
 
 const reasonArray = [
   { key: "jit", value: "JIT" },
@@ -608,7 +609,8 @@ function AddEditPurchaseRequest(props) {
           orderType,
           reason,
           patientReferenceNo,
-          fuId: fuArray[0]._id,
+          // fuId: fuArray[0]._id,
+          fuId: currentUser.functionalUnit._id,
           orderFor: "Medical",
           orderBy,
         };
@@ -622,7 +624,7 @@ function AddEditPurchaseRequest(props) {
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
                   // ORDER #
-                  message: `Order for patient with MRN ${patientDetails.profileNo} has been placed succesfully`,
+                  message: `Order(Non-Pharma Med) for patient with MRN ${patientDetails.profileNo} has been placed succesfully`,
                 },
               });
             } else if (!res.data.success) {
@@ -733,7 +735,7 @@ function AddEditPurchaseRequest(props) {
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
                   // order #
-                  message: `Order for patient with MRN ${patientDetails.profileNo} has been updated`,
+                  message: `Order(Non-Pharma Med) for patient with MRN ${patientDetails.profileNo} has been updated`,
                 },
               });
             } else if (!res.data.success) {
@@ -767,7 +769,13 @@ function AddEditPurchaseRequest(props) {
     setSearchPatientQuery(e.target.value);
     if (e.target.value.length >= 1) {
       axios
-        .get(getSearchedpatient + "/" + e.target.value)
+        .get(
+          getSearchedpatient +
+            "/" +
+            currentUser.functionalUnit._id +
+            "/" +
+            e.target.value
+        )
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
@@ -1274,36 +1282,21 @@ function AddEditPurchaseRequest(props) {
     >
       <Header />
       <div className="cPadding">
-        {/* <div className="subheader">
+        <div className="subheader">
           <div>
             <img src={purchase_request} />
             <h4>
-
-
               {comingFor === "add"
-                ? " Add Medication Order"
+                ? "Add Order Items (Non-Pharma Med)"
                 : comingFor === "edit"
-                ? " Update Medication Order"
+                ? "Update Order Items (Non-Pharma Med)"
                 : comingFor === "view"
-                ? "Medication Order Details"
+                ? "Order Items (Non-Pharma Med)"
                 : undefined}
             </h4>
           </div>
-
-          <div>
-        
-            <Button
-              onClick={() => props.history.goBack()}
-              style={styles.stylesForButton}
-              variant="contained"
-              color="primary"
-            >
-              <img src={view_all} style={styles.stylesForIcon} />
-              &nbsp;&nbsp;
-              <strong>View All</strong>
-            </Button>
-          </div>
-        </div> */}
+          {/* <ViewAllBtn history={props.history} /> */}
+        </div>
 
         <div style={{ marginTop: "5px", marginBottom: "5px" }}>
           {comingFor === "add" ? (
@@ -1384,7 +1377,7 @@ function AddEditPurchaseRequest(props) {
                     marginTop: 5,
                   }}
                 >
-                  <Paper>
+                  <Paper style={{ ...stylesForPaper.paperStyle }}>
                     {patientFoundSuccessfull ? (
                       patientFound && (
                         <Table size="small">
@@ -1570,7 +1563,7 @@ function AddEditPurchaseRequest(props) {
               Order Item
             </h5>
 
-            <div
+            {/* <div
               className="container-fluid"
               style={{
                 ...styles.inputContainerForTextField,
@@ -1637,7 +1630,7 @@ function AddEditPurchaseRequest(props) {
                   </RadioGroup>
                 </FormControl>
               </div>
-            </div>
+            </div> */}
 
             {selectedItemToSearch === "pharmaceutical" ? (
               <div>
@@ -1722,7 +1715,7 @@ function AddEditPurchaseRequest(props) {
                         marginTop: 5,
                       }}
                     >
-                      <Paper>
+                      <Paper style={{ ...stylesForPaper.paperStyle }}>
                         {itemFoundSuccessfull ? (
                           itemFound && (
                             <Table size="small">
@@ -2443,7 +2436,7 @@ function AddEditPurchaseRequest(props) {
                 {searchQuery ? (
                   // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
                   <div style={{ zIndex: 3 }}>
-                    <Paper>
+                    <Paper style={{ ...stylesForPaper.paperStyle }}>
                       {itemFoundSuccessfull ? (
                         itemFound && (
                           <Table size="small">

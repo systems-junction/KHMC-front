@@ -141,19 +141,19 @@ const registeredNurse = [
 
   {
     img: OrderItems,
-    text: "Medical Order Items",
+    text: "Order Items (Non-Pharma Med)",
     path: `/home/wms/fus/professionalorder/addorder`,
   },
 
   {
     img: ReceiveItem,
-    text: "Medical Order Receiving",
+    text: "Order Receiving (Medical)",
     path: `/home/wms/fus/medicinalorder`,
   },
 
   {
     img: OrderItems,
-    text: "Non Medical Order Items",
+    text: "Order Items (Non-Medical)",
     path: `/home/wms/fus/professionalorder/addnonmedicalorder`,
   },
 
@@ -170,7 +170,7 @@ const registeredNurse = [
 
   {
     img: ReceiveItem,
-    text: "Non Medical Order Receiving",
+    text: "Order Receiving (Non-Medical)",
     path: `/home/wms/fus/professionalorder/receiveorder`,
   },
 ];
@@ -261,9 +261,15 @@ const doctorPhysician = [
     path: "",
   },
 
+  // {
+  //   img: OrderItems,
+  //   text: "Order Items",
+  //   path: `/home/wms/fus/medicinalorder`,
+  // },
+
   {
     img: OrderItems,
-    text: "Order Items",
+    text: "Order Items (Medical)",
     path: `/home/wms/fus/medicinalorder`,
   },
 ];
@@ -289,13 +295,13 @@ const committeeMember = [
 
   {
     img: purchase_request,
-    text: "Purchase Request",
+    text: "Purchase Requests",
     path: "/home/wms/warehouse/pr",
   },
 
   {
     img: purchase_order,
-    text: "Purchase Order",
+    text: "Purchase Orders",
     path: "/home/wms/warehouse/po",
   },
 ];
@@ -495,7 +501,7 @@ const fuInventoryKeeper = [
 
   {
     img: ReturnItem,
-    text: "FuncU Return Status",
+    text: "Functional Unit Returns",
     path: `/home/wms/fus/returnitems`,
   },
 
@@ -513,13 +519,13 @@ const fuInventoryKeeper = [
 
   {
     img: MedicationOrder,
-    text: "Medication  Order",
+    text: "Order Items (Medical)",
     path: `/home/wms/fus/medicinalorder`,
   },
 
   {
     img: ProfessionalOrder,
-    text: "Professional Order",
+    text: "Order Items (Non-Medical)",
     path: `/home/wms/fus/professionalorder`,
   },
 
@@ -601,7 +607,7 @@ const purchasingManager = [
 
   {
     img: purchase_order,
-    text: "Purchase Order",
+    text: "Purchase Orders",
     path: "/home/wms/warehouse/po",
   },
 ];

@@ -94,7 +94,7 @@ const useStyles = makeStyles(styles);
 
 const tableHeadingForBUMember = [
   'No.',
-  "Item Name",
+  // "Item Name",
   "Item Code",
   "Requested Qty",
   "Actions",
@@ -517,7 +517,7 @@ export default function DenseTable(props) {
               {index + 1}
             </TableCell>
 
-            <TableCell
+            {/* <TableCell
               align="center"
               style={{
                 backgroundColor: "white",
@@ -525,7 +525,7 @@ export default function DenseTable(props) {
               }}
             >
               {row.itemId.name}
-            </TableCell>
+            </TableCell> */}
             <TableCell
               align="center"
               style={{

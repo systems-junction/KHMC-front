@@ -182,7 +182,7 @@ const DATE = new Date();
 const time = DATE.getHours();
 
 const statusArray = [
-  { key: "reject", value: "Reject" },
+  { key: "rejected", value: "Rejected" },
   { key: "hold", value: "Hold" },
   { key: "modify", value: "Modify" },
   { key: "approved", value: "Approved" },
@@ -221,6 +221,8 @@ function AddEditPurchaseRequest(props) {
 
     selectedVendor: "",
     commentNotes: "",
+
+    approvedBy: "",
   };
 
   function reducer(state, { field, value }) {
@@ -256,6 +258,7 @@ function AddEditPurchaseRequest(props) {
     comments,
 
     commentNotes,
+    approvedBy,
   } = state;
 
   const onChangeValue = (e) => {
@@ -474,10 +477,17 @@ function AddEditPurchaseRequest(props) {
         // };
       };
 
-      console.log("params", params);
+      let obj;
+      if (approvedBy) {
+        obj = { ...params, approvedBy };
+      } else {
+        obj = { ...params };
+      }
+
+      console.log("params", obj);
 
       axios
-        .put(updatePurchaseOrderUrl, params)
+        .put(updatePurchaseOrderUrl, obj)
         .then((res) => {
           if (res.data.success) {
             let message = `Purchase order ${res.data.data.purchaseOrderNo} has been updated successfully`;
@@ -542,6 +552,7 @@ function AddEditPurchaseRequest(props) {
           prId: temp,
           comments,
           commentNotes,
+          approvedBy: currentUser.staffId,
         };
       }
 
@@ -620,7 +631,7 @@ function AddEditPurchaseRequest(props) {
   function validateApprovalForm() {
     return (
       committeeStatus !== "approved" &&
-      committeeStatus !== "reject" &&
+      committeeStatus !== "rejected" &&
       committeeStatus !== "modify" &&
       committeeStatus !== "hold"
     );
@@ -696,7 +707,7 @@ function AddEditPurchaseRequest(props) {
             className="col-md-12"
             style={{
               ...styles.inputContainerForTextField,
-              ...styles.textFieldPaddingNew,
+              ...styles.textFieldPadding,
             }}
           >
             <TextField
@@ -1062,7 +1073,7 @@ function AddEditPurchaseRequest(props) {
             {comingFor &&
             currentUser &&
             currentUser.staffTypeId.type !== "Committe Member" ? (
-              <div style={{ marginTop: 10 }}>
+              <div style={{ marginTop: 10, marginLeft: -10, marginRight: -10 }}>
                 <AddPurchaseRequest
                   handleAddPR={handleAddPR}
                   openPRDialog={openPRDialog}
@@ -1121,7 +1132,7 @@ function AddEditPurchaseRequest(props) {
                 className="col-md-12"
                 style={{
                   ...styles.inputContainerForTextField,
-                  ...styles.textFieldPaddingNew,
+                  ...styles.textFieldPadding,
                 }}
               >
                 <TextField
@@ -1204,10 +1215,10 @@ function AddEditPurchaseRequest(props) {
           </div>
 
           {purchaseRequest.length !== 0 ? (
-            <div>
-              <h6 style={{ color: "white", fontWeight: "700" }}>
+            <div style={{ marginLeft: -10, marginRight: -10 }}>
+              <h5 style={{ color: "white", fontWeight: "700" }}>
                 Added Purchase Requests
-              </h6>
+              </h5>
               <AddedPurchaseRequestTable
                 tableData={purchaseRequest}
                 vendors={vendors}

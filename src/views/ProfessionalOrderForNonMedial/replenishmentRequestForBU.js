@@ -397,8 +397,6 @@ export default function ReplenishmentRequest(props) {
           repRequest[i].status === "complete" ||
           repRequest[i].status === "Received" ||
           repRequest[i].status === "Partially Received"
-
-
         ) {
           temp.push(repRequest[i]);
         }
@@ -519,8 +517,6 @@ export default function ReplenishmentRequest(props) {
     });
   }
 
-
-
   if (
     props.history.location.pathname ===
       "/home/wms/fus/professionalorder/addnonmedicalorder" &&
@@ -537,8 +533,6 @@ export default function ReplenishmentRequest(props) {
       state: { comingFor: "add", vendors, statues, items, buObj },
     });
   }
-
-
 
   if (
     props.history.location.pathname !==
@@ -565,9 +559,9 @@ export default function ReplenishmentRequest(props) {
 
               {props.history.location.pathname ===
               "/home/wms/fus/professionalorder/receiveorder" ? (
-                <h4>Order Receiving</h4>
+                <h4>Order Items (Non-Medical)</h4>
               ) : (
-                <h4>Added Orders</h4>
+                <h4>Order Items (Non-Medical)</h4>
               )}
             </div>
 
@@ -694,7 +688,7 @@ export default function ReplenishmentRequest(props) {
           >
             <DialogContent style={{ backgroundColor: "#31e2aa" }}>
               <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
-                Added Item
+                Added Items
               </DialogTitle>
               <div className="container-fluid">
                 <CustomTable

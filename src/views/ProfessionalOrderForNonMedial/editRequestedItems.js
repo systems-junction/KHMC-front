@@ -27,6 +27,7 @@ import {
   getFUFromBUUrl,
   getCurrentQtyForBURepRequestUrl,
   getCurrentQtyForFURepRequestUrl,
+  getFunctionalUnitUrl,
 } from "../../public/endpoins";
 
 import Paper from "@material-ui/core/Paper";
@@ -297,11 +298,12 @@ function AddEditPurchaseRequest(props) {
 
   function getFUsFromBU(buId) {
     axios
-      .get(getFUFromBUUrl + "/" + buId)
+      // .get(getFUFromBUUrl + "/" + buId)
+      .get(getFunctionalUnitUrl)
       .then((res) => {
         if (res.data.success) {
-          console.log("FU array", res.data.data);
-          setFUs(res.data.data);
+          console.log("FU array", res.data.data.functionalUnits);
+          setFUs(res.data.data.functionalUnits);
         } else if (!res.data.success) {
           setErrorMsg(res.data.error);
           setOpenNotification(true);
@@ -610,11 +612,11 @@ function AddEditPurchaseRequest(props) {
             <img src={purchase_request} />
             <h4>
               {comingFor === "add"
-                ? "Professional Request  Details"
+                ? "Order (Non-Medical) Details"
                 : comingFor === "edit"
-                ? "Professional Request  Details "
+                ? "Order (Non-Medical)  Details "
                 : comingFor === "view"
-                ? "Professional Request Details"
+                ? "Order (Non-Medical) Details"
                 : undefined}
             </h4>
           </div>
@@ -710,7 +712,7 @@ function AddEditPurchaseRequest(props) {
                     inputVariant="filled"
                     // onChange={onChangeDate}
                     disabled={true}
-                    format="MM-dd-yy HHmm  " //[4:03 PM] MM-DD-YY 0000Hrs
+                    format="MM/dd/yyyy hh:mm a"
                     label="Date"
                     fullWidth
                     InputProps={{
@@ -743,7 +745,7 @@ function AddEditPurchaseRequest(props) {
                           <TextField
                             disabled={true}
                             type="text"
-                            label="Fu Name"
+                            label="Functional Unit"
                             name={"fuId"}
                             value={val.fuName}
                             onChange={onChangeValue}

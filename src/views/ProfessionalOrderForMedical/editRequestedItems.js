@@ -27,6 +27,7 @@ import {
   getFUFromBUUrl,
   getCurrentQtyForBURepRequestUrl,
   getCurrentQtyForFURepRequestUrl,
+  getFunctionalUnitUrl,
 } from "../../public/endpoins";
 
 import Paper from "@material-ui/core/Paper";
@@ -331,11 +332,14 @@ function AddEditPurchaseRequest(props) {
 
   function getFUsFromBU(buId) {
     axios
-      .get(getFUFromBUUrl + "/" + buId)
+      // .get(getFUFromBUUrl + "/" + buId)
+
+      .get(getFunctionalUnitUrl)
+
       .then((res) => {
         if (res.data.success) {
-          console.log("FU array", res.data.data);
-          setFUs(res.data.data);
+          console.log("FU array", res.data.data.functionalUnits);
+          setFUs(res.data.data.functionalUnits);
         } else if (!res.data.success) {
           setErrorMsg(res.data.error);
           setOpenNotification(true);
@@ -346,6 +350,8 @@ function AddEditPurchaseRequest(props) {
         console.log("error: ", e);
       });
   }
+
+  console.log(fuArray)
 
   useEffect(() => {
     const selectedRec = props.history.location.state.selectedItem;
@@ -479,7 +485,7 @@ function AddEditPurchaseRequest(props) {
 
           patientReferenceNo,
 
-          fuId: fuArray[0]._id,
+          fuId: currentUser.functionalUnit._id,
         };
 
         console.log("params", params);
@@ -594,7 +600,7 @@ function AddEditPurchaseRequest(props) {
               props.history.replace({
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
-                  message: `Order ${requestNo} with item name ${itemName} is set to ${secondStatus}`,
+                  message: `Medical Order ${requestNo} with item name ${itemName} is set to ${secondStatus}`,
                 },
               });
             } else if (!res.data.success) {
@@ -637,11 +643,11 @@ function AddEditPurchaseRequest(props) {
             <img src={purchase_request} />
             <h4>
               {comingFor === "add"
-                ? "Add Medication Request"
+                ? "Add Request"
                 : comingFor === "edit"
-                ? "Medication Request Details"
+                ? "Order(Medical) Details"
                 : comingFor === "view"
-                ? "Medication Request Details"
+                ? "Order(Medical) Details"
                 : undefined}
             </h4>
           </div>
@@ -768,7 +774,7 @@ function AddEditPurchaseRequest(props) {
                         <TextField
                           disabled={true}
                           type="text"
-                          label="Fu Name"
+                          label="Functional Unit Name"
                           name={"fuId"}
                           value={val.fuName}
                           onChange={onChangeValue}
