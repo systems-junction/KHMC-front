@@ -1216,12 +1216,14 @@ function LabRadRequest(props) {
   }
 
   const addNewRequest = () => {
-    let path = `assessmentdiagnosis/add`
+    console.log("Sending item ... ",selectedItem)
+    // let path = `assessmentdiagnosis/add`
+    let path  = `/home/wms/fus/medicinalorder`
     props.history.push({
       pathname: path,
       state: {
         comingFor: 'add',
-        selectedItem: selectedItem,
+        selectedPatient: selectedItem.patientId,
         pharmacyRequestArray,
       },
     })

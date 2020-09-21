@@ -484,6 +484,15 @@ function AddEditPurchaseRequest(props) {
   useEffect(() => {
     const selectedRec = props.history.location.state.selectedItem;
 
+    const selectedPatientforPharm = props.history.location.state.selectedPatientForPharma;
+     
+    if(selectedPatientforPharm)
+    {
+      setPatientDetails(selectedPatientforPharm);
+      openPatientDetailsDialog(true);
+      dispatch("patientReferenceNo", selectedPatientforPharm.profileNo)
+    }
+
     if (!selectedRec) {
       getFUsFromBU(props.history.location.state.buObj._id);
     } else if (selectedRec) {
