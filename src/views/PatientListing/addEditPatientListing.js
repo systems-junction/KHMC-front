@@ -543,9 +543,9 @@ function AddEditPatientListing(props) {
       validateCountryCity(city) &&
       address &&
       address.length > 0 &&
-      validateAddress(address) &&
-      dob &&
-      dob.length > 0
+      validateAddress(address)
+      // dob &&
+      // dob.length > 0
       // bloodGroup &&
       // bloodGroup != null &&
       // otherDetails &&
@@ -1657,7 +1657,7 @@ function AddEditPatientListing(props) {
                     format='MM-dd-yyyy'
                     // minDate={dob}
 
-                    error={dob === '' && detailsForm}
+                    // error={dob === '' && detailsForm}
                     onChange={(val) => handleChangeDate(val, 'dob')}
                     InputProps={{
                       className: classes.input,
@@ -1668,7 +1668,7 @@ function AddEditPatientListing(props) {
                   />
                 </MuiPickersUtilsProvider>
 
-                <ErrorMessage name={dob} isFormSubmitted={detailsForm} />
+                {/* <ErrorMessage name={dob} isFormSubmitted={detailsForm} /> */}
               </div>
 
               <div
