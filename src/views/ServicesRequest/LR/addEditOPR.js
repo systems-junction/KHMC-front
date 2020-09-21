@@ -934,7 +934,16 @@ function AddEditPatientListing(props) {
   function handleAddItem(i) {
     console.log('selected banda', i)
 
-    const dob = new Date(i.dob).toISOString().substr(0, 10)
+    // const dob = new Date(i.dob).toISOString().substr(0, 10)
+    let d = i.dob
+    var dob
+    let myDate = d.split('/')
+    if (myDate.length > 1) {
+      console.log(myDate, 'mydate')
+      dob = new Date(myDate[2], myDate[1] - 1, myDate[0])
+    } else {
+      dob = d
+    }
 
     setPatientId(i._id)
     dispatch({ field: 'firstName', value: i.firstName })
