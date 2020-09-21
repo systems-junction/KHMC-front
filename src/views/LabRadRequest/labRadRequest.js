@@ -335,7 +335,7 @@ function LabRadRequest(props) {
   const [errorMsg, setErrorMsg] = useState('')
   const [successMsg, setsuccessMsg] = useState('')
   const [openNotification, setOpenNotification] = useState(false)
-  const [value, setValue] = useState(2)
+  const [value, setValue] = useState(0)
   const [selectedItem, setSelectedItem] = useState('')
   const [searchPatientQuery, setSearchPatientQuery] = useState('')
   const [patientFoundSuccessfull, setpatientFoundSuccessfully] = useState(false)
@@ -1324,7 +1324,7 @@ function LabRadRequest(props) {
               variant='scrollable'
               fullWidth={true}
             >
-              <Tab
+              {/* <Tab
                 style={{
                   color: 'white',
                   borderRadius: 5,
@@ -1343,13 +1343,13 @@ function LabRadRequest(props) {
                 }}
                 label='Pharm'
                 disabled
-              />
+              /> */}
               <Tab
                 style={{
                   color: 'white',
                   borderRadius: 5,
                   outline: 'none',
-                  color: value === 2 ? '#12387a' : '#3B988C',
+                  color: value === 0 ? '#12387a' : '#3B988C',
                 }}
                 label='Lab'
                 disabled={enableForm}
@@ -1359,12 +1359,12 @@ function LabRadRequest(props) {
                   color: 'white',
                   borderRadius: 5,
                   outline: 'none',
-                  color: value === 3 ? '#12387a' : '#3B988C',
+                  color: value === 1 ? '#12387a' : '#3B988C',
                 }}
                 label='Rad'
                 disabled={enableForm}
               />
-              <Tab
+              {/* <Tab
                 style={{
                   color: 'white',
                   borderRadius: 5,
@@ -1373,7 +1373,7 @@ function LabRadRequest(props) {
                 }}
                 label='Consultant/Specialist Notes'
                 disabled
-              />
+              /> */}
               {/* <Tab
                   style={{
                       color: "white",
@@ -1486,7 +1486,7 @@ function LabRadRequest(props) {
                             </div>
                         </div>
                         )  */}
-          {value === 2 ? (
+          {value === 0 ? (
             <div
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
               className={`container-fluid ${classes.root}`}
@@ -1659,7 +1659,7 @@ function LabRadRequest(props) {
                 </div>
               </div> */}
             </div>
-          ) : value === 3 ? (
+          ) : value === 1 ? (
             <div
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
               className={`container-fluid ${classes.root}`}

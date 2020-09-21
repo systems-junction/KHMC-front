@@ -24,7 +24,7 @@ const tableHeading = [
 const tableDataKeys = [
   ['patientId', 'profileNo'],
   'requestNo',
-  'Name',
+  ['patientId', 'fullName'],
   'updatedAt',
   'status',
 ]
@@ -60,15 +60,17 @@ export default function preApproval(props) {
       .then((res) => {
         if (res.data.success) {
           console.log(res.data.data, 'data')
-          res.data.data.edr.map(
-            (d) => (d.Name = d.patientId.firstName + ' ' + d.patientId.lastName)
-          )
-          res.data.data.ipr.map(
-            (d) => (d.Name = d.patientId.firstName + ' ' + d.patientId.lastName)
-          )
-          res.data.data.opr.map(
-            (d) => (d.Name = d.patientId.firstName + ' ' + d.patientId.lastName)
-          )
+          // res.data.data.edr.map(
+          //   (d) => (d.Name = d.patientId.firstName + ' ' + d.patientId.lastName)
+          // )
+          // res.data.data.ipr.map(
+          //   (d) => (d.Name = d.patientId.firstName + ' ' + d.patientId.lastName)
+          // )
+          // if (res.data.data.opr){
+          // res.data.data.opr.map(
+          //   (d) => (d.Name = d.patientId.firstName + ' ' + d.patientId.lastName)
+          // )
+          // }
           setpreApproval([].concat(res.data.data.edr.reverse(), res.data.data.ipr.reverse(),res.data.data.opr.reverse() ))
           console.log([].concat(res.data.data.edr, res.data.data.ipr,res.data.data.opr ),"CONCATENATE")
         } else if (!res.data.success) {
