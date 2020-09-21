@@ -43,7 +43,7 @@ let icdCodesList = require('../../../assets/icdCodes.json')
 const tableHeadingForResident = [
   'Date/Time',
   'Description / Condition',
-  'Doctor Ref',
+  'Referring Doctor',
   'Action',
 ]
 const tableDataKeysForResident = ['date', 'description', 'doctorName']
@@ -51,7 +51,7 @@ const tableHeadingForConsultation = [
   'Date/Time',
   'Description / Condition',
   'Specialist',
-  'Doctor Ref',
+  'Referring Doctor',
   'Status',
   'Action',
 ]
@@ -72,8 +72,8 @@ const tableHeadingForPharmacy = [
 const tableDataKeysForPharmacy = ['PRrequestNo', 'date', 'doctorName', 'status']
 const tableHeadingForLabReq = [
   'Request Id',
-  'Service Code',
-  'Service Name',
+  'Test Code',
+  'Test',
   'Requester',
   'Status',
   'Action',
@@ -87,8 +87,8 @@ const tableDataKeysForLabReq = [
 ]
 const tableHeadingForRadiology = [
   'Request Id',
-  'Service Code',
-  'Service Name',
+  'Test Code',
+  'Test',
   'Requester',
   'Status',
   'Action',
@@ -1370,7 +1370,7 @@ function LabRadRequest(props) {
                     marginTop: 5,
                   }}
                 >
-                  <Paper>
+                  <Paper style={{ maxHeight: 300, overflow: 'auto' }}>
                     {patientFoundSuccessfull ? (
                       patientFound && (
                         <Table size='small'>
@@ -1584,7 +1584,7 @@ function LabRadRequest(props) {
                   outline: 'none',
                   color: value === 0 ? '#12387a' : '#3B988C',
                 }}
-                label='Resident Doctor Notes'
+                label='Doctor/Physician Notes'
                 disabled={enableForm}
               />
               <Tab
@@ -1624,7 +1624,7 @@ function LabRadRequest(props) {
                   outline: 'none',
                   color: value === 4 ? '#12387a' : '#3B988C',
                 }}
-                label='External Consultation'
+                label='Consultant/Specialist Notes'
                 disabled={enableForm}
               />
             </Tabs>
@@ -1778,7 +1778,7 @@ function LabRadRequest(props) {
 
               {searchQuery ? (
                 <div style={{ zIndex: 10 }}>
-                  <Paper>
+                  <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
                     {itemFoundSuccessfull ? (
                       itemFound && (
                         <Table size='small'>
@@ -1952,7 +1952,7 @@ function LabRadRequest(props) {
               {searchRadioQuery ? (
                 // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
                 <div style={{ zIndex: 10 }}>
-                  <Paper>
+                  <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
                     {radioItemFoundSuccessfull ? (
                       radioItemFound && (
                         <Table size='small'>
