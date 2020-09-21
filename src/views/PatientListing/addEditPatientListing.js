@@ -37,7 +37,7 @@ import validateHeight from '../../public/numberFloatValidator'
 import validateCountryCity from '../../public/countryCityValidator'
 import validateGender from '../../public/genderValidator'
 import validateRelation from '../../public/relationValidator'
-import validateAddress from '../../public/inputValidator'
+import validateAddress from '../../public/addressValidator'
 
 import {
   uploadsUrl,

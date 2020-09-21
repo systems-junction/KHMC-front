@@ -28,7 +28,7 @@ import validatePhone from '../../public/validatePhone'
 import ValidateCountryCity from '../../public/countryCityValidator'
 import ValidateGender from '../../public/genderValidator'
 import ValidateRelation from '../../public/relationValidator'
-import ValidateAddress from '../../public/inputValidator'
+import ValidateAddress from '../../public/addressValidator'
 
 const ErrorMsg = (props) => {
   return (
