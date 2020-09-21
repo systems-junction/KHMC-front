@@ -1195,8 +1195,8 @@ function AddEditPurchaseRequest(props) {
             <img src={purchase_request} />
             <h4>
               {comingFor === "add"
-                ? " Add Functional Unit  Fulfillment"
-                : " Edit Functional Unit  Fulfillment"}
+                ? " Add Replenishment Requests"
+                : " Edit Replenishment Requests"}
             </h4>
           </div>
 
