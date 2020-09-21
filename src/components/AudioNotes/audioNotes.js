@@ -43,8 +43,9 @@ export default function Items(props) {
   const uploadFile = (selectedFile) => {
     const data = new FormData();
     data.append("file", selectedFile);
+    var url = "http://localhost:4000/api/patient";
     axios
-      .post("http://192.168.10.29:4000/api/patient/test", data)
+      .put(`${url}/updateEdrIprItem`, data)
       .then((res) => {
         if (res.data.success) {
           console.log("response after adding item", res);
@@ -72,8 +73,9 @@ export default function Items(props) {
   };
 
   const getFile = () => {
+    var url = "http://localhost:4000/api/patient";
     axios
-      .get("http://192.168.10.29:4000/api/patient/test2")
+      .get(`${url}/updateEdrIprItem`)
       .then((res) => {
         if (res.data.success) {
           console.log("response after adding item", res.data.data);
@@ -86,7 +88,7 @@ export default function Items(props) {
       });
   };
 
-  const baseUrl = "http://192.168.10.29:4000/";
+  const baseUrl = "http:/localhost:4000/";
 
   return (
     <div>
@@ -105,12 +107,12 @@ export default function Items(props) {
       >
         Record
       </button>
-      <audio src={blobURL} controls="controls"  />
+      <audio src={blobURL} controls="controls" />
       <button
         onClick={stop}
         disabled={!isRecording}
         style={{
-          backgroundColor: 'red',
+          backgroundColor: "red",
           color: "white",
           borderRadius: 5,
           borderWidth: 0,
@@ -125,7 +127,12 @@ export default function Items(props) {
         response.map((link) => {
           return <audio src={`${baseUrl}${link.abc}`} controls="controls" />;
         })}
-      <button type="button" style={{marginTop:10}} class="btn btn-success btn-block" onClick={getFile}>
+      <button
+        type="button"
+        style={{ marginTop: 10 }}
+        class="btn btn-success btn-block"
+        onClick={getFile}
+      >
         Get All Notes File
       </button>
     </div>

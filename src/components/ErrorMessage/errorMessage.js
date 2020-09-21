@@ -25,6 +25,11 @@ import validateHeight from '../../public/numberFloatValidator'
 import validateWeight from '../../public/numberFloatValidator'
 import validateCoPayment from '../../public/numberFloatValidator'
 import validatePhone from '../../public/validatePhone'
+import ValidateCountryCity from '../../public/countryCityValidator'
+import ValidateGender from '../../public/genderValidator'
+import ValidateRelation from '../../public/relationValidator'
+import ValidateAddress from '../../public/addressValidator'
+
 const ErrorMsg = (props) => {
   return (
     <p style={{ color: '#ff0000', fontSize: 13 }}>
@@ -85,6 +90,26 @@ const ErrorMsg = (props) => {
         : props.type && props.type === 'phone' && props.isFormSubmitted
         ? validatePhone(props.name) && props.isFormSubmitted
           ? 'Please enter a valid phone number +962xxxxxxxxx or +962xxxxxxxx'
+          : undefined
+        : props.type && props.type === 'country' && props.isFormSubmitted
+        ? !ValidateCountryCity(props.name) && props.isFormSubmitted
+          ? 'Country cannot be null, please select a country'
+          : undefined
+        : props.type && props.type === 'city' && props.isFormSubmitted
+        ? !ValidateCountryCity(props.name) && props.isFormSubmitted
+          ? 'Country cannot be null, please select a city'
+          : undefined
+        : props.type && props.type === 'gender' && props.isFormSubmitted
+        ? !ValidateGender(props.name) && props.isFormSubmitted
+          ? 'Gender cannot be null, please select a gender'
+          : undefined
+        : props.type && props.type === 'relation' && props.isFormSubmitted
+        ? !ValidateRelation(props.name) && props.isFormSubmitted
+          ? 'Relation cannot be null, please select a relation'
+          : undefined
+        : props.type && props.type === 'address' && props.isFormSubmitted
+        ? !ValidateAddress(props.name) && props.isFormSubmitted
+          ? 'Please enter address'
           : undefined
         : undefined}
     </p>

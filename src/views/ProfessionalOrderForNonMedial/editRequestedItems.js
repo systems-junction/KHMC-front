@@ -562,6 +562,13 @@ function AddEditPurchaseRequest(props) {
         // }
         console.log(obj);
 
+        let selectedStatus = "";
+        if (secondStatus === "in_progess") {
+          selectedStatus = "In Progess";
+        } else if (secondStatus === "Delivery in Progress") {
+          selectedStatus = "Delivery in Progress";
+        }
+
         axios
           .put(updateReplenishmentRequestUrlBU, obj)
           .then((res) => {
@@ -569,7 +576,7 @@ function AddEditPurchaseRequest(props) {
               props.history.replace({
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
-                  message: `Order ${requestNo} with item name ${itemName} is set to ${secondStatus}`,
+                  message: `Order ${requestNo} with item name ${itemName} is set to ${selectedStatus}`,
                 },
               });
             } else if (!res.data.success) {

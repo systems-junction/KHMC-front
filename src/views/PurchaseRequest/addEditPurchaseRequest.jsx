@@ -432,12 +432,11 @@ function AddEditPurchaseRequest(props) {
               secondStatus: requestedItemsArray[i].secondStatus,
               comments: requestedItemsArray[i].comments,
               maximumLevel: requestedItemsArray[i].maximumLevel,
-
             },
           ];
         }
 
-        console.log(requestedItems)
+        console.log(requestedItems);
         const params = {
           generatedBy: currentUser.name,
           date: new Date(),
@@ -671,13 +670,29 @@ function AddEditPurchaseRequest(props) {
           department,
           rejectionReason,
           commentNotes,
-          approvedBy: currentUser.staffId,
+          
         };
 
-        console.log("params for approve", params);
+        let objAfterApproved = "";
+
+        if (approvedBy || committeeStatus === "approved") {
+          objAfterApproved = {
+            ...params,
+            approvedBy:
+              committeeStatus === "approved" && approvedBy!==""
+                ? approvedBy
+                : committeeStatus === "approved"
+                ? currentUser.staffId
+                : "",
+          };
+        } else {
+          objAfterApproved = { ...params };
+        }
+
+        console.log("params for approve", objAfterApproved);
 
         axios
-          .put(updatePurchaseRequestUrl, params)
+          .put(updatePurchaseRequestUrl, objAfterApproved)
           .then((res) => {
             if (res.data.success) {
               // props.history.goBack();

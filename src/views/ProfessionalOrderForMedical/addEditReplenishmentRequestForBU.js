@@ -1292,9 +1292,9 @@ function AddEditPurchaseRequest(props) {
               <img src={purchase_request} />
               <h4>
                 {comingFor === "add"
-                  ? "Add Order Items (Medical)"
+                  ? "Order Items (Medical)"
                   : comingFor === "edit"
-                  ? "Update Order Items (Medical)"
+                  ? "Order Items (Medical)"
                   : comingFor === "view"
                   ? "Order Items (Medical) Details"
                   : undefined}

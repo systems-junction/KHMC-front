@@ -17,23 +17,23 @@ import AddIcon from "@material-ui/icons/Add";
 
 const styles = {
   stylesForButton: {
-    color: 'white',
-    cursor: 'pointer',
+    color: "white",
+    cursor: "pointer",
     borderRadius: 5,
-    backgroundColor: '#2c6ddd',
-    width: '140px',
-    height: '45px',
-    outline: 'none',
+    backgroundColor: "#2c6ddd",
+    width: "140px",
+    height: "45px",
+    outline: "none",
   },
   stylesForCancel: {
-    color: '#000',
-    cursor: 'pointer',
+    color: "#000",
+    cursor: "pointer",
     borderRadius: 5,
-    width: '140px',
-    height: '45px',
-    outline: 'none',
+    width: "140px",
+    height: "45px",
+    outline: "none",
   },
-}
+};
 class Header extends React.Component {
   state = {
     goBack: false,
@@ -47,13 +47,13 @@ class Header extends React.Component {
   }
 
   handleClickOpen() {
-    console.log('====================================')
-    console.log('clicked logout')
-    console.log('====================================')
-    this.setState({ dialogue: true, open: !this.state.open })
+    console.log("====================================");
+    console.log("clicked logout");
+    console.log("====================================");
+    this.setState({ dialogue: true, open: !this.state.open });
   }
   handleClose() {
-    this.setState({ dialogue: false })
+    this.setState({ dialogue: false });
   }
   logoutUser() {
     console.log("called");
@@ -74,7 +74,7 @@ class Header extends React.Component {
         <img
           src={KHMC_White}
           className="header1-style"
-          // style={{ maxWidth: '50%', height: 'auto' }}
+          style={{ maxWidth: "160px", height: "35px" }}
           onClick={() => {
             return this.setState({ goBack: true });
           }}
@@ -83,8 +83,8 @@ class Header extends React.Component {
           src={Influence_white}
           className="header2-style"
           style={{
-            // maxWidth: '60%',
-            // height: 'auto',
+            maxWidth: "160px",
+            height: "35px",
             cursor: "pointer",
             // boxShadow: this.state.hover ? '2px 2px 2px 2px #b2b0b0' : '',
           }}
@@ -141,7 +141,7 @@ class Header extends React.Component {
                     {this.state.currentUser && this.state.currentUser.email}
                   </Typography>
 
-          {/* {this.state.open ? (
+                  {/* {this.state.open ? (
             <div
               style={{
                 float: 'right',
@@ -253,10 +253,13 @@ class Header extends React.Component {
               // color="primary"
               aria-label="add"
               onClick={() => this.logoutUser()}
-              style={{backgroundColor:'#ba02ed'}}
+              style={{ backgroundColor: "#ba02ed" }}
             >
               {/* <AddIcon /> */}
-              <i class="zmdi zmdi-power zmdi-hc-3x" style={{color:'white'}}></i>
+              <i
+                class="zmdi zmdi-power zmdi-hc-3x"
+                style={{ color: "white" }}
+              ></i>
             </Fab>
           </div>
         ) : (
