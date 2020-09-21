@@ -855,7 +855,7 @@ function AddEditPatientListing(props) {
     const params = {
       patientId,
       // generatedBy: currentUser.staffId,
-      generatedFrom: 'pharmacyRequest',
+      generatedFrom: 'radiologyRequest',
       status: 'pending',
       functionalUnit: currentUser.functionalUnit._id,
     }
