@@ -13,6 +13,7 @@ import TextField from '@material-ui/core/TextField'
 import { updateEdrIprItem, notifyConsultation } from '../../public/endpoins'
 import axios from 'axios'
 import Notification from '../../components/Snackbar/Notification.js'
+import AudioNotes from '../../components/AudioNotes/audioNotes'
 
 const tableHeadingForPHR = [
   'Medicine Name',
@@ -515,6 +516,15 @@ export default function EdrRequest(props) {
               />
             </div>
           </div>
+
+          {/* <div className='row'>
+            <div
+              className='col-md-12 col-sm-12 col-12 d-flex justify-content-center text-center'
+              style={styles.inputContainerForTextField}
+            >
+              <AudioNotes />
+            </div>
+          </div> */}
           <div className='row'>
             <div
               className='col-md-12 col-sm-12 col-12'
