@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import Notification from "../../../components/Snackbar/Notification.js";
 import CustomTable from "../../../components/Table/Table";
 import axios from "axios";
+import _ from "lodash";
+
 import {
   getRRIPRUrl,
   getRRPatient,
@@ -53,7 +55,8 @@ export default function EDR(props) {
           res.data.data[0].map((d) => (d.profileNo = d.patientData.profileNo));
           // res.data.data[0].map((d) => (d.requestNo = d.iprId.requestNo))
           // res.data.data[0].map((d) => (d.requestNo = d.edrId.requestNo))
-          setEdr(res.data.data[0].reverse());
+          var sortedObjs = _.sortBy(res.data.data[0], "date").reverse();
+          setEdr(sortedObjs);
         } else if (!res.data.success) {
           setErrorMsg(res.data.error);
           setOpenNotification(true);
