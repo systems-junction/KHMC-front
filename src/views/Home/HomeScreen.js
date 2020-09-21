@@ -561,7 +561,7 @@ const warehouseInventoryKeeper = [
 
   {
     img: FuncUFulfillment,
-    text: "Functional Unit Fullfillment",
+    text: "Replenishment Requests",
     path: `/home/wms/fus/replenishment`,
   },
 

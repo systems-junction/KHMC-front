@@ -6,11 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
-import {
-  getLRById,
-  uploadsUrl,
-  updateLRById,
-} from "../../../public/endpoins";
+import { getLRById, uploadsUrl, updateLRById } from "../../../public/endpoins";
 import cookie from "react-cookies";
 import Header from "../../../components/Header/Header";
 import business_Unit from "../../../assets/img/EDR.png";
@@ -24,7 +20,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import BootstrapInput from "../../../components/Dropdown/dropDown.js";
 import Loader from "react-loader-spinner";
 import "../../../assets/jss/material-dashboard-react/components/loaderStyle.css";
-import { FaUpload } from 'react-icons/fa'
+import { FaUpload } from "react-icons/fa";
 
 const statusArray = [
   {
@@ -73,14 +69,14 @@ const styles = {
     color: "gray",
   },
   upload: {
-    backgroundColor: 'white',
-    border: '0px solid #ccc',
-    borderRadius: '6px',
-    color: 'gray',
-    width: '100%',
-    height: '55px',
-    cursor: 'pointer',
-    padding: '15px',
+    backgroundColor: "white",
+    border: "0px solid #ccc",
+    borderRadius: "6px",
+    color: "gray",
+    width: "100%",
+    height: "55px",
+    cursor: "pointer",
+    padding: "15px",
   },
 };
 
@@ -88,7 +84,7 @@ const useStylesForTabs = makeStyles({
   root: {
     flexGrow: 1,
   },
-})
+});
 
 const useStyles = makeStyles((theme) => ({
   scroller: {
@@ -138,9 +134,9 @@ function AddEditPurchaseRequest(props) {
     name: "",
     price: "",
     status: "",
-    date: '',
-    results: '',
-    sampleID: ''
+    date: "",
+    results: "",
+    sampleID: "",
   };
 
   function reducer(state, { field, value }) {
@@ -158,7 +154,7 @@ function AddEditPurchaseRequest(props) {
     dispatch({ field: e.target.name, value: e.target.value });
   };
 
-  const classesForTabs = useStylesForTabs()
+  const classesForTabs = useStylesForTabs();
   const [, setCurrentUser] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setsuccessMsg] = useState("");
@@ -166,12 +162,12 @@ function AddEditPurchaseRequest(props) {
   const [selectedPatient, setSelectedPatient] = useState("");
   const [requestNo, setrequestNo] = useState("");
   const [, setSelectedItem] = useState("");
-  const [value, setValue] = React.useState(0)
+  const [value, setValue] = React.useState(0);
   const [labid, setlabId] = useState("");
-  const [edrId, setedrId] = useState("")
-  const [slipUpload, setSlipUpload] = useState('')
-  const [imagePreview, setImagePreview] = useState('')
-  const [pdfView, setpdfView] = useState('')
+  const [edrId, setedrId] = useState("");
+  const [slipUpload, setSlipUpload] = useState("");
+  const [imagePreview, setImagePreview] = useState("");
+  const [pdfView, setpdfView] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   const getLRByIdURI = (id) => {
@@ -191,9 +187,11 @@ function AddEditPurchaseRequest(props) {
                 }
               } else {
                 if (key === "date") {
-                  dispatch({ field: 'date', value: new Date(val).toISOString().substr(0, 10) });
-                }
-                else {
+                  dispatch({
+                    field: "date",
+                    value: new Date(val).toISOString().substr(0, 10),
+                  });
+                } else {
                   dispatch({ field: key, value: val });
                 }
               }
@@ -207,31 +205,30 @@ function AddEditPurchaseRequest(props) {
   };
 
   const updateLRByIdURI = () => {
-    let formData = new FormData()
+    let formData = new FormData();
     if (slipUpload) {
-      formData.append('file', slipUpload, slipUpload.name)
+      formData.append("file", slipUpload, slipUpload.name);
     }
     const params = {
       EDRId: edrId,
       labRequestId: labid,
       status: status,
     };
-    formData.append('data', JSON.stringify(params))
+    formData.append("data", JSON.stringify(params));
     // console.log('PARAMSS ', params)
     axios
       .put(updateLRById, formData, {
         headers: {
-          accept: 'application/json',
-          'Accept-Language': 'en-US,en;q=0.8',
-          'content-type': 'multipart/form-data',
+          accept: "application/json",
+          "Accept-Language": "en-US,en;q=0.8",
+          "content-type": "multipart/form-data",
         },
       })
       .then((res) => {
         if (res.data.success) {
           setOpenNotification(true);
           setsuccessMsg("Submitted successfully");
-        }
-        else {
+        } else {
           setOpenNotification(true);
           setErrorMsg("Error while submitting");
         }
@@ -253,35 +250,34 @@ function AddEditPurchaseRequest(props) {
   }, []);
 
   const handleChange = (event, newValue) => {
-    setValue(newValue)
-  }
+    setValue(newValue);
+  };
 
   const onSlipUpload = (event) => {
-    var file = event.target.files[0]
-    var fileType = file.name.slice(file.name.length - 3)
+    var file = event.target.files[0];
+    var fileType = file.name.slice(file.name.length - 3);
 
     // console.log("Selected file : ", file.name)
     // console.log("file type : ", fileType)
 
-    setSlipUpload(file)
-    var reader = new FileReader()
+    setSlipUpload(file);
+    var reader = new FileReader();
     var url = reader.readAsDataURL(file);
 
-    reader.onloadend = function () {
-      if (fileType === 'pdf') {
-        setpdfView(file.name)
+    reader.onloadend = function() {
+      if (fileType === "pdf") {
+        setpdfView(file.name);
+      } else {
+        setImagePreview([reader.result]);
       }
-      else {
-        setImagePreview([reader.result])
-      }
-    }
-  }
+    };
+  };
 
   if (openNotification) {
     setTimeout(() => {
       setOpenNotification(false);
       setErrorMsg("");
-      setsuccessMsg("")
+      setsuccessMsg("");
     }, 2000);
   }
 
@@ -307,7 +303,6 @@ function AddEditPurchaseRequest(props) {
               <img src={business_Unit} />
               <h4>EDR - Lab Service Request</h4>
             </div>
-
           </div>
           <div
             style={{
@@ -399,32 +394,32 @@ function AddEditPurchaseRequest(props) {
                 value={value}
                 onChange={handleChange}
                 textColor="primary"
-                TabIndicatorProps={{style: {background:'#12387a'}}}
+                TabIndicatorProps={{ style: { background: "#12387a" } }}
                 centered
               >
                 <Tab
                   style={{
-                    color: 'white',
+                    color: "white",
                     borderRadius: 15,
-                    outline: 'none',
-                    color: value === 0 ? "#12387a" : '#3B988C',
+                    outline: "none",
+                    color: value === 0 ? "#12387a" : "#3B988C",
                   }}
-                  label='Sample Collection'
+                  label="Sample Collection"
                 />
                 <Tab
                   style={{
-                    color: 'white',
+                    color: "white",
                     borderRadius: 15,
-                    outline: 'none',
-                    color: value === 1 ? "#12387a" : '#3B988C',
+                    outline: "none",
+                    color: value === 1 ? "#12387a" : "#3B988C",
                   }}
-                  label='Results'
+                  label="Results"
                 />
               </Tabs>
             </div>
             {value === 0 ? (
               <>
-                <div className="row" style={{ marginTop: '20px' }}>
+                <div className="row" style={{ marginTop: "20px" }}>
                   <div
                     className="col-md-4 col-sm-4"
                     style={{
@@ -524,16 +519,16 @@ function AddEditPurchaseRequest(props) {
                   >
                     <TextField
                       disabled={true}
-                      variant='filled'
-                      label='Date/Time'
-                      name={'date'}
+                      variant="filled"
+                      label="Date/Time"
+                      name={"date"}
                       value={date}
-                      type='date'
-                      className='textInputStyle'
+                      type="date"
+                      className="textInputStyle"
                       // onChange={(val) => onChangeValue(val, 'DateTime')}
                       InputLabelProps={{
                         shrink: true,
-                        color: 'black'
+                        color: "black",
                       }}
                       InputProps={{
                         className: classes.input,
@@ -550,16 +545,16 @@ function AddEditPurchaseRequest(props) {
                   >
                     <TextField
                       disabled={true}
-                      variant='filled'
-                      label='Sample ID'
-                      name={'sampleID'}
+                      variant="filled"
+                      label="Sample ID"
+                      name={"sampleID"}
                       // value={DateTime}
-                      type='text'
-                      className='textInputStyle'
+                      type="text"
+                      className="textInputStyle"
                       // onChange={(val) => onChangeValue(val, 'DateTime')}
                       InputLabelProps={{
                         shrink: true,
-                        color: 'black'
+                        color: "black",
                       }}
                       InputProps={{
                         className: classes.input,
@@ -571,9 +566,9 @@ function AddEditPurchaseRequest(props) {
               </>
             ) : value === 1 ? (
               <>
-                <div className="row" style={{ marginTop: '20px' }}>
+                <div className="row" style={{ marginTop: "20px" }}>
                   <div
-                    className='col-md-6 col-sm-6 col-6'
+                    className="col-md-6 col-sm-6 col-6"
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -582,110 +577,135 @@ function AddEditPurchaseRequest(props) {
                     <label style={styles.upload}>
                       <TextField
                         required
-                        type='file'
+                        type="file"
                         style={styles.input}
                         onChange={onSlipUpload}
-                        name='results'
+                        name="results"
                       />
                       <FaUpload /> Results
                     </label>
 
                     {pdfView !== "" ? (
                       <div
-                        style={{ textAlign: 'center', color: '#2c6ddd', fontStyle: 'italic' }}
+                        style={{
+                          textAlign: "center",
+                          color: "#2c6ddd",
+                          fontStyle: "italic",
+                        }}
                       >
-                        <span style={{ color: 'black' }}>Selected File : </span>{pdfView}
+                        <span style={{ color: "black" }}>Selected File : </span>
+                        {pdfView}
                       </div>
                     ) : (
-                        undefined
-                      )}
-
+                      undefined
+                    )}
                   </div>
                 </div>
 
-                <div className='row'>
-                  {results !== "" && results.includes('\\') ? (
+                <div className="row">
+                  {results !== "" && results.includes("\\") ? (
                     <>
-                      {results !== "" && results.slice(results.length - 3) !== 'pdf' ? (
-                        <div className='col-md-6 col-sm-6 col-6'
+                      {results !== "" &&
+                      results.slice(results.length - 3) !== "pdf" ? (
+                        <div
+                          className="col-md-6 col-sm-6 col-6"
                           style={{
                             ...styles.inputContainerForTextField,
                             ...styles.textFieldPadding,
-                          }}>
-
-                          <img src={uploadsUrl + results.split('\\')[1]} className="depositSlipImg" />
+                          }}
+                        >
+                          <img
+                            src={uploadsUrl + results.split("\\")[1]}
+                            className="depositSlipImg"
+                          />
                         </div>
-                      ) : results !== "" && results.slice(results.length - 3) === 'pdf' ? (
-                        <div className='col-md-6 col-sm-6 col-6'
+                      ) : results !== "" &&
+                        results.slice(results.length - 3) === "pdf" ? (
+                        <div
+                          className="col-md-6 col-sm-6 col-6"
                           style={{
                             ...styles.inputContainerForTextField,
                             ...styles.textFieldPadding,
                             // textAlign:'center',
-                          }}>
-                          <a href={uploadsUrl
-                            + results.split('\\')[1]
-                          } style={{ color: '#2c6ddd' }}>Click here to open results</a>
+                          }}
+                        >
+                          <Button
+                            href={uploadsUrl + results.split("\\")[1]}
+                            style={{ color: "#2c6ddd" }}
+                          >
+                            Click here to open results
+                          </Button>
                         </div>
                       ) : (
-                            undefined
-                          )}
-                    </>
-                  ) : results !== "" && results.includes('/') ? (
-                    <>
-                      {results !== "" && results.slice(results.length - 3) !== 'pdf' ? (
-                        <div className='col-md-6 col-sm-6 col-6'
-                          style={{
-                            ...styles.inputContainerForTextField,
-                            ...styles.textFieldPadding,
-                          }}>
-
-                          <img src={uploadsUrl + results} className="depositSlipImg" />
-                        </div>
-                      ) : results !== "" && results.slice(results.length - 3) === 'pdf' ? (
-                        <div className='col-md-6 col-sm-6 col-6'
-                          style={{
-                            ...styles.inputContainerForTextField,
-                            ...styles.textFieldPadding,
-                            // textAlign:'center',
-                          }}>
-                          <a href={uploadsUrl+results} style={{ color: '#2c6ddd' }}>Click here to open results</a>
-                        </div>
-                      ) : (
-                           undefined
-                          )}
-                    </>
-                  ) : (
                         undefined
                       )}
-
+                    </>
+                  ) : results !== "" && results.includes("/") ? (
+                    <>
+                      {results !== "" &&
+                      results.slice(results.length - 3) !== "pdf" ? (
+                        <div
+                          className="col-md-6 col-sm-6 col-6"
+                          style={{
+                            ...styles.inputContainerForTextField,
+                            ...styles.textFieldPadding,
+                          }}
+                        >
+                          <img
+                            src={uploadsUrl + results}
+                            className="depositSlipImg"
+                          />
+                        </div>
+                      ) : results !== "" &&
+                        results.slice(results.length - 3) === "pdf" ? (
+                        <div
+                          className="col-md-6 col-sm-6 col-6"
+                          style={{
+                            ...styles.inputContainerForTextField,
+                            ...styles.textFieldPadding,
+                            // textAlign:'center',
+                          }}
+                        >
+                          <Button
+                            href={uploadsUrl + results}
+                            style={{ color: "#2c6ddd" }}
+                          >
+                            Click here to open results
+                          </Button>
+                        </div>
+                      ) : (
+                        undefined
+                      )}
+                    </>
+                  ) : (
+                    undefined
+                  )}
 
                   {imagePreview !== "" ? (
-                    <div className='col-md-6 col-sm-6 col-6'
+                    <div
+                      className="col-md-6 col-sm-6 col-6"
                       style={{
                         ...styles.inputContainerForTextField,
                         ...styles.textFieldPadding,
-                      }}>
+                      }}
+                    >
                       <img src={imagePreview} className="depositSlipImg" />
                       {results !== "" ? (
-                        <div
-                          style={{ color: 'black', textAlign: 'center' }}
-                        >
+                        <div style={{ color: "black", textAlign: "center" }}>
                           New results
                         </div>
-
                       ) : (
-                          undefined
-                        )}
-
+                        undefined
+                      )}
                     </div>
                   ) : (
-                      undefined
-                    )}
+                    undefined
+                  )}
                 </div>
               </>
             ) : (
-                  undefined
-                )}
+              undefined
+            )}
             <br />
             <br />
             <div className="row" style={{ marginBottom: "25px" }}>
@@ -709,13 +729,17 @@ function AddEditPurchaseRequest(props) {
             </div>
           </div>
 
-          <Notification msg={errorMsg} open={openNotification} success={successMsg} />
+          <Notification
+            msg={errorMsg}
+            open={openNotification}
+            success={successMsg}
+          />
         </div>
       ) : (
-          <div className="LoaderStyle">
-            <Loader type="TailSpin" color="red" height={50} width={50} />
-          </div>
-        )}
+        <div className="LoaderStyle">
+          <Loader type="TailSpin" color="red" height={50} width={50} />
+        </div>
+      )}
     </div>
   );
 }

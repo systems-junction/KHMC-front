@@ -74,7 +74,7 @@ class Header extends React.Component {
         <img
           src={KHMC_White}
           className="header1-style"
-          // style={{ maxWidth: '50%', height: 'auto' }}
+          style={{ maxWidth: "160px", height: "35px" }}
           onClick={() => {
             return this.setState({ goBack: true });
           }}

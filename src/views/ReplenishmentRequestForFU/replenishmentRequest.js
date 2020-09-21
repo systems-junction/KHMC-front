@@ -613,7 +613,7 @@ export default function ReplenishmentRequest(props) {
           ) : (
             <div>
               <img src={business_Unit} />
-              <h4>Functional Unit Fulfillment</h4>
+              <h4>Replenishment Requests</h4>
             </div>
           )}
 
