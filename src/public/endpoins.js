@@ -20,6 +20,7 @@ export const socketUrl = "ws://localhost:4001";
 // export const socketUrl = "ws://192.168.10.20:4001";
 
 export const audioURL = "http://localhost:4000";
+//export const audioURL = "https://dev.khmc-staging.online/";
 //export const uploadsUrl = 'https://demo.khmc-staging.com/'
 //export const uploadsUrl = 'https://test.khmc-staging.com/'
 export const uploadsUrl = "http://localhost:4000/";
