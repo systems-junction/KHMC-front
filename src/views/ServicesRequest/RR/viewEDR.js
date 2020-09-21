@@ -7,18 +7,14 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
 import TextField from "@material-ui/core/TextField";
-import {
-  uploadsUrl,
-  getRRById,
-  updateRRById,
-} from "../../../public/endpoins";
+import { uploadsUrl, getRRById, updateRRById } from "../../../public/endpoins";
 import cookie from "react-cookies";
 import Header from "../../../components/Header/Header";
 import business_Unit from "../../../assets/img/EDR.png";
 import Back from "../../../assets/img/Back_Arrow.png";
 import "../../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
 import Notification from "../../../components/Snackbar/Notification.js";
-import { FaUpload } from 'react-icons/fa'
+import { FaUpload } from "react-icons/fa";
 import MenuItem from "@material-ui/core/MenuItem";
 import BootstrapInput from "../../../components/Dropdown/dropDown.js";
 import Loader from "react-loader-spinner";
@@ -72,17 +68,17 @@ const styles = {
     color: "gray",
   },
   upload: {
-    backgroundColor: 'white',
-    border: '0px solid #ccc',
-    borderRadius: '6px',
-    color: 'gray',
-    width: '100%',
-    height: '55px',
-    cursor: 'pointer',
-    padding: '15px',
+    backgroundColor: "white",
+    border: "0px solid #ccc",
+    borderRadius: "6px",
+    color: "gray",
+    width: "100%",
+    height: "55px",
+    cursor: "pointer",
+    padding: "15px",
   },
   input: {
-    display: 'none',
+    display: "none",
   },
 };
 
@@ -134,8 +130,8 @@ function AddEditPurchaseRequest(props) {
     name: "",
     price: "",
     status: "",
-    date: '',
-    results: ''
+    date: "",
+    results: "",
   };
 
   function reducer(state, { field, value }) {
@@ -161,10 +157,10 @@ function AddEditPurchaseRequest(props) {
   const [selectedPatient, setSelectedPatient] = useState("");
   const [requestNo, setrequestNo] = useState("");
   const [rrId, setrrId] = useState("");
-  const [edrId, setedrId] = useState("")
-  const [slipUpload, setSlipUpload] = useState('')
-  const [imagePreview, setImagePreview] = useState('')
-  const [pdfView, setpdfView] = useState('')
+  const [edrId, setedrId] = useState("");
+  const [slipUpload, setSlipUpload] = useState("");
+  const [imagePreview, setImagePreview] = useState("");
+  const [pdfView, setpdfView] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   const getLRByIdURI = (id) => {
@@ -182,12 +178,13 @@ function AddEditPurchaseRequest(props) {
                   dispatch({ field: "name", value: val.name });
                   dispatch({ field: "price", value: val.price });
                 }
-              }
-              else {
+              } else {
                 if (key === "date") {
-                  dispatch({ field: 'date', value: new Date(val).toISOString().substr(0, 10) });
-                }
-                else {
+                  dispatch({
+                    field: "date",
+                    value: new Date(val).toISOString().substr(0, 10),
+                  });
+                } else {
                   dispatch({ field: key, value: val });
                 }
               }
@@ -201,31 +198,30 @@ function AddEditPurchaseRequest(props) {
   };
 
   const updateLRByIdURI = () => {
-    let formData = new FormData()
+    let formData = new FormData();
     if (slipUpload) {
-      formData.append('file', slipUpload, slipUpload.name)
+      formData.append("file", slipUpload, slipUpload.name);
     }
     const params = {
       EDRId: edrId,
       radiologyRequestId: rrId,
       status: status,
     };
-    formData.append('data', JSON.stringify(params))
+    formData.append("data", JSON.stringify(params));
     // console.log('PARAMSS ', params)
     axios
       .put(updateRRById, formData, {
         headers: {
-          accept: 'application/json',
-          'Accept-Language': 'en-US,en;q=0.8',
-          'content-type': 'multipart/form-data',
+          accept: "application/json",
+          "Accept-Language": "en-US,en;q=0.8",
+          "content-type": "multipart/form-data",
         },
       })
       .then((res) => {
         if (res.data.success) {
           setOpenNotification(true);
           setsuccessMsg("Submitted successfully");
-        }
-        else {
+        } else {
           setOpenNotification(true);
           setErrorMsg("Error while submitting");
         }
@@ -247,31 +243,30 @@ function AddEditPurchaseRequest(props) {
   }, []);
 
   const onSlipUpload = (event) => {
-    var file = event.target.files[0]
-    var fileType = file.name.slice(file.name.length - 3)
+    var file = event.target.files[0];
+    var fileType = file.name.slice(file.name.length - 3);
 
     // console.log("Selected file : ", file.name)
     // console.log("file type : ", fileType)
 
-    setSlipUpload(file)
-    var reader = new FileReader()
+    setSlipUpload(file);
+    var reader = new FileReader();
     var url = reader.readAsDataURL(file);
 
-    reader.onloadend = function () {
-      if (fileType === 'pdf') {
-        setpdfView(file.name)
+    reader.onloadend = function() {
+      if (fileType === "pdf") {
+        setpdfView(file.name);
+      } else {
+        setImagePreview([reader.result]);
       }
-      else {
-        setImagePreview([reader.result])
-      }
-    }
-  }
+    };
+  };
 
   if (openNotification) {
     setTimeout(() => {
       setOpenNotification(false);
       setErrorMsg("");
-      setsuccessMsg("")
+      setsuccessMsg("");
     }, 2000);
   }
 
@@ -297,7 +292,6 @@ function AddEditPurchaseRequest(props) {
               <img src={business_Unit} />
               <h4>EDR - Radiology Service Request</h4>
             </div>
-
           </div>
           <div
             style={{
@@ -479,7 +473,7 @@ function AddEditPurchaseRequest(props) {
 
             <div className="row">
               <div
-                className='col-md-6 col-sm-6 col-6'
+                className="col-md-6 col-sm-6 col-6"
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -488,24 +482,28 @@ function AddEditPurchaseRequest(props) {
                 <label style={styles.upload}>
                   <TextField
                     required
-                    type='file'
+                    type="file"
                     style={styles.input}
                     onChange={onSlipUpload}
-                    name='results'
+                    name="results"
                   />
                   <FaUpload /> Results
                 </label>
 
                 {pdfView !== "" ? (
                   <div
-                    style={{ textAlign: 'center', color: '#2c6ddd', fontStyle: 'italic' }}
+                    style={{
+                      textAlign: "center",
+                      color: "#2c6ddd",
+                      fontStyle: "italic",
+                    }}
                   >
-                    <span style={{ color: 'black' }}>Selected File : </span>{pdfView}
+                    <span style={{ color: "black" }}>Selected File : </span>
+                    {pdfView}
                   </div>
                 ) : (
-                    undefined
-                  )}
-
+                  undefined
+                )}
               </div>
               <div
                 className="col-md-6 col-sm-6 col-6"
@@ -516,16 +514,16 @@ function AddEditPurchaseRequest(props) {
               >
                 <TextField
                   disabled={true}
-                  variant='filled'
-                  label='Date/Time'
-                  name={'date'}
+                  variant="filled"
+                  label="Date/Time"
+                  name={"date"}
                   value={date}
-                  type='date'
-                  className='textInputStyle'
+                  type="date"
+                  className="textInputStyle"
                   // onChange={(val) => onChangeValue(val, 'DateTime')}
                   InputLabelProps={{
                     shrink: true,
-                    color: 'black'
+                    color: "black",
                   }}
                   InputProps={{
                     className: classes.input,
@@ -535,83 +533,105 @@ function AddEditPurchaseRequest(props) {
               </div>
             </div>
 
-            <div className='row'>
-              {results !== "" && results.includes('\\') ? (
+            <div className="row">
+              {results !== "" && results.includes("\\") ? (
                 <>
-                  {results !== "" && results.slice(results.length - 3) !== 'pdf' ? (
-                    <div className='col-md-6 col-sm-6 col-6'
+                  {results !== "" &&
+                  results.slice(results.length - 3) !== "pdf" ? (
+                    <div
+                      className="col-md-6 col-sm-6 col-6"
                       style={{
                         ...styles.inputContainerForTextField,
                         ...styles.textFieldPadding,
-                      }}>
-
-                      <img src={uploadsUrl + results.split('\\')[1]} className="depositSlipImg" />
+                      }}
+                    >
+                      <img
+                        src={uploadsUrl + results.split("\\")[1]}
+                        className="depositSlipImg"
+                      />
                     </div>
-                  ) : results !== "" && results.slice(results.length - 3) === 'pdf' ? (
-                    <div className='col-md-6 col-sm-6 col-6'
+                  ) : results !== "" &&
+                    results.slice(results.length - 3) === "pdf" ? (
+                    <div
+                      className="col-md-6 col-sm-6 col-6"
                       style={{
                         ...styles.inputContainerForTextField,
                         ...styles.textFieldPadding,
                         // textAlign:'center',
-                      }}>
-                      <a href={uploadsUrl + results.split('\\')[1]} style={{ color: '#2c6ddd' }}>Click here to open results</a>
+                      }}
+                    >
+                      <Button
+                        href={uploadsUrl + results.split("\\")[1]}
+                        style={{ color: "#2c6ddd" }}
+                      >
+                        Click here to open results
+                      </Button>
                     </div>
                   ) : (
-                        undefined
-                      )}
-                </>
-              ) : results !== "" && results.includes('/') ? (
-                <>
-                  {results !== "" && results.slice(results.length - 3) !== 'pdf' ? (
-                    <div className='col-md-6 col-sm-6 col-6'
-                      style={{
-                        ...styles.inputContainerForTextField,
-                        ...styles.textFieldPadding,
-                      }}>
-
-                      <img src={uploadsUrl + results} className="depositSlipImg" />
-                    </div>
-                  ) : results !== "" && results.slice(results.length - 3) === 'pdf' ? (
-                    <div className='col-md-6 col-sm-6 col-6'
-                      style={{
-                        ...styles.inputContainerForTextField,
-                        ...styles.textFieldPadding,
-                        // textAlign:'center',
-                      }}>
-                      <a href={uploadsUrl + results} style={{ color: '#2c6ddd' }}>Click here to open results</a>
-                    </div>
-                  ) : (
-                        undefined
-                      )}
-                </>
-              ) : (
                     undefined
                   )}
-
-
+                </>
+              ) : results !== "" && results.includes("/") ? (
+                <>
+                  {results !== "" &&
+                  results.slice(results.length - 3) !== "pdf" ? (
+                    <div
+                      className="col-md-6 col-sm-6 col-6"
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
+                    >
+                      <img
+                        src={uploadsUrl + results}
+                        className="depositSlipImg"
+                      />
+                    </div>
+                  ) : results !== "" &&
+                    results.slice(results.length - 3) === "pdf" ? (
+                    <div
+                      className="col-md-6 col-sm-6 col-6"
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                        // textAlign:'center',
+                      }}
+                    >
+                      <Button
+                        href={uploadsUrl + results}
+                        style={{ color: "#2c6ddd" }}
+                      >
+                        Click here to open results
+                      </Button>
+                    </div>
+                  ) : (
+                    undefined
+                  )}
+                </>
+              ) : (
+                undefined
+              )}
 
               {imagePreview !== "" ? (
-                <div className='col-md-6 col-sm-6 col-6'
+                <div
+                  className="col-md-6 col-sm-6 col-6"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
-                  }}>
+                  }}
+                >
                   <img src={imagePreview} className="depositSlipImg" />
                   {results !== "" ? (
-                    <div
-                      style={{ color: 'black', textAlign: 'center' }}
-                    >
+                    <div style={{ color: "black", textAlign: "center" }}>
                       New results
                     </div>
-
                   ) : (
-                      undefined
-                    )}
-
+                    undefined
+                  )}
                 </div>
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
             </div>
 
             <br />
@@ -637,13 +657,17 @@ function AddEditPurchaseRequest(props) {
             </div>
           </div>
 
-          <Notification msg={errorMsg} open={openNotification} success={successMsg} />
+          <Notification
+            msg={errorMsg}
+            open={openNotification}
+            success={successMsg}
+          />
         </div>
       ) : (
-          <div className="LoaderStyle">
-            <Loader type="TailSpin" color="red" height={50} width={50} />
-          </div>
-        )}
+        <div className="LoaderStyle">
+          <Loader type="TailSpin" color="red" height={50} width={50} />
+        </div>
+      )}
     </div>
   );
 }
