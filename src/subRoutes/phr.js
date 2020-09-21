@@ -8,6 +8,7 @@ import PHR from '../views/ServicesRequest/PHR/PHR'
 import DischargeMedication from '../subRoutes/dischargeMedication'
 import EDR from '../views/ServicesRequest/PHR/EDR'
 import IPR from '../views/ServicesRequest/PHR/IPR'
+import changeStatus from '../views/ServicesRequest/PHR/changeStatus'
 import OPR from '../views/ServicesRequest/PHR/OPR'
 import ViewIPR from '../views/ServicesRequest/PHR/viewIPR'
 import ViewEDR from '../views/ServicesRequest/PHR/viewEDR'
@@ -66,6 +67,11 @@ class WMSRoutes extends React.PureComponent {
           exact
           path={`${this.props.match.url}/ipr/success`}
           component={SuccessScreen}
+        />
+        <Route
+          exact
+          path={`${this.props.match.url}/ipr/changeStatus`}
+          component={changeStatus}
         />
         <Route
           exact

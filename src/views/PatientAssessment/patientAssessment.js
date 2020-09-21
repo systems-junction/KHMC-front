@@ -1299,7 +1299,7 @@ function PatientAssessment(props) {
                 disabled={enableAssessment}
               />
 
-              <Tab
+              {/* <Tab
                 style={{
                   color: 'white',
                   borderRadius: 5,
@@ -1328,7 +1328,7 @@ function PatientAssessment(props) {
                 }}
                 label='Rad'
                 disabled
-              />
+              /> */}
               {/* <Tab
                 style={{
                   color: 'white',
@@ -1344,14 +1344,14 @@ function PatientAssessment(props) {
                   color: 'white',
                   borderRadius: 5,
                   outline: 'none',
-                  color: value === 4 ? '#12387a' : '#3B988C',
+                  color: value === 1 ? '#12387a' : '#3B988C',
                 }}
                 label='Consultant/Specialist Notes'
                 disabled={enableAssessment}
               />
             </Tabs>
           </div>
-          {value === 4 ? (
+          {value === 1 ? (
             <div
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
               className='container-fluid'

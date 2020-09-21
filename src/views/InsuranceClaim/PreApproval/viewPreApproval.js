@@ -23,7 +23,7 @@ import InputLabel from '@material-ui/core/InputLabel'
 const tableHeadingForNeedApproval = [
   'Request No',
   'Request Type',
-  'Item',
+  // 'Item',
   'Total Cost',
   'Status',
   'Insurance',
@@ -32,7 +32,7 @@ const tableHeadingForNeedApproval = [
 const tableDataKeysForNeedApproval = [
   '_id',
   'RequestType',
-  'item',
+  // 'item',
   'totalCost',
   'status',
   'insurance',
@@ -196,22 +196,23 @@ function AddEditPurchaseRequest(props) {
           let amount = 0
           let singlePR = selectedRec.pharmacyRequest[i]
 
-          for (let j = 0; j < singlePR.medicine.length; j++) {
-            amount = amount + singlePR.medicine[j].itemId.purchasePrice
-            // amount = amount + (singlePR.medicine[j].itemId.issueUnitCost * singlePR.medicine[j].requestedQty)
+          for (let j = 0; j < singlePR.item.length; j++) {
+            // amount = amount + singlePR.item[j].itemId.issueUnitCost
+            amount = amount + (singlePR.item[j].itemId.issueUnitCost * singlePR.item[j].requestedQty)
           }
 
           selectedRec.pharmacyRequest[i] = {
             ...selectedRec.pharmacyRequest[i],
             totalCost: amount,
             RequestType: 'PHR',
-            item: 'Medicine',
+            // item: 'Medicine',
             insurance: 'Uncovered',
           }
         }
+
         // selectedRec.pharmacyRequest.map(
         //   (d) => (
-        //     (d.totalCost = d.medicine.map(
+        //     (d.totalCost = d.item.map(
         //       (a) => a.requestedQty * a.itemId.issueUnitCost
         //     )),
         //     (d.RequestType = 'PHR'),
