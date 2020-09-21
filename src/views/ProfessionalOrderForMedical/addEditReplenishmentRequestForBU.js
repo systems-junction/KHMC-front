@@ -489,8 +489,9 @@ function AddEditPurchaseRequest(props) {
     if(selectedPatientforPharm)
     {
       setPatientDetails(selectedPatientforPharm);
+      setSelectedPatient(selectedPatientforPharm)
       openPatientDetailsDialog(true);
-      dispatch("patientReferenceNo", selectedPatientforPharm.profileNo)
+      dispatch({field:"patientReferenceNo", value:selectedPatientforPharm.profileNo})
     }
 
     if (!selectedRec) {

@@ -74,7 +74,7 @@ const tableHeadingForPharmacy = [
   'Status',
   'Action',
 ]
-const tableDataKeysForPharmacy = ['PRrequestNo', 'date', 'doctorName', 'status']
+const tableDataKeysForPharmacy = ['requestNo', 'createdAt', 'generatedBy', 'status']
 const tableHeadingForLabReq = [
   'Request Id',
   'Test Code',
@@ -105,6 +105,34 @@ const tableDataKeysForRadiology = [
   'requesterName',
   'status',
 ]
+const tableDataKeysForItemsForBUMember = [
+  ["itemId", "name"],
+  ["itemId", "medClass"],
+  "requestedQty",
+  "status",
+];
+const tableDataKeysForFUMemberForItems = [
+  ["itemId", "name"],
+  ["itemId", "medClass"],
+  "requestedQty",
+  "secondStatus",
+];
+
+const tableHeadingForFUMemberForItems = [
+  "Name",
+  "Type",
+  "Requested Qty",
+  "Status",
+  ""
+];
+
+const tableHeadingForBUMemberForItems = [
+  "Name",
+  "Type",
+  "Requested Qty",
+  "Status",
+  ""
+];
 // const tableHeadingForNurse = [
 //     "Service Code",
 //     "Service Name",
@@ -334,7 +362,7 @@ function LabRadRequest(props) {
     dispatch({ field: e.target.name, value: e.target.value })
   }
 
-  const [currentUser, setCurrentUser] = useState('')
+  const [currentUser, setCurrentUser] = useState(cookie.load('current_user'))
   const [errorMsg, setErrorMsg] = useState('')
   const [successMsg, setsuccessMsg] = useState('')
   const [openNotification, setOpenNotification] = useState(false)
@@ -381,9 +409,11 @@ function LabRadRequest(props) {
   const [addNurseRequest, setaddNurseRequest] = useState(false)
   const [searchNurseQuery, setSearchNurseQuery] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+  const [requestedItems, setRequestedItems] = useState("");
+  const [selectedOrder, setSelectedOrder] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    setCurrentUser(cookie.load('current_user'))
 
     // getEDRById(props.history.location.state.selectedItem._id);
 
@@ -406,6 +436,65 @@ function LabRadRequest(props) {
       setItem('')
     }
   }
+   const handleView = (obj) => {
+    let path = `/home/wms/fus/medicinalorder/edit`;
+    // props.history.push({
+    //   pathname: path,
+    //   state: {
+    //     comingFor: "view",
+    //     selectedItem: obj,
+    //     vendors,
+    //     statues,
+    //     items,
+    //     buObj,
+    //   },
+    // });
+
+    // if (currentUser.staffTypeId.type === "Doctor/Physician") {
+    //   let repRequest = res.data.da;
+    //   let temp = [];
+    //   for (let i = 0; i < repRequest.length; i++) {
+    //     if (repRequest[i].buId.buHead === currentUser.staffId) {
+    //       temp.push(repRequest[i]);
+    //     }
+    //   }
+    //   console.log("rep array after filter", temp);
+    //   setPurchaseRequest(temp.reverse());
+    // }
+
+    // else {
+
+    // if (currentUser.staffTypeId.type === "Registered Nurse") {
+    //   let repRequest = obj.item;
+    //   let temp = [];
+    //   for (let i = 0; i < repRequest.length; i++) {
+    //     if (
+    //       repRequest[i].status === "Delivery in Progress" ||
+    //       repRequest[i].status === "pending_administration" ||
+    //       repRequest[i].status === "Received" ||
+    //       repRequest[i].status === "Partially Received"
+    //     ) {
+    //       temp.push(repRequest[i]);
+    //     }
+    //   }
+    //   console.log("rep array after filter", temp);
+
+    //   if (temp.length === 0) {
+    //     setOpenNotification(true);
+    //     setErrorMsg("Order is still pending from the pharmacy/sub store.");
+    //   } else {
+    //     setSelectedOrder(obj);
+    //     setIsOpen(true);
+    //     setRequestedItems(temp);
+    //   }
+    // } 
+    // else {
+    setSelectedOrder(obj);
+    setIsOpen(true);
+    setRequestedItems(obj.item);
+    // }
+    // }
+  };
 
   function UpdateItem(item) {
     if (item !== '') {
@@ -2006,7 +2095,7 @@ function LabRadRequest(props) {
                     tableData={pharmacyRequestArray}
                     tableDataKeys={tableDataKeysForPharmacy}
                     tableHeading={tableHeadingForPharmacy}
-                    handleView={viewItem}
+                    handleView={handleView}
                     action={actions}
                     borderBottomColor={'#60d69f'}
                     borderBottomWidth={20}
@@ -2635,6 +2724,64 @@ function LabRadRequest(props) {
             </div>
           </DialogContent>
         </Dialog>
+
+        <Dialog
+          aria-labelledby="form-dialog-title"
+          open={isOpen}
+          maxWidth="xl"
+          fullWidth={true}
+          // fullScreen
+          onBackdropClick={() => {
+            setIsOpen(false);
+          }}
+        >
+          <DialogContent style={{ backgroundColor: "#31e2aa" }}>
+            <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
+              Added Items
+              </DialogTitle>
+            <div className="container-fluid">
+              <CustomTable
+                tableData={requestedItems}
+                tableHeading={
+                  currentUser.staffTypeId.type === "Doctor/Physician"
+                    ? tableHeadingForBUMemberForItems
+                    : currentUser.staffTypeId.type === "Registered Nurse" ||
+                      currentUser.staffTypeId.type === "BU Doctor"
+                      ? tableHeadingForBUMemberForItems
+                      : currentUser.staffTypeId.type === "FU Inventory Keeper"
+                        ? tableHeadingForFUMemberForItems
+                        : tableHeadingForFUMemberForItems
+                }
+                tableDataKeys={
+                  currentUser.staffTypeId.type === "Doctor/Physician"
+                    ? tableDataKeysForItemsForBUMember
+                    : currentUser.staffTypeId.type === "Registered Nurse" ||
+                      currentUser.staffTypeId.type === "BU Doctor"
+                      ? tableDataKeysForItemsForBUMember
+                      : currentUser.staffTypeId.type === "FU Inventory Keeper"
+                        ? tableDataKeysForFUMemberForItems
+                        : tableDataKeysForItemsForBUMember
+                }
+                // action={
+                //   currentUser.staffTypeId.type === "Registered Nurse"
+                //     ? actionsForItemsForReceiver
+                //     : currentUser.staffTypeId.type === "BU Doctor"
+                //       ? actionsForItemsForOther
+                //       : currentUser.staffTypeId.type === "FU Inventory Keeper"
+                //         ? actionsForItemsForFUMember
+                //         : actionsForItemsForOther
+                // }
+                // handleEdit={handleEditRequestedItem}
+                // handleDelete={handleDelete}
+                // receiveItem={handleReceive}
+                // handleView={handleEditRequestedItem}
+                borderBottomColor={"#60d69f"}
+                borderBottomWidth={20}
+              />
+            </div>
+          </DialogContent>
+        </Dialog>
+
         <div
           className='container-fluid'
           style={{ marginBottom: '25px', marginTop: '25px' }}
