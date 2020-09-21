@@ -395,9 +395,24 @@ export default function ReplenishmentRequest(props) {
     props.history.location.pathname !== `/home/wms/fus/medicinalorder/view`
   ) {
     let path = `/home/wms/fus/medicinalorder/add`;
+    let selectedPatientForPharma = props.history.location.state.selectedPatient
+    let obj={
+      comingFor: "add", vendors, statues, items, buObj 
+    }
+    let sendingObj=""
+    if(selectedPatientForPharma)
+    {
+      sendingObj={
+        ...obj,
+        selectedPatientForPharma
+      }
+    }
+    else{
+      sendingObj={...obj}
+    }
     props.history.replace({
       pathname: path,
-      state: { comingFor: "add", vendors, statues, items, buObj },
+      state: { ...sendingObj },
     });
   }
 
