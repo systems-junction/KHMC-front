@@ -34,6 +34,11 @@ import validateInsuranceNo from '../../../public/numbersValidator'
 import validateInsuranceVendor from '../../../public/inputValidator'
 import MuiPhoneNumber from 'material-ui-phone-number'
 import validatePhone from '../../../public/validatePhone'
+import validateCountryCity from '../../../public/countryCityValidator'
+import validateGender from '../../../public/genderValidator'
+import validateRelation from '../../../public/relationValidator'
+import validateAddress from '../../../public/addressValidator'
+
 import {
   uploadsUrl,
   updatePatientUrl,
@@ -488,20 +493,20 @@ function AddEditPatientListing(props) {
       SIN &&
       SIN.length > 0 &&
       validateNationalId(SIN) &&
-      title &&
-      title.length > 0 &&
+      // title &&
+      // title.length > 0 &&
       firstName &&
       firstName.length > 0 &&
       validateFirstName(firstName) &&
       lastName &&
       lastName.length > 0 &&
       validateLastName(lastName) &&
-      nationality &&
-      nationality.length > 0 &&
+      // nationality &&
+      // nationality.length > 0 &&
       // validateNationName(nationality) &&
-      phoneNumber &&
-      phoneNumber.length > 0 &&
-      !validatePhone(phoneNumber) &&
+      // phoneNumber &&
+      // phoneNumber.length > 0 &&
+      // !validatePhone(phoneNumber) &&
       mobileNumber &&
       mobileNumber.length > 0 &&
       !validatePhone(mobileNumber) &&
@@ -510,6 +515,7 @@ function AddEditPatientListing(props) {
       // validateNumbers(age) &&
       gender &&
       gender.length > 0 &&
+      validateGender(gender) &&
       // height &&
       // height != null &&
       // validateHeight(height) &&
@@ -521,17 +527,19 @@ function AddEditPatientListing(props) {
       validateEmail(email) &&
       country &&
       country.length > 0 &&
+      validateCountryCity(country) &&
       city &&
       city.length > 0 &&
+      validateCountryCity(city) &&
       address &&
       address.length > 0 &&
-      // validateInput(address) &&
+      validateAddress(address) &&
       dob &&
-      dob.length > 0 &&
+      dob.length > 0
       // bloodGroup &&
       // bloodGroup != null &&
-      otherDetails &&
-      otherDetails.length > 0
+      // otherDetails &&
+      // otherDetails.length > 0
       // validateInput(otherDetails) &&
     )
   }
@@ -545,8 +553,8 @@ function AddEditPatientListing(props) {
       emergencyContactNo.length > 0 &&
       !validatePhone(emergencyContactNo) &&
       emergencyRelation &&
-      emergencyRelation.length > 0
-      // validateInput(emergencyRelation)
+      emergencyRelation.length > 0 &&
+      validateRelation(emergencyRelation)
     )
   }
   function validateCashForm() {
@@ -569,19 +577,19 @@ function AddEditPatientListing(props) {
         validateInsuranceNo(insuranceNo) &&
         insuranceVendor &&
         insuranceVendor.length > 0 &&
-        validateInsuranceVendor(insuranceVendor) &&
-        coverageDetails &&
-        coverageDetails.length > 0 &&
+        validateInsuranceVendor(insuranceVendor)
+        // coverageDetails &&
+        // coverageDetails.length > 0
         // validateInput(coverageDetails) &&
-        coverageTerms &&
-        coverageTerms.length > 0 &&
+        // coverageTerms &&
+        // coverageTerms.length > 0 &&
         // payment &&
         // payment.length > 0 &&
         // validateCoPayment(payment) &&
-        coveredFamilyMembers &&
-        coveredFamilyMembers.length > 0 &&
-        otherCoverageDetails &&
-        otherCoverageDetails.length > 0
+        // coveredFamilyMembers &&
+        // coveredFamilyMembers.length > 0 &&
+        // otherCoverageDetails &&
+        // otherCoverageDetails.length > 0
         // validateInput(otherCoverageDetails)
       )
       // } else {
@@ -878,8 +886,10 @@ function AddEditPatientListing(props) {
   const handleGenerateIPR = () => {
     const params = {
       patientId,
-      generatedBy: currentUser.staffId,
+      // generatedBy: currentUser.staffId,
+      generatedFrom: 'radiologyRequest',
       status: 'pending',
+      functionalUnit: currentUser.functionalUnit._id,
     }
     // console.log(params)
     axios
@@ -994,7 +1004,7 @@ function AddEditPatientListing(props) {
   }
 
   const onChangeValue = (e) => {
-    var pattern = /^[a-zA-Z ]*$/
+    var pattern = /^[a-zA-Z' ]*$/
     if (
       e.target.name === 'firstName' ||
       e.target.name === 'lastName' ||
@@ -1029,6 +1039,17 @@ function AddEditPatientListing(props) {
       dispatch({
         field: e.target.name,
         value: e.target.value,
+      })
+    } else if (
+      e.target.name === 'firstName' ||
+      e.target.name === 'lastName' ||
+      e.target.name === 'emergencyName' ||
+      e.target.name === 'depositorName' ||
+      e.target.name === 'insuranceVendor'
+    ) {
+      dispatch({
+        field: e.target.name,
+        value: e.target.value.replace(/[^\w'\s]/gi, ''),
       })
     } else {
       dispatch({
@@ -1199,9 +1220,9 @@ function AddEditPatientListing(props) {
                   style={{ marginTop: '20px', marginBottom: '10px' }}
                 >
                   <div
-                    className='col-md-10 col-sm-8 col-8'
+                    className='col-md-10 col-sm-9 col-8'
                     style={{
-                      ...styles.inputContainerForTextField,
+                      // ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
                     }}
                   >
@@ -1232,7 +1253,8 @@ function AddEditPatientListing(props) {
                   <div
                     className='col-md-1 col-sm-2 col-2'
                     style={{
-                      ...styles.inputContainerForTextField,
+                      // ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
                     }}
                   >
                     <div
@@ -1243,7 +1265,7 @@ function AddEditPatientListing(props) {
                         height: 55,
                         backgroundColor: 'white',
                         borderRadius: 5,
-                        width: 100,
+                        // width: 100,
                       }}
                     >
                       <img src={BarCode} style={{ width: 80, height: 75 }} />
@@ -1253,7 +1275,8 @@ function AddEditPatientListing(props) {
                   <div
                     className='col-md-1 col-sm-2 col-2'
                     style={{
-                      ...styles.inputContainerForTextField,
+                      // ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
                     }}
                   >
                     <div
@@ -1264,7 +1287,7 @@ function AddEditPatientListing(props) {
                         height: 55,
                         backgroundColor: 'white',
                         borderRadius: 5,
-                        width: 100,
+                        // width: 100,
                       }}
                     >
                       <img
@@ -1414,13 +1437,12 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
-                  required
                   select
                   fullWidth
                   id='title'
                   name='title'
                   value={title}
-                  error={title === '' && detailsForm}
+                  // error={title === '' && detailsForm}
                   onChange={onChangeValue}
                   label='Title'
                   variant='filled'
@@ -1440,7 +1462,7 @@ function AddEditPatientListing(props) {
                     )
                   })}
                 </TextField>
-                <ErrorMessage name={title} isFormSubmitted={detailsForm} />
+                {/* <ErrorMessage name={title} isFormSubmitted={detailsForm} /> */}
               </div>
               <div
                 className='col-md-5 col-sm-5'
@@ -1537,7 +1559,11 @@ function AddEditPatientListing(props) {
                     )
                   })}
                 </TextField>
-                <ErrorMessage name={gender} isFormSubmitted={detailsForm} />
+                <ErrorMessage
+                  name={gender}
+                  type='gender'
+                  isFormSubmitted={detailsForm}
+                />
               </div>
 
               <div
@@ -1553,7 +1579,7 @@ function AddEditPatientListing(props) {
                     inputVariant='filled'
                     fullWidth={true}
                     label='Date of birth'
-                    format='MM/dd/yyyy'
+                    format='MM-dd-yyyy'
                     // minDate={dob}
                     error={dob === '' && detailsForm}
                     onChange={(val) => handleChangeDate(val, 'dob')}
@@ -1577,13 +1603,12 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
-                  required
                   type='text'
                   select
                   label='Nationality'
                   name={'nationality'}
                   value={nationality}
-                  error={nationality === '' && detailsForm}
+                  // error={nationality === '' && detailsForm}
                   onChange={(e) => onChangeValue(e)}
                   className='textInputStyle'
                   variant='filled'
@@ -1606,11 +1631,11 @@ function AddEditPatientListing(props) {
                     })}
                 </TextField>
 
-                <ErrorMessage
+                {/* <ErrorMessage
                   name={nationality}
                   // type='nationName'
                   isFormSubmitted={detailsForm}
-                />
+                /> */}
               </div>
             </div>
 
@@ -1747,12 +1772,12 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <MuiPhoneNumber
-                  required
+                  // required
                   label='Telephone Number'
                   name={'phoneNumber'}
                   value={phoneNumber}
-                  hyperText='Telephone format +962xxxxxxxx'
-                  error={phoneNumber === '' && detailsForm}
+                  // hyperText='Telephone format +962xxxxxxxx'
+                  // error={phoneNumber === '' && detailsForm}
                   defaultCountry={'jo'}
                   onChange={onPhoneNumberChange}
                   className='textInputStyle'
@@ -1766,7 +1791,7 @@ function AddEditPatientListing(props) {
                     classes: { label: classes.label },
                   }}
                 />
-                {phoneNumber && !validatePhone(phoneNumber) ? (
+                {/* {phoneNumber && !validatePhone(phoneNumber) ? (
                   undefined
                 ) : (
                   <ErrorMessage
@@ -1774,7 +1799,7 @@ function AddEditPatientListing(props) {
                     type='phone'
                     isFormSubmitted={detailsForm}
                   />
-                )}
+                )} */}
               </div>
               <div
                 className='col-md-3 col-sm-3'
@@ -1850,7 +1875,11 @@ function AddEditPatientListing(props) {
                   input={<BootstrapInput />}
                   countries={countries}
                 /> */}
-                <ErrorMessage name={country} isFormSubmitted={detailsForm} />
+                <ErrorMessage
+                  name={country}
+                  type='country'
+                  isFormSubmitted={detailsForm}
+                />
               </div>
               <div
                 className='col-md-3 col-sm-3'
@@ -1897,7 +1926,11 @@ function AddEditPatientListing(props) {
                   input={<BootstrapInput />}
                   cities={cities}
                 /> */}
-                <ErrorMessage name={city} isFormSubmitted={detailsForm} />
+                <ErrorMessage
+                  name={city}
+                  type='city'
+                  isFormSubmitted={detailsForm}
+                />
               </div>
             </div>
 
@@ -1968,7 +2001,7 @@ function AddEditPatientListing(props) {
                 />
                 <ErrorMessage
                   name={address}
-                  // type='text'
+                  type='address'
                   isFormSubmitted={detailsForm}
                 />
               </div>
@@ -1988,7 +2021,7 @@ function AddEditPatientListing(props) {
                   name={'otherDetails'}
                   value={otherDetails}
                   onChange={onChangeValue}
-                  error={otherDetails === '' && detailsForm}
+                  // error={otherDetails === '' && detailsForm}
                   rows={4}
                   className='textInputStyle'
                   variant='filled'
@@ -1999,11 +2032,11 @@ function AddEditPatientListing(props) {
                     },
                   }}
                 />
-                <ErrorMessage
+                {/* <ErrorMessage
                   name={otherDetails}
                   // type='text'
                   isFormSubmitted={detailsForm}
-                />
+                /> */}
               </div>
             </div>
 
@@ -2208,6 +2241,7 @@ function AddEditPatientListing(props) {
                   </TextField>
                   <ErrorMessage
                     name={emergencyRelation}
+                    type='relation'
                     isFormSubmitted={emergencyForm}
                   />
                 </div>
@@ -2453,6 +2487,7 @@ function AddEditPatientListing(props) {
                   }}
                 >
                   <TextField
+                    required
                     label='Depositor Name'
                     name={'depositorName'}
                     value={depositorName}
@@ -2479,6 +2514,7 @@ function AddEditPatientListing(props) {
                   }}
                 >
                   <CurrencyTextField
+                    required
                     label='Amount Received'
                     name={'amountReceived'}
                     value={amountReceived}
@@ -2843,6 +2879,7 @@ function AddEditPatientListing(props) {
                   }}
                 >
                   <TextField
+                    required
                     label='Insurance Number'
                     type='number'
                     name={'insuranceNo'}
@@ -2971,7 +3008,6 @@ function AddEditPatientListing(props) {
                   }}
                 >
                   <TextField
-                    required
                     select
                     fullWidth
                     disabled={Insuranceform}
@@ -2979,7 +3015,7 @@ function AddEditPatientListing(props) {
                     name='coverageTerms'
                     value={coverageTerms}
                     onChange={onChangeValue}
-                    error={coverageTerms === '' && insuranceForm}
+                    // error={coverageTerms === '' && insuranceForm}
                     label='Coverage Terms'
                     variant='filled'
                     className='dropDownStyle'
@@ -2998,10 +3034,10 @@ function AddEditPatientListing(props) {
                       )
                     })}
                   </TextField>
-                  <ErrorMessage
+                  {/* <ErrorMessage
                     name={coverageTerms}
                     isFormSubmitted={insuranceForm}
-                  />
+                  /> */}
                 </div>
                 <div
                   className='col-md-6'
@@ -3045,7 +3081,6 @@ function AddEditPatientListing(props) {
                 >
                   <div>
                     <TextField
-                      required
                       select
                       fullWidth
                       disabled={Insuranceform}
@@ -3053,7 +3088,7 @@ function AddEditPatientListing(props) {
                       name='coveredFamilyMembers'
                       value={coveredFamilyMembers}
                       onChange={onChangeValue}
-                      error={coveredFamilyMembers === '' && insuranceForm}
+                      // error={coveredFamilyMembers === '' && insuranceForm}
                       label='Covered Family Members'
                       variant='filled'
                       className='dropDownStyle'
@@ -3074,11 +3109,11 @@ function AddEditPatientListing(props) {
                         )
                       })}
                     </TextField>
-                    <ErrorMessage
+                    {/* <ErrorMessage
                       name={coveredFamilyMembers}
                       // type='text'
                       isFormSubmitted={insuranceForm}
-                    />
+                    /> */}
                   </div>
                 </div>
               </div>
@@ -3092,11 +3127,10 @@ function AddEditPatientListing(props) {
                   }}
                 >
                   <TextField
-                    required
                     multiline
                     type='text'
                     disabled={Insuranceform}
-                    error={coverageDetails === '' && insuranceForm}
+                    // error={coverageDetails === '' && insuranceForm}
                     label='Coverage Details'
                     name={'coverageDetails'}
                     value={coverageDetails}
@@ -3109,11 +3143,11 @@ function AddEditPatientListing(props) {
                       classes: { input: classes.input },
                     }}
                   />
-                  <ErrorMessage
+                  {/* <ErrorMessage
                     name={coverageDetails}
                     // type='text'
                     isFormSubmitted={insuranceForm}
-                  />
+                  /> */}
                 </div>
               </div>
 
@@ -3126,11 +3160,10 @@ function AddEditPatientListing(props) {
                   }}
                 >
                   <TextField
-                    required
                     multiline
                     type='text'
                     disabled={Insuranceform}
-                    error={otherCoverageDetails === '' && insuranceForm}
+                    // error={otherCoverageDetails === '' && insuranceForm}
                     label='Other Details'
                     name={'otherCoverageDetails'}
                     value={otherCoverageDetails}
@@ -3143,11 +3176,11 @@ function AddEditPatientListing(props) {
                       classes: { input: classes.input },
                     }}
                   />
-                  <ErrorMessage
+                  {/* <ErrorMessage
                     name={otherCoverageDetails}
                     // type='text'
                     isFormSubmitted={insuranceForm}
-                  />
+                  /> */}
                 </div>
               </div>
             </div>

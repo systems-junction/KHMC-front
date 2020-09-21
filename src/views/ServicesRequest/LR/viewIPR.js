@@ -768,12 +768,12 @@ function AddEditPurchaseRequest(props) {
                             // textAlign:'center',
                           }}
                         >
-                          <a
+                          <Button
                             href={uploadsUrl + results.split('\\')[1]}
                             style={{ color: '#2c6ddd' }}
                           >
                             Click here to open results
-                          </a>
+                          </Button>
                         </div>
                       ) : (
                         undefined
@@ -804,12 +804,12 @@ function AddEditPurchaseRequest(props) {
                             ...styles.textFieldPadding,
                           }}
                         >
-                          <a
+                          <Button
                             href={uploadsUrl + results}
                             style={{ color: '#2c6ddd' }}
                           >
                             Click here to open results
-                          </a>
+                          </Button>
                         </div>
                       ) : (
                         undefined
