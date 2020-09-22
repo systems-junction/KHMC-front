@@ -4,6 +4,7 @@ import NotFound from '../components/NotFound/NotFound'
 import patientCare from '../views/PatientCare/patientCare'
 import triageAssessment from '../views/PatientCare/TriageAndAssessment'
 import SuccessScreen from '../components/SuccessScreen/SuccessScreen'
+import viewReport from '../views/PatientAssessment/viewLabRadReport'
 
 class PatientCare extends React.PureComponent {
   render() {
@@ -17,6 +18,10 @@ class PatientCare extends React.PureComponent {
         <Route
           path={`${this.props.match.url}/triageAssessment`}
           component={triageAssessment}
+        />
+        <Route
+          path={`${this.props.match.url}/viewReport`}
+          component={viewReport}
         />
         <Route
           path={`${this.props.match.url}/success`}

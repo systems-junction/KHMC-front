@@ -5,12 +5,9 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 import { makeStyles } from '@material-ui/core/styles'
-import InputLabel from '@material-ui/core/InputLabel'
-import capitilizeLetter from '../../public/capitilizeLetter'
 import cookie from 'react-cookies'
-import CustomTable from '../../components/Table/Table'
 import TextField from '@material-ui/core/TextField'
-import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
+import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import { DateTimePicker } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
 
@@ -40,44 +37,6 @@ const styles = {
   },
   styleForLabel: {
     fontWeight: '700',
-  },
-}
-const stylesB = {
-  stylesForActive: {
-    verticalAlign: 'center',
-    fontSize: '0.62rem',
-    color: 'white',
-    cursor: 'pointer',
-    borderRadius: 10,
-    background: '#2c6ddd',
-    width: '100px',
-    height: '45px',
-    outline: 'none',
-    boxShadow: 'none',
-  },
-  stylesForInActive: {
-    verticalAlign: 'center',
-    fontSize: '0.62rem',
-    color: 'white',
-    cursor: 'pointer',
-    borderRadius: 10,
-    background: '#845DC2',
-    width: '100px',
-    height: '45px',
-    outline: 'none',
-    boxShadow: 'none',
-  },
-  stylesForReceived: {
-    verticalAlign: 'center',
-    fontSize: '0.62rem',
-    color: 'white',
-    cursor: 'pointer',
-    borderRadius: 10,
-    background: '#845DC2',
-    width: '100px',
-    height: '45px',
-    boxShadow: 'none',
-    outline: 'none',
   },
 }
 
@@ -133,24 +92,12 @@ const useStylesForInput = makeStyles((theme) => ({
 
 export default function EdrRequest(props) {
   const classes = useStylesForInput()
-  const [currentUser] = React.useState(cookie.load('current_user'))
+  const [] = React.useState(cookie.load('current_user'))
 
   useEffect(() => {
     console.log(props.item, 'view Data')
   }, [])
 
-  const formatDate = (date) => {
-    const d = new Date(date)
-    return (
-      d.getDate() +
-      '/' +
-      (d.getMonth() + 1) +
-      '/' +
-      d.getFullYear() +
-      ' ' +
-      d.toLocaleTimeString()
-    )
-  }
 
   return (
     <Dialog
@@ -166,8 +113,59 @@ export default function EdrRequest(props) {
         <DialogTitle id='simple-dialog-title' style={{ color: 'white' }}>
           Details
         </DialogTitle>
-        <div className={`container-fluid ${classes.root}`}>
+        <div className='container-fluid'>
           <div className='row'>
+            {props.item.serviceCode ? (
+              <div
+                className='col-md-6 col-sm-6 col-6'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  required
+                  label='Service Code'
+                  disabled={true}
+                  placeholder='serviceCode'
+                  name={'serviceCode'}
+                  value={props.item.serviceCode}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
+
+            {props.item.serviceName ? (
+              <div
+                className='col-md-6 col-sm-6 col-6'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  required
+                  label='Service Name'
+                  disabled={true}
+                  placeholder='serviceName'
+                  name={'serviceName'}
+                  value={props.item.serviceName}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
+          </div>
+          <div className={`row ${classes.root}`}>
             {props.item.doctor ? (
               <div
                 className='col-md-6 col-sm-6 col-6'
@@ -188,6 +186,7 @@ export default function EdrRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
+                    disableUnderline: true,
                   }}
                 />
               </div>
@@ -211,10 +210,11 @@ export default function EdrRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
+                    disableUnderline: true,
                   }}
                 />
               </div>
-            ) : props.item.requesterName ? (
+            ) : props.item.requesterName && !props.item.comments ? (
               <div
                 className='col-md-6 col-sm-6 col-6'
                 style={styles.inputContainerForTextField}
@@ -230,6 +230,7 @@ export default function EdrRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
+                    disableUnderline: true,
                   }}
                 />
               </div>
@@ -271,68 +272,38 @@ export default function EdrRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
+                    disableUnderline: true,
                   }}
                 /> */}
+              </div>
+            ) : props.item.comments ? (
+              <div
+                className='col-md-6 col-sm-6 col-6'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  required
+                  multiline
+                  disabled={true}
+                  label='Comments'
+                  name={'comments'}
+                  value={props.item.comments}
+                  className='textInputStyle'
+                  rows={4}
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
               </div>
             ) : (
               undefined
             )}
           </div>
 
-          <div className='row'>
-            <div
-              className='col-md-6 col-sm-6 col-6'
-              style={styles.inputContainerForTextField}
-            >
-              {props.item.serviceCode ? (
-                <div>
-                  <TextField
-                    required
-                    label='Service Code'
-                    disabled={true}
-                    placeholder='serviceCode'
-                    name={'serviceCode'}
-                    value={props.item.serviceCode}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
-                </div>
-              ) : (
-                undefined
-              )}
-            </div>
-            <div
-              className='col-md-6 col-sm-6 col-6'
-              style={styles.inputContainerForTextField}
-            >
-              {props.item.serviceName ? (
-                <div>
-                  <TextField
-                    required
-                    label='Service Name'
-                    disabled={true}
-                    placeholder='serviceName'
-                    name={'serviceName'}
-                    value={props.item.serviceName}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
-                </div>
-              ) : (
-                undefined
-              )}
-            </div>
-          </div>
-
-          <div className='row'>
+          <div className={`row ${classes.root}`}>
             {props.item.description ? (
               <div
                 className='col-md-12 col-sm-12 col-12'
@@ -351,6 +322,7 @@ export default function EdrRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
+                    disableUnderline: true,
                   }}
                 />
               </div>
@@ -377,6 +349,7 @@ export default function EdrRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
+                    disableUnderline: true,
                   }}
                 />
               </div>
@@ -398,27 +371,7 @@ export default function EdrRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
-                  }}
-                />
-              </div>
-            ) : props.item.comments ? (
-              <div
-                className='col-md-6 col-sm-6 col-6'
-                style={styles.inputContainerForTextField}
-              >
-                <TextField
-                  required
-                  multiline
-                  disabled={true}
-                  label='Comments'
-                  name={'comments'}
-                  value={props.item.comments}
-                  className='textInputStyle'
-                  rows={4}
-                  variant='filled'
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
+                    disableUnderline: true,
                   }}
                 />
               </div>

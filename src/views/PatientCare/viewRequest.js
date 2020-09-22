@@ -5,30 +5,11 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 import { makeStyles } from '@material-ui/core/styles'
-import InputLabel from '@material-ui/core/InputLabel'
-import capitilizeLetter from '../../public/capitilizeLetter'
 import cookie from 'react-cookies'
-import CustomTable from '../../components/Table/Table'
 import TextField from '@material-ui/core/TextField'
-import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
+import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import { DateTimePicker } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
-
-const tableHeadingForPHR = [
-  'Medicine Name',
-  'Requested Qty',
-  'Dosage',
-  'Frequency',
-  'Duration',
-  '',
-]
-const tableDataKeysForPHR = [
-  'medicineName',
-  'requestedQty',
-  'dosage',
-  'frequency',
-  'duration',
-]
 
 const styles = {
   inputContainer: {
@@ -102,20 +83,21 @@ const useStylesForInput = makeStyles((theme) => ({
       backgroundColor: 'white',
       color: 'black',
     },
+    '& .Mui-disabled': {
+      backgroundColor: 'white',
+      color: 'gray',
+    },
   },
 }))
 
-const useStyles = makeStyles(styles)
-
 export default function EdrRequest(props) {
   const classes = useStylesForInput()
-  const [currentUser, setCurrentUser] = React.useState(
-    cookie.load('current_user')
-  )
+  const [] = React.useState(cookie.load('current_user'))
 
   useEffect(() => {
     console.log(props.item, 'view Data')
   }, [])
+
 
   return (
     <Dialog
@@ -133,245 +115,265 @@ export default function EdrRequest(props) {
         </DialogTitle>
         <div className='container-fluid'>
           <div className='row'>
-            <div
-              className='col-md-6 col-sm-6 col-6'
-              style={styles.inputContainerForTextField}
-            >
-              {props.item.date ? (
-                <div>
-                  {/* <TextField
-                    required
-                    disabled={true}
+            {props.item.serviceCode ? (
+              <div
+                className='col-md-6 col-sm-6 col-6'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  required
+                  label='Service Code'
+                  disabled={true}
+                  placeholder='serviceCode'
+                  name={'serviceCode'}
+                  value={props.item.serviceCode}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
+
+            {props.item.serviceName ? (
+              <div
+                className='col-md-6 col-sm-6 col-6'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  required
+                  label='Service Name'
+                  disabled={true}
+                  placeholder='serviceName'
+                  name={'serviceName'}
+                  value={props.item.serviceName}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
+          </div>
+          <div className={`row ${classes.root}`}>
+            {props.item.doctor ? (
+              <div
+                className='col-md-6 col-sm-6 col-6'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  required
+                  disabled={true}
+                  label='Doctor'
+                  name={'doctor'}
+                  value={
+                    props.item.doctor.firstName +
+                    ` ` +
+                    props.item.doctor.lastName
+                  }
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : props.item.requester.firstName ? (
+              <div
+                className='col-md-6 col-sm-6 col-6'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  required
+                  disabled={true}
+                  label='Requester'
+                  name={'requester'}
+                  value={
+                    props.item.requester.firstName +
+                    ` ` +
+                    props.item.requester.lastName
+                  }
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : props.item.requesterName && !props.item.comments ? (
+              <div
+                className='col-md-6 col-sm-6 col-6'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  required
+                  disabled={true}
+                  label='Requester'
+                  name={'requester'}
+                  value={props.item.requesterName}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
+
+            {props.item.date ? (
+              <div
+                className='col-md-6 col-sm-6 col-6'
+                style={styles.inputContainerForTextField}
+              >
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <DateTimePicker
+                    // required
+                    disabled
+                    inputVariant='filled'
+                    fullWidth={true}
                     label='Date'
-                    name={'date'}
+                    format='MM-dd-yyyy HH:mm'
+                    // minDate={DateTime}
+                    // onChange={(val) => onChangeDate(val, 'DateTime')}
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                    style={{ borderRadius: '10px' }}
                     value={props.item.date}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline:true
-                    }}
-                  /> */}
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <DateTimePicker
-                      // required
-                      disabled
-                      inputVariant='filled'
-                      fullWidth={true}
-                      label='Date'
-                      format='MM-dd-yyyy HH:mm'
-                      // minDate={DateTime}
-                      // onChange={(val) => onChangeDate(val, 'DateTime')}
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                      }}
-                      style={{ borderRadius: '10px' }}
-                      value={props.item.date}
-                    />
-                  </MuiPickersUtilsProvider>
-                </div>
-              ) : (
-                undefined
-              )}
-            </div>
-            <div
-              className='col-md-6 col-sm-6 col-6'
-              style={styles.inputContainerForTextField}
-            >
-              {props.item.doctor ? (
-                <div>
-                  <TextField
-                    required
-                    disabled={true}
-                    label='Doctor'
-                    name={'doctor'}
-                    value={
-                      props.item.doctor.firstName +
-                      ` ` +
-                      props.item.doctor.lastName
-                    }
-                    // error={buName === '' && isFormSubmitted}
-                    // onChange={(e) => onChangeValue(e)}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
                   />
-                </div>
-              ) : props.item.requester ? (
-                <div>
-                  <TextField
-                    required
-                    disabled={true}
-                    label='Requester'
-                    name={'requester'}
-                    value={
-                      props.item.requester.firstName +
-                      ` ` +
-                      props.item.requester.lastName
-                    }
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                  />
-                </div>
-              ) : (
-                undefined
-              )}
-            </div>
+                </MuiPickersUtilsProvider>
+                {/* <TextField
+                  required
+                  disabled={true}
+                  label='Date'
+                  name={'date'}
+                  value={formatDate(props.item.date)}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                /> */}
+              </div>
+            ) : props.item.comments ? (
+              <div
+                className='col-md-6 col-sm-6 col-6'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  required
+                  multiline
+                  disabled={true}
+                  label='Comments'
+                  name={'comments'}
+                  value={props.item.comments}
+                  className='textInputStyle'
+                  rows={4}
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
           </div>
 
-          <div className='row'>
-            <div
-              className='col-md-6 col-sm-6 col-6'
-              style={styles.inputContainerForTextField}
-            >
-              {props.item.description ? (
-                <div>
-                  <TextField
-                    required
-                    disabled={true}
-                    label='Description'
-                    name={'description'}
-                    value={props.item.description}
-                    rows={4}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                  />
-                </div>
-              ) : (
-                undefined
-              )}
-            </div>
-            <div
-              className='col-md-6 col-sm-6 col-6'
-              style={styles.inputContainerForTextField}
-            >
-              {props.item.note ? (
-                <div>
-                  <TextField
-                    required
-                    disabled={true}
-                    label='Note'
-                    name={'note'}
-                    value={props.item.note}
-                    rows={4}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                  />
-                </div>
-              ) : props.item.consultationNotes ? (
-                <div>
-                  <TextField
-                    required
-                    disabled={true}
-                    label='Consultation Note'
-                    name={'consultationNotes'}
-                    value={props.item.consultationNotes}
-                    className='textInputStyle'
-                    rows={4}
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                  />
-                </div>
-              ) : (
-                undefined
-              )}
-            </div>
+          <div className={`row ${classes.root}`}>
+            {props.item.description ? (
+              <div
+                className='col-md-12 col-sm-12 col-12'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  multiline
+                  required
+                  disabled={true}
+                  label='Description / Condition'
+                  name={'description'}
+                  value={props.item.description}
+                  rows={4}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
           </div>
-
-          <div className='row'>
-            <div
-              className='col-md-6 col-sm-6 col-6'
-              style={styles.inputContainerForTextField}
-            >
-              {props.item.serviceCode ? (
-                <div>
-                  <TextField
-                    required
-                    label='Service Code'
-                    disabled={true}
-                    placeholder='serviceCode'
-                    name={'serviceCode'}
-                    value={props.item.serviceCode}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                  />
-                </div>
-              ) : (
-                undefined
-              )}
-            </div>
-            <div
-              className='col-md-6 col-sm-6 col-6'
-              style={styles.inputContainerForTextField}
-            >
-              {props.item.serviceName ? (
-                <div>
-                  <TextField
-                    required
-                    label='Service Name'
-                    disabled={true}
-                    placeholder='serviceName'
-                    name={'serviceName'}
-                    value={props.item.serviceName}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                  />
-                </div>
-              ) : (
-                undefined
-              )}
-            </div>
-          </div>
-
-          <div className='container-fluid'>
-            {props.item.medicine ? (
-              <div className='row'>
-                {props.item.medicine ? (
-                  <CustomTable
-                    tableData={props.item.medicine}
-                    tableDataKeys={tableDataKeysForPHR}
-                    tableHeading={tableHeadingForPHR}
-                    borderBottomColor={'#60d69f'}
-                    borderBottomWidth={20}
-                  />
-                ) : (
-                  undefined
-                )}
+          <div className={`row ${classes.root}`}>
+            {props.item.note ? (
+              <div
+                className='col-md-12 col-sm-12 col-12'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  required
+                  multiline
+                  disabled={true}
+                  label='Consultation Note'
+                  name={'note'}
+                  value={props.item.note}
+                  rows={4}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : props.item.consultationNotes ? (
+              <div
+                className='col-md-12 col-sm-12 col-12'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  required
+                  multiline
+                  disabled={true}
+                  label='Consultation Note'
+                  name={'consultationNotes'}
+                  value={props.item.consultationNotes}
+                  className='textInputStyle'
+                  rows={4}
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
               </div>
             ) : (
               undefined
