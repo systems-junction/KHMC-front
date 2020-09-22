@@ -111,14 +111,12 @@ const tableDataKeysForItemsForBUMember = [
   "requestedQty",
   "status",
 ];
-
 const tableDataKeysForFUMemberForItems = [
   ["itemId", "name"],
   ["itemId", "medClass"],
   "requestedQty",
   "secondStatus",
 ];
-
 const tableHeadingForFUMemberForItems = [
   "Name",
   "Type",
@@ -126,7 +124,6 @@ const tableHeadingForFUMemberForItems = [
   "Status",
   "",
 ];
-
 const tableHeadingForBUMemberForItems = [
   "Name",
   "Type",
@@ -148,11 +145,6 @@ const tableHeadingForBUMemberForItems = [
 //     "status",
 // ];
 const actions = { view: true };
-// const actionsForItemsForOther = { view: true };
-// const actionsForItemsForReceiver = {
-//   receiveItem: true,
-// };
-// const actionsForItemsForFUMember = { edit: true };
 
 const specialistArray = [
   {
@@ -498,63 +490,9 @@ function LabRadRequest(props) {
   }
 
   const handleView = (obj) => {
-    let path = `/home/wms/fus/medicinalorder/edit`;
-    // props.history.push({
-    //   pathname: path,
-    //   state: {
-    //     comingFor: "view",
-    //     selectedItem: obj,
-    //     vendors,
-    //     statues,
-    //     items,
-    //     buObj,
-    //   },
-    // });
-
-    // if (currentUser.staffTypeId.type === "Doctor/Physician") {
-    //   let repRequest = res.data.da;
-    //   let temp = [];
-    //   for (let i = 0; i < repRequest.length; i++) {
-    //     if (repRequest[i].buId.buHead === currentUser.staffId) {
-    //       temp.push(repRequest[i]);
-    //     }
-    //   }
-    //   console.log("rep array after filter", temp);
-    //   setPurchaseRequest(temp.reverse());
-    // }
-
-    // else {
-
-    // if (currentUser.staffTypeId.type === "Registered Nurse") {
-    //   let repRequest = obj.item;
-    //   let temp = [];
-    //   for (let i = 0; i < repRequest.length; i++) {
-    //     if (
-    //       repRequest[i].status === "Delivery in Progress" ||
-    //       repRequest[i].status === "pending_administration" ||
-    //       repRequest[i].status === "Received" ||
-    //       repRequest[i].status === "Partially Received"
-    //     ) {
-    //       temp.push(repRequest[i]);
-    //     }
-    //   }
-    //   console.log("rep array after filter", temp);
-
-    //   if (temp.length === 0) {
-    //     setOpenNotification(true);
-    //     setErrorMsg("Order is still pending from the pharmacy/sub store.");
-    //   } else {
-    //     setSelectedOrder(obj);
-    //     setIsOpen(true);
-    //     setRequestedItems(temp);
-    //   }
-    // }
-    // else {
     setSelectedOrder(obj);
     setIsOpen(true);
     setRequestedItems(obj.item);
-    // }
-    // }
   };
 
   function addConsultRequest() {
@@ -731,18 +669,6 @@ function LabRadRequest(props) {
       }
     }
   }
-
-  // const addNewRequest = () => {
-  //     let path = `viewIPR/add`;
-  //     props.history.push({
-  //         pathname: path,
-  //         state: {
-  //             comingFor: "add",
-  //             selectedItem: selectedItem,
-  //             pharmacyRequestArray,
-  //         },
-  //     });
-  // };
 
   function hideDialog() {
     setOpenAddConsultDialog(false);
