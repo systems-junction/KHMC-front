@@ -5,30 +5,11 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 import { makeStyles } from '@material-ui/core/styles'
-import InputLabel from '@material-ui/core/InputLabel'
-import capitilizeLetter from '../../../public/capitilizeLetter'
 import cookie from 'react-cookies'
-import CustomTable from '../../../components/Table/Table'
 import TextField from '@material-ui/core/TextField'
-import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
+import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import { DateTimePicker } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
-
-const tableHeadingForPHR = [
-  'Medicine Name',
-  'Requested Qty',
-  'Dosage',
-  'Frequency',
-  'Duration',
-  '',
-]
-const tableDataKeysForPHR = [
-  'medicineName',
-  'requestedQty',
-  'dosage',
-  'frequency',
-  'duration',
-]
 
 const styles = {
   inputContainer: {
@@ -111,25 +92,12 @@ const useStylesForInput = makeStyles((theme) => ({
 
 export default function EdrRequest(props) {
   const classes = useStylesForInput()
-  const [currentUser] = React.useState(cookie.load('current_user'))
+  const [] = React.useState(cookie.load('current_user'))
 
   useEffect(() => {
     console.log(props.item, 'view Data')
   }, [])
 
-  const formatDate = (date) => {
-    const d = new Date(date)
-    return (
-      d.getDate() +
-      '/' +
-      (d.getMonth() + 1) +
-      '/' +
-      d.getFullYear() +
-      ' ' +
-      // d.toLocaleTimeString()
-      d.DateTime().Now.ToString('hh:mm')
-    )
-  }
 
   return (
     <Dialog
@@ -406,26 +374,6 @@ export default function EdrRequest(props) {
                     disableUnderline: true,
                   }}
                 />
-              </div>
-            ) : (
-              undefined
-            )}
-          </div>
-
-          <div className='container-fluid'>
-            {props.item.medicine ? (
-              <div className='row'>
-                {props.item.medicine ? (
-                  <CustomTable
-                    tableData={props.item.medicine}
-                    tableDataKeys={tableDataKeysForPHR}
-                    tableHeading={tableHeadingForPHR}
-                    borderBottomColor={'#60d69f'}
-                    borderBottomWidth={20}
-                  />
-                ) : (
-                  undefined
-                )}
               </div>
             ) : (
               undefined
