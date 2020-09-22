@@ -413,7 +413,7 @@ function LabRadRequest(props) {
   const [currentUser, setCurrentUser] = useState(cookie.load('current_user'))
   const [errorMsg, setErrorMsg] = useState('')
   const [openNotification, setOpenNotification] = useState(false)
-  const [value, setValue] = useState(4)
+  const [value, setValue] = useState(1)
   const [selectedItem, setSelectedItem] = useState('')
   const [searchPatientQuery, setSearchPatientQuery] = useState('')
   const [patientFoundSuccessfull, setpatientFoundSuccessfully] = useState(false)
@@ -604,8 +604,8 @@ function LabRadRequest(props) {
             pathname: "consultationrequest/success",
             state: {
               message: `Consultation Note of Request # ${res.data.data.consultationNote[
-                  res.data.data.consultationNote.length - 1
-                ].consultationNo
+                res.data.data.consultationNote.length - 1
+              ].consultationNo
                 } for patient MRN ${res.data.data.patientId.profileNo
                 } submitted successfully`,
             },
@@ -694,8 +694,8 @@ function LabRadRequest(props) {
             pathname: "assessmentdiagnosis/success",
             state: {
               message: `Consultation note # ${res.data.data.residentNotes[
-                  res.data.data.residentNotes.length - 1
-                ].residentNoteNo
+                res.data.data.residentNotes.length - 1
+              ].residentNoteNo
                 } for patient MRN ${res.data.data.patientId.profileNo
                 } added successfully`,
             },
@@ -867,7 +867,7 @@ function LabRadRequest(props) {
             pathname: "consultationrequest/success",
             state: {
               message: `Lab Request # ${res.data.data.labRequest[res.data.data.labRequest.length - 1]
-                  .LRrequestNo
+                .LRrequestNo
                 } for patient MRN ${res.data.data.patientId.profileNo
                 } added successfully`,
             },
@@ -1012,8 +1012,8 @@ function LabRadRequest(props) {
             pathname: "consultationrequest/success",
             state: {
               message: `Radiology Request # ${res.data.data.radiologyRequest[
-                  res.data.data.radiologyRequest.length - 1
-                ].RRrequestNo
+                res.data.data.radiologyRequest.length - 1
+              ].RRrequestNo
                 } for patient MRN ${res.data.data.patientId.profileNo
                 } added successfully`,
             },
@@ -1512,13 +1512,13 @@ function LabRadRequest(props) {
                         </Table>
                       )
                     ) : (
-                      <h4
-                        style={{ textAlign: "center" }}
-                        onClick={() => setSearchPatientQuery("")}
-                      >
-                        Patient Not Found
-                      </h4>
-                    )}
+                        <h4
+                          style={{ textAlign: "center" }}
+                          onClick={() => setSearchPatientQuery("")}
+                        >
+                          Patient Not Found
+                        </h4>
+                      )}
                   </Paper>
                 </div>
               ) : (
@@ -1642,10 +1642,10 @@ function LabRadRequest(props) {
               >
                 {medicationArray
                   ? medicationArray.map((drug, index) => {
-                      return (
-                        <h6 style={styles.textStyles}>{drug.medicineName}</h6>
-                      );
-                    })
+                    return (
+                      <h6 style={styles.textStyles}>{drug.medicineName}</h6>
+                    );
+                  })
                   : "None"}
               </div>
 
@@ -1655,8 +1655,8 @@ function LabRadRequest(props) {
               >
                 {diagnosisArray
                   ? diagnosisArray.map((drug, index) => {
-                      return <h6 style={styles.textStyles}>{drug}</h6>;
-                    })
+                    return <h6 style={styles.textStyles}>{drug}</h6>;
+                  })
                   : "None"}
               </div>
             </div>
@@ -1690,7 +1690,7 @@ function LabRadRequest(props) {
                   outline: "none",
                   color: value === 0 ? "#12387a" : "#3B988C",
                 }}
-                label="Doctor/Physician Notes" //"Resident Doctor Notes"
+                label="Doctor/Physician Notes"
                 disabled={enableForm}
               />
               <Tab
@@ -1700,7 +1700,7 @@ function LabRadRequest(props) {
                   outline: "none",
                   color: value === 1 ? "#12387a" : "#3B988C",
                 }}
-                label="Pharm"
+                label="Consultant/Specialist Notes"
                 disabled={enableForm}
               />
               <Tab
@@ -1710,7 +1710,7 @@ function LabRadRequest(props) {
                   outline: "none",
                   color: value === 2 ? "#12387a" : "#3B988C",
                 }}
-                label="Lab"
+                label="Pharm"
                 disabled={enableForm}
               />
               <Tab
@@ -1720,7 +1720,7 @@ function LabRadRequest(props) {
                   outline: "none",
                   color: value === 3 ? "#12387a" : "#3B988C",
                 }}
-                label="Rad"
+                label="Lab"
                 disabled={enableForm}
               />
               <Tab
@@ -1730,13 +1730,13 @@ function LabRadRequest(props) {
                   outline: "none",
                   color: value === 4 ? "#12387a" : "#3B988C",
                 }}
-                label="Consultant/Specialist Notes"
+                label="Rad"
                 disabled={enableForm}
               />
             </Tabs>
           </div>
 
-          {value === 4 ? (
+          {value === 1 ? (
             <div
               style={{ flex: 4, display: "flex", flexDirection: "column" }}
               className="container-fluid"
@@ -1812,7 +1812,7 @@ function LabRadRequest(props) {
                 </div>
               </div>
             </div>
-          ) : value === 1 ? (
+          ) : value === 2 ? (
             <div
               style={{ flex: 4, display: "flex", flexDirection: "column" }}
               className="container-fluid"
@@ -1850,7 +1850,7 @@ function LabRadRequest(props) {
                 </div>
               </div>
             </div>
-          ) : value === 2 ? (
+          ) : value === 3 ? (
             <div
               style={{ flex: 4, display: "flex", flexDirection: "column" }}
               className={`container-fluid ${classes.root}`}
@@ -1915,13 +1915,13 @@ function LabRadRequest(props) {
                         </Table>
                       )
                     ) : (
-                      <h4
-                        style={{ textAlign: "center" }}
-                        onClick={() => setSearchQuery("")}
-                      >
-                        Service Not Found
-                      </h4>
-                    )}
+                        <h4
+                          style={{ textAlign: "center" }}
+                          onClick={() => setSearchQuery("")}
+                        >
+                          Service Not Found
+                        </h4>
+                      )}
                   </Paper>
                 </div>
               ) : (
@@ -2024,7 +2024,7 @@ function LabRadRequest(props) {
                 </div>
               </div>
             </div>
-          ) : value === 3 ? (
+          ) : value === 4 ? (
             <div
               style={{ flex: 4, display: "flex", flexDirection: "column" }}
               className={`container-fluid ${classes.root}`}
@@ -2089,13 +2089,13 @@ function LabRadRequest(props) {
                         </Table>
                       )
                     ) : (
-                      <h4
-                        style={{ textAlign: "center" }}
-                        onClick={() => setSearchRadioQuery("")}
-                      >
-                        Service Not Found
-                      </h4>
-                    )}
+                        <h4
+                          style={{ textAlign: "center" }}
+                          onClick={() => setSearchRadioQuery("")}
+                        >
+                          Service Not Found
+                        </h4>
+                      )}
                   </Paper>
                 </div>
               ) : (
@@ -2844,7 +2844,7 @@ function LabRadRequest(props) {
 
         <Notification msg={errorMsg} open={openNotification} />
       </div>
-      </div>
+    </div>
   );
 }
 export default LabRadRequest;

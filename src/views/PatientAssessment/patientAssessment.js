@@ -261,8 +261,8 @@ const useStylesForInput = makeStyles((theme) => ({
 }));
 
 function PatientAssessment(props) {
-  const classesForTabs = useStylesForTabs();
-  const classes = useStylesForInput();
+  const classesForTabs = useStylesForTabs()
+  const classes = useStylesForInput()
 
   const initialState = {
     labServiceId: "",
@@ -1328,7 +1328,7 @@ function PatientAssessment(props) {
                   outline: "none",
                   color: value === 1 ? "#12387a" : "#3B988C",
                 }}
-                label="Pharm"
+                label='Consultant/Specialist Notes'
                 disabled={enableAssessment}
               />
               <Tab
@@ -1338,7 +1338,7 @@ function PatientAssessment(props) {
                   outline: "none",
                   color: value === 2 ? "#12387a" : "#3B988C",
                 }}
-                label="Lab"
+                label='Pharm'
                 disabled={enableAssessment}
               />
               <Tab
@@ -1348,7 +1348,7 @@ function PatientAssessment(props) {
                   outline: "none",
                   color: value === 3 ? "#12387a" : "#3B988C",
                 }}
-                label="Rad"
+                label='Lab'
                 disabled={enableAssessment}
               />
               <Tab
@@ -1358,7 +1358,7 @@ function PatientAssessment(props) {
                   outline: "none",
                   color: value === 4 ? "#12387a" : "#3B988C",
                 }}
-                label="Consultant/Specialist Notes"
+                label='Rad'
                 disabled={enableAssessment}
               />
               {/* <Tab
@@ -1394,7 +1394,7 @@ function PatientAssessment(props) {
                 )}
               </div>
             </div>
-          ) : value === 1 ? (
+          ) : value === 2 ? (
             <div
               style={{ flex: 4, display: "flex", flexDirection: "column" }}
               className="container-fluid"
@@ -1424,7 +1424,7 @@ function PatientAssessment(props) {
                 )}
               </div>
             </div>
-          ) : value === 2 ? (
+          ) : value === 3 ? (
             <div
               style={{ flex: 4, display: "flex", flexDirection: "column" }}
               className={`container-fluid ${classes.root}`}
@@ -1596,7 +1596,7 @@ function PatientAssessment(props) {
                 </div>
               </div>
             </div>
-          ) : value === 3 ? (
+          ) : value === 4 ? (
             <div
               style={{ flex: 4, display: "flex", flexDirection: "column" }}
               className={`container-fluid ${classes.root}`}
@@ -1769,7 +1769,7 @@ function PatientAssessment(props) {
                 </div>
               </div>
             </div>
-          ) : value === 4 ? (
+          ) : value === 1 ? (
             <div
               style={{ flex: 4, display: "flex", flexDirection: "column" }}
               className="container-fluid"
@@ -1791,8 +1791,8 @@ function PatientAssessment(props) {
               </div>
             </div>
           ) : (
-            undefined
-          )}
+                      undefined
+                    )}
 
           {openItemDialog ? (
             <ViewSingleRequest

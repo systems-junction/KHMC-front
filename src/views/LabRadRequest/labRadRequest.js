@@ -344,7 +344,7 @@ function LabRadRequest(props) {
   const [errorMsg, setErrorMsg] = useState('')
   const [successMsg, setsuccessMsg] = useState('')
   const [openNotification, setOpenNotification] = useState(false)
-  const [value, setValue] = useState(0)
+  const [value, setValue] = useState(3)
   const [selectedItem, setSelectedItem] = useState('')
   const [searchPatientQuery, setSearchPatientQuery] = useState('')
   const [patientFoundSuccessfull, setpatientFoundSuccessfully] = useState(false)
@@ -1006,9 +1006,9 @@ function LabRadRequest(props) {
           <div>
             <img src={Lab_RadIcon} />
             <h4>
-              {value === 2
+              {value === 3
                 ? 'Lab Request'
-                : value === 3
+                : value === 4
                   ? 'Radiology Request'
                   : 'Lab / Rad Request'}
             </h4>
@@ -1336,7 +1336,7 @@ function LabRadRequest(props) {
                   outline: 'none',
                   color: value === 1 ? '#12387a' : '#3B988C',
                 }}
-                label='Pharm'
+                label='Consultant/Specialist Notes'
                 disabled={enableForm}
               />
               <Tab
@@ -1346,7 +1346,7 @@ function LabRadRequest(props) {
                   outline: 'none',
                   color: value === 2 ? '#12387a' : '#3B988C',
                 }}
-                label='Lab'
+                label='Pharm'
                 disabled={enableForm}
               />
               <Tab
@@ -1356,7 +1356,7 @@ function LabRadRequest(props) {
                   outline: 'none',
                   color: value === 3 ? '#12387a' : '#3B988C',
                 }}
-                label='Rad'
+                label='Lab'
                 disabled={enableForm}
               />
               <Tab
@@ -1366,7 +1366,7 @@ function LabRadRequest(props) {
                   outline: 'none',
                   color: value === 4 ? '#12387a' : '#3B988C',
                 }}
-                label='Consultant/Specialist Notes'
+                label='Rad'
                 disabled={enableForm}
               />
               {/* <Tab
@@ -1403,7 +1403,7 @@ function LabRadRequest(props) {
                   )}
               </div>
             </div>
-          ) : value === 1 ? (
+          ) : value === 2 ? (
             <div
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
               className='container-fluid'
@@ -1433,7 +1433,7 @@ function LabRadRequest(props) {
                   )}
               </div>
             </div>
-          ) : value === 2 ? (
+          ) : value === 3 ? (
             <div
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
               className={`container-fluid ${classes.root}`}
@@ -1605,7 +1605,7 @@ function LabRadRequest(props) {
                 </div>
               </div>
             </div>
-          ) : value === 3 ? (
+          ) : value === 4 ? (
             <div
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
               className={`container-fluid ${classes.root}`}
@@ -1778,7 +1778,7 @@ function LabRadRequest(props) {
                 </div>
               </div>
             </div>
-          ) : value === 4 ? (
+          ) : value === 1 ? (
             <div
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
               className='container-fluid'
