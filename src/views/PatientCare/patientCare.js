@@ -332,7 +332,7 @@ function PatientCare(props) {
   const [currentUser] = useState(cookie.load('current_user'))
   const [errorMsg, setErrorMsg] = useState('')
   const [openNotification, setOpenNotification] = useState(false)
-  const [value, setValue] = useState(0)
+  const [value, setValue] = useState(2)
   const [selectedItem, setSelectedItem] = useState('')
   const [searchPatientQuery, setSearchPatientQuery] = useState('')
   const [patientFoundSuccessfull, setpatientFoundSuccessfully] = useState(false)
@@ -1287,7 +1287,7 @@ function PatientCare(props) {
                   outline: 'none',
                   color: value === 1 ? '#12387a' : '#3B988C',
                 }}
-                label='Pharm'
+                label='Consultant/Specialist Notes'
                 disabled={enableAssessment}
               />
               <Tab
@@ -1297,7 +1297,7 @@ function PatientCare(props) {
                   outline: 'none',
                   color: value === 2 ? '#12387a' : '#3B988C',
                 }}
-                label='Lab'
+                label='Pharm'
                 disabled={enableAssessment}
               />
               <Tab
@@ -1307,7 +1307,7 @@ function PatientCare(props) {
                   outline: 'none',
                   color: value === 3 ? '#12387a' : '#3B988C',
                 }}
-                label='Rad'
+                label='Lab'
                 disabled={enableAssessment}
               />
               <Tab
@@ -1317,7 +1317,7 @@ function PatientCare(props) {
                   outline: 'none',
                   color: value === 4 ? '#12387a' : '#3B988C',
                 }}
-                label='Consultant/Specialist Notes'
+                label='Rad'
                 disabled={enableAssessment}
               />
             </Tabs>
@@ -1344,7 +1344,7 @@ function PatientCare(props) {
                   )}
               </div>
             </div>
-          ) : value === 1 ? (
+          ) : value === 2 ? (
             <div
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
               className='container-fluid'
@@ -1374,7 +1374,7 @@ function PatientCare(props) {
                   )}
               </div>
             </div>
-          ) : value === 2 ? (
+          ) : value === 3 ? (
             <div
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
               className={`container-fluid ${classes.root}`}
@@ -1546,7 +1546,7 @@ function PatientCare(props) {
                 </div>
               </div>
             </div>
-          ) : value === 3 ? (
+          ) : value === 4 ? (
             <div
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
               className={`container-fluid ${classes.root}`}
@@ -1719,7 +1719,7 @@ function PatientCare(props) {
                 </div>
               </div>
             </div>
-          ) : value === 4 ? (
+          ) : value === 1 ? (
             <div
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
               className='container-fluid'
