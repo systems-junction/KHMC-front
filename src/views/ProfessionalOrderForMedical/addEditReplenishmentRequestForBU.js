@@ -77,6 +77,12 @@ import BarCode from "../../assets/img/Bar Code.png";
 
 import stylesForPaper from "../../assets/jss/material-dashboard-react/components/paper.js";
 
+import { connect } from "react-redux";
+import {
+  funForReducer,
+  setPatientDetailsForReducer,
+} from "../../actions/Checking";
+
 const reasonArray = [
   { key: "jit", value: "JIT" },
   { key: "new_item", value: "New Item" },
@@ -484,14 +490,26 @@ function AddEditPurchaseRequest(props) {
   useEffect(() => {
     const selectedRec = props.history.location.state.selectedItem;
 
-    const selectedPatientforPharm = props.history.location.state.selectedPatientForPharma;
-     
-    if(selectedPatientforPharm)
-    {
-      setPatientDetails(selectedPatientforPharm);
-      setSelectedPatient(selectedPatientforPharm)
+    const selectedPatientforPharm =
+      props.history.location.state.selectedPatientForPharma;
+
+    if (props.patientDetails) {
+      setPatientDetails(props.patientDetails);
+      dispatch({
+        field: "patientReferenceNo",
+        value: props.patientDetails.profileNo,
+      });
       openPatientDetailsDialog(true);
-      dispatch({field:"patientReferenceNo", value:selectedPatientforPharm.profileNo})
+    }
+
+    if (selectedPatientforPharm) {
+      setPatientDetails(selectedPatientforPharm);
+      setSelectedPatient(selectedPatientforPharm);
+      openPatientDetailsDialog(true);
+      dispatch({
+        field: "patientReferenceNo",
+        value: selectedPatientforPharm.profileNo,
+      });
     }
 
     if (!selectedRec) {
@@ -535,6 +553,11 @@ function AddEditPurchaseRequest(props) {
         }
       });
     }
+
+    return function cleanup() {
+      console.log("unmount")
+      props.setPatientDetailsForReducer("");
+    };
   }, []);
 
   if (comingFor === "edit" && patientReferenceNo && patientDetails === "") {
@@ -638,11 +661,12 @@ function AddEditPurchaseRequest(props) {
           .then((res) => {
             if (res.data.success) {
               console.log("response after adding RR", res.data);
-              props.history.replace({
+              props.history.push({
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
                   // order #
                   message: `Medical Order # ${res.data.data.requestNo} for patient with MRN ${patientDetails.profileNo} has been placed succesfully`,
+                  patientDetails: patientDetails,
                 },
               });
             } else if (!res.data.success) {
@@ -657,8 +681,6 @@ function AddEditPurchaseRequest(props) {
       }
     }
   };
-
-  console.log(currentUser);
 
   const handleEdit = () => {
     if (!validateForm()) {
@@ -751,11 +773,12 @@ function AddEditPurchaseRequest(props) {
           .put(updateReplenishmentRequestUrlBU, obj)
           .then((res) => {
             if (res.data.success) {
-              props.history.replace({
+              props.history.push({
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
                   // order #
                   message: `Medical Order for patient with MRN ${patientDetails.profileNo} has been updated`,
+                  patientDetails: patientDetails,
                 },
               });
             } else if (!res.data.success) {
@@ -819,6 +842,8 @@ function AddEditPurchaseRequest(props) {
     setSelectedPatient(i);
     dispatch({ field: "patientReferenceNo", value: i.profileNo });
 
+    // props.setPatientDetailsForReducer(i);
+
     // dispatch({ field: "itemCode", value: i.itemCode });
     // dispatch({ field: "itemName", value: i.name });
     // dispatch({ field: "itemType", value: i.cls });
@@ -842,6 +867,8 @@ function AddEditPurchaseRequest(props) {
     setSelectedPatientArray((pervState) => [...pervState, obj]);
     setSearchPatientQuery("");
   }
+
+  console.log("patient id from reducer", props.patientDetails);
 
   const handleSearch = (e) => {
     var pattern = /^[a-zA-Z0-9 ]*$/;
@@ -1285,6 +1312,7 @@ function AddEditPurchaseRequest(props) {
       }}
     >
       <Header />
+
       <div className="cPadding">
         <div className="row">
           <div className="subheader">
@@ -2429,4 +2457,12 @@ function AddEditPurchaseRequest(props) {
     </div>
   );
 }
-export default AddEditPurchaseRequest;
+
+const mapStateToProps = ({ CheckingReducer }) => {
+  const { count, patientDetails } = CheckingReducer;
+  return { count, patientDetails };
+};
+export default connect(mapStateToProps, {
+  funForReducer,
+  setPatientDetailsForReducer,
+})(AddEditPurchaseRequest);
