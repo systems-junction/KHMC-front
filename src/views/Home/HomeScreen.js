@@ -364,17 +364,17 @@ const warehouseIncharge = [
 
 const fuHead = [
   { img: FunctionalUnit, text: "Functional Unit", path: "" },
-  {
-    img: MedicationOrder,
-    text: "Medication  Order",
-    path: `/home/wms/fus/medicinalorder`,
-  },
+  // {
+  //   img: MedicationOrder,
+  //   text: "Medication  Order",
+  //   path: `/home/wms/fus/medicinalorder`,
+  // },
 
-  {
-    img: ProfessionalOrder,
-    text: "Professional Order",
-    path: `fus/professionalorder`,
-  },
+  // {
+  //   img: ProfessionalOrder,
+  //   text: "Professional Order",
+  //   path: `fus/professionalorder`,
+  // },
 
   {
     img: FunctionalUnit,
@@ -382,23 +382,23 @@ const fuHead = [
     path: `fus/fuinventory`,
   },
 
-  {
-    img: BU,
-    text: "FU Rep Request",
-    path: `fus/replenishment`,
-  },
+  // {
+  //   img: BU,
+  //   text: "FU Rep Request",
+  //   path: `fus/replenishment`,
+  // },
 
-  {
-    img: ReturnItem,
-    text: "FU Returns",
-    path: `fus/returnitems`,
-  },
+  // {
+  //   img: ReturnItem,
+  //   text: "FU Returns",
+  //   path: `fus/returnitems`,
+  // },
 
-  {
-    img: ReceiveItem,
-    text: "Receive Items",
-    path: `fus/receive`,
-  },
+  // {
+  //   img: ReceiveItem,
+  //   text: "Receive Items",
+  //   path: `fus/receive`,
+  // },
 ];
 
 const buMember = [
