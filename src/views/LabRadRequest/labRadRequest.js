@@ -40,6 +40,12 @@ import BarCode from '../../assets/img/Bar Code.png'
 import Loader from 'react-loader-spinner'
 import ViewSingleRequest from './viewRequest'
 
+import { connect } from "react-redux";
+import {
+  funForReducer,
+  setPatientDetailsForReducer,
+} from "../../actions/Checking";
+
 const tableHeadingForResident = [
   'Date / Time',
   'Description / Condition',
@@ -387,6 +393,12 @@ function LabRadRequest(props) {
 
   useEffect(() => {
 
+    if (props.patientDetails) {
+      setPatientDetails(props.patientDetails);
+      getPatientByInfo(props.patientDetails._id);
+      openPatientDetailsDialog(true);
+    }
+
     // getEDRById(props.history.location.state.selectedItem._id);
 
     // setId(props.history.location.state.selectedItem._id);
@@ -548,6 +560,7 @@ function LabRadRequest(props) {
                 .LRrequestNo
                 } for patient MRN ${res.data.data.patientId.profileNo
                 } added successfully`,
+                patientDetails: patientDetails
             },
           })
         } else if (!res.data.success) {
@@ -694,6 +707,7 @@ function LabRadRequest(props) {
               ].RRrequestNo
                 } for patient MRN ${res.data.data.patientId.profileNo
                 } added successfully`,
+                patientDetails: patientDetails
             },
           })
         } else if (!res.data.success) {
@@ -844,6 +858,9 @@ function LabRadRequest(props) {
     setPatientDetails(i)
     getPatientByInfo(i._id)
     openPatientDetailsDialog(true)
+
+    props.setPatientDetailsForReducer(i);
+
 
     const obj = {
       itemCode: i.itemCode,
@@ -1862,4 +1879,13 @@ function LabRadRequest(props) {
     </div>
   )
 }
-export default LabRadRequest
+
+const mapStateToProps = ({ CheckingReducer }) => {
+  const { count, patientDetails } = CheckingReducer;
+  return { count, patientDetails };
+};
+export default connect(mapStateToProps, {
+  funForReducer,
+  setPatientDetailsForReducer,
+})(LabRadRequest);
+

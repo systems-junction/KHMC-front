@@ -58,6 +58,12 @@ import FuncUFulfillment from "../../assets/img/FuncU Fulfillment.png";
 import MedicationOrder from "../../assets/img/Medication Order.png";
 import ProfessionalOrder from "../../assets/img/Professional Order.png";
 
+import { connect } from "react-redux";
+import {
+  funForReducer,
+  setPatientDetailsForReducer,
+} from "../../actions/Checking";
+
 const admin = [
   { img: KHMC, text: "KHMC", path: "" },
   {
@@ -673,6 +679,9 @@ class HomeScreen extends React.Component {
     // if (this.state.userStaff !== "" && this.state.userStaff !== "undefined") {
     //   this.setOptions();
     // }
+
+    this.props.setPatientDetailsForReducer("");
+
     setTimeout(() => {
       document.getElementById("menu-open").checked = true;
     }, 120);
@@ -969,4 +978,11 @@ class HomeScreen extends React.Component {
   }
 }
 
-export default HomeScreen;
+const mapStateToProps = ({ CheckingReducer }) => {
+  const { count, patientDetails } = CheckingReducer;
+  return { count, patientDetails };
+};
+export default connect(mapStateToProps, {
+  funForReducer,
+  setPatientDetailsForReducer,
+})(HomeScreen);
