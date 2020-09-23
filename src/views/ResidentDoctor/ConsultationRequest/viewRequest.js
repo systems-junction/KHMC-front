@@ -415,7 +415,7 @@ export default function EdrRequest(props) {
 
           {props.item.audioNotes ? (
             <audio
-              style={{ marginTop: 20, marginLeft: 20 }}
+              style={{ marginTop: 20 }}
               src={`${audioURL}/${props.item.audioNotes}`}
               controls="controls"
             />
