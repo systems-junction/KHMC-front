@@ -505,6 +505,7 @@ function AddEditPurchaseRequest(props) {
       });
       openPatientDetailsDialog(true);
       getPatientByInfo(props.patientDetails._id);
+      setSelectedPatient(props.patientDetails)
     }
 
     if (!selectedRec) {

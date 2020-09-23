@@ -464,10 +464,15 @@ function AddEditPatientListing(props) {
   const [insuranceForm, setinsuranceForm] = useState(false)
 
   useEffect(() => {
-    setcomingFor(props.history.location.state.comingFor)
+    setcomingFor(
+      props.history.location.state && props.history.location.state.comingFor
+        ? props.history.location.state.comingFor
+        : 'add'
+    )
     setCountries(Object.keys(countriesList[0]))
 
-    const selectedRec = props.history.location.state.selectedItem
+    const selectedRec =
+      props.history.location.state && props.history.location.state.selectedItem
 
     if (selectedRec) {
       setPatientId(selectedRec._id)
@@ -487,7 +492,10 @@ function AddEditPatientListing(props) {
         }
       })
     }
-    if (props.history.location.state.comingFor === 'edit') {
+    if (
+      props.history.location.state &&
+      props.history.location.state.comingFor === 'edit'
+    ) {
       if (selectedRec.paymentMethod === 'Insurance') {
         setenableForm(false)
         setInsuranceForm(false)
@@ -543,8 +551,8 @@ function AddEditPatientListing(props) {
       validateCountryCity(city) &&
       address &&
       address.length > 0 &&
-      validateAddress(address)
-      // dob &&
+      validateAddress(address) &&
+      dob
       // dob.length > 0
       // bloodGroup &&
       // bloodGroup != null &&
@@ -621,6 +629,8 @@ function AddEditPatientListing(props) {
     if (slipUpload) {
       formData.append('file', slipUpload, slipUpload.name)
     }
+    console.log(value, 'value index')
+
     if (
       validatePatientForm() &&
       (validateCashForm() || validateInsuranceForm()) &&
@@ -696,7 +706,9 @@ function AddEditPatientListing(props) {
         })
     } else {
       setOpenNotification(true)
-      setErrorMsg('Please Fill the the empty fields with valid data')
+      setErrorMsg(
+        'Please Fill the the empty fields with valid data / Please add payment method'
+      )
     }
     setDetailsForm(true)
     setEmergencyForm(true)
@@ -792,7 +804,9 @@ function AddEditPatientListing(props) {
         })
     } else {
       setOpenNotification(true)
-      setErrorMsg('Please Fill the the empty fields with valid data')
+      setErrorMsg(
+        'Please Fill the the empty fields with valid data / Please add payment method'
+      )
     }
     setDetailsForm(true)
     setEmergencyForm(true)
@@ -1213,7 +1227,7 @@ function AddEditPatientListing(props) {
           </div>
           <div>
             <ButtonField
-              onClick={() => props.history.goBack()}
+              onClick={() => props.history.push('/home/rcm/patientListing')}
               name='viewAll'
             />
           </div>
@@ -1657,7 +1671,7 @@ function AddEditPatientListing(props) {
                     format='MM-dd-yyyy'
                     // minDate={dob}
 
-                    // error={dob === '' && detailsForm}
+                    error={dob == '' && detailsForm}
                     onChange={(val) => handleChangeDate(val, 'dob')}
                     InputProps={{
                       className: classes.input,
@@ -1668,7 +1682,7 @@ function AddEditPatientListing(props) {
                   />
                 </MuiPickersUtilsProvider>
 
-                {/* <ErrorMessage name={dob} isFormSubmitted={detailsForm} /> */}
+                <ErrorMessage name={dob} isFormSubmitted={detailsForm} />
               </div>
 
               <div
@@ -1729,7 +1743,7 @@ function AddEditPatientListing(props) {
                   disabled
                   label='Age'
                   name={'age'}
-                  value={age}
+                  value={age ? age : 0}
                   onChange={onChangeValue}
                   // error={age === '' && detailsForm}
                   className='textInputStyle'
@@ -1840,7 +1854,7 @@ function AddEditPatientListing(props) {
               </div>
             </div>
 
-            <div className='row'>
+            <div className='row' style={{ marginTop: 15 }}>
               <div
                 className='col-md-3 col-sm-3'
                 style={{
@@ -2310,8 +2324,8 @@ function AddEditPatientListing(props) {
                     display: 'inline-block',
                   }}
                 />
-                <>
-                  {comingFor === 'add' ? (
+
+                {/* {comingFor === 'add' ? (
                     <>
                       <Button
                         style={styles.save}
@@ -2319,38 +2333,29 @@ function AddEditPatientListing(props) {
                         //   !(validatePatientForm() && validatePaymentForm())
                         // }
                         onClick={searchActivated ? handleEdit : handleAdd}
-                        variant='contained'
-                        color='default'
+                        variant="contained"
+                        color="default"
                       >
                         Save
                       </Button>
                       <div
                         style={{
-                          width: '10px',
-                          height: 'auto',
-                          display: 'inline-block',
+                          width: "10px",
+                          height: "auto",
+                          display: "inline-block",
                         }}
                       />
                     </>
                   ) : (
                     <></>
-                  )}
+                  )} */}
 
-                  <div
-                    style={{
-                      width: '10px',
-                      height: 'auto',
-                      display: 'inline-block',
-                    }}
-                  />
-                </>
-
-                {currentUser.staffTypeId.type === 'EDR Receptionist' ? (
+                {/* {currentUser.staffTypeId.type === 'EDR Receptionist' ? (
                   <Button
                     style={styles.generate}
                     // disabled={comingFor === 'add' ? !isFormSubmitted : false}
                     disabled={
-                      comingFor === 'add'
+                      comingFor === "add"
                         ? !(
                             validatePatientForm() &&
                             validateEmergencyForm() &&
@@ -2360,23 +2365,23 @@ function AddEditPatientListing(props) {
                         : false
                     }
                     onClick={
-                      comingFor === 'add' ? handleGenerateEDR : handleEdit
+                      comingFor === "add" ? handleGenerateEDR : handleEdit
                     }
-                    variant='contained'
-                    color='primary'
+                    variant="contained"
+                    color="primary"
                   >
-                    {comingFor === 'add' ? 'Generate ED Record' : 'Update'}
+                    {comingFor === "add" ? "Generate ED Record" : "Update"}
                   </Button>
                 ) : (
                   undefined
-                )}
+                )} */}
 
-                {currentUser.staffTypeId.type === 'IPR Receptionist' ? (
+                {/* {currentUser.staffTypeId.type === 'IPR Receptionist' ? (
                   <Button
                     style={styles.generate}
                     // disabled={comingFor === 'add' ? !isFormSubmitted : false}
                     disabled={
-                      comingFor === 'add'
+                      comingFor === "add"
                         ? !(
                             validatePatientForm() &&
                             validateEmergencyForm() &&
@@ -2386,16 +2391,16 @@ function AddEditPatientListing(props) {
                         : false
                     }
                     onClick={
-                      comingFor === 'add' ? handleGenerateIPR : handleEdit
+                      comingFor === "add" ? handleGenerateIPR : handleEdit
                     }
-                    variant='contained'
-                    color='primary'
+                    variant="contained"
+                    color="primary"
                   >
-                    {comingFor === 'add' ? 'Generate IP Record' : 'Update'}
+                    {comingFor === "add" ? "Generate IP Record" : "Update"}
                   </Button>
                 ) : (
                   undefined
-                )}
+                )} */}
               </div>
             </div>
           </div>
@@ -3137,7 +3142,7 @@ function AddEditPatientListing(props) {
                   </div>
                 </div>
               </div>
-              <div className='row'>
+              <div className='row' style={{ marginTop: 15 }}>
                 <div
                   className='col-md-12'
                   style={{
@@ -3185,7 +3190,7 @@ function AddEditPatientListing(props) {
                 </div>
               </div>
 
-              <div className='row'>
+              <div className='row' style={{ marginTop: 15 }}>
                 <div
                   className='col-md-12'
                   style={{
@@ -3219,7 +3224,7 @@ function AddEditPatientListing(props) {
                 </div>
               </div>
 
-              <div className='row'>
+              <div className='row' style={{ marginTop: 15 }}>
                 <div
                   className='col-md-12'
                   style={{
