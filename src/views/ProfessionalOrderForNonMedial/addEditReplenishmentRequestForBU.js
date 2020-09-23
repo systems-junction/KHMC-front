@@ -504,6 +504,7 @@ function AddEditPurchaseRequest(props) {
         value: props.patientDetails.profileNo,
       });
       openPatientDetailsDialog(true);
+      setSelectedPatient(props.patientDetails)
     }
 
     if (!selectedRec) {
@@ -547,10 +548,10 @@ function AddEditPurchaseRequest(props) {
       });
     }
 
-    return function cleanup() {
-      console.log("unmount");
-      props.setPatientDetailsForReducer("");
-    };
+    // return function cleanup() {
+    //   console.log("unmount");
+    //   props.setPatientDetailsForReducer("");
+    // };
   }, []);
 
   if (comingFor === "edit" && patientReferenceNo && patientDetails === "") {
@@ -646,6 +647,7 @@ function AddEditPurchaseRequest(props) {
           fuId: currentUser.functionalUnit._id,
           orderFor: "Medical",
           orderBy,
+          pId: selectedPatient._id,
         };
         console.log("params", params);
         axios

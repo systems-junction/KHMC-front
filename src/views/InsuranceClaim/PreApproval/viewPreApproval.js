@@ -23,7 +23,7 @@ import InputLabel from '@material-ui/core/InputLabel'
 const tableHeadingForNeedApproval = [
   'Request No',
   'Request Type',
-  // 'Item',
+  'Item',
   'Total Cost',
   'Status',
   'Insurance',
@@ -32,7 +32,7 @@ const tableHeadingForNeedApproval = [
 const tableDataKeysForNeedApproval = [
   '_id',
   'RequestType',
-  // 'item',
+  'serviceName',
   'totalCost',
   'status',
   'insurance',
@@ -205,7 +205,7 @@ function AddEditPurchaseRequest(props) {
             ...selectedRec.pharmacyRequest[i],
             totalCost: amount,
             RequestType: 'PHR',
-            // item: 'Medicine',
+            serviceName:'Medical',
             insurance: 'Uncovered',
           }
         }
@@ -225,7 +225,6 @@ function AddEditPurchaseRequest(props) {
         selectedRec.labRequest.map(
           (d) => (
             (d.RequestType = 'LR'),
-            (d.item = d.serviceName),
             (d.totalCost = d.serviceId.price),
             (d.insurance = 'Uncovered')
           )
@@ -235,7 +234,6 @@ function AddEditPurchaseRequest(props) {
         selectedRec.radiologyRequest.map(
           (d) => (
             (d.RequestType = 'RR'),
-            (d.item = d.serviceName),
             (d.totalCost = d.serviceId.price),
             (d.insurance = 'Uncovered')
           )
@@ -244,9 +242,9 @@ function AddEditPurchaseRequest(props) {
     }
     setneedApprovalArray(
       [].concat(
-        selectedRec.labRequest,
-        selectedRec.radiologyRequest,
-        selectedRec.pharmacyRequest
+        selectedRec.labRequest.reverse(),
+        selectedRec.radiologyRequest.reverse(),
+        selectedRec.pharmacyRequest.reverse()
       )
     )
   }, [])
@@ -258,7 +256,6 @@ function AddEditPurchaseRequest(props) {
         if (res.data.success) {
           if (res.data.data) {
             const selectedfollowUp = res.data.data[0]
-            console.log('follow Up: ', selectedfollowUp)
 
             setIsLoading(false)
 
