@@ -109,7 +109,7 @@ const frontDesk = [
   {
     img: PatientRegistration,
     text: "Patient Registration",
-    path: "/home/rcm/patientListing",
+    path: "/home/rcm/patientListing/add",
   },
 ];
 
