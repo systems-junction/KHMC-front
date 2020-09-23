@@ -31,6 +31,7 @@ import {
   getCurrentQtyForFURepRequestUrl,
   getPatientByProfileNo,
   getSearchedpatient,
+  searchpatient,
 } from "../../public/endpoins";
 
 import Paper from "@material-ui/core/Paper";
@@ -328,6 +329,9 @@ function AddEditPurchaseRequest(props) {
     scientificName: "",
     make_model: "",
     size: "",
+
+    diagnosisArray: "",
+    pharmacyRequest:""
   };
 
   function reducer(state, { field, value }) {
@@ -401,6 +405,9 @@ function AddEditPurchaseRequest(props) {
     scientificName,
     make_model,
     size,
+
+    diagnosisArray,
+    pharmacyRequest
   } = state;
 
   const [comingFor, setcomingFor] = useState("");
@@ -554,6 +561,12 @@ function AddEditPurchaseRequest(props) {
     var pattern = /^[a-zA-Z0-9 ]*$/;
     if (e.target.type === "text") {
       if (pattern.test(e.target.value) === false) {
+        return;
+      }
+    }
+
+    if (e.target.type === "number") {
+      if (e.target.value < 0) {
         return;
       }
     }
@@ -836,6 +849,7 @@ function AddEditPurchaseRequest(props) {
 
     setPatientDetails(i);
     openPatientDetailsDialog(true);
+    getPatientByInfo(i._id);
 
     const obj = {
       itemCode: i.itemCode,
@@ -844,6 +858,91 @@ function AddEditPurchaseRequest(props) {
     setSelectedPatientArray((pervState) => [...pervState, obj]);
     setSearchPatientQuery("");
   }
+
+  const getPatientByInfo = (id) => {
+    axios
+      .get(searchpatient + "/" + id)
+      .then((res) => {
+        if (res.data.success) {
+          if (res.data.data) {
+            console.log(
+              "Response after getting EDR/IPR data : ",
+              res.data.data
+            );
+
+            Object.entries(res.data.data).map(([key, val]) => {
+              if (val && typeof val === "object") {
+                // if (key === "patientId") {
+                //     dispatch({ field: "patientId", value: val._id });
+                // } else
+                if (key === "labRequest") {
+                  dispatch({ field: "labRequestArray", value: val.reverse() });
+                } else if (key === "radiologyRequest") {
+                  dispatch({
+                    field: "radiologyRequestArray",
+                    value: val.reverse(),
+                  });
+                } else if (key === "consultationNote") {
+                  val.map(
+                    (d) =>
+                      (d.doctorName = d.requester
+                        ? d.requester.firstName + " " + d.requester.lastName
+                        : "")
+                  );
+                  dispatch({
+                    field: "consultationNoteArray",
+                    value: val.reverse(),
+                  });
+                } else if (key === "residentNotes") {
+                  val.map(
+                    (d) =>
+                      (d.doctorName = d.doctor
+                        ? d.doctor.firstName + " " + d.doctor.lastName
+                        : "")
+                  );
+                  dispatch({
+                    field: "residentNoteArray",
+                    value: val.reverse(),
+                  });
+                  if (val && val.length > 0) {
+                    dispatch({ field: "diagnosisArray", value: val[0].code });
+                  }
+                } else if (key === "pharmacyRequest") {
+                  val.map(
+                    (d) =>
+                      (d.doctorName = d.requester
+                        ? d.requester.firstName + " " + d.requester.lastName
+                        : "")
+                  );
+                  dispatch({
+                    field: "pharmacyRequestArray",
+                    value: val.reverse(),
+                  });
+                  if (val && val.length > 0) {
+                    dispatch({
+                      field: "medicationArray",
+                      value: val[0].medicine,
+                    });
+                  }
+                }
+                //  else if (key === "nurseService") {
+                //     dispatch({ field: "nurseService", value: val });
+                // }
+              } else {
+                dispatch({ field: key, value: val });
+              }
+            });
+          }
+        } else {
+          setOpenNotification(true);
+          setErrorMsg("EDR/IPR not generated for patient");
+        }
+      })
+      .catch((e) => {
+        setOpenNotification(true);
+        setErrorMsg(e);
+      });
+  };
 
   const handleSearch = (e) => {
     var pattern = /^[a-zA-Z0-9 ]*$/;
@@ -967,7 +1066,7 @@ function AddEditPurchaseRequest(props) {
     if (selectedItemToSearch === "non_pharmaceutical") {
       checkForNonpharma =
         requestedQty !== "" &&
-        requestedQty !== 0 &&
+        requestedQty !== "0" &&
         size !== "" &&
         make_model !== "";
     }
@@ -1456,6 +1555,8 @@ function AddEditPurchaseRequest(props) {
         {patientDetails && patientDetailsDialog ? (
           <PatientDetails
             patientDetails={patientDetails}
+            diagnosisArray={diagnosisArray}
+            pharmacyRequest={pharmacyRequest}
             showPatientDetails={showPatientDetails}
           />
         ) : (
