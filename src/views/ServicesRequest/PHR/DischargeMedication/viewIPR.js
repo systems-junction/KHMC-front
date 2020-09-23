@@ -413,6 +413,7 @@ function AddEditPurchaseRequest(props) {
     setSelectedItem(props.history.location.state.selectedItem)
     setrequestNo(props.history.location.state.selectedItem.requestNo)
     setSelectedPatient(props.history.location.state.selectedItem.patientId)
+    console.log(props.history.location.state.selectedItem.patientId, 'patient')
   }, [])
 
   const handleChangeExternalConsultant = (event) => {
@@ -643,8 +644,8 @@ function AddEditPurchaseRequest(props) {
                     Insurance No
                   </InputLabel>
                   <span>
-                    {selectedPatient.insuranceId
-                      ? selectedPatient.insuranceId
+                    {selectedPatient.insuranceNo
+                      ? selectedPatient.insuranceNo
                       : '--'}
                   </span>
                 </div>

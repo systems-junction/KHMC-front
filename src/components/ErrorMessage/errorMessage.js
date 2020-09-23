@@ -19,7 +19,7 @@ import validateInsuranceVendor from '../../public/inputValidator'
 import validateNationName from '../../public/inputValidator'
 import validateNumber from '../../public/numberValidator'
 import validateNationalId from '../../public/numbersValidator'
-import validateAmount from '../../public/FloatValidator'
+import validateAmount from '../../public/amountValidator'
 import validateInsuranceNo from '../../public/numbersValidator'
 import validateHeight from '../../public/numberFloatValidator'
 import validateWeight from '../../public/numberFloatValidator'
@@ -47,11 +47,11 @@ const ErrorMsg = (props) => {
         ? !validateNationalId(props.name)
           ? 'Enter valid national Id with numbers only (e.g: 123456789 etc)'
           : undefined
-        : props.type && props.type === 'amount' && props.isFormSubmitted
-        ? !validateAmount(props.name)
-          ? 'Enter valid amount in decimal only (e.g: 46.74, 1200.00 etc)'
-          : undefined
-        : props.type && props.type === 'insuranceNo' && props.isFormSubmitted
+        : // : props.type && props.type === 'amount' && props.isFormSubmitted
+        // ? !validateAmount(props.name)
+        //   ? 'Enter valid amount in decimal only (e.g: 46.74, 1200.00 etc)'
+        //   : undefined
+        props.type && props.type === 'insuranceNo' && props.isFormSubmitted
         ? !validateInsuranceNo(props.name)
           ? 'Enter valid insurance No with numbers only (e.g: 123456789 etc)'
           : undefined

@@ -37,10 +37,14 @@ import socketIOClient from 'socket.io-client'
 import CustomTable from '../../../components/Table/Table'
 import { colors } from '@material-ui/core'
 
-const durationArray = [
-  { key: '1 Week', value: '1 week' },
-  { key: '2 Week', value: '2 week' },
-  { key: '3 Week', value: '3 week' },
+const scheduleArray = [
+  { key: 'Now', value: 'Now/Immediate' },
+  // { key: "Immediate", value: "Immediate" },
+]
+const priorityArray = [
+  { key: 'Emergency', value: 'Emergency' },
+  { key: 'Regular', value: 'Regular' },
+  { key: 'PRN', value: 'PRN' },
 ]
 const tableHeadingForPharmacyReq = [
   'Medicine Name',
@@ -72,7 +76,7 @@ const styles = {
     borderRadius: 5,
     backgroundColor: '#2c6ddd',
     width: '140px',
-    height: '40px',
+    height: '50px',
     outline: 'none',
   },
   stylesForPurchaseButton: {
@@ -81,7 +85,7 @@ const styles = {
     borderRadius: 5,
     backgroundColor: '#2c6ddd',
     width: '140px',
-    height: '40px',
+    height: '50px',
     outline: 'none',
   },
   inputField: {
@@ -155,12 +159,12 @@ function AddEditEDR(props) {
     requester: '',
     medicineDataArray: '',
     itemId: '',
-    duration: 0,
-    dosage: 0,
+    duration: '',
+    dosage: '',
     priority: '',
     schedule: '',
-    frequency: 0,
-    requestedQty: 0,
+    frequency: '',
+    requestedQty: '',
     // additionalNote:'',
     pharmacyRequest: '',
     medicineName: '',
@@ -560,7 +564,13 @@ function AddEditEDR(props) {
       priority &&
       priority.length > 0 &&
       schedule &&
-      schedule.length > 0
+      schedule.length > 0 &&
+      duration &&
+      duration.length > 0 &&
+      frequency &&
+      frequency.length > 0 &&
+      dosage &&
+      dosage.length > 0
     )
   }
 
@@ -571,13 +581,13 @@ function AddEditEDR(props) {
 
     dispatch({ field: 'itemId', value: '' })
     dispatch({ field: 'medicineName', value: '' })
-    dispatch({ field: 'duration', value: 0 })
-    dispatch({ field: 'dosage', value: 0 })
+    dispatch({ field: 'duration', value: '' })
+    dispatch({ field: 'dosage', value: '' })
     // dispatch({ field: 'additionalNote', value: '' })
     dispatch({ field: 'priority', value: '' })
     dispatch({ field: 'schedule', value: '' })
-    dispatch({ field: 'frequency', value: 0 })
-    dispatch({ field: 'requestedQty', value: 0 })
+    dispatch({ field: 'frequency', value: '' })
+    dispatch({ field: 'requestedQty', value: '' })
   }
 
   const addSelectedItem = () => {
@@ -606,7 +616,7 @@ function AddEditEDR(props) {
               priority,
               schedule,
               frequency,
-              requestedQty,
+              requestedQty: (frequency * dosage * duration).toFixed(2),
             },
           ],
         })
@@ -615,13 +625,13 @@ function AddEditEDR(props) {
 
     dispatch({ field: 'itemId', value: '' })
     dispatch({ field: 'medicineName', value: '' })
-    dispatch({ field: 'duration', value: 0 })
-    dispatch({ field: 'dosage', value: 0 })
+    dispatch({ field: 'duration', value: '' })
+    dispatch({ field: 'dosage', value: '' })
     // dispatch({ field: 'additionalNote', value: '' })
     dispatch({ field: 'priority', value: '' })
     dispatch({ field: 'schedule', value: '' })
-    dispatch({ field: 'frequency', value: 0 })
-    dispatch({ field: 'requestedQty', value: 0 })
+    dispatch({ field: 'frequency', value: '' })
+    dispatch({ field: 'requestedQty', value: '' })
     setEnableSave(false)
   }
 
@@ -643,7 +653,7 @@ function AddEditEDR(props) {
             priority,
             schedule,
             frequency,
-            requestedQty,
+            requestedQty: (frequency * dosage * duration).toFixed(2),
           }
           temp[i] = obj
         } else {
@@ -663,12 +673,12 @@ function AddEditEDR(props) {
 
     dispatch({ field: 'itemId', value: '' })
     dispatch({ field: 'medicineName', value: '' })
-    dispatch({ field: 'duration', value: 0 })
-    dispatch({ field: 'dosage', value: 0 })
+    dispatch({ field: 'duration', value: '' })
+    dispatch({ field: 'dosage', value: '' })
     dispatch({ field: 'priority', value: '' })
     dispatch({ field: 'schedule', value: '' })
-    dispatch({ field: 'frequency', value: 0 })
-    dispatch({ field: 'requestedQty', value: 0 })
+    dispatch({ field: 'frequency', value: '' })
+    dispatch({ field: 'requestedQty', value: '' })
     // dispatch({ field: 'additionalNote', value: '' })
     setEnableSave(false)
   }
@@ -937,7 +947,7 @@ function AddEditEDR(props) {
                       variant='filled'
                       label='Priority'
                       className='dropDownStyle'
-                      error={priority === '' && isFormSubmitted}
+                      // error={priority === '' && isFormSubmitted}
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
@@ -947,7 +957,7 @@ function AddEditEDR(props) {
                       <MenuItem value=''>
                         <em>None</em>
                       </MenuItem>
-                      {durationArray.map((val) => {
+                      {priorityArray.map((val) => {
                         return (
                           <MenuItem key={val.key} value={val.key}>
                             {val.value}
@@ -973,7 +983,7 @@ function AddEditEDR(props) {
                       value={schedule}
                       onChange={onChangeValue}
                       label='Schedule'
-                      error={schedule === '' && isFormSubmitted}
+                      // error={schedule === '' && isFormSubmitted}
                       className='dropDownStyle'
                       InputProps={{
                         className: classes.input,
@@ -984,7 +994,7 @@ function AddEditEDR(props) {
                       <MenuItem value=''>
                         <em>None</em>
                       </MenuItem>
-                      {durationArray.map((val) => {
+                      {scheduleArray.map((val) => {
                         return (
                           <MenuItem key={val.key} value={val.key}>
                             {val.value}
@@ -1094,7 +1104,7 @@ function AddEditEDR(props) {
                       onChange={onChangeValue}
                       className='textInputStyle'
                       variant='filled'
-                      error={dosage === '' && isFormSubmitted}
+                      // error={dosage === '' && isFormSubmitted}
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
@@ -1114,12 +1124,13 @@ function AddEditEDR(props) {
                   >
                     <TextField
                       // type='number'
+                      disabled
                       label='Requested Qty'
                       variant='filled'
                       name={'requestedQty'}
-                      value={requestedQty}
+                      value={(frequency * dosage * duration).toFixed(2)}
                       onChange={onChangeValue}
-                      error={requestedQty === '' && isFormSubmitted}
+                      // error={requestedQty === '' && isFormSubmitted}
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
@@ -1159,7 +1170,7 @@ function AddEditEDR(props) {
                         style={{
                           color: 'white',
                           cursor: 'pointer',
-                          borderRadius: 15,
+                          borderRadius: 5,
                           backgroundColor: '#2c6ddd',
                           width: '140px',
                           height: '50px',
