@@ -193,7 +193,21 @@ function AddEditEDR(props) {
   } = state
 
   const onChangeValue = (e) => {
-    dispatch({ field: e.target.name, value: e.target.value })
+    var pattern = /^[0-9. ]*$/
+    if (
+      e.target.name === 'frequency' ||
+      e.target.name === 'dosage' ||
+      e.target.name === 'duration' ||
+      e.target.name === 'requestedQty'
+    ) {
+      if (pattern.test(e.target.value) === false) {
+        return
+      }
+    }
+    dispatch({
+      field: e.target.name,
+      value: e.target.value.replace(/[^\w.\s]/gi, ''),
+    })
   }
 
   function validateForm() {
@@ -991,7 +1005,7 @@ function AddEditEDR(props) {
                   >
                     <TextField
                       style={styles.inputField}
-                      type='number'
+                      // type='number'
                       label='Frequency'
                       variant='filled'
                       name={'frequency'}
@@ -1017,7 +1031,7 @@ function AddEditEDR(props) {
                   >
                     <TextField
                       style={styles.inputField}
-                      type='number'
+                      // type='number'
                       label='Duration'
                       name={'duration'}
                       value={duration}
@@ -1073,7 +1087,7 @@ function AddEditEDR(props) {
                     }}
                   >
                     <TextField
-                      type='number'
+                      // type='number'
                       label='Dosage'
                       name={'dosage'}
                       value={dosage}
@@ -1099,7 +1113,7 @@ function AddEditEDR(props) {
                     }}
                   >
                     <TextField
-                      type='number'
+                      // type='number'
                       label='Requested Qty'
                       variant='filled'
                       name={'requestedQty'}

@@ -543,8 +543,8 @@ function AddEditPatientListing(props) {
       validateCountryCity(city) &&
       address &&
       address.length > 0 &&
-      validateAddress(address)
-      // dob &&
+      validateAddress(address) &&
+      dob
       // dob.length > 0
       // bloodGroup &&
       // bloodGroup != null &&
@@ -621,6 +621,8 @@ function AddEditPatientListing(props) {
     if (slipUpload) {
       formData.append('file', slipUpload, slipUpload.name)
     }
+    console.log(value, 'value index')
+
     if (
       validatePatientForm() &&
       (validateCashForm() || validateInsuranceForm()) &&
@@ -696,7 +698,9 @@ function AddEditPatientListing(props) {
         })
     } else {
       setOpenNotification(true)
-      setErrorMsg('Please Fill the the empty fields with valid data')
+      setErrorMsg(
+        'Please Fill the the empty fields with valid data / Please add payment method'
+      )
     }
     setDetailsForm(true)
     setEmergencyForm(true)
@@ -792,7 +796,9 @@ function AddEditPatientListing(props) {
         })
     } else {
       setOpenNotification(true)
-      setErrorMsg('Please Fill the the empty fields with valid data')
+      setErrorMsg(
+        'Please Fill the the empty fields with valid data / Please add payment method'
+      )
     }
     setDetailsForm(true)
     setEmergencyForm(true)
@@ -1657,7 +1663,7 @@ function AddEditPatientListing(props) {
                     format='MM-dd-yyyy'
                     // minDate={dob}
 
-                    // error={dob === '' && detailsForm}
+                    error={dob == '' && detailsForm}
                     onChange={(val) => handleChangeDate(val, 'dob')}
                     InputProps={{
                       className: classes.input,
@@ -1668,7 +1674,7 @@ function AddEditPatientListing(props) {
                   />
                 </MuiPickersUtilsProvider>
 
-                {/* <ErrorMessage name={dob} isFormSubmitted={detailsForm} /> */}
+                <ErrorMessage name={dob} isFormSubmitted={detailsForm} />
               </div>
 
               <div
@@ -1729,7 +1735,7 @@ function AddEditPatientListing(props) {
                   disabled
                   label='Age'
                   name={'age'}
-                  value={age}
+                  value={age ? age : 0}
                   onChange={onChangeValue}
                   // error={age === '' && detailsForm}
                   className='textInputStyle'
@@ -1840,7 +1846,7 @@ function AddEditPatientListing(props) {
               </div>
             </div>
 
-            <div className='row'>
+            <div className='row' style={{ marginTop: 15 }}>
               <div
                 className='col-md-3 col-sm-3'
                 style={{
@@ -2310,8 +2316,8 @@ function AddEditPatientListing(props) {
                     display: 'inline-block',
                   }}
                 />
-                <>
-                  {comingFor === 'add' ? (
+
+                {/* {comingFor === 'add' ? (
                     <>
                       <Button
                         style={styles.save}
@@ -2334,18 +2340,9 @@ function AddEditPatientListing(props) {
                     </>
                   ) : (
                     <></>
-                  )}
+                  )} */}
 
-                  <div
-                    style={{
-                      width: '10px',
-                      height: 'auto',
-                      display: 'inline-block',
-                    }}
-                  />
-                </>
-
-                {currentUser.staffTypeId.type === 'EDR Receptionist' ? (
+                {/* {currentUser.staffTypeId.type === 'EDR Receptionist' ? (
                   <Button
                     style={styles.generate}
                     // disabled={comingFor === 'add' ? !isFormSubmitted : false}
@@ -2369,9 +2366,9 @@ function AddEditPatientListing(props) {
                   </Button>
                 ) : (
                   undefined
-                )}
+                )} */}
 
-                {currentUser.staffTypeId.type === 'IPR Receptionist' ? (
+                {/* {currentUser.staffTypeId.type === 'IPR Receptionist' ? (
                   <Button
                     style={styles.generate}
                     // disabled={comingFor === 'add' ? !isFormSubmitted : false}
@@ -2395,7 +2392,7 @@ function AddEditPatientListing(props) {
                   </Button>
                 ) : (
                   undefined
-                )}
+                )} */}
               </div>
             </div>
           </div>
@@ -3137,7 +3134,7 @@ function AddEditPatientListing(props) {
                   </div>
                 </div>
               </div>
-              <div className='row'>
+              <div className='row' style={{ marginTop: 15 }}>
                 <div
                   className='col-md-12'
                   style={{
@@ -3185,7 +3182,7 @@ function AddEditPatientListing(props) {
                 </div>
               </div>
 
-              <div className='row'>
+              <div className='row' style={{ marginTop: 15 }}>
                 <div
                   className='col-md-12'
                   style={{
@@ -3219,7 +3216,7 @@ function AddEditPatientListing(props) {
                 </div>
               </div>
 
-              <div className='row'>
+              <div className='row' style={{ marginTop: 15 }}>
                 <div
                   className='col-md-12'
                   style={{
