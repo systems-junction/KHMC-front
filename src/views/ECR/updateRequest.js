@@ -603,13 +603,13 @@ export default function EdrRequest(props) {
             <div>
               {props.item.audioNotes ? (
                 <audio
-                  style={{ marginTop: 30, marginLeft: 20 }}
+                  style={{ marginTop: 30, marginLeft: 15 }}
                   src={`${audioURL}/${props.item.audioNotes}`}
                   controls="controls"
                 />
               ) : !isRecording ? (
                 <audio
-                  style={{ marginTop: 30, marginLeft: 20 }}
+                  style={{ marginTop: 30, marginLeft: 15 }}
                   src={blobURL}
                   controls="controls"
                 />

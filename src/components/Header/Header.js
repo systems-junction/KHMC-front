@@ -74,7 +74,7 @@ class Header extends React.Component {
         <img
           src={KHMC_White}
           className="header1-style"
-          style={{ maxWidth: "160px", height: "35px" }}
+          // style={{ maxWidth: "160px", height: "35px" }}
           onClick={() => {
             return this.setState({ goBack: true });
           }}
@@ -83,8 +83,8 @@ class Header extends React.Component {
           src={Influence_white}
           className="header2-style"
           style={{
-            maxWidth: "160px",
-            height: "35px",
+            // maxWidth: "160px",
+            // height: "35px",
             cursor: "pointer",
             // boxShadow: this.state.hover ? '2px 2px 2px 2px #b2b0b0' : '',
           }}
@@ -99,7 +99,7 @@ class Header extends React.Component {
               float: "right",
               width: 300,
               marginRight: 10,
-              top: 50,
+              top: 35,
               right: 0,
               bottom: 0,
               position: "fixed",

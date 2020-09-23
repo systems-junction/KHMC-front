@@ -464,10 +464,15 @@ function AddEditPatientListing(props) {
   const [insuranceForm, setinsuranceForm] = useState(false)
 
   useEffect(() => {
-    setcomingFor(props.history.location.state.comingFor)
+    setcomingFor(
+      props.history.location.state && props.history.location.state.comingFor
+        ? props.history.location.state.comingFor
+        : 'add'
+    )
     setCountries(Object.keys(countriesList[0]))
 
-    const selectedRec = props.history.location.state.selectedItem
+    const selectedRec =
+      props.history.location.state && props.history.location.state.selectedItem
 
     if (selectedRec) {
       setPatientId(selectedRec._id)
@@ -487,7 +492,10 @@ function AddEditPatientListing(props) {
         }
       })
     }
-    if (props.history.location.state.comingFor === 'edit') {
+    if (
+      props.history.location.state &&
+      props.history.location.state.comingFor === 'edit'
+    ) {
       if (selectedRec.paymentMethod === 'Insurance') {
         setenableForm(false)
         setInsuranceForm(false)
@@ -1219,7 +1227,7 @@ function AddEditPatientListing(props) {
           </div>
           <div>
             <ButtonField
-              onClick={() => props.history.goBack()}
+              onClick={() => props.history.push('/home/rcm/patientListing')}
               name='viewAll'
             />
           </div>
@@ -2325,16 +2333,16 @@ function AddEditPatientListing(props) {
                         //   !(validatePatientForm() && validatePaymentForm())
                         // }
                         onClick={searchActivated ? handleEdit : handleAdd}
-                        variant='contained'
-                        color='default'
+                        variant="contained"
+                        color="default"
                       >
                         Save
                       </Button>
                       <div
                         style={{
-                          width: '10px',
-                          height: 'auto',
-                          display: 'inline-block',
+                          width: "10px",
+                          height: "auto",
+                          display: "inline-block",
                         }}
                       />
                     </>
@@ -2347,7 +2355,7 @@ function AddEditPatientListing(props) {
                     style={styles.generate}
                     // disabled={comingFor === 'add' ? !isFormSubmitted : false}
                     disabled={
-                      comingFor === 'add'
+                      comingFor === "add"
                         ? !(
                             validatePatientForm() &&
                             validateEmergencyForm() &&
@@ -2357,12 +2365,12 @@ function AddEditPatientListing(props) {
                         : false
                     }
                     onClick={
-                      comingFor === 'add' ? handleGenerateEDR : handleEdit
+                      comingFor === "add" ? handleGenerateEDR : handleEdit
                     }
-                    variant='contained'
-                    color='primary'
+                    variant="contained"
+                    color="primary"
                   >
-                    {comingFor === 'add' ? 'Generate ED Record' : 'Update'}
+                    {comingFor === "add" ? "Generate ED Record" : "Update"}
                   </Button>
                 ) : (
                   undefined
@@ -2373,7 +2381,7 @@ function AddEditPatientListing(props) {
                     style={styles.generate}
                     // disabled={comingFor === 'add' ? !isFormSubmitted : false}
                     disabled={
-                      comingFor === 'add'
+                      comingFor === "add"
                         ? !(
                             validatePatientForm() &&
                             validateEmergencyForm() &&
@@ -2383,12 +2391,12 @@ function AddEditPatientListing(props) {
                         : false
                     }
                     onClick={
-                      comingFor === 'add' ? handleGenerateIPR : handleEdit
+                      comingFor === "add" ? handleGenerateIPR : handleEdit
                     }
-                    variant='contained'
-                    color='primary'
+                    variant="contained"
+                    color="primary"
                   >
-                    {comingFor === 'add' ? 'Generate IP Record' : 'Update'}
+                    {comingFor === "add" ? "Generate IP Record" : "Update"}
                   </Button>
                 ) : (
                   undefined
