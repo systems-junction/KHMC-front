@@ -15,6 +15,9 @@ import Button from '@material-ui/core/Button'
 import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
 import axios from 'axios'
 import Notification from '../../../components/Snackbar/Notification.js'
+import AccountCircle from '@material-ui/icons/SearchOutlined'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import TextField from '@material-ui/core/TextField'
 import {
   updateIPR,
   notifyDischarge,
@@ -36,10 +39,14 @@ import DialogContent from '@material-ui/core/DialogContent'
 import '../../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
 import CustomTable from '../../../components/Table/Table'
 
+const scheduleArray = [
+  { key: 'Now', value: 'Now/Immediate' },
+  // { key: "Immediate", value: "Immediate" },
+]
 const priorityArray = [
-  { key: 'High', value: 'high' },
-  { key: 'Medium', value: 'medium' },
-  { key: 'Low', value: 'low' },
+  { key: 'Emergency', value: 'Emergency' },
+  { key: 'Regular', value: 'Regular' },
+  { key: 'PRN', value: 'PRN' },
 ]
 const tableHeadingForPharmacyReq = [
   'Medicine Name',
@@ -71,7 +78,7 @@ const styles = {
     borderRadius: 5,
     backgroundColor: '#2c6ddd',
     width: '140px',
-    height: '40px',
+    height: '50px',
     outline: 'none',
   },
   stylesForPurchaseButton: {
@@ -80,14 +87,18 @@ const styles = {
     borderRadius: 5,
     backgroundColor: '#2c6ddd',
     width: '140px',
-    height: '40px',
+    height: '50px',
     outline: 'none',
   },
   inputField: {
     outline: 'none',
   },
   inputContainerForTextField: {
-    marginTop: 25,
+    marginTop: 10,
+  },
+  textFieldPadding: {
+    paddingLeft: 5,
+    paddingRight: 5,
   },
   inputContainerForDropDown: {
     marginTop: 25,
@@ -96,9 +107,67 @@ const styles = {
     marginTop: 25,
   },
 }
-const useStyles = makeStyles(tableStyles)
+// const useStyles = makeStyles(tableStyles)
+
+const useStyles = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(0),
+  },
+  input: {
+    backgroundColor: 'white',
+    boxShadow: 'none',
+    borderRadius: 5,
+    '&:after': {
+      borderBottomColor: 'black',
+      boxShadow: 'none',
+    },
+    '&:hover': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
+  },
+  multilineColor: {
+    boxShadow: 'none',
+    backgroundColor: 'white',
+    borderRadius: 5,
+    '&:hover': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
+    '&:after': {
+      borderBottomColor: 'black',
+      boxShadow: 'none',
+    },
+    '&:focus': {
+      boxShadow: 'none',
+    },
+  },
+  root: {
+    '& .MuiTextField-root': {
+      backgroundColor: 'white',
+    },
+    '& .Mui-focused': {
+      backgroundColor: 'white',
+      color: 'black',
+      boxShadow: 'none',
+    },
+    '& .Mui-disabled': {
+      backgroundColor: 'white',
+      color: 'gray',
+    },
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
+  },
+}))
 
 function AddEditEDR(props) {
+  const classes = useStyles()
   const initialState = {
     date: new Date(),
     status: 'pending',
@@ -146,7 +215,20 @@ function AddEditEDR(props) {
   } = state
 
   const onChangeValue = (e) => {
-    dispatch({ field: e.target.name, value: e.target.value })
+    var pattern = /^[0-9. ]*$/
+    if (
+      e.target.name === 'frequency' ||
+      e.target.name === 'dosage' ||
+      e.target.name === 'duration'
+    ) {
+      if (pattern.test(e.target.value) === false) {
+        return
+      }
+    }
+    dispatch({
+      field: e.target.name,
+      value: e.target.value.replace(/[^\w.\s]/gi, ''),
+    })
   }
 
   const [comingFor, setcomingFor] = useState('')
@@ -251,7 +333,7 @@ function AddEditEDR(props) {
           requestedQty: dischargeMedicines[i].requestedQty,
           unitPrice: dischargeMedicines[i].unitPrice,
           totalPrice: dischargeMedicines[i].totalPrice,
-          totalPrice: dischargeMedicines[i].totalPrice,
+          // totalPrice: dischargeMedicines[i].totalPrice,
         },
       ]
     }
@@ -433,8 +515,6 @@ function AddEditEDR(props) {
       duration.length > 0 &&
       frequency &&
       frequency.length > 0 &&
-      requestedQty &&
-      requestedQty.length > 0 &&
       dosage &&
       dosage.length > 0
     )
@@ -464,10 +544,12 @@ function AddEditEDR(props) {
               dosage,
               frequency,
               duration,
-              requestedQty,
+              requestedQty: (frequency * dosage * duration).toFixed(2),
               medicineName,
               unitPrice,
-              totalPrice: (unitPrice * requestedQty).toFixed(2),
+              totalPrice: (unitPrice * frequency * dosage * duration).toFixed(
+                2
+              ),
             },
           ],
         })
@@ -501,10 +583,10 @@ function AddEditEDR(props) {
           dosage,
           frequency,
           duration,
-          requestedQty,
+          requestedQty: (frequency * dosage * duration).toFixed(2),
           medicineName,
           unitPrice,
-          totalPrice,
+          totalPrice: (unitPrice * frequency * dosage * duration).toFixed(2),
         }
         temp[i] = obj
       } else {
@@ -688,8 +770,35 @@ function AddEditEDR(props) {
               </DialogTitle>
               <div className='container-fluid'>
                 <div className='row'>
-                  <div className='col-md-12 col-sm-12 col-12'>
-                    <InputLabelComponent>Search Medicine</InputLabelComponent>
+                  <div
+                    className='col-md-12 col-sm-12 col-12'
+                    style={{
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      type='text'
+                      label='Search Medicine by Name'
+                      name={'searchQuery'}
+                      value={searchQuery}
+                      onChange={handleSearch}
+                      className='textInputStyle'
+                      variant='filled'
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position='end'>
+                            <AccountCircle />
+                          </InputAdornment>
+                        ),
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                      InputLabelProps={{
+                        className: classes.label,
+                        classes: { label: classes.label },
+                      }}
+                    />
+                    {/* <InputLabelComponent>Search Medicine</InputLabelComponent>
                     <input
                       type='text'
                       placeholder='Search medicine by name'
@@ -697,7 +806,7 @@ function AddEditEDR(props) {
                       value={searchQuery}
                       onChange={handleSearch}
                       className='textInputStyle'
-                    />
+                    /> */}
                   </div>
                 </div>
 
@@ -753,48 +862,105 @@ function AddEditEDR(props) {
                   undefined
                 )}
 
-                <div className='row'>
+                <div className='row' style={{ marginTop: 15 }}>
                   <div
                     className='col-md-4 col-sm-4 col-4'
-                    style={styles.inputContainerForTextField}
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
                   >
-                    <InputLabelComponent>Medicine Name*</InputLabelComponent>
-                    <input
-                      disabled
-                      style={styles.inputField}
-                      type='text'
-                      placeholder='Search from above...'
+                    <TextField
+                      required
+                      label='Medicine Name'
                       name={'medicineName'}
                       value={medicineName}
-                      onChange={onChangeValue}
+                      disabled
                       className='textInputStyle'
+                      variant='filled'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
                     />
                   </div>
                   <div
                     className='col-md-4 col-sm-4 col-4'
-                    style={styles.inputContainerForDropDown}
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
                   >
-                    <InputLabelComponent>Duration*</InputLabelComponent>
-                    <input
-                      style={styles.inputField}
-                      type='number'
-                      placeholder='Enter Duration'
-                      name={'duration'}
-                      value={duration}
+                    <TextField
+                      required
+                      select
+                      label='Schedule'
+                      name={'schedule'}
+                      value={schedule}
                       onChange={onChangeValue}
                       className='textInputStyle'
-                    />
+                      variant='filled'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                    >
+                      <MenuItem value=''>
+                        <em>None</em>
+                      </MenuItem>
+                      {scheduleArray.map((val) => {
+                        return (
+                          <MenuItem key={val.key} value={val.key}>
+                            {val.value}
+                          </MenuItem>
+                        )
+                      })}
+                    </TextField>
                     <ErrorMessage
-                      name={duration}
+                      name={schedule}
                       isFormSubmitted={isFormSubmitted}
                     />
                   </div>
 
                   <div
                     className='col-md-4 col-sm-4 col-4'
-                    style={styles.inputContainerForTextField}
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
                   >
-                    <InputLabelComponent>Priority*</InputLabelComponent>
+                    <TextField
+                      required
+                      select
+                      fullWidth
+                      id='priority'
+                      name='priority'
+                      value={priority}
+                      onChange={onChangeValue}
+                      label='Priority'
+                      variant='filled'
+                      className='dropDownStyle'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                    >
+                      <MenuItem value=''>
+                        <em>None</em>
+                      </MenuItem>
+                      {priorityArray.map((val) => {
+                        return (
+                          <MenuItem key={val.key} value={val.key}>
+                            {val.value}
+                          </MenuItem>
+                        )
+                      })}
+                    </TextField>
+                    <ErrorMessage
+                      name={priority}
+                      isFormSubmitted={isFormSubmitted}
+                    />
+                    {/* <InputLabelComponent>Priority*</InputLabelComponent>
                     <Select
                       fullWidth
                       id='priority'
@@ -819,23 +985,30 @@ function AddEditEDR(props) {
                     <ErrorMessage
                       name={priority}
                       isFormSubmitted={isFormSubmitted}
-                    />
+                    /> */}
                   </div>
                 </div>
 
                 <div className='row'>
                   <div
                     className='col-md-6 col-sm-6 col-6'
-                    style={styles.inputContainerForTextField}
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
                   >
-                    <InputLabelComponent>Dosage*</InputLabelComponent>
-                    <input
-                      type='number'
-                      placeholder='Enter Dosage'
+                    <TextField
+                      required
+                      label='Dosage'
                       name={'dosage'}
                       value={dosage}
                       onChange={onChangeValue}
                       className='textInputStyle'
+                      variant='filled'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
                     />
                     <ErrorMessage
                       name={dosage}
@@ -844,20 +1017,27 @@ function AddEditEDR(props) {
                   </div>
                   <div
                     className='col-md-6 col-sm-6 col-6'
-                    style={styles.inputContainerForDropDown}
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
                   >
-                    <InputLabelComponent>Schedule*</InputLabelComponent>
-                    <input
-                      style={styles.inputField}
-                      type='text'
-                      placeholder='Enter Schedule'
-                      name={'schedule'}
-                      value={schedule}
+                    <TextField
+                      required
+                      label='Duration'
+                      name={'duration'}
+                      value={duration}
                       onChange={onChangeValue}
                       className='textInputStyle'
+                      variant='filled'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
                     />
+
                     <ErrorMessage
-                      name={schedule}
+                      name={duration}
                       isFormSubmitted={isFormSubmitted}
                     />
                   </div>
@@ -866,35 +1046,47 @@ function AddEditEDR(props) {
                 <div className='row'>
                   <div
                     className='col-md-6 col-sm-6 col-6'
-                    style={styles.inputContainerForTextField}
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
                   >
-                    <InputLabelComponent>Frequency* </InputLabelComponent>
-                    <input
-                      style={styles.inputField}
-                      type='number'
-                      placeholder='Enter Frequency'
+                    <TextField
+                      required
+                      label='Frequency'
                       name={'frequency'}
                       value={frequency}
                       onChange={onChangeValue}
                       className='textInputStyle'
+                      variant='filled'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
                     />
                   </div>
                   <div
                     className='col-md-6 col-sm-6 col-6'
-                    style={styles.inputContainerForDropDown}
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
                   >
-                    <InputLabelComponent>
-                      Requested Quantity*
-                    </InputLabelComponent>
-                    <input
-                      style={styles.inputField}
-                      type='number'
-                      placeholder='Enter Requested Quantity'
+                    <TextField
+                      required
+                      disabled
+                      label='Requested Quantity'
                       name={'requestedQty'}
-                      value={requestedQty}
+                      value={(dosage * duration * frequency).toFixed(2)}
                       onChange={onChangeValue}
                       className='textInputStyle'
+                      variant='filled'
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
                     />
+
                     <ErrorMessage
                       name={requestedQty}
                       isFormSubmitted={isFormSubmitted}
@@ -928,7 +1120,7 @@ function AddEditEDR(props) {
                         style={{
                           color: 'white',
                           cursor: 'pointer',
-                          borderRadius: 15,
+                          borderRadius: 5,
                           backgroundColor: '#2c6ddd',
                           width: '140px',
                           height: '50px',

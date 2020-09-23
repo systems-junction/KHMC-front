@@ -29,7 +29,7 @@ import validateLastName from '../../../public/inputValidator'
 import validateWeight from '../../../public/numberFloatValidator'
 import validateHeight from '../../../public/numberFloatValidator'
 import validateEmergencyName from '../../../public/inputValidator'
-import validateAmount from '../../../public/FloatValidator'
+import validateAmount from '../../../public/amountValidator'
 import validateInsuranceNo from '../../../public/numbersValidator'
 import validateInsuranceVendor from '../../../public/inputValidator'
 import MuiPhoneNumber from 'material-ui-phone-number'
@@ -564,8 +564,8 @@ function AddEditPatientListing(props) {
         depositorName.length > 0 &&
         validateEmergencyName(depositorName) &&
         amountReceived &&
-        amountReceived != null
-        // validateAmount(amountReceived)
+        amountReceived.length > 0 &&
+        validateAmount(amountReceived)
       )
     }
   }
@@ -982,6 +982,9 @@ function AddEditPatientListing(props) {
     // dispatch({ field: 'receiverName', value: i.receiverName })
 
     dispatch({ field: 'amountReceived', value: i.amountReceived })
+    if (i.amountReceived === null) {
+      dispatch({ field: 'amountReceived', value: '' })
+    }
     dispatch({ field: 'bankName', value: i.bankName })
     dispatch({ field: 'depositorName', value: i.depositorName })
 
@@ -2548,6 +2551,7 @@ function AddEditPatientListing(props) {
                   />
                   <ErrorMessage
                     name={amountReceived}
+                    type='amount'
                     isFormSubmitted={paymentForm}
                   />
                   {/* <ErrorMessage

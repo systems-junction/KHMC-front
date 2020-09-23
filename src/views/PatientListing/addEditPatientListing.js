@@ -23,7 +23,7 @@ import validateNationName from '../../public/inputValidator'
 import validateNumber from '../../public/numberValidator'
 import validateNumbers from '../../public/numbersValidator'
 import validateNationalId from '../../public/numbersValidator'
-import validateAmount from '../../public/numbersValidator'
+import validateAmount from '../../public/amountValidator'
 import validateInsuranceNo from '../../public/numbersValidator'
 import validateFloat from '../../public/FloatValidator'
 import validateInput from '../../public/FloatValidator'
@@ -582,8 +582,8 @@ function AddEditPatientListing(props) {
         depositorName.length > 0 &&
         validateEmergencyName(depositorName) &&
         amountReceived &&
-        amountReceived != null
-        // validateAmount(amountReceived)
+        amountReceived.length > 0 &&
+        validateAmount(amountReceived)
       )
     }
   }
@@ -1003,6 +1003,9 @@ function AddEditPatientListing(props) {
     // dispatch({ field: 'receiverName', value: i.receiverName })
 
     dispatch({ field: 'amountReceived', value: i.amountReceived })
+    if (i.amountReceived === null) {
+      dispatch({ field: 'amountReceived', value: '' })
+    }
     dispatch({ field: 'bankName', value: i.bankName })
     dispatch({ field: 'depositorName', value: i.depositorName })
 
@@ -1047,6 +1050,14 @@ function AddEditPatientListing(props) {
   }
 
   const onChangeBloodGroup = (e) => {
+    dispatch({
+      field: e.target.name,
+      value: e.target.value,
+    })
+  }
+
+  const onBlurChangeValue = (e) => {
+    console.log('amount', e.target.value)
     dispatch({
       field: e.target.name,
       value: e.target.value,
@@ -2561,7 +2572,7 @@ function AddEditPatientListing(props) {
                     error={amountReceived === '' && paymentForm}
                     // onChange={onChangeValue}
                     // type='number'
-                    onBlur={onChangeValue}
+                    onBlur={onBlurChangeValue}
                     className='textInputStyle'
                     variant='filled'
                     textAlign='left'
@@ -2575,6 +2586,7 @@ function AddEditPatientListing(props) {
                   />
                   <ErrorMessage
                     name={amountReceived}
+                    type='amount'
                     isFormSubmitted={paymentForm}
                   />
                   {/* <TextField
