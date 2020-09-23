@@ -31,6 +31,7 @@ import {
   getCurrentQtyForFURepRequestUrl,
   getPatientByProfileNo,
   getSearchedpatient,
+  searchpatient,
 } from "../../public/endpoins";
 
 import Paper from "@material-ui/core/Paper";
@@ -328,6 +329,9 @@ function AddEditPurchaseRequest(props) {
     scientificName: "",
     make_model: "",
     size: "",
+
+    diagnosisArray: [],
+    pharmacyRequest: "",
   };
 
   function reducer(state, { field, value }) {
@@ -401,6 +405,9 @@ function AddEditPurchaseRequest(props) {
     scientificName,
     make_model,
     size,
+
+    diagnosisArray,
+    pharmacyRequest,
   } = state;
 
   const [comingFor, setcomingFor] = useState("");
@@ -500,6 +507,7 @@ function AddEditPurchaseRequest(props) {
         value: props.patientDetails.profileNo,
       });
       openPatientDetailsDialog(true);
+      getPatientByInfo(props.patientDetails._id);
     }
 
     if (selectedPatientforPharm) {
@@ -555,7 +563,7 @@ function AddEditPurchaseRequest(props) {
     }
 
     return function cleanup() {
-      console.log("unmount")
+      console.log("unmount");
       props.setPatientDetailsForReducer("");
     };
   }, []);
@@ -860,6 +868,8 @@ function AddEditPurchaseRequest(props) {
     setPatientDetails(i);
     openPatientDetailsDialog(true);
 
+    getPatientByInfo(i._id);
+
     const obj = {
       itemCode: i.itemCode,
     };
@@ -868,7 +878,59 @@ function AddEditPurchaseRequest(props) {
     setSearchPatientQuery("");
   }
 
-  console.log("patient id from reducer", props.patientDetails);
+  const getPatientByInfo = (id) => {
+    axios
+      .get(searchpatient + "/" + id)
+      .then((res) => {
+        if (res.data.success) {
+          if (res.data.data) {
+            console.log(
+              "Response after getting patient details for pharmacy and notes : ",
+              res.data.data
+            );
+
+            Object.entries(res.data.data).map(([key, val]) => {
+              if (val && typeof val === "object") {
+                if (key === "residentNotes") {
+                  let data = [];
+                  val.map((d) => {
+                    d.code.map((singleCode) => {
+                      let found = data.find((i) => i === singleCode);
+                      if (!found) {
+                        data.push(singleCode);
+                      }
+                    });
+                  });
+                  console.log(data);
+                  dispatch({ field: "diagnosisArray", value: data });
+                } else if (key === "pharmacyRequest") {
+                  let data = [];
+                  val.map((d) => {
+                    d.item.map((item) => {
+                      let found = data.find((i) => i === item.itemId.name);
+                      if (!found) {
+                        data.push(item.itemId.name);
+                      }
+                    });
+                  });
+                  console.log(data);
+                  dispatch({ field: "pharmacyRequest", value: data });
+                }
+              } else {
+                dispatch({ field: key, value: val });
+              }
+            });
+          }
+        } else {
+          setOpenNotification(true);
+          setErrorMsg("EDR/IPR not generated for patient");
+        }
+      })
+      .catch((e) => {
+        setOpenNotification(true);
+        setErrorMsg(e);
+      });
+  };
 
   const handleSearch = (e) => {
     var pattern = /^[a-zA-Z0-9 ]*$/;
@@ -1481,6 +1543,8 @@ function AddEditPurchaseRequest(props) {
           <PatientDetails
             patientDetails={patientDetails}
             showPatientDetails={showPatientDetails}
+            diagnosisArray={diagnosisArray}
+            pharmacyRequest={pharmacyRequest}
           />
         ) : (
           undefined

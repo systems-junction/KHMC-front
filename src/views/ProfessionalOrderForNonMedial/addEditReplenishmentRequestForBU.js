@@ -330,8 +330,8 @@ function AddEditPurchaseRequest(props) {
     make_model: "",
     size: "",
 
-    diagnosisArray: "",
-    pharmacyRequest:""
+    diagnosisArray: [],
+    pharmacyRequest: "",
   };
 
   function reducer(state, { field, value }) {
@@ -407,7 +407,7 @@ function AddEditPurchaseRequest(props) {
     size,
 
     diagnosisArray,
-    pharmacyRequest
+    pharmacyRequest,
   } = state;
 
   const [comingFor, setcomingFor] = useState("");
@@ -504,6 +504,7 @@ function AddEditPurchaseRequest(props) {
         value: props.patientDetails.profileNo,
       });
       openPatientDetailsDialog(true);
+      getPatientByInfo(props.patientDetails._id);
     }
 
     if (!selectedRec) {
@@ -547,10 +548,10 @@ function AddEditPurchaseRequest(props) {
       });
     }
 
-    return function cleanup() {
-      console.log("unmount");
-      props.setPatientDetailsForReducer("");
-    };
+    // return function cleanup() {
+    //   console.log("unmount");
+    //   props.setPatientDetailsForReducer("");
+    // };
   }, []);
 
   if (comingFor === "edit" && patientReferenceNo && patientDetails === "") {
@@ -646,6 +647,7 @@ function AddEditPurchaseRequest(props) {
           fuId: currentUser.functionalUnit._id,
           orderFor: "Medical",
           orderBy,
+          pId: selectedPatient._id,
         };
         console.log("params", params);
         axios
@@ -866,68 +868,37 @@ function AddEditPurchaseRequest(props) {
         if (res.data.success) {
           if (res.data.data) {
             console.log(
-              "Response after getting EDR/IPR data : ",
+              "Response after getting patient details for pharmacy and notes : ",
               res.data.data
             );
 
             Object.entries(res.data.data).map(([key, val]) => {
               if (val && typeof val === "object") {
-                // if (key === "patientId") {
-                //     dispatch({ field: "patientId", value: val._id });
-                // } else
-                if (key === "labRequest") {
-                  dispatch({ field: "labRequestArray", value: val.reverse() });
-                } else if (key === "radiologyRequest") {
-                  dispatch({
-                    field: "radiologyRequestArray",
-                    value: val.reverse(),
-                  });
-                } else if (key === "consultationNote") {
-                  val.map(
-                    (d) =>
-                      (d.doctorName = d.requester
-                        ? d.requester.firstName + " " + d.requester.lastName
-                        : "")
-                  );
-                  dispatch({
-                    field: "consultationNoteArray",
-                    value: val.reverse(),
-                  });
-                } else if (key === "residentNotes") {
-                  val.map(
-                    (d) =>
-                      (d.doctorName = d.doctor
-                        ? d.doctor.firstName + " " + d.doctor.lastName
-                        : "")
-                  );
-                  dispatch({
-                    field: "residentNoteArray",
-                    value: val.reverse(),
-                  });
-                  if (val && val.length > 0) {
-                    dispatch({ field: "diagnosisArray", value: val[0].code });
-                  }
-                } else if (key === "pharmacyRequest") {
-                  val.map(
-                    (d) =>
-                      (d.doctorName = d.requester
-                        ? d.requester.firstName + " " + d.requester.lastName
-                        : "")
-                  );
-                  dispatch({
-                    field: "pharmacyRequestArray",
-                    value: val.reverse(),
-                  });
-                  if (val && val.length > 0) {
-                    dispatch({
-                      field: "medicationArray",
-                      value: val[0].medicine,
+                if (key === "residentNotes") {
+                  let data = [];
+                  val.map((d) => {
+                    d.code.map((singleCode) => {
+                      let found = data.find((i) => i === singleCode);
+                      if (!found) {
+                        data.push(singleCode);
+                      }
                     });
-                  }
+                  });
+                  console.log(data);
+                  dispatch({ field: "diagnosisArray", value: data });
+                } else if (key === "pharmacyRequest") {
+                  let data = [];
+                  val.map((d) => {
+                    d.item.map((item) => {
+                      let found = data.find((i) => i === item.itemId.name);
+                      if (!found) {
+                        data.push(item.itemId.name);
+                      }
+                    });
+                  });
+                  console.log(data);
+                  dispatch({ field: "pharmacyRequest", value: data });
                 }
-                //  else if (key === "nurseService") {
-                //     dispatch({ field: "nurseService", value: val });
-                // }
               } else {
                 dispatch({ field: key, value: val });
               }
