@@ -39,7 +39,6 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import BarCode from '../../assets/img/Bar Code.png'
 import Loader from 'react-loader-spinner'
 import ViewSingleRequest from './viewRequest'
-
 import { connect } from 'react-redux'
 import {
   funForReducer,
@@ -986,6 +985,19 @@ function LabRadRequest(props) {
     }
   }
 
+  const addNewRequest = () => {
+    // let path = `assessmentdiagnosis/add`
+    let path = '/home/wms/fus/professionalorder/addorder';
+    props.history.push({
+      pathname: path,
+      state: {
+        comingFor: "add",
+        selectedPatient: selectedItem.patientId,
+        pharmacyRequestArray,
+      },
+    });
+  };
+
   if (openNotification) {
     setTimeout(() => {
       setOpenNotification(false)
@@ -1416,7 +1428,7 @@ function LabRadRequest(props) {
               className='container-fluid'
             >
               <div className='row' style={{ marginTop: '20px' }}>
-                {pharmacyRequestArray && pharmacyRequestArray.length !== 0 ? (
+                {pharmacyRequestArray !== 0 ? (
                   <CustomTable
                     tableData={pharmacyRequestArray}
                     tableDataKeys={tableDataKeysForPharmacy}
@@ -1427,17 +1439,24 @@ function LabRadRequest(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                  <h3
-                    style={{
-                      color: 'white',
-                      textAlign: 'center',
-                      width: '100%',
-                      position: 'absolute',
-                    }}
-                  >
-                    Opps...No Data Found In PHARM
-                  </h3>
+                  undefined
                 )}
+              </div>
+              <div className="row" style={{ marginBottom: "25px" }}>
+                <div className="col-md-12 col-sm-12 col-12 d-flex justify-content-end">
+                  <Button
+                    onClick={addNewRequest}
+                    style={styles.stylesForButton}
+                    variant="contained"
+                    color="primary"
+                  >
+                    <img className="icon-style" src={plus_icon} />
+                    &nbsp;&nbsp;
+                    <strong style={{ fontSize: "12px" }}>
+                      Pharmacy Request
+                    </strong>
+                  </Button>
+                </div>
               </div>
             </div>
           ) : value === 3 ? (

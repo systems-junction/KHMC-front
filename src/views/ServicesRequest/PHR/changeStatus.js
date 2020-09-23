@@ -41,7 +41,7 @@ import { tr } from "date-fns/locale";
 
 import Header from "../../../components/Header/Header";
 import view_all from "../../../assets/img/Eye.png";
-import purchase_request from "../../../assets/img/purchase request.png";
+import purchase_request from "../../../assets/img/IPR.png";
 import Back_Arrow from "../../../assets/img/Back_Arrow.png";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -642,13 +642,14 @@ function ChangeStatus(props) {
           <div>
             <img src={purchase_request} />
             <h4>
-              {comingFor === "add"
+              {/* {comingFor === "add"
                 ? "Add Request"
                 : comingFor === "edit"
                 ? "Order Details (Medical)"
                 : comingFor === "view"
                 ? "Order Details (Medical)"
-                : undefined}
+                : undefined} */}
+                In-Patient
             </h4>
           </div>
 

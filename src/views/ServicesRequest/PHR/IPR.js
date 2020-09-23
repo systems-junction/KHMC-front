@@ -182,7 +182,7 @@ import {
 import Loader from "react-loader-spinner";
 import Header from "../../../components/Header/Header";
 import Add_New from "../../../assets/img/Add_New.png";
-import business_Unit from "../../../assets/img/Medication Order.png";
+import business_Unit from "../../../assets/img/IPR.png";
 import cookie from "react-cookies";
 import Search from "../../../assets/img/Search.png";
 import Control_Room from "../../../assets/img/Control_Room.png";
@@ -791,7 +791,7 @@ export default function ReplenishmentRequest(props) {
           <div className="subheader">
             <div>
               <img src={business_Unit} />
-              <h4>Order Items (Medical)</h4>
+              <h4>In-Patient</h4>
             </div>
 
             {/* {currentUser &&
