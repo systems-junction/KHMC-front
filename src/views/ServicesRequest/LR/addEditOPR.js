@@ -684,7 +684,9 @@ function AddEditPatientListing(props) {
         })
     } else {
       setOpenNotification(true)
-      setErrorMsg('Please Fill the the empty fields with valid data')
+      setErrorMsg(
+        'Please Fill the the empty fields with valid data / Please add payment method'
+      )
     }
     setDetailsForm(true)
     setEmergencyForm(true)
@@ -770,7 +772,9 @@ function AddEditPatientListing(props) {
         })
     } else {
       setOpenNotification(true)
-      setErrorMsg('Please Fill the the empty fields with valid data')
+      setErrorMsg(
+        'Please Fill the the empty fields with valid data / Please add payment method'
+      )
     }
     setDetailsForm(true)
     setEmergencyForm(true)
@@ -886,8 +890,10 @@ function AddEditPatientListing(props) {
   const handleGenerateIPR = () => {
     const params = {
       patientId,
-      generatedBy: currentUser.staffId,
+      // generatedBy: currentUser.staffId,
+      generatedFrom: 'radiologyRequest',
       status: 'pending',
+      functionalUnit: currentUser.functionalUnit._id,
     }
     // console.log(params)
     axios
@@ -1659,7 +1665,7 @@ function AddEditPatientListing(props) {
                   disabled
                   label='Age'
                   name={'age'}
-                  value={age}
+                  value={age ? age : 0}
                   onChange={onChangeValue}
                   // error={age === '' && detailsForm}
                   className='textInputStyle'
@@ -1770,7 +1776,7 @@ function AddEditPatientListing(props) {
               </div>
             </div>
 
-            <div className='row'>
+            <div className='row' style={{ marginTop: 15 }}>
               <div
                 className='col-md-3 col-sm-3'
                 style={{
@@ -2292,7 +2298,7 @@ function AddEditPatientListing(props) {
                 >
                   Next
                 </Button>
-                <div
+                {/* <div
                   style={{
                     width: '10px',
                     height: 'auto',
@@ -2318,7 +2324,7 @@ function AddEditPatientListing(props) {
                       display: 'inline-block',
                     }}
                   />
-                </>
+                </> */}
 
                 {/* <Button
                   style={styles.generate}
@@ -2333,7 +2339,7 @@ function AddEditPatientListing(props) {
                 </Button> */}
 
                 {/* {currentUser.staffTypeId.type === "EDR Receptionist" ? ( */}
-                <Button
+                {/* <Button
                   style={comingFor === 'add' ? styles.generate : styles.None}
                   // disabled={comingFor === 'add' ? !isFormSubmitted : false}
                   disabled={
@@ -2349,7 +2355,7 @@ function AddEditPatientListing(props) {
                   color='primary'
                 >
                   {comingFor === 'add' ? 'Generate OP Record' : 'Update'}
-                </Button>
+                </Button> */}
                 {/* ) : (
                     undefined
                   )} */}
@@ -3078,7 +3084,7 @@ function AddEditPatientListing(props) {
                   </div>
                 </div>
               </div>
-              <div className='row'>
+              <div className='row' style={{ marginTop: 15 }}>
                 <div
                   className='col-md-12'
                   style={{
@@ -3125,7 +3131,7 @@ function AddEditPatientListing(props) {
                 </div>
               </div>
 
-              <div className='row'>
+              <div className='row' style={{ marginTop: 15 }}>
                 <div
                   className='col-md-12'
                   style={{
@@ -3158,7 +3164,7 @@ function AddEditPatientListing(props) {
                 </div>
               </div>
 
-              <div className='row'>
+              <div className='row' style={{ marginTop: 15 }}>
                 <div
                   className='col-md-12'
                   style={{

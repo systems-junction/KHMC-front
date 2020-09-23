@@ -40,11 +40,11 @@ import BarCode from '../../assets/img/Bar Code.png'
 import Loader from 'react-loader-spinner'
 import ViewSingleRequest from './viewRequest'
 
-import { connect } from "react-redux";
+import { connect } from 'react-redux'
 import {
   funForReducer,
   setPatientDetailsForReducer,
-} from "../../actions/Checking";
+} from '../../actions/Checking'
 
 const tableHeadingForResident = [
   'Date / Time',
@@ -75,7 +75,12 @@ const tableHeadingForPharmacy = [
   'Status',
   'Action',
 ]
-const tableDataKeysForPharmacy = ['requestNo', 'createdAt', 'generatedBy', 'status']
+const tableDataKeysForPharmacy = [
+  'requestNo',
+  'createdAt',
+  'generatedBy',
+  'status',
+]
 const tableHeadingForLabReq = [
   'Request Id',
   'Test Code',
@@ -107,31 +112,31 @@ const tableDataKeysForRadiology = [
   'status',
 ]
 const tableDataKeysForItemsForBUMember = [
-  ["itemId", "name"],
-  ["itemId", "medClass"],
-  "requestedQty",
-  "status",
-];
+  ['itemId', 'name'],
+  ['itemId', 'medClass'],
+  'requestedQty',
+  'status',
+]
 const tableDataKeysForFUMemberForItems = [
-  ["itemId", "name"],
-  ["itemId", "medClass"],
-  "requestedQty",
-  "secondStatus",
-];
+  ['itemId', 'name'],
+  ['itemId', 'medClass'],
+  'requestedQty',
+  'secondStatus',
+]
 const tableHeadingForFUMemberForItems = [
-  "Name",
-  "Type",
-  "Requested Qty",
-  "Status",
-  ""
-];
+  'Name',
+  'Type',
+  'Requested Qty',
+  'Status',
+  '',
+]
 const tableHeadingForBUMemberForItems = [
-  "Name",
-  "Type",
-  "Requested Qty",
-  "Status",
-  ""
-];
+  'Name',
+  'Type',
+  'Requested Qty',
+  'Status',
+  '',
+]
 // const tableHeadingForNurse = [
 //     "Service Code",
 //     "Service Name",
@@ -333,7 +338,7 @@ function LabRadRequest(props) {
     pharmacyRequestArray,
     diagnosisArray,
     medicationArray,
-    requestType
+    requestType,
   } = state
 
   const onChangeValue = (e) => {
@@ -386,17 +391,16 @@ function LabRadRequest(props) {
   const [addNurseRequest, setaddNurseRequest] = useState(false)
   const [searchNurseQuery, setSearchNurseQuery] = useState('')
   const [isLoading, setIsLoading] = useState(true)
-  const [requestedItems, setRequestedItems] = useState("");
-  const [, setSelectedOrder] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
+  const [requestedItems, setRequestedItems] = useState('')
+  const [, setSelectedOrder] = useState('')
+  const [isOpen, setIsOpen] = useState(false)
   const [enableSave, setEnableSave] = useState(true)
 
   useEffect(() => {
-
     if (props.patientDetails) {
-      setPatientDetails(props.patientDetails);
-      getPatientByInfo(props.patientDetails._id);
-      openPatientDetailsDialog(true);
+      setPatientDetails(props.patientDetails)
+      getPatientByInfo(props.patientDetails._id)
+      openPatientDetailsDialog(true)
     }
 
     // getEDRById(props.history.location.state.selectedItem._id);
@@ -422,10 +426,10 @@ function LabRadRequest(props) {
   }
 
   const handleView = (obj) => {
-    setSelectedOrder(obj);
-    setIsOpen(true);
-    setRequestedItems(obj.item);
-  };
+    setSelectedOrder(obj)
+    setIsOpen(true)
+    setRequestedItems(obj.item)
+  }
 
   const handleSearch = (e) => {
     const a = e.target.value.replace(/[^\w\s]/gi, '')
@@ -556,11 +560,13 @@ function LabRadRequest(props) {
           props.history.push({
             pathname: 'LabRadRequest/success',
             state: {
-              message: `Lab Request # ${res.data.data.labRequest[res.data.data.labRequest.length - 1]
-                .LRrequestNo
-                } for patient MRN ${res.data.data.patientId.profileNo
-                } added successfully`,
-                patientDetails: patientDetails
+              message: `Lab Request # ${
+                res.data.data.labRequest[res.data.data.labRequest.length - 1]
+                  .LRrequestNo
+              } for patient MRN ${
+                res.data.data.patientId.profileNo
+              } added successfully`,
+              patientDetails: patientDetails,
             },
           })
         } else if (!res.data.success) {
@@ -702,12 +708,14 @@ function LabRadRequest(props) {
           props.history.push({
             pathname: 'LabRadRequest/success',
             state: {
-              message: `Radiology Request # ${res.data.data.radiologyRequest[
-                res.data.data.radiologyRequest.length - 1
-              ].RRrequestNo
-                } for patient MRN ${res.data.data.patientId.profileNo
-                } added successfully`,
-                patientDetails: patientDetails
+              message: `Radiology Request # ${
+                res.data.data.radiologyRequest[
+                  res.data.data.radiologyRequest.length - 1
+                ].RRrequestNo
+              } for patient MRN ${
+                res.data.data.patientId.profileNo
+              } added successfully`,
+              patientDetails: patientDetails,
             },
           })
         } else if (!res.data.success) {
@@ -859,8 +867,7 @@ function LabRadRequest(props) {
     getPatientByInfo(i._id)
     openPatientDetailsDialog(true)
 
-    props.setPatientDetailsForReducer(i);
-
+    props.setPatientDetailsForReducer(i)
 
     const obj = {
       itemCode: i.itemCode,
@@ -1009,8 +1016,8 @@ function LabRadRequest(props) {
               {value === 3
                 ? 'Lab Request'
                 : value === 4
-                  ? 'Radiology Request'
-                  : 'Lab / Rad Request'}
+                ? 'Radiology Request'
+                : 'Lab / Rad Request'}
             </h4>
           </div>
 
@@ -1148,18 +1155,18 @@ function LabRadRequest(props) {
                         </Table>
                       )
                     ) : (
-                        <h4
-                          style={{ textAlign: 'center' }}
-                          onClick={() => setSearchPatientQuery('')}
-                        >
-                          Patient Not Found
-                        </h4>
-                      )}
+                      <h4
+                        style={{ textAlign: 'center' }}
+                        onClick={() => setSearchPatientQuery('')}
+                      >
+                        Patient Not Found
+                      </h4>
+                    )}
                   </Paper>
                 </div>
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
             </div>
           </div>
         </div>
@@ -1278,10 +1285,10 @@ function LabRadRequest(props) {
               >
                 {medicationArray
                   ? medicationArray.map((drug, index) => {
-                    return (
-                      <h6 style={styles.textStyles}>{drug.medicineName}</h6>
-                    )
-                  })
+                      return (
+                        <h6 style={styles.textStyles}>{drug.medicineName}</h6>
+                      )
+                    })
                   : 'None'}
               </div>
 
@@ -1291,8 +1298,8 @@ function LabRadRequest(props) {
               >
                 {diagnosisArray
                   ? diagnosisArray.map((drug, index) => {
-                    return <h6 style={styles.textStyles}>{drug}</h6>
-                  })
+                      return <h6 style={styles.textStyles}>{drug}</h6>
+                    })
                   : 'None'}
               </div>
             </div>
@@ -1399,8 +1406,8 @@ function LabRadRequest(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
             </div>
           ) : value === 2 ? (
@@ -1420,17 +1427,17 @@ function LabRadRequest(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                    <h3
-                      style={{
-                        color: 'white',
-                        textAlign: 'center',
-                        width: '100%',
-                        position: 'absolute',
-                      }}
-                    >
-                      Opps...No Data Found In PHARM
-                    </h3>
-                  )}
+                  <h3
+                    style={{
+                      color: 'white',
+                      textAlign: 'center',
+                      width: '100%',
+                      position: 'absolute',
+                    }}
+                  >
+                    Opps...No Data Found In PHARM
+                  </h3>
+                )}
               </div>
             </div>
           ) : value === 3 ? (
@@ -1448,6 +1455,7 @@ function LabRadRequest(props) {
                 >
                   <TextField
                     required
+                    disabled={enableForm}
                     label='Lab Test'
                     name={'searchQuery'}
                     value={searchQuery}
@@ -1497,18 +1505,18 @@ function LabRadRequest(props) {
                         </Table>
                       )
                     ) : (
-                        <h4
-                          style={{ textAlign: 'center' }}
-                          onClick={() => setSearchQuery('')}
-                        >
-                          Service Not Found
-                        </h4>
-                      )}
+                      <h4
+                        style={{ textAlign: 'center' }}
+                        onClick={() => setSearchQuery('')}
+                      >
+                        Service Not Found
+                      </h4>
+                    )}
                   </Paper>
                 </div>
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
 
               <div style={{ marginTop: '20px' }} className='row'>
                 <div
@@ -1543,6 +1551,7 @@ function LabRadRequest(props) {
                 >
                   <TextField
                     required
+                    disabled={enableForm}
                     label='Comments / Notes'
                     name={'labComments'}
                     value={labComments}
@@ -1586,8 +1595,8 @@ function LabRadRequest(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
 
               <div className='row' style={{ marginBottom: '25px' }}>
@@ -1670,18 +1679,18 @@ function LabRadRequest(props) {
                         </Table>
                       )
                     ) : (
-                        <h4
-                          style={{ textAlign: 'center' }}
-                          onClick={() => setSearchRadioQuery('')}
-                        >
-                          Service Not Found
-                        </h4>
-                      )}
+                      <h4
+                        style={{ textAlign: 'center' }}
+                        onClick={() => setSearchRadioQuery('')}
+                      >
+                        Service Not Found
+                      </h4>
+                    )}
                   </Paper>
                 </div>
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
 
               <div style={{ marginTop: '20px' }} className='row'>
                 <div
@@ -1759,8 +1768,8 @@ function LabRadRequest(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
 
               <div className='row' style={{ marginBottom: '25px' }}>
@@ -1795,13 +1804,13 @@ function LabRadRequest(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
             </div>
           ) : (
-                      undefined
-                    )}
+            undefined
+          )}
 
           {openItemDialog ? (
             <ViewSingleRequest
@@ -1810,47 +1819,47 @@ function LabRadRequest(props) {
               viewItem={viewItem}
             />
           ) : (
-              undefined
-            )}
+            undefined
+          )}
         </div>
 
         <Dialog
-          aria-labelledby="form-dialog-title"
+          aria-labelledby='form-dialog-title'
           open={isOpen}
-          maxWidth="xl"
+          maxWidth='xl'
           fullWidth={true}
           onBackdropClick={() => {
-            setIsOpen(false);
+            setIsOpen(false)
           }}
         >
-          <DialogContent style={{ backgroundColor: "#31e2aa" }}>
-            <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
+          <DialogContent style={{ backgroundColor: '#31e2aa' }}>
+            <DialogTitle id='simple-dialog-title' style={{ color: 'white' }}>
               Added Items
-              </DialogTitle>
-            <div className="container-fluid">
+            </DialogTitle>
+            <div className='container-fluid'>
               <CustomTable
                 tableData={requestedItems}
                 tableHeading={
-                  currentUser.staffTypeId.type === "Doctor/Physician"
+                  currentUser.staffTypeId.type === 'Doctor/Physician'
                     ? tableHeadingForBUMemberForItems
-                    : currentUser.staffTypeId.type === "Registered Nurse" ||
-                      currentUser.staffTypeId.type === "BU Doctor"
-                      ? tableHeadingForBUMemberForItems
-                      : currentUser.staffTypeId.type === "FU Inventory Keeper"
-                        ? tableHeadingForFUMemberForItems
-                        : tableHeadingForFUMemberForItems
+                    : currentUser.staffTypeId.type === 'Registered Nurse' ||
+                      currentUser.staffTypeId.type === 'BU Doctor'
+                    ? tableHeadingForBUMemberForItems
+                    : currentUser.staffTypeId.type === 'FU Inventory Keeper'
+                    ? tableHeadingForFUMemberForItems
+                    : tableHeadingForFUMemberForItems
                 }
                 tableDataKeys={
-                  currentUser.staffTypeId.type === "Doctor/Physician"
+                  currentUser.staffTypeId.type === 'Doctor/Physician'
                     ? tableDataKeysForItemsForBUMember
-                    : currentUser.staffTypeId.type === "Registered Nurse" ||
-                      currentUser.staffTypeId.type === "BU Doctor"
-                      ? tableDataKeysForItemsForBUMember
-                      : currentUser.staffTypeId.type === "FU Inventory Keeper"
-                        ? tableDataKeysForFUMemberForItems
-                        : tableDataKeysForItemsForBUMember
+                    : currentUser.staffTypeId.type === 'Registered Nurse' ||
+                      currentUser.staffTypeId.type === 'BU Doctor'
+                    ? tableDataKeysForItemsForBUMember
+                    : currentUser.staffTypeId.type === 'FU Inventory Keeper'
+                    ? tableDataKeysForFUMemberForItems
+                    : tableDataKeysForItemsForBUMember
                 }
-                borderBottomColor={"#60d69f"}
+                borderBottomColor={'#60d69f'}
                 borderBottomWidth={20}
               />
             </div>
@@ -1881,11 +1890,10 @@ function LabRadRequest(props) {
 }
 
 const mapStateToProps = ({ CheckingReducer }) => {
-  const { count, patientDetails } = CheckingReducer;
-  return { count, patientDetails };
-};
+  const { count, patientDetails } = CheckingReducer
+  return { count, patientDetails }
+}
 export default connect(mapStateToProps, {
   funForReducer,
   setPatientDetailsForReducer,
-})(LabRadRequest);
-
+})(LabRadRequest)
