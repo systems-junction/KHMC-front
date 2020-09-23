@@ -183,7 +183,7 @@ function AddEditPurchaseRequest(props) {
                   backgroundColor: "#2C6DDD",
                   // marginTop: 20,
                   paddingLeft: 10,
-                  height: "20%",
+                  minHeight: "20%",
                   borderTopLeftRadius: 5,
                   borderTopRightRadius: 5,
                   paddingBottom: 10,
@@ -271,20 +271,18 @@ function AddEditPurchaseRequest(props) {
               </div>
 
               <div className={"col-md-3 col-sm-3 col-3"} style={{}}>
-                {patientDetails &&
-                  patientDetails.drugAllergy.map((drug, index) => {
-                    return (
-                      <h6 style={styles.textStyles}>Medication {index + 1}</h6>
-                    );
+                {props.pharmacyRequest &&
+                  props.pharmacyRequest.map((d, index) => {
+                  return <h6 style={styles.textStyles}> {index+1}{'.'} &nbsp; {d}</h6>;
                   })}
               </div>
 
-              {/* <div className={"col-md-3 col-sm-3 col-3"} style={{}}>
+              <div className={"col-md-3 col-sm-3 col-3"} style={{}}>
                 {props.diagnosisArray &&
                   props.diagnosisArray.map((d, index) => {
-                    return <h6 style={styles.textStyles}>{d}</h6>;
+                  return <h6 style={styles.textStyles}> {index+1}{'.'} &nbsp; {d}</h6>;
                   })}
-              </div> */}
+              </div>
             </div>
           </div>
         </>
