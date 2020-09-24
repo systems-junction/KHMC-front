@@ -1024,7 +1024,7 @@ function LabRadRequest(props) {
     //     alert("CheckBox is Disabled");
     // }
 
-    setErrorMsg("Please Search First Patient");
+    setErrorMsg("Please Search Patient First ");
     setOpenNotification(true);
   };
 
