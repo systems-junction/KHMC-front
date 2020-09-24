@@ -582,8 +582,8 @@ function AddEditPatientListing(props) {
         depositorName.length > 0 &&
         validateEmergencyName(depositorName) &&
         amountReceived &&
-        amountReceived.length > 0 &&
-        validateAmount(amountReceived)
+        amountReceived.toString().length > 0
+        // validateAmount(amountReceived)
       )
     }
   }
@@ -1005,6 +1005,9 @@ function AddEditPatientListing(props) {
     dispatch({ field: 'amountReceived', value: i.amountReceived })
     if (i.amountReceived === null) {
       dispatch({ field: 'amountReceived', value: '' })
+    }
+    if (i.amountReceived === 0) {
+      dispatch({ field: 'amountReceived', value: '0.00' })
     }
     dispatch({ field: 'bankName', value: i.bankName })
     dispatch({ field: 'depositorName', value: i.depositorName })
@@ -2584,11 +2587,11 @@ function AddEditPatientListing(props) {
                     outputFormat='number'
                     // onChange={(event, value) => setValue(value)}
                   />
-                  <ErrorMessage
+                  {/* <ErrorMessage
                     name={amountReceived}
-                    type='amount'
+                    // type='amount'
                     isFormSubmitted={paymentForm}
-                  />
+                  /> */}
                   {/* <TextField
                     label='Amount Received'
                     name={'amountReceived'}
