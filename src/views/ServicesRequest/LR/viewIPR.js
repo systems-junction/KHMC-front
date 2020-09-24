@@ -884,7 +884,10 @@ function AddEditPurchaseRequest(props) {
                   style={{ width: 45, height: 35, cursor: 'pointer' }}
                 />
               </div>
-              <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
+              <div
+                className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'
+                style={{ paddingRight: '5px' }}
+              >
                 <Button
                   disabled={checkStatus === 'completed' ? true : false}
                   onClick={updateLRByIdURI}

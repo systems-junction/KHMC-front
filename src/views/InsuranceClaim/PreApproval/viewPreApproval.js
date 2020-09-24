@@ -85,7 +85,7 @@ const actions = { view: true };
 const styles = {
   patientDetails: {
     backgroundColor: "white",
-    borderRadius: 15,
+    borderRadius: 5,
     padding: "20px",
   },
   inputContainerForTextField: {
