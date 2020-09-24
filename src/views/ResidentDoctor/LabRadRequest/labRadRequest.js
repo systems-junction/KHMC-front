@@ -1417,13 +1417,12 @@ function LabRadRequest(props) {
       setsuccessMsg("");
     }, 2000);
   }
-
   const showAlert = () => {
     // if (document.getElementById("ckDemo").disabled) {
     //     alert("CheckBox is Disabled");
     // }
 
-    setErrorMsg("Please Search First Patient");
+    setErrorMsg("Please Search Patient First ");
     setOpenNotification(true);
   };
 
