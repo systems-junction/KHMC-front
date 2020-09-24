@@ -729,8 +729,8 @@ function AddEditPurchaseRequest(props) {
           </div>
 
           <div
-            style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-            className='container-fluid'
+          // style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+          // className={`${'container-fluid'} ${classes.root}`}
           >
             <div
               style={{
@@ -739,6 +739,7 @@ function AddEditPurchaseRequest(props) {
                 justifyContent: 'flex-end',
                 marginTop: '2%',
                 marginBottom: '2%',
+                paddingRight: '2px',
               }}
             >
               <Button

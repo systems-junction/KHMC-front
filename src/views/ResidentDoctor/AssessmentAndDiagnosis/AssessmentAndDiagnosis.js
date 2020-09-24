@@ -1981,6 +1981,7 @@ function LabRadRequest(props) {
                       height: 56,
                       outline: 'none',
                       marginTop: 25,
+                      width: '104%',
                     }}
                     disabled={!addLabRequest}
                     onClick={addSelectedLabItem}
@@ -2183,7 +2184,15 @@ function LabRadRequest(props) {
                     style={{
                       ...styles.stylesForButton,
                       marginTop: '25px',
-                      backgroundColor: '#ad6bbf',
+                      backgroundColor: '#AD6BBF',
+                      color: 'white',
+                      cursor: 'pointer',
+                      borderRadius: 5,
+                      backgroundColor: 'rgb(173, 107, 191)',
+                      height: 56,
+                      outline: 'none',
+                      marginTop: 25,
+                      width: '104%',
                     }}
                     disabled={!addRadioRequest}
                     onClick={addSelectedRadioItem}

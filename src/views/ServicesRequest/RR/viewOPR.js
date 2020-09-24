@@ -145,7 +145,7 @@ const styles = {
     borderRadius: 5,
     backgroundColor: '#2c6ddd',
     height: '50px',
-    width: '140px',
+    // width: '140px',
     outline: 'none',
   },
   buttonContainer: {
@@ -1047,7 +1047,7 @@ function AddEditPurchaseRequest(props) {
                 />
               </div>
 
-              <div className='col-md-1 col-sm-2 col-2'>
+              <div className='col-md-1 col-sm-1 col-1'>
                 <div
                   style={{
                     ...styles.inputContainerForTextField,
@@ -1059,7 +1059,7 @@ function AddEditPurchaseRequest(props) {
                     height: 55,
                   }}
                 >
-                  <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
+                  <img src={Fingerprint} style={{ maxWidth: 35, height: 35 }} />
                 </div>
               </div>
             </div>
@@ -1116,6 +1116,7 @@ function AddEditPurchaseRequest(props) {
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
+                  paddingRight: '15px',
                 }}
               >
                 <TextField
@@ -1167,9 +1168,16 @@ function AddEditPurchaseRequest(props) {
                 <Button
                   style={{
                     ...styles.stylesForButton,
-                    marginTop: '7px',
-                    backgroundColor: '#ad6bbf',
-                    width: '190px',
+                    marginTop: '25px',
+                    backgroundColor: '#AD6BBF',
+                    color: 'white',
+                    cursor: 'pointer',
+                    borderRadius: 5,
+                    backgroundColor: 'rgb(173, 107, 191)',
+                    height: 56,
+                    outline: 'none',
+                    marginTop: 7,
+                    width: '104%',
                   }}
                   disabled={!addRadioRequest}
                   onClick={addSelectedRadioItem}
@@ -1177,12 +1185,19 @@ function AddEditPurchaseRequest(props) {
                   color='primary'
                   fullWidth
                 >
-                  Add Service
+                  Add
                 </Button>
               </div>
             </div>
 
-            <div className='row' style={{ marginTop: '20px' }}>
+            <div
+              className='row'
+              style={{
+                marginTop: '20px',
+                scrollPaddingLeft: '5px',
+                paddingRight: '10px',
+              }}
+            >
               {radiologyRequestArray !== 0 ? (
                 <CustomTable
                   tableData={radiologyRequestArray}
@@ -1206,7 +1221,10 @@ function AddEditPurchaseRequest(props) {
                   style={{ width: 45, height: 35, cursor: 'pointer' }}
                 />
               </div>
-              <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
+              <div
+                className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'
+                style={{ paddingRight: '10px' }}
+              >
                 <Button
                   disabled={enableSave}
                   onClick={saveRadioReq}

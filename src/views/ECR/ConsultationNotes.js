@@ -178,6 +178,15 @@ const styles = {
     height: '50px',
     outline: 'none',
   },
+  stylesForSave: {
+    color: 'white',
+    cursor: 'pointer',
+    borderRadius: 5,
+    backgroundColor: '#2c6ddd',
+    height: '50px',
+    outline: 'none',
+  },
+
   buttonContainer: {
     marginTop: 25,
   },
@@ -1317,7 +1326,11 @@ function LabRadRequest(props) {
         </div>
         <div
           className={`${'container-fluid'} ${classes.root}`}
-          style={{ marginTop: '25px' }}
+          style={{
+            marginTop: '25px',
+            paddingLeft: '10px',
+            paddingRight: '10px',
+          }}
         >
           <div className='row'>
             <div
@@ -1453,7 +1466,7 @@ function LabRadRequest(props) {
           </div>
         </div>
 
-        <div className='container-fluid'>
+        <div className={`${classes.root}`}>
           <h5 style={{ fontWeight: 'bold', color: 'white', marginTop: 25 }}>
             Patient Details
           </h5>
@@ -1742,7 +1755,13 @@ function LabRadRequest(props) {
             </div>
           ) : value === 3 ? (
             <div
-              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              style={{
+                flex: 4,
+                display: 'flex',
+                flexDirection: 'column',
+                paddingLeft: '10px',
+                paddingRight: '10px',
+              }}
               className={`container-fluid ${classes.root}`}
             >
               <div style={{ marginTop: '20px' }} className='row'>
@@ -1835,6 +1854,7 @@ function LabRadRequest(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
+                    paddingRight: '15px',
                   }}
                 >
                   <TextField
@@ -1879,9 +1899,17 @@ function LabRadRequest(props) {
                 <div className='col-md-2 col-sm-2 col-6'>
                   <Button
                     style={{
-                      ...styles.stylesForButton,
+                      ...styles.stylesForAdd,
                       marginTop: '25px',
-                      backgroundColor: '#ad6bbf',
+                      backgroundColor: '#AD6BBF',
+                      color: 'white',
+                      cursor: 'pointer',
+                      borderRadius: 5,
+                      backgroundColor: 'rgb(173, 107, 191)',
+                      height: 56,
+                      outline: 'none',
+                      marginTop: 25,
+                      width: '104%',
                     }}
                     disabled={!addLabRequest}
                     onClick={addSelectedLabItem}
@@ -1894,7 +1922,14 @@ function LabRadRequest(props) {
                 </div>
               </div>
 
-              <div className='row' style={{ marginTop: '20px' }}>
+              <div
+                className='row'
+                style={{
+                  marginTop: '20px',
+                  paddingLeft: '5px',
+                  paddingRight: '5px',
+                }}
+              >
                 {labRequestArray !== 0 ? (
                   <CustomTable
                     tableData={labRequestArray}
@@ -1911,11 +1946,14 @@ function LabRadRequest(props) {
               </div>
 
               <div className='row' style={{ marginBottom: '25px' }}>
-                <div className='col-md-12 col-sm-12 col-12 d-flex justify-content-end'>
+                <div
+                  className='col-md-12 col-sm-12 col-12 d-flex justify-content-end'
+                  style={{ paddingRight: '5px' }}
+                >
                   <Button
                     disabled={enableForm}
                     onClick={saveLabReq}
-                    style={{ ...styles.stylesForButton, width: '100px' }}
+                    style={{ ...styles.stylesForSave, width: '100px' }}
                     variant='contained'
                     color='primary'
                   >
@@ -1926,7 +1964,13 @@ function LabRadRequest(props) {
             </div>
           ) : value === 4 ? (
             <div
-              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              style={{
+                flex: 4,
+                display: 'flex',
+                flexDirection: 'column',
+                paddingLeft: '10px',
+                paddingRight: '10px',
+              }}
               className={`container-fluid ${classes.root}`}
             >
               <div style={{ marginTop: '20px' }} className='row'>
@@ -2019,6 +2063,7 @@ function LabRadRequest(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
+                    paddingRight: '15px',
                   }}
                 >
                   <TextField
@@ -2064,9 +2109,17 @@ function LabRadRequest(props) {
                 <div className='col-md-2 col-sm-2 col-6'>
                   <Button
                     style={{
-                      ...styles.stylesForButton,
+                      ...styles.stylesForAdd,
                       marginTop: '25px',
-                      backgroundColor: '#ad6bbf',
+                      backgroundColor: '#AD6BBF',
+                      color: 'white',
+                      cursor: 'pointer',
+                      borderRadius: 5,
+                      backgroundColor: 'rgb(173, 107, 191)',
+                      height: 56,
+                      outline: 'none',
+                      marginTop: 25,
+                      width: '104%',
                     }}
                     disabled={!addRadioRequest}
                     onClick={addSelectedRadioItem}
@@ -2079,7 +2132,14 @@ function LabRadRequest(props) {
                 </div>
               </div>
 
-              <div className='row' style={{ marginTop: '20px' }}>
+              <div
+                className='row'
+                style={{
+                  marginTop: '20px',
+                  paddingLeft: '5px',
+                  paddingRight: '5px',
+                }}
+              >
                 {radiologyRequestArray !== 0 ? (
                   <CustomTable
                     tableData={radiologyRequestArray}
@@ -2096,11 +2156,14 @@ function LabRadRequest(props) {
               </div>
 
               <div className='row' style={{ marginBottom: '25px' }}>
-                <div className='col-md-12 col-sm-12 col-12 d-flex justify-content-end'>
+                <div
+                  className='col-md-12 col-sm-12 col-12 d-flex justify-content-end'
+                  style={{ paddingRight: '5px' }}
+                >
                   <Button
                     disabled={enableForm}
                     onClick={saveRadioReq}
-                    style={{ ...styles.stylesForButton, width: '100px' }}
+                    style={{ ...styles.stylesForSave, width: '100px' }}
                     variant='contained'
                     color='primary'
                   >
@@ -2129,7 +2192,7 @@ function LabRadRequest(props) {
                   undefined
                 )}
               </div>
-            </div> /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/)
+            </div> /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/)
           ) : (
             //     : value === 5 ? (
             //         <div
