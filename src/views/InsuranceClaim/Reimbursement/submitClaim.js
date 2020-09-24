@@ -912,7 +912,7 @@ function AddEditPatientListing(props) {
                     className={'col-md-3 col-sm-3 col-3'}
                     style={styles.textStyles}
                   >
-                    {'None'}
+                    {''}
                   </div>
 
                   <div
@@ -927,7 +927,7 @@ function AddEditPatientListing(props) {
                             </h6>
                           )
                         })
-                      : 'None'}
+                      : ''}
                   </div>
 
                   <div
@@ -938,7 +938,7 @@ function AddEditPatientListing(props) {
                       ? diagnosisArray.map((drug, index) => {
                           return <h6 style={styles.textStyles}>{drug}</h6>
                         })
-                      : 'None'}
+                      : ''}
                   </div>
                 </div>
               </div>
