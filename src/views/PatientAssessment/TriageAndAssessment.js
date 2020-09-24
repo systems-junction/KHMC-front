@@ -15,8 +15,9 @@ import Notification from '../../components/Snackbar/Notification.js'
 import CustomTable from '../../components/Table/Table'
 
 const tableHeadingForTriage = [
+  'Request No.',
   'Date/Time',
-  'Doctor',
+  'Checked By',
   'Triage Level',
   'General Appearance',
   'Head Neck',
@@ -27,6 +28,7 @@ const tableHeadingForTriage = [
   '',
 ]
 const tableDataKeysForTriage = [
+  'triageRequestNo',
   'date',
   'doctorName',
   'triageLevel',
@@ -36,6 +38,32 @@ const tableDataKeysForTriage = [
   'respiratory',
   'cardiac',
   'abdomen',
+]
+
+const tableHeadingForVitalSigns = [
+  'Request No.',
+  'Date/Time',
+  'Checked By',
+  'Heart Rate',
+  'Blood Pressure',
+  'Respiratory Rate',
+  'Temperature',
+  'FSBS (Finger Stick Blood Sugar)',
+  'Pain Scale',
+  'Pulse OX',
+  '',
+]
+const tableDataKeysForVitalSigns = [
+  'triageRequestNo',
+  'date',
+  'doctorName',
+  'heartRate',
+  'bloodPressure',
+  'respiratoryRate',
+  'temperature',
+  'FSBS',
+  'painScale',
+  'pulseOX'
 ]
 
 const styles = {
@@ -77,6 +105,14 @@ function TriageAndAssessment(props) {
     cardiacText: null,
     abdomenText: null,
     neurologicalText: null,
+
+    heartRate: '',
+    bloodPressure: '',
+    respiratoryRate: '',
+    temperature: '',
+    FSBS: '',
+    painScale: '',
+    pulseOX: '',
   }
 
   function reducer(state, { field, value }) {
@@ -105,11 +141,20 @@ function TriageAndAssessment(props) {
     cardiacText,
     abdomenText,
     neurologicalText,
+
+    heartRate,
+    bloodPressure,
+    respiratoryRate,
+    temperature,
+    FSBS,
+    painScale,
+    pulseOX,
   } = state
 
   const classesForTabs = useStylesForTabs()
 
-  const [value, setValue] = React.useState(0)
+  const [value, setValue] = useState(0)
+  const [historyValue, sethistoryValue] = useState(0)
   const [id, setId] = React.useState('')
   const [currentUser, setCurrentUser] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
@@ -169,6 +214,10 @@ function TriageAndAssessment(props) {
     setValue(newValue)
   }
 
+  const handleHistoryTabChange = (event, newValue) => {
+    sethistoryValue(newValue)
+  }
+
   const onNext = () => {
     setValue(value + 1)
   }
@@ -190,12 +239,37 @@ function TriageAndAssessment(props) {
     dispatch({ field: e.target.name, value: e.target.value })
   }
 
+  const onTextChange = (e) => {
+    dispatch({ field: e.target.name, value: e.target.value })
+  }
+
   const handleSubmitAssessment = (e) => {
+    var now = new Date()
+    var start = new Date(now.getFullYear(), 0, 0)
+    var diff =
+      now -
+      start +
+      (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000
+    var oneDay = 1000 * 60 * 60 * 24
+    var day = Math.floor(diff / oneDay)
+
+    var dateNow = new Date()
+    var YYYY = dateNow
+      .getFullYear()
+      .toString()
+      .substr(-2)
+    var HH = dateNow.getHours()
+    var mm = dateNow.getMinutes()
+    let ss = dateNow.getSeconds()
+
+    const TAArequestNo = 'TAA' + day + YYYY + HH + mm + ss
+
     let triageAssessment = []
 
     triageAssessment = [
       ...triageAssessmentArray,
       {
+        triageRequestNo: TAArequestNo,
         requester: currentUser.staffId,
         triageLevel: triageLevel,
         generalAppearance: generalAppearance,
@@ -204,6 +278,13 @@ function TriageAndAssessment(props) {
         cardiac: cardiac,
         abdomen: abdomen,
         neurological: neurological,
+        heartRate: heartRate === '' ? "N/A" : heartRate,
+        bloodPressure: bloodPressure === '' ? "N/A" : bloodPressure,
+        respiratoryRate: respiratoryRate === '' ? "N/A" : respiratoryRate,
+        temperature: temperature === '' ? "N/A" : temperature,
+        FSBS: FSBS === '' ? "N/A" : FSBS,
+        painScale: painScale === '' ? "N/A" : painScale,
+        pulseOX: pulseOX === '' ? "N/A" : pulseOX,
       },
     ]
     console.log(e)
@@ -296,7 +377,7 @@ function TriageAndAssessment(props) {
                 outline: 'none',
                 color: value === 1 ? '#12387a' : '#3B988C',
               }}
-              label='Triage Level'
+              label='Vital Signs'
             />
             <Tab
               style={{
@@ -307,10 +388,92 @@ function TriageAndAssessment(props) {
               }}
               label='Physical Examination'
             />
+            <Tab
+              style={{
+                color: 'white',
+                borderRadius: 15,
+                outline: 'none',
+                color: value === 3 ? '#12387a' : '#3B988C',
+              }}
+              label='Triage Level'
+            />
           </Tabs>
         </div>
 
-        {value === 1 ? (
+        {value === 0 ? (
+          <>
+            <div className={classesForTabs.root}>
+              <Tabs
+                value={historyValue}
+                onChange={handleHistoryTabChange}
+                textColor='primary'
+                TabIndicatorProps={{ style: { background: '#12387a' } }}
+                centered
+              >
+                <Tab
+                  style={{
+                    color: 'white',
+                    borderRadius: 15,
+                    outline: 'none',
+                    color: historyValue === 0 ? '#12387a' : '#3B988C',
+                  }}
+                  label='Vital Signs'
+                />
+                <Tab
+                  style={{
+                    color: 'white',
+                    borderRadius: 15,
+                    outline: 'none',
+                    color: historyValue === 1 ? '#12387a' : '#3B988C',
+                  }}
+                  label='Physical Examination'
+                />
+              </Tabs>
+            </div>
+
+            {historyValue === 0 ? (
+              <div
+                style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+                className='container-fluid'
+              >
+                <div className='row' style={{ marginTop: '20px' }}>
+                  {triageAssessmentArray !== 0 ? (
+                    <CustomTable
+                      tableData={triageAssessmentArray}
+                      tableDataKeys={tableDataKeysForVitalSigns}
+                      tableHeading={tableHeadingForVitalSigns}
+                      borderBottomColor={'#60d69f'}
+                      borderBottomWidth={20}
+                    />
+                  ) : (
+                      undefined
+                    )}
+                </div>
+              </div>
+            ) : historyValue === 1 ? (
+              <div
+                style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+                className='container-fluid'
+              >
+                <div className='row' style={{ marginTop: '20px' }}>
+                  {triageAssessmentArray !== 0 ? (
+                    <CustomTable
+                      tableData={triageAssessmentArray}
+                      tableDataKeys={tableDataKeysForTriage}
+                      tableHeading={tableHeadingForTriage}
+                      borderBottomColor={'#60d69f'}
+                      borderBottomWidth={20}
+                    />
+                  ) : (
+                      undefined
+                    )}
+                </div>
+              </div>
+            ) : (
+                  undefined
+                )}
+          </>
+        ) : value === 1 ? (
           <>
             <div
               style={{
@@ -323,62 +486,119 @@ function TriageAndAssessment(props) {
                 padding: '25px',
                 borderRadius: '25px',
               }}
-              className='container-fluid'
             >
-              <div className='row'>
-                <label style={{ paddingLeft: '15px' }}>
-                  <strong>Triage Level</strong>
-                </label>
-              </div>
-              <div onChange={onCheckedValue} value={triageLevel}>
+              <div className='container-fluid'>
                 <div className='row'>
-                  <div className='col-md-4'>
-                    <input
-                      type='radio'
-                      name='triageLevel'
-                      value='Resuscitation'
-                      checked={triageLevel === 'Resuscitation'}
-                    />
-                    <label for='male'>&nbsp;&nbsp;1 - Resuscitation</label>
-                  </div>
-                  <div className='col-md-4'>
-                    <input
-                      type='radio'
-                      name='triageLevel'
-                      value='Emergent'
-                      checked={triageLevel === 'Emergent'}
-                    />
-                    <label for='male'>&nbsp;&nbsp;2 - Emergent</label>
-                  </div>
-                  <div className='col-md-4'>
-                    <input
-                      type='radio'
-                      name='triageLevel'
-                      value='Urgent'
-                      checked={triageLevel === 'Urgent'}
-                    />
-                    <label for='male'>&nbsp;&nbsp;3 - Urgent</label>
-                  </div>
+                  <label style={{ paddingLeft: '15px' }}>
+                    <strong>Heart Rate</strong>
+                  </label>
+                </div>
+                <div className='form-group col-md-12'>
+                  <input
+                    style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
+                    type='text'
+                    placeholder='Enter Heart Rate'
+                    onChange={onTextChange}
+                    name='heartRate'
+                    value={heartRate}
+                    className='control-label textInputStyle'
+                  />
                 </div>
                 <div className='row'>
-                  <div className='col-md-4'>
-                    <input
-                      type='radio'
-                      name='triageLevel'
-                      value='LessUrgent'
-                      checked={triageLevel === 'LessUrgent'}
-                    />
-                    <label for='male'>&nbsp;&nbsp;4 - Less Urgent</label>
-                  </div>
-                  <div className='col-md-4'>
-                    <input
-                      type='radio'
-                      name='triageLevel'
-                      value='NonUrgent'
-                      checked={triageLevel === 'NonUrgent'}
-                    />
-                    <label for='male'>&nbsp;&nbsp;5 - Non Urgent</label>
-                  </div>
+                  <label style={{ paddingLeft: '15px' }}>
+                    <strong>Blood Pressure</strong>
+                  </label>
+                </div>
+                <div className='form-group col-md-12'>
+                  <input
+                    style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
+                    type='text'
+                    placeholder='Enter Blood Pressure'
+                    onChange={onTextChange}
+                    name='bloodPressure'
+                    value={bloodPressure}
+                    className='control-label textInputStyle'
+                  />
+                </div>
+                <div className='row'>
+                  <label style={{ paddingLeft: '15px' }}>
+                    <strong>Respiratory Rate</strong>
+                  </label>
+                </div>
+                <div className='form-group col-md-12'>
+                  <input
+                    style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
+                    type='text'
+                    placeholder='Enter Respiratory Rate'
+                    onChange={onTextChange}
+                    name='respiratoryRate'
+                    value={respiratoryRate}
+                    className='control-label textInputStyle'
+                  />
+                </div>
+                <div className='row'>
+                  <label style={{ paddingLeft: '15px' }}>
+                    <strong>Temperature</strong>
+                  </label>
+                </div>
+                <div className='form-group col-md-12'>
+                  <input
+                    style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
+                    type='text'
+                    placeholder='Enter Temperature'
+                    onChange={onTextChange}
+                    name='temperature'
+                    value={temperature}
+                    className='control-label textInputStyle'
+                  />
+                </div>
+                <div className='row'>
+                  <label style={{ paddingLeft: '15px' }}>
+                    <strong>FSBS (Finger Stick Blood Sugar)</strong>
+                  </label>
+                </div>
+                <div className='form-group col-md-12'>
+                  <input
+                    style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
+                    type='text'
+                    placeholder='Enter FSBS'
+                    onChange={onTextChange}
+                    name='FSBS'
+                    value={FSBS}
+                    className='control-label textInputStyle'
+                  />
+                </div>
+                <div className='row'>
+                  <label style={{ paddingLeft: '15px' }}>
+                    <strong>Pain Scale</strong>
+                  </label>
+                </div>
+                <div className='form-group col-md-12'>
+                  <input
+                    style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
+                    type='text'
+                    placeholder='Enter Pain Scale'
+                    onChange={onTextChange}
+                    name='painScale'
+                    value={painScale}
+                    className='control-label textInputStyle'
+                  />
+                </div>
+                <div className='row'>
+                  <label style={{ paddingLeft: '15px' }}>
+                    <strong>Pulse OX</strong>
+                  </label>
+                </div>
+                <div className='form-group col-md-12'>
+                  <input
+                    style={{ outline: 'none', backgroundColor: '#F7F5F5' }}
+                    type='text'
+                    placeholder='Enter Pulse OX'
+                    onChange={onTextChange}
+                    name='pulseOX'
+                    value={pulseOX}
+                    className='control-label textInputStyle'
+                  />
                 </div>
               </div>
             </div>
@@ -963,6 +1183,104 @@ function TriageAndAssessment(props) {
                   <Button
                     style={styles.stylesForButton}
                     //disabled={!validateFormType1()}
+                    onClick={onNext}
+                    variant='contained'
+                    color='primary'
+                  >
+                    Next
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </>
+        ) : value === 3 ? (
+          <>
+            <div
+              style={{
+                flex: 4,
+                display: 'flex',
+                flexDirection: 'column',
+                backgroundColor: 'white',
+                marginTop: '25px',
+                marginBottom: '25px',
+                padding: '25px',
+                borderRadius: '25px',
+              }}
+              className='container-fluid'
+            >
+              <div className='row'>
+                <label style={{ paddingLeft: '15px' }}>
+                  <strong>Triage Level</strong>
+                </label>
+              </div>
+              <div onChange={onCheckedValue} value={triageLevel}>
+                <div className='row'>
+                  <div className='col-md-4'>
+                    <input
+                      type='radio'
+                      name='triageLevel'
+                      value='Resuscitation'
+                      checked={triageLevel === 'Resuscitation'}
+                    />
+                    <label for='male'>&nbsp;&nbsp;1 - Resuscitation</label>
+                  </div>
+                  <div className='col-md-4'>
+                    <input
+                      type='radio'
+                      name='triageLevel'
+                      value='Emergent'
+                      checked={triageLevel === 'Emergent'}
+                    />
+                    <label for='male'>&nbsp;&nbsp;2 - Emergent</label>
+                  </div>
+                  <div className='col-md-4'>
+                    <input
+                      type='radio'
+                      name='triageLevel'
+                      value='Urgent'
+                      checked={triageLevel === 'Urgent'}
+                    />
+                    <label for='male'>&nbsp;&nbsp;3 - Urgent</label>
+                  </div>
+                </div>
+                <div className='row'>
+                  <div className='col-md-4'>
+                    <input
+                      type='radio'
+                      name='triageLevel'
+                      value='LessUrgent'
+                      checked={triageLevel === 'LessUrgent'}
+                    />
+                    <label for='male'>&nbsp;&nbsp;4 - Less Urgent</label>
+                  </div>
+                  <div className='col-md-4'>
+                    <input
+                      type='radio'
+                      name='triageLevel'
+                      value='NonUrgent'
+                      checked={triageLevel === 'NonUrgent'}
+                    />
+                    <label for='male'>&nbsp;&nbsp;5 - Non Urgent</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style={{ display: 'flex', flex: 1, justifyContent: 'center' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  flex: 1,
+                  justifyContent: 'flex-end',
+                  marginTop: '2%',
+                  marginBottom: '2%',
+                  paddingRight: '32px',
+                }}
+                className='container-fluid'
+              >
+                <div className='row'>
+                  <Button
+                    style={styles.stylesForButton}
+                    //disabled={!validateFormType1()}
                     onClick={handleSubmitAssessment}
                     variant='contained'
                     color='primary'
@@ -973,28 +1291,9 @@ function TriageAndAssessment(props) {
               </div>
             </div>
           </>
-        ) : value === 0 ? (
-          <div
-            style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-            className='container-fluid'
-          >
-            <div className='row' style={{ marginTop: '20px' }}>
-              {triageAssessmentArray !== 0 ? (
-                <CustomTable
-                  tableData={triageAssessmentArray}
-                  tableDataKeys={tableDataKeysForTriage}
-                  tableHeading={tableHeadingForTriage}
-                  borderBottomColor={'#60d69f'}
-                  borderBottomWidth={20}
-                />
-              ) : (
-                undefined
-              )}
-            </div>
-          </div>
         ) : (
-          undefined
-        )}
+                  undefined
+                )}
 
         <Notification
           msg={errorMsg}
