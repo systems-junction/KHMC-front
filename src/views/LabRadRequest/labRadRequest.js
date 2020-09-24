@@ -431,7 +431,7 @@ function LabRadRequest(props) {
   }
 
   const handleSearch = (e) => {
-    const a = e.target.value.replace(/[^\w\s]/gi, '')
+    const a = e.target.value.replace(/[^\w-\s]/gi, '')
     setSearchQuery(a)
     if (a.length >= 3) {
       axios
@@ -580,7 +580,7 @@ function LabRadRequest(props) {
   }
 
   const handleRadioSearch = (e) => {
-    const a = e.target.value.replace(/[^\w\s]/gi, '')
+    const a = e.target.value.replace(/[^\w-\s]/gi, '')
     setSearchRadioQuery(a)
     if (a.length >= 3) {
       axios
@@ -987,16 +987,16 @@ function LabRadRequest(props) {
 
   const addNewRequest = () => {
     // let path = `assessmentdiagnosis/add`
-    let path = '/home/wms/fus/professionalorder/addorder';
+    let path = '/home/wms/fus/professionalorder/addorder'
     props.history.push({
       pathname: path,
       state: {
-        comingFor: "add",
+        comingFor: 'add',
         selectedPatient: selectedItem.patientId,
         pharmacyRequestArray,
       },
-    });
-  };
+    })
+  }
 
   if (openNotification) {
     setTimeout(() => {
@@ -1442,17 +1442,17 @@ function LabRadRequest(props) {
                   undefined
                 )}
               </div>
-              <div className="row" style={{ marginBottom: "25px" }}>
-                <div className="col-md-12 col-sm-12 col-12 d-flex justify-content-end">
+              <div className='row' style={{ marginBottom: '25px' }}>
+                <div className='col-md-12 col-sm-12 col-12 d-flex justify-content-end'>
                   <Button
                     onClick={addNewRequest}
                     style={styles.stylesForButton}
-                    variant="contained"
-                    color="primary"
+                    variant='contained'
+                    color='primary'
                   >
-                    <img className="icon-style" src={plus_icon} />
+                    <img className='icon-style' src={plus_icon} />
                     &nbsp;&nbsp;
-                    <strong style={{ fontSize: "12px" }}>
+                    <strong style={{ fontSize: '12px' }}>
                       Pharmacy Request
                     </strong>
                   </Button>
@@ -1475,16 +1475,25 @@ function LabRadRequest(props) {
                   <TextField
                     required
                     disabled={enableForm}
-                    label='Lab Test'
+                    label='Search by Lab Test'
                     name={'searchQuery'}
                     value={searchQuery}
                     onChange={handleSearch}
                     className='textInputStyle'
                     variant='filled'
                     InputProps={{
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          <AccountCircle />
+                        </InputAdornment>
+                      ),
                       className: classes.input,
                       classes: { input: classes.input },
                       disableUnderline: true,
+                    }}
+                    InputLabelProps={{
+                      className: classes.label,
+                      classes: { label: classes.label },
                     }}
                   />
                 </div>
@@ -1516,7 +1525,9 @@ function LabRadRequest(props) {
                                   <TableCell>{i.name}</TableCell>
                                   <TableCell>{i.serviceNo}</TableCell>
                                   <TableCell>{i.price}</TableCell>
-                                  <TableCell>{i.description}</TableCell>
+                                  <TableCell align='center'>
+                                    {i.description}
+                                  </TableCell>
                                 </TableRow>
                               )
                             })}
@@ -1648,16 +1659,25 @@ function LabRadRequest(props) {
                 >
                   <TextField
                     required
-                    label='Radiology / Imaging'
+                    label='Search by Radiology / Imaging'
                     name={'searchRadioQuery'}
                     value={searchRadioQuery}
                     onChange={handleRadioSearch}
                     className='textInputStyle'
                     variant='filled'
                     InputProps={{
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          <AccountCircle />
+                        </InputAdornment>
+                      ),
                       className: classes.input,
                       classes: { input: classes.input },
                       disableUnderline: true,
+                    }}
+                    InputLabelProps={{
+                      className: classes.label,
+                      classes: { label: classes.label },
                     }}
                   />
                 </div>
@@ -1690,7 +1710,9 @@ function LabRadRequest(props) {
                                   <TableCell>{i.name}</TableCell>
                                   <TableCell>{i.serviceNo}</TableCell>
                                   <TableCell>{i.price}</TableCell>
-                                  <TableCell>{i.description}</TableCell>
+                                  <TableCell align='center'>
+                                    {i.description}
+                                  </TableCell>
                                 </TableRow>
                               )
                             })}

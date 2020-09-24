@@ -478,7 +478,7 @@ export default function EdrRequest(props) {
                       inputVariant='filled'
                       fullWidth={true}
                       label='Date'
-                      format='MM-dd-yyyy HH:mm'
+                      format='dd - MM - yyyy HH:mm'
                       // minDate={DateTime}
                       // onChange={(val) => onChangeDate(val, 'DateTime')}
                       InputProps={{

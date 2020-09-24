@@ -568,7 +568,7 @@ function AddEditPurchaseRequest(props) {
                         inputVariant='filled'
                         fullWidth={true}
                         label='Date/Time'
-                        format='MM-dd-yyyy HH:mm'
+                        format='dd - MM - yyyy HH:mm'
                         InputProps={{
                           className: classes.input,
                           classes: { input: classes.input },
