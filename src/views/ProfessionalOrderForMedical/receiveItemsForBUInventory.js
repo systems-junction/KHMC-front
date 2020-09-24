@@ -40,6 +40,11 @@ import MUIInputStyle from "../../assets/jss/material-dashboard-react/inputStyle.
 
 import CurrencyTextField from "@unicef/material-ui-currency-textfield";
 
+import dateTimeFormat from "../../constants/dateTimeFormat";
+import dateFormat from "../../constants/dateFormat";
+
+
+
 const statusArray = [
   // { key: "complete", value: "Complete" },
   { key: "Received", value: "Received" },
@@ -801,6 +806,7 @@ function ReceiveItems(props) {
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DatePicker
                   required
+                  format={dateFormat}
                   inputVariant="filled"
                   fullWidth={true}
                   format="MM/dd/yyyy"
@@ -1259,7 +1265,8 @@ function ReceiveItems(props) {
             >
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DateTimePicker
-                  format="MM/dd/yyyy HH:mm a"
+                  // format="MM/dd/yyyy HH:mm a"
+                  format={dateTimeFormat}
                   required
                   inputVariant={"filled"}
                   fullWidth={true}
@@ -1289,7 +1296,8 @@ function ReceiveItems(props) {
             >
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DateTimePicker
-                  format="MM/dd/yyyy HH:mm a"
+                  // format="MM/dd/yyyy HH:mm a"
+                  format={dateTimeFormat}
                   required
                   inputVariant={"filled"}
                   fullWidth={true}

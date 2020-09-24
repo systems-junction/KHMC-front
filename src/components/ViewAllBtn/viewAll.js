@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-// import Button from "@material-ui/core/Button";
+import Button from "@material-ui/core/Button";
 import view_all from "../../assets/img/Eye.png";
 
 const styles = {
@@ -9,7 +9,7 @@ const styles = {
     borderRadius: 5,
     background: "#2c6ddd",
     width: "120px",
-    height: "40px",
+    height: "45px",
     // outline: "none",
     borderWidth:0,
     color:'white',
@@ -17,7 +17,6 @@ const styles = {
     display:'flex',
     justifyContent:'center',
     alignItems:'center',
-    boxShadow: '0.1px 1.5px #44536b'
     // fontSize:50
   },
 };
@@ -28,16 +27,16 @@ function ViewAllBtn(props) {
 
   return (
     <div>
-      <button
+      <Button
         onClick={() => props.history.goBack()}
         style={styles.stylesForButton}
-        // variant="contained"
-        // color="primary"
+        variant="contained"
+        color="primary"
       >
         <img className="icon-view" src={view_all} />
         &nbsp;&nbsp;
         <strong style={{ fontSize: "12px" }}>View All</strong>
-      </button>
+      </Button>
     </div>
   );
 }

@@ -16,7 +16,7 @@ import tableStyles from "../../assets/jss/material-dashboard-react/components/ta
 import axios from "axios";
 import Notification from "../../components/Snackbar/Notification.js";
 import DateFnsUtils from "@date-io/date-fns";
-import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import { DateTimePicker, MuiPickersUtilsProvider,DatePicker } from "@material-ui/pickers";
 import {
   addInternalReturnRequest,
   updateInternalReturnRequest,
@@ -47,6 +47,9 @@ import BootstrapInput from "../../components/Dropdown/dropDown.js";
 import Loader from "react-loader-spinner";
 
 import InputLabelComponent from "../../components/InputLabel/inputLabel";
+
+import dateFormat from "../../constants/dateFormat";
+import dateTimeFormat from "../../constants/dateTimeFormat";
 
 const reasonArray = [
   { key: "jit", value: "JIT" },
@@ -910,7 +913,8 @@ function AddEditPurchaseRequest(props) {
                     label="Date Generated (MM/DD/YYYY)"
                     disabled={true}
                     fullWidth
-                    format="MM/dd/yyyy hh:mm a"
+                    // format="MM/dd/yyyy hh:mm a"
+                    format={dateTimeFormat}
                     // style={styles.inputContainerForDate}
 
                     InputProps={{
@@ -936,13 +940,14 @@ function AddEditPurchaseRequest(props) {
                 }}
               >
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <DateTimePicker
+                  <DatePicker
                     required
                     inputVariant="filled"
                     onChange={(val) => onChangeDate(val, "expiryDate")}
                     name={"expiryDate"}
                     label="Expiry Date (MM/DD/YYYY)"
-                    format="MM/dd/yyyy hh:mm a"
+                    // format="MM/dd/yyyy hh:mm a"
+                    format={dateFormat}
                     disabled={
                       currentUser &&
                       (currentUser.staffTypeId.type === "FU Inventory Keeper" ||
@@ -1533,13 +1538,16 @@ function AddEditPurchaseRequest(props) {
                     </div>
 
                     <div className="col-md-6" style={{ marginTop: 35 }}>
-                      <InputLabelComponent>Date/Time (MM/DD/YYYY)</InputLabelComponent>
+                      <InputLabelComponent>
+                        Date/Time (MM/DD/YYYY)
+                      </InputLabelComponent>
                       <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <DateTimePicker
                           inputVariant="outlined"
                           onChange={(val) => onChangeDate(val, "date")}
                           name={"date"}
-                          format="MM/dd/yyyy hh:mm a"
+                          // format="MM/dd/yyyy hh:mm a"
+                          format={dateTimeFormat}
                           disabled={
                             (currentUser &&
                               currentUser.staffTypeId.type ===

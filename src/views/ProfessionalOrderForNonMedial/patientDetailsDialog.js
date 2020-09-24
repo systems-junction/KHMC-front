@@ -154,7 +154,7 @@ function AddEditPurchaseRequest(props) {
   useEffect(() => {
     setPatientDetails(props.patientDetails);
     console.log("props", props.patientDetails);
-  }, []);
+  }, [props.patientDetails]);
 
   return (
     <div className="row">
@@ -273,14 +273,26 @@ function AddEditPurchaseRequest(props) {
               <div className={"col-md-3 col-sm-3 col-3"} style={{}}>
                 {props.pharmacyRequest &&
                   props.pharmacyRequest.map((d, index) => {
-                  return <h6 style={styles.textStyles}> {index+1}{'.'} &nbsp; {d}</h6>;
+                    return (
+                      <h6 style={styles.textStyles}>
+                        {" "}
+                        {index + 1}
+                        {"."} &nbsp; {d}
+                      </h6>
+                    );
                   })}
               </div>
 
               <div className={"col-md-3 col-sm-3 col-3"} style={{}}>
                 {props.diagnosisArray &&
                   props.diagnosisArray.map((d, index) => {
-                  return <h6 style={styles.textStyles}> {index+1}{'.'} &nbsp; {d}</h6>;
+                    return (
+                      <h6 style={styles.textStyles}>
+                        {" "}
+                        {index + 1}
+                        {"."} &nbsp; {d}
+                      </h6>
+                    );
                   })}
               </div>
             </div>

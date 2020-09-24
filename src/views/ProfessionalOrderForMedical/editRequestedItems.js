@@ -62,6 +62,8 @@ import TableForAddedItems from "./tableforAddedItems";
 
 import useStyleforinput from "../../../src/assets/jss/material-dashboard-react/inputStyle.js";
 
+import dateTimeFormat from "../../constants/dateTimeFormat";
+
 const reasonArray = [
   { key: "jit", value: "JIT" },
   { key: "new_item", value: "New Item" },
@@ -351,7 +353,7 @@ function AddEditPurchaseRequest(props) {
       });
   }
 
-  console.log(fuArray)
+  console.log(fuArray);
 
   useEffect(() => {
     const selectedRec = props.history.location.state.selectedItem;
@@ -743,7 +745,8 @@ function AddEditPurchaseRequest(props) {
                     disabled={true}
                     ampm={false}
                     fullWidth
-                    format="MM/dd/yyyy hh:mm a"
+                    // format="MM/dd/yyyy hh:mm a"
+                    format={dateTimeFormat}
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
