@@ -204,13 +204,13 @@ export default function ReplenishmentRequest(props) {
           if (currentUser.staffTypeId.type === "Registered Nurse") {
             // let repRequest = res.data.data;
             let temp = [];
-            for (let i = 0; i < repRequest.length; i++) {
-              if (repRequest[i].buId.buHead === currentUser.staffId) {
-                temp.push(repRequest[i]);
-              }
-            }
-            console.log("rep array after filter", temp);
-            setPurchaseRequest(temp.reverse());
+            // for (let i = 0; i < repRequest.length; i++) {
+            //   if (repRequest[i].buId.buHead === currentUser.staffId) {
+            //     temp.push(repRequest[i]);
+            //   }
+            // }
+            // console.log("rep array after filter", temp);
+            setPurchaseRequest(res.data.data.reverse());
           } else {
             if (currentUser.staffTypeId.type === "FU Inventory Keeper") {
               // let repRequest = res.data.data;
@@ -511,9 +511,31 @@ export default function ReplenishmentRequest(props) {
   ) {
     let path = "/home/wms/fus/professionalorder/add";
 
+    // props.history.replace({
+    //   pathname: path,
+    //   state: { comingFor: "add", vendors, statues, items, buObj },
+    // });
+
+    let obj = {
+      comingFor: "add",
+      buObj,
+    };
+    let sendingObj = "";
+    if (
+      props.history.location.state &&
+      props.history.location.state.selectedPatient
+    ) {
+      sendingObj = {
+        ...obj,
+        selectedPatient: props.history.location.state.selectedPatient,
+        comingFromRCM: true,
+      };
+    } else {
+      sendingObj = { ...obj };
+    }
     props.history.replace({
       pathname: path,
-      state: { comingFor: "add", vendors, statues, items, buObj },
+      state: { ...sendingObj },
     });
   }
 

@@ -832,7 +832,7 @@ function AddEditPurchaseRequest(props) {
             {/* {currentQty && description ? ( */}
             <div>
               <h4 style={{ color: "white", fontWeight: "700", marginTop: 30 }}>
-                Item details
+                Item Details
               </h4>
               <div className="row">
                 <div

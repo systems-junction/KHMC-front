@@ -404,7 +404,7 @@ function AddEditPurchaseRequest(props) {
             props.history.replace({
               pathname: "/home/wms/fus/medicinalorder/success",
               state: {
-                message: `External Return request ${res.data.data.returnRequestNo} for patient MRN ${res.data.data.patientId} has been generated successfully`,
+                message: `External Return request ${res.data.data.returnRequestNo} has been generated successfully`,
               },
             });
           } else if (!res.data.success) {
@@ -473,11 +473,16 @@ function AddEditPurchaseRequest(props) {
               props.history.replace({
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
-                  message: `External Return request ${res.data.data.returnRequestNo} for patient MRN ${res.data.data.patientId.profileNo} has been ${status}`,
+                  message: `External Return request ${res.data.data.returnRequestNo} has been ${status}`,
                 },
               });
             } else {
-              props.history.goBack();
+              props.history.replace({
+                pathname: "/home/wms/fus/medicinalorder/success",
+                state: {
+                  message: `External Return request ${res.data.data.returnRequestNo} has been updated`,
+                },
+              });
             }
           } else if (!res.data.success) {
             setOpenNotification(true);
@@ -883,8 +888,7 @@ function AddEditPurchaseRequest(props) {
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <DateTimePicker
                     // format="MM/dd/yyyy hh:mm a"
-                  format={dateTimeFormat}
-
+                    format={dateTimeFormat}
                     inputVariant="filled"
                     onChange={(val) => onChangeDate(val, "expiryDate")}
                     name={"expiryDate"}

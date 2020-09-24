@@ -1392,7 +1392,7 @@ function AddEditPurchaseRequest(props) {
         </div>
 
         <div style={{ marginTop: "5px", marginBottom: "5px" }}>
-          {comingFor === "add" ? (
+          {comingFor === "add"   && !props.history.location.state.comingFromRCM? (
             <div>
               <div className="row">
                 {/* <span class="fa fa-search"></span> */}
