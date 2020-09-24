@@ -1582,7 +1582,7 @@ function AddEditPurchaseRequest(props) {
                 <h5
                   style={{ color: "white", fontWeight: "700", marginTop: 20 }}
                 >
-                  Item details
+                  Item Details
                 </h5>
               </div>
 

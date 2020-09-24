@@ -248,7 +248,7 @@ class Header extends React.Component {
         )}
 
         {this.state.currentUser ? (
-          <div style={{ position: "fixed", right: 30, bottom: 30, zIndex: 5 }}>
+          <div style={{ position: "fixed", right: 35, bottom: 45, zIndex: 5 }}>
             <Fab
               // color="primary"
               aria-label="add"

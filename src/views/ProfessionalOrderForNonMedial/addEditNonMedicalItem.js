@@ -397,7 +397,7 @@ function AddEditPurchaseRequest(props) {
     }
     return (
       // comments !== "" &&
-      requestedItemsArray !== "" && requestedItemsArray.length > 0
+      // requestedItemsArray !== "" && requestedItemsArray.length > 0
       // dateGenerated !== "" &&
       // itemCode !== "" &&
       // description !== "" &&
@@ -412,6 +412,8 @@ function AddEditPurchaseRequest(props) {
 
       //  && receiptUnit !== ""
       // && issueUnit !== ""
+
+      true
     );
   }
 
@@ -420,6 +422,13 @@ function AddEditPurchaseRequest(props) {
       setIsFormSubmitted(true);
       setOpenNotification(true);
       setErrorMsg("Please fill the fields properly");
+    }
+
+    if (requestedItemsArray === "" || requestedItemsArray.length === 0) {
+      setIsFormSubmitted(true);
+      setOpenNotification(true);
+      setErrorMsg("Please add some items first to generate order");
+      return;
     } else {
       if (validateForm()) {
         let requestedItems = [];
@@ -497,6 +506,13 @@ function AddEditPurchaseRequest(props) {
       setIsFormSubmitted(true);
       setOpenNotification(true);
       setErrorMsg("Please fill the fields properly");
+    }
+
+    if (requestedItemsArray === "" || requestedItemsArray.length === 0) {
+      setIsFormSubmitted(true);
+      setOpenNotification(true);
+      setErrorMsg("Please add some items first to generate order");
+      return;
     } else {
       if (validateForm()) {
         let requestedItems = [];
@@ -1123,7 +1139,7 @@ function AddEditPurchaseRequest(props) {
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
-                  error={secondStatus === "" && isFormSubmitted}
+                  // error={secondStatus === "" && isFormSubmitted}
                 >
                   <MenuItem value="">
                     <em>None</em>
@@ -1449,7 +1465,7 @@ function AddEditPurchaseRequest(props) {
                     onChange={onChangeValue}
                     variant="filled"
                     className="textInputStyle"
-                    error={itemCode === "" && isFormSubmitted}
+                    // error={itemCode === "" && isFormSubmitted}
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
@@ -1470,7 +1486,7 @@ function AddEditPurchaseRequest(props) {
                     id="comments"
                     variant="filled"
                     type="number"
-                    label="Req Qty"
+                    label="Requested Qty"
                     name={"requestedQty"}
                     value={requestedQty}
                     onChange={onChangeValue}
@@ -1486,7 +1502,7 @@ function AddEditPurchaseRequest(props) {
                       className: classes.input,
                       classes: { input: classes.input },
                     }}
-                    error={requestedQty === "" && isFormSubmitted}
+                    // error={requestedQty === "" && isFormSubmitted}
                     onKeyDown={(evt) => {
                       (evt.key === "e" ||
                         evt.key === "E" ||

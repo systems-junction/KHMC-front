@@ -60,6 +60,7 @@ import TableForAddedItems from "./tableforAddedItems";
 import stylesForPaper from "../../assets/jss/material-dashboard-react/components/paper.js";
 import dateTimeFormat from "../../constants/dateTimeFormat.js";
 
+import CurrencyTextField from "@unicef/material-ui-currency-textfield";
 
 const reasonArray = [
   { key: "jit", value: "JIT" },
@@ -170,27 +171,52 @@ const styles = {
   },
 };
 
-const useStyles = makeStyles((theme) => ({
+// const useStyles = makeStyles((theme) => ({
+//   margin: {
+//     margin: theme.spacing(0),
+//   },
+//   input: {
+//     backgroundColor: "white",
+//     borderRadius: 4,
+//     "&:placeholder": {
+//       // color: "gray",
+//       // fontWeight: "400",
+//     },
+//     "&:before": {
+//       borderBottomWidth: "0px",
+//     },
+//     "&:after": {
+//       color: "black",
+//     },
+//   },
+// }));
+
+const inputStyles = makeStyles((theme) => ({
   margin: {
     margin: theme.spacing(0),
   },
   input: {
     backgroundColor: "white",
-    borderRadius: 4,
-    "&:placeholder": {
-      // color: "gray",
-      // fontWeight: "400",
-    },
-    "&:before": {
-      borderBottomWidth: "0px",
+    borderRadius: 5,
+    "&": {
+      backgroundColor: "white",
     },
     "&:after": {
-      color: "black",
+      backgroundColor: "white",
+    },
+
+    "&:hover": {
+      backgroundColor: "white",
+    },
+
+    "&:focus": {
+      boxShadow: "none",
+      backgroundColor: "white",
     },
   },
 }));
 function AddEditPurchaseRequest(props) {
-  const classes = useStyles();
+  const classes = inputStyles();
   const initialState = {
     _id: "",
     requestNo: "",
@@ -378,6 +404,10 @@ function AddEditPurchaseRequest(props) {
       }
     }
 
+    dispatch({ field: e.target.name, value: e.target.value });
+  };
+
+  const onChangeCurrency = (e) => {
     dispatch({ field: e.target.name, value: e.target.value });
   };
 
@@ -1625,7 +1655,7 @@ function AddEditPurchaseRequest(props) {
                       marginTop: 5,
                     }}
                   >
-                    <Paper  style={{ ...stylesForPaper.paperStyle }}>
+                    <Paper style={{ ...stylesForPaper.paperStyle }}>
                       {itemFoundSuccessfull ? (
                         itemFound && (
                           <Table size="small">
@@ -1836,7 +1866,7 @@ function AddEditPurchaseRequest(props) {
                     ...styles.textFieldPadding,
                   }}
                 >
-                  <TextField
+                  {/* <TextField
                     disabled={
                       currentUser &&
                       (currentUser.staffTypeId.type === "FU Inventory Keeper" ||
@@ -1862,6 +1892,29 @@ function AddEditPurchaseRequest(props) {
                       className: classes.input,
                       classes: { input: classes.input },
                     }}
+                  /> */}
+
+                  <CurrencyTextField
+                    style={{ backgroundColor: "white", borderRadius: 5 }}
+                    className="textInputStyle"
+                    id="fuItemCost"
+                    label="Functional Unit  Cost"
+                    name={"fuItemCost"}
+                    value={fuItemCost}
+                    onBlur={onChangeCurrency}
+                    variant="filled"
+                    textAlign="left"
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                    InputLabelProps={{
+                      className: classes.label,
+                      classes: { label: classes.label },
+                    }}
+                    currencySymbol="JD"
+                    // outputFormat="number"
+                    onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
                   />
                 </div>
                 <div

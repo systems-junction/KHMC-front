@@ -16,7 +16,11 @@ import tableStyles from "../../assets/jss/material-dashboard-react/components/ta
 import axios from "axios";
 import Notification from "../../components/Snackbar/Notification.js";
 import DateFnsUtils from "@date-io/date-fns";
-import { DateTimePicker, MuiPickersUtilsProvider,DatePicker } from "@material-ui/pickers";
+import {
+  DateTimePicker,
+  MuiPickersUtilsProvider,
+  DatePicker,
+} from "@material-ui/pickers";
 import {
   addInternalReturnRequest,
   updateInternalReturnRequest,
@@ -391,6 +395,12 @@ function AddEditPurchaseRequest(props) {
         return;
       }
     }
+
+    if (e.target.type === "number") {
+      if (e.target.value < 0) {
+        return;
+      }
+    }
     dispatch({ field: e.target.name, value: e.target.value });
   };
 
@@ -476,7 +486,7 @@ function AddEditPurchaseRequest(props) {
             props.history.replace({
               pathname: "/home/wms/fus/medicinalorder/success",
               state: {
-                message: `Internal Return Request ${res.data.data.returnRequestNo} for patient MRN ${res.data.data.patientId.profileNo} has been generated successfully`,
+                message: `Internal Return Request ${res.data.data.returnRequestNo} has been generated successfully`,
               },
             });
           } else if (!res.data.success) {
@@ -499,6 +509,7 @@ function AddEditPurchaseRequest(props) {
         setErrorMsg("Return qty can not greater than received qty");
         return;
       }
+
       const obj = {
         _id,
         returnRequestNo,
@@ -561,7 +572,7 @@ function AddEditPurchaseRequest(props) {
             props.history.replace({
               pathname: "/home/wms/fus/medicinalorder/success",
               state: {
-                message: `Internal Return Request ${res.data.data.returnRequestNo} for patient MRN ${res.data.data.patientId.profileNo} has been generated successfully`,
+                message: `Internal Return Request ${res.data.data.returnRequestNo} has been updated successfully`,
               },
             });
           } else if (!res.data.success) {
@@ -629,7 +640,7 @@ function AddEditPurchaseRequest(props) {
             props.history.replace({
               pathname: "/home/wms/fus/medicinalorder/success",
               state: {
-                message: `Internal Return Request ${res.data.data.returnRequestNo} for patient MRN ${res.data.data.patientId.profileNo} has been generated successfully`,
+                message: `Internal Return Request ${res.data.data.returnRequestNo} has been updated successfully`,
               },
             });
           } else if (!res.data.success) {
@@ -725,7 +736,9 @@ function AddEditPurchaseRequest(props) {
       itemCostPerUnit &&
       itemCostPerUnit !== "" &&
       date &&
-      date !== ""
+      date !== "" &&
+      totalDamageCost !== "0" &&
+      itemCostPerUnit !== "0"
     );
   }
 
@@ -1326,7 +1339,9 @@ function AddEditPurchaseRequest(props) {
                   </Button>
                 ) : comingFor === "edit" &&
                   currentUser &&
-                  currentUser.staffTypeId.type === "FU Inventory Keeper" ? (
+                  currentUser.staffTypeId.type === "FU Inventory Keeper" &&
+                  status !== "reject" &&
+                  status !== "Item Returned to Warehouse" ? (
                   <Button
                     style={{ width: "60%" }}
                     disabled={!validateForm()}
@@ -1336,7 +1351,9 @@ function AddEditPurchaseRequest(props) {
                   >
                     Update
                   </Button>
-                ) : (
+                ) : currentUser &&
+                  currentUser.staffTypeId.type ===
+                    "FU Internal Request Return Approval Member" ? (
                   <Button
                     style={{ width: "60%" }}
                     disabled={!validateApproveForm()}
@@ -1346,6 +1363,8 @@ function AddEditPurchaseRequest(props) {
                   >
                     Submit
                   </Button>
+                ) : (
+                  undefined
                 )}
               </div>
             </div>
