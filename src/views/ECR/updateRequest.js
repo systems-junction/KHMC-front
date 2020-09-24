@@ -599,90 +599,6 @@ export default function EdrRequest(props) {
               />
             </div>
           </div>
-          <div className="row">
-            <div>
-              {props.item.audioNotes ? (
-                <audio
-                  style={{ marginTop: 30, marginLeft: 15 }}
-                  src={`${audioURL}/${props.item.audioNotes}`}
-                  controls="controls"
-                />
-              ) : !isRecording ? (
-                <audio
-                  style={{ marginTop: 30, marginLeft: 15 }}
-                  src={blobURL}
-                  controls="controls"
-                />
-              ) : (
-                <div
-                  style={{
-                    marginTop: 30,
-                    marginLeft: 110,
-                    marginRight: 110,
-                    width: 100,
-                  }}
-                >
-                  <Loader
-                    type="ThreeDots"
-                    color="blue"
-                    height={40}
-                    width={40}
-                    //3 secs
-                  />
-                </div>
-              )}
-
-              {/* {response &&
-                response.map((link) => {
-                  return (
-                    <audio src={`${baseUrl}${link.abc}`} controls="controls" />
-                  );
-                })}
-              <button
-                type="button"
-                style={{ marginTop: 10 }}
-                class="btn btn-success btn-block"
-                onClick={getFile}
-              >
-                Get All Notes File
-              </button> */}
-            </div>
-
-            <div style={{ marginTop: 30 }}>
-              {!props.item.audioNotes ? (
-                <div>
-                  {isRecording ? (
-                    <StopIcon
-                      fontSize="large"
-                      onClick={stop}
-                      disabled={!isRecording}
-                      color="secondary"
-                    />
-                  ) : (
-                    <MicIcon
-                      style={{ marginTop: 10 }}
-                      fontSize="large"
-                      onClick={start}
-                      disabled={isRecording}
-                      color="primary"
-                    />
-                  )}
-                </div>
-              ) : (
-                undefined
-              )}
-
-              {/* {!props.item.audioNotes ? (
-                <StopIcon
-                  onClick={stop}
-                  disabled={!isRecording}
-                  color="secondary"
-                />
-              ) : (
-                undefined
-              )} */}
-            </div>
-          </div>
 
           <div className="row">
             <div
@@ -737,6 +653,109 @@ export default function EdrRequest(props) {
               ) : (
                 undefined
               )}
+            </div>
+          </div>
+
+          <div
+            className="row"
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              // justifyContent: "center",
+            }}
+          >
+            <label
+              style={{
+                paddingLeft: 17,
+                paddingTop: 15,
+                color: "white",
+                fontWeight: "bold",
+              }}
+            >
+              Record Voice Notes
+            </label>
+            <div>
+              {props.item.audioNotes ? (
+                <audio
+                  style={{ marginTop: 10, marginLeft: 30 }}
+                  src={`${audioURL}/${props.item.audioNotes}`}
+                  controls="controls"
+                />
+              ) : !isRecording ? (
+                <audio
+                  style={{ marginTop: 10, marginLeft: 30 }}
+                  src={blobURL}
+                  controls="controls"
+                />
+              ) : (
+                <div
+                  style={{
+                    marginTop: 15,
+                    marginLeft: 110,
+                    marginRight: 110,
+                    width: 100,
+                  }}
+                >
+                  <Loader
+                    type="ThreeDots"
+                    color="blue"
+                    height={40}
+                    width={40}
+                    //3 secs
+                  />
+                </div>
+              )}
+
+              {/* {response &&
+                response.map((link) => {
+                  return (
+                    <audio src={`${baseUrl}${link.abc}`} controls="controls" />
+                  );
+                })}
+              <button
+                type="button"
+                style={{ marginTop: 10 }}
+                class="btn btn-success btn-block"
+                onClick={getFile}
+              >
+                Get All Notes File
+              </button> */}
+            </div>
+
+            <div style={{ marginTop: 15 }}>
+              {!props.item.audioNotes ? (
+                <div>
+                  {isRecording ? (
+                    <StopIcon
+                      fontSize="large"
+                      onClick={stop}
+                      disabled={!isRecording}
+                      color="secondary"
+                    />
+                  ) : (
+                    <MicIcon
+                      style={{ marginTop: -10 }}
+                      fontSize="large"
+                      onClick={start}
+                      disabled={isRecording}
+                      color="primary"
+                    />
+                  )}
+                </div>
+              ) : (
+                undefined
+              )}
+
+              {/* {!props.item.audioNotes ? (
+                <StopIcon
+                  onClick={stop}
+                  disabled={!isRecording}
+                  color="secondary"
+                />
+              ) : (
+                undefined
+              )} */}
             </div>
           </div>
 
