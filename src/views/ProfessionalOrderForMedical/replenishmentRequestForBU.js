@@ -419,6 +419,7 @@ export default function ReplenishmentRequest(props) {
       sendingObj = {
         ...obj,
         selectedPatientForPharma: props.history.location.state.selectedPatient,
+        comingFromRCM: true
       };
     } else {
       sendingObj = { ...obj };

@@ -43,8 +43,6 @@ import CurrencyTextField from "@unicef/material-ui-currency-textfield";
 import dateTimeFormat from "../../constants/dateTimeFormat";
 import dateFormat from "../../constants/dateFormat";
 
-
-
 const statusArray = [
   // { key: "complete", value: "Complete" },
   { key: "Received", value: "Received" },
@@ -407,6 +405,7 @@ function ReceiveItems(props) {
       if (date > receivedDate) {
         setOpenNotification(true);
         setErrorMsg("Invoice date can not be greater than received date");
+        return;
       }
       let params = {
         itemId: selectedItem.itemId._id,
@@ -421,7 +420,7 @@ function ReceiveItems(props) {
         discount: discount,
         unitDiscount: selectedItem.itemId.issueUnit,
         discountAmount,
-        tax:selectedItem.itemId.issueUnitCost,
+        tax: selectedItem.itemId.issueUnitCost,
         taxAmount,
         finalUnitPrice: selectedItem.itemId.issueUnitCost,
         subTotal,

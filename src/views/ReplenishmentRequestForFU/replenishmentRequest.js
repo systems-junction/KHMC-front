@@ -589,35 +589,59 @@ export default function ReplenishmentRequest(props) {
     }, 2500);
   }
 
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        flex: 1,
-        position: "fixed",
-        width: "100%",
-        height: "100%",
-        backgroundColor: "#60d69f",
-        overflowY: "scroll",
-      }}
-    >
-      <Header />
-      <div className="cPadding">
-        <div className="subheader">
-          {props.history.location.pathname === "/home/wms/fus/receive" ? (
-            <div>
-              <img src={ReceiveItem} />
-              <h4>Order Receiving / Return</h4>
-            </div>
-          ) : (
-            <div>
-              <img src={business_Unit} />
-              <h4>Replenishment Requests</h4>
-            </div>
-          )}
+  if (
+    props.history.location.pathname === "/home/wms/fus/replenishment/add/manual"
+  ) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          flex: 1,
+          position: "fixed",
+          width: "100%",
+          height: "100%",
+          backgroundColor: "#60d69f",
+          overflowY: "scroll",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <div className="LoaderStyle">
+          <Loader type="TailSpin" color="red" height={50} width={50} />
+        </div>
+      </div>
+    );
+  } else {
+    return (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          flex: 1,
+          position: "fixed",
+          width: "100%",
+          height: "100%",
+          backgroundColor: "#60d69f",
+          overflowY: "scroll",
+        }}
+      >
+        <Header />
+        <div className="cPadding">
+          <div className="subheader">
+            {props.history.location.pathname === "/home/wms/fus/receive" ? (
+              <div>
+                <img src={ReceiveItem} />
+                <h4>Order Receiving / Return</h4>
+              </div>
+            ) : (
+              <div>
+                <img src={business_Unit} />
+                <h4>Replenishment Requests</h4>
+              </div>
+            )}
 
-          {/* {currentUser &&
+            {/* {currentUser &&
           currentUser.staffTypeId.type === "FU Inventory Keeper" &&
           props.history.location.pathname !== "/home/wms/fus/receive" ? (
             <div>
@@ -635,173 +659,175 @@ export default function ReplenishmentRequest(props) {
           ) : (
             undefined
           )} */}
-        </div>
+          </div>
 
-        <div
-          style={{
-            flex: 4,
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          {purchaseRequests ? (
-            <div>
+          <div
+            style={{
+              flex: 4,
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            {purchaseRequests ? (
               <div>
-                <CustomTable
-                  tableData={purchaseRequests}
-                  tableDataKeys={
-                    currentUser.staffTypeId.type === "FU Inventory Keeper" ||
-                    currentUser.staffTypeId.type === "FU Inventory Keeper"
-                      ? tableDataKeysForFUHead
-                      : tableDataKeys
-                  }
-                  tableHeading={
-                    currentUser.staffTypeId.type === "FU Inventory Keeper" ||
-                    currentUser.staffTypeId.type === "FU Inventory Keeper"
-                      ? tableHeadingForFUHead
-                      : tableHeading
-                  }
-                  // action={
-                  //   currentUser.staffTypeId.type === "FU Inventory Keeper"
-                  //     ? actionsForFUInventoryKeeper
-                  //     : currentUser.staffTypeId.type === "admin"
-                  //     ? actionsForAdmin
-                  //     : actions
-                  // }
+                <div>
+                  <CustomTable
+                    tableData={purchaseRequests}
+                    tableDataKeys={
+                      currentUser.staffTypeId.type === "FU Inventory Keeper" ||
+                      currentUser.staffTypeId.type === "FU Inventory Keeper"
+                        ? tableDataKeysForFUHead
+                        : tableDataKeys
+                    }
+                    tableHeading={
+                      currentUser.staffTypeId.type === "FU Inventory Keeper" ||
+                      currentUser.staffTypeId.type === "FU Inventory Keeper"
+                        ? tableHeadingForFUHead
+                        : tableHeading
+                    }
+                    // action={
+                    //   currentUser.staffTypeId.type === "FU Inventory Keeper"
+                    //     ? actionsForFUInventoryKeeper
+                    //     : currentUser.staffTypeId.type === "admin"
+                    //     ? actionsForAdmin
+                    //     : actions
+                    // }
 
-                  // action={
-                  //   props.match.path === '/home/wms/fus/receive'
-                  //     ? actionsForFUInventoryKeeper
-                  //     : props.match.path === '/home/wms/fus/receive'
-                  //     ? actionsForAdmin
-                  //     : actions
-                  // }
+                    // action={
+                    //   props.match.path === '/home/wms/fus/receive'
+                    //     ? actionsForFUInventoryKeeper
+                    //     : props.match.path === '/home/wms/fus/receive'
+                    //     ? actionsForAdmin
+                    //     : actions
+                    // }
 
-                  action={
-                    currentUser.staffTypeId.type === "Warehouse Member"
-                      ? actionsForWarehouseMember
-                      : currentUser.staffTypeId.type ===
-                        "Warehouse Inventory Keeper"
-                      ? actionsForWarehouseMember
-                      : currentUser.staffTypeId.type ===
-                          "FU Inventory Keeper" &&
-                        props.history.location.pathname ===
-                          "/home/wms/fus/receive"
-                      ? actionsForFUMemeberForReceive
-                      : currentUser.staffTypeId.type ===
-                          "FU Inventory Keeper" &&
-                        props.history.location.pathname ===
-                          "/home/wms/fus/replenishment"
-                      ? actionsForFUMemeberForReplenishment
-                      : actions
-                  }
-                  handleEdit={handleEdit}
-                  handleDelete={handleDelete}
-                  receiveItem={handleReceive}
-                  handleView={handleView}
-                  addReturnRequest={handleAddReturnRequest}
-                  borderBottomColor={"#60d69f"}
-                  borderBottomWidth={20}
+                    action={
+                      currentUser.staffTypeId.type === "Warehouse Member"
+                        ? actionsForWarehouseMember
+                        : currentUser.staffTypeId.type ===
+                          "Warehouse Inventory Keeper"
+                        ? actionsForWarehouseMember
+                        : currentUser.staffTypeId.type ===
+                            "FU Inventory Keeper" &&
+                          props.history.location.pathname ===
+                            "/home/wms/fus/receive"
+                        ? actionsForFUMemeberForReceive
+                        : currentUser.staffTypeId.type ===
+                            "FU Inventory Keeper" &&
+                          props.history.location.pathname ===
+                            "/home/wms/fus/replenishment"
+                        ? actionsForFUMemeberForReplenishment
+                        : actions
+                    }
+                    handleEdit={handleEdit}
+                    handleDelete={handleDelete}
+                    receiveItem={handleReceive}
+                    handleView={handleView}
+                    addReturnRequest={handleAddReturnRequest}
+                    borderBottomColor={"#60d69f"}
+                    borderBottomWidth={20}
+                  />
+                </div>
+
+                <ConfirmationModal
+                  modalVisible={modalVisible}
+                  msg="Are you sure want to delete the record?"
+                  hideconfirmationModal={() => setModalVisible(false)}
+                  onConfirmDelete={() => deleteVendor()}
+                  setdeleteItem={() => setdeleteItem("")}
                 />
+
+                <Notification msg={errorMsg} open={openNotification} />
               </div>
-
-              <ConfirmationModal
-                modalVisible={modalVisible}
-                msg="Are you sure want to delete the record?"
-                hideconfirmationModal={() => setModalVisible(false)}
-                onConfirmDelete={() => deleteVendor()}
-                setdeleteItem={() => setdeleteItem("")}
-              />
-
-              <Notification msg={errorMsg} open={openNotification} />
-            </div>
-          ) : (
-            <div className="LoaderStyle">
-              <Loader type="TailSpin" color="red" height={50} width={50} />
-            </div>
-          )}
-        </div>
-        <div style={{ marginBottom: 20 }}>
-          <img
-            onClick={() => props.history.goBack()}
-            src={Back_Arrow}
-            style={{ width: 60, height: 40, cursor: "pointer" }}
-          />
-        </div>
-      </div>
-
-      <Dialog
-        aria-labelledby="form-dialog-title"
-        open={isOpen}
-        maxWidth="xl"
-        fullWidth={true}
-        // fullScreen
-        onBackdropClick={() => {
-          setIsOpen(false);
-        }}
-      >
-        <DialogContent style={{ backgroundColor: "#31e2aa" }}>
-          <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
-            Added Items
-          </DialogTitle>
-          <div className="container-fluid">
-            <CustomTable
-              tableData={requestedItems}
-              tableHeading={
-                currentUser.staffTypeId.type === "Warehouse Member"
-                  ? tableHeadingForFUMemberForItems
-                  : currentUser.staffTypeId.type ===
-                    "Warehouse Inventory Keeper"
-                  ? tableHeadingForFUMemberForItems
-                  : // : currentUser.staffTypeId.type === "FU Inventory Keeper"
-                  // ? tableHeadingForFUMemberForItems
-                  currentUser.staffTypeId.type === "FU Inventory Keeper" &&
-                    props.history.location.pathname ===
-                      "/home/wms/fus/replenishment"
-                  ? tableHeadingForFUInventoryKeeperForItems
-                  : currentUser.staffTypeId.type === "FU Inventory Keeper" &&
-                    props.history.location.pathname === "/home/wms/fus/receive"
-                  ? tableHeadingForFUInventoryKeeperForItemsForReceive
-                  : tableHeadingForFUMemberForItems
-              }
-              tableDataKeys={
-                currentUser.staffTypeId.type === "Warehouse Member"
-                  ? tableDataKeysForItemsForWarehouseMember
-                  : currentUser.staffTypeId.type ===
-                    "Warehouse Inventory Keeper"
-                  ? tableDataKeysForFUMemberForItems
-                  : currentUser.staffTypeId.type === "FU Inventory Keeper"
-                  ? tableDataKeysForFUMemberForItems
-                  : currentUser.staffTypeId.type === "FU Inventory Keeper"
-                  ? tableDataKeysForFUMemberForItems
-                  : tableDataKeysForFUMemberForItems
-              }
-              action={
-                currentUser.staffTypeId.type === "FU Inventory Keeper" &&
-                props.history.location.pathname === "/home/wms/fus/receive"
-                  ? actionsForItemsForReceiver
-                  : currentUser.staffTypeId.type ===
-                    "Warehouse Inventory Keeper"
-                  ? ""
-                  : currentUser.staffTypeId.type === "FU Inventory Keeper" &&
-                    props.history.location.pathname ===
-                      "/home/wms/fus/replenishment"
-                  ? ""
-                  : currentUser.staffTypeId.type === "Warehouse Member"
-                  ? ""
-                  : actionsForItemsForOther
-              }
-              // handleEdit={handleEditRequestedItem}
-              // handleDelete={handleDelete}
-              receiveItem={handleReceive}
-              // handleView={handleEditRequestedItem}
-              borderBottomColor={"#60d69f"}
-              borderBottomWidth={20}
-              addReturnRequest={handleAddReturnRequest}
+            ) : (
+              <div className="LoaderStyle">
+                <Loader type="TailSpin" color="red" height={50} width={50} />
+              </div>
+            )}
+          </div>
+          <div style={{ marginBottom: 20 }}>
+            <img
+              onClick={() => props.history.goBack()}
+              src={Back_Arrow}
+              style={{ width: 60, height: 40, cursor: "pointer" }}
             />
           </div>
-        </DialogContent>
-      </Dialog>
-    </div>
-  );
+        </div>
+
+        <Dialog
+          aria-labelledby="form-dialog-title"
+          open={isOpen}
+          maxWidth="xl"
+          fullWidth={true}
+          // fullScreen
+          onBackdropClick={() => {
+            setIsOpen(false);
+          }}
+        >
+          <DialogContent style={{ backgroundColor: "#31e2aa" }}>
+            <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
+              Added Items
+            </DialogTitle>
+            <div className="container-fluid">
+              <CustomTable
+                tableData={requestedItems}
+                tableHeading={
+                  currentUser.staffTypeId.type === "Warehouse Member"
+                    ? tableHeadingForFUMemberForItems
+                    : currentUser.staffTypeId.type ===
+                      "Warehouse Inventory Keeper"
+                    ? tableHeadingForFUMemberForItems
+                    : // : currentUser.staffTypeId.type === "FU Inventory Keeper"
+                    // ? tableHeadingForFUMemberForItems
+                    currentUser.staffTypeId.type === "FU Inventory Keeper" &&
+                      props.history.location.pathname ===
+                        "/home/wms/fus/replenishment"
+                    ? tableHeadingForFUInventoryKeeperForItems
+                    : currentUser.staffTypeId.type === "FU Inventory Keeper" &&
+                      props.history.location.pathname ===
+                        "/home/wms/fus/receive"
+                    ? tableHeadingForFUInventoryKeeperForItemsForReceive
+                    : tableHeadingForFUMemberForItems
+                }
+                tableDataKeys={
+                  currentUser.staffTypeId.type === "Warehouse Member"
+                    ? tableDataKeysForItemsForWarehouseMember
+                    : currentUser.staffTypeId.type ===
+                      "Warehouse Inventory Keeper"
+                    ? tableDataKeysForFUMemberForItems
+                    : currentUser.staffTypeId.type === "FU Inventory Keeper"
+                    ? tableDataKeysForFUMemberForItems
+                    : currentUser.staffTypeId.type === "FU Inventory Keeper"
+                    ? tableDataKeysForFUMemberForItems
+                    : tableDataKeysForFUMemberForItems
+                }
+                action={
+                  currentUser.staffTypeId.type === "FU Inventory Keeper" &&
+                  props.history.location.pathname === "/home/wms/fus/receive"
+                    ? actionsForItemsForReceiver
+                    : currentUser.staffTypeId.type ===
+                      "Warehouse Inventory Keeper"
+                    ? ""
+                    : currentUser.staffTypeId.type === "FU Inventory Keeper" &&
+                      props.history.location.pathname ===
+                        "/home/wms/fus/replenishment"
+                    ? ""
+                    : currentUser.staffTypeId.type === "Warehouse Member"
+                    ? ""
+                    : actionsForItemsForOther
+                }
+                // handleEdit={handleEditRequestedItem}
+                // handleDelete={handleDelete}
+                receiveItem={handleReceive}
+                // handleView={handleEditRequestedItem}
+                borderBottomColor={"#60d69f"}
+                borderBottomWidth={20}
+                addReturnRequest={handleAddReturnRequest}
+              />
+            </div>
+          </DialogContent>
+        </Dialog>
+      </div>
+    );
+  }
 }
