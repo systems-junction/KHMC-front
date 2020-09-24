@@ -546,7 +546,7 @@ function AddEditEDR(props) {
               duration,
               requestedQty: (frequency * dosage * duration).toFixed(2),
               medicineName,
-              unitPrice,
+              unitPrice: unitPrice.toFixed(2),
               totalPrice: (unitPrice * frequency * dosage * duration).toFixed(
                 2
               ),
@@ -585,7 +585,7 @@ function AddEditEDR(props) {
           duration,
           requestedQty: (frequency * dosage * duration).toFixed(2),
           medicineName,
-          unitPrice,
+          unitPrice: unitPrice.toFixed(2),
           totalPrice: (unitPrice * frequency * dosage * duration).toFixed(2),
         }
         temp[i] = obj
@@ -641,7 +641,7 @@ function AddEditEDR(props) {
   }
 
   const handleSearch = (e) => {
-    const a = e.target.value.replace(/[^\w\s]/gi, '')
+    const a = e.target.value.replace(/[^\w-\s]/gi, '')
     setSearchQuery(a)
     if (a.length >= 1) {
       axios
@@ -823,7 +823,7 @@ function AddEditEDR(props) {
                                 <TableCell>Scientific Name</TableCell>
                                 <TableCell>Item Code</TableCell>
                                 <TableCell>Unit Price</TableCell>
-                                <TableCell>Total Price</TableCell>
+                                {/* <TableCell>Total Price</TableCell> */}
                               </TableRow>
                             </TableHead>
 
@@ -839,9 +839,9 @@ function AddEditEDR(props) {
                                     <TableCell>{i.scientificName}</TableCell>
                                     <TableCell>{i.itemCode}</TableCell>
                                     <TableCell>{i.issueUnitCost}</TableCell>
-                                    <TableCell>
+                                    {/* <TableCell>
                                       {i.purchasePrice + i.tax}
-                                    </TableCell>
+                                    </TableCell> */}
                                   </TableRow>
                                 )
                               })}

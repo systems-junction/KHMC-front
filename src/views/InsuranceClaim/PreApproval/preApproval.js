@@ -24,7 +24,7 @@ const tableHeading = [
 const tableDataKeys = [
   ['patientId', 'profileNo'],
   'requestNo',
-  ['patientId', 'fullName'],
+  "Name",
   'updatedAt',
   'status',
 ]
@@ -60,19 +60,23 @@ export default function preApproval(props) {
       .then((res) => {
         if (res.data.success) {
           console.log(res.data.data, 'data')
-          // res.data.data.edr.map(
-          //   (d) => (d.Name = d.patientId.firstName + ' ' + d.patientId.lastName)
-          // )
-          // res.data.data.ipr.map(
-          //   (d) => (d.Name = d.patientId.firstName + ' ' + d.patientId.lastName)
-          // )
-          // if (res.data.data.opr){
-          // res.data.data.opr.map(
-          //   (d) => (d.Name = d.patientId.firstName + ' ' + d.patientId.lastName)
-          // )
-          // }
-          setpreApproval([].concat(res.data.data.edr.reverse(), res.data.data.ipr.reverse(),res.data.data.opr.reverse() ))
-          console.log([].concat(res.data.data.edr, res.data.data.ipr,res.data.data.opr ),"CONCATENATE")
+          if (res.data.data.edr) {
+            res.data.data.edr.map(
+              (d) => (d.Name = d.patientId ? d.patientId.firstName + ' ' + d.patientId.lastName : "")
+            )
+          }
+          if (res.data.data.ipr) {
+            res.data.data.ipr.map(
+              (d) => (d.Name = d.patientId ? d.patientId.firstName + ' ' + d.patientId.lastName : "")
+            )
+          }
+          if (res.data.data.opr) {
+            res.data.data.opr.map(
+              (d) => (d.Name = d.patientId ? d.patientId.firstName + ' ' + d.patientId.lastName : "")
+            )
+          }
+          setpreApproval([].concat(res.data.data.edr.reverse(), res.data.data.ipr.reverse(), res.data.data.opr.reverse()))
+          console.log([].concat(res.data.data.edr, res.data.data.ipr, res.data.data.opr), "CONCATENATE")
         } else if (!res.data.success) {
           setErrorMsg(res.data.error)
           setOpenNotification(true)
@@ -151,10 +155,10 @@ export default function preApproval(props) {
               <Notification msg={errorMsg} open={openNotification} />
             </div>
           ) : (
-            <div className='LoaderStyle'>
-              <Loader type='TailSpin' color='red' height={50} width={50} />
-            </div>
-          )}
+              <div className='LoaderStyle'>
+                <Loader type='TailSpin' color='red' height={50} width={50} />
+              </div>
+            )}
         </div>
       </div>
     </div>
