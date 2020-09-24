@@ -1589,7 +1589,7 @@ function LabRadRequest(props) {
                 className={"col-md-3 col-sm-3 col-3"}
                 style={styles.textStyles}
               >
-                {"None"}
+                {""}
               </div>
 
               <div
@@ -1602,7 +1602,7 @@ function LabRadRequest(props) {
                         <h6 style={styles.textStyles}>{drug.medicineName}</h6>
                       );
                     })
-                  : "None"}
+                  : ""}
               </div>
 
               <div
@@ -1613,7 +1613,7 @@ function LabRadRequest(props) {
                   ? diagnosisArray.map((drug, index) => {
                       return <h6 style={styles.textStyles}>{drug}</h6>;
                     })
-                  : "None"}
+                  : ""}
               </div>
             </div>
           </div>
@@ -2476,11 +2476,12 @@ function LabRadRequest(props) {
                     <ul>
                       {icdCode.map((item) => (
                         <li key={item}>
-                          {item} &nbsp;
                           <span
                             className="addCode"
                             onClick={(e) => addICDcodes(item, e)}
+                            style={{ marginRight: 20, marginTop: 5 }}
                           />
+                          {item}
                         </li>
                       ))}
                     </ul>
@@ -2767,19 +2768,6 @@ function LabRadRequest(props) {
                     ? tableDataKeysForFUMemberForItems
                     : tableDataKeysForItemsForBUMember
                 }
-                // action={
-                //   currentUser.staffTypeId.type === "Registered Nurse"
-                //     ? actionsForItemsForReceiver
-                //     : currentUser.staffTypeId.type === "BU Doctor"
-                //       ? actionsForItemsForOther
-                //       : currentUser.staffTypeId.type === "FU Inventory Keeper"
-                //         ? actionsForItemsForFUMember
-                //         : actionsForItemsForOther
-                // }
-                // handleEdit={handleEditRequestedItem}
-                // handleDelete={handleDelete}
-                // receiveItem={handleReceive}
-                // handleView={handleEditRequestedItem}
                 borderBottomColor={"#60d69f"}
                 borderBottomWidth={20}
               />
