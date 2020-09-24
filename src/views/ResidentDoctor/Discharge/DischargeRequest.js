@@ -54,6 +54,7 @@ const styles = {
     color: 'grey',
     fontSize: 12,
   },
+
   textStyles: {
     fontWeight: '700',
     color: 'black',
@@ -478,7 +479,11 @@ function DischargeRequest(props) {
 
         <div
           className={`${'container-fluid'} ${classes.root}`}
-          style={{ marginTop: '25px' }}
+          style={{
+            marginTop: '25px',
+            paddingLeft: '10px',
+            paddingRight: '10px',
+          }}
         >
           <div className='row'>
             <div
@@ -619,7 +624,7 @@ function DischargeRequest(props) {
           }}
         />
 
-        <div className='container-fluid'>
+        <div className={`${classes.root}`}>
           <h5 style={{ fontWeight: 'bold', color: 'white', marginTop: 25 }}>
             Patient Details
           </h5>
@@ -798,7 +803,13 @@ function DischargeRequest(props) {
 
         {value === 0 ? (
           <div
-            style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+            style={{
+              flex: 4,
+              display: 'flex',
+              flexDirection: 'column',
+              paddingLeft: '1px',
+              paddingRight: '1px',
+            }}
             className={`${'container-fluid'} ${classes.root}`}
           >
             <div className='row'>
@@ -870,7 +881,7 @@ function DischargeRequest(props) {
               </div>
               <div
                 style={{ display: 'flex', flex: 1, justifyContent: 'center' }}
-                className='container-fluid'
+                // className='container-fluid'
               >
                 <div
                   style={{
@@ -879,6 +890,7 @@ function DischargeRequest(props) {
                     justifyContent: 'flex-end',
                     marginTop: '2%',
                     marginBottom: '2%',
+                    paddingRight: '7px',
                   }}
                 >
                   <div className='p-2'>
@@ -945,7 +957,10 @@ function DischargeRequest(props) {
                   style={{ width: 45, height: 35, cursor: 'pointer' }}
                 />
               </div>
-              <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
+              <div
+                className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'
+                style={{ paddingRight: '1px' }}
+              >
                 <Button
                   disabled={enableForm}
                   onClick={addNewRequest}

@@ -742,7 +742,10 @@ function AddEditEDR(props) {
               />
             </div>
 
-            <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
+            <div
+              className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'
+              style={{ paddingRight: '5px' }}
+            >
               <Button
                 style={styles.stylesForPurchaseButton}
                 // disabled={!validateForm()}
