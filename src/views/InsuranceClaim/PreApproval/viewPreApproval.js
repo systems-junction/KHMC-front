@@ -400,8 +400,8 @@ function AddEditPurchaseRequest(props) {
                   Insurance No
                 </InputLabel>
                 <span style={styles.styleForPatientDetails}>
-                  {selectedPatient.insuranceId
-                    ? selectedPatient.insuranceId
+                  {selectedPatient.insuranceNo
+                    ? selectedPatient.insuranceNo
                     : '--'}
                 </span>
               </div>

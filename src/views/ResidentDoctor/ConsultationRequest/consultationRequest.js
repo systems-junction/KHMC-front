@@ -1671,7 +1671,7 @@ function LabRadRequest(props) {
                 className={'col-md-3 col-sm-3 col-3'}
                 style={styles.textStyles}
               >
-                {'None'}
+                {''}
               </div>
 
               <div
@@ -1684,7 +1684,7 @@ function LabRadRequest(props) {
                         <h6 style={styles.textStyles}>{drug.medicineName}</h6>
                       )
                     })
-                  : 'None'}
+                  : ''}
               </div>
 
               <div
@@ -1695,7 +1695,7 @@ function LabRadRequest(props) {
                   ? diagnosisArray.map((drug, index) => {
                       return <h6 style={styles.textStyles}>{drug}</h6>
                     })
-                  : 'None'}
+                  : ''}
               </div>
             </div>
           </div>
