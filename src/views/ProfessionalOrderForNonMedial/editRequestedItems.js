@@ -60,6 +60,7 @@ import Loader from "react-loader-spinner";
 import add_new from "../../assets/img/Plus.png";
 
 import TableForAddedItems from "./tableforAddedItems";
+import dateTimeFormat from "../../constants/dateTimeFormat.js";
 // import Moment from "moment/moment.js";
 // import Moment from "react-moment";
 
@@ -619,11 +620,11 @@ function AddEditPurchaseRequest(props) {
             <img src={purchase_request} />
             <h4>
               {comingFor === "add"
-                ? "Order (Non-Medical) Details"
+                ? "Order Details (Non-Medical)"
                 : comingFor === "edit"
-                ? "Order (Non-Medical)  Details "
+                ? "Order Details (Non-Medical)"
                 : comingFor === "view"
-                ? "Order (Non-Medical) Details"
+                ? "Order Details (Non-Medical)"
                 : undefined}
             </h4>
           </div>
@@ -719,7 +720,8 @@ function AddEditPurchaseRequest(props) {
                     inputVariant="filled"
                     // onChange={onChangeDate}
                     disabled={true}
-                    format="MM/dd/yyyy hh:mm a"
+                    // format="MM/dd/yyyy hh:mm a"
+                    format={dateTimeFormat}
                     label="Date"
                     fullWidth
                     InputProps={{

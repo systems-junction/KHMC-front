@@ -41,6 +41,7 @@ import ViewItems from "./viewItems";
 
 import ViewSingleItem from "../PurchaseOrders/viewItem";
 import useStyleforinput from "../../../src/assets/jss/material-dashboard-react/inputStyle.js";
+import dateTimeFormat from "../../constants/dateTimeFormat.js";
 
 const tableHeadingForPR = [
   "Purchase Request No",
@@ -408,7 +409,8 @@ function AddEditPurchaseRequest(props) {
                     disabled
                     inputVariant="filled"
                     fullWidth={true}
-                    format="MM/dd/yyyy hh:mm a"
+                    // format="MM/dd/yyyy hh:mm a"
+                    format={dateTimeFormat}
                     label="Date/Time Generated (MM/DD/YYYY)"
                     style={{ borderRadius: 10, backgroundColor: "white" }}
                     value={poId.createdAt}
@@ -432,7 +434,8 @@ function AddEditPurchaseRequest(props) {
                     disabled
                     inputVariant="filled"
                     fullWidth={true}
-                    format="MM/dd/yyyy hh:mm a"
+                    // format="MM/dd/yyyy hh:mm a"
+                  format={dateTimeFormat}
                     label="Date/Time Sent (MM/DD/YYYY)"
                     style={{ borderRadius: 10, backgroundColor: "white" }}
                     value={poId.sentAt}

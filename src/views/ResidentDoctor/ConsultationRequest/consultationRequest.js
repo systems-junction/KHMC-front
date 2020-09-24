@@ -1323,12 +1323,16 @@ function LabRadRequest(props) {
                     field: 'pharmacyRequestArray',
                     value: val.reverse(),
                   })
-                  if (val && val.length > 0) {
-                    dispatch({
-                      field: 'medicationArray',
-                      value: val[0].medicine,
-                    })
-                  }
+                  let data = [];
+                  val.map((d) => {
+                    d.item.map((item) => {
+                      let found = data.find((i) => i === item.itemId.name);
+                      if (!found) {
+                        data.push(item.itemId.name);
+                      }
+                    });
+                  });
+                  dispatch({ field: "medicationArray", value: data });
                 }
                 //  else if (key === "nurseService") {
                 //     dispatch({ field: "nurseService", value: val });
@@ -1678,13 +1682,13 @@ function LabRadRequest(props) {
                 className={'col-md-3 col-sm-3 col-3'}
                 style={styles.textStyles}
               >
-                {medicationArray
-                  ? medicationArray.map((drug, index) => {
+                 {medicationArray
+                  ? medicationArray.map((drug,index) => {
                       return (
-                        <h6 style={styles.textStyles}>{drug.medicineName}</h6>
-                      )
+                      <h6 style={styles.textStyles}>{index + 1}. {drug}</h6>
+                      );
                     })
-                  : ''}
+                  : ""}
               </div>
 
               <div

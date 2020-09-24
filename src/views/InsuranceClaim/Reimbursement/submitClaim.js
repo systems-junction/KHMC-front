@@ -434,7 +434,7 @@ function AddEditPatientListing(props) {
     var reader = new FileReader()
     var url = reader.readAsDataURL(file)
 
-    reader.onloadend = function() {
+    reader.onloadend = function () {
       if (fileType === 'pdf') {
         setpdfView(file.name)
       } else {
@@ -587,12 +587,16 @@ function AddEditPatientListing(props) {
                     })
                   }
                 } else if (key === 'pharmacyRequest') {
-                  if (val && val.length > 0) {
-                    dispatch({
-                      field: 'medicationArray',
-                      value: val.reverse()[0].medicine,
-                    })
-                  }
+                  let data = [];
+                  val.map((d) => {
+                    d.item.map((item) => {
+                      let found = data.find((i) => i === item.itemId.name);
+                      if (!found) {
+                        data.push(item.itemId.name);
+                      }
+                    });
+                  });
+                  dispatch({ field: "medicationArray", value: data });
                 }
               } else {
                 dispatch({ field: key, value: val })
@@ -788,24 +792,24 @@ function AddEditPatientListing(props) {
                                 </Table>
                               )
                             ) : (
-                              <h4
-                                style={{ textAlign: 'center' }}
-                                onClick={() => setSearchQuery('')}
-                              >
-                                Patient Not Found
-                              </h4>
-                            )}
+                                <h4
+                                  style={{ textAlign: 'center' }}
+                                  onClick={() => setSearchQuery('')}
+                                >
+                                  Patient Not Found
+                                </h4>
+                              )}
                           </Paper>
                         </div>
                       ) : (
-                        undefined
-                      )}
+                          undefined
+                        )}
                     </div>
                   </div>
                 </div>
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
             </div>
 
             <div className='container-fluid'>
@@ -912,7 +916,7 @@ function AddEditPatientListing(props) {
                     className={'col-md-3 col-sm-3 col-3'}
                     style={styles.textStyles}
                   >
-                    {'None'}
+                    {''}
                   </div>
 
                   <div
@@ -921,13 +925,11 @@ function AddEditPatientListing(props) {
                   >
                     {medicationArray
                       ? medicationArray.map((drug, index) => {
-                          return (
-                            <h6 style={styles.textStyles}>
-                              {drug.medicineName}
-                            </h6>
-                          )
-                        })
-                      : 'None'}
+                        return (
+                          <h6 style={styles.textStyles}>{index + 1}. {drug}</h6>
+                        );
+                      })
+                      : ""}
                   </div>
 
                   <div
@@ -936,9 +938,9 @@ function AddEditPatientListing(props) {
                   >
                     {diagnosisArray
                       ? diagnosisArray.map((drug, index) => {
-                          return <h6 style={styles.textStyles}>{drug}</h6>
-                        })
-                      : 'None'}
+                        return <h6 style={styles.textStyles}>{drug}</h6>
+                      })
+                      : ''}
                   </div>
                 </div>
               </div>
@@ -1016,8 +1018,8 @@ function AddEditPatientListing(props) {
                 </div>
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             <div className='container-fluid'>
               <div
@@ -1051,82 +1053,82 @@ function AddEditPatientListing(props) {
                     {pdfView}
                   </div>
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
               </div>
 
               <div className='row'>
                 {document !== '' && document.includes('\\') ? (
                   <>
                     {document !== '' &&
-                    document.slice(document.length - 3) !== 'pdf' ? (
-                      <div
-                        className='col-md-6 col-sm-6 col-6'
-                        style={{
-                          ...styles.inputContainerForTextField,
-                        }}
-                      >
-                        <img
-                          src={uploadsUrl + document.split('\\')[1]}
-                          className='depositSlipImg'
-                        />
-                      </div>
-                    ) : document !== '' &&
-                      document.slice(document.length - 3) === 'pdf' ? (
-                      <div
-                        className='col-md-6 col-sm-6 col-6'
-                        style={{
-                          ...styles.inputContainerForTextField,
-                        }}
-                      >
-                        <a
-                          href={uploadsUrl + document.split('\\')[1]}
-                          style={{ color: '#2c6ddd' }}
+                      document.slice(document.length - 3) !== 'pdf' ? (
+                        <div
+                          className='col-md-6 col-sm-6 col-6'
+                          style={{
+                            ...styles.inputContainerForTextField,
+                          }}
                         >
-                          Click here to open document
+                          <img
+                            src={uploadsUrl + document.split('\\')[1]}
+                            className='depositSlipImg'
+                          />
+                        </div>
+                      ) : document !== '' &&
+                        document.slice(document.length - 3) === 'pdf' ? (
+                          <div
+                            className='col-md-6 col-sm-6 col-6'
+                            style={{
+                              ...styles.inputContainerForTextField,
+                            }}
+                          >
+                            <a
+                              href={uploadsUrl + document.split('\\')[1]}
+                              style={{ color: '#2c6ddd' }}
+                            >
+                              Click here to open document
                         </a>
-                      </div>
-                    ) : (
-                      undefined
-                    )}
+                          </div>
+                        ) : (
+                          undefined
+                        )}
                   </>
                 ) : document !== '' && document.includes('/') ? (
                   <>
                     {document !== '' &&
-                    document.slice(document.length - 3) !== 'pdf' ? (
-                      <div
-                        className='col-md-6 col-sm-6 col-6'
-                        style={{
-                          ...styles.inputContainerForTextField,
-                        }}
-                      >
-                        <img
-                          src={uploadsUrl + document}
-                          className='depositSlipImg'
-                        />
-                      </div>
-                    ) : document !== '' &&
-                      document.slice(document.length - 3) === 'pdf' ? (
-                      <div
-                        className='col-md-6 col-sm-6 col-6'
-                        style={{
-                          ...styles.inputContainerForTextField,
-                        }}
-                      >
-                        <a
-                          href={uploadsUrl + document}
-                          style={{ color: '#2c6ddd' }}
+                      document.slice(document.length - 3) !== 'pdf' ? (
+                        <div
+                          className='col-md-6 col-sm-6 col-6'
+                          style={{
+                            ...styles.inputContainerForTextField,
+                          }}
                         >
-                          Click here to open document
+                          <img
+                            src={uploadsUrl + document}
+                            className='depositSlipImg'
+                          />
+                        </div>
+                      ) : document !== '' &&
+                        document.slice(document.length - 3) === 'pdf' ? (
+                          <div
+                            className='col-md-6 col-sm-6 col-6'
+                            style={{
+                              ...styles.inputContainerForTextField,
+                            }}
+                          >
+                            <a
+                              href={uploadsUrl + document}
+                              style={{ color: '#2c6ddd' }}
+                            >
+                              Click here to open document
                         </a>
-                      </div>
-                    ) : (
-                      undefined
-                    )}
+                          </div>
+                        ) : (
+                          undefined
+                        )}
                   </>
                 ) : (
-                  undefined
-                )}
+                      undefined
+                    )}
 
                 {imagePreview !== '' ? (
                   <div
@@ -1141,12 +1143,12 @@ function AddEditPatientListing(props) {
                         New document
                       </div>
                     ) : (
-                      undefined
-                    )}
+                        undefined
+                      )}
                   </div>
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
               </div>
             </div>
 
@@ -1183,16 +1185,16 @@ function AddEditPatientListing(props) {
                     Next
                   </Button>
                 ) : (
-                  <Button
-                    style={styles.stylesForButton}
-                    //disabled={!validateFormType1()}
-                    onClick={handleEdit}
-                    variant='contained'
-                    color='default'
-                  >
-                    Update
-                  </Button>
-                )}
+                    <Button
+                      style={styles.stylesForButton}
+                      //disabled={!validateFormType1()}
+                      onClick={handleEdit}
+                      variant='contained'
+                      color='default'
+                    >
+                      Update
+                    </Button>
+                  )}
               </div>
             </div>
           </div>
@@ -1213,8 +1215,8 @@ function AddEditPatientListing(props) {
                   borderBottomWidth={20}
                 />
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
             </div>
 
             <div
@@ -1249,22 +1251,22 @@ function AddEditPatientListing(props) {
                     Submit
                   </Button>
                 ) : (
-                  <Button
-                    style={styles.stylesForButton}
-                    //disabled={!validateFormType1()}
-                    onClick={handleEdit}
-                    variant='contained'
-                    color='default'
-                  >
-                    Update
-                  </Button>
-                )}
+                    <Button
+                      style={styles.stylesForButton}
+                      //disabled={!validateFormType1()}
+                      onClick={handleEdit}
+                      variant='contained'
+                      color='default'
+                    >
+                      Update
+                    </Button>
+                  )}
               </div>
             </div>
           </div>
         ) : (
-          undefined
-        )}
+              undefined
+            )}
 
         <Notification
           msg={errorMsg}
