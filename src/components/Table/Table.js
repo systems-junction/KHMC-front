@@ -257,7 +257,7 @@ export default function CustomTable(props) {
       val === "Fulfillment Initiated" ||
       val === "Partial Fulfillment Initiated" ||
       val === "pending_administration" ||
-      val === "pending_reception"
+      val === "pending_receipt"
     ) {
       return (
         <>
@@ -334,13 +334,13 @@ export default function CustomTable(props) {
             >
               <strong>Partial Fulfillment Initiated</strong>
             </Button>
-          ) : val === "pending_reception" ? (
+          ) : val === "pending_receipt" ? (
             <Button
               style={stylesB.stylesForActive}
               variant="contained"
               color="primary"
             >
-              <strong>Pending Reception</strong>
+              <strong>Pending Receipt</strong>
             </Button>
           ) : val === "pending_administration" ? (
             <Button

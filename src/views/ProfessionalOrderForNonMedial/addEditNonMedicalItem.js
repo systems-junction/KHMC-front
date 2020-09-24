@@ -64,6 +64,9 @@ import ViewAllBtn from "../../components/ViewAllBtn/viewAll";
 
 import stylesForPaper from "../../assets/jss/material-dashboard-react/components/paper.js";
 
+import dateTimeFormat from "../../constants/dateTimeFormat";
+import dateFormat from "../../constants/dateFormat";
+
 const reasonArray = [
   { key: "jit", value: "JIT" },
   { key: "new_item", value: "New Item" },
@@ -1021,6 +1024,7 @@ function AddEditPurchaseRequest(props) {
                         onChange={onChangeDate}
                         // disabled={true}
                         label="Date"
+                        format={dateTimeFormat}
                         fullWidth
                         // style={{
                         //   backgroundColor: "white",
