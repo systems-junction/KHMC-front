@@ -63,6 +63,7 @@ import ViewAllBtn from "../../components/ViewAllBtn/viewAll";
 import TableForAddedItems from "./tableforAddedItems";
 
 import stylesForPaper from "../../assets/jss/material-dashboard-react/components/paper.js";
+import dateTimeFormat from "../../constants/dateTimeFormat.js";
 
 const reasonArray = [
   { key: "jit", value: "JIT" },
@@ -271,6 +272,13 @@ function AddEditPurchaseRequest(props) {
         return;
       }
     }
+
+    if (e.target.type === "number") {
+      if (e.target.value < 0) {
+        return;
+      }
+    }
+
     dispatch({ field: e.target.name, value: e.target.value });
   };
 
@@ -670,7 +678,6 @@ function AddEditPurchaseRequest(props) {
           department,
           rejectionReason,
           commentNotes,
-          
         };
 
         let objAfterApproved = "";
@@ -679,7 +686,7 @@ function AddEditPurchaseRequest(props) {
           objAfterApproved = {
             ...params,
             approvedBy:
-              committeeStatus === "approved" && approvedBy!==""
+              committeeStatus === "approved" && approvedBy !== ""
                 ? approvedBy
                 : committeeStatus === "approved"
                 ? currentUser.staffId
@@ -798,6 +805,7 @@ function AddEditPurchaseRequest(props) {
       description.length > 0 &&
       name.length > 0 &&
       reqQty.length > 0 &&
+      reqQty!== '0' &&
       // currentQty.length > 0 &&
       comments.length > 0
       // && maximumLevel >= reqQty
@@ -1073,11 +1081,11 @@ function AddEditPurchaseRequest(props) {
             <img src={purchase_request} />
             <h4>
               {comingFor === "add"
-                ? "MWIK - Add Purchase Request"
+                ? "Add Purchase Request"
                 : comingFor === "edit" &&
                   currentUser.staffTypeId.type === "Committe Member"
                 ? "Approve Purchase Request"
-                : "MWIK - Edit Purchase Request"}
+                : "Edit Purchase Request"}
             </h4>
           </div>
 
@@ -1236,7 +1244,8 @@ function AddEditPurchaseRequest(props) {
                   // onChange={onChangeDate}
                   disabled={true}
                   label="Date (MM/DD/YYYY)"
-                  format="MM/dd/yyyy hh:mm a"
+                  // format="MM/dd/yyyy hh:mm a"
+                  format={dateTimeFormat}
                   fullWidth
                   // style={{
                   //   backgroundColor: "white",
@@ -1937,30 +1946,33 @@ function AddEditPurchaseRequest(props) {
 
           <Notification msg={errorMsg} open={openNotification} />
 
-          {currentUser && currentUser.staffTypeId.type === "Committe Member" ? (
-            <div
-              style={{
-                display: "flex",
-                flex: 1,
-                height: 50,
-                justifyContent: "flex-end",
-                marginTop: "1%",
-                marginBottom: "1%",
-              }}
-            >
-              <Button
-                style={styles.stylesForPurchaseButton}
-                disabled={validateApproveForm()}
-                onClick={handleApprove}
-                variant="contained"
-                color="primary"
+          <div className="row">
+            {currentUser &&
+            currentUser.staffTypeId.type === "Committe Member" ? (
+              <div
+                style={{
+                  display: "flex",
+                  flex: 1,
+                  height: 50,
+                  justifyContent: "flex-end",
+                  marginTop: "1%",
+                  marginBottom: "1%",
+                }}
               >
-                <strong style={{ fontSize: "12px" }}>Submit</strong>
-              </Button>
-            </div>
-          ) : (
-            undefined
-          )}
+                <Button
+                  style={styles.stylesForPurchaseButton}
+                  disabled={validateApproveForm()}
+                  onClick={handleApprove}
+                  variant="contained"
+                  color="primary"
+                >
+                  <strong style={{ fontSize: "12px" }}>Submit</strong>
+                </Button>
+              </div>
+            ) : (
+              undefined
+            )}
+          </div>
 
           {requestedItemsArray && (
             <div className="row">

@@ -1605,7 +1605,7 @@ function AddEditPurchaseRequest(props) {
                       // value={selectedItemToSearch}
                       name={"non_pharmaceutical"}
                       control={<Radio color="primary" />}
-                      label="Non Pharmaceutical"
+                      label="Non-Pharmaceutical"
                       onChange={onChangeRadio}
                       checked={
                         selectedItemToSearch === "non_pharmaceutical"

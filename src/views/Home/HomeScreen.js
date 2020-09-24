@@ -287,6 +287,12 @@ const consultantSpecialist = [
     text: "Consultation Notes",
     path: "/home/rcm/ecr/cn",
   },
+
+  {
+    img: OrderItems,
+    text: "Order Items (Medical)",
+    path: `/home/wms/fus/medicinalorder`,
+  },
 ];
 
 const buHead = [

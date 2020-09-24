@@ -218,7 +218,10 @@ export default function ReplenishmentRequest(props) {
           //   (order) => order.fuId._id === props.match.params.fuName
           // );
 
-          if (currentUser.staffTypeId.type === "Doctor/Physician") {
+          if (
+            currentUser.staffTypeId.type === "Doctor/Physician" ||
+            currentUser.staffTypeId.type === "Consultant/Specialist"
+          ) {
             // let repRequest = res.data.data;
             let temp = [];
             for (let i = 0; i < repRequest.length; i++) {
@@ -308,11 +311,11 @@ export default function ReplenishmentRequest(props) {
 
   function getBUFromHeadId() {
     axios
-      .get(getBusinessUnitUrlWithHead + "/" + currentUser.staffId)
+      .get(getBusinessUnitUrlWithHead + "/" + currentUser.functionalUnit._id)
       .then((res) => {
         if (res.data.success) {
-          console.log("BU Obj", res.data.data[0]);
-          setBUObj(res.data.data[0]);
+          console.log("BU Obj", res.data.data);
+          setBUObj(res.data.data[0].buId);
         } else if (!res.data.success) {
           setErrorMsg(res.data.error);
           setOpenNotification(true);
@@ -375,7 +378,10 @@ export default function ReplenishmentRequest(props) {
     getPurchaseRequests();
     getReceiveRequestsForBU();
 
-    if (currentUser.staffTypeId.type === "Doctor/Physician") {
+    if (
+      currentUser.staffTypeId.type === "Doctor/Physician" ||
+      currentUser.staffTypeId.type === "Consultant/Specialist"
+    ) {
       getBUFromHeadId();
     }
   }, []);
@@ -390,26 +396,32 @@ export default function ReplenishmentRequest(props) {
 
   if (
     currentUser &&
-    currentUser.staffTypeId.type === "Doctor/Physician" &&
+    (currentUser.staffTypeId.type === "Doctor/Physician" ||
+      currentUser.staffTypeId.type === "Consultant/Specialist") &&
     buObj !== "" &&
     props.history.location.pathname !== `/home/wms/fus/medicinalorder/view`
   ) {
     let path = `/home/wms/fus/medicinalorder/add`;
-    // let selectedPatientForPharma = props.history.location.state.selectedPatient ? 
+    // let selectedPatientForPharma = props.history.location.state.selectedPatient ?
     // props.history.location.state.selectedPatient : ""
-    let obj={
-      comingFor: "add", vendors, statues, items, buObj 
-    }
-    let sendingObj=""
-    if(props.history.location.state && props.history.location.state.selectedPatient)
-    {
-      sendingObj={
+    let obj = {
+      comingFor: "add",
+      vendors,
+      statues,
+      items,
+      buObj,
+    };
+    let sendingObj = "";
+    if (
+      props.history.location.state &&
+      props.history.location.state.selectedPatient
+    ) {
+      sendingObj = {
         ...obj,
-        selectedPatientForPharma:props.history.location.state.selectedPatient
-      }
-    }
-    else{
-      sendingObj={...obj}
+        selectedPatientForPharma: props.history.location.state.selectedPatient,
+      };
+    } else {
+      sendingObj = { ...obj };
     }
     props.history.replace({
       pathname: path,
@@ -617,7 +629,9 @@ export default function ReplenishmentRequest(props) {
   }
 
   if (
-    (currentUser && currentUser.staffTypeId.type !== "Doctor/Physician") ||
+    (currentUser &&
+      (currentUser.staffTypeId.type !== "Doctor/Physician" ||
+        currentUser.staffTypeId.type !== "Consultant/Specialist")) ||
     props.history.location.pathname === `/home/wms/fus/medicinalorder/view`
   ) {
     return (
@@ -677,7 +691,9 @@ export default function ReplenishmentRequest(props) {
                         ? actionsForBUNurse
                         : currentUser.staffTypeId.type === "BU Doctor"
                         ? actionsForBUDoctor
-                        : currentUser.staffTypeId.type === "Doctor/Physician"
+                        : currentUser.staffTypeId.type === "Doctor/Physician" ||
+                          currentUser.staffTypeId.type ===
+                            "Consultant/Specialist"
                         ? actionsForBUMemeber
                         : actions
                     }
@@ -735,7 +751,8 @@ export default function ReplenishmentRequest(props) {
                 <CustomTable
                   tableData={requestedItems}
                   tableHeading={
-                    currentUser.staffTypeId.type === "Doctor/Physician"
+                    currentUser.staffTypeId.type === "Doctor/Physician" ||
+                    currentUser.staffTypeId.type === "Consultant/Specialist"
                       ? tableHeadingForBUMemberForItems
                       : currentUser.staffTypeId.type === "Registered Nurse" ||
                         currentUser.staffTypeId.type === "BU Doctor"
@@ -745,7 +762,8 @@ export default function ReplenishmentRequest(props) {
                       : tableHeadingForFUMemberForItems
                   }
                   tableDataKeys={
-                    currentUser.staffTypeId.type === "Doctor/Physician"
+                    currentUser.staffTypeId.type === "Doctor/Physician" ||
+                    currentUser.staffTypeId.type === "Consultant/Specialist"
                       ? tableDataKeysForItemsForBUMember
                       : currentUser.staffTypeId.type === "Registered Nurse" ||
                         currentUser.staffTypeId.type === "BU Doctor"

@@ -39,6 +39,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import Add_New from "../../assets/img/Add_New.png";
 
 import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
+import dateTimeFormat from "../../constants/dateTimeFormat.js";
 
 const reasonArray = [
   { key: "jit", value: "JIT" },
@@ -616,7 +617,8 @@ function AddEditPurchaseRequest(props) {
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DateTimePicker
                   inputVariant="filled"
-                  format="MM/dd/yyyy hh:mm a"
+                  // format="MM/dd/yyyy hh:mm a"
+                  format={dateTimeFormat}
                   onChange={(val) => onChangeDate(val, "dateGenerated")}
                   name={"dateGenerated"}
                   disabled={true}
@@ -880,7 +882,9 @@ function AddEditPurchaseRequest(props) {
               >
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <DateTimePicker
-                    format="MM/dd/yyyy hh:mm a"
+                    // format="MM/dd/yyyy hh:mm a"
+                  format={dateTimeFormat}
+
                     inputVariant="filled"
                     onChange={(val) => onChangeDate(val, "expiryDate")}
                     name={"expiryDate"}
