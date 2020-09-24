@@ -1019,6 +1019,14 @@ function LabRadRequest(props) {
       setsuccessMsg("");
     }, 2000);
   }
+  const showAlert = () => {
+    // if (document.getElementById("ckDemo").disabled) {
+    //     alert("CheckBox is Disabled");
+    // }
+
+    setErrorMsg("Please Search First Patient");
+    setOpenNotification(true);
+  };
 
   return (
     <div
@@ -1049,8 +1057,10 @@ function LabRadRequest(props) {
 
           <div>
             <Button
-              disabled={enableForm}
-              onClick={TriageAssessment}
+              // disabled={enableForm}
+              // onClick={TriageAssessment}
+              onClick={enableForm ? showAlert : TriageAssessment}
+              style={styles.stylesForButton}
               style={styles.stylesForButton}
               variant="contained"
               color="primary"
@@ -1316,10 +1326,12 @@ function LabRadRequest(props) {
                 className={"col-md-3 col-sm-3 col-3"}
                 style={styles.textStyles}
               >
-               {medicationArray
-                  ? medicationArray.map((drug,index) => {
+                {medicationArray
+                  ? medicationArray.map((drug, index) => {
                       return (
-                      <h6 style={styles.textStyles}>{index + 1}. {drug}</h6>
+                        <h6 style={styles.textStyles}>
+                          {index + 1}. {drug}
+                        </h6>
                       );
                     })
                   : ""}
