@@ -562,10 +562,10 @@ function AddEditPurchaseRequest(props) {
       });
     }
 
-    return function cleanup() {
-      console.log("unmount");
-      props.setPatientDetailsForReducer("");
-    };
+    // return function cleanup() {
+    //   console.log("unmount");
+    //   props.setPatientDetailsForReducer("");
+    // };
   }, []);
 
   if (comingFor === "edit" && patientReferenceNo && patientDetails === "") {
@@ -847,6 +847,7 @@ function AddEditPurchaseRequest(props) {
 
   function handleAddPatient(i) {
     // setDialogOpen(true);
+    
     setSelectedPatient(i);
     dispatch({ field: "patientReferenceNo", value: i.profileNo });
 

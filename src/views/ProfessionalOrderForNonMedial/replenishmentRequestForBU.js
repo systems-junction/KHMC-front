@@ -290,11 +290,11 @@ export default function ReplenishmentRequest(props) {
 
   function getBUFromHeadId() {
     axios
-      .get(getBusinessUnitUrlWithHead + "/" + currentUser.staffId)
+      .get(getBusinessUnitUrlWithHead + "/" + currentUser.functionalUnit._id)
       .then((res) => {
         if (res.data.success) {
           console.log("BU Obj", res.data.data[0]);
-          setBUObj(res.data.data[0]);
+          setBUObj(res.data.data[0].buId);
         } else if (!res.data.success) {
           setErrorMsg(res.data.error);
           setOpenNotification(true);
