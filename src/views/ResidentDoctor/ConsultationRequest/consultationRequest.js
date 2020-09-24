@@ -195,6 +195,7 @@ const styles = {
     paddingRight: 10,
     paddingTop: 2,
   },
+
   stylesForButton: {
     color: 'white',
     cursor: 'pointer',
@@ -1323,12 +1324,16 @@ function LabRadRequest(props) {
                     field: 'pharmacyRequestArray',
                     value: val.reverse(),
                   })
-                  if (val && val.length > 0) {
-                    dispatch({
-                      field: 'medicationArray',
-                      value: val[0].medicine,
+                  let data = []
+                  val.map((d) => {
+                    d.item.map((item) => {
+                      let found = data.find((i) => i === item.itemId.name)
+                      if (!found) {
+                        data.push(item.itemId.name)
+                      }
                     })
-                  }
+                  })
+                  dispatch({ field: 'medicationArray', value: data })
                 }
                 //  else if (key === "nurseService") {
                 //     dispatch({ field: "nurseService", value: val });
@@ -1395,6 +1400,15 @@ function LabRadRequest(props) {
     }, 2000)
   }
 
+  const showAlert = () => {
+    // if (document.getElementById("ckDemo").disabled) {
+    //     alert("CheckBox is Disabled");
+    // }
+
+    setErrorMsg('Please Search Patient First ')
+    setOpenNotification(true)
+  }
+
   return (
     <div
       style={{
@@ -1418,8 +1432,10 @@ function LabRadRequest(props) {
 
           <div>
             <Button
-              disabled={enableForm}
-              onClick={TriageAssessment}
+              // disabled={enableForm}
+              // onClick={TriageAssessment}
+              onClick={enableForm ? showAlert : TriageAssessment}
+              style={styles.stylesForButton}
               style={styles.stylesForButton}
               variant='contained'
               color='primary'
@@ -1430,7 +1446,11 @@ function LabRadRequest(props) {
         </div>
         <div
           className={`${'container-fluid'} ${classes.root}`}
-          style={{ marginTop: '25px' }}
+          style={{
+            marginTop: '25px',
+            paddingLeft: '10px',
+            paddingRight: '10px',
+          }}
         >
           <div className='row'>
             <div
@@ -1566,7 +1586,7 @@ function LabRadRequest(props) {
           </div>
         </div>
 
-        <div className='container-fluid'>
+        <div className={`${classes.root}`}>
           <h5 style={{ fontWeight: 'bold', color: 'white', marginTop: 25 }}>
             Patient Details
           </h5>
@@ -1681,7 +1701,9 @@ function LabRadRequest(props) {
                 {medicationArray
                   ? medicationArray.map((drug, index) => {
                       return (
-                        <h6 style={styles.textStyles}>{drug.medicineName}</h6>
+                        <h6 style={styles.textStyles}>
+                          {index + 1}. {drug}
+                        </h6>
                       )
                     })
                   : ''}
@@ -1796,7 +1818,10 @@ function LabRadRequest(props) {
               </div>
               <div className='row' style={{ marginBottom: '25px' }}>
                 <div className='col-md-6 col-sm-6 col-6'></div>
-                <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
+                <div
+                  className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'
+                  style={{ paddingRight: '1px' }}
+                >
                   <Button
                     onClick={() => setOpenAddConsultDialog(true)}
                     style={styles.stylesForButton}
@@ -1833,7 +1858,10 @@ function LabRadRequest(props) {
               </div>
               <div className='row' style={{ marginBottom: '25px' }}>
                 <div className='col-md-6 col-sm-6 col-6'></div>
-                <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
+                <div
+                  className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'
+                  style={{ paddingRight: '1px' }}
+                >
                   <Button
                     onClick={() => setOpenAddResidentDialog(true)}
                     style={styles.stylesForButton}
@@ -1872,7 +1900,10 @@ function LabRadRequest(props) {
               </div>
 
               <div className='row' style={{ marginBottom: '25px' }}>
-                <div className='col-md-12 col-sm-12 col-12 d-flex justify-content-end'>
+                <div
+                  className='col-md-12 col-sm-12 col-12 d-flex justify-content-end'
+                  style={{ paddingRight: '1px' }}
+                >
                   <Button
                     onClick={addNewRequest}
                     style={styles.stylesForButton}
@@ -1890,7 +1921,13 @@ function LabRadRequest(props) {
             </div>
           ) : value === 3 ? (
             <div
-              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              style={{
+                flex: 4,
+                display: 'flex',
+                flexDirection: 'column',
+                paddingLeft: '10px',
+                paddingRight: '10px',
+              }}
               className={`container-fluid ${classes.root}`}
             >
               <div style={{ marginTop: '20px' }} className='row'>
@@ -1983,6 +2020,7 @@ function LabRadRequest(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
+                    paddingRight: '15px',
                   }}
                 >
                   <TextField
@@ -2029,7 +2067,15 @@ function LabRadRequest(props) {
                     style={{
                       ...styles.stylesForButton,
                       marginTop: '25px',
-                      backgroundColor: '#ad6bbf',
+                      backgroundColor: '#AD6BBF',
+                      color: 'white',
+                      cursor: 'pointer',
+                      borderRadius: 5,
+                      backgroundColor: 'rgb(173, 107, 191)',
+                      height: 56,
+                      outline: 'none',
+                      marginTop: 25,
+                      width: '104%',
                     }}
                     disabled={!addLabRequest}
                     onClick={addSelectedLabItem}
@@ -2042,7 +2088,14 @@ function LabRadRequest(props) {
                 </div>
               </div>
 
-              <div className='row' style={{ marginTop: '20px' }}>
+              <div
+                className='row'
+                style={{
+                  marginTop: '20px',
+                  paddingLeft: '5px',
+                  paddingRight: '5px',
+                }}
+              >
                 {labRequestArray !== 0 ? (
                   <CustomTable
                     tableData={labRequestArray}
@@ -2059,7 +2112,10 @@ function LabRadRequest(props) {
               </div>
 
               <div className='row' style={{ marginBottom: '25px' }}>
-                <div className='col-md-12 col-sm-12 col-12 d-flex justify-content-end'>
+                <div
+                  className='col-md-12 col-sm-12 col-12 d-flex justify-content-end'
+                  style={{ paddingRight: '5px' }}
+                >
                   <Button
                     // disabled={enableForm}
                     disabled={enableSave}
@@ -2075,7 +2131,13 @@ function LabRadRequest(props) {
             </div>
           ) : value === 4 ? (
             <div
-              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              style={{
+                flex: 4,
+                display: 'flex',
+                flexDirection: 'column',
+                paddingLeft: '10px',
+                paddingRight: '10px',
+              }}
               className={`container-fluid ${classes.root}`}
             >
               <div style={{ marginTop: '20px' }} className='row'>
@@ -2168,6 +2230,7 @@ function LabRadRequest(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
+                    paddingRight: '15px',
                   }}
                 >
                   <TextField
@@ -2215,7 +2278,15 @@ function LabRadRequest(props) {
                     style={{
                       ...styles.stylesForButton,
                       marginTop: '25px',
-                      backgroundColor: '#ad6bbf',
+                      backgroundColor: '#AD6BBF',
+                      color: 'white',
+                      cursor: 'pointer',
+                      borderRadius: 5,
+                      backgroundColor: 'rgb(173, 107, 191)',
+                      height: 56,
+                      outline: 'none',
+                      marginTop: 25,
+                      width: '104%',
                     }}
                     disabled={!addRadioRequest}
                     onClick={addSelectedRadioItem}
@@ -2228,7 +2299,14 @@ function LabRadRequest(props) {
                 </div>
               </div>
 
-              <div className='row' style={{ marginTop: '20px' }}>
+              <div
+                className='row'
+                style={{
+                  marginTop: '20px',
+                  paddingLeft: '5px',
+                  paddingRight: '5px',
+                }}
+              >
                 {radiologyRequestArray !== 0 ? (
                   <CustomTable
                     tableData={radiologyRequestArray}
@@ -2245,7 +2323,10 @@ function LabRadRequest(props) {
               </div>
 
               <div className='row' style={{ marginBottom: '25px' }}>
-                <div className='col-md-12 col-sm-12 col-12 d-flex justify-content-end'>
+                <div
+                  className='col-md-12 col-sm-12 col-12 d-flex justify-content-end'
+                  style={{ paddingRight: '5px' }}
+                >
                   <Button
                     // disabled={enableForm}
                     disabled={enableSave}

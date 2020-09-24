@@ -157,7 +157,7 @@ const styles = {
     borderRadius: 5,
     backgroundColor: '#2c6ddd',
     height: '50px',
-    width: '140px',
+    // width: '140px',
     outline: 'none',
   },
   buttonContainer: {
@@ -887,8 +887,13 @@ function AddEditPurchaseRequest(props) {
             }}
           />
           <div
-            style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-            className={`container-fluid ${classes.root}`}
+            style={{
+              flex: 4,
+              display: 'flex',
+              flexDirection: 'column',
+              paddingLeft: '10px',
+            }}
+            className={`${'container-fluid'} ${classes.root}`}
           >
             <div className='row'>
               <div
@@ -934,7 +939,7 @@ function AddEditPurchaseRequest(props) {
                     height: 55,
                   }}
                 >
-                  <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
+                  <img src={Fingerprint} style={{ maxWidth: 35, height: 35 }} />
                 </div>
               </div>
             </div>
@@ -994,6 +999,7 @@ function AddEditPurchaseRequest(props) {
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
+                  paddingRight: '15px',
                 }}
               >
                 <TextField
@@ -1045,9 +1051,16 @@ function AddEditPurchaseRequest(props) {
                 <Button
                   style={{
                     ...styles.stylesForButton,
-                    marginTop: '7px',
-                    backgroundColor: '#ad6bbf',
-                    width: '190px',
+                    marginTop: '25px',
+                    backgroundColor: '#AD6BBF',
+                    color: 'white',
+                    cursor: 'pointer',
+                    borderRadius: 5,
+                    backgroundColor: 'rgb(173, 107, 191)',
+                    height: 56,
+                    outline: 'none',
+                    marginTop: 7,
+                    width: '104%',
                   }}
                   disabled={!addLabRequest}
                   onClick={addSelectedLabItem}
@@ -1055,12 +1068,19 @@ function AddEditPurchaseRequest(props) {
                   color='primary'
                   fullWidth
                 >
-                  Add Service
+                  Add
                 </Button>
               </div>
             </div>
 
-            <div className='row' style={{ marginTop: '20px' }}>
+            <div
+              className='row'
+              style={{
+                marginTop: '20px',
+                paddingLeft: '5px',
+                paddingRight: '10px',
+              }}
+            >
               {labRequestArray !== 0 ? (
                 <CustomTable
                   tableData={labRequestArray}

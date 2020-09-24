@@ -409,7 +409,7 @@ function LabRadRequest(props) {
     }
   }
 
-  const [currentUser, setCurrentUser] = useState(cookie.load('current_user'))
+  const [currentUser] = useState(cookie.load('current_user'))
   const [errorMsg, setErrorMsg] = useState('')
   const [successMsg, setsuccessMsg] = useState('')
   const [openNotification, setOpenNotification] = useState(false)
@@ -1232,12 +1232,16 @@ function LabRadRequest(props) {
                     field: 'pharmacyRequestArray',
                     value: val.reverse(),
                   })
-                  if (val && val.length > 0) {
-                    dispatch({
-                      field: 'medicationArray',
-                      value: val[0].medicine,
+                  let data = []
+                  val.map((d) => {
+                    d.item.map((item) => {
+                      let found = data.find((i) => i === item.itemId.name)
+                      if (!found) {
+                        data.push(item.itemId.name)
+                      }
                     })
-                  }
+                  })
+                  dispatch({ field: 'medicationArray', value: data })
                 }
                 //  else if (key === "nurseService") {
                 //     dispatch({ field: "nurseService", value: val });
@@ -1317,6 +1321,15 @@ function LabRadRequest(props) {
     }, 2000)
   }
 
+  const showAlert = () => {
+    // if (document.getElementById("ckDemo").disabled) {
+    //     alert("CheckBox is Disabled");
+    // }
+
+    setErrorMsg('Please Search Patient First ')
+    setOpenNotification(true)
+  }
+
   return (
     <div
       style={{
@@ -1340,11 +1353,12 @@ function LabRadRequest(props) {
 
           <div>
             <Button
-              disabled={enableForm}
-              onClick={TriageAssessment}
+              // disabled={enableForm}
+              onClick={enableForm ? showAlert : TriageAssessment}
               style={styles.stylesForButton}
               variant='contained'
               color='primary'
+              Error={errorMsg}
             >
               Triage & Assessment
             </Button>
@@ -1607,7 +1621,9 @@ function LabRadRequest(props) {
                 {medicationArray
                   ? medicationArray.map((drug, index) => {
                       return (
-                        <h6 style={styles.textStyles}>{drug.medicineName}</h6>
+                        <h6 style={styles.textStyles}>
+                          {index + 1}. {drug}
+                        </h6>
                       )
                     })
                   : ''}
@@ -1981,6 +1997,7 @@ function LabRadRequest(props) {
                       height: 56,
                       outline: 'none',
                       marginTop: 25,
+                      width: '104%',
                     }}
                     disabled={!addLabRequest}
                     onClick={addSelectedLabItem}
@@ -2183,7 +2200,15 @@ function LabRadRequest(props) {
                     style={{
                       ...styles.stylesForButton,
                       marginTop: '25px',
-                      backgroundColor: '#ad6bbf',
+                      backgroundColor: '#AD6BBF',
+                      color: 'white',
+                      cursor: 'pointer',
+                      borderRadius: 5,
+                      backgroundColor: 'rgb(173, 107, 191)',
+                      height: 56,
+                      outline: 'none',
+                      marginTop: 25,
+                      width: '104%',
                     }}
                     disabled={!addRadioRequest}
                     onClick={addSelectedRadioItem}

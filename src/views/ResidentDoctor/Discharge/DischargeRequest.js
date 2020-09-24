@@ -54,6 +54,7 @@ const styles = {
     color: 'grey',
     fontSize: 12,
   },
+
   textStyles: {
     fontWeight: '700',
     color: 'black',
@@ -342,12 +343,16 @@ function DischargeRequest(props) {
                     })
                   }
                 } else if (key === 'pharmacyRequest') {
-                  if (val && val.length > 0) {
-                    dispatch({
-                      field: 'medicationArray',
-                      value: val.reverse()[0].medicine,
-                    })
-                  }
+                  let data = [];
+                  val.map((d) => {
+                    d.item.map((item) => {
+                      let found = data.find((i) => i === item.itemId.name);
+                      if (!found) {
+                        data.push(item.itemId.name);
+                      }
+                    });
+                  });
+                  dispatch({ field: "medicationArray", value: data });
                 }
               } else {
                 dispatch({ field: key, value: val })
@@ -474,7 +479,11 @@ function DischargeRequest(props) {
 
         <div
           className={`${'container-fluid'} ${classes.root}`}
-          style={{ marginTop: '25px' }}
+          style={{
+            marginTop: '25px',
+            paddingLeft: '10px',
+            paddingRight: '10px',
+          }}
         >
           <div className='row'>
             <div
@@ -594,18 +603,18 @@ function DischargeRequest(props) {
                         </Table>
                       )
                     ) : (
-                      <h4
-                        style={{ textAlign: 'center' }}
-                        onClick={() => setSearchPatientQuery('')}
-                      >
-                        Patient Not Found
-                      </h4>
-                    )}
+                        <h4
+                          style={{ textAlign: 'center' }}
+                          onClick={() => setSearchPatientQuery('')}
+                        >
+                          Patient Not Found
+                        </h4>
+                      )}
                   </Paper>
                 </div>
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
             </div>
           </div>
         </div>
@@ -615,7 +624,7 @@ function DischargeRequest(props) {
           }}
         />
 
-        <div className='container-fluid'>
+        <div className={`${classes.root}`}>
           <h5 style={{ fontWeight: 'bold', color: 'white', marginTop: 25 }}>
             Patient Details
           </h5>
@@ -728,11 +737,11 @@ function DischargeRequest(props) {
               >
                 {medicationArray
                   ? medicationArray.map((drug, index) => {
-                      return (
-                        <h6 style={styles.textStyles}>{drug.medicineName}</h6>
-                      )
-                    })
-                  : ''}
+                    return (
+                      <h6 style={styles.textStyles}>{index + 1}. {drug}</h6>
+                    );
+                  })
+                  : ""}
               </div>
 
               <div
@@ -741,8 +750,8 @@ function DischargeRequest(props) {
               >
                 {diagnosisArray
                   ? diagnosisArray.map((drug, index) => {
-                      return <h6 style={styles.textStyles}>{drug}</h6>
-                    })
+                    return <h6 style={styles.textStyles}>{drug}</h6>
+                  })
                   : ''}
               </div>
             </div>
@@ -794,17 +803,23 @@ function DischargeRequest(props) {
 
         {value === 0 ? (
           <div
-            style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+            style={{
+              flex: 4,
+              display: 'flex',
+              flexDirection: 'column',
+              paddingLeft: '1px',
+              paddingRight: '1px',
+            }}
             className={`${'container-fluid'} ${classes.root}`}
           >
             <div className='row'>
               <div
                 className='col-md-12'
                 style={{ marginTop: '20px' }}
-                // style={{
-                //   ...styles.inputContainerForTextField,
-                //   ...styles.textFieldPadding,
-                // }}
+              // style={{
+              //   ...styles.inputContainerForTextField,
+              //   ...styles.textFieldPadding,
+              // }}
               >
                 <TextField
                   required
@@ -866,7 +881,7 @@ function DischargeRequest(props) {
               </div>
               <div
                 style={{ display: 'flex', flex: 1, justifyContent: 'center' }}
-                className='container-fluid'
+                // className='container-fluid'
               >
                 <div
                   style={{
@@ -875,6 +890,7 @@ function DischargeRequest(props) {
                     justifyContent: 'flex-end',
                     marginTop: '2%',
                     marginBottom: '2%',
+                    paddingRight: '7px',
                   }}
                 >
                   <div className='p-2'>
@@ -921,16 +937,16 @@ function DischargeRequest(props) {
                   borderBottomWidth={20}
                 />
               ) : (
-                <CustomTable
-                  tableData={[]}
-                  tableDataKeys={tableDataKeysForDischargeMed}
-                  tableHeading={tableHeadingForDischargeMed}
-                  handleView={viewItem}
-                  action={actions}
-                  borderBottomColor={'#60d69f'}
-                  borderBottomWidth={20}
-                />
-              )}
+                  <CustomTable
+                    tableData={[]}
+                    tableDataKeys={tableDataKeysForDischargeMed}
+                    tableHeading={tableHeadingForDischargeMed}
+                    handleView={viewItem}
+                    action={actions}
+                    borderBottomColor={'#60d69f'}
+                    borderBottomWidth={20}
+                  />
+                )}
             </div>
 
             <div className='row' style={{ marginBottom: '25px' }}>
@@ -941,7 +957,10 @@ function DischargeRequest(props) {
                   style={{ width: 45, height: 35, cursor: 'pointer' }}
                 />
               </div>
-              <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
+              <div
+                className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'
+                style={{ paddingRight: '1px' }}
+              >
                 <Button
                   disabled={enableForm}
                   onClick={addNewRequest}
@@ -957,11 +976,11 @@ function DischargeRequest(props) {
             </div>
           </div>
         ) : (
-          <div
-            style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-            className='container'
-          ></div>
-        )}
+              <div
+                style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+                className='container'
+              ></div>
+            )}
 
         {openItemDialog ? (
           <ViewSingleRequest
@@ -970,8 +989,8 @@ function DischargeRequest(props) {
             viewItem={viewItem}
           />
         ) : (
-          undefined
-        )}
+            undefined
+          )}
 
         <Notification msg={errorMsg} open={openNotification} />
       </div>
