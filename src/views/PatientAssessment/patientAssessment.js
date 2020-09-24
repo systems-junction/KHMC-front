@@ -1452,7 +1452,10 @@ function PatientAssessment(props) {
                 )}
               </div>
               <div className="row" style={{ marginBottom: "25px" }}>
-                <div className="col-md-12 col-sm-12 col-12 d-flex justify-content-end">
+                <div
+                  className="col-md-12 col-sm-12 col-12 d-flex justify-content-end"
+                  style={{ paddingRight: "1px" }}
+                >
                   <Button
                     onClick={addNewRequest}
                     style={styles.stylesForButton}
@@ -1562,6 +1565,7 @@ function PatientAssessment(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
+                    paddingRight: "15px",
                   }}
                 >
                   <TextField
@@ -1608,6 +1612,8 @@ function PatientAssessment(props) {
                       ...styles.stylesForButton,
                       marginTop: "25px",
                       backgroundColor: "#ad6bbf",
+                      height: "56px",
+                      width: "107%",
                     }}
                     disabled={!addLabRequest}
                     onClick={addSelectedLabItem}
@@ -1637,7 +1643,10 @@ function PatientAssessment(props) {
               </div>
 
               <div className="row" style={{ marginBottom: "25px" }}>
-                <div className="col-md-12 col-sm-12 col-12 d-flex justify-content-end">
+                <div
+                  className="col-md-12 col-sm-12 col-12 d-flex justify-content-end"
+                  style={{ paddingRight: "4px" }}
+                >
                   <Button
                     // disabled={enableForm}
                     disabled={enableSave}
@@ -1746,6 +1755,7 @@ function PatientAssessment(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
+                    paddingRight: "15px",
                   }}
                 >
                   <TextField
@@ -1792,6 +1802,8 @@ function PatientAssessment(props) {
                       ...styles.stylesForButton,
                       marginTop: "25px",
                       backgroundColor: "#ad6bbf",
+                      height: "56px",
+                      width: "107%",
                     }}
                     disabled={!addRadioRequest}
                     onClick={addSelectedRadioItem}
@@ -1821,7 +1833,10 @@ function PatientAssessment(props) {
               </div>
 
               <div className="row" style={{ marginBottom: "25px" }}>
-                <div className="col-md-12 col-sm-12 col-12 d-flex justify-content-end">
+                <div
+                  className="col-md-12 col-sm-12 col-12 d-flex justify-content-end"
+                  style={{ paddingRight: "4px" }}
+                >
                   <Button
                     // disabled={enableForm}
                     disabled={enableSave}

@@ -1130,6 +1130,8 @@ function AddEditPatientListing(props) {
     if (e.target.name === "coverageTerms" && e.target.value === "fullPayment") {
       dispatch({ field: "payment", value: "" });
       setCoPaymentField(false);
+      console.log(e.target.name, e.target.value);
+
     }
 
     if (e.target.name === "dob") {
@@ -2126,7 +2128,16 @@ function AddEditPatientListing(props) {
               </div>
             </div>
 
-            <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
+            <div
+              class="row"
+              style={{
+                display: "flex",
+                flex: 1,
+                justifyContent: "center",
+                paddingLeft: 6,
+                paddingRight: 6,
+              }}
+            >
               <div
                 style={{
                   display: "flex",
@@ -2295,13 +2306,17 @@ function AddEditPatientListing(props) {
               </div>
             </div>
 
-            <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
+            <div
+              style={{ display: "flex", flex: 1, justifyContent: "center" }}
+              class="row"
+            >
               <div
                 style={{
                   display: "flex",
                   flex: 1,
+                  paddingLeft: 6,
                   justifyContent: "flex",
-                  marginTop: "2%",
+                  marginTop: "1%",
                   marginBottom: "2%",
                 }}
               >
@@ -2319,7 +2334,7 @@ function AddEditPatientListing(props) {
                   display: "flex",
                   flex: 1,
                   justifyContent: "flex-end",
-                  marginTop: "2%",
+                  marginTop: "1%",
                   marginBottom: "2%",
                 }}
               >
@@ -2464,6 +2479,7 @@ function AddEditPatientListing(props) {
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
+                  paddingLeft: 0,
                 }}
               >
                 {/* <TextField
@@ -2506,6 +2522,7 @@ function AddEditPatientListing(props) {
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
+                  paddingRight: "0px",
                 }}
               >
                 <TextField
@@ -2538,6 +2555,7 @@ function AddEditPatientListing(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
+                    paddingLeft: 0,
                   }}
                 >
                   <TextField
@@ -2565,6 +2583,7 @@ function AddEditPatientListing(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
+                    paddingRight: 0,
                   }}
                 >
                   <CurrencyTextField
@@ -2830,7 +2849,10 @@ function AddEditPatientListing(props) {
               <div></div>
             )}
 
-            <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
+            <div
+              style={{ display: "flex", flex: 1, justifyContent: "center" }}
+              class="row"
+            >
               <div
                 style={{
                   display: "flex",
@@ -2865,7 +2887,7 @@ function AddEditPatientListing(props) {
                   variant="contained"
                   color="primary"
                 >
-                  Next
+                  pay next
                 </Button>
                 <div
                   style={{
@@ -2959,7 +2981,7 @@ function AddEditPatientListing(props) {
             >
               <div className="row">
                 <div
-                  className="col-md-8 col-sm-7 col-6"
+                  className="col-md-9 col-sm-7 col-6"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -3032,7 +3054,7 @@ function AddEditPatientListing(props) {
                   </div>
                 </div>
                 <div
-                  className="col-md-2 col-sm-2 col-1"
+                  className="col-md-1 col-sm-2 col-1"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -3041,7 +3063,8 @@ function AddEditPatientListing(props) {
                   <Button
                     style={{
                       ...styles.stylesForButton,
-                      height: "50px",
+                      height: "54px",
+                      width: 98,
                       backgroundColor: "#ba55d3",
                     }}
                     variant="contained"
@@ -3111,7 +3134,7 @@ function AddEditPatientListing(props) {
                       classes: { input: classes.input },
                     }}
                   >
-                    <MenuItem value={coverageTerms}>{coverageTerms}</MenuItem>
+                    <MenuItem value={coverageTerms}>None</MenuItem>
 
                     {coverageTermsArr.map((val) => {
                       return (
@@ -3275,13 +3298,21 @@ function AddEditPatientListing(props) {
             </div>
 
             <div
-              style={{ display: "flex", flex: 1, justifyContent: "center" }}
-              className="container-fluid"
+              style={{
+                display: "flex",
+                flex: 1,
+
+                justifyContent: "center",
+                // paddingLeft: 6,
+              }}
+              className="row"
             >
               <div
                 style={{
+                  paddingLeft: 20,
                   display: "flex",
                   flex: 1,
+                  // paddingLeft: 6,
                   justifyContent: "flex",
                   marginTop: "2%",
                   marginBottom: "2%",
@@ -3303,6 +3334,7 @@ function AddEditPatientListing(props) {
                   justifyContent: "flex-end",
                   marginTop: "2%",
                   marginBottom: "2%",
+                  paddingRight: 20,
                 }}
               >
                 {comingFor === "add" ? (
