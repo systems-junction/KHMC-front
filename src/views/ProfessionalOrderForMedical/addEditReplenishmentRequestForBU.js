@@ -562,10 +562,10 @@ function AddEditPurchaseRequest(props) {
       });
     }
 
-    return function cleanup() {
-      console.log("unmount");
-      props.setPatientDetailsForReducer("");
-    };
+    // return function cleanup() {
+    //   console.log("unmount");
+    //   props.setPatientDetailsForReducer("");
+    // };
   }, []);
 
   if (comingFor === "edit" && patientReferenceNo && patientDetails === "") {
@@ -847,6 +847,7 @@ function AddEditPurchaseRequest(props) {
 
   function handleAddPatient(i) {
     // setDialogOpen(true);
+    
     setSelectedPatient(i);
     dispatch({ field: "patientReferenceNo", value: i.profileNo });
 
@@ -1605,7 +1606,7 @@ function AddEditPurchaseRequest(props) {
                       // value={selectedItemToSearch}
                       name={"non_pharmaceutical"}
                       control={<Radio color="primary" />}
-                      label="Non Pharmaceutical"
+                      label="Non-Pharmaceutical"
                       onChange={onChangeRadio}
                       checked={
                         selectedItemToSearch === "non_pharmaceutical"

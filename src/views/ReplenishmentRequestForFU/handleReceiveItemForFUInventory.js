@@ -41,6 +41,8 @@ import InputLabelComponent from "../../components/InputLabel/inputLabel";
 
 import BootstrapInput from "../../components/Dropdown/dropDown.js";
 import CurrencyTextField from "@unicef/material-ui-currency-textfield";
+import dateTimeFormat from "../../constants/dateTimeFormat.js";
+import dateFormat from "../../constants/dateFormat.js";
 
 const statusArray = [
   { key: "Partially Received", value: "Partially Received" },
@@ -852,7 +854,8 @@ function ReceiveItems(props) {
                   required
                   inputVariant="filled"
                   fullWidth={true}
-                  format="MM/dd/yyyy"
+                  // format="MM/dd/yyyy"
+                  format={dateFormat}
                   label="Expiry Date"
                   // variant="filled"
                   InputProps={{
@@ -1357,7 +1360,8 @@ function ReceiveItems(props) {
                   inputVariant="filled"
                   fullWidth={true}
                   label="Date/Time Invoice (MM/DD/YYYY)"
-                  format="MM/dd/yyyy HH:mm a"
+                  // format="MM/dd/yyyy HH:mm a"
+                  format={dateTimeFormat}
                   onChange={(val) => onChangeDate(val, "date")}
                   // style={styles.inputContainerForDate}
                   value={comingFor === "add" ? (date ? date : null) : date}
@@ -1383,7 +1387,9 @@ function ReceiveItems(props) {
                   inputVariant="filled"
                   fullWidth={true}
                   label="Date/Time Received (MM/DD/YYYY)"
-                  format="MM/dd/yyyy HH:mm a"
+                  // format="MM/dd/yyyy HH:mm a"
+                  format={dateTimeFormat}
+
                   onChange={(val) => onChangeDate(val, "receivedDate")}
                   InputProps={{
                     className: classes.input,

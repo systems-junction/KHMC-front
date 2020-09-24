@@ -457,6 +457,7 @@ function AddEditPurchaseRequest(props) {
         _id,
         status,
         generated,
+        purchaseOrderNo,
         purchaseRequestId: purchaseRequest,
         generatedBy: generatedBy,
         date: new Date(),
@@ -534,6 +535,7 @@ function AddEditPurchaseRequest(props) {
           _id,
           status,
           generated,
+          purchaseOrderNo,
           purchaseRequestId: purchaseRequest,
           generatedBy: generatedBy,
           date: new Date(),
@@ -702,50 +704,52 @@ function AddEditPurchaseRequest(props) {
           <ViewAllBtn history={props.history} />
         </div>
 
-        <div className="row">
-          <div
-            className="col-md-12"
-            style={{
-              ...styles.inputContainerForTextField,
-              ...styles.textFieldPadding,
-            }}
-          >
-            <TextField
-              disabled={comingFor === "edit" ? true : false}
-              required
-              select
-              fullWidth
-              id="selectedVendor"
-              name="selectedVendor"
-              value={selectedVendor}
-              // error={generated === "" && isFormSubmitted}
-              onChange={onChangeValue}
-              label="Vendor"
-              variant="filled"
-              className="dropDownStyle"
-              InputProps={{
-                className: classes.input,
-                classes: { input: classes.input },
+        <div className="container-fluid">
+          <div className="row">
+            <div
+              className="col-md-12"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
               }}
             >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {vendorsArray &&
-                vendorsArray.map((val) => {
-                  return (
-                    <MenuItem key={val._id} value={val._id}>
-                      {val.englishName}
-                    </MenuItem>
-                  );
-                })}
-            </TextField>
+              <TextField
+                disabled={comingFor === "edit" ? true : false}
+                required
+                select
+                fullWidth
+                id="selectedVendor"
+                name="selectedVendor"
+                value={selectedVendor}
+                // error={generated === "" && isFormSubmitted}
+                onChange={onChangeValue}
+                label="Vendor"
+                variant="filled"
+                className="dropDownStyle"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {vendorsArray &&
+                  vendorsArray.map((val) => {
+                    return (
+                      <MenuItem key={val._id} value={val._id}>
+                        {val.englishName}
+                      </MenuItem>
+                    );
+                  })}
+              </TextField>
+            </div>
           </div>
         </div>
 
         <div
           style={{ flex: 4, display: "flex", flexDirection: "column" }}
-          // className="container-fluid"
+          className="container-fluid"
         >
           {currentUser && currentUser.staffTypeId.type === "Committe Member" ? (
             <div className="row">
@@ -1159,58 +1163,60 @@ function AddEditPurchaseRequest(props) {
             undefined
           )}
 
-          <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
-            <div
-              style={{
-                display: "flex",
-                flex: 1,
-                justifyContent: "flex-end",
-                marginTop: "2%",
-                marginBottom: "2%",
-              }}
-            >
-              {comingFor === "add" ? (
-                <Button
-                  style={styles.stylesForPurchaseButton}
-                  // disabled={!validateForm()}
-                  onClick={handleAdd}
-                  variant="contained"
-                  color="primary"
-                >
-                  <strong style={{ fontSize: "12px" }}>
-                    {" "}
-                    Add Purchase Order
-                  </strong>
-                </Button>
-              ) : comingFor === "edit" &&
-                currentUser.staffTypeId.type === "Purchasing Manager" ? (
-                <Button
-                  style={{ ...styles.stylesForPurchaseButton, width: 200 }}
-                  disabled={!validateForm()}
-                  onClick={handleEdit}
-                  variant="contained"
-                  color="primary"
-                >
-                  <strong style={{ fontSize: "12px" }}>
-                    Update Purchase Order
-                  </strong>
-                </Button>
-              ) : comingFor === "edit" &&
-                currentUser.staffTypeId.type === "Committe Member" ? (
-                <Button
-                  style={{ ...styles.stylesForPurchaseButton, width: 200 }}
-                  disabled={validateApprovalForm()}
-                  onClick={handleApprove}
-                  variant="contained"
-                  color="primary"
-                >
-                  <strong style={{ fontSize: "12px" }}>
-                    Update Purchase Order
-                  </strong>
-                </Button>
-              ) : (
-                undefined
-              )}
+          <div className="row">
+            <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
+              <div
+                style={{
+                  display: "flex",
+                  flex: 1,
+                  justifyContent: "flex-end",
+                  marginTop: "2%",
+                  marginBottom: "2%",
+                }}
+              >
+                {comingFor === "add" ? (
+                  <Button
+                    style={styles.stylesForPurchaseButton}
+                    // disabled={!validateForm()}
+                    onClick={handleAdd}
+                    variant="contained"
+                    color="primary"
+                  >
+                    <strong style={{ fontSize: "12px" }}>
+                      {" "}
+                      Add Purchase Order
+                    </strong>
+                  </Button>
+                ) : comingFor === "edit" &&
+                  currentUser.staffTypeId.type === "Purchasing Manager" ? (
+                  <Button
+                    style={{ ...styles.stylesForPurchaseButton, width: 200 }}
+                    disabled={!validateForm()}
+                    onClick={handleEdit}
+                    variant="contained"
+                    color="primary"
+                  >
+                    <strong style={{ fontSize: "12px" }}>
+                      Update Purchase Order
+                    </strong>
+                  </Button>
+                ) : comingFor === "edit" &&
+                  currentUser.staffTypeId.type === "Committe Member" ? (
+                  <Button
+                    style={{ ...styles.stylesForPurchaseButton, width: 200 }}
+                    disabled={validateApprovalForm()}
+                    onClick={handleApprove}
+                    variant="contained"
+                    color="primary"
+                  >
+                    <strong style={{ fontSize: "12px" }}>
+                      Update Purchase Order
+                    </strong>
+                  </Button>
+                ) : (
+                  undefined
+                )}
+              </div>
             </div>
           </div>
 

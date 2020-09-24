@@ -58,6 +58,7 @@ import ViewAllBtn from "../../components/ViewAllBtn/viewAll";
 import TableForAddedItems from "./tableforAddedItems";
 
 import stylesForPaper from "../../assets/jss/material-dashboard-react/components/paper.js";
+import dateTimeFormat from "../../constants/dateTimeFormat.js";
 
 
 const reasonArray = [
@@ -1195,8 +1196,8 @@ function AddEditPurchaseRequest(props) {
             <img src={purchase_request} />
             <h4>
               {comingFor === "add"
-                ? " Add Replenishment Requests"
-                : " Edit Replenishment Requests"}
+                ? " Add Replenishment Request"
+                : " Edit Replenishment Request"}
             </h4>
           </div>
 
@@ -1342,7 +1343,8 @@ function AddEditPurchaseRequest(props) {
                       : dateGenerated
                   }
                   label={"Date (MM/DD/YYYY)"}
-                  format="MM/dd/yyyy HH:mm a"
+                  // format="MM/dd/yyyy HH:mm a"
+                  format={dateTimeFormat}
                 />
               </MuiPickersUtilsProvider>
             </div>

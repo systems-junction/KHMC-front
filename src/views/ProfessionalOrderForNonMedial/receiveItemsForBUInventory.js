@@ -1321,6 +1321,8 @@ import BootstrapInput from "../../components/Dropdown/dropDown.js";
 import MUIInputStyle from "../../assets/jss/material-dashboard-react/inputStyle.js";
 
 import CurrencyTextField from "@unicef/material-ui-currency-textfield";
+import dateTimeFormat from "../../constants/dateTimeFormat.js";
+import dateFormat from "../../constants/dateFormat.js";
 
 const statusArray = [
   // { key: "complete", value: "Complete" },
@@ -2085,7 +2087,8 @@ function ReceiveItems(props) {
                   required
                   inputVariant="filled"
                   fullWidth={true}
-                  format="MM/dd/yyyy"
+                  // format="MM/dd/yyyy"
+                  format={dateFormat}
                   label="Expiry Date"
                   onChange={(val) => onChangeDate(val, "expiryDate")}
                   style={{ borderRadius: 10, backgroundColor: "white" }}
@@ -2541,7 +2544,8 @@ function ReceiveItems(props) {
             >
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DateTimePicker
-                  format="MM/dd/yyyy HH:mm a"
+                  // format="MM/dd/yyyy HH:mm a"
+                  format={dateTimeFormat}
                   required
                   inputVariant={"filled"}
                   fullWidth={true}
@@ -2571,7 +2575,8 @@ function ReceiveItems(props) {
             >
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DateTimePicker
-                  format="MM/dd/yyyy HH:mm a"
+                  // format="MM/dd/yyyy HH:mm a"
+                  format={dateTimeFormat}
                   required
                   inputVariant={"filled"}
                   fullWidth={true}
