@@ -1460,7 +1460,10 @@ function LabRadRequest(props) {
                 )}
               </div>
               <div className="row" style={{ marginBottom: "25px" }}>
-                <div className="col-md-12 col-sm-12 col-12 d-flex justify-content-end">
+                <div
+                  className="col-md-12 col-sm-12 col-12 d-flex justify-content-end"
+                  style={{ paddingRight: "1px" }}
+                >
                   <Button
                     onClick={addNewRequest}
                     style={styles.stylesForButton}
@@ -1630,6 +1633,7 @@ function LabRadRequest(props) {
                       borderRadius: 5,
                       backgroundColor: "rgb(173, 107, 191)",
                       height: 56,
+                      width: "104%",
                       outline: "none",
                       marginTop: 25,
                     }}
@@ -1666,7 +1670,7 @@ function LabRadRequest(props) {
               <div className="row" style={{ marginBottom: "25px" }}>
                 <div
                   className="col-md-12 col-sm-12 col-12 d-flex justify-content-end"
-                  style={{ paddingRight: "3px" }}
+                  style={{ paddingRight: "4px" }}
                 >
                   <Button
                     // disabled={enableForm}
@@ -1828,6 +1832,8 @@ function LabRadRequest(props) {
                       borderRadius: 5,
                       backgroundColor: "rgb(173, 107, 191)",
                       height: 56,
+                      width: "104%",
+
                       outline: "none",
                       marginTop: 25,
                     }}
@@ -1861,7 +1867,7 @@ function LabRadRequest(props) {
               <div className="row" style={{ marginBottom: "25px" }}>
                 <div
                   className="col-md-12 col-sm-12 col-12 d-flex justify-content-end"
-                  style={{ paddingRight: "15px" }}
+                  style={{ paddingRight: "4px" }}
                 >
                   <Button
                     // disabled={enableForm}
