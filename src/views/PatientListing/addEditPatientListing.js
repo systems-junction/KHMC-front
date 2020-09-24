@@ -1679,7 +1679,7 @@ function AddEditPatientListing(props) {
                     inputVariant='filled'
                     fullWidth={true}
                     label='Date of birth'
-                    format='MM-dd-yyyy'
+                    format='dd - MM - yyyy'
                     // minDate={dob}
 
                     error={dob == '' && detailsForm}
@@ -2486,7 +2486,7 @@ function AddEditPatientListing(props) {
                     inputVariant='filled'
                     fullWidth={true}
                     label='Date/Time'
-                    format='MM-dd-yyyy HH:mm'
+                    format='dd - MM - yyyy HH:mm'
                     minDate={DateTime}
                     // onChange={(val) => onChangeDate(val, 'DateTime')}
                     InputProps={{
