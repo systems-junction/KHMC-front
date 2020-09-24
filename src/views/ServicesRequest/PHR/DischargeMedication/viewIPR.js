@@ -390,7 +390,6 @@ function AddEditPurchaseRequest(props) {
       .then((res) => {
         if (res.data.success) {
           if (res.data.data) {
-            console.log(res.data.data)
             setAllExternalConsultants(res.data.data)
           }
         }
@@ -695,7 +694,6 @@ function AddEditPurchaseRequest(props) {
                   <MenuItem value=''>
                     <em>None</em>
                   </MenuItem>
-                  {console.log(statusArray, 'status')}
                   {statusArray &&
                     statusArray.map((val) => {
                       return (

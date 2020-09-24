@@ -29,7 +29,6 @@ const statusArray = [
   { key: 'Approved', value: 'Approved' },
   { key: 'Partial Approved', value: 'Partial Approved' },
   { key: 'Rejected', value: 'Rejected' },
-  // { key: 'completed', value: "completed" },
 ]
 
 const tableHeadingForNeedApprovalMeds = [
@@ -40,10 +39,9 @@ const tableHeadingForNeedApprovalMeds = [
   '',
 ]
 const tableDataKeysForNeedApprovalMeds = [
-  'medicineName',
+  ['itemId', 'name'],
   'requestedQty',
-  ['itemId', 'purchasePrice'],
-  // ['itemId', 'issueUnitCost'],
+  ['itemId', 'issueUnitCost'],
   'totalPrice',
 ]
 
@@ -190,24 +188,25 @@ function AddEditEDR(props) {
 
     setcomingFor(props.history.location.state.comingFor)
 
-    console.log('Selected Item', props.history.location.state.selectedItem)
+    const selectedRec = props.history.location.state.selectedItem
+
+    console.log('Selected Item', selectedRec)
 
     if (
-      props.history.location.state.selectedItem.RequestType === 'LR' ||
-      props.history.location.state.selectedItem.RequestType === 'RR'
+      selectedRec.RequestType === 'LR' ||
+      selectedRec.RequestType === 'RR'
     ) {
-      console.log(props.history.location.state.selectedItem)
       dispatch({
         field: 'price',
-        value: props.history.location.state.selectedItem.totalCost,
+        value: selectedRec.totalCost,
       })
       dispatch({
         field: 'testName',
-        value: props.history.location.state.selectedItem.serviceName,
+        value: selectedRec.serviceName,
       })
       dispatch({
         field: 'description',
-        value: props.history.location.state.selectedItem.serviceId.description,
+        value: selectedRec.serviceId.description,
       })
       // dispatch({
       //   field: 'status',
@@ -215,28 +214,20 @@ function AddEditEDR(props) {
       // })
     }
 
-    const selectedRec = props.history.location.state.selectedItem
+    if (selectedRec.item) {
 
-    if (selectedRec.medicine) {
-      // console.log('Item', props.history.location.state.selectedItem.medicine)
-
-      selectedRec.medicine.map(
-        (d) => (d.totalPrice = d.requestedQty * d.itemId.purchasePrice)
+      selectedRec.item.map(
+        (d) => (d.totalPrice = d.requestedQty * d.itemId.issueUnitCost)
       )
-
-      // selectedRec.medicine.map(
-      //   (d) => (d.totalPrice = d.requestedQty * d.itemId.issueUnitCost)
-      // )
-
       // dispatch({
       //   field: 'status',
       //   value: props.history.location.state.selectedItem.status,
       // })
-      setmedicineDataArray(selectedRec.medicine)
+      setmedicineDataArray(selectedRec.item)
     }
 
-    setId(props.history.location.state.selectedItem._id)
-    setrequestNo(props.history.location.state.selectedItem.requestNo)
+    setId(selectedRec._id)
+    setrequestNo(selectedRec.requestNo)
   }, [])
 
   const handleSubmit = () => {
@@ -294,7 +285,7 @@ function AddEditEDR(props) {
       }}
     >
       <Header />
-      <div className={`cPadding ${classes.root}`}>
+      <div className='cPadding'>
         <div className='subheader'>
           <div>
             <img src={PreApproval} />
@@ -318,19 +309,18 @@ function AddEditEDR(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
               </div>
               <hr />
             </>
           ) : (
-            undefined
-          )}
-          <div className='container-fluid'>
-            {props.history.location.state.selectedItem.RequestType === 'LR' ||
+              undefined
+            )}
+          {props.history.location.state.selectedItem.RequestType === 'LR' ||
             props.history.location.state.selectedItem.RequestType === 'RR' ? (
               <>
-                <div className='row'>
+                <div className={`row ${classes.root}`} style={{ marginTop: '20px' }}>
                   <div
                     className='col-md-6 col-sm-6 col-6'
                     style={{
@@ -344,13 +334,12 @@ function AddEditEDR(props) {
                       label='Test Name'
                       name={'testName'}
                       value={testName}
-                      error={testName === '' && isFormSubmitted}
-                      onChange={onChangeValue}
                       className='textInputStyle'
                       variant='filled'
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
+                        disableUnderline: true
                       }}
                     />
                   </div>
@@ -366,40 +355,21 @@ function AddEditEDR(props) {
                       label='Price'
                       name={'price'}
                       value={price}
-                      // error={Price === '' && paymentForm}
-                      // onChange={onChangeValue}
-                      // type='number'
-                      // onBlur={onChangeValue}
                       className='textInputStyle'
                       variant='filled'
                       textAlign='left'
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
+                        disableUnderline: true
                       }}
                       currencySymbol='JD'
                       outputFormat='number'
-                      // onChange={(event, value) => setValue(value)}
                     />
-                    {/* <TextField
-                      required
-                      disabled={true}
-                      label="Price"
-                      name={"price"}
-                      value={price}
-                      error={price === "" && isFormSubmitted}
-                      onChange={onChangeValue}
-                      className="textInputStyle"
-                      variant="filled"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                      }}
-                    /> */}
                   </div>
                 </div>
 
-                <div className='row'>
+                <div className={`row ${classes.root}`}>
                   <div
                     className='col-md-12 col-sm-12 col-12'
                     style={{
@@ -410,7 +380,7 @@ function AddEditEDR(props) {
                     <TextField
                       required
                       disabled={true}
-                      // multiline
+                      multiline
                       type='text'
                       error={description === '' && isFormSubmitted}
                       label='Description'
@@ -423,6 +393,7 @@ function AddEditEDR(props) {
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
+                        disableUnderline: true
                       }}
                     />
                   </div>
@@ -432,141 +403,141 @@ function AddEditEDR(props) {
               undefined
             )}
 
-            <div className='row'>
-              <div
-                className='col-md-6 col-sm-6 col-6'
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
+          <div className={`row ${classes.root}`}>
+            <div
+              className='col-md-6 col-sm-6 col-6'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                label='Approval Number'
+                name={'approvalNumber'}
+                value={approvalNumber}
+                error={approvalNumber === '' && isFormSubmitted}
+                onChange={(e) => onChangeValue(e)}
+                className='textInputStyle'
+                variant='filled'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
                 }}
-              >
-                <TextField
-                  required
-                  label='Approval Number'
-                  name={'approvalNumber'}
-                  value={approvalNumber}
-                  error={approvalNumber === '' && isFormSubmitted}
-                  onChange={(e) => onChangeValue(e)}
-                  className='textInputStyle'
-                  variant='filled'
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                />
-              </div>
-              <div
-                className='col-md-6 col-sm-6 col-6'
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <TextField
-                  required
-                  disabled
-                  label='Approval Person'
-                  name={'approvalPerson'}
-                  value={approvalPerson}
-                  error={approvalPerson === '' && isFormSubmitted}
-                  onChange={onChangeValue}
-                  className='textInputStyle'
-                  variant='filled'
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                />
-              </div>
+              />
             </div>
-
-            <div className='row'>
-              <div
-                className='col-md-6 col-sm-6 col-6'
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
+            <div
+              className='col-md-6 col-sm-6 col-6'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                disabled
+                label='Approval Person'
+                name={'approvalPerson'}
+                value={approvalPerson}
+                error={approvalPerson === '' && isFormSubmitted}
+                onChange={onChangeValue}
+                className='textInputStyle'
+                variant='filled'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                  disableUnderline: true
                 }}
-              >
-                <TextField
-                  required
-                  label='Co-Payment'
-                  name={'coPayment'}
-                  value={coPayment}
-                  error={coPayment === '' && isFormSubmitted}
-                  onChange={onChangeValue}
-                  className='textInputStyle'
-                  variant='filled'
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                />
-              </div>
-              <div
-                className='col-md-6 col-sm-6 col-6'
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <TextField
-                  required
-                  select
-                  fullWidth
-                  id='status'
-                  name='status'
-                  value={status}
-                  error={status === '' && isFormSubmitted}
-                  onChange={onChangeValue}
-                  label='Status'
-                  variant='filled'
-                  className='dropDownStyle'
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                >
-                  <MenuItem value=''>
-                    <em>None</em>
-                  </MenuItem>
-                  {statusArray.map((val) => {
-                    return (
-                      <MenuItem key={val.key} value={val.key}>
-                        {val.value}
-                      </MenuItem>
-                    )
-                  })}
-                </TextField>
-              </div>
+              />
             </div>
+          </div>
 
-            <div className='row'>
-              <div
-                className='col-md-12 col-sm-12 col-12'
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
+          <div className={`row ${classes.root}`}>
+            <div
+              className='col-md-6 col-sm-6 col-6'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                label='Co-Payment'
+                name={'coPayment'}
+                value={coPayment}
+                error={coPayment === '' && isFormSubmitted}
+                onChange={onChangeValue}
+                className='textInputStyle'
+                variant='filled'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              />
+            </div>
+            <div
+              className='col-md-6 col-sm-6 col-6'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                select
+                fullWidth
+                id='status'
+                name='status'
+                value={status}
+                error={status === '' && isFormSubmitted}
+                onChange={onChangeValue}
+                label='Status'
+                variant='filled'
+                className='dropDownStyle'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
                 }}
               >
-                <TextField
-                  required
-                  multiline
-                  type='text'
-                  error={comments === '' && isFormSubmitted}
-                  label='Comments'
-                  name={'comments'}
-                  value={comments}
-                  onChange={onChangeValue}
-                  rows={4}
-                  className='textInputStyle'
-                  variant='filled'
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                />
-              </div>
+                <MenuItem value=''>
+                  <em>None</em>
+                </MenuItem>
+                {statusArray.map((val) => {
+                  return (
+                    <MenuItem key={val.key} value={val.key}>
+                      {val.value}
+                    </MenuItem>
+                  )
+                })}
+              </TextField>
+            </div>
+          </div>
+
+          <div className={`row ${classes.root}`}>
+            <div
+              className='col-md-12 col-sm-12 col-12'
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                multiline
+                type='text'
+                error={comments === '' && isFormSubmitted}
+                label='Comments'
+                name={'comments'}
+                value={comments}
+                onChange={onChangeValue}
+                rows={4}
+                className='textInputStyle'
+                variant='filled'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              />
             </div>
           </div>
           <div
