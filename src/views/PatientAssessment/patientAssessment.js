@@ -1002,6 +1002,15 @@ function PatientAssessment(props) {
     }, 2000);
   }
 
+  const showAlert = () => {
+    // if (document.getElementById("ckDemo").disabled) {
+    //     alert("CheckBox is Disabled");
+    // }
+
+    setErrorMsg("Please Search First Patient");
+    setOpenNotification(true);
+  };
+
   return (
     <div
       style={{
@@ -1025,8 +1034,10 @@ function PatientAssessment(props) {
 
           <div>
             <Button
-              disabled={enableAssessment}
-              onClick={TriageAssessment}
+              // disabled={enableAssessment}
+              // onClick={TriageAssessment}
+              onClick={enableAssessment ? showAlert : TriageAssessment}
+              style={styles.stylesForButton}
               style={styles.stylesForButton}
               variant="contained"
               color="primary"
@@ -1293,9 +1304,11 @@ function PatientAssessment(props) {
                 style={styles.textStyles}
               >
                 {medicationArray
-                  ? medicationArray.map((drug,index) => {
+                  ? medicationArray.map((drug, index) => {
                       return (
-                      <h6 style={styles.textStyles}>{index + 1}. {drug}</h6>
+                        <h6 style={styles.textStyles}>
+                          {index + 1}. {drug}
+                        </h6>
                       );
                     })
                   : ""}
