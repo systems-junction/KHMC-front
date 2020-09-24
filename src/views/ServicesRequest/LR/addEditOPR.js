@@ -564,8 +564,7 @@ function AddEditPatientListing(props) {
         depositorName.length > 0 &&
         validateEmergencyName(depositorName) &&
         amountReceived &&
-        amountReceived.length > 0 &&
-        validateAmount(amountReceived)
+        amountReceived.toString().length > 0
       )
     }
   }
@@ -985,6 +984,9 @@ function AddEditPatientListing(props) {
     if (i.amountReceived === null) {
       dispatch({ field: 'amountReceived', value: '' })
     }
+    if (i.amountReceived === 0) {
+      dispatch({ field: 'amountReceived', value: '0.00' })
+    }
     dispatch({ field: 'bankName', value: i.bankName })
     dispatch({ field: 'depositorName', value: i.depositorName })
 
@@ -1013,6 +1015,14 @@ function AddEditPatientListing(props) {
   }
 
   const onChangeBloodGroup = (e) => {
+    dispatch({
+      field: e.target.name,
+      value: e.target.value,
+    })
+  }
+
+  const onBlurChangeValue = (e) => {
+    console.log('amount', e.target.value)
     dispatch({
       field: e.target.name,
       value: e.target.value,
@@ -2537,7 +2547,7 @@ function AddEditPatientListing(props) {
                     error={amountReceived === '' && paymentForm}
                     // onChange={onChangeValue}
                     // type='number'
-                    onBlur={onChangeValue}
+                    onBlur={onBlurChangeValue}
                     className='textInputStyle'
                     variant='filled'
                     textAlign='left'
@@ -2549,11 +2559,10 @@ function AddEditPatientListing(props) {
                     outputFormat='number'
                     // onChange={(event, value) => setValue(value)}
                   />
-                  <ErrorMessage
+                  {/* <ErrorMessage
                     name={amountReceived}
-                    type='amount'
                     isFormSubmitted={paymentForm}
-                  />
+                  /> */}
                   {/* <ErrorMessage
                     name={amountReceived}
                     // type='amount'
