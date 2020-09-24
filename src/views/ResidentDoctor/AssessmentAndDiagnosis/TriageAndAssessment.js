@@ -217,14 +217,11 @@ function TriageAndAssessment(props) {
       .put(updateEdrIpr, params)
       .then((res) => {
         if (res.data.success) {
-          console.log(
-            'Update Patient data assessment and diagnosis: ',
-            res.data.data
-          )
+          console.log('Update Patient data ECR: ', res.data.data)
           props.history.push({
             pathname: 'success',
             state: {
-              message: `Triage & Assessment for patient ${MRN} added successfully`,
+              message: `Triage & Assessment for patient MRN ${res.data.data.patientId.profileNo} added successfully`,
             },
             comingFor: 'Triage',
           })
@@ -299,7 +296,7 @@ function TriageAndAssessment(props) {
                 outline: 'none',
                 color: value === 1 ? '#12387a' : '#3B988C',
               }}
-              label='Triage Level'
+              label='Physical Examination'
             />
             <Tab
               style={{
@@ -308,12 +305,13 @@ function TriageAndAssessment(props) {
                 outline: 'none',
                 color: value === 2 ? '#12387a' : '#3B988C',
               }}
-              label='Physical Examination'
+              label='Triage Level'
             />
+
           </Tabs>
         </div>
 
-        {value === 1 ? (
+        {value === 2 ? (
           <>
             <div
               style={{
@@ -401,17 +399,17 @@ function TriageAndAssessment(props) {
                   <Button
                     style={styles.stylesForButton}
                     //disabled={!validateFormType1()}
-                    onClick={onNext}
+                    onClick={handleSubmitAssessment}
                     variant='contained'
                     color='primary'
                   >
-                    Next
+                    Submit
                   </Button>
                 </div>
               </div>
             </div>
           </>
-        ) : value === 2 ? (
+        ) : value === 1 ? (
           <>
             <div
               style={{
@@ -966,11 +964,11 @@ function TriageAndAssessment(props) {
                   <Button
                     style={styles.stylesForButton}
                     //disabled={!validateFormType1()}
-                    onClick={handleSubmitAssessment}
+                    onClick={onNext}
                     variant='contained'
                     color='primary'
                   >
-                    Submit
+                    Next
                   </Button>
                 </div>
               </div>
@@ -991,13 +989,13 @@ function TriageAndAssessment(props) {
                   borderBottomWidth={20}
                 />
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
             </div>
           </div>
         ) : (
-          undefined
-        )}
+                undefined
+              )}
 
         <Notification
           msg={errorMsg}
