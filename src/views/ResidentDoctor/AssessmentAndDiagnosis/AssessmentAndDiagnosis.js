@@ -409,7 +409,7 @@ function LabRadRequest(props) {
     }
   };
 
-  const [currentUser, setCurrentUser] = useState(cookie.load("current_user"));
+  const [currentUser] = useState(cookie.load("current_user"));
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setsuccessMsg] = useState("");
   const [openNotification, setOpenNotification] = useState(false);
@@ -503,16 +503,7 @@ function LabRadRequest(props) {
     setIsOpen(true);
     setRequestedItems(obj.item);
   };
-  function showAlert() {
-    if (document.getElementsByClassName("Triage").disabled) {
-      // alert("CheckBox is Disabled");
-      setErrorMsg("Please Serach First Patient ");
-      setOpenNotification(true);
-    } else {
-      setErrorMsg("Please Serach First Patient ");
-      setOpenNotification(true);
-    }
-  }
+
   function addConsultRequest() {
     var now = new Date();
     var start = new Date(now.getFullYear(), 0, 0);
@@ -700,7 +691,7 @@ function LabRadRequest(props) {
   }
 
   const handleSearch = (e) => {
-    const a = e.target.value.replace(/[^\w\s]/gi, "");
+    const a = e.target.value.replace(/[^\w-\s]/gi, "");
     setSearchQuery(a);
     if (a.length >= 3) {
       axios
@@ -848,7 +839,7 @@ function LabRadRequest(props) {
   };
 
   const handleRadioSearch = (e) => {
-    const a = e.target.value.replace(/[^\w\s]/gi, "");
+    const a = e.target.value.replace(/[^\w-\s]/gi, "");
     setSearchRadioQuery(a);
     if (a.length >= 3) {
       axios
@@ -1335,6 +1326,15 @@ function LabRadRequest(props) {
     }, 2000);
   }
 
+  const showAlert = () => {
+    // if (document.getElementById("ckDemo").disabled) {
+    //     alert("CheckBox is Disabled");
+    // }
+
+    setErrorMsg("Please Search First Patient");
+    setOpenNotification(true);
+  };
+
   return (
     <div
       style={{
@@ -1356,22 +1356,14 @@ function LabRadRequest(props) {
             <h4>Assessment & Diagnosis</h4>
           </div>
 
-          <div className="Triage">
+          <div>
             <Button
-              disabled={enableForm}
-              // onChange={enableForm === "true" ? showAlert() : TriageAssessment}
-              onChange={TriageAssessment}
-              // onClick={ ? (
-              //   setErrorMsg('Please Search First Patient')
-              // setOpenNotification(true)
-
-              //   ): (TriageAssessment )}
-              // onClick={showAlert()}
-              // onChange={TriageAssessment}
+              // disabled={enableForm}
+              onClick={enableForm ? showAlert : TriageAssessment}
               style={styles.stylesForButton}
               variant="contained"
-              Error={errorMsg}
               color="primary"
+              Error={errorMsg}
             >
               Triage & Assessment
             </Button>
@@ -1624,7 +1616,7 @@ function LabRadRequest(props) {
                 className={"col-md-3 col-sm-3 col-3"}
                 style={styles.textStyles}
               >
-                {"None"}
+                {""}
               </div>
 
               <div
@@ -1650,7 +1642,7 @@ function LabRadRequest(props) {
                   ? diagnosisArray.map((drug, index) => {
                       return <h6 style={styles.textStyles}>{drug}</h6>;
                     })
-                  : "None"}
+                  : ""}
               </div>
             </div>
           </div>
@@ -1876,16 +1868,25 @@ function LabRadRequest(props) {
                   <TextField
                     required
                     disabled={enableForm}
-                    label="Lab Test"
+                    label="Search by Lab Test"
                     name={"searchQuery"}
                     value={searchQuery}
                     onChange={handleSearch}
                     className="textInputStyle"
                     variant="filled"
                     InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <AccountCircle />
+                        </InputAdornment>
+                      ),
                       className: classes.input,
                       classes: { input: classes.input },
                       disableUnderline: true,
+                    }}
+                    InputLabelProps={{
+                      className: classes.label,
+                      classes: { label: classes.label },
                     }}
                   />
                 </div>
@@ -1917,7 +1918,9 @@ function LabRadRequest(props) {
                                   <TableCell>{i.name}</TableCell>
                                   <TableCell>{i.serviceNo}</TableCell>
                                   <TableCell>{i.price}</TableCell>
-                                  <TableCell>{i.description}</TableCell>
+                                  <TableCell align="center">
+                                    {i.description}
+                                  </TableCell>
                                 </TableRow>
                               );
                             })}
@@ -2073,16 +2076,25 @@ function LabRadRequest(props) {
                 >
                   <TextField
                     required
-                    label="Radiology / Imaging"
+                    label="Search by Radiology / Imaging"
                     name={"searchRadioQuery"}
                     value={searchRadioQuery}
                     onChange={handleRadioSearch}
                     className="textInputStyle"
                     variant="filled"
                     InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <AccountCircle />
+                        </InputAdornment>
+                      ),
                       className: classes.input,
                       classes: { input: classes.input },
                       disableUnderline: true,
+                    }}
+                    InputLabelProps={{
+                      className: classes.label,
+                      classes: { label: classes.label },
                     }}
                   />
                 </div>
@@ -2115,7 +2127,9 @@ function LabRadRequest(props) {
                                   <TableCell>{i.name}</TableCell>
                                   <TableCell>{i.serviceNo}</TableCell>
                                   <TableCell>{i.price}</TableCell>
-                                  <TableCell>{i.description}</TableCell>
+                                  <TableCell align="center">
+                                    {i.description}
+                                  </TableCell>
                                 </TableRow>
                               );
                             })}
@@ -2563,11 +2577,12 @@ function LabRadRequest(props) {
                     <ul>
                       {icdCode.map((item) => (
                         <li key={item}>
-                          {item} &nbsp;
                           <span
                             className="addCode"
                             onClick={(e) => addICDcodes(item, e)}
+                            style={{ marginRight: 20, marginTop: 5 }}
                           />
+                          {item}
                         </li>
                       ))}
                     </ul>
@@ -2854,19 +2869,6 @@ function LabRadRequest(props) {
                     ? tableDataKeysForFUMemberForItems
                     : tableDataKeysForItemsForBUMember
                 }
-                // action={
-                //   currentUser.staffTypeId.type === "Registered Nurse"
-                //     ? actionsForItemsForReceiver
-                //     : currentUser.staffTypeId.type === "BU Doctor"
-                //       ? actionsForItemsForOther
-                //       : currentUser.staffTypeId.type === "FU Inventory Keeper"
-                //         ? actionsForItemsForFUMember
-                //         : actionsForItemsForOther
-                // }
-                // handleEdit={handleEditRequestedItem}
-                // handleDelete={handleDelete}
-                // receiveItem={handleReceive}
-                // handleView={handleEditRequestedItem}
                 borderBottomColor={"#60d69f"}
                 borderBottomWidth={20}
               />
