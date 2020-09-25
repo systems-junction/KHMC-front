@@ -2589,7 +2589,7 @@ function ReceiveItems(props) {
                         : null
                       : receivedDate
                   }
-                  // disableFuture
+                  disableFuture
                   InputProps={{
                     className: classesForInput.input,
                     classes: { input: classesForInput.input },

@@ -117,8 +117,8 @@ export default function PurchaseRequest(props) {
       aria-labelledby="simple-dialog-title"
       open={props.openItemDialog}
     >
-      <DialogContent style={{ backgroundColor: "#white" }}>
-        <DialogTitle id="simple-dialog-title" style={{ color: "black" }}>
+      <DialogContent style={{ backgroundColor: "#60d69f" }}>
+        <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
           Item Details
         </DialogTitle>
         <div className="container-fluid">

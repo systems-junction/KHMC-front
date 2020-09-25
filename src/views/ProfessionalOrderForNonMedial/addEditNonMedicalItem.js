@@ -1279,8 +1279,12 @@ function AddEditPurchaseRequest(props) {
                 /> */}
             </div>
 
-            <div style={{ marginTop: 30 }}>
-              <h5 style={{ color: "white", fontWeight: "700" }}>Order Item</h5>
+            <div>
+              <div className="row">
+                <h5 style={{ color: "white", fontWeight: "700", marginTop: 15, marginBottom:15 }}>
+                  Order Item
+                </h5>
+              </div>
               <div className="row">
                 <div className="col-sm-12" style={styles.textFieldPadding}>
                   <TextField
@@ -1326,11 +1330,19 @@ function AddEditPurchaseRequest(props) {
 
               {searchQuery ? (
                 // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
-                <div style={{ zIndex: 3 }}>
+                <div
+                  style={{
+                    zIndex: 3,
+                    position: "absolute",
+                    width: "96%",
+                    left: "2%",
+                    marginTop: 5,
+                  }}
+                >
                   <Paper style={{ ...stylesForPaper.paperStyle }}>
                     {itemFoundSuccessfull ? (
                       itemFound && (
-                        <Table size="small">
+                        <Table size="small" stickyHeader>
                           <TableHead>
                             <TableRow>
                               {/* <TableCell
@@ -1633,8 +1645,8 @@ function AddEditPurchaseRequest(props) {
                 <h5
                   style={{
                     color: "white",
-                    marginTop: 10,
-                    marginBottom: 10,
+                    marginTop: 15,
+                    marginBottom: 15,
                     fontWeight: "700",
                     borderRadius: "5px",
                   }}

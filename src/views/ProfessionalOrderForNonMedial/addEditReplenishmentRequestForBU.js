@@ -505,7 +505,7 @@ function AddEditPurchaseRequest(props) {
       });
       openPatientDetailsDialog(true);
       getPatientByInfo(props.patientDetails._id);
-      setSelectedPatient(props.patientDetails)
+      setSelectedPatient(props.patientDetails);
     }
 
     if (!selectedRec) {
@@ -1059,9 +1059,9 @@ function AddEditPurchaseRequest(props) {
     return (
       itemCode !== "" &&
       description !== "" &&
-      itemName !== "" &&
-      tradeName !== "" &&
-      scientificName !== "" &&
+      // itemName !== "" &&
+      // tradeName !== "" &&
+      // scientificName !== "" &&
       maximumLevel >= requestedQty &&
       // checkForpharma &&
       checkForNonpharma
@@ -1371,6 +1371,7 @@ function AddEditPurchaseRequest(props) {
         flexDirection: "column",
         flex: 1,
         overflowY: "scroll",
+        overflowX: "hidden",
       }}
     >
       <Header />
@@ -1392,7 +1393,8 @@ function AddEditPurchaseRequest(props) {
         </div>
 
         <div style={{ marginTop: "5px", marginBottom: "5px" }}>
-          {comingFor === "add"   && !props.history.location.state.comingFromRCM? (
+          {comingFor === "add" &&
+          !props.history.location.state.comingFromRCM ? (
             <div>
               <div className="row">
                 {/* <span class="fa fa-search"></span> */}
@@ -1653,11 +1655,11 @@ function AddEditPurchaseRequest(props) {
                 undefined
               )}
             </div> */}
-
-            <h5 style={{ fontWeight: "bold", color: "white", marginTop: 25 }}>
-              Order Item
-            </h5>
-
+            <div className="row">
+              <h5 style={{ fontWeight: "bold", color: "white", marginTop: 25 }}>
+                Order Item
+              </h5>
+            </div>
             {/* <div
               className="container-fluid"
               style={{
@@ -1813,7 +1815,7 @@ function AddEditPurchaseRequest(props) {
                       <Paper style={{ ...stylesForPaper.paperStyle }}>
                         {itemFoundSuccessfull ? (
                           itemFound && (
-                            <Table size="small">
+                            <Table stickyHeader size="small">
                               <TableHead>
                                 <TableRow>
                                   <TableCell
@@ -2530,11 +2532,20 @@ function AddEditPurchaseRequest(props) {
 
                 {searchQuery ? (
                   // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
-                  <div style={{ zIndex: 3 }}>
+                  <div
+                    style={{
+                      zIndex: 3,
+                      position: "absolute",
+                      // width: "100%",
+                      width: "96%",
+                      left: "2%",
+                      marginTop: 5,
+                    }}
+                  >
                     <Paper style={{ ...stylesForPaper.paperStyle }}>
                       {itemFoundSuccessfull ? (
                         itemFound && (
-                          <Table size="small">
+                          <Table stickyHeader size="small">
                             <TableHead>
                               <TableRow>
                                 <TableCell
@@ -2634,11 +2645,11 @@ function AddEditPurchaseRequest(props) {
                     <TextField
                       required
                       id="itemName"
-                      label="Item Name"
-                      name={"itemName"}
+                      label="Item Code"
+                      name={"itemCode"}
                       disabled={true}
                       type="text"
-                      value={itemName}
+                      value={itemCode}
                       onChange={onChangeValue}
                       variant="filled"
                       className="textInputStyle"
