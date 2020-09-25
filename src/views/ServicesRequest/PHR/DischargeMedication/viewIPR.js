@@ -579,7 +579,7 @@ function AddEditPurchaseRequest(props) {
 
       {!isLoading ? (
         <div className={`cPadding ${classes.root}`}>
-          <div className='subheader'>
+          <div className='subheader' style={{ marginLeft: '-10px' }}>
             <div>
               <img src={dischargeIcon} />
               <h4>Discharge</h4>

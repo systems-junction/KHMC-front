@@ -139,7 +139,7 @@ export default function EdrRequest(props) {
       open={props.openItemDialog}
     >
       <DialogContent style={{ backgroundColor: '#31e2aa' }}>
-        <DialogTitle id='simple-dialog-title' style={{ color: 'white' }}>
+        <DialogTitle id='simple-dialog-title' style={{ color: 'white', marginLeft: '-6px' }}>
           Details
         </DialogTitle>
         <div className='container-fluid'>

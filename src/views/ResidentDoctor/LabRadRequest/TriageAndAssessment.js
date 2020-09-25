@@ -264,8 +264,8 @@ function TriageAndAssessment(props) {
     >
       <Header />
 
-      <div className="cPadding">
-        <div className="subheader">
+      <div className='cPadding'>
+        <div className='subheader' style={{ marginLeft: '-10px' }}>
           <div>
             <img src={business_Unit} />
             <div style={{ flex: 4, display: "flex", alignItems: "center" }}>

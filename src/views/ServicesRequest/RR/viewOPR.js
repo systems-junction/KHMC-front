@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField'
 import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
 import axios from 'axios'
 import { FaUpload } from 'react-icons/fa'
-import Fingerprint from '../../../assets/img/fingerprint.png'
+import Fingerprint from '../../../assets/img/Bar Code.png'
 import BarCode from '../../../assets/img/Bar Code.png'
 import AccountCircle from '@material-ui/icons/SearchOutlined'
 import InputAdornment from '@material-ui/core/InputAdornment'
@@ -992,7 +992,7 @@ function AddEditPurchaseRequest(props) {
 
       {!isLoading ? (
         <div className='cPadding'>
-          <div className='subheader'>
+          <div className='subheader' style={{ marginLeft: '-10px' }}>
             <div>
               <img src={business_Unit} />
               <h4>OPR - Radiology Service</h4>
@@ -1057,9 +1057,10 @@ function AddEditPurchaseRequest(props) {
                     backgroundColor: 'white',
                     borderRadius: 5,
                     height: 55,
+                    marginRight: '-6px',
                   }}
                 >
-                  <img src={Fingerprint} style={{ maxWidth: 35, height: 35 }} />
+                  <img src={Fingerprint} style={{ maxWidth: 70, height: 60 }} />
                 </div>
               </div>
             </div>
@@ -1218,7 +1219,12 @@ function AddEditPurchaseRequest(props) {
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back}
-                  style={{ width: 45, height: 35, cursor: 'pointer' }}
+                  style={{
+                    width: 45,
+                    height: 35,
+                    cursor: 'pointer',
+                    marginLeft: '-10px',
+                  }}
                 />
               </div>
               <div
@@ -1228,7 +1234,7 @@ function AddEditPurchaseRequest(props) {
                 <Button
                   disabled={enableSave}
                   onClick={saveRadioReq}
-                  style={styles.stylesForButton}
+                  style={{ ...styles.stylesForButton, width: '140px' }}
                   variant='contained'
                   color='primary'
                 >
