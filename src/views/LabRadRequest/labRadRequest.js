@@ -1171,11 +1171,7 @@ function LabRadRequest(props) {
                   style={{
                     zIndex: 3,
                     position: "absolute",
-<<<<<<< HEAD
-                    width: "99%",
-=======
                     width: "100%",
->>>>>>> 870808c9f1052254810a79c3de354c5f37488a41
                     marginTop: 5,
                   }}
                 >

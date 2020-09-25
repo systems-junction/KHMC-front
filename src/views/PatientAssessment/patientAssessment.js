@@ -240,28 +240,13 @@ const useStylesForInput = makeStyles((theme) => ({
     },
   },
   multilineColor: {
-<<<<<<< HEAD
-    boxShadow: "none",
-=======
->>>>>>> 870808c9f1052254810a79c3de354c5f37488a41
     backgroundColor: "white",
     borderRadius: 5,
     "&:hover": {
       backgroundColor: "white",
-<<<<<<< HEAD
-      boxShadow: "none",
     },
     "&:after": {
       borderBottomColor: "black",
-      boxShadow: "none",
-    },
-    "&:focus": {
-      boxShadow: "none",
-=======
-    },
-    "&:after": {
-      borderBottomColor: "black",
->>>>>>> 870808c9f1052254810a79c3de354c5f37488a41
     },
   },
   root: {
