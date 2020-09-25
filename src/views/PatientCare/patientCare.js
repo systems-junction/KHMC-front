@@ -184,7 +184,7 @@ const styles = {
     fontWeight: "bold",
   },
   textFieldPadding: {
-    paddingLeft: 5,
+    paddingLeft: 0,
     paddingRight: 5,
   },
   headerHeading: {
@@ -1129,7 +1129,7 @@ function PatientCare(props) {
                   style={{
                     zIndex: 3,
                     position: "absolute",
-                    width: "100%",
+                    width: "99.6%",
                     marginTop: 5,
                   }}
                 >
@@ -1469,6 +1469,7 @@ function PatientCare(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
+                    paddingLeft: 0,
                   }}
                 >
                   <TextField
@@ -1498,7 +1499,15 @@ function PatientCare(props) {
               </div>
 
               {searchQuery ? (
-                <div style={{ zIndex: 10 }}>
+                <div
+                  style={{
+                    zIndex: 10,
+                    width: "101.6%",
+                    marginRight: "-8px",
+                    marginLeft: "-10px",
+                    marginTop: "10px",
+                  }}
+                >
                   <Paper style={{ maxHeight: 200, overflow: "auto" }}>
                     {itemFoundSuccessfull ? (
                       itemFound && (
@@ -1576,6 +1585,7 @@ function PatientCare(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
+                    paddingLeft: 5,
                   }}
                 >
                   <TextField
@@ -1664,6 +1674,7 @@ function PatientCare(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
+                    paddingLeft: 0,
                   }}
                 >
                   <TextField
@@ -1772,6 +1783,7 @@ function PatientCare(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
+                    paddingLeft: 5,
                   }}
                 >
                   <TextField

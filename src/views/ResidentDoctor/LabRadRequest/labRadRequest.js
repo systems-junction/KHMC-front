@@ -2572,9 +2572,10 @@ function LabRadRequest(props) {
                     className="textInputStyle"
                     variant="filled"
                     InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
+                      className: classes.multilineColor,
+                      classes: {
+                        input: classes.multilineColor,
+                      },
                     }}
                   />
                 </div>
@@ -2598,9 +2599,10 @@ function LabRadRequest(props) {
                     className="textInputStyle"
                     variant="filled"
                     InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
+                      className: classes.multilineColor,
+                      classes: {
+                        input: classes.multilineColor,
+                      },
                     }}
                   />
                 </div>
@@ -2670,8 +2672,10 @@ function LabRadRequest(props) {
                           <AccountCircle />
                         </InputAdornment>
                       ),
-                      className: classes.input,
-                      classes: { input: classes.input },
+                      className: classes.multilineColor,
+                      classes: {
+                        input: classes.multilineColor,
+                      },
                     }}
                     InputLabelProps={{
                       className: classes.label,
@@ -2800,9 +2804,10 @@ function LabRadRequest(props) {
                     className="textInputStyle"
                     variant="filled"
                     InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
+                      className: classes.multilineColor,
+                      classes: {
+                        input: classes.multilineColor,
+                      },
                     }}
                   />
                 </div>
@@ -2828,9 +2833,10 @@ function LabRadRequest(props) {
                     className="textInputStyle"
                     variant="filled"
                     InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
+                      className: classes.multilineColor,
+                      classes: {
+                        input: classes.multilineColor,
+                      },
                     }}
                   />
                 </div>

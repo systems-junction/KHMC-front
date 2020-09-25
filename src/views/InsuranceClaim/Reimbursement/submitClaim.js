@@ -836,7 +836,7 @@ function AddEditPatientListing(props) {
                     </div>
                   </div>
 
-                  <div className="row">
+                  <div className="row" style={{ marginTop: 10 }}>
                     <div className="col-md-10 col-sm-8 col-8">
                       {searchQuery ? (
                         <div style={{ zIndex: 3 }}>

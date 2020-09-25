@@ -1171,7 +1171,11 @@ function LabRadRequest(props) {
                   style={{
                     zIndex: 3,
                     position: "absolute",
+<<<<<<< HEAD
+                    width: "99%",
+=======
                     width: "100%",
+>>>>>>> 870808c9f1052254810a79c3de354c5f37488a41
                     marginTop: 5,
                   }}
                 >
@@ -1551,7 +1555,15 @@ function LabRadRequest(props) {
               </div>
 
               {searchQuery ? (
-                <div style={{ zIndex: 10 }}>
+                <div
+                  style={{
+                    zIndex: 10,
+                    width: "101.6%",
+                    marginRight: "-8px",
+                    marginLeft: "-10px",
+                    marginTop: "10px",
+                  }}
+                >
                   <Paper style={{ maxHeight: 200, overflow: "auto" }}>
                     {itemFoundSuccessfull ? (
                       itemFound && (
@@ -1716,8 +1728,8 @@ function LabRadRequest(props) {
                 flex: 4,
                 display: "flex",
                 flexDirection: "column",
-                paddingLeft: "10px",
-                paddingRight: "10px",
+                paddingLeft: 9,
+                paddingRight: 9,
               }}
               className={`container-fluid ${classes.root}`}
             >
@@ -1757,7 +1769,15 @@ function LabRadRequest(props) {
 
               {searchRadioQuery ? (
                 // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
-                <div style={{ zIndex: 10 }}>
+                <div
+                  style={{
+                    zIndex: 10,
+                    width: "101.6%",
+                    marginRight: "-8px",
+                    marginLeft: "-10px",
+                    marginTop: "10px",
+                  }}
+                >
                   <Paper style={{ maxHeight: 200, overflow: "auto" }}>
                     {radioItemFoundSuccessfull ? (
                       radioItemFound && (
@@ -1879,7 +1899,10 @@ function LabRadRequest(props) {
                 </div>
               </div>
 
-              <div className="row" style={{ marginTop: "20px" }}>
+              <div
+                className="row"
+                style={{ marginTop: "20px", paddingLeft: 5, paddingRight: 5 }}
+              >
                 {radiologyRequestArray !== 0 ? (
                   <CustomTable
                     tableData={radiologyRequestArray}

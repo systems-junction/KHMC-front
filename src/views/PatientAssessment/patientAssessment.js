@@ -184,7 +184,7 @@ const styles = {
     fontWeight: "bold",
   },
   textFieldPadding: {
-    paddingLeft: 5,
+    paddingLeft: 0,
     paddingRight: 5,
   },
   headerHeading: {
@@ -240,13 +240,28 @@ const useStylesForInput = makeStyles((theme) => ({
     },
   },
   multilineColor: {
+<<<<<<< HEAD
+    boxShadow: "none",
+=======
+>>>>>>> 870808c9f1052254810a79c3de354c5f37488a41
     backgroundColor: "white",
     borderRadius: 5,
     "&:hover": {
       backgroundColor: "white",
+<<<<<<< HEAD
+      boxShadow: "none",
     },
     "&:after": {
       borderBottomColor: "black",
+      boxShadow: "none",
+    },
+    "&:focus": {
+      boxShadow: "none",
+=======
+    },
+    "&:after": {
+      borderBottomColor: "black",
+>>>>>>> 870808c9f1052254810a79c3de354c5f37488a41
     },
   },
   root: {
@@ -1135,7 +1150,7 @@ function PatientAssessment(props) {
                   style={{
                     zIndex: 3,
                     position: "absolute",
-                    width: "100%",
+                    width: "99.6%",
                     marginTop: 5,
                   }}
                 >
@@ -1513,7 +1528,15 @@ function PatientAssessment(props) {
               </div>
 
               {searchQuery ? (
-                <div style={{ zIndex: 10 }}>
+                <div
+                  style={{
+                    zIndex: 10,
+                    width: "101.6%",
+                    marginRight: "-8px",
+                    marginLeft: "-10px",
+                    marginTop: "10px",
+                  }}
+                >
                   <Paper style={{ maxHeight: 200, overflow: "auto" }}>
                     {itemFoundSuccessfull ? (
                       itemFound && (
@@ -1591,6 +1614,7 @@ function PatientAssessment(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
+                    paddingLeft: 5,
                   }}
                 >
                   <TextField
@@ -1709,7 +1733,15 @@ function PatientAssessment(props) {
 
               {searchRadioQuery ? (
                 // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
-                <div style={{ zIndex: 10 }}>
+                <div
+                  style={{
+                    zIndex: 10,
+                    width: "101.6%",
+                    marginRight: "-8px",
+                    marginLeft: "-10px",
+                    marginTop: "10px",
+                  }}
+                >
                   <Paper style={{ maxHeight: 200, overflow: "auto" }}>
                     {radioItemFoundSuccessfull ? (
                       radioItemFound && (
@@ -1787,6 +1819,7 @@ function PatientAssessment(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
+                    paddingLeft: 5,
                   }}
                 >
                   <TextField

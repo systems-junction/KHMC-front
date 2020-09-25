@@ -3154,8 +3154,8 @@ function AddEditPatientListing(props) {
                         classes: { input: classes.input },
                       }}
                     >
-                      <MenuItem value={coveredFamilyMembers}>
-                        {coveredFamilyMembers}
+                      <MenuItem value="">
+                        <em>Family Member</em>
                       </MenuItem>
 
                       {coveredFamilyArray.map((val) => {

@@ -174,7 +174,7 @@ function ViewLabRadReport(props) {
           </div>
         </div>
 
-        <div className="container-fluid">
+        <div className="container-fluid" style={{ marginLeft: -12 }}>
           <div className="row">
             {results !== "" && results.includes("\\") ? (
               <>
@@ -189,6 +189,7 @@ function ViewLabRadReport(props) {
                     <img
                       src={uploadsUrl + results.split("\\")[1]}
                       className="depositSlipImg"
+                      style={{ borderRadius: 5 }}
                     />
                   </div>
                 ) : results !== "" &&
@@ -223,6 +224,8 @@ function ViewLabRadReport(props) {
                     <img
                       src={uploadsUrl + results}
                       className="depositSlipImg"
+                      style={{ borderRadius: 5 }}
+
                     />
                   </div>
                 ) : results !== "" &&
