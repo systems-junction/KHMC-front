@@ -9,6 +9,7 @@ import business_Unit from '../../../assets/img/Purchase Order.png'
 import Back_Arrow from '../../../assets/img/Back_Arrow.png'
 import cookie from 'react-cookies'
 import axios from 'axios'
+import _ from 'lodash'
 import { updateEdrIpr } from '../../../public/endpoins'
 import '../../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
 import Notification from '../../../components/Snackbar/Notification.js'
@@ -136,7 +137,10 @@ function TriageAndAssessment(props) {
       )
       dispatch({
         field: 'triageAssessmentArray',
-        value: selectedRec.triageAssessment.reverse(),
+        value: _.sortBy(
+          selectedRec.triageAssessment.reverse(),
+          'date'
+        ).reverse(),
       })
     }
   }, [])
