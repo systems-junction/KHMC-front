@@ -248,16 +248,16 @@ export default function CustomTable(props) {
         )
       }
     } else if (
-      val === "in_progress" ||
-      val === "po_sent" ||
-      val === "items_in_transit" ||
-      val === "pending_approval_from_accounts" ||
-      val === "pending_approval" ||
-      val === "Delivery in Progress" ||
-      val === "Fulfillment Initiated" ||
-      val === "Partial Fulfillment Initiated" ||
-      val === "pending_administration" ||
-      val === "pending_receipt"
+      val === 'in_progress' ||
+      val === 'po_sent' ||
+      val === 'items_in_transit' ||
+      val === 'pending_approval_from_accounts' ||
+      val === 'pending_approval' ||
+      val === 'Delivery in Progress' ||
+      val === 'Fulfillment Initiated' ||
+      val === 'Partial Fulfillment Initiated' ||
+      val === 'pending_administration' ||
+      val === 'pending_receipt'
     ) {
       return (
         <>
@@ -334,7 +334,7 @@ export default function CustomTable(props) {
             >
               <strong>Partial Fulfillment Initiated</strong>
             </Button>
-          ) : val === "pending_receipt" ? (
+          ) : val === 'pending_receipt' ? (
             <Button
               style={stylesB.stylesForActive}
               variant='contained'

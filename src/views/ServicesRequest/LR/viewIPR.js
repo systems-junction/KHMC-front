@@ -10,6 +10,7 @@ import {
 } from '../../../public/endpoins'
 import DateFnsUtils from '@date-io/date-fns'
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
+import LinearProgress from '@material-ui/core/LinearProgress'
 import CurrencyTextField from '@unicef/material-ui-currency-textfield'
 import cookie from 'react-cookies'
 import Header from '../../../components/Header/Header'
@@ -141,6 +142,12 @@ const useStyles = makeStyles((theme) => ({
       boxShadow: 'none',
     },
   },
+  progressbarroot: {
+    width: '100%',
+
+    height: 10,
+    borderRadius: 5,
+  },
 }))
 
 function AddEditPurchaseRequest(props) {
@@ -203,6 +210,7 @@ function AddEditPurchaseRequest(props) {
   const [statusOnResultStatus, setStatusOnResultStatus] = useState(false)
   const [checkStatus, setcheckStatus] = useState('')
   const [isFormSubmitted, setisFormSubmitted] = useState(false)
+  const [progress, setProgress] = React.useState(false)
 
   const getLRByIdURI = (id) => {
     axios
@@ -333,6 +341,20 @@ function AddEditPurchaseRequest(props) {
     setSelectedItem(props.history.location.state.selectedItem)
     setrequestNo(props.history.location.state.selectedItem.requestNo)
     setSelectedPatient(props.history.location.state.selectedItem.patientId)
+
+    // const timer = setInterval(() => {
+    //   setProgress((oldProgress) => {
+    //     if (oldProgress === 100) {
+    //       return 0;
+    //     }
+    //     const diff = Math.random() * 10;
+    //     return Math.min(oldProgress + diff, 100);
+    //   });
+    // }, 500);
+
+    // return () => {
+    //   clearInterval(timer);
+    // };
   }, [])
 
   if (openNotification) {
@@ -354,8 +376,15 @@ function AddEditPurchaseRequest(props) {
 
     // console.log("Selected file : ", file.name)
     // console.log("file type : ", fileType)
+    setTimeout(() => {
+      setProgress(true)
+      //setSlipUpload(file);
+    }, 500)
 
+    // setProgress(true);
     setSlipUpload(file)
+
+    setProgress(true)
     var reader = new FileReader()
     var url = reader.readAsDataURL(file)
 
@@ -396,6 +425,7 @@ function AddEditPurchaseRequest(props) {
       setStatusOnResult('completed')
       setStatusOnResultStatus(true)
     }
+    setProgress(false)
   }
 
   const removeUploadedSlip = () => {
@@ -451,7 +481,7 @@ function AddEditPurchaseRequest(props) {
 
       {!isLoading ? (
         <div className={`cPadding ${classes.root}`}>
-          <div className='subheader'>
+          <div className='subheader' style={{ marginLeft: '-10px' }}>
             <div>
               <img src={business_Unit} />
               <h4>In Patient</h4>
@@ -706,6 +736,19 @@ function AddEditPurchaseRequest(props) {
                       <FaUpload /> Results
                     </label>
 
+                    <div className={classes.progressbarroot}>
+                      {progress === true ? (
+                        // <LinearProgress
+                        //   variant="determinate"
+                        //   value={progress}
+                        // />
+                        <LinearProgress style={{ height: 15 }} />
+                      ) : (
+                        undefined
+                      )}
+                      {/* <h1> Progress Bar </h1> */}
+                    </div>
+
                     {pdfView !== '' ? (
                       <div
                         className='row'
@@ -881,7 +924,12 @@ function AddEditPurchaseRequest(props) {
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back}
-                  style={{ width: 45, height: 35, cursor: 'pointer' }}
+                  style={{
+                    width: 45,
+                    height: 35,
+                    cursor: 'pointer',
+                    marginLeft: '-10px',
+                  }}
                 />
               </div>
               <div

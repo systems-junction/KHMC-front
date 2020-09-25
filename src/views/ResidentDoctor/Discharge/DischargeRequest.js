@@ -343,16 +343,16 @@ function DischargeRequest(props) {
                     })
                   }
                 } else if (key === 'pharmacyRequest') {
-                  let data = [];
+                  let data = []
                   val.map((d) => {
                     d.item.map((item) => {
-                      let found = data.find((i) => i === item.itemId.name);
+                      let found = data.find((i) => i === item.itemId.name)
                       if (!found) {
-                        data.push(item.itemId.name);
+                        data.push(item.itemId.name)
                       }
-                    });
-                  });
-                  dispatch({ field: "medicationArray", value: data });
+                    })
+                  })
+                  dispatch({ field: 'medicationArray', value: data })
                 }
               } else {
                 dispatch({ field: key, value: val })
@@ -470,7 +470,7 @@ function DischargeRequest(props) {
       <Header />
 
       <div className='cPadding'>
-        <div className='subheader'>
+        <div className='subheader' style={{ marginLeft: '-10px' }}>
           <div>
             <img src={business_Unit} />
             <h4>Discharge</h4>
@@ -528,7 +528,7 @@ function DischargeRequest(props) {
                   height: 55,
                 }}
               >
-                <img src={BarCode} style={{ width: 80, height: 75 }} />
+                <img src={BarCode} style={{ width: 70, height: 60 }} />
               </div>
             </div>
 
@@ -603,18 +603,18 @@ function DischargeRequest(props) {
                         </Table>
                       )
                     ) : (
-                        <h4
-                          style={{ textAlign: 'center' }}
-                          onClick={() => setSearchPatientQuery('')}
-                        >
-                          Patient Not Found
-                        </h4>
-                      )}
+                      <h4
+                        style={{ textAlign: 'center' }}
+                        onClick={() => setSearchPatientQuery('')}
+                      >
+                        Patient Not Found
+                      </h4>
+                    )}
                   </Paper>
                 </div>
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
             </div>
           </div>
         </div>
@@ -737,11 +737,9 @@ function DischargeRequest(props) {
               >
                 {medicationArray
                   ? medicationArray.map((drug, index) => {
-                    return (
-                      <h6 style={styles.textStyles}>{index + 1}. {drug}</h6>
-                    );
-                  })
-                  : ""}
+                      return <h6 style={styles.textStyles}> {drug}</h6>
+                    })
+                  : ''}
               </div>
 
               <div
@@ -750,8 +748,8 @@ function DischargeRequest(props) {
               >
                 {diagnosisArray
                   ? diagnosisArray.map((drug, index) => {
-                    return <h6 style={styles.textStyles}>{drug}</h6>
-                  })
+                      return <h6 style={styles.textStyles}>{drug}</h6>
+                    })
                   : ''}
               </div>
             </div>
@@ -816,10 +814,10 @@ function DischargeRequest(props) {
               <div
                 className='col-md-12'
                 style={{ marginTop: '20px' }}
-              // style={{
-              //   ...styles.inputContainerForTextField,
-              //   ...styles.textFieldPadding,
-              // }}
+                // style={{
+                //   ...styles.inputContainerForTextField,
+                //   ...styles.textFieldPadding,
+                // }}
               >
                 <TextField
                   required
@@ -937,16 +935,16 @@ function DischargeRequest(props) {
                   borderBottomWidth={20}
                 />
               ) : (
-                  <CustomTable
-                    tableData={[]}
-                    tableDataKeys={tableDataKeysForDischargeMed}
-                    tableHeading={tableHeadingForDischargeMed}
-                    handleView={viewItem}
-                    action={actions}
-                    borderBottomColor={'#60d69f'}
-                    borderBottomWidth={20}
-                  />
-                )}
+                <CustomTable
+                  tableData={[]}
+                  tableDataKeys={tableDataKeysForDischargeMed}
+                  tableHeading={tableHeadingForDischargeMed}
+                  handleView={viewItem}
+                  action={actions}
+                  borderBottomColor={'#60d69f'}
+                  borderBottomWidth={20}
+                />
+              )}
             </div>
 
             <div className='row' style={{ marginBottom: '25px' }}>
@@ -976,11 +974,11 @@ function DischargeRequest(props) {
             </div>
           </div>
         ) : (
-              <div
-                style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-                className='container'
-              ></div>
-            )}
+          <div
+            style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+            className='container'
+          ></div>
+        )}
 
         {openItemDialog ? (
           <ViewSingleRequest
@@ -989,8 +987,8 @@ function DischargeRequest(props) {
             viewItem={viewItem}
           />
         ) : (
-            undefined
-          )}
+          undefined
+        )}
 
         <Notification msg={errorMsg} open={openNotification} />
       </div>

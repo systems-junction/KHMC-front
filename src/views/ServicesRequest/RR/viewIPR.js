@@ -394,7 +394,7 @@ function AddEditPurchaseRequest(props) {
 
       {!isLoading ? (
         <div className={`cPadding ${classes.root}`}>
-          <div className='subheader'>
+          <div className='subheader' style={{ marginLeft: '-10px' }}>
             <div>
               <img src={radioIcon} />
               <h4>Radiology / Imaging Request </h4>
@@ -729,7 +729,12 @@ function AddEditPurchaseRequest(props) {
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back}
-                  style={{ width: 45, height: 35, cursor: 'pointer' }}
+                  style={{
+                    width: 45,
+                    height: 35,
+                    cursor: 'pointer',
+                    marginLeft: '-10px',
+                  }}
                 />
               </div>
               <div

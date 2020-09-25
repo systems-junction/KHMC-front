@@ -9,6 +9,7 @@ import business_Unit from '../../assets/img/Purchase Order.png'
 import Back_Arrow from '../../assets/img/Back_Arrow.png'
 import cookie from 'react-cookies'
 import axios from 'axios'
+import _ from 'lodash'
 import { updateEdrIpr } from '../../public/endpoins'
 import '../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
 import Notification from '../../components/Snackbar/Notification.js'
@@ -63,7 +64,7 @@ const tableDataKeysForVitalSigns = [
   'temperature',
   'FSBS',
   'painScale',
-  'pulseOX'
+  'pulseOX',
 ]
 
 const styles = {
@@ -181,7 +182,10 @@ function TriageAndAssessment(props) {
       )
       dispatch({
         field: 'triageAssessmentArray',
-        value: selectedRec.triageAssessment.reverse(),
+        value: _.sortBy(
+          selectedRec.triageAssessment.reverse(),
+          'date'
+        ).reverse(),
       })
     }
   }, [])
@@ -278,13 +282,13 @@ function TriageAndAssessment(props) {
         cardiac: cardiac,
         abdomen: abdomen,
         neurological: neurological,
-        heartRate: heartRate === '' ? "N/A" : heartRate,
-        bloodPressure: bloodPressure === '' ? "N/A" : bloodPressure,
-        respiratoryRate: respiratoryRate === '' ? "N/A" : respiratoryRate,
-        temperature: temperature === '' ? "N/A" : temperature,
-        FSBS: FSBS === '' ? "N/A" : FSBS,
-        painScale: painScale === '' ? "N/A" : painScale,
-        pulseOX: pulseOX === '' ? "N/A" : pulseOX,
+        heartRate: heartRate === '' ? 'N/A' : heartRate,
+        bloodPressure: bloodPressure === '' ? 'N/A' : bloodPressure,
+        respiratoryRate: respiratoryRate === '' ? 'N/A' : respiratoryRate,
+        temperature: temperature === '' ? 'N/A' : temperature,
+        FSBS: FSBS === '' ? 'N/A' : FSBS,
+        painScale: painScale === '' ? 'N/A' : painScale,
+        pulseOX: pulseOX === '' ? 'N/A' : pulseOX,
       },
     ]
     console.log(e)
@@ -342,7 +346,7 @@ function TriageAndAssessment(props) {
       <Header />
 
       <div className='cPadding'>
-        <div className='subheader'>
+        <div className='subheader' style={{ marginLeft: '-10px' }}>
           <div>
             <img src={business_Unit} />
             <div style={{ flex: 4, display: 'flex', alignItems: 'center' }}>
@@ -446,8 +450,8 @@ function TriageAndAssessment(props) {
                       borderBottomWidth={20}
                     />
                   ) : (
-                      undefined
-                    )}
+                    undefined
+                  )}
                 </div>
               </div>
             ) : historyValue === 1 ? (
@@ -465,13 +469,13 @@ function TriageAndAssessment(props) {
                       borderBottomWidth={20}
                     />
                   ) : (
-                      undefined
-                    )}
+                    undefined
+                  )}
                 </div>
               </div>
             ) : (
-                  undefined
-                )}
+              undefined
+            )}
           </>
         ) : value === 1 ? (
           <>
@@ -1292,8 +1296,8 @@ function TriageAndAssessment(props) {
             </div>
           </>
         ) : (
-                  undefined
-                )}
+          undefined
+        )}
 
         <Notification
           msg={errorMsg}
