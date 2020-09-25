@@ -14,6 +14,7 @@ import { updateEdrIpr } from "../../public/endpoins";
 import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
 import Notification from "../../components/Snackbar/Notification.js";
 import CustomTable from "../../components/Table/Table";
+import TextField from "@material-ui/core/TextField";
 
 const tableHeadingForTriage = [
   "Request No.",
@@ -46,10 +47,11 @@ const tableHeadingForVitalSigns = [
   "Date/Time",
   "Checked By",
   "Heart Rate",
-  "Blood Pressure",
+  "BP (Systolic)",
+  "BP (Diastolic)",
   "Respiratory Rate",
   "Temperature",
-  "FSBS (Finger Stick Blood Sugar)",
+  "FSBS",
   "Pain Scale",
   "Pulse OX",
   "",
@@ -59,7 +61,8 @@ const tableDataKeysForVitalSigns = [
   "date",
   "doctorName",
   "heartRate",
-  "bloodPressure",
+  "bloodPressureSys",
+  "bloodPressureDia",
   "respiratoryRate",
   "temperature",
   "FSBS",
@@ -71,7 +74,7 @@ const styles = {
   stylesForButton: {
     color: "white",
     cursor: "pointer",
-    borderRadius: 15,
+    borderRadius: 5,
     backgroundColor: "#2c6ddd",
     width: "120px",
     height: "45px",
@@ -85,10 +88,66 @@ const useStylesForTabs = makeStyles({
   },
 });
 
-const useStyles = makeStyles(tableStyles);
+const useStyles = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(0),
+  },
+  input: {
+    backgroundColor: "white",
+    boxShadow: "none",
+    borderRadius: 5,
+    "&:after": {
+      borderBottomColor: "black",
+      boxShadow: "none",
+    },
+    "&:hover": {
+      backgroundColor: "white",
+      boxShadow: "none",
+    },
+    "&:focus": {
+      backgroundColor: "white",
+      boxShadow: "none",
+    },
+  },
+  multilineColor: {
+    boxShadow: "none",
+    backgroundColor: "white",
+    borderRadius: 5,
+    "&:hover": {
+      backgroundColor: "white",
+      boxShadow: "none",
+    },
+    "&:after": {
+      borderBottomColor: "black",
+      boxShadow: "none",
+    },
+    "&:focus": {
+      boxShadow: "none",
+    },
+  },
+  root: {
+    "& .MuiTextField-root": {
+      backgroundColor: "white",
+    },
+    "& .Mui-focused": {
+      backgroundColor: "white",
+      color: "black",
+      boxShadow: "none",
+    },
+    "& .Mui-disabled": {
+      backgroundColor: "white",
+      color: "gray",
+    },
+    "&:focus": {
+      backgroundColor: "white",
+      boxShadow: "none",
+    },
+  },
+}));
 
 function TriageAndAssessment(props) {
   const classes = useStyles();
+
   const initialState = {
     triageAssessmentArray: "",
 
@@ -108,7 +167,8 @@ function TriageAndAssessment(props) {
     neurologicalText: null,
 
     heartRate: "",
-    bloodPressure: "",
+    bloodPressureSys: "",
+    bloodPressureDia: "",
     respiratoryRate: "",
     temperature: "",
     FSBS: "",
@@ -144,7 +204,8 @@ function TriageAndAssessment(props) {
     neurologicalText,
 
     heartRate,
-    bloodPressure,
+    bloodPressureSys,
+    bloodPressureDia,
     respiratoryRate,
     temperature,
     FSBS,
@@ -283,7 +344,8 @@ function TriageAndAssessment(props) {
         abdomen: abdomen,
         neurological: neurological,
         heartRate: heartRate === "" ? "N/A" : heartRate,
-        bloodPressure: bloodPressure === "" ? "N/A" : bloodPressure,
+        bloodPressureSys: bloodPressureSys === "" ? "N/A" : bloodPressureSys,
+        bloodPressureDia: bloodPressureDia === "" ? "N/A" : bloodPressureDia,
         respiratoryRate: respiratoryRate === "" ? "N/A" : respiratoryRate,
         temperature: temperature === "" ? "N/A" : temperature,
         FSBS: FSBS === "" ? "N/A" : FSBS,
@@ -371,7 +433,7 @@ function TriageAndAssessment(props) {
             <Tab
               style={{
                 color: "white",
-                borderRadius: 15,
+                borderRadius: 5,
                 outline: "none",
                 color: value === 0 ? "#12387a" : "#3B988C",
               }}
@@ -380,7 +442,7 @@ function TriageAndAssessment(props) {
             <Tab
               style={{
                 color: "white",
-                borderRadius: 15,
+                borderRadius: 5,
                 outline: "none",
                 color: value === 1 ? "#12387a" : "#3B988C",
               }}
@@ -389,7 +451,7 @@ function TriageAndAssessment(props) {
             <Tab
               style={{
                 color: "white",
-                borderRadius: 15,
+                borderRadius: 5,
                 outline: "none",
                 color: value === 2 ? "#12387a" : "#3B988C",
               }}
@@ -398,7 +460,7 @@ function TriageAndAssessment(props) {
             <Tab
               style={{
                 color: "white",
-                borderRadius: 15,
+                borderRadius: 5,
                 outline: "none",
                 color: value === 3 ? "#12387a" : "#3B988C",
               }}
@@ -420,7 +482,7 @@ function TriageAndAssessment(props) {
                 <Tab
                   style={{
                     color: "white",
-                    borderRadius: 15,
+                    borderRadius: 5,
                     outline: "none",
                     color: historyValue === 0 ? "#12387a" : "#3B988C",
                   }}
@@ -429,11 +491,11 @@ function TriageAndAssessment(props) {
                 <Tab
                   style={{
                     color: "white",
-                    borderRadius: 15,
+                    borderRadius: 5,
                     outline: "none",
                     color: historyValue === 1 ? "#12387a" : "#3B988C",
                   }}
-                  label="Physical Examination"
+                  label="Physical Examination & Triage"
                 />
               </Tabs>
             </div>
@@ -453,8 +515,8 @@ function TriageAndAssessment(props) {
                       borderBottomWidth={20}
                     />
                   ) : (
-                    undefined
-                  )}
+                      undefined
+                    )}
                 </div>
               </div>
             ) : historyValue === 1 ? (
@@ -472,13 +534,13 @@ function TriageAndAssessment(props) {
                       borderBottomWidth={20}
                     />
                   ) : (
-                    undefined
-                  )}
+                      undefined
+                    )}
                 </div>
               </div>
             ) : (
-              undefined
-            )}
+                  undefined
+                )}
           </>
         ) : value === 1 ? (
           <>
@@ -487,125 +549,186 @@ function TriageAndAssessment(props) {
                 flex: 4,
                 display: "flex",
                 flexDirection: "column",
-                backgroundColor: "white",
                 marginTop: "25px",
                 marginBottom: "25px",
-                padding: "25px",
-                borderRadius: "25px",
+                borderRadius: "5px",
               }}
             >
-              <div className="container-fluid">
+              <div className={`container-fluid ${classes.root}`}>
                 <div className="row">
-                  <label style={{ paddingLeft: "15px" }}>
-                    <strong>Heart Rate</strong>
-                  </label>
-                </div>
-                <div className="form-group col-md-12">
-                  <input
-                    style={{ outline: "none", backgroundColor: "#F7F5F5" }}
-                    type="text"
-                    placeholder="Enter Heart Rate"
-                    onChange={onTextChange}
-                    name="heartRate"
-                    value={heartRate}
-                    className="control-label textInputStyle"
-                  />
-                </div>
-                <div className="row">
-                  <label style={{ paddingLeft: "15px" }}>
-                    <strong>Blood Pressure</strong>
-                  </label>
-                </div>
-                <div className="form-group col-md-12">
-                  <input
-                    style={{ outline: "none", backgroundColor: "#F7F5F5" }}
-                    type="text"
-                    placeholder="Enter Blood Pressure"
-                    onChange={onTextChange}
-                    name="bloodPressure"
-                    value={bloodPressure}
-                    className="control-label textInputStyle"
-                  />
-                </div>
-                <div className="row">
-                  <label style={{ paddingLeft: "15px" }}>
-                    <strong>Respiratory Rate</strong>
-                  </label>
-                </div>
-                <div className="form-group col-md-12">
-                  <input
-                    style={{ outline: "none", backgroundColor: "#F7F5F5" }}
-                    type="text"
-                    placeholder="Enter Respiratory Rate"
-                    onChange={onTextChange}
-                    name="respiratoryRate"
-                    value={respiratoryRate}
-                    className="control-label textInputStyle"
-                  />
-                </div>
-                <div className="row">
-                  <label style={{ paddingLeft: "15px" }}>
-                    <strong>Temperature</strong>
-                  </label>
-                </div>
-                <div className="form-group col-md-12">
-                  <input
-                    style={{ outline: "none", backgroundColor: "#F7F5F5" }}
-                    type="text"
-                    placeholder="Enter Temperature"
-                    onChange={onTextChange}
-                    name="temperature"
-                    value={temperature}
-                    className="control-label textInputStyle"
-                  />
-                </div>
-                <div className="row">
-                  <label style={{ paddingLeft: "15px" }}>
-                    <strong>FSBS (Finger Stick Blood Sugar)</strong>
-                  </label>
-                </div>
-                <div className="form-group col-md-12">
-                  <input
-                    style={{ outline: "none", backgroundColor: "#F7F5F5" }}
-                    type="text"
-                    placeholder="Enter FSBS"
-                    onChange={onTextChange}
-                    name="FSBS"
-                    value={FSBS}
-                    className="control-label textInputStyle"
-                  />
+                  <div className="form-group col-md-4 col-sm-4 col-4"
+                    style={{
+                      paddingLeft: 5,
+                      paddingRight: 5
+                    }}
+                  >
+                    <TextField
+                      type='number'
+                      label="Enter Heart Rate (bpm)"
+                      name={"heartRate"}
+                      value={heartRate}
+                      // error={email === "" && detailsForm}
+                      onChange={onTextChange}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                        disableUnderline: true
+                      }}
+                    />
+                  </div>
+                  <div className="form-group col-md-4 col-sm-4 col-4"
+                    style={{
+                      paddingLeft: 5,
+                      paddingRight: 5
+                    }}>
+                    <TextField
+                      type='number'
+                      label="Blood Pressure Systolic (mmHg)"
+                      name={"bloodPressureSys"}
+                      value={bloodPressureSys}
+                      // error={email === "" && detailsForm}
+                      onChange={onTextChange}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                        disableUnderline: true
+                      }}
+                    />
+                  </div>
+                  <div className="form-group col-md-4 col-sm-4 col-4"
+                    style={{
+                      paddingLeft: 5,
+                      paddingRight: 5
+                    }}>
+                    <TextField
+                      type='number'
+                      label="Blood Pressure Diastolic (mmHg)"
+                      name={"bloodPressureDia"}
+                      value={bloodPressureDia}
+                      // error={email === "" && detailsForm}
+                      onChange={onTextChange}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                        disableUnderline: true
+                      }}
+                    />
+                  </div>
                 </div>
                 <div className="row">
-                  <label style={{ paddingLeft: "15px" }}>
-                    <strong>Pain Scale</strong>
-                  </label>
-                </div>
-                <div className="form-group col-md-12">
-                  <input
-                    style={{ outline: "none", backgroundColor: "#F7F5F5" }}
-                    type="text"
-                    placeholder="Enter Pain Scale"
-                    onChange={onTextChange}
-                    name="painScale"
-                    value={painScale}
-                    className="control-label textInputStyle"
-                  />
+                  <div className="form-group col-md-4 col-sm-4 col-4"
+                    style={{
+                      paddingLeft: 5,
+                      paddingRight: 5
+                    }}>
+                    <TextField
+                      type='number'
+                      label="Enter Respiratory Rate (/min)"
+                      name={"respiratoryRate"}
+                      value={respiratoryRate}
+                      // error={email === "" && detailsForm}
+                      onChange={onTextChange}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                        disableUnderline: true
+                      }}
+                    />
+                  </div>
+                  <div className="form-group col-md-4 col-sm-4 col-4"
+                    style={{
+                      paddingLeft: 5,
+                      paddingRight: 5
+                    }}>
+                    <TextField
+                      type='number'
+                      label="Enter Temperature (°F)"
+                      name={"temperature"}
+                      value={temperature}
+                      // error={email === "" && detailsForm}
+                      onChange={onTextChange}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                        disableUnderline: true
+                      }}
+                    />
+                  </div>
+                  <div className="form-group col-md-4 col-sm-4 col-4"
+                    style={{
+                      paddingLeft: 5,
+                      paddingRight: 5
+                    }}>
+                    <TextField
+                      type='number'
+                      label="Enter FSBS (mg/dL)"
+                      name={"FSBS"}
+                      value={FSBS}
+                      // error={email === "" && detailsForm}
+                      onChange={onTextChange}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                        disableUnderline: true
+                      }}
+                    />
+                  </div>
                 </div>
                 <div className="row">
-                  <label style={{ paddingLeft: "15px" }}>
-                    <strong>Pulse OX</strong>
-                  </label>
-                </div>
-                <div className="form-group col-md-12">
-                  <input
-                    style={{ outline: "none", backgroundColor: "#F7F5F5" }}
-                    type="text"
-                    placeholder="Enter Pulse OX"
-                    onChange={onTextChange}
-                    name="pulseOX"
-                    value={pulseOX}
-                    className="control-label textInputStyle"
-                  />
+                  <div className="form-group col-md-6 col-sm-6 col-6"
+                    style={{
+                      paddingLeft: 5,
+                      paddingRight: 5
+                    }}>
+                    <TextField
+                      type='number'
+                      label="Enter Pain Scale (0-10)"
+                      name={"painScale"}
+                      value={painScale}
+                      // error={email === "" && detailsForm}
+                      onChange={onTextChange}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                        disableUnderline: true
+                      }}
+                    />
+                  </div>
+                  <div className="form-group col-md-6 col-sm-6 col-6"
+                    style={{
+                      paddingLeft: 5,
+                      paddingRight: 5
+                    }}>
+                    <TextField
+                      type='number'
+                      label="Enter Pulse OX (SpO2)"
+                      name={"pulseOX"}
+                      value={pulseOX}
+                      // error={email === "" && detailsForm}
+                      onChange={onTextChange}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                        disableUnderline: true
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -615,9 +738,9 @@ function TriageAndAssessment(props) {
                   display: "flex",
                   flex: 1,
                   justifyContent: "flex-end",
-                  marginTop: "2%",
+                  marginTop: "15px",
                   marginBottom: "2%",
-                  paddingRight: "32px",
+                  paddingRight: "20px",
                 }}
                 className="container-fluid"
               >
@@ -646,7 +769,7 @@ function TriageAndAssessment(props) {
                 marginTop: "25px",
                 marginBottom: "25px",
                 padding: "25px",
-                borderRadius: "25px",
+                borderRadius: "5px",
               }}
             >
               <div className="container-fluid">
@@ -1182,7 +1305,7 @@ function TriageAndAssessment(props) {
                   justifyContent: "flex-end",
                   marginTop: "2%",
                   marginBottom: "2%",
-                  paddingRight: "32px",
+                  paddingRight: "15px",
                 }}
                 className="container-fluid"
               >
@@ -1211,7 +1334,7 @@ function TriageAndAssessment(props) {
                 marginTop: "25px",
                 marginBottom: "25px",
                 padding: "25px",
-                borderRadius: "25px",
+                borderRadius: "5px",
               }}
               className="container-fluid"
             >
@@ -1280,7 +1403,7 @@ function TriageAndAssessment(props) {
                   justifyContent: "flex-end",
                   marginTop: "2%",
                   marginBottom: "2%",
-                  paddingRight: "32px",
+                  paddingRight: "15px",
                 }}
                 className="container-fluid"
               >
@@ -1299,8 +1422,8 @@ function TriageAndAssessment(props) {
             </div>
           </>
         ) : (
-          undefined
-        )}
+                  undefined
+                )}
 
         <Notification
           msg={errorMsg}
