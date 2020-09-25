@@ -3054,7 +3054,7 @@ function AddEditPatientListing(props) {
                   </div>
                 </div>
                 <div
-                  className="col-md-1 col-sm-2 col-1"
+                  className="col-md-1 col-sm-1 col-1"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,

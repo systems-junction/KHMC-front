@@ -712,6 +712,7 @@ export default function CustomTable(props) {
                                   style={{
                                     textAlign: 'center',
                                     borderWidth: 0,
+                                    maxWidth:400,
                                   }}
                                 >
                                   {Array.isArray(val)
@@ -728,6 +729,7 @@ export default function CustomTable(props) {
                                   key={key}
                                   onClick={() => handleClick(prop, val)}
                                   style={{
+                                    maxWidth:400,
                                     textAlign: 'center',
                                     cursor: props.handleModelMaterialReceiving
                                       ? 'pointer'
