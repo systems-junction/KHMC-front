@@ -146,13 +146,19 @@ const useStylesForInput = makeStyles((theme) => ({
     },
   },
   multilineColor: {
+    boxShadow: "none",
     backgroundColor: "white",
-    borderRadius: 6,
+    borderRadius: 5,
     "&:hover": {
       backgroundColor: "white",
+      boxShadow: "none",
     },
     "&:after": {
       borderBottomColor: "black",
+      boxShadow: "none",
+    },
+    "&:focus": {
+      boxShadow: "none",
     },
   },
   root: {
@@ -591,11 +597,6 @@ export default function EdrRequest(props) {
                 className="textInputStyle"
                 rows={4}
                 variant="filled"
-                InputProps={{
-                  className: classes.input,
-                  classes: { input: classes.input },
-                  disableUnderline: true,
-                }}
               />
             </div>
           </div>

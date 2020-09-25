@@ -1453,7 +1453,7 @@ function LabRadRequest(props) {
                   style={{
                     zIndex: 3,
                     position: "absolute",
-                    width: "100%",
+                    width: "99%",
                     marginTop: 5,
                   }}
                 >
@@ -2490,9 +2490,10 @@ function LabRadRequest(props) {
                     className="textInputStyle"
                     variant="filled"
                     InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
+                      className: classes.multilineColor,
+                      classes: {
+                        input: classes.multilineColor,
+                      },
                     }}
                   />
                 </div>
@@ -2685,10 +2686,12 @@ function LabRadRequest(props) {
                     onChange={onChangeValue}
                     className="textInputStyle"
                     variant="filled"
+                    variant="filled"
                     InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
+                      className: classes.multilineColor,
+                      classes: {
+                        input: classes.multilineColor,
+                      },
                     }}
                   />
                 </div>
@@ -2714,9 +2717,10 @@ function LabRadRequest(props) {
                     className="textInputStyle"
                     variant="filled"
                     InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
+                      className: classes.multilineColor,
+                      classes: {
+                        input: classes.multilineColor,
+                      },
                     }}
                   />
                 </div>
