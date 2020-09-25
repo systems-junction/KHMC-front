@@ -875,9 +875,9 @@ function AddEditPatientListing(props) {
           props.history.push({
             pathname: "success",
             state: {
-              message: `OP Record for request # ${
+              message: `OP Record for Request:${
                 res.data.data.requestNo
-              } patient MRN ${MRN.toUpperCase()} has been generated successfully`,
+              } patient MRN: ${MRN.toUpperCase()} has been generated successfully`,
             },
           });
         } else if (!res.data.success) {
@@ -2200,7 +2200,7 @@ function AddEditPatientListing(props) {
               </div>
             </div>
 
-            <div className="row" style={{ marginBottom: 16 }}>
+            <div className="row">
               <div
                 className="col-md-12"
                 style={{

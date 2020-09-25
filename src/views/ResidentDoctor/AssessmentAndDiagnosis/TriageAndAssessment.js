@@ -14,10 +14,12 @@ import { updateEdrIpr } from "../../../public/endpoins";
 import "../../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
 import Notification from "../../../components/Snackbar/Notification.js";
 import CustomTable from "../../../components/Table/Table";
+import TextField from "@material-ui/core/TextField";
 
 const tableHeadingForTriage = [
+  "Request No.",
   "Date/Time",
-  "Doctor",
+  "Checked By",
   "Triage Level",
   "General Appearance",
   "Head Neck",
@@ -28,6 +30,7 @@ const tableHeadingForTriage = [
   "",
 ];
 const tableDataKeysForTriage = [
+  "triageRequestNo",
   "date",
   "doctorName",
   "triageLevel",
@@ -39,11 +42,39 @@ const tableDataKeysForTriage = [
   "abdomen",
 ];
 
+const tableHeadingForVitalSigns = [
+  "Request No.",
+  "Date/Time",
+  "Checked By",
+  "Heart Rate",
+  "BP (Systolic)",
+  "BP (Diastolic)",
+  "Respiratory Rate",
+  "Temperature",
+  "FSBS",
+  "Pain Scale",
+  "Pulse OX",
+  "",
+];
+const tableDataKeysForVitalSigns = [
+  "triageRequestNo",
+  "date",
+  "doctorName",
+  "heartRate",
+  "bloodPressureSys",
+  "bloodPressureDia",
+  "respiratoryRate",
+  "temperature",
+  "FSBS",
+  "painScale",
+  "pulseOX",
+];
+
 const styles = {
   stylesForButton: {
     color: "white",
     cursor: "pointer",
-    borderRadius: 15,
+    borderRadius: 5,
     backgroundColor: "#2c6ddd",
     width: "120px",
     height: "45px",
@@ -57,10 +88,66 @@ const useStylesForTabs = makeStyles({
   },
 });
 
-const useStyles = makeStyles(tableStyles);
+const useStyles = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(0),
+  },
+  input: {
+    backgroundColor: "white",
+    boxShadow: "none",
+    borderRadius: 5,
+    "&:after": {
+      borderBottomColor: "black",
+      boxShadow: "none",
+    },
+    "&:hover": {
+      backgroundColor: "white",
+      boxShadow: "none",
+    },
+    "&:focus": {
+      backgroundColor: "white",
+      boxShadow: "none",
+    },
+  },
+  multilineColor: {
+    boxShadow: "none",
+    backgroundColor: "white",
+    borderRadius: 5,
+    "&:hover": {
+      backgroundColor: "white",
+      boxShadow: "none",
+    },
+    "&:after": {
+      borderBottomColor: "black",
+      boxShadow: "none",
+    },
+    "&:focus": {
+      boxShadow: "none",
+    },
+  },
+  root: {
+    "& .MuiTextField-root": {
+      backgroundColor: "white",
+    },
+    "& .Mui-focused": {
+      backgroundColor: "white",
+      color: "black",
+      boxShadow: "none",
+    },
+    "& .Mui-disabled": {
+      backgroundColor: "white",
+      color: "gray",
+    },
+    "&:focus": {
+      backgroundColor: "white",
+      boxShadow: "none",
+    },
+  },
+}));
 
 function TriageAndAssessment(props) {
   const classes = useStyles();
+
   const initialState = {
     triageAssessmentArray: "",
 
@@ -78,6 +165,15 @@ function TriageAndAssessment(props) {
     cardiacText: null,
     abdomenText: null,
     neurologicalText: null,
+
+    heartRate: "",
+    bloodPressureSys: "",
+    bloodPressureDia: "",
+    respiratoryRate: "",
+    temperature: "",
+    FSBS: "",
+    painScale: "",
+    pulseOX: "",
   };
 
   function reducer(state, { field, value }) {
@@ -106,11 +202,21 @@ function TriageAndAssessment(props) {
     cardiacText,
     abdomenText,
     neurologicalText,
+
+    heartRate,
+    bloodPressureSys,
+    bloodPressureDia,
+    respiratoryRate,
+    temperature,
+    FSBS,
+    painScale,
+    pulseOX,
   } = state;
 
   const classesForTabs = useStylesForTabs();
 
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
+  const [historyValue, sethistoryValue] = useState(0);
   const [id, setId] = React.useState("");
   const [currentUser, setCurrentUser] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
@@ -173,6 +279,10 @@ function TriageAndAssessment(props) {
     setValue(newValue);
   };
 
+  const handleHistoryTabChange = (event, newValue) => {
+    sethistoryValue(newValue);
+  };
+
   const onNext = () => {
     setValue(value + 1);
   };
@@ -194,12 +304,37 @@ function TriageAndAssessment(props) {
     dispatch({ field: e.target.name, value: e.target.value });
   };
 
+  const onTextChange = (e) => {
+    dispatch({ field: e.target.name, value: e.target.value });
+  };
+
   const handleSubmitAssessment = (e) => {
+    var now = new Date();
+    var start = new Date(now.getFullYear(), 0, 0);
+    var diff =
+      now -
+      start +
+      (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000;
+    var oneDay = 1000 * 60 * 60 * 24;
+    var day = Math.floor(diff / oneDay);
+
+    var dateNow = new Date();
+    var YYYY = dateNow
+      .getFullYear()
+      .toString()
+      .substr(-2);
+    var HH = dateNow.getHours();
+    var mm = dateNow.getMinutes();
+    let ss = dateNow.getSeconds();
+
+    const TAArequestNo = "TAA" + day + YYYY + HH + mm + ss;
+
     let triageAssessment = [];
 
     triageAssessment = [
       ...triageAssessmentArray,
       {
+        triageRequestNo: TAArequestNo,
         requester: currentUser.staffId,
         triageLevel: triageLevel,
         generalAppearance: generalAppearance,
@@ -208,6 +343,14 @@ function TriageAndAssessment(props) {
         cardiac: cardiac,
         abdomen: abdomen,
         neurological: neurological,
+        heartRate: heartRate === "" ? "N/A" : heartRate,
+        bloodPressureSys: bloodPressureSys === "" ? "N/A" : bloodPressureSys,
+        bloodPressureDia: bloodPressureDia === "" ? "N/A" : bloodPressureDia,
+        respiratoryRate: respiratoryRate === "" ? "N/A" : respiratoryRate,
+        temperature: temperature === "" ? "N/A" : temperature,
+        FSBS: FSBS === "" ? "N/A" : FSBS,
+        painScale: painScale === "" ? "N/A" : painScale,
+        pulseOX: pulseOX === "" ? "N/A" : pulseOX,
       },
     ];
     console.log(e);
@@ -221,11 +364,14 @@ function TriageAndAssessment(props) {
       .put(updateEdrIpr, params)
       .then((res) => {
         if (res.data.success) {
-          console.log("Update Patient data ECR: ", res.data.data);
+          console.log(
+            "Update Patient data patient assessment: ",
+            res.data.data
+          );
           props.history.push({
             pathname: "success",
             state: {
-              message: `Triage & Assessment for patient MRN ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
+              message: `Triage & Assessment for patient MRN: ${res.data.data.patientId.profileNo} added successfully`,
             },
             comingFor: "Triage",
           });
@@ -287,7 +433,7 @@ function TriageAndAssessment(props) {
             <Tab
               style={{
                 color: "white",
-                borderRadius: 15,
+                borderRadius: 5,
                 outline: "none",
                 color: value === 0 ? "#12387a" : "#3B988C",
               }}
@@ -296,92 +442,292 @@ function TriageAndAssessment(props) {
             <Tab
               style={{
                 color: "white",
-                borderRadius: 15,
+                borderRadius: 5,
                 outline: "none",
                 color: value === 1 ? "#12387a" : "#3B988C",
+              }}
+              label="Vital Signs"
+            />
+            <Tab
+              style={{
+                color: "white",
+                borderRadius: 5,
+                outline: "none",
+                color: value === 2 ? "#12387a" : "#3B988C",
               }}
               label="Physical Examination"
             />
             <Tab
               style={{
                 color: "white",
-                borderRadius: 15,
+                borderRadius: 5,
                 outline: "none",
-                color: value === 2 ? "#12387a" : "#3B988C",
+                color: value === 3 ? "#12387a" : "#3B988C",
               }}
               label="Triage Level"
             />
           </Tabs>
         </div>
 
-        {value === 2 ? (
+        {value === 0 ? (
+          <>
+            <div className={classesForTabs.root}>
+              <Tabs
+                value={historyValue}
+                onChange={handleHistoryTabChange}
+                textColor="primary"
+                TabIndicatorProps={{ style: { background: "#12387a" } }}
+                centered
+              >
+                <Tab
+                  style={{
+                    color: "white",
+                    borderRadius: 5,
+                    outline: "none",
+                    color: historyValue === 0 ? "#12387a" : "#3B988C",
+                  }}
+                  label="Vital Signs"
+                />
+                <Tab
+                  style={{
+                    color: "white",
+                    borderRadius: 5,
+                    outline: "none",
+                    color: historyValue === 1 ? "#12387a" : "#3B988C",
+                  }}
+                  label="Physical Examination & Triage"
+                />
+              </Tabs>
+            </div>
+
+            {historyValue === 0 ? (
+              <div
+                style={{ flex: 4, display: "flex", flexDirection: "column" }}
+                className="container-fluid"
+              >
+                <div className="row" style={{ marginTop: "20px" }}>
+                  {triageAssessmentArray !== 0 ? (
+                    <CustomTable
+                      tableData={triageAssessmentArray}
+                      tableDataKeys={tableDataKeysForVitalSigns}
+                      tableHeading={tableHeadingForVitalSigns}
+                      borderBottomColor={"#60d69f"}
+                      borderBottomWidth={20}
+                    />
+                  ) : (
+                      undefined
+                    )}
+                </div>
+              </div>
+            ) : historyValue === 1 ? (
+              <div
+                style={{ flex: 4, display: "flex", flexDirection: "column" }}
+                className="container-fluid"
+              >
+                <div className="row" style={{ marginTop: "20px" }}>
+                  {triageAssessmentArray !== 0 ? (
+                    <CustomTable
+                      tableData={triageAssessmentArray}
+                      tableDataKeys={tableDataKeysForTriage}
+                      tableHeading={tableHeadingForTriage}
+                      borderBottomColor={"#60d69f"}
+                      borderBottomWidth={20}
+                    />
+                  ) : (
+                      undefined
+                    )}
+                </div>
+              </div>
+            ) : (
+                  undefined
+                )}
+          </>
+        ) : value === 1 ? (
           <>
             <div
               style={{
                 flex: 4,
                 display: "flex",
                 flexDirection: "column",
-                backgroundColor: "white",
                 marginTop: "25px",
                 marginBottom: "25px",
-                padding: "25px",
-                borderRadius: "25px",
+                borderRadius: "5px",
               }}
-              className="container-fluid"
             >
-              <div className="row">
-                <label style={{ paddingLeft: "15px" }}>
-                  <strong>Triage Level</strong>
-                </label>
-              </div>
-              <div onChange={onCheckedValue} value={triageLevel}>
+              <div className={`container-fluid ${classes.root}`}>
                 <div className="row">
-                  <div className="col-md-4">
-                    <input
-                      type="radio"
-                      name="triageLevel"
-                      value="Resuscitation"
-                      checked={triageLevel === "Resuscitation"}
+                  <div className="form-group col-md-4 col-sm-4 col-4"
+                    style={{
+                      paddingLeft: 5,
+                      paddingRight: 5
+                    }}
+                  >
+                    <TextField
+                      type='number'
+                      label="Enter Heart Rate (bpm)"
+                      name={"heartRate"}
+                      value={heartRate}
+                      // error={email === "" && detailsForm}
+                      onChange={onTextChange}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                        disableUnderline: true
+                      }}
                     />
-                    <label for="male">&nbsp;&nbsp;1 - Resuscitation</label>
                   </div>
-                  <div className="col-md-4">
-                    <input
-                      type="radio"
-                      name="triageLevel"
-                      value="Emergent"
-                      checked={triageLevel === "Emergent"}
+                  <div className="form-group col-md-4 col-sm-4 col-4"
+                    style={{
+                      paddingLeft: 5,
+                      paddingRight: 5
+                    }}>
+                    <TextField
+                      type='number'
+                      label="Blood Pressure Systolic (mmHg)"
+                      name={"bloodPressureSys"}
+                      value={bloodPressureSys}
+                      // error={email === "" && detailsForm}
+                      onChange={onTextChange}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                        disableUnderline: true
+                      }}
                     />
-                    <label for="male">&nbsp;&nbsp;2 - Emergent</label>
                   </div>
-                  <div className="col-md-4">
-                    <input
-                      type="radio"
-                      name="triageLevel"
-                      value="Urgent"
-                      checked={triageLevel === "Urgent"}
+                  <div className="form-group col-md-4 col-sm-4 col-4"
+                    style={{
+                      paddingLeft: 5,
+                      paddingRight: 5
+                    }}>
+                    <TextField
+                      type='number'
+                      label="Blood Pressure Diastolic (mmHg)"
+                      name={"bloodPressureDia"}
+                      value={bloodPressureDia}
+                      // error={email === "" && detailsForm}
+                      onChange={onTextChange}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                        disableUnderline: true
+                      }}
                     />
-                    <label for="male">&nbsp;&nbsp;3 - Urgent</label>
                   </div>
                 </div>
                 <div className="row">
-                  <div className="col-md-4">
-                    <input
-                      type="radio"
-                      name="triageLevel"
-                      value="LessUrgent"
-                      checked={triageLevel === "LessUrgent"}
+                  <div className="form-group col-md-4 col-sm-4 col-4"
+                    style={{
+                      paddingLeft: 5,
+                      paddingRight: 5
+                    }}>
+                    <TextField
+                      type='number'
+                      label="Enter Respiratory Rate (/min)"
+                      name={"respiratoryRate"}
+                      value={respiratoryRate}
+                      // error={email === "" && detailsForm}
+                      onChange={onTextChange}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                        disableUnderline: true
+                      }}
                     />
-                    <label for="male">&nbsp;&nbsp;4 - Less Urgent</label>
                   </div>
-                  <div className="col-md-4">
-                    <input
-                      type="radio"
-                      name="triageLevel"
-                      value="NonUrgent"
-                      checked={triageLevel === "NonUrgent"}
+                  <div className="form-group col-md-4 col-sm-4 col-4"
+                    style={{
+                      paddingLeft: 5,
+                      paddingRight: 5
+                    }}>
+                    <TextField
+                      type='number'
+                      label="Enter Temperature (°F)"
+                      name={"temperature"}
+                      value={temperature}
+                      // error={email === "" && detailsForm}
+                      onChange={onTextChange}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                        disableUnderline: true
+                      }}
                     />
-                    <label for="male">&nbsp;&nbsp;5 - Non Urgent</label>
+                  </div>
+                  <div className="form-group col-md-4 col-sm-4 col-4"
+                    style={{
+                      paddingLeft: 5,
+                      paddingRight: 5
+                    }}>
+                    <TextField
+                      type='number'
+                      label="Enter FSBS (mg/dL)"
+                      name={"FSBS"}
+                      value={FSBS}
+                      // error={email === "" && detailsForm}
+                      onChange={onTextChange}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                        disableUnderline: true
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="form-group col-md-6 col-sm-6 col-6"
+                    style={{
+                      paddingLeft: 5,
+                      paddingRight: 5
+                    }}>
+                    <TextField
+                      type='number'
+                      label="Enter Pain Scale (0-10)"
+                      name={"painScale"}
+                      value={painScale}
+                      // error={email === "" && detailsForm}
+                      onChange={onTextChange}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                        disableUnderline: true
+                      }}
+                    />
+                  </div>
+                  <div className="form-group col-md-6 col-sm-6 col-6"
+                    style={{
+                      paddingLeft: 5,
+                      paddingRight: 5
+                    }}>
+                    <TextField
+                      type='number'
+                      label="Enter Pulse OX (SpO2)"
+                      name={"pulseOX"}
+                      value={pulseOX}
+                      // error={email === "" && detailsForm}
+                      onChange={onTextChange}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                        disableUnderline: true
+                      }}
+                    />
                   </div>
                 </div>
               </div>
@@ -392,9 +738,9 @@ function TriageAndAssessment(props) {
                   display: "flex",
                   flex: 1,
                   justifyContent: "flex-end",
-                  marginTop: "2%",
+                  marginTop: "15px",
                   marginBottom: "2%",
-                  paddingRight: "32px",
+                  paddingRight: "20px",
                 }}
                 className="container-fluid"
               >
@@ -402,17 +748,17 @@ function TriageAndAssessment(props) {
                   <Button
                     style={styles.stylesForButton}
                     //disabled={!validateFormType1()}
-                    onClick={handleSubmitAssessment}
+                    onClick={onNext}
                     variant="contained"
                     color="primary"
                   >
-                    Submit
+                    Next
                   </Button>
                 </div>
               </div>
             </div>
           </>
-        ) : value === 1 ? (
+        ) : value === 2 ? (
           <>
             <div
               style={{
@@ -423,7 +769,7 @@ function TriageAndAssessment(props) {
                 marginTop: "25px",
                 marginBottom: "25px",
                 padding: "25px",
-                borderRadius: "25px",
+                borderRadius: "5px",
               }}
             >
               <div className="container-fluid">
@@ -959,7 +1305,7 @@ function TriageAndAssessment(props) {
                   justifyContent: "flex-end",
                   marginTop: "2%",
                   marginBottom: "2%",
-                  paddingRight: "32px",
+                  paddingRight: "15px",
                 }}
                 className="container-fluid"
               >
@@ -977,28 +1323,107 @@ function TriageAndAssessment(props) {
               </div>
             </div>
           </>
-        ) : value === 0 ? (
-          <div
-            style={{ flex: 4, display: "flex", flexDirection: "column" }}
-            className="container-fluid"
-          >
-            <div className="row" style={{ marginTop: "20px" }}>
-              {triageAssessmentArray !== 0 ? (
-                <CustomTable
-                  tableData={triageAssessmentArray}
-                  tableDataKeys={tableDataKeysForTriage}
-                  tableHeading={tableHeadingForTriage}
-                  borderBottomColor={"#60d69f"}
-                  borderBottomWidth={20}
-                />
-              ) : (
-                undefined
-              )}
+        ) : value === 3 ? (
+          <>
+            <div
+              style={{
+                flex: 4,
+                display: "flex",
+                flexDirection: "column",
+                backgroundColor: "white",
+                marginTop: "25px",
+                marginBottom: "25px",
+                padding: "25px",
+                borderRadius: "5px",
+              }}
+              className="container-fluid"
+            >
+              <div className="row">
+                <label style={{ paddingLeft: "15px" }}>
+                  <strong>Triage Level</strong>
+                </label>
+              </div>
+              <div onChange={onCheckedValue} value={triageLevel}>
+                <div className="row">
+                  <div className="col-md-4">
+                    <input
+                      type="radio"
+                      name="triageLevel"
+                      value="Resuscitation"
+                      checked={triageLevel === "Resuscitation"}
+                    />
+                    <label for="male">&nbsp;&nbsp;1 - Resuscitation</label>
+                  </div>
+                  <div className="col-md-4">
+                    <input
+                      type="radio"
+                      name="triageLevel"
+                      value="Emergent"
+                      checked={triageLevel === "Emergent"}
+                    />
+                    <label for="male">&nbsp;&nbsp;2 - Emergent</label>
+                  </div>
+                  <div className="col-md-4">
+                    <input
+                      type="radio"
+                      name="triageLevel"
+                      value="Urgent"
+                      checked={triageLevel === "Urgent"}
+                    />
+                    <label for="male">&nbsp;&nbsp;3 - Urgent</label>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-md-4">
+                    <input
+                      type="radio"
+                      name="triageLevel"
+                      value="LessUrgent"
+                      checked={triageLevel === "LessUrgent"}
+                    />
+                    <label for="male">&nbsp;&nbsp;4 - Less Urgent</label>
+                  </div>
+                  <div className="col-md-4">
+                    <input
+                      type="radio"
+                      name="triageLevel"
+                      value="NonUrgent"
+                      checked={triageLevel === "NonUrgent"}
+                    />
+                    <label for="male">&nbsp;&nbsp;5 - Non Urgent</label>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
+            <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
+              <div
+                style={{
+                  display: "flex",
+                  flex: 1,
+                  justifyContent: "flex-end",
+                  marginTop: "2%",
+                  marginBottom: "2%",
+                  paddingRight: "15px",
+                }}
+                className="container-fluid"
+              >
+                <div className="row">
+                  <Button
+                    style={styles.stylesForButton}
+                    //disabled={!validateFormType1()}
+                    onClick={handleSubmitAssessment}
+                    variant="contained"
+                    color="primary"
+                  >
+                    Submit
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </>
         ) : (
-          undefined
-        )}
+                  undefined
+                )}
 
         <Notification
           msg={errorMsg}

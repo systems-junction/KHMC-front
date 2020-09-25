@@ -789,7 +789,7 @@ function AddEditPatientListing(props) {
               props.history.push({
                 pathname: "success",
                 state: {
-                  message: `Details of Patient with MRN ${res.data.data.profileNo} Updated Successfully`,
+                  message: `Details of Patient with MRN: ${res.data.data.profileNo.toUpperCase()} Updated Successfully`,
                 },
               });
             }
@@ -891,9 +891,9 @@ function AddEditPatientListing(props) {
           props.history.push({
             pathname: "success",
             state: {
-              message: `EDR # ${
+              message: `EDR: ${
                 res.data.data.requestNo
-              } for patient MRN ${MRN.toUpperCase()} generated successfully`,
+              } for patient MRN: ${MRN.toUpperCase()} generated successfully`,
             },
           });
         } else if (!res.data.success) {
@@ -924,9 +924,9 @@ function AddEditPatientListing(props) {
           props.history.push({
             pathname: "success",
             state: {
-              message: `IPR # ${
+              message: `IPR: ${
                 res.data.data.requestNo
-              } for patient MRN ${MRN.toUpperCase()} generated successfully`,
+              } for patient MRN: ${MRN.toUpperCase()} generated successfully`,
             },
           });
         } else if (!res.data.success) {
@@ -2223,7 +2223,11 @@ function AddEditPatientListing(props) {
               </div>
             </div>
 
+<<<<<<< HEAD
             <div className="row" style={{ marginBottom: 16 }}>
+=======
+            <div className="row">
+>>>>>>> 870808c9f1052254810a79c3de354c5f37488a41
               <div
                 className="col-md-12"
                 style={{
@@ -2341,7 +2345,10 @@ function AddEditPatientListing(props) {
                   justifyContent: "flex-end",
                   marginTop: "1%",
                   marginBottom: "2%",
+<<<<<<< HEAD
                   marginRight: -5,
+=======
+>>>>>>> 870808c9f1052254810a79c3de354c5f37488a41
                 }}
               >
                 <Button

@@ -412,9 +412,9 @@ function DischargeRequest(props) {
           props.history.push({
             pathname: "dischargerequest/success",
             state: {
-              message: `Discharge Summary request # ${
+              message: `Discharge Summary Request: ${
                 res.data.data.requestNo
-              } for patient MRN ${res.data.data.patientId.profileNo.toUpperCase()} Submitted successfully`,
+              } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} Submitted successfully`,
             },
           });
         } else if (!res.data.success) {

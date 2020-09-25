@@ -784,10 +784,10 @@ function AddEditPurchaseRequest(props) {
           props.history.push({
             pathname: "viewOPR/success",
             state: {
-              message: `Lab Request # ${
+              message: `Lab Request: ${
                 res.data.data.labRequest[res.data.data.labRequest.length - 1]
                   .LRrequestNo
-              } for patient MRN ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
+              } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
             },
           });
         } else if (!res.data.success) {
@@ -946,14 +946,7 @@ function AddEditPurchaseRequest(props) {
             </div>
 
             {searchQuery ? (
-              <div
-                style={{
-                  zIndex: 10,
-                  width: "93%",
-                  marginLeft: "-11px",
-                  marginTop: "10px",
-                }}
-              >
+              <div style={{ zIndex: 10 }}>
                 <Paper style={{ maxHeight: 200, overflow: "auto" }}>
                   {setItemFoundSuccessfully ? (
                     itemFound && (

@@ -240,19 +240,13 @@ const useStylesForInput = makeStyles((theme) => ({
     },
   },
   multilineColor: {
-    boxShadow: "none",
     backgroundColor: "white",
     borderRadius: 5,
     "&:hover": {
       backgroundColor: "white",
-      boxShadow: "none",
     },
     "&:after": {
       borderBottomColor: "black",
-      boxShadow: "none",
-    },
-    "&:focus": {
-      boxShadow: "none",
     },
   },
   root: {
@@ -544,10 +538,10 @@ function PatientCare(props) {
           props.history.push({
             pathname: "patientCare/success",
             state: {
-              message: `Lab Request # ${
+              message: `Lab Request: ${
                 res.data.data.labRequest[res.data.data.labRequest.length - 1]
                   .LRrequestNo
-              } for patient MRN ${
+              } for patient MRN: ${
                 res.data.data.patientId.profileNo
               } added successfully`,
 
@@ -693,11 +687,11 @@ function PatientCare(props) {
           props.history.push({
             pathname: "patientCare/success",
             state: {
-              message: `Radiology Request # ${
+              message: `Radiology Request: ${
                 res.data.data.radiologyRequest[
                   res.data.data.radiologyRequest.length - 1
                 ].RRrequestNo
-              } for patient MRN ${
+              } for patient MRN: ${
                 res.data.data.patientId.profileNo
               } added successfully`,
 
@@ -1711,15 +1705,7 @@ function PatientCare(props) {
 
               {searchRadioQuery ? (
                 // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
-                <div
-                  style={{
-                    zIndex: 10,
-                    width: "101.6%",
-                    marginRight: "-8px",
-                    marginLeft: "-10px",
-                    marginTop: "10px",
-                  }}
-                >
+                <div style={{ zIndex: 10 }}>
                   <Paper style={{ maxHeight: 200, overflow: "auto" }}>
                     {radioItemFoundSuccessfull ? (
                       radioItemFound && (

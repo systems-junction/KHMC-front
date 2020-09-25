@@ -576,10 +576,10 @@ function LabRadRequest(props) {
           props.history.push({
             pathname: "LabRadRequest/success",
             state: {
-              message: `Lab Request # ${
+              message: `Lab Request: ${
                 res.data.data.labRequest[res.data.data.labRequest.length - 1]
                   .LRrequestNo
-              } for patient MRN ${
+              } for patient MRN: ${
                 res.data.data.patientId.profileNo
               } added successfully`,
               patientDetails: patientDetails,
@@ -724,11 +724,11 @@ function LabRadRequest(props) {
           props.history.push({
             pathname: "LabRadRequest/success",
             state: {
-              message: `Radiology Request # ${
+              message: `Radiology Request: ${
                 res.data.data.radiologyRequest[
                   res.data.data.radiologyRequest.length - 1
                 ].RRrequestNo
-              } for patient MRN ${
+              } for patient MRN: ${
                 res.data.data.patientId.profileNo
               } added successfully`,
               patientDetails: patientDetails,
@@ -1171,7 +1171,11 @@ function LabRadRequest(props) {
                   style={{
                     zIndex: 3,
                     position: "absolute",
+<<<<<<< HEAD
                     width: "99%",
+=======
+                    width: "100%",
+>>>>>>> 870808c9f1052254810a79c3de354c5f37488a41
                     marginTop: 5,
                   }}
                 >

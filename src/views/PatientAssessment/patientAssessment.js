@@ -240,11 +240,15 @@ const useStylesForInput = makeStyles((theme) => ({
     },
   },
   multilineColor: {
+<<<<<<< HEAD
     boxShadow: "none",
+=======
+>>>>>>> 870808c9f1052254810a79c3de354c5f37488a41
     backgroundColor: "white",
     borderRadius: 5,
     "&:hover": {
       backgroundColor: "white",
+<<<<<<< HEAD
       boxShadow: "none",
     },
     "&:after": {
@@ -253,6 +257,11 @@ const useStylesForInput = makeStyles((theme) => ({
     },
     "&:focus": {
       boxShadow: "none",
+=======
+    },
+    "&:after": {
+      borderBottomColor: "black",
+>>>>>>> 870808c9f1052254810a79c3de354c5f37488a41
     },
   },
   root: {
@@ -552,10 +561,10 @@ function PatientAssessment(props) {
           props.history.push({
             pathname: "patientAssessment/success",
             state: {
-              message: `Lab Request # ${
+              message: `Lab Request: ${
                 res.data.data.labRequest[res.data.data.labRequest.length - 1]
                   .LRrequestNo
-              } for patient MRN ${
+              } for patient MRN: ${
                 res.data.data.patientId.profileNo
               } added successfully`,
               patientDetails: patientDetails,
@@ -700,11 +709,11 @@ function PatientAssessment(props) {
           props.history.push({
             pathname: "patientAssessment/success",
             state: {
-              message: `Radiology Request # ${
+              message: `Radiology Request:${
                 res.data.data.radiologyRequest[
                   res.data.data.radiologyRequest.length - 1
                 ].RRrequestNo
-              } for patient MRN ${
+              } for patient MRN: ${
                 res.data.data.patientId.profileNo
               } added successfully`,
 
@@ -1484,7 +1493,7 @@ function PatientAssessment(props) {
               }}
               className={`container-fluid ${classes.root}`}
             >
-              <div style={{ marginTop: "20px" }} class="row">
+              <div style={{ marginTop: "20px" }} className="row">
                 <div
                   className="col-md-12 col-sm-12 col-12"
                   style={{
