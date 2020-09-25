@@ -364,7 +364,7 @@ function AddEditEDR(props) {
             pathname: "success",
             state: {
               // request #
-              message: `Pharmacy request for patient MRN ${res.data.data.patientId.profileNo} added successfully`,
+              message: `Pharmacy request for patient MRN ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
             },
           });
         } else if (!res.data.success) {
