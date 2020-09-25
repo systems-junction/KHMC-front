@@ -225,7 +225,7 @@ function TriageAndAssessment(props) {
           props.history.push({
             pathname: "success",
             state: {
-              message: `Triage & Assessment for patient MRN ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
+              message: `Triage & Assessment for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
             },
             comingFor: "Triage",
           });
