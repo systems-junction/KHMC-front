@@ -567,11 +567,11 @@ function LabRadRequest(props) {
               props.history.push({
                 pathname: "consultationrequest/success",
                 state: {
-                  message: `Consultation Note of Request # ${
+                  message: `Consultation Request: ${
                     res.data.data.consultationNote[
                       res.data.data.consultationNote.length - 1
                     ].consultationNo
-                  } for patient MRN ${res.data.data.patientId.profileNo.toUpperCase()} submitted successfully`,
+                  } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} submitted successfully`,
                 },
               });
             } else if (!res.data.success) {
@@ -658,11 +658,11 @@ function LabRadRequest(props) {
               props.history.push({
                 pathname: "assessmentdiagnosis/success",
                 state: {
-                  message: `Consultation note # ${
+                  message: `Consultation note:  ${
                     res.data.data.residentNotes[
                       res.data.data.residentNotes.length - 1
                     ].residentNoteNo
-                  } for patient MRN ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
+                  } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
                 },
               });
             } else if (!res.data.success) {
@@ -821,10 +821,10 @@ function LabRadRequest(props) {
           props.history.push({
             pathname: "assessmentdiagnosis/success",
             state: {
-              message: `Lab Request # ${
+              message: `Lab Request: ${
                 res.data.data.labRequest[res.data.data.labRequest.length - 1]
                   .LRrequestNo
-              } for patient MRN ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
+              } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
             },
           });
         } else if (!res.data.success) {
@@ -966,11 +966,11 @@ function LabRadRequest(props) {
           props.history.push({
             pathname: "assessmentdiagnosis/success",
             state: {
-              message: `Radiology Request # ${
+              message: `Radiology Request: ${
                 res.data.data.radiologyRequest[
                   res.data.data.radiologyRequest.length - 1
                 ].RRrequestNo
-              } for patient MRN ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
+              } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
             },
           });
         } else if (!res.data.success) {

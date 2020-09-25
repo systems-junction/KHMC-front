@@ -1,14 +1,14 @@
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable array-callback-return */
 /* eslint-disable react/jsx-indent */
-import React, { useEffect, useState, useReducer } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import InputLabel from '@material-ui/core/InputLabel'
-import Button from '@material-ui/core/Button'
-import { TextField } from '@material-ui/core'
-import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
-import axios from 'axios'
-import DropDown from '../../../components/common/DropDown'
+import React, { useEffect, useState, useReducer } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import InputLabel from "@material-ui/core/InputLabel";
+import Button from "@material-ui/core/Button";
+import { TextField } from "@material-ui/core";
+import tableStyles from "../../../assets/jss/material-dashboard-react/components/tableStyle.js";
+import axios from "axios";
+import DropDown from "../../../components/common/DropDown";
 import {
   getSearchedLaboratoryService,
   getSearchedRadiologyService,
@@ -19,50 +19,50 @@ import {
   getPHRByIdURL,
   updatePHRIPRById,
   updatePHRRByIdURL,
-} from '../../../public/endpoins'
-import cookie from 'react-cookies'
-import Header from '../../../components/Header/Header'
-import business_Unit from '../../../assets/img/PHR.png'
-import Back from '../../../assets/img/Back_Arrow.png'
-import '../../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
-import Tabs from '@material-ui/core/Tabs'
-import Tab from '@material-ui/core/Tab'
-import CustomTable from '../../../components/Table/Table'
-import plus_icon from '../../../assets/img/Plus.png'
+} from "../../../public/endpoins";
+import cookie from "react-cookies";
+import Header from "../../../components/Header/Header";
+import business_Unit from "../../../assets/img/PHR.png";
+import Back from "../../../assets/img/Back_Arrow.png";
+import "../../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import CustomTable from "../../../components/Table/Table";
+import plus_icon from "../../../assets/img/Plus.png";
 // import ViewSingleRequest from './viewRequest'
-import InputLabelComponent from '../../../components/InputLabel/inputLabel'
-import Paper from '@material-ui/core/Paper'
-import Table from '@material-ui/core/Table'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import Dialog from '@material-ui/core/Dialog'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import DialogContent from '@material-ui/core/DialogContent'
-import ErrorMessage from '../../../components/ErrorMessage/errorMessage'
-import Notification from '../../../components/Snackbar/Notification.js'
+import InputLabelComponent from "../../../components/InputLabel/inputLabel";
+import Paper from "@material-ui/core/Paper";
+import Table from "@material-ui/core/Table";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import ErrorMessage from "../../../components/ErrorMessage/errorMessage";
+import Notification from "../../../components/Snackbar/Notification.js";
 
-import Select from '@material-ui/core/Select'
-import MenuItem from '@material-ui/core/MenuItem'
-import BootstrapInput from '../../../components/Dropdown/dropDown.js'
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import BootstrapInput from "../../../components/Dropdown/dropDown.js";
 
-import Loader from 'react-loader-spinner'
-import '../../../assets/jss/material-dashboard-react/components/loaderStyle.css'
+import Loader from "react-loader-spinner";
+import "../../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 
 const tableHeadingForPharmacy = [
-  'Medicine Name',
-  'Quantity',
-  'Unit Price',
-  'Total Price',
-  '',
-]
+  "Medicine Name",
+  "Quantity",
+  "Unit Price",
+  "Total Price",
+  "",
+];
 const tableDataKeysForPharmacy = [
-  'medicineName',
-  'requestedQty',
-  ['itemId', 'issueUnitCost'],
-  'total',
-]
+  "medicineName",
+  "requestedQty",
+  ["itemId", "issueUnitCost"],
+  "total",
+];
 
 // const statusArray = [
 //   {
@@ -75,12 +75,12 @@ const tableDataKeysForPharmacy = [
 //   },
 // ]
 
-const actions = { view: true }
+const actions = { view: true };
 const styles = {
   patientDetails: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 15,
-    padding: '20px',
+    padding: "20px",
   },
   inputContainerForTextField: {
     marginTop: 6,
@@ -94,16 +94,16 @@ const styles = {
     paddingRight: 3,
   },
   input: {
-    display: 'none',
+    display: "none",
   },
   stylesForButton: {
-    color: 'white',
-    cursor: 'pointer',
+    color: "white",
+    cursor: "pointer",
     borderRadius: 5,
-    backgroundColor: '#2c6ddd',
-    height: '50px',
-    outline: 'none',
-    width: '140px',
+    backgroundColor: "#2c6ddd",
+    height: "50px",
+    outline: "none",
+    width: "140px",
   },
   stylesForDropdown: {
     marginTop: 0,
@@ -112,85 +112,85 @@ const styles = {
     marginTop: 25,
   },
   stylesForLabel: {
-    fontWeight: '700',
-    color: 'gray',
+    fontWeight: "700",
+    color: "gray",
   },
-}
+};
 
 const statusArray = [
   {
-    key: 'completed',
-    value: 'Completed',
+    key: "completed",
+    value: "Completed",
   },
-]
+];
 
 const useStyles = makeStyles((theme) => ({
   scroller: {
-    flexGrow: '0',
+    flexGrow: "0",
   },
   margin: {
     margin: theme.spacing(0),
   },
   input: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 6,
-    '&:after': {
-      borderBottomColor: 'black',
+    "&:after": {
+      borderBottomColor: "black",
     },
-    '&:hover': {
-      backgroundColor: 'white',
+    "&:hover": {
+      backgroundColor: "white",
     },
-    '&:disabled': {
-      color: 'gray',
+    "&:disabled": {
+      color: "gray",
     },
   },
   multilineColor: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 6,
-    '&:hover': {
-      backgroundColor: 'white',
+    "&:hover": {
+      backgroundColor: "white",
     },
-    '&:after': {
-      borderBottomColor: 'black',
+    "&:after": {
+      borderBottomColor: "black",
     },
   },
   root: {
-    '& .MuiTextField-root': {
-      backgroundColor: 'white',
+    "& .MuiTextField-root": {
+      backgroundColor: "white",
     },
-    '& .Mui-focused': {
-      backgroundColor: 'white',
-      color: 'black',
+    "& .Mui-focused": {
+      backgroundColor: "white",
+      color: "black",
     },
   },
-}))
+}));
 
 const useStylesForTabs = makeStyles({
   root: {
     flexGrow: 1,
   },
-})
+});
 
 function AddEditPurchaseRequest(props) {
-  const classes = useStyles()
-  const classesForTabs = useStylesForTabs()
+  const classes = useStyles();
+  const classesForTabs = useStylesForTabs();
   const initialState = {
-    medicineDataArray: '',
-    dischargeMedicationArray: '',
+    medicineDataArray: "",
+    dischargeMedicationArray: "",
 
-    name: '',
-    price: '',
-    status: '',
-  }
+    name: "",
+    price: "",
+    status: "",
+  };
 
   function reducer(state, { field, value }) {
     return {
       ...state,
       [field]: value,
-    }
+    };
   }
 
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const {
     medicineDataArray,
@@ -199,123 +199,123 @@ function AddEditPurchaseRequest(props) {
     name,
     price,
     status,
-  } = state
+  } = state;
 
   const onChangeValue = (e) => {
-    console.log(e, 'e')
-    dispatch({ field: e.target.name, value: e.target.value })
-  }
+    console.log(e, "e");
+    dispatch({ field: e.target.name, value: e.target.value });
+  };
 
-  const [currentUser, setCurrentUser] = useState('')
-  const [errorMsg, setErrorMsg] = useState('')
-  const [openNotification, setOpenNotification] = useState(false)
-  const [selectedPatient, setSelectedPatient] = useState('')
-  const [requestNo, setrequestNo] = useState('')
-  const [id, setId] = useState('')
-  const [selectedItem, setSelectedItem] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
-  const [value, setValue] = React.useState(0)
-  const [requestId, setRequestId] = useState('')
+  const [currentUser, setCurrentUser] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [openNotification, setOpenNotification] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState("");
+  const [requestNo, setrequestNo] = useState("");
+  const [id, setId] = useState("");
+  const [selectedItem, setSelectedItem] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [value, setValue] = React.useState(0);
+  const [requestId, setRequestId] = useState("");
 
   const getLRByIdURI = (id) => {
     axios
-      .get(getPHRByIdURL + '/' + id)
+      .get(getPHRByIdURL + "/" + id)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data.medicine, 'data')
+          console.log(res.data.data.medicine, "data");
           res.data.data.medicine.map(
             (d) => (d.itemId.issueUnitCost = d.itemId.issueUnitCost.toFixed(2))
-          )
+          );
           res.data.data.medicine.map(
             (d) =>
               (d.total = (d.itemId.issueUnitCost * d.requestedQty).toFixed(2))
-          )
+          );
           if (res.data.data) {
-            setRequestId(res.data.data._id)
-            setIsLoading(false)
+            setRequestId(res.data.data._id);
+            setIsLoading(false);
 
             Object.entries(res.data.data).map(([key, val]) => {
-              if (val && typeof val === 'object') {
-                if (key === 'medicine') {
-                  dispatch({ field: 'medicineDataArray', value: val })
+              if (val && typeof val === "object") {
+                if (key === "medicine") {
+                  dispatch({ field: "medicineDataArray", value: val });
                 }
               } else {
-                dispatch({ field: key, value: val })
+                dispatch({ field: key, value: val });
               }
-            })
+            });
           }
           if (res.data.data2) {
-            setIsLoading(false)
+            setIsLoading(false);
 
             Object.entries(res.data.data2).map(([key, val]) => {
-              if (val && typeof val === 'object') {
-                if (key === 'medicine') {
-                  dispatch({ field: 'dischargeMedicationArray', value: val })
+              if (val && typeof val === "object") {
+                if (key === "medicine") {
+                  dispatch({ field: "dischargeMedicationArray", value: val });
                 }
               } else {
-                dispatch({ field: key, value: val })
+                dispatch({ field: key, value: val });
               }
-            })
+            });
           }
         }
       })
       .catch((e) => {
-        console.log('error while searching req', e)
-      })
-  }
+        console.log("error while searching req", e);
+      });
+  };
 
   const updateLRByIdURI = () => {
     const params = {
       _id: id,
-      status: 'completed',
-    }
-    console.log(params, 'params')
+      status: "completed",
+    };
+    console.log(params, "params");
     axios
       .put(updatePHRRByIdURL, params)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data, 'data')
+          console.log(res.data, "data");
           if (res.data.data) {
-            console.log(res.data, 'data2')
+            console.log(res.data, "data2");
 
-            setIsLoading(false)
+            setIsLoading(false);
 
             Object.entries(res.data.data).map(([key, val]) => {
-              if (val && typeof val === 'object') {
-                if (key === 'serviceId') {
-                  dispatch({ field: 'status', value: val.status })
+              if (val && typeof val === "object") {
+                if (key === "serviceId") {
+                  dispatch({ field: "status", value: val.status });
                 }
               } else {
-                dispatch({ field: key, value: val })
+                dispatch({ field: key, value: val });
               }
-            })
+            });
           }
           props.history.push({
-            pathname: 'success',
+            pathname: "success",
             state: {
               //of Request No ${requestId}
-              message: `Discharge Medication order # ${res.data.data.requestNo} for patient MRN ${res.data.data.patientId.profileNo} fulfilled successfully`,
+              message: `Discharge Medication Order :${res.data.data.requestNo} for patient MRN: ${res.data.data.patientId.profileNo} fulfilled successfully`,
             },
-          })
+          });
         }
       })
       .catch((e) => {
-        console.log('error while searching req', e)
-      })
-  }
+        console.log("error while searching req", e);
+      });
+  };
 
   useEffect(() => {
-    getLRByIdURI(props.history.location.state.selectedItem._id)
+    getLRByIdURI(props.history.location.state.selectedItem._id);
 
-    setCurrentUser(cookie.load('current_user'))
+    setCurrentUser(cookie.load("current_user"));
 
-    const selectedRec = props.history.location.state.selectedItem._id
-    console.log(selectedRec, 'rec')
-    setId(props.history.location.state.selectedItem._id)
-    console.log('id', props.history.location.state.selectedItem._id)
-    setSelectedItem(props.history.location.state.selectedItem)
-    setrequestNo(props.history.location.state.selectedItem.requestNo)
-    setSelectedPatient(props.history.location.state.selectedItem.patientId)
+    const selectedRec = props.history.location.state.selectedItem._id;
+    console.log(selectedRec, "rec");
+    setId(props.history.location.state.selectedItem._id);
+    console.log("id", props.history.location.state.selectedItem._id);
+    setSelectedItem(props.history.location.state.selectedItem);
+    setrequestNo(props.history.location.state.selectedItem.requestNo);
+    setSelectedPatient(props.history.location.state.selectedItem.patientId);
 
     // if (selectedRec) {
     //   Object.entries(selectedRec).map(([key, val]) => {
@@ -352,7 +352,7 @@ function AddEditPurchaseRequest(props) {
     //     }
     //   });
     // }
-  }, [])
+  }, []);
 
   // For dummy Data
   // function getEDRdetails() {
@@ -377,34 +377,34 @@ function AddEditPurchaseRequest(props) {
   // }
 
   const handleChange = (event, newValue) => {
-    setValue(newValue)
-  }
+    setValue(newValue);
+  };
 
   if (openNotification) {
     setTimeout(() => {
-      setOpenNotification(false)
-      setErrorMsg('')
-    }, 2000)
+      setOpenNotification(false);
+      setErrorMsg("");
+    }, 2000);
   }
 
   return (
     <div
       style={{
-        backgroundColor: '#60d69f',
-        position: 'fixed',
-        display: 'flex',
-        width: '100%',
-        height: '100%',
-        flexDirection: 'column',
+        backgroundColor: "#60d69f",
+        position: "fixed",
+        display: "flex",
+        width: "100%",
+        height: "100%",
+        flexDirection: "column",
         flex: 1,
-        overflowY: 'scroll',
+        overflowY: "scroll",
       }}
     >
       <Header />
 
       {!isLoading ? (
         <div className={`cPadding ${classes.root}`}>
-          <div className='subheader'>
+          <div className="subheader">
             <div>
               <img src={business_Unit} />
               <h4>Pharmacy Request</h4>
@@ -521,7 +521,7 @@ function AddEditPurchaseRequest(props) {
 
           <div
             style={{
-              height: '20px',
+              height: "20px",
             }}
           />
 
@@ -574,10 +574,10 @@ function AddEditPurchaseRequest(props) {
           </div> */}
           {/* {value === 0 ? ( */}
           <div
-            style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-            className='container-fluid'
+            style={{ flex: 4, display: "flex", flexDirection: "column" }}
+            className="container-fluid"
           >
-            <div className='row' style={{ marginTop: '20px' }}>
+            <div className="row" style={{ marginTop: "20px" }}>
               {medicineDataArray !== 0 ? (
                 <CustomTable
                   tableData={medicineDataArray}
@@ -585,7 +585,7 @@ function AddEditPurchaseRequest(props) {
                   tableHeading={tableHeadingForPharmacy}
                   // handleView={viewItem}
                   // action={actions}
-                  borderBottomColor={'#60d69f'}
+                  borderBottomColor={"#60d69f"}
                   borderBottomWidth={20}
                 />
               ) : (
@@ -617,10 +617,10 @@ function AddEditPurchaseRequest(props) {
           )} */}
 
           <div
-            style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-            className='container-fluid'
+            style={{ flex: 4, display: "flex", flexDirection: "column" }}
+            className="container-fluid"
           >
-            <div className='row'>
+            <div className="row">
               {/* <div
                 className='col-md-4 col-sm-4'
                 style={{
@@ -659,25 +659,25 @@ function AddEditPurchaseRequest(props) {
                     })}
                 </TextField>
               </div> */}
-              <div className='col-md-12 col-sm-12 col-12 d-flex justify-content-end'>
+              <div className="col-md-12 col-sm-12 col-12 d-flex justify-content-end">
                 <Button
                   onClick={updateLRByIdURI}
                   style={styles.stylesForButton}
-                  variant='contained'
-                  color='primary'
+                  variant="contained"
+                  color="primary"
                 >
-                  <strong style={{ fontSize: '12px' }}>Submit</strong>
+                  <strong style={{ fontSize: "12px" }}>Submit</strong>
                 </Button>
               </div>
             </div>
 
             <br />
-            <div className='row' style={{ marginBottom: '25px' }}>
-              <div className='col-md-6 col-sm-6 col-6'>
+            <div className="row" style={{ marginBottom: "25px" }}>
+              <div className="col-md-6 col-sm-6 col-6">
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back}
-                  style={{ width: 45, height: 35, cursor: 'pointer' }}
+                  style={{ width: 45, height: 35, cursor: "pointer" }}
                 />
               </div>
             </div>
@@ -686,11 +686,11 @@ function AddEditPurchaseRequest(props) {
           <Notification msg={errorMsg} open={openNotification} />
         </div>
       ) : (
-        <div className='LoaderStyle'>
-          <Loader type='TailSpin' color='red' height={50} width={50} />
+        <div className="LoaderStyle">
+          <Loader type="TailSpin" color="red" height={50} width={50} />
         </div>
       )}
     </div>
-  )
+  );
 }
-export default AddEditPurchaseRequest
+export default AddEditPurchaseRequest;

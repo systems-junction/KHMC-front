@@ -243,7 +243,9 @@ function AddEditEDR(props) {
           console.log("response while adding Approval Req", res.data.data);
           props.history.push({
             pathname: "success",
-            state: { message: `Request No ${res.data.data.requestNo} Submitted Successfully` },
+            state: {
+              message: `Request No: ${res.data.data.requestNo} Submitted Successfully`,
+            },
           });
         } else if (!res.data.success) {
           setOpenNotification(true);
