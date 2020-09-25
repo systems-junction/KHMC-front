@@ -39,12 +39,14 @@ import Fingerprint from "../../../assets/img/fingerprint.png";
 const tableHeadingForBillSummary = [
   "Date/Time",
   "Service Name",
+  "Service Type",
   "Amount",
   "Invoice",
 ];
 const tableDataKeysForBillSummary = [
   "date",
   ["serviceId", "name"],
+  "serviceType",
   ["serviceId", "price"],
 ];
 
@@ -522,42 +524,37 @@ function AddEditPatientListing(props) {
 
           dispatch({
             field: "treatmentDetail",
-            value: res.data.data.rc.treatmentDetail,
+            value: res.data.rc.treatmentDetail,
           });
-          dispatch({ field: "document", value: res.data.data.rc.document });
+          dispatch({ field: "document", value: res.data.rc.document });
 
-          let prEDR = [];
-          for (let i = 0; i < res.data.data.prEdr.length; i++) {
+          let pharm = [];
+          for (let i = 0; i < res.data.data.pharmacyRequest.length; i++) {
             let amount = 0;
-            let singlePR = res.data.data.prEdr[i];
-            for (let j = 0; j < singlePR.medicine.length; j++) {
+            let singlePR = res.data.data.pharmacyRequest[i];
+            for (let j = 0; j < singlePR.item.length; j++) {
               // console.log(singlePR.medicine[j].itemId.purchasePrice)
-              amount = amount + singlePR.medicine[j].itemId.purchasePrice;
+              amount = amount + singlePR.item[j].itemId.issueUnitCost * singlePR.item[j].requestedQty;;
             }
             let obj = {
               serviceId: {
-                name: "Pharmacy Service",
-                price: amount,
+                name: "Pharmacy Item",
+                price: amount.toFixed(2),
               },
-              date: res.data.data.prEdr[i].date,
+              date: res.data.data.pharmacyRequest[i].dateGenerated,
+              serviceType:"Pharmacy"
             };
-            prEDR.push(obj);
+            pharm.push(obj);
           }
-          //   console.log("response is ... ",[].concat(res.data.data.lrEdr, res.data.data.rrEdr,prEDR))
+
+          res.data.data.labRequest.map((d) => (d.serviceType = "Lab"))
+          res.data.data.radiologyRequest.map((d) => (d.serviceType = "Radiology"))
+          
+          // console.log("Bill sumamry is ... ", [].concat(res.data.data.labRequest, res.data.data.radiologyRequest,pharm ))
           setbillSummaryArray(
-            [].concat(res.data.data.lrEdr, res.data.data.rrEdr, prEDR)
+            [].concat(res.data.data.labRequest.reverse(), res.data.data.radiologyRequest.reverse(),pharm.reverse())
           );
 
-          // if(res.data.data.edr)
-          // {
-          // setbillSummaryArray(res.data.data)
-          // console.log('response is ... ', res.data.data.edr)
-          // }
-          // else if(res.data.data.ipr)
-          // {
-          // setbillSummaryArray(res.data.data.ipr)
-          // console.log('response is ... ', res.data.data.ipr)
-          // }
         } else if (!res.data.success) {
           setErrorMsg(res.data.error);
           setOpenNotification(true);
@@ -617,7 +614,8 @@ function AddEditPatientListing(props) {
       });
   };
 
-  const handleInvoicePrint = () => {
+  const handleInvoicePrint = (item) => {
+    console.log("Item for invoice", item)
     alert("Printer not attached");
   };
 
