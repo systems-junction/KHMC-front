@@ -310,7 +310,7 @@ function AddEditPurchaseRequest(props) {
             state: {
               //of Request No ${requestId}
               // request #
-              message: `Radiology Service for patient MRN ${res.data.data.patientId.profileNo} updated successfully`,
+              message: `Radiology Service for patient MRN ${res.data.data.patientId.profileNo.toUpperCase()} updated successfully`,
             },
           })
         } else if (!res.data.success) {

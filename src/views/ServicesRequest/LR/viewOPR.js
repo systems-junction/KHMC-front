@@ -786,7 +786,7 @@ function AddEditPurchaseRequest(props) {
                 res.data.data.labRequest[res.data.data.labRequest.length - 1]
                   .LRrequestNo
               } for patient MRN ${
-                res.data.data.patientId.profileNo
+                (res.data.data.patientId.profileNo).toUpperCase()
               } added successfully`,
             },
           })

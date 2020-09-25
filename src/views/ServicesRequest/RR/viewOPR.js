@@ -849,9 +849,7 @@ function AddEditPurchaseRequest(props) {
                 res.data.data.radiologyRequest[
                   res.data.data.radiologyRequest.length - 1
                 ].RRrequestNo
-              } for patient MRN ${
-                res.data.data.patientId.profileNo
-              } added successfully`,
+              } for patient MRN ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
             },
           })
         } else if (!res.data.success) {

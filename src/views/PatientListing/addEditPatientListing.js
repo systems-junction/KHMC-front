@@ -891,7 +891,9 @@ function AddEditPatientListing(props) {
           props.history.push({
             pathname: 'success',
             state: {
-              message: `EDR # ${res.data.data.requestNo} for patient MRN ${MRN} generated successfully`,
+              message: `EDR # ${
+                res.data.data.requestNo
+              } for patient MRN ${MRN.toUpperCase()} generated successfully`,
             },
           })
         } else if (!res.data.success) {
@@ -922,7 +924,9 @@ function AddEditPatientListing(props) {
           props.history.push({
             pathname: 'success',
             state: {
-              message: `IPR # ${res.data.data.requestNo} for patient MRN ${MRN} generated successfully`,
+              message: `IPR # ${
+                res.data.data.requestNo
+              } for patient MRN ${MRN.toUpperCase()} generated successfully`,
             },
           })
         } else if (!res.data.success) {
