@@ -239,8 +239,9 @@ const useStylesForInput = makeStyles((theme) => ({
     "&:hover": {
       backgroundColor: "white",
     },
-    "&:disabled": {
+    "&:disable": {
       color: "gray",
+      backgroundColor: "white",
     },
   },
   multilineColor: {
@@ -252,6 +253,10 @@ const useStylesForInput = makeStyles((theme) => ({
     "&:after": {
       borderBottomColor: "black",
     },
+    "&:disable": {
+      color: "gray",
+      backgroundColor: "white",
+    },
   },
   root: {
     "& .MuiTextField-root": {
@@ -260,6 +265,14 @@ const useStylesForInput = makeStyles((theme) => ({
     "& .Mui-focused": {
       backgroundColor: "white",
       color: "black",
+    },
+    "&:disable": {
+      color: "gray",
+      backgroundColor: "white",
+    },
+    "& .Mui-disabled": {
+      color: "gray",
+      backgroundColor: "white",
     },
   },
 }));
@@ -563,10 +576,10 @@ function LabRadRequest(props) {
           props.history.push({
             pathname: "LabRadRequest/success",
             state: {
-              message: `Lab Request # ${
+              message: `Lab Request: ${
                 res.data.data.labRequest[res.data.data.labRequest.length - 1]
                   .LRrequestNo
-              } for patient MRN ${
+              } for patient MRN: ${
                 res.data.data.patientId.profileNo
               } added successfully`,
               patientDetails: patientDetails,
@@ -711,11 +724,11 @@ function LabRadRequest(props) {
           props.history.push({
             pathname: "LabRadRequest/success",
             state: {
-              message: `Radiology Request # ${
+              message: `Radiology Request: ${
                 res.data.data.radiologyRequest[
                   res.data.data.radiologyRequest.length - 1
                 ].RRrequestNo
-              } for patient MRN ${
+              } for patient MRN: ${
                 res.data.data.patientId.profileNo
               } added successfully`,
               patientDetails: patientDetails,
@@ -1043,7 +1056,7 @@ function LabRadRequest(props) {
     >
       <Header />
       <div className="cPadding">
-        <div className="subheader">
+        <div className="subheader" style={{ marginLeft: "-10px" }}>
           <div>
             <img src={Lab_RadIcon} />
             <h4>
@@ -1055,7 +1068,7 @@ function LabRadRequest(props) {
             </h4>
           </div>
 
-          <div>
+          <div style={{ marginRight: "-10px" }}>
             <Button
               // disabled={enableForm}
               // onClick={TriageAssessment}
@@ -1123,7 +1136,7 @@ function LabRadRequest(props) {
                   height: 55,
                 }}
               >
-                <img src={BarCode} style={{ width: 80, height: 75 }} />
+                <img src={BarCode} style={{ width: 70, height: 60 }} />
               </div>
             </div>
 
@@ -1327,12 +1340,8 @@ function LabRadRequest(props) {
                 style={styles.textStyles}
               >
                 {medicationArray
-                  ? medicationArray.map((drug, index) => {
-                      return (
-                        <h6 style={styles.textStyles}>
-                          {index + 1}. {drug}
-                        </h6>
-                      );
+                  ? medicationArray.map((drug) => {
+                      return <h6 style={styles.textStyles}>{drug}</h6>;
                     })
                   : ""}
               </div>
@@ -1542,7 +1551,15 @@ function LabRadRequest(props) {
               </div>
 
               {searchQuery ? (
-                <div style={{ zIndex: 10 }}>
+                <div
+                  style={{
+                    zIndex: 10,
+                    width: "101.6%",
+                    marginRight: "-8px",
+                    marginLeft: "-10px",
+                    marginTop: "10px",
+                  }}
+                >
                   <Paper style={{ maxHeight: 200, overflow: "auto" }}>
                     {itemFoundSuccessfull ? (
                       itemFound && (
@@ -1692,7 +1709,7 @@ function LabRadRequest(props) {
                     // disabled={enableForm}
                     disabled={enableSave}
                     onClick={saveLabReq}
-                    style={{ ...styles.stylesForButton, width: "100px" }}
+                    style={{ ...styles.stylesForButton, width: "140px" }}
                     variant="contained"
                     color="primary"
                   >
@@ -1703,7 +1720,13 @@ function LabRadRequest(props) {
             </div>
           ) : value === 4 ? (
             <div
-              style={{ flex: 4, display: "flex", flexDirection: "column" }}
+              style={{
+                flex: 4,
+                display: "flex",
+                flexDirection: "column",
+                paddingLeft: 9,
+                paddingRight: 9,
+              }}
               className={`container-fluid ${classes.root}`}
             >
               <div style={{ marginTop: "20px" }} className="row">
@@ -1742,7 +1765,15 @@ function LabRadRequest(props) {
 
               {searchRadioQuery ? (
                 // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
-                <div style={{ zIndex: 10 }}>
+                <div
+                  style={{
+                    zIndex: 10,
+                    width: "101.6%",
+                    marginRight: "-8px",
+                    marginLeft: "-10px",
+                    marginTop: "10px",
+                  }}
+                >
                   <Paper style={{ maxHeight: 200, overflow: "auto" }}>
                     {radioItemFoundSuccessfull ? (
                       radioItemFound && (
@@ -1864,7 +1895,10 @@ function LabRadRequest(props) {
                 </div>
               </div>
 
-              <div className="row" style={{ marginTop: "20px" }}>
+              <div
+                className="row"
+                style={{ marginTop: "20px", paddingLeft: 5, paddingRight: 5 }}
+              >
                 {radiologyRequestArray !== 0 ? (
                   <CustomTable
                     tableData={radiologyRequestArray}
@@ -1889,7 +1923,7 @@ function LabRadRequest(props) {
                     // disabled={enableForm}
                     disabled={enableSave}
                     onClick={saveRadioReq}
-                    style={{ ...styles.stylesForButton, width: "100px" }}
+                    style={{ ...styles.stylesForButton, width: "140px" }}
                     variant="contained"
                     color="primary"
                   >
@@ -1944,7 +1978,10 @@ function LabRadRequest(props) {
           }}
         >
           <DialogContent style={{ backgroundColor: "#31e2aa" }}>
-            <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
+            <DialogTitle
+              id="simple-dialog-title"
+              style={{ color: "white", marginLeft: "-6px" }}
+            >
               Added Items
             </DialogTitle>
             <div className="container-fluid">

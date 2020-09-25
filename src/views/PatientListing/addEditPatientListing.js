@@ -108,6 +108,7 @@ const styles = {
     borderRadius: 5,
     backgroundColor: "#e877a1",
     height: "45px",
+    width: "190px",
     outline: "none",
   },
   None: {
@@ -567,9 +568,9 @@ function AddEditPatientListing(props) {
       emergencyName &&
       emergencyName.length > 0 &&
       validateEmergencyName(emergencyName) &&
-      emergencyContactNo &&
-      emergencyContactNo.length > 0 &&
-      !validatePhone(emergencyContactNo) &&
+      // emergencyContactNo &&
+      // emergencyContactNo.length > 0 &&
+      // !validatePhone(emergencyContactNo) &&
       emergencyRelation &&
       emergencyRelation.length > 0 &&
       validateRelation(emergencyRelation)
@@ -788,7 +789,7 @@ function AddEditPatientListing(props) {
               props.history.push({
                 pathname: "success",
                 state: {
-                  message: `Details of Patient with MRN ${res.data.data.profileNo} Updated Successfully`,
+                  message: `Details of Patient with MRN: ${res.data.data.profileNo.toUpperCase()} Updated Successfully`,
                 },
               });
             }
@@ -890,7 +891,9 @@ function AddEditPatientListing(props) {
           props.history.push({
             pathname: "success",
             state: {
-              message: `EDR # ${res.data.data.requestNo} for patient MRN ${MRN} generated successfully`,
+              message: `EDR: ${
+                res.data.data.requestNo
+              } for patient MRN: ${MRN.toUpperCase()} generated successfully`,
             },
           });
         } else if (!res.data.success) {
@@ -921,7 +924,9 @@ function AddEditPatientListing(props) {
           props.history.push({
             pathname: "success",
             state: {
-              message: `IPR # ${res.data.data.requestNo} for patient MRN ${MRN} generated successfully`,
+              message: `IPR: ${
+                res.data.data.requestNo
+              } for patient MRN: ${MRN.toUpperCase()} generated successfully`,
             },
           });
         } else if (!res.data.success) {
@@ -1131,7 +1136,6 @@ function AddEditPatientListing(props) {
       dispatch({ field: "payment", value: "" });
       setCoPaymentField(false);
       console.log(e.target.name, e.target.value);
-
     }
 
     if (e.target.name === "dob") {
@@ -1230,7 +1234,7 @@ function AddEditPatientListing(props) {
     >
       <Header />
       <div className="cPadding">
-        <div className="subheader">
+        <div className="subheader" style={{ marginLeft: "-10px" }}>
           <div>
             <img src={patientRegister} />
             <div style={{ flex: 4, display: "flex", alignItems: "center" }}>
@@ -1241,7 +1245,7 @@ function AddEditPatientListing(props) {
               </h3>
             </div>
           </div>
-          <div>
+          <div style={{ marginRight: "-10px" }}>
             <ButtonField
               onClick={() => props.history.push("/home/rcm/patientListing")}
               name="viewAll"
@@ -1357,7 +1361,7 @@ function AddEditPatientListing(props) {
                         // width: 100,
                       }}
                     >
-                      <img src={BarCode} style={{ width: 80, height: 75 }} />
+                      <img src={BarCode} style={{ width: 70, height: 60 }} />
                     </div>
                   </div>
 
@@ -2119,6 +2123,7 @@ function AddEditPatientListing(props) {
                       input: classes.multilineColor,
                     },
                   }}
+                  // inputProps={{ maxLength: 12 }}
                 />
                 {/* <ErrorMessage
                   name={otherDetails}
@@ -2218,7 +2223,7 @@ function AddEditPatientListing(props) {
               </div>
             </div>
 
-            <div className="row">
+            <div className="row" style={{ marginBottom: 16 }}>
               <div
                 className="col-md-12"
                 style={{
@@ -2232,10 +2237,10 @@ function AddEditPatientListing(props) {
                     label="Contact No"
                     name={"emergencyContactNo"}
                     value={emergencyContactNo}
-                    hyperText="emergency contact format +962xxxxxxxx"
+                    // hyperText='emergency contact format +962xxxxxxxx'
                     defaultCountry={"jo"}
                     onChange={onEmergencyNumberChange}
-                    error={emergencyContactNo === "" && emergencyForm}
+                    // error={emergencyContactNo === '' && emergencyForm}
                     className="textInputStyle"
                     variant="filled"
                     InputProps={{
@@ -2248,15 +2253,15 @@ function AddEditPatientListing(props) {
                     }}
                   />
 
-                  {emergencyContactNo && !validatePhone(emergencyContactNo) ? (
+                  {/* {emergencyContactNo && !validatePhone(emergencyContactNo) ? (
                     undefined
                   ) : (
                     <ErrorMessage
                       name={emergencyContactNo}
-                      type="phone"
+                      type='phone'
                       isFormSubmitted={emergencyForm}
                     />
-                  )}
+                  )} */}
                 </div>
               </div>
             </div>
@@ -2336,6 +2341,7 @@ function AddEditPatientListing(props) {
                   justifyContent: "flex-end",
                   marginTop: "1%",
                   marginBottom: "2%",
+                  marginRight: -5,
                 }}
               >
                 <Button
@@ -3026,7 +3032,7 @@ function AddEditPatientListing(props) {
                       height: 55,
                     }}
                   >
-                    <img src={BarCode} style={{ width: 100, height: 70 }} />
+                    <img src={BarCode} style={{ width: 70, height: 60 }} />
                   </div>
                 </div>
 
@@ -3054,7 +3060,7 @@ function AddEditPatientListing(props) {
                   </div>
                 </div>
                 <div
-                  className="col-md-1 col-sm-2 col-1"
+                  className="col-md-1 col-sm-1 col-1"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -3064,8 +3070,9 @@ function AddEditPatientListing(props) {
                     style={{
                       ...styles.stylesForButton,
                       height: "54px",
-                      width: 98,
+                      width: "98%",
                       backgroundColor: "#ba55d3",
+                      marginRight: "-10px",
                     }}
                     variant="contained"
                     color="primary"
@@ -3207,8 +3214,8 @@ function AddEditPatientListing(props) {
                         classes: { input: classes.input },
                       }}
                     >
-                      <MenuItem value={coveredFamilyMembers}>
-                        {coveredFamilyMembers}
+                      <MenuItem value="">
+                        <em>Family member</em>
                       </MenuItem>
 
                       {coveredFamilyArray.map((val) => {

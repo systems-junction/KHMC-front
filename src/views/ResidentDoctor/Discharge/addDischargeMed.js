@@ -2,70 +2,70 @@
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable array-callback-return */
 /* eslint-disable react/jsx-indent */
-import React, { useEffect, useState, useReducer } from 'react'
-import Select from '@material-ui/core/Select'
-import { makeStyles } from '@material-ui/core/styles'
-import Table from '@material-ui/core/Table'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import MenuItem from '@material-ui/core/MenuItem'
-import Button from '@material-ui/core/Button'
-import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
-import axios from 'axios'
-import Notification from '../../../components/Snackbar/Notification.js'
-import AccountCircle from '@material-ui/icons/SearchOutlined'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import TextField from '@material-ui/core/TextField'
+import React, { useEffect, useState, useReducer } from "react";
+import Select from "@material-ui/core/Select";
+import { makeStyles } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import MenuItem from "@material-ui/core/MenuItem";
+import Button from "@material-ui/core/Button";
+import tableStyles from "../../../assets/jss/material-dashboard-react/components/tableStyle.js";
+import axios from "axios";
+import Notification from "../../../components/Snackbar/Notification.js";
+import AccountCircle from "@material-ui/icons/SearchOutlined";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import TextField from "@material-ui/core/TextField";
 import {
   updateIPR,
   notifyDischarge,
   updateEdrIpr,
   getSearchedPharmaceuticalItemsUrl,
-} from '../../../public/endpoins'
-import InputLabelComponent from '../../../components/InputLabel/inputLabel'
-import BootstrapInput from '../../../components/Dropdown/dropDown.js'
-import ErrorMessage from '../../../components/ErrorMessage/errorMessage'
-import Paper from '@material-ui/core/Paper'
-import cookie from 'react-cookies'
-import Dialog from '@material-ui/core/Dialog'
-import Header from '../../../components/Header/Header'
-import plus_icon from '../../../assets/img/Plus.png'
-import purchase_request from '../../../assets/img/Doctor - Discharge.png'
-import Back from '../../../assets/img/Back_Arrow.png'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import DialogContent from '@material-ui/core/DialogContent'
-import '../../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
-import CustomTable from '../../../components/Table/Table'
+} from "../../../public/endpoins";
+import InputLabelComponent from "../../../components/InputLabel/inputLabel";
+import BootstrapInput from "../../../components/Dropdown/dropDown.js";
+import ErrorMessage from "../../../components/ErrorMessage/errorMessage";
+import Paper from "@material-ui/core/Paper";
+import cookie from "react-cookies";
+import Dialog from "@material-ui/core/Dialog";
+import Header from "../../../components/Header/Header";
+import plus_icon from "../../../assets/img/Plus.png";
+import purchase_request from "../../../assets/img/Doctor - Discharge.png";
+import Back from "../../../assets/img/Back_Arrow.png";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import "../../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
+import CustomTable from "../../../components/Table/Table";
 
 const scheduleArray = [
-  { key: 'Now', value: 'Now/Immediate' },
+  { key: "Now", value: "Now/Immediate" },
   // { key: "Immediate", value: "Immediate" },
-]
+];
 const priorityArray = [
-  { key: 'Emergency', value: 'Emergency' },
-  { key: 'Regular', value: 'Regular' },
-  { key: 'PRN', value: 'PRN' },
-]
+  { key: "Emergency", value: "Emergency" },
+  { key: "Regular", value: "Regular" },
+  { key: "PRN", value: "PRN" },
+];
 const tableHeadingForPharmacyReq = [
-  'Medicine Name',
-  'Quantity',
-  'Unit Price',
-  'Total Price',
-  'Action',
-]
+  "Medicine Name",
+  "Quantity",
+  "Unit Price",
+  "Total Price",
+  "Action",
+];
 const tableDataKeysForPharmacyReq = [
-  'medicineName',
-  'requestedQty',
-  'unitPrice',
-  'totalPrice',
-]
-const actions = { edit: true }
+  "medicineName",
+  "requestedQty",
+  "unitPrice",
+  "totalPrice",
+];
+const actions = { edit: true };
 const styles = {
   inputContainer: {
     marginTop: 10,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 5,
     paddingTop: 5,
     paddingBottom: 5,
@@ -73,25 +73,25 @@ const styles = {
     marginRight: 5,
   },
   stylesForButton: {
-    color: 'white',
-    cursor: 'pointer',
+    color: "white",
+    cursor: "pointer",
     borderRadius: 5,
-    backgroundColor: '#2c6ddd',
-    width: '140px',
-    height: '50px',
-    outline: 'none',
+    backgroundColor: "#2c6ddd",
+    width: "140px",
+    height: "50px",
+    outline: "none",
   },
   stylesForPurchaseButton: {
-    color: 'white',
-    cursor: 'pointer',
+    color: "white",
+    cursor: "pointer",
     borderRadius: 5,
-    backgroundColor: '#2c6ddd',
-    width: '140px',
-    height: '50px',
-    outline: 'none',
+    backgroundColor: "#2c6ddd",
+    width: "140px",
+    height: "50px",
+    outline: "none",
   },
   inputField: {
-    outline: 'none',
+    outline: "none",
   },
   inputContainerForTextField: {
     marginTop: 10,
@@ -106,7 +106,7 @@ const styles = {
   buttonContainer: {
     marginTop: 25,
   },
-}
+};
 // const useStyles = makeStyles(tableStyles)
 
 const useStyles = makeStyles((theme) => ({
@@ -114,91 +114,91 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(0),
   },
   input: {
-    backgroundColor: 'white',
-    boxShadow: 'none',
+    backgroundColor: "white",
+    boxShadow: "none",
     borderRadius: 5,
-    '&:after': {
-      borderBottomColor: 'black',
-      boxShadow: 'none',
+    "&:after": {
+      borderBottomColor: "black",
+      boxShadow: "none",
     },
-    '&:hover': {
-      backgroundColor: 'white',
-      boxShadow: 'none',
+    "&:hover": {
+      backgroundColor: "white",
+      boxShadow: "none",
     },
-    '&:focus': {
-      backgroundColor: 'white',
-      boxShadow: 'none',
+    "&:focus": {
+      backgroundColor: "white",
+      boxShadow: "none",
     },
   },
   multilineColor: {
-    boxShadow: 'none',
-    backgroundColor: 'white',
+    boxShadow: "none",
+    backgroundColor: "white",
     borderRadius: 5,
-    '&:hover': {
-      backgroundColor: 'white',
-      boxShadow: 'none',
+    "&:hover": {
+      backgroundColor: "white",
+      boxShadow: "none",
     },
-    '&:after': {
-      borderBottomColor: 'black',
-      boxShadow: 'none',
+    "&:after": {
+      borderBottomColor: "black",
+      boxShadow: "none",
     },
-    '&:focus': {
-      boxShadow: 'none',
+    "&:focus": {
+      boxShadow: "none",
     },
   },
   root: {
-    '& .MuiTextField-root': {
-      backgroundColor: 'white',
+    "& .MuiTextField-root": {
+      backgroundColor: "white",
     },
-    '& .Mui-focused': {
-      backgroundColor: 'white',
-      color: 'black',
-      boxShadow: 'none',
+    "& .Mui-focused": {
+      backgroundColor: "white",
+      color: "black",
+      boxShadow: "none",
     },
-    '& .Mui-disabled': {
-      backgroundColor: 'white',
-      color: 'gray',
+    "& .Mui-disabled": {
+      backgroundColor: "white",
+      color: "gray",
     },
-    '&:focus': {
-      backgroundColor: 'white',
-      boxShadow: 'none',
+    "&:focus": {
+      backgroundColor: "white",
+      boxShadow: "none",
     },
   },
-}))
+}));
 
 function AddEditEDR(props) {
-  const classes = useStyles()
+  const classes = useStyles();
   const initialState = {
     date: new Date(),
-    status: 'pending',
-    requester: '',
-    itemId: '',
-    medicineName: '',
-    priority: '',
-    schedule: '',
-    dosage: '',
-    frequency: '',
-    duration: '',
-    requestedQty: '',
-    unitPrice: '',
-    totalPrice: '',
-    dischargeMedicines: '',
-    dischargeRequest: '',
-    requestType: '',
-  }
+    status: "pending",
+    requester: "",
+    itemId: "",
+    medicineName: "",
+    priority: "",
+    schedule: "",
+    dosage: "",
+    frequency: "",
+    duration: "",
+    requestedQty: "",
+    unitPrice: "",
+    totalPrice: "",
+    dischargeMedicines: "",
+    dischargeRequest: "",
+    requestType: "",
+  };
 
   function reducer(state, { field, value }) {
     return {
       ...state,
       [field]: value,
-    }
+    };
   }
 
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const {
     date = new Date(),
-    status = 'pending',
+    status = "pending",
     itemId,
     medicineName,
     priority,
@@ -212,104 +212,104 @@ function AddEditEDR(props) {
     dischargeMedicines,
     dischargeRequest,
     requestType,
-  } = state
+  } = state;
 
   const onChangeValue = (e) => {
-    var pattern = /^[0-9. ]*$/
+    var pattern = /^[0-9. ]*$/;
     if (
-      e.target.name === 'frequency' ||
-      e.target.name === 'dosage' ||
-      e.target.name === 'duration'
+      e.target.name === "frequency" ||
+      e.target.name === "dosage" ||
+      e.target.name === "duration"
     ) {
       if (pattern.test(e.target.value) === false) {
-        return
+        return;
       }
     }
     dispatch({
       field: e.target.name,
-      value: e.target.value.replace(/[^\w.\s]/gi, ''),
-    })
-  }
+      value: e.target.value.replace(/[^\w.\s]/gi, ""),
+    });
+  };
 
-  const [comingFor, setcomingFor] = useState('')
-  const [currentUser, setCurrentUser] = useState('')
-  const [isFormSubmitted] = useState(false)
-  const [errorMsg, setErrorMsg] = useState('')
-  const [openNotification, setOpenNotification] = useState(false)
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [, setSelectedItem] = useState('')
-  const [selectItemToEditId, setSelectItemToEditId] = useState('')
-  const [id, setId] = useState('')
-  const [, setrequestNo] = useState('')
-  const [searchQuery, setSearchQuery] = useState('')
-  const [itemFound, setItemFound] = useState('')
-  const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false)
-  const [patientId, setpatientId] = useState('')
-  const [enableSave, setEnableSave] = useState(true)
-  const [dischargeNotes, setdischargeNotes] = useState('')
-  const [otherNotes, setotherNotes] = useState('')
+  const [comingFor, setcomingFor] = useState("");
+  const [currentUser, setCurrentUser] = useState("");
+  const [isFormSubmitted] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [openNotification, setOpenNotification] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [, setSelectedItem] = useState("");
+  const [selectItemToEditId, setSelectItemToEditId] = useState("");
+  const [id, setId] = useState("");
+  const [, setrequestNo] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [itemFound, setItemFound] = useState("");
+  const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false);
+  const [patientId, setpatientId] = useState("");
+  const [enableSave, setEnableSave] = useState(true);
+  const [dischargeNotes, setdischargeNotes] = useState("");
+  const [otherNotes, setotherNotes] = useState("");
 
   useEffect(() => {
     // const soc = socketIOClient(socketUrl);
     // setSocket(soc);
     // soc.emit("connection");
-    setCurrentUser(cookie.load('current_user'))
+    setCurrentUser(cookie.load("current_user"));
 
-    setcomingFor(props.history.location.state.comingFor)
+    setcomingFor(props.history.location.state.comingFor);
 
-    const selectedRec = props.history.location.state.selectedItem
-    console.log('Other... ', props.history.location.state.otherNotes)
-    console.log('Discharge... ', props.history.location.state.dischargeNotes)
+    const selectedRec = props.history.location.state.selectedItem;
+    console.log("Other... ", props.history.location.state.otherNotes);
+    console.log("Discharge... ", props.history.location.state.dischargeNotes);
 
-    setpatientId(selectedRec.patientId._id)
-    setotherNotes(props.history.location.state.otherNotes)
-    setdischargeNotes(props.history.location.state.dischargeNotes)
-    setId(selectedRec._id)
-    setrequestNo(selectedRec.requestNo)
+    setpatientId(selectedRec.patientId._id);
+    setotherNotes(props.history.location.state.otherNotes);
+    setdischargeNotes(props.history.location.state.dischargeNotes);
+    setId(selectedRec._id);
+    setrequestNo(selectedRec.requestNo);
 
     if (selectedRec) {
       Object.entries(selectedRec).map(([key, val]) => {
-        if (val && typeof val === 'object') {
-          if (key === 'dischargeRequest') {
+        if (val && typeof val === "object") {
+          if (key === "dischargeRequest") {
             Object.entries(val).map(([key1, val1]) => {
-              if (key1 === 'dischargeMedication') {
+              if (key1 === "dischargeMedication") {
                 Object.entries(val1).map(([key2, val2]) => {
-                  if (key2 === 'medicine') {
-                    dispatch({ field: 'dischargeMedicines', value: val2 })
+                  if (key2 === "medicine") {
+                    dispatch({ field: "dischargeMedicines", value: val2 });
                   }
-                })
+                });
               }
-            })
-            dispatch({ field: 'dischargeRequest', value: val })
+            });
+            dispatch({ field: "dischargeRequest", value: val });
           }
         } else {
-          dispatch({ field: key, value: val })
+          dispatch({ field: key, value: val });
         }
-      })
+      });
     }
     // return () => soc.disconnect();
-  }, [])
+  }, []);
 
   const handleAdd = () => {
-    var now = new Date()
-    var start = new Date(now.getFullYear(), 0, 0)
+    var now = new Date();
+    var start = new Date(now.getFullYear(), 0, 0);
     var diff =
       now -
       start +
-      (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000
-    var oneDay = 1000 * 60 * 60 * 24
-    var day = Math.floor(diff / oneDay)
+      (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000;
+    var oneDay = 1000 * 60 * 60 * 24;
+    var day = Math.floor(diff / oneDay);
 
-    var dateNow = new Date()
+    var dateNow = new Date();
     var YYYY = dateNow
       .getFullYear()
       .toString()
-      .substr(-2)
-    var HH = dateNow.getHours()
-    var mm = dateNow.getMinutes()
-    let ss = dateNow.getSeconds()
+      .substr(-2);
+    var HH = dateNow.getHours();
+    var mm = dateNow.getMinutes();
+    let ss = dateNow.getSeconds();
 
-    const DischargeNo = 'DCN' + day + YYYY + HH + mm + ss
+    const DischargeNo = "DCN" + day + YYYY + HH + mm + ss;
     // if (!validateForm()) {
     //   setIsFormSubmitted(true);
     //   setOpenNotification(true);
@@ -317,7 +317,7 @@ function AddEditEDR(props) {
     // } else {
     // if (validateForm()) {
 
-    let medicineData = []
+    let medicineData = [];
 
     for (let i = 0; i < dischargeMedicines.length; i++) {
       medicineData = [
@@ -335,7 +335,7 @@ function AddEditEDR(props) {
           totalPrice: dischargeMedicines[i].totalPrice,
           // totalPrice: dischargeMedicines[i].totalPrice,
         },
-      ]
+      ];
     }
 
     let dischargeMedicationObject = {
@@ -343,7 +343,7 @@ function AddEditEDR(props) {
       status: status,
       requester: currentUser.staffId,
       medicine: medicineData,
-    }
+    };
 
     const params = {
       _id: id,
@@ -352,47 +352,47 @@ function AddEditEDR(props) {
         dischargeSummary: { otherNotes, dischargeNotes },
         dischargeMedication: dischargeMedicationObject,
       },
-    }
-    console.log('params', params)
+    };
+    console.log("params", params);
     axios
       .put(updateEdrIpr, params)
       .then((res) => {
         if (res.data.success) {
-          console.log('response while adding Medicine Req', res.data.data)
-          notifyForDischarge(patientId)
+          console.log("response while adding Medicine Req", res.data.data);
+          notifyForDischarge(patientId);
           props.history.push({
-            pathname: 'success',
+            pathname: "success",
             state: {
               // request #
-              message: `Pharmacy request for patient MRN ${res.data.data.patientId.profileNo} added successfully`,
+              message: `Pharmacy Request for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
             },
-          })
+          });
         } else if (!res.data.success) {
-          setOpenNotification(true)
-          setErrorMsg('Error while adding the Medicine request')
+          setOpenNotification(true);
+          setErrorMsg("Error while adding the Medicine request");
         }
       })
       .catch((e) => {
-        console.log('error after adding Medicine request', e)
-        setOpenNotification(true)
-        setErrorMsg('Error after adding the medicine request')
-      })
+        console.log("error after adding Medicine request", e);
+        setOpenNotification(true);
+        setErrorMsg("Error after adding the medicine request");
+      });
     //   }
     // }
-  }
+  };
 
   const notifyForDischarge = (id) => {
     axios
-      .get(notifyDischarge + '/' + id)
+      .get(notifyDischarge + "/" + id)
       .then((res) => {
-        console.log(res)
+        console.log(res);
       })
       .catch((e) => {
-        console.log('error after notify', e)
-        setOpenNotification(true)
-        setErrorMsg(e)
-      })
-  }
+        console.log("error after notify", e);
+        setOpenNotification(true);
+        setErrorMsg(e);
+      });
+  };
 
   // const handleEdit = () => {
   //   if (!validateForm()) {
@@ -479,26 +479,26 @@ function AddEditEDR(props) {
 
   if (openNotification) {
     setTimeout(() => {
-      setOpenNotification(false)
-      setErrorMsg('')
-    }, 2000)
+      setOpenNotification(false);
+      setErrorMsg("");
+    }, 2000);
   }
 
   function hideDialog() {
-    setDialogOpen(false)
-    setSelectedItem('')
-    setSelectItemToEditId('')
+    setDialogOpen(false);
+    setSelectedItem("");
+    setSelectItemToEditId("");
 
-    dispatch({ field: 'itemId', value: '' })
-    dispatch({ field: 'priority', value: '' })
-    dispatch({ field: 'schedule', value: '' })
-    dispatch({ field: 'dosage', value: '' })
-    dispatch({ field: 'frequency', value: '' })
-    dispatch({ field: 'duration', value: '' })
-    dispatch({ field: 'requestedQty', value: '' })
-    dispatch({ field: 'medicineName', value: '' })
-    dispatch({ field: 'unitPrice', value: '' })
-    dispatch({ field: 'totalPrice', value: '' })
+    dispatch({ field: "itemId", value: "" });
+    dispatch({ field: "priority", value: "" });
+    dispatch({ field: "schedule", value: "" });
+    dispatch({ field: "dosage", value: "" });
+    dispatch({ field: "frequency", value: "" });
+    dispatch({ field: "duration", value: "" });
+    dispatch({ field: "requestedQty", value: "" });
+    dispatch({ field: "medicineName", value: "" });
+    dispatch({ field: "unitPrice", value: "" });
+    dispatch({ field: "totalPrice", value: "" });
   }
 
   function validateItemsForm() {
@@ -517,24 +517,24 @@ function AddEditEDR(props) {
       frequency.length > 0 &&
       dosage &&
       dosage.length > 0
-    )
+    );
   }
 
   const addSelectedItem = () => {
     // setIsFormSubmitted(true);
     if (validateItemsForm()) {
-      setDialogOpen(false)
+      setDialogOpen(false);
 
       let found =
         dischargeMedicines &&
-        dischargeMedicines.find((item) => item.itemId === itemId)
+        dischargeMedicines.find((item) => item.itemId === itemId);
 
       if (found) {
-        setOpenNotification(true)
-        setErrorMsg('This Medicine has already been added.')
+        setOpenNotification(true);
+        setErrorMsg("This Medicine has already been added.");
       } else {
         dispatch({
-          field: 'dischargeMedicines',
+          field: "dischargeMedicines",
           value: [
             ...dischargeMedicines,
             {
@@ -552,27 +552,27 @@ function AddEditEDR(props) {
               ),
             },
           ],
-        })
+        });
       }
     }
 
-    dispatch({ field: 'itemId', value: '' })
-    dispatch({ field: 'priority', value: '' })
-    dispatch({ field: 'schedule', value: '' })
-    dispatch({ field: 'dosage', value: '' })
-    dispatch({ field: 'frequency', value: '' })
-    dispatch({ field: 'duration', value: '' })
-    dispatch({ field: 'requestedQty', value: '' })
-    dispatch({ field: 'medicineName', value: '' })
-    dispatch({ field: 'unitPrice', value: '' })
-    dispatch({ field: 'totalPrice', value: '' })
-    setEnableSave(false)
-  }
+    dispatch({ field: "itemId", value: "" });
+    dispatch({ field: "priority", value: "" });
+    dispatch({ field: "schedule", value: "" });
+    dispatch({ field: "dosage", value: "" });
+    dispatch({ field: "frequency", value: "" });
+    dispatch({ field: "duration", value: "" });
+    dispatch({ field: "requestedQty", value: "" });
+    dispatch({ field: "medicineName", value: "" });
+    dispatch({ field: "unitPrice", value: "" });
+    dispatch({ field: "totalPrice", value: "" });
+    setEnableSave(false);
+  };
 
   const editSelectedItem = () => {
     // if (validateItemsForm()) {
-    setDialogOpen(false)
-    let temp = []
+    setDialogOpen(false);
+    let temp = [];
 
     for (let i = 0; i < dischargeMedicines.length; i++) {
       if (dischargeMedicines[i].itemId === selectItemToEditId) {
@@ -587,53 +587,53 @@ function AddEditEDR(props) {
           medicineName,
           unitPrice: unitPrice.toFixed(2),
           totalPrice: (unitPrice * frequency * dosage * duration).toFixed(2),
-        }
-        temp[i] = obj
+        };
+        temp[i] = obj;
       } else {
-        temp = [...temp, dischargeMedicines[i]]
+        temp = [...temp, dischargeMedicines[i]];
       }
     }
 
     dispatch({
-      field: 'dischargeMedicines',
+      field: "dischargeMedicines",
       value: temp,
-    })
+    });
     // }
 
-    setDialogOpen(false)
-    setSelectedItem('')
-    setSelectItemToEditId('')
+    setDialogOpen(false);
+    setSelectedItem("");
+    setSelectItemToEditId("");
 
-    dispatch({ field: 'itemId', value: '' })
-    dispatch({ field: 'priority', value: '' })
-    dispatch({ field: 'schedule', value: '' })
-    dispatch({ field: 'dosage', value: '' })
-    dispatch({ field: 'frequency', value: '' })
-    dispatch({ field: 'duration', value: '' })
-    dispatch({ field: 'requestedQty', value: '' })
-    dispatch({ field: 'medicineName', value: '' })
-    dispatch({ field: 'unitPrice', value: '' })
-    dispatch({ field: 'totalPrice', value: '' })
-    setEnableSave(false)
-  }
+    dispatch({ field: "itemId", value: "" });
+    dispatch({ field: "priority", value: "" });
+    dispatch({ field: "schedule", value: "" });
+    dispatch({ field: "dosage", value: "" });
+    dispatch({ field: "frequency", value: "" });
+    dispatch({ field: "duration", value: "" });
+    dispatch({ field: "requestedQty", value: "" });
+    dispatch({ field: "medicineName", value: "" });
+    dispatch({ field: "unitPrice", value: "" });
+    dispatch({ field: "totalPrice", value: "" });
+    setEnableSave(false);
+  };
 
   function handleRequestedItemEdit(i) {
-    console.log(i)
+    console.log(i);
     // if (i.status === "pending") {
-    setDialogOpen(true)
-    setSelectedItem(i.itemId)
-    setSelectItemToEditId(i.itemId)
+    setDialogOpen(true);
+    setSelectedItem(i.itemId);
+    setSelectItemToEditId(i.itemId);
 
-    dispatch({ field: 'itemId', value: i.itemId })
-    dispatch({ field: 'priority', value: i.priority })
-    dispatch({ field: 'schedule', value: i.schedule })
-    dispatch({ field: 'dosage', value: i.dosage })
-    dispatch({ field: 'frequency', value: i.frequency })
-    dispatch({ field: 'duration', value: i.duration })
-    dispatch({ field: 'requestedQty', value: i.requestedQty })
-    dispatch({ field: 'medicineName', value: i.medicineName })
-    dispatch({ field: 'unitPrice', value: i.unitPrice })
-    dispatch({ field: 'totalPrice', value: i.totalPrice })
+    dispatch({ field: "itemId", value: i.itemId });
+    dispatch({ field: "priority", value: i.priority });
+    dispatch({ field: "schedule", value: i.schedule });
+    dispatch({ field: "dosage", value: i.dosage });
+    dispatch({ field: "frequency", value: i.frequency });
+    dispatch({ field: "duration", value: i.duration });
+    dispatch({ field: "requestedQty", value: i.requestedQty });
+    dispatch({ field: "medicineName", value: i.medicineName });
+    dispatch({ field: "unitPrice", value: i.unitPrice });
+    dispatch({ field: "totalPrice", value: i.totalPrice });
     // } else {
     //   setOpenNotification(true);
     //   setErrorMsg("Item can not be updated once it is in progess");
@@ -641,80 +641,80 @@ function AddEditEDR(props) {
   }
 
   const handleSearch = (e) => {
-    const a = e.target.value.replace(/[^\w-\s]/gi, '')
-    setSearchQuery(a)
+    const a = e.target.value.replace(/[^\w-\s]/gi, "");
+    setSearchQuery(a);
     if (a.length >= 1) {
       axios
-        .get(getSearchedPharmaceuticalItemsUrl + '/' + a)
+        .get(getSearchedPharmaceuticalItemsUrl + "/" + a)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.items.length > 0) {
-              console.log('price data', res.data.data)
-              setItemFoundSuccessfully(true)
-              setItemFound(res.data.data.items)
+              console.log("price data", res.data.data);
+              setItemFoundSuccessfully(true);
+              setItemFound(res.data.data.items);
             } else {
-              setItemFoundSuccessfully(false)
-              setItemFound('')
+              setItemFoundSuccessfully(false);
+              setItemFound("");
             }
           }
         })
         .catch((e) => {
-          console.log('error while searching medicine', e)
-        })
+          console.log("error while searching medicine", e);
+        });
     }
-  }
+  };
 
   function handleAddItem(i) {
-    console.log('selected med', i)
+    console.log("selected med", i);
 
-    dispatch({ field: 'itemId', value: i._id })
-    dispatch({ field: 'medicineName', value: i.name })
-    dispatch({ field: 'unitPrice', value: i.issueUnitCost })
+    dispatch({ field: "itemId", value: i._id });
+    dispatch({ field: "medicineName", value: i.name });
+    dispatch({ field: "unitPrice", value: i.issueUnitCost });
     // dispatch({ field: 'totalPrice', value: i.purchasePrice + i.tax })
 
-    setSearchQuery('')
+    setSearchQuery("");
   }
 
   return (
     <div
       style={{
-        backgroundColor: '#60d69f',
-        position: 'fixed',
-        display: 'flex',
-        width: '100%',
-        height: '100%',
-        flexDirection: 'column',
+        backgroundColor: "#60d69f",
+        position: "fixed",
+        display: "flex",
+        width: "100%",
+        height: "100%",
+        flexDirection: "column",
         flex: 1,
-        overflowY: 'scroll',
+        overflowY: "scroll",
       }}
     >
       <Header />
-      <div className='cPadding'>
-        <div className='subheader'>
+      <div className="cPadding">
+        <div className="subheader">
           <div>
             <img src={purchase_request} />
-            <h4>{comingFor === 'add' ? ' Discharge' : ' Discharge'}</h4>
+            <h4>{comingFor === "add" ? " Discharge" : " Discharge"}</h4>
           </div>
 
           <div>
             <Button
               onClick={() => setDialogOpen(true)}
               style={styles.stylesForButton}
-              variant='contained'
-              color='primary'
+              variant="contained"
+              color="primary"
             >
-              <img className='icon-style' src={plus_icon} />
+              <img className="icon-style" src={plus_icon} />
               &nbsp;&nbsp;
-              <strong style={{ fontSize: '12px' }}>Add New</strong>
+              <strong style={{ fontSize: "12px" }}>Add New</strong>
             </Button>
           </div>
         </div>
 
         <div
-          style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-          className='container-fluid'
+          style={{ flex: 4, display: "flex", flexDirection: "column" }}
+          className="container-fluid"
         >
-          <div className='row' style={{ marginTop: '20px' }}>
+          <div className="row" style={{ marginTop: "20px" }}>
             {dischargeMedicines !== 0 ? (
               <CustomTable
                 tableData={dischargeMedicines}
@@ -722,7 +722,7 @@ function AddEditEDR(props) {
                 tableHeading={tableHeadingForPharmacyReq}
                 action={actions}
                 handleEdit={handleRequestedItemEdit}
-                borderBottomColor={'#60d69f'}
+                borderBottomColor={"#60d69f"}
                 borderBottomWidth={20}
               />
             ) : (
@@ -731,30 +731,30 @@ function AddEditEDR(props) {
           </div>
 
           <div
-            className='row'
-            style={{ marginTop: '25px', marginBottom: '25px' }}
+            className="row"
+            style={{ marginTop: "25px", marginBottom: "25px" }}
           >
-            <div className='col-md-6 col-sm-6 col-6'>
+            <div className="col-md-6 col-sm-6 col-6">
               <img
                 onClick={() => props.history.goBack()}
                 src={Back}
-                style={{ width: 45, height: 35, cursor: 'pointer' }}
+                style={{ width: 45, height: 35, cursor: "pointer" }}
               />
             </div>
 
             <div
-              className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'
-              style={{ paddingRight: '5px' }}
+              className="col-md-6 col-sm-6 col-6 d-flex justify-content-end"
+              style={{ paddingRight: "5px" }}
             >
               <Button
                 style={styles.stylesForPurchaseButton}
                 // disabled={!validateForm()}
                 disabled={enableSave}
                 onClick={handleAdd}
-                variant='contained'
-                color='primary'
+                variant="contained"
+                color="primary"
               >
-                <strong style={{ fontSize: '12px' }}>Save</strong>
+                <strong style={{ fontSize: "12px" }}>Save</strong>
               </Button>
             </div>
           </div>
@@ -762,34 +762,37 @@ function AddEditEDR(props) {
           <Notification msg={errorMsg} open={openNotification} />
 
           <Dialog
-            aria-labelledby='form-dialog-title'
+            aria-labelledby="form-dialog-title"
             open={dialogOpen}
-            maxWidth='xl'
+            maxWidth="xl"
             fullWidth={true}
           >
-            <DialogContent style={{ backgroundColor: '#31e2aa' }}>
-              <DialogTitle id='simple-dialog-title' style={{ color: 'white' }}>
+            <DialogContent style={{ backgroundColor: "#31e2aa" }}>
+              <DialogTitle
+                id="simple-dialog-title"
+                style={{ color: "white", marginLeft: -19 }}
+              >
                 Add Medicine
               </DialogTitle>
-              <div className='container-fluid'>
-                <div className='row'>
+              <div className="container-fluid">
+                <div className="row">
                   <div
-                    className='col-md-12 col-sm-12 col-12'
+                    className="col-md-12 col-sm-12 col-12"
                     style={{
                       ...styles.textFieldPadding,
                     }}
                   >
                     <TextField
-                      type='text'
-                      label='Search Medicine by Name'
-                      name={'searchQuery'}
+                      type="text"
+                      label="Search Medicine by Name"
+                      name={"searchQuery"}
                       value={searchQuery}
                       onChange={handleSearch}
-                      className='textInputStyle'
-                      variant='filled'
+                      className="textInputStyle"
+                      variant="filled"
                       InputProps={{
                         endAdornment: (
-                          <InputAdornment position='end'>
+                          <InputAdornment position="end">
                             <AccountCircle />
                           </InputAdornment>
                         ),
@@ -816,10 +819,10 @@ function AddEditEDR(props) {
                 {searchQuery ? (
                   // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
                   <div style={{ zIndex: 3 }}>
-                    <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
+                    <Paper style={{ maxHeight: 200, overflow: "auto" }}>
                       {itemFoundSuccessfull ? (
                         itemFound && (
-                          <Table size='small'>
+                          <Table size="small">
                             <TableHead>
                               <TableRow>
                                 <TableCell>Medicine Name</TableCell>
@@ -836,7 +839,7 @@ function AddEditEDR(props) {
                                   <TableRow
                                     key={i.itemCode}
                                     onClick={() => handleAddItem(i)}
-                                    style={{ cursor: 'pointer' }}
+                                    style={{ cursor: "pointer" }}
                                   >
                                     <TableCell>{i.tradeName}</TableCell>
                                     <TableCell>{i.scientificName}</TableCell>
@@ -846,15 +849,15 @@ function AddEditEDR(props) {
                                       {i.purchasePrice + i.tax}
                                     </TableCell> */}
                                   </TableRow>
-                                )
+                                );
                               })}
                             </TableBody>
                           </Table>
                         )
                       ) : (
                         <h4
-                          style={{ textAlign: 'center' }}
-                          onClick={() => setSearchQuery('')}
+                          style={{ textAlign: "center" }}
+                          onClick={() => setSearchQuery("")}
                         >
                           Medicine Not Found
                         </h4>
@@ -865,9 +868,9 @@ function AddEditEDR(props) {
                   undefined
                 )}
 
-                <div className='row' style={{ marginTop: 15 }}>
+                <div className="row" style={{ marginTop: 15 }}>
                   <div
-                    className='col-md-4 col-sm-4 col-4'
+                    className="col-md-4 col-sm-4 col-4"
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -875,12 +878,12 @@ function AddEditEDR(props) {
                   >
                     <TextField
                       required
-                      label='Medicine Name'
-                      name={'medicineName'}
+                      label="Medicine Name"
+                      name={"medicineName"}
                       value={medicineName}
                       disabled
-                      className='textInputStyle'
-                      variant='filled'
+                      className="textInputStyle"
+                      variant="filled"
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
@@ -888,7 +891,7 @@ function AddEditEDR(props) {
                     />
                   </div>
                   <div
-                    className='col-md-4 col-sm-4 col-4'
+                    className="col-md-4 col-sm-4 col-4"
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -897,18 +900,18 @@ function AddEditEDR(props) {
                     <TextField
                       required
                       select
-                      label='Schedule'
-                      name={'schedule'}
+                      label="Schedule"
+                      name={"schedule"}
                       value={schedule}
                       onChange={onChangeValue}
-                      className='textInputStyle'
-                      variant='filled'
+                      className="textInputStyle"
+                      variant="filled"
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
                       }}
                     >
-                      <MenuItem value=''>
+                      <MenuItem value="">
                         <em>None</em>
                       </MenuItem>
                       {scheduleArray.map((val) => {
@@ -916,7 +919,7 @@ function AddEditEDR(props) {
                           <MenuItem key={val.key} value={val.key}>
                             {val.value}
                           </MenuItem>
-                        )
+                        );
                       })}
                     </TextField>
                     <ErrorMessage
@@ -926,7 +929,7 @@ function AddEditEDR(props) {
                   </div>
 
                   <div
-                    className='col-md-4 col-sm-4 col-4'
+                    className="col-md-4 col-sm-4 col-4"
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -936,19 +939,19 @@ function AddEditEDR(props) {
                       required
                       select
                       fullWidth
-                      id='priority'
-                      name='priority'
+                      id="priority"
+                      name="priority"
                       value={priority}
                       onChange={onChangeValue}
-                      label='Priority'
-                      variant='filled'
-                      className='dropDownStyle'
+                      label="Priority"
+                      variant="filled"
+                      className="dropDownStyle"
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
                       }}
                     >
-                      <MenuItem value=''>
+                      <MenuItem value="">
                         <em>None</em>
                       </MenuItem>
                       {priorityArray.map((val) => {
@@ -956,7 +959,7 @@ function AddEditEDR(props) {
                           <MenuItem key={val.key} value={val.key}>
                             {val.value}
                           </MenuItem>
-                        )
+                        );
                       })}
                     </TextField>
                     <ErrorMessage
@@ -992,9 +995,9 @@ function AddEditEDR(props) {
                   </div>
                 </div>
 
-                <div className='row'>
+                <div className="row">
                   <div
-                    className='col-md-6 col-sm-6 col-6'
+                    className="col-md-6 col-sm-6 col-6"
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1002,12 +1005,12 @@ function AddEditEDR(props) {
                   >
                     <TextField
                       required
-                      label='Dosage'
-                      name={'dosage'}
+                      label="Dosage"
+                      name={"dosage"}
                       value={dosage}
                       onChange={onChangeValue}
-                      className='textInputStyle'
-                      variant='filled'
+                      className="textInputStyle"
+                      variant="filled"
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
@@ -1019,7 +1022,7 @@ function AddEditEDR(props) {
                     />
                   </div>
                   <div
-                    className='col-md-6 col-sm-6 col-6'
+                    className="col-md-6 col-sm-6 col-6"
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1027,12 +1030,12 @@ function AddEditEDR(props) {
                   >
                     <TextField
                       required
-                      label='Duration'
-                      name={'duration'}
+                      label="Duration"
+                      name={"duration"}
                       value={duration}
                       onChange={onChangeValue}
-                      className='textInputStyle'
-                      variant='filled'
+                      className="textInputStyle"
+                      variant="filled"
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
@@ -1046,9 +1049,9 @@ function AddEditEDR(props) {
                   </div>
                 </div>
 
-                <div className='row'>
+                <div className="row">
                   <div
-                    className='col-md-6 col-sm-6 col-6'
+                    className="col-md-6 col-sm-6 col-6"
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1056,12 +1059,12 @@ function AddEditEDR(props) {
                   >
                     <TextField
                       required
-                      label='Frequency'
-                      name={'frequency'}
+                      label="Frequency"
+                      name={"frequency"}
                       value={frequency}
                       onChange={onChangeValue}
-                      className='textInputStyle'
-                      variant='filled'
+                      className="textInputStyle"
+                      variant="filled"
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
@@ -1069,7 +1072,7 @@ function AddEditEDR(props) {
                     />
                   </div>
                   <div
-                    className='col-md-6 col-sm-6 col-6'
+                    className="col-md-6 col-sm-6 col-6"
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1078,12 +1081,12 @@ function AddEditEDR(props) {
                     <TextField
                       required
                       disabled
-                      label='Requested Quantity'
-                      name={'requestedQty'}
+                      label="Requested Quantity"
+                      name={"requestedQty"}
                       value={(dosage * duration * frequency).toFixed(2)}
                       onChange={onChangeValue}
-                      className='textInputStyle'
-                      variant='filled'
+                      className="textInputStyle"
+                      variant="filled"
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
@@ -1098,13 +1101,19 @@ function AddEditEDR(props) {
                 </div>
 
                 <div
-                  style={{ display: 'flex', justifyContent: 'space-between' }}
+                  class="row"
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    paddingLeft: 2,
+                    paddingRight: 2,
+                  }}
                 >
-                  <div style={{ marginTop: '2%', marginBottom: '2%' }}>
+                  <div style={{ marginTop: "2%", marginBottom: "2%" }}>
                     <Button
                       onClick={() => hideDialog()}
                       style={styles.stylesForButton}
-                      variant='contained'
+                      variant="contained"
                     >
                       <strong>Cancel</strong>
                     </Button>
@@ -1112,29 +1121,29 @@ function AddEditEDR(props) {
 
                   <div
                     style={{
-                      display: 'flex',
-                      justifyContent: 'flex-end',
-                      marginTop: '2%',
-                      marginBottom: '2%',
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      marginTop: "2%",
+                      marginBottom: "2%",
                     }}
                   >
-                    {selectItemToEditId === '' ? (
+                    {selectItemToEditId === "" ? (
                       <Button
                         style={{
-                          color: 'white',
-                          cursor: 'pointer',
+                          color: "white",
+                          cursor: "pointer",
                           borderRadius: 5,
-                          backgroundColor: '#2c6ddd',
-                          width: '140px',
-                          height: '50px',
-                          outline: 'none',
+                          backgroundColor: "#2c6ddd",
+                          width: "140px",
+                          height: "50px",
+                          outline: "none",
                           paddingLeft: 30,
                           paddingRight: 30,
                         }}
                         disabled={!validateItemsForm()}
                         onClick={addSelectedItem}
-                        variant='contained'
-                        color='primary'
+                        variant="contained"
+                        color="primary"
                       >
                         Add
                       </Button>
@@ -1143,10 +1152,10 @@ function AddEditEDR(props) {
                         style={{ paddingLeft: 30, paddingRight: 30 }}
                         // disabled={!validateItemsForm()}
                         onClick={editSelectedItem}
-                        variant='contained'
-                        color='primary'
+                        variant="contained"
+                        color="primary"
                       >
-                        {' '}
+                        {" "}
                         Edit
                       </Button>
                     )}
@@ -1158,6 +1167,6 @@ function AddEditEDR(props) {
         </div>
       </div>
     </div>
-  )
+  );
 }
-export default AddEditEDR
+export default AddEditEDR;

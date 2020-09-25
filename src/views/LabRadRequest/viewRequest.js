@@ -110,7 +110,10 @@ export default function EdrRequest(props) {
       open={props.openItemDialog}
     >
       <DialogContent style={{ backgroundColor: '#31e2aa' }}>
-        <DialogTitle id='simple-dialog-title' style={{ color: 'white' }}>
+        <DialogTitle
+          id='simple-dialog-title'
+          style={{ color: 'white', marginLeft: '-6px' }}
+        >
           Details
         </DialogTitle>
         <div className='container-fluid'>
@@ -380,17 +383,34 @@ export default function EdrRequest(props) {
             )}
           </div>
 
-          <div>
-            {props.item.audioNotes ? (
+          {props.item.audioNotes ? (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                // justifyContent: "center",
+              }}
+            >
+              <label
+                style={{
+                  paddingLeft: 1,
+                  paddingTop: 27,
+                  color: 'white',
+                  fontWeight: 'bold',
+                }}
+              >
+                Voice notes
+              </label>
               <audio
-                style={{ marginTop: 20 }}
+                style={{ marginTop: 20, marginLeft: 20 }}
                 src={`${audioURL}/${props.item.audioNotes}`}
                 controls='controls'
               />
-            ) : (
-              undefined
-            )}
-          </div>
+            </div>
+          ) : (
+            undefined
+          )}
 
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <div style={{ marginTop: '2%', marginBottom: '2%' }}>

@@ -446,9 +446,7 @@ function AddEditEDR(props) {
                 res.data.data.pharmacyRequest[
                   res.data.data.pharmacyRequest.length - 1
                 ].PRrequestNo
-              } for patient ${
-                res.data.data.patientId.profileNo
-              } added successfully`,
+              } for patient ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
             },
           })
         } else if (!res.data.success) {
@@ -755,13 +753,13 @@ function AddEditEDR(props) {
     >
       <Header />
       <div className={`cPadding ${classes.root}`}>
-        <div className='subheader'>
+        <div className='subheader' style={{ marginLeft: '-10px' }}>
           <div>
             <img src={purchase_request} />
             <h4>{comingFor === 'add' ? 'OPR - Pharmacy Request' : ''}</h4>
           </div>
 
-          <div>
+          <div style={{ marginRight: '-10px' }}>
             <Button
               onClick={() => setDialogOpen(true)}
               style={styles.stylesForButton}
@@ -775,7 +773,10 @@ function AddEditEDR(props) {
           </div>
         </div>
 
-        <div style={{ flex: 4, display: 'flex', flexDirection: 'column' }}>
+        <div
+          style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+          className='container-fluid'
+        >
           <div className='row' style={{ marginTop: '20px' }}>
             {medicineDataArray !== 0 ? (
               <CustomTable
@@ -800,11 +801,19 @@ function AddEditEDR(props) {
               <img
                 onClick={() => props.history.goBack()}
                 src={Back}
-                style={{ width: 45, height: 35, cursor: 'pointer' }}
+                style={{
+                  width: 45,
+                  height: 35,
+                  cursor: 'pointer',
+                  marginLeft: '-10px',
+                }}
               />
             </div>
 
-            <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
+            <div
+              className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'
+              style={{ paddingRight: '1px' }}
+            >
               <Button
                 style={styles.stylesForPurchaseButton}
                 disabled={enableSave}
@@ -826,7 +835,10 @@ function AddEditEDR(props) {
             fullWidth={true}
           >
             <DialogContent style={{ backgroundColor: '#31e2aa' }}>
-              <DialogTitle id='simple-dialog-title' style={{ color: 'white' }}>
+              <DialogTitle
+                id='simple-dialog-title'
+                style={{ color: 'white', marginLeft: '-15px' }}
+              >
                 Add Medicine
               </DialogTitle>
               <div className={`container-fluid ${classes.root}`}>
@@ -1147,7 +1159,13 @@ function AddEditEDR(props) {
                 <div
                   style={{ display: 'flex', justifyContent: 'space-between' }}
                 >
-                  <div style={{ marginTop: '2%', marginBottom: '2%' }}>
+                  <div
+                    style={{
+                      marginTop: '2%',
+                      marginBottom: '2%',
+                      marginLeft: '-10px',
+                    }}
+                  >
                     <Button
                       onClick={() => hideDialog()}
                       style={styles.stylesForButton}
@@ -1163,6 +1181,7 @@ function AddEditEDR(props) {
                       justifyContent: 'flex-end',
                       marginTop: '2%',
                       marginBottom: '2%',
+                      marginRight: '-10px',
                     }}
                   >
                     {selectItemToEditId === '' ? (

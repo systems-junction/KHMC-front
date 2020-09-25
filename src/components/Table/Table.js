@@ -248,16 +248,16 @@ export default function CustomTable(props) {
         );
       }
     } else if (
-      val === "in_progress" ||
-      val === "po_sent" ||
-      val === "items_in_transit" ||
-      val === "pending_approval_from_accounts" ||
-      val === "pending_approval" ||
-      val === "Delivery in Progress" ||
-      val === "Fulfillment Initiated" ||
-      val === "Partial Fulfillment Initiated" ||
-      val === "pending_administration" ||
-      val === "pending_receipt"
+      val === 'in_progress' ||
+      val === 'po_sent' ||
+      val === 'items_in_transit' ||
+      val === 'pending_approval_from_accounts' ||
+      val === 'pending_approval' ||
+      val === 'Delivery in Progress' ||
+      val === 'Fulfillment Initiated' ||
+      val === 'Partial Fulfillment Initiated' ||
+      val === 'pending_administration' ||
+      val === 'pending_receipt'
     ) {
       return (
         <>
@@ -336,7 +336,7 @@ export default function CustomTable(props) {
             >
               <strong>Partial Ful Initiated</strong>
             </Button>
-          ) : val === "pending_receipt" ? (
+          ) : val === 'pending_receipt' ? (
             <Button
               style={stylesB.stylesForActive}
               variant="contained"
@@ -364,33 +364,33 @@ export default function CustomTable(props) {
         </>
       );
     } else if (
-      val === "complete" ||
-      val === "Complete" ||
-      val === "pending" ||
-      val === "modify" ||
-      val === "closed" ||
-      val === "delivered" ||
-      val === "partially completed" ||
-      val === "approved" ||
-      val === "Approved" ||
-      val === "Analysis In Progress" ||
-      val === "reject" ||
-      val === "response in progress" ||
-      val === "partial approved" ||
-      val === "Partial Approved" ||
-      val === "completed" ||
-      val === "approve" ||
-      val === "received" ||
-      val === "Partially Received" ||
-      val === "Partially Completed" ||
-      val === "Cannot be fulfilled" ||
-      val === "Item Returned to Warehouse" ||
-      val === "Returned" ||
-      val === "receive" ||
-      val === "Received" ||
-      val === "rejected" ||
-      val === "Sent for PAR" ||
-      val === "Completed"
+      val === 'complete' ||
+      val === 'Complete' ||
+      val === 'pending' ||
+      val === 'modify' ||
+      val === 'closed' ||
+      val === 'delivered' ||
+      val === 'partially completed' ||
+      val === 'approved' ||
+      val === 'Approved' ||
+      val === 'Analysis In Progress' ||
+      val === 'reject' ||
+      val === 'response in progress' ||
+      val === 'partial approved' ||
+      val === 'Partial Approved' ||
+      val === 'completed' ||
+      val === 'approve' ||
+      val === 'received' ||
+      val === 'Partially Received' ||
+      val === 'Partially Completed' ||
+      val === 'Cannot be fulfilled' ||
+      val === 'Item Returned to Warehouse' ||
+      val === 'Returned' ||
+      val === 'receive' ||
+      val === 'Received' ||
+      val === 'Rejected' ||
+      val === 'Sent for PAR' ||
+      val === 'Completed'
     ) {
       return (
         <>
@@ -723,6 +723,7 @@ export default function CustomTable(props) {
                                   style={{
                                     textAlign: "center",
                                     borderWidth: 0,
+                                    maxWidth:400,
                                   }}
                                 >
                                   {Array.isArray(val)
@@ -739,7 +740,8 @@ export default function CustomTable(props) {
                                   key={key}
                                   onClick={() => handleClick(prop, val)}
                                   style={{
-                                    textAlign: "center",
+                                    maxWidth:400,
+                                    textAlign: 'center',
                                     cursor: props.handleModelMaterialReceiving
                                       ? "pointer"
                                       : "",

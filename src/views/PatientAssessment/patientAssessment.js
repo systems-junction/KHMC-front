@@ -184,7 +184,7 @@ const styles = {
     fontWeight: "bold",
   },
   textFieldPadding: {
-    paddingLeft: 5,
+    paddingLeft: 0,
     paddingRight: 5,
   },
   headerHeading: {
@@ -546,10 +546,10 @@ function PatientAssessment(props) {
           props.history.push({
             pathname: "patientAssessment/success",
             state: {
-              message: `Lab Request # ${
+              message: `Lab Request: ${
                 res.data.data.labRequest[res.data.data.labRequest.length - 1]
                   .LRrequestNo
-              } for patient MRN ${
+              } for patient MRN: ${
                 res.data.data.patientId.profileNo
               } added successfully`,
               patientDetails: patientDetails,
@@ -694,11 +694,11 @@ function PatientAssessment(props) {
           props.history.push({
             pathname: "patientAssessment/success",
             state: {
-              message: `Radiology Request # ${
+              message: `Radiology Request:${
                 res.data.data.radiologyRequest[
                   res.data.data.radiologyRequest.length - 1
                 ].RRrequestNo
-              } for patient MRN ${
+              } for patient MRN: ${
                 res.data.data.patientId.profileNo
               } added successfully`,
 
@@ -1026,13 +1026,13 @@ function PatientAssessment(props) {
     >
       <Header />
       <div className="cPadding">
-        <div className="subheader">
+        <div className="subheader" style={{ marginLeft: "-10px" }}>
           <div>
             <img src={assessmentIcon} />
             <h4>Patient Assessment</h4>
           </div>
 
-          <div>
+          <div style={{ marginRight: "-10px" }}>
             <Button
               // disabled={enableAssessment}
               // onClick={TriageAssessment}
@@ -1100,7 +1100,7 @@ function PatientAssessment(props) {
                   height: 55,
                 }}
               >
-                <img src={BarCode} style={{ width: 80, height: 75 }} />
+                <img src={BarCode} style={{ width: 70, height: 60 }} />
               </div>
             </div>
 
@@ -1135,7 +1135,7 @@ function PatientAssessment(props) {
                   style={{
                     zIndex: 3,
                     position: "absolute",
-                    width: "100%",
+                    width: "99.6%",
                     marginTop: 5,
                   }}
                 >
@@ -1304,12 +1304,8 @@ function PatientAssessment(props) {
                 style={styles.textStyles}
               >
                 {medicationArray
-                  ? medicationArray.map((drug, index) => {
-                      return (
-                        <h6 style={styles.textStyles}>
-                          {index + 1}. {drug}
-                        </h6>
-                      );
+                  ? medicationArray.map((drug) => {
+                      return <h6 style={styles.textStyles}>{drug}</h6>;
                     })
                   : ""}
               </div>
@@ -1473,7 +1469,13 @@ function PatientAssessment(props) {
             </div>
           ) : value === 3 ? (
             <div
-              style={{ flex: 4, display: "flex", flexDirection: "column" }}
+              style={{
+                flex: 4,
+                display: "flex",
+                flexDirection: "column",
+                paddingLeft: "10px",
+                paddingRight: "10px",
+              }}
               className={`container-fluid ${classes.root}`}
             >
               <div style={{ marginTop: "20px" }} className="row">
@@ -1511,7 +1513,15 @@ function PatientAssessment(props) {
               </div>
 
               {searchQuery ? (
-                <div style={{ zIndex: 10 }}>
+                <div
+                  style={{
+                    zIndex: 10,
+                    width: "101.6%",
+                    marginRight: "-8px",
+                    marginLeft: "-10px",
+                    marginTop: "10px",
+                  }}
+                >
                   <Paper style={{ maxHeight: 200, overflow: "auto" }}>
                     {itemFoundSuccessfull ? (
                       itemFound && (
@@ -1589,6 +1599,7 @@ function PatientAssessment(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
+                    paddingLeft: 5,
                   }}
                 >
                   <TextField
@@ -1651,7 +1662,7 @@ function PatientAssessment(props) {
                     // disabled={enableForm}
                     disabled={enableSave}
                     onClick={saveLabReq}
-                    style={{ ...styles.stylesForButton, width: "100px" }}
+                    style={{ ...styles.stylesForButton, width: "140px" }}
                     variant="contained"
                     color="primary"
                   >
@@ -1662,7 +1673,13 @@ function PatientAssessment(props) {
             </div>
           ) : value === 4 ? (
             <div
-              style={{ flex: 4, display: "flex", flexDirection: "column" }}
+              style={{
+                flex: 4,
+                display: "flex",
+                flexDirection: "column",
+                paddingLeft: "10px",
+                paddingRight: "10px",
+              }}
               className={`container-fluid ${classes.root}`}
             >
               <div style={{ marginTop: "20px" }} className="row">
@@ -1701,7 +1718,15 @@ function PatientAssessment(props) {
 
               {searchRadioQuery ? (
                 // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
-                <div style={{ zIndex: 10 }}>
+                <div
+                  style={{
+                    zIndex: 10,
+                    width: "101.6%",
+                    marginRight: "-8px",
+                    marginLeft: "-10px",
+                    marginTop: "10px",
+                  }}
+                >
                   <Paper style={{ maxHeight: 200, overflow: "auto" }}>
                     {radioItemFoundSuccessfull ? (
                       radioItemFound && (
@@ -1779,6 +1804,7 @@ function PatientAssessment(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
+                    paddingLeft: 5,
                   }}
                 >
                   <TextField
@@ -1841,7 +1867,7 @@ function PatientAssessment(props) {
                     // disabled={enableForm}
                     disabled={enableSave}
                     onClick={saveRadioReq}
-                    style={{ ...styles.stylesForButton, width: "100px" }}
+                    style={{ ...styles.stylesForButton, width: "140px" }}
                     variant="contained"
                     color="primary"
                   >
@@ -1896,7 +1922,10 @@ function PatientAssessment(props) {
           }}
         >
           <DialogContent style={{ backgroundColor: "#31e2aa" }}>
-            <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
+            <DialogTitle
+              id="simple-dialog-title"
+              style={{ color: "white", marginLeft: "-6px" }}
+            >
               Added Items
             </DialogTitle>
             <div className="container-fluid">

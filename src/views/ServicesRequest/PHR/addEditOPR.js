@@ -107,6 +107,7 @@ const styles = {
     borderRadius: 5,
     backgroundColor: "#e877a1",
     height: "45px",
+    width: "190px",
     outline: "none",
   },
   None: {
@@ -549,9 +550,9 @@ function AddEditPatientListing(props) {
       emergencyName &&
       emergencyName.length > 0 &&
       validateEmergencyName(emergencyName) &&
-      emergencyContactNo &&
-      emergencyContactNo.length > 0 &&
-      !validatePhone(emergencyContactNo) &&
+      // emergencyContactNo &&
+      // emergencyContactNo.length > 0 &&
+      // !validatePhone(emergencyContactNo) &&
       emergencyRelation &&
       emergencyRelation.length > 0 &&
       validateRelation(emergencyRelation)
@@ -874,7 +875,9 @@ function AddEditPatientListing(props) {
           props.history.push({
             pathname: "success",
             state: {
-              message: `OP Record for request # ${res.data.data.requestNo} patient MRN ${MRN} has been generated successfully`,
+              message: `OP Record for Request: ${
+                res.data.data.requestNo
+              } patient MRN: ${MRN.toUpperCase()} has been generated successfully`,
             },
           });
         } else if (!res.data.success) {
@@ -1170,7 +1173,7 @@ function AddEditPatientListing(props) {
     >
       <Header />
       <div className="cPadding">
-        <div className="subheader">
+        <div className="subheader" style={{ marginLeft: "-10px" }}>
           <div>
             <img src={patientRegister} />
             <div style={{ flex: 4, display: "flex", alignItems: "center" }}>
@@ -1181,7 +1184,7 @@ function AddEditPatientListing(props) {
               </h3>
             </div>
           </div>
-          <div>
+          <div style={{ marginLeft: "-10px" }}>
             <ButtonField
               onClick={() => props.history.goBack()}
               name="viewAll"
@@ -1296,7 +1299,7 @@ function AddEditPatientListing(props) {
                         // width: 100,
                       }}
                     >
-                      <img src={BarCode} style={{ width: 80, height: 75 }} />
+                      <img src={BarCode} style={{ width: 70, height: 60 }} />
                     </div>
                   </div>
 
@@ -2211,10 +2214,10 @@ function AddEditPatientListing(props) {
                     label="Contact No"
                     name={"emergencyContactNo"}
                     value={emergencyContactNo}
-                    hyperText="emergency contact format +962xxxxxxxx"
+                    // hyperText='emergency contact format +962xxxxxxxx'
                     defaultCountry={"jo"}
                     onChange={onEmergencyNumberChange}
-                    error={emergencyContactNo === "" && emergencyForm}
+                    // error={emergencyContactNo === '' && emergencyForm}
                     className="textInputStyle"
                     variant="filled"
                     InputProps={{
@@ -2227,15 +2230,15 @@ function AddEditPatientListing(props) {
                     }}
                   />
 
-                  {emergencyContactNo && !validatePhone(emergencyContactNo) ? (
+                  {/* {emergencyContactNo && !validatePhone(emergencyContactNo) ? (
                     undefined
                   ) : (
                     <ErrorMessage
                       name={emergencyContactNo}
-                      type="phone"
+                      type='phone'
                       isFormSubmitted={emergencyForm}
                     />
-                  )}
+                  )} */}
                 </div>
               </div>
             </div>
@@ -2971,7 +2974,7 @@ function AddEditPatientListing(props) {
                       height: 55,
                     }}
                   >
-                    <img src={BarCode} style={{ width: 80, height: 75 }} />
+                    <img src={BarCode} style={{ width: 70, height: 60 }} />
                   </div>
                 </div>
 
@@ -3151,8 +3154,8 @@ function AddEditPatientListing(props) {
                         classes: { input: classes.input },
                       }}
                     >
-                      <MenuItem value={coveredFamilyMembers}>
-                        {coveredFamilyMembers}
+                      <MenuItem value="">
+                        <em>Family Member</em>
                       </MenuItem>
 
                       {coveredFamilyArray.map((val) => {
