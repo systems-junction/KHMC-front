@@ -568,9 +568,9 @@ function AddEditPatientListing(props) {
       emergencyName &&
       emergencyName.length > 0 &&
       validateEmergencyName(emergencyName) &&
-      emergencyContactNo &&
-      emergencyContactNo.length > 0 &&
-      !validatePhone(emergencyContactNo) &&
+      // emergencyContactNo &&
+      // emergencyContactNo.length > 0 &&
+      // !validatePhone(emergencyContactNo) &&
       emergencyRelation &&
       emergencyRelation.length > 0 &&
       validateRelation(emergencyRelation)
@@ -2233,10 +2233,10 @@ function AddEditPatientListing(props) {
                     label='Contact No'
                     name={'emergencyContactNo'}
                     value={emergencyContactNo}
-                    hyperText='emergency contact format +962xxxxxxxx'
+                    // hyperText='emergency contact format +962xxxxxxxx'
                     defaultCountry={'jo'}
                     onChange={onEmergencyNumberChange}
-                    error={emergencyContactNo === '' && emergencyForm}
+                    // error={emergencyContactNo === '' && emergencyForm}
                     className='textInputStyle'
                     variant='filled'
                     InputProps={{
@@ -2249,7 +2249,7 @@ function AddEditPatientListing(props) {
                     }}
                   />
 
-                  {emergencyContactNo && !validatePhone(emergencyContactNo) ? (
+                  {/* {emergencyContactNo && !validatePhone(emergencyContactNo) ? (
                     undefined
                   ) : (
                     <ErrorMessage
@@ -2257,7 +2257,7 @@ function AddEditPatientListing(props) {
                       type='phone'
                       isFormSubmitted={emergencyForm}
                     />
-                  )}
+                  )} */}
                 </div>
               </div>
             </div>
