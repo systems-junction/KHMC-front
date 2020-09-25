@@ -39,12 +39,14 @@ import Fingerprint from "../../../assets/img/fingerprint.png";
 const tableHeadingForBillSummary = [
   "Date/Time",
   "Service Name",
+  "Service Type",
   "Amount",
   "Invoice",
 ];
 const tableDataKeysForBillSummary = [
   "date",
   ["serviceId", "name"],
+  "serviceType",
   ["serviceId", "price"],
 ];
 
@@ -536,13 +538,18 @@ function AddEditPatientListing(props) {
             }
             let obj = {
               serviceId: {
-                name: "Pharmacy Service",
-                price: amount,
+                name: "Pharmacy Item",
+                price: amount.toFixed(2),
               },
               date: res.data.data.pharmacyRequest[i].dateGenerated,
+              serviceType:"Pharmacy"
             };
             pharm.push(obj);
           }
+
+          res.data.data.labRequest.map((d) => (d.serviceType = "Lab"))
+          res.data.data.radiologyRequest.map((d) => (d.serviceType = "Radiology"))
+          
           // console.log("Bill sumamry is ... ", [].concat(res.data.data.labRequest, res.data.data.radiologyRequest,pharm ))
           setbillSummaryArray(
             [].concat(res.data.data.labRequest.reverse(), res.data.data.radiologyRequest.reverse(),pharm.reverse())
@@ -607,7 +614,8 @@ function AddEditPatientListing(props) {
       });
   };
 
-  const handleInvoicePrint = () => {
+  const handleInvoicePrint = (item) => {
+    console.log("Item for invoice", item)
     alert("Printer not attached");
   };
 
