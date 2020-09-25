@@ -239,8 +239,9 @@ const useStylesForInput = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: 'white',
     },
-    '&:disabled': {
+    '&:disable': {
       color: 'gray',
+      backgroundColor: 'white',
     },
   },
   multilineColor: {
@@ -252,6 +253,10 @@ const useStylesForInput = makeStyles((theme) => ({
     '&:after': {
       borderBottomColor: 'black',
     },
+    '&:disable': {
+      color: 'gray',
+      backgroundColor: 'white',
+    },
   },
   root: {
     '& .MuiTextField-root': {
@@ -260,6 +265,14 @@ const useStylesForInput = makeStyles((theme) => ({
     '& .Mui-focused': {
       backgroundColor: 'white',
       color: 'black',
+    },
+    '&:disable': {
+      color: 'gray',
+      backgroundColor: 'white',
+    },
+    '& .Mui-disabled': {
+      color: 'gray',
+      backgroundColor: 'white',
     },
   },
 }))
@@ -1692,7 +1705,13 @@ function LabRadRequest(props) {
             </div>
           ) : value === 4 ? (
             <div
-              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              style={{
+                flex: 4,
+                display: 'flex',
+                flexDirection: 'column',
+                paddingLeft: '10px',
+                paddingRight: '10px',
+              }}
               className={`container-fluid ${classes.root}`}
             >
               <div style={{ marginTop: '20px' }} className='row'>

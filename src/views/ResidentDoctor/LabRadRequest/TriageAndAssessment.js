@@ -261,7 +261,7 @@ function TriageAndAssessment(props) {
       <Header />
 
       <div className='cPadding'>
-        <div className='subheader'>
+        <div className='subheader' style={{ marginLeft: '-10px' }}>
           <div>
             <img src={business_Unit} />
             <div style={{ flex: 4, display: 'flex', alignItems: 'center' }}>
@@ -307,7 +307,6 @@ function TriageAndAssessment(props) {
               }}
               label='Triage Level'
             />
-
           </Tabs>
         </div>
 
@@ -989,13 +988,13 @@ function TriageAndAssessment(props) {
                   borderBottomWidth={20}
                 />
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
             </div>
           </div>
         ) : (
-                undefined
-              )}
+          undefined
+        )}
 
         <Notification
           msg={errorMsg}

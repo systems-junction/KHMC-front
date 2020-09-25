@@ -1449,7 +1449,13 @@ function PatientCare(props) {
             </div>
           ) : value === 3 ? (
             <div
-              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              style={{
+                flex: 4,
+                display: 'flex',
+                flexDirection: 'column',
+                paddingLeft: '10px',
+                paddingRight: '10px',
+              }}
               className={`container-fluid ${classes.root}`}
             >
               <div style={{ marginTop: '20px' }} className='row'>
@@ -1638,7 +1644,13 @@ function PatientCare(props) {
             </div>
           ) : value === 4 ? (
             <div
-              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              style={{
+                flex: 4,
+                display: 'flex',
+                flexDirection: 'column',
+                paddingLeft: '10px',
+                paddingRight: '10px',
+              }}
               className={`container-fluid ${classes.root}`}
             >
               <div style={{ marginTop: '20px' }} className='row'>

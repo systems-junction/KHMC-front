@@ -9,7 +9,7 @@ import TextField from '@material-ui/core/TextField'
 import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
 import axios from 'axios'
 import { FaUpload } from 'react-icons/fa'
-import Fingerprint from '../../../assets/img/fingerprint.png'
+import Fingerprint from '../../../assets/img/Bar Code.png'
 import BarCode from '../../../assets/img/Bar Code.png'
 import AccountCircle from '@material-ui/icons/SearchOutlined'
 import InputAdornment from '@material-ui/core/InputAdornment'
@@ -940,7 +940,7 @@ function AddEditPurchaseRequest(props) {
                     marginRight: '-6px',
                   }}
                 >
-                  <img src={Fingerprint} style={{ maxWidth: 35, height: 35 }} />
+                  <img src={Fingerprint} style={{ maxWidth: 70, height: 60 }} />
                 </div>
               </div>
             </div>

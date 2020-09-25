@@ -3006,9 +3006,9 @@ function AddEditPatientListing(props) {
                 >
                   <Button
                     style={{
-                      ...styles.stylesForButton,
+                      // ...styles.stylesForButton,
                       height: '53px',
-                      width: 98,
+                      width: '98%',
                       backgroundColor: '#ba55d3',
                     }}
                     variant='contained'
