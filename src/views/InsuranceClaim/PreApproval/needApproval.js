@@ -243,8 +243,7 @@ function AddEditEDR(props) {
           console.log("response while adding Approval Req", res.data.data);
           props.history.push({
             pathname: "success",
-            // todo: adding requestNo, patient MRN
-            state: { message: "Request Submitted successfully" },
+            state: { message: `Request No ${res.data.data.requestNo} Submitted Successfully` },
           });
         } else if (!res.data.success) {
           setOpenNotification(true);

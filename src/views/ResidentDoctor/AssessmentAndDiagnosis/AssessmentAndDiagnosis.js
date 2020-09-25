@@ -571,9 +571,7 @@ function LabRadRequest(props) {
                     res.data.data.consultationNote[
                       res.data.data.consultationNote.length - 1
                     ].consultationNo
-                  } for patient MRN ${
-                    res.data.data.patientId.profileNo
-                  } submitted successfully`,
+                  } for patient MRN ${res.data.data.patientId.profileNo.toUpperCase()} submitted successfully`,
                 },
               });
             } else if (!res.data.success) {
@@ -664,9 +662,7 @@ function LabRadRequest(props) {
                     res.data.data.residentNotes[
                       res.data.data.residentNotes.length - 1
                     ].residentNoteNo
-                  } for patient MRN ${
-                    res.data.data.patientId.profileNo
-                  } added successfully`,
+                  } for patient MRN ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
                 },
               });
             } else if (!res.data.success) {
@@ -828,9 +824,7 @@ function LabRadRequest(props) {
               message: `Lab Request # ${
                 res.data.data.labRequest[res.data.data.labRequest.length - 1]
                   .LRrequestNo
-              } for patient MRN ${
-                res.data.data.patientId.profileNo
-              } added successfully`,
+              } for patient MRN ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
             },
           });
         } else if (!res.data.success) {
@@ -976,9 +970,7 @@ function LabRadRequest(props) {
                 res.data.data.radiologyRequest[
                   res.data.data.radiologyRequest.length - 1
                 ].RRrequestNo
-              } for patient MRN ${
-                res.data.data.patientId.profileNo
-              } added successfully`,
+              } for patient MRN ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
             },
           });
         } else if (!res.data.success) {
@@ -1356,13 +1348,13 @@ function LabRadRequest(props) {
     >
       <Header />
       <div className="cPadding">
-        <div className="subheader">
+        <div className="subheader" style={{ marginLeft: "-10px" }}>
           <div>
             <img src={Lab_RadIcon} />
             <h4>Assessment & Diagnosis</h4>
           </div>
 
-          <div>
+          <div style={{ marginRight: "-10px" }}>
             <Button
               // disabled={enableForm}
               onClick={enableForm ? showAlert : TriageAssessment}
@@ -1426,7 +1418,7 @@ function LabRadRequest(props) {
                   height: 55,
                 }}
               >
-                <img src={BarCode} style={{ width: 80, height: 75 }} />
+                <img src={BarCode} style={{ width: 70, height: 60 }} />
               </div>
             </div>
 
@@ -1630,12 +1622,8 @@ function LabRadRequest(props) {
                 style={styles.textStyles}
               >
                 {medicationArray
-                  ? medicationArray.map((drug, index) => {
-                      return (
-                        <h6 style={styles.textStyles}>
-                          {index + 1}. {drug}
-                        </h6>
-                      );
+                  ? medicationArray.map((drug) => {
+                      return <h6 style={styles.textStyles}>{drug}</h6>;
                     })
                   : ""}
               </div>
@@ -2479,6 +2467,7 @@ function LabRadRequest(props) {
                         input: classes.multilineColor,
                       },
                     }}
+                    inputProps={{ maxLength: 300 }}
                   />
                 </div>
               </div>

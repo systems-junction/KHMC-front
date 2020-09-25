@@ -311,7 +311,7 @@ function AddEditPurchaseRequest(props) {
               pathname: 'success',
               state: {
                 //of Request No ${requestId}
-                message: `Lab Service for patient MRN ${res.data.data.patientId.profileNo} updated successfully`,
+                message: `Lab Service for patient MRN ${res.data.data.patientId.profileNo.toUpperCase()} updated successfully`,
               },
             })
           } else if (!res.data.success) {
@@ -455,7 +455,7 @@ function AddEditPurchaseRequest(props) {
 
       {!isLoading ? (
         <div className='cPadding'>
-          <div className='subheader'>
+          <div className='subheader' style={{ marginLeft: '-8px' }}>
             <div>
               <img src={business_Unit} />
               <h4>OPR - Lab Service</h4>
@@ -884,7 +884,12 @@ function AddEditPurchaseRequest(props) {
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back}
-                  style={{ width: 45, height: 35, cursor: 'pointer' }}
+                  style={{
+                    width: 45,
+                    height: 35,
+                    cursor: 'pointer',
+                    marginLeft: '-10px',
+                  }}
                 />
               </div>
               <div

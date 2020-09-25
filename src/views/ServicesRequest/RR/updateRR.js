@@ -310,7 +310,7 @@ function AddEditPurchaseRequest(props) {
             state: {
               //of Request No ${requestId}
               // request #
-              message: `Radiology Service for patient MRN ${res.data.data.patientId.profileNo} updated successfully`,
+              message: `Radiology Service for patient MRN ${res.data.data.patientId.profileNo.toUpperCase()} updated successfully`,
             },
           })
         } else if (!res.data.success) {
@@ -434,7 +434,7 @@ function AddEditPurchaseRequest(props) {
 
       {!isLoading ? (
         <div className='cPadding'>
-          <div className='subheader'>
+          <div className='subheader' style={{ marginLeft: '-8px' }}>
             <div>
               <img src={business_Unit} />
               <h4>OPR - Radiology Service</h4>
@@ -794,7 +794,12 @@ function AddEditPurchaseRequest(props) {
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back}
-                  style={{ width: 45, height: 35, cursor: 'pointer' }}
+                  style={{
+                    width: 45,
+                    height: 35,
+                    cursor: 'pointer',
+                    marginLeft: '-10px',
+                  }}
                 />
               </div>
               <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>

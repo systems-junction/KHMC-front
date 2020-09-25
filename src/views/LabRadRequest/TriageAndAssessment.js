@@ -9,6 +9,7 @@ import business_Unit from '../../assets/img/Purchase Order.png'
 import Back_Arrow from '../../assets/img/Back_Arrow.png'
 import cookie from 'react-cookies'
 import axios from 'axios'
+import _ from 'lodash'
 import { updateEdrIpr } from '../../public/endpoins'
 import '../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
 import Notification from '../../components/Snackbar/Notification.js'
@@ -136,7 +137,10 @@ function TriageAndAssessment(props) {
       )
       dispatch({
         field: 'triageAssessmentArray',
-        value: selectedRec.triageAssessment.reverse(),
+        value: _.sortBy(
+          selectedRec.triageAssessment.reverse(),
+          'date'
+        ).reverse(),
       })
     }
   }, [])
@@ -261,7 +265,7 @@ function TriageAndAssessment(props) {
       <Header />
 
       <div className='cPadding'>
-        <div className='subheader'>
+        <div className='subheader' style={{ marginLeft: '-10px' }}>
           <div>
             <img src={business_Unit} />
             <div style={{ flex: 4, display: 'flex', alignItems: 'center' }}>
@@ -307,7 +311,6 @@ function TriageAndAssessment(props) {
               }}
               label='Triage Level'
             />
-
           </Tabs>
         </div>
 
@@ -989,13 +992,13 @@ function TriageAndAssessment(props) {
                   borderBottomWidth={20}
                 />
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
             </div>
           </div>
         ) : (
-                undefined
-              )}
+          undefined
+        )}
 
         <Notification
           msg={errorMsg}

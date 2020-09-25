@@ -116,13 +116,13 @@ export default function PatientListing(props) {
     >
       <Header />
       <div className='cPadding'>
-        <div className='subheader'>
+        <div className='subheader' style={{ marginLeft: '-10px' }}>
           <div>
             <img src={patientRegister} />
             <h4>Patient Registration</h4>
           </div>
 
-          <div>
+          <div style={{ marginRight: '-10px' }}>
             <ButtonField onClick={addNewItem} name='add' />
             {/* <SearchField /> */}
           </div>
