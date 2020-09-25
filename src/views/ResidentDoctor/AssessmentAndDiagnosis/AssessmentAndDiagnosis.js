@@ -2464,6 +2464,7 @@ function LabRadRequest(props) {
                       classes: { input: classes.input },
                       disableUnderline: true,
                     }}
+                    inputProps={{ maxLength: 300 }}
                   />
                 </div>
               </div>

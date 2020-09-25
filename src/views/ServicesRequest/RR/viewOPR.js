@@ -992,7 +992,7 @@ function AddEditPurchaseRequest(props) {
 
       {!isLoading ? (
         <div className='cPadding'>
-          <div className='subheader'>
+          <div className='subheader' style={{ marginLeft: '-10px' }}>
             <div>
               <img src={business_Unit} />
               <h4>OPR - Radiology Service</h4>
@@ -1057,6 +1057,7 @@ function AddEditPurchaseRequest(props) {
                     backgroundColor: 'white',
                     borderRadius: 5,
                     height: 55,
+                    marginRight: '-6px',
                   }}
                 >
                   <img src={Fingerprint} style={{ maxWidth: 35, height: 35 }} />
@@ -1218,7 +1219,12 @@ function AddEditPurchaseRequest(props) {
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back}
-                  style={{ width: 45, height: 35, cursor: 'pointer' }}
+                  style={{
+                    width: 45,
+                    height: 35,
+                    cursor: 'pointer',
+                    marginLeft: '-10px',
+                  }}
                 />
               </div>
               <div
@@ -1228,7 +1234,7 @@ function AddEditPurchaseRequest(props) {
                 <Button
                   disabled={enableSave}
                   onClick={saveRadioReq}
-                  style={styles.stylesForButton}
+                  style={{ ...styles.stylesForButton, width: '140px' }}
                   variant='contained'
                   color='primary'
                 >

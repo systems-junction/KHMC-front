@@ -105,12 +105,12 @@ export default function EDR(props) {
       <Header />
 
       <div className='cPadding'>
-        <div className='subheader'>
+        <div className='subheader' style={{ marginLeft: '-10px' }}>
           <div>
             <img src={business_Unit} />
             <h4>Out Patient</h4>
           </div>
-          <div>
+          <div style={{ marginRight: '-10px' }}>
             <ButtonField onClick={addNewItem} name='add' />
             {/* <img src={Search} /> */}
           </div>

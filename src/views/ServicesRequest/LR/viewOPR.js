@@ -875,7 +875,7 @@ function AddEditPurchaseRequest(props) {
 
       {!isLoading ? (
         <div className='cPadding'>
-          <div className='subheader'>
+          <div className='subheader' style={{ marginLeft: '-10px' }}>
             <div>
               <img src={business_Unit} />
               <h4>OPR - Lab Service</h4>
@@ -937,6 +937,7 @@ function AddEditPurchaseRequest(props) {
                     backgroundColor: 'white',
                     borderRadius: 5,
                     height: 55,
+                    marginRight: '-6px',
                   }}
                 >
                   <img src={Fingerprint} style={{ maxWidth: 35, height: 35 }} />
@@ -1101,14 +1102,19 @@ function AddEditPurchaseRequest(props) {
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back}
-                  style={{ width: 45, height: 35, cursor: 'pointer' }}
+                  style={{
+                    width: 45,
+                    height: 35,
+                    cursor: 'pointer',
+                    marginLeft: '-10px',
+                  }}
                 />
               </div>
               <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
                 <Button
                   disabled={enableSave}
                   onClick={saveLabReq}
-                  style={styles.stylesForButton}
+                  style={{ ...styles.stylesForButton, width: '140px' }}
                   variant='contained'
                   color='primary'
                 >

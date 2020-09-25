@@ -810,9 +810,10 @@ function LabRadRequest(props) {
           props.history.push({
             pathname: 'cn/success',
             state: {
-              message: `Lab Request # ${res.data.data.labRequest[res.data.data.labRequest.length - 1]
-                .LRrequestNo
-                } for patient MRN ${res.data.data.patientId} added successfully`,
+              message: `Lab Request # ${
+                res.data.data.labRequest[res.data.data.labRequest.length - 1]
+                  .LRrequestNo
+              } for patient MRN ${res.data.data.patientId} added successfully`,
             },
           })
           notifyForLab(patientId)
@@ -966,11 +967,13 @@ function LabRadRequest(props) {
           props.history.push({
             pathname: 'cn/success',
             state: {
-              message: `Radiology Request # ${res.data.data.radiologyRequest[
-                res.data.data.radiologyRequest.length - 1
-              ].RRrequestNo
-                } for patient MRN ${res.data.data.patientId.profileNo
-                } added successfully`,
+              message: `Radiology Request # ${
+                res.data.data.radiologyRequest[
+                  res.data.data.radiologyRequest.length - 1
+                ].RRrequestNo
+              } for patient MRN ${
+                res.data.data.patientId.profileNo
+              } added successfully`,
             },
           })
           notifyForRad(patientId)
@@ -1209,16 +1212,16 @@ function LabRadRequest(props) {
                     field: 'pharmacyRequestArray',
                     value: val.reverse(),
                   })
-                  let data = [];
+                  let data = []
                   val.map((d) => {
                     d.item.map((item) => {
-                      let found = data.find((i) => i === item.itemId.name);
+                      let found = data.find((i) => i === item.itemId.name)
                       if (!found) {
-                        data.push(item.itemId.name);
+                        data.push(item.itemId.name)
                       }
-                    });
-                  });
-                  dispatch({ field: "medicationArray", value: data });
+                    })
+                  })
+                  dispatch({ field: 'medicationArray', value: data })
                 }
                 //  else if (key === "nurseService") {
                 //     dispatch({ field: "nurseService", value: val });
@@ -1295,13 +1298,13 @@ function LabRadRequest(props) {
     >
       <Header />
       <div className='cPadding'>
-        <div className='subheader'>
+        <div className='subheader' style={{ marginLeft: '-10px' }}>
           <div style={{}}>
             <img src={ConsultationIcon} />
             <h4>Consultation Notes</h4>
           </div>
 
-          <div style={{ width: '50%' }}>
+          <div style={{ width: '50%', marginRight: '-10px' }}>
             <Button
               disabled={enableForm}
               onClick={TriageAssessment}
@@ -1376,7 +1379,7 @@ function LabRadRequest(props) {
                   height: 55,
                 }}
               >
-                <img src={BarCode} style={{ width: 80, height: 75 }} />
+                <img src={BarCode} style={{ width: 70, height: 60 }} />
               </div>
             </div>
 
@@ -1451,18 +1454,18 @@ function LabRadRequest(props) {
                         </Table>
                       )
                     ) : (
-                        <h4
-                          style={{ textAlign: 'center' }}
-                          onClick={() => setSearchPatientQuery('')}
-                        >
-                          Patient Not Found
-                        </h4>
-                      )}
+                      <h4
+                        style={{ textAlign: 'center' }}
+                        onClick={() => setSearchPatientQuery('')}
+                      >
+                        Patient Not Found
+                      </h4>
+                    )}
                   </Paper>
                 </div>
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
             </div>
           </div>
         </div>
@@ -1580,12 +1583,10 @@ function LabRadRequest(props) {
                 style={styles.textStyles}
               >
                 {medicationArray
-                  ? medicationArray.map((drug, index) => {
-                    return (
-                      <h6 style={styles.textStyles}>{index + 1}. {drug}</h6>
-                    );
-                  })
-                  : ""}
+                  ? medicationArray.map((drug) => {
+                      return <h6 style={styles.textStyles}>{drug}</h6>
+                    })
+                  : ''}
               </div>
 
               <div
@@ -1593,9 +1594,9 @@ function LabRadRequest(props) {
                 style={styles.textStyles}
               >
                 {diagnosisArray
-                  ? diagnosisArray.map((drug, index) => {
-                    return <h6 style={styles.textStyles}>{drug}</h6>
-                  })
+                  ? diagnosisArray.map((drug) => {
+                      return <h6 style={styles.textStyles}>{drug}</h6>
+                    })
                   : ''}
               </div>
             </div>
@@ -1692,8 +1693,8 @@ function LabRadRequest(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
               {/* <div className='row' style={{ marginBottom: '25px' }}>
                 <div className='col-md-6 col-sm-6 col-6'></div>
@@ -1731,8 +1732,8 @@ function LabRadRequest(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
 
               {/* <div className="row" style={{ marginBottom: "25px" }}>
@@ -1836,18 +1837,18 @@ function LabRadRequest(props) {
                         </Table>
                       )
                     ) : (
-                        <h4
-                          style={{ textAlign: 'center' }}
-                          onClick={() => setSearchQuery('')}
-                        >
-                          Service Not Found
-                        </h4>
-                      )}
+                      <h4
+                        style={{ textAlign: 'center' }}
+                        onClick={() => setSearchQuery('')}
+                      >
+                        Service Not Found
+                      </h4>
+                    )}
                   </Paper>
                 </div>
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
 
               <div style={{ marginTop: '20px' }} className='row'>
                 <div
@@ -1942,8 +1943,8 @@ function LabRadRequest(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
 
               <div className='row' style={{ marginBottom: '25px' }}>
@@ -1954,7 +1955,7 @@ function LabRadRequest(props) {
                   <Button
                     disabled={enableForm}
                     onClick={saveLabReq}
-                    style={{ ...styles.stylesForSave, width: '100px' }}
+                    style={{ ...styles.stylesForSave, width: '140px' }}
                     variant='contained'
                     color='primary'
                   >
@@ -2045,18 +2046,18 @@ function LabRadRequest(props) {
                         </Table>
                       )
                     ) : (
-                        <h4
-                          style={{ textAlign: 'center' }}
-                          onClick={() => setSearchRadioQuery('')}
-                        >
-                          Service Not Found
-                        </h4>
-                      )}
+                      <h4
+                        style={{ textAlign: 'center' }}
+                        onClick={() => setSearchRadioQuery('')}
+                      >
+                        Service Not Found
+                      </h4>
+                    )}
                   </Paper>
                 </div>
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
 
               <div style={{ marginTop: '20px' }} className='row'>
                 <div
@@ -2152,8 +2153,8 @@ function LabRadRequest(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
 
               <div className='row' style={{ marginBottom: '25px' }}>
@@ -2164,7 +2165,7 @@ function LabRadRequest(props) {
                   <Button
                     disabled={enableForm}
                     onClick={saveRadioReq}
-                    style={{ ...styles.stylesForSave, width: '100px' }}
+                    style={{ ...styles.stylesForSave, width: '140px' }}
                     variant='contained'
                     color='primary'
                   >
@@ -2190,168 +2191,168 @@ function LabRadRequest(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
-            </div> /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/)
+            </div> /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/)
           ) : (
-                      //     : value === 5 ? (
-                      //         <div
-                      //             style={{ flex: 4, display: "flex", flexDirection: "column" }}
-                      //             // className={`container ${classes.root}`}
-                      //             className="container-fluid"
-                      //         >
-                      //             <div style={{ marginTop: "20px" }} className="row">
-                      //                 <div
-                      //                     className="col-md-12 col-sm-12 col-12"
-                      //                     style={{
-                      //                         ...styles.inputContainerForTextField,
-                      //                         ...styles.textFieldPadding,
-                      //                     }}
-                      //                 >
-                      //                     <TextField
-                      //                         required
-                      //                         label="Service Name"
-                      //                         name={"searchNurseQuery"}
-                      //                         value={searchNurseQuery}
-                      //                         // error={searchNurseQuery === '' && isFormSubmitted}
-                      //                         onChange={handleNurseSearch}
-                      //                         className="textInputStyle"
-                      //                         variant="filled"
-                      //                         InputProps={{
-                      //                             className: classes.input,
-                      //                             classes: { input: classes.input },
-                      //                         }}
-                      //                     />
-                      //                 </div>
-                      //             </div>
-                      //             {searchNurseQuery ? (
-                      //                 // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
-                      //                 <div style={{ zIndex: 10 }}>
-                      //                     <Paper>
-                      //                         {nurseItemFoundSuccessfull ? (
-                      //                             nurseItemFound && (
-                      //                                 <Table size="small">
-                      //                                     <TableHead>
-                      //                                         <TableRow>
-                      //                                             <TableCell>Service Name</TableCell>
-                      //                                             <TableCell>Service Number</TableCell>
-                      //                                             <TableCell>Price</TableCell>
-                      //                                             <TableCell align="center">
-                      //                                                 Description
-                      //                   </TableCell>
-                      //                                         </TableRow>
-                      //                                     </TableHead>
-                      //                                     <TableBody>
-                      //                                         {nurseItemFound.map((i, index) => {
-                      //                                             return (
-                      //                                                 <TableRow
-                      //                                                     key={i.serviceNo}
-                      //                                                     onClick={() => handleAddNurseItem(i)}
-                      //                                                     style={{ cursor: "pointer" }}
-                      //                                                 >
-                      //                                                     <TableCell>{i.name}</TableCell>
-                      //                                                     <TableCell>{i.serviceNo}</TableCell>
-                      //                                                     <TableCell>{i.price}</TableCell>
-                      //                                                     <TableCell>{i.description}</TableCell>
-                      //                                                 </TableRow>
-                      //                                             );
-                      //                                         })}
-                      //                                     </TableBody>
-                      //                                 </Table>
-                      //                             )
-                      //                         ) : (
-                      //                                 <h4
-                      //                                     style={{ textAlign: "center" }}
-                      //                                     onClick={() => setSearchNurseQuery("")}
-                      //                                 >
-                      //                                     Service Not Found
-                      //                                 </h4>
-                      //                             )}
-                      //                     </Paper>
-                      //                 </div>
-                      //             ) : (
-                      //                     undefined
-                      //                 )}
-                      //             <div style={{ marginTop: "20px" }} className="row">
-                      //                 <div
-                      //                     className="col-md-10 col-sm-10 col-6"
-                      //                     style={{
-                      //                         ...styles.inputContainerForTextField,
-                      //                         ...styles.textFieldPadding,
-                      //                     }}
-                      //                 >
-                      //                     <TextField
-                      //                         required
-                      //                         label="Selected Service"
-                      //                         name={"nurseServiceName"}
-                      //                         value={nurseServiceName}
-                      //                         // error={nurseServiceName === '' && isFormSubmitted}
-                      //                         onChange={onChangeValue}
-                      //                         className="textInputStyle"
-                      //                         variant="filled"
-                      //                         InputProps={{
-                      //                             className: classes.input,
-                      //                             classes: { input: classes.input },
-                      //                         }}
-                      //                     />
-                      //                 </div>
-                      //                 <div className="col-md-2 col-sm-2 col-6">
-                      //                     <Button
-                      //                         style={{
-                      //                             ...styles.stylesForButton,
-                      //                             marginTop: "25px",
-                      //                             backgroundColor: "#ad6bbf",
-                      //                         }}
-                      //                         disabled={!addNurseRequest}
-                      //                         onClick={addSelectedNurseItem}
-                      //                         variant="contained"
-                      //                         color="primary"
-                      //                         fullWidth
-                      //                     >
-                      //                         Add
-                      //       </Button>
-                      //                 </div>
-                      //             </div>
-                      //             <div className="row" style={{ marginTop: "20px" }}>
-                      //                 {nurseService !== 0 ? (
-                      //                     <CustomTable
-                      //                         tableData={nurseService}
-                      //                         tableDataKeys={tableDataKeysForNurse}
-                      //                         tableHeading={tableHeadingForNurse}
-                      //                         handleView={viewItem}
-                      //                         action={actions}
-                      //                         borderBottomColor={"#60D69F"}
-                      //                         borderBottomWidth={20}
-                      //                     />
-                      //                 ) : (
-                      //                         undefined
-                      //                     )}
-                      //             </div>
-                      //             <div className="row" style={{ marginBottom: "25px" }}>
-                      //                 <div className="col-md-6 col-sm-6 col-6">
-                      //                     <img
-                      //                         onClick={() => props.history.goBack()}
-                      //                         src={Back}
-                      //                         style={{ width: 45, height: 35, cursor: "pointer" }}
-                      //                     />
-                      //                 </div>
-                      //                 <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
-                      //                     <Button
-                      //                         onClick={saveNurseReq}
-                      //                         style={styles.stylesForButton}
-                      //                         variant="contained"
-                      //                         color="primary"
-                      //                     >
-                      //                         <strong style={{ fontSize: "12px" }}>Save</strong>
-                      //                     </Button>
-                      //                 </div>
-                      //             </div>
-                      //         </div>
-                      // )
+            //     : value === 5 ? (
+            //         <div
+            //             style={{ flex: 4, display: "flex", flexDirection: "column" }}
+            //             // className={`container ${classes.root}`}
+            //             className="container-fluid"
+            //         >
+            //             <div style={{ marginTop: "20px" }} className="row">
+            //                 <div
+            //                     className="col-md-12 col-sm-12 col-12"
+            //                     style={{
+            //                         ...styles.inputContainerForTextField,
+            //                         ...styles.textFieldPadding,
+            //                     }}
+            //                 >
+            //                     <TextField
+            //                         required
+            //                         label="Service Name"
+            //                         name={"searchNurseQuery"}
+            //                         value={searchNurseQuery}
+            //                         // error={searchNurseQuery === '' && isFormSubmitted}
+            //                         onChange={handleNurseSearch}
+            //                         className="textInputStyle"
+            //                         variant="filled"
+            //                         InputProps={{
+            //                             className: classes.input,
+            //                             classes: { input: classes.input },
+            //                         }}
+            //                     />
+            //                 </div>
+            //             </div>
+            //             {searchNurseQuery ? (
+            //                 // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
+            //                 <div style={{ zIndex: 10 }}>
+            //                     <Paper>
+            //                         {nurseItemFoundSuccessfull ? (
+            //                             nurseItemFound && (
+            //                                 <Table size="small">
+            //                                     <TableHead>
+            //                                         <TableRow>
+            //                                             <TableCell>Service Name</TableCell>
+            //                                             <TableCell>Service Number</TableCell>
+            //                                             <TableCell>Price</TableCell>
+            //                                             <TableCell align="center">
+            //                                                 Description
+            //                   </TableCell>
+            //                                         </TableRow>
+            //                                     </TableHead>
+            //                                     <TableBody>
+            //                                         {nurseItemFound.map((i, index) => {
+            //                                             return (
+            //                                                 <TableRow
+            //                                                     key={i.serviceNo}
+            //                                                     onClick={() => handleAddNurseItem(i)}
+            //                                                     style={{ cursor: "pointer" }}
+            //                                                 >
+            //                                                     <TableCell>{i.name}</TableCell>
+            //                                                     <TableCell>{i.serviceNo}</TableCell>
+            //                                                     <TableCell>{i.price}</TableCell>
+            //                                                     <TableCell>{i.description}</TableCell>
+            //                                                 </TableRow>
+            //                                             );
+            //                                         })}
+            //                                     </TableBody>
+            //                                 </Table>
+            //                             )
+            //                         ) : (
+            //                                 <h4
+            //                                     style={{ textAlign: "center" }}
+            //                                     onClick={() => setSearchNurseQuery("")}
+            //                                 >
+            //                                     Service Not Found
+            //                                 </h4>
+            //                             )}
+            //                     </Paper>
+            //                 </div>
+            //             ) : (
+            //                     undefined
+            //                 )}
+            //             <div style={{ marginTop: "20px" }} className="row">
+            //                 <div
+            //                     className="col-md-10 col-sm-10 col-6"
+            //                     style={{
+            //                         ...styles.inputContainerForTextField,
+            //                         ...styles.textFieldPadding,
+            //                     }}
+            //                 >
+            //                     <TextField
+            //                         required
+            //                         label="Selected Service"
+            //                         name={"nurseServiceName"}
+            //                         value={nurseServiceName}
+            //                         // error={nurseServiceName === '' && isFormSubmitted}
+            //                         onChange={onChangeValue}
+            //                         className="textInputStyle"
+            //                         variant="filled"
+            //                         InputProps={{
+            //                             className: classes.input,
+            //                             classes: { input: classes.input },
+            //                         }}
+            //                     />
+            //                 </div>
+            //                 <div className="col-md-2 col-sm-2 col-6">
+            //                     <Button
+            //                         style={{
+            //                             ...styles.stylesForButton,
+            //                             marginTop: "25px",
+            //                             backgroundColor: "#ad6bbf",
+            //                         }}
+            //                         disabled={!addNurseRequest}
+            //                         onClick={addSelectedNurseItem}
+            //                         variant="contained"
+            //                         color="primary"
+            //                         fullWidth
+            //                     >
+            //                         Add
+            //       </Button>
+            //                 </div>
+            //             </div>
+            //             <div className="row" style={{ marginTop: "20px" }}>
+            //                 {nurseService !== 0 ? (
+            //                     <CustomTable
+            //                         tableData={nurseService}
+            //                         tableDataKeys={tableDataKeysForNurse}
+            //                         tableHeading={tableHeadingForNurse}
+            //                         handleView={viewItem}
+            //                         action={actions}
+            //                         borderBottomColor={"#60D69F"}
+            //                         borderBottomWidth={20}
+            //                     />
+            //                 ) : (
+            //                         undefined
+            //                     )}
+            //             </div>
+            //             <div className="row" style={{ marginBottom: "25px" }}>
+            //                 <div className="col-md-6 col-sm-6 col-6">
+            //                     <img
+            //                         onClick={() => props.history.goBack()}
+            //                         src={Back}
+            //                         style={{ width: 45, height: 35, cursor: "pointer" }}
+            //                     />
+            //                 </div>
+            //                 <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
+            //                     <Button
+            //                         onClick={saveNurseReq}
+            //                         style={styles.stylesForButton}
+            //                         variant="contained"
+            //                         color="primary"
+            //                     >
+            //                         <strong style={{ fontSize: "12px" }}>Save</strong>
+            //                     </Button>
+            //                 </div>
+            //             </div>
+            //         </div>
+            // )
 
-                      undefined
-                    )}
+            undefined
+          )}
 
           {openItemDialog ? (
             <ViewSingleRequest
@@ -2360,8 +2361,8 @@ function LabRadRequest(props) {
               viewItem={viewItem}
             />
           ) : (
-              undefined
-            )}
+            undefined
+          )}
 
           {openUpdateItemDialog ? (
             <UpdateSingleRequest
@@ -2373,8 +2374,8 @@ function LabRadRequest(props) {
               viewItem={UpdateItem}
             />
           ) : (
-              undefined
-            )}
+            undefined
+          )}
         </div>
 
         <Dialog
@@ -2825,7 +2826,10 @@ function LabRadRequest(props) {
           }}
         >
           <DialogContent style={{ backgroundColor: '#31e2aa' }}>
-            <DialogTitle id='simple-dialog-title' style={{ color: 'white' }}>
+            <DialogTitle
+              id='simple-dialog-title'
+              style={{ color: 'white', marginLeft: '-6px' }}
+            >
               Added Items
             </DialogTitle>
             <div className='container-fluid'>
@@ -2836,20 +2840,20 @@ function LabRadRequest(props) {
                     ? tableHeadingForBUMemberForItems
                     : currentUser.staffTypeId.type === 'Registered Nurse' ||
                       currentUser.staffTypeId.type === 'BU Doctor'
-                      ? tableHeadingForBUMemberForItems
-                      : currentUser.staffTypeId.type === 'FU Inventory Keeper'
-                        ? tableHeadingForFUMemberForItems
-                        : tableHeadingForFUMemberForItems
+                    ? tableHeadingForBUMemberForItems
+                    : currentUser.staffTypeId.type === 'FU Inventory Keeper'
+                    ? tableHeadingForFUMemberForItems
+                    : tableHeadingForFUMemberForItems
                 }
                 tableDataKeys={
                   currentUser.staffTypeId.type === 'Doctor/Physician'
                     ? tableDataKeysForItemsForBUMember
                     : currentUser.staffTypeId.type === 'Registered Nurse' ||
                       currentUser.staffTypeId.type === 'BU Doctor'
-                      ? tableDataKeysForItemsForBUMember
-                      : currentUser.staffTypeId.type === 'FU Inventory Keeper'
-                        ? tableDataKeysForFUMemberForItems
-                        : tableDataKeysForItemsForBUMember
+                    ? tableDataKeysForItemsForBUMember
+                    : currentUser.staffTypeId.type === 'FU Inventory Keeper'
+                    ? tableDataKeysForFUMemberForItems
+                    : tableDataKeysForItemsForBUMember
                 }
                 // action={
                 //   currentUser.staffTypeId.type === "Registered Nurse"
