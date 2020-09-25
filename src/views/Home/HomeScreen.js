@@ -58,6 +58,7 @@ import FuncUFulfillment from "../../assets/img/FuncU Fulfillment.png";
 import MedicationOrder from "../../assets/img/Medication Order.png";
 import ProfessionalOrder from "../../assets/img/Professional Order.png";
 
+
 import { connect } from "react-redux";
 import {
   funForReducer,
@@ -634,6 +635,15 @@ const purchasingOfficer = [
   },
 ];
 
+const cashier = [
+  { img: KHMC, text: "KHMC APPS", path: "" },
+  {
+    img: claimsReview,
+    text: "Patient Clearence",
+    path: "/home/rcm/patientclearence",
+  },
+];
+
 class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -976,6 +986,8 @@ class HomeScreen extends React.Component {
               ? doctorPhysician
               : userType && userType.type === "Consultant/Specialist"
               ? consultantSpecialist
+              : userType && userType.type === "Cashier"
+              ? cashier
               : admin
           }
         />

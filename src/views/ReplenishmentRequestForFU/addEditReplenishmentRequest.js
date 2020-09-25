@@ -546,7 +546,7 @@ function AddEditPurchaseRequest(props) {
               props.history.replace({
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
-                  message: `Replenisment request ${res.data.data.requestNo} has been addded successfully`,
+                  message: `Replenisment Request ${res.data.data.requestNo} has been addded successfully`,
                 },
               });
             } else if (!res.data.success) {
@@ -1609,9 +1609,13 @@ function AddEditPurchaseRequest(props) {
           {currentUser &&
           currentUser.staffTypeId.type === "FU Inventory Keeper" ? (
             <div>
-              <h5 style={{ color: "white", fontWeight: "700", marginTop: 15 }}>
-                Add Item
-              </h5>
+              <div className='row' > 
+                <h5
+                  style={{ color: "white", fontWeight: "700", marginTop: 20, marginLeft:3 }}
+                >
+                  Add Item
+                </h5>
+              </div>
 
               {selectItemToEditId === "" ? (
                 <div className="row">
@@ -1658,7 +1662,7 @@ function AddEditPurchaseRequest(props) {
                     <Paper style={{ ...stylesForPaper.paperStyle }}>
                       {itemFoundSuccessfull ? (
                         itemFound && (
-                          <Table size="small">
+                          <Table size="small" stickyHeader>
                             <TableHead>
                               <TableRow>
                                 <TableCell>Item Code</TableCell>
@@ -1949,7 +1953,7 @@ function AddEditPurchaseRequest(props) {
                     // height: 50,
                     justifyContent: "flex-end",
                     marginTop: "2%",
-                    marginBottom: "2%",
+                    // marginBottom: "1%",
                   }}
                 >
                   {selectItemToEditId === "" ? (
@@ -2106,8 +2110,8 @@ function AddEditPurchaseRequest(props) {
               <h5
                 style={{
                   color: "white",
-                  marginTop: 10,
-                  marginBottom: 10,
+                  marginTop: 20,
+                  marginBottom: 20,
                   fontWeight: "700",
                 }}
               >

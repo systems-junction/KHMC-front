@@ -140,6 +140,33 @@ const inputStyles = makeStyles((theme) => ({
   // },
 }));
 
+const inputStylesForCurrency = makeStyles((theme) => ({
+  input: {
+    backgroundColor: "white",
+    borderRadius: 5,
+
+    boxShadow: "none",
+
+    "&": {
+      // backgroundColor: "white",
+      boxShadow: "none",
+    },
+    "&:after": {
+      // backgroundColor: "white",
+      boxShadow: "none",
+    },
+    "&:hover": {
+      backgroundColor: "white",
+      boxShadow: "none",
+    },
+
+    "&:focus": {
+      boxShadow: "none",
+      // backgroundColor: "white",
+    },
+  },
+}));
+
 const useStyles = makeStyles(tableStyles);
 // const useStylesForInput = makeStyles(inputStyles);
 
@@ -149,6 +176,8 @@ const time = DATE.getHours();
 
 function ReceiveItems(props) {
   const classesForInput = inputStyles();
+  const classesForInputForCurrency = inputStylesForCurrency();
+
   const classes = useStyles();
 
   const initialState = {
@@ -947,7 +976,7 @@ function ReceiveItems(props) {
                 onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
               /> */}
               <CurrencyTextField
-                disabled
+                // disabled
                 style={{ backgroundColor: "white", borderRadius: 5 }}
                 className="textInputStyle"
                 id="discountAmount"
@@ -958,12 +987,13 @@ function ReceiveItems(props) {
                 variant="filled"
                 textAlign="left"
                 InputProps={{
-                  className: classesForInput.input,
-                  classes: { input: classesForInput.input },
+                  className: classesForInputForCurrency.input,
+                  classes: { input: classesForInputForCurrency.input },
+                  readOnly: true,
                 }}
                 InputLabelProps={{
-                  className: classesForInput.label,
-                  classes: { label: classesForInput.label },
+                  className: classesForInputForCurrency.label,
+                  classes: { label: classesForInputForCurrency.label },
                 }}
                 currencySymbol="JD"
                 outputFormat="number"
@@ -1309,7 +1339,7 @@ function ReceiveItems(props) {
                         : null
                       : receivedDate
                   }
-                  // disableFuture
+                  disableFuture
                   InputProps={{
                     className: classesForInput.input,
                     classes: { input: classesForInput.input },

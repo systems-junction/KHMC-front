@@ -1705,7 +1705,7 @@ function AddEditPurchaseRequest(props) {
                       <Paper style={{ ...stylesForPaper.paperStyle }}>
                         {itemFoundSuccessfull ? (
                           itemFound && (
-                            <Table size="small">
+                            <Table stickyHeader size="small">
                               <TableHead>
                                 <TableRow>
                                   <TableCell

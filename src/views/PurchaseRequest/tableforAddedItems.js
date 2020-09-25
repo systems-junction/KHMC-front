@@ -252,7 +252,7 @@ export default function DenseTable(props) {
                 // fontSize: "0.9rem",
               }}
             >
-              {row.itemId.receiptUnitCost}
+              {row.itemId.receiptUnitCost} JD
             </TableCell>
 
             {currentUser &&

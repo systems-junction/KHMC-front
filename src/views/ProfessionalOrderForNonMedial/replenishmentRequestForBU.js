@@ -581,9 +581,9 @@ export default function ReplenishmentRequest(props) {
 
               {props.history.location.pathname ===
               "/home/wms/fus/professionalorder/receiveorder" ? (
-                <h4>Order Items (Non-Medical)</h4>
+                <h4>Ordered Items (Non-Medical)</h4>
               ) : (
-                <h4>Order Items (Non-Medical)</h4>
+                <h4>Ordered Items (Non-Medical)</h4>
               )}
             </div>
 

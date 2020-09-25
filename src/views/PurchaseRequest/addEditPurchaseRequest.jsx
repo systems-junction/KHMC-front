@@ -1580,7 +1580,7 @@ function AddEditPurchaseRequest(props) {
             <div>
               <div className="row">
                 <h5
-                  style={{ color: "white", fontWeight: "700", marginTop: 20 }}
+                  style={{ color: "white", fontWeight: "700", marginTop:15 }}
                 >
                   Item Details
                 </h5>
@@ -1627,7 +1627,7 @@ function AddEditPurchaseRequest(props) {
                       <Paper style={{ ...stylesForPaper.paperStyle }}>
                         {itemFoundSuccessfull ? (
                           itemFound && (
-                            <Table size="small">
+                            <Table size="small" stickyHeader>
                               <TableHead>
                                 <TableRow>
                                   <TableCell style={styles.forTableCell}>
@@ -1915,7 +1915,6 @@ function AddEditPurchaseRequest(props) {
                     // height: 50,
                     justifyContent: "flex-end",
                     marginTop: "2%",
-                    marginBottom: "2%",
                   }}
                 >
                   {selectItemToEditId === "" ? (
@@ -1980,7 +1979,7 @@ function AddEditPurchaseRequest(props) {
                 style={{
                   color: "white",
                   marginTop: 10,
-                  marginBottom: 10,
+                  marginBottom: 15,
                   fontWeight: "700",
                 }}
               >

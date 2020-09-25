@@ -653,7 +653,7 @@ export default function ReplenishmentRequest(props) {
           <div className="subheader">
             <div>
               <img src={business_Unit} />
-              <h4>Order Items (Medical)</h4>
+              <h4>Ordered Items (Medical)</h4>
             </div>
 
             {/* {currentUser &&
