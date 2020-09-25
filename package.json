@@ -45,6 +45,7 @@
     "react-select-country-list": "^2.2.1",
     "react-swipeable": "^5.5.1",
     "react-swipeable-views": "0.13.3",
+    "react-to-print": "^2.10.0",
     "react-toasts": "^3.0.6",
     "redux": "^4.0.5",
     "redux-persist": "^6.0.0",
