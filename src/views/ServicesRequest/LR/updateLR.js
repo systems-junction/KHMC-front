@@ -311,7 +311,7 @@ function AddEditPurchaseRequest(props) {
               pathname: 'success',
               state: {
                 //of Request No ${requestId}
-                message: `Lab Service for patient MRN ${res.data.data.patientId.profileNo} updated successfully`,
+                message: `Lab Service for patient MRN ${res.data.data.patientId.profileNo.toUpperCase()} updated successfully`,
               },
             })
           } else if (!res.data.success) {

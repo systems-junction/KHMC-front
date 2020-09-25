@@ -370,7 +370,9 @@ function AddEditPurchaseRequest(props) {
               pathname: 'success',
               state: {
                 //of Request No ${res.data.data.dischargeRequest.dischargeMedication.requester}
-                message: `Medication order # ${res.data.data.requestNo} for patient MRN ${res.data.data.patientId.profileNo} updated successfully`,
+                message: `Medication order # ${
+                  res.data.data.requestNo
+                } for patient MRN ${res.data.data.patientId.profileNo.toUpperCase()} updated successfully`,
               },
             })
           } else if (!res.data.success) {

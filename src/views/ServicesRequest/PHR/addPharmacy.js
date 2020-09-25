@@ -446,9 +446,7 @@ function AddEditEDR(props) {
                 res.data.data.pharmacyRequest[
                   res.data.data.pharmacyRequest.length - 1
                 ].PRrequestNo
-              } for patient ${
-                res.data.data.patientId.profileNo
-              } added successfully`,
+              } for patient ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
             },
           })
         } else if (!res.data.success) {

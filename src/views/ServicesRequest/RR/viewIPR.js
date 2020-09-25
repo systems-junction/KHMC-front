@@ -258,7 +258,9 @@ function AddEditPurchaseRequest(props) {
             pathname: 'success',
             state: {
               //of Request No ${requestId}
-              message: `Radiology services request # ${res.data.data.requestNo} for patient MRN ${res.data.data.patientId.profileNo} updated successfully`,
+              message: `Radiology services request # ${
+                res.data.data.requestNo
+              } for patient MRN ${res.data.data.patientId.profileNo.toUpperCase()} updated successfully`,
             },
           })
         } else {
