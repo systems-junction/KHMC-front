@@ -818,7 +818,14 @@ function AddEditEDR(props) {
 
                 {searchQuery ? (
                   // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
-                  <div style={{ zIndex: 3 }}>
+                  <div
+                    style={{
+                      zIndex: 3,
+                      marginTop: 10,
+                      marginLeft: -8,
+                      width: "101.5%",
+                    }}
+                  >
                     <Paper style={{ maxHeight: 200, overflow: "auto" }}>
                       {itemFoundSuccessfull ? (
                         itemFound && (
