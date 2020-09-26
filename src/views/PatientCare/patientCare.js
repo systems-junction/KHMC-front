@@ -1502,9 +1502,9 @@ function PatientCare(props) {
                 <div
                   style={{
                     zIndex: 10,
-                    width: "101.6%",
-                    marginRight: "-8px",
-                    marginLeft: "-10px",
+                    width: "101.9%",
+                    marginRight: "-3px",
+                    marginLeft: "-14px",
                     marginTop: "10px",
                   }}
                 >
@@ -1705,7 +1705,14 @@ function PatientCare(props) {
 
               {searchRadioQuery ? (
                 // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
-                <div style={{ zIndex: 10 }}>
+                <div
+                  style={{
+                    zIndex: 10,
+                    marginTop: 10,
+                    marginLeft: -14,
+                    width: "101.9%",
+                  }}
+                >
                   <Paper style={{ maxHeight: 200, overflow: "auto" }}>
                     {radioItemFoundSuccessfull ? (
                       radioItemFound && (

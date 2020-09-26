@@ -570,7 +570,7 @@ function DischargeRequest(props) {
                   style={{
                     zIndex: 3,
                     position: "absolute",
-                    width: "100%",
+                    width: "99%",
                     marginTop: 5,
                   }}
                 >

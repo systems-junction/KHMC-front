@@ -1549,7 +1549,7 @@ function LabRadRequest(props) {
                   style={{
                     zIndex: 3,
                     position: "absolute",
-                    width: "100%",
+                    width: "99%",
                     marginTop: 5,
                   }}
                 >
@@ -1998,7 +1998,14 @@ function LabRadRequest(props) {
               </div>
 
               {searchQuery ? (
-                <div style={{ zIndex: 10 }}>
+                <div
+                  style={{
+                    zIndex: 10,
+                    marginTop: 10,
+                    marginLeft: -8,
+                    width: "101.5%",
+                  }}
+                >
                   <Paper style={{ maxHeight: 200, overflow: "auto" }}>
                     {itemFoundSuccessfull ? (
                       itemFound && (
@@ -2208,7 +2215,14 @@ function LabRadRequest(props) {
 
               {searchRadioQuery ? (
                 // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
-                <div style={{ zIndex: 10 }}>
+                <div
+                  style={{
+                    zIndex: 10,
+                    marginTop: 10,
+                    marginLeft: -8,
+                    width: "101.5%",
+                  }}
+                >
                   <Paper style={{ maxHeight: 200, overflow: "auto" }}>
                     {radioItemFoundSuccessfull ? (
                       radioItemFound && (

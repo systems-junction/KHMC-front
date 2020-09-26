@@ -2200,7 +2200,7 @@ function AddEditPatientListing(props) {
               </div>
             </div>
 
-            <div className="row">
+            <div className="row" style={{ marginBottom: 16 }}>
               <div
                 className="col-md-12"
                 style={{
