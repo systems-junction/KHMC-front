@@ -50,6 +50,9 @@ import InputLabelComponent from "../../components/InputLabel/inputLabel";
 import BootstrapInput from "../../components/Dropdown/dropDown.js";
 import ErrorMessage from "../../components/ErrorMessage/errorMessage";
 
+import ViewAll from "../../components/ViewAllBtn/viewAll";
+
+
 import Add_New from "../../assets/img/Add_New.png";
 
 import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
@@ -629,7 +632,7 @@ function AddEditPurchaseRequest(props) {
             </h4>
           </div>
 
-          <div>
+          {/* <div>
             <Button
               onClick={() => props.history.goBack()}
               style={styles.stylesForButton}
@@ -640,7 +643,9 @@ function AddEditPurchaseRequest(props) {
               &nbsp;&nbsp;
               <strong>View All</strong>
             </Button>
-          </div>
+          </div> */}
+
+          <ViewAll history={props.history} />
         </div>
 
         {fuArray && fuArray !== "" ? (
@@ -831,9 +836,13 @@ function AddEditPurchaseRequest(props) {
 
             {/* {currentQty && description ? ( */}
             <div>
-              <h4 style={{ color: "white", fontWeight: "700", marginTop: 30 }}>
-                Item Details
-              </h4>
+              <div className="row">
+                <h4
+                  style={{ color: "white", fontWeight: "700", marginTop: 30 }}
+                >
+                  Item Details
+                </h4>
+              </div>
               <div className="row">
                 <div
                   className="col-md-4"
@@ -1265,16 +1274,13 @@ function AddEditPurchaseRequest(props) {
               undefined
             )}
 
-            <div
-              style={{
-                display: "flex",
-                flex: 1,
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
+            <div className="row">
               <div
                 style={{
+                  display: "flex",
+                  flex: 1,
+                  justifyContent: "space-between",
+                  alignItems: "center",
                   marginTop: "2%",
                   marginBottom: "2%",
                 }}
@@ -1284,14 +1290,7 @@ function AddEditPurchaseRequest(props) {
                   src={Back_Arrow}
                   style={{ width: 60, height: 40, cursor: "pointer" }}
                 />
-              </div>
 
-              <div
-                style={{
-                  marginTop: "2%",
-                  marginBottom: "2%",
-                }}
-              >
                 {comingFor === "add" ? (
                   <Button
                     style={styles.stylesForPurchaseButton}

@@ -52,7 +52,8 @@ import InputLabelComponent from "../../components/InputLabel/inputLabel";
 import ErrorMessage from "../../components/ErrorMessage/errorMessage";
 
 import add_new from "../../assets/img/Plus.png";
-import useStyleforinput from "../../../src/assets/jss/material-dashboard-react/inputStyle.js";
+import MUIStyleForinput from "../../../src/assets/jss/material-dashboard-react/inputStyle.js";
+import MUIStyleForInputForCurrency from "../../../src/assets/jss/material-dashboard-react/inputStylesForCurrency.js";
 
 import ViewAllBtn from "../../components/ViewAllBtn/viewAll";
 import TableForAddedItems from "./tableforAddedItems";
@@ -216,7 +217,9 @@ const inputStyles = makeStyles((theme) => ({
   },
 }));
 function AddEditPurchaseRequest(props) {
-  const classes = inputStyles();
+  const classes = MUIStyleForinput();
+  const classesForInputForCurrency = MUIStyleForInputForCurrency();
+
   const initialState = {
     _id: "",
     requestNo: "",
@@ -1609,9 +1612,14 @@ function AddEditPurchaseRequest(props) {
           {currentUser &&
           currentUser.staffTypeId.type === "FU Inventory Keeper" ? (
             <div>
-              <div className='row' > 
+              <div className="row">
                 <h5
-                  style={{ color: "white", fontWeight: "700", marginTop: 20, marginLeft:3 }}
+                  style={{
+                    color: "white",
+                    fontWeight: "700",
+                    marginTop: 20,
+                    marginLeft: 3,
+                  }}
                 >
                   Add Item
                 </h5>
@@ -1909,12 +1917,12 @@ function AddEditPurchaseRequest(props) {
                     variant="filled"
                     textAlign="left"
                     InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
+                      className: classesForInputForCurrency.input,
+                      classes: { input: classesForInputForCurrency.input },
                     }}
                     InputLabelProps={{
-                      className: classes.label,
-                      classes: { label: classes.label },
+                      className: classesForInputForCurrency.label,
+                      classes: { label: classesForInputForCurrency.label },
                     }}
                     currencySymbol="JD"
                     // outputFormat="number"

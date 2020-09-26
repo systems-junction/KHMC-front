@@ -11,7 +11,6 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
-import tableStyles from "../../assets/jss/material-dashboard-react/components/tableStyle.js";
 import axios from "axios";
 import Notification from "../../components/Snackbar/Notification.js";
 import DateFnsUtils from "@date-io/date-fns";
@@ -847,7 +846,7 @@ function AddEditPurchaseRequest(props) {
 
   function handleAddPatient(i) {
     // setDialogOpen(true);
-    
+
     setSelectedPatient(i);
     dispatch({ field: "patientReferenceNo", value: i.profileNo });
 
@@ -1372,6 +1371,7 @@ function AddEditPurchaseRequest(props) {
         flexDirection: "column",
         flex: 1,
         overflowY: "scroll",
+        overflowX: "hidden",
       }}
     >
       <Header />
@@ -1396,7 +1396,7 @@ function AddEditPurchaseRequest(props) {
               onClick={() =>
                 props.history.push("/home/wms/fus/medicinalorder/view")
               }
-              style={{ ...styles.stylesForButton, height: 50 }}
+              style={{ ...styles.stylesForButton, height: 45, fontSize: 12 }}
               variant="contained"
               color="primary"
             >
@@ -1408,7 +1408,8 @@ function AddEditPurchaseRequest(props) {
         </div>
 
         <div style={{ marginTop: "5px", marginBottom: "5px" }}>
-          {comingFor === "add"  && !props.history.location.state.comingFromRCM ? (
+          {comingFor === "add" &&
+          !props.history.location.state.comingFromRCM ? (
             <div>
               <div className="row">
                 {/* <span class="fa fa-search"></span> */}
@@ -1489,7 +1490,7 @@ function AddEditPurchaseRequest(props) {
                   <Paper style={{ ...stylesForPaper.paperStyle }}>
                     {patientFoundSuccessfull ? (
                       patientFound && (
-                        <Table size="small">
+                        <Table stickyHeader size="small">
                           <TableHead>
                             <TableRow>
                               <TableCell>MRN Number</TableCell>
@@ -1553,9 +1554,11 @@ function AddEditPurchaseRequest(props) {
 
         {fuArray && fuArray !== "" ? (
           <div style={{ flex: 4, display: "flex", flexDirection: "column" }}>
-            <h5 style={{ fontWeight: "bold", color: "white", marginTop: 25 }}>
-              Order Item
-            </h5>
+            <div className="row">
+              <h5 style={{ fontWeight: "bold", color: "white", marginTop: 20 }}>
+                Order Item
+              </h5>
+            </div>
 
             <div
               className="container-fluid"
@@ -2083,7 +2086,10 @@ function AddEditPurchaseRequest(props) {
                   </div>
                   <div
                     className="col-md-3"
-                    style={styles.inputContainerForTextField}
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
                   >
                     {selectItemToEditId === "" ? (
                       <Button
@@ -2442,8 +2448,8 @@ function AddEditPurchaseRequest(props) {
                 <h5
                   style={{
                     color: "white",
-                    marginTop: 10,
-                    marginBottom: 10,
+                    marginTop: 15,
+                    marginBottom: 15,
                     fontWeight: "700",
                   }}
                 >

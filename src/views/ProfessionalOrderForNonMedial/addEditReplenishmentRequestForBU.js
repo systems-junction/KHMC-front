@@ -2431,7 +2431,10 @@ function AddEditPurchaseRequest(props) {
                   </div>
                   <div
                     className="col-md-3 col-sm-3 col-3"
-                    style={styles.inputContainerForTextField}
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
                   >
                     {selectItemToEditId === "" ? (
                       <Button
@@ -2821,7 +2824,10 @@ function AddEditPurchaseRequest(props) {
                   </div>
                   <div
                     className="col-md-3 col-sm-3 col-3"
-                    style={styles.inputContainerForTextField}
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
                   >
                     {selectItemToEditId === "" ? (
                       <Button

@@ -2,7 +2,7 @@ import { makeStyles, withStyles } from "@material-ui/core/styles";
 
 export default makeStyles((theme) => ({
   input: {
-    backgroundColor: "white",
+    backgroundColor: "white!important",
     borderRadius: 4,
     "&:placeholder": {
       // color: "gray",
@@ -22,6 +22,7 @@ export default makeStyles((theme) => ({
 
     "&:focus": {
       backgroundColor: "white",
+      boxShadow: "none",
     },
   },
 
