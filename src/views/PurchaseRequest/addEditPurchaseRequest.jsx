@@ -417,6 +417,12 @@ function AddEditPurchaseRequest(props) {
   }, []);
 
   const handleAdd = () => {
+    if (requestedItemsArray === "" || requestedItemsArray.length === 0) {
+      setOpenNotification(true);
+      setErrorMsg("Please add items first before creating purchase request");
+      return;
+    }
+
     if (!validateForm()) {
       setIsFormSubmitted(true);
       setOpenNotification(true);
@@ -494,7 +500,7 @@ function AddEditPurchaseRequest(props) {
                 props.history.replace({
                   pathname: "/home/wms/fus/medicinalorder/success",
                   state: {
-                    message: `Purchase request ${res.data.data.requestNo} has been added successfully`,
+                    message: `Purchase Request ${res.data.data.requestNo} has been added successfully`,
                   },
                 });
                 socket.emit("purchaseRequest");
@@ -513,6 +519,12 @@ function AddEditPurchaseRequest(props) {
   };
 
   const handleEdit = () => {
+    if (requestedItemsArray === "" || requestedItemsArray.length === 0) {
+      setOpenNotification(true);
+      setErrorMsg("Please add items first before creating purchase request");
+      return;
+    }
+
     if (!validateForm()) {
       setIsFormSubmitted(true);
       setOpenNotification(true);
@@ -591,7 +603,7 @@ function AddEditPurchaseRequest(props) {
                 props.history.replace({
                   pathname: "/home/wms/fus/medicinalorder/success",
                   state: {
-                    message: `Purchase request # ${requestNo} has been updated successfully`,
+                    message: `Purchase Request ${requestNo} has been updated successfully`,
                   },
                 });
               } else if (!res.data.success) {
@@ -706,7 +718,7 @@ function AddEditPurchaseRequest(props) {
               props.history.replace({
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
-                  message: `Purchase request ${requestNo} status has been set to ${committeeStatus}`,
+                  message: `Purchase Request ${requestNo} status has been set to ${committeeStatus}`,
                 },
               });
             } else if (!res.data.success) {
@@ -805,7 +817,7 @@ function AddEditPurchaseRequest(props) {
       description.length > 0 &&
       name.length > 0 &&
       reqQty.length > 0 &&
-      reqQty!== '0' &&
+      reqQty !== "0" &&
       // currentQty.length > 0 &&
       comments.length > 0
       // && maximumLevel >= reqQty
@@ -1580,7 +1592,7 @@ function AddEditPurchaseRequest(props) {
             <div>
               <div className="row">
                 <h5
-                  style={{ color: "white", fontWeight: "700", marginTop:15 }}
+                  style={{ color: "white", fontWeight: "700", marginTop: 15 }}
                 >
                   Item Details
                 </h5>
@@ -1630,11 +1642,17 @@ function AddEditPurchaseRequest(props) {
                             <Table size="small" stickyHeader>
                               <TableHead>
                                 <TableRow>
-                                  <TableCell style={styles.forTableCell}>
+                                  <TableCell
+                                    align="center"
+                                    style={styles.forTableCell}
+                                  >
                                     Trade Name
                                   </TableCell>
 
-                                  <TableCell style={styles.forTableCell}>
+                                  <TableCell
+                                    align="center"
+                                    style={styles.forTableCell}
+                                  >
                                     Item Code
                                   </TableCell>
 
@@ -1645,7 +1663,10 @@ function AddEditPurchaseRequest(props) {
                                     Item Name
                                   </TableCell> */}
 
-                                  <TableCell style={styles.forTableCell}>
+                                  <TableCell
+                                    align="center"
+                                    style={styles.forTableCell}
+                                  >
                                     Receipt Unit Cost
                                   </TableCell>
 
@@ -1653,7 +1674,10 @@ function AddEditPurchaseRequest(props) {
                                     Vendor No
                                   </TableCell> */}
 
-                                  <TableCell style={styles.forTableCell}>
+                                  <TableCell
+                                    align="center"
+                                    style={styles.forTableCell}
+                                  >
                                     Vendor Name
                                   </TableCell>
 
@@ -1674,18 +1698,24 @@ function AddEditPurchaseRequest(props) {
                                       onClick={() => handleAddItem(i)}
                                       style={{ cursor: "pointer" }}
                                     >
-                                      <TableCell>{i.tradeName}</TableCell>
-                                      <TableCell>{i.itemCode}</TableCell>
+                                      <TableCell align="center">
+                                        {i.tradeName}
+                                      </TableCell>
+                                      <TableCell align="center">
+                                        {i.itemCode}
+                                      </TableCell>
                                       {/* <TableCell align="center">
                                         {i.name}
                                       </TableCell> */}
 
-                                      <TableCell>{i.receiptUnitCost}</TableCell>
+                                      <TableCell align="center">
+                                        {i.receiptUnitCost}
+                                      </TableCell>
 
                                       {/* <TableCell>
                                         {i.vendorId.vendorNo}
                                       </TableCell> */}
-                                      <TableCell>
+                                      <TableCell align="center">
                                         {i.vendorId.englishName}
                                       </TableCell>
                                       {/* <TableCell align="center">
@@ -1998,10 +2028,9 @@ function AddEditPurchaseRequest(props) {
               style={{
                 display: "flex",
                 flex: 1,
-                height: 50,
                 justifyContent: "space-between",
-                marginTop: "1%",
-                marginBottom: "1%",
+                marginTop: "2%",
+                marginBottom: "2%",
               }}
             >
               <img
