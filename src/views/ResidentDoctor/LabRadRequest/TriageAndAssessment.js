@@ -305,10 +305,16 @@ function TriageAndAssessment(props) {
   };
 
   const onTextChange = (e) => {
-    if (e.target.name === "painScale" && e.target.value < 0 || e.target.value > 10 ) {
-      return 
-    }
     dispatch({ field: e.target.name, value: e.target.value });
+  };
+
+  const onPainScaleChange = (e) => {
+    if (e.target.name === "painScale" && e.target.value < 0 || e.target.value > 10) {
+      return
+    }
+    else {
+      dispatch({ field: e.target.name, value: e.target.value });
+    }
   };
 
   const handleSubmitAssessment = (e) => {
@@ -721,7 +727,7 @@ function TriageAndAssessment(props) {
                           evt.key === "+") &&
                           evt.preventDefault();
                       }}
-                      onChange={onTextChange}
+                      onChange={onPainScaleChange}
                       className="textInputStyle"
                       variant="filled"
                       InputProps={{
