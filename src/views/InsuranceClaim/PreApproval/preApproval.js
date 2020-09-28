@@ -75,34 +75,34 @@ export default function preApproval(props) {
                   : '')
             )
           }
-          if (res.data.data.opr) {
-            res.data.data.opr.map(
-              (d) =>
-                (d.Name = d.patientId
-                  ? d.patientId.firstName + ' ' + d.patientId.lastName
-                  : '')
-            )
-          }
+          // if (res.data.data.opr) {
+          //   res.data.data.opr.map(
+          //     (d) =>
+          //       (d.Name = d.patientId
+          //         ? d.patientId.firstName + ' ' + d.patientId.lastName
+          //         : '')
+          //   )
+          // }
           setpreApproval(
             [].concat(
               res.data.data.edr.reverse(),
               res.data.data.ipr.reverse(),
-              res.data.data.opr.reverse()
+              // res.data.data.opr.reverse()
             )
           )
           var sortedObjs = _.sortBy(
             [].concat(
               res.data.data.edr.reverse(),
               res.data.data.ipr.reverse(),
-              res.data.data.opr.reverse()
+              // res.data.data.opr.reverse()
             ),
             'updatedAt'
           ).reverse()
           setpreApproval(sortedObjs)
-          console.log(
-            [].concat(res.data.data.edr, res.data.data.ipr, res.data.data.opr),
-            'CONCATENATE'
-          )
+          // console.log(
+          //   [].concat(res.data.data.edr, res.data.data.ipr, res.data.data.opr),
+          //   'CONCATENATE'
+          // )
         } else if (!res.data.success) {
           setErrorMsg(res.data.error)
           setOpenNotification(true)
