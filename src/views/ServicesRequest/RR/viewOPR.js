@@ -885,9 +885,9 @@ function AddEditPurchaseRequest(props) {
         setImagePreview([reader.result]);
       } else if (fileType === "png") {
         setImagePreview([reader.result]);
-      } else if (fileType === "jpeg") {
+      } else if (fileType === "peg") {
         setImagePreview([reader.result]);
-      } else if (fileType === "JPEG") {
+      } else if (fileType === "PEG") {
         setImagePreview([reader.result]);
       } else if (fileType === "jpg") {
         setImagePreview([reader.result]);
