@@ -1634,7 +1634,7 @@ function AddEditPurchaseRequest(props) {
               </DialogContent>
             </Dialog>
 
-            <div style={{ marginBottom: 20 }}>
+            <div className='row' style={{ marginBottom: 20 }}>
               <img
                 onClick={() => props.history.goBack()}
                 src={Back_Arrow}

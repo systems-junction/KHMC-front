@@ -52,7 +52,8 @@ import InputLabelComponent from "../../components/InputLabel/inputLabel";
 import ErrorMessage from "../../components/ErrorMessage/errorMessage";
 
 import add_new from "../../assets/img/Plus.png";
-import useStyleforinput from "../../../src/assets/jss/material-dashboard-react/inputStyle.js";
+import MUIStyleForinput from "../../../src/assets/jss/material-dashboard-react/inputStyle.js";
+import MUIStyleForInputForCurrency from "../../../src/assets/jss/material-dashboard-react/inputStylesForCurrency.js";
 
 import ViewAllBtn from "../../components/ViewAllBtn/viewAll";
 import TableForAddedItems from "./tableforAddedItems";
@@ -216,7 +217,9 @@ const inputStyles = makeStyles((theme) => ({
   },
 }));
 function AddEditPurchaseRequest(props) {
-  const classes = inputStyles();
+  const classes = MUIStyleForinput();
+  const classesForInputForCurrency = MUIStyleForInputForCurrency();
+
   const initialState = {
     _id: "",
     requestNo: "",
@@ -496,6 +499,15 @@ function AddEditPurchaseRequest(props) {
   // };
 
   const handleAdd = () => {
+
+if(requestedItemsArray==="" || requestedItemsArray.length===0)
+{
+  setOpenNotification(true);
+  setErrorMsg("Please add some items first before creating an order");
+  return
+}
+
+
     if (!validateForm()) {
       setIsFormSubmitted(true);
       setOpenNotification(true);
@@ -1148,9 +1160,11 @@ function AddEditPurchaseRequest(props) {
   }
 
   const editSelectedItem = () => {
+
+
     if (!validateItemsForm()) {
       setOpenNotification(true);
-      setErrorMsg("Please add the item first");
+      setErrorMsg("Please fill the fields properly");
     }
     if (validateItemsForm()) {
       setDialogOpen(false);
@@ -1220,7 +1234,7 @@ function AddEditPurchaseRequest(props) {
       }}
     >
       <Header />
-      <div className={`cPadding ${classes.root}`}>
+      <div className="cPadding">
         <div className="subheader">
           <div>
             <img src={purchase_request} />
@@ -1609,9 +1623,14 @@ function AddEditPurchaseRequest(props) {
           {currentUser &&
           currentUser.staffTypeId.type === "FU Inventory Keeper" ? (
             <div>
-              <div className='row' > 
+              <div className="row">
                 <h5
-                  style={{ color: "white", fontWeight: "700", marginTop: 20, marginLeft:3 }}
+                  style={{
+                    color: "white",
+                    fontWeight: "700",
+                    marginTop: 20,
+                    marginLeft: 3,
+                  }}
                 >
                   Add Item
                 </h5>
@@ -1909,12 +1928,12 @@ function AddEditPurchaseRequest(props) {
                     variant="filled"
                     textAlign="left"
                     InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
+                      className: classesForInputForCurrency.input,
+                      classes: { input: classesForInputForCurrency.input },
                     }}
                     InputLabelProps={{
-                      className: classes.label,
-                      classes: { label: classes.label },
+                      className: classesForInputForCurrency.label,
+                      classes: { label: classesForInputForCurrency.label },
                     }}
                     currencySymbol="JD"
                     // outputFormat="number"
@@ -2110,8 +2129,8 @@ function AddEditPurchaseRequest(props) {
               <h5
                 style={{
                   color: "white",
-                  marginTop: 20,
-                  marginBottom: 20,
+                  marginTop: 15,
+                  marginBottom: 15,
                   fontWeight: "700",
                 }}
               >
@@ -2198,386 +2217,3 @@ function AddEditPurchaseRequest(props) {
   );
 }
 export default AddEditPurchaseRequest;
-
-{
-  /* <Dialog
-            aria-labelledby="form-dialog-title"
-            open={dialogOpen}
-            maxWidth="xl"
-            fullWidth={true}
-            // fullScreen
-          >
-            <DialogContent style={{ backgroundColor: "#31e2aa" }}>
-              <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
-                Add Item
-              </DialogTitle>
-              <div className="container-fluid">
-                <div className="row">
-                  <div
-                    className="col-md-12"
-                    style={{
-                      ...styles.inputContainerForTextField,
-                      ...styles.textFieldPadding,
-                    }}
-                  >
-                    <InputLabelComponent> Search *</InputLabelComponent>
-
-                    <TextField
-                      type="text"
-                      label="Search Items by name or code"
-                      name={"searchQuery"}
-                      value={searchQuery}
-                      onChange={handleSearch}
-                      className="textInputStyle"
-                      variant="filled"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                      }}
-                      error={searchQuery === "" && isFormSubmitted}
-                    />
-                    <ErrorMessage
-                      name={searchQuery}
-                      isFormSubmitted={isFormSubmitted}
-                    />
-                  </div>
-                </div>
-
-                {searchQuery ? (
-                  // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
-                  <div style={{ zIndex: 3 }}>
-                    <Paper>
-                      {itemFoundSuccessfull ? (
-                        itemFound && (
-                          <Table size="small">
-                            <TableHead>
-                              <TableRow>
-                                <TableCell>Name</TableCell>
-                                <TableCell>Item Code</TableCell>
-                                <TableCell>Puschase Price</TableCell>
-                                <TableCell align="center">
-                                  Description
-                                </TableCell>
-                              </TableRow>
-                            </TableHead>
-
-                            <TableBody>
-                              {itemFound.map((i, index) => {
-                                return (
-                                  <TableRow
-                                    key={i.itemCode}
-                                    onClick={() => handleAddItem(i)}
-                                    style={{ cursor: "pointer" }}
-                                  >
-                                    <TableCell>{i.name}</TableCell>
-                                    <TableCell>{i.itemCode}</TableCell>
-                                    <TableCell>{i.purchasePrice}</TableCell>
-                                    <TableCell>{i.description}</TableCell>
-                                  </TableRow>
-                                );
-                              })}
-                            </TableBody>
-                          </Table>
-                        )
-                      ) : (
-                        <h4
-                          style={{ textAlign: "center" }}
-                          onClick={() => console.log("ddf")}
-                        >
-                          Item Not Found
-                        </h4>
-                      )}
-                    </Paper>
-                  </div>
-                ) : (
-                  undefined
-                )}
-
-                <div className="row">
-                  <div
-                    className="col-md-6"
-                    style={{
-                      ...styles.inputContainerForTextField,
-                      ...styles.textFieldPadding,
-                    }}
-                  >
-                    <InputLabelComponent> Item Code *</InputLabelComponent>
-
-                    <TextField
-                      type="text"
-                      disabled={true}
-                      label="Item Code"
-                      name={"itemCode"}
-                      value={itemCode}
-                      onChange={onChangeValue}
-                      className="textInputStyle"
-                      variant="filled"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                      }}
-                      error={itemCode === "" && isFormSubmitted}
-                    />
-                    <ErrorMessage
-                      name={itemCode}
-                      isFormSubmitted={isFormSubmitted}
-                    />
-                  </div>
-                  <div
-                    className="col-md-6"
-                    style={{
-                      ...styles.inputContainerForTextField,
-                      ...styles.textFieldPadding,
-                    }}
-                  >
-                    <InputLabelComponent> Item Name *</InputLabelComponent>
-
-                    <TextField
-                      type="text"
-                      disabled={true}
-                      label="Item Name"
-                      name={"itemName"}
-                      value={itemName}
-                      onChange={onChangeValue}
-                      className="textInputStyle"
-                      variant="filled"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                      }}
-                      error={itemName === "" && isFormSubmitted}
-                    />
-                  </div>
-                  <ErrorMessage
-                    name={itemName}
-                    isFormSubmitted={isFormSubmitted}
-                  />
-                </div>
-
-                <div className="row">
-                  <div
-                    className="col-md-6"
-                    style={{
-                      ...styles.inputContainerForTextField,
-                      ...styles.textFieldPadding,
-                    }}
-                  >
-                    <InputLabelComponent> Current Qty *</InputLabelComponent>
-
-                    <TextField
-                      type="number"
-                      disabled={true}
-                      label="Current Qty"
-                      name={"currentQty"}
-                      value={currentQty}
-                      onChange={onChangeValue}
-                      className="textInputStyle"
-                      variant="filled"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                      }}
-                      error={currentQty === "" && isFormSubmitted}
-                    />
-                    <ErrorMessage
-                      name={currentQty}
-                      isFormSubmitted={isFormSubmitted}
-                    />
-                  </div>
-
-                  <div
-                    className="col-md-6"
-                    style={{
-                      ...styles.inputContainerForTextField,
-                      ...styles.textFieldPadding,
-                    }}
-                  >
-                    <InputLabelComponent> Requested Qty *</InputLabelComponent>
-
-                    <TextField
-                      type="number"
-                      label="Req Qty"
-                      name={"requestedQty"}
-                      value={requestedQty}
-                      onChange={onChangeValue}
-                      className="textInputStyle"
-                      variant="filled"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                      }}
-                      error={requestedQty === "" && isFormSubmitted}
-                    />
-                    <ErrorMessage
-                      name={requestedQty}
-                      isFormSubmitted={isFormSubmitted}
-                    />
-                  </div>
-                </div>
-
-                <div className="row">
-                  <div
-                    className="col-md-4"
-                    style={{
-                      ...styles.inputContainerForTextField,
-                      ...styles.textFieldPadding,
-                    }}
-                  >
-                    <InputLabelComponent> Receipt Unit *</InputLabelComponent>
-
-                    <TextField
-                      disabled={true}
-                      placeholder="Receipt Unit"
-                      name={"recieptUnit"}
-                      value={recieptUnit}
-                      onChange={onChangeValue}
-                      className="textInputStyle"
-                      variant="filled"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                      }}
-                      error={recieptUnit === "" && isFormSubmitted}
-                    />
-                    <ErrorMessage
-                      name={recieptUnit}
-                      isFormSubmitted={isFormSubmitted}
-                    />
-                  </div>
-
-                  <div
-                    className="col-md-4"
-                    style={{
-                      ...styles.inputContainerForTextField,
-                      ...styles.textFieldPadding,
-                    }}
-                  >
-                    <InputLabelComponent> Issue Unit *</InputLabelComponent>
-
-                    <TextField
-                      disabled={true}
-                      label="Issue Unit"
-                      name={"issueUnit"}
-                      value={issueUnit}
-                      onChange={onChangeValue}
-                      className="textInputStyle"
-                      variant="filled"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                      }}
-                      error={issueUnit === "" && isFormSubmitted}
-                    />
-                    <ErrorMessage
-                      name={issueUnit}
-                      isFormSubmitted={isFormSubmitted}
-                    />
-                  </div>
-
-                  <div
-                    className="col-md-4"
-                    style={{
-                      ...styles.inputContainerForTextField,
-                      ...styles.textFieldPadding,
-                    }}
-                  >
-                    <InputLabelComponent> FU Item Cost *</InputLabelComponent>
-
-                    <TextField
-                      type="number"
-                      label="FU Item Cost"
-                      name={"fuItemCost"}
-                      value={fuItemCost}
-                      onChange={onChangeValue}
-                      className="textInputStyle"
-                      variant="filled"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                      }}
-                      error={fuItemCost === "" && isFormSubmitted}
-                    />
-                    <ErrorMessage
-                      name={fuItemCost}
-                      isFormSubmitted={isFormSubmitted}
-                    />
-                  </div>
-                </div>
-
-                <div className="row">
-                  <div
-                    className="col-md-12"
-                    style={{
-                      ...styles.inputContainerForTextField,
-                      ...styles.textFieldPadding,
-                    }}
-                  >
-                    <InputLabelComponent> Description *</InputLabelComponent>
-
-                    <TextField
-                      type="text"
-                      disabled={true}
-                      label="Description"
-                      name={"description"}
-                      value={description}
-                      onChange={onChangeValue}
-                      className="textInputStyle"
-                      variant="filled"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                      }}
-                      error={description === "" && isFormSubmitted}
-                    />
-                    <ErrorMessage
-                      name={description}
-                      isFormSubmitted={isFormSubmitted}
-                    />
-                  </div>
-                </div>
-
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <div style={{ marginTop: "2%", marginBottom: "2%" }}>
-                    <Button onClick={() => hideDialog()} variant="contained">
-                      Cancel
-                    </Button>
-                  </div>
-
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      marginTop: "2%",
-                      marginBottom: "2%",
-                    }}
-                  >
-                    {selectItemToEditId === "" ? (
-                      <Button
-                        style={{ paddingLeft: 30, paddingRight: 30 }}
-                        disabled={!validateItemsForm()}
-                        onClick={addSelectedItem}
-                        variant="contained"
-                        color="primary"
-                      >
-                        Add Item
-                      </Button>
-                    ) : (
-                      <Button
-                        style={{ paddingLeft: 30, paddingRight: 30 }}
-                        disabled={!validateItemsForm()}
-                        onClick={editSelectedItem}
-                        variant="contained"
-                        color="primary"
-                      >
-                        {" "}
-                        Edit Item{" "}
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </DialogContent>
-          </Dialog> */
-}

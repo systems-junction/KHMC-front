@@ -277,16 +277,18 @@ function AddEditPurchaseRequest(props) {
 
   return (
     <div>
-      <CustomTable
-        tableData={items}
-        tableDataKeys={tableDataKeys}
-        tableHeading={tableHeading}
-        action={actions}
-        receiveItem={handleReceive}
-        // addReturnRequest={handleAddReturnRequest}
-        borderBottomColor={"#60d69f"}
-        borderBottomWidth={20}
-      />
+      <div className="row">
+        <CustomTable
+          tableData={items}
+          tableDataKeys={tableDataKeys}
+          tableHeading={tableHeading}
+          action={actions}
+          receiveItem={handleReceive}
+          // addReturnRequest={handleAddReturnRequest}
+          borderBottomColor={"#60d69f"}
+          borderBottomWidth={20}
+        />
+      </div>
 
       <Notification msg={errorMsg} open={openNotification} />
 
@@ -302,7 +304,7 @@ function AddEditPurchaseRequest(props) {
         undefined
       )}
 
-      <div style={{ marginBottom: 20, marginTop: 10 }}>
+      <div className="row" style={{ marginBottom: 20, marginTop: 10 }}>
         <img
           onClick={() => props.history.goBack()}
           src={Back_Arrow}

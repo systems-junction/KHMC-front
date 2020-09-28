@@ -39,6 +39,9 @@ import stylesForPaper from "../../assets/jss/material-dashboard-react/components
 
 import CurrencyTextField from "@unicef/material-ui-currency-textfield";
 
+import MUIInputStyle from "../../assets/jss/material-dashboard-react/inputStyle.js";
+import MUIInputStyleForCurrency from "../../assets/jss/material-dashboard-react/inputStylesForCurrency";
+
 const tableHeadingForBillSummary = [
   "Date/Time",
   "Service Name",
@@ -174,42 +177,13 @@ const useStyles = makeStyles((theme) => ({
       boxShadow: "none",
     },
   },
-  //   multilineColor: {
-  //     backgroundColor: "white",
-  //     borderRadius: 10,
-  //     "&:hover": {
-  //       backgroundColor: "white",
-  //     },
-  //     "&:after": {
-  //       borderBottomColor: "black",
-  //     },
-  //   },
-  //   root: {
-  //     "& .MuiTextField-root": {
-  //       backgroundColor: "white",
-  //     },
-  //     "& .Mui-focused": {
-  //       backgroundColor: "white",
-  //       color: "black",
-  //     },
-  //   },
+
 }));
 
-const inputStyles = makeStyles((theme) => ({
-  input: {
-    backgroundColor: "white",
-    borderRadius: 5,
-    "&": {
-      //   backgroundColor: 'white',
-      //   color: "black",
-    },
-  },
-}));
 
 function AddEditPatientListing(props) {
-  const classes = useStyles();
-
-  const classesForInput = inputStyles();
+  const classes = MUIInputStyle();
+  const classesForInput = MUIInputStyleForCurrency();
 
   const initialState = {
     profileNo: "-----",
@@ -1165,9 +1139,13 @@ function AddEditPatientListing(props) {
         ) : value === 1 ? (
           <div>
             <div
-              style={{ flex: 4, display: "flex", flexDirection: "column", paddingLeft:27,
-              paddingRight:27
-            }}
+              style={{
+                flex: 4,
+                display: "flex",
+                flexDirection: "column",
+                paddingLeft: 27,
+                paddingRight: 27,
+              }}
               className="container-fluid"
             >
               <div className="row" style={{ marginTop: "20px" }}>
@@ -1201,7 +1179,7 @@ function AddEditPatientListing(props) {
                   }}
                 >
                   <CurrencyTextField
-                    style={{ backgroundColor: "white", borderRadius: 5 }}
+                    // style={{ backgroundColor: "white", borderRadius: 5 }}
                     className="textInputStyle"
                     id={"externalRequestsFee"}
                     label="Fee"
@@ -1292,7 +1270,7 @@ function AddEditPatientListing(props) {
                   }}
                 >
                   <CurrencyTextField
-                    //   disabled
+                    disabled
                     style={{ backgroundColor: "white", borderRadius: 5 }}
                     className="textInputStyle"
                     id="payment"
@@ -1305,7 +1283,6 @@ function AddEditPatientListing(props) {
                     InputProps={{
                       className: classesForInput.input,
                       classes: { input: classesForInput.input },
-                      readOnly: true,
                     }}
                     InputLabelProps={{
                       className: classesForInput.label,
@@ -1325,6 +1302,7 @@ function AddEditPatientListing(props) {
                   }}
                 >
                   <CurrencyTextField
+                    disabled
                     style={{ backgroundColor: "white", borderRadius: 5 }}
                     className="textInputStyle"
                     id={"totalBillingAmount"}
@@ -1337,7 +1315,6 @@ function AddEditPatientListing(props) {
                     InputProps={{
                       className: classesForInput.input,
                       classes: { input: classesForInput.input },
-                      readOnly: true,
                     }}
                     InputLabelProps={{
                       className: classesForInput.label,
@@ -1357,6 +1334,7 @@ function AddEditPatientListing(props) {
                   }}
                 >
                   <CurrencyTextField
+                    disabled
                     style={{ backgroundColor: "white", borderRadius: 5 }}
                     className="textInputStyle"
                     id={"remainingAmount"}
@@ -1374,7 +1352,6 @@ function AddEditPatientListing(props) {
                     InputLabelProps={{
                       className: classesForInput.label,
                       classes: { label: classesForInput.label },
-                      readOnly: true,
                     }}
                     currencySymbol="JD"
                     outputFormat="number"
@@ -1390,6 +1367,7 @@ function AddEditPatientListing(props) {
                   }}
                 >
                   <CurrencyTextField
+                    disabled
                     style={{ backgroundColor: "white", borderRadius: 5 }}
                     className="textInputStyle"
                     id={"rgrandTotal"}
@@ -1402,7 +1380,6 @@ function AddEditPatientListing(props) {
                     InputProps={{
                       className: classesForInput.input,
                       classes: { input: classesForInput.input },
-                      readOnly: true,
                     }}
                     InputLabelProps={{
                       className: classesForInput.label,
