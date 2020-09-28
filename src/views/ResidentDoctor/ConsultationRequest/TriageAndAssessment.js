@@ -305,6 +305,9 @@ function TriageAndAssessment(props) {
   };
 
   const onTextChange = (e) => {
+    if (e.target.name === "painScale" && e.target.value < 0 || e.target.value > 10 ) {
+      return 
+    }
     dispatch({ field: e.target.name, value: e.target.value });
   };
 
@@ -556,14 +559,15 @@ function TriageAndAssessment(props) {
             >
               <div className={`container-fluid ${classes.root}`}>
                 <div className="row">
-                  <div className="form-group col-md-4 col-sm-4 col-4"
+                  <div
+                    className="form-group col-md-4 col-sm-4 col-4"
                     style={{
                       paddingLeft: 5,
-                      paddingRight: 5
+                      paddingRight: 5,
                     }}
                   >
                     <TextField
-                      type='number'
+                      type="number"
                       label="Enter Heart Rate (bpm)"
                       name={"heartRate"}
                       value={heartRate}
@@ -574,17 +578,19 @@ function TriageAndAssessment(props) {
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
-                        disableUnderline: true
+                        disableUnderline: true,
                       }}
                     />
                   </div>
-                  <div className="form-group col-md-4 col-sm-4 col-4"
+                  <div
+                    className="form-group col-md-4 col-sm-4 col-4"
                     style={{
                       paddingLeft: 5,
-                      paddingRight: 5
-                    }}>
+                      paddingRight: 5,
+                    }}
+                  >
                     <TextField
-                      type='number'
+                      type="number"
                       label="Blood Pressure Systolic (mmHg)"
                       name={"bloodPressureSys"}
                       value={bloodPressureSys}
@@ -595,17 +601,19 @@ function TriageAndAssessment(props) {
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
-                        disableUnderline: true
+                        disableUnderline: true,
                       }}
                     />
                   </div>
-                  <div className="form-group col-md-4 col-sm-4 col-4"
+                  <div
+                    className="form-group col-md-4 col-sm-4 col-4"
                     style={{
                       paddingLeft: 5,
-                      paddingRight: 5
-                    }}>
+                      paddingRight: 5,
+                    }}
+                  >
                     <TextField
-                      type='number'
+                      type="number"
                       label="Blood Pressure Diastolic (mmHg)"
                       name={"bloodPressureDia"}
                       value={bloodPressureDia}
@@ -616,19 +624,21 @@ function TriageAndAssessment(props) {
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
-                        disableUnderline: true
+                        disableUnderline: true,
                       }}
                     />
                   </div>
                 </div>
                 <div className="row">
-                  <div className="form-group col-md-4 col-sm-4 col-4"
+                  <div
+                    className="form-group col-md-4 col-sm-4 col-4"
                     style={{
                       paddingLeft: 5,
-                      paddingRight: 5
-                    }}>
+                      paddingRight: 5,
+                    }}
+                  >
                     <TextField
-                      type='number'
+                      type="number"
                       label="Enter Respiratory Rate (/min)"
                       name={"respiratoryRate"}
                       value={respiratoryRate}
@@ -639,17 +649,19 @@ function TriageAndAssessment(props) {
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
-                        disableUnderline: true
+                        disableUnderline: true,
                       }}
                     />
                   </div>
-                  <div className="form-group col-md-4 col-sm-4 col-4"
+                  <div
+                    className="form-group col-md-4 col-sm-4 col-4"
                     style={{
                       paddingLeft: 5,
-                      paddingRight: 5
-                    }}>
+                      paddingRight: 5,
+                    }}
+                  >
                     <TextField
-                      type='number'
+                      type="number"
                       label="Enter Temperature (°F)"
                       name={"temperature"}
                       value={temperature}
@@ -660,17 +672,19 @@ function TriageAndAssessment(props) {
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
-                        disableUnderline: true
+                        disableUnderline: true,
                       }}
                     />
                   </div>
-                  <div className="form-group col-md-4 col-sm-4 col-4"
+                  <div
+                    className="form-group col-md-4 col-sm-4 col-4"
                     style={{
                       paddingLeft: 5,
-                      paddingRight: 5
-                    }}>
+                      paddingRight: 5,
+                    }}
+                  >
                     <TextField
-                      type='number'
+                      type="number"
                       label="Enter FSBS (mg/dL)"
                       name={"FSBS"}
                       value={FSBS}
@@ -681,40 +695,51 @@ function TriageAndAssessment(props) {
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
-                        disableUnderline: true
+                        disableUnderline: true,
                       }}
                     />
                   </div>
                 </div>
                 <div className="row">
-                  <div className="form-group col-md-6 col-sm-6 col-6"
+                  <div
+                    className="form-group col-md-6 col-sm-6 col-6"
                     style={{
                       paddingLeft: 5,
-                      paddingRight: 5
-                    }}>
+                      paddingRight: 5,
+                    }}
+                  >
                     <TextField
-                      type='number'
+                      type="number"
                       label="Enter Pain Scale (0-10)"
                       name={"painScale"}
                       value={painScale}
                       // error={email === "" && detailsForm}
+                      onKeyDown={(evt) => {
+                        (evt.key === "e" ||
+                          evt.key === "E" ||
+                          evt.key === "-" ||
+                          evt.key === "+") &&
+                          evt.preventDefault();
+                      }}
                       onChange={onTextChange}
                       className="textInputStyle"
                       variant="filled"
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
-                        disableUnderline: true
+                        disableUnderline: true,
                       }}
                     />
                   </div>
-                  <div className="form-group col-md-6 col-sm-6 col-6"
+                  <div
+                    className="form-group col-md-6 col-sm-6 col-6"
                     style={{
                       paddingLeft: 5,
-                      paddingRight: 5
-                    }}>
+                      paddingRight: 5,
+                    }}
+                  >
                     <TextField
-                      type='number'
+                      type="number"
                       label="Enter Pulse OX (SpO2)"
                       name={"pulseOX"}
                       value={pulseOX}
@@ -725,7 +750,7 @@ function TriageAndAssessment(props) {
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
-                        disableUnderline: true
+                        disableUnderline: true,
                       }}
                     />
                   </div>
@@ -1026,7 +1051,7 @@ function TriageAndAssessment(props) {
                       </div>
                     </div>
                   </form>
-                  <div className="form-group col-md-9">
+                  <div className="form-group col-md-11">
                     <input
                       style={{ outline: "none", backgroundColor: "#F7F5F5" }}
                       disabled={respiratoryText === null}
@@ -1198,7 +1223,7 @@ function TriageAndAssessment(props) {
                       </div>
                     </div>
                   </form>
-                  <div className="col-md-9">
+                  <div className="col-md-11">
                     <input
                       style={{ outline: "none", backgroundColor: "#F7F5F5" }}
                       disabled={abdomenText === null}

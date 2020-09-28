@@ -343,6 +343,7 @@ function AddEditPurchaseRequest(props) {
     event.preventDefault();
     var file = event.target.files[0];
     var fileType = file.name.slice(file.name.length - 3);
+    let file_size = event.target.files[0].size;
 
     // console.log("Selected file : ", file.name)
     // console.log("file type : ", fileType)
@@ -352,6 +353,8 @@ function AddEditPurchaseRequest(props) {
     var url = reader.readAsDataURL(file);
 
     reader.onloadend = function() {
+
+      if (file_size <= 1500000) {
       if (fileType === "pdf") {
         setpdfView(file.name);
       } else if (fileType === "PDF") {
@@ -360,9 +363,9 @@ function AddEditPurchaseRequest(props) {
         setImagePreview([reader.result]);
       } else if (fileType === "PNG") {
         setImagePreview([reader.result]);
-      } else if (fileType === "jpeg") {
+      } else if (fileType === "peg") {
         setImagePreview([reader.result]);
-      } else if (fileType === "JPEG") {
+      } else if (fileType === "PEG") {
         setImagePreview([reader.result]);
       } else if (fileType === "jpg") {
         setImagePreview([reader.result]);
@@ -376,6 +379,11 @@ function AddEditPurchaseRequest(props) {
         setErrorMsg("only pdf, jpeg, png and rtf should be allowed");
         setOpenNotification(true);
       }
+    }
+    else {
+      setErrorMsg("Files size should be less Than or Equal to 1.5MB");
+      setOpenNotification(true);
+    }
     };
     if (statusOnResult === "pending") {
       setStatusOnResult("completed");
@@ -413,9 +421,9 @@ function AddEditPurchaseRequest(props) {
       setImagePreview("");
     } else if (fileType === "PNG") {
       setImagePreview("");
-    } else if (fileType === "jpeg") {
+    } else if (fileType === "peg") {
       setImagePreview("");
-    } else if (fileType === "JPEG") {
+    } else if (fileType === "PEG") {
       setImagePreview("");
     } else if (fileType === "jpg") {
       setImagePreview("");
