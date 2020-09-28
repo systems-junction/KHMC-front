@@ -19,6 +19,7 @@ import Notification from "../../../components/Snackbar/Notification.js";
 import cookie from "react-cookies";
 import Header from "../../../components/Header/Header";
 import Back_Arrow from "../../../assets/img/Back_Arrow.png";
+import logoInvoice from "../../../assets/img/logoInvoice.png";
 import "../../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
 import FormData from "form-data";
 import claimsReview from "../../../assets/img/ClaimsReview.png";
@@ -192,7 +193,7 @@ function AddEditPatientListing(props) {
     gender: "-----",
     age: "--",
     weight: "--",
-    qr:'',
+    qr: "",
     document: "",
     generatedBy: cookie.load("current_user").staffId,
     insuranceNumber: "----",
@@ -512,7 +513,7 @@ function AddEditPatientListing(props) {
     dispatch({ field: "profileNo", value: i.profileNo });
     dispatch({ field: "insuranceNumber", value: i.insuranceNumber });
     dispatch({ field: "insuranceVendor", value: i.insuranceVendor });
-    dispatch({ field: 'qr', value: i.QR});
+    dispatch({ field: "qr", value: i.QR });
 
     setSearchQuery("");
     getBillSummary(i._id);
@@ -627,12 +628,10 @@ function AddEditPatientListing(props) {
   };
 
   const handleInvoicePrint = (item) => {
-    // You'll need to make your image into a Data URL
-    // Use http://dataurl.net/#dataurlmaker
     console.log("item", item);
-    console.log("Patient Name ",firstName,lastName)
-    console.log("Patient QR",qr)
 
+    console.log("Patient Name ", firstName, lastName);
+    console.log("Patient QR", qr);
     var now = new Date();
     var start = new Date(now.getFullYear(), 0, 0);
     var diff =
@@ -653,58 +652,65 @@ function AddEditPatientListing(props) {
 
     var time = dateNow.getHours() + ":" + dateNow.getMinutes();
 
-    var imgData =
-      "https://3.bp.blogspot.com/-c89Y40tcQb4/WYpRX1ZKkcI/AAAAAAAAAKk/674Q5d2wQRksA3B1GGwDX9RqUuMHssQtQCLcBGAs/s1600/IMG_20170809_010100.JPG";
     var doc = new jsPDF();
 
-    // header left
     doc.setFontSize(40);
     doc.setTextColor(44, 109, 221);
-    doc.text(5, 18, "KHMC");
+    var logo = new Image();
 
-    doc.setFontSize(12);
+    logo.src = logoInvoice;
+    doc.addImage(logo, "PNG", 5, 7);
+
     doc.setTextColor(0, 0, 0);
 
-    // header right
-    doc.text(140, 10, `Invoice #: ${invoiceNo}`);
-    doc.text(140, 20, `Date: ${dateNow.toISOString().substr(0, 10)}`);
-    doc.text(140, 30, `Time: ${time}`);
+    doc.setFontSize(15);
+    doc.text(139, 10, `Invoice No:`);
+    doc.text(170, 10, `${invoiceNo}`);
 
-    //  phase 1 left
+    doc.setFontSize(12);
+    doc.text(155, 20, "Date:");
+    doc.text(184, 20, `${now.toISOString().substr(0, 10)}`);
 
-    doc.text(5, 50, "Submitted to:");
-    doc.text(5, 60, "-------------");
-    doc.text(5, 70, "Request #:");
-    doc.text(5, 80, `${item.LRrequestNo}`);
+    doc.text(155, 30, "Time:");
+    doc.text(195, 30, `${time}`);
 
-    //  phase 1 right
-    doc.text(140, 50, "Invoice Total:");
-    doc.text(140, 60, "JD 33400");
+    doc.setFontSize(18);
+    doc.text(5, 55, "Bill to:");
+    doc.setFontSize(12);
+    doc.line(5, 65, 50, 65);
+    doc.text(5, 75, "Request No:");
+    doc.text(5, 85, `${item.RRrequestNo}`);
 
-    //  phase 2 left
+    doc.text(178, 50, "Invoice Total");
+    doc.setFontSize(23);
+    doc.setTextColor(44, 109, 221);
+    doc.text(167, 60, `${item.serviceId.price} JD`);
+
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(12);
     doc.text(5, 100, `Service Name: ${item.serviceName}`);
     doc.text(5, 110, `Service Type: ${item.serviceType}`);
     doc.text(5, 120, `Comments: ${item.comments}`);
 
-    // footer left
-    doc.text(5, 260, "Signature");
-    doc.text(5, 270, "------------------");
+    doc.text(5, 252, "Signature & Stamp");
+    doc.line(5, 257, 50, 257);
 
-    // footer right
-    doc.text(136, 230, `Sub Total: ${item.serviceId.price} JD`);
-    doc.text(137, 240, "Tax Rate:");
-    doc.text(154, 250, "Tax:");
-    doc.text(139, 260, "Discount: 500 JD");
-    doc.text(125, 270, `Total Amount: ${item.serviceId.price} JD`);
+    doc.setTextColor(150, 150, 130);
+    doc.text(162, 215, `Sub Total:`);
+    doc.text(183, 215, `${item.serviceId.price} JD`);
+    doc.text(163, 225, "Tax Rate:");
+    doc.text(174, 235, "Tax:");
+    doc.text(165, 245, "Discount:");
+    doc.text(184, 245, " 999 JD");
+    doc.setTextColor(0, 0, 0);
+    doc.text(156, 255, "Total Amount:");
+    doc.text(185, 255, `${item.serviceId.price} JD`);
 
-    // footer bottom
-    doc.text(
-      0,
-      280,
-      "-----------------------------------------------------------------------------------------------------------------------"
-    );
-    doc.text(5, 290, "Prepared By: Mudassir Ijaz");
-    doc.addImage(imgData, "JPEG", 182, 281, 13, 13);
+    doc.line(0, 272, 1000, 272);
+
+    doc.text(5, 285, "Prepared by:");
+    doc.addImage(`http://localhost:4000${qr}`, "PNG", 175, 275, 20, 20);
+
     doc.save("Invoice.pdf");
   };
 
