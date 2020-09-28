@@ -50,6 +50,8 @@ import InputLabelComponent from "../../components/InputLabel/inputLabel";
 import BootstrapInput from "../../components/Dropdown/dropDown.js";
 import ErrorMessage from "../../components/ErrorMessage/errorMessage";
 
+import ViewAllBtn from "../../components/ViewAllBtn/viewAll";
+
 import Add_New from "../../assets/img/Add_New.png";
 
 import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
@@ -640,31 +642,21 @@ function AddEditPurchaseRequest(props) {
     >
       <Header />
       <div className="cPadding">
-        <div className="subheader">
-          <div>
-            <img src={purchase_request} />
-            <h4>
-              {comingFor === "add"
-                ? "Add Request"
-                : comingFor === "edit"
-                ? "Order Details (Medical)"
-                : comingFor === "view"
-                ? "Order Details (Medical)"
-                : undefined}
-            </h4>
-          </div>
-
-          <div>
-            <Button
-              onClick={() => props.history.goBack()}
-              style={styles.stylesForButton}
-              variant="contained"
-              color="primary"
-            >
-              <img src={view_all} style={styles.stylesForIcon} />
-              &nbsp;&nbsp;
-              <strong>View All</strong>
-            </Button>
+        <div className="row" style={{ paddingRight: 2 }}>
+          <div className="subheader">
+            <div>
+              <img src={purchase_request} />
+              <h4>
+                {comingFor === "add"
+                  ? "Add Request"
+                  : comingFor === "edit"
+                  ? "Order Details (Medical)"
+                  : comingFor === "view"
+                  ? "Order Details (Medical)"
+                  : undefined}
+              </h4>
+            </div>
+            <ViewAllBtn history={props.history} />
           </div>
         </div>
 
@@ -847,9 +839,14 @@ function AddEditPurchaseRequest(props) {
             </div>
 
             <div>
-              <h5 style={{ color: "white", fontWeight: "700", marginTop: 20 }}>
-                Item Details
-              </h5>
+              <div className="row">
+                <h5
+                  style={{ color: "white", fontWeight: "700", marginTop: 20 }}
+                >
+                  Item Details
+                </h5>
+              </div>
+
               <div className="row">
                 <div
                   className={
@@ -1312,28 +1309,23 @@ function AddEditPurchaseRequest(props) {
               undefined
             )}
 
-            <div
-              style={{
-                display: "flex",
-                flex: 1,
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <div style={{ marginTop: "2%", marginBottom: "2%" }}>
+            <div className="row">
+              <div
+                style={{
+                  display: "flex",
+                  flex: 1,
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginTop: "2%",
+                  marginBottom: "2%",
+                }}
+              >
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back_Arrow}
                   style={{ width: 60, height: 40, cursor: "pointer" }}
                 />
-              </div>
 
-              <div
-                style={{
-                  marginTop: "2%",
-                  marginBottom: "2%",
-                }}
-              >
                 {comingFor === "add" ? (
                   <Button
                     style={styles.stylesForPurchaseButton}

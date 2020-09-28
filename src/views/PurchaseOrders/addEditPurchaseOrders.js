@@ -388,7 +388,7 @@ function AddEditPurchaseRequest(props) {
             props.history.replace({
               pathname: "/home/wms/fus/medicinalorder/success",
               state: {
-                message: `Purchase order ${res.data.data.purchaseOrderNo} has been added successfully`,
+                message: `Purchase Order ${res.data.data.purchaseOrderNo} has been added successfully`,
               },
             });
           } else if (!res.data.success) {
@@ -491,7 +491,7 @@ function AddEditPurchaseRequest(props) {
         .put(updatePurchaseOrderUrl, obj)
         .then((res) => {
           if (res.data.success) {
-            let message = `Purchase order ${res.data.data.purchaseOrderNo} has been updated successfully`;
+            let message = `Purchase Order ${res.data.data.purchaseOrderNo} has been updated successfully`;
             if (currentUser.staffTypeId.type === "Committe Member") {
               message = `Purchase order ${res.data.data.purchaseOrderNo} has been set to ${committeeStatus}`;
             }
@@ -589,9 +589,9 @@ function AddEditPurchaseRequest(props) {
         .put(updatePurchaseOrderUrl, params)
         .then((res) => {
           if (res.data.success) {
-            let message = `Purchase order ${res.data.data.purchaseOrderNo} has been updated successfully`;
+            let message = `Purchase Order ${res.data.data.purchaseOrderNo} has been updated successfully`;
             if (currentUser.staffTypeId.type === "Committe Member") {
-              message = `Purchase order ${res.data.data.purchaseOrderNo} has been set to ${committeeStatus}`;
+              message = `Purchase Order ${res.data.data.purchaseOrderNo} has been set to ${committeeStatus}`;
             }
 
             props.history.replace({

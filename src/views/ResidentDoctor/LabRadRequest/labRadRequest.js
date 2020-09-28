@@ -39,6 +39,12 @@ import AccountCircle from "@material-ui/icons/SearchOutlined";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import BarCode from "../../../assets/img/Bar Code.png";
 import ViewSingleRequest from "./viewRequest";
+import { connect } from "react-redux";
+import {
+  funForReducer,
+  setPatientDetailsForReducer,
+} from "../../../actions/Checking";
+
 let icdCodesList = require("../../../assets/icdCodes.json");
 
 const tableHeadingForResident = [
@@ -473,6 +479,15 @@ function LabRadRequest(props) {
   };
 
   useEffect(() => {
+
+    if (props.patientDetails) {
+      setPatientDetails(props.patientDetails);
+      getPatientByInfo(props.patientDetails._id);
+      openPatientDetailsDialog(true);
+    }
+
+
+
     seticdSection(Object.keys(icdCodesList[0]));
     // getEDRById(props.history.location.state.selectedItem._id);
 
@@ -562,6 +577,8 @@ function LabRadRequest(props) {
                       res.data.data.consultationNote.length - 1
                     ].consultationNo
                   } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} submitted successfully`,
+                  patientDetails: patientDetails,
+              
                 },
               });
             } else if (!res.data.success) {
@@ -653,6 +670,8 @@ function LabRadRequest(props) {
                       res.data.data.residentNotes.length - 1
                     ].residentNoteNo
                   } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
+                  patientDetails: patientDetails,
+              
                 },
               });
             } else if (!res.data.success) {
@@ -899,6 +918,8 @@ function LabRadRequest(props) {
                 res.data.data.labRequest[res.data.data.labRequest.length - 1]
                   .LRrequestNo
               } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
+              patientDetails: patientDetails,
+         
             },
           });
           notifyForLab(patientId);
@@ -1072,6 +1093,8 @@ function LabRadRequest(props) {
                   res.data.data.radiologyRequest.length - 1
                 ].RRrequestNo
               } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
+              patientDetails: patientDetails,
+          
             },
           });
           notifyForRad(patientId);
@@ -1277,6 +1300,10 @@ function LabRadRequest(props) {
     dispatch({ field: "medicationArray", value: "" });
     // setDialogOpen(true);
     console.log("selected banda : ", i);
+
+    props.setPatientDetailsForReducer(i);
+
+
     setPatientDetails(i);
     getPatientByInfo(i._id);
     openPatientDetailsDialog(true);
@@ -3071,4 +3098,12 @@ function LabRadRequest(props) {
     </div>
   );
 }
-export default LabRadRequest;
+
+const mapStateToProps = ({ CheckingReducer }) => {
+  const { count, patientDetails } = CheckingReducer;
+  return { count, patientDetails };
+};
+export default connect(mapStateToProps, {
+  funForReducer,
+  setPatientDetailsForReducer,
+})(LabRadRequest);

@@ -4,7 +4,7 @@
 import React, { useEffect, useState, useReducer } from "react";
 import TextField from "@material-ui/core/TextField";
 import Select from "@material-ui/core/Select";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
@@ -37,6 +37,7 @@ import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css"
 import InputLabelComponent from "../../components/InputLabel/inputLabel";
 import BootstrapInput from "../../components/Dropdown/dropDown.js";
 import MUIInputStyle from "../../assets/jss/material-dashboard-react/inputStyle.js";
+import MUIInputStyleForCurrency from "../../assets/jss/material-dashboard-react/inputStylesForCurrency";
 
 import CurrencyTextField from "@unicef/material-ui-currency-textfield";
 
@@ -91,94 +92,14 @@ const styles = {
   },
 };
 
-const inputStyles = makeStyles((theme) => ({
-  margin: {
-    margin: theme.spacing(0),
-  },
-  input: {
-    backgroundColor: "white",
-    borderRadius: 5,
-    "&": {
-      backgroundColor: "white",
-    },
-    "&:after": {
-      backgroundColor: "white",
-    },
-
-    "&:hover": {
-      backgroundColor: "white",
-    },
-
-    "&:focus": {
-      boxShadow: "none",
-      backgroundColor: "white",
-    },
-  },
-  // multilineColor: {
-  //   backgroundColor: "white",
-  //   borderRadius: 5,
-  //   "&:hover": {
-  //     backgroundColor: "white",
-  //   },
-  //   "&:after": {
-  //     borderBottomColor: "black",
-  //   },
-  // },
-  // root: {
-  //   "& .MuiTextField-root": {
-  //     backgroundColor: "white",
-  //     color: "blue",
-  //   },
-  //   "& .Mui-focused": {
-  //     backgroundColor: "white",
-  //     color: "blue",
-  //   },
-  //   "& .Mui-disabled": {
-  //     backgroundColor: undefined,
-  //     // color: "gray",
-  //   },
-  // },
-}));
-
-const inputStylesForCurrency = makeStyles((theme) => ({
-  input: {
-    backgroundColor: "white",
-    borderRadius: 5,
-
-    boxShadow: "none",
-
-    "&": {
-      // backgroundColor: "white",
-      boxShadow: "none",
-    },
-    "&:after": {
-      // backgroundColor: "white",
-      boxShadow: "none",
-    },
-    "&:hover": {
-      backgroundColor: "white",
-      boxShadow: "none",
-    },
-
-    "&:focus": {
-      boxShadow: "none",
-      // backgroundColor: "white",
-    },
-  },
-}));
-
-const useStyles = makeStyles(tableStyles);
-// const useStylesForInput = makeStyles(inputStyles);
-
 const DATE = new Date();
 
 const time = DATE.getHours();
 
 function ReceiveItems(props) {
-  const classesForInput = inputStyles();
-  const classesForInputForCurrency = inputStylesForCurrency();
+  const classesForInput = MUIInputStyle();
+  const classesForInputForCurrency = MUIInputStyleForCurrency();
 
-  const classes = useStyles();
 
   const initialState = {
     requiredQty: "",
@@ -976,7 +897,7 @@ function ReceiveItems(props) {
                 onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
               /> */}
               <CurrencyTextField
-                // disabled
+                disabled
                 style={{ backgroundColor: "white", borderRadius: 5 }}
                 className="textInputStyle"
                 id="discountAmount"
@@ -989,7 +910,7 @@ function ReceiveItems(props) {
                 InputProps={{
                   className: classesForInputForCurrency.input,
                   classes: { input: classesForInputForCurrency.input },
-                  readOnly: true,
+                  // readOnly: true,
                 }}
                 InputLabelProps={{
                   className: classesForInputForCurrency.label,
@@ -1106,12 +1027,12 @@ function ReceiveItems(props) {
                 variant="filled"
                 textAlign="left"
                 InputProps={{
-                  className: classesForInput.input,
-                  classes: { input: classesForInput.input },
+                  className: classesForInputForCurrency.input,
+                  classes: { input: classesForInputForCurrency.input },
                 }}
                 InputLabelProps={{
-                  className: classesForInput.label,
-                  classes: { label: classesForInput.label },
+                  className: classesForInputForCurrency.label,
+                  classes: { label: classesForInputForCurrency.label },
                 }}
                 currencySymbol="JD"
                 outputFormat="number"
@@ -1158,12 +1079,12 @@ function ReceiveItems(props) {
                 variant="filled"
                 textAlign="left"
                 InputProps={{
-                  className: classesForInput.input,
-                  classes: { input: classesForInput.input },
+                  className: classesForInputForCurrency.input,
+                  classes: { input: classesForInputForCurrency.input },
                 }}
                 InputLabelProps={{
-                  className: classesForInput.label,
-                  classes: { label: classesForInput.label },
+                  className: classesForInputForCurrency.label,
+                  classes: { label: classesForInputForCurrency.label },
                 }}
                 currencySymbol="JD"
                 outputFormat="number"
@@ -1211,12 +1132,12 @@ function ReceiveItems(props) {
                 variant="filled"
                 textAlign="left"
                 InputProps={{
-                  className: classesForInput.input,
-                  classes: { input: classesForInput.input },
+                  className: classesForInputForCurrency.input,
+                  classes: { input: classesForInputForCurrency.input },
                 }}
                 InputLabelProps={{
-                  className: classesForInput.label,
-                  classes: { label: classesForInput.label },
+                  className: classesForInputForCurrency.label,
+                  classes: { label: classesForInputForCurrency.label },
                 }}
                 currencySymbol="JD"
                 outputFormat="number"
@@ -1435,71 +1356,43 @@ function ReceiveItems(props) {
             </div>
           </div>
 
-          <div
-            style={{
-              display: "flex",
-              flex: 1,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
+          <div className="row" style={{paddingLeft:'0.1rem', paddingRight:'0.1rem'}}>
             <div
               style={{
                 display: "flex",
                 flex: 1,
-                height: 50,
-
-                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginTop: 15,
+                marginBottom: 15,
               }}
             >
-              <div style={{ marginTop: 30 }}>
-                <img
-                  onClick={() => props.history.goBack()}
-                  src={Back_Arrow}
-                  style={{ width: 60, height: 40, cursor: "pointer" }}
-                />
-              </div>
+              <img
+                onClick={() => props.history.goBack()}
+                src={Back_Arrow}
+                style={{ width: 60, height: 40, cursor: "pointer" }}
+              />
 
               {comingFor === "add" ? (
-                <div
-                  style={{
-                    display: "flex",
-                    flex: 1,
-                    height: 50,
-                    justifyContent: "flex-end",
-                    marginTop: "2%",
-                    marginBottom: "2%",
-                    flexDirection: "row",
-                  }}
+                <Button
+                  disabled={!validateForm()}
+                  onClick={handleAdd}
+                  variant="contained"
+                  color="primary"
+                  style={{ ...styles.stylesForButton }}
                 >
-                  <Button
-                    disabled={!validateForm()}
-                    onClick={handleAdd}
-                    variant="contained"
-                    color="primary"
-                    style={{ ...styles.stylesForButton }}
-                  >
-                    Receive
-                  </Button>
-                </div>
+                  Receive
+                </Button>
               ) : (
                 <div
                   style={{
                     display: "flex",
                     flex: 1,
-                    height: 50,
                     justifyContent: "space-between",
-                    marginTop: "2%",
-                    marginBottom: "2%",
                     flexDirection: "row",
                   }}
                 >
-                  <Button
-                    variant="contained"
-                    style={{ height: 54, marginRight: 6 }}
-                  >
-                    Upload Invoice
-                  </Button>
+                  <Button variant="contained">Upload Invoice</Button>
                   <Button
                     disabled={!validateForm()}
                     onClick={handleEdit}

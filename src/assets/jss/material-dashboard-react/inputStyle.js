@@ -1,9 +1,6 @@
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 
 export default makeStyles((theme) => ({
-  margin: {
-    margin: theme.spacing(0),
-  },
   input: {
     backgroundColor: "white",
     borderRadius: 4,
@@ -17,6 +14,14 @@ export default makeStyles((theme) => ({
     },
     "&:after": {
       color: "black",
+    },
+
+    "&:hover": {
+      backgroundColor: "white",
+    },
+
+    "&:focus": {
+      backgroundColor: "white",
     },
   },
 

@@ -35,7 +35,8 @@ import business_Unit from "../../assets/img/Receive Item.png";
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 
 import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
-import useStyleforinput from "../../../src/assets/jss/material-dashboard-react/inputStyle.js";
+import MUIInputStyles from "../../../src/assets/jss/material-dashboard-react/inputStyle.js";
+import MUIInputStylesForCurrency from "../../../src/assets/jss/material-dashboard-react/inputStylesForCurrency.js";
 
 import InputLabelComponent from "../../components/InputLabel/inputLabel";
 
@@ -171,8 +172,9 @@ const time = DATE.getHours();
 
 function ReceiveItems(props) {
   // const classes = useStyles();
-  const classes = useStyleforinput();
-  const classesForInput = inputStyles();
+  const classes = MUIInputStyles();
+  const classesForInput = MUIInputStyles();
+  const classesForInputForCurrency = MUIInputStylesForCurrency();
 
   const initialState = {
     requiredQty: "",
@@ -1032,12 +1034,12 @@ function ReceiveItems(props) {
                 variant="filled"
                 textAlign="left"
                 InputProps={{
-                  className: classesForInput.input,
-                  classes: { input: classesForInput.input },
+                  className: classesForInputForCurrency.input,
+                  classes: { input: classesForInputForCurrency.input },
                 }}
                 InputLabelProps={{
-                  className: classesForInput.label,
-                  classes: { label: classesForInput.label },
+                  className: classesForInputForCurrency.label,
+                  classes: { label: classesForInputForCurrency.label },
                 }}
                 currencySymbol="JD"
                 outputFormat="number"
@@ -1172,12 +1174,12 @@ function ReceiveItems(props) {
                 variant="filled"
                 textAlign="left"
                 InputProps={{
-                  className: classesForInput.input,
-                  classes: { input: classesForInput.input },
+                  className: classesForInputForCurrency.input,
+                  classes: { input: classesForInputForCurrency.input },
                 }}
                 InputLabelProps={{
-                  className: classesForInput.label,
-                  classes: { label: classesForInput.label },
+                  className: classesForInputForCurrency.label,
+                  classes: { label: classesForInputForCurrency.label },
                 }}
                 currencySymbol="JD"
                 outputFormat="number"
@@ -1225,12 +1227,12 @@ function ReceiveItems(props) {
                 variant="filled"
                 textAlign="left"
                 InputProps={{
-                  className: classesForInput.input,
-                  classes: { input: classesForInput.input },
+                  className: classesForInputForCurrency.input,
+                  classes: { input: classesForInputForCurrency.input },
                 }}
                 InputLabelProps={{
-                  className: classesForInput.label,
-                  classes: { label: classesForInput.label },
+                  className: classesForInputForCurrency.label,
+                  classes: { label: classesForInputForCurrency.label },
                 }}
                 currencySymbol="JD"
                 outputFormat="number"
@@ -1279,12 +1281,12 @@ function ReceiveItems(props) {
                 variant="filled"
                 textAlign="left"
                 InputProps={{
-                  className: classesForInput.input,
-                  classes: { input: classesForInput.input },
+                  className: classesForInputForCurrency.input,
+                  classes: { input: classesForInputForCurrency.input },
                 }}
                 InputLabelProps={{
-                  className: classesForInput.label,
-                  classes: { label: classesForInput.label },
+                  className: classesForInputForCurrency.label,
+                  classes: { label: classesForInputForCurrency.label },
                 }}
                 currencySymbol="JD"
                 outputFormat="number"
@@ -1389,7 +1391,7 @@ function ReceiveItems(props) {
                   label="Date/Time Received (MM/DD/YYYY)"
                   // format="MM/dd/yyyy HH:mm a"
                   format={dateTimeFormat}
-
+                  disableFuture
                   onChange={(val) => onChangeDate(val, "receivedDate")}
                   InputProps={{
                     className: classes.input,
@@ -1478,25 +1480,26 @@ function ReceiveItems(props) {
             </div>
           </div>
 
-          <div
-            style={{
-              display: "flex",
-              flex: 1,
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: 20,
-              marginTop: 20,
-            }}
-          >
-            <img
-              onClick={() => props.history.goBack()}
-              src={Back_Arrow}
-              style={{ width: 60, height: 40, cursor: "pointer" }}
-            />
+          <div className="row">
+            <div
+              style={{
+                display: "flex",
+                flex: 1,
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: 20,
+                marginTop: 20,
+              }}
+            >
+              <img
+                onClick={() => props.history.goBack()}
+                src={Back_Arrow}
+                style={{ width: 60, height: 40, cursor: "pointer" }}
+              />
 
-            {comingFor === "add" ? (
-              <div style={{}}>
-                {/* <Button
+              {comingFor === "add" ? (
+                <div style={{}}>
+                  {/* <Button
                     style={{ minWidth: "20%", marginRight: 30 }}
                     // disabled={true}
                     // onClick={handleAdd}
@@ -1505,19 +1508,19 @@ function ReceiveItems(props) {
                     Upload Invoice
                   </Button> */}
 
-                <Button
-                  style={{ width: 100, height: 50 }}
-                  disabled={!validateForm()}
-                  onClick={handleAdd}
-                  variant="contained"
-                  color="primary"
-                >
-                  Receive
-                </Button>
-              </div>
-            ) : (
-              <div style={{}}>
-                {/* <Button
+                  <Button
+                    style={{ width: 100, height: 50 }}
+                    disabled={!validateForm()}
+                    onClick={handleAdd}
+                    variant="contained"
+                    color="primary"
+                  >
+                    Receive
+                  </Button>
+                </div>
+              ) : (
+                <div style={{}}>
+                  {/* <Button
                     style={{ minWidth: "20%" }}
                     // disabled={true}
                     // onClick={handleAdd}
@@ -1526,17 +1529,18 @@ function ReceiveItems(props) {
                   >
                     Upload Invoice
                   </Button> */}
-                <Button
-                  style={{ width: 100, height: 50 }}
-                  disabled={!validateForm()}
-                  onClick={handleEdit}
-                  variant="contained"
-                  color="primary"
-                >
-                  Receive
-                </Button>
-              </div>
-            )}
+                  <Button
+                    style={{ width: 100, height: 50 }}
+                    disabled={!validateForm()}
+                    onClick={handleEdit}
+                    variant="contained"
+                    color="primary"
+                  >
+                    Receive
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
 
           <Notification msg={errorMsg} open={openNotification} />

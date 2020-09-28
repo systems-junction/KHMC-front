@@ -35,6 +35,12 @@ import {
   notifyDischarge,
 } from "../../../public/endpoins";
 
+import { connect } from "react-redux";
+import {
+  funForReducer,
+  setPatientDetailsForReducer,
+} from "../../../actions/Checking";
+
 const tableHeadingForDischargeMed = [
   "Request ID",
   "Date/Time",
@@ -223,6 +229,14 @@ function DischargeRequest(props) {
   const [backIsEmpty, setBackIsEmpty] = useState(false);
 
   useEffect(() => {
+
+
+    if (props.patientDetails) {
+      setPatientDetails(props.patientDetails);
+      getPatientByInfo(props.patientDetails._id);
+      openPatientDetailsDialog(true);
+    }
+
     setCurrentUser(cookie.load("current_user"));
 
     // console.log(props.history.location.state.selectedItem)
@@ -282,6 +296,10 @@ function DischargeRequest(props) {
     dispatch({ field: "medicationArray", value: "" });
     // setDialogOpen(true);
     console.log("selected banda : ", i);
+
+    props.setPatientDetailsForReducer(i);
+
+
     dispatch({ field: "dischargeNotes", value: "" });
     dispatch({ field: "otherNotes", value: "" });
     setPatientDetails(i);
@@ -1002,4 +1020,11 @@ function DischargeRequest(props) {
     </div>
   );
 }
-export default DischargeRequest;
+const mapStateToProps = ({ CheckingReducer }) => {
+  const { count, patientDetails } = CheckingReducer;
+  return { count, patientDetails };
+};
+export default connect(mapStateToProps, {
+  funForReducer,
+  setPatientDetailsForReducer,
+})(DischargeRequest);

@@ -8,7 +8,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
-import tableStyles from "../../assets/jss/material-dashboard-react/components/tableStyle.js";
 import axios from "axios";
 import Notification from "../../components/Snackbar/Notification.js";
 import DateFnsUtils from "@date-io/date-fns";
@@ -44,7 +43,8 @@ import business_Unit from "../../assets/img/business_Unit.png";
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 
 import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
-import useStyleforinput from "../../../src/assets/jss/material-dashboard-react/inputStyle.js";
+import MUIStyleforinput from "../../../src/assets/jss/material-dashboard-react/inputStyle.js";
+import MUIStyleForInputForCurrency from "../../../src/assets/jss/material-dashboard-react/inputStylesForCurrency.js";
 
 import CurrencyTextField from "@unicef/material-ui-currency-textfield";
 
@@ -60,11 +60,6 @@ const styles = {
 
   inputContainerForDropDown: {
     marginTop: 6,
-    // backgroundColor: 'white',
-    // borderRadius: 10,
-    // paddingLeft: 10,
-    // paddingRight: 10,
-    // paddingTop: 2,
   },
 
   buttonContainer: {
@@ -98,86 +93,14 @@ const styles = {
     paddingRight: 3,
   },
 };
-// const useStyles = makeStyles(tableStyles);
-
-const useStyles = makeStyles((theme) => ({
-  margin: {
-    margin: theme.spacing(0),
-  },
-  input: {
-    backgroundColor: "white",
-    borderRadius: 4,
-    "&:placeholder": {
-      // color: "gray",
-      // fontWeight: "400",
-    },
-    "&:before": {
-      borderBottomWidth: "0px",
-    },
-    "&:after": {
-      color: "black",
-    },
-  },
-}));
-
-const inputStyles = makeStyles((theme) => ({
-  margin: {
-    margin: theme.spacing(0),
-  },
-  input: {
-    backgroundColor: "white",
-    borderRadius: 5,
-    "&": {
-      backgroundColor: "white",
-    },
-    "&:after": {
-      backgroundColor: "white",
-    },
-
-    "&:hover": {
-      backgroundColor: "white",
-    },
-
-    "&:focus": {
-      boxShadow: "none",
-      backgroundColor: "white",
-    },
-  },
-  // multilineColor: {
-  //   backgroundColor: "white",
-  //   borderRadius: 5,
-  //   "&:hover": {
-  //     backgroundColor: "white",
-  //   },
-  //   "&:after": {
-  //     borderBottomColor: "black",
-  //   },
-  // },
-  // root: {
-  //   "& .MuiTextField-root": {
-  //     backgroundColor: "white",
-  //     color: "blue",
-  //   },
-  //   "& .Mui-focused": {
-  //     backgroundColor: "white",
-  //     color: "blue",
-  //   },
-  //   "& .Mui-disabled": {
-  //     backgroundColor: undefined,
-  //     // color: "gray",
-  //   },
-  // },
-}));
 
 const DATE = new Date();
 
 const time = DATE.getHours();
 
 function ReceiveItems(props) {
-  // const classes = useStyles();
-
-  const classes = useStyles();
-  const classesForInput = inputStyles();
+  const classes = MUIStyleforinput();
+  const classesForInput = MUIStyleForInputForCurrency();
 
   const initialState = {
     _id: "",
@@ -1263,6 +1186,7 @@ function ReceiveItems(props) {
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DateTimePicker
                   required
+                  disableFuture
                   format="MM/dd/yyyy HH:mm a"
                   inputVariant="filled"
                   fullWidth
@@ -1349,51 +1273,47 @@ function ReceiveItems(props) {
             </div>
           </div>
 
-          <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
+          <div
+            className="row"
+            style={{
+              display: "flex",
+              flex: 1,
+              marginTop: "1%",
+              marginBottom: "1%",
+            }}
+          >
             <div
               style={{
                 display: "flex",
                 flex: 1,
-                height: 50,
-                marginTop: "1%",
-                marginBottom: "1%",
+                justifyContent: "flex-end",
+                flexDirection: "row",
               }}
             >
-              <div
-                style={{
-                  display: "flex",
-                  flex: 1,
-                  height: 50,
-                  justifyContent: "flex-end",
-                  marginTop: "1%",
-                  marginBottom: "1%",
-                  flexDirection: "row",
-                }}
+              <Button
+                style={{ minWidth: "20%", marginRight: 30, height:50 }}
+                disabled={true}
+                // onClick={handleAdd}
+                variant="contained"
               >
-                <Button
-                  style={{ minWidth: "20%", marginRight: 30 }}
-                  disabled={true}
-                  // onClick={handleAdd}
-                  variant="contained"
-                >
-                  Upload Invoice
-                </Button>
+                Upload Invoice
+              </Button>
 
-                <Button
-                  style={{ minWidth: "10%" }}
-                  disabled={!validateForm()}
-                  onClick={
-                    receivedQty <= selectedItem.reqQty
-                      ? handleAdd
-                      : handleExtraQty
-                  }
-                  variant="contained"
-                  color="primary"
-                >
-                  Receive
-                </Button>
-              </div>
-              {/* ) : (
+              <Button
+                style={{ minWidth: "10%", height:50 }}
+                disabled={!validateForm()}
+                onClick={
+                  receivedQty <= selectedItem.reqQty
+                    ? handleAdd
+                    : handleExtraQty
+                }
+                variant="contained"
+                color="primary"
+              >
+                Receive
+              </Button>
+            </div>
+            {/* ) : (
                 <div
                   style={{
                     display: "flex",
@@ -1424,7 +1344,6 @@ function ReceiveItems(props) {
                     Receive
                   </Button>
                 </div> */}
-            </div>
           </div>
 
           <Notification msg={errorMsg} open={openNotification} />

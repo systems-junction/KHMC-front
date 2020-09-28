@@ -264,7 +264,7 @@ export default function DenseTable(props) {
                   // fontSize: "0.9rem",
                 }}
               >
-                {row.itemId.receiptUnitCost * row.reqQty}
+                {row.itemId.receiptUnitCost * row.reqQty} JD
               </TableCell>
             ) : (
               undefined

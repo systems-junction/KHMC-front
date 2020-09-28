@@ -117,7 +117,7 @@ const tableHeadingForFUMemberForItems = [
   "Item Code",
   "Name",
   "Requested Qty",
-  "Functional Unit Item Cost",
+  "Functional Unit Item Cost (JD)",
   "Status",
   // "Actions",
 ];
@@ -126,7 +126,7 @@ const tableHeadingForFUInventoryKeeperForItems = [
   "Item Code",
   "Name",
   "Requested Qty",
-  "Functional Unit Item Cost",
+  "Functional Unit Item Cost (JD)",
   "Status",
 ];
 
@@ -134,7 +134,7 @@ const tableHeadingForFUInventoryKeeperForItemsForReceive = [
   "Item Code",
   "Name",
   "Requested Qty",
-  "Functional Unit Item Cost",
+  "Functional Unit Item Cost (JD)",
   "Status",
   "Actions",
 ];

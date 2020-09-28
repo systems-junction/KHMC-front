@@ -485,7 +485,7 @@ function AddEditPurchaseRequest(props) {
               props.history.replace({
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
-                  message: `Non Medical Order has been generated successfully`,
+                  message: `Non Medical Order ${res.data.data.requestNo} has been generated successfully`,
                 },
               });
             } else if (!res.data.success) {
@@ -902,7 +902,7 @@ function AddEditPurchaseRequest(props) {
               onClick={() =>
                 props.history.push("/home/wms/fus/professionalorder")
               }
-              style={{ ...styles.stylesForButton, height: 45 }}
+              style={{ ...styles.stylesForButton, height: 45, fontSize:12 }}
               variant="contained"
               color="primary"
             >
@@ -1281,7 +1281,14 @@ function AddEditPurchaseRequest(props) {
 
             <div>
               <div className="row">
-                <h5 style={{ color: "white", fontWeight: "700", marginTop: 15, marginBottom:15 }}>
+                <h5
+                  style={{
+                    color: "white",
+                    fontWeight: "700",
+                    marginTop: 15,
+                    marginBottom: 15,
+                  }}
+                >
                   Order Item
                 </h5>
               </div>
@@ -1552,7 +1559,10 @@ function AddEditPurchaseRequest(props) {
 
                 <div
                   className="col-md-4 col-sm-4 col-4"
-                  style={styles.inputContainerForTextField}
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
                 >
                   {/* <div style={{ marginTop: "2%", marginBottom: "2%" }}>
                   <Button onClick={() => hideDialog()} variant="contained">
@@ -1854,52 +1864,51 @@ function AddEditPurchaseRequest(props) {
                 )}
               </div>
             </div> */}
-
-            <div
-              style={{
-                display: "flex",
-                flex: 1,
-                justifyContent: "space-between",
-                marginTop: "2%",
-                marginBottom: "2%",
-              }}
-            >
-              <div>
+            <div className="row">
+              <div
+                style={{
+                  display: "flex",
+                  flex: 1,
+                  justifyContent: "space-between",
+                  marginTop: "2%",
+                  marginBottom: "2%",
+                }}
+              >
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back_Arrow}
                   style={{ width: 60, height: 40, cursor: "pointer" }}
                 />
-              </div>
 
-              {comingFor === "add" ? (
-                <Button
-                  style={{
-                    ...styles.stylesForPurchaseButton,
-                    backgroundColor: "#845DC2",
-                  }}
-                  // disabled={!validateForm()}
-                  onClick={handleAdd}
-                  variant="contained"
-                  // color="primary"
-                >
-                  Generate Order
-                </Button>
-              ) : comingFor === "edit" ? (
-                <Button
-                  style={styles.stylesForPurchaseButton}
-                  // disabled={!validateForm()}
-                  onClick={handleEdit}
-                  variant="contained"
-                  color="primary"
-                >
-                  Update
-                </Button>
-              ) : comingFor === "view" ? (
-                undefined
-              ) : (
-                undefined
-              )}
+                {comingFor === "add" ? (
+                  <Button
+                    style={{
+                      ...styles.stylesForPurchaseButton,
+                      backgroundColor: "#845DC2",
+                    }}
+                    // disabled={!validateForm()}
+                    onClick={handleAdd}
+                    variant="contained"
+                    // color="primary"
+                  >
+                    Generate Order
+                  </Button>
+                ) : comingFor === "edit" ? (
+                  <Button
+                    style={styles.stylesForPurchaseButton}
+                    // disabled={!validateForm()}
+                    onClick={handleEdit}
+                    variant="contained"
+                    color="primary"
+                  >
+                    Update
+                  </Button>
+                ) : comingFor === "view" ? (
+                  undefined
+                ) : (
+                  undefined
+                )}
+              </div>
             </div>
 
             <Notification msg={errorMsg} open={openNotification} />

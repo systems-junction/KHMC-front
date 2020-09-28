@@ -94,7 +94,7 @@ const tableHeadingForFUMember = [
   "Trade Name",
   "Item Code",
   "Requested Qty",
-  "Functional Unit  Cost",
+  "Functional Unit  Cost(JD)",
   "Actions",
 ];
 
@@ -103,7 +103,7 @@ const tableHeadingForWarehouseMember = [
   "Trade Name",
   "Item Code",
   "Requested Qty",
-  "Functional Unit  Cost",
+  "Functional Unit  Cost(JD)",
   "Status",
 ];
 
@@ -112,7 +112,7 @@ const tableHeadingForOthers = [
   "Trade Name",
   "Item Code",
   "Requested Qty",
-  "Functional Unit  Cost",
+  "Functional Unit  Cost(JD)",
 ];
 
 const actions = { edit: true, view: false, delete: true };
@@ -236,7 +236,7 @@ export default function DenseTable(props) {
                 // fontSize: "0.9rem",
               }}
             >
-              {row.fuItemCost}
+              {row.fuItemCost} JD
             </TableCell>
 
             {currentUser.staffTypeId.type === "FU Inventory Keeper" ? (
