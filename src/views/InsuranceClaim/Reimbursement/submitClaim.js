@@ -192,6 +192,7 @@ function AddEditPatientListing(props) {
     gender: '-----',
     age: '--',
     weight: '--',
+    qr: '',
     document: '',
     generatedBy: cookie.load('current_user').staffId,
     insuranceNumber: '----',
@@ -223,6 +224,7 @@ function AddEditPatientListing(props) {
     gender = '----',
     age = '--',
     weight = '--',
+    qr,
     document,
     generatedBy = cookie.load('current_user').staffId,
     insuranceNumber = '-----',
@@ -510,6 +512,7 @@ function AddEditPatientListing(props) {
     dispatch({ field: 'profileNo', value: i.profileNo })
     dispatch({ field: 'insuranceNumber', value: i.insuranceNumber })
     dispatch({ field: 'insuranceVendor', value: i.insuranceVendor })
+    dispatch({ field: 'qr', value: i.QR })
 
     setSearchQuery('')
     getBillSummary(i._id)
@@ -624,6 +627,8 @@ function AddEditPatientListing(props) {
     // You'll need to make your image into a Data URL
     // Use http://dataurl.net/#dataurlmaker
     console.log('item', item)
+    console.log('Patient Name ', firstName, lastName)
+    console.log('Patient QR', qr)
 
     var now = new Date()
     var start = new Date(now.getFullYear(), 0, 0)

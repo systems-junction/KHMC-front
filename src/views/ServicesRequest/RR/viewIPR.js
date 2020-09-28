@@ -306,9 +306,9 @@ function AddEditPurchaseRequest(props) {
         setImagePreview([reader.result]);
       } else if (fileType === "PNG") {
         setImagePreview([reader.result]);
-      } else if (fileType === "jpeg") {
+      } else if (fileType === "peg") {
         setImagePreview([reader.result]);
-      } else if (fileType === "JPEG") {
+      } else if (fileType === "PEG") {
         setImagePreview([reader.result]);
       } else if (fileType === "jpg") {
         setImagePreview([reader.result]);
@@ -353,9 +353,9 @@ function AddEditPurchaseRequest(props) {
       setImagePreview("");
     } else if (fileType === "PNG") {
       setImagePreview("");
-    } else if (fileType === "jpeg") {
+    } else if (fileType === "peg") {
       setImagePreview("");
-    } else if (fileType === "JPEG") {
+    } else if (fileType === "PEG") {
       setImagePreview("");
     } else if (fileType === "jpg") {
       setImagePreview("");
@@ -750,7 +750,7 @@ function AddEditPurchaseRequest(props) {
                   variant="contained"
                   color="primary"
                 >
-                  <strong style={{ fontSize: "13px" }}>Updated</strong>
+                  <strong style={{ fontSize: "13px" }}>Update</strong>
                 </Button>
               </div>
             </div>
