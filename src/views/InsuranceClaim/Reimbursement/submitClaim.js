@@ -19,10 +19,11 @@ import Notification from "../../../components/Snackbar/Notification.js";
 import cookie from "react-cookies";
 import Header from "../../../components/Header/Header";
 import Back_Arrow from "../../../assets/img/Back_Arrow.png";
-import logoInvoice from "../../../assets/img/logoInvoice.png";
 import "../../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
 import FormData from "form-data";
 import claimsReview from "../../../assets/img/ClaimsReview.png";
+import logoInvoice from "../../../assets/img/logoInvoice.png";
+
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
@@ -679,7 +680,7 @@ function AddEditPatientListing(props) {
     doc.setFontSize(12);
     doc.line(5, 65, 50, 65);
     doc.text(5, 75, "Request No:");
-    doc.text(5, 85, `${item.RRrequestNo}`);
+    doc.text(5, 85, `${item.RRrequestNo || item.LRrequestNo}`);
 
     doc.text(178, 50, "Invoice Total");
     doc.setFontSize(23);
@@ -1037,7 +1038,11 @@ function AddEditPatientListing(props) {
                   >
                     {diagnosisArray
                       ? diagnosisArray.map((drug, index) => {
-                          return <h6 style={styles.textStyles}>{drug}</h6>;
+                          return (
+                            <h6 style={styles.textStyles}>
+                              {index + 1}. {drug}
+                            </h6>
+                          );
                         })
                       : ""}
                   </div>

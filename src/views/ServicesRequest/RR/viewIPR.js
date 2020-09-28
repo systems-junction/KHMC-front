@@ -290,7 +290,8 @@ function AddEditPurchaseRequest(props) {
     var file = event.target.files[0];
     var fileType = file.name.slice(file.name.length - 3);
 
-    // console.log("Selected file : ", file)
+    let file_size = event.target.files[0].size;
+
     // console.log("file type : ", fileType)
 
     setSlipUpload(file);
@@ -298,28 +299,38 @@ function AddEditPurchaseRequest(props) {
     var url = reader.readAsDataURL(file);
 
     reader.onloadend = function() {
-      if (fileType === "pdf") {
-        setpdfView(file.name);
-      } else if (fileType === "PDF") {
-        setpdfView(file.name);
-      } else if (fileType === "png") {
-        setImagePreview([reader.result]);
-      } else if (fileType === "PNG") {
-        setImagePreview([reader.result]);
-      } else if (fileType === "peg") {
-        setImagePreview([reader.result]);
-      } else if (fileType === "PEG") {
-        setImagePreview([reader.result]);
-      } else if (fileType === "jpg") {
-        setImagePreview([reader.result]);
-      } else if (fileType === "JPG") {
-        setImagePreview([reader.result]);
-      } else if (fileType === "rtf") {
-        setImagePreview([reader.result]);
-      } else if (fileType === "RTF") {
-        setImagePreview([reader.result]);
+      {
+        file_size > 1500000
+          ? console.log("Selected file : ", file_size)
+          : console.log("Selected file less then 1.5 MB ");
+      }
+      if (file_size <= 1500000) {
+        if (fileType === "pdf") {
+          setpdfView(file.name);
+        } else if (fileType === "PDF") {
+          setpdfView(file.name);
+        } else if (fileType === "png") {
+          setImagePreview([reader.result]);
+        } else if (fileType === "PNG") {
+          setImagePreview([reader.result]);
+        } else if (fileType === "peg") {
+          setImagePreview([reader.result]);
+        } else if (fileType === "PEG") {
+          setImagePreview([reader.result]);
+        } else if (fileType === "jpg") {
+          setImagePreview([reader.result]);
+        } else if (fileType === "JPG") {
+          setImagePreview([reader.result]);
+        } else if (fileType === "rtf") {
+          setImagePreview([reader.result]);
+        } else if (fileType === "RTF") {
+          setImagePreview([reader.result]);
+        } else {
+          setErrorMsg("only pdf, jpeg, png and rtf should be allowed");
+          setOpenNotification(true);
+        }
       } else {
-        setErrorMsg("only pdf, jpeg, png and rtf should be allowed");
+        setErrorMsg("Files size should be less Than or Equal to 1.5MB");
         setOpenNotification(true);
       }
     };

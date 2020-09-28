@@ -213,7 +213,7 @@ function AddEditEDR(props) {
 
     if (selectedRec.item) {
       selectedRec.item.map(
-        (d) => (d.totalPrice = d.requestedQty * d.itemId.issueUnitCost)
+        (d) => (d.totalPrice = (d.requestedQty * d.itemId.issueUnitCost).toFixed(2))
       );
       // dispatch({
       //   field: 'status',

@@ -12,6 +12,10 @@ import {
   getedripr,
   uploadsUrl,
   searchpatient,
+  addPatientClearanceURL,
+  getPatientClearanceURL,
+  updatePatientClearanceURL,
+  getSearchDischargedPatient
 } from "../../public/endpoins";
 import axios from "axios";
 import Notification from "../../components/Snackbar/Notification.js";
@@ -42,11 +46,13 @@ import CurrencyTextField from "@unicef/material-ui-currency-textfield";
 import MUIInputStyle from "../../assets/jss/material-dashboard-react/inputStyle.js";
 import MUIInputStyleForCurrency from "../../assets/jss/material-dashboard-react/inputStylesForCurrency";
 
+import view_all from "../../assets/img/Eye.png";
+
 const tableHeadingForBillSummary = [
   "Date/Time",
   "Service Name",
   "Name",
-  "Amount",
+  "Amount (JD)",
   "Quantity",
   //   "Invoice",
 ];
@@ -177,9 +183,7 @@ const useStyles = makeStyles((theme) => ({
       boxShadow: "none",
     },
   },
-
 }));
-
 
 function AddEditPatientListing(props) {
   const classes = MUIInputStyle();
@@ -203,6 +207,9 @@ function AddEditPatientListing(props) {
     responseCode: "",
     diagnosisArray: "",
     medicationArray: "",
+
+    requestType: "",
+    requestId: "",
 
     // billSummaryArray: "",
   };
@@ -233,6 +240,8 @@ function AddEditPatientListing(props) {
     responseCode,
     diagnosisArray,
     medicationArray,
+    requestType,
+    requestId,
 
     // billSummaryArray,
   } = state;
@@ -272,12 +281,24 @@ function AddEditPatientListing(props) {
   useEffect(() => {
     // setcomingFor(props.history.location.state.comingFor);
     setCurrentUser(cookie.load("current_user"));
-    // const selectedRec = props.history.location.state.selectedItem;
+    // const selectedRec = props.history.location.state.selectedItem
+    //   ? props.history.location.state.selectedItem
+    //   : "";
     // console.log("selected rec is ... ", selectedRec);
 
-    // if (props.history.location.state.comingFor === "edit") {
-    //   getPatientByInfo(selectedRec.patient._id);
-    // }
+    if (
+      props.history.location.state &&
+      props.history.location.state.selectedItem
+    ) {
+      const selectedRec = props.history.location.state.selectedItem;
+      setcomingFor(selectedRec.comingFor);
+      // getPatientByInfo(selectedRec.patientId._id);
+      // setPatientDetails(selectedRec.patientId)
+      handleAddItem(selectedRec.patientId);
+      setInternalRequestsFee(selectedRec.residentFee);
+      setExternalRequestsFee(selectedRec.consultantFee);
+      setGrandTotal(selectedRec.total);
+    }
 
     // if (selectedRec) {
     //   setClaimId(selectedRec._id);
@@ -344,49 +365,45 @@ function AddEditPatientListing(props) {
   // }
 
   const handleAdd = () => {
-    let formData = new FormData();
-    if (DocumentUpload) {
-      formData.append("file", DocumentUpload, DocumentUpload.name);
+    if (!patientDetails) {
+      setOpenNotification(true);
+      setErrorMsg("Please add the patient first");
+      return;
     }
-    //if (validatePatientForm()) {
+
+    if (!grandTotal) {
+      setOpenNotification(true);
+      setErrorMsg("Please calculate the billing amount first");
+      return;
+    }
+
     const params = {
-      generatedBy: generatedBy,
-      patient: patientId,
-      treatmentDetail: treatmentDetail,
-      document: document,
-      status: "pending",
-      responseCode: "N/A",
+      patientId: patientDetails._id,
+      generatedBy: currentUser.staffId,
+      consultantFee: externalRequestsFee,
+      residentFee: internalRequestsFee,
+      subTotal: remainingAmount,
+      total: grandTotal,
     };
-    formData.append("data", JSON.stringify(params));
-    // console.log("PARAMSS ", params);
-    // console.log("DATAAA ", formData);
+
+    let obj = { ...params };
+    if (requestType === "EDR") {
+      obj = { ...params, edrId: requestId };
+    } else if (requestType === "IPR") {
+      obj = { ...params, iprId: requestId };
+    }
+
+    console.log(params);
+
     axios
-      .post(addClaim, formData, {
-        headers: {
-          accept: "application/json",
-          "Accept-Language": "en-US,en;q=0.8",
-          "content-type": "multipart/form-data",
-        },
-      })
+      .post(addPatientClearanceURL, obj)
       .then((res) => {
         if (res.data.success) {
           console.log(res.data.data, "patients data");
-          dispatch({ field: "patientId", value: "" });
-          dispatch({ field: "firstName", value: "" });
-          dispatch({ field: "lastName", value: "" });
-          dispatch({ field: "gender", value: "" });
-          dispatch({ field: "age", value: "" });
-          dispatch({ field: "weight", value: "" });
-          dispatch({ field: "profileNo", value: "" });
-          dispatch({ field: "insuranceNumber", value: "" });
-          dispatch({ field: "insuranceVendor", value: "" });
-          dispatch({ field: "treatmentDetail", value: "" });
-          dispatch({ field: "document", value: "" });
-
           props.history.push({
-            pathname: "success",
+            pathname: "patientclearence/success",
             state: {
-              message: `Claim against Patient MRN ${profileNo} Submitted successfully`,
+              message: `Patient with MRN: ${profileNo} has been cleared successfully`,
             },
           });
         } else if (!res.data.success) {
@@ -404,59 +421,60 @@ function AddEditPatientListing(props) {
   };
 
   const handleEdit = () => {
-    let formData = new FormData();
-    if (DocumentUpload) {
-      formData.append("file", DocumentUpload, DocumentUpload.name);
+    if (!patientDetails) {
+      setOpenNotification(true);
+      setErrorMsg("Please add the patient first");
+      return;
     }
-    //if (validatePatientForm()) {
+
+    if (!grandTotal) {
+      setOpenNotification(true);
+      setErrorMsg("Please calculate the billing amount first");
+      return;
+    }
+
     const params = {
-      _id: ClaimId,
-      treatmentDetail: treatmentDetail,
-      document: document,
-      status: status,
-      responseCode: responseCode,
+      _id: props.history.location.state.selectedItem._id,
+      patientId: patientDetails._id,
+      generatedBy: currentUser.staffId,
+      consultantFee: externalRequestsFee,
+      residentFee: internalRequestsFee,
+      subTotal: remainingAmount,
+      total: grandTotal,
     };
-    formData.append("data", JSON.stringify(params));
-    // console.log("PARAMSS ", params);
-    // console.log("DATAAA ", formData);
+
+    let obj = { ...params };
+    if (requestType === "EDR") {
+      obj = { ...params, edrId: requestId };
+    } else if (requestType === "IPR") {
+      obj = { ...params, iprId: requestId };
+    }
+
+    console.log(params);
+
     axios
-      .put(updateClaim, formData)
+      .put(updatePatientClearanceURL, obj)
       .then((res) => {
         if (res.data.success) {
+          console.log(res.data.data, "patients data");
           props.history.push({
             pathname: "success",
             state: {
-              message: `Claim against Patient MRN ${profileNo} Updated successfully`,
+              message: `Patient with MRN: ${profileNo} has been updated successfully`,
             },
           });
         } else if (!res.data.success) {
           setOpenNotification(true);
+          setErrorMsg("Error submitting Claim details");
         }
       })
       .catch((e) => {
-        console.log("error after updating Claim details", e);
+        console.log("error after adding Claim details", e);
         setOpenNotification(true);
-        setErrorMsg("Error while editing the Claim details");
+        setErrorMsg("Error while adding the Claim details");
       });
     //}
-    // setIsFormSubmitted(true)
-  };
-
-  const onDocumentUpload = (event) => {
-    var file = event.target.files[0];
-    var fileType = file.name.slice(file.name.length - 3);
-
-    setDocumentUpload(file);
-    var reader = new FileReader();
-    var url = reader.readAsDataURL(file);
-
-    reader.onloadend = function() {
-      if (fileType === "pdf") {
-        setpdfView(file.name);
-      } else {
-        setImagePreview([reader.result]);
-      }
-    };
+    setIsFormSubmitted(true);
   };
 
   const handleChange = (event, newValue) => {
@@ -474,21 +492,18 @@ function AddEditPatientListing(props) {
     });
   };
 
-  const onChangeCurrency = (e) => {
+  const onCalculateTotal = () => {
+    if (!patientDetails) {
+      setOpenNotification(true);
+      setErrorMsg("Please add patient discharge request first");
+      return;
+    }
     let totalForExternal = externalRequests * externalRequestsFee;
     let totalForInternal = internalRequests * internalRequestsFee;
 
     let endTotal = remainingAmount + totalForExternal + totalForInternal;
 
     setGrandTotal(endTotal);
-    // let endRemainingAmount =
-    //   remainingAmount + totalForExternal + totalForInternal;
-
-    // setTotalBillingAmount(endTotal);
-    // setRemainingAmount(endRemainingAmount);
-
-    // setExternalRequestsFee("");
-    // setInternalRequestsFee("");
   };
 
   if (openNotification) {
@@ -505,7 +520,7 @@ function AddEditPatientListing(props) {
     if (a.length >= 3) {
       axios
         .get(
-          getSearchedpatient + "/" + currentUser.functionalUnit._id + "/" + a
+          getSearchDischargedPatient + "/" + currentUser.functionalUnit._id + "/" + a
         )
         .then((res) => {
           if (res.data.success) {
@@ -689,8 +704,6 @@ function AddEditPatientListing(props) {
       });
   }
 
-  console.log("billSummaryArray", billSummaryArray);
-
   const getPatientByInfo = (id) => {
     axios
       .get(searchpatient + "/" + id)
@@ -723,6 +736,8 @@ function AddEditPatientListing(props) {
                   });
                   dispatch({ field: "medicationArray", value: data });
                 }
+              } else if (key === "_id") {
+                dispatch({ field: "requestId", value: val });
               } else {
                 dispatch({ field: key, value: val });
               }
@@ -738,6 +753,7 @@ function AddEditPatientListing(props) {
         setErrorMsg(e);
       });
   };
+
 
   const handleInvoicePrint = () => {
     alert("Printer not attached");
@@ -764,11 +780,22 @@ function AddEditPatientListing(props) {
             <div style={{ flex: 4, display: "flex", alignItems: "center" }}>
               <h4>
                 {comingFor === "add"
-                  ? "Patient Clearence"
-                  : " Edit Claim Review"}
+                  ? "Patient Clearance"
+                  : " Edit Patient Clearance"}
               </h4>
             </div>
           </div>
+
+          <Button
+            onClick={() => props.history.push("patientclearence/view")}
+            style={{ ...styles.stylesForButton, height: 45, fontSize: 12 }}
+            variant="contained"
+            color="primary"
+          >
+            <img src={view_all} style={styles.stylesForIcon} />
+            &nbsp;&nbsp;
+            <strong>View All</strong>
+          </Button>
         </div>
 
         <div style={{ width: "auto", height: "20px" }} />
@@ -1303,6 +1330,7 @@ function AddEditPatientListing(props) {
                 >
                   <CurrencyTextField
                     disabled
+                    required
                     style={{ backgroundColor: "white", borderRadius: 5 }}
                     className="textInputStyle"
                     id={"totalBillingAmount"}
@@ -1334,6 +1362,7 @@ function AddEditPatientListing(props) {
                   }}
                 >
                   <CurrencyTextField
+                    required
                     disabled
                     style={{ backgroundColor: "white", borderRadius: 5 }}
                     className="textInputStyle"
@@ -1367,6 +1396,7 @@ function AddEditPatientListing(props) {
                   }}
                 >
                   <CurrencyTextField
+                    required
                     disabled
                     style={{ backgroundColor: "white", borderRadius: 5 }}
                     className="textInputStyle"
@@ -1393,24 +1423,47 @@ function AddEditPatientListing(props) {
                 </div>
               </div>
 
-              <div className="row">
-                <div
-                  style={{
-                    display: "flex",
-                    flex: 1,
-                    justifyContent: "flex-end",
-                    marginTop: 20,
-                  }}
+              <div
+                className="row"
+                style={{
+                  marginTop: 20,
+                  display: "flex",
+                  flex: 1,
+                  justifyContent: "flex-end",
+                }}
+              >
+                <Button
+                  style={styles.stylesForButton}
+                  //disabled={!validateFormType1()}
+                  onClick={onCalculateTotal}
+                  variant="contained"
+                  color="default"
                 >
-                  <Button
-                    style={styles.stylesForButton}
-                    //disabled={!validateFormType1()}
-                    onClick={onChangeCurrency}
-                    variant="contained"
-                    color="default"
-                  >
-                    Calculate
-                  </Button>
+                  Calculate
+                </Button>
+
+                <div style={{ marginLeft: 15 }}>
+                  {comingFor === "add" ? (
+                    <Button
+                      style={styles.stylesForButton}
+                      //disabled={!validateFormType1()}
+                      onClick={handleAdd}
+                      variant="contained"
+                      color="default"
+                    >
+                      Submit
+                    </Button>
+                  ) : (
+                    <Button
+                      style={styles.stylesForButton}
+                      //disabled={!validateFormType1()}
+                      onClick={handleEdit}
+                      variant="contained"
+                      color="default"
+                    >
+                      Update
+                    </Button>
+                  )}
                 </div>
               </div>
 
@@ -1435,7 +1488,6 @@ function AddEditPatientListing(props) {
                 style={{
                   display: "flex",
                   flex: 1,
-                  justifyContent: "center",
                   marginTop: "2%",
                   marginBottom: "2%",
                 }}
@@ -1445,35 +1497,6 @@ function AddEditPatientListing(props) {
                   src={Back_Arrow}
                   style={{ width: 45, height: 35, cursor: "pointer" }}
                 />
-                <div
-                  style={{
-                    display: "flex",
-                    flex: 1,
-                    justifyContent: "flex-end",
-                  }}
-                >
-                  {comingFor === "add" ? (
-                    <Button
-                      style={styles.stylesForButton}
-                      //disabled={!validateFormType1()}
-                      onClick={handleAdd}
-                      variant="contained"
-                      color="default"
-                    >
-                      Submit
-                    </Button>
-                  ) : (
-                    <Button
-                      style={styles.stylesForButton}
-                      //disabled={!validateFormType1()}
-                      onClick={handleEdit}
-                      variant="contained"
-                      color="default"
-                    >
-                      Update
-                    </Button>
-                  )}
-                </div>
               </div>
             </div>
           </div>
