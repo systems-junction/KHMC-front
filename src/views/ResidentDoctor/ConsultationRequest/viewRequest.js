@@ -434,7 +434,7 @@ export default function EdrRequest(props) {
                   fontWeight: "bold",
                 }}
               >
-                Voice notes
+                Voice notes from Consultant/Specialists
               </label>
               <audio
                 style={{ marginTop: 20, marginLeft: 20 }}
