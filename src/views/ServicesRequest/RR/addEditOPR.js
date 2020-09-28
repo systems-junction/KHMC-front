@@ -877,7 +877,7 @@ function AddEditPatientListing(props) {
           props.history.push({
             pathname: 'success',
             state: {
-              message: `OP Record for Request:${
+              message: `OP Record for Request: ${
                 res.data.data.requestNo
               } patient MRN: ${MRN.toUpperCase()} has been generated successfully`,
             },
