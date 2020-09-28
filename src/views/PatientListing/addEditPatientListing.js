@@ -83,6 +83,7 @@ const styles = {
     height: '45px',
     outline: 'none',
   },
+
   inputContainerForTextField: {
     marginTop: 10,
   },
