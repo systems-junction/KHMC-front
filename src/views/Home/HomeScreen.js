@@ -639,7 +639,7 @@ const cashier = [
   { img: KHMC, text: "KHMC APPS", path: "" },
   {
     img: claimsReview,
-    text: "Patient Clearence",
+    text: "Patient Clearance",
     path: "/home/rcm/patientclearence",
   },
 ];

@@ -67,6 +67,7 @@ export const notifyDischarge = `${baseUrl}/patient/discharge`;
 
 // reimbursement endpoints
 export const getSearchedpatient = `${baseUrl}/reimbursementclaim/getpatient`;
+export const getSearchDischargedPatient = `${baseUrl}/reimbursementclaim/getpatientdischarge`;
 export const addClaim = `${baseUrl}/reimbursementclaim/addclaim`;
 export const getedripr = `${baseUrl}/reimbursementclaim/getedripr`;
 export const getClaim = `${baseUrl}/reimbursementclaim/getclaim`;
@@ -400,3 +401,11 @@ export const searchPatients = `${baseUrl}/patient/searchpatient`;
 //http://localhost:4000/api/ipr/getallconsultations
 //get consultation
 export const getallconsultations = `${baseUrl}/ipr/getallconsultations`;
+
+
+//patient clearance
+
+export const getPatientClearanceURL = `${baseUrl}/patientclearance/getpatientclearance`;
+export const addPatientClearanceURL = `${baseUrl}/patientclearance/addpatientclearance`;
+export const getPatientClearanceByIdURL = `${baseUrl}/patientclearance/getpatientclearance/:id`;
+export const updatePatientClearanceURL = `${baseUrl}/patientclearance/updatepatientclearance`;

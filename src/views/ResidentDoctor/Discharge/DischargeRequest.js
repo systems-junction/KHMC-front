@@ -33,6 +33,7 @@ import {
   getSearchedpatient,
   searchpatient,
   notifyDischarge,
+  AddDischargeRequestUrl,
 } from "../../../public/endpoins";
 
 import { connect } from "react-redux";
@@ -229,8 +230,6 @@ function DischargeRequest(props) {
   const [backIsEmpty, setBackIsEmpty] = useState(false);
 
   useEffect(() => {
-
-
     if (props.patientDetails) {
       setPatientDetails(props.patientDetails);
       getPatientByInfo(props.patientDetails._id);
@@ -298,7 +297,6 @@ function DischargeRequest(props) {
     console.log("selected banda : ", i);
 
     props.setPatientDetailsForReducer(i);
-
 
     dispatch({ field: "dischargeNotes", value: "" });
     dispatch({ field: "otherNotes", value: "" });
@@ -407,7 +405,70 @@ function DischargeRequest(props) {
     });
   };
 
-  console.log(dischargeMedArray, "discharge Med aarray");
+  const addNewDischargeRequest = () => {
+    // let formData = new FormData();
+    // if (depositSlip) {
+    //   formData.append("file", depositSlip, depositSlip.name);
+    // }
+    // if (validatePatientForm() || validateInsuranceForm()) {
+    let params = "";
+
+    if (requestType === "EDR") {
+      params = {
+        edrId: requestType === "EDR" ? id : "",
+        generatedFor: requestType,
+        paymentMethod: patientDetails.paymentMethod,
+        depositAmount: patientDetails.payment,
+        amountReceived: patientDetails.amountReceived,
+        totalAmount: patientDetails.amountReceived + patientDetails.payment,
+        bankName: patientDetails.bankName,
+        depositorName: patientDetails.depositorName,
+        receivedBy: currentUser.staffId,
+      };
+    }
+
+    if (requestType === "IPR") {
+      params = {
+        iprId: requestType === "IPR" ? id : "",
+        paymentMethod: patientDetails.paymentMethod,
+        depositAmount: patientDetails.payment,
+        amountReceived: patientDetails.amountReceived,
+        totalAmount: patientDetails.amountReceived + patientDetails.payment,
+        bankName: patientDetails.bankName,
+        depositorName: patientDetails.depositorName,
+        receivedBy: currentUser.staffId,
+      };
+    }
+
+    // formData.append("data", JSON.stringify(params));
+    console.log("PARAMSS ", params);
+    // console.log("DATAAA ", formData);
+    axios
+      // .post(AddDischargeRequestUrl, params, {
+      //   headers: {
+      //     accept: "application/json",
+      //     "Accept-Language": "en-US,en;q=0.8",
+      //     "content-type": "multipart/form-data",
+      //   },
+      // })
+      .post(AddDischargeRequestUrl, params)
+      .then((res) => {
+        if (res.data.success) {
+          console.log("response after adding discharge request", res.data.data);
+          // setPatientId(res.data.data._id);
+          // props.history.goBack();
+        } else if (!res.data.success) {
+          setOpenNotification(true);
+        }
+      })
+      .catch((e) => {
+        console.log("error after adding patient details", e);
+        setOpenNotification(true);
+        setErrorMsg("Error while adding the patient details");
+      });
+    // }
+  };
+
   const submitDischargeSummary = () => {
     const params = {
       _id: id,
@@ -425,7 +486,11 @@ function DischargeRequest(props) {
       .put(updateEdrIpr, params)
       .then((res) => {
         if (res.data.success) {
-          console.log("response while adding Discharge Req", res.data.data);
+          console.log(
+            "response while adding Discharge Req medication",
+            res.data.data
+          );
+          addNewDischargeRequest();
           notifyForDischarge(patientId);
           props.history.push({
             pathname: "dischargerequest/success",
@@ -435,6 +500,7 @@ function DischargeRequest(props) {
               } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} Submitted successfully`,
             },
           });
+          props.setPatientDetailsForReducer("")
         } else if (!res.data.success) {
           setOpenNotification(true);
           setErrorMsg("Error while adding the Discharge request");
