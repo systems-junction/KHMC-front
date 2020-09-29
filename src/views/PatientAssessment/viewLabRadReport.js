@@ -108,7 +108,7 @@ function ViewLabRadReport(props) {
   return (
     <div
       style={{
-        backgroundColor: '#60d69f',
+        backgroundColor: 'rgb(19 213 159)',
         position: 'fixed',
         display: 'flex',
         width: '100%',

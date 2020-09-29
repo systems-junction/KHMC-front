@@ -382,7 +382,7 @@ function TriageAndAssessment(props) {
           props.history.push({
             pathname: "success",
             state: {
-              message: `Triage & Assessment for patient MRN: ${res.data.data.patientId.profileNo} added successfully`,
+              message: `Triage & Assessment for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
             },
             comingFor: "Triage",
           });
@@ -409,7 +409,7 @@ function TriageAndAssessment(props) {
   return (
     <div
       style={{
-        backgroundColor: "#60d69f",
+        backgroundColor: "rgb(19 213 159)",
         position: "fixed",
         display: "flex",
         width: "100%",
@@ -886,6 +886,7 @@ function TriageAndAssessment(props) {
                     name="generalAppearance"
                     value={generalAppearanceText}
                     className="control-label textInputStyle"
+                    maxlength="500"
                   />
                 </div>
                 {/* </form> */}
@@ -968,6 +969,7 @@ function TriageAndAssessment(props) {
                     name="headNeck"
                     value={headNeckText}
                     className="control-label textInputStyle"
+                    maxlength="500"
                   />
                 </div>
                 {/* </form> */}
@@ -1045,7 +1047,7 @@ function TriageAndAssessment(props) {
                     onChange={onCheckedValue}
                     value={respiratory}
                   >
-                    <div className="form-group col-lg-1 col-md-1">
+                    <div className="form-group col-md-3">
                       <div class="radio">
                         <label class="radio-inline control-label">
                           <input
@@ -1059,9 +1061,13 @@ function TriageAndAssessment(props) {
                       </div>
                     </div>
                   </form>
-                  <div className="form-group col-lg-11 col-md-12">
+                  <div className="form-group col-md-11">
                     <input
-                      style={{ outline: "none", backgroundColor: "#F7F5F5" }}
+                      style={{
+                        outline: "none",
+                        backgroundColor: "#F7F5F5",
+                        marginLeft: "-8px",
+                      }}
                       disabled={respiratoryText === null}
                       type="text"
                       placeholder="Specify"
@@ -1069,6 +1075,7 @@ function TriageAndAssessment(props) {
                       name="respiratory"
                       value={respiratoryText}
                       className="control-label textInputStyle"
+                      maxlength="500"
                     />
                   </div>
                 </div>
@@ -1132,7 +1139,11 @@ function TriageAndAssessment(props) {
                                 > */}
                 <div className="form-group col-md-12">
                   <input
-                    style={{ outline: "none", backgroundColor: "#F7F5F5" }}
+                    style={{
+                      outline: "none",
+                      backgroundColor: "#F7F5F5",
+                      marginLeft: "-5px",
+                    }}
                     disabled={cardiacText === null}
                     type="text"
                     placeholder="Specify"
@@ -1140,6 +1151,7 @@ function TriageAndAssessment(props) {
                     name="cardiac"
                     value={cardiacText}
                     className="control-label textInputStyle"
+                    maxlength="500"
                   />
                 </div>
                 {/* </form> */}
@@ -1233,7 +1245,11 @@ function TriageAndAssessment(props) {
                   </form>
                   <div className="col-md-11">
                     <input
-                      style={{ outline: "none", backgroundColor: "#F7F5F5" }}
+                      style={{
+                        outline: "none",
+                        backgroundColor: "#F7F5F5",
+                        marginLeft: "-10px",
+                      }}
                       disabled={abdomenText === null}
                       type="text"
                       placeholder="Specify"
@@ -1241,6 +1257,7 @@ function TriageAndAssessment(props) {
                       name="abdomen"
                       value={abdomenText}
                       className=" textInputStyle"
+                      maxlength="500"
                     />
                   </div>
                 </div>
@@ -1315,9 +1332,13 @@ function TriageAndAssessment(props) {
                                     onChange={onCheckedValue}
                                     value={neurological}
                                 > */}
-                <div classNames="col-md-12">
+                <div className="form-group col-md-12">
                   <input
-                    style={{ outline: "none", backgroundColor: "#F7F5F5" }}
+                    style={{
+                      outline: "none",
+                      backgroundColor: "#F7F5F5",
+                      marginLeft: "-5px",
+                    }}
                     disabled={neurologicalText === null}
                     type="text"
                     placeholder="Specify"
@@ -1325,6 +1346,7 @@ function TriageAndAssessment(props) {
                     name="neurological"
                     value={neurologicalText}
                     className="textInputStyle"
+                    maxlength="500"
                   />
                 </div>
                 {/* </form> */}
