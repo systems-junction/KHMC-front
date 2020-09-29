@@ -1289,6 +1289,15 @@ function LabRadRequest(props) {
     }, 2000)
   }
 
+  const showAlert = () => {
+    // if (document.getElementById("ckDemo").disabled) {
+    //     alert("CheckBox is Disabled");
+    // }
+
+    setErrorMsg('Please Search Patient First ')
+    setOpenNotification(true)
+  }
+
   return (
     <div
       style={{
@@ -1312,8 +1321,9 @@ function LabRadRequest(props) {
 
           <div style={{ width: '50%', marginRight: '-10px' }}>
             <Button
-              disabled={enableForm}
-              onClick={TriageAssessment}
+              // disabled={enableForm}
+              onClick={enableForm ? showAlert : TriageAssessment}
+              // onClick={TriageAssessment}
               style={styles.stylesForButton}
               variant='contained'
               color='primary'
@@ -2222,7 +2232,7 @@ function LabRadRequest(props) {
                   undefined
                 )}
               </div>
-            </div> /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/)
+            </div> /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/)
           ) : (
             //     : value === 5 ? (
             //         <div
