@@ -338,7 +338,7 @@ function AddEditPatientListing(props) {
     lastName: '',
     nationality: '',
     gender: '',
-    age: '',
+    age: '0',
     height: '',
     weight: '',
     bloodGroup: '',
@@ -557,8 +557,8 @@ function AddEditPatientListing(props) {
       validateCountryCity(city) &&
       address &&
       address.length > 0 &&
-      validateAddress(address) &&
-      dob
+      validateAddress(address)
+      // dob
       // dob.length > 0
       // bloodGroup &&
       // bloodGroup != null &&
@@ -1227,7 +1227,7 @@ function AddEditPatientListing(props) {
   return (
     <div
       style={{
-        backgroundColor: '#60d69f',
+        backgroundColor: 'rgb(19 213 159)',
         position: 'fixed',
         display: 'flex',
         width: '100%',
@@ -1243,14 +1243,14 @@ function AddEditPatientListing(props) {
           <div>
             <img src={patientRegister} />
             <div style={{ flex: 4, display: 'flex', alignItems: 'center' }}>
-              <h3 style={{ color: 'white', fontWeight: '700' }}>
+              <h4 style={{ color: 'white', fontWeight: '700' }}>
                 {comingFor === 'add'
                   ? ' Patient Registration'
                   : ' Edit Patient'}
-              </h3>
+              </h4>
             </div>
           </div>
-          <div style={{ marginRight: '-10px' }}>
+          <div style={{ marginRight: '-5px' }}>
             <ButtonField
               onClick={() => props.history.push('/home/rcm/patientListing')}
               name='viewAll'
@@ -1689,14 +1689,13 @@ function AddEditPatientListing(props) {
               >
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <DatePicker
-                    required
+                    // required
                     inputVariant='filled'
                     fullWidth={true}
                     label='Date of birth'
                     format='dd - MM - yyyy'
-                    // minDate={dob}
-
-                    error={dob == '' && detailsForm}
+                    maxDate={new Date()}
+                    // error={dob === '' && detailsForm}
                     onChange={(val) => handleChangeDate(val, 'dob')}
                     InputProps={{
                       className: classes.input,
@@ -1707,7 +1706,7 @@ function AddEditPatientListing(props) {
                   />
                 </MuiPickersUtilsProvider>
 
-                <ErrorMessage name={dob} isFormSubmitted={detailsForm} />
+                {/* <ErrorMessage name={dob} isFormSubmitted={detailsForm} /> */}
               </div>
 
               <div
@@ -1764,11 +1763,11 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
-                  type='number'
+                  // type='number'
                   disabled
                   label='Age'
                   name={'age'}
-                  value={age ? age : 0}
+                  value={age}
                   onChange={onChangeValue}
                   // error={age === '' && detailsForm}
                   className='textInputStyle'
@@ -2238,7 +2237,7 @@ function AddEditPatientListing(props) {
               >
                 <div>
                   <MuiPhoneNumber
-                    required
+                    // required
                     label='Contact No'
                     name={'emergencyContactNo'}
                     value={emergencyContactNo}
@@ -3000,6 +2999,7 @@ function AddEditPatientListing(props) {
                   }}
                 >
                   <TextField
+                    required
                     label='Insurance Number'
                     type='number'
                     name={'insuranceNo'}

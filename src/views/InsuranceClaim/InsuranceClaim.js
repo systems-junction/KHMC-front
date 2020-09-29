@@ -10,7 +10,7 @@ import Back from '../../assets/img/Back_Arrow.png'
 import MenuTree from '../../components/MenuTree/MenuTree'
 
 const admin = [
-  { img: InsuranceClaim , text: 'Insurance Claim' },
+  { img: InsuranceClaim, text: 'Insurance Claim' },
   {
     img: PreApproval,
     text: 'Pre Approval',
@@ -49,22 +49,22 @@ const admin = [
 ]
 
 const buHead = [
-    { img: InsuranceClaim , text: 'Insurance Claim' },
-    {
-      img: PreApproval,
-      text: 'Pre Approval',
-      path: '/home/rcm/ic/pa',
-    },
-    {
-      img: Reimbursement,
-      text: 'Re Imbursement',
-      path: '/home/rcm/ic/ri',
-    },
+  { img: InsuranceClaim, text: 'Insurance Claim' },
+  {
+    img: PreApproval,
+    text: 'Pre Approval',
+    path: '/home/rcm/ic/pa',
+  },
+  {
+    img: Reimbursement,
+    text: 'Re Imbursement',
+    path: '/home/rcm/ic/ri',
+  },
 
-    {
-        text: '',
-        path: '',
-      },
+  {
+    text: '',
+    path: '',
+  },
 
   {
     text: '',
@@ -88,7 +88,7 @@ const buHead = [
 ]
 
 const committeeMember = [
-    { img: InsuranceClaim , text: 'Insurance Claim' },
+  { img: InsuranceClaim, text: 'Insurance Claim' },
   {
     img: PreApproval,
     text: 'Pre Approval',
@@ -100,10 +100,10 @@ const committeeMember = [
     path: '/home/rcm/ic/ri',
   },
 
-    {
-        text: '',
-        path: '',
-      },
+  {
+    text: '',
+    path: '',
+  },
 
   {
     text: '',
@@ -127,22 +127,22 @@ const committeeMember = [
 ]
 
 const accountsMember = [
-    { img: InsuranceClaim , text: 'Insurance Claim' },
-    {
-      img: PreApproval,
-      text: 'Pre Approval',
-      path: '/home/rcm/ic/pa',
-    },
-    {
-      img: Reimbursement,
-      text: 'Re Imbursement',
-      path: '/home/rcm/ic/ri',
-    },
+  { img: InsuranceClaim, text: 'Insurance Claim' },
+  {
+    img: PreApproval,
+    text: 'Pre Approval',
+    path: '/home/rcm/ic/pa',
+  },
+  {
+    img: Reimbursement,
+    text: 'Re Imbursement',
+    path: '/home/rcm/ic/ri',
+  },
 
-    {
-        text: '',
-        path: '',
-      },
+  {
+    text: '',
+    path: '',
+  },
 
   {
     text: '',
@@ -166,7 +166,7 @@ const accountsMember = [
 ]
 
 const warehouseMember = [
-    { img: InsuranceClaim , text: 'Insurance Claim' },
+  { img: InsuranceClaim, text: 'Insurance Claim' },
   {
     img: PreApproval,
     text: 'Pre Approval',
@@ -178,10 +178,10 @@ const warehouseMember = [
     path: '/home/rcm/ic/ri',
   },
 
-    {
-        text: '',
-        path: '',
-      },
+  {
+    text: '',
+    path: '',
+  },
 
   {
     text: '',
@@ -205,22 +205,22 @@ const warehouseMember = [
 ]
 
 const warehouseIncharge = [
-    { img: InsuranceClaim , text: 'Insurance Claim' },
-    {
-      img: PreApproval,
-      text: 'Pre Approval',
-      path: '/home/rcm/ic/pa',
-    },
-    {
-      img: Reimbursement,
-      text: 'Re Imbursement',
-      path: '/home/rcm/ic/ri',
-    },
+  { img: InsuranceClaim, text: 'Insurance Claim' },
+  {
+    img: PreApproval,
+    text: 'Pre Approval',
+    path: '/home/rcm/ic/pa',
+  },
+  {
+    img: Reimbursement,
+    text: 'Re Imbursement',
+    path: '/home/rcm/ic/ri',
+  },
 
-    {
-        text: '',
-        path: '',
-      },
+  {
+    text: '',
+    path: '',
+  },
 
   {
     text: '',
@@ -275,8 +275,11 @@ class HomeScreen extends React.Component {
           position: 'fixed',
           width: '100%',
           height: '100%',
-          backgroundColor: '#2B62CC',
-          backgroundImage: `url("${WMS_Back}")`,
+          // backgroundColor: '#2B62CC',
+          // backgroundImage: `url("${WMS_Back}")`,
+          background: 'rgb(42,98,205)',
+          background:
+            'linear-gradient(25deg, rgba(42,98,205,1) 0%, rgba(4,76,207,1) 33%, rgba(0,45,130,1) 66%, rgba(0,33,106,1) 100%)',
           backgroundSize: '100%',
         }}
       >

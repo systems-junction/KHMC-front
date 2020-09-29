@@ -787,7 +787,7 @@ export default function ReplenishmentRequest(props) {
           position: 'fixed',
           width: '100%',
           height: '100%',
-          backgroundColor: '#60d69f',
+          backgroundColor: 'rgb(19 213 159)',
           overflowY: 'scroll',
         }}
       >
@@ -885,7 +885,7 @@ export default function ReplenishmentRequest(props) {
               setIsOpen(false)
             }}
           >
-            <DialogContent style={{ backgroundColor: '#31e2aa' }}>
+            <DialogContent style={{ backgroundColor: 'rgb(19 213 159)' }}>
               <DialogTitle
                 id='simple-dialog-title'
                 style={{ color: 'white', marginLeft: '-6px' }}

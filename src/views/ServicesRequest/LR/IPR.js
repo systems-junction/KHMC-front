@@ -84,7 +84,7 @@ export default function EDR(props) {
         position: 'fixed',
         width: '100%',
         height: '100%',
-        backgroundColor: '#60d69f',
+        backgroundColor: 'rgb(19 213 159)',
         overflowY: 'scroll',
       }}
     >

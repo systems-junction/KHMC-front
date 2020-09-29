@@ -313,8 +313,11 @@ class HomeScreen extends React.Component {
           position: 'fixed',
           width: '100%',
           height: '100%',
-          backgroundColor: '#2B62CC',
-          backgroundImage: `url("${WMS_Back}")`,
+          // backgroundColor: '#2B62CC',
+          // backgroundImage: `url("${WMS_Back}")`,
+          background: 'rgb(42,98,205)',
+          background:
+            'linear-gradient(25deg, rgba(42,98,205,1) 0%, rgba(4,76,207,1) 33%, rgba(0,45,130,1) 66%, rgba(0,33,106,1) 100%)',
           backgroundSize: '100%',
         }}
       >

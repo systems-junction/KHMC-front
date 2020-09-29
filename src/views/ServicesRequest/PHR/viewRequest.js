@@ -138,8 +138,11 @@ export default function EdrRequest(props) {
       aria-labelledby='simple-dialog-title'
       open={props.openItemDialog}
     >
-      <DialogContent style={{ backgroundColor: '#31e2aa' }}>
-        <DialogTitle id='simple-dialog-title' style={{ color: 'white', marginLeft: '-6px' }}>
+      <DialogContent style={{ backgroundColor: 'rgb(19 213 159)' }}>
+        <DialogTitle
+          id='simple-dialog-title'
+          style={{ color: 'white', marginLeft: '-6px' }}
+        >
           Details
         </DialogTitle>
         <div className='container-fluid'>
