@@ -1243,11 +1243,11 @@ function AddEditPatientListing(props) {
           <div>
             <img src={patientRegister} />
             <div style={{ flex: 4, display: 'flex', alignItems: 'center' }}>
-              <h3 style={{ color: 'white', fontWeight: '700' }}>
+              <h4 style={{ color: 'white', fontWeight: '700' }}>
                 {comingFor === 'add'
                   ? ' Patient Registration'
                   : ' Edit Patient'}
-              </h3>
+              </h4>
             </div>
           </div>
           <div style={{ marginRight: '-5px' }}>
