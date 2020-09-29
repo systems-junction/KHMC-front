@@ -1439,7 +1439,7 @@ function LabRadRequest(props) {
   return (
     <div
       style={{
-        backgroundColor: '#60d69f',
+        backgroundColor: 'rgb(19 213 159)',
         position: 'fixed',
         display: 'flex',
         width: '100%',
@@ -2582,7 +2582,7 @@ function LabRadRequest(props) {
           maxWidth='xl'
           fullWidth={true}
         >
-          <DialogContent style={{ backgroundColor: '#31e2aa' }}>
+          <DialogContent style={{ backgroundColor: 'rgb(19 213 159)' }}>
             <DialogTitle
               id='simple-dialog-title'
               style={{ color: 'white', marginLeft: -9 }}

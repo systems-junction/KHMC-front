@@ -375,7 +375,7 @@ function AddEditPurchaseRequest(props) {
     event.preventDefault()
     var file = event.target.files[0]
     var fileType = file.name.slice(file.name.length - 3)
-    let file_size = event.target.files[0].size;
+    let file_size = event.target.files[0].size
 
     // console.log("Selected file : ", file.name)
     // console.log("file type : ", fileType)
@@ -393,35 +393,34 @@ function AddEditPurchaseRequest(props) {
 
     reader.onloadend = function() {
       if (file_size <= 1500000) {
-      if (fileType === 'pdf') {
-        setpdfView(file.name)
-      } else if (fileType === 'PDF') {
-        setpdfView(file.name)
-      } else if (fileType === 'png') {
-        setImagePreview([reader.result])
-      } else if (fileType === 'PNG') {
-        setImagePreview([reader.result])
-      } else if (fileType === 'peg') {
-        setImagePreview([reader.result])
-      } else if (fileType === 'PEG') {
-        setImagePreview([reader.result])
-      } else if (fileType === 'jpg') {
-        setImagePreview([reader.result])
-      } else if (fileType === 'JPG') {
-        setImagePreview([reader.result])
-      } else if (fileType === 'rtf') {
-        setImagePreview([reader.result])
-      } else if (fileType === 'RTF') {
-        setImagePreview([reader.result])
+        if (fileType === 'pdf') {
+          setpdfView(file.name)
+        } else if (fileType === 'PDF') {
+          setpdfView(file.name)
+        } else if (fileType === 'png') {
+          setImagePreview([reader.result])
+        } else if (fileType === 'PNG') {
+          setImagePreview([reader.result])
+        } else if (fileType === 'peg') {
+          setImagePreview([reader.result])
+        } else if (fileType === 'PEG') {
+          setImagePreview([reader.result])
+        } else if (fileType === 'jpg') {
+          setImagePreview([reader.result])
+        } else if (fileType === 'JPG') {
+          setImagePreview([reader.result])
+        } else if (fileType === 'rtf') {
+          setImagePreview([reader.result])
+        } else if (fileType === 'RTF') {
+          setImagePreview([reader.result])
+        } else {
+          setErrorMsg('only pdf, jpeg, png and rtf should be allowed')
+          setOpenNotification(true)
+        }
       } else {
-        setErrorMsg('only pdf, jpeg, png and rtf should be allowed')
+        setErrorMsg('Files size should be less Than or Equal to 1.5MB')
         setOpenNotification(true)
       }
-    }
-    else {
-      setErrorMsg("Files size should be less Than or Equal to 1.5MB");
-      setOpenNotification(true);
-    }
     }
 
     if (statusOnResult === 'pending') {
@@ -476,7 +475,7 @@ function AddEditPurchaseRequest(props) {
   return (
     <div
       style={{
-        backgroundColor: '#60d69f',
+        backgroundColor: 'rgb(19 213 159)',
         position: 'fixed',
         display: 'flex',
         width: '100%',

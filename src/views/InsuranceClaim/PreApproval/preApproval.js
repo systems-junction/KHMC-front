@@ -86,14 +86,14 @@ export default function preApproval(props) {
           setpreApproval(
             [].concat(
               res.data.data.edr.reverse(),
-              res.data.data.ipr.reverse(),
+              res.data.data.ipr.reverse()
               // res.data.data.opr.reverse()
             )
           )
           var sortedObjs = _.sortBy(
             [].concat(
               res.data.data.edr.reverse(),
-              res.data.data.ipr.reverse(),
+              res.data.data.ipr.reverse()
               // res.data.data.opr.reverse()
             ),
             'updatedAt'
@@ -133,7 +133,7 @@ export default function preApproval(props) {
         position: 'fixed',
         width: '100%',
         height: '100%',
-        backgroundColor: '#60d69f',
+        backgroundColor: 'rgb(19 213 159)',
         overflowY: 'scroll',
       }}
     >
