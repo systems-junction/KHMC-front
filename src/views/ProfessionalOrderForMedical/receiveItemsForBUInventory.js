@@ -249,6 +249,7 @@ function ReceiveItems(props) {
     replenishmentRequestId,
 
     rrBUId,
+
   } = state;
 
   const onChangeValue = (e) => {
@@ -350,6 +351,9 @@ function ReceiveItems(props) {
     );
   }
 
+
+  console.log(selectedItem,"selec")
+
   const handleAdd = () => {
     if (validateForm()) {
       if (date > receivedDate) {
@@ -398,7 +402,7 @@ function ReceiveItems(props) {
             props.history.replace({
               pathname: "/home/wms/fus/medicinalorder/success",
               state: {
-                message: `${selectedItem.itemId.name} has been received successfully`,
+                message: `Medical Order: ${requestNo} with item ${selectedItem.itemId.name} has been received successfully`,
               },
             });
           } else if (!res.data.success) {

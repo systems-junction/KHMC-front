@@ -672,7 +672,7 @@ function AddEditPurchaseRequest(props) {
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
                   // order #
-                  message: `Medical Order # ${res.data.data.requestNo} for patient with MRN ${patientDetails.profileNo} has been placed succesfully`,
+                  message: `Medical Order: ${res.data.data.requestNo} for patient with MRN: ${patientDetails.profileNo} has been placed succesfully`,
                   patientDetails: patientDetails,
                 },
               });
@@ -784,7 +784,7 @@ function AddEditPurchaseRequest(props) {
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
                   // order #
-                  message: `Medical Order for patient with MRN ${patientDetails.profileNo} has been updated`,
+                  message: `Medical Order: ${res.data.data.requestNo} for patient with MRN: ${patientDetails.profileNo} has been updated`,
                   patientDetails: patientDetails,
                 },
               });

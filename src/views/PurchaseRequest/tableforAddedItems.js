@@ -35,7 +35,7 @@ import Inactive from "../../assets/img/Inactive.png";
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 
 import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 
 import add_new from "../../assets/img/Plus.png";
 
@@ -88,6 +88,19 @@ const styles = {
   },
 };
 const useStyles = makeStyles(styles);
+
+
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    "&:nth-of-type(odd)": {
+      backgroundColor: "#f4f4f4",
+    },
+
+    "&:nth-of-type(even)": {
+      backgroundColor: "#FFFFFF",
+    },
+  },
+}))(TableRow);
 
 const tableHeadingForFUMember = [
   "No.",
@@ -188,11 +201,10 @@ export default function DenseTable(props) {
       </TableHead>
       <TableBody>
         {props.items.map((row, index) => (
-          <TableRow key={row.name} style={{}}>
+          <StyledTableRow key={row.name} style={{}}>
             <TableCell
               align="center"
               style={{
-                backgroundColor: "white",
                 // fontSize: "0.9rem",
 
                 borderBottomLeftRadius:
@@ -209,7 +221,6 @@ export default function DenseTable(props) {
             <TableCell
               align="center"
               style={{
-                backgroundColor: "white",
                 fontSize: "0.9rem",
               }}
             >
@@ -218,7 +229,6 @@ export default function DenseTable(props) {
             <TableCell
               align="center"
               style={{
-                backgroundColor: "white",
                 // fontSize: "0.9rem",
               }}
             >
@@ -228,7 +238,6 @@ export default function DenseTable(props) {
             <TableCell
               align="center"
               style={{
-                backgroundColor: "white",
                 // fontSize: "0.9rem",
               }}
             >
@@ -238,7 +247,6 @@ export default function DenseTable(props) {
             <TableCell
               align="center"
               style={{
-                backgroundColor: "white",
                 // fontSize: "0.9rem",
               }}
             >
@@ -248,7 +256,6 @@ export default function DenseTable(props) {
             <TableCell
               align="center"
               style={{
-                backgroundColor: "white",
                 // fontSize: "0.9rem",
               }}
             >
@@ -260,7 +267,6 @@ export default function DenseTable(props) {
               <TableCell
                 align="center"
                 style={{
-                  backgroundColor: "white",
                   // fontSize: "0.9rem",
                 }}
               >
@@ -274,7 +280,6 @@ export default function DenseTable(props) {
               <TableCell
                 align="center"
                 style={{
-                  backgroundColor: "white",
                   display: "flex",
                   justifyContent: "space-evenly",
                   borderBottomColor:
@@ -306,7 +311,6 @@ export default function DenseTable(props) {
               <TableCell
                 align="center"
                 style={{
-                  backgroundColor: "white",
                   display: "flex",
                   justifyContent: "space-evenly",
                   borderBottomColor:
@@ -323,7 +327,7 @@ export default function DenseTable(props) {
             ) : (
               undefined
             )}
-          </TableRow>
+          </StyledTableRow>
         ))}
       </TableBody>
     </Table>

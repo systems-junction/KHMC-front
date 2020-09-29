@@ -489,7 +489,7 @@ function ReceiveItems(props) {
             props.history.replace({
               pathname: "/home/wms/fus/medicinalorder/success",
               state: {
-                message: `${selectedItem.itemId.name} has been received`,
+                message: `Replenishment Request: ${requestNo} with item ${selectedItem.itemId.name} has been received`,
               },
             });
           } else if (!res.data.success) {

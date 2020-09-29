@@ -420,6 +420,7 @@ export default function ReplenishmentRequest(props) {
       buId: selectedOrder.buId,
       fuId: selectedOrder.fuId,
       replenishmentRequestId: selectedOrder._id,
+      requestNo: selectedOrder.requestNo,
     };
 
     console.log("rec", obj);

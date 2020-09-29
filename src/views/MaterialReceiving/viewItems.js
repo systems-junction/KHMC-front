@@ -94,6 +94,8 @@ function AddEditPurchaseRequest(props) {
     vendorId: "",
     status: "",
     poSentDate: "",
+
+    requestNo: "",
   };
 
   function reducer(state, { field, value }) {
@@ -114,6 +116,7 @@ function AddEditPurchaseRequest(props) {
     vendorId,
     status,
     poSentDate,
+    requestNo,
   } = state;
 
   const [comingFor, setcomingFor] = useState("");
@@ -179,12 +182,21 @@ function AddEditPurchaseRequest(props) {
 
     setPurchaseOrders(props.history.location.state.purchaseOrders);
 
+
     const selectedRec = props.history.location.state.selectedItem;
+    console.log("sele", selectedRec)
 
     if (selectedRec) {
       Object.entries(selectedRec).map(([key, val]) => {
         if (val && typeof val === "object") {
+          if(key==='poId')
+          {
+            dispatch({ field: key, value: val._id });
+            dispatch({ field: "requestNo", value: val.purchaseOrderNo });
+          }
+          else{
           dispatch({ field: key, value: val._id });
+          }
         } else {
           dispatch({ field: key, value: val });
         }
@@ -221,7 +233,6 @@ function AddEditPurchaseRequest(props) {
   function handleReceive(rec) {
     let found = false;
     // console.log("received item in function", receivedItems);
-    console.log(rec);
 
     for (let i = 0; i < receivedItems.length; i++) {
       if (
@@ -240,7 +251,7 @@ function AddEditPurchaseRequest(props) {
     } else {
       let path = `viewpo/receiveitems/add`;
 
-      setSelectedItem(rec);
+      setSelectedItem({ ...rec, requestNo: requestNo });
       // props.history.push({
       //   pathname: path,
       //   state: {
