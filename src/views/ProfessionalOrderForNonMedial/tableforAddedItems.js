@@ -35,7 +35,7 @@ import Inactive from "../../assets/img/Inactive.png";
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 
 import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 
 import add_new from "../../assets/img/Plus.png";
 
@@ -91,6 +91,19 @@ const styles = {
   },
 };
 const useStyles = makeStyles(styles);
+
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    "&:nth-of-type(odd)": {
+      backgroundColor: "#ededed",
+    },
+
+    "&:nth-of-type(even)": {
+      backgroundColor: "#FFFFFF",
+    },
+  },
+}))(TableRow);
+
 
 const tableHeadingForBUMember = [
   'No.',
@@ -486,9 +499,9 @@ export default function DenseTable(props) {
                   paddingTop: 15,
                   paddingBottom: 15,
                   fontSize: "0.9rem",
-                  borderTopLeftRadius: index === 0 ? 15 : 0,
+                  borderTopLeftRadius: index === 0 ? 5 : 0,
                   borderTopRightRadius:
-                    index === tableHeadingForBUMember.length - 1 ? 15 : 0,
+                    index === tableHeadingForBUMember.length - 1 ? 5 : 0,
                 }}
               >
                 {h}
@@ -499,15 +512,15 @@ export default function DenseTable(props) {
       </TableHead>
       <TableBody>
         {props.items.map((row, index) => (
-          <TableRow key={row.name} style={{}}>
+          <StyledTableRow key={row.name} >
             <TableCell
               align="center"
               style={{
-                backgroundColor: "white",
+                // backgroundColor: "white",
                 // fontSize: "0.9rem",
 
                 borderBottomLeftRadius:
-                  props.items.length - 1 === index ? 15 : 0,
+                  props.items.length - 1 === index ? 5 : 0,
 
                 borderBottomColor:
                   props.items.length - 1 === index ? "#60d69f" : undefined,
@@ -529,7 +542,7 @@ export default function DenseTable(props) {
             <TableCell
               align="center"
               style={{
-                backgroundColor: "white",
+                // backgroundColor: "white",
                 // fontSize: "0.9rem",
               }}
             >
@@ -538,7 +551,7 @@ export default function DenseTable(props) {
             <TableCell
               align="center"
               style={{
-                backgroundColor: "white",
+                // backgroundColor: "white",
                 // fontSize: "0.9rem",
               }}
             >
@@ -547,7 +560,7 @@ export default function DenseTable(props) {
             <TableCell
               align="center"
               style={{
-                backgroundColor: "white",
+                // backgroundColor: "white",
                 display: "flex",
                 justifyContent: "space-evenly",
                 // fontSize: "0.9rem",
@@ -555,7 +568,7 @@ export default function DenseTable(props) {
                   props.items.length - 1 === index ? "#60d69f" : undefined,
 
                 borderBottomRightRadius:
-                  index === props.items.length - 1 ? 15 : 0,
+                  index === props.items.length - 1 ? 5 : 0,
                 borderWidth: props.items.length - 1 === index ? 0 : 1,
               }}
             >
@@ -572,7 +585,7 @@ export default function DenseTable(props) {
                 className="zmdi zmdi-edit zmdi-hc-2x"
               />
             </TableCell>
-          </TableRow>
+          </StyledTableRow>
         ))}
       </TableBody>
     </Table>

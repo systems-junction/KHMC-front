@@ -533,11 +533,13 @@ export default function ReplenishmentRequest(props) {
   };
 
   function handleReceive(rec) {
+
     let obj = {
       ...rec,
       buId: selectedOrder.buId,
       fuId: selectedOrder.fuId,
       replenishmentRequestId: selectedOrder._id,
+      requestNo: selectedOrder.requestNo
     };
 
     console.log("rec", obj);

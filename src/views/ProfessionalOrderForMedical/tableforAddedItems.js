@@ -35,7 +35,7 @@ import Inactive from "../../assets/img/Inactive.png";
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 
 import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 
 import add_new from "../../assets/img/Plus.png";
 
@@ -91,6 +91,18 @@ const styles = {
 };
 const useStyles = makeStyles(styles);
 
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    "&:nth-of-type(odd)": {
+      backgroundColor: "#ededed",
+    },
+
+    "&:nth-of-type(even)": {
+      backgroundColor: "#FFFFFF",
+    },
+  },
+}))(TableRow);
+
 const tableHeadingForBUMember = [
   "No.",
   "Trade Name",
@@ -102,7 +114,7 @@ const tableDataKeysForBUMember = [
   ["itemId", "name"],
   ["itemId", "itemCode"],
   "requestedQty",
-  "price"
+  "price",
 ];
 
 const tableHeadingForDoctorAndNursing = [
@@ -510,11 +522,10 @@ export default function DenseTable(props) {
       </TableHead>
       <TableBody>
         {props.items.map((row, index) => (
-          <TableRow key={row.name} style={{}}>
+          <StyledTableRow key={row.name} style={{}}>
             <TableCell
               align="center"
               style={{
-                backgroundColor: "white",
                 // fontSize: "0.9rem",
 
                 borderBottomLeftRadius:
@@ -525,13 +536,12 @@ export default function DenseTable(props) {
                 borderWidth: props.items.length - 1 === index ? 0 : 1,
               }}
             >
-              {index+1}
+              {index + 1}
             </TableCell>
 
             <TableCell
               align="center"
               style={{
-                backgroundColor: "white",
                 fontSize: "0.9rem",
               }}
             >
@@ -539,28 +549,28 @@ export default function DenseTable(props) {
             </TableCell>
             <TableCell
               align="center"
-              style={{
-                backgroundColor: "white",
-                // fontSize: "0.9rem",
-              }}
+              style={
+                {
+                  // fontSize: "0.9rem",
+                }
+              }
             >
               {row.itemId.itemCode}
             </TableCell>
             <TableCell
               align="center"
-              style={{
-                backgroundColor: "white",
-                // fontSize: "0.9rem",
-              }}
+              style={
+                {
+                  // fontSize: "0.9rem",
+                }
+              }
             >
               {row.requestedQty}
             </TableCell>
 
-            
             <TableCell
               align="center"
               style={{
-                backgroundColor: "white",
                 display: "flex",
                 justifyContent: "space-evenly",
                 // fontSize: "0.9rem",
@@ -585,7 +595,7 @@ export default function DenseTable(props) {
                 className="zmdi zmdi-edit zmdi-hc-2x"
               />
             </TableCell>
-          </TableRow>
+          </StyledTableRow>
         ))}
       </TableBody>
     </Table>

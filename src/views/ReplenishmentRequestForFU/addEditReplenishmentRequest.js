@@ -558,7 +558,7 @@ if(requestedItemsArray==="" || requestedItemsArray.length===0)
               props.history.replace({
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
-                  message: `Replenisment Request ${res.data.data.requestNo} has been addded successfully`,
+                  message: `Replenisment Request: ${res.data.data.requestNo} has been addded successfully`,
                 },
               });
             } else if (!res.data.success) {
@@ -901,7 +901,7 @@ if(requestedItemsArray==="" || requestedItemsArray.length===0)
                 props.history.replace({
                   pathname: "/home/wms/fus/medicinalorder/success",
                   state: {
-                    message: `${secondStatus} for ${requestNo}`,
+                    message: `Replenishment Request: ${requestNo} is set to ${secondStatus}`,
                   },
                 });
               } else if (!res.data.success) {

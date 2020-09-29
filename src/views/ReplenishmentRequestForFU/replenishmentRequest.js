@@ -471,6 +471,7 @@ export default function ReplenishmentRequest(props) {
             ...rec,
             _id: purchaseRequests[i]._id,
             fuId: purchaseRequests[i].fuId,
+            requestNo: selectedOrder.requestNo,
           };
         }
       }
