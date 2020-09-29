@@ -309,10 +309,12 @@ function TriageAndAssessment(props) {
   };
 
   const onPainScaleChange = (e) => {
-    if (e.target.name === "painScale" && e.target.value < 0 || e.target.value > 10) {
-      return
-    }
-    else {
+    if (
+      (e.target.name === "painScale" && e.target.value < 0) ||
+      e.target.value > 10
+    ) {
+      return;
+    } else {
       dispatch({ field: e.target.name, value: e.target.value });
     }
   };
@@ -524,8 +526,8 @@ function TriageAndAssessment(props) {
                       borderBottomWidth={20}
                     />
                   ) : (
-                      undefined
-                    )}
+                    undefined
+                  )}
                 </div>
               </div>
             ) : historyValue === 1 ? (
@@ -543,13 +545,13 @@ function TriageAndAssessment(props) {
                       borderBottomWidth={20}
                     />
                   ) : (
-                      undefined
-                    )}
+                    undefined
+                  )}
                 </div>
               </div>
             ) : (
-                  undefined
-                )}
+              undefined
+            )}
           </>
         ) : value === 1 ? (
           <>
@@ -1043,7 +1045,7 @@ function TriageAndAssessment(props) {
                     onChange={onCheckedValue}
                     value={respiratory}
                   >
-                    <div className="form-group col-md-3">
+                    <div className="form-group col-lg-1 col-md-1">
                       <div class="radio">
                         <label class="radio-inline control-label">
                           <input
@@ -1057,7 +1059,7 @@ function TriageAndAssessment(props) {
                       </div>
                     </div>
                   </form>
-                  <div className="form-group col-md-11">
+                  <div className="form-group col-lg-11 col-md-12">
                     <input
                       style={{ outline: "none", backgroundColor: "#F7F5F5" }}
                       disabled={respiratoryText === null}
@@ -1453,8 +1455,8 @@ function TriageAndAssessment(props) {
             </div>
           </>
         ) : (
-                  undefined
-                )}
+          undefined
+        )}
 
         <Notification
           msg={errorMsg}
