@@ -328,7 +328,7 @@ function AddEditPatientListing(props) {
     lastName: '',
     nationality: '',
     gender: '',
-    age: '',
+    age: '0',
     height: '',
     weight: '',
     bloodGroup: '',
@@ -1163,7 +1163,7 @@ function AddEditPatientListing(props) {
   return (
     <div
       style={{
-        backgroundColor: '#60d69f',
+        backgroundColor: 'rgb(19 213 159)',
         position: 'fixed',
         display: 'flex',
         width: '100%',
@@ -1186,7 +1186,7 @@ function AddEditPatientListing(props) {
               </h3>
             </div>
           </div>
-          <div style={{ marginLeft: '-10px' }}>
+          <div style={{ marginRight: '-5px' }}>
             <ButtonField
               onClick={() => props.history.goBack()}
               name='viewAll'
@@ -1608,12 +1608,12 @@ function AddEditPatientListing(props) {
               >
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <DatePicker
-                    required
+                    // required
                     inputVariant='filled'
                     fullWidth={true}
                     label='Date of birth'
                     format='dd - MM - yyyy'
-                    // minDate={dob}
+                    maxDate={new Date()}
                     // error={dob === '' && detailsForm}
                     onChange={(val) => handleChangeDate(val, 'dob')}
                     InputProps={{
@@ -1681,11 +1681,11 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
-                  type='number'
+                  // type='number'
                   disabled
                   label='Age'
                   name={'age'}
-                  value={age ? age : 0}
+                  value={age}
                   onChange={onChangeValue}
                   // error={age === '' && detailsForm}
                   className='textInputStyle'
@@ -2212,7 +2212,7 @@ function AddEditPatientListing(props) {
               >
                 <div>
                   <MuiPhoneNumber
-                    required
+                    // required
                     label='Contact No'
                     name={'emergencyContactNo'}
                     value={emergencyContactNo}
