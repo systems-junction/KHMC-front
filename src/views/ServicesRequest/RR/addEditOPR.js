@@ -528,7 +528,7 @@ function AddEditPatientListing(props) {
       // weight != null &&
       // validateWeight(weight) &&
       email &&
-      email.length > 0 &&
+      // email.length > 0 &&
       validateEmail(email) &&
       country &&
       country.length > 0 &&
@@ -877,7 +877,7 @@ function AddEditPatientListing(props) {
           props.history.push({
             pathname: 'success',
             state: {
-              message: `OP Record for Request: ${
+              message: `OP Record for request: ${
                 res.data.data.requestNo
               } patient MRN: ${MRN.toUpperCase()} has been generated successfully`,
             },
@@ -1049,12 +1049,15 @@ function AddEditPatientListing(props) {
         return
       }
     }
-    if (
-      e.target.name === 'email'
-      // e.target.name === 'phoneNumber' ||
-      // e.target.name === 'mobileNumber' ||
-      // e.target.name === 'emergencyContactNo' ||
-    ) {
+
+    var heightWeightPattern = /^[0-9. ]*$/
+    if (e.target.name === 'height' || e.target.name === 'weight') {
+      if (heightWeightPattern.test(e.target.value) === false) {
+        return
+      }
+    }
+
+    if (e.target.name === 'email') {
       dispatch({
         field: e.target.name,
         value: e.target.value.replace(/[^\w@.\s]/gi, ''),
@@ -1517,6 +1520,7 @@ function AddEditPatientListing(props) {
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
+                  inputProps={{ maxLength: 40 }}
                 />
                 <ErrorMessage
                   name={firstName}
@@ -1546,6 +1550,7 @@ function AddEditPatientListing(props) {
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
+                  inputProps={{ maxLength: 40 }}
                 />
                 <ErrorMessage
                   name={lastName}
@@ -1709,7 +1714,7 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
-                  type='number'
+                  // type="number"
                   label='Height (ft)'
                   name={'height'}
                   value={height}
@@ -1721,6 +1726,7 @@ function AddEditPatientListing(props) {
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
+                  inputProps={{ maxLength: 4 }}
                 />
                 {/* <ErrorMessage
                   name={height}
@@ -1736,7 +1742,7 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
-                  type='number'
+                  // type="number"
                   label='Weight (Kg)'
                   name={'weight'}
                   value={weight}
@@ -1748,6 +1754,7 @@ function AddEditPatientListing(props) {
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
+                  inputProps={{ maxLength: 4 }}
                 />
                 {/* <ErrorMessage
                   name={weight}
@@ -1842,11 +1849,11 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
-                  required
+                  // required
                   label='Email'
                   name={'email'}
                   value={email}
-                  error={email === '' && detailsForm}
+                  // error={email === "" && detailsForm}
                   onChange={onChangeValue}
                   className='textInputStyle'
                   variant='filled'
@@ -2192,6 +2199,7 @@ function AddEditPatientListing(props) {
                       className: classes.input,
                       classes: { input: classes.input },
                     }}
+                    inputProps={{ maxLength: 80 }}
                   />
                   <ErrorMessage
                     name={emergencyName}
@@ -2231,8 +2239,8 @@ function AddEditPatientListing(props) {
                       classes: { label: classes.label },
                     }}
                   />
-                  {/* 
-                  {emergencyContactNo && !validatePhone(emergencyContactNo) ? (
+
+                  {/* {emergencyContactNo && !validatePhone(emergencyContactNo) ? (
                     undefined
                   ) : (
                     <ErrorMessage
@@ -2553,6 +2561,7 @@ function AddEditPatientListing(props) {
                       className: classes.input,
                       classes: { input: classes.input },
                     }}
+                    inputProps={{ maxLength: 80 }}
                   />
                   <ErrorMessage
                     name={depositorName}
@@ -3013,9 +3022,9 @@ function AddEditPatientListing(props) {
                 >
                   <Button
                     style={{
-                      // ...styles.stylesForButton,
+                      ...styles.stylesForButton,
                       height: '53px',
-                      width: '98%',
+                      width: 98,
                       backgroundColor: '#ba55d3',
                     }}
                     variant='contained'
@@ -3049,6 +3058,7 @@ function AddEditPatientListing(props) {
                         className: classes.input,
                         classes: { input: classes.input },
                       }}
+                      inputProps={{ maxLength: 80 }}
                     />
                     <ErrorMessage
                       name={insuranceVendor}
