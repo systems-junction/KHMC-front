@@ -1592,6 +1592,7 @@ function AddEditPatientListing(props) {
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
+                  inputProps={{ maxLength: 50 }}
                 />
                 <ErrorMessage
                   name={firstName}
@@ -1620,6 +1621,7 @@ function AddEditPatientListing(props) {
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
+                  inputProps={{ maxLength: 50 }}
                 />
                 <ErrorMessage
                   name={lastName}
