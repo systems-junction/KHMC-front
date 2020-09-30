@@ -1461,7 +1461,7 @@ function AddEditPatientListing(props) {
                               href={uploadsUrl + item.split("\\")[1]}
                               style={{ color: "#2c6ddd" }}
                             >
-                              Click here to open document
+                              Click here to open document {index + 1}
                           </a>
                           </div>
                         )
@@ -1500,7 +1500,7 @@ function AddEditPatientListing(props) {
                                 href={uploadsUrl + document}
                                 style={{ color: "#2c6ddd" }}
                               >
-                                Click here to open document
+                                Click here to open document {index + 1}
                               </a>
                             </div>
                           )
