@@ -199,7 +199,7 @@ function AddEditPatientListing(props) {
     qr: "",
     admittedOn: '',
     invoiceNo: '--',
-    document: "",
+    document: [],
     generatedBy: cookie.load("current_user").staffId,
     insuranceNumber: "----",
     insuranceVendor: "----",
@@ -381,7 +381,7 @@ function AddEditPatientListing(props) {
     }
     formData.append('data', JSON.stringify(params))
     // console.log("PARAMSS ", params);
-    // console.log("DATAAA ", formData);
+    console.log("DATAAA ", formData);
     axios
       .post(addClaim, formData, {
         headers: {
@@ -403,7 +403,7 @@ function AddEditPatientListing(props) {
           dispatch({ field: 'insuranceNumber', value: '' })
           dispatch({ field: 'insuranceVendor', value: '' })
           dispatch({ field: 'treatmentDetail', value: '' })
-          dispatch({ field: 'document', value: '' })
+          dispatch({ field: 'document', value: [] })
 
           props.history.push({
             pathname: 'success',
@@ -471,31 +471,26 @@ function AddEditPatientListing(props) {
     console.log("Multiple files are ", file)
 
     let fileType = [];
-    for (var x = 0; x < file.length; x++) {
+    for (let x = 0; x < file.length; x++) {
       console.log("Separate files ", file[x])
       fileType.push(file[x].name.slice(file[x].name.length - 3))
     }
-    // var fileType = file.name.slice(file.name.length - 3)
 
-    for (var i = 0; i < fileType.length; i++) {
+    let arr = []
+    let arr1 = []
+    for (let i = 0; i < fileType.length; i++) {
       let reader = new FileReader()
       reader.readAsDataURL(file[i]);
       reader.onload = function (event) {
         if (fileType[i] === "pdf") {
-          setpdfView.push(file[i].name);
+          arr.push(file[i].name)
+          setpdfView([...arr])
         }
         else {
-          setImagePreview.push(event.target.result)
-          console.log("Reader result >>", event.target.result)
+          arr1.push(event.target.result)
+          setImagePreview([...arr1])
         }
       }
-      // var url = reader.readAsDataURL(file[i])
-
-      // if (fileType === "pdf") {
-      //   setpdfView(file.name);
-      // } else {
-      //   setImagePreview([reader.result])
-      // }
     }
   }
 
@@ -524,7 +519,6 @@ function AddEditPatientListing(props) {
     } else {
       minutes = d.getHours();
     }
-
     return (
       // d.getDate() +
       d.getDate() +
@@ -560,7 +554,6 @@ function AddEditPatientListing(props) {
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
-              console.log('patient data ', res.data.data)
               setItemFoundSuccessfully(true)
               setItemFound(res.data.data)
             } else {
@@ -604,7 +597,7 @@ function AddEditPatientListing(props) {
       .get(getedripr + '/' + i)
       .then((res) => {
         if (res.data.success) {
-          // console.log("response for search", res.data.data);
+          console.log("response for Claim", res.data.rc);
 
           dispatch({
             field: 'treatmentDetail',
@@ -639,7 +632,7 @@ function AddEditPatientListing(props) {
             (d) => (d.serviceType = 'Radiology')
           )
 
-          console.log("Bill sumamry is ... ", [].concat(res.data.data.labRequest, res.data.data.radiologyRequest, pharm))
+          // console.log("Bill sumamry is ... ", [].concat(res.data.data.labRequest, res.data.data.radiologyRequest, pharm))
           setbillSummaryArray(
             [].concat(
               res.data.data.labRequest.reverse(),
@@ -1385,7 +1378,7 @@ function AddEditPatientListing(props) {
                     marginRight: 0,
                   }}>
                   <Button
-                    style={{...styles.stylesForButton,height:'48px',width:'100%'}}
+                    style={{ ...styles.stylesForButton, height: '48px', width: '100%' }}
                     disabled={!searched}
                     // onClick={}
                     variant="contained"
@@ -1418,7 +1411,7 @@ function AddEditPatientListing(props) {
                     />
                   </Button>
 
-                  {pdfView && pdfView.length > 0 ? (
+                  {pdfView.length > 0 ? (
                     <div
                       style={{
                         textAlign: "center",
@@ -1426,8 +1419,8 @@ function AddEditPatientListing(props) {
                         fontStyle: "italic",
                       }}
                     >
-                      { pdfView.map((index, view) => {
-                        return <><span style={{ color: "black" }}>Selected File {index + 1}: </span><span>{view}</span></>
+                      { pdfView.map((view, index) => {
+                        return <div><span style={{ color: "black" }}>Selected File {index + 1}: </span><span>{view}</span></div>
                       })
                       }
                     </div>
@@ -1438,23 +1431,26 @@ function AddEditPatientListing(props) {
               </div>
 
               <div className="row">
-                {document !== "" && document.includes("\\") ? (
+                {document.length > 0 && document.map((item, index) => item.includes("\\")) ? (
                   <>
-                    {document !== "" &&
-                      document.slice(document.length - 3) !== "pdf" ? (
-                        <div
-                          className="col-md-6 col-sm-6 col-6"
-                          style={{
-                            ...styles.inputContainerForTextField,
-                          }}
-                        >
-                          <img
-                            src={uploadsUrl + document.split("\\")[1]}
-                            className="depositSlipImg"
-                          />
-                        </div>
-                      ) : document !== "" &&
-                        document.slice(document.length - 3) === "pdf" ? (
+                    {document.map((item, index) => {
+                      if (item.slice(item.length - 3) !== "pdf") {
+                        return (
+                          <div
+                            className="col-md-6 col-sm-6 col-6"
+                            style={{
+                              ...styles.inputContainerForTextField,
+                            }}
+                          >
+                            <img
+                              src={uploadsUrl + item.split("\\")[1]}
+                              className="depositSlipImg"
+                            />
+                          </div>
+                        )
+                      }
+                      else if (item.slice(item.length - 3) === "pdf") {
+                        return (
                           <div
                             className="col-md-6 col-sm-6 col-6"
                             style={{
@@ -1462,70 +1458,83 @@ function AddEditPatientListing(props) {
                             }}
                           >
                             <a
-                              href={uploadsUrl + document.split("\\")[1]}
+                              href={uploadsUrl + item.split("\\")[1]}
                               style={{ color: "#2c6ddd" }}
                             >
-                              Click here to open document
-                        </a>
+                              Click here to open document {index + 1}
+                          </a>
                           </div>
-                        ) : (
-                          undefined
-                        )}
+                        )
+                      }
+                    }
+                    )}
                   </>
-                ) : document !== "" && document.includes("/") ? (
+                ) : document.length > 0 && document.map((item, index) => item.includes("/")) ? (
                   <>
-                    {document !== "" &&
-                      document.slice(document.length - 3) !== "pdf" ? (
-                        <div
-                          className="col-md-6 col-sm-6 col-6"
-                          style={{
-                            ...styles.inputContainerForTextField,
-                          }}
-                        >
-                          <img
-                            src={uploadsUrl + document}
-                            className="depositSlipImg"
-                          />
-                        </div>
-                      ) : document !== "" &&
-                        document.slice(document.length - 3) === "pdf" ? (
-                          <div
-                            className="col-md-6 col-sm-6 col-6"
-                            style={{
-                              ...styles.inputContainerForTextField,
-                            }}
-                          >
-                            <a
-                              href={uploadsUrl + document}
-                              style={{ color: "#2c6ddd" }}
+                    {
+                      document.map((item, index) => {
+                        if (item.slice(item.length - 3) !== "pdf") {
+                          return (
+                            <div
+                              className="col-md-6 col-sm-6 col-6"
+                              style={{
+                                ...styles.inputContainerForTextField,
+                              }}
                             >
-                              Click here to open document
-                        </a>
-                          </div>
-                        ) : (
-                          undefined
-                        )}
+                              <img
+                                src={uploadsUrl + item}
+                                className="depositSlipImg"
+                              />
+                            </div>
+                          )
+                        }
+                        else if (item.slice(item.length - 3) === "pdf") {
+                          return (
+                            <div
+                              className="col-md-6 col-sm-6 col-6"
+                              style={{
+                                ...styles.inputContainerForTextField,
+                              }}
+                            >
+                              <a
+                                href={uploadsUrl + document}
+                                style={{ color: "#2c6ddd" }}
+                              >
+                                Click here to open document {index + 1}
+                              </a>
+                            </div>
+                          )
+                        }
+                      }
+                      )}
                   </>
                 ) : (
-                      undefined
-                    )}
+                    undefined
+                  )}
 
-                {imagePreview !== "" ? (
-                  <div
-                    className="col-md-6 col-sm-6 col-6"
-                    style={{
-                      ...styles.inputContainerForTextField,
-                    }}
-                  >
-                    <img src={imagePreview} className="depositSlipImg" />
-                    {document !== "" ? (
-                      <div style={{ color: "black", textAlign: "center" }}>
-                        New document
-                      </div>
-                    ) : (
-                        undefined
-                      )}
-                  </div>
+                {imagePreview.length > 0 ? (
+                  <>
+                    {imagePreview.map((view, index) => {
+                      return (
+                        <div key={index}
+                          className="col-md-6 col-sm-6 col-6"
+                          style={{
+                            ...styles.inputContainerForTextField,
+                          }}
+                        >
+                          <img src={view} className="depositSlipImg" />
+                          {document !== "" ? (
+                            <div style={{ color: "black", textAlign: "center" }}>
+                              New document
+                            </div>
+                          ) : (
+                              undefined
+                            )}
+                        </div>
+                      )
+                    })
+                    }
+                  </>
                 ) : (
                     undefined
                   )}

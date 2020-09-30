@@ -13,6 +13,8 @@ import {
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import Button from "@material-ui/core/Button";
+import validateInsuranceNo from "../../../public/insuranceValidator";
+
 import CurrencyTextField from "@unicef/material-ui-currency-textfield";
 import Fingerprint from "../../../assets/img/fingerprint.png";
 import BarCode from "../../../assets/img/Bar Code.png";
@@ -30,8 +32,6 @@ import validateWeight from "../../../public/numberFloatValidator";
 import validateHeight from "../../../public/numberFloatValidator";
 import validateEmergencyName from "../../../public/inputValidator";
 import validateAmount from "../../../public/amountValidator";
-import validateInsuranceNo from "../../../public/insuranceValidator";
-
 import validateInsuranceVendor from "../../../public/inputValidator";
 import MuiPhoneNumber from "material-ui-phone-number";
 import validatePhone from "../../../public/validatePhone";
@@ -532,7 +532,7 @@ function AddEditPatientListing(props) {
       // weight != null &&
       // validateWeight(weight) &&
       email &&
-      email.length > 0 &&
+      // email.length > 0 &&
       validateEmail(email) &&
       country &&
       country.length > 0 &&
@@ -1002,16 +1002,14 @@ function AddEditPatientListing(props) {
     }
     dispatch({ field: "bankName", value: i.bankName });
     dispatch({ field: "depositorName", value: i.depositorName });
-    dispatch({
-      field: "coverageDetails",
-      value: i.coverageDetails,
-    });
-    dispatch({ field: "insuranceVendor", value: i.insuranceVendor });
+
+    dispatch({ field: "coverageDetails", value: i.coverageDetails });
     dispatch({ field: "coverageTerms", value: i.coverageTerms });
     dispatch({ field: "payment", value: i.payment });
     dispatch({ field: "depositSlip", value: i.depositSlip });
     dispatch({ field: "DateTime", value: i.DateTime });
     dispatch({ field: "paymentMethod", value: i.paymentMethod });
+    dispatch({ field: "insuranceVendor", value: i.insuranceVendor });
     dispatch({ field: "emergencyName", value: i.emergencyName });
     dispatch({ field: "emergencyContactNo", value: i.emergencyContactNo });
     dispatch({ field: "emergencyRelation", value: i.emergencyRelation });
@@ -1080,12 +1078,15 @@ function AddEditPatientListing(props) {
         return;
       }
     }
-    if (
-      e.target.name === "email"
-      // e.target.name === 'phoneNumber' ||
-      // e.target.name === 'mobileNumber' ||
-      // e.target.name === 'emergencyContactNo' ||
-    ) {
+
+    var heightWeightPattern = /^[0-9. ]*$/;
+    if (e.target.name === "height" || e.target.name === "weight") {
+      if (heightWeightPattern.test(e.target.value) === false) {
+        return;
+      }
+    }
+
+    if (e.target.name === "email") {
       dispatch({
         field: e.target.name,
         value: e.target.value.replace(/[^\w@.\s]/gi, ""),
@@ -1548,6 +1549,7 @@ function AddEditPatientListing(props) {
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
+                  inputProps={{ maxLength: 40 }}
                 />
                 <ErrorMessage
                   name={firstName}
@@ -1577,6 +1579,7 @@ function AddEditPatientListing(props) {
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
+                  inputProps={{ maxLength: 40 }}
                 />
                 <ErrorMessage
                   name={lastName}
@@ -1740,7 +1743,7 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
-                  type="number"
+                  // type="number"
                   label="Height (ft)"
                   name={"height"}
                   value={height}
@@ -1752,6 +1755,7 @@ function AddEditPatientListing(props) {
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
+                  inputProps={{ maxLength: 4 }}
                 />
                 {/* <ErrorMessage
                   name={height}
@@ -1767,7 +1771,7 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
-                  type="number"
+                  // type="number"
                   label="Weight (Kg)"
                   name={"weight"}
                   value={weight}
@@ -1779,6 +1783,7 @@ function AddEditPatientListing(props) {
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
+                  inputProps={{ maxLength: 4 }}
                 />
                 {/* <ErrorMessage
                   name={weight}
@@ -1873,11 +1878,11 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
-                  required
+                  // required
                   label="Email"
                   name={"email"}
                   value={email}
-                  error={email === "" && detailsForm}
+                  // error={email === "" && detailsForm}
                   onChange={onChangeValue}
                   className="textInputStyle"
                   variant="filled"
@@ -2223,6 +2228,7 @@ function AddEditPatientListing(props) {
                       className: classes.input,
                       classes: { input: classes.input },
                     }}
+                    inputProps={{ maxLength: 80 }}
                   />
                   <ErrorMessage
                     name={emergencyName}
@@ -2584,6 +2590,7 @@ function AddEditPatientListing(props) {
                       className: classes.input,
                       classes: { input: classes.input },
                     }}
+                    inputProps={{ maxLength: 80 }}
                   />
                   <ErrorMessage
                     name={depositorName}
@@ -3081,6 +3088,7 @@ function AddEditPatientListing(props) {
                         className: classes.input,
                         classes: { input: classes.input },
                       }}
+                      inputProps={{ maxLength: 80 }}
                     />
                     <ErrorMessage
                       name={insuranceVendor}
