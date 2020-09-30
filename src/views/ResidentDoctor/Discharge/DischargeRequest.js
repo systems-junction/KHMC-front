@@ -34,7 +34,7 @@ import {
   searchpatient,
   notifyDischarge,
   AddDischargeRequestUrl,
-} from "../../../public/endpoins";
+} from '../../../public/endpoins'
 
 import { connect } from 'react-redux'
 import {
@@ -406,11 +406,11 @@ function DischargeRequest(props) {
     //   formData.append("file", depositSlip, depositSlip.name);
     // }
     // if (validatePatientForm() || validateInsuranceForm()) {
-    let params = "";
+    let params = ''
 
-    if (requestType === "EDR") {
+    if (requestType === 'EDR') {
       params = {
-        edrId: requestType === "EDR" ? id : "",
+        edrId: requestType === 'EDR' ? id : '',
         generatedFor: requestType,
         paymentMethod: patientDetails.paymentMethod,
         depositAmount: patientDetails.payment,
@@ -419,12 +419,12 @@ function DischargeRequest(props) {
         bankName: patientDetails.bankName,
         depositorName: patientDetails.depositorName,
         receivedBy: currentUser.staffId,
-      };
+      }
     }
 
-    if (requestType === "IPR") {
+    if (requestType === 'IPR') {
       params = {
-        iprId: requestType === "IPR" ? id : "",
+        iprId: requestType === 'IPR' ? id : '',
         paymentMethod: patientDetails.paymentMethod,
         depositAmount: patientDetails.payment,
         amountReceived: patientDetails.amountReceived,
@@ -432,11 +432,11 @@ function DischargeRequest(props) {
         bankName: patientDetails.bankName,
         depositorName: patientDetails.depositorName,
         receivedBy: currentUser.staffId,
-      };
+      }
     }
 
     // formData.append("data", JSON.stringify(params));
-    console.log("PARAMSS ", params);
+    console.log('PARAMSS ', params)
     // console.log("DATAAA ", formData);
     axios
       // .post(AddDischargeRequestUrl, params, {
@@ -449,20 +449,20 @@ function DischargeRequest(props) {
       .post(AddDischargeRequestUrl, params)
       .then((res) => {
         if (res.data.success) {
-          console.log("response after adding discharge request", res.data.data);
+          console.log('response after adding discharge request', res.data.data)
           // setPatientId(res.data.data._id);
           // props.history.goBack();
         } else if (!res.data.success) {
-          setOpenNotification(true);
+          setOpenNotification(true)
         }
       })
       .catch((e) => {
-        console.log("error after adding patient details", e);
-        setOpenNotification(true);
-        setErrorMsg("Error while adding the patient details");
-      });
+        console.log('error after adding patient details', e)
+        setOpenNotification(true)
+        setErrorMsg('Error while adding the patient details')
+      })
     // }
-  };
+  }
 
   const submitDischargeSummary = () => {
     const params = {
@@ -482,11 +482,11 @@ function DischargeRequest(props) {
       .then((res) => {
         if (res.data.success) {
           console.log(
-            "response while adding Discharge Req medication",
+            'response while adding Discharge Req medication',
             res.data.data
-          );
-          addNewDischargeRequest();
-          notifyForDischarge(patientId);
+          )
+          addNewDischargeRequest()
+          notifyForDischarge(patientId)
           props.history.push({
             pathname: 'dischargerequest/success',
             state: {
@@ -494,8 +494,8 @@ function DischargeRequest(props) {
                 res.data.data.requestNo
               } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} Submitted successfully`,
             },
-          });
-          props.setPatientDetailsForReducer("")
+          })
+          props.setPatientDetailsForReducer('')
         } else if (!res.data.success) {
           setOpenNotification(true)
           setErrorMsg('Error while adding the Discharge request')
@@ -543,7 +543,7 @@ function DischargeRequest(props) {
   return (
     <div
       style={{
-        backgroundColor: '#60d69f',
+        backgroundColor: 'rgb(19 213 159)',
         position: 'fixed',
         display: 'flex',
         width: '100%',

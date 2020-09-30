@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useReducer } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { FaUpload } from "react-icons/fa";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import { jsPDF } from "jspdf";
+import React, { useEffect, useState, useReducer } from 'react'
+import { makeStyles } from '@material-ui/core/styles'
+import { FaUpload } from 'react-icons/fa'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
+import Button from '@material-ui/core/Button'
+import TextField from '@material-ui/core/TextField'
+import { jsPDF } from 'jspdf'
 import {
   updateClaim,
   getSearchedpatient,
@@ -40,53 +40,53 @@ import Fingerprint from "../../../assets/img/fingerprint.png";
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 
 const tableHeadingForBillSummary = [
-  "Date/Time",
-  "Service Name",
-  "Service Type",
-  "Amount",
-  "Invoice",
-];
+  'Date/Time',
+  'Service Name',
+  'Service Type',
+  'Amount',
+  'Invoice',
+]
 const tableDataKeysForBillSummary = [
-  "date",
-  ["serviceId", "name"],
-  "serviceType",
-  ["serviceId", "price"],
-];
+  'date',
+  ['serviceId', 'name'],
+  'serviceType',
+  ['serviceId', 'price'],
+]
 
 const statusArray = [
-  { key: "Analysis In Progress", value: "Analysis In Progress" },
-  { key: "Approved", value: "Approved" },
-  { key: "Partial Approved", value: "Partial Approved" },
-  { key: "Rejected", value: "Rejected" },
-];
+  { key: 'Analysis In Progress', value: 'Analysis In Progress' },
+  { key: 'Approved', value: 'Approved' },
+  { key: 'Partial Approved', value: 'Partial Approved' },
+  { key: 'Rejected', value: 'Rejected' },
+]
 
-const actions = { print: true };
+const actions = { print: true }
 
 const styles = {
   stylesForButton: {
-    color: "white",
-    cursor: "pointer",
+    color: 'white',
+    cursor: 'pointer',
     borderRadius: 5,
-    backgroundColor: "#2c6ddd",
-    width: "130px",
-    height: "45px",
-    outline: "none",
+    backgroundColor: '#2c6ddd',
+    width: '130px',
+    height: '45px',
+    outline: 'none',
   },
   save: {
-    color: "white",
-    cursor: "pointer",
+    color: 'white',
+    cursor: 'pointer',
     borderRadius: 10,
-    backgroundColor: "#ba55d3",
-    width: "130px",
-    height: "45px",
-    outline: "none",
+    backgroundColor: '#ba55d3',
+    width: '130px',
+    height: '45px',
+    outline: 'none',
   },
   form: {
-    backgroundColor: "white",
-    borderRadius: "10px",
-    marginTop: "20px",
-    padding: "10px",
-    textAlign: "center",
+    backgroundColor: 'white',
+    borderRadius: '10px',
+    marginTop: '20px',
+    padding: '10px',
+    textAlign: 'center',
   },
   upload: {
     backgroundColor: "white",
@@ -100,94 +100,94 @@ const styles = {
     padding: "10px",
   },
   input: {
-    display: "none",
+    display: 'none',
   },
   patientDetails: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 5,
-    padding: "10px",
+    padding: '10px',
   },
   inputContainerForTextField: {
     marginTop: 10,
   },
   styleForLabel: {
     paddingTop: 25,
-    fontWeight: "700",
-    color: "gray",
+    fontWeight: '700',
+    color: 'gray',
   },
   inputStyles: {
-    outline: "none",
+    outline: 'none',
   },
   headingStyles: {
-    fontWeight: "bold",
-    color: "grey",
+    fontWeight: 'bold',
+    color: 'grey',
     fontSize: 12,
   },
   textStyles: {
-    fontWeight: "700",
-    color: "black",
+    fontWeight: '700',
+    color: 'black',
     fontSize: 14,
   },
-};
+}
 
 const useStylesForTabs = makeStyles({
   root: {
     flexGrow: 1,
   },
-});
+})
 
 const useStyles = makeStyles((theme) => ({
   underline: {
-    "&&&:before": {
-      borderBottom: "none",
+    '&&&:before': {
+      borderBottom: 'none',
     },
-    "&&:after": {
-      borderBottom: "none",
+    '&&:after': {
+      borderBottom: 'none',
     },
   },
   margin: {
     margin: theme.spacing(0),
   },
   input: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 10,
-    "&:after": {
-      borderBottomColor: "black",
+    '&:after': {
+      borderBottomColor: 'black',
     },
-    "&:hover": {
-      backgroundColor: "white",
+    '&:hover': {
+      backgroundColor: 'white',
     },
-    "&:disabled": {
-      color: "gray",
+    '&:disabled': {
+      color: 'gray',
     },
-    "&:focus": {
-      backgroundColor: "white",
-      boxShadow: "none",
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
     },
   },
   multilineColor: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 10,
-    "&:hover": {
-      backgroundColor: "white",
+    '&:hover': {
+      backgroundColor: 'white',
     },
-    "&:after": {
-      borderBottomColor: "black",
+    '&:after': {
+      borderBottomColor: 'black',
     },
   },
   root: {
-    "& .MuiTextField-root": {
-      backgroundColor: "white",
+    '& .MuiTextField-root': {
+      backgroundColor: 'white',
     },
-    "& .Mui-focused": {
-      backgroundColor: "white",
-      color: "black",
+    '& .Mui-focused': {
+      backgroundColor: 'white',
+      color: 'black',
     },
   },
-}));
+}))
 
 function AddEditPatientListing(props) {
-  const classes = useStyles();
+  const classes = useStyles()
   const initialState = {
     profileNo: "-----",
     firstName: "-----",
@@ -211,31 +211,31 @@ function AddEditPatientListing(props) {
     medicationArray: "",
 
     // billSummaryArray: "",
-  };
+  }
 
   function reducer(state, { field, value }) {
     return {
       ...state,
       [field]: value,
-    };
+    }
   }
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   const {
-    profileNo = "-----",
-    firstName = "-----",
-    lastName = "-----",
-    gender = "----",
-    age = "--",
-    weight = "--",
+    profileNo = '-----',
+    firstName = '-----',
+    lastName = '-----',
+    gender = '----',
+    age = '--',
+    weight = '--',
     qr,
     admittedOn,
     invoiceNo,
     document,
-    generatedBy = cookie.load("current_user").staffId,
-    insuranceNumber = "-----",
-    insuranceVendor = "-----",
+    generatedBy = cookie.load('current_user').staffId,
+    insuranceNumber = '-----',
+    insuranceVendor = '-----',
     treatmentDetail,
     patientId,
     status,
@@ -244,15 +244,15 @@ function AddEditPatientListing(props) {
     medicationArray,
 
     // billSummaryArray,
-  } = state;
+  } = state
 
-  const classesForTabs = useStylesForTabs();
+  const classesForTabs = useStylesForTabs()
 
-  const [comingFor, setcomingFor] = useState("");
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
-  const [successMsg, setsuccessMsg] = useState("");
-  const [openNotification, setOpenNotification] = useState(false);
+  const [comingFor, setcomingFor] = useState('')
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
+  const [successMsg, setsuccessMsg] = useState('')
+  const [openNotification, setOpenNotification] = useState(false)
   // const [isDisabled, setDisabled] = useState(false)
   const [value, setValue] = React.useState(0);
   const [DocumentUpload, setDocumentUpload] = useState("");
@@ -268,38 +268,37 @@ function AddEditPatientListing(props) {
   const [searched, setsearched] = useState(false)
 
   useEffect(() => {
-    setcomingFor(props.history.location.state.comingFor);
-    setCurrentUser(cookie.load("current_user"));
-    const selectedRec = props.history.location.state.selectedItem;
-    console.log("selected rec is ... ", selectedRec);
+    setcomingFor(props.history.location.state.comingFor)
+    setCurrentUser(cookie.load('current_user'))
+    const selectedRec = props.history.location.state.selectedItem
+    console.log('selected rec is ... ', selectedRec)
 
-    if (props.history.location.state.comingFor === "edit") {
-      getPatientByInfo(selectedRec.patient._id);
+    if (props.history.location.state.comingFor === 'edit') {
+      getPatientByInfo(selectedRec.patient._id)
     }
 
     if (selectedRec) {
-      setClaimId(selectedRec._id);
+      setClaimId(selectedRec._id)
       Object.entries(selectedRec).map(([key, val]) => {
-        if (val && typeof val === "object") {
-          if (key === "patient") {
+        if (val && typeof val === 'object') {
+          if (key === 'patient') {
             Object.entries(val).map(([key1, val1]) => {
-              if (key1 === "_id") {
-                dispatch({ field: "patientId", value: val1 });
-                getBillSummary(val1);
-                console.log("Patient id is ", val1);
+              if (key1 === '_id') {
+                dispatch({ field: 'patientId', value: val1 })
+                getBillSummary(val1)
+                console.log('Patient id is ', val1)
               } else {
-                dispatch({ field: key1, value: val1 });
+                dispatch({ field: key1, value: val1 })
               }
-            });
+            })
           } else {
-            dispatch({ field: key, value: val._id });
+            dispatch({ field: key, value: val._id })
           }
         } else {
-          dispatch({ field: key, value: val });
+          dispatch({ field: key, value: val })
         }
-      });
+      })
     }
-
     var now = new Date();
     var start = new Date(now.getFullYear(), 0, 0);
     var diff =
@@ -318,7 +317,6 @@ function AddEditPatientListing(props) {
     let ss = dateNow.getSeconds();
 
     dispatch({ field: 'invoiceNo', value: "IN" + day + YYYY + HH + mm + ss })
-
 
   }, []);
 
@@ -363,9 +361,9 @@ function AddEditPatientListing(props) {
   // }
 
   const handleAdd = () => {
-    let formData = new FormData();
+    let formData = new FormData()
     if (DocumentUpload) {
-      formData.append("file", DocumentUpload, DocumentUpload.name);
+      formData.append('file', DocumentUpload, DocumentUpload.name)
     }
     //if (validatePatientForm()) {
     const params = {
@@ -373,59 +371,59 @@ function AddEditPatientListing(props) {
       patient: patientId,
       treatmentDetail: treatmentDetail,
       document: document,
-      status: "pending",
-      responseCode: "N/A",
-    };
-    formData.append("data", JSON.stringify(params));
+      status: 'pending',
+      responseCode: 'N/A',
+    }
+    formData.append('data', JSON.stringify(params))
     // console.log("PARAMSS ", params);
     // console.log("DATAAA ", formData);
     axios
       .post(addClaim, formData, {
         headers: {
-          accept: "application/json",
-          "Accept-Language": "en-US,en;q=0.8",
-          "content-type": "multipart/form-data",
+          accept: 'application/json',
+          'Accept-Language': 'en-US,en;q=0.8',
+          'content-type': 'multipart/form-data',
         },
       })
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data, "patients data");
-          dispatch({ field: "patientId", value: "" });
-          dispatch({ field: "firstName", value: "" });
-          dispatch({ field: "lastName", value: "" });
-          dispatch({ field: "gender", value: "" });
-          dispatch({ field: "age", value: "" });
-          dispatch({ field: "weight", value: "" });
-          dispatch({ field: "profileNo", value: "" });
-          dispatch({ field: "insuranceNumber", value: "" });
-          dispatch({ field: "insuranceVendor", value: "" });
-          dispatch({ field: "treatmentDetail", value: "" });
-          dispatch({ field: "document", value: "" });
+          console.log(res.data.data, 'patients data')
+          dispatch({ field: 'patientId', value: '' })
+          dispatch({ field: 'firstName', value: '' })
+          dispatch({ field: 'lastName', value: '' })
+          dispatch({ field: 'gender', value: '' })
+          dispatch({ field: 'age', value: '' })
+          dispatch({ field: 'weight', value: '' })
+          dispatch({ field: 'profileNo', value: '' })
+          dispatch({ field: 'insuranceNumber', value: '' })
+          dispatch({ field: 'insuranceVendor', value: '' })
+          dispatch({ field: 'treatmentDetail', value: '' })
+          dispatch({ field: 'document', value: '' })
 
           props.history.push({
-            pathname: "success",
+            pathname: 'success',
             state: {
               message: `Claim against Patient MRN: ${profileNo} Submitted successfully`,
             },
-          });
+          })
         } else if (!res.data.success) {
-          setOpenNotification(true);
-          setErrorMsg("Error submitting Claim details");
+          setOpenNotification(true)
+          setErrorMsg('Error submitting Claim details')
         }
       })
       .catch((e) => {
-        console.log("error after adding Claim details", e);
-        setOpenNotification(true);
-        setErrorMsg("Error while adding the Claim details");
-      });
+        console.log('error after adding Claim details', e)
+        setOpenNotification(true)
+        setErrorMsg('Error while adding the Claim details')
+      })
     //}
-    setIsFormSubmitted(true);
-  };
+    setIsFormSubmitted(true)
+  }
 
   const handleEdit = () => {
-    let formData = new FormData();
+    let formData = new FormData()
     if (DocumentUpload) {
-      formData.append("file", DocumentUpload, DocumentUpload.name);
+      formData.append('file', DocumentUpload, DocumentUpload.name)
     }
     //if (validatePatientForm()) {
     const params = {
@@ -434,8 +432,8 @@ function AddEditPatientListing(props) {
       document: document,
       status: status,
       responseCode: responseCode,
-    };
-    formData.append("data", JSON.stringify(params));
+    }
+    formData.append('data', JSON.stringify(params))
     // console.log("PARAMSS ", params);
     // console.log("DATAAA ", formData);
     axios
@@ -443,55 +441,55 @@ function AddEditPatientListing(props) {
       .then((res) => {
         if (res.data.success) {
           props.history.push({
-            pathname: "success",
+            pathname: 'success',
             state: {
               message: `Claim against Patient MRN: ${profileNo} Updated successfully`,
             },
-          });
+          })
         } else if (!res.data.success) {
-          setOpenNotification(true);
+          setOpenNotification(true)
         }
       })
       .catch((e) => {
-        console.log("error after updating Claim details", e);
-        setOpenNotification(true);
-        setErrorMsg("Error while editing the Claim details");
-      });
+        console.log('error after updating Claim details', e)
+        setOpenNotification(true)
+        setErrorMsg('Error while editing the Claim details')
+      })
     //}
     // setIsFormSubmitted(true)
-  };
+  }
 
   const onDocumentUpload = (event) => {
-    var file = event.target.files[0];
-    var fileType = file.name.slice(file.name.length - 3);
+    var file = event.target.files[0]
+    var fileType = file.name.slice(file.name.length - 3)
 
-    setDocumentUpload(file);
-    var reader = new FileReader();
-    var url = reader.readAsDataURL(file);
+    setDocumentUpload(file)
+    var reader = new FileReader()
+    var url = reader.readAsDataURL(file)
 
     reader.onloadend = function () {
       if (fileType === "pdf") {
         setpdfView(file.name);
       } else {
-        setImagePreview([reader.result]);
+        setImagePreview([reader.result])
       }
-    };
-  };
+    }
+  }
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+    setValue(newValue)
+  }
 
   const onClick = () => {
-    setValue(value + 1);
-  };
+    setValue(value + 1)
+  }
 
   const onChangeValue = (e) => {
     dispatch({
       field: e.target.name,
-      value: e.target.value.replace(/[^\w\s]/gi, ""),
-    });
-  };
+      value: e.target.value.replace(/[^\w\s]/gi, ''),
+    })
+  }
 
   const formatDate = (date) => {
     const d = new Date(date);
@@ -522,37 +520,37 @@ function AddEditPatientListing(props) {
 
   if (openNotification) {
     setTimeout(() => {
-      setOpenNotification(false);
-      setErrorMsg("");
-      setsuccessMsg("");
-    }, 2000);
+      setOpenNotification(false)
+      setErrorMsg('')
+      setsuccessMsg('')
+    }, 2000)
   }
 
   const handleSearch = (e) => {
-    const a = e.target.value.replace(/[^\w\s]/gi, "");
-    setSearchQuery(a);
+    const a = e.target.value.replace(/[^\w\s]/gi, '')
+    setSearchQuery(a)
     if (a.length >= 3) {
       axios
         .get(
-          getSearchedpatient + "/" + currentUser.functionalUnit._id + "/" + a
+          getSearchedpatient + '/' + currentUser.functionalUnit._id + '/' + a
         )
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
-              console.log("patient data ", res.data.data);
-              setItemFoundSuccessfully(true);
-              setItemFound(res.data.data);
+              console.log('patient data ', res.data.data)
+              setItemFoundSuccessfully(true)
+              setItemFound(res.data.data)
             } else {
-              setItemFoundSuccessfully(false);
-              setItemFound("");
+              setItemFoundSuccessfully(false)
+              setItemFound('')
             }
           }
         })
         .catch((e) => {
-          console.log("error while searching patient", e);
-        });
+          console.log('error while searching patient', e)
+        })
     }
-  };
+  }
 
   function handleAddItem(i) {
     dispatch({ field: "medicationArray", value: "" });
@@ -580,21 +578,21 @@ function AddEditPatientListing(props) {
 
   function getBillSummary(i) {
     axios
-      .get(getedripr + "/" + i)
+      .get(getedripr + '/' + i)
       .then((res) => {
         if (res.data.success) {
           // console.log("response for search", res.data.data);
 
           dispatch({
-            field: "treatmentDetail",
+            field: 'treatmentDetail',
             value: res.data.rc.treatmentDetail,
-          });
-          dispatch({ field: "document", value: res.data.rc.document });
+          })
+          dispatch({ field: 'document', value: res.data.rc.document })
 
-          let pharm = [];
+          let pharm = []
           for (let i = 0; i < res.data.data.pharmacyRequest.length; i++) {
-            let amount = 0;
-            let singlePR = res.data.data.pharmacyRequest[i];
+            let amount = 0
+            let singlePR = res.data.data.pharmacyRequest[i]
             for (let j = 0; j < singlePR.item.length; j++) {
               // console.log(singlePR.medicine[j].itemId.purchasePrice)
               amount =
@@ -604,19 +602,19 @@ function AddEditPatientListing(props) {
             }
             let obj = {
               serviceId: {
-                name: "Pharmacy Item",
+                name: 'Pharmacy Item',
                 price: amount.toFixed(2),
               },
               date: res.data.data.pharmacyRequest[i].dateGenerated,
-              serviceType: "Pharmacy",
-            };
-            pharm.push(obj);
+              serviceType: 'Pharmacy',
+            }
+            pharm.push(obj)
           }
 
-          res.data.data.labRequest.map((d) => (d.serviceType = "Lab"));
+          res.data.data.labRequest.map((d) => (d.serviceType = 'Lab'))
           res.data.data.radiologyRequest.map(
-            (d) => (d.serviceType = "Radiology")
-          );
+            (d) => (d.serviceType = 'Radiology')
+          )
 
           console.log("Bill sumamry is ... ", [].concat(res.data.data.labRequest, res.data.data.radiologyRequest, pharm))
           setbillSummaryArray(
@@ -625,201 +623,198 @@ function AddEditPatientListing(props) {
               res.data.data.radiologyRequest.reverse(),
               pharm.reverse()
             )
-          );
+          )
         } else if (!res.data.success) {
-          setErrorMsg(res.data.error);
-          setOpenNotification(true);
+          setErrorMsg(res.data.error)
+          setOpenNotification(true)
         }
-        return res;
+        return res
       })
       .catch((e) => {
-        console.log("error: ", e);
-      });
+        console.log('error: ', e)
+      })
   }
 
   const getPatientByInfo = (id) => {
     axios
-      .get(searchpatient + "/" + id)
+      .get(searchpatient + '/' + id)
       .then((res) => {
         if (res.data.success) {
           if (res.data.data) {
-            console.log(
-              "Response after getting EDR/IPR data : ",
-              res.data.data
-            );
+            console.log('Response after getting EDR/IPR data : ', res.data.data)
 
             Object.entries(res.data.data).map(([key, val]) => {
-              if (val && typeof val === "object") {
-                if (key === "residentNotes") {
+              if (val && typeof val === 'object') {
+                if (key === 'residentNotes') {
                   if (val && val.length > 0) {
                     dispatch({
-                      field: "diagnosisArray",
+                      field: 'diagnosisArray',
                       value: val.reverse()[0].code,
-                    });
+                    })
                   }
-                } else if (key === "pharmacyRequest") {
-                  let data = [];
+                } else if (key === 'pharmacyRequest') {
+                  let data = []
                   val.map((d) => {
                     d.item.map((item) => {
-                      let found = data.find((i) => i === item.itemId.name);
+                      let found = data.find((i) => i === item.itemId.name)
                       if (!found) {
-                        data.push(item.itemId.name);
+                        data.push(item.itemId.name)
                       }
-                    });
-                  });
-                  dispatch({ field: "medicationArray", value: data });
+                    })
+                  })
+                  dispatch({ field: 'medicationArray', value: data })
                 }
               } else {
-                dispatch({ field: key, value: val });
+                dispatch({ field: key, value: val })
               }
-            });
+            })
           }
         } else {
-          setOpenNotification(true);
-          setErrorMsg("EDR/IPR not generated for patient");
+          setOpenNotification(true)
+          setErrorMsg('EDR/IPR not generated for patient')
         }
       })
       .catch((e) => {
-        setOpenNotification(true);
-        setErrorMsg(e);
-      });
-  };
+        setOpenNotification(true)
+        setErrorMsg(e)
+      })
+  }
 
   const handleInvoicePrint = (item) => {
-    console.log("item", item);
+    console.log('item', item)
 
     var now = new Date();
     var start = new Date(now.getFullYear(), 0, 0);
     var diff =
       now -
       start +
-      (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000;
-    var oneDay = 1000 * 60 * 60 * 24;
-    var day = Math.floor(diff / oneDay);
-    var dateNow = new Date();
+      (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000
+    var oneDay = 1000 * 60 * 60 * 24
+    var day = Math.floor(diff / oneDay)
+    var dateNow = new Date()
     var YYYY = dateNow
       .getFullYear()
       .toString()
-      .substr(-2);
-    var HH = dateNow.getHours();
-    var mm = dateNow.getMinutes();
-    let ss = dateNow.getSeconds();
-    const invoiceNo = "IN" + day + YYYY + HH + mm + ss;
+      .substr(-2)
+    var HH = dateNow.getHours()
+    var mm = dateNow.getMinutes()
+    let ss = dateNow.getSeconds()
+    const invoiceNo = 'IN' + day + YYYY + HH + mm + ss
 
-    var time = dateNow.getHours() + ":" + dateNow.getMinutes();
+    var time = dateNow.getHours() + ':' + dateNow.getMinutes()
 
-    var doc = new jsPDF();
+    var doc = new jsPDF()
 
-    doc.setFontSize(40);
-    doc.setTextColor(44, 109, 221);
-    var logo = new Image();
+    doc.setFontSize(40)
+    doc.setTextColor(44, 109, 221)
+    var logo = new Image()
 
-    logo.src = logoInvoice;
-    doc.addImage(logo, "PNG", 5, 7);
+    logo.src = logoInvoice
+    doc.addImage(logo, 'PNG', 5, 7)
 
-    doc.setTextColor(0, 0, 0);
+    doc.setTextColor(0, 0, 0)
 
-    doc.setFontSize(15);
-    doc.text(139, 10, `Invoice No:`);
-    doc.text(170, 10, `${invoiceNo}`);
+    doc.setFontSize(15)
+    doc.text(139, 10, `Invoice No:`)
+    doc.text(170, 10, `${invoiceNo}`)
 
-    doc.setFontSize(12);
-    doc.text(155, 20, "Date:");
-    doc.text(184, 20, `${now.toISOString().substr(0, 10)}`);
+    doc.setFontSize(12)
+    doc.text(155, 20, 'Date:')
+    doc.text(184, 20, `${now.toISOString().substr(0, 10)}`)
 
-    doc.text(155, 30, "Time:");
-    doc.text(195, 30, `${time}`);
+    doc.text(155, 30, 'Time:')
+    doc.text(195, 30, `${time}`)
 
-    doc.setFontSize(18);
-    doc.text(5, 55, "Bill to:");
-    doc.setFontSize(12);
-    doc.line(5, 65, 50, 65);
-    doc.text(5, 75, "Request No:");
-    doc.text(5, 85, `${item.RRrequestNo || item.LRrequestNo}`);
+    doc.setFontSize(18)
+    doc.text(5, 55, 'Bill to:')
+    doc.setFontSize(12)
+    doc.line(5, 65, 50, 65)
+    doc.text(5, 75, 'Request No:')
+    doc.text(5, 85, `${item.RRrequestNo || item.LRrequestNo}`)
 
-    doc.text(178, 50, "Invoice Total");
-    doc.setFontSize(23);
-    doc.setTextColor(44, 109, 221);
-    doc.text(167, 60, `${item.serviceId.price} JD`);
+    doc.text(178, 50, 'Invoice Total')
+    doc.setFontSize(23)
+    doc.setTextColor(44, 109, 221)
+    doc.text(167, 60, `${item.serviceId.price} JD`)
 
-    doc.setTextColor(0, 0, 0);
-    doc.setFontSize(12);
-    doc.text(5, 100, `Service Name: ${item.serviceName}`);
-    doc.text(5, 110, `Service Type: ${item.serviceType}`);
-    doc.text(5, 120, `Comments: ${item.comments}`);
+    doc.setTextColor(0, 0, 0)
+    doc.setFontSize(12)
+    doc.text(5, 100, `Service Name: ${item.serviceName}`)
+    doc.text(5, 110, `Service Type: ${item.serviceType}`)
+    doc.text(5, 120, `Comments: ${item.comments}`)
 
-    doc.text(5, 252, "Signature & Stamp");
-    doc.line(5, 257, 50, 257);
+    doc.text(5, 252, 'Signature & Stamp')
+    doc.line(5, 257, 50, 257)
 
-    doc.setTextColor(150, 150, 130);
-    doc.text(162, 215, `Sub Total:`);
-    doc.text(183, 215, `${item.serviceId.price} JD`);
-    doc.text(163, 225, "Tax Rate:");
-    doc.text(174, 235, "Tax:");
-    doc.text(165, 245, "Discount:");
-    doc.text(184, 245, " 999 JD");
-    doc.setTextColor(0, 0, 0);
-    doc.text(156, 255, "Total Amount:");
-    doc.text(185, 255, `${item.serviceId.price} JD`);
+    doc.setTextColor(150, 150, 130)
+    doc.text(162, 215, `Sub Total:`)
+    doc.text(183, 215, `${item.serviceId.price} JD`)
+    doc.text(163, 225, 'Tax Rate:')
+    doc.text(174, 235, 'Tax:')
+    doc.text(165, 245, 'Discount:')
+    doc.text(184, 245, ' 999 JD')
+    doc.setTextColor(0, 0, 0)
+    doc.text(156, 255, 'Total Amount:')
+    doc.text(185, 255, `${item.serviceId.price} JD`)
 
-    doc.line(0, 272, 1000, 272);
+    doc.line(0, 272, 1000, 272)
 
-    doc.text(5, 285, "Prepared by:");
-    doc.addImage(`http://localhost:4000${qr}`, "PNG", 175, 275, 20, 20);
+    doc.text(5, 285, 'Prepared by:')
+    doc.addImage(`http://localhost:4000${qr}`, 'PNG', 175, 275, 20, 20)
 
-    doc.save("Invoice.pdf");
-  };
+    doc.save('Invoice.pdf')
+  }
 
   return (
     <div
       style={{
-        backgroundColor: "#60d69f",
-        position: "fixed",
-        display: "flex",
-        width: "100%",
-        height: "100%",
-        flexDirection: "column",
+        backgroundColor: 'rgb(19 213 159)',
+        position: 'fixed',
+        display: 'flex',
+        width: '100%',
+        height: '100%',
+        flexDirection: 'column',
         flex: 1,
-        overflowY: "scroll",
+        overflowY: 'scroll',
       }}
     >
       <Header />
-      <div className="cPadding">
-        <div className="subheader">
+      <div className='cPadding'>
+        <div className='subheader'>
           <div>
             <img src={claimsReview} />
-            <div style={{ flex: 4, display: "flex", alignItems: "center" }}>
+            <div style={{ flex: 4, display: 'flex', alignItems: 'center' }}>
               <h4>
-                {comingFor === "add" ? " Claim Review" : " Edit Claim Review"}
+                {comingFor === 'add' ? ' Claim Review' : ' Edit Claim Review'}
               </h4>
             </div>
           </div>
         </div>
 
-        <div style={{ width: "auto", height: "20px" }} />
+        <div style={{ width: 'auto', height: '20px' }} />
         <div className={classesForTabs.root}>
           <Tabs
             value={value}
             onChange={handleChange}
-            textColor="primary"
-            TabIndicatorProps={{ style: { background: "#12387a" } }}
+            textColor='primary'
+            TabIndicatorProps={{ style: { background: '#12387a' } }}
             centered
           >
             <Tab
               style={{
-                color: "white",
+                color: 'white',
                 borderRadius: 10,
-                outline: "none",
-                color: value === 0 ? "#12387a" : "#3B988C",
+                outline: 'none',
+                color: value === 0 ? '#12387a' : '#3B988C',
               }}
-              label="Treatment Details"
+              label='Treatment Details'
             />
             <Tab
               style={{
-                color: "white",
+                color: 'white',
                 borderRadius: 10,
-                outline: "none",
-                color: value === 1 ? "#12387a" : "#3B988C",
+                outline: 'none',
+                color: value === 1 ? '#12387a' : '#3B988C',
               }}
               label="Bill Summary"
               disabled={!searched}
@@ -839,30 +834,30 @@ function AddEditPatientListing(props) {
         {value === 0 ? (
           <div>
             <div
-              style={{ marginTop: "20px", marginBottom: "10px" }}
+              style={{ marginTop: '20px', marginBottom: '10px' }}
               className={`container-fluid ${classes.root}`}
             >
-              {comingFor === "add" ? (
+              {comingFor === 'add' ? (
                 <div>
-                  <div className="row">
+                  <div className='row'>
                     <div
-                      className="col-md-10 col-sm-8 col-8"
+                      className='col-md-10 col-sm-8 col-8'
                       style={{
                         ...styles.inputContainerForTextField,
                       }}
                     >
                       <TextField
                         required
-                        label="Search Patient by Name / MRN / National ID / Mobile Number"
-                        name={"searchQuery"}
+                        label='Search Patient by Name / MRN / National ID / Mobile Number'
+                        name={'searchQuery'}
                         value={searchQuery}
-                        style={{ borderRadius: "5px" }}
+                        style={{ borderRadius: '5px' }}
                         onChange={handleSearch}
-                        className="textInputStyle"
-                        variant="filled"
+                        className='textInputStyle'
+                        variant='filled'
                         InputProps={{
                           endAdornment: (
-                            <InputAdornment position="end">
+                            <InputAdornment position='end'>
                               <AccountCircle />
                             </InputAdornment>
                           ),
@@ -874,18 +869,18 @@ function AddEditPatientListing(props) {
                     </div>
 
                     <div
-                      className="col-md-1 col-sm-2 col-2"
+                      className='col-md-1 col-sm-2 col-2'
                       style={{
                         ...styles.inputContainerForTextField,
                       }}
                     >
                       <div
                         style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
                           height: 55,
-                          backgroundColor: "white",
+                          backgroundColor: 'white',
                           borderRadius: 5,
                           width: 84,
                         }}
@@ -894,14 +889,14 @@ function AddEditPatientListing(props) {
                       </div>
                     </div>
 
-                    <div className="col-md-1 col-sm-2 col-2">
+                    <div className='col-md-1 col-sm-2 col-2'>
                       <div
                         style={{
                           ...styles.inputContainerForTextField,
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          backgroundColor: "white",
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          backgroundColor: 'white',
                           borderRadius: 5,
                           height: 55,
                         }}
@@ -914,14 +909,14 @@ function AddEditPatientListing(props) {
                     </div>
                   </div>
 
-                  <div className="row" style={{ marginTop: 10 }}>
-                    <div className="col-md-10 col-sm-8 col-8">
+                  <div className='row' style={{ marginTop: 10 }}>
+                    <div className='col-md-10 col-sm-8 col-8'>
                       {searchQuery ? (
                         <div style={{ zIndex: 3 }}>
-                          <Paper style={{ maxHeight: 300, overflow: "auto" }}>
+                          <Paper style={{ maxHeight: 300, overflow: 'auto' }}>
                             {itemFoundSuccessfull ? (
                               itemFound && (
-                                <Table size="small">
+                                <Table size='small'>
                                   <TableHead>
                                     <TableRow>
                                       <TableCell>MRN</TableCell>
@@ -938,7 +933,7 @@ function AddEditPatientListing(props) {
                                         <TableRow
                                           key={i._id}
                                           onClick={() => handleAddItem(i)}
-                                          style={{ cursor: "pointer" }}
+                                          style={{ cursor: 'pointer' }}
                                         >
                                           <TableCell>{i.profileNo}</TableCell>
                                           <TableCell>
@@ -950,7 +945,7 @@ function AddEditPatientListing(props) {
                                             {i.paymentMethod}
                                           </TableCell>
                                         </TableRow>
-                                      );
+                                      )
                                     })}
                                   </TableBody>
                                 </Table>
@@ -976,11 +971,11 @@ function AddEditPatientListing(props) {
                 )}
             </div>
 
-            <div className="container-fluid">
+            <div className='container-fluid'>
               <h5
                 style={{
-                  fontWeight: "bold",
-                  color: "white",
+                  fontWeight: 'bold',
+                  color: 'white',
                   marginTop: 25,
                   paddingLeft: 0,
                   paddingRight: 0,
@@ -992,17 +987,17 @@ function AddEditPatientListing(props) {
                 // className="row"
                 style={{
                   marginTop: 25,
-                  backgroundColor: "white",
+                  backgroundColor: 'white',
                   borderRadius: 5,
-                  width: "100%",
+                  width: '100%',
                 }}
               >
                 <div
-                  className="row"
+                  className='row'
                   style={{
-                    backgroundColor: "#2C6DDD",
+                    backgroundColor: '#2C6DDD',
                     paddingLeft: 10,
-                    height: "30%",
+                    height: '30%',
                     borderTopLeftRadius: 5,
                     borderTopRightRadius: 5,
                     paddingBottom: 10,
@@ -1012,58 +1007,58 @@ function AddEditPatientListing(props) {
                   }}
                 >
                   <div
-                    className={"col-md-3 col-sm-3 col-3"}
+                    className={'col-md-3 col-sm-3 col-3'}
                     style={styles.headerHeading}
                   >
-                    <h6 style={{ color: "white", fontWeight: "700" }}>
+                    <h6 style={{ color: 'white', fontWeight: '700' }}>
                       Patient Info
                     </h6>
                   </div>
                   <div
-                    className={"col-md-3 col-sm-3 col-3"}
+                    className={'col-md-3 col-sm-3 col-3'}
                     style={styles.headerHeading}
                   >
-                    <h6 style={{ color: "white", fontWeight: "700" }}>
+                    <h6 style={{ color: 'white', fontWeight: '700' }}>
                       Allergy
                     </h6>
                   </div>
                   <div
-                    className={"col-md-3 col-sm-3 col-3"}
+                    className={'col-md-3 col-sm-3 col-3'}
                     style={styles.headerHeading}
                   >
-                    <h6 style={{ color: "white", fontWeight: "700" }}>
+                    <h6 style={{ color: 'white', fontWeight: '700' }}>
                       Medication
                     </h6>
                   </div>
                   <div
-                    className={"col-md-3 col-sm-3 col-3"}
+                    className={'col-md-3 col-sm-3 col-3'}
                     style={styles.headerHeading}
                   >
-                    <h6 style={{ color: "white", fontWeight: "700" }}>
+                    <h6 style={{ color: 'white', fontWeight: '700' }}>
                       Diagnosis
                     </h6>
                   </div>
                 </div>
 
                 <div
-                  className="row"
+                  className='row'
                   style={{
                     marginTop: 10,
                     paddingLeft: 10,
-                    height: "80%",
+                    height: '80%',
                     paddingBottom: 10,
                   }}
                 >
                   <div
-                    className={"col-md-3 col-sm-3 col-3"}
-                    style={{ display: "flex", flexDirection: "column" }}
+                    className={'col-md-3 col-sm-3 col-3'}
+                    style={{ display: 'flex', flexDirection: 'column' }}
                   >
                     <span style={styles.headingStyles}>MRN</span>
                     <span style={styles.textStyles}>{profileNo}</span>
 
                     <span style={styles.headingStyles}>Patient</span>
                     <span style={styles.textStyles}>
-                      {firstName + ` ` + lastName}{" "}
+                      {firstName + ` ` + lastName}{' '}
                     </span>
 
                     <span style={styles.headingStyles}>Gender</span>
@@ -1077,14 +1072,14 @@ function AddEditPatientListing(props) {
                   </div>
 
                   <div
-                    className={"col-md-3 col-sm-3 col-3"}
+                    className={'col-md-3 col-sm-3 col-3'}
                     style={styles.textStyles}
                   >
-                    {""}
+                    {''}
                   </div>
 
                   <div
-                    className={"col-md-3 col-sm-3 col-3"}
+                    className={'col-md-3 col-sm-3 col-3'}
                     style={styles.textStyles}
                   >
                     {medicationArray
@@ -1099,7 +1094,7 @@ function AddEditPatientListing(props) {
                   </div>
 
                   <div
-                    className={"col-md-3 col-sm-3 col-3"}
+                    className={'col-md-3 col-sm-3 col-3'}
                     style={styles.textStyles}
                   >
                     {diagnosisArray
@@ -1118,13 +1113,13 @@ function AddEditPatientListing(props) {
 
             <div
               style={{
-                height: "10px",
+                height: '10px',
               }}
             />
 
             <div className={`container-fluid ${classes.root}`}>
               <div
-                className="row"
+                className='row'
                 style={{
                   ...styles.patientDetails,
                   marginRight: 0,
@@ -1134,14 +1129,14 @@ function AddEditPatientListing(props) {
                 <TextField
                   required
                   multiline
-                  type="text"
-                  label="Treatment Details"
-                  name={"treatmentDetail"}
+                  type='text'
+                  label='Treatment Details'
+                  name={'treatmentDetail'}
                   value={treatmentDetail}
                   onChange={onChangeValue}
                   rows={4}
-                  className="textInputStyle"
-                  variant="filled"
+                  className='textInputStyle'
+                  variant='filled'
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
@@ -1151,24 +1146,24 @@ function AddEditPatientListing(props) {
               </div>
             </div>
 
-            {comingFor === "edit" ? (
+            {comingFor === 'edit' ? (
               <div
                 className={`container-fluid ${classes.root}`}
-                style={{ marginTop: "10px" }}
+                style={{ marginTop: '10px' }}
               >
-                <div className="row" style={{ marginLeft: 0, marginRight: 0 }}>
+                <div className='row' style={{ marginLeft: 0, marginRight: 0 }}>
                   <TextField
                     required
                     select
                     fullWidth
-                    id="status"
-                    name="status"
+                    id='status'
+                    name='status'
                     value={status}
-                    error={status === "" && isFormSubmitted}
+                    error={status === '' && isFormSubmitted}
                     onChange={onChangeValue}
-                    label="Status"
-                    variant="filled"
-                    style={{ borderRadius: "5px" }}
+                    label='Status'
+                    variant='filled'
+                    style={{ borderRadius: '5px' }}
                     // className="dropDownStyle"
                     InputProps={{
                       className: classes.input,
@@ -1183,7 +1178,7 @@ function AddEditPatientListing(props) {
                         <MenuItem key={val.key} value={val.key}>
                           {val.value}
                         </MenuItem>
-                      );
+                      )
                     })}
                   </TextField>
                 </div>
@@ -1194,24 +1189,24 @@ function AddEditPatientListing(props) {
 
             <div
               style={{
-                display: "flex",
+                display: 'flex',
                 flex: 1,
-                justifyContent: "center",
-                marginTop: "2%",
-                marginBottom: "2%",
+                justifyContent: 'center',
+                marginTop: '2%',
+                marginBottom: '2%',
               }}
-              className="container-fluid"
+              className='container-fluid'
             >
               <img
                 onClick={() => props.history.goBack()}
                 src={Back_Arrow}
-                style={{ width: 45, height: 35, cursor: "pointer" }}
+                style={{ width: 45, height: 35, cursor: 'pointer' }}
               />
               <div
                 style={{
-                  display: "flex",
+                  display: 'flex',
                   flex: 1,
-                  justifyContent: "flex-end",
+                  justifyContent: 'flex-end',
                 }}
               >
                 {/* {comingFor === "add" ? ( */}
@@ -1240,10 +1235,10 @@ function AddEditPatientListing(props) {
           </div>
         ) : value === 1 ? (
           <div
-            style={{ flex: 4, display: "flex", flexDirection: "column" }}
-            className="container-fluid"
+            style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+            className='container-fluid'
           >
-            <div className="row" style={{ marginTop: "20px" }}>
+            <div className='row' style={{ marginTop: '20px' }}>
               {billSummaryArray !== 0 ? (
                 <CustomTable
                   tableData={billSummaryArray}
@@ -1251,7 +1246,7 @@ function AddEditPatientListing(props) {
                   tableHeading={tableHeadingForBillSummary}
                   action={actions}
                   printItem={handleInvoicePrint}
-                  borderBottomColor={"#60d69f"}
+                  borderBottomColor={'#60d69f'}
                   borderBottomWidth={20}
                 />
               ) : (
@@ -1260,25 +1255,25 @@ function AddEditPatientListing(props) {
             </div>
 
             <div
-              class="row"
+              class='row'
               style={{
-                display: "flex",
+                display: 'flex',
                 flex: 1,
-                justifyContent: "center",
-                marginTop: "2%",
-                marginBottom: "2%",
+                justifyContent: 'center',
+                marginTop: '2%',
+                marginBottom: '2%',
               }}
             >
               <img
                 onClick={() => props.history.goBack()}
                 src={Back_Arrow}
-                style={{ width: 45, height: 35, cursor: "pointer" }}
+                style={{ width: 45, height: 35, cursor: 'pointer' }}
               />
               <div
                 style={{
-                  display: "flex",
+                  display: 'flex',
                   flex: 1,
-                  justifyContent: "flex-end",
+                  justifyContent: 'flex-end',
                 }}
               >
                 {/* {comingFor === "add" ? ( */}
@@ -1543,8 +1538,8 @@ function AddEditPatientListing(props) {
                     style={styles.stylesForButton}
                     disabled={!searched}
                     onClick={handleAdd}
-                    variant="contained"
-                    color="default"
+                    variant='contained'
+                    color='default'
                   >
                     Submit
                   </Button>
@@ -1575,4 +1570,4 @@ function AddEditPatientListing(props) {
     </div >
   );
 }
-export default AddEditPatientListing;
+export default AddEditPatientListing

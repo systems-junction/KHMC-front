@@ -485,7 +485,7 @@ function AddEditPurchaseRequest(props) {
               props.history.replace({
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
-                  message: `Non Medical Order ${res.data.data.requestNo} has been generated successfully`,
+                  message: `Non Medical Order: ${res.data.data.requestNo} has been generated successfully`,
                 },
               });
             } else if (!res.data.success) {

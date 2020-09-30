@@ -486,7 +486,7 @@ function AddEditPurchaseRequest(props) {
             props.history.replace({
               pathname: "/home/wms/fus/medicinalorder/success",
               state: {
-                message: `Internal Return Request ${res.data.data.returnRequestNo} has been generated successfully`,
+                message: `Internal Return Request: ${res.data.data.returnRequestNo} has been generated successfully`,
               },
             });
           } else if (!res.data.success) {
@@ -572,7 +572,7 @@ function AddEditPurchaseRequest(props) {
             props.history.replace({
               pathname: "/home/wms/fus/medicinalorder/success",
               state: {
-                message: `Internal Return Request ${res.data.data.returnRequestNo} has been updated successfully`,
+                message: `Internal Return Request: ${res.data.data.returnRequestNo} has been updated successfully`,
               },
             });
           } else if (!res.data.success) {
@@ -640,7 +640,7 @@ function AddEditPurchaseRequest(props) {
             props.history.replace({
               pathname: "/home/wms/fus/medicinalorder/success",
               state: {
-                message: `Internal Return Request ${res.data.data.returnRequestNo} has been updated successfully`,
+                message: `Internal Return Request: ${res.data.data.returnRequestNo} has been updated successfully`,
               },
             });
           } else if (!res.data.success) {

@@ -176,6 +176,12 @@ function ReceiveItems(props) {
         return;
       }
     }
+
+    if (e.target.type === "number") {
+      if (e.target.value < 0) {
+        return;
+      }
+    }
     dispatch({ field: e.target.name, value: e.target.value });
   };
 
@@ -238,6 +244,7 @@ function ReceiveItems(props) {
   function validateForm() {
     return (
       receivedQty.length > 0 &&
+      receivedQty !== "0" &&
       bonusQty.length > 0 &&
       // batchNumber.length > 0 &&
       // lotNo.length > 0 &&
@@ -259,6 +266,8 @@ function ReceiveItems(props) {
       statusForReceivingItem.length > 0
     );
   }
+
+console.log("selected item",props.selectedItem)
 
   const handleAdd = () => {
     setIsFormSubmitted(true);
@@ -311,7 +320,7 @@ function ReceiveItems(props) {
               props.history.replace({
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
-                  message: `${selectedItem.itemId.name} has been received successfully with requested quantity ${selectedItem.reqQty}`,
+                  message: `Purchase Order:${props.selectedItem.requestNo} with item ${selectedItem.itemId.name} has been received successfully`,
                 },
               });
             }
@@ -1291,7 +1300,7 @@ function ReceiveItems(props) {
               }}
             >
               <Button
-                style={{ minWidth: "20%", marginRight: 30, height:50 }}
+                style={{ minWidth: "20%", marginRight: 30, height: 50 }}
                 disabled={true}
                 // onClick={handleAdd}
                 variant="contained"
@@ -1300,7 +1309,7 @@ function ReceiveItems(props) {
               </Button>
 
               <Button
-                style={{ minWidth: "10%", height:50 }}
+                style={{ minWidth: "10%", height: 50 }}
                 disabled={!validateForm()}
                 onClick={
                   receivedQty <= selectedItem.reqQty
