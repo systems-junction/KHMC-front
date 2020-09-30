@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { getPatientUrl } from '../../public/endpoins'
+import { getPatientUrl, searchPatientsURL } from '../../public/endpoins'
 import Notification from '../../components/Snackbar/Notification.js'
 import CustomTable from '../../components/Table/Table'
 import ButtonField from '../../components/common/Button'
@@ -9,8 +9,43 @@ import Loader from 'react-loader-spinner'
 import Header from '../../components/Header/Header'
 import patientRegister from '../../assets/img/PatientRegistration.png'
 import Back_Arrow from '../../assets/img/Back_Arrow.png'
+import Fingerprint from '../../assets/img/fingerprint.png'
+import AccountCircle from '@material-ui/icons/SearchOutlined'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import BarCode from '../../assets/img/Bar Code.png'
 import '../../assets/jss/material-dashboard-react/components/loaderStyle.css'
 import ViewPatient from './viewPatient'
+import TextField from '@material-ui/core/TextField'
+import cookie from 'react-cookies'
+
+
+
+const styles = {
+  textFieldPadding: {
+    paddingLeft: 0,
+    paddingRight: 5,
+  },
+
+
+}
+
+const useStylesForInput = makeStyles((theme) => ({
+  input: {
+    backgroundColor: 'white',
+    borderRadius: 5,
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:disabled': {
+      color: 'gray',
+    },
+  },
+
+
+}))
 
 const tableHeading = [
   'MRN',
@@ -33,11 +68,18 @@ const tableDataKeys = [
 const actions = { view: true }
 
 export default function PatientListing(props) {
+  const classes = useStylesForInput()
+
+
   const [patient, setPatient] = useState('')
   const [itemModalVisible, setitemModalVisible] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
   const [openNotification, setOpenNotification] = useState(false)
   const [item, setItem] = useState('')
+  const [searchPatientQuery, setSearchPatientQuery] = useState('')
+  const [currentUser] = useState(cookie.load('current_user'))
+  const [patientFoundSuccessfull, setpatientFoundSuccessfully] = useState(false)
+  const [patientFound, setpatientFound] = useState('')
 
   useEffect(() => {
     getPatientData()
@@ -101,6 +143,42 @@ export default function PatientListing(props) {
     }
   }
 
+  const handlePatientSearch = (e) => {
+    const a = e.target.value.replace(/[^\w\s]/gi, '')
+    setSearchPatientQuery(a)
+    if (a.length >= 3) {
+      axios
+        .get(
+          searchPatientsURL + '/' + a
+        )
+        .then((res) => {
+          if (res.data.success) {
+            if (res.data.data.length > 0) {
+              console.log(res.data.data)
+              setpatientFoundSuccessfully(true)
+              setpatientFound(res.data.data)
+              setPatient(res.data.data)
+            } else {
+              setpatientFoundSuccessfully(false)
+              setpatientFound('')
+              setPatient('')
+            }
+          }
+        })
+        .catch((e) => {
+          console.log('error after searching patient request', e)
+        })
+    }
+
+    else{
+      console.log("less");
+      console.log(patient);
+      getPatientData();
+    }
+  }
+
+
+
   return (
     <div
       style={{
@@ -127,6 +205,76 @@ export default function PatientListing(props) {
             {/* <SearchField /> */}
           </div>
         </div>
+
+        <div className='row' style={{marginLeft: '0px', marginRight: '0px', marginTop: '20px'}}>
+            <div
+              className='col-md-10 col-sm-9 col-8'
+              style={styles.textFieldPadding}
+            >
+              <TextField
+                className='textInputStyle'
+                id='searchPatientQuery'
+                type='text'
+                variant='filled'
+                label='Search Patient by Name / MRN / National ID / Mobile Number'
+                name={'searchPatientQuery'}
+                value={searchPatientQuery}
+                onChange={handlePatientSearch} 
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <AccountCircle />
+                    </InputAdornment>
+                  ),
+                  className: classes.input,
+                  classes: { input: classes.input },
+                  disableUnderline: true,
+                }}
+              />
+            </div>
+
+            <div
+              className='col-md-1 col-sm-2 col-2'
+              style={{
+                ...styles.textFieldPadding,
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: 'white',
+                  borderRadius: 5,
+                  height: 55,
+                }}
+              >
+                <img src={BarCode} style={{ width: 70, height: 60 }} />
+              </div>
+            </div>
+
+            <div
+              className='col-md-1 col-sm-1 col-2'
+              style={{
+                ...styles.textFieldPadding,
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: 'white',
+                  borderRadius: 5,
+                  height: 55,
+                }}
+              >
+                <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
+              </div>
+            </div>
+          </div>
+
+
 
         <div
           style={{
