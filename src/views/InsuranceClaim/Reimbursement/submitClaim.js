@@ -275,6 +275,7 @@ function AddEditPatientListing(props) {
 
     if (props.history.location.state.comingFor === 'edit') {
       getPatientByInfo(selectedRec.patient._id)
+      setsearched(true)
     }
 
     if (selectedRec) {

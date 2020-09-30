@@ -253,11 +253,7 @@ class Header extends React.Component {
               // color="primary"
               aria-label='add'
               onClick={() => this.logoutUser()}
-<<<<<<< HEAD
-              style={{ backgroundColor: "#ba02ed", outline: "none" }}
-=======
               style={{ backgroundColor: '#ba02ed' }}
->>>>>>> 4dac81a2ba5b1eaad2d48261117305b86e8677ba
             >
               {/* <AddIcon /> */}
               <i
