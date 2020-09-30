@@ -24,7 +24,7 @@ import validateNumber from "../../public/numberValidator";
 import validateNumbers from "../../public/numbersValidator";
 import validateNationalId from "../../public/numbersValidator";
 import validateAmount from "../../public/amountValidator";
-import validateInsuranceNo from "../../public/numbersValidator";
+import validateInsuranceNo from "../../public/insuranceValidator";
 import validateFloat from "../../public/FloatValidator";
 import validateInput from "../../public/FloatValidator";
 import validateNumberFloat from "../../public/numberFloatValidator";
@@ -46,6 +46,7 @@ import {
   generateEDR,
   generateIPR,
   getSearchedpatient,
+  getVendorApproval,
   searchPatientsURL,
 } from "../../public/endpoins";
 import axios from "axios";
@@ -468,6 +469,8 @@ function AddEditPatientListing(props) {
   const [emergencyForm, setEmergencyForm] = useState(false);
   const [paymentForm, setPaymentForm] = useState(false);
   const [insuranceForm, setinsuranceForm] = useState(false);
+  const [insuranceBoolean, setInsuranceBoolean] = useState(true);
+  const [covTer, setCovTer] = useState("");
 
   useEffect(() => {
     setcomingFor(
@@ -725,6 +728,28 @@ function AddEditPatientListing(props) {
     }
 
     // setIsFormSubmitted(true)
+  };
+
+  const vendorVerify = () => {
+    console.log("insuranceNo", insuranceNo);
+    axios
+      .get(`${getVendorApproval}/${insuranceNo}`)
+      .then((e) => {
+        setInsuranceBoolean(false);
+        dispatch({
+          field: "coverageTerms",
+          value: e.data.data.coverageDetail,
+        });
+
+        setCovTer(e.data.data.coverageDetail);
+        dispatch({ field: "insuranceVendor", value: e.data.data.vendor });
+
+        console.log(e);
+      })
+      .catch((error) => {
+        setOpenNotification(true);
+        setErrorMsg("Invalid insurance number/insurance number not verified");
+      });
   };
 
   const handleEdit = () => {
@@ -3001,7 +3026,7 @@ function AddEditPatientListing(props) {
                   <TextField
                     required
                     label="Insurance Number"
-                    type="number"
+                    type="text"
                     name={"insuranceNo"}
                     value={insuranceNo}
                     onChange={onChangeValue}
@@ -3080,6 +3105,7 @@ function AddEditPatientListing(props) {
                       backgroundColor: "#ba55d3",
                       marginRight: "-10px",
                     }}
+                    onClick={vendorVerify}
                     variant="contained"
                     color="primary"
                   >
@@ -3102,7 +3128,7 @@ function AddEditPatientListing(props) {
                       label="Insurance Vendor"
                       name={"insuranceVendor"}
                       value={insuranceVendor}
-                      disabled={Insuranceform}
+                      disabled={insuranceBoolean}
                       onChange={onChangeValue}
                       error={insuranceVendor === "" && insuranceForm}
                       className="textInputStyle"
@@ -3130,13 +3156,12 @@ function AddEditPatientListing(props) {
                   }}
                 >
                   <TextField
-                    // required
                     select
                     fullWidth
-                    disabled={Insuranceform}
+                    disabled={insuranceBoolean}
                     id="coverageTerms"
                     name="coverageTerms"
-                    value={coverageTerms}
+                    value={coverageTerms || covTer}
                     onChange={onChangeValue}
                     // error={coverageTerms === '' && insuranceForm}
                     label="Coverage Terms"

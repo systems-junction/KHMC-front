@@ -30,7 +30,8 @@ import validateWeight from "../../../public/numberFloatValidator";
 import validateHeight from "../../../public/numberFloatValidator";
 import validateEmergencyName from "../../../public/inputValidator";
 import validateAmount from "../../../public/amountValidator";
-import validateInsuranceNo from "../../../public/numbersValidator";
+import validateInsuranceNo from "../../../public/insuranceValidator";
+
 import validateInsuranceVendor from "../../../public/inputValidator";
 import MuiPhoneNumber from "material-ui-phone-number";
 import validatePhone from "../../../public/validatePhone";
@@ -46,6 +47,7 @@ import {
   generateOPR,
   generateIPR,
   searchPatientsURL,
+  getVendorApproval,
 } from "../../../public/endpoins";
 import axios from "axios";
 import Notification from "../../../components/Snackbar/Notification.js";
@@ -461,6 +463,8 @@ function AddEditPatientListing(props) {
   const [emergencyForm, setEmergencyForm] = useState(false);
   const [paymentForm, setPaymentForm] = useState(false);
   const [insuranceForm, setinsuranceForm] = useState(false);
+  const [insuranceBoolean, setInsuranceBoolean] = useState(true);
+  const [covTer, setCovTer] = useState("");
 
   useEffect(() => {
     setcomingFor(props.history.location.state.comingFor);
@@ -899,11 +903,11 @@ function AddEditPatientListing(props) {
     const params = {
       patientId,
       // generatedBy: currentUser.staffId,
-      generatedFrom: "radiologyRequest",
+      generatedFrom: "labRequest",
       status: "pending",
       functionalUnit: currentUser.functionalUnit._id,
     };
-    // console.log(params)
+    console.log(params);
     axios
       .post(generateIPR, params, {})
       .then((res) => {
@@ -998,14 +1002,16 @@ function AddEditPatientListing(props) {
     }
     dispatch({ field: "bankName", value: i.bankName });
     dispatch({ field: "depositorName", value: i.depositorName });
-
-    dispatch({ field: "coverageDetails", value: i.coverageDetails });
+    dispatch({
+      field: "coverageDetails",
+      value: i.coverageDetails,
+    });
+    dispatch({ field: "insuranceVendor", value: i.insuranceVendor });
     dispatch({ field: "coverageTerms", value: i.coverageTerms });
     dispatch({ field: "payment", value: i.payment });
     dispatch({ field: "depositSlip", value: i.depositSlip });
     dispatch({ field: "DateTime", value: i.DateTime });
     dispatch({ field: "paymentMethod", value: i.paymentMethod });
-    dispatch({ field: "insuranceVendor", value: i.insuranceVendor });
     dispatch({ field: "emergencyName", value: i.emergencyName });
     dispatch({ field: "emergencyContactNo", value: i.emergencyContactNo });
     dispatch({ field: "emergencyRelation", value: i.emergencyRelation });
@@ -1038,6 +1044,29 @@ function AddEditPatientListing(props) {
     });
   };
 
+  const vendorVerify = () => {
+    console.log("insuranceNo", insuranceNo);
+    axios
+      .get(`${getVendorApproval}/${insuranceNo}`)
+      .then((e) => {
+        setInsuranceBoolean(false);
+        dispatch({
+          field: "coverageTerms",
+          value: e.data.data.coverageDetail,
+        });
+
+        setCovTer(e.data.data.coverageDetail);
+        dispatch({ field: "insuranceVendor", value: e.data.data.vendor });
+
+        console.log(e);
+      })
+      .catch((error) => {
+        setOpenNotification(true);
+        setErrorMsg("Invalid insurance number/insurance number not verified");
+      });
+  };
+
+  console.log("coverageTerms", coverageTerms);
   const onChangeValue = (e) => {
     var pattern = /^[a-zA-Z' ]*$/;
     if (
@@ -2942,11 +2971,11 @@ function AddEditPatientListing(props) {
                   <TextField
                     required
                     label="Insurance Number"
-                    type="number"
+                    type="text"
                     name={"insuranceNo"}
                     value={insuranceNo}
                     onChange={onChangeValue}
-                    error={insuranceNo === "" && insuranceForm}
+                    error={insuranceNo === "" && Insuranceform}
                     className="textInputStyle"
                     variant="filled"
                     disabled={Insuranceform}
@@ -3020,6 +3049,7 @@ function AddEditPatientListing(props) {
                       width: 98,
                       backgroundColor: "#ba55d3",
                     }}
+                    onClick={vendorVerify}
                     variant="contained"
                     color="primary"
                   >
@@ -3042,7 +3072,7 @@ function AddEditPatientListing(props) {
                       label="Insurance Vendor"
                       name={"insuranceVendor"}
                       value={insuranceVendor}
-                      disabled={Insuranceform}
+                      disabled={insuranceBoolean}
                       onChange={onChangeValue}
                       error={insuranceVendor === "" && insuranceForm}
                       className="textInputStyle"
@@ -3072,10 +3102,10 @@ function AddEditPatientListing(props) {
                   <TextField
                     select
                     fullWidth
-                    disabled={Insuranceform}
+                    disabled={insuranceBoolean}
                     id="coverageTerms"
                     name="coverageTerms"
-                    value={coverageTerms}
+                    value={coverageTerms || covTer}
                     onChange={onChangeValue}
                     // error={coverageTerms === '' && insuranceForm}
                     label="Coverage Terms"
