@@ -579,7 +579,7 @@ function AddEditPurchaseRequest(props) {
               props.history.replace({
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
-                  message: `Order ${requestNo} with item code ${itemCode} is set to ${selectedStatus}`,
+                  message: `Order: ${requestNo} with item code ${itemCode} is set to ${selectedStatus}`,
                 },
               });
             } else if (!res.data.success) {

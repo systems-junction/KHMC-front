@@ -500,7 +500,7 @@ function AddEditPurchaseRequest(props) {
                 props.history.replace({
                   pathname: "/home/wms/fus/medicinalorder/success",
                   state: {
-                    message: `Purchase Request ${res.data.data.requestNo} has been added successfully`,
+                    message: `Purchase Request: ${res.data.data.requestNo} has been added successfully`,
                   },
                 });
                 socket.emit("purchaseRequest");
@@ -603,7 +603,7 @@ function AddEditPurchaseRequest(props) {
                 props.history.replace({
                   pathname: "/home/wms/fus/medicinalorder/success",
                   state: {
-                    message: `Purchase Request ${requestNo} has been updated successfully`,
+                    message: `Purchase Request: ${requestNo} has been updated successfully`,
                   },
                 });
               } else if (!res.data.success) {
@@ -718,7 +718,7 @@ function AddEditPurchaseRequest(props) {
               props.history.replace({
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
-                  message: `Purchase Request ${requestNo} status has been set to ${committeeStatus}`,
+                  message: `Purchase Request: ${requestNo} status has been set to ${committeeStatus}`,
                 },
               });
             } else if (!res.data.success) {

@@ -275,7 +275,6 @@ function AddEditPurchaseRequest(props) {
                   props.pharmacyRequest.map((d, index) => {
                     return (
                       <h6 style={styles.textStyles}>
-                        {" "}
                         {index + 1}
                         {"."} &nbsp; {d}
                       </h6>
@@ -287,11 +286,23 @@ function AddEditPurchaseRequest(props) {
                 {props.diagnosisArray &&
                   props.diagnosisArray.map((d, index) => {
                     return (
-                      <h6 style={styles.textStyles}>
-                        {" "}
-                        {index + 1}
-                        {"."} &nbsp; {d}
-                      </h6>
+                      <div style={{ display: "flex", flexDirection: "row" }}>
+                        <h6
+                          style={{
+                            ...styles.textStyles,
+                          }}
+                        >
+                          {index + 1}
+                          {"."} &nbsp;
+                        </h6>
+                        <h6
+                          style={{
+                            ...styles.textStyles,
+                          }}
+                        >
+                          {d}
+                        </h6>
+                      </div>
                     );
                   })}
               </div>

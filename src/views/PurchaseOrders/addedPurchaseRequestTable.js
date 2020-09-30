@@ -38,11 +38,24 @@ import TableRow from "@material-ui/core/TableRow";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 
 import styles from "../../assets/jss/material-dashboard-react/components/tableStyle";
 
 import cookie from "react-cookies";
+
+
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    "&:nth-of-type(odd)": {
+      backgroundColor: "#f4f4f4",
+    },
+
+    "&:nth-of-type(even)": {
+      backgroundColor: "#FFFFFF",
+    },
+  },
+}))(TableRow);
 
 const stylesB = {
   stylesForActive: {
@@ -313,11 +326,10 @@ export default function PurchaseRequest(props) {
               props.tableData.map((prop, index) => {
                 return (
                   <>
-                    <TableRow
+                    <StyledTableRow
                       key={index}
                       className={classes.tableBodyRow}
                       style={{
-                        backgroundColor: "white",
                         cursor: "pointer",
                       }}
                     >
@@ -402,7 +414,7 @@ export default function PurchaseRequest(props) {
                           />
                         </span>
                       </TableCell>
-                    </TableRow>
+                    </StyledTableRow>
                   </>
                 );
               })}

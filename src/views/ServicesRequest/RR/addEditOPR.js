@@ -1710,7 +1710,7 @@ function AddEditPatientListing(props) {
               >
                 <TextField
                   type='number'
-                  label='Height (inches)'
+                  label='Height (ft)'
                   name={'height'}
                   value={height}
                   onChange={onChangeValue}
@@ -1737,7 +1737,7 @@ function AddEditPatientListing(props) {
               >
                 <TextField
                   type='number'
-                  label='Weight (kg)'
+                  label='Weight (Kg)'
                   name={'weight'}
                   value={weight}
                   onChange={onChangeValue}
