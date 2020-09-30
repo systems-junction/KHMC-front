@@ -38,6 +38,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import BarCode from "../../../assets/img/Bar Code.png";
 import Fingerprint from "../../../assets/img/fingerprint.png";
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
+import { reject } from 'lodash'
 
 const tableHeadingForBillSummary = [
   'Date/Time',
@@ -256,8 +257,8 @@ function AddEditPatientListing(props) {
   // const [isDisabled, setDisabled] = useState(false)
   const [value, setValue] = React.useState(0);
   const [DocumentUpload, setDocumentUpload] = useState("");
-  const [imagePreview, setImagePreview] = useState("");
-  const [pdfView, setpdfView] = useState("");
+  const [imagePreview, setImagePreview] = useState([]);
+  const [pdfView, setpdfView] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [itemFound, setItemFound] = useState("");
   const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false);
@@ -364,7 +365,10 @@ function AddEditPatientListing(props) {
   const handleAdd = () => {
     let formData = new FormData()
     if (DocumentUpload) {
-      formData.append('file', DocumentUpload, DocumentUpload.name)
+      for (var x = 0; x < DocumentUpload.length; x++) {
+        formData.append('file', DocumentUpload[x], DocumentUpload[x].name)
+      }
+      // formData.append('file', DocumentUpload, DocumentUpload.name)
     }
     //if (validatePatientForm()) {
     const params = {
@@ -461,19 +465,37 @@ function AddEditPatientListing(props) {
   }
 
   const onDocumentUpload = (event) => {
-    var file = event.target.files[0]
-    var fileType = file.name.slice(file.name.length - 3)
-
+    var file = event.target.files
     setDocumentUpload(file)
-    var reader = new FileReader()
-    var url = reader.readAsDataURL(file)
 
-    reader.onloadend = function () {
-      if (fileType === "pdf") {
-        setpdfView(file.name);
-      } else {
-        setImagePreview([reader.result])
+    console.log("Multiple files are ", file)
+
+    let fileType = [];
+    for (var x = 0; x < file.length; x++) {
+      console.log("Separate files ", file[x])
+      fileType.push(file[x].name.slice(file[x].name.length - 3))
+    }
+    // var fileType = file.name.slice(file.name.length - 3)
+
+    for (var i = 0; i < fileType.length; i++) {
+      let reader = new FileReader()
+      reader.readAsDataURL(file[i]);
+      reader.onload = function (event) {
+        if (fileType[i] === "pdf") {
+          setpdfView.push(file[i].name);
+        }
+        else {
+          setImagePreview.push(event.target.result)
+          console.log("Reader result >>", event.target.result)
+        }
       }
+      // var url = reader.readAsDataURL(file[i])
+
+      // if (fileType === "pdf") {
+      //   setpdfView(file.name);
+      // } else {
+      //   setImagePreview([reader.result])
+      // }
     }
   }
 
@@ -1219,7 +1241,7 @@ function AddEditPatientListing(props) {
                   color="primary"
                 >
                   Next
-                  </Button>
+                </Button>
                 {/* ) : (
                     <Button
                       style={styles.stylesForButton}
@@ -1306,8 +1328,8 @@ function AddEditPatientListing(props) {
             <div className="container-fluid" style={{ marginTop: "30px" }}>
 
               <div className="row">
-                <table id="emp" class="table"
-                style={{ display: 'none' }}
+                {/* <table id="emp" class="table"
+                  style={{ display: 'none' }}
                 >
                   <thead>
                     <tr>
@@ -1341,24 +1363,6 @@ function AddEditPatientListing(props) {
                         </tr>
                       })
                     }
-                      {/* <tr>
-                        <td >{"Grand Total"}</td>
-                        {
-                        //   let amount = 0
-                        // for (let j = 0; j < billSummaryArray.length; {
-                        //   amount =
-                        //   amount +
-                        //   singlePR.item[j].itemId.issueUnitCost *
-                        //   singlePR.item[j].requestedQty;
-                        // }
-                        // return <td >{amount}</td>
-                        billSummaryArray.map((p, index) => {
-                          let amount = 0;
-                          amount = amount + p.serviceId.price
-                          return <td >{amount}</td>
-                        })
-                      }
-                      </tr> */}
                     </tbody>
                   </table>
                 </table>
@@ -1374,7 +1378,23 @@ function AddEditPatientListing(props) {
                     filename="Patient Summary Invoice"
                     sheet="Invoice"
                     buttonText="Export Invoice" />
+                </div> */}
+                <div className="col-md-6 col-sm-6 col-6"
+                  style={{
+                    marginLeft: 0,
+                    marginRight: 0,
+                  }}>
+                  <Button
+                    style={{...styles.stylesForButton,height:'48px',width:'100%'}}
+                    disabled={!searched}
+                    // onClick={}
+                    variant="contained"
+                    color="primary"
+                  >
+                    Export Invoice
+                </Button>
                 </div>
+
                 <div
                   className="col-md-6 col-sm-6 col-6"
                   style={{
@@ -1382,24 +1402,23 @@ function AddEditPatientListing(props) {
                     marginRight: 0,
                   }}
                 >
-                  <label style={styles.upload}>
-                    <TextField
-                      required
-                      // disabled={!searched}
+                  <Button
+                    variant="contained"
+                    component="label"
+                    style={styles.upload}
+                  >
+                    <FaUpload />&nbsp;&nbsp;&nbsp;Upload Document
+                    <input
                       type="file"
-                      style={styles.input}
-                      onChange={!searched ? (e) => {
-                        e.preventDefault()
-                        setErrorMsg("Please search a patient first")
-                        setOpenNotification(true)
-                      }
-                        : onDocumentUpload}
+                      accept=".png,.PNG,.peg,.PEG,.rtf,.RTF,.jpeg,.jpg,.pdf,.PDF,."
+                      multiple
                       name="document"
+                      onChange={onDocumentUpload}
+                      style={{ display: "none" }}
                     />
-                    <FaUpload /> &nbsp;&nbsp;&nbsp;Upload Document
-                </label>
+                  </Button>
 
-                  {pdfView !== "" ? (
+                  {pdfView && pdfView.length > 0 ? (
                     <div
                       style={{
                         textAlign: "center",
@@ -1407,16 +1426,16 @@ function AddEditPatientListing(props) {
                         fontStyle: "italic",
                       }}
                     >
-                      <span style={{ color: "black" }}>Selected File : </span>
-                      {pdfView}
+                      { pdfView.map((index, view) => {
+                        return <><span style={{ color: "black" }}>Selected File {index + 1}: </span><span>{view}</span></>
+                      })
+                      }
                     </div>
                   ) : (
                       undefined
                     )}
                 </div>
               </div>
-
-
 
               <div className="row">
                 {document !== "" && document.includes("\\") ? (
