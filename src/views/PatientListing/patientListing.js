@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { getPatientUrl, getSearchedpatient } from '../../public/endpoins'
+import { getPatientUrl, searchPatientsURL } from '../../public/endpoins'
 import Notification from '../../components/Snackbar/Notification.js'
 import CustomTable from '../../components/Table/Table'
 import ButtonField from '../../components/common/Button'
@@ -149,7 +149,7 @@ export default function PatientListing(props) {
     if (a.length >= 3) {
       axios
         .get(
-          getSearchedpatient + '/' + currentUser.functionalUnit._id + '/' + a
+          searchPatientsURL + '/' + a
         )
         .then((res) => {
           if (res.data.success) {
@@ -173,7 +173,7 @@ export default function PatientListing(props) {
     else{
       console.log("less");
       console.log(patient);
-      getPatientData()
+      getPatientData();
     }
   }
 
