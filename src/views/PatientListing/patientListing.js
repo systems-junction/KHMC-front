@@ -70,23 +70,21 @@ const actions = { view: true }
 export default function PatientListing(props) {
   const classes = useStylesForInput()
 
-
   const [patient, setPatient] = useState('')
   const [itemModalVisible, setitemModalVisible] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
   const [openNotification, setOpenNotification] = useState(false)
   const [item, setItem] = useState('')
   const [searchPatientQuery, setSearchPatientQuery] = useState('')
-  const [currentUser] = useState(cookie.load('current_user'))
-  const [patientFoundSuccessfull, setpatientFoundSuccessfully] = useState(false)
-  const [patientFound, setpatientFound] = useState('')
+
+  
 
   useEffect(() => {
     getPatientData()
   }, [])
 
-  function getPatientData() {
-    axios
+   function  getPatientData() {
+     axios
       .get(getPatientUrl)
       .then((res) => {
         if (res.data.success) {
@@ -143,25 +141,26 @@ export default function PatientListing(props) {
     }
   }
 
-  const handlePatientSearch = (e) => {
+   const handlePatientSearch =  (e) => {
     const a = e.target.value.replace(/[^\w\s]/gi, '')
     setSearchPatientQuery(a)
     if (a.length >= 3) {
-      axios
+       axios
         .get(
           searchPatientsURL + '/' + a
         )
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
+               res.data.data.map(
+                 (d) => (d.patientName = d.firstName + ' ' + d.lastName) )
+               
               console.log(res.data.data)
-              setpatientFoundSuccessfully(true)
-              setpatientFound(res.data.data)
+              
               setPatient(res.data.data)
             } else {
-              setpatientFoundSuccessfully(false)
-              setpatientFound('')
-              setPatient('')
+              
+              setPatient(' ')
             }
           }
         })
@@ -170,11 +169,12 @@ export default function PatientListing(props) {
         })
     }
 
-    else{
+    else if(a.length == 0){
       console.log("less");
       console.log(patient);
       getPatientData();
     }
+
   }
 
 
