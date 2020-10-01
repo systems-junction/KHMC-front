@@ -1065,19 +1065,6 @@ function AddEditPatientListing(props) {
 
   console.log('coverageTerms', coverageTerms)
   const onChangeValue = (e) => {
-    var pattern = /^[a-zA-Z' ]*$/
-    if (
-      e.target.name === 'firstName' ||
-      e.target.name === 'lastName' ||
-      e.target.name === 'emergencyName' ||
-      e.target.name === 'depositorName' ||
-      e.target.name === 'insuranceVendor'
-    ) {
-      if (pattern.test(e.target.value) === false) {
-        return
-      }
-    }
-
     var heightWeightPattern = /^[0-9. ]*$/
     if (e.target.name === 'height' || e.target.name === 'weight') {
       if (heightWeightPattern.test(e.target.value) === false) {
@@ -1111,10 +1098,23 @@ function AddEditPatientListing(props) {
       e.target.name === 'depositorName' ||
       e.target.name === 'insuranceVendor'
     ) {
-      dispatch({
-        field: e.target.name,
-        value: e.target.value.replace(/[^\w'\s]/gi, ''),
-      })
+      if (/^[a-zA-Z' ]*$/.test(e.target.value) === false) {
+        return
+      } else {
+        dispatch({
+          field: e.target.name,
+          value: e.target.value.replace(/[^\w'\s]/gi, ''),
+        })
+      }
+    } else if (e.target.name === 'address') {
+      if (/^[#.0-9a-zA-Z\s,-]*$/.test(e.target.value) === false) {
+        return
+      } else {
+        dispatch({
+          field: e.target.name,
+          value: e.target.value,
+        })
+      }
     } else {
       dispatch({
         field: e.target.name,
