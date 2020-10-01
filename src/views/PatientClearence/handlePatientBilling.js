@@ -5,6 +5,9 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
+import logoPatientInvoice from "../../assets/img/logoPatientSummaryInvoice.jpg";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 import {
   updateClaim,
   getSearchedpatient,
@@ -15,7 +18,7 @@ import {
   addPatientClearanceURL,
   getPatientClearanceURL,
   updatePatientClearanceURL,
-  getSearchDischargedPatient
+  getSearchDischargedPatient,
 } from "../../public/endpoins";
 import axios from "axios";
 import Notification from "../../components/Snackbar/Notification.js";
@@ -50,8 +53,8 @@ import view_all from "../../assets/img/Eye.png";
 
 const tableHeadingForBillSummary = [
   "Date/Time",
+  "Service Type",
   "Service Name",
-  "Name",
   "Amount (JD)",
   "Quantity",
   //   "Invoice",
@@ -277,6 +280,9 @@ function AddEditPatientListing(props) {
 
   const [internalRequests, setInternalRequests] = useState("");
   const [internalRequestsFee, setInternalRequestsFee] = useState(0);
+  const [requestNo, setRequestNo] = useState("");
+  const [visitDate, setVisitDate] = useState("");
+  const [patientProfileNo, setPatientProfileNo] = useState("");
 
   useEffect(() => {
     // setcomingFor(props.history.location.state.comingFor);
@@ -520,7 +526,11 @@ function AddEditPatientListing(props) {
     if (a.length >= 3) {
       axios
         .get(
-          getSearchDischargedPatient + "/" + currentUser.functionalUnit._id + "/" + a
+          getSearchDischargedPatient +
+            "/" +
+            currentUser.functionalUnit._id +
+            "/" +
+            a
         )
         .then((res) => {
           if (res.data.success) {
@@ -564,6 +574,110 @@ function AddEditPatientListing(props) {
     getPatientByInfo(i._id);
   }
 
+  const onDischargeInvoice = () => {
+    if (grandTotal === "") {
+      setOpenNotification(true)
+      setErrorMsg("Please calculate total amount before creating invoice");
+    } else {
+      var now = new Date();
+      var start = new Date(now.getFullYear(), 0, 0);
+      var diff =
+        now -
+        start +
+        (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000;
+      var oneDay = 1000 * 60 * 60 * 24;
+      var day = Math.floor(diff / oneDay);
+      var dateNow = new Date();
+      var YYYY = dateNow
+        .getFullYear()
+        .toString()
+        .substr(-2);
+      var HH = dateNow.getHours();
+      var mm = dateNow.getMinutes();
+      let ss = dateNow.getSeconds();
+      const invoiceNo = "IN" + day + YYYY + HH + mm + ss;
+
+      var doc = new jsPDF();
+
+      var logo = new Image();
+      logo.src = logoPatientInvoice;
+
+      // header
+      doc.setFontSize(15);
+      doc.addImage(logo, "JPEG", 10, 10, 30, 20);
+      doc.text(60, 15, "Al-Khalidi Hospital & Medical Center");
+      doc.text(77, 20, "Detailed ER Invoice");
+      doc.line(80, 22.5, 120, 22.5);
+      doc.text(93, 28, "CASH");
+      doc.line(80, 30, 120, 30);
+      doc.setFontSize(12);
+      doc.text(170, 14, "Amman Jordan");
+
+      // background coloring
+      doc.setFillColor(255, 255, 200);
+      doc.rect(0, 45, 210, 20, "F");
+
+      // information of patient
+      doc.text(10, 50, "Patient Name:");
+      doc.text(45, 50, `${firstName + ` ` + lastName}`);
+      doc.text(10, 55, "Visit Date:");
+      doc.text(45, 55, `${visitDate.substr(0, 10)}`);
+      doc.text(10, 60, "Patient MRN:");
+      doc.text(45, 60, `${patientProfileNo}`);
+      doc.text(120, 50, "Invoice No:");
+      doc.text(155, 50, `${invoiceNo}`);
+      doc.text(120, 55, "Invoice Date");
+      doc.text(155, 55, `${dateNow.toISOString().substr(0, 10)} ${HH}:${mm}`);
+      doc.text(120, 60, "Visit No:");
+      doc.text(155, 60, `${requestNo}`);
+
+      // heading 1
+
+      // doc.setFontSize(20);
+      // doc.text(10, 80, "Not Covered");
+
+      // table 1
+      doc.autoTable({
+        margin: { top: 70, left: 10, right: 10 },
+        html: "#my-table",
+      });
+
+      // heading 2
+
+      // doc.setFontSize(20);
+      // doc.text(10, 180, "Paid Doctor fee");
+
+      // table 2
+
+      // footer
+      doc.setFontSize(12);
+      doc.text(120, 260, "Consultant Fee");
+      doc.text(169, 260, `${externalRequestsFee}`);
+      doc.text(190, 260, "JD");
+      doc.text(120, 265, "Doctor Fee");
+      doc.text(169, 265, `${internalRequestsFee}`);
+      doc.text(190, 265, "JD");
+      doc.text(120, 270, "Deposited Amount");
+      doc.text(
+        169,
+        270,
+        `${patientDetails.payment ? patientDetails.payment : 0}`
+      );
+      doc.text(190, 270, "JD");
+      doc.text(120, 275, "Total Services Bill");
+      doc.text(169, 275, `${totalBillingAmount}`);
+      doc.text(190, 275, "JD");
+      doc.text(120, 280, "Sub Total");
+      doc.text(169, 280, `${remainingAmount}`);
+      doc.text(190, 280, "JD");
+      doc.text(120, 285, "Total");
+      doc.text(169, 285, `${grandTotal}`);
+      doc.text(190, 285, "JD");
+
+      doc.save("Discharge Patient.pdf");
+    }
+  };
+
   function getBillSummary(i, payment) {
     axios
       .get(getedripr + "/" + i)
@@ -571,8 +685,12 @@ function AddEditPatientListing(props) {
         if (res.data.success) {
           console.log("response for search", res.data.data);
 
+          setRequestNo(res.data.data.requestNo);
           setInternalRequests(res.data.data.residentNotes.length);
           setExternalRequests(res.data.data.consultationNote.length);
+          setVisitDate(res.data.data.createdAt);
+          setPatientProfileNo(res.data.data.patientId.profileNo);
+
           //   dispatch({
           //     field: "treatmentDetail",
           //     value: res.data.rc.treatmentDetail,
@@ -704,6 +822,7 @@ function AddEditPatientListing(props) {
       });
   }
 
+  console.log("billSummaryArray", billSummaryArray);
   const getPatientByInfo = (id) => {
     axios
       .get(searchpatient + "/" + id)
@@ -754,7 +873,6 @@ function AddEditPatientListing(props) {
       });
   };
 
-
   const handleInvoicePrint = () => {
     alert("Printer not attached");
   };
@@ -781,7 +899,7 @@ function AddEditPatientListing(props) {
               <h4>
                 {comingFor === "add"
                   ? "Patient Clearance"
-                  : " Edit Patient Clearance"}
+                  : "Edit Patient Clearance"}
               </h4>
             </div>
           </div>
@@ -1433,6 +1551,25 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <Button
+                  style={{
+                    color: "white",
+                    cursor: "pointer",
+                    borderRadius: 5,
+                    backgroundColor: "#2c6ddd",
+                    width: "130px",
+                    height: "45px",
+                    outline: "none",
+                    marginRight: 15,
+                  }}
+                  // disabled={}
+                  onClick={onDischargeInvoice}
+                  variant="contained"
+                  color="default"
+                >
+                  Invoice
+                </Button>
+
+                <Button
                   style={styles.stylesForButton}
                   //disabled={!validateFormType1()}
                   onClick={onCalculateTotal}
@@ -1510,6 +1647,34 @@ function AddEditPatientListing(props) {
           success={successMsg}
         />
       </div>
+      <Table aria-label="my table" id="my-table" style={{ display: "none" }}>
+        <TableHead>
+          <TableRow>
+            <TableCell>Date/Time</TableCell>
+            <TableCell align="right">Service Type</TableCell>
+            <TableCell align="right">Service Name</TableCell>
+            <TableCell align="right">Amount (JD)</TableCell>
+            <TableCell align="right">Quantity</TableCell>
+          </TableRow>
+        </TableHead>
+        {patientId && billSummaryArray != false ? (
+          <TableBody>
+            {billSummaryArray.map((row) => (
+              <TableRow key={row.date}>
+                <TableCell component="th" scope="row">
+                  {`${row.date.substr(0, 10)} ${row.date.substr(11, 5)}`}
+                </TableCell>
+                <TableCell align="right">{row.serviceId.type}</TableCell>
+                <TableCell align="right">{row.serviceId.name}</TableCell>
+                <TableCell align="right">{row.serviceId.price}</TableCell>
+                <TableCell align="right">{row.qty}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        ) : (
+          <h1>No service found</h1>
+        )}
+      </Table>
     </div>
   );
 }
