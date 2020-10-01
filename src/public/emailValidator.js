@@ -5,9 +5,7 @@ export default function ValidateEmail(mail) {
     // ) &&
     /(^$|^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(?:[a-zA-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)$)/.test(
       mail
-    ) &&
-    mail !== undefined &&
-    mail !== null
+    )
   ) {
     return true
   }
