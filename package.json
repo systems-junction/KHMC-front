@@ -23,6 +23,7 @@
     "history": "4.9.0",
     "install": "^0.13.0",
     "jspdf": "^2.1.1",
+    "jspdf-autotable": "^3.5.13",
     "lodash": "^4.17.20",
     "material-ui-phone-number": "^2.2.6",
     "mic-recorder-to-mp3": "^2.2.2",
