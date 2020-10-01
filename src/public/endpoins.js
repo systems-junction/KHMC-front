@@ -53,6 +53,8 @@ export const deletePatientUrl = `${baseUrl}/patient/deletepatient`;
 export const updatePatientUrl = `${baseUrl}/patient/updatepatient`;
 export const generateEDR = `${baseUrl}/edr/addedr`;
 export const generateIPR = `${baseUrl}/ipr/addipr`;
+export const getVendorApproval = `${baseUrl}/insurance/verify`;
+
 export const searchpatient = `${baseUrl}/patient/searchpatient`;
 export const updateEdrIpr = `${baseUrl}/patient/updateEdrIpr`;
 export const updateEdrIprItem = `${baseUrl}/patient/updateEdrIprItem`;
@@ -401,7 +403,6 @@ export const searchPatients = `${baseUrl}/patient/searchpatient`;
 //http://localhost:4000/api/ipr/getallconsultations
 //get consultation
 export const getallconsultations = `${baseUrl}/ipr/getallconsultations`;
-
 
 //patient clearance
 
