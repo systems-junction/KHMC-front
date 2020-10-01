@@ -6,6 +6,7 @@ import Tab from "@material-ui/core/Tab";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import { jsPDF } from "jspdf";
+import "jspdf-autotable";
 import {
   updateClaim,
   getSearchedpatient,
@@ -223,6 +224,18 @@ function AddEditPatientListing(props) {
       [field]: value,
     };
   }
+
+  function createData(name, calories, fat, carbs, protein) {
+    return { name, calories, fat, carbs, protein };
+  }
+
+  // const rows = [
+  //   createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
+  //   createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
+  //   createData("Eclair", 262, 16.0, 24, 6.0),
+  //   createData("Cupcake", 305, 3.7, 67, 4.3),
+  //   createData("Gingerbread", 356, 16.0, 49, 3.9),
+  // ];
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -588,7 +601,6 @@ function AddEditPatientListing(props) {
     dispatch({ field: "admittedOn", value: i.createdAt });
 
     setSearchQuery("");
-    setsearched(true);
     getBillSummary(i._id);
     getPatientByInfo(i._id);
   }
@@ -598,6 +610,7 @@ function AddEditPatientListing(props) {
       .get(getedripr + "/" + i)
       .then((res) => {
         if (res.data.success) {
+          setsearched(true);
           console.log("response for Claim", res.data.rc);
 
           dispatch({
@@ -890,8 +903,7 @@ function AddEditPatientListing(props) {
     doc.save("Invoice.pdf");
   };
 
-  const onPdfDownload = () => {
-    console.log("hello");
+  const onInpatientInvoiceSummary = () => {
     var doc = new jsPDF();
 
     var logo = new Image();
@@ -899,7 +911,7 @@ function AddEditPatientListing(props) {
 
     // header
     doc.setFontSize(15);
-    doc.addImage(logo, "PNG", 10, 10, 30, 20);
+    doc.addImage(logo, "JPEG", 10, 10, 30, 20);
     doc.text(60, 15, "Al-Khalidi Hospital & Medical Center");
     doc.text(68, 20, "In - Patient Summary Invoice");
     doc.line(80, 22.5, 120, 22.5);
@@ -908,32 +920,123 @@ function AddEditPatientListing(props) {
     doc.setFontSize(12);
     doc.text(170, 14, "Amman Jordan");
 
+    // background coloring
+    doc.setFillColor(255, 255, 200);
+    doc.rect(0, 45, 210, 22, "F");
+
     // information of patient
-    doc.text(10, 50, "Guarantor");
-    doc.text(10, 55, "Patient Name");
-    doc.text(10, 60, "Admitted On");
-    doc.text(10, 65, "Room");
-    doc.text(90, 60, "Discharged on");
-    doc.text(90, 65, "Class");
-    doc.text(150, 60, "Invoice No");
+    // labels
+    doc.setFontSize(10)
+    doc.setFont('times',"bold");
+    doc.text(10, 50, "Patient MRN:");
+    doc.text(10, 55, "Patient Name:");
+    doc.text(10, 60, "Admitted On:");
+    doc.text(10, 65, "Room:");
+    doc.text(85, 60, "Discharged on:");
+    doc.text(85, 65, "Class:");
+    doc.text(150, 60, "Invoice No:");
     doc.text(150, 65, "Adm. No");
 
+    // dynamic inputs
+    doc.setFont('times',"normal");
+    doc.text(45, 50, profileNo);
+    doc.text(45, 55, firstName + ' ' + lastName); // Patient Name
+    doc.text(45, 60, admittedOn !== '' ? formatDate(admittedOn) : '--');
+    doc.text(45, 65, ""); // room no
+    doc.text(120, 60, ""); // discharged on
+    doc.text(120, 65, ""); // class 
+    doc.text(180, 60, invoiceNo); // invoice No
+    doc.text(180, 65, "AD223423"); //Adm. No
+
     // table
+    doc.autoTable({ 
+      margin: { top: 70 ,right:0,left:0},
+      tableWidth:'auto',
+      headStyles:{fillColor: [170, 170, 170]},
+      html: "#InpatientInvoiceSummary" 
+    });
 
     // footer
+    // labels
+    doc.setFontSize(12);
+    doc.setFont('times',"bold");
     doc.text(120, 260, "Invoice Amount");
+    doc.text(120, 265, "Pharmacy");
+    doc.text(120, 270, "Down Payments");
+    doc.line(120, 273, 195, 273);
+    doc.text(120, 280, "Total");
+    doc.text(169, 280, "1090.48");
+    doc.text(190, 280, "JD");
+
+    // dynamic text
+    doc.setFont('times',"normal");
+    doc.text(169, 260, "1090.48"); // invoice amount
+    doc.text(190, 260, "JD");
+    doc.text(169, 265, "1090.48"); // pharmacy
+    doc.text(190, 265, "JD");
+    doc.text(169, 270, "1090.48"); // down payment
+    doc.text(190, 270, "JD");
+
+    doc.save(`Patient Summary Invoice ${invoiceNo}.pdf`);
+  };
+
+  const onInpatientInvoiceDetails = () => {
+    console.log("hello");
+    var doc = new jsPDF();
+
+    var logo = new Image();
+    logo.src = logoPatientSummaryInvoice;
+
+    // header
+    doc.setFontSize(15);
+    doc.addImage(logo, "JPEG", 10, 10, 20, 20);
+    doc.text(60, 15, "Al-Khalidi Hospital & Medical Center");
+    doc.text(68, 20, "Detailed In-Patient Invoice");
+    doc.line(80, 22.5, 120, 22.5);
+    doc.text(93, 28, "CREDIT");
+    doc.line(80, 30, 120, 30);
+    doc.setFontSize(12);
+    doc.text(170, 14, "Amman Jordan");
+
+    // background coloring
+    doc.setFillColor(255, 255, 200);
+    doc.rect(0, 45, 210, 27, "F");
+
+    // information of patient
+    doc.text(10, 50, "Guarantor:");
+    doc.text(45, 50, "Mudassir Ijaz");
+    doc.text(10, 55, "Patient Name:");
+    doc.text(45, 55, "Name");
+    doc.text(10, 60, "Admitted On:");
+    doc.text(45, 60, "03/04/2020");
+    doc.text(10, 65, "Discharged on:");
+    doc.text(45, 65, "3/2/2020");
+    doc.text(120, 60, "Invoice No:");
+    doc.text(155, 60, "IN332313D");
+    doc.text(120, 65, "Adm. No");
+    doc.text(155, 65, "AD223423");
+    doc.text(120, 70, "Invoice Date:");
+    doc.text(155, 70, "03/05/2010");
+
+    // table
+    doc.autoTable({ margin: { top: 80 }, html: "#my-table" });
+
+    // footer
+    doc.setFontSize(15);
+    // doc.setFontType("bold");
+    doc.text(110, 260, "Charged Amount");
     doc.text(169, 260, "1090.48");
     doc.text(190, 260, "JD");
-
-    doc.text(120, 265, "Pharmacy");
+    doc.text(110, 265, "Total Charged Amount");
     doc.text(169, 265, "1090.48");
     doc.text(190, 265, "JD");
-    doc.text(120, 270, "Down Payments");
+    doc.text(110, 270, "Grand Total");
     doc.text(169, 270, "1090.48");
     doc.text(190, 270, "JD");
-    doc.line(120, 275, 195, 275);
-    doc.save("Patient Summary Invoice.pdf");
+
+    doc.save("Patient Details Invoice.pdf");
   };
+
   return (
     <div
       style={{
@@ -1410,6 +1513,7 @@ function AddEditPatientListing(props) {
             <div className="row" style={{ marginTop: "20px" }}>
               {billSummaryArray !== 0 ? (
                 <CustomTable
+                  // id="my-table"
                   tableData={billSummaryArray}
                   tableDataKeys={tableDataKeysForBillSummary}
                   tableHeading={tableHeadingForBillSummary}
@@ -1524,6 +1628,30 @@ function AddEditPatientListing(props) {
                     sheet="Invoice"
                     buttonText="Export Invoice" />
                 </div> */}
+
+                <Table id="InpatientInvoiceSummary" style={{ display: "none" }} aria-label="InpatientInvoiceSummary">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Description</TableCell>
+                      <TableCell align="right">Service Type</TableCell>
+                      <TableCell align="right">Status</TableCell>
+                      <TableCell align="right">Amount</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {billSummaryArray.map((row, index) => (
+                      <TableRow key={index}>
+                        <TableCell component="th" scope="row">
+                          {row.serviceId.name}
+                        </TableCell>
+                        <TableCell align="right">{row.serviceType}</TableCell>
+                        <TableCell align="right">{row.serviceId.insuranceStatus}</TableCell>
+                        <TableCell align="right">{row.serviceId.price}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+
                 <div
                   className="col-md-6 col-sm-6 col-6"
                   style={{
@@ -1538,13 +1666,35 @@ function AddEditPatientListing(props) {
                       width: "100%",
                     }}
                     disabled={!searched}
-                    onClick={onPdfDownload}
+                    onClick={onInpatientInvoiceSummary}
                     variant="contained"
                     color="primary"
                   >
-                    Export Invoice
+                    In-patient Invoice Summary
                   </Button>
                 </div>
+
+                {/* <div
+                  className="col-md-4 col-sm-4 col-4"
+                  style={{
+                    marginLeft: 0,
+                    marginRight: 0,
+                  }}
+                >
+                  <Button
+                    style={{
+                      ...styles.stylesForButton,
+                      height: "48px",
+                      width: "100%",
+                    }}
+                    disabled={!searched}
+                    onClick={onInpatientInvoiceDetails}
+                    variant="contained"
+                    color="primary"
+                  >
+                    In-patient Invoice Details
+                  </Button>
+                </div> */}
 
                 <div
                   className="col-md-6 col-sm-6 col-6"
