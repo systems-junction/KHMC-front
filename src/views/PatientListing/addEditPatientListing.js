@@ -39,7 +39,6 @@ import validateCountryCity from "../../public/countryCityValidator";
 import validateGender from "../../public/genderValidator";
 import validateRelation from "../../public/relationValidator";
 import validateAddress from "../../public/addressValidator";
-
 import {
   uploadsUrl,
   updatePatientUrl,
@@ -371,6 +370,7 @@ function AddEditPatientListing(props) {
     emergencyRelation: "",
     coveredFamilyMembers: "",
     otherCoverageDetails: "",
+    insurerId: ''
   };
 
   function reducer(state, { field, value }) {
@@ -421,6 +421,7 @@ function AddEditPatientListing(props) {
     emergencyRelation,
     coveredFamilyMembers,
     otherCoverageDetails,
+    insurerId
   } = state;
 
   const onChangeCountry = (e) => {
@@ -737,16 +738,17 @@ function AddEditPatientListing(props) {
     axios
       .get(`${getVendorApproval}/${insuranceNo}`)
       .then((e) => {
-        setInsuranceBoolean(false);
-        dispatch({
-          field: "coverageTerms",
-          value: e.data.data.coverageDetail,
-        });
-
-        setCovTer(e.data.data.coverageDetail);
-        dispatch({ field: "insuranceVendor", value: e.data.data.vendor });
-
-        console.log(e);
+        if (e.data.success) {
+          console.log(e.data);
+          setInsuranceBoolean(false);
+          dispatch({
+            field: "coverageTerms",
+            value: e.data.data.coverageDetail,
+          });
+          dispatch({ field: "insuranceVendor", value: e.data.data.vendor });
+          dispatch({ field: "insurerId", value: e.data.data.insurerId });
+          setCovTer(e.data.data.coverageDetail);
+        }
       })
       .catch((error) => {
         setOpenNotification(true);
@@ -862,7 +864,7 @@ function AddEditPatientListing(props) {
     var reader = new FileReader();
     var url = reader.readAsDataURL(file);
 
-    reader.onloadend = function() {
+    reader.onloadend = function () {
       if (fileType === "pdf") {
         setpdfView(file.name);
       } else {
@@ -903,8 +905,8 @@ function AddEditPatientListing(props) {
     value === 1
       ? setValue(0)
       : value === 2
-      ? setValue(1)
-      : props.history.goBack();
+        ? setValue(1)
+        : props.history.goBack();
     // setValue(tabIndex);
   };
 
@@ -914,7 +916,10 @@ function AddEditPatientListing(props) {
       generatedBy: currentUser.staffId,
       status: "pending",
       functionalUnit: currentUser.functionalUnit._id,
+      insurerId:insurerId,
+      verified: !insuranceBoolean ? true : false
     };
+    console.log("PARAMS ARE : ",params)
     axios
       .post(generateEDR, params, {})
       .then((res) => {
@@ -923,9 +928,8 @@ function AddEditPatientListing(props) {
           props.history.push({
             pathname: "success",
             state: {
-              message: `EDR: ${
-                res.data.data.requestNo
-              } for patient MRN: ${MRN.toUpperCase()} generated successfully`,
+              message: `EDR: ${res.data.data.requestNo
+                } for patient MRN: ${MRN.toUpperCase()} generated successfully`,
             },
           });
         } else if (!res.data.success) {
@@ -946,8 +950,10 @@ function AddEditPatientListing(props) {
       generatedBy: currentUser.staffId,
       status: "pending",
       functionalUnit: currentUser.functionalUnit._id,
+      insurerId:insurerId,
+      verified: !insuranceBoolean ? true : false
     };
-    // console.log(params)
+    console.log("PARAMS ARE : ",params)
     axios
       .post(generateIPR, params, {})
       .then((res) => {
@@ -956,9 +962,8 @@ function AddEditPatientListing(props) {
           props.history.push({
             pathname: "success",
             state: {
-              message: `IPR: ${
-                res.data.data.requestNo
-              } for patient MRN: ${MRN.toUpperCase()} generated successfully`,
+              message: `IPR: ${res.data.data.requestNo
+                } for patient MRN: ${MRN.toUpperCase()} generated successfully`,
             },
           });
         } else if (!res.data.success) {
@@ -1214,8 +1219,6 @@ function AddEditPatientListing(props) {
     }
   };
 
-  console.log("amout", amountReceived, typeof amountReceived);
-
   // const addZeroes = (num) => {
   //   // Cast as number
   //   var num = Number(num)
@@ -1466,24 +1469,24 @@ function AddEditPatientListing(props) {
                               </Table>
                             )
                           ) : (
-                            <h4
-                              style={{ textAlign: "center" }}
-                              onClick={() => setSearchQuery("")}
-                            >
-                              Patient Not Found
-                            </h4>
-                          )}
+                              <h4
+                                style={{ textAlign: "center" }}
+                                onClick={() => setSearchQuery("")}
+                              >
+                                Patient Not Found
+                              </h4>
+                            )}
                         </Paper>
                       </div>
                     ) : (
-                      undefined
-                    )}
+                        undefined
+                      )}
                   </div>
                 </div>
               </>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             <div className="row">
               <div
@@ -2095,12 +2098,12 @@ function AddEditPatientListing(props) {
                 {mobileNumber && !validatePhone(mobileNumber) ? (
                   undefined
                 ) : (
-                  <ErrorMessage
-                    name={mobileNumber}
-                    type="phone"
-                    isFormSubmitted={detailsForm}
-                  />
-                )}
+                    <ErrorMessage
+                      name={mobileNumber}
+                      type="phone"
+                      isFormSubmitted={detailsForm}
+                    />
+                  )}
               </div>
 
               <div
@@ -2160,7 +2163,7 @@ function AddEditPatientListing(props) {
                       input: classes.multilineColor,
                     },
                   }}
-                  // inputProps={{ maxLength: 12 }}
+                // inputProps={{ maxLength: 12 }}
                 />
                 {/* <ErrorMessage
                   name={otherDetails}
@@ -2650,7 +2653,7 @@ function AddEditPatientListing(props) {
                     currencySymbol="JD"
                     outputFormat="number"
                     decimalPlaces="3"
-                    // onChange={(event, value) => setValue(value)}
+                  // onChange={(event, value) => setValue(value)}
                   />
                   {/* <ErrorMessage
                     name={amountReceived}
@@ -2775,8 +2778,8 @@ function AddEditPatientListing(props) {
                         {pdfView}
                       </div>
                     ) : (
-                      undefined
-                    )}
+                        undefined
+                      )}
                   </div>
                 </div>
 
@@ -2786,88 +2789,88 @@ function AddEditPatientListing(props) {
                       {depositSlip !== "" && depositSlip.includes("\\") ? (
                         <>
                           {depositSlip !== "" &&
-                          depositSlip.slice(depositSlip.length - 3) !==
+                            depositSlip.slice(depositSlip.length - 3) !==
                             "pdf" ? (
-                            <div
-                              className="col-md-6 col-sm-6 col-6"
-                              style={{
-                                ...styles.inputContainerForTextField,
-                                ...styles.textFieldPadding,
-                              }}
-                            >
-                              <img
-                                src={uploadsUrl + depositSlip.split("\\")[1]}
-                                className="depositSlipImg"
-                              />
-                            </div>
-                          ) : depositSlip !== "" &&
-                            depositSlip.slice(depositSlip.length - 3) ===
-                              "pdf" ? (
-                            <div
-                              className="col-md-6 col-sm-6 col-6"
-                              style={{
-                                ...styles.inputContainerForTextField,
-                                ...styles.textFieldPadding,
-                                // textAlign:'center',
-                              }}
-                            >
-                              <a
-                                href={uploadsUrl + depositSlip.split("\\")[1]}
-                                style={{ color: "#2c6ddd" }}
+                              <div
+                                className="col-md-6 col-sm-6 col-6"
+                                style={{
+                                  ...styles.inputContainerForTextField,
+                                  ...styles.textFieldPadding,
+                                }}
                               >
-                                Click here to open Deposit Slip
+                                <img
+                                  src={uploadsUrl + depositSlip.split("\\")[1]}
+                                  className="depositSlipImg"
+                                />
+                              </div>
+                            ) : depositSlip !== "" &&
+                              depositSlip.slice(depositSlip.length - 3) ===
+                              "pdf" ? (
+                                <div
+                                  className="col-md-6 col-sm-6 col-6"
+                                  style={{
+                                    ...styles.inputContainerForTextField,
+                                    ...styles.textFieldPadding,
+                                    // textAlign:'center',
+                                  }}
+                                >
+                                  <a
+                                    href={uploadsUrl + depositSlip.split("\\")[1]}
+                                    style={{ color: "#2c6ddd" }}
+                                  >
+                                    Click here to open Deposit Slip
                               </a>
-                            </div>
-                          ) : (
-                            undefined
-                          )}
+                                </div>
+                              ) : (
+                                undefined
+                              )}
                         </>
                       ) : depositSlip !== "" && depositSlip.includes("/") ? (
                         <>
                           {depositSlip !== "" &&
-                          depositSlip.slice(depositSlip.length - 3) !==
+                            depositSlip.slice(depositSlip.length - 3) !==
                             "pdf" ? (
-                            <div
-                              className="col-md-6 col-sm-6 col-6"
-                              style={{
-                                ...styles.inputContainerForTextField,
-                                ...styles.textFieldPadding,
-                              }}
-                            >
-                              <img
-                                src={uploadsUrl + depositSlip}
-                                className="depositSlipImg"
-                              />
-                            </div>
-                          ) : depositSlip !== "" &&
-                            depositSlip.slice(depositSlip.length - 3) ===
-                              "pdf" ? (
-                            <div
-                              className="col-md-6 col-sm-6 col-6"
-                              style={{
-                                ...styles.inputContainerForTextField,
-                                ...styles.textFieldPadding,
-                                // textAlign:'center',
-                              }}
-                            >
-                              <a
-                                href={uploadsUrl + depositSlip}
-                                style={{ color: "#2c6ddd" }}
+                              <div
+                                className="col-md-6 col-sm-6 col-6"
+                                style={{
+                                  ...styles.inputContainerForTextField,
+                                  ...styles.textFieldPadding,
+                                }}
                               >
-                                Click here to open Deposit Slip
+                                <img
+                                  src={uploadsUrl + depositSlip}
+                                  className="depositSlipImg"
+                                />
+                              </div>
+                            ) : depositSlip !== "" &&
+                              depositSlip.slice(depositSlip.length - 3) ===
+                              "pdf" ? (
+                                <div
+                                  className="col-md-6 col-sm-6 col-6"
+                                  style={{
+                                    ...styles.inputContainerForTextField,
+                                    ...styles.textFieldPadding,
+                                    // textAlign:'center',
+                                  }}
+                                >
+                                  <a
+                                    href={uploadsUrl + depositSlip}
+                                    style={{ color: "#2c6ddd" }}
+                                  >
+                                    Click here to open Deposit Slip
                               </a>
-                            </div>
-                          ) : (
-                            undefined
-                          )}
+                                </div>
+                              ) : (
+                                undefined
+                              )}
                         </>
                       ) : (
-                        undefined
-                      )}
+                            undefined
+                          )}
                     </>
                   ) : (
-                    undefined
-                  )}
+                      undefined
+                    )}
 
                   {imagePreview !== "" ? (
                     <div
@@ -2883,17 +2886,17 @@ function AddEditPatientListing(props) {
                           New Deposit Slip
                         </div>
                       ) : (
-                        undefined
-                      )}
+                          undefined
+                        )}
                     </div>
                   ) : (
-                    undefined
-                  )}
+                      undefined
+                    )}
                 </div>
               </div>
             ) : (
-              <div></div>
-            )}
+                    <div></div>
+                  )}
 
             <div
               style={{ display: "flex", flex: 1, justifyContent: "center" }}
@@ -2964,19 +2967,19 @@ function AddEditPatientListing(props) {
                     />
                   </>
                 ) : (
-                  <></>
-                )}
+                    <></>
+                  )}
                 {currentUser.staffTypeId.type === "EDR Receptionist" ? (
                   <Button
                     style={styles.generate}
                     disabled={
                       comingFor === "add"
                         ? !(
-                            validatePatientForm() &&
-                            validateEmergencyForm() &&
-                            (validateInsuranceForm() || validateCashForm()) &&
-                            isPatientSubmitted
-                          )
+                          validatePatientForm() &&
+                          validateEmergencyForm() &&
+                          (validateInsuranceForm() || validateCashForm()) &&
+                          isPatientSubmitted
+                        )
                         : false
                     }
                     onClick={
@@ -2988,8 +2991,8 @@ function AddEditPatientListing(props) {
                     {comingFor === "add" ? "Generate ED Record" : "Update"}
                   </Button>
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
 
                 {currentUser.staffTypeId.type === "IPR Receptionist" ? (
                   <Button
@@ -2998,11 +3001,11 @@ function AddEditPatientListing(props) {
                     disabled={
                       comingFor === "add"
                         ? !(
-                            validatePatientForm() &&
-                            validateEmergencyForm() &&
-                            (validateInsuranceForm() || validateCashForm()) &&
-                            isPatientSubmitted
-                          )
+                          validatePatientForm() &&
+                          validateEmergencyForm() &&
+                          (validateInsuranceForm() || validateCashForm()) &&
+                          isPatientSubmitted
+                        )
                         : false
                     }
                     onClick={
@@ -3014,456 +3017,456 @@ function AddEditPatientListing(props) {
                     {comingFor === "add" ? "Generate IP Record" : "Update"}
                   </Button>
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
               </div>
             </div>
           </div>
         ) : (
-          <div>
-            <div
-              style={{ flex: 4, display: "flex", flexDirection: "column" }}
-              className={`${"container-fluid"} ${classes.root}`}
-            >
-              <div className="row">
-                <div
-                  className="col-md-9 col-sm-7 col-6"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    label="Insurance Number"
-                    type="text"
-                    name={"insuranceNo"}
-                    value={insuranceNo}
-                    onChange={onChangeValue}
-                    error={insuranceNo === "" && insuranceForm}
-                    className="textInputStyle"
-                    variant="filled"
-                    disabled={Insuranceform}
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
-                  <ErrorMessage
-                    name={insuranceNo}
-                    type="insuranceNo"
-                    isFormSubmitted={insuranceForm}
-                  />
-                </div>
-
-                <div
-                  className="col-md-1 col-sm-2 col-2"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
+                <div>
                   <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      backgroundColor: "white",
-                      borderRadius: 5,
-                      height: 55,
-                    }}
+                    style={{ flex: 4, display: "flex", flexDirection: "column" }}
+                    className={`${"container-fluid"} ${classes.root}`}
                   >
-                    <img src={BarCode} style={{ width: 70, height: 60 }} />
-                  </div>
-                </div>
+                    <div className="row">
+                      <div
+                        className="col-md-9 col-sm-7 col-6"
+                        style={{
+                          ...styles.inputContainerForTextField,
+                          ...styles.textFieldPadding,
+                        }}
+                      >
+                        <TextField
+                          required
+                          label="Insurance Number"
+                          type="text"
+                          name={"insuranceNo"}
+                          value={insuranceNo}
+                          onChange={onChangeValue}
+                          error={insuranceNo === "" && insuranceForm}
+                          className="textInputStyle"
+                          variant="filled"
+                          disabled={Insuranceform}
+                          InputProps={{
+                            className: classes.input,
+                            classes: { input: classes.input },
+                          }}
+                        />
+                        <ErrorMessage
+                          name={insuranceNo}
+                          type="insuranceNo"
+                          isFormSubmitted={insuranceForm}
+                        />
+                      </div>
 
-                <div
-                  className="col-md-1 col-sm-1 col-1"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      backgroundColor: "white",
-                      borderRadius: 5,
-                      height: 55,
-                    }}
-                  >
-                    <img
-                      src={Fingerprint}
-                      style={{ maxWidth: 43, height: 43 }}
-                    />
-                  </div>
-                </div>
-                <div
-                  className="col-md-1 col-sm-1 col-1"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <Button
-                    style={{
-                      ...styles.stylesForButton,
-                      height: "54px",
-                      width: "98%",
-                      backgroundColor: "#ba55d3",
-                      marginRight: "-10px",
-                    }}
-                    onClick={vendorVerify}
-                    variant="contained"
-                    color="primary"
-                  >
-                    Verify
+                      <div
+                        className="col-md-1 col-sm-2 col-2"
+                        style={{
+                          ...styles.inputContainerForTextField,
+                          ...styles.textFieldPadding,
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            backgroundColor: "white",
+                            borderRadius: 5,
+                            height: 55,
+                          }}
+                        >
+                          <img src={BarCode} style={{ width: 70, height: 60 }} />
+                        </div>
+                      </div>
+
+                      <div
+                        className="col-md-1 col-sm-1 col-1"
+                        style={{
+                          ...styles.inputContainerForTextField,
+                          ...styles.textFieldPadding,
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            backgroundColor: "white",
+                            borderRadius: 5,
+                            height: 55,
+                          }}
+                        >
+                          <img
+                            src={Fingerprint}
+                            style={{ maxWidth: 43, height: 43 }}
+                          />
+                        </div>
+                      </div>
+                      <div
+                        className="col-md-1 col-sm-1 col-1"
+                        style={{
+                          ...styles.inputContainerForTextField,
+                          ...styles.textFieldPadding,
+                        }}
+                      >
+                        <Button
+                          style={{
+                            ...styles.stylesForButton,
+                            height: "54px",
+                            width: "98%",
+                            backgroundColor: "#ba55d3",
+                            marginRight: "-10px",
+                          }}
+                          onClick={vendorVerify}
+                          variant="contained"
+                          color="primary"
+                        >
+                          Verify
                   </Button>
-                </div>
-              </div>
+                      </div>
+                    </div>
 
-              <div className="row">
-                <div
-                  className="col-md-12"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <div>
-                    <TextField
-                      required
-                      label="Insurance Vendor"
-                      name={"insuranceVendor"}
-                      value={insuranceVendor}
-                      disabled={insuranceBoolean}
-                      onChange={onChangeValue}
-                      error={insuranceVendor === "" && insuranceForm}
-                      className="textInputStyle"
-                      variant="filled"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                      }}
-                      inputProps={{ maxLength: 80 }}
-                    />
-                    <ErrorMessage
-                      name={insuranceVendor}
-                      type="vendor"
-                      isFormSubmitted={insuranceForm}
-                    />
-                  </div>
-                </div>
-              </div>
+                    <div className="row">
+                      <div
+                        className="col-md-12"
+                        style={{
+                          ...styles.inputContainerForTextField,
+                          ...styles.textFieldPadding,
+                        }}
+                      >
+                        <div>
+                          <TextField
+                            required
+                            label="Insurance Vendor"
+                            name={"insuranceVendor"}
+                            value={insuranceVendor}
+                            disabled={insuranceBoolean}
+                            onChange={onChangeValue}
+                            error={insuranceVendor === "" && insuranceForm}
+                            className="textInputStyle"
+                            variant="filled"
+                            InputProps={{
+                              className: classes.input,
+                              classes: { input: classes.input },
+                            }}
+                            inputProps={{ maxLength: 80 }}
+                          />
+                          <ErrorMessage
+                            name={insuranceVendor}
+                            type="vendor"
+                            isFormSubmitted={insuranceForm}
+                          />
+                        </div>
+                      </div>
+                    </div>
 
-              <div className="row">
-                <div
-                  className="col-md-6"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    select
-                    fullWidth
-                    disabled={insuranceBoolean}
-                    id="coverageTerms"
-                    name="coverageTerms"
-                    value={coverageTerms || covTer}
-                    onChange={onChangeValue}
-                    // error={coverageTerms === '' && insuranceForm}
-                    label="Coverage Terms"
-                    variant="filled"
-                    className="dropDownStyle"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  >
-                    <MenuItem value={coverageTerms}>None</MenuItem>
+                    <div className="row">
+                      <div
+                        className="col-md-6"
+                        style={{
+                          ...styles.inputContainerForTextField,
+                          ...styles.textFieldPadding,
+                        }}
+                      >
+                        <TextField
+                          select
+                          fullWidth
+                          disabled={insuranceBoolean}
+                          id="coverageTerms"
+                          name="coverageTerms"
+                          value={coverageTerms || covTer}
+                          onChange={onChangeValue}
+                          // error={coverageTerms === '' && insuranceForm}
+                          label="Coverage Terms"
+                          variant="filled"
+                          className="dropDownStyle"
+                          InputProps={{
+                            className: classes.input,
+                            classes: { input: classes.input },
+                          }}
+                        >
+                          <MenuItem value={coverageTerms}>None</MenuItem>
 
-                    {coverageTermsArr.map((val) => {
-                      return (
-                        <MenuItem key={val.key} value={val.key}>
-                          {val.value}
-                        </MenuItem>
-                      );
-                    })}
-                  </TextField>
-                  {/* <ErrorMessage
+                          {coverageTermsArr.map((val) => {
+                            return (
+                              <MenuItem key={val.key} value={val.key}>
+                                {val.value}
+                              </MenuItem>
+                            );
+                          })}
+                        </TextField>
+                        {/* <ErrorMessage
                     name={coverageTerms}
                     isFormSubmitted={insuranceForm}
                   /> */}
-                </div>
-                <div
-                  className="col-md-6"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <div>
-                    <TextField
-                      label="Co-Payment %"
-                      name={"payment"}
-                      value={payment}
-                      disabled={Insuranceform || !coPaymentField}
-                      onChange={onChangeValue}
-                      // error={payment === '' && isFormSubmitted}
-                      type="number"
-                      className="textInputStyle"
-                      variant="filled"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                      }}
-                    />
-                    {/* <ErrorMessage
+                      </div>
+                      <div
+                        className="col-md-6"
+                        style={{
+                          ...styles.inputContainerForTextField,
+                          ...styles.textFieldPadding,
+                        }}
+                      >
+                        <div>
+                          <TextField
+                            label="Co-Payment %"
+                            name={"payment"}
+                            value={payment}
+                            disabled={Insuranceform || !coPaymentField}
+                            onChange={onChangeValue}
+                            // error={payment === '' && isFormSubmitted}
+                            type="number"
+                            className="textInputStyle"
+                            variant="filled"
+                            InputProps={{
+                              className: classes.input,
+                              classes: { input: classes.input },
+                            }}
+                          />
+                          {/* <ErrorMessage
                       name={payment}
                       type="coPayment"
                       isFormSubmitted={isFormSubmitted}
                     /> */}
-                  </div>
-                </div>
-              </div>
-              <div className="row" style={{ marginTop: 15 }}>
-                <div
-                  className="col-md-12"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <div>
-                    <TextField
-                      // required
-                      select
-                      fullWidth
-                      disabled={Insuranceform}
-                      id="coveredFamilyMembers"
-                      name="coveredFamilyMembers"
-                      value={coveredFamilyMembers}
-                      onChange={onChangeValue}
-                      // error={coveredFamilyMembers === '' && insuranceForm}
-                      label="Covered Family Members"
-                      variant="filled"
-                      className="dropDownStyle"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                      }}
-                    >
-                      <MenuItem value="">
-                        <em>Family member</em>
-                      </MenuItem>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="row" style={{ marginTop: 15 }}>
+                      <div
+                        className="col-md-12"
+                        style={{
+                          ...styles.inputContainerForTextField,
+                          ...styles.textFieldPadding,
+                        }}
+                      >
+                        <div>
+                          <TextField
+                            // required
+                            select
+                            fullWidth
+                            disabled={Insuranceform}
+                            id="coveredFamilyMembers"
+                            name="coveredFamilyMembers"
+                            value={coveredFamilyMembers}
+                            onChange={onChangeValue}
+                            // error={coveredFamilyMembers === '' && insuranceForm}
+                            label="Covered Family Members"
+                            variant="filled"
+                            className="dropDownStyle"
+                            InputProps={{
+                              className: classes.input,
+                              classes: { input: classes.input },
+                            }}
+                          >
+                            <MenuItem value="">
+                              <em>Family member</em>
+                            </MenuItem>
 
-                      {coveredFamilyArray.map((val) => {
-                        return (
-                          <MenuItem key={val.key} value={val.key}>
-                            {val.value}
-                          </MenuItem>
-                        );
-                      })}
-                    </TextField>
-                    {/* <ErrorMessage
+                            {coveredFamilyArray.map((val) => {
+                              return (
+                                <MenuItem key={val.key} value={val.key}>
+                                  {val.value}
+                                </MenuItem>
+                              );
+                            })}
+                          </TextField>
+                          {/* <ErrorMessage
                       name={coveredFamilyMembers}
                       // type='text'
                       isFormSubmitted={insuranceForm}
                     /> */}
-                  </div>
-                </div>
-              </div>
+                        </div>
+                      </div>
+                    </div>
 
-              <div className="row" style={{ marginTop: 15 }}>
-                <div
-                  className="col-md-12"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    // required
-                    multiline
-                    type="text"
-                    disabled={Insuranceform}
-                    // error={coverageDetails === '' && insuranceForm}
-                    label="Coverage Details"
-                    name={"coverageDetails"}
-                    value={coverageDetails}
-                    onChange={onChangeValue}
-                    rows={4}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
-                  {/* <ErrorMessage
+                    <div className="row" style={{ marginTop: 15 }}>
+                      <div
+                        className="col-md-12"
+                        style={{
+                          ...styles.inputContainerForTextField,
+                          ...styles.textFieldPadding,
+                        }}
+                      >
+                        <TextField
+                          // required
+                          multiline
+                          type="text"
+                          disabled={Insuranceform}
+                          // error={coverageDetails === '' && insuranceForm}
+                          label="Coverage Details"
+                          name={"coverageDetails"}
+                          value={coverageDetails}
+                          onChange={onChangeValue}
+                          rows={4}
+                          className="textInputStyle"
+                          variant="filled"
+                          InputProps={{
+                            className: classes.input,
+                            classes: { input: classes.input },
+                          }}
+                        />
+                        {/* <ErrorMessage
                     name={coverageDetails}
                     // type='text'
                     isFormSubmitted={insuranceForm}
                   /> */}
-                </div>
-              </div>
+                      </div>
+                    </div>
 
-              <div className="row" style={{ marginTop: 15 }}>
-                <div
-                  className="col-md-12"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    // required
-                    multiline
-                    type="text"
-                    disabled={Insuranceform}
-                    // error={otherCoverageDetails === '' && insuranceForm}
-                    label="Other Details"
-                    name={"otherCoverageDetails"}
-                    value={otherCoverageDetails}
-                    onChange={onChangeValue}
-                    rows={4}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
-                  {/* <ErrorMessage
+                    <div className="row" style={{ marginTop: 15 }}>
+                      <div
+                        className="col-md-12"
+                        style={{
+                          ...styles.inputContainerForTextField,
+                          ...styles.textFieldPadding,
+                        }}
+                      >
+                        <TextField
+                          // required
+                          multiline
+                          type="text"
+                          disabled={Insuranceform}
+                          // error={otherCoverageDetails === '' && insuranceForm}
+                          label="Other Details"
+                          name={"otherCoverageDetails"}
+                          value={otherCoverageDetails}
+                          onChange={onChangeValue}
+                          rows={4}
+                          className="textInputStyle"
+                          variant="filled"
+                          InputProps={{
+                            className: classes.input,
+                            classes: { input: classes.input },
+                          }}
+                        />
+                        {/* <ErrorMessage
                     name={otherCoverageDetails}
                     // type='text'
                     isFormSubmitted={insuranceForm}
                   /> */}
-                </div>
-              </div>
-            </div>
+                      </div>
+                    </div>
+                  </div>
 
-            <div
-              style={{
-                display: "flex",
-                flex: 1,
+                  <div
+                    style={{
+                      display: "flex",
+                      flex: 1,
 
-                justifyContent: "center",
-                // paddingLeft: 6,
-              }}
-              className="row"
-            >
-              <div
-                style={{
-                  paddingLeft: 20,
-                  display: "flex",
-                  flex: 1,
-                  // paddingLeft: 6,
-                  justifyContent: "flex",
-                  marginTop: "2%",
-                  marginBottom: "2%",
-                }}
-              >
-                <Button
-                  style={styles.stylesForButton}
-                  onClick={onTabNavigation}
-                  variant="contained"
-                  color="default"
-                >
-                  Cancel
-                </Button>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  flex: 1,
-                  justifyContent: "flex-end",
-                  marginTop: "2%",
-                  marginBottom: "2%",
-                  paddingRight: 20,
-                }}
-              >
-                {comingFor === "add" ? (
-                  <>
-                    <Button
-                      style={styles.save}
-                      // disabled={
-                      //   !(validatePatientForm() && validatePaymentForm())
-                      // }
-                      onClick={searchActivated ? handleEdit : handleAdd}
-                      variant="contained"
-                      color="default"
-                    >
-                      Save
-                    </Button>
+                      justifyContent: "center",
+                      // paddingLeft: 6,
+                    }}
+                    className="row"
+                  >
                     <div
                       style={{
-                        width: "10px",
-                        height: "auto",
-                        display: "inline-block",
+                        paddingLeft: 20,
+                        display: "flex",
+                        flex: 1,
+                        // paddingLeft: 6,
+                        justifyContent: "flex",
+                        marginTop: "2%",
+                        marginBottom: "2%",
                       }}
-                    />
-                  </>
-                ) : (
-                  <></>
-                )}
+                    >
+                      <Button
+                        style={styles.stylesForButton}
+                        onClick={onTabNavigation}
+                        variant="contained"
+                        color="default"
+                      >
+                        Cancel
+                </Button>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flex: 1,
+                        justifyContent: "flex-end",
+                        marginTop: "2%",
+                        marginBottom: "2%",
+                        paddingRight: 20,
+                      }}
+                    >
+                      {comingFor === "add" ? (
+                        <>
+                          <Button
+                            style={styles.save}
+                            // disabled={
+                            //   !(validatePatientForm() && validatePaymentForm())
+                            // }
+                            onClick={searchActivated ? handleEdit : handleAdd}
+                            variant="contained"
+                            color="default"
+                          >
+                            Save
+                    </Button>
+                          <div
+                            style={{
+                              width: "10px",
+                              height: "auto",
+                              display: "inline-block",
+                            }}
+                          />
+                        </>
+                      ) : (
+                          <></>
+                        )}
 
-                {currentUser.staffTypeId.type === "EDR Receptionist" ? (
-                  <Button
-                    style={styles.generate}
-                    // disabled={comingFor === 'add' ? !isFormSubmitted : false}
-                    disabled={
-                      comingFor === "add"
-                        ? !(
-                            validatePatientForm() &&
-                            validateEmergencyForm() &&
-                            (validateInsuranceForm() || validateCashForm()) &&
-                            isPatientSubmitted
-                          )
-                        : false
-                    }
-                    onClick={
-                      comingFor === "add" ? handleGenerateEDR : handleEdit
-                    }
-                    variant="contained"
-                    color="danger"
-                  >
-                    {comingFor === "add" ? "Generate ED Record" : "Update"}
-                  </Button>
-                ) : (
-                  undefined
-                )}
-                {currentUser.staffTypeId.type === "IPR Receptionist" ? (
-                  <Button
-                    style={styles.generate}
-                    disabled={
-                      comingFor === "add"
-                        ? !(
-                            validatePatientForm() &&
-                            validateEmergencyForm() &&
-                            (validateInsuranceForm() || validateCashForm()) &&
-                            isPatientSubmitted
-                          )
-                        : false
-                    }
-                    onClick={
-                      comingFor === "add" ? handleGenerateIPR : handleEdit
-                    }
-                    variant="contained"
-                    color="danger"
-                  >
-                    {comingFor === "add" ? "Generate IP Record" : "Update"}
-                  </Button>
-                ) : (
-                  undefined
-                )}
-              </div>
-            </div>
-          </div>
-        )}
+                      {currentUser.staffTypeId.type === "EDR Receptionist" ? (
+                        <Button
+                          style={styles.generate}
+                          // disabled={comingFor === 'add' ? !isFormSubmitted : false}
+                          disabled={
+                            comingFor === "add"
+                              ? !(
+                                validatePatientForm() &&
+                                validateEmergencyForm() &&
+                                (validateInsuranceForm() || validateCashForm()) &&
+                                isPatientSubmitted
+                              )
+                              : false
+                          }
+                          onClick={
+                            comingFor === "add" ? handleGenerateEDR : handleEdit
+                          }
+                          variant="contained"
+                          color="danger"
+                        >
+                          {comingFor === "add" ? "Generate ED Record" : "Update"}
+                        </Button>
+                      ) : (
+                          undefined
+                        )}
+                      {currentUser.staffTypeId.type === "IPR Receptionist" ? (
+                        <Button
+                          style={styles.generate}
+                          disabled={
+                            comingFor === "add"
+                              ? !(
+                                validatePatientForm() &&
+                                validateEmergencyForm() &&
+                                (validateInsuranceForm() || validateCashForm()) &&
+                                isPatientSubmitted
+                              )
+                              : false
+                          }
+                          onClick={
+                            comingFor === "add" ? handleGenerateIPR : handleEdit
+                          }
+                          variant="contained"
+                          color="danger"
+                        >
+                          {comingFor === "add" ? "Generate IP Record" : "Update"}
+                        </Button>
+                      ) : (
+                          undefined
+                        )}
+                    </div>
+                  </div>
+                </div>
+              )}
 
         <Notification
           msg={errorMsg}

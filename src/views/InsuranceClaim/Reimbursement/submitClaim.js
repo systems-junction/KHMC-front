@@ -39,12 +39,13 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import BarCode from "../../../assets/img/Bar Code.png";
 import Fingerprint from "../../../assets/img/fingerprint.png";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
-import { reject } from "lodash";
+import { last, reject } from "lodash";
 
 const tableHeadingForBillSummary = [
   "Date/Time",
   "Service Name",
   "Service Type",
+  "Status",
   "Amount",
   "Invoice",
 ];
@@ -52,6 +53,7 @@ const tableDataKeysForBillSummary = [
   "date",
   ["serviceId", "name"],
   "serviceType",
+  ["serviceId", "insuranceStatus"],
   ["serviceId", "price"],
 ];
 
@@ -481,7 +483,7 @@ function AddEditPatientListing(props) {
     for (let i = 0; i < fileType.length; i++) {
       let reader = new FileReader();
       reader.readAsDataURL(file[i]);
-      reader.onload = function(event) {
+      reader.onload = function (event) {
         if (fileType[i] === "pdf") {
           arr.push(file[i].name);
           setpdfView([...arr]);
@@ -604,38 +606,143 @@ function AddEditPatientListing(props) {
           });
           dispatch({ field: "document", value: res.data.rc.document });
 
+          // let pharm = [];
+          // for (let i = 0; i < res.data.data.pharmacyRequest.length; i++) {
+          //   let amount = 0;
+          //   let singlePR = res.data.data.pharmacyRequest[i];
+          //   for (let j = 0; j < singlePR.item.length; j++) {
+          //     // console.log(singlePR.medicine[j].itemId.purchasePrice)
+          //     amount =
+          //       amount +
+          //       singlePR.item[j].itemId.issueUnitCost *
+          //         singlePR.item[j].requestedQty;
+          //   }
+          //   let obj = {
+          //     serviceId: {
+          //       name: "Pharmacy Item",
+          //       price: amount.toFixed(2),
+          //     },
+          //     date: res.data.data.pharmacyRequest[i].dateGenerated,
+          //     serviceType: "Pharmacy",
+          //   };
+          //   pharm.push(obj);
+          // }
+
           let pharm = [];
           for (let i = 0; i < res.data.data.pharmacyRequest.length; i++) {
             let amount = 0;
             let singlePR = res.data.data.pharmacyRequest[i];
             for (let j = 0; j < singlePR.item.length; j++) {
-              // console.log(singlePR.medicine[j].itemId.purchasePrice)
-              amount =
-                amount +
-                singlePR.item[j].itemId.issueUnitCost *
+              let found = false;
+              for (let k = 0; k < res.data.insured.length; k++) {
+                if (singlePR.item[j].itemId._id === res.data.insured[k].itemId) {
+                  amount =
+                    // amount +
+                    res.data.insured[k].price *
+                    singlePR.item[j].requestedQty;
+                  let obj = {
+                    serviceId: {
+                      name: singlePR.item[j].itemId.name,
+                      price: amount.toFixed(2),
+                      insuranceStatus: 'Insured'
+                    },
+                    date: res.data.data.pharmacyRequest[i].dateGenerated,
+                    serviceType: "Pharmacy",
+                  };
+                  pharm.push(obj);
+                  found = true
+                }
+              }
+              if (!found) {
+                amount =
+                  // amount +
+                  singlePR.item[j].itemId.issueUnitCost *
                   singlePR.item[j].requestedQty;
+                let obj = {
+                  serviceId: {
+                    name: singlePR.item[j].itemId.name,
+                    price: amount.toFixed(2),
+                    insuranceStatus: 'Uninsured'
+                  },
+                  date: res.data.data.pharmacyRequest[i].dateGenerated,
+                  serviceType: "Pharmacy",
+                };
+                pharm.push(obj);
+              }
             }
-            let obj = {
-              serviceId: {
-                name: "Pharmacy Item",
-                price: amount.toFixed(2),
-              },
-              date: res.data.data.pharmacyRequest[i].dateGenerated,
-              serviceType: "Pharmacy",
-            };
-            pharm.push(obj);
           }
 
-          res.data.data.labRequest.map((d) => (d.serviceType = "Lab"));
-          res.data.data.radiologyRequest.map(
-            (d) => (d.serviceType = "Radiology")
-          );
+          let lab = [];
+          for (let i = 0; i < res.data.data.labRequest.length; i++) {
+            let singleLR = res.data.data.labRequest[i];
+            let found = false;
+            for (let j = 0; j < res.data.insured.length; j++) {
+              if (singleLR.serviceId._id === res.data.insured[j].laboratoryServiceId) {
+                let obj = {
+                  serviceId: {
+                    name: singleLR.serviceId.name,
+                    price: res.data.insured[j].price,
+                    insuranceStatus: 'Insured'
+                  },
+                  date: singleLR.date,
+                  serviceType: "Lab",
+                };
+                lab.push(obj);
+                found = true
+              }
+            }
+            if (!found) {
+              let obj = {
+                serviceId: {
+                  name: singleLR.serviceId.name,
+                  price: singleLR.serviceId.price.toFixed(2),
+                  insuranceStatus: 'Uninsured'
+                },
+                date: singleLR.date,
+                serviceType: "Lab",
+              };
+              lab.push(obj);
+            }
+          }
+
+          let radiology = [];
+          for (let i = 0; i < res.data.data.radiologyRequest.length; i++) {
+            let singleRR = res.data.data.radiologyRequest[i];
+            let found = false;
+            for (let j = 0; j < res.data.insured.length; j++) {
+              if (singleRR.serviceId._id === res.data.insured[j].radiologyServiceId) {
+                let obj = {
+                  serviceId: {
+                    name: singleRR.serviceId.name,
+                    price: res.data.insured[j].price,
+                    insuranceStatus: 'Insured'
+                  },
+                  date: singleRR.date,
+                  serviceType: "Radiology",
+                };
+                radiology.push(obj);
+                found = true
+              }
+            }
+            if (!found) {
+              let obj = {
+                serviceId: {
+                  name: singleRR.serviceId.name,
+                  price: singleRR.serviceId.price.toFixed(2),
+                  insuranceStatus: 'Uninsured'
+                },
+                date: singleRR.date,
+                serviceType: "Radiology",
+              };
+              radiology.push(obj);
+            }
+          }
 
           // console.log("Bill sumamry is ... ", [].concat(res.data.data.labRequest, res.data.data.radiologyRequest, pharm))
           setbillSummaryArray(
             [].concat(
-              res.data.data.labRequest.reverse(),
-              res.data.data.radiologyRequest.reverse(),
+              lab.reverse(),
+              radiology.reverse(),
               pharm.reverse()
             )
           );
@@ -1013,24 +1120,24 @@ function AddEditPatientListing(props) {
                                 </Table>
                               )
                             ) : (
-                              <h4
-                                style={{ textAlign: "center" }}
-                                onClick={() => setSearchQuery("")}
-                              >
-                                Patient Not Found
-                              </h4>
-                            )}
+                                <h4
+                                  style={{ textAlign: "center" }}
+                                  onClick={() => setSearchQuery("")}
+                                >
+                                  Patient Not Found
+                                </h4>
+                              )}
                           </Paper>
                         </div>
                       ) : (
-                        undefined
-                      )}
+                          undefined
+                        )}
                     </div>
                   </div>
                 </div>
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
             </div>
 
             <div className="container-fluid">
@@ -1146,12 +1253,12 @@ function AddEditPatientListing(props) {
                   >
                     {medicationArray
                       ? medicationArray.map((drug, index) => {
-                          return (
-                            <h6 style={styles.textStyles}>
-                              {index + 1}. {drug}
-                            </h6>
-                          );
-                        })
+                        return (
+                          <h6 style={styles.textStyles}>
+                            {index + 1}. {drug}
+                          </h6>
+                        );
+                      })
                       : ""}
                   </div>
 
@@ -1161,12 +1268,12 @@ function AddEditPatientListing(props) {
                   >
                     {diagnosisArray
                       ? diagnosisArray.map((drug, index) => {
-                          return (
-                            <h6 style={styles.textStyles}>
-                              {index + 1}. {drug}
-                            </h6>
-                          );
-                        })
+                        return (
+                          <h6 style={styles.textStyles}>
+                            {index + 1}. {drug}
+                          </h6>
+                        );
+                      })
                       : ""}
                   </div>
                 </div>
@@ -1246,8 +1353,8 @@ function AddEditPatientListing(props) {
                 </div>
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             <div
               style={{
@@ -1312,8 +1419,8 @@ function AddEditPatientListing(props) {
                   borderBottomWidth={20}
                 />
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
             </div>
 
             <div
@@ -1483,89 +1590,89 @@ function AddEditPatientListing(props) {
                       })}
                     </div>
                   ) : (
-                    undefined
-                  )}
+                      undefined
+                    )}
                 </div>
               </div>
 
               <div className="row">
                 {document.length > 0 &&
-                document.map((item, index) => item.includes("\\")) ? (
-                  <>
-                    {document.map((item, index) => {
-                      if (item.slice(item.length - 3) !== "pdf") {
-                        return (
-                          <div
-                            className="col-md-6 col-sm-6 col-6"
-                            style={{
-                              ...styles.inputContainerForTextField,
-                            }}
-                          >
-                            <img
-                              src={uploadsUrl + item.split("\\")[1]}
-                              className="depositSlipImg"
-                            />
-                          </div>
-                        );
-                      } else if (item.slice(item.length - 3) === "pdf") {
-                        return (
-                          <div
-                            className="col-md-6 col-sm-6 col-6"
-                            style={{
-                              ...styles.inputContainerForTextField,
-                            }}
-                          >
-                            <a
-                              href={uploadsUrl + item.split("\\")[1]}
-                              style={{ color: "#2c6ddd" }}
+                  document.map((item, index) => item.includes("\\")) ? (
+                    <>
+                      {document.map((item, index) => {
+                        if (item.slice(item.length - 3) !== "pdf") {
+                          return (
+                            <div
+                              className="col-md-6 col-sm-6 col-6"
+                              style={{
+                                ...styles.inputContainerForTextField,
+                              }}
                             >
-                              Click here to open document {index + 1}
-                            </a>
-                          </div>
-                        );
-                      }
-                    })}
-                  </>
-                ) : document.length > 0 &&
-                  document.map((item, index) => item.includes("/")) ? (
-                  <>
-                    {document.map((item, index) => {
-                      if (item.slice(item.length - 3) !== "pdf") {
-                        return (
-                          <div
-                            className="col-md-6 col-sm-6 col-6"
-                            style={{
-                              ...styles.inputContainerForTextField,
-                            }}
-                          >
-                            <img
-                              src={uploadsUrl + item}
-                              className="depositSlipImg"
-                            />
-                          </div>
-                        );
-                      } else if (item.slice(item.length - 3) === "pdf") {
-                        return (
-                          <div
-                            className="col-md-6 col-sm-6 col-6"
-                            style={{
-                              ...styles.inputContainerForTextField,
-                            }}
-                          >
-                            <a
-                              href={uploadsUrl + document}
-                              style={{ color: "#2c6ddd" }}
+                              <img
+                                src={uploadsUrl + item.split("\\")[1]}
+                                className="depositSlipImg"
+                              />
+                            </div>
+                          );
+                        } else if (item.slice(item.length - 3) === "pdf") {
+                          return (
+                            <div
+                              className="col-md-6 col-sm-6 col-6"
+                              style={{
+                                ...styles.inputContainerForTextField,
+                              }}
                             >
-                              Click here to open document {index + 1}
-                            </a>
-                          </div>
-                        );
-                      }
-                    })}
-                  </>
-                ) : (
-                  undefined
-                )}
+                              <a
+                                href={uploadsUrl + item.split("\\")[1]}
+                                style={{ color: "#2c6ddd" }}
+                              >
+                                Click here to open document {index + 1}
+                              </a>
+                            </div>
+                          );
+                        }
+                      })}
+                    </>
+                  ) : document.length > 0 &&
+                    document.map((item, index) => item.includes("/")) ? (
+                      <>
+                        {document.map((item, index) => {
+                          if (item.slice(item.length - 3) !== "pdf") {
+                            return (
+                              <div
+                                className="col-md-6 col-sm-6 col-6"
+                                style={{
+                                  ...styles.inputContainerForTextField,
+                                }}
+                              >
+                                <img
+                                  src={uploadsUrl + item}
+                                  className="depositSlipImg"
+                                />
+                              </div>
+                            );
+                          } else if (item.slice(item.length - 3) === "pdf") {
+                            return (
+                              <div
+                                className="col-md-6 col-sm-6 col-6"
+                                style={{
+                                  ...styles.inputContainerForTextField,
+                                }}
+                              >
+                                <a
+                                  href={uploadsUrl + document}
+                                  style={{ color: "#2c6ddd" }}
+                                >
+                                  Click here to open document {index + 1}
+                                </a>
+                              </div>
+                            );
+                          }
+                        })}
+                      </>
+                    ) : (
+                      undefined
+                    )}
 
                 {imagePreview.length > 0 ? (
                   <>
@@ -1586,15 +1693,15 @@ function AddEditPatientListing(props) {
                               New document
                             </div>
                           ) : (
-                            undefined
-                          )}
+                              undefined
+                            )}
                         </div>
                       );
                     })}
                   </>
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
               </div>
             </div>
             <div
@@ -1630,22 +1737,22 @@ function AddEditPatientListing(props) {
                     Submit
                   </Button>
                 ) : (
-                  <Button
-                    style={styles.stylesForButton}
-                    //disabled={!validateFormType1()}
-                    onClick={handleEdit}
-                    variant="contained"
-                    color="default"
-                  >
-                    Update
-                  </Button>
-                )}
+                    <Button
+                      style={styles.stylesForButton}
+                      //disabled={!validateFormType1()}
+                      onClick={handleEdit}
+                      variant="contained"
+                      color="default"
+                    >
+                      Update
+                    </Button>
+                  )}
               </div>
             </div>
           </div>
         ) : (
-          undefined
-        )}
+                undefined
+              )}
 
         <Notification
           msg={errorMsg}
