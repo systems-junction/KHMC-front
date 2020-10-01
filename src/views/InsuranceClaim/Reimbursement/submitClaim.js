@@ -40,12 +40,13 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import BarCode from "../../../assets/img/Bar Code.png";
 import Fingerprint from "../../../assets/img/fingerprint.png";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
-import { reject } from "lodash";
+import { last, reject } from "lodash";
 
 const tableHeadingForBillSummary = [
   "Date/Time",
   "Service Name",
   "Service Type",
+  "Status",
   "Amount",
   "Invoice",
 ];
@@ -53,6 +54,7 @@ const tableDataKeysForBillSummary = [
   "date",
   ["serviceId", "name"],
   "serviceType",
+  ["serviceId", "insuranceStatus"],
   ["serviceId", "price"],
 ];
 
@@ -227,13 +229,13 @@ function AddEditPatientListing(props) {
     return { name, calories, fat, carbs, protein };
   }
 
-  const rows = [
-    createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-    createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-    createData("Eclair", 262, 16.0, 24, 6.0),
-    createData("Cupcake", 305, 3.7, 67, 4.3),
-    createData("Gingerbread", 356, 16.0, 49, 3.9),
-  ];
+  // const rows = [
+  //   createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
+  //   createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
+  //   createData("Eclair", 262, 16.0, 24, 6.0),
+  //   createData("Cupcake", 305, 3.7, 67, 4.3),
+  //   createData("Gingerbread", 356, 16.0, 49, 3.9),
+  // ];
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -494,7 +496,7 @@ function AddEditPatientListing(props) {
     for (let i = 0; i < fileType.length; i++) {
       let reader = new FileReader();
       reader.readAsDataURL(file[i]);
-      reader.onload = function(event) {
+      reader.onload = function (event) {
         if (fileType[i] === "pdf") {
           arr.push(file[i].name);
           setpdfView([...arr]);
@@ -599,7 +601,6 @@ function AddEditPatientListing(props) {
     dispatch({ field: "admittedOn", value: i.createdAt });
 
     setSearchQuery("");
-    setsearched(true);
     getBillSummary(i._id);
     getPatientByInfo(i._id);
   }
@@ -609,6 +610,7 @@ function AddEditPatientListing(props) {
       .get(getedripr + "/" + i)
       .then((res) => {
         if (res.data.success) {
+          setsearched(true);
           console.log("response for Claim", res.data.rc);
 
           dispatch({
@@ -617,38 +619,143 @@ function AddEditPatientListing(props) {
           });
           dispatch({ field: "document", value: res.data.rc.document });
 
+          // let pharm = [];
+          // for (let i = 0; i < res.data.data.pharmacyRequest.length; i++) {
+          //   let amount = 0;
+          //   let singlePR = res.data.data.pharmacyRequest[i];
+          //   for (let j = 0; j < singlePR.item.length; j++) {
+          //     // console.log(singlePR.medicine[j].itemId.purchasePrice)
+          //     amount =
+          //       amount +
+          //       singlePR.item[j].itemId.issueUnitCost *
+          //         singlePR.item[j].requestedQty;
+          //   }
+          //   let obj = {
+          //     serviceId: {
+          //       name: "Pharmacy Item",
+          //       price: amount.toFixed(2),
+          //     },
+          //     date: res.data.data.pharmacyRequest[i].dateGenerated,
+          //     serviceType: "Pharmacy",
+          //   };
+          //   pharm.push(obj);
+          // }
+
           let pharm = [];
           for (let i = 0; i < res.data.data.pharmacyRequest.length; i++) {
             let amount = 0;
             let singlePR = res.data.data.pharmacyRequest[i];
             for (let j = 0; j < singlePR.item.length; j++) {
-              // console.log(singlePR.medicine[j].itemId.purchasePrice)
-              amount =
-                amount +
-                singlePR.item[j].itemId.issueUnitCost *
+              let found = false;
+              for (let k = 0; k < res.data.insured.length; k++) {
+                if (singlePR.item[j].itemId._id === res.data.insured[k].itemId) {
+                  amount =
+                    // amount +
+                    res.data.insured[k].price *
+                    singlePR.item[j].requestedQty;
+                  let obj = {
+                    serviceId: {
+                      name: singlePR.item[j].itemId.name,
+                      price: amount.toFixed(2),
+                      insuranceStatus: 'Insured'
+                    },
+                    date: res.data.data.pharmacyRequest[i].dateGenerated,
+                    serviceType: "Pharmacy",
+                  };
+                  pharm.push(obj);
+                  found = true
+                }
+              }
+              if (!found) {
+                amount =
+                  // amount +
+                  singlePR.item[j].itemId.issueUnitCost *
                   singlePR.item[j].requestedQty;
+                let obj = {
+                  serviceId: {
+                    name: singlePR.item[j].itemId.name,
+                    price: amount.toFixed(2),
+                    insuranceStatus: 'Uninsured'
+                  },
+                  date: res.data.data.pharmacyRequest[i].dateGenerated,
+                  serviceType: "Pharmacy",
+                };
+                pharm.push(obj);
+              }
             }
-            let obj = {
-              serviceId: {
-                name: "Pharmacy Item",
-                price: amount.toFixed(2),
-              },
-              date: res.data.data.pharmacyRequest[i].dateGenerated,
-              serviceType: "Pharmacy",
-            };
-            pharm.push(obj);
           }
 
-          res.data.data.labRequest.map((d) => (d.serviceType = "Lab"));
-          res.data.data.radiologyRequest.map(
-            (d) => (d.serviceType = "Radiology")
-          );
+          let lab = [];
+          for (let i = 0; i < res.data.data.labRequest.length; i++) {
+            let singleLR = res.data.data.labRequest[i];
+            let found = false;
+            for (let j = 0; j < res.data.insured.length; j++) {
+              if (singleLR.serviceId._id === res.data.insured[j].laboratoryServiceId) {
+                let obj = {
+                  serviceId: {
+                    name: singleLR.serviceId.name,
+                    price: res.data.insured[j].price,
+                    insuranceStatus: 'Insured'
+                  },
+                  date: singleLR.date,
+                  serviceType: "Lab",
+                };
+                lab.push(obj);
+                found = true
+              }
+            }
+            if (!found) {
+              let obj = {
+                serviceId: {
+                  name: singleLR.serviceId.name,
+                  price: singleLR.serviceId.price.toFixed(2),
+                  insuranceStatus: 'Uninsured'
+                },
+                date: singleLR.date,
+                serviceType: "Lab",
+              };
+              lab.push(obj);
+            }
+          }
+
+          let radiology = [];
+          for (let i = 0; i < res.data.data.radiologyRequest.length; i++) {
+            let singleRR = res.data.data.radiologyRequest[i];
+            let found = false;
+            for (let j = 0; j < res.data.insured.length; j++) {
+              if (singleRR.serviceId._id === res.data.insured[j].radiologyServiceId) {
+                let obj = {
+                  serviceId: {
+                    name: singleRR.serviceId.name,
+                    price: res.data.insured[j].price,
+                    insuranceStatus: 'Insured'
+                  },
+                  date: singleRR.date,
+                  serviceType: "Radiology",
+                };
+                radiology.push(obj);
+                found = true
+              }
+            }
+            if (!found) {
+              let obj = {
+                serviceId: {
+                  name: singleRR.serviceId.name,
+                  price: singleRR.serviceId.price.toFixed(2),
+                  insuranceStatus: 'Uninsured'
+                },
+                date: singleRR.date,
+                serviceType: "Radiology",
+              };
+              radiology.push(obj);
+            }
+          }
 
           // console.log("Bill sumamry is ... ", [].concat(res.data.data.labRequest, res.data.data.radiologyRequest, pharm))
           setbillSummaryArray(
             [].concat(
-              res.data.data.labRequest.reverse(),
-              res.data.data.radiologyRequest.reverse(),
+              lab.reverse(),
+              radiology.reverse(),
               pharm.reverse()
             )
           );
@@ -797,7 +904,6 @@ function AddEditPatientListing(props) {
   };
 
   const onInpatientInvoiceSummary = () => {
-    console.log("hello");
     var doc = new jsPDF();
 
     var logo = new Image();
@@ -819,43 +925,59 @@ function AddEditPatientListing(props) {
     doc.rect(0, 45, 210, 22, "F");
 
     // information of patient
-    doc.text(10, 50, "Guarantor:");
-    doc.text(45, 50, "Mudassir Ijaz");
+    // labels
+    doc.setFontSize(10)
+    doc.setFont('times',"bold");
+    doc.text(10, 50, "Patient MRN:");
     doc.text(10, 55, "Patient Name:");
-    doc.text(45, 55, "Name");
     doc.text(10, 60, "Admitted On:");
-    doc.text(45, 60, "03/04/2020");
     doc.text(10, 65, "Room:");
-    doc.text(45, 65, "04");
     doc.text(85, 60, "Discharged on:");
-    doc.text(120, 60, "3/2/2020");
     doc.text(85, 65, "Class:");
-    doc.text(120, 65, "ABC");
     doc.text(150, 60, "Invoice No:");
-    doc.text(180, 60, "IN332313D");
     doc.text(150, 65, "Adm. No");
-    doc.text(180, 65, "AD223423");
+
+    // dynamic inputs
+    doc.setFont('times',"normal");
+    doc.text(45, 50, profileNo);
+    doc.text(45, 55, firstName + ' ' + lastName); // Patient Name
+    doc.text(45, 60, admittedOn !== '' ? formatDate(admittedOn) : '--');
+    doc.text(45, 65, ""); // room no
+    doc.text(120, 60, ""); // discharged on
+    doc.text(120, 65, ""); // class 
+    doc.text(180, 60, invoiceNo); // invoice No
+    doc.text(180, 65, "AD223423"); //Adm. No
 
     // table
-    doc.autoTable({ margin: { top: 70 }, html: "#my-table" });
+    doc.autoTable({ 
+      margin: { top: 70 ,right:0,left:0},
+      tableWidth:'auto',
+      headStyles:{fillColor: [170, 170, 170]},
+      html: "#InpatientInvoiceSummary" 
+    });
 
     // footer
-    doc.setFontSize(15);
-    // doc.setFontType("bold");
+    // labels
+    doc.setFontSize(12);
+    doc.setFont('times',"bold");
     doc.text(120, 260, "Invoice Amount");
-    doc.text(169, 260, "1090.48");
-    doc.text(190, 260, "JD");
     doc.text(120, 265, "Pharmacy");
-    doc.text(169, 265, "1090.48");
-    doc.text(190, 265, "JD");
     doc.text(120, 270, "Down Payments");
-    doc.text(169, 270, "1090.48");
-    doc.text(190, 270, "JD");
     doc.line(120, 273, 195, 273);
     doc.text(120, 280, "Total");
     doc.text(169, 280, "1090.48");
     doc.text(190, 280, "JD");
-    doc.save("Patient Summary Invoice.pdf");
+
+    // dynamic text
+    doc.setFont('times',"normal");
+    doc.text(169, 260, "1090.48"); // invoice amount
+    doc.text(190, 260, "JD");
+    doc.text(169, 265, "1090.48"); // pharmacy
+    doc.text(190, 265, "JD");
+    doc.text(169, 270, "1090.48"); // down payment
+    doc.text(190, 270, "JD");
+
+    doc.save(`Patient Summary Invoice ${invoiceNo}.pdf`);
   };
 
   const onInpatientInvoiceDetails = () => {
@@ -914,6 +1036,7 @@ function AddEditPatientListing(props) {
 
     doc.save("Patient Details Invoice.pdf");
   };
+
   return (
     <div
       style={{
@@ -1100,24 +1223,24 @@ function AddEditPatientListing(props) {
                                 </Table>
                               )
                             ) : (
-                              <h4
-                                style={{ textAlign: "center" }}
-                                onClick={() => setSearchQuery("")}
-                              >
-                                Patient Not Found
-                              </h4>
-                            )}
+                                <h4
+                                  style={{ textAlign: "center" }}
+                                  onClick={() => setSearchQuery("")}
+                                >
+                                  Patient Not Found
+                                </h4>
+                              )}
                           </Paper>
                         </div>
                       ) : (
-                        undefined
-                      )}
+                          undefined
+                        )}
                     </div>
                   </div>
                 </div>
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
             </div>
 
             <div className="container-fluid">
@@ -1233,12 +1356,12 @@ function AddEditPatientListing(props) {
                   >
                     {medicationArray
                       ? medicationArray.map((drug, index) => {
-                          return (
-                            <h6 style={styles.textStyles}>
-                              {index + 1}. {drug}
-                            </h6>
-                          );
-                        })
+                        return (
+                          <h6 style={styles.textStyles}>
+                            {index + 1}. {drug}
+                          </h6>
+                        );
+                      })
                       : ""}
                   </div>
 
@@ -1248,12 +1371,12 @@ function AddEditPatientListing(props) {
                   >
                     {diagnosisArray
                       ? diagnosisArray.map((drug, index) => {
-                          return (
-                            <h6 style={styles.textStyles}>
-                              {index + 1}. {drug}
-                            </h6>
-                          );
-                        })
+                        return (
+                          <h6 style={styles.textStyles}>
+                            {index + 1}. {drug}
+                          </h6>
+                        );
+                      })
                       : ""}
                   </div>
                 </div>
@@ -1333,8 +1456,8 @@ function AddEditPatientListing(props) {
                 </div>
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             <div
               style={{
@@ -1400,8 +1523,8 @@ function AddEditPatientListing(props) {
                   borderBottomWidth={20}
                 />
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
             </div>
 
             <div
@@ -1505,8 +1628,32 @@ function AddEditPatientListing(props) {
                     sheet="Invoice"
                     buttonText="Export Invoice" />
                 </div> */}
+
+                <Table id="InpatientInvoiceSummary" style={{ display: "none" }} aria-label="InpatientInvoiceSummary">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Description</TableCell>
+                      <TableCell align="right">Service Type</TableCell>
+                      <TableCell align="right">Status</TableCell>
+                      <TableCell align="right">Amount</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {billSummaryArray.map((row, index) => (
+                      <TableRow key={index}>
+                        <TableCell component="th" scope="row">
+                          {row.serviceId.name}
+                        </TableCell>
+                        <TableCell align="right">{row.serviceType}</TableCell>
+                        <TableCell align="right">{row.serviceId.insuranceStatus}</TableCell>
+                        <TableCell align="right">{row.serviceId.price}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+
                 <div
-                  className="col-md-3 col-sm-3 col-3"
+                  className="col-md-6 col-sm-6 col-6"
                   style={{
                     marginLeft: 0,
                     marginRight: 0,
@@ -1527,8 +1674,8 @@ function AddEditPatientListing(props) {
                   </Button>
                 </div>
 
-                <div
-                  className="col-md-3 col-sm-3 col-3"
+                {/* <div
+                  className="col-md-4 col-sm-4 col-4"
                   style={{
                     marginLeft: 0,
                     marginRight: 0,
@@ -1547,7 +1694,7 @@ function AddEditPatientListing(props) {
                   >
                     In-patient Invoice Details
                   </Button>
-                </div>
+                </div> */}
 
                 <div
                   className="col-md-6 col-sm-6 col-6"
@@ -1593,89 +1740,89 @@ function AddEditPatientListing(props) {
                       })}
                     </div>
                   ) : (
-                    undefined
-                  )}
+                      undefined
+                    )}
                 </div>
               </div>
 
               <div className="row">
                 {document.length > 0 &&
-                document.map((item, index) => item.includes("\\")) ? (
-                  <>
-                    {document.map((item, index) => {
-                      if (item.slice(item.length - 3) !== "pdf") {
-                        return (
-                          <div
-                            className="col-md-6 col-sm-6 col-6"
-                            style={{
-                              ...styles.inputContainerForTextField,
-                            }}
-                          >
-                            <img
-                              src={uploadsUrl + item.split("\\")[1]}
-                              className="depositSlipImg"
-                            />
-                          </div>
-                        );
-                      } else if (item.slice(item.length - 3) === "pdf") {
-                        return (
-                          <div
-                            className="col-md-6 col-sm-6 col-6"
-                            style={{
-                              ...styles.inputContainerForTextField,
-                            }}
-                          >
-                            <a
-                              href={uploadsUrl + item.split("\\")[1]}
-                              style={{ color: "#2c6ddd" }}
+                  document.map((item, index) => item.includes("\\")) ? (
+                    <>
+                      {document.map((item, index) => {
+                        if (item.slice(item.length - 3) !== "pdf") {
+                          return (
+                            <div
+                              className="col-md-6 col-sm-6 col-6"
+                              style={{
+                                ...styles.inputContainerForTextField,
+                              }}
                             >
-                              Click here to open document {index + 1}
-                            </a>
-                          </div>
-                        );
-                      }
-                    })}
-                  </>
-                ) : document.length > 0 &&
-                  document.map((item, index) => item.includes("/")) ? (
-                  <>
-                    {document.map((item, index) => {
-                      if (item.slice(item.length - 3) !== "pdf") {
-                        return (
-                          <div
-                            className="col-md-6 col-sm-6 col-6"
-                            style={{
-                              ...styles.inputContainerForTextField,
-                            }}
-                          >
-                            <img
-                              src={uploadsUrl + item}
-                              className="depositSlipImg"
-                            />
-                          </div>
-                        );
-                      } else if (item.slice(item.length - 3) === "pdf") {
-                        return (
-                          <div
-                            className="col-md-6 col-sm-6 col-6"
-                            style={{
-                              ...styles.inputContainerForTextField,
-                            }}
-                          >
-                            <a
-                              href={uploadsUrl + document}
-                              style={{ color: "#2c6ddd" }}
+                              <img
+                                src={uploadsUrl + item.split("\\")[1]}
+                                className="depositSlipImg"
+                              />
+                            </div>
+                          );
+                        } else if (item.slice(item.length - 3) === "pdf") {
+                          return (
+                            <div
+                              className="col-md-6 col-sm-6 col-6"
+                              style={{
+                                ...styles.inputContainerForTextField,
+                              }}
                             >
-                              Click here to open document {index + 1}
-                            </a>
-                          </div>
-                        );
-                      }
-                    })}
-                  </>
-                ) : (
-                  undefined
-                )}
+                              <a
+                                href={uploadsUrl + item.split("\\")[1]}
+                                style={{ color: "#2c6ddd" }}
+                              >
+                                Click here to open document {index + 1}
+                              </a>
+                            </div>
+                          );
+                        }
+                      })}
+                    </>
+                  ) : document.length > 0 &&
+                    document.map((item, index) => item.includes("/")) ? (
+                      <>
+                        {document.map((item, index) => {
+                          if (item.slice(item.length - 3) !== "pdf") {
+                            return (
+                              <div
+                                className="col-md-6 col-sm-6 col-6"
+                                style={{
+                                  ...styles.inputContainerForTextField,
+                                }}
+                              >
+                                <img
+                                  src={uploadsUrl + item}
+                                  className="depositSlipImg"
+                                />
+                              </div>
+                            );
+                          } else if (item.slice(item.length - 3) === "pdf") {
+                            return (
+                              <div
+                                className="col-md-6 col-sm-6 col-6"
+                                style={{
+                                  ...styles.inputContainerForTextField,
+                                }}
+                              >
+                                <a
+                                  href={uploadsUrl + document}
+                                  style={{ color: "#2c6ddd" }}
+                                >
+                                  Click here to open document {index + 1}
+                                </a>
+                              </div>
+                            );
+                          }
+                        })}
+                      </>
+                    ) : (
+                      undefined
+                    )}
 
                 {imagePreview.length > 0 ? (
                   <>
@@ -1696,15 +1843,15 @@ function AddEditPatientListing(props) {
                               New document
                             </div>
                           ) : (
-                            undefined
-                          )}
+                              undefined
+                            )}
                         </div>
                       );
                     })}
                   </>
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
               </div>
             </div>
             <div
@@ -1740,22 +1887,22 @@ function AddEditPatientListing(props) {
                     Submit
                   </Button>
                 ) : (
-                  <Button
-                    style={styles.stylesForButton}
-                    //disabled={!validateFormType1()}
-                    onClick={handleEdit}
-                    variant="contained"
-                    color="default"
-                  >
-                    Update
-                  </Button>
-                )}
+                    <Button
+                      style={styles.stylesForButton}
+                      //disabled={!validateFormType1()}
+                      onClick={handleEdit}
+                      variant="contained"
+                      color="default"
+                    >
+                      Update
+                    </Button>
+                  )}
               </div>
             </div>
           </div>
         ) : (
-          undefined
-        )}
+                undefined
+              )}
 
         <Notification
           msg={errorMsg}
@@ -1763,31 +1910,6 @@ function AddEditPatientListing(props) {
           success={successMsg}
         />
       </div>
-
-      <Table id="my-table" style={{ display: "none" }} aria-label="my-table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">Calories</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.name}>
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
     </div>
   );
 }

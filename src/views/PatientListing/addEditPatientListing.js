@@ -365,14 +365,15 @@ function AddEditPatientListing(props) {
     DateTime: new Date(),
     receiverName: cookie.load('current_user').name,
     // receiverName: '',
-    insuranceVendor: '',
-    paymentMethod: '',
-    emergencyName: '',
-    emergencyContactNo: '',
-    emergencyRelation: '',
-    coveredFamilyMembers: '',
-    otherCoverageDetails: '',
-  }
+    insuranceVendor: "",
+    paymentMethod: "",
+    emergencyName: "",
+    emergencyContactNo: "",
+    emergencyRelation: "",
+    coveredFamilyMembers: "",
+    otherCoverageDetails: "",
+    insurerId: ''
+  };
 
   function reducer(state, { field, value }) {
     return {
@@ -422,7 +423,8 @@ function AddEditPatientListing(props) {
     emergencyRelation,
     coveredFamilyMembers,
     otherCoverageDetails,
-  } = state
+    insurerId
+  } = state;
 
   const onChangeCountry = (e) => {
     if (e.target.value) {
@@ -738,16 +740,17 @@ function AddEditPatientListing(props) {
     axios
       .get(`${getVendorApproval}/${insuranceNo}`)
       .then((e) => {
-        setInsuranceBoolean(false)
-        dispatch({
-          field: 'coverageTerms',
-          value: e.data.data.coverageDetail,
-        })
-
-        setCovTer(e.data.data.coverageDetail)
-        dispatch({ field: 'insuranceVendor', value: e.data.data.vendor })
-
-        console.log(e)
+        if (e.data.success) {
+          console.log(e.data);
+          setInsuranceBoolean(false);
+          dispatch({
+            field: "coverageTerms",
+            value: e.data.data.coverageDetail,
+          });
+          dispatch({ field: "insuranceVendor", value: e.data.data.vendor });
+          dispatch({ field: "insurerId", value: e.data.data.insurerId });
+          setCovTer(e.data.data.coverageDetail);
+        }
       })
       .catch((error) => {
         setOpenNotification(true)
@@ -863,7 +866,7 @@ function AddEditPatientListing(props) {
     var reader = new FileReader()
     var url = reader.readAsDataURL(file)
 
-    reader.onloadend = function() {
+    reader.onloadend = function () {
       if (fileType === 'pdf') {
         setpdfView(file.name)
       } else {
@@ -904,8 +907,8 @@ function AddEditPatientListing(props) {
     value === 1
       ? setValue(0)
       : value === 2
-      ? setValue(1)
-      : props.history.goBack()
+        ? setValue(1)
+        : props.history.goBack()
     // setValue(tabIndex);
   }
 
@@ -915,7 +918,10 @@ function AddEditPatientListing(props) {
       generatedBy: currentUser.staffId,
       status: 'pending',
       functionalUnit: currentUser.functionalUnit._id,
-    }
+      insurerId: insurerId,
+      verified: !insuranceBoolean ? true : false
+    };
+    console.log("PARAMS ARE : ", params)
     axios
       .post(generateEDR, params, {})
       .then((res) => {
@@ -924,9 +930,8 @@ function AddEditPatientListing(props) {
           props.history.push({
             pathname: 'success',
             state: {
-              message: `EDR: ${
-                res.data.data.requestNo
-              } for patient MRN: ${MRN.toUpperCase()} generated successfully`,
+              message: `EDR: ${res.data.data.requestNo
+                } for patient MRN: ${MRN.toUpperCase()} generated successfully`,
             },
           })
         } else if (!res.data.success) {
@@ -947,8 +952,10 @@ function AddEditPatientListing(props) {
       generatedBy: currentUser.staffId,
       status: 'pending',
       functionalUnit: currentUser.functionalUnit._id,
-    }
-    // console.log(params)
+      insurerId: insurerId,
+      verified: !insuranceBoolean ? true : false
+    };
+    console.log("PARAMS ARE : ", params)
     axios
       .post(generateIPR, params, {})
       .then((res) => {
@@ -957,9 +964,8 @@ function AddEditPatientListing(props) {
           props.history.push({
             pathname: 'success',
             state: {
-              message: `IPR: ${
-                res.data.data.requestNo
-              } for patient MRN: ${MRN.toUpperCase()} generated successfully`,
+              message: `IPR: ${res.data.data.requestNo
+                } for patient MRN: ${MRN.toUpperCase()} generated successfully`,
             },
           })
         } else if (!res.data.success) {
@@ -1232,8 +1238,6 @@ function AddEditPatientListing(props) {
       dispatch({ field: 'otherCoverageDetails', value: '' })
     }
   }
-
-  console.log('amout', amountReceived, typeof amountReceived)
 
   // const addZeroes = (num) => {
   //   // Cast as number
