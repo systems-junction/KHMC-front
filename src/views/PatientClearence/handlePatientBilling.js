@@ -5,7 +5,7 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import logoPatientInvoice from "../../assets/img/logoPatientSummaryInvoice.jpg";
+import logoPatientInvoice from "../../assets/img/logoPatientSummaryInvoice.png";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import {
@@ -14,6 +14,7 @@ import {
   addClaim,
   getedripr,
   uploadsUrl,
+  audioURL,
   searchpatient,
   addPatientClearanceURL,
   getPatientClearanceURL,
@@ -283,7 +284,7 @@ function AddEditPatientListing(props) {
   const [requestNo, setRequestNo] = useState("");
   const [visitDate, setVisitDate] = useState("");
   const [patientProfileNo, setPatientProfileNo] = useState("");
-
+  const [qr, setQr] = useState("");
   useEffect(() => {
     // setcomingFor(props.history.location.state.comingFor);
     setCurrentUser(cookie.load("current_user"));
@@ -520,6 +521,36 @@ function AddEditPatientListing(props) {
     }, 2000);
   }
 
+  const formatDate = (date) => {
+    const d = new Date(date);
+
+    let minutes = "";
+
+    if (d.getHours().toString().length === 1) {
+      minutes = "0" + d.getHours();
+    } else {
+      minutes = d.getHours();
+    }
+
+    return (
+      // d.getDate() +
+      d
+        .getDate()
+        .toString()
+        .padStart(2, "0") +
+      " - " +
+      (d.getMonth() + 1).toString().padStart(2, "0") +
+      " - " +
+      // (d.getMonth() + 1) +
+      d.getFullYear() +
+      " " +
+      // d.toLocaleTimeString()
+      minutes +
+      ":" +
+      ("00" + d.getMinutes()).slice(-2)
+    );
+  };
+
   const handleSearch = (e) => {
     const a = e.target.value.replace(/[^\w\s]/gi, "");
     setSearchQuery(a);
@@ -555,6 +586,7 @@ function AddEditPatientListing(props) {
     dispatch({ field: "diagnosisArray", value: "" });
 
     console.log("selected banda", i);
+    setQr(i.QR);
 
     setSelectedPatient(i);
     setPatientDetails(i);
@@ -576,8 +608,11 @@ function AddEditPatientListing(props) {
 
   const onDischargeInvoice = () => {
     if (grandTotal === "") {
-      setOpenNotification(true)
+      setOpenNotification(true);
       setErrorMsg("Please calculate total amount before creating invoice");
+    } else if (billSummaryArray.length === 0) {
+      setOpenNotification(true);
+      setErrorMsg("No service is used, So invoice cannot be generated");
     } else {
       var now = new Date();
       var start = new Date(now.getFullYear(), 0, 0);
@@ -604,7 +639,7 @@ function AddEditPatientListing(props) {
 
       // header
       doc.setFontSize(15);
-      doc.addImage(logo, "JPEG", 10, 10, 30, 20);
+      doc.addImage(logo, "PNG", 10, 10, 55, 30);
       doc.text(60, 15, "Al-Khalidi Hospital & Medical Center");
       doc.text(77, 20, "Detailed ER Invoice");
       doc.line(80, 22.5, 120, 22.5);
@@ -615,20 +650,25 @@ function AddEditPatientListing(props) {
 
       // background coloring
       doc.setFillColor(255, 255, 200);
-      doc.rect(0, 45, 210, 20, "F");
+      doc.rect(10, 45, 190, 20, "F");
 
       // information of patient
-      doc.text(10, 50, "Patient Name:");
-      doc.text(45, 50, `${firstName + ` ` + lastName}`);
-      doc.text(10, 55, "Visit Date:");
-      doc.text(45, 55, `${visitDate.substr(0, 10)}`);
-      doc.text(10, 60, "Patient MRN:");
-      doc.text(45, 60, `${patientProfileNo}`);
+      doc.setFontSize(10);
+      doc.setFont("times", "bold");
+      doc.text(12, 50, "Patient Name:");
+      doc.text(12, 55, "Visit Date:");
+      doc.text(12, 60, "Patient MRN:");
       doc.text(120, 50, "Invoice No:");
-      doc.text(155, 50, `${invoiceNo}`);
       doc.text(120, 55, "Invoice Date");
-      doc.text(155, 55, `${dateNow.toISOString().substr(0, 10)} ${HH}:${mm}`);
       doc.text(120, 60, "Visit No:");
+
+      // dynamic data info patient
+      doc.setFont("times", "normal");
+      doc.text(47, 50, `${firstName + ` ` + lastName}`);
+      doc.text(47, 55, `${visitDate.substr(0, 10)}`);
+      doc.text(47, 60, `${patientProfileNo}`);
+      doc.text(155, 50, `${invoiceNo}`);
+      doc.text(155, 55, `${dateNow.toISOString().substr(0, 10)} ${HH}:${mm}`);
       doc.text(155, 60, `${requestNo}`);
 
       // heading 1
@@ -637,8 +677,11 @@ function AddEditPatientListing(props) {
       // doc.text(10, 80, "Not Covered");
 
       // table 1
+
       doc.autoTable({
-        margin: { top: 70, left: 10, right: 10 },
+        margin: { top: 70, right: 10, left: 10 },
+        tableWidth: "auto",
+        headStyles: { fillColor: [44, 109, 221] },
         html: "#my-table",
       });
 
@@ -651,28 +694,38 @@ function AddEditPatientListing(props) {
 
       // footer
       doc.setFontSize(12);
-      doc.text(120, 260, "Consultant Fee");
-      doc.text(169, 260, `${externalRequestsFee}`);
-      doc.text(190, 260, "JD");
-      doc.text(120, 265, "Doctor Fee");
-      doc.text(169, 265, `${internalRequestsFee}`);
-      doc.text(190, 265, "JD");
-      doc.text(120, 270, "Deposited Amount");
+      doc.setFont("times", "bold");
+      doc.text(120, 230, "Consultant Fee");
+      doc.text(190, 230, "JD");
+      doc.text(120, 235, "Doctor Fee");
+      doc.text(190, 235, "JD");
+      doc.text(120, 240, "Deposited Amount");
+      doc.text(190, 240, "JD");
+      doc.text(120, 245, "Total Services Bill");
+      doc.text(190, 245, "JD");
+      doc.text(120, 250, "Sub Total");
+      doc.text(190, 250, "JD");
+      doc.text(120, 255, "Total");
+      doc.text(190, 255, "JD");
+
+      // dynamic text
+      doc.setFont("times", "normal");
+      doc.text(169, 230, `${externalRequestsFee}`);
+      doc.text(169, 235, `${internalRequestsFee}`);
       doc.text(
         169,
-        270,
+        240,
         `${patientDetails.payment ? patientDetails.payment : 0}`
       );
-      doc.text(190, 270, "JD");
-      doc.text(120, 275, "Total Services Bill");
-      doc.text(169, 275, `${totalBillingAmount}`);
-      doc.text(190, 275, "JD");
-      doc.text(120, 280, "Sub Total");
-      doc.text(169, 280, `${remainingAmount}`);
-      doc.text(190, 280, "JD");
-      doc.text(120, 285, "Total");
-      doc.text(169, 285, `${grandTotal}`);
-      doc.text(190, 285, "JD");
+      doc.text(169, 245, `${totalBillingAmount}`);
+      doc.text(169, 250, `${remainingAmount}`);
+      doc.text(169, 255, `${grandTotal}`);
+
+      // bar code
+      doc.line(0, 260, 210, 260);
+      if (qr) {
+        doc.addImage(`${audioURL}${qr}`, "PNG", 172.9, 266, 25, 25);
+      }
 
       doc.save("Discharge Patient.pdf");
     }
@@ -1030,7 +1083,7 @@ function AddEditPatientListing(props) {
                           style={{
                             zIndex: 3,
                             position: "absolute",
-                            width: "98%",
+                            width: "81%",
                             left: 14,
                             marginTop: 5,
                           }}
@@ -1571,7 +1624,7 @@ function AddEditPatientListing(props) {
 
                 <Button
                   style={styles.stylesForButton}
-                  //disabled={!validateFormType1()}
+                  // disabled={!validateFormType1()}
                   onClick={onCalculateTotal}
                   variant="contained"
                   color="default"
@@ -1662,7 +1715,7 @@ function AddEditPatientListing(props) {
             {billSummaryArray.map((row) => (
               <TableRow key={row.date}>
                 <TableCell component="th" scope="row">
-                  {`${row.date.substr(0, 10)} ${row.date.substr(11, 5)}`}
+                  {formatDate(row.date)}
                 </TableCell>
                 <TableCell align="right">{row.serviceId.type}</TableCell>
                 <TableCell align="right">{row.serviceId.name}</TableCell>
