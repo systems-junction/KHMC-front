@@ -51,8 +51,8 @@ const priorityArray = [
 const tableHeadingForPharmacyReq = [
   'Medicine Name',
   'Quantity',
-  'Unit Price',
-  'Total Price',
+  'Unit Price ( JD)',
+  'Total Price ( JD)',
   'Action',
 ]
 const tableDataKeysForPharmacyReq = [
@@ -215,7 +215,7 @@ function AddEditEDR(props) {
   } = state
 
   const onChangeValue = (e) => {
-    var pattern = /^[0-9. ]*$/
+    var pattern = /^[0-9]*$/
     if (
       e.target.name === 'frequency' ||
       e.target.name === 'dosage' ||
@@ -544,12 +544,14 @@ function AddEditEDR(props) {
               dosage,
               frequency,
               duration,
-              requestedQty: (frequency * dosage * duration).toFixed(2),
+              requestedQty: frequency * dosage * duration,
               medicineName,
-              unitPrice: unitPrice.toFixed(2),
-              totalPrice: (unitPrice * frequency * dosage * duration).toFixed(
-                2
-              ),
+              // unitPrice: unitPrice,
+              unitPrice: parseFloat(unitPrice).toFixed(4),
+              // totalPrice: unitPrice * frequency * dosage * duration,
+              totalPrice: parseFloat(
+                unitPrice * frequency * dosage * duration
+              ).toFixed(4),
             },
           ],
         })
@@ -571,6 +573,7 @@ function AddEditEDR(props) {
 
   const editSelectedItem = () => {
     // if (validateItemsForm()) {
+    console.log('unitprice', unitPrice)
     setDialogOpen(false)
     let temp = []
 
@@ -583,10 +586,14 @@ function AddEditEDR(props) {
           dosage,
           frequency,
           duration,
-          requestedQty: (frequency * dosage * duration).toFixed(2),
+          requestedQty: frequency * dosage * duration,
           medicineName,
-          unitPrice: unitPrice.toFixed(2),
-          totalPrice: (unitPrice * frequency * dosage * duration).toFixed(2),
+          // unitPrice: unitPrice,
+          unitPrice: parseFloat(unitPrice).toFixed(4),
+          // totalPrice: unitPrice * frequency * dosage * duration,
+          totalPrice: parseFloat(
+            unitPrice * frequency * dosage * duration
+          ).toFixed(4),
         }
         temp[i] = obj
       } else {
@@ -1093,7 +1100,7 @@ function AddEditEDR(props) {
                       disabled
                       label='Requested Quantity'
                       name={'requestedQty'}
-                      value={(dosage * duration * frequency).toFixed(2)}
+                      value={dosage * duration * frequency}
                       onChange={onChangeValue}
                       className='textInputStyle'
                       variant='filled'

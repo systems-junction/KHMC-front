@@ -197,7 +197,7 @@ function AddEditEDR(props) {
   } = state
 
   const onChangeValue = (e) => {
-    var pattern = /^[0-9. ]*$/
+    var pattern = /^[0-9 ]*$/
     if (
       e.target.name === 'frequency' ||
       e.target.name === 'dosage' ||
@@ -614,7 +614,7 @@ function AddEditEDR(props) {
               priority,
               schedule,
               frequency,
-              requestedQty: (frequency * dosage * duration).toFixed(2),
+              requestedQty: frequency * dosage * duration,
             },
           ],
         })
@@ -651,7 +651,7 @@ function AddEditEDR(props) {
             priority,
             schedule,
             frequency,
-            requestedQty: (frequency * dosage * duration).toFixed(2),
+            requestedQty: frequency * dosage * duration,
           }
           temp[i] = obj
         } else {
@@ -1140,7 +1140,7 @@ function AddEditEDR(props) {
                       label='Requested Qty'
                       variant='filled'
                       name={'requestedQty'}
-                      value={(frequency * dosage * duration).toFixed(2)}
+                      value={frequency * dosage * duration}
                       onChange={onChangeValue}
                       // error={requestedQty === '' && isFormSubmitted}
                       InputProps={{
