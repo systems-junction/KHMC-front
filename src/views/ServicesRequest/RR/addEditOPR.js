@@ -363,6 +363,7 @@ function AddEditPatientListing(props) {
     emergencyRelation: '',
     coveredFamilyMembers: '',
     otherCoverageDetails: '',
+    insurerId: '',
   }
 
   function reducer(state, { field, value }) {
@@ -414,6 +415,7 @@ function AddEditPatientListing(props) {
     emergencyRelation,
     coveredFamilyMembers,
     otherCoverageDetails,
+    insurerId,
   } = state
 
   const onChangeCountry = (e) => {
@@ -865,12 +867,24 @@ function AddEditPatientListing(props) {
   }
 
   const handleGenerateEDR = () => {
-    const params = {
-      patientId,
-      // generatedBy: currentUser.staffId,
-      generatedFrom: 'pharmacyRequest',
-      status: 'pending',
-      functionalUnit: currentUser.functionalUnit._id,
+    if (insurerId !== '') {
+      var params = {
+        patientId,
+        // generatedBy: currentUser.staffId,
+        generatedFrom: 'radiologyRequest',
+        status: 'pending',
+        functionalUnit: currentUser.functionalUnit._id,
+        insurerId: insurerId,
+        verified: !insuranceBoolean ? true : false,
+      }
+    } else {
+      var params = {
+        patientId,
+        // generatedBy: currentUser.staffId,
+        generatedFrom: 'radiologyRequest',
+        status: 'pending',
+        functionalUnit: currentUser.functionalUnit._id,
+      }
     }
     // console.log(params)
     axios
