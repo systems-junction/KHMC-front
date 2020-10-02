@@ -51,8 +51,8 @@ const priorityArray = [
 const tableHeadingForPharmacyReq = [
   'Medicine Name',
   'Quantity',
-  'Unit Price',
-  'Total Price',
+  'Unit Price ( JD)',
+  'Total Price ( JD)',
   'Action',
 ]
 const tableDataKeysForPharmacyReq = [
@@ -546,9 +546,12 @@ function AddEditEDR(props) {
               duration,
               requestedQty: frequency * dosage * duration,
               medicineName,
-              unitPrice: unitPrice.toFixed(4) + ' JD',
-              totalPrice:
-                (unitPrice * frequency * dosage * duration).toFixed(4) + ' JD',
+              // unitPrice: unitPrice,
+              unitPrice: parseFloat(unitPrice).toFixed(4),
+              // totalPrice: unitPrice * frequency * dosage * duration,
+              totalPrice: parseFloat(
+                unitPrice * frequency * dosage * duration
+              ).toFixed(4),
             },
           ],
         })
@@ -570,6 +573,7 @@ function AddEditEDR(props) {
 
   const editSelectedItem = () => {
     // if (validateItemsForm()) {
+    console.log('unitprice', unitPrice)
     setDialogOpen(false)
     let temp = []
 
@@ -584,9 +588,12 @@ function AddEditEDR(props) {
           duration,
           requestedQty: frequency * dosage * duration,
           medicineName,
-          unitPrice: unitPrice.toFixed(4) + ' JD',
-          totalPrice:
-            (unitPrice * frequency * dosage * duration).toFixed(4) + ' JD',
+          // unitPrice: unitPrice,
+          unitPrice: parseFloat(unitPrice).toFixed(4),
+          // totalPrice: unitPrice * frequency * dosage * duration,
+          totalPrice: parseFloat(
+            unitPrice * frequency * dosage * duration
+          ).toFixed(4),
         }
         temp[i] = obj
       } else {

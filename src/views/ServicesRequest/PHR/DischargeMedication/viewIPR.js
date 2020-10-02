@@ -39,8 +39,8 @@ import '../../../../assets/jss/material-dashboard-react/components/loaderStyle.c
 const tableHeadingForPharmacy = [
   'Medicine Name',
   'Quantity',
-  'Unit Price',
-  'Total Price',
+  'Unit Price ( JD)',
+  'Total Price ( JD)',
   '',
 ]
 const tableDataKeysForPharmacy = [
@@ -318,9 +318,8 @@ function AddEditPurchaseRequest(props) {
           )
           res.data.data.dischargeRequest.dischargeMedication.medicine.map(
             (d) => (
-              (d.issueUnitCost = d.itemId.issueUnitCost.toFixed(4) + ' JD'),
-              (d.total =
-                (d.itemId.issueUnitCost * d.requestedQty).toFixed(4) + ' JD')
+              (d.issueUnitCost = d.itemId.issueUnitCost.toFixed(4)),
+              (d.total = (d.itemId.issueUnitCost * d.requestedQty).toFixed(4))
             )
           )
           // res.data.data.dischargeRequest.dischargeMedication.medicine.map(
