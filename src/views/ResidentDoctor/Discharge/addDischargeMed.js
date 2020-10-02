@@ -784,15 +784,17 @@ function AddEditEDR(props) {
               >
                 Add Medicine
               </DialogTitle>
-              <div className='container-fluid'>
+              <div className={`${'container-fluid'} ${classes.root}`}>
                 <div className='row'>
                   <div
                     className='col-md-12 col-sm-12 col-12'
                     style={{
                       ...styles.textFieldPadding,
+                      ...styles.inputContainerForTextField,
                     }}
                   >
                     <TextField
+                      required
                       type='text'
                       label='Search Medicine by Name'
                       name={'searchQuery'}
@@ -1166,7 +1168,17 @@ function AddEditEDR(props) {
                       </Button>
                     ) : (
                       <Button
-                        style={{ paddingLeft: 30, paddingRight: 30 }}
+                        style={{
+                          color: 'white',
+                          cursor: 'pointer',
+                          borderRadius: 5,
+                          backgroundColor: '#2c6ddd',
+                          width: '140px',
+                          height: '50px',
+                          outline: 'none',
+                          paddingLeft: 30,
+                          paddingRight: 30,
+                        }}
                         // disabled={!validateItemsForm()}
                         onClick={editSelectedItem}
                         variant='contained'
