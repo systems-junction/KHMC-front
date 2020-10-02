@@ -914,14 +914,24 @@ function AddEditPatientListing(props) {
   }
 
   const handleGenerateEDR = () => {
-    const params = {
-      patientId,
-      generatedBy: currentUser.staffId,
-      status: 'pending',
-      functionalUnit: currentUser.functionalUnit._id,
-      insurerId: insurerId,
-      verified: !insuranceBoolean ? true : false,
+    if (insurerId !== '') {
+      var params = {
+        patientId,
+        generatedBy: currentUser.staffId,
+        status: 'pending',
+        functionalUnit: currentUser.functionalUnit._id,
+        insurerId: insurerId,
+        verified: !insuranceBoolean ? true : false,
+      }
+    } else {
+      params = {
+        patientId,
+        generatedBy: currentUser.staffId,
+        status: 'pending',
+        functionalUnit: currentUser.functionalUnit._id,
+      }
     }
+
     console.log('PARAMS ARE : ', params)
     axios
       .post(generateEDR, params, {})
@@ -949,14 +959,24 @@ function AddEditPatientListing(props) {
   }
 
   const handleGenerateIPR = () => {
-    const params = {
-      patientId,
-      generatedBy: currentUser.staffId,
-      status: 'pending',
-      functionalUnit: currentUser.functionalUnit._id,
-      insurerId: insurerId,
-      verified: !insuranceBoolean ? true : false,
+    if (insurerId !== '') {
+      var params = {
+        patientId,
+        generatedBy: currentUser.staffId,
+        status: 'pending',
+        functionalUnit: currentUser.functionalUnit._id,
+        insurerId: insurerId,
+        verified: !insuranceBoolean ? true : false,
+      }
+    } else {
+      var params = {
+        patientId,
+        generatedBy: currentUser.staffId,
+        status: 'pending',
+        functionalUnit: currentUser.functionalUnit._id,
+      }
     }
+
     console.log('PARAMS ARE : ', params)
     axios
       .post(generateIPR, params, {})
