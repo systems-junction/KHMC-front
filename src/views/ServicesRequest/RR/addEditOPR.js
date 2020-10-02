@@ -284,6 +284,7 @@ const useStyles = makeStyles((theme) => ({
     },
     '&:focus': {
       boxShadow: 'none',
+      borderRadius: 5,
     },
   },
   multilineColor: {
@@ -2627,7 +2628,7 @@ function AddEditPatientListing(props) {
                     }}
                     currencySymbol='JD'
                     outputFormat='number'
-                    decimalPlaces='3'
+                    decimalPlaces='4'
                     // onChange={(event, value) => setValue(value)}
                   />
                   {/* <ErrorMessage
@@ -2972,7 +2973,7 @@ function AddEditPatientListing(props) {
             >
               <div className='row' style={{ marginTop: '20px' }}>
                 <div
-                  className='col-md-9 col-sm-8 col-9'
+                  className='col-md-8 col-sm-8 col-9'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -3056,7 +3057,7 @@ function AddEditPatientListing(props) {
                     style={{
                       ...styles.stylesForButton,
                       height: '53px',
-                      width: 98,
+                      width: '210%',
                       backgroundColor: '#ba55d3',
                     }}
                     onClick={vendorVerify}
