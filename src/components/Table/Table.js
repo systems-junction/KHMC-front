@@ -6,7 +6,6 @@ import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 // @material-ui/core components
 import { makeStyles, withStyles } from '@material-ui/core/styles'
-
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
 import Table from '@material-ui/core/Table'
@@ -19,20 +18,14 @@ import styles from '../../assets/jss/material-dashboard-react/components/tableSt
 import TablePagination from '@material-ui/core/TablePagination'
 import RcIf from 'rc-if'
 import { dateOptions } from '../../variables/public'
-
 import Active from '../../assets/img/Active.png'
 import In_Active from '../../assets/img/Inactive.png'
 import ReturnItem from '../../assets/img/Return Item Grey.png'
 import ReceiveItem from '../../assets/img/Receive Item Grey.png'
-import print from '../../assets/img/print.png'
-
 import EditIcon from '../../assets/img/Edit.png'
 import cookie from 'react-cookies'
-
 import Tooltip from '@material-ui/core/Tooltip'
-
 import capitilizeLetter from '../../public/capitilizeLetter'
-
 import formatDate from '../../utils/formatDate'
 import mapDateToKeys from '../../utils/mapDateToKeys'
 
@@ -830,19 +823,6 @@ export default function CustomTable(props) {
                                     className=' ml-10 zmdi zmdi-eye zmdi-hc-2x'
                                   />
                                 </span>
-                              </RcIf>
-
-                              <RcIf if={props.action.print}>
-                                <Tooltip title='Print'>
-                                  <img
-                                    src={print}
-                                    onClick={() => props.printItem(prop)}
-                                    style={{
-                                      maxWidth: 40,
-                                      height: 30,
-                                    }}
-                                  />
-                                </Tooltip>
                               </RcIf>
 
                               <RcIf if={props.action.receiveItem}>
