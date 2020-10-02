@@ -24,7 +24,7 @@ import "../../../assets/jss/material-dashboard-react/components/TextInputStyle.c
 import FormData from "form-data";
 import claimsReview from "../../../assets/img/ClaimsReview.png";
 import logoInvoice from "../../../assets/img/logoInvoice.png";
-import logoPatientSummaryInvoice from "../../../assets/img/logoPatientSummaryInvoice.jpg";
+import logoPatientSummaryInvoice from "../../../assets/img/logoPatientSummaryInvoice.png";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
@@ -560,7 +560,7 @@ function AddEditPatientListing(props) {
     for (let i = 0; i < fileType.length; i++) {
       let reader = new FileReader();
       reader.readAsDataURL(file[i]);
-      reader.onload = function (event) {
+      reader.onload = function(event) {
         if (fileType[i] === "pdf") {
           arr.push(file[i].name);
           setpdfView([...arr]);
@@ -716,11 +716,12 @@ function AddEditPatientListing(props) {
             for (let j = 0; j < singlePR.item.length; j++) {
               let found = false;
               for (let k = 0; k < res.data.insured.length; k++) {
-                if (singlePR.item[j].itemId._id === res.data.insured[k].itemId) {
+                if (
+                  singlePR.item[j].itemId._id === res.data.insured[k].itemId
+                ) {
                   amount =
                     // amount +
-                    res.data.insured[k].price *
-                    singlePR.item[j].requestedQty;
+                    res.data.insured[k].price * singlePR.item[j].requestedQty;
                   let obj = {
                     serviceId: {
                       name: singlePR.item[j].itemId.name,
@@ -732,7 +733,7 @@ function AddEditPatientListing(props) {
                     serviceType: "Pharmacy",
                   };
                   pharm.push(obj);
-                  found = true
+                  found = true;
                 }
               }
               if (!found) {
@@ -760,7 +761,10 @@ function AddEditPatientListing(props) {
             let singleLR = res.data.data.labRequest[i];
             let found = false;
             for (let j = 0; j < res.data.insured.length; j++) {
-              if (singleLR.serviceId._id === res.data.insured[j].laboratoryServiceId) {
+              if (
+                singleLR.serviceId._id ===
+                res.data.insured[j].laboratoryServiceId
+              ) {
                 let obj = {
                   serviceId: {
                     name: singleLR.serviceId.name,
@@ -772,7 +776,7 @@ function AddEditPatientListing(props) {
                   serviceType: "Lab",
                 };
                 lab.push(obj);
-                found = true
+                found = true;
               }
             }
             if (!found) {
@@ -795,7 +799,10 @@ function AddEditPatientListing(props) {
             let singleRR = res.data.data.radiologyRequest[i];
             let found = false;
             for (let j = 0; j < res.data.insured.length; j++) {
-              if (singleRR.serviceId._id === res.data.insured[j].radiologyServiceId) {
+              if (
+                singleRR.serviceId._id ===
+                res.data.insured[j].radiologyServiceId
+              ) {
                 let obj = {
                   serviceId: {
                     name: singleRR.serviceId.name,
@@ -807,7 +814,7 @@ function AddEditPatientListing(props) {
                   serviceType: "Radiology",
                 };
                 radiology.push(obj);
-                found = true
+                found = true;
               }
             }
             if (!found) {
@@ -827,11 +834,7 @@ function AddEditPatientListing(props) {
 
           // console.log("Bill sumamry is ... ", [].concat(res.data.data.labRequest, res.data.data.radiologyRequest, pharm))
           setbillSummaryArray(
-            [].concat(
-              lab.reverse(),
-              radiology.reverse(),
-              pharm.reverse()
-            )
+            [].concat(lab.reverse(), radiology.reverse(), pharm.reverse())
           );
         } else if (!res.data.success) {
           setErrorMsg(res.data.error);
@@ -926,7 +929,7 @@ function AddEditPatientListing(props) {
 
     doc.setTextColor(0, 0, 0);
 
-    doc.setFontSize(15);
+    doc.setFontSize(10);
     doc.text(139, 10, `Invoice No:`);
     doc.text(170, 10, `${invoiceNo}`);
 
@@ -1333,24 +1336,24 @@ function AddEditPatientListing(props) {
                                 </Table>
                               )
                             ) : (
-                                <h4
-                                  style={{ textAlign: "center" }}
-                                  onClick={() => setSearchQuery("")}
-                                >
-                                  Patient Not Found
-                                </h4>
-                              )}
+                              <h4
+                                style={{ textAlign: "center" }}
+                                onClick={() => setSearchQuery("")}
+                              >
+                                Patient Not Found
+                              </h4>
+                            )}
                           </Paper>
                         </div>
                       ) : (
-                          undefined
-                        )}
+                        undefined
+                      )}
                     </div>
                   </div>
                 </div>
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
             </div>
 
             <div className="container-fluid">
@@ -1466,12 +1469,12 @@ function AddEditPatientListing(props) {
                   >
                     {medicationArray
                       ? medicationArray.map((drug, index) => {
-                        return (
-                          <h6 style={styles.textStyles}>
-                            {index + 1}. {drug}
-                          </h6>
-                        );
-                      })
+                          return (
+                            <h6 style={styles.textStyles}>
+                              {index + 1}. {drug}
+                            </h6>
+                          );
+                        })
                       : ""}
                   </div>
 
@@ -1481,12 +1484,12 @@ function AddEditPatientListing(props) {
                   >
                     {diagnosisArray
                       ? diagnosisArray.map((drug, index) => {
-                        return (
-                          <h6 style={styles.textStyles}>
-                            {index + 1}. {drug}
-                          </h6>
-                        );
-                      })
+                          return (
+                            <h6 style={styles.textStyles}>
+                              {index + 1}. {drug}
+                            </h6>
+                          );
+                        })
                       : ""}
                   </div>
                 </div>
@@ -1566,8 +1569,8 @@ function AddEditPatientListing(props) {
                 </div>
               </div>
             ) : (
-                undefined
-              )}
+              undefined
+            )}
 
             <div
               style={{
@@ -1703,8 +1706,8 @@ function AddEditPatientListing(props) {
                   </TableBody>
                 </Table>
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
             </div>
 
             <div
@@ -1925,89 +1928,89 @@ function AddEditPatientListing(props) {
                       })}
                     </div>
                   ) : (
-                      undefined
-                    )}
+                    undefined
+                  )}
                 </div>
               </div>
 
               <div className="row" style={{ marginTop: '10px' }}>
                 {document.length > 0 &&
-                  document.map((item, index) => item.includes("\\")) ? (
-                    <>
-                      {document.map((item, index) => {
-                        if (item.slice(item.length - 3) !== "pdf") {
-                          return (
-                            <div
-                              className="col-md-6 col-sm-6 col-6"
-                              style={{
-                                ...styles.inputContainerForTextField,
-                              }}
+                document.map((item, index) => item.includes("\\")) ? (
+                  <>
+                    {document.map((item, index) => {
+                      if (item.slice(item.length - 3) !== "pdf") {
+                        return (
+                          <div
+                            className="col-md-6 col-sm-6 col-6"
+                            style={{
+                              ...styles.inputContainerForTextField,
+                            }}
+                          >
+                            <img
+                              src={uploadsUrl + item.split("\\")[1]}
+                              className="depositSlipImg"
+                            />
+                          </div>
+                        );
+                      } else if (item.slice(item.length - 3) === "pdf") {
+                        return (
+                          <div
+                            className="col-md-6 col-sm-6 col-6"
+                            style={{
+                              ...styles.inputContainerForTextField,
+                            }}
+                          >
+                            <a
+                              href={uploadsUrl + item.split("\\")[1]}
+                              style={{ color: "#2c6ddd" }}
                             >
-                              <img
-                                src={uploadsUrl + item.split("\\")[1]}
-                                className="depositSlipImg"
-                              />
-                            </div>
-                          );
-                        } else if (item.slice(item.length - 3) === "pdf") {
-                          return (
-                            <div
-                              className="col-md-6 col-sm-6 col-6"
-                              style={{
-                                ...styles.inputContainerForTextField,
-                              }}
+                              Click here to open document {index + 1}
+                            </a>
+                          </div>
+                        );
+                      }
+                    })}
+                  </>
+                ) : document.length > 0 &&
+                  document.map((item, index) => item.includes("/")) ? (
+                  <>
+                    {document.map((item, index) => {
+                      if (item.slice(item.length - 3) !== "pdf") {
+                        return (
+                          <div
+                            className="col-md-6 col-sm-6 col-6"
+                            style={{
+                              ...styles.inputContainerForTextField,
+                            }}
+                          >
+                            <img
+                              src={uploadsUrl + item}
+                              className="depositSlipImg"
+                            />
+                          </div>
+                        );
+                      } else if (item.slice(item.length - 3) === "pdf") {
+                        return (
+                          <div
+                            className="col-md-6 col-sm-6 col-6"
+                            style={{
+                              ...styles.inputContainerForTextField,
+                            }}
+                          >
+                            <a
+                              href={uploadsUrl + document}
+                              style={{ color: "#2c6ddd" }}
                             >
-                              <a
-                                href={uploadsUrl + item.split("\\")[1]}
-                                style={{ color: "#2c6ddd" }}
-                              >
-                                Click here to open document {index + 1}
-                              </a>
-                            </div>
-                          );
-                        }
-                      })}
-                    </>
-                  ) : document.length > 0 &&
-                    document.map((item, index) => item.includes("/")) ? (
-                      <>
-                        {document.map((item, index) => {
-                          if (item.slice(item.length - 3) !== "pdf") {
-                            return (
-                              <div
-                                className="col-md-6 col-sm-6 col-6"
-                                style={{
-                                  ...styles.inputContainerForTextField,
-                                }}
-                              >
-                                <img
-                                  src={uploadsUrl + item}
-                                  className="depositSlipImg"
-                                />
-                              </div>
-                            );
-                          } else if (item.slice(item.length - 3) === "pdf") {
-                            return (
-                              <div
-                                className="col-md-6 col-sm-6 col-6"
-                                style={{
-                                  ...styles.inputContainerForTextField,
-                                }}
-                              >
-                                <a
-                                  href={uploadsUrl + document}
-                                  style={{ color: "#2c6ddd" }}
-                                >
-                                  Click here to open document {index + 1}
-                                </a>
-                              </div>
-                            );
-                          }
-                        })}
-                      </>
-                    ) : (
-                      undefined
-                    )}
+                              Click here to open document {index + 1}
+                            </a>
+                          </div>
+                        );
+                      }
+                    })}
+                  </>
+                ) : (
+                  undefined
+                )}
 
                 {imagePreview.length > 0 ? (
                   <>
@@ -2028,15 +2031,15 @@ function AddEditPatientListing(props) {
                               New document
                             </div>
                           ) : (
-                              undefined
-                            )}
+                            undefined
+                          )}
                         </div>
                       );
                     })}
                   </>
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
             </div>
             <div
@@ -2072,22 +2075,22 @@ function AddEditPatientListing(props) {
                     Submit
                   </Button>
                 ) : (
-                    <Button
-                      style={styles.stylesForButton}
-                      //disabled={!validateFormType1()}
-                      onClick={handleEdit}
-                      variant="contained"
-                      color="default"
-                    >
-                      Update
-                    </Button>
-                  )}
+                  <Button
+                    style={styles.stylesForButton}
+                    //disabled={!validateFormType1()}
+                    onClick={handleEdit}
+                    variant="contained"
+                    color="default"
+                  >
+                    Update
+                  </Button>
+                )}
               </div>
             </div>
           </div>
         ) : (
-                undefined
-              )}
+          undefined
+        )}
 
         <Notification
           msg={errorMsg}

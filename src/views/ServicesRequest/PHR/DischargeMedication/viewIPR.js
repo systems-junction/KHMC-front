@@ -39,8 +39,8 @@ import '../../../../assets/jss/material-dashboard-react/components/loaderStyle.c
 const tableHeadingForPharmacy = [
   'Medicine Name',
   'Quantity',
-  'Unit Price',
-  'Total Price',
+  'Unit Price ( JD)',
+  'Total Price ( JD)',
   '',
 ]
 const tableDataKeysForPharmacy = [
@@ -48,7 +48,7 @@ const tableDataKeysForPharmacy = [
   'requestedQty',
   // "unitPrice",
   // "totalPrice",
-  ['itemId', 'issueUnitCost'],
+  'issueUnitCost',
   'total',
 ]
 
@@ -317,12 +317,15 @@ function AddEditPurchaseRequest(props) {
             'data'
           )
           res.data.data.dischargeRequest.dischargeMedication.medicine.map(
-            (d) => (d.itemId.issueUnitCost = d.itemId.issueUnitCost.toFixed(2))
+            (d) => (
+              (d.issueUnitCost = d.itemId.issueUnitCost.toFixed(4)),
+              (d.total = (d.itemId.issueUnitCost * d.requestedQty).toFixed(4))
+            )
           )
-          res.data.data.dischargeRequest.dischargeMedication.medicine.map(
-            (d) =>
-              (d.total = (d.itemId.issueUnitCost * d.requestedQty).toFixed(2))
-          )
+          // res.data.data.dischargeRequest.dischargeMedication.medicine.map(
+          //   (d) =>
+          //     (d.total = (d.itemId.issueUnitCost * d.requestedQty).toFixed(4))
+          // )
           if (res.data.data) {
             setIsLoading(false)
 

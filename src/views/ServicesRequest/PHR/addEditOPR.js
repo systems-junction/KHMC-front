@@ -284,6 +284,7 @@ const useStyles = makeStyles((theme) => ({
     },
     '&:focus': {
       boxShadow: 'none',
+      borderRadius: 5,
     },
   },
   multilineColor: {
@@ -362,6 +363,7 @@ function AddEditPatientListing(props) {
     emergencyRelation: '',
     coveredFamilyMembers: '',
     otherCoverageDetails: '',
+    insurerId: '',
   }
 
   function reducer(state, { field, value }) {
@@ -413,6 +415,7 @@ function AddEditPatientListing(props) {
     emergencyRelation,
     coveredFamilyMembers,
     otherCoverageDetails,
+    insurerId,
   } = state
 
   const onChangeCountry = (e) => {
@@ -864,12 +867,24 @@ function AddEditPatientListing(props) {
   }
 
   const handleGenerateEDR = () => {
-    const params = {
-      patientId,
-      // generatedBy: currentUser.staffId,
-      generatedFrom: 'pharmacyRequest',
-      status: 'pending',
-      functionalUnit: currentUser.functionalUnit._id,
+    if (insurerId !== '') {
+      var params = {
+        patientId,
+        // generatedBy: currentUser.staffId,
+        generatedFrom: 'pharmacyRequest',
+        status: 'pending',
+        functionalUnit: currentUser.functionalUnit._id,
+        insurerId: insurerId,
+        verified: !insuranceBoolean ? true : false,
+      }
+    } else {
+      var params = {
+        patientId,
+        // generatedBy: currentUser.staffId,
+        generatedFrom: 'pharmacyRequest',
+        status: 'pending',
+        functionalUnit: currentUser.functionalUnit._id,
+      }
     }
     console.log(params)
     axios
@@ -1063,7 +1078,6 @@ function AddEditPatientListing(props) {
 
   console.log('coverageTerms', coverageTerms)
   const onChangeValue = (e) => {
-    
     var heightWeightPattern = /^[0-9. ]*$/
     if (e.target.name === 'height' || e.target.name === 'weight') {
       if (heightWeightPattern.test(e.target.value) === false) {
@@ -2626,7 +2640,7 @@ function AddEditPatientListing(props) {
                     }}
                     currencySymbol='JD'
                     outputFormat='number'
-                    decimalPlaces='3'
+                    decimalPlaces='4'
                     // onChange={(event, value) => setValue(value)}
                   />
                   {/* <ErrorMessage
@@ -2971,7 +2985,7 @@ function AddEditPatientListing(props) {
             >
               <div className='row' style={{ marginTop: '20px' }}>
                 <div
-                  className='col-md-9 col-sm-8 col-9'
+                  className='col-md-8 col-sm-8 col-9'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -3055,7 +3069,7 @@ function AddEditPatientListing(props) {
                     style={{
                       ...styles.stylesForButton,
                       height: '53px',
-                      width: 98,
+                      width: '210%',
                       backgroundColor: '#ba55d3',
                     }}
                     onClick={vendorVerify}
