@@ -410,3 +410,7 @@ export const getPatientClearanceURL = `${baseUrl}/patientclearance/getpatientcle
 export const addPatientClearanceURL = `${baseUrl}/patientclearance/addpatientclearance`;
 export const getPatientClearanceByIdURL = `${baseUrl}/patientclearance/getpatientclearance/:id`;
 export const updatePatientClearanceURL = `${baseUrl}/patientclearance/updatepatientclearance`;
+
+// icd code
+
+export const getIcd = `${baseUrl}/codes/geticdcat`;
