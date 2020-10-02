@@ -215,7 +215,7 @@ function AddEditEDR(props) {
   } = state
 
   const onChangeValue = (e) => {
-    var pattern = /^[0-9. ]*$/
+    var pattern = /^[0-9]*$/
     if (
       e.target.name === 'frequency' ||
       e.target.name === 'dosage' ||
@@ -544,12 +544,11 @@ function AddEditEDR(props) {
               dosage,
               frequency,
               duration,
-              requestedQty: (frequency * dosage * duration).toFixed(2),
+              requestedQty: frequency * dosage * duration,
               medicineName,
-              unitPrice: unitPrice.toFixed(2),
-              totalPrice: (unitPrice * frequency * dosage * duration).toFixed(
-                2
-              ),
+              unitPrice: unitPrice.toFixed(4) + ' JD',
+              totalPrice:
+                (unitPrice * frequency * dosage * duration).toFixed(4) + ' JD',
             },
           ],
         })
@@ -583,10 +582,11 @@ function AddEditEDR(props) {
           dosage,
           frequency,
           duration,
-          requestedQty: (frequency * dosage * duration).toFixed(2),
+          requestedQty: frequency * dosage * duration,
           medicineName,
-          unitPrice: unitPrice.toFixed(2),
-          totalPrice: (unitPrice * frequency * dosage * duration).toFixed(2),
+          unitPrice: unitPrice.toFixed(4) + ' JD',
+          totalPrice:
+            (unitPrice * frequency * dosage * duration).toFixed(4) + ' JD',
         }
         temp[i] = obj
       } else {
@@ -1093,7 +1093,7 @@ function AddEditEDR(props) {
                       disabled
                       label='Requested Quantity'
                       name={'requestedQty'}
-                      value={(dosage * duration * frequency).toFixed(2)}
+                      value={dosage * duration * frequency}
                       onChange={onChangeValue}
                       className='textInputStyle'
                       variant='filled'
