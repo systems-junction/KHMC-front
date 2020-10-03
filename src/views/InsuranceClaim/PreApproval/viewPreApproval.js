@@ -24,7 +24,7 @@ const tableHeadingForNeedApproval = [
   'Request No',
   'Request Type',
   'Item',
-  'Total Cost',
+  'Total Cost (JD)',
   'Status',
   'Insurance',
   'Action',

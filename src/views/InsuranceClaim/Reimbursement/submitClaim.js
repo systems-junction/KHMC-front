@@ -52,8 +52,8 @@ const tableHeadingForBillSummary = [
   "Service Name",
   "Service Type",
   "Status",
-  "Original Amount",
-  "Insured Amount",
+  "Original Amount (JD)",
+  "Insured Amount (JD)",
   "Invoice",
 ];
 // const tableDataKeysForBillSummary = [
@@ -726,12 +726,11 @@ function AddEditPatientListing(props) {
                   let obj = {
                     serviceId: {
                       name: singlePR.item[j].itemId.name,
-                      originalPrice:
-                        (
-                          singlePR.item[j].itemId.issueUnitCost *
-                          singlePR.item[j].requestedQty
-                        ).toFixed(4) + " JD",
-                      insuredPrice: amount.toFixed(4) + " JD",
+                      originalPrice: (
+                        singlePR.item[j].itemId.issueUnitCost *
+                        singlePR.item[j].requestedQty
+                      ).toFixed(4),
+                      insuredPrice: amount.toFixed(4),
                       insuranceStatus: "Covered",
                     },
                     date: res.data.data.pharmacyRequest[i].dateGenerated,
@@ -749,8 +748,8 @@ function AddEditPatientListing(props) {
                 let obj = {
                   serviceId: {
                     name: singlePR.item[j].itemId.name,
-                    originalPrice: amount.toFixed(4) + " JD",
-                    insuredPrice: "0 JD",
+                    originalPrice: amount.toFixed(4),
+                    insuredPrice: "0",
                     insuranceStatus: "Not Covered",
                   },
                   date: res.data.data.pharmacyRequest[i].dateGenerated,
@@ -773,8 +772,8 @@ function AddEditPatientListing(props) {
                 let obj = {
                   serviceId: {
                     name: singleLR.serviceId.name,
-                    originalPrice: singleLR.serviceId.price.toFixed(4) + " JD",
-                    insuredPrice: res.data.insured[j].price.toFixed(4) + " JD",
+                    originalPrice: singleLR.serviceId.price.toFixed(4),
+                    insuredPrice: res.data.insured[j].price.toFixed(4),
                     insuranceStatus: "Covered",
                   },
                   date: singleLR.date,
@@ -788,8 +787,8 @@ function AddEditPatientListing(props) {
               let obj = {
                 serviceId: {
                   name: singleLR.serviceId.name,
-                  originalPrice: singleLR.serviceId.price.toFixed(4) + " JD",
-                  insuredPrice: "0 JD",
+                  originalPrice: singleLR.serviceId.price.toFixed(4),
+                  insuredPrice: "0",
                   insuranceStatus: "Not Covered",
                 },
                 date: singleLR.date,
@@ -811,8 +810,8 @@ function AddEditPatientListing(props) {
                 let obj = {
                   serviceId: {
                     name: singleRR.serviceId.name,
-                    originalPrice: singleRR.serviceId.price.toFixed(4) + " JD",
-                    insuredPrice: res.data.insured[j].price.toFixed(4) + " JD",
+                    originalPrice: singleRR.serviceId.price.toFixed(4),
+                    insuredPrice: res.data.insured[j].price.toFixed(4),
                     insuranceStatus: "Covered",
                   },
                   date: singleRR.date,
@@ -826,8 +825,8 @@ function AddEditPatientListing(props) {
               let obj = {
                 serviceId: {
                   name: singleRR.serviceId.name,
-                  originalPrice: singleRR.serviceId.price.toFixed(4) + " JD",
-                  insuredPrice: "0 JD",
+                  originalPrice: singleRR.serviceId.price.toFixed(4),
+                  insuredPrice: "0",
                   insuranceStatus: "Not Covered",
                 },
                 date: singleRR.date,
@@ -980,9 +979,10 @@ function AddEditPatientListing(props) {
     doc.line(0, 272, 1000, 272);
 
     doc.text(5, 285, "Prepared by:");
-    doc.addImage(`http://localhost:4000${qr}`, "PNG", 175, 275, 20, 20);
-
-    doc.save("Invoice.pdf");
+    if (qr) {
+      doc.addImage(`http://localhost:4000${qr}`, "PNG", 175, 275, 20, 20);
+    }
+    doc.save(`Invoice ${invoiceNo}.pdf`);
   };
 
   const onInpatientInvoiceSummary = () => {
@@ -1937,7 +1937,7 @@ function AddEditPatientListing(props) {
                     />
                   </Button>
 
-                  {pdfView.length > 0 ? (
+                  {pdfView && pdfView.length > 0 ? (
                     <div
                       style={{
                         textAlign: "center",
@@ -1963,7 +1963,8 @@ function AddEditPatientListing(props) {
               </div>
 
               <div className="row" style={{ marginTop: "10px" }}>
-                {document.length > 0 &&
+                {document &&
+                document.length > 0 &&
                 document.map((item, index) => item.includes("\\")) ? (
                   <>
                     {document.map((item, index) => {
@@ -2000,7 +2001,8 @@ function AddEditPatientListing(props) {
                       }
                     })}
                   </>
-                ) : document.length > 0 &&
+                ) : document &&
+                  document.length > 0 &&
                   document.map((item, index) => item.includes("/")) ? (
                   <>
                     {document.map((item, index) => {
@@ -2041,7 +2043,7 @@ function AddEditPatientListing(props) {
                   undefined
                 )}
 
-                {imagePreview.length > 0 ? (
+                {imagePreview && imagePreview.length > 0 ? (
                   <>
                     {imagePreview.map((view, index) => {
                       return (
