@@ -257,8 +257,8 @@ const doctorPhysician = [
 
   {
     img: '',
-    text: '',
-    path: '',
+    text: 'Patient History',
+    path: '/home/rcm/rd/patienthistory',
   },
 
   {
@@ -286,6 +286,11 @@ const consultantSpecialist = [
     img: CN,
     text: 'Consultation Notes',
     path: '/home/rcm/ecr/cn',
+  },
+  {
+    img: '',
+    text: 'Patient History',
+    path: '/home/rcm/ecr/patienthistory',
   },
 
   {
