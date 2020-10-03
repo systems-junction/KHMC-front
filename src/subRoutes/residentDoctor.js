@@ -15,9 +15,11 @@ import LabRadRequest from '../views/ResidentDoctor/LabRadRequest/labRadRequest'
 import viewReport from '../views/ResidentDoctor/LabRadRequest/viewLabRadReport'
 import AssessmentAndDiagnosis from '../views/ResidentDoctor/AssessmentAndDiagnosis/AssessmentAndDiagnosis'
 import viewReportAssDia from '../views/ResidentDoctor/AssessmentAndDiagnosis/viewLabRadReport'
+import PatientHistoryViewReport from '../views/PatientHistory/viewLabRadReport'
 import viewReportCons from '../views/ResidentDoctor/ConsultationRequest/viewLabRadReport'
 import triageAssessment from '../views/ResidentDoctor/LabRadRequest/TriageAndAssessment'
 import triageAssessmentAssessDiagnosis from '../views/ResidentDoctor/AssessmentAndDiagnosis/TriageAndAssessment'
+import AssessmentDiagnosisPatientHistory from '../views/PatientHistory/PatientHistory'
 import triageAssessmentConRequest from '../views/ResidentDoctor/ConsultationRequest/TriageAndAssessment'
 import Discharge from '../views/ResidentDoctor/Discharge/DischargeRequest'
 import ConsultationRequest from '../views/ResidentDoctor/ConsultationRequest/consultationRequest'
@@ -43,13 +45,13 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
       {...rest}
       render={(props) =>
         currentUser.staffTypeId.type === 'admin' ||
-          currentUser.staffTypeId.type === 'Committe Member' ||
-          currentUser.staffTypeId.type === 'Accounts Member' ||
-          currentUser.staffTypeId.type === 'Warehouse Member' ? (
-            <Component {...props} />
-          ) : (
-            <Redirect to='notfound' />
-          )
+        currentUser.staffTypeId.type === 'Committe Member' ||
+        currentUser.staffTypeId.type === 'Accounts Member' ||
+        currentUser.staffTypeId.type === 'Warehouse Member' ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to='notfound' />
+        )
       }
     />
   )
@@ -115,6 +117,16 @@ class WMSRoutes extends React.PureComponent {
           exact
           path={`${this.props.match.url}/assessmentdiagnosis/triageAssessment`}
           component={triageAssessmentAssessDiagnosis}
+        />
+        <Route
+          exact
+          path={`${this.props.match.url}/patienthistory`}
+          component={AssessmentDiagnosisPatientHistory}
+        />
+        <Route
+          exact
+          path={`${this.props.match.url}/patientHistory/viewReport`}
+          component={PatientHistoryViewReport}
         />
 
         <Route
