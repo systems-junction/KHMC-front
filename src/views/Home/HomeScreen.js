@@ -46,6 +46,7 @@ import purchase_request from '../../assets/img/purchase request.png'
 import MaterialReceiving from '../../assets/img/Material Receiving.png'
 import AssessDiagIcon from '../../assets/img/Assessment & Diagnosis.png'
 import DischargeIcon from '../../assets/img/Doctor - Discharge.png'
+import HistoryIcon from '../../assets/img/Manual Request.png'
 import CRIcon from '../../assets/img/Consultation Request.png'
 import WMS_Back from '../../assets/img/WMS_Back.png'
 import OrderItems from '../../assets/img/Order Items.png'
@@ -63,6 +64,7 @@ import {
   funForReducer,
   setPatientDetailsForReducer,
 } from '../../actions/Checking'
+import PatientHistory from '../PatientHistory/PatientHistory'
 
 const admin = [
   { img: KHMC, text: 'KHMC', path: '' },
@@ -256,7 +258,7 @@ const doctorPhysician = [
   },
 
   {
-    img: '',
+    img: HistoryIcon,
     text: 'Patient History',
     path: '/home/rcm/rd/patienthistory',
   },
@@ -288,7 +290,7 @@ const consultantSpecialist = [
     path: '/home/rcm/ecr/cn',
   },
   {
-    img: '',
+    img: HistoryIcon,
     text: 'Patient History',
     path: '/home/rcm/ecr/patienthistory',
   },
