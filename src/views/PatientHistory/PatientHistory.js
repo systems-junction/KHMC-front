@@ -17,7 +17,7 @@ import {
 } from '../../public/endpoins'
 import cookie from 'react-cookies'
 import Header from '../../components/Header/Header'
-import Lab_RadIcon from '../../assets/img/Assessment & Diagnosis.png'
+import Lab_RadIcon from '../../assets/img/Manual Request.png'
 import Back from '../../assets/img/Back_Arrow.png'
 import '../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
 import Tabs from '@material-ui/core/Tabs'
@@ -75,14 +75,14 @@ const tableDataKeysForConsultation = [
 const tableHeadingForEDRIPROPR = [
   'Request No',
   'Date/Time',
-  // 'Department',
+  'Department',
   'Status',
   'Action',
 ]
 const tableDataKeysForEDRIPROPR = [
   'requestNo',
   'createdAt',
-  // 'department',
+  ['functionalUnit', 'fuName'],
   'status',
 ]
 const tableHeadingForPharmacy = [
@@ -170,13 +170,17 @@ const tableDataKeysForNurse = [
 
 const tableDataHeadingForTriage = [
   'RequestNo',
+  'Date/Time',
+  'Checked By',
   'Heart Rate',
   'BP (Systolic)',
-  '',
+  'Action',
 ]
 
 const tableDataKeysForTriage = [
   'triageRequestNo',
+  'date',
+  'doctorName',
   'heartRate',
   'bloodPressureSys',
 ]
@@ -1417,6 +1421,12 @@ function LabRadRequest(props) {
               } else if (key === 'labRequest') {
                 dispatch({ field: 'labRequestArray', value: val.reverse() })
               } else if (key === 'triageAssessment') {
+                val.map(
+                  (d) =>
+                    (d.doctorName = d.requester
+                      ? d.requester.firstName + ' ' + d.requester.lastName
+                      : '')
+                )
                 dispatch({
                   field: 'triageAssessmentArray',
                   value: val.reverse(),
@@ -2113,8 +2123,8 @@ function LabRadRequest(props) {
                     tableData={triageAssessmentArray}
                     tableDataKeys={tableDataKeysForTriage}
                     tableHeading={tableDataHeadingForTriage}
-                    // handleView={viewItem}
-                    // action={actions}
+                    handleView={viewItem}
+                    action={actions}
                     borderBottomColor={'#60D69F'}
                     borderBottomWidth={20}
                   />
