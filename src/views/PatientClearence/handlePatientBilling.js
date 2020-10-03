@@ -703,10 +703,14 @@ function AddEditPatientListing(props) {
       doc.text(190, 240, "JD");
       doc.text(120, 245, "Total Services Bill");
       doc.text(190, 245, "JD");
-      doc.text(120, 250, "Sub Total");
+
+    doc.text(120, 250, "Sub Total");
       doc.text(190, 250, "JD");
       doc.text(120, 255, "Total");
       doc.text(190, 255, "JD");
+
+      doc.text(10, 250, "Signature & Stamp");
+      doc.line(10, 255, 50, 255);
 
       // dynamic text
       doc.setFont("times", "normal");
