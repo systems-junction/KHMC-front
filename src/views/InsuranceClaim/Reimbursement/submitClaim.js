@@ -77,7 +77,7 @@ EnhancedTableHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
 };
@@ -160,7 +160,7 @@ const useStylesForTabs = makeStyles({
     flexGrow: 1,
   },
 });
-const useStyles1 = makeStyles(tableStyles)
+const useStyles1 = makeStyles(tableStyles);
 const useStyles = makeStyles((theme) => ({
   underline: {
     "&&&:before": {
@@ -219,33 +219,34 @@ const useStyles = makeStyles((theme) => ({
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
-    '&:nth-of-type(odd)': {
-      backgroundColor: '#f4f4f4',
+    "&:nth-of-type(odd)": {
+      backgroundColor: "#f4f4f4",
     },
-    '&:nth-of-type(even)': {
-      backgroundColor: '#FFFFFF',
+    "&:nth-of-type(even)": {
+      backgroundColor: "#FFFFFF",
     },
   },
-}))(TableRow)
+}))(TableRow);
 
 function EnhancedTableHead(props) {
-  const classes = useStyles1()
-  const { tableHeaderColor } = props
+  const classes = useStyles1();
+  const { tableHeaderColor } = props;
   const { onSelectAllClick, numSelected, rowCount } = props;
 
   return (
     <TableHead
-      className={classes[tableHeaderColor + 'TableHeader']}
+      className={classes[tableHeaderColor + "TableHeader"]}
       style={{
-        backgroundColor: '#2873cf',
-      }}>
+        backgroundColor: "#2873cf",
+      }}
+    >
       <TableRow className={classes.tableHeadRow}>
         <TableCell padding="checkbox">
           <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
-            inputProps={{ 'aria-label': 'select all requests' }}
+            inputProps={{ "aria-label": "select all requests" }}
           />
         </TableCell>
         {tableHeadingForBillSummary.map((headCell, index) => (
@@ -253,9 +254,9 @@ function EnhancedTableHead(props) {
             key={headCell}
             className={classes.tableHeadCell}
             style={{
-              color: 'white',
-              fontWeight: '700',
-              textAlign: 'center',
+              color: "white",
+              fontWeight: "700",
+              textAlign: "center",
               borderTopLeftRadius: index === 0 ? 5 : 0,
               borderTopRightRadius:
                 index === tableHeadingForBillSummary.length - 1 ? 5 : 0,
@@ -271,7 +272,7 @@ function EnhancedTableHead(props) {
 
 function AddEditPatientListing(props) {
   const classes = useStyles();
-  const classes1 = useStyles1()
+  const classes1 = useStyles1();
 
   const initialState = {
     profileNo: "-----",
@@ -537,7 +538,7 @@ function AddEditPatientListing(props) {
     for (let i = 0; i < fileType.length; i++) {
       let reader = new FileReader();
       reader.readAsDataURL(file[i]);
-      reader.onload = function (event) {
+      reader.onload = function(event) {
         if (fileType[i] === "pdf") {
           arr.push(file[i].name);
           setpdfView([...arr]);
@@ -628,7 +629,7 @@ function AddEditPatientListing(props) {
     dispatch({ field: "diagnosisArray", value: "" });
     dispatch({ field: "treatmentDetail", value: "" });
     dispatch({ field: "document", value: "" });
-    dispatch({ field: "billSummaryArray", value: "" })
+    dispatch({ field: "billSummaryArray", value: "" });
 
     dispatch({ field: "patientId", value: i._id });
     dispatch({ field: "firstName", value: i.firstName });
@@ -701,9 +702,12 @@ function AddEditPatientListing(props) {
                   let obj = {
                     serviceId: {
                       name: singlePR.item[j].itemId.name,
-                      originalPrice: (singlePR.item[j].itemId.issueUnitCost * singlePR.item[j].requestedQty).toFixed(4),
+                      originalPrice: (
+                        singlePR.item[j].itemId.issueUnitCost *
+                        singlePR.item[j].requestedQty
+                      ).toFixed(4),
                       insuredPrice: amount.toFixed(4),
-                      insuranceStatus: 'Covered'
+                      insuranceStatus: "Covered",
                     },
                     date: res.data.data.pharmacyRequest[i].dateGenerated,
                     serviceType: "Pharmacy",
@@ -721,8 +725,8 @@ function AddEditPatientListing(props) {
                   serviceId: {
                     name: singlePR.item[j].itemId.name,
                     originalPrice: amount.toFixed(4),
-                    insuredPrice: '0',
-                    insuranceStatus: 'Not Covered'
+                    insuredPrice: "0",
+                    insuranceStatus: "Not Covered",
                   },
                   date: res.data.data.pharmacyRequest[i].dateGenerated,
                   serviceType: "Pharmacy",
@@ -746,7 +750,7 @@ function AddEditPatientListing(props) {
                     name: singleLR.serviceId.name,
                     originalPrice: singleLR.serviceId.price.toFixed(4),
                     insuredPrice: res.data.insured[j].price.toFixed(4),
-                    insuranceStatus: 'Covered'
+                    insuranceStatus: "Covered",
                   },
                   date: singleLR.date,
                   serviceType: "Lab",
@@ -760,8 +764,8 @@ function AddEditPatientListing(props) {
                 serviceId: {
                   name: singleLR.serviceId.name,
                   originalPrice: singleLR.serviceId.price.toFixed(4),
-                  insuredPrice: '0',
-                  insuranceStatus: 'Not Covered'
+                  insuredPrice: "0",
+                  insuranceStatus: "Not Covered",
                 },
                 date: singleLR.date,
                 serviceType: "Lab",
@@ -784,7 +788,7 @@ function AddEditPatientListing(props) {
                     name: singleRR.serviceId.name,
                     originalPrice: singleRR.serviceId.price.toFixed(4),
                     insuredPrice: res.data.insured[j].price.toFixed(4),
-                    insuranceStatus: 'Covered'
+                    insuranceStatus: "Covered",
                   },
                   date: singleRR.date,
                   serviceType: "Radiology",
@@ -798,8 +802,8 @@ function AddEditPatientListing(props) {
                 serviceId: {
                   name: singleRR.serviceId.name,
                   originalPrice: singleRR.serviceId.price.toFixed(4),
-                  insuredPrice: '0',
-                  insuranceStatus: 'Not Covered'
+                  insuredPrice: "0",
+                  insuranceStatus: "Not Covered",
                 },
                 date: singleRR.date,
                 serviceType: "Radiology",
@@ -1126,10 +1130,9 @@ function AddEditPatientListing(props) {
       }
 
       doc.save(`Patient Summary Invoice ${invoiceNo}.pdf`);
-    }
-    else {
-      setErrorMsg("Please select items from Bill Summary")
-      setOpenNotification(true)
+    } else {
+      setErrorMsg("Please select items from Bill Summary");
+      setOpenNotification(true);
     }
   };
 
@@ -1212,7 +1215,7 @@ function AddEditPatientListing(props) {
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
+        selected.slice(selectedIndex + 1)
       );
     }
     setSelected(newSelected);
@@ -1406,24 +1409,24 @@ function AddEditPatientListing(props) {
                                 </Table>
                               )
                             ) : (
-                                <h4
-                                  style={{ textAlign: "center" }}
-                                  onClick={() => setSearchQuery("")}
-                                >
-                                  Patient Not Found
-                                </h4>
-                              )}
+                              <h4
+                                style={{ textAlign: "center" }}
+                                onClick={() => setSearchQuery("")}
+                              >
+                                Patient Not Found
+                              </h4>
+                            )}
                           </Paper>
                         </div>
                       ) : (
-                          undefined
-                        )}
+                        undefined
+                      )}
                     </div>
                   </div>
                 </div>
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
             </div>
 
             <div className="container-fluid">
@@ -1539,12 +1542,12 @@ function AddEditPatientListing(props) {
                   >
                     {medicationArray
                       ? medicationArray.map((drug, index) => {
-                        return (
-                          <h6 style={styles.textStyles}>
-                            {index + 1}. {drug}
-                          </h6>
-                        );
-                      })
+                          return (
+                            <h6 style={styles.textStyles}>
+                              {index + 1}. {drug}
+                            </h6>
+                          );
+                        })
                       : ""}
                   </div>
 
@@ -1554,12 +1557,12 @@ function AddEditPatientListing(props) {
                   >
                     {diagnosisArray
                       ? diagnosisArray.map((drug, index) => {
-                        return (
-                          <h6 style={styles.textStyles}>
-                            {index + 1}. {drug}
-                          </h6>
-                        );
-                      })
+                          return (
+                            <h6 style={styles.textStyles}>
+                              {index + 1}. {drug}
+                            </h6>
+                          );
+                        })
                       : ""}
                   </div>
                 </div>
@@ -1639,8 +1642,8 @@ function AddEditPatientListing(props) {
                 </div>
               </div>
             ) : (
-                undefined
-              )}
+              undefined
+            )}
 
             <div
               style={{
@@ -1708,7 +1711,7 @@ function AddEditPatientListing(props) {
                 <Table>
                   <EnhancedTableHead
                     style={{
-                      backgroundColor: '#2873cf',
+                      backgroundColor: "#2873cf",
                     }}
                     numSelected={selected.length}
                     onSelectAllClick={handleSelectAllClick}
@@ -1731,34 +1734,49 @@ function AddEditPatientListing(props) {
                             <TableCell padding="checkbox">
                               <Checkbox
                                 checked={isItemSelected}
-                                inputProps={{ 'aria-labelledby': labelId }}
+                                inputProps={{ "aria-labelledby": labelId }}
                               />
                             </TableCell>
-                            <TableCell component="th" id={labelId} scope="row" padding="none">
+                            <TableCell
+                              component="th"
+                              id={labelId}
+                              scope="row"
+                              padding="none"
+                            >
                               {formatDate(row.date)}
                             </TableCell>
-                            <TableCell align="center">{row.serviceId.name}</TableCell>
-                            <TableCell align="center">{row.serviceType}</TableCell>
-                            <TableCell align="center">{row.serviceId.insuranceStatus}</TableCell>
-                            <TableCell align="center">{row.serviceId.originalPrice}</TableCell>
-                            <TableCell align="center">{row.serviceId.insuredPrice}</TableCell>
+                            <TableCell align="center">
+                              {row.serviceId.name}
+                            </TableCell>
+                            <TableCell align="center">
+                              {row.serviceType}
+                            </TableCell>
+                            <TableCell align="center">
+                              {row.serviceId.insuranceStatus}
+                            </TableCell>
+                            <TableCell align="center">
+                              {row.serviceId.originalPrice}
+                            </TableCell>
+                            <TableCell align="center">
+                              {row.serviceId.insuredPrice}
+                            </TableCell>
                             <TableCell
                               style={{
-                                cursor: 'pointer',
+                                cursor: "pointer",
                                 borderBottomRightRadius:
                                   billSummaryArray.length - 1 === index ? 5 : 0,
                                 borderWidth: 0,
                               }}
                               className={classes1.tableCell}
-                              colSpan='2'
+                              colSpan="2"
                             >
                               <div
                                 style={{
-                                  display: 'flex',
-                                  justifyContent: 'space-evenly',
+                                  display: "flex",
+                                  justifyContent: "space-evenly",
                                 }}
                               >
-                                <Tooltip title='Print'>
+                                <Tooltip title="Print">
                                   <img
                                     src={print}
                                     onClick={() => handleInvoicePrint(row)}
@@ -1776,8 +1794,8 @@ function AddEditPatientListing(props) {
                   </TableBody>
                 </Table>
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
             </div>
 
             <div
@@ -1882,7 +1900,11 @@ function AddEditPatientListing(props) {
                     buttonText="Export Invoice" />
                 </div> */}
                 {selected.length > 0 ? (
-                  <Table id="InpatientInvoiceSummary" style={{ display: "none" }} aria-label="InpatientInvoiceSummary">
+                  <Table
+                    id="InpatientInvoiceSummary"
+                    style={{ display: "none" }}
+                    aria-label="InpatientInvoiceSummary"
+                  >
                     <TableHead>
                       <TableRow>
                         <TableCell>Description</TableCell>
@@ -1899,16 +1921,22 @@ function AddEditPatientListing(props) {
                             {row.serviceId.name}
                           </TableCell>
                           <TableCell align="right">{row.serviceType}</TableCell>
-                          <TableCell align="right">{row.serviceId.insuranceStatus}</TableCell>
-                          <TableCell align="right">{row.serviceId.originalPrice}</TableCell>
-                          <TableCell align="right">{row.serviceId.insuredPrice}</TableCell>
+                          <TableCell align="right">
+                            {row.serviceId.insuranceStatus}
+                          </TableCell>
+                          <TableCell align="right">
+                            {row.serviceId.originalPrice}
+                          </TableCell>
+                          <TableCell align="right">
+                            {row.serviceId.insuredPrice}
+                          </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
                   </Table>
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
 
                 <div
                   className="col-md-6 col-sm-6 col-6"
@@ -2001,8 +2029,8 @@ function AddEditPatientListing(props) {
                       })}
                     </div>
                   ) : (
-                      undefined
-                    )}
+                    undefined
+                  )}
                 </div>
               </div>
 
@@ -2114,15 +2142,15 @@ function AddEditPatientListing(props) {
                               New document
                             </div>
                           ) : (
-                              undefined
-                            )}
+                            undefined
+                          )}
                         </div>
                       );
                     })}
                   </>
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
             </div>
             <div
@@ -2158,22 +2186,22 @@ function AddEditPatientListing(props) {
                     Submit
                   </Button>
                 ) : (
-                    <Button
-                      style={styles.stylesForButton}
-                      //disabled={!validateFormType1()}
-                      onClick={handleEdit}
-                      variant="contained"
-                      color="default"
-                    >
-                      Update
-                    </Button>
-                  )}
+                  <Button
+                    style={styles.stylesForButton}
+                    //disabled={!validateFormType1()}
+                    onClick={handleEdit}
+                    variant="contained"
+                    color="default"
+                  >
+                    Update
+                  </Button>
+                )}
               </div>
             </div>
           </div>
         ) : (
-                undefined
-              )}
+          undefined
+        )}
 
         <Notification
           msg={errorMsg}
@@ -2185,18 +2213,18 @@ function AddEditPatientListing(props) {
   );
 }
 CustomTable.defaultProps = {
-  tableHeaderColor: 'gray',
-}
+  tableHeaderColor: "gray",
+};
 
 CustomTable.propTypes = {
   tableHeaderColor: PropTypes.oneOf([
-    'warning',
-    'primary',
-    'danger',
-    'success',
-    'info',
-    'rose',
-    'gray',
+    "warning",
+    "primary",
+    "danger",
+    "success",
+    "info",
+    "rose",
+    "gray",
   ]),
-}
+};
 export default AddEditPatientListing;
