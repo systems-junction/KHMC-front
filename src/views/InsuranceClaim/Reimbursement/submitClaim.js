@@ -661,9 +661,9 @@ function AddEditPatientListing(props) {
               value: res.data.rc.treatmentDetail,
             });
             dispatch({ field: "document", value: res.data.rc.document });
-            if(document.map((item, index) => item.includes("\\"))) 
+            if(res.data.rc.document.map((item, index) => item.includes("\\"))) 
               {
-                document.map((item, index) => {
+                res.data.rc.document.map((item, index) => {
                   // if (item.slice(item.length - 3) !== "pdf") {
                     console.log("Checking the item's URL on live >>> ",uploadsUrl+item)
                   // }
