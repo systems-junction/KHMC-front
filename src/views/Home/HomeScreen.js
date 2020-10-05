@@ -1,167 +1,172 @@
 // import React from 'react';
-import Button from '@material-ui/core/Button'
-import Card from '@material-ui/core/Card'
-import KHMC from '../../assets/img/KHMC Apps.png'
-import '../../components/MenuTree/MenuPage.css'
-import MenuTree from '../../components/MenuTree/MenuTree'
-import PatientRegistration from '../../assets/img/PatientRegistration.png'
-import Snackbar from '../../components/Snackbar/Snackbar'
-import Notification from '../../components/Snackbar/Notification.js'
-import AddAlert from '@material-ui/icons/AddAlert'
-import { Redirect } from 'react-router-dom'
-import axios from 'axios'
-import cookie from 'react-cookies'
-import Header from '../../components/Header/Header'
-import RCM from '../../assets/img/RCM.png'
-import WMS from '../../assets/img/WMS.png'
-import FIN from '../../assets/img/FIN.png'
-import Control_Room from '../../assets/img/Control_Room.png'
-import BU from '../../assets/img/business_Unit.png'
-import FunctionalUnit from '../../assets/img/Functional Unit.png'
-import Staff from '../../assets/img/Staff.png'
-import PurchaseRequest from '../../assets/img/purchase request.png'
-import React, { useEffect } from 'react'
-import './MenuPage.css'
-import { render } from 'react-dom'
-import Back from '../../assets/img/Back_Arrow.png'
-import KHMC_White from '../../assets/img/KHMC_White.png'
-import Influence_white from '../../assets/img/Influence_white.png'
-import ReturnItem from '../../assets/img/Return Item.png'
-import ReceiveItem from '../../assets/img/Receive Item.png'
-import ReceiveItems from '../ReplenishmentRequestForFU/handleReceiveItemForFUInventory'
-import claimsReview from '../../assets/img/ClaimsReview.png'
-import PreApproval from '../../assets/img/Pre-Approval.png'
-import IPR from '../../assets/img/IPR.png'
-import outPatient1 from '../../assets/img/Rad Out Patient.png'
-import outPatient2 from '../../assets/img/Lab Out-Patient.png'
-import outPatient3 from '../../assets/img/Pharmacist  Out-Patient.png'
-import DM from '../../assets/img/Discharge Medication.png'
-import CN from '../../assets/img/Consultation_Notes.png'
-import assessmentIcon from '../../assets/img/PatientAssessment.png'
-import patientCareIcon from '../../assets/img/PatientCare.png'
-import Lab_RadIcon from '../../assets/img/Lab-Rad Request.png'
-import wh_inventory from '../../assets/img/WH Inventory.png'
-import purchase_order from '../../assets/img/Purchase Order.png'
-import purchase_request from '../../assets/img/purchase request.png'
-import MaterialReceiving from '../../assets/img/Material Receiving.png'
-import AssessDiagIcon from '../../assets/img/Assessment & Diagnosis.png'
-import DischargeIcon from '../../assets/img/Doctor - Discharge.png'
-import HistoryIcon from '../../assets/img/Manual Request.png'
-import CRIcon from '../../assets/img/Consultation Request.png'
-import WMS_Back from '../../assets/img/WMS_Back.png'
-import OrderItems from '../../assets/img/Order Items.png'
+import Button from "@material-ui/core/Button";
+import Card from "@material-ui/core/Card";
+import KHMC from "../../assets/img/KHMC Apps.png";
+import "../../components/MenuTree/MenuPage.css";
+import MenuTree from "../../components/MenuTree/MenuTree";
+import PatientRegistration from "../../assets/img/PatientRegistration.png";
+import Snackbar from "../../components/Snackbar/Snackbar";
+import Notification from "../../components/Snackbar/Notification.js";
+import AddAlert from "@material-ui/icons/AddAlert";
+import { Redirect } from "react-router-dom";
+import axios from "axios";
+import cookie from "react-cookies";
+import Header from "../../components/Header/Header";
+import RCM from "../../assets/img/RCM.png";
+import WMS from "../../assets/img/WMS.png";
+import FIN from "../../assets/img/FIN.png";
+import Control_Room from "../../assets/img/Control_Room.png";
+import BU from "../../assets/img/business_Unit.png";
+import FunctionalUnit from "../../assets/img/Functional Unit.png";
+import Staff from "../../assets/img/Staff.png";
+import PurchaseRequest from "../../assets/img/purchase request.png";
+import React, { useEffect } from "react";
+import "./MenuPage.css";
+import { render } from "react-dom";
+import Back from "../../assets/img/Back_Arrow.png";
+import KHMC_White from "../../assets/img/KHMC_White.png";
+import Influence_white from "../../assets/img/Influence_white.png";
+import ReturnItem from "../../assets/img/Return Item.png";
+import ReceiveItem from "../../assets/img/Receive Item.png";
+import ReceiveItems from "../ReplenishmentRequestForFU/handleReceiveItemForFUInventory";
+import claimsReview from "../../assets/img/ClaimsReview.png";
+import PreApproval from "../../assets/img/Pre-Approval.png";
+import IPR from "../../assets/img/IPR.png";
+import outPatient1 from "../../assets/img/Rad Out Patient.png";
+import outPatient2 from "../../assets/img/Lab Out-Patient.png";
+import outPatient3 from "../../assets/img/Pharmacist  Out-Patient.png";
+import DM from "../../assets/img/Discharge Medication.png";
+import CN from "../../assets/img/Consultation_Notes.png";
+import assessmentIcon from "../../assets/img/PatientAssessment.png";
+import patientCareIcon from "../../assets/img/PatientCare.png";
+import Lab_RadIcon from "../../assets/img/Lab-Rad Request.png";
+import wh_inventory from "../../assets/img/WH Inventory.png";
+import purchase_order from "../../assets/img/Purchase Order.png";
+import purchase_request from "../../assets/img/purchase request.png";
+import MaterialReceiving from "../../assets/img/Material Receiving.png";
+import AssessDiagIcon from "../../assets/img/Assessment & Diagnosis.png";
+import DischargeIcon from "../../assets/img/Doctor - Discharge.png";
+import HistoryIcon from "../../assets/img/Manual Request.png";
+import CRIcon from "../../assets/img/Consultation Request.png";
+import WMS_Back from "../../assets/img/WMS_Back.png";
+import OrderItems from "../../assets/img/Order Items.png";
 
-import RepRequestStatus from '../../assets/img/Replenishment Requests Status.png'
+import RepRequestStatus from "../../assets/img/Replenishment Requests Status.png";
 // import FuncUFulfillment from "../../assets/img/FuncUFulfillment.png";
-import ManualRequest from '../../assets/img/Manual Request.png'
-import VendorReturns from '../../assets/img/Vendor Returns.png'
-import FuncUFulfillment from '../../assets/img/FuncU Fulfillment.png'
-import MedicationOrder from '../../assets/img/Medication Order.png'
-import ProfessionalOrder from '../../assets/img/Professional Order.png'
+import ManualRequest from "../../assets/img/Manual Request.png";
+import VendorReturns from "../../assets/img/Vendor Returns.png";
+import FuncUFulfillment from "../../assets/img/FuncU Fulfillment.png";
+import MedicationOrder from "../../assets/img/Medication Order.png";
+import ProfessionalOrder from "../../assets/img/Professional Order.png";
 
-import { connect } from 'react-redux'
+import { connect } from "react-redux";
 import {
   funForReducer,
   setPatientDetailsForReducer,
-} from '../../actions/Checking'
-import PatientHistory from '../PatientHistory/PatientHistory'
+} from "../../actions/Checking";
+import PatientHistory from "../PatientHistory/PatientHistory";
 
 const admin = [
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, text: "KHMC", path: "" },
   {
     img: RCM,
-    text: 'RCM',
-    path: '/home/rcm',
+    text: "RCM",
+    path: "/home/rcm",
   },
 
   {
     img: WMS,
-    text: 'WMS',
-    path: '/home/wms',
+    text: "WMS",
+    path: "/home/wms",
   },
 
   {
     img: FIN,
-    text: 'FIN',
-    path: '/home/fin',
+    text: "FIN",
+    path: "/home/fin",
   },
   {
     img: Control_Room,
-    text: 'Control Room',
+    text: "Control Room",
     path: `/home/controlroom`,
   },
-]
+];
 
 const residentDoctor = [
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, text: "KHMC", path: "" },
   {
     img: RCM,
-    text: 'RCM',
-    path: '/home/rcm',
+    text: "RCM",
+    path: "/home/rcm",
   },
   {
     img: WMS,
-    text: 'WMS',
-    path: '/home/wms',
+    text: "WMS",
+    path: "/home/wms",
   },
-]
+];
 
 const frontDesk = [
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, text: "KHMC", path: "" },
   {
     img: PatientRegistration,
-    text: 'Patient Registration',
-    path: '/home/rcm/patientListing/add',
+    text: "Patient Registration",
+    path: "/home/rcm/patientListing/add",
   },
-]
+  {
+    img: PatientRegistration,
+    text: "Patient History",
+    path: "/home/rcm/patientHistory",
+  },
+];
 
 const insuranceDepartment = [
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, text: "KHMC", path: "" },
   {
     img: PreApproval,
-    text: 'Pre Approval',
-    path: '/home/rcm/ic/pa',
+    text: "Pre Approval",
+    path: "/home/rcm/ic/pa",
   },
   {
     img: claimsReview,
-    text: 'Claims Review',
-    path: '/home/rcm/ic/ri',
+    text: "Claims Review",
+    path: "/home/rcm/ic/ri",
   },
-]
+];
 
 const registeredNurse = [
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, text: "KHMC", path: "" },
   {
     img: assessmentIcon,
-    text: 'Patient Assessment',
-    path: '/home/rcm/patientAssessment',
+    text: "Patient Assessment",
+    path: "/home/rcm/patientAssessment",
   },
   {
     img: patientCareIcon,
-    text: 'Patient Care',
-    path: '/home/rcm/patientCare',
+    text: "Patient Care",
+    path: "/home/rcm/patientCare",
   },
   {
     img: Lab_RadIcon,
-    text: 'Lab/Rad Request',
-    path: '/home/rcm/LabRadRequest',
+    text: "Lab/Rad Request",
+    path: "/home/rcm/LabRadRequest",
   },
 
   {
     img: OrderItems,
-    text: 'Order Items (Non-Pharma Med)',
+    text: "Order Items (Non-Pharma Med)",
     path: `/home/wms/fus/professionalorder/addorder`,
   },
 
   {
     img: ReceiveItem,
-    text: 'Order Receiving (Medical)',
+    text: "Order Receiving (Medical)",
     path: `/home/wms/fus/medicinalorder`,
   },
 
   {
     img: OrderItems,
-    text: 'Order Items (Non-Medical)',
+    text: "Order Items (Non-Medical)",
     path: `/home/wms/fus/professionalorder/addnonmedicalorder`,
   },
 
@@ -178,95 +183,95 @@ const registeredNurse = [
 
   {
     img: ReceiveItem,
-    text: 'Order Receiving (Non-Medical)',
+    text: "Order Receiving (Non-Medical)",
     path: `/home/wms/fus/professionalorder/receiveorder`,
   },
-]
+];
 
 const radiologyImagingDepartment = [
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, text: "KHMC", path: "" },
   {
     img: IPR,
-    text: 'In-Patient',
-    path: '/home/rcm/sr/rr/ipr',
+    text: "In-Patient",
+    path: "/home/rcm/sr/rr/ipr",
   },
 
   {
     img: outPatient1,
-    text: 'Out-Patient',
-    path: '/home/rcm/sr/rr/opr',
+    text: "Out-Patient",
+    path: "/home/rcm/sr/rr/opr",
   },
-]
+];
 
 const labTechnician = [
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, text: "KHMC", path: "" },
   {
     img: IPR,
-    text: 'In-Patient',
-    path: '/home/rcm/sr/lr/ipr',
+    text: "In-Patient",
+    path: "/home/rcm/sr/lr/ipr",
   },
 
   {
     img: outPatient2,
-    text: 'Out-Patient',
-    path: '/home/rcm/sr/lr/opr',
+    text: "Out-Patient",
+    path: "/home/rcm/sr/lr/opr",
   },
-]
+];
 
 const pharmacist = [
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, text: "KHMC", path: "" },
   {
     img: IPR,
-    text: 'In-Patient',
-    path: '/home/rcm/sr/phr/ipr',
+    text: "In-Patient",
+    path: "/home/rcm/sr/phr/ipr",
   },
 
   {
     img: outPatient3,
-    text: 'Out-Patient',
-    path: '/home/rcm/sr/phr/opr',
+    text: "Out-Patient",
+    path: "/home/rcm/sr/phr/opr",
   },
 
   {
     img: DM,
-    text: 'Discharge',
-    path: '/home/rcm/sr/phr/dischargemedication/ipr',
+    text: "Discharge",
+    path: "/home/rcm/sr/phr/dischargemedication/ipr",
   },
-]
+];
 
 const doctorPhysician = [
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, text: "KHMC", path: "" },
   {
     img: AssessDiagIcon,
-    text: 'Assessment & Diagnosis',
-    path: '/home/rcm/rd/assessmentdiagnosis',
+    text: "Assessment & Diagnosis",
+    path: "/home/rcm/rd/assessmentdiagnosis",
   },
   {
     img: Lab_RadIcon,
-    text: 'Lab/Rad Request',
-    path: '/home/rcm/rd/labradrequest',
+    text: "Lab/Rad Request",
+    path: "/home/rcm/rd/labradrequest",
   },
   {
     img: CRIcon,
-    text: 'Consultation Request',
-    path: '/home/rcm/rd/consultationrequest',
+    text: "Consultation Request",
+    path: "/home/rcm/rd/consultationrequest",
   },
   {
     img: DischargeIcon,
-    text: 'Discharge',
-    path: '/home/rcm/rd/dischargerequest',
+    text: "Discharge",
+    path: "/home/rcm/rd/dischargerequest",
   },
 
   {
     img: HistoryIcon,
-    text: 'Patient History',
-    path: '/home/rcm/rd/patienthistory',
+    text: "Patient History",
+    path: "/home/rcm/rd/patienthistory",
   },
 
   {
-    img: '',
-    text: '',
-    path: '',
+    img: "",
+    text: "",
+    path: "",
   },
 
   // {
@@ -277,77 +282,77 @@ const doctorPhysician = [
 
   {
     img: OrderItems,
-    text: 'Order Items (Medical)',
+    text: "Order Items (Medical)",
     path: `/home/wms/fus/medicinalorder`,
   },
-]
+];
 
 const consultantSpecialist = [
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, text: "KHMC", path: "" },
   {
     img: CN,
-    text: 'Consultation Notes',
-    path: '/home/rcm/ecr/cn',
+    text: "Consultation Notes",
+    path: "/home/rcm/ecr/cn",
   },
   {
     img: HistoryIcon,
-    text: 'Patient History',
-    path: '/home/rcm/ecr/patienthistory',
+    text: "Patient History",
+    path: "/home/rcm/ecr/patienthistory",
   },
 
   {
     img: OrderItems,
-    text: 'Order Items (Medical)',
+    text: "Order Items (Medical)",
     path: `/home/wms/fus/medicinalorder`,
   },
-]
+];
 
 const buHead = [
-  { img: Control_Room, text: 'Control Room', path: '' },
-  { img: RCM, text: 'RCM', path: '' },
-  { img: BU, text: 'BU Mgmt', path: 'controlroom/bus' },
-  { img: FunctionalUnit, text: 'FU Mgmt', path: 'controlroom/fus' },
-]
+  { img: Control_Room, text: "Control Room", path: "" },
+  { img: RCM, text: "RCM", path: "" },
+  { img: BU, text: "BU Mgmt", path: "controlroom/bus" },
+  { img: FunctionalUnit, text: "FU Mgmt", path: "controlroom/fus" },
+];
 
 const committeeMember = [
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, text: "KHMC", path: "" },
 
   {
     img: purchase_request,
-    text: 'Purchase Requests',
-    path: '/home/wms/warehouse/pr',
+    text: "Purchase Requests",
+    path: "/home/wms/warehouse/pr",
   },
 
   {
     img: purchase_order,
-    text: 'Purchase Orders',
-    path: '/home/wms/warehouse/po',
+    text: "Purchase Orders",
+    path: "/home/wms/warehouse/po",
   },
-]
+];
 
 const accountsMember = [
   // { img: Control_Room, text: "Control Room", path: "" },
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, text: "KHMC", path: "" },
 
   {
     img: WMS,
-    text: 'Approve Receivings',
-    path: '/home/wms/warehouse/receiverequests',
+    text: "Approve Receivings",
+    path: "/home/wms/warehouse/receiverequests",
   },
-]
+];
 
 const warehouseMember = [
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, text: "KHMC", path: "" },
 
   {
     img: FuncUFulfillment,
-    text: 'FuncU Fulfillment',
+    text: "FuncU Fulfillment",
     path: `/home/wms/fus/replenishment`,
   },
 
   {
     img: ReturnItem,
-    text: 'FuncU Returns',
+    text: "FuncU Returns",
     path: `/home/wms/fus/returnitems`,
   },
 
@@ -356,15 +361,15 @@ const warehouseMember = [
   //   text: "Receive Items",
   //   path: `fus/receive`,
   // },
-]
+];
 
 const warehouseIncharge = [
   // { img: FunctionalUnit, text: "Functional Unit", path: "" },
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, text: "KHMC", path: "" },
 
   {
     img: FunctionalUnit,
-    text: 'FU Rep Request',
+    text: "FU Rep Request",
     path: `fus/replenishment`,
   },
 
@@ -379,10 +384,10 @@ const warehouseIncharge = [
   //   text: "Receive Items",
   //   path: `fus/receive`,
   // },
-]
+];
 
 const fuHead = [
-  { img: FunctionalUnit, text: 'Functional Unit', path: '' },
+  { img: FunctionalUnit, text: "Functional Unit", path: "" },
   // {
   //   img: MedicationOrder,
   //   text: "Medication  Order",
@@ -397,7 +402,7 @@ const fuHead = [
 
   {
     img: FunctionalUnit,
-    text: 'FU Inventory',
+    text: "FU Inventory",
     path: `fus/fuinventory`,
   },
 
@@ -418,15 +423,15 @@ const fuHead = [
   //   text: "Receive Items",
   //   path: `fus/receive`,
   // },
-]
+];
 
 const buMember = [
   // { img: FunctionalUnit, text: "Functional Unit", path: "" },
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, text: "KHMC", path: "" },
 
   {
     img: MedicationOrder,
-    text: 'Medication  Order',
+    text: "Medication  Order",
     path: `/home/wms/fus/medicinalorder`,
   },
 
@@ -438,22 +443,22 @@ const buMember = [
 
   {
     img: ReceiveItem,
-    text: 'Receive Items',
+    text: "Receive Items",
     path: `/home/wms/fus/receive`,
   },
-]
+];
 
 const buNurse = [
-  { img: FunctionalUnit, text: 'Functional Unit', path: '' },
+  { img: FunctionalUnit, text: "Functional Unit", path: "" },
   {
     img: MedicationOrder,
-    text: 'Medication  Order',
+    text: "Medication  Order",
     path: `/home/wms/fus/medicinalorder`,
   },
 
   {
     img: ProfessionalOrder,
-    text: 'Professional Order',
+    text: "Professional Order",
     path: `/home/wms/fus/professionalorder`,
   },
 
@@ -462,17 +467,17 @@ const buNurse = [
   //   text: "Receive Items",
   //   path: `fus/receive`,
   // },
-]
+];
 
 const fuReturnRequestApprovalMember = [
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, text: "KHMC", path: "" },
 
   {
     img: ReturnItem,
-    text: 'Approve Returns',
+    text: "Approve Returns",
     path: `/home/wms/fus/returnitems`,
   },
-]
+];
 
 // const fuMemberForBUManagement = [
 //   { img: Control_Room, text: "Control Room", path: "" },
@@ -498,36 +503,36 @@ const fuReturnRequestApprovalMember = [
 
 const fuInventoryKeeper = [
   // { img: FunctionalUnit, text: "Functional Unit", path: "" },
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, text: "KHMC", path: "" },
 
   {
     img: RepRequestStatus,
-    text: 'Replenishment Request Status',
+    text: "Replenishment Request Status",
     path: `/home/wms/fus/replenishment`,
   },
 
   {
     img: ReceiveItem,
-    text: 'Order Receiving/ Return',
+    text: "Order Receiving/ Return",
     path: `/home/wms/fus/receive`,
   },
 
   {
     img: ManualRequest,
-    text: 'Manual Request',
+    text: "Manual Request",
     path: `/home/wms/fus/replenishment/add/manual`,
   },
 
   {
     img: ReturnItem,
-    text: 'Functional Unit Returns',
+    text: "Functional Unit Returns",
     path: `/home/wms/fus/returnitems`,
   },
 
   {
-    img: '',
-    text: '',
-    path: '',
+    img: "",
+    text: "",
+    path: "",
   },
 
   // {
@@ -538,13 +543,13 @@ const fuInventoryKeeper = [
 
   {
     img: MedicationOrder,
-    text: 'Order Items (Medical)',
+    text: "Order Items (Medical)",
     path: `/home/wms/fus/medicinalorder`,
   },
 
   {
     img: ProfessionalOrder,
-    text: 'Order Items (Non-Medical)',
+    text: "Order Items (Non-Medical)",
     path: `/home/wms/fus/professionalorder`,
   },
 
@@ -553,65 +558,65 @@ const fuInventoryKeeper = [
   //   text: "Items Order",
   //   path: `/home/wms/fus/medicinalorder`,
   // },
-]
+];
 
 const fuIncharge = [
-  { img: Control_Room, text: 'Control Room' },
-  { img: '', text: '', path: '' },
-  { img: '', text: '', path: '' },
-  { img: '', text: '', path: '' },
-  { img: BU, text: 'BU Mgmt', path: 'controlroom/bus/replenishment' },
+  { img: Control_Room, text: "Control Room" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+  { img: "", text: "", path: "" },
+  { img: BU, text: "BU Mgmt", path: "controlroom/bus/replenishment" },
 
   {
     img: FunctionalUnit,
-    text: 'FU Mgmt',
-    path: 'controlroom/fus/replenishment',
+    text: "FU Mgmt",
+    path: "controlroom/fus/replenishment",
   },
-]
+];
 
 const warehouseInventoryKeeper = [
-  { img: KHMC, text: 'KHMC APPS', path: '' },
+  { img: KHMC, text: "KHMC APPS", path: "" },
 
   {
     img: purchase_request,
-    text: 'Purchase Requests',
-    path: '/home/wms/warehouse/pr',
+    text: "Purchase Requests",
+    path: "/home/wms/warehouse/pr",
   },
 
   {
     img: FuncUFulfillment,
-    text: 'Replenishment Requests',
+    text: "Replenishment Requests",
     path: `/home/wms/fus/replenishment`,
   },
 
   {
     img: ReceiveItem,
-    text: 'Order Receiving/ Return',
-    path: '/home/wms/warehouse/materialreceiving',
+    text: "Order Receiving/ Return",
+    path: "/home/wms/warehouse/materialreceiving",
   },
 
   {
-    img: '',
-    text: '',
-    path: '',
+    img: "",
+    text: "",
+    path: "",
   },
 
   {
-    img: '',
-    text: '',
-    path: '',
+    img: "",
+    text: "",
+    path: "",
   },
 
   {
-    img: '',
-    text: '',
-    path: '',
+    img: "",
+    text: "",
+    path: "",
   },
 
   {
     img: wh_inventory,
-    text: 'WH Inventory',
-    path: '/home/wms/warehouse/warehouseinventory',
+    text: "WH Inventory",
+    path: "/home/wms/warehouse/warehouseinventory",
   },
 
   // {
@@ -619,82 +624,82 @@ const warehouseInventoryKeeper = [
   //   text: "Purchase Order",
   //   path: "/home/wms/warehouse/po",
   // },
-]
+];
 
 const purchasingManager = [
-  { img: KHMC, text: 'KHMC APPS', path: '' },
+  { img: KHMC, text: "KHMC APPS", path: "" },
 
   {
     img: purchase_order,
-    text: 'Purchase Orders',
-    path: '/home/wms/warehouse/po',
+    text: "Purchase Orders",
+    path: "/home/wms/warehouse/po",
   },
-]
+];
 
 const purchasingOfficer = [
-  { img: KHMC, text: 'KHMC APPS', path: '' },
+  { img: KHMC, text: "KHMC APPS", path: "" },
 
   {
     img: VendorReturns,
-    text: 'Vendor Return',
-    path: '/home/wms/warehouse/externalreturn',
+    text: "Vendor Return",
+    path: "/home/wms/warehouse/externalreturn",
   },
-]
+];
 
 const cashier = [
-  { img: KHMC, text: 'KHMC APPS', path: '' },
+  { img: KHMC, text: "KHMC APPS", path: "" },
   {
     img: claimsReview,
-    text: 'Patient Clearance',
-    path: '/home/rcm/patientclearence',
+    text: "Patient Clearance",
+    path: "/home/rcm/patientclearence",
   },
-]
+];
 
 class HomeScreen extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       openApps: false,
-      currentUser: '',
-      userStaff: '',
+      currentUser: "",
+      userStaff: "",
 
-      options: '',
-    }
+      options: "",
+    };
   }
 
   setOptions() {
-    let routeAccess = this.state.userStaff.routeAccess
+    let routeAccess = this.state.userStaff.routeAccess;
 
-    let options = []
+    let options = [];
 
     for (let i = 0; i < routeAccess.length; i++) {
-      let routeObj = routeAccess[i]
-      let splitedModulesArray = routeObj.route.split('/')
+      let routeObj = routeAccess[i];
+      let splitedModulesArray = routeObj.route.split("/");
 
       for (let j = 0; j < splitedModulesArray.length; j++) {
-        let singleModule = splitedModulesArray[j]
-        let temp = admin.find((r) => r.text === singleModule)
+        let singleModule = splitedModulesArray[j];
+        let temp = admin.find((r) => r.text === singleModule);
         if (temp) {
-          console.log(temp.text)
+          console.log(temp.text);
           let alreadyFound =
-            options && options.find((r) => r.text === temp.text)
+            options && options.find((r) => r.text === temp.text);
           if (!alreadyFound) {
-            options.push(temp)
+            options.push(temp);
           }
         }
       }
     }
 
-    console.log(options)
-    this.setState({ options: [admin[0], ...options] })
+    console.log(options);
+    this.setState({ options: [admin[0], ...options] });
   }
 
   componentWillMount() {
     this.setState({
-      currentUser: cookie.load('current_user'),
-      userStaff: cookie.load('user_staff'),
-    })
+      currentUser: cookie.load("current_user"),
+      userStaff: cookie.load("user_staff"),
+    });
   }
 
   componentDidMount() {
@@ -702,32 +707,32 @@ class HomeScreen extends React.Component {
     //   this.setOptions();
     // }
 
-    this.props.setPatientDetailsForReducer('')
+    this.props.setPatientDetailsForReducer("");
 
     setTimeout(() => {
-      document.getElementById('menu-open').checked = true
-    }, 120)
+      document.getElementById("menu-open").checked = true;
+    }, 120);
   }
 
   render() {
-    const userType = this.state.currentUser.staffTypeId
-    console.log(userType)
+    const userType = this.state.currentUser.staffTypeId;
+    console.log(userType);
 
     return (
       <div
         style={{
-          display: 'flex',
-          flexDirection: 'column',
+          display: "flex",
+          flexDirection: "column",
           flex: 1,
-          position: 'fixed',
-          width: '100%',
-          height: '100%',
+          position: "fixed",
+          width: "100%",
+          height: "100%",
           // backgroundColor: "#2B62CC",
-          background: 'rgb(101,228,193)',
+          background: "rgb(101,228,193)",
           background:
-            'linear-gradient(25deg, rgba(101,228,193,1) 0%, rgba(58,219,175,1) 33%, rgba(15,206,147,1) 66%, rgba(6,142,103,1) 100%)',
+            "linear-gradient(25deg, rgba(101,228,193,1) 0%, rgba(58,219,175,1) 33%, rgba(15,206,147,1) 66%, rgba(6,142,103,1) 100%)",
           // backgroundImage: `url("${WMS_Back}")`,
-          backgroundSize: '100%',
+          backgroundSize: "100%",
         }}
       >
         <Header />
@@ -941,75 +946,75 @@ class HomeScreen extends React.Component {
         <MenuTree
           history={this.props.history}
           options={
-            userType && userType.type === 'BU Head'
+            userType && userType.type === "BU Head"
               ? buHead
-              : userType && userType.type === 'Committe Member'
+              : userType && userType.type === "Committe Member"
               ? committeeMember
-              : userType && userType.type === 'Accounts Member'
+              : userType && userType.type === "Accounts Member"
               ? accountsMember
-              : userType && userType.type === 'Purchasing Officer'
+              : userType && userType.type === "Purchasing Officer"
               ? purchasingOfficer
-              : userType && userType.type === 'Purchasing Manager'
+              : userType && userType.type === "Purchasing Manager"
               ? purchasingManager
-              : userType && userType.type === 'Warehouse Member'
+              : userType && userType.type === "Warehouse Member"
               ? warehouseMember
-              : userType && userType.type === 'FU Member'
+              : userType && userType.type === "FU Member"
               ? fuHead
-              : userType && userType.type === 'Warehouse Incharge'
+              : userType && userType.type === "Warehouse Incharge"
               ? warehouseIncharge
-              : userType && userType.type === 'Warehouse Inventory Keeper'
+              : userType && userType.type === "Warehouse Inventory Keeper"
               ? warehouseInventoryKeeper
-              : userType && userType.type === 'FU Inventory Keeper'
+              : userType && userType.type === "FU Inventory Keeper"
               ? fuInventoryKeeper
               : userType &&
-                userType.type === 'FU Internal Request Return Approval Member'
+                userType.type === "FU Internal Request Return Approval Member"
               ? fuReturnRequestApprovalMember
-              : userType && userType.type === 'FU Incharge'
+              : userType && userType.type === "FU Incharge"
               ? fuIncharge
-              : userType && userType.type === 'BU Nurse'
+              : userType && userType.type === "BU Nurse"
               ? buNurse
-              : (userType && userType.type === 'BU Member') ||
-                (userType && userType.type === 'BU Inventory Keeper') ||
-                (userType && userType.type === 'BU Doctor')
+              : (userType && userType.type === "BU Member") ||
+                (userType && userType.type === "BU Inventory Keeper") ||
+                (userType && userType.type === "BU Doctor")
               ? buMember
-              : userType && userType.type === 'Warehouse Incharge'
+              : userType && userType.type === "Warehouse Incharge"
               ? warehouseIncharge
-              : userType && userType.type === 'FU Inventory Keeper'
+              : userType && userType.type === "FU Inventory Keeper"
               ? fuInventoryKeeper
-              : userType && userType.type === 'Resident Doctor'
+              : userType && userType.type === "Resident Doctor"
               ? residentDoctor
-              : (userType && userType.type === 'IPR Receptionist') ||
-                (userType && userType.type === 'EDR Receptionist')
+              : (userType && userType.type === "IPR Receptionist") ||
+                (userType && userType.type === "EDR Receptionist")
               ? frontDesk
-              : userType && userType.type === 'Insurance Department'
+              : userType && userType.type === "Insurance Department"
               ? insuranceDepartment
-              : userType && userType.type === 'Registered Nurse'
+              : userType && userType.type === "Registered Nurse"
               ? registeredNurse
-              : userType && userType.type === 'Radiology/Imaging'
+              : userType && userType.type === "Radiology/Imaging"
               ? radiologyImagingDepartment
-              : userType && userType.type === 'Lab Technician'
+              : userType && userType.type === "Lab Technician"
               ? labTechnician
-              : userType && userType.type === 'Pharmacist'
+              : userType && userType.type === "Pharmacist"
               ? pharmacist
-              : userType && userType.type === 'Doctor/Physician'
+              : userType && userType.type === "Doctor/Physician"
               ? doctorPhysician
-              : userType && userType.type === 'Consultant/Specialist'
+              : userType && userType.type === "Consultant/Specialist"
               ? consultantSpecialist
-              : userType && userType.type === 'Cashier'
+              : userType && userType.type === "Cashier"
               ? cashier
               : admin
           }
         />
       </div>
-    )
+    );
   }
 }
 
 const mapStateToProps = ({ CheckingReducer }) => {
-  const { count, patientDetails } = CheckingReducer
-  return { count, patientDetails }
-}
+  const { count, patientDetails } = CheckingReducer;
+  return { count, patientDetails };
+};
 export default connect(mapStateToProps, {
   funForReducer,
   setPatientDetailsForReducer,
-})(HomeScreen)
+})(HomeScreen);

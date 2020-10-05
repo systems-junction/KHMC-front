@@ -9,6 +9,8 @@ import InsuranceClaimRoutes from "../subRoutes/insuranceClaim";
 import ResidentDoctor from "../subRoutes/residentDoctor";
 import ECR from "../subRoutes/ecr";
 import PatientListingRoutes from "./patientListing";
+// import PatientHistory from "../views/PatientHistory/PatientHistory";
+import PatientHistory from "./patientHistory";
 import patientAssessment from "./patientAssessment";
 import patientCare from "./patientCare";
 import LabRadRequest from "./labRadRequest";
@@ -51,6 +53,8 @@ class WMSRoutes extends React.PureComponent {
         <Route path={"/home/rcm/sr"} component={ServicesRequestRoutes} />
         <Route path={"/home/rcm/rd"} component={ResidentDoctor} />
         <Route path={"/home/rcm/ecr"} component={ECR} />
+        <Route path={"/home/rcm/patientHistory"} component={PatientHistory} />
+
         <Route path={`${this.props.match.url}/edr`} component={EDR} />
         <Route path={`${this.props.match.url}/ipr`} component={IPR} />
         <Route path={"/home/rcm/ic"} component={InsuranceClaimRoutes} />
