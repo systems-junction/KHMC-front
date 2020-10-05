@@ -111,9 +111,6 @@ ul li {
   display: inline-block;
 }
 
-<<<<<<< HEAD
-@import url("//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css");
-=======
 .depositSlipImg:hover {
   margin-bottom: 10px;
   height: 400px;
@@ -127,8 +124,7 @@ ul li {
   display: inline-block;
 }
 
-@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css');
->>>>>>> b30a97042fc949182a45f159c3220e81c561833a
+@import url("//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css");
 .search {
   position: relative;
 }

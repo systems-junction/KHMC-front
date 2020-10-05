@@ -652,7 +652,7 @@ function AddEditPatientListing(props) {
       .then((res) => {
         if (res.data.success) {
           setsearched(true);
-          // console.log("response for summary", res.data);
+          console.log("response for summary", res.data);
 
           if (res.data.rc) {
             console.log("response for Claim", res.data.rc);
@@ -661,19 +661,6 @@ function AddEditPatientListing(props) {
               value: res.data.rc.treatmentDetail,
             });
             dispatch({ field: "document", value: res.data.rc.document });
-            if(res.data.rc.document.map((item, index) => item.includes("\\"))) 
-              {
-                res.data.rc.document.map((item, index) => {
-                  if (item.slice(item.length - 3) !== "pdf") {
-                    console.log("Checking the item's URL on live of image >>> ",uploadsUrl+item)
-                  }
-                  else if (item.slice(item.length - 3) !== "pdf")
-                  {
-                    console.log("Checking the item's URL on live of pdf >>> ",uploadsUrl+item)
-                  }
-                })
-              }
-            
           }
           dispatch({ field: "requestNo", value: res.data.data.requestNo });
 
@@ -721,11 +708,9 @@ function AddEditPatientListing(props) {
                       ).toFixed(4),
                       insuredPrice: amount.toFixed(4),
                       insuranceStatus: "Covered",
-                      comments:singlePR.item[j].comments
                     },
                     date: res.data.data.pharmacyRequest[i].dateGenerated,
                     serviceType: "Pharmacy",
-                    requestNo:singlePR.requestNo
                   };
                   pharm.push(obj);
                   found = true;
@@ -742,11 +727,9 @@ function AddEditPatientListing(props) {
                     originalPrice: amount.toFixed(4),
                     insuredPrice: "0",
                     insuranceStatus: "Not Covered",
-                    comments:singlePR.item[j].comments
                   },
                   date: res.data.data.pharmacyRequest[i].dateGenerated,
                   serviceType: "Pharmacy",
-                  requestNo:singlePR.requestNo
                 };
                 pharm.push(obj);
               }
@@ -768,11 +751,9 @@ function AddEditPatientListing(props) {
                     originalPrice: singleLR.serviceId.price.toFixed(4),
                     insuredPrice: res.data.insured[j].price.toFixed(4),
                     insuranceStatus: "Covered",
-                    comments:singleLR.comments
                   },
                   date: singleLR.date,
                   serviceType: "Lab",
-                  requestNo:singleLR.LRrequestNo
                 };
                 lab.push(obj);
                 found = true;
@@ -785,11 +766,9 @@ function AddEditPatientListing(props) {
                   originalPrice: singleLR.serviceId.price.toFixed(4),
                   insuredPrice: "0",
                   insuranceStatus: "Not Covered",
-                  comments:singleLR.comments
                 },
                 date: singleLR.date,
                 serviceType: "Lab",
-                requestNo:singleLR.LRrequestNo
               };
               lab.push(obj);
             }
@@ -810,11 +789,9 @@ function AddEditPatientListing(props) {
                     originalPrice: singleRR.serviceId.price.toFixed(4),
                     insuredPrice: res.data.insured[j].price.toFixed(4),
                     insuranceStatus: "Covered",
-                    comments:singleRR.comments
                   },
                   date: singleRR.date,
                   serviceType: "Radiology",
-                  requestNo:singleRR.RRrequestNo
                 };
                 radiology.push(obj);
                 found = true;
@@ -827,17 +804,15 @@ function AddEditPatientListing(props) {
                   originalPrice: singleRR.serviceId.price.toFixed(4),
                   insuredPrice: "0",
                   insuranceStatus: "Not Covered",
-                  comments:singleRR.comments
                 },
                 date: singleRR.date,
                 serviceType: "Radiology",
-                requestNo:singleRR.RRrequestNo
               };
               radiology.push(obj);
             }
           }
 
-          console.log("Bill sumamry is ... ", [].concat(lab.reverse(), radiology.reverse(), pharm.reverse()))
+          // console.log("Bill sumamry is ... ", [].concat(res.data.data.labRequest, res.data.data.radiologyRequest, pharm))
           setbillSummaryArray(
             [].concat(lab.reverse(), radiology.reverse(), pharm.reverse())
           );
@@ -858,10 +833,10 @@ function AddEditPatientListing(props) {
       .then((res) => {
         if (res.data.success) {
           if (res.data.data) {
-            // console.log(
-            //   "Response after getting EDR/IPR data : ",
-            //   res.data.data
-            // );
+            console.log(
+              "Response after getting EDR/IPR data : ",
+              res.data.data
+            );
 
             Object.entries(res.data.data).map(([key, val]) => {
               if (val && typeof val === "object") {
@@ -926,7 +901,6 @@ function AddEditPatientListing(props) {
     var logo = new Image();
     logo.src = logoPatientSummaryInvoice;
 
-<<<<<<< HEAD
     // var doc = new jsPDF();
 
     // doc.setFontSize(40);
@@ -990,11 +964,9 @@ function AddEditPatientListing(props) {
     // doc.save(`Invoice ${invoiceNo}.pdf`);
 
     var doc = new jsPDF();
-=======
-    var doc = new jsPDF()
->>>>>>> b30a97042fc949182a45f159c3220e81c561833a
 
     doc.addImage(logo, "PNG", 10, 10, 55, 30);
+
     doc.setTextColor(0, 0, 0);
 
     // header
@@ -1031,19 +1003,11 @@ function AddEditPatientListing(props) {
     doc.text(5, 95, "Service Type:");
     doc.text(5, 105, "Comments:");
 
-<<<<<<< HEAD
     doc.setFont("times", "normal");
     doc.text(35, 75, "LR129237288");
     doc.text(35, 85, `${item.serviceId.name}`);
     doc.text(35, 95, `${item.serviceType}`);
     doc.text(35, 105, "This person was refered for a Urine Test.");
-=======
-    doc.setFont('times', "normal");
-    doc.text(35, 75, `${item.requestNo}`);
-    doc.text(35, 85, `${item.serviceId.name}`);
-    doc.text(35, 95, `${item.serviceType}`);
-    doc.text(35, 105, `${item.serviceId.comments ? item.serviceId.comments : 'N/A'}`);
->>>>>>> b30a97042fc949182a45f159c3220e81c561833a
 
     doc.text(5, 235, "Signature & Stamp");
     doc.line(5, 240, 75, 240);
@@ -1570,9 +1534,7 @@ function AddEditPatientListing(props) {
                     style={{ display: "flex", flexDirection: "column" }}
                   >
                     <span style={styles.headingStyles}>MRN</span>
-                    <span style={styles.textStyles} className="mrnUpperCase">
-                      {profileNo}
-                    </span>
+                    <span style={styles.textStyles}>{profileNo}</span>
 
                     <span style={styles.headingStyles}>Patient</span>
                     <span style={styles.textStyles}>
@@ -2183,7 +2145,6 @@ function AddEditPatientListing(props) {
                                 window.location.href = uploadsUrl + document;
                               }}
                             >
-<<<<<<< HEAD
                               Click here to open document {index + 1}
                             </Button>
                           </div>
@@ -2194,69 +2155,6 @@ function AddEditPatientListing(props) {
                 ) : (
                   undefined
                 )}
-=======
-                              <Button
-                                style={{ ...styles.stylesForButton, width: '100%', backgroundColor: '#ba55d3' }}
-                                variant="contained"
-                                color="default"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  window.location.href = uploadsUrl + item.split("\\")[1];
-                                }}
-                              >
-                                Click here to open document {index + 1}
-                              </Button>
-                            </div>
-                          );
-                        }
-                      })}
-                    </>
-                  ) : document && document.length > 0 &&
-                    document.map((item, index) => item.includes("/")) ? (
-                      <>
-                        {document.map((item, index) => {
-                          if (item.slice(item.length - 3) !== "pdf") {
-                            return (
-                              <div
-                                className="col-md-4 col-sm-4 col-4"
-                                style={{
-                                  ...styles.inputContainerForTextField,
-                                }}
-                              >
-                                <img
-                                  src={uploadsUrl+item}
-                                  className="depositSlipImg"
-                                />
-                              </div>
-                            );
-                          } else if (item.slice(item.length - 3) === "pdf") {
-                            return (
-                              <div
-                                className="col-md-4 col-sm-4 col-4"
-                                style={{
-                                  ...styles.inputContainerForTextField,
-                                }}
-                              >
-                                <Button
-                                  style={{ ...styles.stylesForButton, width: '100%', backgroundColor: '#ba55d3' }}
-                                  variant="contained"
-                                  color="default"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    window.location.href = uploadsUrl+item;
-                                  }}
-                                >
-                                  Click here to open document {index + 1}
-                                </Button>
-                              </div>
-                            );
-                          }
-                        })}
-                      </>
-                    ) : (
-                      undefined
-                    )}
->>>>>>> b30a97042fc949182a45f159c3220e81c561833a
 
                 {imagePreview && imagePreview.length > 0 ? (
                   <>

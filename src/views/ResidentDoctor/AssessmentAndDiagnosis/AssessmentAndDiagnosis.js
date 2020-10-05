@@ -8,6 +8,7 @@ import {
   getSearchedLaboratoryService,
   getSearchedRadiologyService,
   updateEdrIpr,
+  getIcd,
   searchpatient,
   notifyConsultation,
   getSearchedpatient,
@@ -467,7 +468,8 @@ function LabRadRequest(props) {
   const [requestedItems, setRequestedItems] = useState("");
   const [selectedOrder, setSelectedOrder] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-
+  const [icd, setIcd] = useState([]);
+  const [icdArr, setIcdArr] = useState([]);
   const validateForm = () => {
     return (
       doctorconsultationNotes &&
@@ -499,6 +501,11 @@ function LabRadRequest(props) {
       getPatientByInfo(props.patientDetails._id);
       openPatientDetailsDialog(true);
     }
+
+    axios.get(getIcd).then((res) => {
+      console.log("res for icd", res);
+      setIcd(res.data.data);
+    });
 
     seticdSection(Object.keys(icdCodesList[0]));
 
@@ -1113,24 +1120,19 @@ function LabRadRequest(props) {
 
   const onChangeSection = (e) => {
     if (e.target.value) {
-<<<<<<< HEAD
       dispatch({ field: e.target.name, value: e.target.value });
-      let codes = Object.entries(icdCodesList[0]);
-=======
-      dispatch({ field: e.target.name, value: e.target.value })
 
-      axios.get(getIcd + '/' + e.target.value).then((res) => {
+      axios.get(getIcd + "/" + e.target.value).then((res) => {
         if (res.data.data) {
-          console.log('hello', res.data.data)
+          console.log("hello", res.data.data);
           // const mappedArr = res.data.data.map(
           //   (e) => e.icd10PCSCodes && e.procedureCodeDescriptions
           // )
-          setIcdArr(res.data.data)
+          setIcdArr(res.data.data);
         }
-      })
+      });
 
-      let codes = Object.entries(icdCodesList[0])
->>>>>>> b30a97042fc949182a45f159c3220e81c561833a
+      let codes = Object.entries(icdCodesList[0]);
       for (var x in codes) {
         let arr = codes[x];
         if (arr[0] === e.target.value) {
@@ -1149,42 +1151,29 @@ function LabRadRequest(props) {
     let currentList = [];
     let newList = [];
 
+    console.log("icdArr", icdArr);
     if (e.target.value !== "") {
-      currentList = icdCode;
-
+      currentList = icdArr;
+      console.log(icdArr);
       newList = currentList.filter((item) => {
-<<<<<<< HEAD
-        const lc = item.toLowerCase();
+        const lc = item.icd10PCSCodes.toLowerCase();
         const filter = e.target.value.toLowerCase();
         return lc.includes(filter);
       });
     } else {
-      let codes = Object.entries(icdCodesList[0]);
-      for (var x in codes) {
-        let arr = codes[x];
-        if (arr[0] === section) {
-          console.log("codes", arr[1]);
-          newList = arr[1];
-=======
-        const lc = item.icd10PCSCodes.toLowerCase()
-        const filter = e.target.value.toLowerCase()
-        return lc.includes(filter)
-      })
-    } else {
-      axios.get(getIcd + '/' + section).then((res) => {
+      axios.get(getIcd + "/" + section).then((res) => {
         if (res.data.data) {
-          console.log('hello', res.data.data)
+          console.log("hello", res.data.data);
           // const mappedArr = res.data.data.map(
           //   (e) => e.icd10PCSCodes && e.procedureCodeDescriptions
           // )
-          setIcdArr(res.data.data)
->>>>>>> b30a97042fc949182a45f159c3220e81c561833a
+          setIcdArr(res.data.data);
         }
-      }
+      });
     }
-    seticdCode(newList);
+    setIcdArr(newList);
+    console.log("icdArr", icdArr);
   };
-
   //for search patient
   const handlePatientSearch = (e) => {
     const a = e.target.value.replace(/[^\w\s]/gi, "");
@@ -1349,14 +1338,14 @@ function LabRadRequest(props) {
   };
 
   const PatientHistory = () => {
-    let path = `assessmentdiagnosis/patienthistory`
+    let path = `assessmentdiagnosis/patienthistory`;
     props.history.push({
       pathname: path,
       state: {
         selectedItem: selectedItem,
       },
-    })
-  }
+    });
+  };
 
   const addNewRequest = () => {
     // let path = `assessmentdiagnosis/add`
@@ -1407,9 +1396,9 @@ function LabRadRequest(props) {
     //     alert("CheckBox is Disabled");
     // }
 
-    setErrorMsg('Please Search Patient First ')
-    setOpenNotification(true)
-  }
+    setErrorMsg("Please Search Patient First ");
+    setOpenNotification(true);
+  };
 
   return (
     <div
@@ -1448,8 +1437,8 @@ function LabRadRequest(props) {
               // disabled={enableForm}
               onClick={enableForm ? showAlertForPatientHistory : PatientHistory}
               style={styles.stylesForButton}
-              variant='contained'
-              color='primary'
+              variant="contained"
+              color="primary"
               Error={errorMsg}
             >
               Patient History
@@ -1669,7 +1658,7 @@ function LabRadRequest(props) {
                 style={{ display: "flex", flexDirection: "column" }}
               >
                 <span style={styles.headingStyles}>MRN</span>
-                <span style={styles.textStyles} className="mrnUpperCase">
+                <span style={styles.textStyles}>
                   {patientDetails.profileNo
                     ? patientDetails.profileNo
                     : "-----"}
@@ -1708,11 +1697,7 @@ function LabRadRequest(props) {
 
               <div
                 className={"col-md-3 col-sm-3 col-3"}
-                style={{
-                  ...styles.textStyles,
-                  overflow: "auto",
-                  maxHeight: 200,
-                }}
+                style={styles.textStyles}
               >
                 {medicationArray
                   ? medicationArray.map((drug, index) => {
@@ -1727,16 +1712,12 @@ function LabRadRequest(props) {
 
               <div
                 className={"col-md-3 col-sm-3 col-3"}
-                style={{
-                  ...styles.textStyles,
-                  maxHeight: 200,
-                  overflow: "auto",
-                }}
+                style={styles.textStyles}
               >
                 {diagnosisArray
                   ? diagnosisArray.map((drug, index) => {
                       return (
-                        <h6 style={{ ...styles.textStyles }}>
+                        <h6 style={styles.textStyles}>
                           {index + 1}. {drug}
                         </h6>
                       );
@@ -2656,8 +2637,8 @@ function LabRadRequest(props) {
                       <em>Section</em>
                     </MenuItem>
 
-                    {icdSection &&
-                      icdSection.map((val) => {
+                    {icd &&
+                      icd.map((val) => {
                         return (
                           <MenuItem key={val} value={val}>
                             {val}
@@ -2671,19 +2652,11 @@ function LabRadRequest(props) {
                   style={styles.inputContainerForTextField}
                 >
                   <TextField
-<<<<<<< HEAD
                     type="text"
                     label="Code"
-                    onChange={handleCodeSearch}
+                    onChange={(e) => handleCodeSearch(e)}
                     className="textInputStyle"
                     variant="filled"
-=======
-                    type='text'
-                    label='Code'
-                    onChange={(e) => handleCodeSearch(e)}
-                    className='textInputStyle'
-                    variant='filled'
->>>>>>> b30a97042fc949182a45f159c3220e81c561833a
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
@@ -2703,9 +2676,7 @@ function LabRadRequest(props) {
                 </div>
               </div>
 
-              {icdCode != null &&
-              icdCode.length != null &&
-              icdCode.length > 0 ? (
+              {icdArr != null && icdArr.length != null && icdArr.length > 0 ? (
                 <div className="row" style={{ marginLeft: 0, marginRight: 0 }}>
                   <div
                     className={`scrollable ${"col-md-12 col-sm-12 col-12"}`}
@@ -2715,7 +2686,7 @@ function LabRadRequest(props) {
                     }}
                   >
                     <ul>
-                      {icdCode.map((item) => (
+                      {icdArr.map((item) => (
                         <li key={item}>
                           <span
                             className="addCode"

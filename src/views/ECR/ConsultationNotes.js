@@ -15,7 +15,6 @@ import {
   getSearchedpatient,
   notifyLab,
   notifyRad,
-<<<<<<< HEAD
 } from "../../public/endpoins";
 import cookie from "react-cookies";
 import Header from "../../components/Header/Header";
@@ -47,39 +46,6 @@ import UpdateSingleRequest from "./updateRequest";
 import Loader from "react-loader-spinner";
 
 import { connect } from "react-redux";
-=======
-} from '../../public/endpoins'
-import cookie from 'react-cookies'
-import Header from '../../components/Header/Header'
-import ConsultationIcon from '../../assets/img/Consultation_Notes.png'
-import Back from '../../assets/img/Back_Arrow.png'
-import '../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
-import Tabs from '@material-ui/core/Tabs'
-import Tab from '@material-ui/core/Tab'
-import CustomTable from '../../components/Table/Table'
-import plus_icon from '../../assets/img/Plus.png'
-import InputLabelComponent from '../../components/InputLabel/inputLabel'
-import Paper from '@material-ui/core/Paper'
-import Table from '@material-ui/core/Table'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import Dialog from '@material-ui/core/Dialog'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import DialogContent from '@material-ui/core/DialogContent'
-import ErrorMessage from '../../components/ErrorMessage/errorMessage'
-import Notification from '../../components/Snackbar/Notification.js'
-import Fingerprint from '../../assets/img/fingerprint.png'
-import AccountCircle from '@material-ui/icons/SearchOutlined'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import BarCode from '../../assets/img/Bar Code.png'
-import ViewSingleRequest from './viewRequest'
-import UpdateSingleRequest from './updateRequest'
-import Loader from 'react-loader-spinner'
-
-import { connect } from 'react-redux'
->>>>>>> b30a97042fc949182a45f159c3220e81c561833a
 import {
   funForReducer,
   setPatientDetailsForReducer,
@@ -871,13 +837,8 @@ function LabRadRequest(props) {
               } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
             },
             patientDetails: patientDetails,
-<<<<<<< HEAD
           });
           notifyForLab(patientId);
-=======
-          })
-          notifyForLab(patientId)
->>>>>>> b30a97042fc949182a45f159c3220e81c561833a
         } else if (!res.data.success) {
           setOpenNotification(true);
         }
@@ -1198,11 +1159,6 @@ function LabRadRequest(props) {
     dispatch({ field: "diagnosisArray", value: "" });
     dispatch({ field: "medicationArray", value: "" });
 
-<<<<<<< HEAD
-    props.setPatientDetailsForReducer(i);
-
-=======
->>>>>>> b30a97042fc949182a45f159c3220e81c561833a
     // setDialogOpen(true);
     console.log("selected banda : ", i);
     setPatientDetails(i);
@@ -1330,14 +1286,14 @@ function LabRadRequest(props) {
   };
 
   const PatientHistory = () => {
-    let path = `cn/patienthistory`
+    let path = `cn/patienthistory`;
     props.history.push({
       pathname: path,
       state: {
         selectedItem: selectedItem,
       },
-    })
-  }
+    });
+  };
 
   function viewLabRadReport(rec) {
     if (!rec.view) {
@@ -1375,9 +1331,9 @@ function LabRadRequest(props) {
     //     alert("CheckBox is Disabled");
     // }
 
-    setErrorMsg('Please Search Patient First ')
-    setOpenNotification(true)
-  }
+    setErrorMsg("Please Search Patient First ");
+    setOpenNotification(true);
+  };
 
   return (
     <div
@@ -1416,8 +1372,8 @@ function LabRadRequest(props) {
               // disabled={enableForm}
               onClick={enableForm ? showAlertForPatientHistory : PatientHistory}
               style={styles.stylesForButton}
-              variant='contained'
-              color='primary'
+              variant="contained"
+              color="primary"
               Error={errorMsg}
             >
               Patient History
@@ -2325,11 +2281,7 @@ function LabRadRequest(props) {
                   undefined
                 )}
               </div>
-<<<<<<< HEAD
             </div> /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/)
-=======
-            </div> /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/)
->>>>>>> b30a97042fc949182a45f159c3220e81c561833a
           ) : (
             //     : value === 5 ? (
             //         <div
