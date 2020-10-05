@@ -78,6 +78,7 @@ export const addClaim = `${baseUrl}/reimbursementclaim/addclaim`
 export const getedripr = `${baseUrl}/reimbursementclaim/getedripr`
 export const getClaim = `${baseUrl}/reimbursementclaim/getclaim`
 export const updateClaim = `${baseUrl}/reimbursementclaim/updateclaim`
+export const getInsuredPatients = `${baseUrl}/reimbursementclaim/getpatientinsurance`
 
 // pre-approval Endpoints
 export const getPreApproval = `${baseUrl}/par/getedrandipr`

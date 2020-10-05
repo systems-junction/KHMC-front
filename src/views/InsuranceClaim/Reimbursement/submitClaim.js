@@ -9,7 +9,7 @@ import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import {
   updateClaim,
-  getSearchedpatient,
+  getInsuredPatients,
   addClaim,
   getedripr,
   uploadsUrl,
@@ -41,11 +41,11 @@ import BarCode from "../../../assets/img/Bar Code.png";
 import Fingerprint from "../../../assets/img/fingerprint.png";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import { before, last, reject } from "lodash";
-import PropTypes from 'prop-types';
-import Checkbox from '@material-ui/core/Checkbox';
-import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle'
-import print from '../../../assets/img/print.png'
-import Tooltip from '@material-ui/core/Tooltip'
+import PropTypes from "prop-types";
+import Checkbox from "@material-ui/core/Checkbox";
+import tableStyles from "../../../assets/jss/material-dashboard-react/components/tableStyle";
+import print from "../../../assets/img/print.png";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const tableHeadingForBillSummary = [
   "Date/Time",
@@ -149,9 +149,9 @@ const styles = {
     fontSize: 14,
   },
   selectedDoc: {
-    backgroundColor: 'azure',
-    padding: '5px',
-    borderRadius: '5px'
+    backgroundColor: "azure",
+    padding: "5px",
+    borderRadius: "5px",
   },
 };
 
@@ -605,7 +605,7 @@ function AddEditPatientListing(props) {
     if (a.length >= 3) {
       axios
         .get(
-          getSearchedpatient + "/" + currentUser.functionalUnit._id + "/" + a
+          getInsuredPatients + "/" + currentUser.functionalUnit._id + "/" + a
         )
         .then((res) => {
           if (res.data.success) {
@@ -652,7 +652,7 @@ function AddEditPatientListing(props) {
       .then((res) => {
         if (res.data.success) {
           setsearched(true);
-          // console.log("response for summary", res.data);
+          console.log("response for summary", res.data);
 
           if (res.data.rc) {
             console.log("response for Claim", res.data.rc);
@@ -661,19 +661,6 @@ function AddEditPatientListing(props) {
               value: res.data.rc.treatmentDetail,
             });
             dispatch({ field: "document", value: res.data.rc.document });
-            if(res.data.rc.document.map((item, index) => item.includes("\\"))) 
-              {
-                res.data.rc.document.map((item, index) => {
-                  if (item.slice(item.length - 3) !== "pdf") {
-                    console.log("Checking the item's URL on live of image >>> ",uploadsUrl+item)
-                  }
-                  else if (item.slice(item.length - 3) !== "pdf")
-                  {
-                    console.log("Checking the item's URL on live of pdf >>> ",uploadsUrl+item)
-                  }
-                })
-              }
-            
           }
           dispatch({ field: "requestNo", value: res.data.data.requestNo });
 
@@ -721,11 +708,9 @@ function AddEditPatientListing(props) {
                       ).toFixed(4),
                       insuredPrice: amount.toFixed(4),
                       insuranceStatus: "Covered",
-                      comments:singlePR.item[j].comments
                     },
                     date: res.data.data.pharmacyRequest[i].dateGenerated,
                     serviceType: "Pharmacy",
-                    requestNo:singlePR.requestNo
                   };
                   pharm.push(obj);
                   found = true;
@@ -742,11 +727,9 @@ function AddEditPatientListing(props) {
                     originalPrice: amount.toFixed(4),
                     insuredPrice: "0",
                     insuranceStatus: "Not Covered",
-                    comments:singlePR.item[j].comments
                   },
                   date: res.data.data.pharmacyRequest[i].dateGenerated,
                   serviceType: "Pharmacy",
-                  requestNo:singlePR.requestNo
                 };
                 pharm.push(obj);
               }
@@ -768,11 +751,9 @@ function AddEditPatientListing(props) {
                     originalPrice: singleLR.serviceId.price.toFixed(4),
                     insuredPrice: res.data.insured[j].price.toFixed(4),
                     insuranceStatus: "Covered",
-                    comments:singleLR.comments
                   },
                   date: singleLR.date,
                   serviceType: "Lab",
-                  requestNo:singleLR.LRrequestNo
                 };
                 lab.push(obj);
                 found = true;
@@ -785,11 +766,9 @@ function AddEditPatientListing(props) {
                   originalPrice: singleLR.serviceId.price.toFixed(4),
                   insuredPrice: "0",
                   insuranceStatus: "Not Covered",
-                  comments:singleLR.comments
                 },
                 date: singleLR.date,
                 serviceType: "Lab",
-                requestNo:singleLR.LRrequestNo
               };
               lab.push(obj);
             }
@@ -810,11 +789,9 @@ function AddEditPatientListing(props) {
                     originalPrice: singleRR.serviceId.price.toFixed(4),
                     insuredPrice: res.data.insured[j].price.toFixed(4),
                     insuranceStatus: "Covered",
-                    comments:singleRR.comments
                   },
                   date: singleRR.date,
                   serviceType: "Radiology",
-                  requestNo:singleRR.RRrequestNo
                 };
                 radiology.push(obj);
                 found = true;
@@ -827,17 +804,15 @@ function AddEditPatientListing(props) {
                   originalPrice: singleRR.serviceId.price.toFixed(4),
                   insuredPrice: "0",
                   insuranceStatus: "Not Covered",
-                  comments:singleRR.comments
                 },
                 date: singleRR.date,
                 serviceType: "Radiology",
-                requestNo:singleRR.RRrequestNo
               };
               radiology.push(obj);
             }
           }
 
-          console.log("Bill sumamry is ... ", [].concat(lab.reverse(), radiology.reverse(), pharm.reverse()))
+          // console.log("Bill sumamry is ... ", [].concat(res.data.data.labRequest, res.data.data.radiologyRequest, pharm))
           setbillSummaryArray(
             [].concat(lab.reverse(), radiology.reverse(), pharm.reverse())
           );
@@ -858,10 +833,10 @@ function AddEditPatientListing(props) {
       .then((res) => {
         if (res.data.success) {
           if (res.data.data) {
-            // console.log(
-            //   "Response after getting EDR/IPR data : ",
-            //   res.data.data
-            // );
+            console.log(
+              "Response after getting EDR/IPR data : ",
+              res.data.data
+            );
 
             Object.entries(res.data.data).map(([key, val]) => {
               if (val && typeof val === "object") {
@@ -926,55 +901,142 @@ function AddEditPatientListing(props) {
     var logo = new Image();
     logo.src = logoPatientSummaryInvoice;
 
-    var doc = new jsPDF()
+    // var doc = new jsPDF();
+
+    // doc.setFontSize(40);
+    // doc.setTextColor(44, 109, 221);
+    // var logo = new Image();
+
+    // logo.src = logoInvoice;
+    // doc.addImage(logo, "PNG", 5, 7);
+
+    // doc.setTextColor(0, 0, 0);
+
+    // doc.setFontSize(10);
+    // doc.text(139, 10, `Invoice No:`);
+    // doc.text(170, 10, `${invoiceNo}`);
+
+    // doc.setFontSize(12);
+    // doc.text(155, 20, "Date:");
+    // doc.text(184, 20, `${now.toISOString().substr(0, 10)}`);
+
+    // doc.text(155, 30, "Time:");
+    // doc.text(195, 30, `${time}`);
+
+    // doc.setFontSize(18);
+    // doc.text(5, 55, "Bill to:");
+    // doc.setFontSize(12);
+    // doc.line(5, 65, 50, 65);
+    // doc.text(5, 75, "Request No:");
+    // doc.text(5, 85, `${item.RRrequestNo || item.LRrequestNo}`);
+
+    // doc.text(178, 50, "Invoice Total");
+    // doc.setFontSize(23);
+    // doc.setTextColor(44, 109, 221);
+    // doc.text(167, 60, `${item.serviceId.price} JD`);
+
+    // doc.setTextColor(0, 0, 0);
+    // doc.setFontSize(12);
+    // doc.text(5, 100, `Service Name: ${item.serviceName}`);
+    // doc.text(5, 110, `Service Type: ${item.serviceType}`);
+    // doc.text(5, 120, `Comments: ${item.comments}`);
+
+    // doc.text(5, 252, "Signature & Stamp");
+    // doc.line(5, 257, 50, 257);
+
+    // doc.setTextColor(150, 150, 130);
+    // doc.text(162, 215, `Sub Total:`);
+    // doc.text(183, 215, `${item.serviceId.price} JD`);
+    // doc.text(163, 225, "Tax Rate:");
+    // doc.text(174, 235, "Tax:");
+    // doc.text(165, 245, "Discount:");
+    // doc.text(184, 245, " 999 JD");
+    // doc.setTextColor(0, 0, 0);
+    // doc.text(156, 255, "Total Amount:");
+    // doc.text(185, 255, `${item.serviceId.price} JD`);
+
+    // doc.line(0, 272, 1000, 272);
+
+    // doc.text(5, 285, "Prepared by:");
+    // if (QR) {
+    //   doc.addImage(`http://localhost:4000${QR}`, "PNG", 175, 275, 20, 20);
+    // }
+    // doc.save(`Invoice ${invoiceNo}.pdf`);
+
+    var doc = new jsPDF();
 
     doc.addImage(logo, "PNG", 10, 10, 55, 30);
+
     doc.setTextColor(0, 0, 0);
 
-    // header 
+    // header
     doc.setFontSize(15);
-    doc.setFont('times', "bold");
+    doc.setFont("times", "bold");
     doc.text(135, 15, `Invoice No: ${invoiceNo}`);
     doc.setFontSize(12);
-    doc.text(151, 23, 'Date:');
-    doc.text(151, 30, 'Time:');
-    doc.setFont('times', "normal");
+    doc.text(151, 23, "Date:");
+    doc.text(151, 30, "Time:");
+    doc.setFont("times", "normal");
     doc.text(178, 23, `${now.toISOString().substr(0, 10)}`); // date
     doc.text(188, 30, `${time}`); // time
     doc.text(175, 50, "Invoice Total");
     doc.setFontSize(23);
     doc.setTextColor(44, 109, 221);
-    doc.text(155, 60, `${item.serviceId.insuredPrice === "0" ? item.serviceId.originalPrice : item.serviceId.insuredPrice} JD`);
+    doc.text(
+      155,
+      60,
+      `${
+        item.serviceId.insuredPrice === "0"
+          ? item.serviceId.originalPrice
+          : item.serviceId.insuredPrice
+      } JD`
+    );
 
     // below header
     doc.setTextColor(0, 0, 0);
     doc.setFontSize(12);
     doc.line(0, 65, 210, 65);
 
-    doc.setFont('times', "bold");
+    doc.setFont("times", "bold");
     doc.text(5, 75, "Request No:");
-    doc.text(5, 85, 'Service Name:');
-    doc.text(5, 95, 'Service Type:');
-    doc.text(5, 105, 'Comments:');
+    doc.text(5, 85, "Service Name:");
+    doc.text(5, 95, "Service Type:");
+    doc.text(5, 105, "Comments:");
 
-    doc.setFont('times', "normal");
-    doc.text(35, 75, `${item.requestNo}`);
+    doc.setFont("times", "normal");
+    doc.text(35, 75, "LR129237288");
     doc.text(35, 85, `${item.serviceId.name}`);
     doc.text(35, 95, `${item.serviceType}`);
-    doc.text(35, 105, `${item.serviceId.comments ? item.serviceId.comments : 'N/A'}`);
+    doc.text(35, 105, "This person was refered for a Urine Test.");
 
     doc.text(5, 235, "Signature & Stamp");
-    doc.line(5, 240, 75, 240)
-    
-    doc.text(142, 200, `Sub Total: ${item.serviceId.insuredPrice === "0" ? item.serviceId.originalPrice : item.serviceId.insuredPrice} JD`);
+    doc.line(5, 240, 75, 240);
+
+    doc.text(
+      142,
+      200,
+      `Sub Total: ${
+        item.serviceId.insuredPrice === "0"
+          ? item.serviceId.originalPrice
+          : item.serviceId.insuredPrice
+      } JD`
+    );
     doc.text(143, 210, "Tax Rate: 0.0000 JD");
     doc.text(152, 220, "Tax: 0.0000 JD");
     doc.text(144, 230, "Discount: 0.0000 JD");
-    doc.setFont('times', "bold");
-    doc.text(135.4, 240, `Total Amount: ${item.serviceId.insuredPrice === "0" ? item.serviceId.originalPrice : item.serviceId.insuredPrice} JD`);
-    
-    doc.line(0,260, 1000, 260)
-    doc.setFont('times', "normal");
+    doc.setFont("times", "bold");
+    doc.text(
+      135.4,
+      240,
+      `Total Amount: ${
+        item.serviceId.insuredPrice === "0"
+          ? item.serviceId.originalPrice
+          : item.serviceId.insuredPrice
+      } JD`
+    );
+
+    doc.line(0, 260, 1000, 260);
+    doc.setFont("times", "normal");
     doc.text(5, 288, `Prepared by: ${currentUser.name}`);
 
     if (QR) {
@@ -986,14 +1048,12 @@ function AddEditPatientListing(props) {
 
   const onInpatientInvoiceSummary = () => {
     if (selected.length > 0) {
-
-      let invoiceAmount = 0
+      let invoiceAmount = 0;
       for (let i = 0; i < selected.length; i++) {
         if (selected[i].serviceId.insuredPrice === "0") {
-          invoiceAmount = invoiceAmount + +selected[i].serviceId.originalPrice
-        }
-        else {
-          invoiceAmount = invoiceAmount + +selected[i].serviceId.insuredPrice
+          invoiceAmount = invoiceAmount + +selected[i].serviceId.originalPrice;
+        } else {
+          invoiceAmount = invoiceAmount + +selected[i].serviceId.insuredPrice;
         }
       }
 
@@ -1014,7 +1074,7 @@ function AddEditPatientListing(props) {
       var mm = dateNow.getMinutes();
       let ss = dateNow.getSeconds();
 
-      var invoiceNo = "IN" + day + YYYY + HH + mm + ss
+      var invoiceNo = "IN" + day + YYYY + HH + mm + ss;
 
       var doc = new jsPDF();
 
@@ -1038,8 +1098,8 @@ function AddEditPatientListing(props) {
 
       // information of patient
       // labels
-      doc.setFontSize(10)
-      doc.setFont('times', "bold");
+      doc.setFontSize(10);
+      doc.setFont("times", "bold");
       doc.text(12, 50, "Patient Name:");
       doc.text(12, 55, "Visit Date:");
       doc.text(12, 60, "Patient MRN:");
@@ -1048,9 +1108,9 @@ function AddEditPatientListing(props) {
       doc.text(120, 60, "Visit No:");
 
       // dynamic data of patient
-      doc.setFont('times', "normal");
-      doc.text(47, 50, firstName + ' ' + lastName); // Patient Name
-      doc.text(47, 55, admittedOn !== '' ? formatDate(admittedOn) : '--');
+      doc.setFont("times", "normal");
+      doc.text(47, 50, firstName + " " + lastName); // Patient Name
+      doc.text(47, 55, admittedOn !== "" ? formatDate(admittedOn) : "--");
       doc.text(47, 60, profileNo);
       doc.text(155, 50, invoiceNo); // invoice No
       doc.text(155, 55, `${dateNow.toISOString().substr(0, 10)} ${HH}:${mm}`);
@@ -1059,15 +1119,15 @@ function AddEditPatientListing(props) {
       // table
       doc.autoTable({
         margin: { top: 70, right: 10, left: 10 },
-        tableWidth: 'auto',
+        tableWidth: "auto",
         headStyles: { fillColor: [44, 109, 221] },
-        html: "#InpatientInvoiceSummary"
+        html: "#InpatientInvoiceSummary",
       });
 
       // footer
       // labels
       doc.setFontSize(12);
-      doc.setFont('times', "bold");
+      doc.setFont("times", "bold");
       doc.text(120, 235, "Invoice Amount");
       //   doc.text(120, 235, "Pharmacy");
       doc.text(120, 240, "Down Payments");
@@ -1077,7 +1137,7 @@ function AddEditPatientListing(props) {
       doc.text(190, 250, "JD");
 
       // dynamic text
-      doc.setFont('times', "normal");
+      doc.setFont("times", "normal");
       doc.text(169, 235, `${invoiceAmount.toFixed(4)}`); // invoice amount
       doc.text(190, 235, "JD");
       //   doc.text(169, 235, "1090.48"); // pharmacy
@@ -1088,7 +1148,7 @@ function AddEditPatientListing(props) {
       doc.line(0, 260, 210, 260);
       doc.text(5, 288, `Prepared by: ${currentUser.name}`);
       if (QR) {
-        doc.addImage(`http://localhost:4000${QR}`, "PNG", 172.9, 266, 25, 25);
+        doc.addImage(`${uploadsUrl+QR}`, "PNG", 172.9, 266, 25, 25);
       }
 
       doc.save(`Patient Summary Invoice ${invoiceNo}.pdf`);
@@ -1096,63 +1156,6 @@ function AddEditPatientListing(props) {
       setErrorMsg("Please select items from Bill Summary");
       setOpenNotification(true);
     }
-  };
-
-  const onInpatientInvoiceDetails = () => {
-    console.log("hello");
-    var doc = new jsPDF();
-
-    var logo = new Image();
-    logo.src = logoPatientSummaryInvoice;
-
-    // header
-    doc.setFontSize(15);
-    doc.addImage(logo, "JPEG", 10, 10, 20, 20);
-    doc.text(60, 15, "Al-Khalidi Hospital & Medical Center");
-    doc.text(68, 20, "Detailed In-Patient Invoice");
-    doc.line(80, 22.5, 120, 22.5);
-    doc.text(93, 28, "CREDIT");
-    doc.line(80, 30, 120, 30);
-    doc.setFontSize(12);
-    doc.text(170, 14, "Amman Jordan");
-
-    // background coloring
-    doc.setFillColor(255, 255, 200);
-    doc.rect(0, 45, 210, 27, "F");
-
-    // information of patient
-    doc.text(10, 50, "Guarantor:");
-    doc.text(45, 50, "Mudassir Ijaz");
-    doc.text(10, 55, "Patient Name:");
-    doc.text(45, 55, "Name");
-    doc.text(10, 60, "Admitted On:");
-    doc.text(45, 60, "03/04/2020");
-    doc.text(10, 65, "Discharged on:");
-    doc.text(45, 65, "3/2/2020");
-    doc.text(120, 60, "Invoice No:");
-    doc.text(155, 60, "IN332313D");
-    doc.text(120, 65, "Adm. No");
-    doc.text(155, 65, "AD223423");
-    doc.text(120, 70, "Invoice Date:");
-    doc.text(155, 70, "03/05/2010");
-
-    // table
-    doc.autoTable({ margin: { top: 80 }, html: "#my-table" });
-
-    // footer
-    doc.setFontSize(15);
-    // doc.setFontType("bold");
-    doc.text(110, 260, "Charged Amount");
-    doc.text(169, 260, "1090.48");
-    doc.text(190, 260, "JD");
-    doc.text(110, 265, "Total Charged Amount");
-    doc.text(169, 265, "1090.48");
-    doc.text(190, 265, "JD");
-    doc.text(110, 270, "Grand Total");
-    doc.text(169, 270, "1090.48");
-    doc.text(190, 270, "JD");
-
-    doc.save("Patient Details Invoice.pdf");
   };
 
   const handleSelectAllClick = (event) => {
@@ -1974,12 +1977,12 @@ function AddEditPatientListing(props) {
                         alignItems: "center",
                         color: "#2c6ddd",
                         fontStyle: "italic",
-                        marginTop: '10px'
+                        marginTop: "10px",
                       }}
                     >
                       {pdfView.map((view, index) => {
                         return (
-                          <div style={{ marginTop: '5px' }}>
+                          <div style={{ marginTop: "5px" }}>
                             <div style={styles.selectedDoc}>
                               <span style={{ color: "black" }}>
                                 Selected File {index + 1}:{" "}
@@ -1996,94 +1999,105 @@ function AddEditPatientListing(props) {
                 </div>
               </div>
 
-              <div className="row" style={{ marginTop: '20px' }}>
-                {document && document.length > 0 &&
-                  document.map((item, index) => item.includes("\\")) ? (
-                    <>
-                      {document.map((item, index) => {
-                        if (item.slice(item.length - 3) !== "pdf") {
-                          return (
-                            <div
-                              className="col-md-4 col-sm-4 col-4"
+              <div className="row" style={{ marginTop: "20px" }}>
+                {document &&
+                document.length > 0 &&
+                document.map((item, index) => item.includes("\\")) ? (
+                  <>
+                    {document.map((item, index) => {
+                      if (item.slice(item.length - 3) !== "pdf") {
+                        return (
+                          <div
+                            className="col-md-4 col-sm-4 col-4"
+                            style={{
+                              ...styles.inputContainerForTextField,
+                            }}
+                          >
+                            <img
+                              src={uploadsUrl + item.split("\\")[1]}
+                              className="depositSlipImg"
+                            />
+                          </div>
+                        );
+                      } else if (item.slice(item.length - 3) === "pdf") {
+                        return (
+                          <div
+                            className="col-md-4 col-sm-4 col-4"
+                            style={{
+                              ...styles.inputContainerForTextField,
+                            }}
+                          >
+                            <Button
                               style={{
-                                ...styles.inputContainerForTextField,
+                                ...styles.stylesForButton,
+                                width: "100%",
+                                backgroundColor: "#ba55d3",
+                              }}
+                              variant="contained"
+                              color="default"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                window.location.href =
+                                  uploadsUrl + item.split("\\")[1];
                               }}
                             >
-                              <img
-                                src={uploadsUrl + item.split("\\")[1]}
-                                className="depositSlipImg"
-                              />
-                            </div>
-                          );
-                        } else if (item.slice(item.length - 3) === "pdf") {
-                          return (
-                            <div
-                              className="col-md-4 col-sm-4 col-4"
+                              Click here to open document {index + 1}
+                            </Button>
+                          </div>
+                        );
+                      }
+                    })}
+                  </>
+                ) : document &&
+                  document.length > 0 &&
+                  document.map((item, index) => item.includes("/")) ? (
+                  <>
+                    {document.map((item, index) => {
+                      if (item.slice(item.length - 3) !== "pdf") {
+                        return (
+                          <div
+                            className="col-md-4 col-sm-4 col-4"
+                            style={{
+                              ...styles.inputContainerForTextField,
+                            }}
+                          >
+                            <img
+                              src={uploadsUrl + item}
+                              className="depositSlipImg"
+                            />
+                          </div>
+                        );
+                      } else if (item.slice(item.length - 3) === "pdf") {
+                        return (
+                          <div
+                            className="col-md-4 col-sm-4 col-4"
+                            style={{
+                              ...styles.inputContainerForTextField,
+                            }}
+                          >
+                            <Button
                               style={{
-                                ...styles.inputContainerForTextField,
+                                ...styles.stylesForButton,
+                                width: "100%",
+                                backgroundColor: "#ba55d3",
+                              }}
+                              variant="contained"
+                              color="default"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                window.location.href = uploadsUrl + document;
                               }}
                             >
-                              <Button
-                                style={{ ...styles.stylesForButton, width: '100%', backgroundColor: '#ba55d3' }}
-                                variant="contained"
-                                color="default"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  window.location.href = uploadsUrl + item.split("\\")[1];
-                                }}
-                              >
-                                Click here to open document {index + 1}
-                              </Button>
-                            </div>
-                          );
-                        }
-                      })}
-                    </>
-                  ) : document && document.length > 0 &&
-                    document.map((item, index) => item.includes("/")) ? (
-                      <>
-                        {document.map((item, index) => {
-                          if (item.slice(item.length - 3) !== "pdf") {
-                            return (
-                              <div
-                                className="col-md-4 col-sm-4 col-4"
-                                style={{
-                                  ...styles.inputContainerForTextField,
-                                }}
-                              >
-                                <img
-                                  src={uploadsUrl+item}
-                                  className="depositSlipImg"
-                                />
-                              </div>
-                            );
-                          } else if (item.slice(item.length - 3) === "pdf") {
-                            return (
-                              <div
-                                className="col-md-4 col-sm-4 col-4"
-                                style={{
-                                  ...styles.inputContainerForTextField,
-                                }}
-                              >
-                                <Button
-                                  style={{ ...styles.stylesForButton, width: '100%', backgroundColor: '#ba55d3' }}
-                                  variant="contained"
-                                  color="default"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    window.location.href = uploadsUrl+item;
-                                  }}
-                                >
-                                  Click here to open document {index + 1}
-                                </Button>
-                              </div>
-                            );
-                          }
-                        })}
-                      </>
-                    ) : (
-                      undefined
-                    )}
+                              Click here to open document {index + 1}
+                            </Button>
+                          </div>
+                        );
+                      }
+                    })}
+                  </>
+                ) : (
+                  undefined
+                )}
 
                 {imagePreview && imagePreview.length > 0 ? (
                   <>
@@ -2099,7 +2113,10 @@ function AddEditPatientListing(props) {
                           <img src={view} className="depositSlipImg" />
                           {document.length > 0 ? (
                             <div
-                              style={{ ...styles.selectedDoc, textAlign: 'center' }}
+                              style={{
+                                ...styles.selectedDoc,
+                                textAlign: "center",
+                              }}
                             >
                               New document
                             </div>
