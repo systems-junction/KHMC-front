@@ -189,6 +189,11 @@ import Control_Room from '../../../assets/img/Control_Room.png'
 import Edit from '../../../assets/img/Edit.png'
 import Inactive from '../../../assets/img/Inactive.png'
 import Back_Arrow from '../../../assets/img/Back_Arrow.png'
+import Fingerprint from '../../../assets/img/fingerprint.png'
+import AccountCircle from '@material-ui/icons/SearchOutlined'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import BarCode from '../../../assets/img/Bar Code.png'
+import TextField from '@material-ui/core/TextField'
 import '../../../assets/jss/material-dashboard-react/components/loaderStyle.css'
 import { makeStyles } from '@material-ui/core/styles'
 import add_new from '../../../assets/img/Plus.png'
@@ -235,8 +240,30 @@ const styles = {
     height: '50px',
     outline: 'none',
   },
+  textFieldPadding: {
+    paddingLeft: 0,
+    paddingRight: 5,
+  },
 }
 const useStyles = makeStyles(styles)
+
+const useStylesForInput = makeStyles((theme) => ({
+  input: {
+    backgroundColor: 'white',
+    borderRadius: 5,
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:disabled': {
+      color: 'gray',
+    },
+  },
+
+
+}))
 
 const tableHeadingForBUMember = [
   'Order Type',
@@ -327,6 +354,7 @@ const actionsForItemsForFUMember = { edit: true }
 
 export default function ReplenishmentRequest(props) {
   const classes = useStyles()
+  const classesInput = useStylesForInput()
 
   const [purchaseRequests, setPurchaseRequest] = useState('')
   const [vendors, setVendor] = useState('')
@@ -351,6 +379,7 @@ export default function ReplenishmentRequest(props) {
     delete: false,
     view: false,
   })
+  const [searchPatientQuery, setSearchPatientQuery] = useState('')
 
   if (openNotification) {
     setTimeout(() => {
@@ -774,6 +803,44 @@ export default function ReplenishmentRequest(props) {
     })
   }
 
+
+  
+  const handlePatientSearch =  (e) => {
+    const a = e.target.value.replace(/[^\w\s]/gi, '')
+    setSearchPatientQuery(a)
+    if (a.length >= 3) {
+       axios
+        .get(
+          getRepRequestUrlBUForPharmaceutical + '/' + a
+        )
+        .then((res) => {
+          if (res.data.success) {
+            if (res.data.data.length > 0) {
+              console.log(res.data.data)
+              //var sortedObjs = _.sortBy(res.data.data, 'date').reverse()
+              //setEdr(sortedObjs)
+            } else {
+              //setEdr(' ')
+            }
+          }
+        })
+        .catch((e) => {
+          console.log('error after searching patient request', e)
+        })
+    }
+
+    else if(a.length == 0){
+      console.log("less");
+      //console.log(Edr); 
+      //getEDRsData();
+    }
+    
+  }
+
+
+
+
+
   if (
     (currentUser && currentUser.staffTypeId.type !== 'Doctor/Physician') ||
     props.history.location.pathname === `/home/wms/fus/medicinalorder/view`
@@ -817,6 +884,77 @@ export default function ReplenishmentRequest(props) {
               undefined
             )} */}
           </div>
+
+
+          {/*<div className='row' style={{marginLeft: '0px', marginRight: '0px', marginTop: '20px'}}>
+            <div
+              className='col-md-10 col-sm-9 col-8'
+              style={styles.textFieldPadding}
+            >
+              <TextField
+                className='textInputStyle'
+                id='searchPatientQuery'
+                type='text'
+                variant='filled'
+                label='Search Patient by Name / MRN / National ID / Mobile Number'
+                name={'searchPatientQuery'}
+                value={searchPatientQuery}
+                //onChange={handlePatientSearch} 
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <AccountCircle />
+                    </InputAdornment>
+                  ),
+                  className: classesInput.input,
+                  classes: { input: classesInput.input },
+                  disableUnderline: true,
+                }}
+              />
+            </div>
+
+            <div
+              className='col-md-1 col-sm-2 col-2'
+              style={{
+                ...styles.textFieldPadding,
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: 'white',
+                  borderRadius: 5,
+                  height: 55,
+                }}
+              >
+                <img src={BarCode} style={{ width: 70, height: 60 }} />
+              </div>
+            </div>
+
+            <div
+              className='col-md-1 col-sm-1 col-2'
+              style={{
+                ...styles.textFieldPadding,
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: 'white',
+                  borderRadius: 5,
+                  height: 55,
+                }}
+              >
+                <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
+              </div>
+            </div>
+          </div> */}
+
+
 
           <div
             style={{
