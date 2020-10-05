@@ -1074,7 +1074,7 @@ function TriageAndAssessment(props) {
                       onChange={onSpecify}
                       name="respiratory"
                       value={respiratoryText}
-                      className="control-label textInputStyle"
+                      className="control-label textInputStyle tri-Alt-4-tab"
                       maxlength="500"
                     />
                   </div>
@@ -1256,7 +1256,7 @@ function TriageAndAssessment(props) {
                       onChange={onSpecify}
                       name="abdomen"
                       value={abdomenText}
-                      className=" textInputStyle"
+                      className=" textInputStyle tri-Alt-4-tab"
                       maxlength="500"
                     />
                   </div>

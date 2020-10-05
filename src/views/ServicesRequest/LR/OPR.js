@@ -108,11 +108,11 @@ export default function EDR(props) {
       .get(getOPRFromLabUrl)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data, 'ecr1')
           // res.data.data.map((d) => (d.createdAt = d.patientId.createdAt))
           // res.data.data.map((d) => (d.DateTime = formatDate(d.patientId.DateTime)))
           var sortedObjs = _.sortBy(res.data.data, 'date').reverse()
           setEdr(sortedObjs)
+          console.log(res.data.data, 'ecr1')
         } else if (!res.data.success) {
           setErrorMsg(res.data.error)
           setOpenNotification(true)

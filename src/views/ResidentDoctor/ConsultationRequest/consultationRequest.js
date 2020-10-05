@@ -10,6 +10,7 @@ import {
   getSearchedLaboratoryService,
   getSearchedRadiologyService,
   updateEdrIpr,
+  getIcd,
   searchpatient,
   getSearchedpatient,
   notifyConsultation,
@@ -479,6 +480,8 @@ function LabRadRequest(props) {
   const [requestedItems, setRequestedItems] = useState('')
   const [selectedOrder, setSelectedOrder] = useState('')
   const [isOpen, setIsOpen] = useState(false)
+  const [icd, setIcd] = useState([])
+  const [icdArr, setIcdArr] = useState([])
 
   const validateForm = () => {
     return (
@@ -511,6 +514,11 @@ function LabRadRequest(props) {
       getPatientByInfo(props.patientDetails._id)
       openPatientDetailsDialog(true)
     }
+
+    axios.get(getIcd).then((res) => {
+      console.log('res for icd', res)
+      setIcd(res.data.data)
+    })
 
     seticdSection(Object.keys(icdCodesList[0]))
     // getEDRById(props.history.location.state.selectedItem._id);
@@ -1191,6 +1199,15 @@ function LabRadRequest(props) {
   const onChangeSection = (e) => {
     if (e.target.value) {
       dispatch({ field: e.target.name, value: e.target.value })
+
+      axios.get(getIcd + '/' + e.target.value).then((res) => {
+        if (res.data.data) {
+          console.log('hello', res.data.data)
+          const mappedArr = res.data.data.map((e) => e.icd10PCSCodes)
+          setIcdArr(mappedArr)
+        }
+      })
+
       let codes = Object.entries(icdCodesList[0])
       for (var x in codes) {
         let arr = codes[x]
@@ -1210,25 +1227,26 @@ function LabRadRequest(props) {
     let currentList = []
     let newList = []
 
+    console.log('icdArr', icdArr)
     if (e.target.value !== '') {
-      currentList = icdCode
-
+      currentList = icdArr
+      console.log(icdArr)
       newList = currentList.filter((item) => {
         const lc = item.toLowerCase()
         const filter = e.target.value.toLowerCase()
         return lc.includes(filter)
       })
     } else {
-      let codes = Object.entries(icdCodesList[0])
-      for (var x in codes) {
-        let arr = codes[x]
-        if (arr[0] === section) {
-          console.log('codes', arr[1])
-          newList = arr[1]
+      axios.get(getIcd + '/' + section).then((res) => {
+        if (res.data.data) {
+          console.log('hello', res.data.data)
+          const mappedArr = res.data.data.map((e) => e.icd10PCSCodes)
+          setIcdArr(mappedArr)
         }
-      }
+      })
     }
-    seticdCode(newList)
+    setIcdArr(newList)
+    console.log('icdArr', icdArr)
   }
 
   //for search patient
@@ -1423,7 +1441,7 @@ function LabRadRequest(props) {
     // }
 
     setErrorMsg('Please Search Patient First ')
-    setOpenNotification(true)
+    // setOpenNotification(true);
   }
 
   return (
@@ -1949,7 +1967,7 @@ function LabRadRequest(props) {
                 paddingLeft: '10px',
                 paddingRight: '10px',
               }}
-              className={`container-fluid ${classes.root}`}
+              className={`container-fluid `}
             >
               <div style={{ marginTop: '20px' }} className='row'>
                 <div
@@ -2166,7 +2184,7 @@ function LabRadRequest(props) {
                 paddingLeft: '10px',
                 paddingRight: '10px',
               }}
-              className={`container-fluid ${classes.root}`}
+              className={`container-fluid `}
             >
               <div style={{ marginTop: '20px' }} className='row'>
                 <div
@@ -2650,8 +2668,8 @@ function LabRadRequest(props) {
                       <em>Section</em>
                     </MenuItem>
 
-                    {icdSection &&
-                      icdSection.map((val) => {
+                    {icd &&
+                      icd.map((val) => {
                         return (
                           <MenuItem key={val} value={val}>
                             {val}
@@ -2689,9 +2707,7 @@ function LabRadRequest(props) {
                 </div>
               </div>
 
-              {icdCode != null &&
-              icdCode.length != null &&
-              icdCode.length > 0 ? (
+              {icdArr != null && icdArr.length != null && icdArr.length > 0 ? (
                 <div className='row' style={{ marginLeft: 0, marginRight: 0 }}>
                   <div
                     className={`scrollable ${'col-md-12 col-sm-12 col-12'}`}
@@ -2701,7 +2717,7 @@ function LabRadRequest(props) {
                     }}
                   >
                     <ul>
-                      {icdCode.map((item) => (
+                      {icdArr.map((item) => (
                         <li key={item}>
                           <span
                             className='addCode'

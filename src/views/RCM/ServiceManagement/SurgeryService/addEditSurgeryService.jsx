@@ -383,7 +383,7 @@ function AddEditVendor(props) {
                 }}
                 currencySymbol='JD'
                 outputFormat='number'
-                decimalPlaces='3'
+                decimalPlaces='4'
                 // onChange={(event, value) => setValue(value)}
               />
               {/* <TextField

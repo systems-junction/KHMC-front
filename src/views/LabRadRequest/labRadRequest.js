@@ -1514,7 +1514,7 @@ function LabRadRequest(props) {
                 paddingLeft: 10,
                 paddingRight: 10,
               }}
-              className={`container-fluid ${classes.root}`}
+              className={`container-fluid `}
             >
               <div style={{ marginTop: '20px' }} className='row'>
                 <div
@@ -1728,7 +1728,7 @@ function LabRadRequest(props) {
                 paddingLeft: 9,
                 paddingRight: 9,
               }}
-              className={`container-fluid ${classes.root}`}
+              className={`container-fluid `}
             >
               <div style={{ marginTop: '20px' }} className='row'>
                 <div

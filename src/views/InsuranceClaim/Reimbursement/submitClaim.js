@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useReducer } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import { FaUpload } from "react-icons/fa";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import { jsPDF } from "jspdf";
+import "jspdf-autotable";
 import {
   updateClaim,
   getSearchedpatient,
@@ -23,7 +24,7 @@ import "../../../assets/jss/material-dashboard-react/components/TextInputStyle.c
 import FormData from "form-data";
 import claimsReview from "../../../assets/img/ClaimsReview.png";
 import logoInvoice from "../../../assets/img/logoInvoice.png";
-import logoPatientSummaryInvoice from "../../../assets/img/logoPatientSummaryInvoice.jpg";
+import logoPatientSummaryInvoice from "../../../assets/img/logoPatientSummaryInvoice.png";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
@@ -39,21 +40,30 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import BarCode from "../../../assets/img/Bar Code.png";
 import Fingerprint from "../../../assets/img/fingerprint.png";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
-import { reject } from "lodash";
+import { before, last, reject } from "lodash";
+import PropTypes from 'prop-types';
+import Checkbox from '@material-ui/core/Checkbox';
+import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle'
+import print from '../../../assets/img/print.png'
+import Tooltip from '@material-ui/core/Tooltip'
 
 const tableHeadingForBillSummary = [
   "Date/Time",
   "Service Name",
   "Service Type",
-  "Amount",
+  "Status",
+  "Original Amount (JD)",
+  "Insured Amount (JD)",
   "Invoice",
 ];
-const tableDataKeysForBillSummary = [
-  "date",
-  ["serviceId", "name"],
-  "serviceType",
-  ["serviceId", "price"],
-];
+// const tableDataKeysForBillSummary = [
+//   "date",
+//   ["serviceId", "name"],
+//   "serviceType",
+//   ["serviceId", "insuranceStatus"],
+//   ["serviceId", "originalPrice"],
+//   ["serviceId", "insuredPrice"],
+// ];
 
 const statusArray = [
   { key: "Analysis In Progress", value: "Analysis In Progress" },
@@ -62,7 +72,15 @@ const statusArray = [
   { key: "Rejected", value: "Rejected" },
 ];
 
-const actions = { print: true };
+EnhancedTableHead.propTypes = {
+  classes: PropTypes.object.isRequired,
+  numSelected: PropTypes.number.isRequired,
+  onRequestSort: PropTypes.func.isRequired,
+  onSelectAllClick: PropTypes.func.isRequired,
+  order: PropTypes.oneOf(["asc", "desc"]).isRequired,
+  orderBy: PropTypes.string.isRequired,
+  rowCount: PropTypes.number.isRequired,
+};
 
 const styles = {
   stylesForButton: {
@@ -130,6 +148,11 @@ const styles = {
     color: "black",
     fontSize: 14,
   },
+  selectedDoc: {
+    backgroundColor: 'azure',
+    padding: '5px',
+    borderRadius: '5px'
+  },
 };
 
 const useStylesForTabs = makeStyles({
@@ -137,7 +160,7 @@ const useStylesForTabs = makeStyles({
     flexGrow: 1,
   },
 });
-
+const useStyles1 = makeStyles(tableStyles);
 const useStyles = makeStyles((theme) => ({
   underline: {
     "&&&:before": {
@@ -185,11 +208,72 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: "white",
       color: "black",
     },
+    "& .Mui-selected": {
+      backgroundColor: "#CCCCCC",
+      "&:hover": {
+        backgroundColor: "#CCCCCC",
+      },
+    },
   },
 }));
 
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    "&:nth-of-type(odd)": {
+      backgroundColor: "#f4f4f4",
+    },
+    "&:nth-of-type(even)": {
+      backgroundColor: "#FFFFFF",
+    },
+  },
+}))(TableRow);
+
+function EnhancedTableHead(props) {
+  const classes = useStyles1();
+  const { tableHeaderColor } = props;
+  const { onSelectAllClick, numSelected, rowCount } = props;
+
+  return (
+    <TableHead
+      className={classes[tableHeaderColor + "TableHeader"]}
+      style={{
+        backgroundColor: "#2873cf",
+      }}
+    >
+      <TableRow className={classes.tableHeadRow}>
+        <TableCell padding="checkbox">
+          <Checkbox
+            indeterminate={numSelected > 0 && numSelected < rowCount}
+            checked={rowCount > 0 && numSelected === rowCount}
+            onChange={onSelectAllClick}
+            inputProps={{ "aria-label": "select all requests" }}
+          />
+        </TableCell>
+        {tableHeadingForBillSummary.map((headCell, index) => (
+          <TableCell
+            key={headCell}
+            className={classes.tableHeadCell}
+            style={{
+              color: "white",
+              fontWeight: "700",
+              textAlign: "center",
+              borderTopLeftRadius: index === 0 ? 5 : 0,
+              borderTopRightRadius:
+                index === tableHeadingForBillSummary.length - 1 ? 5 : 0,
+            }}
+          >
+            {headCell}
+          </TableCell>
+        ))}
+      </TableRow>
+    </TableHead>
+  );
+}
+
 function AddEditPatientListing(props) {
   const classes = useStyles();
+  const classes1 = useStyles1();
+
   const initialState = {
     profileNo: "-----",
     firstName: "-----",
@@ -197,22 +281,17 @@ function AddEditPatientListing(props) {
     gender: "-----",
     age: "--",
     weight: "--",
-    qr: "",
+    QR: "",
+    requestNo: "",
     admittedOn: "",
-    invoiceNo: "--",
     document: [],
     generatedBy: cookie.load("current_user").staffId,
-    insuranceNumber: "----",
-    insuranceVendor: "----",
-    paymentMethod: "",
     treatmentDetail: "",
     patientId: "",
     status: "",
     responseCode: "",
     diagnosisArray: "",
     medicationArray: "",
-
-    // billSummaryArray: "",
   };
 
   function reducer(state, { field, value }) {
@@ -225,27 +304,23 @@ function AddEditPatientListing(props) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const {
-    profileNo = "-----",
-    firstName = "-----",
-    lastName = "-----",
-    gender = "----",
-    age = "--",
-    weight = "--",
-    qr,
+    profileNo,
+    firstName,
+    lastName,
+    gender,
+    age,
+    weight,
+    QR,
+    requestNo,
     admittedOn,
-    invoiceNo,
     document,
     generatedBy = cookie.load("current_user").staffId,
-    insuranceNumber = "-----",
-    insuranceVendor = "-----",
     treatmentDetail,
     patientId,
     status,
     responseCode,
     diagnosisArray,
     medicationArray,
-
-    // billSummaryArray,
   } = state;
 
   const classesForTabs = useStylesForTabs();
@@ -255,7 +330,6 @@ function AddEditPatientListing(props) {
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setsuccessMsg] = useState("");
   const [openNotification, setOpenNotification] = useState(false);
-  // const [isDisabled, setDisabled] = useState(false)
   const [value, setValue] = React.useState(0);
   const [DocumentUpload, setDocumentUpload] = useState("");
   const [imagePreview, setImagePreview] = useState([]);
@@ -268,10 +342,12 @@ function AddEditPatientListing(props) {
   const [currentUser, setCurrentUser] = useState("");
   const [productData, setproductData] = useState([]);
   const [searched, setsearched] = useState(false);
+  const [selected, setSelected] = React.useState([]);
 
   useEffect(() => {
     setcomingFor(props.history.location.state.comingFor);
     setCurrentUser(cookie.load("current_user"));
+
     const selectedRec = props.history.location.state.selectedItem;
     console.log("selected rec is ... ", selectedRec);
 
@@ -302,24 +378,6 @@ function AddEditPatientListing(props) {
         }
       });
     }
-    var now = new Date();
-    var start = new Date(now.getFullYear(), 0, 0);
-    var diff =
-      now -
-      start +
-      (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000;
-    var oneDay = 1000 * 60 * 60 * 24;
-    var day = Math.floor(diff / oneDay);
-    var dateNow = new Date();
-    var YYYY = dateNow
-      .getFullYear()
-      .toString()
-      .substr(-2);
-    var HH = dateNow.getHours();
-    var mm = dateNow.getMinutes();
-    let ss = dateNow.getSeconds();
-
-    dispatch({ field: "invoiceNo", value: "IN" + day + YYYY + HH + mm + ss });
   }, []);
 
   // function validatePatientForm() {
@@ -368,7 +426,6 @@ function AddEditPatientListing(props) {
       for (var x = 0; x < DocumentUpload.length; x++) {
         formData.append("file", DocumentUpload[x], DocumentUpload[x].name);
       }
-      // formData.append('file', DocumentUpload, DocumentUpload.name)
     }
     //if (validatePatientForm()) {
     const params = {
@@ -400,8 +457,6 @@ function AddEditPatientListing(props) {
           dispatch({ field: "age", value: "" });
           dispatch({ field: "weight", value: "" });
           dispatch({ field: "profileNo", value: "" });
-          dispatch({ field: "insuranceNumber", value: "" });
-          dispatch({ field: "insuranceVendor", value: "" });
           dispatch({ field: "treatmentDetail", value: "" });
           dispatch({ field: "document", value: [] });
 
@@ -428,7 +483,9 @@ function AddEditPatientListing(props) {
   const handleEdit = () => {
     let formData = new FormData();
     if (DocumentUpload) {
-      formData.append("file", DocumentUpload, DocumentUpload.name);
+      for (var x = 0; x < DocumentUpload.length; x++) {
+        formData.append("file", DocumentUpload[x], DocumentUpload[x].name);
+      }
     }
     //if (validatePatientForm()) {
     const params = {
@@ -570,8 +627,9 @@ function AddEditPatientListing(props) {
   function handleAddItem(i) {
     dispatch({ field: "medicationArray", value: "" });
     dispatch({ field: "diagnosisArray", value: "" });
-
-    console.log("selected banda", i);
+    dispatch({ field: "treatmentDetail", value: "" });
+    dispatch({ field: "document", value: "" });
+    dispatch({ field: "billSummaryArray", value: "" });
 
     dispatch({ field: "patientId", value: i._id });
     dispatch({ field: "firstName", value: i.firstName });
@@ -580,13 +638,10 @@ function AddEditPatientListing(props) {
     dispatch({ field: "age", value: i.age });
     dispatch({ field: "weight", value: i.weight });
     dispatch({ field: "profileNo", value: i.profileNo });
-    dispatch({ field: "insuranceNumber", value: i.insuranceNumber });
-    dispatch({ field: "insuranceVendor", value: i.insuranceVendor });
-    dispatch({ field: "qr", value: i.QR });
+    dispatch({ field: "QR", value: i.QR });
     dispatch({ field: "admittedOn", value: i.createdAt });
 
     setSearchQuery("");
-    setsearched(true);
     getBillSummary(i._id);
     getPatientByInfo(i._id);
   }
@@ -596,48 +651,170 @@ function AddEditPatientListing(props) {
       .get(getedripr + "/" + i)
       .then((res) => {
         if (res.data.success) {
-          console.log("response for Claim", res.data.rc);
+          setsearched(true);
+          console.log("response for summary", res.data);
 
-          dispatch({
-            field: "treatmentDetail",
-            value: res.data.rc.treatmentDetail,
-          });
-          dispatch({ field: "document", value: res.data.rc.document });
+          if (res.data.rc) {
+            console.log("response for Claim", res.data.rc);
+            dispatch({
+              field: "treatmentDetail",
+              value: res.data.rc.treatmentDetail,
+            });
+            dispatch({ field: "document", value: res.data.rc.document });
+          }
+          dispatch({ field: "requestNo", value: res.data.data.requestNo });
+
+          // let pharm = [];
+          // for (let i = 0; i < res.data.data.pharmacyRequest.length; i++) {
+          //   let amount = 0;
+          //   let singlePR = res.data.data.pharmacyRequest[i];
+          //   for (let j = 0; j < singlePR.item.length; j++) {
+          //     // console.log(singlePR.medicine[j].itemId.purchasePrice)
+          //     amount =
+          //       amount +
+          //       singlePR.item[j].itemId.issueUnitCost *
+          //         singlePR.item[j].requestedQty;
+          //   }
+          //   let obj = {
+          //     serviceId: {
+          //       name: "Pharmacy Item",
+          //       price: amount.toFixed(2),
+          //     },
+          //     date: res.data.data.pharmacyRequest[i].dateGenerated,
+          //     serviceType: "Pharmacy",
+          //   };
+          //   pharm.push(obj);
+          // }
 
           let pharm = [];
           for (let i = 0; i < res.data.data.pharmacyRequest.length; i++) {
             let amount = 0;
             let singlePR = res.data.data.pharmacyRequest[i];
             for (let j = 0; j < singlePR.item.length; j++) {
-              // console.log(singlePR.medicine[j].itemId.purchasePrice)
-              amount =
-                amount +
-                singlePR.item[j].itemId.issueUnitCost *
+              let found = false;
+              for (let k = 0; k < res.data.insured.length; k++) {
+                if (
+                  singlePR.item[j].itemId._id === res.data.insured[k].itemId
+                ) {
+                  amount =
+                    // amount +
+                    res.data.insured[k].price * singlePR.item[j].requestedQty;
+                  let obj = {
+                    serviceId: {
+                      name: singlePR.item[j].itemId.name,
+                      originalPrice: (
+                        singlePR.item[j].itemId.issueUnitCost *
+                        singlePR.item[j].requestedQty
+                      ).toFixed(4),
+                      insuredPrice: amount.toFixed(4),
+                      insuranceStatus: "Covered",
+                    },
+                    date: res.data.data.pharmacyRequest[i].dateGenerated,
+                    serviceType: "Pharmacy",
+                  };
+                  pharm.push(obj);
+                  found = true;
+                }
+              }
+              if (!found) {
+                amount =
+                  // amount +
+                  singlePR.item[j].itemId.issueUnitCost *
                   singlePR.item[j].requestedQty;
+                let obj = {
+                  serviceId: {
+                    name: singlePR.item[j].itemId.name,
+                    originalPrice: amount.toFixed(4),
+                    insuredPrice: "0",
+                    insuranceStatus: "Not Covered",
+                  },
+                  date: res.data.data.pharmacyRequest[i].dateGenerated,
+                  serviceType: "Pharmacy",
+                };
+                pharm.push(obj);
+              }
             }
-            let obj = {
-              serviceId: {
-                name: "Pharmacy Item",
-                price: amount.toFixed(2),
-              },
-              date: res.data.data.pharmacyRequest[i].dateGenerated,
-              serviceType: "Pharmacy",
-            };
-            pharm.push(obj);
           }
 
-          res.data.data.labRequest.map((d) => (d.serviceType = "Lab"));
-          res.data.data.radiologyRequest.map(
-            (d) => (d.serviceType = "Radiology")
-          );
+          let lab = [];
+          for (let i = 0; i < res.data.data.labRequest.length; i++) {
+            let singleLR = res.data.data.labRequest[i];
+            let found = false;
+            for (let j = 0; j < res.data.insured.length; j++) {
+              if (
+                singleLR.serviceId._id ===
+                res.data.insured[j].laboratoryServiceId
+              ) {
+                let obj = {
+                  serviceId: {
+                    name: singleLR.serviceId.name,
+                    originalPrice: singleLR.serviceId.price.toFixed(4),
+                    insuredPrice: res.data.insured[j].price.toFixed(4),
+                    insuranceStatus: "Covered",
+                  },
+                  date: singleLR.date,
+                  serviceType: "Lab",
+                };
+                lab.push(obj);
+                found = true;
+              }
+            }
+            if (!found) {
+              let obj = {
+                serviceId: {
+                  name: singleLR.serviceId.name,
+                  originalPrice: singleLR.serviceId.price.toFixed(4),
+                  insuredPrice: "0",
+                  insuranceStatus: "Not Covered",
+                },
+                date: singleLR.date,
+                serviceType: "Lab",
+              };
+              lab.push(obj);
+            }
+          }
+
+          let radiology = [];
+          for (let i = 0; i < res.data.data.radiologyRequest.length; i++) {
+            let singleRR = res.data.data.radiologyRequest[i];
+            let found = false;
+            for (let j = 0; j < res.data.insured.length; j++) {
+              if (
+                singleRR.serviceId._id ===
+                res.data.insured[j].radiologyServiceId
+              ) {
+                let obj = {
+                  serviceId: {
+                    name: singleRR.serviceId.name,
+                    originalPrice: singleRR.serviceId.price.toFixed(4),
+                    insuredPrice: res.data.insured[j].price.toFixed(4),
+                    insuranceStatus: "Covered",
+                  },
+                  date: singleRR.date,
+                  serviceType: "Radiology",
+                };
+                radiology.push(obj);
+                found = true;
+              }
+            }
+            if (!found) {
+              let obj = {
+                serviceId: {
+                  name: singleRR.serviceId.name,
+                  originalPrice: singleRR.serviceId.price.toFixed(4),
+                  insuredPrice: "0",
+                  insuranceStatus: "Not Covered",
+                },
+                date: singleRR.date,
+                serviceType: "Radiology",
+              };
+              radiology.push(obj);
+            }
+          }
 
           // console.log("Bill sumamry is ... ", [].concat(res.data.data.labRequest, res.data.data.radiologyRequest, pharm))
           setbillSummaryArray(
-            [].concat(
-              res.data.data.labRequest.reverse(),
-              res.data.data.radiologyRequest.reverse(),
-              pharm.reverse()
-            )
+            [].concat(lab.reverse(), radiology.reverse(), pharm.reverse())
           );
         } else if (!res.data.success) {
           setErrorMsg(res.data.error);
@@ -721,69 +898,245 @@ function AddEditPatientListing(props) {
 
     var time = dateNow.getHours() + ":" + dateNow.getMinutes();
 
-    var doc = new jsPDF();
-
-    doc.setFontSize(40);
-    doc.setTextColor(44, 109, 221);
     var logo = new Image();
+    logo.src = logoPatientSummaryInvoice;
 
-    logo.src = logoInvoice;
-    doc.addImage(logo, "PNG", 5, 7);
+    // var doc = new jsPDF();
+
+    // doc.setFontSize(40);
+    // doc.setTextColor(44, 109, 221);
+    // var logo = new Image();
+
+    // logo.src = logoInvoice;
+    // doc.addImage(logo, "PNG", 5, 7);
+
+    // doc.setTextColor(0, 0, 0);
+
+    // doc.setFontSize(10);
+    // doc.text(139, 10, `Invoice No:`);
+    // doc.text(170, 10, `${invoiceNo}`);
+
+    // doc.setFontSize(12);
+    // doc.text(155, 20, "Date:");
+    // doc.text(184, 20, `${now.toISOString().substr(0, 10)}`);
+
+    // doc.text(155, 30, "Time:");
+    // doc.text(195, 30, `${time}`);
+
+    // doc.setFontSize(18);
+    // doc.text(5, 55, "Bill to:");
+    // doc.setFontSize(12);
+    // doc.line(5, 65, 50, 65);
+    // doc.text(5, 75, "Request No:");
+    // doc.text(5, 85, `${item.RRrequestNo || item.LRrequestNo}`);
+
+    // doc.text(178, 50, "Invoice Total");
+    // doc.setFontSize(23);
+    // doc.setTextColor(44, 109, 221);
+    // doc.text(167, 60, `${item.serviceId.price} JD`);
+
+    // doc.setTextColor(0, 0, 0);
+    // doc.setFontSize(12);
+    // doc.text(5, 100, `Service Name: ${item.serviceName}`);
+    // doc.text(5, 110, `Service Type: ${item.serviceType}`);
+    // doc.text(5, 120, `Comments: ${item.comments}`);
+
+    // doc.text(5, 252, "Signature & Stamp");
+    // doc.line(5, 257, 50, 257);
+
+    // doc.setTextColor(150, 150, 130);
+    // doc.text(162, 215, `Sub Total:`);
+    // doc.text(183, 215, `${item.serviceId.price} JD`);
+    // doc.text(163, 225, "Tax Rate:");
+    // doc.text(174, 235, "Tax:");
+    // doc.text(165, 245, "Discount:");
+    // doc.text(184, 245, " 999 JD");
+    // doc.setTextColor(0, 0, 0);
+    // doc.text(156, 255, "Total Amount:");
+    // doc.text(185, 255, `${item.serviceId.price} JD`);
+
+    // doc.line(0, 272, 1000, 272);
+
+    // doc.text(5, 285, "Prepared by:");
+    // if (QR) {
+    //   doc.addImage(`http://localhost:4000${QR}`, "PNG", 175, 275, 20, 20);
+    // }
+    // doc.save(`Invoice ${invoiceNo}.pdf`);
+
+    var doc = new jsPDF()
+
+    doc.addImage(logo, "PNG", 10, 10, 55, 30);
 
     doc.setTextColor(0, 0, 0);
 
+    // header 
     doc.setFontSize(15);
-    doc.text(139, 10, `Invoice No:`);
-    doc.text(170, 10, `${invoiceNo}`);
-
+    doc.setFont('times', "bold");
+    doc.text(135, 15, `Invoice No: ${invoiceNo}`);
     doc.setFontSize(12);
-    doc.text(155, 20, "Date:");
-    doc.text(184, 20, `${now.toISOString().substr(0, 10)}`);
-
-    doc.text(155, 30, "Time:");
-    doc.text(195, 30, `${time}`);
-
-    doc.setFontSize(18);
-    doc.text(5, 55, "Bill to:");
-    doc.setFontSize(12);
-    doc.line(5, 65, 50, 65);
-    doc.text(5, 75, "Request No:");
-    doc.text(5, 85, `${item.RRrequestNo || item.LRrequestNo}`);
-
-    doc.text(178, 50, "Invoice Total");
+    doc.text(151, 23, 'Date:');
+    doc.text(151, 30, 'Time:');
+    doc.setFont('times', "normal");
+    doc.text(178, 23, `${now.toISOString().substr(0, 10)}`); // date
+    doc.text(188, 30, `${time}`); // time
+    doc.text(175, 50, "Invoice Total");
     doc.setFontSize(23);
     doc.setTextColor(44, 109, 221);
-    doc.text(167, 60, `${item.serviceId.price} JD`);
+    doc.text(155, 60, `${item.serviceId.insuredPrice === "0" ? item.serviceId.originalPrice : item.serviceId.insuredPrice} JD`);
 
+    // below header
     doc.setTextColor(0, 0, 0);
     doc.setFontSize(12);
-    doc.text(5, 100, `Service Name: ${item.serviceName}`);
-    doc.text(5, 110, `Service Type: ${item.serviceType}`);
-    doc.text(5, 120, `Comments: ${item.comments}`);
+    doc.line(0, 65, 210, 65);
 
-    doc.text(5, 252, "Signature & Stamp");
-    doc.line(5, 257, 50, 257);
+    doc.setFont('times', "bold");
+    doc.text(5, 75, "Request No:");
+    doc.text(5, 85, 'Service Name:');
+    doc.text(5, 95, 'Service Type:');
+    doc.text(5, 105, 'Comments:');
 
-    doc.setTextColor(150, 150, 130);
-    doc.text(162, 215, `Sub Total:`);
-    doc.text(183, 215, `${item.serviceId.price} JD`);
-    doc.text(163, 225, "Tax Rate:");
-    doc.text(174, 235, "Tax:");
-    doc.text(165, 245, "Discount:");
-    doc.text(184, 245, " 999 JD");
-    doc.setTextColor(0, 0, 0);
-    doc.text(156, 255, "Total Amount:");
-    doc.text(185, 255, `${item.serviceId.price} JD`);
+    doc.setFont('times', "normal");
+    doc.text(35, 75, 'LR129237288');
+    doc.text(35, 85, `${item.serviceId.name}`);
+    doc.text(35, 95, `${item.serviceType}`);
+    doc.text(35, 105, 'This person was refered for a Urine Test.');
 
-    doc.line(0, 272, 1000, 272);
+    doc.text(5, 235, "Signature & Stamp");
+    doc.line(5, 240, 75, 240)
+    
+    doc.text(142, 200, `Sub Total: ${item.serviceId.insuredPrice === "0" ? item.serviceId.originalPrice : item.serviceId.insuredPrice} JD`);
+    doc.text(143, 210, "Tax Rate: 0.0000 JD");
+    doc.text(152, 220, "Tax: 0.0000 JD");
+    doc.text(144, 230, "Discount: 0.0000 JD");
+    doc.setFont('times', "bold");
+    doc.text(135.4, 240, `Total Amount: ${item.serviceId.insuredPrice === "0" ? item.serviceId.originalPrice : item.serviceId.insuredPrice} JD`);
+    
+    doc.line(0,260, 1000, 260)
+    doc.setFont('times', "normal");
+    doc.text(5, 288, `Prepared by: ${currentUser.name}`);
 
-    doc.text(5, 285, "Prepared by:");
-    doc.addImage(`http://localhost:4000${qr}`, "PNG", 175, 275, 20, 20);
+    if (QR) {
+      doc.addImage(`http://localhost:4000${QR}`, "PNG", 172.9, 266, 25, 25);
+    }
 
-    doc.save("Invoice.pdf");
+    doc.save(`Invoice ${invoiceNo}.pdf`);
   };
 
-  const onPdfDownload = () => {
+  const onInpatientInvoiceSummary = () => {
+    if (selected.length > 0) {
+
+      let invoiceAmount = 0
+      for (let i = 0; i < selected.length; i++) {
+        if (selected[i].serviceId.insuredPrice === "0") {
+          invoiceAmount = invoiceAmount + +selected[i].serviceId.originalPrice
+        }
+        else {
+          invoiceAmount = invoiceAmount + +selected[i].serviceId.insuredPrice
+        }
+      }
+
+      var now = new Date();
+      var start = new Date(now.getFullYear(), 0, 0);
+      var diff =
+        now -
+        start +
+        (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000;
+      var oneDay = 1000 * 60 * 60 * 24;
+      var day = Math.floor(diff / oneDay);
+      var dateNow = new Date();
+      var YYYY = dateNow
+        .getFullYear()
+        .toString()
+        .substr(-2);
+      var HH = dateNow.getHours();
+      var mm = dateNow.getMinutes();
+      let ss = dateNow.getSeconds();
+
+      var invoiceNo = "IN" + day + YYYY + HH + mm + ss
+
+      var doc = new jsPDF();
+
+      var logo = new Image();
+      logo.src = logoPatientSummaryInvoice;
+
+      // header
+      doc.setFontSize(15);
+      doc.addImage(logo, "PNG", 10, 10, 55, 30);
+      doc.text(60, 15, "Al-Khalidi Hospital & Medical Center");
+      doc.text(68, 20, "In - Patient Summary Invoice");
+      doc.line(80, 22.5, 120, 22.5);
+      doc.text(85, 28, "INSURANCE");
+      doc.line(80, 30, 120, 30);
+      doc.setFontSize(12);
+      doc.text(170, 14, "Amman Jordan");
+
+      // background coloring
+      doc.setFillColor(255, 255, 200);
+      doc.rect(10, 45, 190, 20, "F");
+
+      // information of patient
+      // labels
+      doc.setFontSize(10)
+      doc.setFont('times', "bold");
+      doc.text(12, 50, "Patient Name:");
+      doc.text(12, 55, "Visit Date:");
+      doc.text(12, 60, "Patient MRN:");
+      doc.text(120, 50, "Invoice No:");
+      doc.text(120, 55, "Invoice Date");
+      doc.text(120, 60, "Visit No:");
+
+      // dynamic data of patient
+      doc.setFont('times', "normal");
+      doc.text(47, 50, firstName + ' ' + lastName); // Patient Name
+      doc.text(47, 55, admittedOn !== '' ? formatDate(admittedOn) : '--');
+      doc.text(47, 60, profileNo);
+      doc.text(155, 50, invoiceNo); // invoice No
+      doc.text(155, 55, `${dateNow.toISOString().substr(0, 10)} ${HH}:${mm}`);
+      doc.text(155, 60, `${requestNo}`);
+
+      // table
+      doc.autoTable({
+        margin: { top: 70, right: 10, left: 10 },
+        tableWidth: 'auto',
+        headStyles: { fillColor: [44, 109, 221] },
+        html: "#InpatientInvoiceSummary"
+      });
+
+      // footer
+      // labels
+      doc.setFontSize(12);
+      doc.setFont('times', "bold");
+      doc.text(120, 235, "Invoice Amount");
+      //   doc.text(120, 235, "Pharmacy");
+      doc.text(120, 240, "Down Payments");
+      doc.line(120, 243, 195, 243);
+      doc.text(120, 250, "Total");
+      doc.text(169, 250, `${invoiceAmount.toFixed(4)}`);
+      doc.text(190, 250, "JD");
+
+      // dynamic text
+      doc.setFont('times', "normal");
+      doc.text(169, 235, `${invoiceAmount.toFixed(4)}`); // invoice amount
+      doc.text(190, 235, "JD");
+      //   doc.text(169, 235, "1090.48"); // pharmacy
+      //   doc.text(190, 235, "JD");
+      doc.text(169, 240, "0"); // down payment
+      doc.text(190, 240, "JD");
+
+      doc.line(0, 260, 210, 260);
+      doc.text(5, 288, `Prepared by: ${currentUser.name}`);
+      if (QR) {
+        doc.addImage(`http://localhost:4000${QR}`, "PNG", 172.9, 266, 25, 25);
+      }
+
+      doc.save(`Patient Summary Invoice ${invoiceNo}.pdf`);
+    } else {
+      setErrorMsg("Please select items from Bill Summary");
+      setOpenNotification(true);
+    }
+  };
+
+  const onInpatientInvoiceDetails = () => {
     console.log("hello");
     var doc = new jsPDF();
 
@@ -792,41 +1145,84 @@ function AddEditPatientListing(props) {
 
     // header
     doc.setFontSize(15);
-    doc.addImage(logo, "PNG", 10, 10, 30, 20);
+    doc.addImage(logo, "JPEG", 10, 10, 20, 20);
     doc.text(60, 15, "Al-Khalidi Hospital & Medical Center");
-    doc.text(68, 20, "In - Patient Summary Invoice");
+    doc.text(68, 20, "Detailed In-Patient Invoice");
     doc.line(80, 22.5, 120, 22.5);
-    doc.text(93, 28, "CASH");
+    doc.text(93, 28, "CREDIT");
     doc.line(80, 30, 120, 30);
     doc.setFontSize(12);
     doc.text(170, 14, "Amman Jordan");
 
+    // background coloring
+    doc.setFillColor(255, 255, 200);
+    doc.rect(0, 45, 210, 27, "F");
+
     // information of patient
-    doc.text(10, 50, "Guarantor");
-    doc.text(10, 55, "Patient Name");
-    doc.text(10, 60, "Admitted On");
-    doc.text(10, 65, "Room");
-    doc.text(90, 60, "Discharged on");
-    doc.text(90, 65, "Class");
-    doc.text(150, 60, "Invoice No");
-    doc.text(150, 65, "Adm. No");
+    doc.text(10, 50, "Guarantor:");
+    doc.text(45, 50, "Mudassir Ijaz");
+    doc.text(10, 55, "Patient Name:");
+    doc.text(45, 55, "Name");
+    doc.text(10, 60, "Admitted On:");
+    doc.text(45, 60, "03/04/2020");
+    doc.text(10, 65, "Discharged on:");
+    doc.text(45, 65, "3/2/2020");
+    doc.text(120, 60, "Invoice No:");
+    doc.text(155, 60, "IN332313D");
+    doc.text(120, 65, "Adm. No");
+    doc.text(155, 65, "AD223423");
+    doc.text(120, 70, "Invoice Date:");
+    doc.text(155, 70, "03/05/2010");
 
     // table
+    doc.autoTable({ margin: { top: 80 }, html: "#my-table" });
 
     // footer
-    doc.text(120, 260, "Invoice Amount");
+    doc.setFontSize(15);
+    // doc.setFontType("bold");
+    doc.text(110, 260, "Charged Amount");
     doc.text(169, 260, "1090.48");
     doc.text(190, 260, "JD");
-
-    doc.text(120, 265, "Pharmacy");
+    doc.text(110, 265, "Total Charged Amount");
     doc.text(169, 265, "1090.48");
     doc.text(190, 265, "JD");
-    doc.text(120, 270, "Down Payments");
+    doc.text(110, 270, "Grand Total");
     doc.text(169, 270, "1090.48");
     doc.text(190, 270, "JD");
-    doc.line(120, 275, 195, 275);
-    doc.save("Patient Summary Invoice.pdf");
+
+    doc.save("Patient Details Invoice.pdf");
   };
+
+  const handleSelectAllClick = (event) => {
+    if (event.target.checked) {
+      const newSelecteds = billSummaryArray.map((n) => n);
+      setSelected(newSelecteds);
+      return;
+    }
+    setSelected([]);
+  };
+
+  const handleClick = (event, name) => {
+    const selectedIndex = selected.indexOf(name);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, name);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1)
+      );
+    }
+    setSelected(newSelected);
+  };
+
+  const isSelected = (name) => selected.indexOf(name) !== -1;
+
   return (
     <div
       style={{
@@ -1302,15 +1698,101 @@ function AddEditPatientListing(props) {
           >
             <div className="row" style={{ marginTop: "20px" }}>
               {billSummaryArray !== 0 ? (
-                <CustomTable
-                  tableData={billSummaryArray}
-                  tableDataKeys={tableDataKeysForBillSummary}
-                  tableHeading={tableHeadingForBillSummary}
-                  action={actions}
-                  printItem={handleInvoicePrint}
-                  borderBottomColor={"#60d69f"}
-                  borderBottomWidth={20}
-                />
+                // <CustomTable
+                //   // id="my-table"
+                //   tableData={billSummaryArray}
+                //   tableDataKeys={tableDataKeysForBillSummary}
+                //   tableHeading={tableHeadingForBillSummary}
+                //   action={actions}
+                //   printItem={handleInvoicePrint}
+                //   borderBottomColor={"#60d69f"}
+                //   borderBottomWidth={20}
+                // />
+                <Table>
+                  <EnhancedTableHead
+                    style={{
+                      backgroundColor: "#2873cf",
+                    }}
+                    numSelected={selected.length}
+                    onSelectAllClick={handleSelectAllClick}
+                  />
+                  <TableBody className={classes.root}>
+                    {billSummaryArray &&
+                      billSummaryArray.map((row, index) => {
+                        const isItemSelected = isSelected(row);
+                        const labelId = `enhanced-table-checkbox-${index}`;
+
+                        return (
+                          <StyledTableRow
+                            onClick={(event) => handleClick(event, row)}
+                            role="checkbox"
+                            aria-checked={isItemSelected}
+                            tabIndex={-1}
+                            key={row}
+                            selected={isItemSelected}
+                          >
+                            <TableCell padding="checkbox">
+                              <Checkbox
+                                checked={isItemSelected}
+                                inputProps={{ "aria-labelledby": labelId }}
+                              />
+                            </TableCell>
+                            <TableCell
+                              component="th"
+                              id={labelId}
+                              scope="row"
+                              padding="none"
+                            >
+                              {formatDate(row.date)}
+                            </TableCell>
+                            <TableCell align="center">
+                              {row.serviceId.name}
+                            </TableCell>
+                            <TableCell align="center">
+                              {row.serviceType}
+                            </TableCell>
+                            <TableCell align="center">
+                              {row.serviceId.insuranceStatus}
+                            </TableCell>
+                            <TableCell align="center">
+                              {row.serviceId.originalPrice}
+                            </TableCell>
+                            <TableCell align="center">
+                              {row.serviceId.insuredPrice}
+                            </TableCell>
+                            <TableCell
+                              style={{
+                                cursor: "pointer",
+                                borderBottomRightRadius:
+                                  billSummaryArray.length - 1 === index ? 5 : 0,
+                                borderWidth: 0,
+                              }}
+                              className={classes1.tableCell}
+                              colSpan="2"
+                            >
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-evenly",
+                                }}
+                              >
+                                <Tooltip title="Print">
+                                  <img
+                                    src={print}
+                                    onClick={() => handleInvoicePrint(row)}
+                                    style={{
+                                      maxWidth: 40,
+                                      height: 30,
+                                    }}
+                                  />
+                                </Tooltip>
+                              </div>
+                            </TableCell>
+                          </StyledTableRow>
+                        );
+                      })}
+                  </TableBody>
+                </Table>
               ) : (
                 undefined
               )}
@@ -1417,6 +1899,45 @@ function AddEditPatientListing(props) {
                     sheet="Invoice"
                     buttonText="Export Invoice" />
                 </div> */}
+                {selected.length > 0 ? (
+                  <Table
+                    id="InpatientInvoiceSummary"
+                    style={{ display: "none" }}
+                    aria-label="InpatientInvoiceSummary"
+                  >
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Description</TableCell>
+                        <TableCell align="right">Service Type</TableCell>
+                        <TableCell align="right">Status</TableCell>
+                        <TableCell align="right">Original Amount</TableCell>
+                        <TableCell align="right">Insured Amount</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {selected.map((row, index) => (
+                        <TableRow key={index}>
+                          <TableCell component="th" scope="row">
+                            {row.serviceId.name}
+                          </TableCell>
+                          <TableCell align="right">{row.serviceType}</TableCell>
+                          <TableCell align="right">
+                            {row.serviceId.insuranceStatus}
+                          </TableCell>
+                          <TableCell align="right">
+                            {row.serviceId.originalPrice}
+                          </TableCell>
+                          <TableCell align="right">
+                            {row.serviceId.insuredPrice}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                ) : (
+                  undefined
+                )}
+
                 <div
                   className="col-md-6 col-sm-6 col-6"
                   style={{
@@ -1431,13 +1952,35 @@ function AddEditPatientListing(props) {
                       width: "100%",
                     }}
                     disabled={!searched}
-                    onClick={onPdfDownload}
+                    onClick={onInpatientInvoiceSummary}
                     variant="contained"
                     color="primary"
                   >
-                    Export Invoice
+                    In-patient Invoice Summary
                   </Button>
                 </div>
+
+                {/* <div
+                  className="col-md-4 col-sm-4 col-4"
+                  style={{
+                    marginLeft: 0,
+                    marginRight: 0,
+                  }}
+                >
+                  <Button
+                    style={{
+                      ...styles.stylesForButton,
+                      height: "48px",
+                      width: "100%",
+                    }}
+                    disabled={!searched}
+                    onClick={onInpatientInvoiceDetails}
+                    variant="contained"
+                    color="primary"
+                  >
+                    In-patient Invoice Details
+                  </Button>
+                </div> */}
 
                 <div
                   className="col-md-6 col-sm-6 col-6"
@@ -1463,21 +2006,24 @@ function AddEditPatientListing(props) {
                     />
                   </Button>
 
-                  {pdfView.length > 0 ? (
+                  {pdfView && pdfView.length > 0 ? (
                     <div
                       style={{
-                        textAlign: "center",
+                        alignItems: "center",
                         color: "#2c6ddd",
                         fontStyle: "italic",
+                        marginTop: '10px'
                       }}
                     >
                       {pdfView.map((view, index) => {
                         return (
-                          <div>
-                            <span style={{ color: "black" }}>
-                              Selected File {index + 1}:{" "}
-                            </span>
-                            <span>{view}</span>
+                          <div style={{ marginTop: '5px' }}>
+                            <div style={styles.selectedDoc}>
+                              <span style={{ color: "black" }}>
+                                Selected File {index + 1}:{" "}
+                              </span>
+                              <span>{view}</span>
+                            </div>
                           </div>
                         );
                       })}
@@ -1488,100 +2034,110 @@ function AddEditPatientListing(props) {
                 </div>
               </div>
 
-              <div className="row">
-                {document.length > 0 &&
-                document.map((item, index) => item.includes("\\")) ? (
-                  <>
-                    {document.map((item, index) => {
-                      if (item.slice(item.length - 3) !== "pdf") {
-                        return (
-                          <div
-                            className="col-md-6 col-sm-6 col-6"
-                            style={{
-                              ...styles.inputContainerForTextField,
-                            }}
-                          >
-                            <img
-                              src={uploadsUrl + item.split("\\")[1]}
-                              className="depositSlipImg"
-                            />
-                          </div>
-                        );
-                      } else if (item.slice(item.length - 3) === "pdf") {
-                        return (
-                          <div
-                            className="col-md-6 col-sm-6 col-6"
-                            style={{
-                              ...styles.inputContainerForTextField,
-                            }}
-                          >
-                            <a
-                              href={uploadsUrl + item.split("\\")[1]}
-                              style={{ color: "#2c6ddd" }}
+              <div className="row" style={{ marginTop: '20px' }}>
+                {document && document.length > 0 &&
+                  document.map((item, index) => item.includes("\\")) ? (
+                    <>
+                      {document.map((item, index) => {
+                        if (item.slice(item.length - 3) !== "pdf") {
+                          return (
+                            <div
+                              className="col-md-4 col-sm-4 col-4"
+                              style={{
+                                ...styles.inputContainerForTextField,
+                              }}
                             >
-                              Click here to open document {index + 1}
-                            </a>
-                          </div>
-                        );
-                      }
-                    })}
-                  </>
-                ) : document.length > 0 &&
-                  document.map((item, index) => item.includes("/")) ? (
-                  <>
-                    {document.map((item, index) => {
-                      if (item.slice(item.length - 3) !== "pdf") {
-                        return (
-                          <div
-                            className="col-md-6 col-sm-6 col-6"
-                            style={{
-                              ...styles.inputContainerForTextField,
-                            }}
-                          >
-                            <img
-                              src={uploadsUrl + item}
-                              className="depositSlipImg"
-                            />
-                          </div>
-                        );
-                      } else if (item.slice(item.length - 3) === "pdf") {
-                        return (
-                          <div
-                            className="col-md-6 col-sm-6 col-6"
-                            style={{
-                              ...styles.inputContainerForTextField,
-                            }}
-                          >
-                            <a
-                              href={uploadsUrl + document}
-                              style={{ color: "#2c6ddd" }}
+                              <img
+                                src={uploadsUrl + item.split("\\")[1]}
+                                className="depositSlipImg"
+                              />
+                            </div>
+                          );
+                        } else if (item.slice(item.length - 3) === "pdf") {
+                          return (
+                            <div
+                              className="col-md-4 col-sm-4 col-4"
+                              style={{
+                                ...styles.inputContainerForTextField,
+                              }}
                             >
-                              Click here to open document {index + 1}
-                            </a>
-                          </div>
-                        );
-                      }
-                    })}
-                  </>
-                ) : (
-                  undefined
-                )}
+                              <Button
+                                style={{ ...styles.stylesForButton, width: '100%', backgroundColor: '#ba55d3' }}
+                                variant="contained"
+                                color="default"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  window.location.href = uploadsUrl + item.split("\\")[1];
+                                }}
+                              >
+                                Click here to open document {index + 1}
+                              </Button>
+                            </div>
+                          );
+                        }
+                      })}
+                    </>
+                  ) : document && document.length > 0 &&
+                    document.map((item, index) => item.includes("/")) ? (
+                      <>
+                        {document.map((item, index) => {
+                          if (item.slice(item.length - 3) !== "pdf") {
+                            return (
+                              <div
+                                className="col-md-4 col-sm-4 col-4"
+                                style={{
+                                  ...styles.inputContainerForTextField,
+                                }}
+                              >
+                                <img
+                                  src={uploadsUrl + item}
+                                  className="depositSlipImg"
+                                />
+                              </div>
+                            );
+                          } else if (item.slice(item.length - 3) === "pdf") {
+                            return (
+                              <div
+                                className="col-md-4 col-sm-4 col-4"
+                                style={{
+                                  ...styles.inputContainerForTextField,
+                                }}
+                              >
+                                <Button
+                                  style={{ ...styles.stylesForButton, width: '100%', backgroundColor: '#ba55d3' }}
+                                  variant="contained"
+                                  color="default"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    window.location.href = uploadsUrl + document;
+                                  }}
+                                >
+                                  Click here to open document {index + 1}
+                                </Button>
+                              </div>
+                            );
+                          }
+                        })}
+                      </>
+                    ) : (
+                      undefined
+                    )}
 
-                {imagePreview.length > 0 ? (
+                {imagePreview && imagePreview.length > 0 ? (
                   <>
                     {imagePreview.map((view, index) => {
                       return (
                         <div
                           key={index}
-                          className="col-md-6 col-sm-6 col-6"
+                          className="col-md-4 col-sm-4 col-4"
                           style={{
                             ...styles.inputContainerForTextField,
                           }}
                         >
                           <img src={view} className="depositSlipImg" />
-                          {document !== "" ? (
+                          {document.length > 0 ? (
                             <div
-                              style={{ color: "black", textAlign: "center" }}
+                              style={{ ...styles.selectedDoc, textAlign: 'center' }}
                             >
                               New document
                             </div>
@@ -1656,4 +2212,19 @@ function AddEditPatientListing(props) {
     </div>
   );
 }
+CustomTable.defaultProps = {
+  tableHeaderColor: "gray",
+};
+
+CustomTable.propTypes = {
+  tableHeaderColor: PropTypes.oneOf([
+    "warning",
+    "primary",
+    "danger",
+    "success",
+    "info",
+    "rose",
+    "gray",
+  ]),
+};
 export default AddEditPatientListing;
