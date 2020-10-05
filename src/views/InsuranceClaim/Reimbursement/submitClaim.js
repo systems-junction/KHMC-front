@@ -1040,7 +1040,7 @@ function AddEditPatientListing(props) {
     doc.text(5, 288, `Prepared by: ${currentUser.name}`);
 
     if (QR) {
-      doc.addImage(`http://localhost:4000${QR}`, "PNG", 172.9, 266, 25, 25);
+      doc.addImage(`${uploadsUrl+QR}`, "PNG", 172.9, 266, 25, 25);
     }
 
     doc.save(`Invoice ${invoiceNo}.pdf`);
