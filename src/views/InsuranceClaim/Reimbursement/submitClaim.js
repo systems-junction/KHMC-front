@@ -661,6 +661,15 @@ function AddEditPatientListing(props) {
               value: res.data.rc.treatmentDetail,
             });
             dispatch({ field: "document", value: res.data.rc.document });
+            if(res.data.rc.document.map((item, index) => item.includes("\\"))) 
+              {
+                res.data.rc.document.map((item, index) => {
+                  // if (item.slice(item.length - 3) !== "pdf") {
+                    console.log("Checking the item's URL on live >>> ",uploadsUrl+item)
+                  // }
+                })
+              }
+            
           }
           dispatch({ field: "requestNo", value: res.data.data.requestNo });
 
@@ -2039,7 +2048,7 @@ function AddEditPatientListing(props) {
                                 }}
                               >
                                 <img
-                                  src={uploadsUrl + item}
+                                  src={uploadsUrl+item}
                                   className="depositSlipImg"
                                 />
                               </div>
@@ -2058,7 +2067,7 @@ function AddEditPatientListing(props) {
                                   color="default"
                                   onClick={(e) => {
                                     e.preventDefault();
-                                    window.location.href = uploadsUrl + document;
+                                    window.location.href = uploadsUrl+item;
                                   }}
                                 >
                                   Click here to open document {index + 1}

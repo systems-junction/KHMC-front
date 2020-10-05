@@ -113,6 +113,11 @@ const frontDesk = [
     text: 'Patient Registration',
     path: '/home/rcm/patientListing/add',
   },
+  {
+    img: PatientRegistration,
+    text: 'Patient History',
+    path: '/home/rcm/patientHistory',
+  },
 ]
 
 const insuranceDepartment = [
