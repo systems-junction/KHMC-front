@@ -244,7 +244,7 @@ function AddEditPurchaseRequest(props) {
 
                 <span style={styles.headingStyles}>MRN</span>
                 <span style={styles.textStyles}>
-                  {patientDetails && patientDetails.profileNo}
+                  {patientDetails && patientDetails.profileNo.toUpperCase()}
                 </span>
 
                 <span style={styles.headingStyles}>Age</span>
