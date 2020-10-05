@@ -5,29 +5,12 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 import { makeStyles } from '@material-ui/core/styles'
-import InputLabel from '@material-ui/core/InputLabel'
 import cookie from 'react-cookies'
-import CustomTable from '../../components/Table/Table'
 import TextField from '@material-ui/core/TextField'
-import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
+import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import { DateTimePicker } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
-
-const tableHeadingForPHR = [
-  'Medicine Name',
-  'Requested Qty',
-  'Dosage',
-  'Frequency',
-  'Duration',
-  '',
-]
-const tableDataKeysForPHR = [
-  'medicineName',
-  'requestedQty',
-  'dosage',
-  'frequency',
-  'duration',
-]
+import { audioURL } from '../../public/endpoins'
 
 const styles = {
   inputContainer: {
@@ -110,24 +93,11 @@ const useStylesForInput = makeStyles((theme) => ({
 
 export default function EdrRequest(props) {
   const classes = useStylesForInput()
-  const [currentUser] = React.useState(cookie.load('current_user'))
+  const [] = React.useState(cookie.load('current_user'))
 
   useEffect(() => {
     console.log(props.item, 'view Data')
   }, [])
-
-  const formatDate = (date) => {
-    const d = new Date(date)
-    return (
-      d.getDate() +
-      '/' +
-      (d.getMonth() + 1) +
-      '/' +
-      d.getFullYear() +
-      ' ' +
-      d.toLocaleTimeString()
-    )
-  }
 
   return (
     <Dialog
@@ -142,7 +112,8 @@ export default function EdrRequest(props) {
       <DialogContent style={{ backgroundColor: 'rgb(19 213 159)' }}>
         <DialogTitle
           id='simple-dialog-title'
-          style={{ color: 'white', marginLeft: '-6px' }}
+          style={{ color: 'white', paddingLeft: 30 }}
+          class='row'
         >
           Details
         </DialogTitle>
@@ -305,7 +276,7 @@ export default function EdrRequest(props) {
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
-                    disableUnderline:true
+                    disableUnderline: true,
                   }}
                 /> */}
               </div>
@@ -323,6 +294,156 @@ export default function EdrRequest(props) {
                   value={props.item.comments}
                   className='textInputStyle'
                   rows={4}
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
+          </div>
+
+          <div className={`row ${classes.root}`}>
+            {props.item.heartRate ? (
+              <div
+                className='col-md-6 col-sm-6 col-6'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  multiline
+                  disabled={true}
+                  label='Heart Rate'
+                  name={'heartRate'}
+                  value={props.item.heartRate}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
+
+            {props.item.bloodPressureSys ? (
+              <div
+                className='col-md-6 col-sm-6 col-6'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  multiline
+                  disabled={true}
+                  label='Blood Pressure'
+                  name={'bloodPressureSys'}
+                  value={props.item.bloodPressureSys}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
+          </div>
+
+          <div className={`row ${classes.root}`}>
+            {props.item.painScale ? (
+              <div
+                className='col-md-6 col-sm-6 col-6'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  multiline
+                  disabled={true}
+                  label='Pain Scale'
+                  name={'painScale'}
+                  value={props.item.painScale}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
+
+            {props.item.headNeck ? (
+              <div
+                className='col-md-6 col-sm-6 col-6'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  multiline
+                  disabled={true}
+                  label='Head Neck'
+                  name={'headNeck'}
+                  value={props.item.headNeck}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
+          </div>
+
+          <div className={`row ${classes.root}`}>
+            {props.item.pulseOX ? (
+              <div
+                className='col-md-6 col-sm-6 col-6'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  multiline
+                  disabled={true}
+                  label='Pulse OX'
+                  name={'pulseOX'}
+                  value={props.item.pulseOX}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
+
+            {props.item.temperature ? (
+              <div
+                className='col-md-6 col-sm-6 col-6'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  multiline
+                  disabled={true}
+                  label='Temperature'
+                  name={'temperature'}
+                  value={props.item.temperature}
+                  className='textInputStyle'
                   variant='filled'
                   InputProps={{
                     className: classes.input,
@@ -413,25 +534,34 @@ export default function EdrRequest(props) {
             )}
           </div>
 
-          <div className='container-fluid'>
-            {props.item.medicine ? (
-              <div className='row'>
-                {props.item.medicine ? (
-                  <CustomTable
-                    tableData={props.item.medicine}
-                    tableDataKeys={tableDataKeysForPHR}
-                    tableHeading={tableHeadingForPHR}
-                    borderBottomColor={'#60d69f'}
-                    borderBottomWidth={20}
-                  />
-                ) : (
-                  undefined
-                )}
-              </div>
-            ) : (
-              undefined
-            )}
-          </div>
+          {props.item.audioNotes ? (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                // justifyContent: "center",
+              }}
+            >
+              <label
+                style={{
+                  paddingLeft: 1,
+                  paddingTop: 27,
+                  color: 'white',
+                  fontWeight: 'bold',
+                }}
+              >
+                Voice notes from Consultant/Specialists
+              </label>
+              <audio
+                style={{ marginTop: 20, marginLeft: 20 }}
+                src={`${audioURL}/${props.item.audioNotes}`}
+                controls='controls'
+              />
+            </div>
+          ) : (
+            undefined
+          )}
 
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <div style={{ marginTop: '2%', marginBottom: '2%' }}>

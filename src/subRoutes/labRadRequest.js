@@ -5,6 +5,7 @@ import labRadRequest from '../views/LabRadRequest/labRadRequest'
 import triageAssessment from '../views/LabRadRequest/TriageAndAssessment'
 import viewLabRadReport from '../views/LabRadRequest/viewLabRadReport'
 import SuccessScreen from '../components/SuccessScreen/SuccessScreen'
+import PatientHistory from '../views/LabRadRequest/PatientHistory'
 
 class LabRadRequest extends React.PureComponent {
   render() {
@@ -23,7 +24,12 @@ class LabRadRequest extends React.PureComponent {
           path={`${this.props.match.url}/viewReport`}
           component={viewLabRadReport}
         />
-         <Route
+
+        <Route
+          path={`${this.props.match.url}/patienthistory`}
+          component={PatientHistory}
+        />
+        <Route
           path={`${this.props.match.url}/success`}
           component={SuccessScreen}
         />
