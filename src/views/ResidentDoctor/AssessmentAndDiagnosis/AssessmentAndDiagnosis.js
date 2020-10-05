@@ -1328,6 +1328,16 @@ function LabRadRequest(props) {
     })
   }
 
+  const PatientHistory = () => {
+    let path = `assessmentdiagnosis/patienthistory`
+    props.history.push({
+      pathname: path,
+      state: {
+        selectedItem: selectedItem,
+      },
+    })
+  }
+
   const addNewRequest = () => {
     // let path = `assessmentdiagnosis/add`
     let path = `/home/wms/fus/medicinalorder`
@@ -1372,6 +1382,15 @@ function LabRadRequest(props) {
     setOpenNotification(true)
   }
 
+  const showAlertForPatientHistory = () => {
+    // if (document.getElementById("ckDemo").disabled) {
+    //     alert("CheckBox is Disabled");
+    // }
+
+    setErrorMsg('Please Search Patient First ')
+    setOpenNotification(true)
+  }
+
   return (
     <div
       style={{
@@ -1403,6 +1422,17 @@ function LabRadRequest(props) {
               Error={errorMsg}
             >
               Triage & Assessment
+            </Button>
+            &nbsp;&nbsp;
+            <Button
+              // disabled={enableForm}
+              onClick={enableForm ? showAlertForPatientHistory : PatientHistory}
+              style={styles.stylesForButton}
+              variant='contained'
+              color='primary'
+              Error={errorMsg}
+            >
+              Patient History
             </Button>
           </div>
         </div>

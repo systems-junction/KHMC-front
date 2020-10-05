@@ -963,6 +963,16 @@ function PatientAssessment(props) {
     })
   }
 
+  const PatientHistory = () => {
+    let path = `patientAssessment/patienthistory`
+    props.history.push({
+      pathname: path,
+      state: {
+        selectedItem: selectedItem,
+      },
+    })
+  }
+
   function viewLabRadReport(rec) {
     if (!rec.view) {
       let path = `patientAssessment/viewReport`
@@ -1006,6 +1016,11 @@ function PatientAssessment(props) {
     setOpenNotification(true)
   }
 
+  const showAlertForPatientHistory = () => {
+    setErrorMsg('Please Search Patient First ')
+    setOpenNotification(true)
+  }
+
   return (
     <div
       style={{
@@ -1038,6 +1053,19 @@ function PatientAssessment(props) {
               color='primary'
             >
               Triage & Assessment
+            </Button>
+            &nbsp;&nbsp;
+            <Button
+              // disabled={enableForm}
+              onClick={
+                enableAssessment ? showAlertForPatientHistory : PatientHistory
+              }
+              style={styles.stylesForButton}
+              variant='contained'
+              color='primary'
+              Error={errorMsg}
+            >
+              Patient History
             </Button>
           </div>
         </div>
