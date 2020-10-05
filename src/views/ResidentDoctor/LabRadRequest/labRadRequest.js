@@ -1739,7 +1739,7 @@ function LabRadRequest(props) {
                 style={{ display: 'flex', flexDirection: 'column' }}
               >
                 <span style={styles.headingStyles}>MRN</span>
-                <span style={styles.textStyles}>
+                <span style={styles.textStyles} className="mrnUpperCase">
                   {patientDetails.profileNo
                     ? patientDetails.profileNo
                     : '-----'}
