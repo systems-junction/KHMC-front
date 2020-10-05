@@ -100,7 +100,6 @@ function ReceiveItems(props) {
   const classesForInput = MUIInputStyle();
   const classesForInputForCurrency = MUIInputStyleForCurrency();
 
-
   const initialState = {
     requiredQty: "",
     receivedQty: "",
@@ -120,7 +119,7 @@ function ReceiveItems(props) {
     invoice: "FUINV-0091",
     date: "",
     receivedDate: new Date(),
-    expiryDate: "Mon Sep 30 2020 16:07:47 GMT+0500 (Pakistan Standard Time)",
+    expiryDate: "Fr Oct 30 2020 16:07:47 GMT+0500 (Pakistan Standard Time)",
     discountPercentage: "",
 
     _id: "",
@@ -249,7 +248,6 @@ function ReceiveItems(props) {
     replenishmentRequestId,
 
     rrBUId,
-
   } = state;
 
   const onChangeValue = (e) => {
@@ -351,8 +349,7 @@ function ReceiveItems(props) {
     );
   }
 
-
-  console.log(selectedItem,"selec")
+  console.log(selectedItem, "selec");
 
   const handleAdd = () => {
     if (validateForm()) {
@@ -762,7 +759,7 @@ function ReceiveItems(props) {
                   format={dateFormat}
                   inputVariant="filled"
                   fullWidth={true}
-                  format="MM/dd/yyyy"
+                  // format="MM/dd/yyyy"
                   label="Expiry Date"
                   onChange={(val) => onChangeDate(val, "expiryDate")}
                   style={{ borderRadius: 10, backgroundColor: "white" }}
@@ -901,6 +898,7 @@ function ReceiveItems(props) {
                 onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
               /> */}
               <CurrencyTextField
+                decimalPlaces={4}
                 disabled
                 style={{ backgroundColor: "white", borderRadius: 5 }}
                 className="textInputStyle"
@@ -1019,6 +1017,7 @@ function ReceiveItems(props) {
               /> */}
 
               <CurrencyTextField
+                decimalPlaces={4}
                 disabled
                 style={{ backgroundColor: "white", borderRadius: 5 }}
                 className="textInputStyle"
@@ -1072,6 +1071,7 @@ function ReceiveItems(props) {
                 onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
               /> */}
               <CurrencyTextField
+                decimalPlaces={4}
                 disabled
                 style={{ backgroundColor: "white", borderRadius: 5 }}
                 className="textInputStyle"
@@ -1125,6 +1125,7 @@ function ReceiveItems(props) {
               /> */}
 
               <CurrencyTextField
+                decimalPlaces={4}
                 disabled
                 style={{ backgroundColor: "white", borderRadius: 5 }}
                 className="textInputStyle"
@@ -1360,7 +1361,10 @@ function ReceiveItems(props) {
             </div>
           </div>
 
-          <div className="row" style={{paddingLeft:'0.1rem', paddingRight:'0.1rem'}}>
+          <div
+            className="row"
+            style={{ paddingLeft: "0.1rem", paddingRight: "0.1rem" }}
+          >
             <div
               style={{
                 display: "flex",
