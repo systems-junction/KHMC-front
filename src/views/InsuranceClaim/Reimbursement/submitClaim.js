@@ -41,11 +41,11 @@ import BarCode from "../../../assets/img/Bar Code.png";
 import Fingerprint from "../../../assets/img/fingerprint.png";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import { before, last, reject } from "lodash";
-import PropTypes from 'prop-types';
-import Checkbox from '@material-ui/core/Checkbox';
-import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle'
-import print from '../../../assets/img/print.png'
-import Tooltip from '@material-ui/core/Tooltip'
+import PropTypes from "prop-types";
+import Checkbox from "@material-ui/core/Checkbox";
+import tableStyles from "../../../assets/jss/material-dashboard-react/components/tableStyle";
+import print from "../../../assets/img/print.png";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const tableHeadingForBillSummary = [
   "Date/Time",
@@ -149,9 +149,9 @@ const styles = {
     fontSize: 14,
   },
   selectedDoc: {
-    backgroundColor: 'azure',
-    padding: '5px',
-    borderRadius: '5px'
+    backgroundColor: "azure",
+    padding: "5px",
+    borderRadius: "5px",
   },
 };
 
@@ -963,56 +963,80 @@ function AddEditPatientListing(props) {
     // }
     // doc.save(`Invoice ${invoiceNo}.pdf`);
 
-    var doc = new jsPDF()
+    var doc = new jsPDF();
 
     doc.addImage(logo, "PNG", 10, 10, 55, 30);
 
     doc.setTextColor(0, 0, 0);
 
-    // header 
+    // header
     doc.setFontSize(15);
-    doc.setFont('times', "bold");
+    doc.setFont("times", "bold");
     doc.text(135, 15, `Invoice No: ${invoiceNo}`);
     doc.setFontSize(12);
-    doc.text(151, 23, 'Date:');
-    doc.text(151, 30, 'Time:');
-    doc.setFont('times', "normal");
+    doc.text(151, 23, "Date:");
+    doc.text(151, 30, "Time:");
+    doc.setFont("times", "normal");
     doc.text(178, 23, `${now.toISOString().substr(0, 10)}`); // date
     doc.text(188, 30, `${time}`); // time
     doc.text(175, 50, "Invoice Total");
     doc.setFontSize(23);
     doc.setTextColor(44, 109, 221);
-    doc.text(155, 60, `${item.serviceId.insuredPrice === "0" ? item.serviceId.originalPrice : item.serviceId.insuredPrice} JD`);
+    doc.text(
+      155,
+      60,
+      `${
+        item.serviceId.insuredPrice === "0"
+          ? item.serviceId.originalPrice
+          : item.serviceId.insuredPrice
+      } JD`
+    );
 
     // below header
     doc.setTextColor(0, 0, 0);
     doc.setFontSize(12);
     doc.line(0, 65, 210, 65);
 
-    doc.setFont('times', "bold");
+    doc.setFont("times", "bold");
     doc.text(5, 75, "Request No:");
-    doc.text(5, 85, 'Service Name:');
-    doc.text(5, 95, 'Service Type:');
-    doc.text(5, 105, 'Comments:');
+    doc.text(5, 85, "Service Name:");
+    doc.text(5, 95, "Service Type:");
+    doc.text(5, 105, "Comments:");
 
-    doc.setFont('times', "normal");
-    doc.text(35, 75, 'LR129237288');
+    doc.setFont("times", "normal");
+    doc.text(35, 75, "LR129237288");
     doc.text(35, 85, `${item.serviceId.name}`);
     doc.text(35, 95, `${item.serviceType}`);
-    doc.text(35, 105, 'This person was refered for a Urine Test.');
+    doc.text(35, 105, "This person was refered for a Urine Test.");
 
     doc.text(5, 235, "Signature & Stamp");
-    doc.line(5, 240, 75, 240)
-    
-    doc.text(142, 200, `Sub Total: ${item.serviceId.insuredPrice === "0" ? item.serviceId.originalPrice : item.serviceId.insuredPrice} JD`);
+    doc.line(5, 240, 75, 240);
+
+    doc.text(
+      142,
+      200,
+      `Sub Total: ${
+        item.serviceId.insuredPrice === "0"
+          ? item.serviceId.originalPrice
+          : item.serviceId.insuredPrice
+      } JD`
+    );
     doc.text(143, 210, "Tax Rate: 0.0000 JD");
     doc.text(152, 220, "Tax: 0.0000 JD");
     doc.text(144, 230, "Discount: 0.0000 JD");
-    doc.setFont('times', "bold");
-    doc.text(135.4, 240, `Total Amount: ${item.serviceId.insuredPrice === "0" ? item.serviceId.originalPrice : item.serviceId.insuredPrice} JD`);
-    
-    doc.line(0,260, 1000, 260)
-    doc.setFont('times', "normal");
+    doc.setFont("times", "bold");
+    doc.text(
+      135.4,
+      240,
+      `Total Amount: ${
+        item.serviceId.insuredPrice === "0"
+          ? item.serviceId.originalPrice
+          : item.serviceId.insuredPrice
+      } JD`
+    );
+
+    doc.line(0, 260, 1000, 260);
+    doc.setFont("times", "normal");
     doc.text(5, 288, `Prepared by: ${currentUser.name}`);
 
     if (QR) {
@@ -1024,14 +1048,12 @@ function AddEditPatientListing(props) {
 
   const onInpatientInvoiceSummary = () => {
     if (selected.length > 0) {
-
-      let invoiceAmount = 0
+      let invoiceAmount = 0;
       for (let i = 0; i < selected.length; i++) {
         if (selected[i].serviceId.insuredPrice === "0") {
-          invoiceAmount = invoiceAmount + +selected[i].serviceId.originalPrice
-        }
-        else {
-          invoiceAmount = invoiceAmount + +selected[i].serviceId.insuredPrice
+          invoiceAmount = invoiceAmount + +selected[i].serviceId.originalPrice;
+        } else {
+          invoiceAmount = invoiceAmount + +selected[i].serviceId.insuredPrice;
         }
       }
 
@@ -1052,7 +1074,7 @@ function AddEditPatientListing(props) {
       var mm = dateNow.getMinutes();
       let ss = dateNow.getSeconds();
 
-      var invoiceNo = "IN" + day + YYYY + HH + mm + ss
+      var invoiceNo = "IN" + day + YYYY + HH + mm + ss;
 
       var doc = new jsPDF();
 
@@ -1076,8 +1098,8 @@ function AddEditPatientListing(props) {
 
       // information of patient
       // labels
-      doc.setFontSize(10)
-      doc.setFont('times', "bold");
+      doc.setFontSize(10);
+      doc.setFont("times", "bold");
       doc.text(12, 50, "Patient Name:");
       doc.text(12, 55, "Visit Date:");
       doc.text(12, 60, "Patient MRN:");
@@ -1086,9 +1108,9 @@ function AddEditPatientListing(props) {
       doc.text(120, 60, "Visit No:");
 
       // dynamic data of patient
-      doc.setFont('times', "normal");
-      doc.text(47, 50, firstName + ' ' + lastName); // Patient Name
-      doc.text(47, 55, admittedOn !== '' ? formatDate(admittedOn) : '--');
+      doc.setFont("times", "normal");
+      doc.text(47, 50, firstName + " " + lastName); // Patient Name
+      doc.text(47, 55, admittedOn !== "" ? formatDate(admittedOn) : "--");
       doc.text(47, 60, profileNo);
       doc.text(155, 50, invoiceNo); // invoice No
       doc.text(155, 55, `${dateNow.toISOString().substr(0, 10)} ${HH}:${mm}`);
@@ -1097,15 +1119,15 @@ function AddEditPatientListing(props) {
       // table
       doc.autoTable({
         margin: { top: 70, right: 10, left: 10 },
-        tableWidth: 'auto',
+        tableWidth: "auto",
         headStyles: { fillColor: [44, 109, 221] },
-        html: "#InpatientInvoiceSummary"
+        html: "#InpatientInvoiceSummary",
       });
 
       // footer
       // labels
       doc.setFontSize(12);
-      doc.setFont('times', "bold");
+      doc.setFont("times", "bold");
       doc.text(120, 235, "Invoice Amount");
       //   doc.text(120, 235, "Pharmacy");
       doc.text(120, 240, "Down Payments");
@@ -1115,7 +1137,7 @@ function AddEditPatientListing(props) {
       doc.text(190, 250, "JD");
 
       // dynamic text
-      doc.setFont('times', "normal");
+      doc.setFont("times", "normal");
       doc.text(169, 235, `${invoiceAmount.toFixed(4)}`); // invoice amount
       doc.text(190, 235, "JD");
       //   doc.text(169, 235, "1090.48"); // pharmacy
@@ -1512,7 +1534,9 @@ function AddEditPatientListing(props) {
                     style={{ display: "flex", flexDirection: "column" }}
                   >
                     <span style={styles.headingStyles}>MRN</span>
-                    <span style={styles.textStyles}>{profileNo}</span>
+                    <span style={styles.textStyles} className="mrnUpperCase">
+                      {profileNo}
+                    </span>
 
                     <span style={styles.headingStyles}>Patient</span>
                     <span style={styles.textStyles}>
@@ -2012,12 +2036,12 @@ function AddEditPatientListing(props) {
                         alignItems: "center",
                         color: "#2c6ddd",
                         fontStyle: "italic",
-                        marginTop: '10px'
+                        marginTop: "10px",
                       }}
                     >
                       {pdfView.map((view, index) => {
                         return (
-                          <div style={{ marginTop: '5px' }}>
+                          <div style={{ marginTop: "5px" }}>
                             <div style={styles.selectedDoc}>
                               <span style={{ color: "black" }}>
                                 Selected File {index + 1}:{" "}
@@ -2034,94 +2058,105 @@ function AddEditPatientListing(props) {
                 </div>
               </div>
 
-              <div className="row" style={{ marginTop: '20px' }}>
-                {document && document.length > 0 &&
-                  document.map((item, index) => item.includes("\\")) ? (
-                    <>
-                      {document.map((item, index) => {
-                        if (item.slice(item.length - 3) !== "pdf") {
-                          return (
-                            <div
-                              className="col-md-4 col-sm-4 col-4"
+              <div className="row" style={{ marginTop: "20px" }}>
+                {document &&
+                document.length > 0 &&
+                document.map((item, index) => item.includes("\\")) ? (
+                  <>
+                    {document.map((item, index) => {
+                      if (item.slice(item.length - 3) !== "pdf") {
+                        return (
+                          <div
+                            className="col-md-4 col-sm-4 col-4"
+                            style={{
+                              ...styles.inputContainerForTextField,
+                            }}
+                          >
+                            <img
+                              src={uploadsUrl + item.split("\\")[1]}
+                              className="depositSlipImg"
+                            />
+                          </div>
+                        );
+                      } else if (item.slice(item.length - 3) === "pdf") {
+                        return (
+                          <div
+                            className="col-md-4 col-sm-4 col-4"
+                            style={{
+                              ...styles.inputContainerForTextField,
+                            }}
+                          >
+                            <Button
                               style={{
-                                ...styles.inputContainerForTextField,
+                                ...styles.stylesForButton,
+                                width: "100%",
+                                backgroundColor: "#ba55d3",
+                              }}
+                              variant="contained"
+                              color="default"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                window.location.href =
+                                  uploadsUrl + item.split("\\")[1];
                               }}
                             >
-                              <img
-                                src={uploadsUrl + item.split("\\")[1]}
-                                className="depositSlipImg"
-                              />
-                            </div>
-                          );
-                        } else if (item.slice(item.length - 3) === "pdf") {
-                          return (
-                            <div
-                              className="col-md-4 col-sm-4 col-4"
+                              Click here to open document {index + 1}
+                            </Button>
+                          </div>
+                        );
+                      }
+                    })}
+                  </>
+                ) : document &&
+                  document.length > 0 &&
+                  document.map((item, index) => item.includes("/")) ? (
+                  <>
+                    {document.map((item, index) => {
+                      if (item.slice(item.length - 3) !== "pdf") {
+                        return (
+                          <div
+                            className="col-md-4 col-sm-4 col-4"
+                            style={{
+                              ...styles.inputContainerForTextField,
+                            }}
+                          >
+                            <img
+                              src={uploadsUrl + item}
+                              className="depositSlipImg"
+                            />
+                          </div>
+                        );
+                      } else if (item.slice(item.length - 3) === "pdf") {
+                        return (
+                          <div
+                            className="col-md-4 col-sm-4 col-4"
+                            style={{
+                              ...styles.inputContainerForTextField,
+                            }}
+                          >
+                            <Button
                               style={{
-                                ...styles.inputContainerForTextField,
+                                ...styles.stylesForButton,
+                                width: "100%",
+                                backgroundColor: "#ba55d3",
+                              }}
+                              variant="contained"
+                              color="default"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                window.location.href = uploadsUrl + document;
                               }}
                             >
-                              <Button
-                                style={{ ...styles.stylesForButton, width: '100%', backgroundColor: '#ba55d3' }}
-                                variant="contained"
-                                color="default"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  window.location.href = uploadsUrl + item.split("\\")[1];
-                                }}
-                              >
-                                Click here to open document {index + 1}
-                              </Button>
-                            </div>
-                          );
-                        }
-                      })}
-                    </>
-                  ) : document && document.length > 0 &&
-                    document.map((item, index) => item.includes("/")) ? (
-                      <>
-                        {document.map((item, index) => {
-                          if (item.slice(item.length - 3) !== "pdf") {
-                            return (
-                              <div
-                                className="col-md-4 col-sm-4 col-4"
-                                style={{
-                                  ...styles.inputContainerForTextField,
-                                }}
-                              >
-                                <img
-                                  src={uploadsUrl + item}
-                                  className="depositSlipImg"
-                                />
-                              </div>
-                            );
-                          } else if (item.slice(item.length - 3) === "pdf") {
-                            return (
-                              <div
-                                className="col-md-4 col-sm-4 col-4"
-                                style={{
-                                  ...styles.inputContainerForTextField,
-                                }}
-                              >
-                                <Button
-                                  style={{ ...styles.stylesForButton, width: '100%', backgroundColor: '#ba55d3' }}
-                                  variant="contained"
-                                  color="default"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    window.location.href = uploadsUrl + document;
-                                  }}
-                                >
-                                  Click here to open document {index + 1}
-                                </Button>
-                              </div>
-                            );
-                          }
-                        })}
-                      </>
-                    ) : (
-                      undefined
-                    )}
+                              Click here to open document {index + 1}
+                            </Button>
+                          </div>
+                        );
+                      }
+                    })}
+                  </>
+                ) : (
+                  undefined
+                )}
 
                 {imagePreview && imagePreview.length > 0 ? (
                   <>
@@ -2137,7 +2172,10 @@ function AddEditPatientListing(props) {
                           <img src={view} className="depositSlipImg" />
                           {document.length > 0 ? (
                             <div
-                              style={{ ...styles.selectedDoc, textAlign: 'center' }}
+                              style={{
+                                ...styles.selectedDoc,
+                                textAlign: "center",
+                              }}
                             >
                               New document
                             </div>

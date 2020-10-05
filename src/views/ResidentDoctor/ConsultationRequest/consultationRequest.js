@@ -1699,7 +1699,7 @@ function LabRadRequest(props) {
                 style={{ display: "flex", flexDirection: "column" }}
               >
                 <span style={styles.headingStyles}>MRN</span>
-                <span style={styles.textStyles}>
+                <span style={styles.textStyles} className="mrnUpperCase">
                   {patientDetails.profileNo
                     ? patientDetails.profileNo
                     : "-----"}
@@ -2714,9 +2714,7 @@ function LabRadRequest(props) {
                 </div>
               </div>
 
-              {icdArr != null &&
-              icdArr.length != null &&
-              icdArr.length > 0 ? (
+              {icdArr != null && icdArr.length != null && icdArr.length > 0 ? (
                 <div className="row" style={{ marginLeft: 0, marginRight: 0 }}>
                   <div
                     className={`scrollable ${"col-md-12 col-sm-12 col-12"}`}
