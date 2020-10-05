@@ -4,6 +4,8 @@
 /* eslint-disable react/jsx-indent */
 import React, { useEffect, useState, useReducer } from "react";
 import TextField from "@material-ui/core/TextField";
+import Input from "@material-ui/core/Input";
+
 import Select from "@material-ui/core/Select";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -44,7 +46,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import Add_New from "../../assets/img/Add_New.png";
 
 import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
-import useStyleforinput from "../../../src/assets/jss/material-dashboard-react/inputStyle.js";
+import useStyleforinput from "../../assets/jss/material-dashboard-react/inputStyle.js";
 
 import BootstrapInput from "../../components/Dropdown/dropDown.js";
 
@@ -54,6 +56,7 @@ import InputLabelComponent from "../../components/InputLabel/inputLabel";
 
 import dateFormat from "../../constants/dateFormat";
 import dateTimeFormat from "../../constants/dateTimeFormat";
+import TableforAddedQty from "./tableforAddedQty";
 
 const reasonArray = [
   { key: "jit", value: "JIT" },
@@ -128,7 +131,7 @@ const styles = {
   stylesForButton: {
     color: "white",
     cursor: "pointer",
-    borderRadius: 15,
+    borderRadius: 5,
     backgroundColor: "#2C6DDD",
     width: "140px",
     height: "50px",
@@ -206,6 +209,11 @@ function AddEditPurchaseRequest(props) {
 
     returnedQty: "",
     receivedQty: "",
+
+    batchArray: "",
+    selectedBatch: "",
+    returnedQtyPerBatch: "",
+    receivedQtyPerBatch: "",
   };
 
   function reducer(state, { field, value }) {
@@ -267,8 +275,13 @@ function AddEditPurchaseRequest(props) {
     replenishmentRequestFU,
 
     returnedQty,
-
     receivedQty,
+
+    batchArray,
+
+    selectedBatch,
+    returnedQtyPerBatch,
+    receivedQtyPerBatch,
   } = state;
 
   const [comingFor, setcomingFor] = useState("");
@@ -299,6 +312,8 @@ function AddEditPurchaseRequest(props) {
 
   const [receiveRequests, setReceiveRequests] = useState("");
 
+  const [returnBatchArray, setReturnedBatchArray] = useState([]);
+
   useEffect(() => {
     getReceiveRequestsForFU();
 
@@ -309,7 +324,7 @@ function AddEditPurchaseRequest(props) {
     setFUObj(props.history.location.state.fuObj);
 
     const selectedRec = props.history.location.state.selectedItem;
-    console.log(selectedRec);
+    console.log("selected Rec", selectedRec);
     if (selectedRec) {
       Object.entries(selectedRec).map(([key, val]) => {
         if (val && typeof val === "object") {
@@ -349,6 +364,29 @@ function AddEditPurchaseRequest(props) {
       dispatch({ field: "items", value: props.history.location.state.items });
     }
   }, []);
+
+  const handleChange = (e) => {
+    var pattern = /^[a-zA-Z0-9 ]*$/;
+    if (e.target.type === "text") {
+      if (pattern.test(e.target.value) === false) {
+        return;
+      }
+    }
+
+    if (e.target.type === "number") {
+      if (e.target.value < 0) {
+        return;
+      }
+    }
+
+    if (e.target.name === "selectedBatch") {
+      dispatch({ field: e.target.name, value: e.target.value });
+      let batch = batchArray.find((b) => b.batchNumber === e.target.value);
+      dispatch({ field: "receivedQtyPerBatch", value: batch.quantity });
+    } else {
+      dispatch({ field: e.target.name, value: e.target.value });
+    }
+  };
 
   function getReceiveRequestsForFU() {
     axios
@@ -753,6 +791,32 @@ function AddEditPurchaseRequest(props) {
     setDialogOpen(false);
   };
 
+  const addNew = () => {
+    let found =
+      returnBatchArray &&
+      returnBatchArray.find((item) => item.batchNumber === selectedBatch);
+    if (found) {
+      setOpenNotification(true);
+      setErrorMsg("This item has already been added");
+      return;
+    }
+    setReturnedBatchArray([
+      ...returnBatchArray,
+      {
+        receivedQtyPerBatch,
+        returnedQtyPerBatch,
+        batchNumber: selectedBatch,
+      },
+    ]);
+
+    //     dispatch({ field: "itemId", value: i._id });
+    //     dispatch({ field: "itemCode", value: i.itemCode });
+    //     dispatch({ field: "itemName", value: i.name });
+    dispatch({ field: "selectedBatch", value: "" });
+    dispatch({ field: "returnedQtyPerBatch", value: "" });
+    dispatch({ field: "receivedQtyPerBatch", value: "" });
+  };
+
   return (
     <div
       style={{
@@ -896,7 +960,7 @@ function AddEditPurchaseRequest(props) {
                 <TextField
                   type="number"
                   disabled={true}
-                  label="Received Qty"
+                  label="Total Received Qty"
                   name={"receivedQty"}
                   value={receivedQty}
                   onChange={onChangeValue}
@@ -908,6 +972,123 @@ function AddEditPurchaseRequest(props) {
                   }}
                 />
               </div>
+            </div>
+
+            <div className="row">
+              <div
+                className="col-md-4"
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  labelId="label"
+                  select
+                  type="Select"
+                  name="selectedBatch"
+                  value={selectedBatch}
+                  onChange={handleChange}
+                  className="textInputStyle"
+                  variant="filled"
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                  label="Select Batch"
+                >
+                  {batchArray &&
+                    batchArray.map((name) => (
+                      <MenuItem key={name.batchNumber} value={name.batchNumber}>
+                        {name.batchNumber}
+                      </MenuItem>
+                    ))}
+                </TextField>
+              </div>
+
+              <div
+                className="col-md-4"
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  type={"number"}
+                  disabled={true}
+                  value={receivedQtyPerBatch}
+                  className="textInputStyle"
+                  variant="filled"
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                  label="Received Qty"
+                />
+              </div>
+
+              <div
+                className="col-md-4"
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <TextField
+                  type={"number"}
+                  name={"returnedQtyPerBatch"}
+                  value={returnedQtyPerBatch}
+                  onChange={handleChange}
+                  className="textInputStyle"
+                  variant="filled"
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                  }}
+                  label="Return Quantity"
+                  onKeyDown={(evt) => {
+                    (evt.key === "e" ||
+                      evt.key === "E" ||
+                      evt.key === "-" ||
+                      evt.key === "+") &&
+                      evt.preventDefault();
+                  }}
+                />
+              </div>
+            </div>
+
+            <div
+              className="row"
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                marginTop: 10,
+                marginBottom: 4,
+              }}
+            >
+              {selectItemToEditId === "" ? (
+                <Button
+                  onClick={addNew}
+                  style={{
+                    ...styles.stylesForButton,
+                    // width: "100%",
+                    // height: "100%",
+                  }}
+                  variant="contained"
+                  color="primary"
+                >
+                  <strong style={{ fontSize: "12px" }}>Add New</strong>
+                </Button>
+              ) : (
+                <Button
+                  // onClick={editSelectedItem}
+                  style={styles.stylesForButton}
+                  variant="contained"
+                  color="primary"
+                >
+                  <strong style={{ fontSize: "12px" }}>Update</strong>
+                </Button>
+              )}
             </div>
 
             <div className="row">
@@ -996,8 +1177,9 @@ function AddEditPurchaseRequest(props) {
               >
                 <TextField
                   required
+                  disabled
                   type="number"
-                  label="Return Qty"
+                  label="Total Return Qty"
                   name={"returnedQty"}
                   value={returnedQty}
                   onChange={onChangeValue}
@@ -1312,6 +1494,12 @@ function AddEditPurchaseRequest(props) {
                   />
                 </div>
               </div>
+            ) : (
+              undefined
+            )}
+
+            {returnBatchArray.length > 0 ? (
+              <TableforAddedQty returnBatchArray={returnBatchArray} />
             ) : (
               undefined
             )}
@@ -1634,7 +1822,7 @@ function AddEditPurchaseRequest(props) {
               </DialogContent>
             </Dialog>
 
-            <div className='row' style={{ marginBottom: 20 }}>
+            <div className="row" style={{ marginBottom: 20 }}>
               <img
                 onClick={() => props.history.goBack()}
                 src={Back_Arrow}

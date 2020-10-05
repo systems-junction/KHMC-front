@@ -118,9 +118,15 @@ export default function PurchaseRequest(props) {
       open={props.openItemDialog}
     >
       <DialogContent style={{ backgroundColor: "#60d69f" }}>
-        <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
-          Item Details
-        </DialogTitle>
+        <div className="container-fluid">
+            <h5
+              id="simple-dialog-title"
+              style={{ fontWeight: "700", color: "white" }}
+            >
+              Item Details
+            </h5>
+        </div>
+
         <div className="container-fluid">
           <div className="row">
             <div

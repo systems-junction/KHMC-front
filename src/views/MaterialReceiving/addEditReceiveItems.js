@@ -643,7 +643,7 @@ console.log("selected item",props.selectedItem)
             >
               <TextField
                 required
-                disabled={true}
+                // disabled={true}
                 type="number"
                 label="Batch Number"
                 name={"batchNumber"}
