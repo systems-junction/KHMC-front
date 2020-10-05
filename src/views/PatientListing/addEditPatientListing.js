@@ -751,6 +751,9 @@ function AddEditPatientListing(props) {
           dispatch({ field: 'insuranceVendor', value: e.data.data.vendor })
           dispatch({ field: 'insurerId', value: e.data.data.insurerId })
           setCovTer(e.data.data.coverageDetail)
+        } else if (!e.data.success) {
+          setOpenNotification(true)
+          setErrorMsg('Invalid insurance number/insurance number not verified')
         }
       })
       .catch((error) => {
