@@ -1203,8 +1203,7 @@ function LabRadRequest(props) {
       axios.get(getIcd + '/' + e.target.value).then((res) => {
         if (res.data.data) {
           console.log('hello', res.data.data)
-          const mappedArr = res.data.data.map((e) => e.icd10PCSCodes)
-          setIcdArr(mappedArr)
+          setIcdArr(res.data.data)
         }
       })
 
@@ -1232,7 +1231,7 @@ function LabRadRequest(props) {
       currentList = icdArr
       console.log(icdArr)
       newList = currentList.filter((item) => {
-        const lc = item.toLowerCase()
+        const lc = item.icd10PCSCodes.toLowerCase()
         const filter = e.target.value.toLowerCase()
         return lc.includes(filter)
       })
@@ -1240,8 +1239,10 @@ function LabRadRequest(props) {
       axios.get(getIcd + '/' + section).then((res) => {
         if (res.data.data) {
           console.log('hello', res.data.data)
-          const mappedArr = res.data.data.map((e) => e.icd10PCSCodes)
-          setIcdArr(mappedArr)
+          // const mappedArr = res.data.data.map(
+          //   (e) => e.icd10PCSCodes && e.procedureCodeDescriptions
+          // )
+          setIcdArr(res.data.data)
         }
       })
     }
@@ -2711,7 +2712,7 @@ function LabRadRequest(props) {
                   <TextField
                     type='text'
                     label='Code'
-                    onChange={handleCodeSearch}
+                    onChange={(e) => handleCodeSearch(e)}
                     className='textInputStyle'
                     variant='filled'
                     InputProps={{
@@ -2750,7 +2751,7 @@ function LabRadRequest(props) {
                             onClick={(e) => addICDcodes(item, e)}
                             style={{ marginRight: 20, marginTop: 5 }}
                           />
-                          {item}
+                          {`Code: ${item.icd10PCSCodes}      Description: ${item.procedureCodeDescriptions}`}
                         </li>
                       ))}
                     </ul>
