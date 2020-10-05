@@ -172,18 +172,10 @@ const tableDataHeadingForTriage = [
   'RequestNo',
   'Date/Time',
   'Checked By',
-  'Heart Rate',
-  'BP (Systolic)',
   'Action',
 ]
 
-const tableDataKeysForTriage = [
-  'triageRequestNo',
-  'date',
-  'doctorName',
-  'heartRate',
-  'bloodPressureSys',
-]
+const tableDataKeysForTriage = ['triageRequestNo', 'date', 'doctorName']
 const actions = { view: true }
 
 const specialistArray = [
