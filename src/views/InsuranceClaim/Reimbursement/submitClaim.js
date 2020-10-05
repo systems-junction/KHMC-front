@@ -2039,7 +2039,7 @@ function AddEditPatientListing(props) {
                                 }}
                               >
                                 <img
-                                  src={uploadsUrl + item}
+                                  src={uploadsUrl+item}
                                   className="depositSlipImg"
                                 />
                               </div>
@@ -2058,7 +2058,7 @@ function AddEditPatientListing(props) {
                                   color="default"
                                   onClick={(e) => {
                                     e.preventDefault();
-                                    window.location.href = uploadsUrl + document;
+                                    window.location.href = uploadsUrl+item;
                                   }}
                                 >
                                   Click here to open document {index + 1}
