@@ -652,7 +652,7 @@ function AddEditPatientListing(props) {
       .then((res) => {
         if (res.data.success) {
           setsearched(true);
-          console.log("response for summary", res.data);
+          // console.log("response for summary", res.data);
 
           if (res.data.rc) {
             console.log("response for Claim", res.data.rc);
@@ -708,9 +708,11 @@ function AddEditPatientListing(props) {
                       ).toFixed(4),
                       insuredPrice: amount.toFixed(4),
                       insuranceStatus: "Covered",
+                      comments:singlePR.item[j].comments
                     },
                     date: res.data.data.pharmacyRequest[i].dateGenerated,
                     serviceType: "Pharmacy",
+                    requestNo:singlePR.requestNo
                   };
                   pharm.push(obj);
                   found = true;
@@ -727,9 +729,11 @@ function AddEditPatientListing(props) {
                     originalPrice: amount.toFixed(4),
                     insuredPrice: "0",
                     insuranceStatus: "Not Covered",
+                    comments:singlePR.item[j].comments
                   },
                   date: res.data.data.pharmacyRequest[i].dateGenerated,
                   serviceType: "Pharmacy",
+                  requestNo:singlePR.requestNo
                 };
                 pharm.push(obj);
               }
@@ -751,9 +755,11 @@ function AddEditPatientListing(props) {
                     originalPrice: singleLR.serviceId.price.toFixed(4),
                     insuredPrice: res.data.insured[j].price.toFixed(4),
                     insuranceStatus: "Covered",
+                    comments:singleLR.comments
                   },
                   date: singleLR.date,
                   serviceType: "Lab",
+                  requestNo:singleLR.LRrequestNo
                 };
                 lab.push(obj);
                 found = true;
@@ -766,9 +772,11 @@ function AddEditPatientListing(props) {
                   originalPrice: singleLR.serviceId.price.toFixed(4),
                   insuredPrice: "0",
                   insuranceStatus: "Not Covered",
+                  comments:singleLR.comments
                 },
                 date: singleLR.date,
                 serviceType: "Lab",
+                requestNo:singleLR.LRrequestNo
               };
               lab.push(obj);
             }
@@ -789,9 +797,11 @@ function AddEditPatientListing(props) {
                     originalPrice: singleRR.serviceId.price.toFixed(4),
                     insuredPrice: res.data.insured[j].price.toFixed(4),
                     insuranceStatus: "Covered",
+                    comments:singleRR.comments
                   },
                   date: singleRR.date,
                   serviceType: "Radiology",
+                  requestNo:singleRR.RRrequestNo
                 };
                 radiology.push(obj);
                 found = true;
@@ -804,15 +814,17 @@ function AddEditPatientListing(props) {
                   originalPrice: singleRR.serviceId.price.toFixed(4),
                   insuredPrice: "0",
                   insuranceStatus: "Not Covered",
+                  comments:singleRR.comments
                 },
                 date: singleRR.date,
                 serviceType: "Radiology",
+                requestNo:singleRR.RRrequestNo
               };
               radiology.push(obj);
             }
           }
 
-          // console.log("Bill sumamry is ... ", [].concat(res.data.data.labRequest, res.data.data.radiologyRequest, pharm))
+          console.log("Bill sumamry is ... ", [].concat(lab.reverse(), radiology.reverse(), pharm.reverse()))
           setbillSummaryArray(
             [].concat(lab.reverse(), radiology.reverse(), pharm.reverse())
           );
@@ -833,10 +845,10 @@ function AddEditPatientListing(props) {
       .then((res) => {
         if (res.data.success) {
           if (res.data.data) {
-            console.log(
-              "Response after getting EDR/IPR data : ",
-              res.data.data
-            );
+            // console.log(
+            //   "Response after getting EDR/IPR data : ",
+            //   res.data.data
+            // );
 
             Object.entries(res.data.data).map(([key, val]) => {
               if (val && typeof val === "object") {
@@ -901,72 +913,9 @@ function AddEditPatientListing(props) {
     var logo = new Image();
     logo.src = logoPatientSummaryInvoice;
 
-    // var doc = new jsPDF();
-
-    // doc.setFontSize(40);
-    // doc.setTextColor(44, 109, 221);
-    // var logo = new Image();
-
-    // logo.src = logoInvoice;
-    // doc.addImage(logo, "PNG", 5, 7);
-
-    // doc.setTextColor(0, 0, 0);
-
-    // doc.setFontSize(10);
-    // doc.text(139, 10, `Invoice No:`);
-    // doc.text(170, 10, `${invoiceNo}`);
-
-    // doc.setFontSize(12);
-    // doc.text(155, 20, "Date:");
-    // doc.text(184, 20, `${now.toISOString().substr(0, 10)}`);
-
-    // doc.text(155, 30, "Time:");
-    // doc.text(195, 30, `${time}`);
-
-    // doc.setFontSize(18);
-    // doc.text(5, 55, "Bill to:");
-    // doc.setFontSize(12);
-    // doc.line(5, 65, 50, 65);
-    // doc.text(5, 75, "Request No:");
-    // doc.text(5, 85, `${item.RRrequestNo || item.LRrequestNo}`);
-
-    // doc.text(178, 50, "Invoice Total");
-    // doc.setFontSize(23);
-    // doc.setTextColor(44, 109, 221);
-    // doc.text(167, 60, `${item.serviceId.price} JD`);
-
-    // doc.setTextColor(0, 0, 0);
-    // doc.setFontSize(12);
-    // doc.text(5, 100, `Service Name: ${item.serviceName}`);
-    // doc.text(5, 110, `Service Type: ${item.serviceType}`);
-    // doc.text(5, 120, `Comments: ${item.comments}`);
-
-    // doc.text(5, 252, "Signature & Stamp");
-    // doc.line(5, 257, 50, 257);
-
-    // doc.setTextColor(150, 150, 130);
-    // doc.text(162, 215, `Sub Total:`);
-    // doc.text(183, 215, `${item.serviceId.price} JD`);
-    // doc.text(163, 225, "Tax Rate:");
-    // doc.text(174, 235, "Tax:");
-    // doc.text(165, 245, "Discount:");
-    // doc.text(184, 245, " 999 JD");
-    // doc.setTextColor(0, 0, 0);
-    // doc.text(156, 255, "Total Amount:");
-    // doc.text(185, 255, `${item.serviceId.price} JD`);
-
-    // doc.line(0, 272, 1000, 272);
-
-    // doc.text(5, 285, "Prepared by:");
-    // if (QR) {
-    //   doc.addImage(`http://localhost:4000${QR}`, "PNG", 175, 275, 20, 20);
-    // }
-    // doc.save(`Invoice ${invoiceNo}.pdf`);
-
     var doc = new jsPDF()
 
     doc.addImage(logo, "PNG", 10, 10, 55, 30);
-
     doc.setTextColor(0, 0, 0);
 
     // header 
@@ -996,10 +945,10 @@ function AddEditPatientListing(props) {
     doc.text(5, 105, 'Comments:');
 
     doc.setFont('times', "normal");
-    doc.text(35, 75, 'LR129237288');
+    doc.text(35, 75, `${item.requestNo}`);
     doc.text(35, 85, `${item.serviceId.name}`);
     doc.text(35, 95, `${item.serviceType}`);
-    doc.text(35, 105, 'This person was refered for a Urine Test.');
+    doc.text(35, 105, `${item.serviceId.comments ? item.serviceId.comments : 'N/A'}`);
 
     doc.text(5, 235, "Signature & Stamp");
     doc.line(5, 240, 75, 240)
