@@ -664,9 +664,13 @@ function AddEditPatientListing(props) {
             if(res.data.rc.document.map((item, index) => item.includes("\\"))) 
               {
                 res.data.rc.document.map((item, index) => {
-                  // if (item.slice(item.length - 3) !== "pdf") {
-                    console.log("Checking the item's URL on live >>> ",uploadsUrl+item)
-                  // }
+                  if (item.slice(item.length - 3) !== "pdf") {
+                    console.log("Checking the item's URL on live of image >>> ",uploadsUrl+item)
+                  }
+                  else if (item.slice(item.length - 3) !== "pdf")
+                  {
+                    console.log("Checking the item's URL on live of pdf >>> ",uploadsUrl+item)
+                  }
                 })
               }
             
