@@ -56,6 +56,8 @@ export const generateIPR = `${baseUrl}/ipr/addipr`
 export const getVendorApproval = `${baseUrl}/insurance/verify`
 export const getpatientHistoryPre = `${baseUrl}/patient/getpatienthistorypre`
 export const getpatientHistory = `${baseUrl}/patient/getpatienthistory`
+export const getPatientEdrUrl = `${baseUrl}/edr/getedrpatient`
+export const getPatientIprUrl = `${baseUrl}/ipr/getiprpatient`
 
 export const searchpatient = `${baseUrl}/patient/searchpatient`
 export const updateEdrIpr = `${baseUrl}/patient/updateEdrIpr`
