@@ -1,49 +1,53 @@
 import React, { useEffect, useState, useReducer } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import InputLabel from '@material-ui/core/InputLabel'
 import Button from '@material-ui/core/Button'
 import tableStyles from '../../assets/jss/material-dashboard-react/components/tableStyle.js'
 import axios from 'axios'
 import TextField from '@material-ui/core/TextField'
 import {
-  searchpatient,
-  getSearchedpatient,
   getSearchedLaboratoryService,
   getSearchedRadiologyService,
   updateEdrIpr,
+  getIcd,
+  searchpatient,
+  notifyConsultation,
+  getSearchedpatient,
+  getpatientHistoryPre,
+  getpatientHistory,
 } from '../../public/endpoins'
 import cookie from 'react-cookies'
 import Header from '../../components/Header/Header'
-import Lab_RadIcon from '../../assets/img/Lab-Rad Request.png'
+import Lab_RadIcon from '../../assets/img/Manual Request.png'
 import Back from '../../assets/img/Back_Arrow.png'
 import '../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import CustomTable from '../../components/Table/Table'
 import plus_icon from '../../assets/img/Plus.png'
-import InputLabelComponent from '../../components/InputLabel/inputLabel'
 import Paper from '@material-ui/core/Paper'
 import Table from '@material-ui/core/Table'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
+import MenuItem from '@material-ui/core/MenuItem'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
-import ErrorMessage from '../../components/ErrorMessage/errorMessage'
 import Notification from '../../components/Snackbar/Notification.js'
 import Fingerprint from '../../assets/img/fingerprint.png'
 import AccountCircle from '@material-ui/icons/SearchOutlined'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import BarCode from '../../assets/img/Bar Code.png'
-import Loader from 'react-loader-spinner'
 import ViewSingleRequest from './viewRequest'
+
 import { connect } from 'react-redux'
 import {
   funForReducer,
   setPatientDetailsForReducer,
 } from '../../actions/Checking'
+
+let icdCodesList = require('../../assets/icdCodes.json')
 
 const tableHeadingForResident = [
   'Date / Time',
@@ -53,7 +57,7 @@ const tableHeadingForResident = [
 ]
 const tableDataKeysForResident = ['date', 'description', 'doctorName']
 const tableHeadingForConsultation = [
-  'Date/Time',
+  'Date / Time',
   'Description / Condition',
   'Specialist',
   'Referring Doctor',
@@ -67,9 +71,23 @@ const tableDataKeysForConsultation = [
   'doctorName',
   'status',
 ]
+
+const tableHeadingForEDRIPROPR = [
+  'Request No',
+  'Date/Time',
+  'Department',
+  'Status',
+  'Action',
+]
+const tableDataKeysForEDRIPROPR = [
+  'requestNo',
+  'createdAt',
+  ['functionalUnit', 'fuName'],
+  'status',
+]
 const tableHeadingForPharmacy = [
   'Request ID',
-  'Date/Time',
+  'Date / Time',
   'Requester',
   'Status',
   'Action',
@@ -136,26 +154,72 @@ const tableHeadingForBUMemberForItems = [
   'Status',
   '',
 ]
-// const tableHeadingForNurse = [
-//     "Service Code",
-//     "Service Name",
-//     "Requester",
-//     "Status",
-//     "Action",
-// ];
-// const tableDataKeysForNurse = [
-//     "serviceCode",
-//     "serviceName",
-//     "requesterName",
-//     "status",
-// ];
+const tableHeadingForNurse = [
+  'Service Code',
+  'Service Name',
+  'Requester',
+  'Status',
+  'Action',
+]
+const tableDataKeysForNurse = [
+  'serviceCode',
+  'serviceName',
+  'requesterName',
+  'status',
+]
+
+const tableDataHeadingForTriage = [
+  'RequestNo',
+  'Date/Time',
+  'Checked By',
+  'Heart Rate',
+  'BP (Systolic)',
+  'Action',
+]
+
+const tableDataKeysForTriage = [
+  'triageRequestNo',
+  'date',
+  'doctorName',
+  'heartRate',
+  'bloodPressureSys',
+]
 const actions = { view: true }
+
+const specialistArray = [
+  {
+    key: 'Dr.Hammad',
+    value: 'Dr.Hammad',
+  },
+  {
+    key: 'Dr.Asad',
+    value: 'Dr.Asad',
+  },
+  {
+    key: 'Dr.Hameed',
+    value: 'Dr.Hameed',
+  },
+]
+
+const specialityArray = [
+  {
+    key: 'Cardiologists',
+    value: 'Cardiologists',
+  },
+  {
+    key: 'Orthopedic',
+    value: 'Orthopedic',
+  },
+  {
+    key: 'Dermatologist',
+    value: 'Dermatologist',
+  },
+]
 
 const styles = {
   patientDetails: {
     backgroundColor: 'white',
     borderRadius: 5,
-    padding: '20px',
   },
   inputContainerForTextField: {
     marginTop: 25,
@@ -173,6 +237,15 @@ const styles = {
     cursor: 'pointer',
     borderRadius: 5,
     backgroundColor: '#2c6ddd',
+    height: '50px',
+    outline: 'none',
+  },
+  stylesForSave: {
+    color: 'white',
+    cursor: 'pointer',
+    borderRadius: 5,
+    backgroundColor: '#2c6ddd',
+    width: '150px',
     height: '50px',
     outline: 'none',
   },
@@ -239,23 +312,28 @@ const useStylesForInput = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: 'white',
     },
-    '&:disable': {
+    '&:disabled': {
       color: 'gray',
+    },
+    '&:focus': {
       backgroundColor: 'white',
+      borderRadius: 5,
     },
   },
   multilineColor: {
+    boxShadow: 'none',
     backgroundColor: 'white',
     borderRadius: 5,
     '&:hover': {
       backgroundColor: 'white',
+      boxShadow: 'none',
     },
     '&:after': {
       borderBottomColor: 'black',
+      boxShadow: 'none',
     },
-    '&:disable': {
-      color: 'gray',
-      backgroundColor: 'white',
+    '&:focus': {
+      boxShadow: 'none',
     },
   },
   root: {
@@ -266,13 +344,9 @@ const useStylesForInput = makeStyles((theme) => ({
       backgroundColor: 'white',
       color: 'black',
     },
-    '&:disable': {
-      color: 'gray',
-      backgroundColor: 'white',
-    },
     '& .Mui-disabled': {
-      color: 'gray',
       backgroundColor: 'white',
+      color: 'black',
     },
   },
 }))
@@ -287,19 +361,32 @@ function LabRadRequest(props) {
     labRequestArray: '',
     labServiceName: '',
     labServiceStatus: '',
+    labComments: '',
 
     radioServiceId: '',
     radioServiceCode: '',
     radioServiceName: '',
     radiologyRequestArray: '',
     radioServiceStatus: '',
+    radioComments: '',
+
+    //for nurse
+    nurseServiceId: '',
+    nurseServiceCode: '',
+    nurseServiceName: '',
+    nurseService: '',
+    nurseServiceStatus: '',
 
     consultationNoteArray: '',
     consultationNo: '',
     date: new Date(),
     description: '',
     consultationNotes: '',
+    doctorconsultationNotes: '',
+
     requester: cookie.load('current_user').name,
+    speciality: '',
+    specialist: '',
 
     residentNoteArray: '',
     rdescription: '',
@@ -308,15 +395,14 @@ function LabRadRequest(props) {
 
     pharmacyRequestArray: '',
     requestType: '',
+    section: '',
+    code: [],
+    patientId: '',
     diagnosisArray: '',
     medicationArray: '',
 
-    //for nurse
-    nurseServiceId: '',
-    nurseServiceCode: '',
-    nurseServiceName: '',
-    nurseService: '',
-    nurseServiceStatus: '',
+    triageAssessmentArray: '',
+    nurseServiceArray: '',
   }
 
   function reducer(state, { field, value }) {
@@ -329,8 +415,6 @@ function LabRadRequest(props) {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const {
-    requester = cookie.load('current_user').name,
-
     labServiceId,
     labServiceCode,
     labRequestArray,
@@ -346,49 +430,66 @@ function LabRadRequest(props) {
     radioComments,
 
     consultationNoteArray,
-    residentNoteArray,
+    date = new Date(),
+    description,
+    consultationNotes,
+    doctorconsultationNotes,
+
+    requester = cookie.load('current_user').name,
+    speciality,
+    specialist,
+
     pharmacyRequestArray,
+
+    residentNoteArray,
+    rdescription,
+    note,
+    requestType,
+    section,
+    code,
+    patientId,
     diagnosisArray,
     medicationArray,
-    requestType,
+    triageAssessmentArray,
+    nurseServiceArray,
   } = state
 
   const onChangeValue = (e) => {
-    dispatch({ field: e.target.name, value: e.target.value })
+    if (e.target.name === 'specialist') {
+      dispatch({
+        field: e.target.name,
+        value: e.target.value,
+      })
+    } else {
+      dispatch({
+        field: e.target.name,
+        value: e.target.value.replace(/[^\w\s]/gi, ''),
+      })
+    }
   }
 
-  const [currentUser, setCurrentUser] = useState(cookie.load('current_user'))
+  const [currentUser] = useState(cookie.load('current_user'))
   const [errorMsg, setErrorMsg] = useState('')
   const [successMsg, setsuccessMsg] = useState('')
   const [openNotification, setOpenNotification] = useState(false)
-  const [value, setValue] = useState(3)
+  const [value, setValue] = useState(0)
   const [selectedItem, setSelectedItem] = useState('')
   const [searchPatientQuery, setSearchPatientQuery] = useState('')
   const [patientFoundSuccessfull, setpatientFoundSuccessfully] = useState(false)
   const [patientFound, setpatientFound] = useState('')
   const [patientDetails, setPatientDetails] = useState('')
-  const [selectedPatientArray, setSelectedPatientArray] = useState([])
-  const [patientDetailsDialog, openPatientDetailsDialog] = useState(false)
+  const [, setSelectedPatientArray] = useState([])
+  const [, openPatientDetailsDialog] = useState(false)
   const [enableForm, setenableForm] = useState(true)
-
   const [openItemDialog, setOpenItemDialog] = useState(false)
   const [openAddConsultDialog, setOpenAddConsultDialog] = useState(false)
   const [openAddResidentDialog, setOpenAddResidentDialog] = useState(false)
   const [item, setItem] = useState('')
-  const [selectedPatient, setSelectedPatient] = useState('')
-  const [requestNo, setrequestNo] = useState('')
-  const [labRequest, setlabRequest] = useState('')
-  const [pharmacyRequest, setpharmacyRequest] = useState('')
-  const [radiologyRequest, setradiologyRequest] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [itemFound, setItemFound] = useState('')
   const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false)
-  const [selectedSearchedItem, setSelectedSearchedItem] = useState('')
-  const [selectedSearchedRadioItem, setSelectedSearchedRadioItem] = useState('')
-  const [selectedLabArray, setSelectedLabArray] = useState([])
-  const [selectedRadioArray, setSelectedRadioArray] = useState([])
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false)
-  const [id, setId] = useState('')
+  const [isFormSubmitted] = useState(false)
+  const [historyId, setHistoryId] = useState('')
   const [searchRadioQuery, setSearchRadioQuery] = useState('')
   const [radioItemFoundSuccessfull, setRadioItemFoundSuccessfully] = useState(
     ''
@@ -396,32 +497,65 @@ function LabRadRequest(props) {
   const [radioItemFound, setRadioItemFound] = useState('')
   const [addLabRequest, setaddLabRequest] = useState(false)
   const [addRadioRequest, setaddRadioRequest] = useState(false)
-  const [nurseItemFoundSuccessfull, setNurseItemFoundSuccessfully] = useState(
-    ''
-  )
-  const [nurseItemFound, setNurseItemFound] = useState('')
-  const [addNurseRequest, setaddNurseRequest] = useState(false)
-  const [searchNurseQuery, setSearchNurseQuery] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
-  const [requestedItems, setRequestedItems] = useState('')
-  const [, setSelectedOrder] = useState('')
-  const [isOpen, setIsOpen] = useState(false)
+  const [, setIsLoading] = useState(true)
+  const [icdSection, seticdSection] = useState('')
+  const [icdCode, seticdCode] = useState([])
   const [enableSave, setEnableSave] = useState(true)
+  const [requestedItems, setRequestedItems] = useState('')
+  const [selectedOrder, setSelectedOrder] = useState('')
+  const [isOpen, setIsOpen] = useState(false)
+  const [icd, setIcd] = useState([])
+  const [icdArr, setIcdArr] = useState([])
+  const [patientHistoryId, setPatientHistoryId] = useState('')
+  const [EDRIPROPR, setEDRIPROPR] = useState([])
+
+  const validateForm = () => {
+    return (
+      doctorconsultationNotes &&
+      doctorconsultationNotes.length > 0 &&
+      description &&
+      description.length > 0 &&
+      speciality &&
+      speciality.length > 0 &&
+      specialist &&
+      specialist.length > 0
+    )
+  }
+  const validateFormRR = () => {
+    return (
+      section &&
+      section.length > 0 &&
+      rdescription &&
+      rdescription.length > 0 &&
+      note &&
+      note.length > 0
+      // specialist &&
+      // specialist.length > 0
+    )
+  }
 
   useEffect(() => {
     if (props.patientDetails) {
       setPatientDetails(props.patientDetails)
       getPatientByInfo(props.patientDetails._id)
+      getEDRIPROPR(props.patientDetails._id)
       openPatientDetailsDialog(true)
     }
 
+    axios.get(getIcd).then((res) => {
+      console.log('res for icd', res)
+      setIcd(res.data.data)
+    })
+
+    seticdSection(Object.keys(icdCodesList[0]))
+
     // getEDRById(props.history.location.state.selectedItem._id);
 
-    // setId(props.history.location.state.selectedItem._id);
-    // setSelectedItem(props.history.location.state.selectedItem);
+    setHistoryId(props.history.location.state.selectedItem._id)
+    setSelectedItem(props.history.location.state.selectedItem)
     // setrequestNo(props.history.location.state.selectedItem.requestNo);
     // setSelectedPatient(props.history.location.state.selectedItem.patientId);
-  }, [])
+  }, [icdCode])
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
@@ -441,6 +575,191 @@ function LabRadRequest(props) {
     setSelectedOrder(obj)
     setIsOpen(true)
     setRequestedItems(obj.item)
+  }
+
+  function addConsultRequest() {
+    var now = new Date()
+    var start = new Date(now.getFullYear(), 0, 0)
+    var diff =
+      now -
+      start +
+      (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000
+    var oneDay = 1000 * 60 * 60 * 24
+    var day = Math.floor(diff / oneDay)
+
+    var dateNow = new Date()
+    var YYYY = dateNow
+      .getFullYear()
+      .toString()
+      .substr(-2)
+    var HH = dateNow.getHours()
+    var mm = dateNow.getMinutes()
+    let ss = dateNow.getSeconds()
+
+    const consultationNoteNo = 'CN' + day + YYYY + HH + mm + ss
+    if (!validateForm()) {
+      // setIsFormSubmitted(true)
+      setOpenNotification(true)
+      setErrorMsg('Please fill the fields properly')
+    } else {
+      if (validateForm()) {
+        let consultationNote = []
+
+        consultationNote = [
+          ...consultationNoteArray,
+          {
+            consultationNo: consultationNoteNo,
+            description: description,
+            doctorNotes: doctorconsultationNotes,
+            requester: currentUser.staffId,
+            date: date,
+            specialist: specialist,
+            status: 'pending',
+          },
+        ]
+
+        const params = {
+          _id: historyId,
+          requestType,
+          consultationNote: consultationNote,
+        }
+
+        console.log('params', params)
+        axios
+          .put(updateEdrIpr, params)
+          .then((res) => {
+            if (res.data.success) {
+              console.log('response while adding Consult Req', res.data.data)
+              notifyForConsult(patientId)
+              props.history.push({
+                pathname: 'consultationrequest/success',
+                state: {
+                  message: `Consultation Request: ${
+                    res.data.data.consultationNote[
+                      res.data.data.consultationNote.length - 1
+                    ].consultationNo
+                  } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} submitted successfully`,
+
+                  patientDetails: patientDetails,
+                },
+              })
+            } else if (!res.data.success) {
+              setOpenNotification(true)
+              setErrorMsg('Error while adding the Consultation request')
+            }
+          })
+          .catch((e) => {
+            console.log('error after adding Consultation request', e)
+            setOpenNotification(true)
+            setErrorMsg('Error after adding the Consultation request')
+          })
+        //   }
+        // }
+      }
+    }
+  }
+
+  const notifyForConsult = (id) => {
+    axios
+      .get(notifyConsultation + '/' + id)
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((e) => {
+        console.log('error after notify', e)
+        setOpenNotification(true)
+        setErrorMsg(e)
+      })
+  }
+
+  function addResidentRequest() {
+    var now = new Date()
+    var start = new Date(now.getFullYear(), 0, 0)
+    var diff =
+      now -
+      start +
+      (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000
+    var oneDay = 1000 * 60 * 60 * 24
+    var day = Math.floor(diff / oneDay)
+
+    var dateNow = new Date()
+    var YYYY = dateNow
+      .getFullYear()
+      .toString()
+      .substr(-2)
+    var HH = dateNow.getHours()
+    var mm = dateNow.getMinutes()
+    let ss = dateNow.getSeconds()
+
+    const residentNoteNo = 'RDN' + day + YYYY + HH + mm + ss
+    if (!validateFormRR()) {
+      // setIsFormSubmitted(true);
+      setOpenNotification(true)
+      setErrorMsg('Please fill the fields properly')
+    } else {
+      if (validateFormRR()) {
+        let residentNote = []
+
+        residentNote = [
+          ...residentNoteArray,
+          {
+            residentNoteNo: residentNoteNo,
+            date: date,
+            description: rdescription,
+            doctor: currentUser.staffId,
+            note: note,
+            section: section,
+            code: code,
+          },
+        ]
+
+        const params = {
+          _id: historyId,
+          requestType,
+          residentNotes: residentNote,
+        }
+        console.log('params', params)
+        axios
+          .put(updateEdrIpr, params)
+          .then((res) => {
+            if (res.data.success) {
+              console.log('response while adding Resident Req', res.data.data)
+              props.history.push({
+                pathname: 'assessmentdiagnosis/success',
+                state: {
+                  message: `Consultation note:  ${
+                    res.data.data.residentNotes[
+                      res.data.data.residentNotes.length - 1
+                    ].residentNoteNo
+                  } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
+                  patientDetails: patientDetails,
+                },
+              })
+            } else if (!res.data.success) {
+              setOpenNotification(true)
+              setErrorMsg('Error while adding the Resident request')
+            }
+          })
+          .catch((e) => {
+            console.log('error after adding Resident request', e)
+            setOpenNotification(true)
+            setErrorMsg('Error after adding the Resident request')
+          })
+        //   }
+        // }
+      }
+    }
+  }
+
+  function hideDialog() {
+    setOpenAddConsultDialog(false)
+    setOpenAddResidentDialog(false)
+
+    dispatch({ field: 'consultationNo', value: '' })
+    dispatch({ field: 'description', value: '' })
+    dispatch({ field: 'consultationNotes', value: '' })
+    dispatch({ field: 'rdescription', value: '' })
+    dispatch({ field: 'note', value: '' })
   }
 
   const handleSearch = (e) => {
@@ -559,7 +878,7 @@ function LabRadRequest(props) {
       ]
     }
     const params = {
-      _id: id,
+      _id: historyId,
       requestType,
       labRequest: labItems,
     }
@@ -570,14 +889,12 @@ function LabRadRequest(props) {
         if (res.data.success) {
           console.log('response after adding Lab Request', res.data)
           props.history.push({
-            pathname: 'LabRadRequest/success',
+            pathname: 'assessmentdiagnosis/success',
             state: {
               message: `Lab Request: ${
                 res.data.data.labRequest[res.data.data.labRequest.length - 1]
                   .LRrequestNo
-              } for patient MRN: ${
-                res.data.data.patientId.profileNo
-              } added successfully`,
+              } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
               patientDetails: patientDetails,
             },
           })
@@ -707,7 +1024,7 @@ function LabRadRequest(props) {
     }
 
     const params = {
-      _id: id,
+      _id: historyId,
       requestType,
       radiologyRequest: radioItems,
     }
@@ -718,15 +1035,13 @@ function LabRadRequest(props) {
         if (res.data.success) {
           console.log('response after adding Radio Request', res.data)
           props.history.push({
-            pathname: 'LabRadRequest/success',
+            pathname: 'assessmentdiagnosis/success',
             state: {
               message: `Radiology Request: ${
                 res.data.data.radiologyRequest[
                   res.data.data.radiologyRequest.length - 1
                 ].RRrequestNo
-              } for patient MRN: ${
-                res.data.data.patientId.profileNo
-              } added successfully`,
+              } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
               patientDetails: patientDetails,
             },
           })
@@ -843,6 +1158,58 @@ function LabRadRequest(props) {
   //         });
   // };
 
+  const onChangeSection = (e) => {
+    if (e.target.value) {
+      dispatch({ field: e.target.name, value: e.target.value })
+
+      axios.get(getIcd + '/' + e.target.value).then((res) => {
+        if (res.data.data) {
+          console.log('hello', res.data.data)
+          const mappedArr = res.data.data.map((e) => e.icd10PCSCodes)
+          setIcdArr(mappedArr)
+        }
+      })
+
+      let codes = Object.entries(icdCodesList[0])
+      for (var x in codes) {
+        let arr = codes[x]
+        if (arr[0] === e.target.value) {
+          console.log('codes', arr[1])
+          seticdCode(arr[1])
+        }
+      }
+    } else {
+      dispatch({ field: e.target.name, value: e.target.value })
+      dispatch({ field: 'Code', value: '' })
+      seticdCode('')
+    }
+  }
+
+  const handleCodeSearch = (e) => {
+    let currentList = []
+    let newList = []
+
+    console.log('icdArr', icdArr)
+    if (e.target.value !== '') {
+      currentList = icdArr
+      console.log(icdArr)
+      newList = currentList.filter((item) => {
+        const lc = item.toLowerCase()
+        const filter = e.target.value.toLowerCase()
+        return lc.includes(filter)
+      })
+    } else {
+      axios.get(getIcd + '/' + section).then((res) => {
+        if (res.data.data) {
+          console.log('hello', res.data.data)
+          const mappedArr = res.data.data.map((e) => e.icd10PCSCodes)
+          setIcdArr(mappedArr)
+        }
+      })
+    }
+    setIcdArr(newList)
+    console.log('icdArr', icdArr)
+  }
   //for search patient
   const handlePatientSearch = (e) => {
     const a = e.target.value.replace(/[^\w\s]/gi, '')
@@ -873,13 +1240,13 @@ function LabRadRequest(props) {
   function handleAddPatient(i) {
     dispatch({ field: 'diagnosisArray', value: '' })
     dispatch({ field: 'medicationArray', value: '' })
-    // setDialogOpen(true);
     console.log('selected banda : ', i)
+
+    props.setPatientDetailsForReducer(i)
+
     setPatientDetails(i)
     getPatientByInfo(i._id)
     openPatientDetailsDialog(true)
-
-    props.setPatientDetailsForReducer(i)
 
     const obj = {
       itemCode: i.itemCode,
@@ -889,9 +1256,19 @@ function LabRadRequest(props) {
     setSearchPatientQuery('')
   }
 
-  const getPatientByInfo = (id) => {
+  const getEDRIPROPR = (historyId) => {
+    axios.get(getpatientHistoryPre + '/' + historyId).then((res) => {
+      if (res.data.success) {
+        setEDRIPROPR(res.data.data)
+
+        console.log('responseee', res.data.data)
+      }
+    })
+  }
+
+  const getPatientByInfo = (historyId) => {
     axios
-      .get(searchpatient + '/' + id)
+      .get(searchpatient + '/' + historyId)
       .then((res) => {
         if (res.data.success) {
           if (res.data.data) {
@@ -899,81 +1276,88 @@ function LabRadRequest(props) {
 
             setIsLoading(false)
             setSelectedItem(res.data.data)
-            setId(res.data.data._id)
-            setenableForm(false)
+            setHistoryId(res.data.data._id)
+            setPatientHistoryId(res.data.data.patientId._id)
+            getEDRIPROPR(res.data.data.patientId._id)
+            // setenableForm(false)
 
-            Object.entries(res.data.data).map(([key, val]) => {
-              if (val && typeof val === 'object') {
-                // if (key === "patientId") {
-                //     dispatch({ field: "patientId", value: val._id });
-                // } else
-                if (key === 'labRequest') {
-                  dispatch({ field: 'labRequestArray', value: val.reverse() })
-                } else if (key === 'radiologyRequest') {
-                  dispatch({
-                    field: 'radiologyRequestArray',
-                    value: val.reverse(),
-                  })
-                } else if (key === 'consultationNote') {
-                  val.map(
-                    (d) =>
-                      (d.doctorName = d.requester
-                        ? d.requester.firstName + ' ' + d.requester.lastName
-                        : '')
-                  )
-                  dispatch({
-                    field: 'consultationNoteArray',
-                    value: val.reverse(),
-                  })
-                } else if (key === 'residentNotes') {
-                  val.map(
-                    (d) =>
-                      (d.doctorName = d.doctor
-                        ? d.doctor.firstName + ' ' + d.doctor.lastName
-                        : '')
-                  )
-                  dispatch({
-                    field: 'residentNoteArray',
-                    value: val.reverse(),
-                  })
-                  if (val && val.length > 0) {
-                    dispatch({ field: 'diagnosisArray', value: val[0].code })
-                  }
-                } else if (key === 'pharmacyRequest') {
-                  val.map(
-                    (d) =>
-                      (d.doctorName = d.requester
-                        ? d.requester.firstName + ' ' + d.requester.lastName
-                        : '')
-                  )
-                  dispatch({
-                    field: 'pharmacyRequestArray',
-                    value: val.reverse(),
-                  })
-                  let data = []
-                  val.map((d) => {
-                    d.item.map((item) => {
-                      let found = data.find((i) => i === item.itemId.name)
-                      if (!found) {
-                        data.push(item.itemId.name)
-                      }
-                    })
-                  })
-                  dispatch({ field: 'medicationArray', value: data })
-                }
-                //  else if (key === "nurseService") {
-                //     dispatch({ field: "nurseService", value: val });
-                // }
-              } else {
-                dispatch({ field: key, value: val })
-                // console.log("here",key,val)
-              }
-            })
+            // Object.entries(res.data.data).map(([key, val]) => {
+            //   if (val && typeof val === 'object') {
+            //     if (key === 'patientId') {
+            //       dispatch({ field: 'patientId', value: val._id })
+            //     } else if (key === 'labRequest') {
+            //       dispatch({ field: 'labRequestArray', value: val.reverse() })
+            //     } else if (key === 'radiologyRequest') {
+            //       dispatch({
+            //         field: 'radiologyRequestArray',
+            //         value: val.reverse(),
+            //       })
+            //     } else if (key === 'consultationNote') {
+            //       val.map(
+            //         (d) =>
+            //           (d.doctorName = d.requester
+            //             ? d.requester.firstName + ' ' + d.requester.lastName
+            //             : '')
+            //       )
+            //       dispatch({
+            //         field: 'consultationNoteArray',
+            //         value: val.reverse(),
+            //       })
+            //     } else if (key === 'residentNotes') {
+            //       val.map(
+            //         (d) =>
+            //           (d.doctorName = d.doctor
+            //             ? d.doctor.firstName + ' ' + d.doctor.lastName
+            //             : '')
+            //       )
+            //       dispatch({
+            //         field: 'residentNoteArray',
+            //         value: val.reverse(),
+            //       })
+            //       if (val && val.length > 0) {
+            //         dispatch({ field: 'diagnosisArray', value: val[0].code })
+            //       }
+            //     } else if (key === 'pharmacyRequest') {
+            //       val.map(
+            //         (d) =>
+            //           (d.doctorName = d.requester
+            //             ? d.requester.firstName + ' ' + d.requester.lastName
+            //             : '')
+            //       )
+            //       dispatch({
+            //         field: 'pharmacyRequestArray',
+            //         value: val.reverse(),
+            //       })
+            //       let data = []
+            //       val.map((d) => {
+            //         d.item.map((item) => {
+            //           let found = data.find((i) => i === item.itemId.name)
+            //           if (!found) {
+            //             data.push(item.itemId.name)
+            //           }
+            //         })
+            //       })
+            //       dispatch({ field: 'medicationArray', value: data })
+            //     }
+            //     //  else if (key === "nurseService") {
+            //     //     dispatch({ field: "nurseService", value: val });
+            //     // }
+            //   } else {
+            //     dispatch({ field: key, value: val })
+            //   }
+            // })
           }
         } else {
           setOpenNotification(true)
           setErrorMsg('EDR/IPR not generated for patient')
         }
+        setenableForm(true)
+        setValue(0)
+        dispatch({ field: 'labRequestArray', value: '' })
+        dispatch({ field: 'radiologyRequestArray', value: '' })
+        dispatch({ field: 'consultationNoteArray', value: '' })
+        dispatch({ field: 'residentNoteArray', value: '' })
+        dispatch({ field: 'pharmacyRequestArray', value: '' })
       })
       .catch((e) => {
         setOpenNotification(true)
@@ -981,29 +1365,36 @@ function LabRadRequest(props) {
       })
   }
 
-  const TriageAssessment = () => {
-    let path = `LabRadRequest/triageAssessment`
-    props.history.push({
-      pathname: path,
-      state: {
-        selectedItem: selectedItem,
-      },
-    })
+  const addICDcodes = (item, e) => {
+    if (code.includes(item)) {
+      var index = code.indexOf(item)
+      code.splice(index, 1)
+      e.target.className = 'addCode'
+    } else {
+      dispatch({
+        field: 'code',
+        value: [...code, item],
+      })
+      e.target.className = 'addedCode'
+    }
   }
 
-  const PatientHistory = () => {
-    let path = `LabRadRequest/patienthistory`
+  const addNewRequest = () => {
+    // let path = `assessmentdiagnosis/add`
+    let path = `/home/wms/fus/medicinalorder`
     props.history.push({
       pathname: path,
       state: {
-        selectedItem: selectedItem,
+        comingFor: 'add',
+        selectedPatient: selectedItem.patientId,
+        pharmacyRequestArray,
       },
     })
   }
 
   function viewLabRadReport(rec) {
     if (!rec.view) {
-      let path = `LabRadRequest/viewReport`
+      let path = `viewReport`
       props.history.push({
         pathname: path,
         state: {
@@ -1015,17 +1406,95 @@ function LabRadRequest(props) {
     }
   }
 
-  const addNewRequest = () => {
-    // let path = `assessmentdiagnosis/add`
-    let path = '/home/wms/fus/professionalorder/addorder'
-    props.history.push({
-      pathname: path,
-      state: {
-        comingFor: 'add',
-        selectedPatient: selectedItem.patientId,
-        pharmacyRequestArray,
-      },
-    })
+  function handlePatientHistoryView(obj) {
+    console.log('obj', obj)
+
+    axios
+      .get(getpatientHistory + '/' + obj._id + '/' + obj.requestType)
+      .then((res) => {
+        if (res.data.success) {
+          console.log('patient history', res.data.data)
+          setenableForm(false)
+          Object.entries(res.data.data).map(([key, val]) => {
+            if (val && typeof val === 'object') {
+              if (key === 'patientId') {
+                dispatch({ field: 'patientId', value: val._id })
+              } else if (key === 'labRequest') {
+                dispatch({ field: 'labRequestArray', value: val.reverse() })
+              } else if (key === 'triageAssessment') {
+                val.map(
+                  (d) =>
+                    (d.doctorName = d.requester
+                      ? d.requester.firstName + ' ' + d.requester.lastName
+                      : '')
+                )
+                dispatch({
+                  field: 'triageAssessmentArray',
+                  value: val.reverse(),
+                })
+              } else if (key === 'nurseService') {
+                dispatch({ field: 'nurseServiceArray', value: val.reverse() })
+              } else if (key === 'radiologyRequest') {
+                dispatch({
+                  field: 'radiologyRequestArray',
+                  value: val.reverse(),
+                })
+              } else if (key === 'consultationNote') {
+                val.map(
+                  (d) =>
+                    (d.doctorName = d.requester
+                      ? d.requester.firstName + ' ' + d.requester.lastName
+                      : '')
+                )
+                dispatch({
+                  field: 'consultationNoteArray',
+                  value: val.reverse(),
+                })
+              } else if (key === 'residentNotes') {
+                val.map(
+                  (d) =>
+                    (d.doctorName = d.doctor
+                      ? d.doctor.firstName + ' ' + d.doctor.lastName
+                      : '')
+                )
+                dispatch({
+                  field: 'residentNoteArray',
+                  value: val.reverse(),
+                })
+                if (val && val.length > 0) {
+                  dispatch({ field: 'diagnosisArray', value: val[0].code })
+                }
+              } else if (key === 'pharmacyRequest') {
+                val.map(
+                  (d) =>
+                    (d.doctorName = d.requester
+                      ? d.requester.firstName + ' ' + d.requester.lastName
+                      : '')
+                )
+                dispatch({
+                  field: 'pharmacyRequestArray',
+                  value: val.reverse(),
+                })
+                let data = []
+                val.map((d) => {
+                  d.item.map((item) => {
+                    let found = data.find((i) => i === item.itemId.name)
+                    if (!found) {
+                      data.push(item.itemId.name)
+                    }
+                  })
+                })
+                dispatch({ field: 'medicationArray', value: data })
+              }
+              //  else if (key === "nurseService") {
+              //     dispatch({ field: "nurseService", value: val });
+              // }
+            } else {
+              dispatch({ field: key, value: val })
+            }
+          })
+        }
+      })
   }
 
   if (openNotification) {
@@ -1035,16 +1504,12 @@ function LabRadRequest(props) {
       setsuccessMsg('')
     }, 2000)
   }
+
   const showAlert = () => {
     // if (document.getElementById("ckDemo").disabled) {
     //     alert("CheckBox is Disabled");
     // }
 
-    setErrorMsg('Please Search Patient First ')
-    setOpenNotification(true)
-  }
-
-  const showAlertForPatientHistory = () => {
     setErrorMsg('Please Search Patient First ')
     setOpenNotification(true)
   }
@@ -1067,52 +1532,18 @@ function LabRadRequest(props) {
         <div className='subheader' style={{ marginLeft: '-10px' }}>
           <div>
             <img src={Lab_RadIcon} />
-            <h4>
-              {value === 3
-                ? 'Lab Request'
-                : value === 4
-                ? 'Radiology Request'
-                : 'Lab / Rad Request'}
-            </h4>
-          </div>
-
-          <div style={{ marginRight: '-10px' }}>
-            <Button
-              // disabled={enableForm}
-              // onClick={TriageAssessment}
-              onClick={enableForm ? showAlert : TriageAssessment}
-              style={styles.stylesForButton}
-              style={styles.stylesForButton}
-              variant='contained'
-              color='primary'
-            >
-              Triage & Assessment
-            </Button>
-            &nbsp;&nbsp;
-            <Button
-              // disabled={enableForm}
-              onClick={enableForm ? showAlertForPatientHistory : PatientHistory}
-              style={styles.stylesForButton}
-              variant='contained'
-              color='primary'
-              Error={errorMsg}
-            >
-              Patient History
-            </Button>
+            <h4>Patient History</h4>
           </div>
         </div>
         <div
           className={`${'container-fluid'} ${classes.root}`}
           style={{
             marginTop: '25px',
-            width: '100%',
-            paddingRight: 10,
-            paddingLeft: 10,
-            marginRight: 'auto',
-            marginLeft: 'auto',
+            paddingLeft: '10px',
+            paddingRight: '10px',
           }}
         >
-          <div className='row'>
+          {/* <div className='row'>
             <div
               className='col-md-10 col-sm-8 col-8'
               style={styles.textFieldPadding}
@@ -1200,7 +1631,7 @@ function LabRadRequest(props) {
                         <Table size='small'>
                           <TableHead>
                             <TableRow>
-                              <TableCell>MRN Number</TableCell>
+                              <TableCell>MRN</TableCell>
                               <TableCell>Patient Name</TableCell>
                               <TableCell>Gender</TableCell>
                               <TableCell>Age</TableCell>
@@ -1243,7 +1674,7 @@ function LabRadRequest(props) {
                 undefined
               )}
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className={`${classes.root}`}>
@@ -1387,6 +1818,29 @@ function LabRadRequest(props) {
           </div>
         </div>
 
+        <div className={`${classes.root}`}>
+          <h5 style={{ fontWeight: 'bold', color: 'white', marginTop: 25 }}>
+            EDR / IPR / OPR
+          </h5>
+        </div>
+
+        <div
+          style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+          className='container-fluid'
+        >
+          <div className='row'>
+            <CustomTable
+              tableData={EDRIPROPR}
+              tableDataKeys={tableDataKeysForEDRIPROPR}
+              tableHeading={tableHeadingForEDRIPROPR}
+              handleView={handlePatientHistoryView}
+              action={actions}
+              borderBottomColor={'#60d69f'}
+              borderBottomWidth={20}
+            />
+          </div>
+        </div>
+
         <div>
           <div
             style={{
@@ -1457,20 +1911,51 @@ function LabRadRequest(props) {
                 label='Rad'
                 disabled={enableForm}
               />
+              <Tab
+                style={{
+                  color: 'white',
+                  borderRadius: 5,
+                  outline: 'none',
+                  color: value === 5 ? '#12387a' : '#3B988C',
+                }}
+                label='Triage And Assessment'
+                disabled={enableForm}
+              />
+
               {/* <Tab
-                  style={{
-                      color: "white",
-                      borderRadius: 5,
-                      outline: "none",
-                      backgroundColor: value === 5 ? "#2c6ddd" : undefined,
-                  }}
-                  label="In Patient Request"
-                  disabled
+                style={{
+                  color: 'white',
+                  borderRadius: 5,
+                  outline: 'none',
+                  color: value === 6 ? '#12387a' : '#3B988C',
+                }}
+                label='Nurse Services'
+                disabled={enableForm}
               /> */}
             </Tabs>
           </div>
-
-          {value === 0 ? (
+          {value === 1 ? (
+            <div
+              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              className='container-fluid'
+            >
+              <div className='row' style={{ marginTop: '20px' }}>
+                {consultationNoteArray !== 0 ? (
+                  <CustomTable
+                    tableData={consultationNoteArray}
+                    tableDataKeys={tableDataKeysForConsultation}
+                    tableHeading={tableHeadingForConsultation}
+                    handleView={viewItem}
+                    action={actions}
+                    borderBottomColor={'#60d69f'}
+                    borderBottomWidth={20}
+                  />
+                ) : (
+                  undefined
+                )}
+              </div>
+            </div>
+          ) : value === 0 ? (
             <div
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
               className=' container-fluid'
@@ -1502,6 +1987,7 @@ function LabRadRequest(props) {
                     tableData={pharmacyRequestArray}
                     tableDataKeys={tableDataKeysForPharmacy}
                     tableHeading={tableHeadingForPharmacy}
+                    // handleView={viewItem}
                     handleView={handleView}
                     action={actions}
                     borderBottomColor={'#60d69f'}
@@ -1511,25 +1997,6 @@ function LabRadRequest(props) {
                   undefined
                 )}
               </div>
-              <div className='row' style={{ marginBottom: '25px' }}>
-                <div
-                  className='col-md-12 col-sm-12 col-12 d-flex justify-content-end'
-                  style={{ paddingRight: '1px' }}
-                >
-                  <Button
-                    onClick={addNewRequest}
-                    style={styles.stylesForButton}
-                    variant='contained'
-                    color='primary'
-                  >
-                    <img className='icon-style' src={plus_icon} />
-                    &nbsp;&nbsp;
-                    <strong style={{ fontSize: '12px' }}>
-                      Pharmacy Request
-                    </strong>
-                  </Button>
-                </div>
-              </div>
             </div>
           ) : value === 3 ? (
             <div
@@ -1537,180 +2004,18 @@ function LabRadRequest(props) {
                 flex: 4,
                 display: 'flex',
                 flexDirection: 'column',
-                paddingLeft: 10,
-                paddingRight: 10,
+                paddingLeft: '10px',
+                paddingRight: '10px',
               }}
               className={`container-fluid `}
             >
-              <div style={{ marginTop: '20px' }} className='row'>
-                <div
-                  className='col-md-12 col-sm-12 col-12'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    disabled={enableForm}
-                    label='Search by Lab Test'
-                    name={'searchQuery'}
-                    value={searchQuery}
-                    onChange={handleSearch}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position='end'>
-                          <AccountCircle />
-                        </InputAdornment>
-                      ),
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                    InputLabelProps={{
-                      className: classes.label,
-                      classes: { label: classes.label },
-                    }}
-                  />
-                </div>
-              </div>
-
-              {searchQuery ? (
-                <div
-                  style={{
-                    zIndex: 10,
-                    width: '101.6%',
-                    marginRight: '-8px',
-                    marginLeft: '-10px',
-                    marginTop: '10px',
-                  }}
-                >
-                  <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
-                    {itemFoundSuccessfull ? (
-                      itemFound && (
-                        <Table size='small'>
-                          <TableHead>
-                            <TableRow>
-                              <TableCell>Service Name</TableCell>
-                              <TableCell>Service Number</TableCell>
-                              <TableCell>Price</TableCell>
-                              <TableCell align='center'>Description</TableCell>
-                            </TableRow>
-                          </TableHead>
-
-                          <TableBody>
-                            {itemFound.map((i) => {
-                              return (
-                                <TableRow
-                                  key={i.serviceNo}
-                                  onClick={() => handleAddItem(i)}
-                                  style={{ cursor: 'pointer' }}
-                                >
-                                  <TableCell>{i.name}</TableCell>
-                                  <TableCell>{i.serviceNo}</TableCell>
-                                  <TableCell>{i.price}</TableCell>
-                                  <TableCell align='center'>
-                                    {i.description}
-                                  </TableCell>
-                                </TableRow>
-                              )
-                            })}
-                          </TableBody>
-                        </Table>
-                      )
-                    ) : (
-                      <h4
-                        style={{ textAlign: 'center' }}
-                        onClick={() => setSearchQuery('')}
-                      >
-                        Service Not Found
-                      </h4>
-                    )}
-                  </Paper>
-                </div>
-              ) : (
-                undefined
-              )}
-
-              <div style={{ marginTop: '20px' }} className='row'>
-                <div
-                  className='col-md-5 col-sm-5 col-3'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                    paddingRight: 15,
-                  }}
-                >
-                  <TextField
-                    required
-                    disabled
-                    label='Selected Service'
-                    name={'labServiceName'}
-                    value={labServiceName}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                  />
-                </div>
-                <div
-                  className='col-md-5 col-sm-5 col-3'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    disabled={enableForm}
-                    label='Comments / Notes'
-                    name={'labComments'}
-                    value={labComments}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                  />
-                </div>
-                <div className='col-md-2 col-sm-2 col-6'>
-                  <Button
-                    style={{
-                      ...styles.stylesForButton,
-                      marginTop: '25px',
-                      backgroundColor: '#ad6bbf',
-                      color: 'white',
-                      cursor: 'pointer',
-                      borderRadius: 5,
-                      backgroundColor: 'rgb(173, 107, 191)',
-                      height: 56,
-                      width: '104%',
-                      outline: 'none',
-                      marginTop: 25,
-                    }}
-                    disabled={!addLabRequest}
-                    onClick={addSelectedLabItem}
-                    variant='contained'
-                    color='primary'
-                    fullWidth
-                  >
-                    Add
-                  </Button>
-                </div>
-              </div>
-
               <div
                 className='row'
-                style={{ marginTop: '20px', paddingLeft: 5, paddingRight: 5 }}
+                style={{
+                  marginTop: '20px',
+                  paddingLeft: '5px',
+                  paddingRight: '5px',
+                }}
               >
                 {labRequestArray !== 0 ? (
                   <CustomTable
@@ -1726,24 +2031,6 @@ function LabRadRequest(props) {
                   undefined
                 )}
               </div>
-
-              <div className='row' style={{ marginBottom: '25px' }}>
-                <div
-                  className='col-md-12 col-sm-12 col-12 d-flex justify-content-end'
-                  style={{ paddingRight: '4px' }}
-                >
-                  <Button
-                    // disabled={enableForm}
-                    disabled={enableSave}
-                    onClick={saveLabReq}
-                    style={{ ...styles.stylesForButton, width: '140px' }}
-                    variant='contained'
-                    color='primary'
-                  >
-                    <strong style={{ fontSize: '12px' }}>Save</strong>
-                  </Button>
-                </div>
-              </div>
             </div>
           ) : value === 4 ? (
             <div
@@ -1751,180 +2038,18 @@ function LabRadRequest(props) {
                 flex: 4,
                 display: 'flex',
                 flexDirection: 'column',
-                paddingLeft: 9,
-                paddingRight: 9,
+                paddingLeft: '10px',
+                paddingRight: '10px',
               }}
               className={`container-fluid `}
             >
-              <div style={{ marginTop: '20px' }} className='row'>
-                <div
-                  className='col-md-12 col-sm-12 col-12'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    label='Search by Radiology / Imaging'
-                    name={'searchRadioQuery'}
-                    value={searchRadioQuery}
-                    onChange={handleRadioSearch}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position='end'>
-                          <AccountCircle />
-                        </InputAdornment>
-                      ),
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                    InputLabelProps={{
-                      className: classes.label,
-                      classes: { label: classes.label },
-                    }}
-                  />
-                </div>
-              </div>
-
-              {searchRadioQuery ? (
-                // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
-                <div
-                  style={{
-                    zIndex: 10,
-                    width: '101.6%',
-                    marginRight: '-8px',
-                    marginLeft: '-10px',
-                    marginTop: '10px',
-                  }}
-                >
-                  <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
-                    {radioItemFoundSuccessfull ? (
-                      radioItemFound && (
-                        <Table size='small'>
-                          <TableHead>
-                            <TableRow>
-                              <TableCell>Service Name</TableCell>
-                              <TableCell>Service Number</TableCell>
-                              <TableCell>Price</TableCell>
-                              <TableCell align='center'>Description</TableCell>
-                            </TableRow>
-                          </TableHead>
-
-                          <TableBody>
-                            {radioItemFound.map((i) => {
-                              return (
-                                <TableRow
-                                  key={i.serviceNo}
-                                  onClick={() => handleAddRadioItem(i)}
-                                  style={{ cursor: 'pointer' }}
-                                >
-                                  <TableCell>{i.name}</TableCell>
-                                  <TableCell>{i.serviceNo}</TableCell>
-                                  <TableCell>{i.price}</TableCell>
-                                  <TableCell align='center'>
-                                    {i.description}
-                                  </TableCell>
-                                </TableRow>
-                              )
-                            })}
-                          </TableBody>
-                        </Table>
-                      )
-                    ) : (
-                      <h4
-                        style={{ textAlign: 'center' }}
-                        onClick={() => setSearchRadioQuery('')}
-                      >
-                        Service Not Found
-                      </h4>
-                    )}
-                  </Paper>
-                </div>
-              ) : (
-                undefined
-              )}
-
-              <div style={{ marginTop: '20px' }} className='row'>
-                <div
-                  className='col-md-5 col-sm-5 col-3'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                    paddingRight: 15,
-                  }}
-                >
-                  <TextField
-                    required
-                    disabled
-                    label='Selected Service'
-                    name={'radioServiceName'}
-                    value={radioServiceName}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                  />
-                </div>
-                <div
-                  className='col-md-5 col-sm-5 col-3'
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    label='Comments / Notes'
-                    name={'radioComments'}
-                    value={radioComments}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                  />
-                </div>
-                <div className='col-md-2 col-sm-2 col-6'>
-                  <Button
-                    style={{
-                      ...styles.stylesForButton,
-                      marginTop: '25px',
-                      backgroundColor: '#ad6bbf',
-                      color: 'white',
-                      cursor: 'pointer',
-                      borderRadius: 5,
-                      backgroundColor: 'rgb(173, 107, 191)',
-                      height: 56,
-                      width: '104%',
-
-                      outline: 'none',
-                      marginTop: 25,
-                    }}
-                    disabled={!addRadioRequest}
-                    onClick={addSelectedRadioItem}
-                    variant='contained'
-                    color='primary'
-                    fullWidth
-                  >
-                    Add
-                  </Button>
-                </div>
-              </div>
-
               <div
                 className='row'
-                style={{ marginTop: '20px', paddingLeft: 5, paddingRight: 5 }}
+                style={{
+                  marginTop: '20px',
+                  paddingLeft: '5px',
+                  paddingRight: '5px',
+                }}
               >
                 {radiologyRequestArray !== 0 ? (
                   <CustomTable
@@ -1940,39 +2065,68 @@ function LabRadRequest(props) {
                   undefined
                 )}
               </div>
-
-              <div className='row' style={{ marginBottom: '25px' }}>
-                <div
-                  className='col-md-12 col-sm-12 col-12 d-flex justify-content-end'
-                  style={{ paddingRight: '4px' }}
-                >
-                  <Button
-                    // disabled={enableForm}
-                    disabled={enableSave}
-                    onClick={saveRadioReq}
-                    style={{ ...styles.stylesForButton, width: '140px' }}
-                    variant='contained'
-                    color='primary'
-                  >
-                    <strong style={{ fontSize: '12px' }}>Save</strong>
-                  </Button>
-                </div>
-              </div>
             </div>
-          ) : value === 1 ? (
+          ) : value === 6 ? (
             <div
-              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-              className='container-fluid'
+              style={{
+                flex: 4,
+                display: 'flex',
+                flexDirection: 'column',
+                paddingLeft: '10px',
+                paddingRight: '10px',
+              }}
+              className={`container-fluid `}
             >
-              <div className='row' style={{ marginTop: '20px' }}>
-                {consultationNoteArray !== 0 ? (
+              <div
+                className='row'
+                style={{
+                  marginTop: '20px',
+                  paddingLeft: '5px',
+                  paddingRight: '5px',
+                }}
+              >
+                {nurseServiceArray !== 0 ? (
                   <CustomTable
-                    tableData={consultationNoteArray}
-                    tableDataKeys={tableDataKeysForConsultation}
-                    tableHeading={tableHeadingForConsultation}
+                    tableData={nurseServiceArray}
+                    tableDataKeys={tableDataKeysForNurse}
+                    tableHeading={tableHeadingForNurse}
                     handleView={viewItem}
                     action={actions}
-                    borderBottomColor={'#60d69f'}
+                    borderBottomColor={'#60D69F'}
+                    borderBottomWidth={20}
+                  />
+                ) : (
+                  undefined
+                )}
+              </div>
+            </div>
+          ) : value === 5 ? (
+            <div
+              style={{
+                flex: 4,
+                display: 'flex',
+                flexDirection: 'column',
+                paddingLeft: '10px',
+                paddingRight: '10px',
+              }}
+              className={`container-fluid `}
+            >
+              <div
+                className='row'
+                style={{
+                  marginTop: '20px',
+                  paddingLeft: '5px',
+                  paddingRight: '5px',
+                }}
+              >
+                {triageAssessmentArray !== 0 ? (
+                  <CustomTable
+                    tableData={triageAssessmentArray}
+                    tableDataKeys={tableDataKeysForTriage}
+                    tableHeading={tableDataHeadingForTriage}
+                    handleView={viewItem}
+                    action={actions}
+                    borderBottomColor={'#60D69F'}
                     borderBottomWidth={20}
                   />
                 ) : (
@@ -1997,9 +2151,437 @@ function LabRadRequest(props) {
 
         <Dialog
           aria-labelledby='form-dialog-title'
+          open={openAddResidentDialog}
+          maxWidth='xl'
+          fullWidth={true}
+        >
+          <DialogContent style={{ backgroundColor: 'rgb(19 213 159)' }}>
+            <DialogTitle
+              id='simple-dialog-title'
+              style={{ color: 'white', marginLeft: -9 }}
+            >
+              Add New Consultation
+            </DialogTitle>
+            <div className={`${'container-fluid'} ${classes.root}`}>
+              <div className='row'>
+                <div
+                  className='col-md-12 col-sm-12 col-12'
+                  style={styles.inputContainerForTextField}
+                >
+                  <TextField
+                    required
+                    multiline
+                    type='text'
+                    error={rdescription === '' && isFormSubmitted}
+                    label='Description / Condition'
+                    name={'rdescription'}
+                    value={rdescription}
+                    onChange={onChangeValue}
+                    rows={4}
+                    className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.multilineColor,
+                      classes: {
+                        input: classes.multilineColor,
+                      },
+                    }}
+                    // inputProps={{ maxLength: 300 }}
+                  />
+                </div>
+              </div>
+
+              <div className='row'>
+                <div
+                  className='col-md-12 col-sm-12 col-12'
+                  style={styles.inputContainerForTextField}
+                >
+                  <TextField
+                    required
+                    multiline
+                    type='text'
+                    error={note === '' && isFormSubmitted}
+                    label='Consultation Note'
+                    name={'note'}
+                    value={note}
+                    onChange={onChangeValue}
+                    rows={4}
+                    className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.multilineColor,
+                      classes: {
+                        input: classes.multilineColor,
+                      },
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div className='row'>
+                <div
+                  className='col-md-12 col-sm-12 col-12'
+                  style={styles.inputContainerForTextField}
+                ></div>
+                <span
+                  style={{ fontWeight: 600, color: 'white', marginLeft: 15 }}
+                >
+                  ICD Diagnosis
+                </span>
+              </div>
+              <div className='row'>
+                <div
+                  className='col-md-6 col-sm-6 col-6'
+                  style={styles.inputContainerForTextField}
+                >
+                  <TextField
+                    required
+                    select
+                    fullWidth
+                    id='status'
+                    name='section'
+                    value={section}
+                    error={section === '' && isFormSubmitted}
+                    onChange={(e) => onChangeSection(e)}
+                    label='Section'
+                    variant='filled'
+                    className='dropDownStyle'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                      disableUnderline: true,
+                    }}
+                  >
+                    <MenuItem value=''>
+                      <em>Section</em>
+                    </MenuItem>
+
+                    {icd &&
+                      icd.map((val) => {
+                        return (
+                          <MenuItem key={val} value={val}>
+                            {val}
+                          </MenuItem>
+                        )
+                      })}
+                  </TextField>
+                </div>
+                <div
+                  className='col-md-6 col-sm-6 col-6'
+                  style={styles.inputContainerForTextField}
+                >
+                  <TextField
+                    type='text'
+                    label='Code'
+                    onChange={handleCodeSearch}
+                    className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          <AccountCircle />
+                        </InputAdornment>
+                      ),
+                      className: classes.multilineColor,
+                      classes: {
+                        input: classes.multilineColor,
+                      },
+                    }}
+                    InputLabelProps={{
+                      className: classes.label,
+                      classes: { label: classes.label },
+                    }}
+                  />
+                </div>
+              </div>
+
+              {icdArr != null && icdArr.length != null && icdArr.length > 0 ? (
+                <div className='row' style={{ marginLeft: 0, marginRight: 0 }}>
+                  <div
+                    className={`scrollable ${'col-md-12 col-sm-12 col-12'}`}
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.patientDetails,
+                    }}
+                  >
+                    <ul>
+                      {icdArr.map((item) => (
+                        <li key={item}>
+                          <span
+                            className='addCode'
+                            onClick={(e) => addICDcodes(item, e)}
+                            style={{ marginRight: 20, marginTop: 5 }}
+                          />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ) : (
+                undefined
+              )}
+
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div style={{ marginTop: '2%', marginBottom: '2%' }}>
+                  <Button
+                    onClick={() => hideDialog()}
+                    style={{
+                      ...styles.stylesForButton,
+                      color: 'gray',
+                      backgroundColor: 'white',
+                    }}
+                    variant='contained'
+                  >
+                    <strong>Cancel</strong>
+                  </Button>
+                </div>
+
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    marginTop: '2%',
+                    marginBottom: '2%',
+                  }}
+                >
+                  <Button
+                    style={{
+                      color: 'white',
+                      cursor: 'pointer',
+                      borderRadius: 5,
+                      backgroundColor: '#2c6ddd',
+                      width: '140px',
+                      height: '50px',
+                      outline: 'none',
+                      paddingLeft: 30,
+                      paddingRight: 30,
+                    }}
+                    disabled={!validateFormRR()}
+                    onClick={addResidentRequest}
+                    variant='contained'
+                    color='primary'
+                  >
+                    Submit
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog
+          aria-labelledby='form-dialog-title'
+          open={openAddConsultDialog}
+          maxWidth='xl'
+          fullWidth={true}
+        >
+          <DialogContent style={{ backgroundColor: '#31e2aa' }}>
+            <DialogTitle
+              id='simple-dialog-title'
+              style={{ color: 'white', marginLeft: -20 }}
+            >
+              Add Consultation Note
+            </DialogTitle>
+            <div className={`container-fluid ${classes.root}`}>
+              <div className='row'>
+                <div
+                  className='col-md-12 col-sm-12 col-12'
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
+                    multiline
+                    rows={4}
+                    label='Comments/Notes'
+                    name={'doctorconsultationNotes'}
+                    value={doctorconsultationNotes}
+                    error={doctorconsultationNotes === '' && isFormSubmitted}
+                    onChange={onChangeValue}
+                    className='textInputStyle'
+                    variant='filled'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.multilineColor,
+                      classes: {
+                        input: classes.multilineColor,
+                      },
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div className='row'>
+                <div
+                  className='col-md-12 col-sm-12 col-12'
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
+                    multiline
+                    rows={4}
+                    label='Description'
+                    name={'description'}
+                    value={description}
+                    error={description === '' && isFormSubmitted}
+                    onChange={onChangeValue}
+                    className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.multilineColor,
+                      classes: {
+                        input: classes.multilineColor,
+                      },
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div className='row'>
+                <div
+                  className='col-md-6'
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
+                    select
+                    fullWidth
+                    label='Speciality'
+                    name={'speciality'}
+                    value={speciality}
+                    error={speciality === '' && isFormSubmitted}
+                    onChange={onChangeValue}
+                    variant='filled'
+                    className='dropDownStyle'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                      disableUnderline: true,
+                    }}
+                  >
+                    <MenuItem value=''>
+                      <em>Speciality</em>
+                    </MenuItem>
+
+                    {specialityArray.map((val) => {
+                      return (
+                        <MenuItem key={val.key} value={val.key}>
+                          {val.value}
+                        </MenuItem>
+                      )
+                    })}
+                  </TextField>
+                </div>
+                <div
+                  className='col-md-6'
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
+                    select
+                    fullWidth
+                    label='Select Consultant/Specialist'
+                    name={'specialist'}
+                    value={specialist}
+                    error={specialist === '' && isFormSubmitted}
+                    onChange={onChangeValue}
+                    variant='filled'
+                    className='dropDownStyle'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                      disableUnderline: true,
+                    }}
+                  >
+                    <MenuItem value=''>
+                      <em>Specialist</em>
+                    </MenuItem>
+
+                    {specialistArray.map((val) => {
+                      return (
+                        <MenuItem key={val.key} value={val.key}>
+                          {val.value}
+                        </MenuItem>
+                      )
+                    })}
+                  </TextField>
+                </div>
+              </div>
+
+              <div
+                class='row'
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  paddingLeft: 5,
+                  paddingRight: 5,
+                }}
+              >
+                <div style={{ marginTop: '2%', marginBottom: '2%' }}>
+                  <Button
+                    onClick={() => hideDialog()}
+                    style={{
+                      ...styles.stylesForButton,
+                      backgroundColor: 'white',
+                      color: 'grey',
+                    }}
+                    variant='contained'
+                  >
+                    <strong>Cancel</strong>
+                  </Button>
+                </div>
+
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    marginTop: '2%',
+                    marginBottom: '2%',
+                  }}
+                >
+                  <Button
+                    style={{
+                      color: 'white',
+                      cursor: 'pointer',
+                      borderRadius: 5,
+                      backgroundColor: '#2c6ddd',
+                      width: '140px',
+                      height: '50px',
+                      outline: 'none',
+                      paddingLeft: 30,
+                      paddingRight: 30,
+                    }}
+                    disabled={!validateForm()}
+                    onClick={addConsultRequest}
+                    variant='contained'
+                    color='primary'
+                  >
+                    Submit
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog
+          aria-labelledby='form-dialog-title'
           open={isOpen}
           maxWidth='xl'
           fullWidth={true}
+          // fullScreen
           onBackdropClick={() => {
             setIsOpen(false)
           }}
@@ -2007,7 +2589,7 @@ function LabRadRequest(props) {
           <DialogContent style={{ backgroundColor: '#31e2aa' }}>
             <DialogTitle
               id='simple-dialog-title'
-              style={{ color: 'white', marginLeft: '-6px' }}
+              style={{ color: 'white', marginLeft: -9 }}
             >
               Added Items
             </DialogTitle>

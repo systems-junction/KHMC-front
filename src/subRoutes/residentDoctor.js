@@ -12,10 +12,11 @@ import AddEDR from '../views/ResidentDoctor/EDR/addEditEDR'
 import EDRTriageAndAssessment from '../views/ResidentDoctor/EDR/TriageAndAssessment'
 import IPR from '../views/ResidentDoctor/IPR/IPR'
 import LabRadRequest from '../views/ResidentDoctor/LabRadRequest/labRadRequest'
+import PatientHistoryLabRadRequest from '../views/ResidentDoctor/LabRadRequest/PatientHistory'
 import viewReport from '../views/ResidentDoctor/LabRadRequest/viewLabRadReport'
 import AssessmentAndDiagnosis from '../views/ResidentDoctor/AssessmentAndDiagnosis/AssessmentAndDiagnosis'
 import viewReportAssDia from '../views/ResidentDoctor/AssessmentAndDiagnosis/viewLabRadReport'
-import PatientHistoryViewReport from '../views/PatientHistory/viewLabRadReport'
+import PatientHistoryAD from '../views/ResidentDoctor/AssessmentAndDiagnosis/PatientHistory'
 import viewReportCons from '../views/ResidentDoctor/ConsultationRequest/viewLabRadReport'
 import triageAssessment from '../views/ResidentDoctor/LabRadRequest/TriageAndAssessment'
 import triageAssessmentAssessDiagnosis from '../views/ResidentDoctor/AssessmentAndDiagnosis/TriageAndAssessment'
@@ -23,6 +24,8 @@ import AssessmentDiagnosisPatientHistory from '../views/PatientHistory/PatientHi
 import triageAssessmentConRequest from '../views/ResidentDoctor/ConsultationRequest/TriageAndAssessment'
 import Discharge from '../views/ResidentDoctor/Discharge/DischargeRequest'
 import ConsultationRequest from '../views/ResidentDoctor/ConsultationRequest/consultationRequest'
+import PatientHistoryConsultationRequest from '../views/ResidentDoctor/ConsultationRequest/PatientHistory'
+
 import AddPharm from '../views/ResidentDoctor/ConsultationRequest/addPharm'
 import AddPharmacy from '../views/ResidentDoctor/AssessmentAndDiagnosis/addPharm'
 import AddPharmLab from '../views/ResidentDoctor/LabRadRequest/addPharm'
@@ -34,6 +37,8 @@ import addViewFollowUp from '../views/ResidentDoctor/IPR/addViewFollowUp'
 import AddIPR from '../views/ResidentDoctor/IPR/addEditIPR'
 import IPRTriageAndAssessment from '../views/ResidentDoctor/IPR/TriageAndAssessment'
 import SuccessScreen from '../components/SuccessScreen/SuccessScreen'
+import PatientHistory from '../views/ResidentDoctor/AssessmentAndDiagnosis/PatientHistory'
+import ViewLabRadReport from '../views/ResidentDoctor/LabRadRequest/viewLabRadReport'
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const [currentUser, setCurrentUser] = React.useState(
@@ -118,6 +123,31 @@ class WMSRoutes extends React.PureComponent {
           path={`${this.props.match.url}/assessmentdiagnosis/triageAssessment`}
           component={triageAssessmentAssessDiagnosis}
         />
+
+        <Route
+          exact
+          path={`${this.props.match.url}/assessmentdiagnosis/patientHistory`}
+          component={PatientHistoryAD}
+        />
+
+        <Route
+          exact
+          path={`${this.props.match.url}/labradrequest/patientHistory`}
+          component={PatientHistoryLabRadRequest}
+        />
+
+        <Route
+          exact
+          path={`${this.props.match.url}/consultationrequest/patientHistory`}
+          component={PatientHistoryConsultationRequest}
+        />
+
+        <Route
+          exact
+          path={`${this.props.match.url}/consultationrequest/patientHistory/viewReport`}
+          component={viewReportCons}
+        />
+
         <Route
           exact
           path={`${this.props.match.url}/patienthistory`}
@@ -125,8 +155,8 @@ class WMSRoutes extends React.PureComponent {
         />
         <Route
           exact
-          path={`${this.props.match.url}/patientHistory/viewReport`}
-          component={PatientHistoryViewReport}
+          path={`${this.props.match.url}/assessmentdiagnosis/patientHistory/viewReport`}
+          component={viewReportAssDia}
         />
 
         <Route

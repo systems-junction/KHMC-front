@@ -1414,6 +1414,16 @@ function LabRadRequest(props) {
     })
   }
 
+  const PatientHistory = () => {
+    let path = `consultationrequest/patienthistory`
+    props.history.push({
+      pathname: path,
+      state: {
+        selectedItem: selectedItem,
+      },
+    })
+  }
+
   function viewLabRadReport(rec) {
     if (!rec.view) {
       let path = `consultationrequest/viewReport`
@@ -1442,6 +1452,11 @@ function LabRadRequest(props) {
 
     setErrorMsg('Please Search Patient First ')
     // setOpenNotification(true);
+  }
+
+  const showAlertForPatientHistory = () => {
+    setErrorMsg('Please Search Patient First ')
+    setOpenNotification(true)
   }
 
   return (
@@ -1476,6 +1491,17 @@ function LabRadRequest(props) {
               color='primary'
             >
               Triage & Assessment
+            </Button>
+            &nbsp;&nbsp;
+            <Button
+              // disabled={enableForm}
+              onClick={enableForm ? showAlertForPatientHistory : PatientHistory}
+              style={styles.stylesForButton}
+              variant='contained'
+              color='primary'
+              Error={errorMsg}
+            >
+              Patient History
             </Button>
           </div>
         </div>
