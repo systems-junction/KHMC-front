@@ -5,6 +5,8 @@ import patientAssessment from '../views/PatientAssessment/patientAssessment'
 import triageAssessment from '../views/PatientAssessment/TriageAndAssessment'
 import SuccessScreen from '../components/SuccessScreen/SuccessScreen'
 import viewReport from '../views/PatientAssessment/viewLabRadReport'
+import pviewReport from '../views/PatientAssessment/viewLabRadReport'
+import PatientHistory from '../views/PatientAssessment/PatientHistory'
 
 class PatientAssessment extends React.PureComponent {
   render() {
@@ -19,9 +21,20 @@ class PatientAssessment extends React.PureComponent {
           path={`${this.props.match.url}/triageAssessment`}
           component={triageAssessment}
         />
+
+        <Route
+          path={`${this.props.match.url}/patienthistory`}
+          component={PatientHistory}
+        />
+
         <Route
           path={`${this.props.match.url}/viewReport`}
           component={viewReport}
+        />
+
+        <Route
+          path={`${this.props.match.url}/viewReport`}
+          component={pviewReport}
         />
         <Route
           path={`${this.props.match.url}/success`}

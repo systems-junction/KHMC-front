@@ -1059,16 +1059,19 @@ function AddEditPatientListing(props) {
     axios
       .get(`${getVendorApproval}/${insuranceNo}`)
       .then((e) => {
-        setInsuranceBoolean(false)
-        dispatch({
-          field: 'coverageTerms',
-          value: e.data.data.coverageDetail,
-        })
+        if (e.data.success) {
+          setInsuranceBoolean(false)
+          dispatch({
+            field: 'coverageTerms',
+            value: e.data.data.coverageDetail,
+          })
 
-        setCovTer(e.data.data.coverageDetail)
-        dispatch({ field: 'insuranceVendor', value: e.data.data.vendor })
-
-        console.log(e)
+          setCovTer(e.data.data.coverageDetail)
+          dispatch({ field: 'insuranceVendor', value: e.data.data.vendor })
+        } else if (!e.data.success) {
+          setOpenNotification(true)
+          setErrorMsg('Invalid insurance number/insurance number not verified')
+        }
       })
       .catch((error) => {
         setOpenNotification(true)

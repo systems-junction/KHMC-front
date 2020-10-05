@@ -112,7 +112,8 @@ export default function EdrRequest(props) {
       <DialogContent style={{ backgroundColor: 'rgb(19 213 159)' }}>
         <DialogTitle
           id='simple-dialog-title'
-          style={{ color: 'white', marginLeft: '-6px' }}
+          style={{ color: 'white', paddingLeft: 30 }}
+          class='row'
         >
           Details
         </DialogTitle>
@@ -201,7 +202,7 @@ export default function EdrRequest(props) {
                 <TextField
                   required
                   disabled={true}
-                  label='Requester'
+                  label={props.item.triageLevel ? 'Checked By' : 'Requester'}
                   name={'requester'}
                   value={
                     props.item.requester.firstName +
@@ -293,6 +294,437 @@ export default function EdrRequest(props) {
                   value={props.item.comments}
                   className='textInputStyle'
                   rows={4}
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
+          </div>
+
+          {props.item.heartRate ? (
+            <DialogTitle
+              id='simple-dialog-title'
+              style={{
+                color: 'white',
+                paddingLeft: 14,
+                marginTop: '14px',
+              }}
+              class='row'
+            >
+              Vital Signs
+            </DialogTitle>
+          ) : (
+            undefined
+          )}
+
+          <div className={`row ${classes.root}`}>
+            {props.item.heartRate ? (
+              <div
+                className='col-md-4 col-sm-4 col-4'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  multiline
+                  disabled={true}
+                  label='Heart Rate'
+                  name={'heartRate'}
+                  value={props.item.heartRate}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
+
+            {props.item.bloodPressureSys ? (
+              <div
+                className='col-md-4 col-sm-4 col-4'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  multiline
+                  disabled={true}
+                  label='BP (Systolic)'
+                  name={'bloodPressureSys'}
+                  value={props.item.bloodPressureSys}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
+
+            {props.item.FSBS ? (
+              <div
+                className='col-md-4 col-sm-4 col-4'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  multiline
+                  disabled={true}
+                  label='BP (Diastolic)'
+                  name={'bloodPressureSys'}
+                  value={props.item.bloodPressureSys}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
+          </div>
+
+          <div className={`row ${classes.root}`}>
+            {props.item.respiratoryRate ? (
+              <div
+                className='col-md-4 col-sm-4 col-4'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  multiline
+                  disabled={true}
+                  label='Respiratory Rate'
+                  name={'respiratoryRate'}
+                  value={props.item.heartRate}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
+
+            {props.item.temperature ? (
+              <div
+                className='col-md-4 col-sm-4 col-4'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  multiline
+                  disabled={true}
+                  label='Temperature'
+                  name={'temperature'}
+                  value={props.item.temperature}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
+
+            {props.item.FSBS ? (
+              <div
+                className='col-md-4 col-sm-4 col-4'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  multiline
+                  disabled={true}
+                  label='FSBS'
+                  name={'FSBS'}
+                  value={props.item.FSBS}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
+          </div>
+
+          <div className={`row ${classes.root}`}>
+            {props.item.painScale ? (
+              <div
+                className='col-md-4 col-sm-4 col-4'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  multiline
+                  disabled={true}
+                  label='Pain Scale'
+                  name={'painScale'}
+                  value={props.item.painScale}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
+
+            {props.item.pulseOX ? (
+              <div
+                className='col-md-4 col-sm-4 col-4'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  multiline
+                  disabled={true}
+                  label='Pulse OX'
+                  name={'pulseOX'}
+                  value={props.item.pulseOX}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
+
+            {/* {props.item.requester.firstName ? (
+              <div
+                className='col-md-4 col-sm-4 col-4'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  multiline
+                  disabled={true}
+                  label='Checked By'
+                  name={'requester'}
+                  value={
+                    props.item.requester.firstName +
+                    ` ` +
+                    props.item.requester.lastName
+                  }
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )} */}
+          </div>
+          {props.item.heartRate ? (
+            <DialogTitle
+              id='simple-dialog-title'
+              style={{
+                color: 'white',
+                paddingLeft: 14,
+                marginTop: '14px',
+              }}
+              class='row'
+            >
+              Physical Examination
+            </DialogTitle>
+          ) : (
+            undefined
+          )}
+
+          <div className={`row ${classes.root}`}>
+            {props.item.triageLevel ? (
+              <div
+                className='col-md-4 col-sm-4 col-4'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  multiline
+                  disabled={true}
+                  label='Triage Level'
+                  name={'triageLevel'}
+                  value={props.item.triageLevel}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
+
+            {props.item.generalAppearance ? (
+              <div
+                className='col-md-4 col-sm-4 col-4'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  multiline
+                  disabled={true}
+                  label='General Appearance'
+                  name={'generalAppearance'}
+                  value={props.item.generalAppearance}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
+
+            {props.item.headNeck ? (
+              <div
+                className='col-md-4 col-sm-4 col-4'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  multiline
+                  disabled={true}
+                  label='Head Neck'
+                  name={'headNeck'}
+                  value={props.item.headNeck}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
+          </div>
+
+          <div className={`row ${classes.root}`}>
+            {props.item.neurological ? (
+              <div
+                className='col-md-4 col-sm-4 col-4'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  multiline
+                  disabled={true}
+                  label='Neurological'
+                  name={'neurological'}
+                  value={props.item.neurological}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
+
+            {props.item.respiratory ? (
+              <div
+                className='col-md-4 col-sm-4 col-4'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  multiline
+                  disabled={true}
+                  label='Respiratory'
+                  name={'respiratory'}
+                  value={props.item.respiratory}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
+
+            {props.item.cardiac ? (
+              <div
+                className='col-md-4 col-sm-4 col-4'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  multiline
+                  disabled={true}
+                  label='Cardiac'
+                  name={'cardiac'}
+                  value={props.item.cardiac}
+                  className='textInputStyle'
+                  variant='filled'
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            ) : (
+              undefined
+            )}
+          </div>
+
+          <div className={`row ${classes.root}`}>
+            {props.item.abdomen ? (
+              <div
+                className='col-md-4 col-sm-4 col-4'
+                style={styles.inputContainerForTextField}
+              >
+                <TextField
+                  multiline
+                  disabled={true}
+                  label='Abdomen'
+                  name={'abdomen'}
+                  value={props.item.abdomen}
+                  className='textInputStyle'
                   variant='filled'
                   InputProps={{
                     className: classes.input,

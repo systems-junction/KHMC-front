@@ -8,12 +8,11 @@ import EDR from '../views/ECR/EcrEDR'
 import IPR from '../views/ECR/EcrIPR'
 import CN from '../views/ECR/ConsultationNotes'
 import ViewReport from '../views/ECR/viewLabRadReport'
-import PatientHistoryViewReport from '../views/PatientHistory/viewLabRadReport'
+import PatientHistory from '../views/ECR/PatientHistory'
 import ViewEDR from '../views/ECR/viewEcrEDR'
 import ViewIPR from '../views/ECR/viewEcrIPR'
 import AddIPR from '../views/ECR/addIPR'
 import AddEDR from '../views/ECR/addEDR'
-import PatientHistory from '../views/PatientHistory/PatientHistory'
 import TriageAndAssessmentEDR from '../views/ECR/TriageAndAssessmentEDR'
 import TriageAndAssessmentIPR from '../views/ECR/TriageAndAssessmentIPR'
 import TriageAndAssessment from '../views/ECR/TriageAndAssessment'
@@ -60,7 +59,7 @@ class WMSRoutes extends React.PureComponent {
         <Route
           exact
           path={`${this.props.match.url}/patienthistory/viewReport`}
-          component={PatientHistoryViewReport}
+          component={ViewReport}
         />
 
         <Route
@@ -86,7 +85,7 @@ class WMSRoutes extends React.PureComponent {
           component={TriageAndAssessment}
         />
         <Route
-          path={`${this.props.match.url}/patienthistory`} //for consultation Triage & Assesment
+          path={`${this.props.match.url}/cn/patienthistory`} //for consultation Triage & Assesment
           component={PatientHistory}
         />
 

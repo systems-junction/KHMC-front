@@ -14,6 +14,12 @@ import Loader from 'react-loader-spinner'
 import Back from '../../../assets/img/Back_Arrow.png'
 import Header from '../../../components/Header/Header'
 import business_Unit from '../../../assets/img/RR.png'
+import Fingerprint from '../../../assets/img/fingerprint.png'
+import AccountCircle from '@material-ui/icons/SearchOutlined'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import BarCode from '../../../assets/img/Bar Code.png'
+import { makeStyles } from '@material-ui/core/styles'
+import TextField from '@material-ui/core/TextField'
 import '../../../assets/jss/material-dashboard-react/components/loaderStyle.css'
 import socketIOClient from 'socket.io-client'
 
@@ -25,12 +31,43 @@ const tableDataKeys = [
   'status',
 ]
 
+
+const styles = {
+  textFieldPadding: {
+    paddingLeft: 0,
+    paddingRight: 5,
+  },
+
+
+}
+
+const useStylesForInput = makeStyles((theme) => ({
+  input: {
+    backgroundColor: 'white',
+    borderRadius: 5,
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:disabled': {
+      color: 'gray',
+    },
+  },
+
+
+}))
+
 const actions = { view: true }
 
 export default function EDR(props) {
+  const classes = useStylesForInput()
+
   const [Edr, setEdr] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
   const [openNotification, setOpenNotification] = useState(false)
+  const [searchPatientQuery, setSearchPatientQuery] = useState('')
 
   if (openNotification) {
     setTimeout(() => {
@@ -95,6 +132,38 @@ export default function EDR(props) {
     })
   }
 
+  const handlePatientSearch =  (e) => {
+    const a = e.target.value.replace(/[^\w\s]/gi, '')
+    setSearchPatientQuery(a)
+    if (a.length >= 3) {
+       axios
+        .get(
+          getOPRFromRadiologyUrl + '/' + a
+        )
+        .then((res) => {
+          if (res.data.success) {
+            if (res.data.data.length > 0) {
+              console.log(res.data.data)
+              var sortedObjs = _.sortBy(res.data.data, 'date').reverse()
+              setEdr(sortedObjs)
+            } else {
+              setEdr(' ')
+            }
+          }
+        })
+        .catch((e) => {
+          console.log('error after searching patient request', e)
+        })
+    }
+
+    else if(a.length == 0){
+      console.log("less");
+      console.log(Edr); 
+      getEDRsData();
+    }
+    
+  }
+
   return (
     <div
       style={{
@@ -121,6 +190,76 @@ export default function EDR(props) {
             {/* <img src={Search} /> */}
           </div>
         </div>
+
+        <div className='row' style={{marginLeft: '0px', marginRight: '0px', marginTop: '20px'}}>
+            <div
+              className='col-md-10 col-sm-9 col-8'
+              style={styles.textFieldPadding}
+            >
+              <TextField
+                className='textInputStyle'
+                id='searchPatientQuery'
+                type='text'
+                variant='filled'
+                label='Search Patient by Name / MRN / National ID / Mobile Number'
+                name={'searchPatientQuery'}
+                value={searchPatientQuery}
+                onChange={handlePatientSearch} 
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <AccountCircle />
+                    </InputAdornment>
+                  ),
+                  className: classes.input,
+                  classes: { input: classes.input },
+                  disableUnderline: true,
+                }}
+              />
+            </div>
+
+            <div
+              className='col-md-1 col-sm-2 col-2'
+              style={{
+                ...styles.textFieldPadding,
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: 'white',
+                  borderRadius: 5,
+                  height: 55,
+                }}
+              >
+                <img src={BarCode} style={{ width: 70, height: 60 }} />
+              </div>
+            </div>
+
+            <div
+              className='col-md-1 col-sm-1 col-2'
+              style={{
+                ...styles.textFieldPadding,
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: 'white',
+                  borderRadius: 5,
+                  height: 55,
+                }}
+              >
+                <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
+              </div>
+            </div>
+          </div>
+
+          
 
         <div
           style={{
@@ -172,7 +311,7 @@ export default function EDR(props) {
               <div className='col-1' style={{ marginTop: 45 }}>
                 <img
                   onClick={() => props.history.goBack()}
-                  src={Back_Arrow}
+                  src={Back}
                   style={{ maxWidth: '60%', height: 'auto', cursor: 'pointer' }}
                 />
               </div>

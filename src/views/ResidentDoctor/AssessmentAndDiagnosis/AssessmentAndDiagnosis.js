@@ -1113,8 +1113,24 @@ function LabRadRequest(props) {
 
   const onChangeSection = (e) => {
     if (e.target.value) {
+<<<<<<< HEAD
       dispatch({ field: e.target.name, value: e.target.value });
       let codes = Object.entries(icdCodesList[0]);
+=======
+      dispatch({ field: e.target.name, value: e.target.value })
+
+      axios.get(getIcd + '/' + e.target.value).then((res) => {
+        if (res.data.data) {
+          console.log('hello', res.data.data)
+          // const mappedArr = res.data.data.map(
+          //   (e) => e.icd10PCSCodes && e.procedureCodeDescriptions
+          // )
+          setIcdArr(res.data.data)
+        }
+      })
+
+      let codes = Object.entries(icdCodesList[0])
+>>>>>>> b30a97042fc949182a45f159c3220e81c561833a
       for (var x in codes) {
         let arr = codes[x];
         if (arr[0] === e.target.value) {
@@ -1137,6 +1153,7 @@ function LabRadRequest(props) {
       currentList = icdCode;
 
       newList = currentList.filter((item) => {
+<<<<<<< HEAD
         const lc = item.toLowerCase();
         const filter = e.target.value.toLowerCase();
         return lc.includes(filter);
@@ -1148,6 +1165,20 @@ function LabRadRequest(props) {
         if (arr[0] === section) {
           console.log("codes", arr[1]);
           newList = arr[1];
+=======
+        const lc = item.icd10PCSCodes.toLowerCase()
+        const filter = e.target.value.toLowerCase()
+        return lc.includes(filter)
+      })
+    } else {
+      axios.get(getIcd + '/' + section).then((res) => {
+        if (res.data.data) {
+          console.log('hello', res.data.data)
+          // const mappedArr = res.data.data.map(
+          //   (e) => e.icd10PCSCodes && e.procedureCodeDescriptions
+          // )
+          setIcdArr(res.data.data)
+>>>>>>> b30a97042fc949182a45f159c3220e81c561833a
         }
       }
     }
@@ -1317,6 +1348,16 @@ function LabRadRequest(props) {
     });
   };
 
+  const PatientHistory = () => {
+    let path = `assessmentdiagnosis/patienthistory`
+    props.history.push({
+      pathname: path,
+      state: {
+        selectedItem: selectedItem,
+      },
+    })
+  }
+
   const addNewRequest = () => {
     // let path = `assessmentdiagnosis/add`
     let path = `/home/wms/fus/medicinalorder`;
@@ -1361,6 +1402,15 @@ function LabRadRequest(props) {
     setOpenNotification(true);
   };
 
+  const showAlertForPatientHistory = () => {
+    // if (document.getElementById("ckDemo").disabled) {
+    //     alert("CheckBox is Disabled");
+    // }
+
+    setErrorMsg('Please Search Patient First ')
+    setOpenNotification(true)
+  }
+
   return (
     <div
       style={{
@@ -1392,6 +1442,17 @@ function LabRadRequest(props) {
               Error={errorMsg}
             >
               Triage & Assessment
+            </Button>
+            &nbsp;&nbsp;
+            <Button
+              // disabled={enableForm}
+              onClick={enableForm ? showAlertForPatientHistory : PatientHistory}
+              style={styles.stylesForButton}
+              variant='contained'
+              color='primary'
+              Error={errorMsg}
+            >
+              Patient History
             </Button>
           </div>
         </div>
@@ -1893,7 +1954,7 @@ function LabRadRequest(props) {
                 paddingLeft: "10px",
                 paddingRight: "10px",
               }}
-              className={`container-fluid ${classes.root}`}
+              className={`container-fluid `}
             >
               <div style={{ marginTop: "20px" }} className="row">
                 <div
@@ -2110,7 +2171,7 @@ function LabRadRequest(props) {
                 paddingLeft: "10px",
                 paddingRight: "10px",
               }}
-              className={`container-fluid ${classes.root}`}
+              className={`container-fluid `}
             >
               <div style={{ marginTop: "20px" }} className="row">
                 <div
@@ -2610,11 +2671,19 @@ function LabRadRequest(props) {
                   style={styles.inputContainerForTextField}
                 >
                   <TextField
+<<<<<<< HEAD
                     type="text"
                     label="Code"
                     onChange={handleCodeSearch}
                     className="textInputStyle"
                     variant="filled"
+=======
+                    type='text'
+                    label='Code'
+                    onChange={(e) => handleCodeSearch(e)}
+                    className='textInputStyle'
+                    variant='filled'
+>>>>>>> b30a97042fc949182a45f159c3220e81c561833a
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
@@ -2653,7 +2722,7 @@ function LabRadRequest(props) {
                             onClick={(e) => addICDcodes(item, e)}
                             style={{ marginRight: 20, marginTop: 5 }}
                           />
-                          {item}
+                          {`Code: ${item.icd10PCSCodes}      Description: ${item.procedureCodeDescriptions}`}
                         </li>
                       ))}
                     </ul>
