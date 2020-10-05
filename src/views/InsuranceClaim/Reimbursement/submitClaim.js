@@ -9,7 +9,7 @@ import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import {
   updateClaim,
-  getSearchedpatient,
+  getInsuredPatients,
   addClaim,
   getedripr,
   uploadsUrl,
@@ -605,7 +605,7 @@ function AddEditPatientListing(props) {
     if (a.length >= 3) {
       axios
         .get(
-          getSearchedpatient + "/" + currentUser.functionalUnit._id + "/" + a
+          getInsuredPatients + "/" + currentUser.functionalUnit._id + "/" + a
         )
         .then((res) => {
           if (res.data.success) {
@@ -1148,7 +1148,7 @@ function AddEditPatientListing(props) {
       doc.line(0, 260, 210, 260);
       doc.text(5, 288, `Prepared by: ${currentUser.name}`);
       if (QR) {
-        doc.addImage(`http://localhost:4000${QR}`, "PNG", 172.9, 266, 25, 25);
+        doc.addImage(`${uploadsUrl+QR}`, "PNG", 172.9, 266, 25, 25);
       }
 
       doc.save(`Patient Summary Invoice ${invoiceNo}.pdf`);
@@ -1156,63 +1156,6 @@ function AddEditPatientListing(props) {
       setErrorMsg("Please select items from Bill Summary");
       setOpenNotification(true);
     }
-  };
-
-  const onInpatientInvoiceDetails = () => {
-    console.log("hello");
-    var doc = new jsPDF();
-
-    var logo = new Image();
-    logo.src = logoPatientSummaryInvoice;
-
-    // header
-    doc.setFontSize(15);
-    doc.addImage(logo, "JPEG", 10, 10, 20, 20);
-    doc.text(60, 15, "Al-Khalidi Hospital & Medical Center");
-    doc.text(68, 20, "Detailed In-Patient Invoice");
-    doc.line(80, 22.5, 120, 22.5);
-    doc.text(93, 28, "CREDIT");
-    doc.line(80, 30, 120, 30);
-    doc.setFontSize(12);
-    doc.text(170, 14, "Amman Jordan");
-
-    // background coloring
-    doc.setFillColor(255, 255, 200);
-    doc.rect(0, 45, 210, 27, "F");
-
-    // information of patient
-    doc.text(10, 50, "Guarantor:");
-    doc.text(45, 50, "Mudassir Ijaz");
-    doc.text(10, 55, "Patient Name:");
-    doc.text(45, 55, "Name");
-    doc.text(10, 60, "Admitted On:");
-    doc.text(45, 60, "03/04/2020");
-    doc.text(10, 65, "Discharged on:");
-    doc.text(45, 65, "3/2/2020");
-    doc.text(120, 60, "Invoice No:");
-    doc.text(155, 60, "IN332313D");
-    doc.text(120, 65, "Adm. No");
-    doc.text(155, 65, "AD223423");
-    doc.text(120, 70, "Invoice Date:");
-    doc.text(155, 70, "03/05/2010");
-
-    // table
-    doc.autoTable({ margin: { top: 80 }, html: "#my-table" });
-
-    // footer
-    doc.setFontSize(15);
-    // doc.setFontType("bold");
-    doc.text(110, 260, "Charged Amount");
-    doc.text(169, 260, "1090.48");
-    doc.text(190, 260, "JD");
-    doc.text(110, 265, "Total Charged Amount");
-    doc.text(169, 265, "1090.48");
-    doc.text(190, 265, "JD");
-    doc.text(110, 270, "Grand Total");
-    doc.text(169, 270, "1090.48");
-    doc.text(190, 270, "JD");
-
-    doc.save("Patient Details Invoice.pdf");
   };
 
   const handleSelectAllClick = (event) => {
