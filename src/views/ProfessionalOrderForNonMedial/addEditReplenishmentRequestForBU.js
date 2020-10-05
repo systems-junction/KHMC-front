@@ -669,7 +669,9 @@ function AddEditPurchaseRequest(props) {
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
                   // ORDER #
-                  message: `Order(Non-Pharma Med): ${res.data.data.requestNo} for patient MRN: ${patientDetails.profileNo} has been placed succesfully`,
+                  message: `Order(Non-Pharma Med): ${
+                    res.data.data.requestNo
+                  } for patient MRN: ${patientDetails.profileNo.toUpperCase()} has been placed succesfully`,
                   patientDetails: patientDetails,
                 },
               });
@@ -781,7 +783,9 @@ function AddEditPurchaseRequest(props) {
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
                   // order #
-                  message: `Order(Non-Pharma Med): ${res.data.data.requestNo} for patient MRN: ${patientDetails.profileNo} has been updated`,
+                  message: `Order(Non-Pharma Med): ${
+                    res.data.data.requestNo
+                  } for patient MRN: ${patientDetails.profileNo.toUpperCase()} has been updated`,
                   patientDetails: patientDetails,
                 },
               });
@@ -1098,7 +1102,7 @@ function AddEditPurchaseRequest(props) {
     if (!validateItemsForm()) {
       setOpenNotification(true);
       setErrorMsg("Please fill the fields properly");
-      setIsItemsFormSubmitted(true)
+      setIsItemsFormSubmitted(true);
       return;
     }
 
@@ -1165,8 +1169,7 @@ function AddEditPurchaseRequest(props) {
         });
       }
 
-
-      setIsItemsFormSubmitted(false)
+      setIsItemsFormSubmitted(false);
       dispatch({ field: "itemId", value: "" });
       dispatch({ field: "itemCode", value: "" });
       dispatch({ field: "itemName", value: "" });
@@ -1197,7 +1200,7 @@ function AddEditPurchaseRequest(props) {
     if (!validateItemsForm()) {
       setOpenNotification(true);
       setErrorMsg("Please fill the fields properly");
-      setIsItemsFormSubmitted(true)
+      setIsItemsFormSubmitted(true);
       return;
     }
     if (requestedQty > maximumLevel) {
@@ -1260,8 +1263,7 @@ function AddEditPurchaseRequest(props) {
       setDialogOpen(false);
       setSelectedItem("");
       setSelectItemToEditId("");
-      setIsItemsFormSubmitted(false)
-
+      setIsItemsFormSubmitted(false);
 
       dispatch({ field: "itemId", value: "" });
       dispatch({ field: "itemCode", value: "" });
@@ -1381,7 +1383,7 @@ function AddEditPurchaseRequest(props) {
       }}
     >
       <Header />
-      <div className="cPadding">
+      <div className="cPadding" style={{ marginLeft: 10, marginRight: 10 }}>
         <div className="subheader">
           <div>
             <img src={purchase_request} />
@@ -1473,8 +1475,8 @@ function AddEditPurchaseRequest(props) {
                   style={{
                     zIndex: 3,
                     position: "absolute",
-                    width: "96%",
-                    left: "2%",
+                    width: "96.6%",
+                    left: 22,
                     marginTop: 5,
                   }}
                 >
@@ -1623,9 +1625,8 @@ function AddEditPurchaseRequest(props) {
                   style={{
                     zIndex: 3,
                     position: "absolute",
-                    // width: "100%",
-                    width: "96%",
-                    left: "2%",
+                    width: "96.6%",
+                    left: 22,
                     marginTop: 5,
                   }}
                 >
@@ -1636,20 +1637,20 @@ function AddEditPurchaseRequest(props) {
                           <TableHead>
                             <TableRow>
                               <TableCell
-                                align="center"
+                                // align="center"
                                 style={styles.forTableCell}
                               >
                                 Trade Name
                               </TableCell>
                               <TableCell
-                                align="center"
+                                // align="center"
                                 style={styles.forTableCell}
                               >
                                 Scientific Name
                               </TableCell>
 
                               <TableCell
-                                align="center"
+                                // align="center"
                                 style={styles.forTableCell}
                               >
                                 Form
@@ -1657,7 +1658,7 @@ function AddEditPurchaseRequest(props) {
 
                               <TableCell
                                 style={styles.forTableCell}
-                                align="center"
+                                // align="center"
                               >
                                 Description
                               </TableCell>
@@ -1672,18 +1673,12 @@ function AddEditPurchaseRequest(props) {
                                   onClick={() => handleAddItem(i)}
                                   style={{ cursor: "pointer" }}
                                 >
-                                  <TableCell align="center">
-                                    {i.tradeName}
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    {i.scientificName}
-                                  </TableCell>
+                                  <TableCell>{i.tradeName}</TableCell>
+                                  <TableCell>{i.scientificName}</TableCell>
 
-                                  <TableCell align="center">{i.form}</TableCell>
+                                  <TableCell>{i.form}</TableCell>
 
-                                  <TableCell align="center">
-                                    {i.description}
-                                  </TableCell>
+                                  <TableCell>{i.description}</TableCell>
                                 </TableRow>
                               );
                             })}

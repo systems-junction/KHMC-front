@@ -23,7 +23,7 @@ export const audioURL = 'http://localhost:4000'
 //export const audioURL = "https://dev.khmc-staging.online/";
 //export const uploadsUrl = 'https://demo.khmc-staging.com/'
 //export const uploadsUrl = 'https://test.khmc-staging.com/'
-export const uploadsUrl = 'http://localhost:4000/uploads/'
+export const uploadsUrl = 'http://localhost:4000/'
 // export const uploadsUrl = 'http://ec2-52-14-42-129.us-east-2.compute.amazonaws.com/'
 //export const uploadsUrl = StagingDigitalOceanUploadsUrl
 

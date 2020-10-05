@@ -1383,6 +1383,7 @@ function AddEditPatientListing(props) {
                   <CurrencyTextField
                     // style={{ backgroundColor: "white", borderRadius: 5 }}
                     className="textInputStyle"
+                    decimalPlaces={4}
                     id={"externalRequestsFee"}
                     label="Fee"
                     name={"externalRequestsFee"}
@@ -1438,6 +1439,7 @@ function AddEditPatientListing(props) {
                 >
                   <CurrencyTextField
                     required
+                    decimalPlaces={4}
                     style={{ backgroundColor: "white", borderRadius: 5 }}
                     className="textInputStyle"
                     id={"internalRequestsFee"}
@@ -1473,6 +1475,7 @@ function AddEditPatientListing(props) {
                 >
                   <CurrencyTextField
                     disabled
+                    decimalPlaces={4}
                     style={{ backgroundColor: "white", borderRadius: 5 }}
                     className="textInputStyle"
                     id="payment"
@@ -1506,6 +1509,7 @@ function AddEditPatientListing(props) {
                   <CurrencyTextField
                     disabled
                     required
+                    decimalPlaces={4}
                     style={{ backgroundColor: "white", borderRadius: 5 }}
                     className="textInputStyle"
                     id={"totalBillingAmount"}
@@ -1539,6 +1543,7 @@ function AddEditPatientListing(props) {
                   <CurrencyTextField
                     required
                     disabled
+                    decimalPlaces={4}
                     style={{ backgroundColor: "white", borderRadius: 5 }}
                     className="textInputStyle"
                     id={"remainingAmount"}
@@ -1573,6 +1578,7 @@ function AddEditPatientListing(props) {
                   <CurrencyTextField
                     required
                     disabled
+                    decimalPlaces={4}
                     style={{ backgroundColor: "white", borderRadius: 5 }}
                     className="textInputStyle"
                     id={"rgrandTotal"}
