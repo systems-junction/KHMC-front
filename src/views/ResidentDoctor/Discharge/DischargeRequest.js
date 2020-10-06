@@ -413,14 +413,18 @@ function DischargeRequest(props) {
     // if (validatePatientForm() || validateInsuranceForm()) {
     let params = "";
 
+    let amountReceived = patientDetails.amountReceived
+      ? patientDetails.amountReceived
+      : 0;
+
     if (requestType === "EDR") {
       params = {
         edrId: requestType === "EDR" ? id : "",
         generatedFor: requestType,
         paymentMethod: patientDetails.paymentMethod,
         depositAmount: patientDetails.payment,
-        amountReceived: patientDetails.amountReceived,
-        totalAmount: patientDetails.amountReceived + patientDetails.payment,
+        amountReceived: amountReceived,
+        totalAmount: amountReceived + patientDetails.payment,
         bankName: patientDetails.bankName,
         depositorName: patientDetails.depositorName,
         receivedBy: currentUser.staffId,
@@ -432,8 +436,8 @@ function DischargeRequest(props) {
         iprId: requestType === "IPR" ? id : "",
         paymentMethod: patientDetails.paymentMethod,
         depositAmount: patientDetails.payment,
-        amountReceived: patientDetails.amountReceived,
-        totalAmount: patientDetails.amountReceived + patientDetails.payment,
+        amountReceived: amountReceived,
+        totalAmount: amountReceived + patientDetails.payment,
         bankName: patientDetails.bankName,
         depositorName: patientDetails.depositorName,
         receivedBy: currentUser.staffId,
