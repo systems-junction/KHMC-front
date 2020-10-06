@@ -16,7 +16,7 @@ import Table from '../../../../components/Table/Table.js'
 import Back from '../../../../assets/img/Back_Arrow.png'
 import {
   getSurgeryServiceUrl,
-  deleteSurgeryServiceUrl
+  deleteSurgeryServiceUrl,
 } from '../../../../public/endpoins'
 // import ws from '../../variables/websocket'
 import { ToastsStore } from 'react-toasts'
@@ -38,7 +38,7 @@ const stylesB = {
 
 const useStyles = makeStyles(styles)
 
-const tableHeading = ['Service ID', 'Name', 'Price', 'Status', 'Action']
+const tableHeading = ['Service ID', 'Name', 'Price ( JD)', 'Status', 'Action']
 const tableDataKeys = ['serviceNo', 'name', 'price', 'status']
 
 const actions = { edit: true, delete: true }
@@ -68,6 +68,7 @@ export default function Vendor(props) {
       .get(getSurgeryServiceUrl)
       .then((res) => {
         if (res.data.success) {
+          res.data.data.map((d) => (d.price = d.price.toFixed(4)))
           setVendor(res.data.data)
           setStatuses(res.data.data.statues)
           setClasses(res.data.data.classes)
