@@ -164,7 +164,7 @@ function AddEditPurchaseRequest(props) {
     dateGenerated: "",
     expiryDate: "",
     vendorId: "",
-    status: "to_do",
+    status: "",
     itemId: "",
     itemCode: "",
     itemName: "",
@@ -207,13 +207,14 @@ function AddEditPurchaseRequest(props) {
     damageReport: "",
     replenishmentRequestFU: "",
 
-    returnedQty: "",
+    returnedQty: 0,
     receivedQty: "",
 
     batchArray: "",
     selectedBatch: "",
     returnedQtyPerBatch: "",
     receivedQtyPerBatch: "",
+    expiryDatePerBatch: "",
   };
 
   function reducer(state, { field, value }) {
@@ -282,6 +283,7 @@ function AddEditPurchaseRequest(props) {
     selectedBatch,
     returnedQtyPerBatch,
     receivedQtyPerBatch,
+    expiryDatePerBatch,
   } = state;
 
   const [comingFor, setcomingFor] = useState("");
@@ -302,17 +304,16 @@ function AddEditPurchaseRequest(props) {
 
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const [selectedItem, setSelectedItem] = useState("");
-
   const [purchaseRequestItems, setPurchaseRequestItems] = useState("");
-
-  const [selectItemToEditId, setSelectItemToEditId] = useState("");
 
   const [fuObj, setFUObj] = useState("");
 
   const [receiveRequests, setReceiveRequests] = useState("");
 
   const [returnBatchArray, setReturnedBatchArray] = useState([]);
+
+  const [selectedItem, setSelectedItem] = useState("");
+  const [selectItemToEditId, setSelectItemToEditId] = useState("");
 
   useEffect(() => {
     getReceiveRequestsForFU();
@@ -383,6 +384,7 @@ function AddEditPurchaseRequest(props) {
       dispatch({ field: e.target.name, value: e.target.value });
       let batch = batchArray.find((b) => b.batchNumber === e.target.value);
       dispatch({ field: "receivedQtyPerBatch", value: batch.quantity });
+      dispatch({ field: "expiryDatePerBatch", value: batch.expiryDate });
     } else {
       dispatch({ field: e.target.name, value: e.target.value });
     }
@@ -512,6 +514,7 @@ function AddEditPurchaseRequest(props) {
         // comments,
         // requestedQty,
         returnedQty,
+        returnBatchArray,
       };
 
       console.log("params", params);
@@ -573,6 +576,7 @@ function AddEditPurchaseRequest(props) {
         replenishmentRequestFU: replenishmentRequestFU._id,
         commentNote,
         returnedQty,
+        returnBatchArray,
       };
 
       let params;
@@ -653,6 +657,7 @@ function AddEditPurchaseRequest(props) {
         replenishmentRequestFU: replenishmentRequestFU._id,
         commentNote,
         returnedQty,
+        returnBatchArray,
       };
 
       let params;
@@ -780,6 +785,18 @@ function AddEditPurchaseRequest(props) {
     );
   }
 
+  function validateBatchForm() {
+    return (
+      selectedBatch &&
+      selectedBatch !== "" &&
+      receivedQtyPerBatch &&
+      receivedQtyPerBatch !== "" &&
+      returnedQtyPerBatch &&
+      returnedQtyPerBatch !== "" &&
+      returnedQtyPerBatch !== "0"
+    );
+  }
+
   function hideDialog() {
     dispatch({ field: "reason", value: "" });
     setDialogOpen(false);
@@ -792,6 +809,11 @@ function AddEditPurchaseRequest(props) {
   };
 
   const addNew = () => {
+    if (returnedQtyPerBatch > receivedQtyPerBatch) {
+      setOpenNotification(true);
+      setErrorMsg("Return quantity must be less than received quantity");
+      return;
+    }
     let found =
       returnBatchArray &&
       returnBatchArray.find((item) => item.batchNumber === selectedBatch);
@@ -806,15 +828,108 @@ function AddEditPurchaseRequest(props) {
         receivedQtyPerBatch,
         returnedQtyPerBatch,
         batchNumber: selectedBatch,
+        expiryDatePerBatch,
       },
     ]);
 
-    //     dispatch({ field: "itemId", value: i._id });
-    //     dispatch({ field: "itemCode", value: i.itemCode });
-    //     dispatch({ field: "itemName", value: i.name });
+    dispatch({
+      field: "returnedQty",
+      value: returnedQty + parseInt(returnedQtyPerBatch),
+    });
     dispatch({ field: "selectedBatch", value: "" });
     dispatch({ field: "returnedQtyPerBatch", value: "" });
     dispatch({ field: "receivedQtyPerBatch", value: "" });
+    dispatch({ field: "expiryDatePerBatch", value: "" });
+  };
+
+  function handleItemDelete(item) {
+    console.log(item);
+    console.log(status);
+    // if (status === "pending_approval") {
+    let temp = returnBatchArray.filter(
+      (i) => i.batchNumber !== item.batchNumber
+    );
+
+    setReturnedBatchArray([...temp]);
+    // dispatch({
+    //   field: "returnBatchArray",
+    //   value: [...temp],
+    // });
+    // } else {
+    //   setOpenNotification(true);
+    //   setErrorMsg("Items can not be deleted once they are in progess");
+    // }
+  }
+
+  function handleRequestedItemEdit(i) {
+    console.log(i);
+    // if (status === "pending") {
+    // setDialogOpen(true);
+    setSelectedItem(i);
+    setSelectItemToEditId(i);
+    dispatch({
+      field: "returnedQty",
+      value: returnedQty - parseInt(i.returnedQtyPerBatch),
+    });
+    dispatch({ field: "selectedBatch", value: i.batchNumber });
+    dispatch({ field: "returnedQtyPerBatch", value: i.returnedQtyPerBatch });
+    dispatch({ field: "receivedQtyPerBatch", value: i.receivedQtyPerBatch });
+    dispatch({ field: "expiryDatePerBatch", value: i.expiryDatePerBatch });
+    // } else {
+    //   setOpenNotification(true);
+    //   setErrorMsg("Item can not be updated once it is in progess");
+    // }
+  }
+
+  const editSelectedItem = () => {
+    if (!validateBatchForm()) {
+      setOpenNotification(true);
+      setErrorMsg("Please fill the fields properly");
+      return;
+    }
+
+    if (returnedQtyPerBatch > receivedQtyPerBatch) {
+      setOpenNotification(true);
+      setErrorMsg("Return quantity must be less than received quantity");
+      return;
+    }
+
+    if (validateBatchForm()) {
+      setDialogOpen(false);
+      let temp = [];
+
+      for (let i = 0; i < returnBatchArray.length; i++) {
+        if (
+          returnBatchArray[i].batchNumber === selectItemToEditId.batchNumber
+        ) {
+          temp[i] = {
+            receivedQtyPerBatch,
+            returnedQtyPerBatch,
+            batchNumber: selectedBatch,
+            expiryDatePerBatch,
+          };
+        } else {
+          temp = [...temp, returnBatchArray[i]];
+        }
+      }
+
+      // dispatch({
+      //   field: "requestedItemsArray",
+      //   value: temp,
+      // });
+
+      setReturnedBatchArray([...temp]);
+      dispatch({
+        field: "returnedQty",
+        value: returnedQty + parseInt(returnedQtyPerBatch),
+      });
+      setSelectedItem("");
+      setSelectItemToEditId("");
+      dispatch({ field: "selectedBatch", value: "" });
+      dispatch({ field: "returnedQtyPerBatch", value: "" });
+      dispatch({ field: "receivedQtyPerBatch", value: "" });
+      dispatch({ field: "expiryDatePerBatch", value: "" });
+    }
   };
 
   return (
@@ -976,7 +1091,7 @@ function AddEditPurchaseRequest(props) {
 
             <div className="row">
               <div
-                className="col-md-4"
+                className="col-md-3"
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -1007,7 +1122,33 @@ function AddEditPurchaseRequest(props) {
               </div>
 
               <div
-                className="col-md-4"
+                className="col-md-3"
+                style={{
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <DatePicker
+                    disabled={true}
+                    inputVariant="filled"
+                    // onChange={(val) => onChangeDate(val, "expiryDatePerBatch")}
+                    name={"expiryDatePerBatch"}
+                    label="Expiry Date Per Batch"
+                    // format="MM/dd/yyyy hh:mm a"
+                    format={dateFormat}
+                    fullWidth
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                    value={expiryDatePerBatch ? expiryDatePerBatch : null}
+                  />
+                </MuiPickersUtilsProvider>
+              </div>
+
+              <div
+                className="col-md-3"
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -1028,13 +1169,14 @@ function AddEditPurchaseRequest(props) {
               </div>
 
               <div
-                className="col-md-4"
+                className="col-md-3"
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
                 }}
               >
                 <TextField
+                  required
                   type={"number"}
                   name={"returnedQtyPerBatch"}
                   value={returnedQtyPerBatch}
@@ -1074,6 +1216,7 @@ function AddEditPurchaseRequest(props) {
                     // width: "100%",
                     // height: "100%",
                   }}
+                  disabled={!validateBatchForm()}
                   variant="contained"
                   color="primary"
                 >
@@ -1083,8 +1226,10 @@ function AddEditPurchaseRequest(props) {
                 <Button
                   // onClick={editSelectedItem}
                   style={styles.stylesForButton}
+                  disabled={!validateBatchForm()}
                   variant="contained"
                   color="primary"
+                  onClick={editSelectedItem}
                 >
                   <strong style={{ fontSize: "12px" }}>Update</strong>
                 </Button>
@@ -1189,14 +1334,6 @@ function AddEditPurchaseRequest(props) {
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
-                  disabled={
-                    currentUser &&
-                    (currentUser.staffTypeId.type === "FU Inventory Keeper" ||
-                      currentUser.staffTypeId.type === "admin") &&
-                    comingFor !== "view"
-                      ? false
-                      : true
-                  }
                 />
               </div>
             </div>
@@ -1498,63 +1635,85 @@ function AddEditPurchaseRequest(props) {
               undefined
             )}
 
-            {returnBatchArray.length > 0 ? (
-              <TableforAddedQty returnBatchArray={returnBatchArray} />
-            ) : (
-              undefined
-            )}
+            <div className="row">
+              {returnBatchArray.length > 0 ? (
+                <>
+                  <h5
+                    style={{
+                      color: "white",
+                      fontWeight: "bold",
+                      marginTop: 15,
+                      marginBottom: 15,
+                    }}
+                  >
+                    Added Batches
+                  </h5>
+                  <TableforAddedQty
+                    returnBatchArray={returnBatchArray}
+                    onDelete={handleItemDelete}
+                    onEdit={handleRequestedItemEdit}
+                  />
+                </>
+              ) : (
+                undefined
+              )}
+            </div>
 
-            <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
-              <div
-                style={{
-                  display: "flex",
-                  flex: 1,
-                  height: 50,
-                  justifyContent: "center",
-                  marginTop: "2%",
-                  marginBottom: "2%",
-                }}
-              >
-                {comingFor === "add" ? (
-                  <Button
-                    style={{ width: "60%" }}
-                    disabled={!validateForm()}
-                    onClick={handleAdd}
-                    variant="contained"
-                    color="primary"
-                  >
-                    Generate
-                  </Button>
-                ) : comingFor === "edit" &&
-                  currentUser &&
-                  currentUser.staffTypeId.type === "FU Inventory Keeper" &&
-                  status !== "reject" &&
-                  status !== "Item Returned to Warehouse" ? (
-                  <Button
-                    style={{ width: "60%" }}
-                    disabled={!validateForm()}
-                    onClick={handleEdit}
-                    variant="contained"
-                    color="primary"
-                  >
-                    Update
-                  </Button>
-                ) : currentUser &&
-                  currentUser.staffTypeId.type ===
-                    "FU Internal Request Return Approval Member" ? (
-                  <Button
-                    style={{ width: "60%" }}
-                    disabled={!validateApproveForm()}
-                    onClick={handleApprove}
-                    variant="contained"
-                    color="primary"
-                  >
-                    Submit
-                  </Button>
-                ) : (
-                  undefined
-                )}
-              </div>
+            <div
+              className="row"
+              style={{
+                display: "flex",
+                flex: 1,
+                justifyContent: "space-between",
+                marginTop: "2%",
+                marginBottom: "2%",
+              }}
+            >
+              <img
+                onClick={() => props.history.goBack()}
+                src={Back_Arrow}
+                style={{ width: 60, height: 40, cursor: "pointer" }}
+              />
+
+              {comingFor === "add" ? (
+                <Button
+                  style={{ ...styles.stylesForButton }}
+                  disabled={!validateForm()}
+                  onClick={handleAdd}
+                  variant="contained"
+                  color="primary"
+                >
+                  Generate
+                </Button>
+              ) : comingFor === "edit" &&
+                currentUser &&
+                currentUser.staffTypeId.type === "FU Inventory Keeper" &&
+                status !== "reject" &&
+                status !== "Item Returned to Warehouse" ? (
+                <Button
+                  style={{ ...styles.stylesForButton }}
+                  disabled={!validateForm()}
+                  onClick={handleEdit}
+                  variant="contained"
+                  color="primary"
+                >
+                  Update
+                </Button>
+              ) : currentUser &&
+                currentUser.staffTypeId.type ===
+                  "FU Internal Request Return Approval Member" ? (
+                <Button
+                  style={{ ...styles.stylesForButton }}
+                  disabled={!validateApproveForm()}
+                  onClick={handleApprove}
+                  variant="contained"
+                  color="primary"
+                >
+                  Submit
+                </Button>
+              ) : (
+                undefined
+              )}
             </div>
 
             <Notification msg={errorMsg} open={openNotification} />
@@ -1821,14 +1980,6 @@ function AddEditPurchaseRequest(props) {
                 </div>
               </DialogContent>
             </Dialog>
-
-            <div className="row" style={{ marginBottom: 20 }}>
-              <img
-                onClick={() => props.history.goBack()}
-                src={Back_Arrow}
-                style={{ width: 60, height: 40, cursor: "pointer" }}
-              />
-            </div>
           </div>
         ) : (
           <div className="LoaderStyle">
