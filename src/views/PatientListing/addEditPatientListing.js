@@ -925,6 +925,7 @@ function AddEditPatientListing(props) {
         functionalUnit: currentUser.functionalUnit._id,
         insurerId: insurerId,
         verified: !insuranceBoolean ? true : false,
+        paymentMethod:paymentMethod
       }
     } else {
       params = {
@@ -932,6 +933,7 @@ function AddEditPatientListing(props) {
         generatedBy: currentUser.staffId,
         status: 'pending',
         functionalUnit: currentUser.functionalUnit._id,
+        paymentMethod:paymentMethod
       }
     }
 
@@ -970,6 +972,7 @@ function AddEditPatientListing(props) {
         functionalUnit: currentUser.functionalUnit._id,
         insurerId: insurerId,
         verified: !insuranceBoolean ? true : false,
+        paymentMethod:paymentMethod
       }
     } else {
       var params = {
@@ -977,6 +980,7 @@ function AddEditPatientListing(props) {
         generatedBy: currentUser.staffId,
         status: 'pending',
         functionalUnit: currentUser.functionalUnit._id,
+        paymentMethod:paymentMethod
       }
     }
 

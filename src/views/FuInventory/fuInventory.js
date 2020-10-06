@@ -36,6 +36,12 @@ import Inactive from "../../assets/img/Inactive.png";
 
 import Active from "../../assets/img/Active.png";
 
+import Fingerprint from '../../assets/img/fingerprint.png'
+import AccountCircle from '@material-ui/icons/SearchOutlined'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import BarCode from '../../assets/img/Bar Code.png'
+import TextField from '@material-ui/core/TextField'
+
 import business_Unit from "../../assets/img/Functional Unit.png";
 import cookie from "react-cookies";
 
@@ -86,8 +92,35 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
+const stylesInput = {
+  textFieldPadding: {
+    paddingLeft: 0,
+    paddingRight: 5,
+  },
+
+
+}
+
+const useStylesForInput = makeStyles((theme) => ({
+  input: {
+    backgroundColor: 'white',
+    borderRadius: 5,
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:disabled': {
+      color: 'gray',
+    },
+  },
+
+
+}))
+
 const tableHeading = [
-  "Functional Unit Name",
+  "FuncU Name",
   "Item Code",
   "Item Name",
   "Qty",
@@ -109,6 +142,8 @@ const actions = { edit: true, delete: false };
 
 export default function BuInventory(props) {
   const classes = useStyles();
+  const classesInput = useStylesForInput()
+
   const [buInventories, setBuInventories] = useState("");
   const [items, setItems] = useState("");
   const [businessUnit, setBusinessUnit] = useState("");
@@ -117,6 +152,8 @@ export default function BuInventory(props) {
   const [errorMsg, setErrorMsg] = useState("");
   const [openNotification, setOpenNotification] = useState(false);
   const [functionalUnits, setFunctionalUnits] = useState("");
+  const [searchPatientQuery, setSearchPatientQuery] = useState('')
+
 
   const [currentUser, setCurrentUser] = useState(cookie.load("current_user"));
 
@@ -289,6 +326,38 @@ export default function BuInventory(props) {
 
   // console.log(props);
 
+  const handlePatientSearch =  (e) => {
+    const a = e.target.value.replace(/[^\w\s]/gi, '')
+    setSearchPatientQuery(a)
+    if (a.length >= 3) {
+       axios
+        .get(
+          `${getFuInventoryByFUIdUrl}/${currentUser.functionalUnit._id}/${a}`
+        )
+        .then((res) => {
+          if (res.data.success) {
+            if (res.data.data.length > 0) {
+              console.log(res.data.data)
+              setBuInventories(res.data.data.fuInventory);
+            } else {
+              setBuInventories(res.data.data.fuInventory);
+            }
+          }
+        })
+        .catch((e) => {
+          console.log('error after searching patient request', e)
+        })
+    }
+
+    else if(a.length == 0){ 
+      console.log("less");
+      getFuInventoryById();
+    }
+    
+  }
+
+
+
   return (
     <div
       style={{
@@ -324,6 +393,56 @@ export default function BuInventory(props) {
             </Button>
           </div>
         </div>
+
+
+        <div className='row' style={{marginLeft: '0px', marginRight: '0px', marginTop: '20px'}}>
+            <div
+              className='col-md-12 col-sm-9 col-8'
+              style={stylesInput.textFieldPadding}
+            >
+              <TextField
+                className='textInputStyle'
+                id='searchPatientQuery'
+                type='text'
+                variant='filled'
+                label='Search by Item Name/ Item Code'
+                name={'searchPatientQuery'}
+                value={searchPatientQuery}
+                onChange={handlePatientSearch} 
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <AccountCircle />
+                    </InputAdornment>
+                  ),
+                  className: classesInput.input,
+                  classes: { input: classesInput.input },
+                  disableUnderline: true,
+                }}
+              />
+            </div>
+
+            <div
+              className='col-md-1 col-sm-2 col-2'
+              style={{
+                ...stylesInput.textFieldPadding,
+              }}
+            >
+              
+            </div>
+
+            <div
+              className='col-md-1 col-sm-1 col-2'
+              style={{
+                ...stylesInput.textFieldPadding,
+              }}
+            >
+              
+            </div>
+            </div>
+
+
+
         {buInventories !== "" ? (
           <div>
             <div>
