@@ -87,7 +87,7 @@ const styles = {
 const useStyles = makeStyles(styles);
 
 const tableHeading = [
-  "Functional Unit Name",
+  "FuncU Name",
   "Item Code",
   "Item Name",
   "Qty",
