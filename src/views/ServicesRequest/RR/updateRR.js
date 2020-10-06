@@ -565,6 +565,7 @@ function AddEditPurchaseRequest(props) {
                   }}
                   currencySymbol='JD'
                   outputFormat='number'
+                  decimalPlaces='4'
                 />
               </div>
               <div
