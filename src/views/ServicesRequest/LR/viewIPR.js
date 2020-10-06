@@ -602,7 +602,6 @@ function AddEditPurchaseRequest(props) {
                   >
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                       <DateTimePicker
-                        required
                         disabled={true}
                         inputVariant='filled'
                         fullWidth={true}
