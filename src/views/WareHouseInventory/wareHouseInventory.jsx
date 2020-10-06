@@ -297,7 +297,7 @@ export default function WareHouseInventory(props) {
 
         <div className='row' style={{marginLeft: '0px', marginRight: '0px', marginTop: '20px'}}>
             <div
-              className='col-md-10 col-sm-9 col-8'
+              className='col-md-12 col-sm-9 col-8'
               style={stylesInput.textFieldPadding}
             >
               <TextField
@@ -328,18 +328,7 @@ export default function WareHouseInventory(props) {
                 ...stylesInput.textFieldPadding,
               }}
             >
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: 'white',
-                  borderRadius: 5,
-                  height: 55,
-                }}
-              >
-                <img src={BarCode} style={{ width: 70, height: 60 }} />
-              </div>
+             
             </div>
 
             <div
@@ -348,18 +337,7 @@ export default function WareHouseInventory(props) {
                 ...stylesInput.textFieldPadding,
               }}
             >
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: 'white',
-                  borderRadius: 5,
-                  height: 55,
-                }}
-              >
-                <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
-              </div>
+              
             </div>
             </div> 
 
