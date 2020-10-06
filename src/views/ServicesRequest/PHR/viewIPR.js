@@ -294,7 +294,7 @@ function AddEditPurchaseRequest(props) {
             pathname: "success",
             state: {
               //of Request No ${requestId}
-              message: `Discharge Medication Order :${res.data.data.requestNo} for patient MRN: ${res.data.data.patientId.profileNo} fulfilled successfully`,
+              message: `Discharge Medication Order :${res.data.data.requestNo.toUpperCase()} for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} fulfilled successfully`,
             },
           });
         }
