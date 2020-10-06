@@ -492,7 +492,7 @@ function AddEditPurchaseRequest(props) {
           <div className='subheader' style={{ marginLeft: '-8px' }}>
             <div>
               <img src={business_Unit} />
-              <h4>In Patient</h4>
+              <h4>In-Patient</h4>
             </div>
           </div>
           <div
