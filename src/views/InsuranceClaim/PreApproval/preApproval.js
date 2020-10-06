@@ -34,14 +34,11 @@ const tableDataKeys = [
   'status',
 ]
 
-
 const styles = {
   textFieldPadding: {
     paddingLeft: 0,
     paddingRight: 5,
   },
-
-
 }
 
 const useStylesForInput = makeStyles((theme) => ({
@@ -58,14 +55,12 @@ const useStylesForInput = makeStyles((theme) => ({
       color: 'gray',
     },
   },
-
-
 }))
-
 
 const actions = { view: true }
 
-export default function preApproval(props) {
+export default function preApproval(props) 
+{
   const classes = useStylesForInput()
 
   const [preApproval, setpreApproval] = useState('')
@@ -97,22 +92,22 @@ export default function preApproval(props) {
       .then((res) => {
         if (res.data.success) {
           console.log(res.data.data, 'data')
-          if (res.data.data.edr) {
-            res.data.data.edr.map(
+          if (res.data.data) {
+            res.data.data.map(
               (d) =>
                 (d.Name = d.patientId
                   ? d.patientId.firstName + ' ' + d.patientId.lastName
                   : '')
             )
           }
-          if (res.data.data.ipr) {
-            res.data.data.ipr.map(
-              (d) =>
-                (d.Name = d.patientId
-                  ? d.patientId.firstName + ' ' + d.patientId.lastName
-                  : '')
-            )
-          }
+          // if (res.data.data.ipr) {
+          //   res.data.data.ipr.map(
+          //     (d) =>
+          //       (d.Name = d.patientId
+          //         ? d.patientId.firstName + ' ' + d.patientId.lastName
+          //         : '')
+          //   )
+          // }
           // if (res.data.data.opr) {
           //   res.data.data.opr.map(
           //     (d) =>
@@ -121,17 +116,17 @@ export default function preApproval(props) {
           //         : '')
           //   )
           // }
-          setpreApproval(
-            [].concat(
-              res.data.data.edr.reverse(),
-              res.data.data.ipr.reverse()
-              // res.data.data.opr.reverse()
-            )
-          )
+          // setpreApproval(
+          //   [].concat(
+          //     res.data.data.reverse(),
+          //     // res.data.data.ipr.reverse()
+          //     // res.data.data.opr.reverse()
+          //   )
+          // )
           var sortedObjs = _.sortBy(
             [].concat(
-              res.data.data.edr.reverse(),
-              res.data.data.ipr.reverse()
+              res.data.data.reverse(),
+              // res.data.data.ipr.reverse()
               // res.data.data.opr.reverse()
             ),
             'updatedAt'

@@ -651,6 +651,7 @@ function LabRadRequest(props) {
     var mm = dateNow.getMinutes();
     let ss = dateNow.getSeconds();
 
+    console.log("code", code);
     const residentNoteNo = "RDN" + day + YYYY + HH + mm + ss;
     if (!validateFormRR()) {
       // setIsFormSubmitted(true);
@@ -1314,17 +1315,21 @@ function LabRadRequest(props) {
   };
 
   const addICDcodes = (item, e) => {
-    if (code.includes(item)) {
+    console.log("item", item);
+    console.log("e", e);
+    console.log("code", code);
+    if (code.includes(item.icd10PCSCodes)) {
       var index = code.indexOf(item);
       code.splice(index, 1);
       e.target.className = "addCode";
     } else {
       dispatch({
         field: "code",
-        value: [...code, item],
+        value: [...code, item.icd10PCSCodes],
       });
       e.target.className = "addedCode";
     }
+    console.log("code after", code);
   };
 
   const TriageAssessment = () => {
@@ -1343,6 +1348,8 @@ function LabRadRequest(props) {
       pathname: path,
       state: {
         selectedItem: selectedItem,
+        diagnosisArray: diagnosisArray,
+        medicationArray: medicationArray,
       },
     });
   };

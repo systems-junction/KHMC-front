@@ -91,13 +91,13 @@ export default function Ipr(props) {
       .get(getDischarge)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data[0], 'ecr1')
-          res.data.data[0].map(
+          console.log(res.data.data, 'ecr1')
+          res.data.data.map(
             (d) => (d.date = d.dischargeRequest.dischargeMedication.date)
           )
-          res.data.data[0].map((d) => (d.status = d.dischargeRequest.status))
-          setIpr(res.data.data[0].reverse())
-          var sortedObjs = _.sortBy(res.data.data[0], 'date').reverse()
+          res.data.data.map((d) => (d.status = d.dischargeRequest.status))
+          setIpr(res.data.data.reverse())
+          var sortedObjs = _.sortBy(res.data.data, 'date').reverse()
           setIpr(sortedObjs)
           // setIpr(res.data.data.reverse())
         } else if (!res.data.success) {
@@ -135,10 +135,15 @@ export default function Ipr(props) {
           if (res.data.success) {
             if (res.data.data.length > 0) {
               console.log(res.data.data)
+              res.data.data.map(
+                (d) => (d.date = d.dischargeRequest.dischargeMedication.date)
+              )
+              res.data.data.map((d) => (d.status = d.dischargeRequest.status))
+              setIpr(res.data.data.reverse())
               var sortedObjs = _.sortBy(res.data.data, 'date').reverse()
               setIpr(sortedObjs)
             } else {
-              setIpr(' ')
+              setIpr(" ")
             }
           }
         })
@@ -147,8 +152,7 @@ export default function Ipr(props) {
         })
     }
 
-    else if(a.length == 0){
-      console.log(Ipr); 
+    else if(a.length == 0){ 
       getIprsData();
     }
     
@@ -181,7 +185,7 @@ export default function Ipr(props) {
           </div>
         </div>
 
-        {/*<div className='row' style={{marginLeft: '0px', marginRight: '0px', marginTop: '20px'}}>
+        <div className='row' style={{marginLeft: '0px', marginRight: '0px', marginTop: '20px'}}>
             <div
               className='col-md-10 col-sm-9 col-8'
               style={styles.textFieldPadding}
@@ -194,7 +198,7 @@ export default function Ipr(props) {
                 label='Search Patient by Name / MRN / National ID / Mobile Number'
                 name={'searchPatientQuery'}
                 value={searchPatientQuery}
-                //onChange={handlePatientSearch} 
+                onChange={handlePatientSearch} 
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position='end'>
@@ -247,7 +251,7 @@ export default function Ipr(props) {
                 <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
               </div>
             </div>
-            </div> */}
+            </div> 
 
 
 
@@ -259,7 +263,7 @@ export default function Ipr(props) {
             flexDirection: 'column',
           }}
         >
-          {Ipr.length !== '' ? (
+          {Ipr !== " " ? (
             <div>
               <div>
                 <CustomTable
