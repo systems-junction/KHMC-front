@@ -1414,20 +1414,23 @@ function LabRadRequest(props) {
         setErrorMsg(e)
       })
   }
-
   const addICDcodes = (item, e) => {
-    if (code.includes(item)) {
-      var index = code.indexOf(item)
-      code.splice(index, 1)
-      e.target.className = 'addCode'
+    console.log("item", item);
+    console.log("e", e);
+    console.log("code", code);
+    if (code.includes(item.icd10PCSCodes)) {
+      var index = code.indexOf(item);
+      code.splice(index, 1);
+      e.target.className = "addCode";
     } else {
       dispatch({
-        field: 'code',
-        value: [...code, item],
-      })
-      e.target.className = 'addedCode'
+        field: "code",
+        value: [...code, item.icd10PCSCodes],
+      });
+      e.target.className = "addedCode";
     }
-  }
+    console.log("code after", code);
+  };
 
   const TriageAssessment = () => {
     let path = `labradrequest/triageAssessment`

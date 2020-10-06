@@ -1285,71 +1285,71 @@ function LabRadRequest(props) {
             getEDRIPROPR(res.data.data.patientId._id);
             // setenableForm(false)
 
-            // Object.entries(res.data.data).map(([key, val]) => {
-            //   if (val && typeof val === 'object') {
-            //     if (key === 'patientId') {
-            //       dispatch({ field: 'patientId', value: val._id })
-            //     } else if (key === 'labRequest') {
-            //       dispatch({ field: 'labRequestArray', value: val.reverse() })
-            //     } else if (key === 'radiologyRequest') {
-            //       dispatch({
-            //         field: 'radiologyRequestArray',
-            //         value: val.reverse(),
-            //       })
-            //     } else if (key === 'consultationNote') {
-            //       val.map(
-            //         (d) =>
-            //           (d.doctorName = d.requester
-            //             ? d.requester.firstName + ' ' + d.requester.lastName
-            //             : '')
-            //       )
-            //       dispatch({
-            //         field: 'consultationNoteArray',
-            //         value: val.reverse(),
-            //       })
-            //     } else if (key === 'residentNotes') {
-            //       val.map(
-            //         (d) =>
-            //           (d.doctorName = d.doctor
-            //             ? d.doctor.firstName + ' ' + d.doctor.lastName
-            //             : '')
-            //       )
-            //       dispatch({
-            //         field: 'residentNoteArray',
-            //         value: val.reverse(),
-            //       })
-            //       if (val && val.length > 0) {
-            //         dispatch({ field: 'diagnosisArray', value: val[0].code })
-            //       }
-            //     } else if (key === 'pharmacyRequest') {
-            //       val.map(
-            //         (d) =>
-            //           (d.doctorName = d.requester
-            //             ? d.requester.firstName + ' ' + d.requester.lastName
-            //             : '')
-            //       )
-            //       dispatch({
-            //         field: 'pharmacyRequestArray',
-            //         value: val.reverse(),
-            //       })
-            //       let data = []
-            //       val.map((d) => {
-            //         d.item.map((item) => {
-            //           let found = data.find((i) => i === item.itemId.name)
-            //           if (!found) {
-            //             data.push(item.itemId.name)
-            //           }
-            //         })
-            //       })
-            //       dispatch({ field: 'medicationArray', value: data })
-            //     }
-            //     //  else if (key === "nurseService") {
-            //     //     dispatch({ field: "nurseService", value: val });
-            //     // }
-            //   } else {
-            //     dispatch({ field: key, value: val })
-            //   }
-            // })
+            Object.entries(res.data.data).map(([key, val]) => {
+              if (val && typeof val === "object") {
+                if (key === "patientId") {
+                  dispatch({ field: "patientId", value: val._id });
+                } else if (key === "labRequest") {
+                  dispatch({ field: "labRequestArray", value: val.reverse() });
+                } else if (key === "radiologyRequest") {
+                  dispatch({
+                    field: "radiologyRequestArray",
+                    value: val.reverse(),
+                  });
+                } else if (key === "consultationNote") {
+                  val.map(
+                    (d) =>
+                      (d.doctorName = d.requester
+                        ? d.requester.firstName + " " + d.requester.lastName
+                        : "")
+                  );
+                  dispatch({
+                    field: "consultationNoteArray",
+                    value: val.reverse(),
+                  });
+                } else if (key === "residentNotes") {
+                  val.map(
+                    (d) =>
+                      (d.doctorName = d.doctor
+                        ? d.doctor.firstName + " " + d.doctor.lastName
+                        : "")
+                  );
+                  dispatch({
+                    field: "residentNoteArray",
+                    value: val.reverse(),
+                  });
+                  if (val && val.length > 0) {
+                    dispatch({ field: "diagnosisArray", value: val[0].code });
+                  }
+                } else if (key === "pharmacyRequest") {
+                  val.map(
+                    (d) =>
+                      (d.doctorName = d.requester
+                        ? d.requester.firstName + " " + d.requester.lastName
+                        : "")
+                  );
+                  dispatch({
+                    field: "pharmacyRequestArray",
+                    value: val.reverse(),
+                  });
+                  let data = [];
+                  val.map((d) => {
+                    d.item.map((item) => {
+                      let found = data.find((i) => i === item.itemId.name);
+                      if (!found) {
+                        data.push(item.itemId.name);
+                      }
+                    });
+                  });
+                  dispatch({ field: "medicationArray", value: data });
+                }
+                //  else if (key === "nurseService") {
+                //     dispatch({ field: "nurseService", value: val });
+                // }
+              } else {
+                dispatch({ field: key, value: val });
+              }
+            });
           }
         } else {
           setOpenNotification(true);
