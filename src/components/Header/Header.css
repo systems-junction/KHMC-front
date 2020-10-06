@@ -10,6 +10,7 @@
 .header1-style {
   max-width: 35%;
   height: 38%;
+  margin-top: -5px;
   /* margin-top: 10px; */
 }
 .header2-style {
@@ -26,9 +27,6 @@
     height: auto;
     /* background-color: crimson; */
   }
-  .header {
-    /* padding: 5% 7%; */
-  }
 }
 
 @media screen and (max-width: 600px) {
@@ -39,9 +37,7 @@
     height: auto;
     /* background-color: crimson; */
   }
-  .header {
-    /* padding: 5% 12%; */
-  }
+
   .header1-style {
     max-width: 40%;
     height: auto;

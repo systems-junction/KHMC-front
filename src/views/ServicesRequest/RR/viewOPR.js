@@ -91,7 +91,7 @@ const tableHeadingForLabReq = [
   'Service Code',
   'Service Name',
   'Requester',
-  'Price',
+  'Price ( JD)',
   'Status',
   'Action',
 ]
@@ -105,7 +105,7 @@ const tableHeadingForRadiology = [
   'Service Code',
   'Service Name',
   'Requester',
-  'Price',
+  'Price ( JD)',
 
   'Status',
   'Action',
@@ -346,6 +346,9 @@ function AddEditPurchaseRequest(props) {
                 } else if (key === 'labRequest') {
                   dispatch({ field: 'labRequestArray', value: val })
                 } else if (key === 'radiologyRequest') {
+                  val.map(
+                    (d) => (d.serviceId.price = d.serviceId.price.toFixed(4))
+                  )
                   dispatch({ field: 'radiologyRequestArray', value: val })
                 } else if (key === 'consultationNote') {
                   Object.entries(val).map(([key1, val1]) => {
@@ -1072,7 +1075,7 @@ function AddEditPurchaseRequest(props) {
                           <TableRow>
                             <TableCell>Service Name</TableCell>
                             <TableCell>Service Number</TableCell>
-                            <TableCell>Price</TableCell>
+                            <TableCell>Price (JD)</TableCell>
                             <TableCell align='center'>Description</TableCell>
                           </TableRow>
                         </TableHead>
@@ -1087,8 +1090,10 @@ function AddEditPurchaseRequest(props) {
                               >
                                 <TableCell>{i.name}</TableCell>
                                 <TableCell>{i.serviceNo}</TableCell>
-                                <TableCell>{i.price}</TableCell>
-                                <TableCell>{i.description}</TableCell>
+                                <TableCell>{i.price.toFixed(4)}</TableCell>
+                                <TableCell align='center'>
+                                  {i.description}
+                                </TableCell>
                               </TableRow>
                             )
                           })}
