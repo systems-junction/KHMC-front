@@ -275,6 +275,12 @@ function AddEditEDR(props) {
               if (key1 === 'dischargeMedication') {
                 Object.entries(val1).map(([key2, val2]) => {
                   if (key2 === 'medicine') {
+                    val2.map(
+                      (d) => (
+                        (d.unitPrice = d.unitPrice.toFixed(4)),
+                        (d.totalPrice = d.totalPrice.toFixed(4))
+                      )
+                    )
                     dispatch({ field: 'dischargeMedicines', value: val2 })
                   }
                 })
@@ -847,7 +853,7 @@ function AddEditEDR(props) {
                                 <TableCell>Medicine Name</TableCell>
                                 <TableCell>Scientific Name</TableCell>
                                 <TableCell>Item Code</TableCell>
-                                <TableCell>Unit Price</TableCell>
+                                <TableCell>Unit Price (JD)</TableCell>
                                 {/* <TableCell>Total Price</TableCell> */}
                               </TableRow>
                             </TableHead>
@@ -863,7 +869,9 @@ function AddEditEDR(props) {
                                     <TableCell>{i.tradeName}</TableCell>
                                     <TableCell>{i.scientificName}</TableCell>
                                     <TableCell>{i.itemCode}</TableCell>
-                                    <TableCell>{i.issueUnitCost}</TableCell>
+                                    <TableCell>
+                                      {i.issueUnitCost.toFixed(4)}
+                                    </TableCell>
                                     {/* <TableCell>
                                       {i.purchasePrice + i.tax}
                                     </TableCell> */}

@@ -76,19 +76,36 @@ const styles = {
   stylesForButton: {
     color: "white",
     cursor: "pointer",
-    borderRadius: 15,
+    borderRadius: 5,
     background: "#2c6ddd",
-    width: "140px",
-    height: "50px",
+    // width: "140px",
+    height: "45px",
     outline: "none",
   },
 };
 
 const useStyles = makeStyles(styles);
 
-const tableHeading = ["FU Name", "Item Name", "Qty", "Actions"];
-const tableDataKeys = [["fuId", "fuName"], ["itemId", "name"], "qty"];
-const actions = { edit: true, delete: true };
+const tableHeading = [
+  "FuncU Name",
+  "Item Code",
+  "Item Name",
+  "Qty",
+  "Maximum Level",
+  "Reorder Level",
+  "Minimum Level",
+  "Actions",
+];
+const tableDataKeys = [
+  ["fuId", "fuName"],
+  ["itemId", "itemCode"],
+  ["itemId", "name"],
+  "qty",
+  "maximumLevel",
+  "reorderLevel",
+  "minimumLevel",
+];
+const actions = { edit: true, delete: false };
 
 export default function BuInventory(props) {
   const classes = useStyles();
@@ -111,8 +128,6 @@ export default function BuInventory(props) {
   }
 
   function getFuInventory() {
-    console.log(currentUser);
-
     let url = `${getFuInventoryUrl}`;
     axios
       .get(
@@ -144,18 +159,20 @@ export default function BuInventory(props) {
   }
 
   function getFuInventoryById() {
+    console.log(currentUser);
     axios
-      .get(`${getFuInventoryByFUIdUrl}/${props.match.params.id}`)
+      .get(`${getFuInventoryByFUIdUrl}/${currentUser.functionalUnit._id}`)
       .then((res) => {
         if (res.data.success) {
           console.log("response for inventory", res.data.data);
           if (currentUser.staffTypeId.type === "admin") {
             setBuInventories(res.data.data.fuInventory);
           } else {
-            let temp = res.data.data.fuInventory.filter(
-              (inventory) => inventory.fuId.fuHead === currentUser.staffId
-            );
-            setBuInventories(temp);
+            // let temp = res.data.data.fuInventory.filter(
+            //   (inventory) => inventory.fuId.fuHead === currentUser.staffId
+            // );
+            // setBuInventories(temp);
+            setBuInventories(res.data.data.fuInventory);
           }
           setItems(res.data.data.items);
           setBusinessUnit(res.data.data.functionalUnit);
@@ -190,11 +207,11 @@ export default function BuInventory(props) {
   }
 
   useEffect(() => {
-    if (props.match.path === "/home/controlroom/fus/fuinventory/:id") {
+    if (props.match.path === "/home/wms/fus/fuinventory") {
       getFuInventoryById();
     } else {
       getFuInventory();
-      getFUFromHead();
+      // getFUFromHead();
     }
   }, []);
 
@@ -270,7 +287,7 @@ export default function BuInventory(props) {
       });
   }
 
-  console.log(props);
+  // console.log(props);
 
   return (
     <div
@@ -291,7 +308,7 @@ export default function BuInventory(props) {
         <div className="subheader">
           <div>
             <img src={business_Unit} />
-            <h4>FU Inventory</h4>
+            <h4>Functional Unit Inventory</h4>
           </div>
 
           <div>

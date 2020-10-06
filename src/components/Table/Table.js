@@ -665,18 +665,17 @@ export default function CustomTable(props) {
                       className={classes.tableHeadCell}
                       style={{
                         color: "white",
-                        fontWeight: "700",
-                        // paddingTop: 30,
-                        // paddingBottom: 30,
-                        textAlign: "center",
+                        // fontWeight: '700',
+                        paddingLeft: 8,
+                        paddingRight: 8,
                         borderTopLeftRadius: index === 0 ? 5 : 0,
                         borderTopRightRadius:
                           index === tableHeading.length - 1 ? 5 : 0,
                       }}
                       key={prop}
-                      onClick={() => console.log(prop)}
-                      onMouseEnter={() => setHovered(prop)}
-                      onMouseLeave={() => setHovered("")}
+                      // onClick={() => console.log(prop)}
+                      // onMouseEnter={() => setHovered(prop)}
+                      // onMouseLeave={() => setHovered('')}
                     >
                       {prop}
                     </TableCell>
@@ -727,7 +726,7 @@ export default function CustomTable(props) {
                                   className={classes.tableCell}
                                   key={key}
                                   style={{
-                                    textAlign: "center",
+                                    // textAlign: 'center',
                                     borderWidth: 0,
                                     maxWidth: 400,
                                   }}
@@ -747,7 +746,7 @@ export default function CustomTable(props) {
                                   onClick={() => handleClick(prop, val)}
                                   style={{
                                     maxWidth: 400,
-                                    textAlign: "center",
+                                    // textAlign: 'center',
                                     cursor: props.handleModelMaterialReceiving
                                       ? "pointer"
                                       : "",

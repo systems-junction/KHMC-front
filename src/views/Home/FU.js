@@ -52,17 +52,17 @@ const fu = "";
 
 const admin = [
   { img: FunctionalUnit, text: "Functional Unit", path: "" },
-  {
-    img: PurchaseRequest,
-    text: "Medication Orders",
-    path: `fus/medicinalorder`,
-  },
+  // {
+  //   img: PurchaseRequest,
+  //   text: "Medication Orders",
+  //   path: `fus/medicinalorder`,
+  // },
 
-  {
-    img: PurchaseRequest,
-    text: "Professional Orders",
-    path: `fus/professionalorder`,
-  },
+  // {
+  //   img: PurchaseRequest,
+  //   text: "Professional Orders",
+  //   path: `fus/professionalorder`,
+  // },
 
   {
     img: FunctionalUnit,
@@ -70,23 +70,23 @@ const admin = [
     path: `fus/fuinventory`,
   },
 
-  {
-    img: BU,
-    text: "FU Rep Request",
-    path: `fus/replenishment`,
-  },
+  // {
+  //   img: BU,
+  //   text: "FU Rep Request",
+  //   path: `fus/replenishment`,
+  // },
 
-  {
-    img: ReturnItem,
-    text: "FU Returns",
-    path: `fus/returnitems`,
-  },
+  // {
+  //   img: ReturnItem,
+  //   text: "FU Returns",
+  //   path: `fus/returnitems`,
+  // },
 
-  {
-    img: ReceiveItem,
-    text: "Receive Items",
-    path: `fus/receive`,
-  },
+  // {
+  //   img: ReceiveItem,
+  //   text: "Receive Items",
+  //   path: `fus/receive`,
+  // },
 ];
 
 const buHead = [
