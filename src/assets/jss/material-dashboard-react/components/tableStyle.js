@@ -38,7 +38,7 @@ const tableStyle = (theme) => ({
       fontWeight: 'bold',
       fontFamily: 'Open Sans,sans-serif',
     },
-    textAlign: 'center',
+    // textAlign: 'center',
   },
   tableCell: {
     // ...defaultFont,
@@ -48,7 +48,7 @@ const tableStyle = (theme) => ({
     // fontSize: '0.8125rem',
     // border: '0.5px solid rgb(165, 165, 165)',
     fontFamily: 'Open Sans,sans-serif',
-    textAlign: 'center',
+    // textAlign: 'center',
   },
 
   tableResponsive: {
@@ -58,7 +58,7 @@ const tableStyle = (theme) => ({
   },
 
   tableHeadRow: {
-    height: '56px',
+    // height: '56px',
     color: 'inherit',
     display: 'table-row',
     outline: 'none',
