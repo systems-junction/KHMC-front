@@ -1251,7 +1251,7 @@ function LabRadRequest(props) {
   const getEDRIPROPR = (historyId) => {
     axios.get(getpatientHistoryPre + '/' + historyId).then((res) => {
       if (res.data.success) {
-        setEDRIPROPR(res.data.data)
+        setEDRIPROPR(res.data.data.reverse())
 
         console.log('responseee', res.data.data)
       }
