@@ -50,8 +50,9 @@ const stylesB = {
 };
 
 const tableHeading = [
+  "Item Code",
   "Item Name",
-  "Item Class",
+  // "Item Class",
   "Item Type",
   "Quantity",
   "Maximum Level",
@@ -60,8 +61,9 @@ const tableHeading = [
   "Action",
 ];
 const tableDataKeys = [
+  ["itemId", "itemCode"],
   ["itemId", "name"],
-  ["itemId", "cls"],
+  // ["itemId", "cls"],
   ["itemId", "medClass"],
   "qty",
   "maximumLevel",
@@ -201,7 +203,7 @@ export default function WareHouseInventory(props) {
         <div className="subheader">
           <div>
             <img src={wh_inventory} />
-            <h4>WareHouse Inventory</h4>
+            <h4>Warehouse Inventory</h4>
           </div>
 
           <div>

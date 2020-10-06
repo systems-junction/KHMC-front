@@ -279,6 +279,8 @@ function AddEditPatientListing(props) {
   const [externalRequests, setExternalRequests] = useState("");
   const [externalRequestsFee, setExternalRequestsFee] = useState(0);
 
+  const [returnedAmount, setReturnedAmount] = useState(0);
+
   const [internalRequests, setInternalRequests] = useState("");
   const [internalRequestsFee, setInternalRequestsFee] = useState(0);
   const [requestNo, setRequestNo] = useState("");
@@ -391,6 +393,7 @@ function AddEditPatientListing(props) {
       residentFee: internalRequestsFee,
       subTotal: remainingAmount,
       total: grandTotal,
+      returnedAmount,
     };
 
     let obj = { ...params };
@@ -448,6 +451,7 @@ function AddEditPatientListing(props) {
       residentFee: internalRequestsFee,
       subTotal: remainingAmount,
       total: grandTotal,
+      returnedAmount,
     };
 
     let obj = { ...params };
@@ -511,6 +515,12 @@ function AddEditPatientListing(props) {
     let endTotal = remainingAmount + totalForExternal + totalForInternal;
 
     setGrandTotal(endTotal);
+
+    if (endTotal < patientDetails.amountReceived) {
+      setReturnedAmount(patientDetails.amountReceived - endTotal);
+    } else {
+      setReturnedAmount(0);
+    }
   };
 
   if (openNotification) {
@@ -602,7 +612,7 @@ function AddEditPatientListing(props) {
     dispatch({ field: "insuranceVendor", value: i.insuranceVendor });
 
     setSearchQuery("");
-    getBillSummary(i._id, i.payment);
+    getBillSummary(i._id, i.amountReceived);
     getPatientByInfo(i._id);
   }
 
@@ -864,7 +874,11 @@ function AddEditPatientListing(props) {
           setTotalBillingAmount(totalAmount);
           console.log(payment);
           if (payment) {
-            setRemainingAmount(totalAmount - parseInt(payment));
+            if (totalAmount - parseInt(payment) > 0) {
+              setRemainingAmount(totalAmount - parseInt(payment));
+            } else {
+              setRemainingAmount(totalAmount);
+            }
           } else {
             setRemainingAmount(totalAmount);
           }
@@ -879,7 +893,6 @@ function AddEditPatientListing(props) {
       });
   }
 
-  console.log("billSummaryArray", billSummaryArray);
   const getPatientByInfo = (id) => {
     axios
       .get(searchpatient + "/" + id)
@@ -1233,7 +1246,9 @@ function AddEditPatientListing(props) {
                     style={{ display: "flex", flexDirection: "column" }}
                   >
                     <span style={styles.headingStyles}>MRN</span>
-                    <span style={styles.textStyles}>{profileNo}</span>
+                    <span style={styles.textStyles}>
+                      {profileNo.toUpperCase()}
+                    </span>
 
                     <span style={styles.headingStyles}>Patient</span>
                     <span style={styles.textStyles}>
@@ -1481,7 +1496,7 @@ function AddEditPatientListing(props) {
                     id="payment"
                     label=" Deposited Amount"
                     name={"payment"}
-                    value={patientDetails.payment ? patientDetails.payment : 0}
+                    value={patientDetails.amountReceived ? patientDetails.amountReceived : 0}
                     onBlur={onChangeValue}
                     variant="filled"
                     textAlign="left"
@@ -1500,7 +1515,7 @@ function AddEditPatientListing(props) {
                 </div>
 
                 <div
-                  className="col-md-3"
+                  className="col-md-2"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1569,7 +1584,7 @@ function AddEditPatientListing(props) {
                 </div>
 
                 <div
-                  className="col-md-3"
+                  className="col-md-2"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1585,6 +1600,41 @@ function AddEditPatientListing(props) {
                     label="Total"
                     name={"grandTotal"}
                     value={grandTotal}
+                    onBlur={onChangeValue}
+                    variant="filled"
+                    textAlign="left"
+                    InputProps={{
+                      className: classesForInput.input,
+                      classes: { input: classesForInput.input },
+                    }}
+                    InputLabelProps={{
+                      className: classesForInput.label,
+                      classes: { label: classesForInput.label },
+                      readOnly: true,
+                    }}
+                    currencySymbol="JD"
+                    outputFormat="number"
+                    onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
+                  />
+                </div>
+
+                <div
+                  className="col-md-2"
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <CurrencyTextField
+                    required
+                    disabled
+                    decimalPlaces={4}
+                    style={{ backgroundColor: "white", borderRadius: 5 }}
+                    className="textInputStyle"
+                    id={"returnedAmount"}
+                    label="Returned Amount"
+                    name={"returnedAmount"}
+                    value={returnedAmount}
                     onBlur={onChangeValue}
                     variant="filled"
                     textAlign="left"

@@ -250,14 +250,14 @@ function AddEditWareHouseInventory(props) {
   const handleEdit = () => {
     setIsFormSubmitted(true);
 
-    let alreadyAdded = false;
-    alreadyAdded = whInventory.find((inv) => inv.itemId._id === itemId);
-    console.log(alreadyAdded);
-    if (alreadyAdded) {
-      setOpenNotification(true);
-      setErrorMsg("Item has already been added");
-      return;
-    }
+    // let alreadyAdded = false;
+    // alreadyAdded = whInventory.find((inv) => inv.itemId._id === itemId);
+    // console.log(alreadyAdded);
+    // if (alreadyAdded) {
+    //   setOpenNotification(true);
+    //   setErrorMsg("Item has already been added");
+    //   return;
+    // }
 
     if (checkValues()) {
       return;
@@ -274,10 +274,11 @@ function AddEditWareHouseInventory(props) {
       .put(updateWhInventoryUrl, params)
       .then((res) => {
         if (res.data.success) {
+          console.log(res)
           props.history.replace({
             pathname: "/home/wms/fus/medicinalorder/success",
             state: {
-              message: `Item has been updated successfully`,
+              message: `Warehouse Inventory has been updated successfully`,
             },
           });
         } else if (!res.data.success) {
