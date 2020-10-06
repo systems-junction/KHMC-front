@@ -661,18 +661,6 @@ function AddEditPatientListing(props) {
               value: res.data.rc.treatmentDetail,
             });
             dispatch({ field: "document", value: res.data.rc.document });
-
-            if (res.data.rc.document.map((item, index) => item.includes("/"))) {
-              res.data.rc.document.map((item, index) => {
-                if (item.slice(item.length - 3) !== "pdf") {
-                  console.log("Console for image file on live",uploadsUrl+item)
-                }
-                else if(item.slice(item.length - 3) === "pdf")
-                {
-                  console.log("Console for pdf file on live",uploadsUrl+item)
-                }
-              })
-            }
           }
           dispatch({ field: "requestNo", value: res.data.data.requestNo });
 
@@ -2010,58 +1998,55 @@ function AddEditPatientListing(props) {
 
               <div className="row" style={{ marginTop: "20px" }}>
                 {document &&
-                  document.length > 0 &&
-                  document.map((item, index) => item.includes("\\")) ? (
+                  document.length > 0 ?
+                  (
                     <>
                       {document.map((item, index) => {
-                        if (item.slice(item.length - 3) !== "pdf") {
-                          return (
-                            <div
-                              className="col-md-4 col-sm-4 col-4"
-                              style={{
-                                ...styles.inputContainerForTextField,
-                              }}
-                            >
-                              <img
-                                src={uploadsUrl + item.split("\\")[1]}
-                                className="depositSlipImg"
-                              />
-                            </div>
-                          );
-                        } else if (item.slice(item.length - 3) === "pdf") {
-                          return (
-                            <div
-                              className="col-md-4 col-sm-4 col-4"
-                              style={{
-                                ...styles.inputContainerForTextField,
-                              }}
-                            >
-                              <Button
+                        if (item.includes("\\")) {
+                          if (item.slice(item.length - 3) !== "pdf") {
+                            return (
+                              <div
+                                className="col-md-4 col-sm-4 col-4"
                                 style={{
-                                  ...styles.stylesForButton,
-                                  width: "100%",
-                                  backgroundColor: "#ba55d3",
-                                }}
-                                variant="contained"
-                                color="default"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  window.location.href =
-                                    uploadsUrl + item.split("\\")[1];
+                                  ...styles.inputContainerForTextField,
                                 }}
                               >
-                                Click here to open document {index + 1}
-                              </Button>
-                            </div>
-                          );
+                                <img
+                                  src={uploadsUrl + item.split("\\")[1]}
+                                  className="depositSlipImg"
+                                />
+                              </div>
+                            );
+                          } else if (item.slice(item.length - 3) === "pdf") {
+                            return (
+                              <div
+                                className="col-md-4 col-sm-4 col-4"
+                                style={{
+                                  ...styles.inputContainerForTextField,
+                                }}
+                              >
+                                <Button
+                                  style={{
+                                    ...styles.stylesForButton,
+                                    width: "100%",
+                                    backgroundColor: "#ba55d3",
+                                  }}
+                                  variant="contained"
+                                  color="default"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    window.location.href =
+                                      uploadsUrl + item.split("\\")[1];
+                                    // console.log("show URL for local", uploadsUrl + item.split("\\")[1])
+                                  }}
+                                >
+                                  Click here to open document {index + 1}
+                                </Button>
+                              </div>
+                            );
+                          }
                         }
-                      })}
-                    </>
-                  ) : document &&
-                    document.length > 0 &&
-                    document.map((item, index) => item.includes("/")) ? (
-                      <>
-                        {document.map((item, index) => {
+                        else if (item.includes("/")) {
                           if (item.slice(item.length - 3) !== "pdf") {
                             return (
                               <div
@@ -2095,6 +2080,7 @@ function AddEditPatientListing(props) {
                                   onClick={(e) => {
                                     e.preventDefault();
                                     window.location.href = uploadsUrl + item;
+                                    // console.log("show URL for live", uploadsUrl + item)
                                   }}
                                 >
                                   Click here to open document {index + 1}
@@ -2102,11 +2088,63 @@ function AddEditPatientListing(props) {
                               </div>
                             );
                           }
-                        })}
-                      </>
-                    ) : (
-                      undefined
-                    )}
+                        }
+                      })
+                      }
+                    </>
+                  ) :
+                  // document &&
+                  //   document.length > 0 &&
+                  //   document.map((item, index) => item.includes("/")) ? (
+                  //     <>
+                  //       {document.map((item, index) => {
+                  //         if (item.slice(item.length - 3) !== "pdf") {
+                  //           return (
+                  //             <div
+                  //               className="col-md-4 col-sm-4 col-4"
+                  //               style={{
+                  //                 ...styles.inputContainerForTextField,
+                  //               }}
+                  //             >
+                  //               <img
+                  //                 src={uploadsUrl + item}
+                  //                 className="depositSlipImg"
+                  //               />
+                  //             </div>
+                  //           );
+                  //         } else if (item.slice(item.length - 3) === "pdf") {
+                  //           return (
+                  //             <div
+                  //               className="col-md-4 col-sm-4 col-4"
+                  //               style={{
+                  //                 ...styles.inputContainerForTextField,
+                  //               }}
+                  //             >
+                  //               <Button
+                  //                 style={{
+                  //                   ...styles.stylesForButton,
+                  //                   width: "100%",
+                  //                   backgroundColor: "#ba55d3",
+                  //                 }}
+                  //                 variant="contained"
+                  //                 color="default"
+                  //                 onClick={(e) => {
+                  //                   e.preventDefault();
+                  //                   // window.location.href = uploadsUrl + item;
+                  //                   console.log("show URL for live", uploadsUrl + item)
+                  //                 }}
+                  //               >
+                  //                 Click here to open document {index + 1}
+                  //               </Button>
+                  //             </div>
+                  //           );
+                  //         }
+                  //       })}
+                  //     </>
+                  //   ) : 
+                  (
+                    undefined
+                  )}
 
                 {imagePreview && imagePreview.length > 0 ? (
                   <>

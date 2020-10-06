@@ -448,7 +448,7 @@ function TriageAndAssessment(props) {
                 outline: "none",
                 color: value === 0 ? "#12387a" : "#3B988C",
               }}
-              label="History"
+              label="RN Assessment"
             />
             <Tab
               style={{
