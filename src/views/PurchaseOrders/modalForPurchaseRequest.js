@@ -361,7 +361,7 @@ export default function PurchaseRequest(props) {
                             style={{
                               color: "white",
                               fontWeight: "700",
-                              textAlign: "center",
+                              // textAlign: "center",
                               borderTopLeftRadius: index === 0 ? 10 : 0,
                               borderTopRightRadius:
                                 index === tableHeading.length - 1 ? 10 : 0,
@@ -398,7 +398,7 @@ export default function PurchaseRequest(props) {
                                       className={classes.tableCell}
                                       key={key}
                                       style={{
-                                        textAlign: "center",
+                                        // textAlign: "center",
                                       }}
                                     >
                                       {formatDate(prop[val])}
@@ -411,7 +411,7 @@ export default function PurchaseRequest(props) {
                                       key={key}
                                       // onClick={() => handleClick(prop, val)}
                                       style={{
-                                        textAlign: "center",
+                                        // textAlign: "center",
                                       }}
                                     >
                                       {Array.isArray(val)

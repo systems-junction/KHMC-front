@@ -656,7 +656,7 @@ export default function CustomTable(props) {
                       style={{
                         color: 'white',
                         // fontWeight: '700',
-                        paddingLeft:8, paddingRight:8,
+                        // paddingLeft:8, paddingRight:8,
                         borderTopLeftRadius: index === 0 ? 5 : 0,
                         borderTopRightRadius:
                           index === tableHeading.length - 1 ? 5 : 0,
