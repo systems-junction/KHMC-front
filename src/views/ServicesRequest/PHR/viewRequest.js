@@ -115,18 +115,54 @@ export default function EdrRequest(props) {
     console.log(props.item, 'view Data')
   }, [])
 
-  const formatDate = (date) => {
-    const d = new Date(date)
-    return (
-      d.getDate() +
-      '/' +
-      (d.getMonth() + 1) +
-      '/' +
-      d.getFullYear() +
-      ' ' +
-      d.toLocaleTimeString()
-    )
-  }
+  // const formatDate = (date) => {
+  //   const d = new Date(date)
+  //   return (
+  //     d
+  //       .getDate()
+  //       .toString()
+  //       .padStart(2, '0') +
+  //     ' - ' +
+  //     (d.getMonth() + 1).toString().padStart(2, '0') +
+  //     ' - ' +
+  //     // (d.getMonth() + 1) +
+  //     d.getFullYear() +
+  //     ' ' +
+  //     // d.toLocaleTimeString()
+  //     ':' +
+  //     ('00' + d.getMinutes()).slice(-2)
+  //   )
+  // }
+
+  // const formatDate = (date) => {
+  //   const d = new Date(date)
+
+  //   let minutes = ''
+
+  //   if (d.getHours().toString().length === 1) {
+  //     minutes = '0' + d.getHours()
+  //   } else {
+  //     minutes = d.getHours()
+  //   }
+
+  //   return (
+  //     // d.getDate() +
+  //     d
+  //       .getDate()
+  //       .toString()
+  //       .padStart(2, '0') +
+  //     ' - ' +
+  //     (d.getMonth() + 1).toString().padStart(2, '0') +
+  //     ' - ' +
+  //     // (d.getMonth() + 1) +
+  //     d.getFullYear() +
+  //     ' ' +
+  //     // d.toLocaleTimeString()
+  //     minutes +
+  //     ':' +
+  //     ('00' + d.getMinutes()).slice(-2)
+  //   )
+  // }
 
   return (
     <Dialog
@@ -228,7 +264,7 @@ export default function EdrRequest(props) {
                     inputVariant='filled'
                     fullWidth={true}
                     label='Date'
-                    format='MM-dd-yyyy HH:mm'
+                    format='dd - MM - yyyy HH:mm'
                     // minDate={DateTime}
                     // onChange={(val) => onChangeDate(val, 'DateTime')}
                     InputProps={{
