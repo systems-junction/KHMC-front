@@ -534,6 +534,8 @@ function LabRadRequest(props) {
       openPatientDetailsDialog(true)
     }
 
+    console.log('props', props)
+
     axios.get(getIcd).then((res) => {
       console.log('res for icd', res)
       setIcd(res.data.data)

@@ -527,13 +527,14 @@ function LabRadRequest(props) {
   }
 
   useEffect(() => {
-    if (props.patientDetails) {
+    if (props) {
       setPatientDetails(props.patientDetails)
       getPatientByInfo(props.patientDetails._id)
       getEDRIPROPR(props.patientDetails._id)
       openPatientDetailsDialog(true)
     }
 
+    console.log(props, 'props')
     axios.get(getIcd).then((res) => {
       console.log('res for icd', res)
       setIcd(res.data.data)
