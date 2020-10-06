@@ -12,6 +12,7 @@ import {
   searchpatient,
   notifyConsultation,
   getSearchedpatient,
+  getpatienthistoryUrl,
   getpatientHistoryPre,
   getpatientHistory,
 } from "../../public/endpoins";
@@ -1217,9 +1218,7 @@ function LabRadRequest(props) {
     setSearchPatientQuery(a);
     if (a.length >= 3) {
       axios
-        .get(
-          getSearchedpatient + "/" + currentUser.functionalUnit._id + "/" + a
-        )
+        .get(getpatienthistoryUrl + "/" + a)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
@@ -1370,17 +1369,21 @@ function LabRadRequest(props) {
   };
 
   const addICDcodes = (item, e) => {
-    if (code.includes(item)) {
+    console.log("item", item);
+    console.log("e", e);
+    console.log("code", code);
+    if (code.includes(item.icd10PCSCodes)) {
       var index = code.indexOf(item);
       code.splice(index, 1);
       e.target.className = "addCode";
     } else {
       dispatch({
         field: "code",
-        value: [...code, item],
+        value: [...code, item.icd10PCSCodes],
       });
       e.target.className = "addedCode";
     }
+    console.log("code after", code);
   };
 
   const addNewRequest = () => {
@@ -1536,7 +1539,7 @@ function LabRadRequest(props) {
         <div className="subheader" style={{ marginLeft: "-10px" }}>
           <div>
             <img src={Lab_RadIcon} />
-            <h4>Patient History</h4>
+            <h4>Patient history</h4>
           </div>
         </div>
         <div

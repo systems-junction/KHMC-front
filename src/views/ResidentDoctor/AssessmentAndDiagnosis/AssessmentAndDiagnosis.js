@@ -1314,7 +1314,6 @@ function LabRadRequest(props) {
       });
   };
 
-
   const addICDcodes = (item, e) => {
     console.log("item", item);
     console.log("e", e);
@@ -1349,6 +1348,8 @@ function LabRadRequest(props) {
       pathname: path,
       state: {
         selectedItem: selectedItem,
+        diagnosisArray: diagnosisArray,
+        medicationArray: medicationArray,
       },
     });
   };
