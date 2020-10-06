@@ -516,8 +516,8 @@ function AddEditPatientListing(props) {
 
     setGrandTotal(endTotal);
 
-    if (endTotal < patientDetails.payment) {
-      setReturnedAmount(patientDetails.payment - endTotal);
+    if (endTotal < patientDetails.amountReceived) {
+      setReturnedAmount(patientDetails.amountReceived - endTotal);
     } else {
       setReturnedAmount(0);
     }
@@ -612,7 +612,7 @@ function AddEditPatientListing(props) {
     dispatch({ field: "insuranceVendor", value: i.insuranceVendor });
 
     setSearchQuery("");
-    getBillSummary(i._id, i.payment);
+    getBillSummary(i._id, i.amountReceived);
     getPatientByInfo(i._id);
   }
 
@@ -1496,7 +1496,7 @@ function AddEditPatientListing(props) {
                     id="payment"
                     label=" Deposited Amount"
                     name={"payment"}
-                    value={patientDetails.payment ? patientDetails.payment : 0}
+                    value={patientDetails.amountReceived ? patientDetails.amountReceived : 0}
                     onBlur={onChangeValue}
                     variant="filled"
                     textAlign="left"
