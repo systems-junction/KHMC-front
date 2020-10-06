@@ -525,9 +525,9 @@ const fuInventoryKeeper = [
   },
 
   {
-    img: "",
-    text: "",
-    path: "",
+    img: FunctionalUnit,
+    text: "FuncU Inventory",
+    path: `/home/wms/fus/fuinventory`,
   },
 
   // {

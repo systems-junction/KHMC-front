@@ -358,7 +358,7 @@ function AddEditBuInventory(props) {
           <div>
             <img src={functional_Unit} />
             <h4>
-              {comingFor === "add" ? " Add FU Inventory" : " Edit FU Inventory"}
+              {comingFor === "add" ? " Add Functional Unit Inventory" : " Edit Functional Unit Inventory"}
             </h4>
           </div>
 
