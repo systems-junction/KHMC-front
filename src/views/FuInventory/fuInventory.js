@@ -337,8 +337,8 @@ export default function BuInventory(props) {
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
-              console.log(res.data.data)
-              setBuInventories(res.data.data.fuInventory);
+              // console.log("response for search",res.data.data)
+              setBuInventories(res.data.data);
             } else {
               setBuInventories(res.data.data.fuInventory);
             }

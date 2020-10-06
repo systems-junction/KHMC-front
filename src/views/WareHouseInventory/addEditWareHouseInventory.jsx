@@ -129,7 +129,14 @@ function AddEditWareHouseInventory(props) {
       qty !== "0" &&
       maximumLevel !== "0" &&
       reorderLevel !== "0" &&
-      minimumLevel !== "0"
+      minimumLevel !== "0" &&
+      maximumLevel !== "" &&
+      reorderLevel !== "" &&
+      minimumLevel !== "" &&
+      parseInt(minimumLevel) > 0 &&
+      parseInt(maximumLevel) > 0 &&
+      parseInt(reorderLevel) > 0 &&
+      parseInt(qty) > 0
     );
   }
 
@@ -274,7 +281,7 @@ function AddEditWareHouseInventory(props) {
       .put(updateWhInventoryUrl, params)
       .then((res) => {
         if (res.data.success) {
-          console.log(res)
+          console.log(res);
           props.history.replace({
             pathname: "/home/wms/fus/medicinalorder/success",
             state: {
