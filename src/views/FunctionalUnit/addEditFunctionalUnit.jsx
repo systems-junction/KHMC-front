@@ -1,35 +1,39 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable react/jsx-indent */
-import React, { useEffect, useState, useReducer } from 'react'
-import TextField from '@material-ui/core/TextField'
-import Select from '@material-ui/core/Select'
-import InputLabel from '@material-ui/core/InputLabel'
-import MenuItem from '@material-ui/core/MenuItem'
-import { makeStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
-import axios from 'axios'
-import { ToastsStore } from 'react-toasts'
-import cookie from 'react-cookies'
-import Table from '@material-ui/core/Table'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TablePagination from '@material-ui/core/TablePagination'
+import React, { useEffect, useState, useReducer } from "react";
+import TextField from "@material-ui/core/TextField";
+import Select from "@material-ui/core/Select";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import { makeStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import axios from "axios";
+import { ToastsStore } from "react-toasts";
+import cookie from "react-cookies";
+import Table from "@material-ui/core/Table";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TablePagination from "@material-ui/core/TablePagination";
 import {
   addFunctionalUnitUrl,
   updateFunctionalUnitUrl,
   getFunctionalUnitLogsUrl,
-} from '../../public/endpoins'
+} from "../../public/endpoins";
 
-import Header from '../../components/Header/Header'
+import Header from "../../components/Header/Header";
 
-import view_all from '../../assets/img/Eye.png'
-import functional_Unit from '../../assets/img/Functional Unit.png'
+import view_all from "../../assets/img/Eye.png";
+import functional_Unit from "../../assets/img/Functional Unit.png";
 
-import Back_Arrow from '../../assets/img/Back_Arrow.png'
+import Back_Arrow from "../../assets/img/Back_Arrow.png";
 
-import '../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
+import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
+
+import ViewAll from "../../components/ViewAllBtn/viewAll";
+
+import MUIInputStyles from '../../assets/jss/material-dashboard-react/inputStyle'
 
 const styles = {
   // inputContainer: {
@@ -42,25 +46,25 @@ const styles = {
   //   marginRight: 5
   // },
   inputField: {
-    outline: 'none',
+    outline: "none",
   },
   stylesForButton: {
-    color: 'white',
-    cursor: 'pointer',
+    color: "white",
+    cursor: "pointer",
     borderRadius: 15,
-    backgroundColor: '#2c6ddd',
-    width: '140px',
-    height: '50px',
-    outline: 'none',
+    backgroundColor: "#2c6ddd",
+    width: "140px",
+    height: "50px",
+    outline: "none",
   },
   stylesForPurchaseButton: {
-    color: 'white',
-    cursor: 'pointer',
-    borderRadius: 15,
-    backgroundColor: '#2c6ddd',
-    width: '60%',
-    height: '50px',
-    outline: 'none',
+    color: "white",
+    cursor: "pointer",
+    borderRadius: 5,
+    // backgroundColor: '#2c6ddd',
+    width: "60%",
+    height: "50px",
+    outline: "none",
   },
 
   // buttonContainer: {
@@ -83,7 +87,7 @@ const styles = {
 
   inputContainerForDropDown: {
     marginTop: 30,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 10,
     paddingLeft: 10,
     paddingRight: 10,
@@ -93,85 +97,47 @@ const styles = {
   buttonContainer: {
     marginTop: 25,
   },
-}
-
-const useStyles = makeStyles((theme) => ({
-  margin: {
-    margin: theme.spacing(0),
-  },
-  input: {
-    backgroundColor: 'white',
-    borderRadius: 6,
-    '&:after': {
-      borderBottomColor: 'black',
-    },
-    '&:hover': {
-      backgroundColor: 'white',
-    },
-    '&:disabled': {
-      color: 'gray',
-    },
-  },
-  multilineColor: {
-    backgroundColor: 'white',
-    borderRadius: 6,
-    '&:hover': {
-      backgroundColor: 'white',
-    },
-    '&:after': {
-      borderBottomColor: 'black',
-    },
-  },
-  root: {
-    '& .MuiTextField-root': {
-      backgroundColor: 'white',
-    },
-    '& .Mui-focused': {
-      backgroundColor: 'white',
-      color: 'black',
-    },
-  },
-}))
+};
 
 function AddEditBuReturn(props) {
-  const classes = useStyles()
-  const [comingFor, setcomingFor] = useState('')
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false)
-  const [fuLogs, setFuLogs] = useState([])
-  const [page, setPage] = React.useState(0)
-  const [rowsPerPage, setRowsPerPage] = React.useState(5)
+  const classes = MUIInputStyles();
+  const [comingFor, setcomingFor] = useState("");
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const [fuLogs, setFuLogs] = useState([]);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage)
-  }
+    setPage(newPage);
+  };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10))
-    setPage(0)
-  }
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   const initialState = {
-    _id: '',
-    fuHead: '',
-    fuName: '',
-    description: '',
-    status: '',
-    buId: '',
-    reason: '',
-    fuLogId: '',
+    _id: "",
+    fuHead: "",
+    fuName: "",
+    description: "",
+    status: "",
+    buId: "",
+    reason: "",
+    fuLogId: "",
     statusArray: [],
     businessUnits: [],
     staffArray: [],
-  }
+  };
 
   function reducer(state, { field, value }) {
     return {
       ...state,
       [field]: value,
-    }
+    };
   }
 
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const {
     _id,
@@ -185,14 +151,14 @@ function AddEditBuReturn(props) {
     statusArray,
     businessUnits,
     staffArray,
-  } = state
+  } = state;
 
   const onChangeValue = (e) => {
-    dispatch({ field: e.target.name, value: e.target.value })
-    if (e.target.name === 'status') {
-      dispatch({ field: 'reason', value: '' })
+    dispatch({ field: e.target.name, value: e.target.value });
+    if (e.target.name === "status") {
+      dispatch({ field: "reason", value: "" });
     }
-  }
+  };
 
   function validateForm() {
     return (
@@ -204,74 +170,74 @@ function AddEditBuReturn(props) {
       status.length > 0 &&
       description &&
       description.length > 0
-    )
+    );
   }
 
   function getFunctionalUnitLogs(id) {
     const param = {
       _id: id,
-    }
+    };
 
     axios
-      .get(getFunctionalUnitLogsUrl + '/' + param._id)
+      .get(getFunctionalUnitLogsUrl + "/" + param._id)
       .then((res) => {
         if (res.data.success) {
-          setFuLogs(res.data.data)
+          setFuLogs(res.data.data);
         } else if (!res.data.success) {
-          ToastsStore.error(res.data.error)
+          ToastsStore.error(res.data.error);
         }
       })
       .catch((e) => {
-        console.log('error is ', e)
-      })
+        console.log("error is ", e);
+      });
   }
 
   useEffect(() => {
-    setcomingFor(props.history.location.state.comingFor)
-    const selectedRec = props.history.location.state.selectedItem
+    setcomingFor(props.history.location.state.comingFor);
+    const selectedRec = props.history.location.state.selectedItem;
     if (selectedRec) {
       Object.entries(selectedRec).map(([key, val]) => {
-        if (val && typeof val === 'object') {
-          dispatch({ field: key, value: val._id })
-          dispatch({ field: 'reason', value: val.reason })
+        if (val && typeof val === "object") {
+          dispatch({ field: key, value: val._id });
+          dispatch({ field: "reason", value: val.reason });
         } else {
-          dispatch({ field: key, value: val })
-          if (key === '_id') {
+          dispatch({ field: key, value: val });
+          if (key === "_id") {
             // get all logs related to this id
-            getFunctionalUnitLogs(val)
+            getFunctionalUnitLogs(val);
           }
         }
-      })
+      });
     }
     if (props.history.location.state.statues) {
       dispatch({
-        field: 'statusArray',
+        field: "statusArray",
         value: props.history.location.state.statues,
-      })
+      });
     }
     if (props.history.location.state.businessUnits) {
       dispatch({
-        field: 'businessUnits',
+        field: "businessUnits",
         value: props.history.location.state.businessUnits,
-      })
+      });
     }
     if (props.history.location.state.staff) {
       dispatch({
-        field: 'staffArray',
+        field: "staffArray",
         value: props.history.location.state.staff,
-      })
+      });
     }
-  }, [])
+  }, []);
 
   const handleCancel = () => {
-    props.history.goBack()
-  }
+    props.history.goBack();
+  };
 
   const handleAdd = () => {
     // props.history.goBack();
-    const currentUser = cookie.load('current_user')
+    const currentUser = cookie.load("current_user");
 
-    setIsFormSubmitted(true)
+    setIsFormSubmitted(true);
 
     const params = {
       fuName,
@@ -281,25 +247,25 @@ function AddEditBuReturn(props) {
       status,
       reason,
       updatedBy: currentUser.name,
-    }
+    };
     axios
       .post(addFunctionalUnitUrl, params)
       .then((res) => {
         if (res.data.success) {
-          // props.history.goBack();
-          props.history.push('success')
+          props.history.goBack();
+          // props.history.push("success");
         } else if (!res.data.success) {
-          ToastsStore.error(res.data.error)
+          ToastsStore.error(res.data.error);
         }
       })
       .catch((e) => {
-        console.log('error after adding bu inventory', e)
-      })
-  }
+        console.log("error after adding Business Unit inventory", e);
+      });
+  };
 
   const handleEdit = () => {
-    setIsFormSubmitted(true)
-    const currentUser = cookie.load('current_user')
+    setIsFormSubmitted(true);
+    const currentUser = cookie.load("current_user");
 
     const params = {
       _id,
@@ -311,47 +277,47 @@ function AddEditBuReturn(props) {
       reason,
       updatedBy: currentUser.name,
       fuLogId,
-    }
+    };
     axios
       .put(updateFunctionalUnitUrl, params)
       .then((res) => {
         if (res.data.success) {
-          props.history.goBack()
+          props.history.goBack();
         } else if (!res.data.success) {
-          ToastsStore.error(res.data.error)
+          ToastsStore.error(res.data.error);
         }
       })
       .catch((e) => {
-        console.log('error after adding bu inventory', e)
-      })
-  }
+        console.log("error after adding Business Unit inventory", e);
+      });
+  };
 
   return (
     <div
       style={{
-        backgroundColor: '#60d69f',
-        position: 'fixed',
-        display: 'flex',
-        width: '100%',
-        height: '100%',
-        flexDirection: 'column',
+        backgroundColor: "#60d69f",
+        position: "fixed",
+        display: "flex",
+        width: "100%",
+        height: "100%",
+        flexDirection: "column",
         flex: 1,
-        overflowY: 'scroll',
+        overflowY: "scroll",
       }}
     >
       <Header />
       <div className={`cPadding ${classes.root}`}>
-        <div className='subheader'>
+        <div className="subheader">
           <div>
             <img src={functional_Unit} />
             <h4>
-              {comingFor === 'add'
-                ? ' Add Functional Unit'
-                : ' Edit Functional Unit'}
+              {comingFor === "add"
+                ? " Add Functional Unit"
+                : " Edit Functional Unit"}
             </h4>
           </div>
 
-          <div>
+          {/* <div>
             <Button
               onClick={() => props.history.goBack()}
               style={styles.stylesForButton}
@@ -362,20 +328,20 @@ function AddEditBuReturn(props) {
               &nbsp;&nbsp;
               <strong>View All</strong>
             </Button>
-            {/* <img src={Search} /> */}
-          </div>
+          </div> */}
+          <ViewAll history={props.history} />
         </div>
 
         <div
           style={{
             flex: 4,
-            display: 'flex',
-            flexDirection: 'column',
+            display: "flex",
+            flexDirection: "column",
           }}
         >
-          <div className='row'>
+          <div className="row">
             <div
-              className='col-md-12'
+              className="col-md-12"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -383,13 +349,13 @@ function AddEditBuReturn(props) {
             >
               <TextField
                 required
-                label='FU Name'
-                name={'fuName'}
+                label="Functional Unit Name"
+                name={"fuName"}
                 value={fuName}
-                error={fuName === '' && isFormSubmitted}
+                error={fuName === "" && isFormSubmitted}
                 onChange={(e) => onChangeValue(e)}
-                className='textInputStyle'
-                variant='filled'
+                className="textInputStyle"
+                variant="filled"
                 InputProps={{
                   className: classes.input,
                   classes: { input: classes.input },
@@ -398,9 +364,9 @@ function AddEditBuReturn(props) {
             </div>
           </div>
 
-          <div className='row'>
+          <div className="row">
             <div
-              className='col-md-12'
+              className="col-md-12"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -420,15 +386,15 @@ function AddEditBuReturn(props) {
               <TextField
                 required
                 multiline
-                type='text'
-                error={description === '' && isFormSubmitted}
-                label='Description'
-                name={'description'}
+                type="text"
+                error={description === "" && isFormSubmitted}
+                label="Description"
+                name={"description"}
                 value={description}
                 onChange={onChangeValue}
                 rows={4}
-                className='textInputStyle'
-                variant='filled'
+                className="textInputStyle"
+                variant="filled"
                 InputProps={{
                   className: classes.input,
                   classes: { input: classes.input },
@@ -437,9 +403,9 @@ function AddEditBuReturn(props) {
             </div>
           </div>
 
-          <div className='row'>
+          <div className="row">
             <div
-              className='col-md-12'
+              className="col-md-12"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -449,20 +415,20 @@ function AddEditBuReturn(props) {
                 required
                 select
                 fullWidth
-                id='fuHead'
-                name='fuHead'
+                id="fuHead"
+                name="fuHead"
                 value={fuHead}
-                error={fuHead === '' && isFormSubmitted}
+                error={fuHead === "" && isFormSubmitted}
                 onChange={onChangeValue}
-                label='FU Head'
-                variant='filled'
-                className='dropDownStyle'
+                label="Functional Unit Head"
+                variant="filled"
+                className="dropDownStyle"
                 InputProps={{
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
               >
-                <MenuItem value=''>
+                <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
                 {staffArray &&
@@ -471,13 +437,13 @@ function AddEditBuReturn(props) {
                       <MenuItem key={val._id} value={val._id}>
                         {val.firstName} {val.lastName}
                       </MenuItem>
-                    )
+                    );
                   })}
               </TextField>
             </div>
 
             <div
-              className='col-md-12'
+              className="col-md-12"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -487,20 +453,20 @@ function AddEditBuReturn(props) {
                 required
                 select
                 fullWidth
-                id='buId'
-                name='buId'
+                id="buId"
+                name="buId"
                 value={buId}
-                error={buId === '' && isFormSubmitted}
+                error={buId === "" && isFormSubmitted}
                 onChange={onChangeValue}
-                label='BU Name'
-                variant='filled'
-                className='dropDownStyle'
+                label="Business Unit Name"
+                variant="filled"
+                className="dropDownStyle"
                 InputProps={{
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
               >
-                <MenuItem value=''>
+                <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
                 {businessUnits &&
@@ -509,15 +475,15 @@ function AddEditBuReturn(props) {
                       <MenuItem key={val._id} value={val._id}>
                         {val.buName}
                       </MenuItem>
-                    )
+                    );
                   })}
               </TextField>
             </div>
           </div>
 
-          <div className='row'>
+          <div className="row">
             <div
-              className='col-md-12'
+              className="col-md-12"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -527,20 +493,20 @@ function AddEditBuReturn(props) {
                 required
                 select
                 fullWidth
-                id='status'
-                name='status'
+                id="status"
+                name="status"
                 value={status}
-                error={status === '' && isFormSubmitted}
+                error={status === "" && isFormSubmitted}
                 onChange={onChangeValue}
-                label='Status'
-                variant='filled'
-                className='dropDownStyle'
+                label="Status"
+                variant="filled"
+                className="dropDownStyle"
                 InputProps={{
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
               >
-                <MenuItem value=''>
+                <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
                 {statusArray &&
@@ -549,14 +515,14 @@ function AddEditBuReturn(props) {
                       <MenuItem key={val.key} value={val.key}>
                         {val.value}
                       </MenuItem>
-                    )
+                    );
                   })}
               </TextField>
             </div>
 
-            {status === 'in_active' ? (
+            {status === "in_active" ? (
               <div
-                className='col-md-12'
+                className="col-md-12"
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -574,13 +540,13 @@ function AddEditBuReturn(props) {
                 /> */}
                 <TextField
                   required
-                  label='Reason'
-                  name={'reason'}
+                  label="Reason"
+                  name={"reason"}
                   value={reason}
-                  error={reason === '' && isFormSubmitted}
+                  error={reason === "" && isFormSubmitted}
                   onChange={(e) => onChangeValue(e)}
-                  className='textInputStyle'
-                  variant='filled'
+                  className="textInputStyle"
+                  variant="filled"
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
@@ -602,7 +568,7 @@ function AddEditBuReturn(props) {
             )}
           </div>
 
-          <div style={{ display: 'flex', flex: 1, justifyContent: 'center' }}>
+          <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
             {/* <div style={styles.buttonContainer}>
             <Button onClick={handleCancel} variant="contained">
               Cancel
@@ -611,21 +577,21 @@ function AddEditBuReturn(props) {
 
             <div
               style={{
-                display: 'flex',
+                display: "flex",
                 flex: 1,
                 height: 50,
-                justifyContent: 'center',
-                marginTop: '2%',
-                marginBottom: '2%',
+                justifyContent: "center",
+                marginTop: "2%",
+                marginBottom: "2%",
               }}
             >
-              {comingFor === 'add' ? (
+              {comingFor === "add" ? (
                 <Button
                   style={styles.stylesForPurchaseButton}
                   disabled={!validateForm()}
                   onClick={handleAdd}
-                  variant='contained'
-                  color='primary'
+                  variant="contained"
+                  color="primary"
                 >
                   Add Functional Unit
                 </Button>
@@ -634,8 +600,8 @@ function AddEditBuReturn(props) {
                   style={styles.stylesForPurchaseButton}
                   disabled={!validateForm()}
                   onClick={handleEdit}
-                  variant='contained'
-                  color='primary'
+                  variant="contained"
+                  color="primary"
                 >
                   Edit Functional Unit
                 </Button>
@@ -643,7 +609,7 @@ function AddEditBuReturn(props) {
             </div>
           </div>
 
-          <div>
+          {/* <div>
             {comingFor === 'edit' ? (
               <>
                 <Table className='mt20'>
@@ -700,18 +666,18 @@ function AddEditBuReturn(props) {
             ) : (
               undefined
             )}
-          </div>
+          </div> */}
 
           <div style={{ marginBottom: 20 }}>
             <img
               onClick={() => props.history.goBack()}
               src={Back_Arrow}
-              style={{ width: 45, height: 35, cursor: 'pointer' }}
+              style={{ width: 45, height: 35, cursor: "pointer" }}
             />
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
-export default AddEditBuReturn
+export default AddEditBuReturn;
