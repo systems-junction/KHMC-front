@@ -538,7 +538,7 @@ function AddEditPatientListing(props) {
     for (let i = 0; i < fileType.length; i++) {
       let reader = new FileReader();
       reader.readAsDataURL(file[i]);
-      reader.onload = function (event) {
+      reader.onload = function(event) {
         if (fileType[i] === "pdf") {
           arr.push(file[i].name);
           setpdfView([...arr]);
@@ -985,9 +985,10 @@ function AddEditPatientListing(props) {
     doc.text(
       155,
       60,
-      `${item.serviceId.insuredPrice === "0"
-        ? item.serviceId.originalPrice
-        : item.serviceId.insuredPrice
+      `${
+        item.serviceId.insuredPrice === "0"
+          ? item.serviceId.originalPrice
+          : item.serviceId.insuredPrice
       } JD`
     );
 
@@ -1014,9 +1015,10 @@ function AddEditPatientListing(props) {
     doc.text(
       142,
       200,
-      `Sub Total: ${item.serviceId.insuredPrice === "0"
-        ? item.serviceId.originalPrice
-        : item.serviceId.insuredPrice
+      `Sub Total: ${
+        item.serviceId.insuredPrice === "0"
+          ? item.serviceId.originalPrice
+          : item.serviceId.insuredPrice
       } JD`
     );
     doc.text(143, 210, "Tax Rate: 0.0000 JD");
@@ -1026,9 +1028,10 @@ function AddEditPatientListing(props) {
     doc.text(
       135.4,
       240,
-      `Total Amount: ${item.serviceId.insuredPrice === "0"
-        ? item.serviceId.originalPrice
-        : item.serviceId.insuredPrice
+      `Total Amount: ${
+        item.serviceId.insuredPrice === "0"
+          ? item.serviceId.originalPrice
+          : item.serviceId.insuredPrice
       } JD`
     );
 
@@ -1371,24 +1374,24 @@ function AddEditPatientListing(props) {
                                 </Table>
                               )
                             ) : (
-                                <h4
-                                  style={{ textAlign: "center" }}
-                                  onClick={() => setSearchQuery("")}
-                                >
-                                  Patient Not Found
-                                </h4>
-                              )}
+                              <h4
+                                style={{ textAlign: "center" }}
+                                onClick={() => setSearchQuery("")}
+                              >
+                                Patient Not Found
+                              </h4>
+                            )}
                           </Paper>
                         </div>
                       ) : (
-                          undefined
-                        )}
+                        undefined
+                      )}
                     </div>
                   </div>
                 </div>
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
             </div>
 
             <div className="container-fluid">
@@ -1474,7 +1477,9 @@ function AddEditPatientListing(props) {
                     style={{ display: "flex", flexDirection: "column" }}
                   >
                     <span style={styles.headingStyles}>MRN</span>
-                    <span style={styles.textStyles}>{profileNo}</span>
+                    <span style={styles.textStyles} className="mrnUpperCase">
+                      {profileNo}
+                    </span>
 
                     <span style={styles.headingStyles}>Patient</span>
                     <span style={styles.textStyles}>
@@ -1504,12 +1509,12 @@ function AddEditPatientListing(props) {
                   >
                     {medicationArray
                       ? medicationArray.map((drug, index) => {
-                        return (
-                          <h6 style={styles.textStyles}>
-                            {index + 1}. {drug}
-                          </h6>
-                        );
-                      })
+                          return (
+                            <h6 style={styles.textStyles}>
+                              {index + 1}. {drug}
+                            </h6>
+                          );
+                        })
                       : ""}
                   </div>
 
@@ -1519,12 +1524,12 @@ function AddEditPatientListing(props) {
                   >
                     {diagnosisArray
                       ? diagnosisArray.map((drug, index) => {
-                        return (
-                          <h6 style={styles.textStyles}>
-                            {index + 1}. {drug}
-                          </h6>
-                        );
-                      })
+                          return (
+                            <h6 style={styles.textStyles}>
+                              {index + 1}. {drug}
+                            </h6>
+                          );
+                        })
                       : ""}
                   </div>
                 </div>
@@ -1604,8 +1609,8 @@ function AddEditPatientListing(props) {
                 </div>
               </div>
             ) : (
-                undefined
-              )}
+              undefined
+            )}
 
             <div
               style={{
@@ -1756,8 +1761,8 @@ function AddEditPatientListing(props) {
                   </TableBody>
                 </Table>
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
             </div>
 
             <div
@@ -1897,8 +1902,8 @@ function AddEditPatientListing(props) {
                     </TableBody>
                   </Table>
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
 
                 <div
                   className="col-md-6 col-sm-6 col-6"
@@ -1991,108 +1996,104 @@ function AddEditPatientListing(props) {
                       })}
                     </div>
                   ) : (
-                      undefined
-                    )}
+                    undefined
+                  )}
                 </div>
               </div>
 
               <div className="row" style={{ marginTop: "20px" }}>
-                {document &&
-                  document.length > 0 ?
-                  (
-                    <>
-                      {document.map((item, index) => {
-                        if (item.includes("\\")) {
-                          if (item.slice(item.length - 3) !== "pdf") {
-                            return (
-                              <div
-                                className="col-md-4 col-sm-4 col-4"
+                {document && document.length > 0 ? (
+                  <>
+                    {document.map((item, index) => {
+                      if (item.includes("\\")) {
+                        if (item.slice(item.length - 3) !== "pdf") {
+                          return (
+                            <div
+                              className="col-md-4 col-sm-4 col-4"
+                              style={{
+                                ...styles.inputContainerForTextField,
+                              }}
+                            >
+                              <img
+                                src={uploadsUrl + item.split("\\")[1]}
+                                className="depositSlipImg"
+                              />
+                            </div>
+                          );
+                        } else if (item.slice(item.length - 3) === "pdf") {
+                          return (
+                            <div
+                              className="col-md-4 col-sm-4 col-4"
+                              style={{
+                                ...styles.inputContainerForTextField,
+                              }}
+                            >
+                              <Button
                                 style={{
-                                  ...styles.inputContainerForTextField,
+                                  ...styles.stylesForButton,
+                                  width: "100%",
+                                  backgroundColor: "#ba55d3",
+                                }}
+                                variant="contained"
+                                color="default"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  window.location.href =
+                                    uploadsUrl + item.split("\\")[1];
+                                  // console.log("show URL for local", uploadsUrl + item.split("\\")[1])
                                 }}
                               >
-                                <img
-                                  src={uploadsUrl + item.split("\\")[1]}
-                                  className="depositSlipImg"
-                                />
-                              </div>
-                            );
-                          } else if (item.slice(item.length - 3) === "pdf") {
-                            return (
-                              <div
-                                className="col-md-4 col-sm-4 col-4"
-                                style={{
-                                  ...styles.inputContainerForTextField,
-                                }}
-                              >
-                                <Button
-                                  style={{
-                                    ...styles.stylesForButton,
-                                    width: "100%",
-                                    backgroundColor: "#ba55d3",
-                                  }}
-                                  variant="contained"
-                                  color="default"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    window.location.href =
-                                      uploadsUrl + item.split("\\")[1];
-                                    // console.log("show URL for local", uploadsUrl + item.split("\\")[1])
-                                  }}
-                                >
-                                  Click here to open document {index + 1}
-                                </Button>
-                              </div>
-                            );
-                          }
+                                Click here to open document {index + 1}
+                              </Button>
+                            </div>
+                          );
                         }
-                        else if (item.includes("/")) {
-                          if (item.slice(item.length - 3) !== "pdf") {
-                            return (
-                              <div
-                                className="col-md-4 col-sm-4 col-4"
+                      } else if (item.includes("/")) {
+                        if (item.slice(item.length - 3) !== "pdf") {
+                          return (
+                            <div
+                              className="col-md-4 col-sm-4 col-4"
+                              style={{
+                                ...styles.inputContainerForTextField,
+                              }}
+                            >
+                              <img
+                                src={uploadsUrl + item}
+                                className="depositSlipImg"
+                              />
+                            </div>
+                          );
+                        } else if (item.slice(item.length - 3) === "pdf") {
+                          return (
+                            <div
+                              className="col-md-4 col-sm-4 col-4"
+                              style={{
+                                ...styles.inputContainerForTextField,
+                              }}
+                            >
+                              <Button
                                 style={{
-                                  ...styles.inputContainerForTextField,
+                                  ...styles.stylesForButton,
+                                  width: "100%",
+                                  backgroundColor: "#ba55d3",
+                                }}
+                                variant="contained"
+                                color="default"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  window.location.href = uploadsUrl + item;
+                                  // console.log("show URL for live", uploadsUrl + item)
                                 }}
                               >
-                                <img
-                                  src={uploadsUrl + item}
-                                  className="depositSlipImg"
-                                />
-                              </div>
-                            );
-                          } else if (item.slice(item.length - 3) === "pdf") {
-                            return (
-                              <div
-                                className="col-md-4 col-sm-4 col-4"
-                                style={{
-                                  ...styles.inputContainerForTextField,
-                                }}
-                              >
-                                <Button
-                                  style={{
-                                    ...styles.stylesForButton,
-                                    width: "100%",
-                                    backgroundColor: "#ba55d3",
-                                  }}
-                                  variant="contained"
-                                  color="default"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    window.location.href = uploadsUrl + item;
-                                    // console.log("show URL for live", uploadsUrl + item)
-                                  }}
-                                >
-                                  Click here to open document {index + 1}
-                                </Button>
-                              </div>
-                            );
-                          }
+                                Click here to open document {index + 1}
+                              </Button>
+                            </div>
+                          );
                         }
-                      })
                       }
-                    </>
-                  ) :
+                    })}
+                  </>
+                ) : (
                   // document &&
                   //   document.length > 0 &&
                   //   document.map((item, index) => item.includes("/")) ? (
@@ -2141,10 +2142,9 @@ function AddEditPatientListing(props) {
                   //         }
                   //       })}
                   //     </>
-                  //   ) : 
-                  (
-                    undefined
-                  )}
+                  //   ) :
+                  undefined
+                )}
 
                 {imagePreview && imagePreview.length > 0 ? (
                   <>
@@ -2168,15 +2168,15 @@ function AddEditPatientListing(props) {
                               New document
                             </div>
                           ) : (
-                              undefined
-                            )}
+                            undefined
+                          )}
                         </div>
                       );
                     })}
                   </>
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
             </div>
             <div
@@ -2212,22 +2212,22 @@ function AddEditPatientListing(props) {
                     Submit
                   </Button>
                 ) : (
-                    <Button
-                      style={styles.stylesForButton}
-                      //disabled={!validateFormType1()}
-                      onClick={handleEdit}
-                      variant="contained"
-                      color="default"
-                    >
-                      Update
-                    </Button>
-                  )}
+                  <Button
+                    style={styles.stylesForButton}
+                    //disabled={!validateFormType1()}
+                    onClick={handleEdit}
+                    variant="contained"
+                    color="default"
+                  >
+                    Update
+                  </Button>
+                )}
               </div>
             </div>
           </div>
         ) : (
-                undefined
-              )}
+          undefined
+        )}
 
         <Notification
           msg={errorMsg}
