@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button'
 import tableStyles from '../../assets/jss/material-dashboard-react/components/tableStyle.js'
 import axios from 'axios'
 import TextField from '@material-ui/core/TextField'
+import _ from 'lodash'
 import {
   getSearchedLaboratoryService,
   getSearchedRadiologyService,
@@ -1252,7 +1253,8 @@ function LabRadRequest(props) {
   const getEDRIPROPR = (historyId) => {
     axios.get(getpatientHistoryPre + '/' + historyId).then((res) => {
       if (res.data.success) {
-        setEDRIPROPR(res.data.data.reverse())
+        var obj = _.sortBy(res.data.data, 'createdAt').reverse()
+        setEDRIPROPR(obj)
 
         console.log('responseee', res.data.data)
       }
