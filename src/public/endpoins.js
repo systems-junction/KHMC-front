@@ -248,6 +248,7 @@ export const updateReceiveRequestsUrl = `${baseUrl}/account/updateaccounts`;
 
 // replenishment request for FU
 export const getReplenishmentRequestUrlFU = `${baseUrl}/replenishmentRequest/getreplenishmentrequestsFU`;
+export const getReplenishmentRequestUrlFUSearch = `${baseUrl}/replenishmentRequest/getreplenishmentrequests`;
 export const addReplenishmentRequestUrl = `${baseUrl}/replenishmentRequest/addreplenishmentrequest`;
 export const deleteReplenishmentRequestUrl = `${baseUrl}/replenishmentRequest/deletereplenishmentrequests`;
 export const updateReplenishmentRequestUrl = `${baseUrl}/replenishmentRequest/updatereplenishmentrequest`;
