@@ -411,6 +411,7 @@ function AddEditPurchaseRequest(props) {
   };
 
   const onChangeCurrency = (e) => {
+    console.log(e.target.value, typeof e.target.value);
     dispatch({ field: e.target.name, value: e.target.value });
   };
 
@@ -499,14 +500,11 @@ function AddEditPurchaseRequest(props) {
   // };
 
   const handleAdd = () => {
-
-if(requestedItemsArray==="" || requestedItemsArray.length===0)
-{
-  setOpenNotification(true);
-  setErrorMsg("Please add some items first before creating an order");
-  return
-}
-
+    if (requestedItemsArray === "" || requestedItemsArray.length === 0) {
+      setOpenNotification(true);
+      setErrorMsg("Please add some items first before creating an order");
+      return;
+    }
 
     if (!validateForm()) {
       setIsFormSubmitted(true);
@@ -1160,8 +1158,6 @@ if(requestedItemsArray==="" || requestedItemsArray.length===0)
   }
 
   const editSelectedItem = () => {
-
-
     if (!validateItemsForm()) {
       setOpenNotification(true);
       setErrorMsg("Please fill the fields properly");
@@ -1924,9 +1920,13 @@ if(requestedItemsArray==="" || requestedItemsArray.length===0)
                     label="Functional Unit  Cost"
                     name={"fuItemCost"}
                     value={fuItemCost}
-                    onBlur={onChangeCurrency}
+                    // onBlur={onChangeCurrency}
+                    onChange={(event, value) => {
+                      dispatch({ field: "fuItemCost", value: value });
+                    }}
                     variant="filled"
                     textAlign="left"
+                    decimalPlaces={4}
                     InputProps={{
                       className: classesForInputForCurrency.input,
                       classes: { input: classesForInputForCurrency.input },
@@ -1936,7 +1936,7 @@ if(requestedItemsArray==="" || requestedItemsArray.length===0)
                       classes: { label: classesForInputForCurrency.label },
                     }}
                     currencySymbol="JD"
-                    // outputFormat="number"
+                    // outputFormat="string"
                     onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
                   />
                 </div>
