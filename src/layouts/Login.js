@@ -32,7 +32,7 @@ class Login extends React.Component {
     super(props)
 
     this.state = {
-      userName: 'superadmin@khmc.com',
+      userName: '',
       null_userName: false,
 
       password: '123456',

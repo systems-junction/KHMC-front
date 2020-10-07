@@ -147,7 +147,7 @@ export default function Staff(props) {
     };
 
     axios
-      .delete(deleteStaffUrl + "/" + params._id)
+      .delete(deleteStaffUrl + "/" + deleteItem._id)
       .then((res) => {
         if (res.data.success) {
           setdeleteItem("");
@@ -199,7 +199,7 @@ export default function Staff(props) {
               &nbsp;&nbsp;
               <strong style={{ fontSize: "12px" }}>Add New</strong>
             </Button>
-            <img src={Search} className="img-style" />
+            {/* <img src={Search} className="img-style" /> */}
           </div>
         </div>
 
