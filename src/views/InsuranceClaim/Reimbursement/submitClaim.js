@@ -463,7 +463,7 @@ function AddEditPatientListing(props) {
           props.history.push({
             pathname: "success",
             state: {
-              message: `Claim against Patient MRN: ${profileNo} Submitted successfully`,
+              message: `Claim against Patient MRN: ${profileNo.toUpperCase()} submitted successfully`,
             },
           });
         } else if (!res.data.success) {
@@ -505,7 +505,7 @@ function AddEditPatientListing(props) {
           props.history.push({
             pathname: "success",
             state: {
-              message: `Claim against Patient MRN: ${profileNo} Updated successfully`,
+              message: `Claim against Patient MRN: ${profileNo.toUpperCase()} updated successfully`,
             },
           });
         } else if (!res.data.success) {
