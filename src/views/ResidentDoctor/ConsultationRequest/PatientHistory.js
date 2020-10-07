@@ -1241,7 +1241,7 @@ function LabRadRequest(props) {
     dispatch({ field: 'medicationArray', value: '' })
     console.log('selected banda : ', i)
 
-    props.setPatientDetailsForReducer(i)
+    // props.setPatientDetailsForReducer(i)
 
     setPatientDetails(i)
     getPatientByInfo(i._id)
