@@ -1770,11 +1770,25 @@ function LabRadRequest(props) {
                 style={styles.textStyles}
               >
                 {medicationArray
-                  ? medicationArray.map((drug, index) => {
+                  ? medicationArray.map((d, index) => {
                       return (
-                        <h6 style={styles.textStyles}>
-                          {index + 1}. {drug}
-                        </h6>
+                        <div style={{ display: "flex", flexDirection: "row" }}>
+                          <h6
+                            style={{
+                              ...styles.textStyles,
+                            }}
+                          >
+                            {index + 1}
+                            {"."} &nbsp;
+                          </h6>
+                          <h6
+                            style={{
+                              ...styles.textStyles,
+                            }}
+                          >
+                            {d}
+                          </h6>
+                        </div>
                       )
                     })
                   : ''}
