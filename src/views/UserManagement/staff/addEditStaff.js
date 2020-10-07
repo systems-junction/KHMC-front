@@ -30,6 +30,7 @@ import "./staff.css";
 import "../../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
 
 import ViewAllBtn from "../../../components/ViewAllBtn/viewAll";
+import FunctionalUnit from "../../FunctionalUnit/functionalUnit.jsx";
 
 const styles = {
   stylesForButton: {
@@ -273,7 +274,7 @@ function AddEditStaff(props) {
   const handleAdd = () => {
     setIsFormSubmitted(true);
     if (validateForm()) {
-      const params = {
+      let params = {
         staffTypeId,
         firstName,
         lastName,
@@ -287,8 +288,13 @@ function AddEditStaff(props) {
         address,
         systemAdminId,
         status,
-        functionalUnit,
       };
+
+
+      if (functionalUnit) {
+        params = { ...params, functionalUnit };
+      }
+
       axios
         .post(addStaffUrl, params)
         .then((res) => {
@@ -308,8 +314,10 @@ function AddEditStaff(props) {
 
   const handleEdit = () => {
     setIsFormSubmitted(true);
+    console.log(functionalUnit)
+    
     if (validateForm()) {
-      const params = {
+      let params = {
         _id,
         staffTypeId,
         firstName,
@@ -324,12 +332,21 @@ function AddEditStaff(props) {
         address,
         systemAdminId,
         status,
-        functionalUnit,
       };
+
+      if (functionalUnit) {
+        params = { ...params, functionalUnit };
+      }
+
+      else{
+        params = { ...params, functionalUnit:null };
+      }
+      
       axios
         .put(updateStaffTUrl, params)
         .then((res) => {
           if (res.data.success) {
+            console.log(res.data)
             props.history.goBack();
           } else if (!res.data.success) {
             setOpenNotification(true);

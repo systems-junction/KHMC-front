@@ -74,11 +74,11 @@ const admin = [
     path: "/home/rcm",
   },
 
-  {
-    img: WMS,
-    text: "WMS",
-    path: "/home/wms",
-  },
+  // {
+  //   img: WMS,
+  //   text: "WMS",
+  //   path: "/home/wms",
+  // },
 
   {
     img: FIN,
