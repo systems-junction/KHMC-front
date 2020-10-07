@@ -528,7 +528,7 @@ function LabRadRequest(props) {
   }
 
   useEffect(() => {
-    if (props) {
+    if (props.patientDetails) {
       setPatientDetails(props.patientDetails)
       getPatientByInfo(props.patientDetails._id)
       getEDRIPROPR(props.patientDetails._id)
