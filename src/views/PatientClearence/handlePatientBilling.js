@@ -199,6 +199,7 @@ function AddEditPatientListing(props) {
     lastName: "-----",
     gender: "-----",
     age: "--",
+    QR: "",
     weight: "--",
     document: "",
     generatedBy: cookie.load("current_user").staffId,
@@ -233,6 +234,7 @@ function AddEditPatientListing(props) {
     lastName = "-----",
     gender = "----",
     age = "--",
+    QR,
     weight = "--",
     document,
     generatedBy = cookie.load("current_user").staffId,
@@ -607,6 +609,8 @@ function AddEditPatientListing(props) {
     dispatch({ field: "gender", value: i.gender });
     dispatch({ field: "age", value: i.age });
     dispatch({ field: "weight", value: i.weight });
+    dispatch({ field: "QR", value: i.QR });
+
     dispatch({ field: "profileNo", value: i.profileNo });
     dispatch({ field: "insuranceNumber", value: i.insuranceNumber });
     dispatch({ field: "insuranceVendor", value: i.insuranceVendor });
@@ -724,24 +728,30 @@ function AddEditPatientListing(props) {
 
       // dynamic text
       doc.setFont("times", "normal");
-      doc.text(169, 230, `${externalRequestsFee}`);
-      doc.text(169, 235, `${internalRequestsFee}`);
+      doc.text(169, 230, `${externalRequestsFee.toFixed(4)}`);
+      doc.text(169, 235, `${internalRequestsFee.toFixed(4)}`);
       doc.text(
         169,
         240,
-        `${patientDetails.payment ? patientDetails.payment : 0}`
+        `${
+          patientDetails.amountReceived
+            ? patientDetails.amountReceived.toFixed(4)
+            : "0.0000"
+        }`
       );
-      doc.text(169, 245, `${totalBillingAmount}`);
-      doc.text(169, 250, `${remainingAmount}`);
-      doc.text(169, 255, `${grandTotal}`);
+      doc.text(169, 245, `${totalBillingAmount.toFixed(4)}`);
+      doc.text(169, 250, `${remainingAmount.toFixed(4)}`);
+      doc.text(169, 255, `${grandTotal.toFixed(4)}`);
 
       // bar code
       doc.line(0, 260, 210, 260);
-      if (qr) {
-        doc.addImage(`${audioURL}${qr}`, "PNG", 172.9, 266, 25, 25);
+      if (QR) {
+        var img = new Image();
+        img.src = `${audioURL}${QR}`;
+        doc.addImage(img, "PNG", 172.9, 266, 25, 25);
       }
 
-      doc.save("Discharge Patient.pdf");
+      doc.save(`Invoice ${invoiceNo}.pdf`);
     }
   };
 
@@ -1496,7 +1506,11 @@ function AddEditPatientListing(props) {
                     id="payment"
                     label=" Deposited Amount"
                     name={"payment"}
-                    value={patientDetails.amountReceived ? patientDetails.amountReceived : 0}
+                    value={
+                      patientDetails.amountReceived
+                        ? patientDetails.amountReceived
+                        : 0
+                    }
                     onBlur={onChangeValue}
                     variant="filled"
                     textAlign="left"
@@ -1779,7 +1793,9 @@ function AddEditPatientListing(props) {
                 </TableCell>
                 <TableCell align="right">{row.serviceId.type}</TableCell>
                 <TableCell align="right">{row.serviceId.name}</TableCell>
-                <TableCell align="right">{row.serviceId.price}</TableCell>
+                <TableCell align="right">
+                  {row.serviceId.price.toFixed(4)}
+                </TableCell>
                 <TableCell align="right">{row.qty}</TableCell>
               </TableRow>
             ))}

@@ -528,7 +528,7 @@ function LabRadRequest(props) {
   }
 
   useEffect(() => {
-    if (props) {
+    if (props.patientDetails) {
       setPatientDetails(props.patientDetails)
       getPatientByInfo(props.patientDetails._id)
       getEDRIPROPR(props.patientDetails._id)
@@ -1683,6 +1683,9 @@ function LabRadRequest(props) {
               backgroundColor: 'white',
               borderRadius: 5,
               width: '100%',
+              maxHeight: '300px',
+              overflowY: 'scroll',
+              overflowX: 'hidden',
             }}
           >
             <div
