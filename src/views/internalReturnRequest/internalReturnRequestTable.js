@@ -41,7 +41,6 @@ const tableHeadingForFUHead = [
   "Functional Unit Name",
   "Date Generated",
   "Item Code",
-  "Item Name",
   "Reason",
   "Status",
   "Actions",
@@ -52,7 +51,6 @@ const tableHeadingForWareHouseMembers = [
   "Functional Unit Name",
   "Date Generated",
   "Item Code",
-  "Item Name",
   "Reason",
   "Status",
   "Actions",
@@ -63,7 +61,6 @@ const tableDataKeysForWareHouseMembers = [
   ["fuId", "fuName"],
   "dateGenerated",
   ["itemId", "itemCode"],
-  ["itemId", "name"],
   "reason",
   "status",
 ];
@@ -73,7 +70,6 @@ const tableDataKeysForFUHead = [
   ["fuId", "fuName"],
   "dateGenerated",
   ["itemId", "itemCode"],
-  ["itemId", "name"],
   "reason",
   "status",
 ];
@@ -83,7 +79,6 @@ const tableHeading = [
   "Functional Unit Name",
   "Date Generated",
   "Item Code",
-  "Item Name",
   "Reason",
   "Status",
   "Actions",
@@ -93,7 +88,6 @@ const tableDataKeys = [
   ["fuId", "fuName"],
   "dateGenerated",
   ["itemId", "itemCode"],
-  ["itemId", "name"],
   "reason",
   "status",
 ];

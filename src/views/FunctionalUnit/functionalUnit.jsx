@@ -10,6 +10,7 @@ import ConfirmationModal from "../../components/Modal/confirmationModal";
 import axios from "axios";
 import { ToastsStore } from "react-toasts";
 import {
+  deleteFunctionalUnitUrl,
   getFunctionalUnitUrl,
   updateFunctionalUnitUrl,
 } from "../../public/endpoins";
@@ -42,21 +43,27 @@ const stylesB = {
   stylesForButton: {
     color: "white",
     cursor: "pointer",
-    borderRadius: 10,
+    borderRadius: 5,
     background: "#2c6ddd",
     width: Button.name === "add" ? "110px" : "auto",
     height: "40px",
     outline: "none",
   },
 };
-const tableHeading = ["FU Name", "FU Head", "BU Name", "Status", "Action"];
+const tableHeading = [
+  "Functional Unit Name",
+  "Functional Unit Head",
+  "Business Unit Name",
+  "Status",
+  "Action",
+];
 const tableDataKeys = [
   "fuName",
   ["fuHead", "firstName"],
   ["buId", "buName"],
   "status",
 ];
-const actions = { edit: true, active: true, view: true };
+const actions = { edit: true, active: true, delete: false };
 
 function FunctionalUnit(props) {
   const classes = useStyles();
@@ -72,7 +79,7 @@ function FunctionalUnit(props) {
       .get(getFunctionalUnitUrl)
       .then((res) => {
         if (res.data.success) {
-          setFunctionalUnits(res.data.data.functionalUnits);
+          setFunctionalUnits(res.data.data.functionalUnits.reverse());
           setBusinessUnits(res.data.data.businessUnit);
           setStaff(res.data.data.staff);
           setStatues(res.data.data.statues);
@@ -136,13 +143,21 @@ function FunctionalUnit(props) {
     setdeleteItem(id);
   }
 
-  function deleteBuReturn() {
+
+
+  function handleDelete(id) {
+    setModalVisible(true);
+    setdeleteItem(id);
+  }
+
+
+  function handleDeleteFU() {
     const params = {
       _id: deleteItem,
     };
 
     axios
-      .delete(updateFunctionalUnitUrl + "/" + params._id)
+      .delete(deleteFunctionalUnitUrl + "/" + deleteItem._id)
       .then((res) => {
         if (res.data.success) {
           setdeleteItem("");
@@ -258,6 +273,7 @@ function FunctionalUnit(props) {
                 handleEdit={handleEdit}
                 handleStatus={handleStatus}
                 handleView={handleView}
+                handleDelete={handleDelete}
                 borderBottomColor={"#60d69f"}
                 borderBottomWidth={20}
               />
@@ -266,7 +282,7 @@ function FunctionalUnit(props) {
                 modalVisible={modalVisible}
                 msg="Are you sure want to in active the record?"
                 hideconfirmationModal={() => setModalVisible(false)}
-                onConfirmDelete={() => activeBuReturn()}
+                onConfirmDelete={() => handleDeleteFU()}
                 setdeleteItem={() => setdeleteItem("")}
               />
               <div style={{ marginBottom: 20 }}>
