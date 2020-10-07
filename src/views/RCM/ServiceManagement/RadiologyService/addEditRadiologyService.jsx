@@ -36,7 +36,7 @@ const styles = {
   stylesForButton: {
     color: 'white',
     cursor: 'pointer',
-    borderRadius: 15,
+    borderRadius: 5,
     backgroundColor: '#2c6ddd',
     width: '140px',
     height: '50px',
@@ -45,7 +45,7 @@ const styles = {
   stylesForADD: {
     color: 'white',
     cursor: 'pointer',
-    borderRadius: 15,
+    borderRadius: 5,
     backgroundColor: '#2c6ddd',
     width: '60%',
     height: '50px',
@@ -149,6 +149,13 @@ function AddEditVendor(props) {
     dispatch({ field: e.target.name, value: e.target.value })
   }
 
+  const onBlurChangeValue = (e) => {
+    dispatch({
+      field: e.target.name,
+      value: e.target.value.replace(/,/g, ''),
+    })
+  }
+
   function validateForm() {
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
@@ -238,12 +245,16 @@ function AddEditVendor(props) {
           .put(updateRadiologyServiceUrl, params)
           .then((res) => {
             if (res.data.success) {
-            } else {
+              console.log('response is', res.data.data)
               props.history.goBack()
+            } else if (!res.data.success) {
+              setOpenNotification(true)
             }
           })
           .catch((e) => {
-            console.log('error after updating vendor', e)
+            console.log('error after adding Lab Service', e)
+            setOpenNotification(true)
+            setErrorMsg('Error while updating radiology Service')
           })
       }
     }
@@ -283,7 +294,7 @@ function AddEditVendor(props) {
           <div>
             <Button
               onClick={() => props.history.goBack()}
-              style={styles.stylesForButton}
+              style={{ ...styles.stylesForButton, marginRight: '3px' }}
               variant='contained'
               color='primary'
             >
@@ -297,7 +308,10 @@ function AddEditVendor(props) {
 
         <div className='container-fluid'>
           {comingFor === 'edit' ? (
-            <div className='row'>
+            <div
+              className='row'
+              style={{ marginTop: '20px', marginBottom: '-20px' }}
+            >
               <div
                 className='col-md-12'
                 style={{
@@ -327,7 +341,7 @@ function AddEditVendor(props) {
             undefined
           )}
 
-          <div className='row'>
+          <div className='row' style={{ marginTop: '20px' }}>
             <div
               className='col-md-6'
               style={{
@@ -369,7 +383,7 @@ function AddEditVendor(props) {
                 error={price === '' && isFormSubmitted}
                 // onChange={onChangeValue}
                 // type='number'
-                onBlur={onChangeValue}
+                onBlur={onBlurChangeValue}
                 className='textInputStyle'
                 variant='filled'
                 textAlign='left'
@@ -478,13 +492,21 @@ function AddEditVendor(props) {
 
           <Notification msg={errorMsg} open={openNotification} />
 
-          <div style={{ display: 'flex', flex: 1, justifyContent: 'center' }}>
+          <div
+            class='row'
+            style={{
+              display: 'flex',
+              flex: 1,
+              justifyContent: 'center',
+              paddingLeft: 6,
+              paddingRight: 6,
+            }}
+          >
             <div
               style={{
                 display: 'flex',
                 flex: 1,
-                height: 50,
-                justifyContent: 'center',
+                justifyContent: 'flex-end',
                 marginTop: '2%',
                 marginBottom: '2%',
               }}
@@ -495,7 +517,7 @@ function AddEditVendor(props) {
                   onClick={handleAdd}
                   variant='contained'
                   color='primary'
-                  style={styles.stylesForADD}
+                  style={{ ...styles.stylesForButton, marginRight: '-3px' }}
                 >
                   Add
                 </Button>
@@ -505,8 +527,7 @@ function AddEditVendor(props) {
                   disabled={!validateForm()}
                   onClick={handleEdit}
                   variant='contained'
-                  color='primary'
-                  style={{ width: '60%' }}
+                  style={{ ...styles.stylesForButton, marginRight: '-3px' }}
                 >
                   Update
                 </Button>

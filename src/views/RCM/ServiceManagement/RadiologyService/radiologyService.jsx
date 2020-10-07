@@ -14,6 +14,7 @@ import Add_New from '../../../../assets/img/Add_New.png'
 import Search from '../../../../assets/img/Search.png'
 import Table from '../../../../components/Table/Table.js'
 import Back from '../../../../assets/img/Back_Arrow.png'
+import _ from 'lodash'
 import {
   getRadiologyServiceUrl,
   deleteRadiologyServiceUrl,
@@ -29,7 +30,7 @@ const stylesB = {
   stylesForButton: {
     color: 'white',
     cursor: 'pointer',
-    borderRadius: 15,
+    borderRadius: 5,
     background: '#2c6ddd',
     width: '140px',
     height: '50px',
@@ -42,7 +43,7 @@ const useStyles = makeStyles(styles)
 const tableHeading = ['Service ID', 'Name', 'Price ( JD)', 'Status', 'Action']
 const tableDataKeys = ['serviceNo', 'name', 'price', 'status']
 
-const actions = { edit: true, delete: true }
+const actions = { edit: true }
 
 export default function Vendor(props) {
   const classes = useStyles()
@@ -71,7 +72,8 @@ export default function Vendor(props) {
         if (res.data.success) {
           console.log(res.data.data, 'data')
           res.data.data.map((d) => (d.price = d.price.toFixed(4)))
-          setVendor(res.data.data)
+          var obj = _.sortBy(res.data.data, 'createdAt').reverse()
+          setVendor(obj)
           setStatuses(res.data.data.statues)
           setClasses(res.data.data.classes)
           setSubClasses(res.data.data.subClasses)

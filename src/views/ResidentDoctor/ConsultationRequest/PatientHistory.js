@@ -543,15 +543,15 @@ function LabRadRequest(props) {
 
     // getEDRById(props.history.location.state.selectedItem._id);
 
-    const selectedItem = props.history.location.state.selectedItem;
-    const diagnosisArray = props.history.location.state.diagnosisArray;
-    const medicationArray = props.history.location.state.medicationArray;
+    const selectedItem = props.history.location.state.selectedItem
+    const diagnosisArray = props.history.location.state.diagnosisArray
+    const medicationArray = props.history.location.state.medicationArray
 
-    console.log("selectedItem", selectedItem);
-    setHistoryId(selectedItem._id);
-    setSelectedItem(selectedItem);
-    dispatch({field:"diagnosisArray",value:diagnosisArray})
-    dispatch({field:"medicationArray",value:medicationArray})
+    console.log('selectedItem', selectedItem)
+    setHistoryId(selectedItem._id)
+    setSelectedItem(selectedItem)
+    dispatch({ field: 'diagnosisArray', value: diagnosisArray })
+    dispatch({ field: 'medicationArray', value: medicationArray })
     // setrequestNo(props.history.location.state.selectedItem.requestNo);
     // setSelectedPatient(props.history.location.state.selectedItem.patientId);
   }, [icdCode])
@@ -1258,7 +1258,7 @@ function LabRadRequest(props) {
   const getEDRIPROPR = (historyId) => {
     axios.get(getpatientHistoryPre + '/' + historyId).then((res) => {
       if (res.data.success) {
-        setEDRIPROPR(res.data.data)
+        setEDRIPROPR(res.data.data.reverse())
 
         console.log('responseee', res.data.data)
       }
