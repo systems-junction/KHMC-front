@@ -57,7 +57,7 @@ const styles = {
   // }
 
   inputContainerForTextField: {
-    marginTop: 25,
+    padding: 6,
   },
 
   inputContainerForDropDown: {
@@ -118,10 +118,19 @@ export default function PurchaseRequest(props) {
       open={props.openItemDialog}
     >
       <DialogContent style={{ backgroundColor: "#60d69f" }}>
-        <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
-          Item Details
-        </DialogTitle>
         <div className="container-fluid">
+          <div className="row">
+            <h5
+              style={{
+                ...styles.inputContainerForTextField,
+
+                color: "white",
+                fontWeight: "bold",
+              }}
+            >
+              Item Details
+            </h5>
+          </div>
           <div className="row">
             <div
               className="col-md-6"

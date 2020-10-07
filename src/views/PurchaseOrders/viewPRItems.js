@@ -259,17 +259,12 @@ export default function PurchaseRequest(props) {
       open={props.openItemDialog}
     >
       <DialogContent style={{ backgroundColor: "#60d69f" }}>
-        <DialogTitle id="simple-dialog-title" style={{ color: "black" }}>
-          Added Items
-        </DialogTitle>
-        <div
-          style={{
-            flex: 4,
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <div>
+        <div>
+          <h5 style={{ color: "white", fontWeight:'bold' }}>
+            Added Items
+          </h5>
+        </div>
+     
             <Table>
               <TableHead
                 className={classes["TableHeader"]}
@@ -287,7 +282,7 @@ export default function PurchaseRequest(props) {
                             style={{
                               color: "white",
                               fontWeight: "700",
-                              textAlign: "center",
+                              // textAlign: "center",
                               borderTopLeftRadius: index === 0 ? 5 : 0,
                               borderTopRightRadius:
                                 index === tableHeading.length - 1 ? 5 : 0,
@@ -322,7 +317,7 @@ export default function PurchaseRequest(props) {
                                   key={key}
                                   onClick={() => handleClick(prop, val)}
                                   style={{
-                                    textAlign: "center",
+                                    // textAlign: "center",
                                     cursor: props.handleModelMaterialReceiving
                                       ? "pointer"
                                       : "",
@@ -364,8 +359,6 @@ export default function PurchaseRequest(props) {
                   })}
               </TableBody>
             </Table>
-          </div>
-        </div>
       </DialogContent>
     </Dialog>
   );

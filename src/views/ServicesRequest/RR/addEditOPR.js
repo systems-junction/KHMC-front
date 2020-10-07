@@ -1693,7 +1693,7 @@ function AddEditPatientListing(props) {
                   select
                   label='Nationality'
                   name={'nationality'}
-                  value={nationality}
+                  value={!nationality ? "Jordan" : nationality}
                   // error={nationality === '' && detailsForm}
                   onChange={(e) => onChangeValue(e)}
                   className='textInputStyle'

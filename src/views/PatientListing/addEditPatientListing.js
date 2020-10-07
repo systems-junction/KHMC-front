@@ -1808,7 +1808,7 @@ function AddEditPatientListing(props) {
                   select
                   label='Nationality'
                   name={'nationality'}
-                  value={nationality}
+                  value={!nationality ? 'Jordan' : nationality}
                   // error={nationality === '' && detailsForm}
                   onChange={(e) => onChangeValue(e)}
                   className='textInputStyle'
@@ -1818,7 +1818,7 @@ function AddEditPatientListing(props) {
                     classes: { input: classes.input },
                   }}
                 >
-                  <MenuItem value=''>
+                  <MenuItem value='Jordan'>
                     <em>None</em>
                   </MenuItem>
 
