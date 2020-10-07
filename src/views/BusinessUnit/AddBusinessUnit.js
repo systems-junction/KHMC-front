@@ -1,36 +1,40 @@
 /* eslint-disable react/jsx-indent */
 /* eslint-disable array-callback-return */
-import React, { useEffect, useState, useReducer } from 'react'
-import TextField from '@material-ui/core/TextField'
-import Select from '@material-ui/core/Select'
-import InputLabel from '@material-ui/core/InputLabel'
-import MenuItem from '@material-ui/core/MenuItem'
+import React, { useEffect, useState, useReducer } from "react";
+import TextField from "@material-ui/core/TextField";
+import Select from "@material-ui/core/Select";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
 // import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button'
-import axios from 'axios'
-import { ToastsStore } from 'react-toasts'
-import cookie from 'react-cookies'
-import { makeStyles } from '@material-ui/core/styles'
-import Table from '@material-ui/core/Table'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TablePagination from '@material-ui/core/TablePagination'
-import { dateOptions } from '../../variables/public'
+import Button from "@material-ui/core/Button";
+import axios from "axios";
+import { ToastsStore } from "react-toasts";
+import cookie from "react-cookies";
+import { makeStyles } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TablePagination from "@material-ui/core/TablePagination";
+import { dateOptions } from "../../variables/public";
 import {
   addBusinessUnitUrl,
   updateBusinessUnitUrl,
   getBusinessUnitLogsUrl,
-} from '../../public/endpoins'
+} from "../../public/endpoins";
 
-import Header from '../../components/Header/Header'
+import Header from "../../components/Header/Header";
 
-import Add_New from '../../assets/img/Add_New.png'
-import business_Unit from '../../assets/img/business_Unit.png'
-import view_all from '../../assets/img/Eye.png'
-import Back_Arrow from '../../assets/img/Back_Arrow.png'
-import '../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
+import Add_New from "../../assets/img/Add_New.png";
+import business_Unit from "../../assets/img/business_Unit.png";
+import view_all from "../../assets/img/Eye.png";
+import Back_Arrow from "../../assets/img/Back_Arrow.png";
+import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
+
+import ViewAll from "../../components/ViewAllBtn/viewAll";
+
+import MUIInputStyles from "../../assets/jss/material-dashboard-react/inputStyle";
 
 const styles = {
   // buttonContainer: {
@@ -51,29 +55,29 @@ const styles = {
     marginTop: 6,
   },
   inputField: {
-    outline: 'none',
+    outline: "none",
   },
   stylesForButton: {
-    color: 'white',
-    cursor: 'pointer',
+    color: "white",
+    cursor: "pointer",
     borderRadius: 10,
-    backgroundColor: '#2c6ddd',
-    width: '115px',
-    height: '40px',
-    outline: 'none',
+    backgroundColor: "#2c6ddd",
+    width: "115px",
+    height: "40px",
+    outline: "none",
   },
   stylesForPurchaseButton: {
-    color: 'white',
-    cursor: 'pointer',
-    borderRadius: 10,
-    backgroundColor: '#2c6ddd',
-    width: '60%',
-    height: '40px',
-    outline: 'none',
+    color: "white",
+    cursor: "pointer",
+    borderRadius: 5,
+    // backgroundColor: "#2c6ddd",
+    width: "60%",
+    height: "40px",
+    outline: "none",
   },
   inputContainerForDropDown: {
     marginTop: 25,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 10,
     paddingLeft: 10,
     paddingRight: 10,
@@ -87,76 +91,30 @@ const styles = {
   buttonContainer: {
     marginTop: 25,
   },
-}
-
-const useStyles = makeStyles((theme) => ({
-  underline: {
-    '&&&:before': {
-      borderBottom: 'none',
-    },
-    '&&:after': {
-      borderBottom: 'none',
-    },
-  },
-  margin: {
-    margin: theme.spacing(0),
-  },
-  input: {
-    backgroundColor: 'white',
-    borderRadius: 6,
-    '&:after': {
-      borderBottomColor: 'black',
-    },
-    '&:hover': {
-      backgroundColor: 'white',
-    },
-    '&:disabled': {
-      color: 'gray',
-    },
-  },
-  multilineColor: {
-    backgroundColor: 'white',
-    borderRadius: 6,
-    '&:hover': {
-      backgroundColor: 'white',
-    },
-    '&:after': {
-      borderBottomColor: 'black',
-    },
-  },
-  root: {
-    '& .MuiTextField-root': {
-      backgroundColor: 'white',
-    },
-    '& .Mui-focused': {
-      backgroundColor: 'white',
-      color: 'black',
-    },
-  },
-}))
+};
 
 function AddBusinessUnit(props) {
-  const classes = useStyles()
+  const classes = MUIInputStyles();
 
   const initialState = {
-    _id: '',
-    buName: '',
-    description: '',
-    buHead: '',
-    division: '',
-    status: '',
-    reason: '',
-    buLogsId: '',
+    _id: "",
+    buName: "",
+    description: "",
+    buHead: "",
+    division: "",
+    status: "",
+    reason: "",
+    buLogsId: "",
     statues: [],
     buHeads: [],
     divisions: [],
-  }
+  };
 
   function reducer(state, { field, value }) {
-    return { ...state, [field]: value }
+    return { ...state, [field]: value };
   }
 
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const {
     _id,
@@ -170,89 +128,89 @@ function AddBusinessUnit(props) {
     statues,
     buHeads,
     divisions,
-  } = state
+  } = state;
 
-  const [comingFor, setcomingFor] = useState('')
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false)
-  const [currentUser, setCurrentUser] = useState('')
-  const [buLogs, setBuLogs] = useState([])
-  const [page, setPage] = React.useState(0)
-  const [rowsPerPage, setRowsPerPage] = React.useState(5)
+  const [comingFor, setcomingFor] = useState("");
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const [currentUser, setCurrentUser] = useState("");
+  const [buLogs, setBuLogs] = useState([]);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage)
-  }
+    setPage(newPage);
+  };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10))
-    setPage(0)
-  }
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   function getBusinessUnitLogs(id) {
     const param = {
       _id: id,
-    }
+    };
 
     axios
-      .get(getBusinessUnitLogsUrl + '/' + param._id)
+      .get(getBusinessUnitLogsUrl + "/" + param._id)
       .then((res) => {
         if (res.data.success) {
-          setBuLogs(res.data.data)
+          setBuLogs(res.data.data);
         } else if (!res.data.success) {
-          ToastsStore.error(res.data.error)
+          ToastsStore.error(res.data.error);
         }
       })
       .catch((e) => {
-        console.log('error is ', e)
-      })
+        console.log("error is ", e);
+      });
   }
 
   useEffect(() => {
-    setCurrentUser(cookie.load('current_user'))
-    setcomingFor(props.history.location.state.comingFor)
+    setCurrentUser(cookie.load("current_user"));
+    setcomingFor(props.history.location.state.comingFor);
 
-    const selectedRec = props.history.location.state.selectedItem
+    const selectedRec = props.history.location.state.selectedItem;
     if (selectedRec) {
       Object.entries(selectedRec).map(([key, val]) => {
-        if (val && typeof val === 'object') {
-          dispatch({ field: key, value: val._id })
-          dispatch({ field: 'reason', value: val.reason })
+        if (val && typeof val === "object") {
+          dispatch({ field: key, value: val._id });
+          dispatch({ field: "reason", value: val.reason });
         } else {
-          dispatch({ field: key, value: val })
-          if (key === '_id') {
+          dispatch({ field: key, value: val });
+          if (key === "_id") {
             // get all logs related to this id
-            getBusinessUnitLogs(val)
+            getBusinessUnitLogs(val);
           }
         }
-      })
+      });
     }
     // all array dispatch
     if (props.history.location.state.buHeads) {
       dispatch({
-        field: 'buHeads',
+        field: "buHeads",
         value: props.history.location.state.buHeads,
-      })
+      });
     }
     if (props.history.location.state.status) {
       dispatch({
-        field: 'statues',
+        field: "statues",
         value: props.history.location.state.status,
-      })
+      });
     }
     if (props.history.location.state.divisions) {
       dispatch({
-        field: 'divisions',
+        field: "divisions",
         value: props.history.location.state.divisions,
-      })
+      });
     }
-  }, [])
+  }, []);
 
   const handleCancel = () => {
-    props.history.goBack()
-  }
+    props.history.goBack();
+  };
 
   const handleAdd = () => {
-    setIsFormSubmitted(true)
+    setIsFormSubmitted(true);
     if (validateForm()) {
       const params = {
         buName,
@@ -262,29 +220,29 @@ function AddBusinessUnit(props) {
         status,
         reason,
         updatedBy: currentUser.name,
-      }
+      };
       axios
         .post(addBusinessUnitUrl, params)
         .then((res) => {
           if (res.data.success) {
-            props.history.goBack()
+            props.history.goBack();
             // props.history.push("/bus/success");
           } else if (!res.data.success) {
-            ToastsStore.error(res.data.error)
+            ToastsStore.error(res.data.error);
           }
         })
         .catch((e) => {
-          console.log('error after adding bu inventory', e)
-        })
+          console.log("error after adding bu inventory", e);
+        });
     }
-  }
+  };
 
   const onChangeValue = (e) => {
-    dispatch({ field: e.target.name, value: e.target.value })
-    if (e.target.name === 'status') {
-      dispatch({ field: 'reason', value: '' })
+    dispatch({ field: e.target.name, value: e.target.value });
+    if (e.target.name === "status") {
+      dispatch({ field: "reason", value: "" });
     }
-  }
+  };
 
   function validateForm() {
     return (
@@ -296,11 +254,11 @@ function AddBusinessUnit(props) {
       buHead.length > 0 &&
       status &&
       status.length > 0
-    )
+    );
   }
 
   const handleEdit = () => {
-    setIsFormSubmitted(true)
+    setIsFormSubmitted(true);
     if (validateForm()) {
       const params = {
         _id,
@@ -312,76 +270,64 @@ function AddBusinessUnit(props) {
         updatedBy: currentUser.name,
         buLogsId,
         reason,
-      }
+      };
 
       axios
         .put(updateBusinessUnitUrl, params)
         .then((res) => {
           if (res.data.success) {
-            props.history.goBack()
+            props.history.goBack();
           } else if (!res.data.success) {
-            ToastsStore.error(res.data.error)
+            ToastsStore.error(res.data.error);
           }
         })
         .catch((e) => {
-          console.log('error after adding bu inventory', e)
-        })
+          console.log("error after adding bu inventory", e);
+        });
     }
-  }
+  };
 
   return (
     <div
       style={{
-        backgroundColor: '#60d69f',
-        position: 'fixed',
-        display: 'flex',
-        width: '100%',
-        height: '100%',
-        flexDirection: 'column',
+        backgroundColor: "#60d69f",
+        position: "fixed",
+        display: "flex",
+        width: "100%",
+        height: "100%",
+        flexDirection: "column",
         flex: 1,
-        overflowY: 'scroll',
+        overflowY: "scroll",
       }}
     >
       <Header />
 
       <div className={`cPadding ${classes.root}`}>
-        <div className='subheader'>
+        <div className="subheader">
           <div>
             <img src={business_Unit} />
             <h4>
-              {comingFor === 'add'
-                ? ' Add Business Unit'
-                : ' Edit Business Unit'}
+              {comingFor === "add"
+                ? " Add Business Unit"
+                : " Edit Business Unit"}
             </h4>
           </div>
 
-          <div>
-            <Button
-              onClick={() => props.history.goBack()}
-              style={styles.stylesForButton}
-              variant='contained'
-              color='primary'
-            >
-              <img src={view_all} className='icon-view' />
-              &nbsp;&nbsp;
-              <strong style={{ fontSize: '12px' }}>View All</strong>
-            </Button>
-            {/* <img src={Search} /> */}
-          </div>
+          <ViewAll history={props.history} />
         </div>
 
         <div
           style={{
             flex: 4,
-            display: 'flex',
-            flexDirection: 'column',
+            display: "flex",
+            flexDirection: "column",
           }}
         >
           {/* <h1>{comingFor === 'add' ? 'Add' : 'Edit'}</h1> */}
 
-          <div className='row '>
+          <div className="row ">
             <div
-              className='col-md-12'
+              className="col-md-12"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -389,13 +335,13 @@ function AddBusinessUnit(props) {
             >
               <TextField
                 required
-                label='BU Name'
-                name={'buName'}
+                label="Business Unit Name"
+                name={"buName"}
                 value={buName}
-                error={buName === '' && isFormSubmitted}
+                error={buName === "" && isFormSubmitted}
                 onChange={(e) => onChangeValue(e)}
-                className='textInputStyle'
-                variant='filled'
+                className="textInputStyle"
+                variant="filled"
                 InputProps={{
                   className: classes.input,
                   classes: { input: classes.input },
@@ -404,9 +350,9 @@ function AddBusinessUnit(props) {
             </div>
           </div>
 
-          <div className='row'>
+          <div className="row">
             <div
-              className='col-md-12'
+              className="col-md-12"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -416,21 +362,21 @@ function AddBusinessUnit(props) {
                 required
                 select
                 fullWidth
-                id='buHead'
-                name='buHead'
+                id="buHead"
+                name="buHead"
                 value={buHead}
-                error={buHead === '' && isFormSubmitted}
+                error={buHead === "" && isFormSubmitted}
                 onChange={onChangeValue}
-                label='BU Head'
-                variant='filled'
-                className='dropDownStyle'
+                label="Business Unit Head"
+                variant="filled"
+                className="dropDownStyle"
                 InputProps={{
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
               >
-                <MenuItem value=''>
-                  <em>BU Head</em>
+                <MenuItem value="">
+                  <em>Business Unit Head</em>
                 </MenuItem>
                 {buHeads &&
                   buHeads.map((val) => {
@@ -438,13 +384,13 @@ function AddBusinessUnit(props) {
                       <MenuItem key={val._id} value={val._id}>
                         {val.firstName} {val.lastName}
                       </MenuItem>
-                    )
+                    );
                   })}
               </TextField>
             </div>
 
             <div
-              className='col-md-12'
+              className="col-md-12"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -454,20 +400,20 @@ function AddBusinessUnit(props) {
                 required
                 select
                 fullWidth
-                id='division'
-                name='division'
+                id="division"
+                name="division"
                 value={division}
-                error={division === '' && isFormSubmitted}
+                error={division === "" && isFormSubmitted}
                 onChange={onChangeValue}
-                label='Division'
-                variant='filled'
-                className='dropDownStyle'
+                label="Division"
+                variant="filled"
+                className="dropDownStyle"
                 InputProps={{
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
               >
-                <MenuItem value=''>
+                <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
                 {divisions &&
@@ -476,15 +422,15 @@ function AddBusinessUnit(props) {
                       <MenuItem key={val.key} value={val.key}>
                         {val.value}
                       </MenuItem>
-                    )
+                    );
                   })}
               </TextField>
             </div>
           </div>
 
-          <div className='row'>
+          <div className="row">
             <div
-              className='col-md-12'
+              className="col-md-12"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -493,15 +439,15 @@ function AddBusinessUnit(props) {
               <TextField
                 required
                 multiline
-                type='text'
-                error={description === '' && isFormSubmitted}
-                label='Description'
-                name={'description'}
+                type="text"
+                error={description === "" && isFormSubmitted}
+                label="Description"
+                name={"description"}
                 value={description}
                 onChange={onChangeValue}
                 rows={4}
-                className='textInputStyle'
-                variant='filled'
+                className="textInputStyle"
+                variant="filled"
                 InputProps={{
                   className: classes.input,
                   classes: { input: classes.input },
@@ -510,7 +456,7 @@ function AddBusinessUnit(props) {
             </div>
           </div>
 
-          <div className='row'>
+          <div className="row">
             {/* <div className="col-md-12" style={styles.inputContainer}>
             <InputLabel id="status-label">Status</InputLabel>
             <Select
@@ -537,27 +483,27 @@ function AddBusinessUnit(props) {
 
             <div
               style={{
-                display: 'flex',
+                display: "flex",
                 marginTop: 25,
                 flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
               <div
                 style={{
-                  textAlign: 'center',
+                  textAlign: "center",
                   flex: 0.5,
-                  display: 'flex',
-                  justifyContent: 'center',
-                  height: '100%',
+                  display: "flex",
+                  justifyContent: "center",
+                  height: "100%",
                 }}
               >
                 <h5
                   style={{
-                    color: 'white',
-                    fontWeight: '700',
-                    fontFamily: 'Ubuntu',
+                    color: "white",
+                    fontWeight: "700",
+                    fontFamily: "Ubuntu",
                   }}
                 >
                   Status
@@ -566,16 +512,16 @@ function AddBusinessUnit(props) {
 
               <div
                 style={{
-                  display: 'flex',
+                  display: "flex",
                   flex: 1,
-                  justifyContent: 'center',
+                  justifyContent: "center",
                 }}
               >
                 <Button
-                  onClick={() => dispatch({ field: 'status', value: 'active' })}
-                  variant={status === 'active' ? 'contained' : 'outlined'}
-                  color={status === 'active' ? 'primary' : 'outlined'}
-                  style={{ color: 'white' }}
+                  onClick={() => dispatch({ field: "status", value: "active" })}
+                  variant={status === "active" ? "contained" : "outlined"}
+                  color={status === "active" ? "primary" : "outlined"}
+                  style={{ color: "white" }}
                 >
                   Active
                 </Button>
@@ -583,27 +529,27 @@ function AddBusinessUnit(props) {
 
               <div
                 style={{
-                  display: 'flex',
+                  display: "flex",
                   flex: 1,
-                  justifyContent: 'center',
+                  justifyContent: "center",
                 }}
               >
                 <Button
                   onClick={() =>
-                    dispatch({ field: 'status', value: 'in_active' })
+                    dispatch({ field: "status", value: "in_active" })
                   }
-                  variant={status === 'in_active' ? 'contained' : 'outlined'}
-                  color={status === 'in_active' ? 'primary' : 'outlined'}
-                  style={{ color: 'white' }}
+                  variant={status === "in_active" ? "contained" : "outlined"}
+                  color={status === "in_active" ? "primary" : "outlined"}
+                  style={{ color: "white" }}
                 >
                   In Active
                 </Button>
               </div>
             </div>
 
-            {status === 'in_active' ? (
+            {status === "in_active" ? (
               <div
-                className='col-md-12'
+                className="col-md-12"
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -611,13 +557,13 @@ function AddBusinessUnit(props) {
               >
                 <TextField
                   required
-                  label='Reason'
-                  name={'reason'}
+                  label="Reason"
+                  name={"reason"}
                   value={reason}
-                  error={reason === '' && isFormSubmitted}
+                  error={reason === "" && isFormSubmitted}
                   onChange={onChangeValue}
-                  className='textInputStyle'
-                  variant='filled'
+                  className="textInputStyle"
+                  variant="filled"
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
@@ -629,7 +575,7 @@ function AddBusinessUnit(props) {
             )}
           </div>
 
-          <div style={{ display: 'flex', flex: 1, justifyContent: 'center' }}>
+          <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
             {/* <div style={styles.buttonContainer}>
             <Button onClick={handleCancel} variant="contained">
               Cancel
@@ -638,23 +584,23 @@ function AddBusinessUnit(props) {
 
             <div
               style={{
-                display: 'flex',
+                display: "flex",
                 flex: 1,
                 height: 50,
-                justifyContent: 'center',
-                marginTop: '2%',
-                marginBottom: '2%',
+                justifyContent: "center",
+                marginTop: "2%",
+                marginBottom: "2%",
               }}
             >
-              {comingFor === 'add' ? (
+              {comingFor === "add" ? (
                 <Button
                   style={styles.stylesForPurchaseButton}
                   disabled={!validateForm()}
                   onClick={handleAdd}
-                  variant='contained'
-                  color='primary'
+                  variant="contained"
+                  color="primary"
                 >
-                  <strong style={{ fontSize: '12px' }}>
+                  <strong style={{ fontSize: "12px" }}>
                     Add Business Unit
                   </strong>
                 </Button>
@@ -663,10 +609,10 @@ function AddBusinessUnit(props) {
                   style={styles.stylesForPurchaseButton}
                   disabled={!validateForm()}
                   onClick={handleEdit}
-                  variant='contained'
-                  color='primary'
+                  variant="contained"
+                  color="primary"
                 >
-                  <strong style={{ fontSize: '12px' }}>
+                  <strong style={{ fontSize: "12px" }}>
                     Edit Business Unit
                   </strong>
                 </Button>
@@ -678,16 +624,16 @@ function AddBusinessUnit(props) {
             <img
               onClick={() => props.history.goBack()}
               src={Back_Arrow}
-              style={{ width: 45, height: 35, cursor: 'pointer' }}
+              style={{ width: 45, height: 35, cursor: "pointer" }}
             />
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default AddBusinessUnit
+export default AddBusinessUnit;
 
 {
   /* <div>

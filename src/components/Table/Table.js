@@ -670,6 +670,7 @@ export default function CustomTable(props) {
                         borderTopLeftRadius: index === 0 ? 5 : 0,
                         borderTopRightRadius:
                           index === tableHeading.length - 1 ? 5 : 0,
+                          textAlign: (prop=== "Actions" || prop=== "Action") ? "center": "" 
                       }}
                       key={prop}
                       // onClick={() => console.log(prop)}
@@ -785,6 +786,7 @@ export default function CustomTable(props) {
                             borderBottomRightRadius:
                               props.tableData.length - 1 === index ? 5 : 0,
                             borderWidth: 0,
+                            // textAlign:'center'
                           }}
                           className={classes.tableCell}
                           colSpan="2"

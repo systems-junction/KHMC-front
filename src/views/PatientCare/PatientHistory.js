@@ -40,7 +40,7 @@ import AccountCircle from '@material-ui/icons/SearchOutlined'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import BarCode from '../../assets/img/Bar Code.png'
 import ViewSingleRequest from './viewRequest'
-
+import _ from 'lodash'
 import { connect } from 'react-redux'
 import {
   funForReducer,
@@ -1244,7 +1244,8 @@ function LabRadRequest(props) {
   const getEDRIPROPR = (historyId) => {
     axios.get(getpatientHistoryPre + '/' + historyId).then((res) => {
       if (res.data.success) {
-        setEDRIPROPR(res.data.data.reverse())
+        var obj = _.sortBy(res.data.data, 'createdAt').reverse()
+        setEDRIPROPR(obj)
 
         console.log('responseee', res.data.data)
       }
