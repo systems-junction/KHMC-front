@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { getClaim } from '../../../public/endpoins'
+import { getClaim, searchPatientsURL } from '../../../public/endpoins'
 import Notification from '../../../components/Snackbar/Notification.js'
 import CustomTable from '../../../components/Table/Table'
 import { makeStyles } from '@material-ui/core/styles'
@@ -10,6 +10,11 @@ import claimsReview from '../../../assets/img/ClaimsReview.png'
 import Back_Arrow from '../../../assets/img/Back_Arrow.png'
 import plus_icon from '../../../assets/img/Plus.png'
 import Button from '@material-ui/core/Button'
+import Fingerprint from '../../../assets/img/fingerprint.png'
+import AccountCircle from '@material-ui/icons/SearchOutlined'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import BarCode from '../../../assets/img/Bar Code.png'
+import TextField from '@material-ui/core/TextField'
 import '../../../assets/jss/material-dashboard-react/components/loaderStyle.css'
 
 const tableHeading = [
@@ -31,16 +36,43 @@ const styles = {
     height: '50px',
     outline: 'none',
   },
+  textFieldPadding: {
+    paddingLeft: 0,
+    paddingRight: 5,
+  },
+
 }
+
+const useStylesForInput = makeStyles((theme) => ({
+  input: {
+    backgroundColor: 'white',
+    borderRadius: 5,
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:disabled': {
+      color: 'gray',
+    },
+  },
+
+
+}))
 
 const actions = { edit: true }
 
 export default function Reimbursement(props) {
+  const classes = useStylesForInput()
+
   const [insurance, setinsurance] = useState('')
   const [itemModalVisible, setitemModalVisible] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
   const [openNotification, setOpenNotification] = useState(false)
   const [item, setItem] = useState('')
+  const [searchPatientQuery, setSearchPatientQuery] = useState('')
+
 
   useEffect(() => {
     getinsuranceData()
@@ -93,6 +125,40 @@ export default function Reimbursement(props) {
     })
   }
 
+  const handlePatientSearch =  (e) => {
+    const a = e.target.value.replace(/[^\w\s]/gi, '')
+    setSearchPatientQuery(a)
+    if (a.length >= 3) {
+       axios
+        .get(
+          getClaim + '/' + a
+        )
+        .then((res) => {
+          if (res.data.success) {
+            if (res.data.data.length > 0) {
+              console.log(res.data.data)
+              res.data.data.map((d) => (d.insurer = 'N/A'))
+              setinsurance(res.data.data.reverse());
+            } else {
+              //setEdr(' ')
+            }
+          }
+        })
+        .catch((e) => {
+          console.log('error after searching patient request', e)
+        })
+    }
+
+    else if(a.length == 0){
+      console.log("less");
+      //console.log(Edr); 
+      //getinsuranceData();
+    }
+    
+  }
+
+
+
   return (
     <div
       style={{
@@ -127,6 +193,75 @@ export default function Reimbursement(props) {
             </Button>
           </div>
         </div>
+
+        {/*<div className='row' style={{marginLeft: '0px', marginRight: '0px', marginTop: '20px'}}>
+            <div
+              className='col-md-10 col-sm-9 col-8'
+              style={styles.textFieldPadding}
+            >
+              <TextField
+                className='textInputStyle'
+                id='searchPatientQuery'
+                type='text'
+                variant='filled'
+                label='Search Patient by Name / MRN / National ID / Mobile Number'
+                name={'searchPatientQuery'}
+                value={searchPatientQuery}
+                //onChange={handlePatientSearch} 
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <AccountCircle />
+                    </InputAdornment>
+                  ),
+                  className: classes.input,
+                  classes: { input: classes.input },
+                  disableUnderline: true,
+                }}
+              />
+            </div>
+
+            <div
+              className='col-md-1 col-sm-2 col-2'
+              style={{
+                ...styles.textFieldPadding,
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: 'white',
+                  borderRadius: 5,
+                  height: 55,
+                }}
+              >
+                <img src={BarCode} style={{ width: 70, height: 60 }} />
+              </div>
+            </div>
+
+            <div
+              className='col-md-1 col-sm-1 col-2'
+              style={{
+                ...styles.textFieldPadding,
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: 'white',
+                  borderRadius: 5,
+                  height: 55,
+                }}
+              >
+                <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
+              </div>
+            </div>
+            </div>*/}
+
 
         <div
           style={{

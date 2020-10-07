@@ -226,6 +226,7 @@ function DischargeRequest(props) {
   const [isLoading, setIsLoading] = useState(true)
   const [enableForm, setenableForm] = useState(true)
   const [backIsEmpty, setBackIsEmpty] = useState(false)
+  const [dischargeForm, setDischargeForm] = useState(false)
 
   useEffect(() => {
     if (props.patientDetails) {
@@ -408,14 +409,18 @@ function DischargeRequest(props) {
     // if (validatePatientForm() || validateInsuranceForm()) {
     let params = ''
 
+    let amountReceived = patientDetails.amountReceived
+      ? patientDetails.amountReceived
+      : 0
+
     if (requestType === 'EDR') {
       params = {
         edrId: requestType === 'EDR' ? id : '',
         generatedFor: requestType,
         paymentMethod: patientDetails.paymentMethod,
         depositAmount: patientDetails.payment,
-        amountReceived: patientDetails.amountReceived,
-        totalAmount: patientDetails.amountReceived + patientDetails.payment,
+        amountReceived: amountReceived,
+        totalAmount: amountReceived + patientDetails.payment,
         bankName: patientDetails.bankName,
         depositorName: patientDetails.depositorName,
         receivedBy: currentUser.staffId,
@@ -427,8 +432,8 @@ function DischargeRequest(props) {
         iprId: requestType === 'IPR' ? id : '',
         paymentMethod: patientDetails.paymentMethod,
         depositAmount: patientDetails.payment,
-        amountReceived: patientDetails.amountReceived,
-        totalAmount: patientDetails.amountReceived + patientDetails.payment,
+        amountReceived: amountReceived,
+        totalAmount: amountReceived + patientDetails.payment,
         bankName: patientDetails.bankName,
         depositorName: patientDetails.depositorName,
         receivedBy: currentUser.staffId,
@@ -465,47 +470,50 @@ function DischargeRequest(props) {
   }
 
   const submitDischargeSummary = () => {
-    const params = {
-      _id: id,
-      requestType,
-      dischargeRequest: {
-        ...dischargeRequest,
-        dischargeSummary: {
-          dischargeNotes: dischargeNotes,
-          otherNotes: otherNotes,
+    if (validateDischargeForm()) {
+      const params = {
+        _id: id,
+        requestType,
+        dischargeRequest: {
+          ...dischargeRequest,
+          dischargeSummary: {
+            dischargeNotes: dischargeNotes,
+            otherNotes: otherNotes,
+          },
         },
-      },
-    }
-    console.log('params', params)
-    axios
-      .put(updateEdrIpr, params)
-      .then((res) => {
-        if (res.data.success) {
-          console.log(
-            'response while adding Discharge Req medication',
-            res.data.data
-          )
-          addNewDischargeRequest()
-          notifyForDischarge(patientId)
-          props.history.push({
-            pathname: 'dischargerequest/success',
-            state: {
-              message: `Discharge Summary Request: ${
-                res.data.data.requestNo
-              } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} Submitted successfully`,
-            },
-          })
-          props.setPatientDetailsForReducer('')
-        } else if (!res.data.success) {
+      }
+      console.log('params', params)
+      axios
+        .put(updateEdrIpr, params)
+        .then((res) => {
+          if (res.data.success) {
+            console.log(
+              'response while adding Discharge Req medication',
+              res.data.data
+            )
+            addNewDischargeRequest()
+            notifyForDischarge(patientId)
+            props.history.push({
+              pathname: 'dischargerequest/success',
+              state: {
+                message: `Discharge Summary Request: ${
+                  res.data.data.requestNo
+                } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} Submitted successfully`,
+              },
+            })
+            props.setPatientDetailsForReducer('')
+          } else if (!res.data.success) {
+            setOpenNotification(true)
+            setErrorMsg('Error while adding the Discharge request')
+          }
+        })
+        .catch((e) => {
+          console.log('error after adding Discharge request', e)
           setOpenNotification(true)
-          setErrorMsg('Error while adding the Discharge request')
-        }
-      })
-      .catch((e) => {
-        console.log('error after adding Discharge request', e)
-        setOpenNotification(true)
-        setErrorMsg('Error after adding the Discharge request')
-      })
+          setErrorMsg('Error after adding the Discharge request')
+        })
+    }
+    setDischargeForm(true)
   }
 
   const notifyForDischarge = (id) => {
@@ -720,6 +728,9 @@ function DischargeRequest(props) {
               backgroundColor: 'white',
               borderRadius: 5,
               width: '100%',
+              maxHeight: '300px',
+              overflowY: 'scroll',
+              overflowX: 'hidden',
             }}
           >
             <div
@@ -780,7 +791,7 @@ function DischargeRequest(props) {
                 style={{ display: 'flex', flexDirection: 'column' }}
               >
                 <span style={styles.headingStyles}>MRN</span>
-                <span style={styles.textStyles}>
+                <span style={styles.textStyles} className='mrnUpperCase'>
                   {patientDetails.profileNo
                     ? patientDetails.profileNo
                     : '-----'}
@@ -921,6 +932,7 @@ function DischargeRequest(props) {
                   disabled={enableForm}
                   name={'dischargeNotes'}
                   value={dischargeNotes}
+                  error={dischargeNotes === '' && dischargeForm}
                   onChange={onChangeValue}
                   rows={4}
                   className='textInputStyle'
@@ -944,6 +956,7 @@ function DischargeRequest(props) {
                   name={'otherNotes'}
                   value={otherNotes}
                   onChange={onChangeValue}
+                  error={otherNotes === '' && dischargeForm}
                   rows={4}
                   className='textInputStyle'
                   variant='filled'
@@ -1003,7 +1016,7 @@ function DischargeRequest(props) {
                       style={styles.stylesForButton}
                       variant='contained'
                       color='primary'
-                      disabled={!validateDischargeForm()}
+                      // disabled={!validateDischargeForm()}
                     >
                       <strong style={{ fontSize: '12px' }}>Submit</strong>
                     </Button>

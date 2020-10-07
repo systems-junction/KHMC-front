@@ -33,6 +33,12 @@ import Inactive from "../../assets/img/Inactive.png";
 
 import Active from "../../assets/img/Active.png";
 
+import Fingerprint from '../../assets/img/fingerprint.png'
+import AccountCircle from '@material-ui/icons/SearchOutlined'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import BarCode from '../../assets/img/Bar Code.png'
+import TextField from '@material-ui/core/TextField'
+
 import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 
 const useStyles = makeStyles(styles);
@@ -50,8 +56,9 @@ const stylesB = {
 };
 
 const tableHeading = [
+  "Item Code",
   "Item Name",
-  "Item Class",
+  // "Item Class",
   "Item Type",
   "Quantity",
   "Maximum Level",
@@ -60,18 +67,50 @@ const tableHeading = [
   "Action",
 ];
 const tableDataKeys = [
+  ["itemId", "itemCode"],
   ["itemId", "name"],
-  ["itemId", "cls"],
+  // ["itemId", "cls"],
   ["itemId", "medClass"],
   "qty",
   "maximumLevel",
   "minimumLevel",
   "reorderLevel",
 ];
+
+const stylesInput = {
+  textFieldPadding: {
+    paddingLeft: 0,
+    paddingRight: 5,
+  },
+
+
+}
+
+const useStylesForInput = makeStyles((theme) => ({
+  input: {
+    backgroundColor: 'white',
+    borderRadius: 5,
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:disabled': {
+      color: 'gray',
+    },
+  },
+
+
+}))
+
+
 const actions = { edit: true, delete: false };
 
 export default function WareHouseInventory(props) {
   const classes = useStyles();
+  const classesInput = useStylesForInput()
+
   const [whInventory, setWHInventory] = useState("");
   const [items, setItems] = useState("");
   const [staff, setStaff] = useState("");
@@ -80,6 +119,8 @@ export default function WareHouseInventory(props) {
   const [modalVisible, setModalVisible] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [openNotification, setOpenNotification] = useState(false);
+  const [searchPatientQuery, setSearchPatientQuery] = useState('')
+
 
   if (openNotification) {
     setTimeout(() => {
@@ -182,6 +223,41 @@ export default function WareHouseInventory(props) {
       });
   }
 
+
+  const handlePatientSearch =  (e) => {
+    const a = e.target.value.replace(/[^\w\s]/gi, '')
+    setSearchPatientQuery(a)
+    if (a.length >= 3) {
+       axios
+        .get(
+          getWhInventoryUrl + '/' + a
+        )
+        .then((res) => {
+          if (res.data.success) {
+            if (res.data.data.length > 0) {
+              console.log(res.data.data)
+              setWHInventory(res.data.data);
+            } else {
+              setWHInventory(" ");
+            }
+          }
+        })
+        .catch((e) => {
+          console.log('error after searching patient request', e)
+        })
+    }
+
+    else if(a.length == 0){ 
+      console.log("less");
+      getFunctionalUnit();
+    }
+    
+  }
+
+
+
+
+
   return (
     <div
       style={{
@@ -201,7 +277,7 @@ export default function WareHouseInventory(props) {
         <div className="subheader">
           <div>
             <img src={wh_inventory} />
-            <h4>WareHouse Inventory</h4>
+            <h4>Warehouse Inventory</h4>
           </div>
 
           <div>
@@ -218,6 +294,53 @@ export default function WareHouseInventory(props) {
             {/* <img src={Search} /> */}
           </div>
         </div>
+
+        <div className='row' style={{marginLeft: '0px', marginRight: '0px', marginTop: '20px'}}>
+            <div
+              className='col-md-12 col-sm-9 col-8'
+              style={stylesInput.textFieldPadding}
+            >
+              <TextField
+                className='textInputStyle'
+                id='searchPatientQuery'
+                type='text'
+                variant='filled'
+                label='Search by Item Name/ Item Code'
+                name={'searchPatientQuery'}
+                value={searchPatientQuery}
+                onChange={handlePatientSearch} 
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <AccountCircle />
+                    </InputAdornment>
+                  ),
+                  className: classesInput.input,
+                  classes: { input: classesInput.input },
+                  disableUnderline: true,
+                }}
+              />
+            </div>
+
+            <div
+              className='col-md-1 col-sm-2 col-2'
+              style={{
+                ...stylesInput.textFieldPadding,
+              }}
+            >
+             
+            </div>
+
+            <div
+              className='col-md-1 col-sm-1 col-2'
+              style={{
+                ...stylesInput.textFieldPadding,
+              }}
+            >
+              
+            </div>
+            </div> 
+
 
         <div
           style={{

@@ -54,6 +54,10 @@ export const updatePatientUrl = `${baseUrl}/patient/updatepatient`;
 export const generateEDR = `${baseUrl}/edr/addedr`;
 export const generateIPR = `${baseUrl}/ipr/addipr`;
 export const getVendorApproval = `${baseUrl}/insurance/verify`;
+export const getpatientHistoryPre = `${baseUrl}/patient/getpatienthistorypre`;
+export const getpatientHistory = `${baseUrl}/patient/getpatienthistory`;
+export const getPatientEdrUrl = `${baseUrl}/edr/getedrpatient`;
+export const getPatientIprUrl = `${baseUrl}/ipr/getiprpatient`;
 
 export const searchpatient = `${baseUrl}/patient/searchpatient`;
 export const updateEdrIpr = `${baseUrl}/patient/updateEdrIpr`;
@@ -74,6 +78,8 @@ export const addClaim = `${baseUrl}/reimbursementclaim/addclaim`;
 export const getedripr = `${baseUrl}/reimbursementclaim/getedripr`;
 export const getClaim = `${baseUrl}/reimbursementclaim/getclaim`;
 export const updateClaim = `${baseUrl}/reimbursementclaim/updateclaim`;
+export const getInsuredPatients = `${baseUrl}/reimbursementclaim/getpatientinsurance`;
+export const getpatienthistoryUrl = `${baseUrl}/reimbursementclaim/getpatienthistory`;
 
 // pre-approval Endpoints
 export const getPreApproval = `${baseUrl}/par/getedrandipr`;
@@ -410,3 +416,7 @@ export const getPatientClearanceURL = `${baseUrl}/patientclearance/getpatientcle
 export const addPatientClearanceURL = `${baseUrl}/patientclearance/addpatientclearance`;
 export const getPatientClearanceByIdURL = `${baseUrl}/patientclearance/getpatientclearance/:id`;
 export const updatePatientClearanceURL = `${baseUrl}/patientclearance/updatepatientclearance`;
+
+// icd code
+
+export const getIcd = `${baseUrl}/codes/geticdcat`;

@@ -172,7 +172,7 @@ function AddEditVendor(props) {
 
   useEffect(() => {
     setcomingFor(props.history.location.state.comingFor)
-
+    console.log('props', props.history.location.state.selectedItem)
     const selectedRec = props.history.location.state.selectedItem
     if (selectedRec) {
       Object.entries(selectedRec).map(([key, val]) => {
@@ -383,7 +383,7 @@ function AddEditVendor(props) {
                 }}
                 currencySymbol='JD'
                 outputFormat='number'
-                decimalPlaces='3'
+                decimalPlaces='4'
                 // onChange={(event, value) => setValue(value)}
               />
               {/* <TextField

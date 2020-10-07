@@ -305,7 +305,7 @@ export default function PurchaseRequest(props) {
                           style={{
                             color: "white",
                             fontWeight: "700",
-                            textAlign: "center",
+                            // textAlign: "center",
                             borderTopLeftRadius: index === 0 ? 5 : 0,
                             borderTopRightRadius:
                               index === props.tableHeading.length - 1 ? 5 : 0,
@@ -342,7 +342,7 @@ export default function PurchaseRequest(props) {
                                   className={classes.tableCell}
                                   key={key}
                                   style={{
-                                    textAlign: "center",
+                                    // textAlign: "center",
                                   }}
                                 >
                                   {formatDate(prop[val])}
@@ -354,7 +354,7 @@ export default function PurchaseRequest(props) {
                                   className={classes.tableCell}
                                   key={key}
                                   style={{
-                                    textAlign: "center",
+                                    // textAlign: "center",
                                   }}
                                 >
                                   {typeof prop[val] === "string"
@@ -375,7 +375,7 @@ export default function PurchaseRequest(props) {
                                   key={key}
                                   // onClick={() => handleClick(prop, val)}
                                   style={{
-                                    textAlign: "center",
+                                    // textAlign: "center",
                                     cursor: props.handleModelMaterialReceiving
                                       ? "pointer"
                                       : "",

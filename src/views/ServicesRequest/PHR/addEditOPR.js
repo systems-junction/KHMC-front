@@ -284,6 +284,7 @@ const useStyles = makeStyles((theme) => ({
     },
     "&:focus": {
       boxShadow: "none",
+      borderRadius: 5,
     },
   },
   multilineColor: {
@@ -362,6 +363,7 @@ function AddEditPatientListing(props) {
     emergencyRelation: "",
     coveredFamilyMembers: "",
     otherCoverageDetails: "",
+    insurerId: "",
   };
 
   function reducer(state, { field, value }) {
@@ -413,6 +415,7 @@ function AddEditPatientListing(props) {
     emergencyRelation,
     coveredFamilyMembers,
     otherCoverageDetails,
+    insurerId,
   } = state;
 
   const onChangeCountry = (e) => {
@@ -531,7 +534,7 @@ function AddEditPatientListing(props) {
       // weight &&
       // weight != null &&
       // validateWeight(weight) &&
-      email &&
+      // email &&
       // email.length > 0 &&
       validateEmail(email) &&
       country &&
@@ -866,13 +869,25 @@ function AddEditPatientListing(props) {
   };
 
   const handleGenerateEDR = () => {
-    const params = {
-      patientId,
-      // generatedBy: currentUser.staffId,
-      generatedFrom: "pharmacyRequest",
-      status: "pending",
-      functionalUnit: currentUser.functionalUnit._id,
-    };
+    if (insurerId !== "") {
+      var params = {
+        patientId,
+        // generatedBy: currentUser.staffId,
+        generatedFrom: "pharmacyRequest",
+        status: "pending",
+        functionalUnit: currentUser.functionalUnit._id,
+        insurerId: insurerId,
+        verified: !insuranceBoolean ? true : false,
+      };
+    } else {
+      var params = {
+        patientId,
+        // generatedBy: currentUser.staffId,
+        generatedFrom: "pharmacyRequest",
+        status: "pending",
+        functionalUnit: currentUser.functionalUnit._id,
+      };
+    }
     console.log(params);
     axios
       .post(generateOPR, params, {})
@@ -1035,10 +1050,9 @@ function AddEditPatientListing(props) {
   };
 
   const onBlurChangeValue = (e) => {
-    console.log("amount", e.target.value);
     dispatch({
       field: e.target.name,
-      value: e.target.value,
+      value: e.target.value.replace(/,/g, ""),
     });
   };
 
@@ -1047,16 +1061,19 @@ function AddEditPatientListing(props) {
     axios
       .get(`${getVendorApproval}/${insuranceNo}`)
       .then((e) => {
-        setInsuranceBoolean(false);
-        dispatch({
-          field: "coverageTerms",
-          value: e.data.data.coverageDetail,
-        });
+        if (e.data.success) {
+          setInsuranceBoolean(false);
+          dispatch({
+            field: "coverageTerms",
+            value: e.data.data.coverageDetail,
+          });
 
-        setCovTer(e.data.data.coverageDetail);
-        dispatch({ field: "insuranceVendor", value: e.data.data.vendor });
-
-        console.log(e);
+          setCovTer(e.data.data.coverageDetail);
+          dispatch({ field: "insuranceVendor", value: e.data.data.vendor });
+        } else if (!e.data.success) {
+          setOpenNotification(true);
+          setErrorMsg("Invalid insurance number/insurance number not verified");
+        }
       })
       .catch((error) => {
         setOpenNotification(true);
@@ -1066,19 +1083,6 @@ function AddEditPatientListing(props) {
 
   console.log("coverageTerms", coverageTerms);
   const onChangeValue = (e) => {
-    var pattern = /^[a-zA-Z' ]*$/;
-    if (
-      e.target.name === "firstName" ||
-      e.target.name === "lastName" ||
-      e.target.name === "emergencyName" ||
-      e.target.name === "depositorName" ||
-      e.target.name === "insuranceVendor"
-    ) {
-      if (pattern.test(e.target.value) === false) {
-        return;
-      }
-    }
-
     var heightWeightPattern = /^[0-9. ]*$/;
     if (e.target.name === "height" || e.target.name === "weight") {
       if (heightWeightPattern.test(e.target.value) === false) {
@@ -1112,10 +1116,23 @@ function AddEditPatientListing(props) {
       e.target.name === "depositorName" ||
       e.target.name === "insuranceVendor"
     ) {
-      dispatch({
-        field: e.target.name,
-        value: e.target.value.replace(/[^\w'\s]/gi, ""),
-      });
+      if (/^[a-zA-Z' ]*$/.test(e.target.value) === false) {
+        return;
+      } else {
+        dispatch({
+          field: e.target.name,
+          value: e.target.value.replace(/[^\w'\s]/gi, ""),
+        });
+      }
+    } else if (e.target.name === "address") {
+      if (/^[#.0-9a-zA-Z\s,-]*$/.test(e.target.value) === false) {
+        return;
+      } else {
+        dispatch({
+          field: e.target.name,
+          value: e.target.value,
+        });
+      }
     } else {
       dispatch({
         field: e.target.name,
@@ -1517,7 +1534,9 @@ function AddEditPatientListing(props) {
                     classes: { input: classes.input },
                   }}
                 >
-                  <MenuItem value={title}>{title}</MenuItem>
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
 
                   {titles.map((val) => {
                     return (
@@ -1674,7 +1693,7 @@ function AddEditPatientListing(props) {
                   select
                   label="Nationality"
                   name={"nationality"}
-                  value={nationality}
+                  value={!nationality ? "Jordan" : nationality}
                   // error={nationality === '' && detailsForm}
                   onChange={(e) => onChangeValue(e)}
                   className="textInputStyle"
@@ -1743,19 +1762,21 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
-                  // type="number"
-                  label="Height (ft)"
+                  label="Height"
+                  id="height"
                   name={"height"}
                   value={height}
                   onChange={onChangeValue}
-                  // error={height === '' && isFormSubmitted}
                   className="textInputStyle"
-                  variant="filled"
                   InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">ft</InputAdornment>
+                    ),
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
                   inputProps={{ maxLength: 4 }}
+                  variant="filled"
                 />
                 {/* <ErrorMessage
                   name={height}
@@ -1771,19 +1792,21 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
-                  // type="number"
-                  label="Weight (Kg)"
+                  label="Weight"
+                  id="weight"
                   name={"weight"}
                   value={weight}
                   onChange={onChangeValue}
-                  // error={weight === '' && isFormSubmitted}
                   className="textInputStyle"
-                  variant="filled"
                   InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">Kg</InputAdornment>
+                    ),
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
                   inputProps={{ maxLength: 4 }}
+                  variant="filled"
                 />
                 {/* <ErrorMessage
                   name={weight}
@@ -2624,7 +2647,7 @@ function AddEditPatientListing(props) {
                     }}
                     currencySymbol="JD"
                     outputFormat="number"
-                    decimalPlaces="3"
+                    decimalPlaces="4"
                     // onChange={(event, value) => setValue(value)}
                   />
                   {/* <ErrorMessage
@@ -2969,7 +2992,7 @@ function AddEditPatientListing(props) {
             >
               <div className="row" style={{ marginTop: "20px" }}>
                 <div
-                  className="col-md-9 col-sm-8 col-9"
+                  className="col-md-8 col-sm-8 col-9"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -3053,7 +3076,7 @@ function AddEditPatientListing(props) {
                     style={{
                       ...styles.stylesForButton,
                       height: "53px",
-                      width: 98,
+                      width: "210%",
                       backgroundColor: "#ba55d3",
                     }}
                     onClick={vendorVerify}
@@ -3124,7 +3147,7 @@ function AddEditPatientListing(props) {
                       classes: { input: classes.input },
                     }}
                   >
-                    <MenuItem value={coverageTerms}>None</MenuItem>
+                    <MenuItem value="">None</MenuItem>
 
                     {coverageTermsArr.map((val) => {
                       return (

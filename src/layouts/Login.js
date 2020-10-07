@@ -14,7 +14,7 @@ import axios from 'axios'
 import cookie from 'react-cookies'
 import { loginUrl, getStaffUrl } from '../public/endpoins'
 
-import KHMC_White from '../assets/img/KHMC_White.png'
+import KHMC_White from '../assets/img/KHMC Logo.png'
 
 import Influence_white from '../assets/img/Influence_white.png'
 
@@ -32,7 +32,7 @@ class Login extends React.Component {
     super(props)
 
     this.state = {
-      userName: 'superadmin@khmc.com',
+      userName: '',
       null_userName: false,
 
       password: '123456',
@@ -69,9 +69,9 @@ class Login extends React.Component {
             (s) => s._id === user.staffId
           )
 
-          console.log("user staff", userStaff[0]);
+          console.log('user staff', userStaff[0])
 
-          cookie.save("user_staff", userStaff[0], { path: "/" });
+          cookie.save('user_staff', userStaff[0], { path: '/' })
           // this.setState({
           //   systemAdmin: res.data.data.systemAdmin,
           //   staffType: res.data.data.staffType,
@@ -123,11 +123,11 @@ class Login extends React.Component {
           .post(loginUrl, params)
           .then((res) => {
             if (res.data.success) {
-              console.log("full response", res.data.data);
-              this.getStaffTypes(res.data.data.user);
-              cookie.save("token", res.data.data.token, { path: "/" });
-              cookie.save("current_user", res.data.data.user, { path: "/" });
-              subscribeUser(res.data.data.user);
+              console.log('full response', res.data.data)
+              this.getStaffTypes(res.data.data.user)
+              cookie.save('token', res.data.data.token, { path: '/' })
+              cookie.save('current_user', res.data.data.user, { path: '/' })
+              subscribeUser(res.data.data.user)
 
               // this.props.history.push('/home'+ '/'+res.data.data.user.staffTypeId.routeAccess);
 
@@ -255,115 +255,115 @@ class Login extends React.Component {
             </h6>
           </div>
 
-          <div style={{ marginLeft: "1%", marginRight: "1%" }}>
+          <div style={{ marginLeft: '1%', marginRight: '1%' }}>
             <form onSubmit={(e) => this.handleLogin(e)}>
               {/* <Notification msg={this.state.msg} open={this.state.tr} /> */}
 
-              <div className="container">
+              <div className='container'>
                 <div
-                  className="col-sm-12"
-                  style={{ display: "flex", justifyContent: "center" }}
+                  className='col-sm-12'
+                  style={{ display: 'flex', justifyContent: 'center' }}
                 >
                   <div
-                    className="row"
+                    className='row'
                     style={{
                       marginTop: 20,
-                      width: "55%",
+                      width: '55%',
                     }}
                   >
                     <input
-                      type="email"
-                      placeholder="Email"
-                      name={"email"}
+                      type='email'
+                      placeholder='Email'
+                      name={'email'}
                       value={this.state.userName}
-                      onChange={(e) => this.handleInput(e, "userName")}
-                      className="textInputStyle"
+                      onChange={(e) => this.handleInput(e, 'userName')}
+                      className='textInputStyle'
                       style={{
                         borderColor:
                           !this.state.userName && this.state.null_userName
-                            ? "red"
-                            : "white",
+                            ? 'red'
+                            : 'white',
                       }}
                     />
                   </div>
                 </div>
 
                 <div
-                  className="col-sm-12"
-                  style={{ display: "flex", justifyContent: "center" }}
+                  className='col-sm-12'
+                  style={{ display: 'flex', justifyContent: 'center' }}
                 >
                   <div
-                    className="row"
+                    className='row'
                     style={{
                       marginTop: 25,
-                      width: "55%",
+                      width: '55%',
                     }}
                   >
                     <input
-                      type="password"
-                      placeholder="Password"
-                      name={"password"}
+                      type='password'
+                      placeholder='Password'
+                      name={'password'}
                       value={this.state.password}
-                      onChange={(e) => this.handleInput(e, "password")}
-                      className="textInputStyle"
+                      onChange={(e) => this.handleInput(e, 'password')}
+                      className='textInputStyle'
                       style={{
                         borderColor:
                           !this.state.password && this.state.null_password
-                            ? "red"
-                            : "white",
+                            ? 'red'
+                            : 'white',
                       }}
                     />
 
-                    <div className="Button" />
+                    <div className='Button' />
                   </div>
                 </div>
 
-                <div className="row">
+                <div className='row'>
                   <div
-                    className="col-sm-12"
+                    className='col-sm-12'
                     style={{
-                      display: "flex",
-                      width: "100%",
+                      display: 'flex',
+                      width: '100%',
                     }}
                   >
                     {!this.state.buttonPressed ? (
                       <div
                         style={{
                           marginTop: 25,
-                          width: "100%",
-                          display: "flex",
-                          justifyContent: "center",
+                          width: '100%',
+                          display: 'flex',
+                          justifyContent: 'center',
                         }}
                       >
                         <Button
                           style={{
-                            width: "25%",
+                            width: '25%',
                             paddingTop: 12,
                             paddingBottom: 12,
-                            backgroundColor: "#002164",
+                            backgroundColor: '#002164',
                             borderRadius: 10,
                           }}
                           //onClick={() => this.handleLogin()}
-                          type="submit"
-                          variant="contained"
-                          color="primary"
+                          type='submit'
+                          variant='contained'
+                          color='primary'
                         >
                           Login
                         </Button>
                       </div>
                     ) : (
                       <div
-                        className="row"
+                        className='row'
                         style={{
                           marginTop: 25,
-                          width: "100%",
-                          display: "flex",
-                          justifyContent: "center",
+                          width: '100%',
+                          display: 'flex',
+                          justifyContent: 'center',
                         }}
                       >
                         <Loader
-                          type="TailSpin"
-                          color="white"
+                          type='TailSpin'
+                          color='white'
                           height={50}
                           width={50}
                         />
@@ -376,10 +376,10 @@ class Login extends React.Component {
               <div style={{}}>
                 <h6
                   style={{
-                    cursor: "pointer",
-                    marginTop: "2%",
-                    color: "white",
-                    textAlign: "center",
+                    cursor: 'pointer',
+                    marginTop: '2%',
+                    color: 'white',
+                    textAlign: 'center',
                     // fontWeight: "500",
                   }}
                   onClick={() => this.handleForgetPassword()}

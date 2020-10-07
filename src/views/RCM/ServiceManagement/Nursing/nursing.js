@@ -39,7 +39,7 @@ const stylesB = {
 
 const useStyles = makeStyles(styles)
 
-const tableHeading = ['Service ID', 'Name', 'Price', 'Status', 'Action']
+const tableHeading = ['Service ID', 'Name', 'Price ( JD)', 'Status', 'Action']
 const tableDataKeys = ['serviceNo', 'name', 'price', 'status']
 
 const actions = { edit: true }
@@ -70,6 +70,7 @@ export default function Vendor(props) {
       .then((res) => {
         if (res.data.success) {
           console.log(res.data.data, 'data')
+          res.data.data.map((d) => (d.price = d.price.toFixed(4)))
           setVendor(res.data.data)
           setStatuses(res.data.data.statues)
           setClasses(res.data.data.classes)

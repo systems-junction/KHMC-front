@@ -672,7 +672,9 @@ function AddEditPurchaseRequest(props) {
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
                   // order #
-                  message: `Medical Order: ${res.data.data.requestNo} for patient with MRN: ${patientDetails.profileNo} has been placed succesfully`,
+                  message: `Medical Order: ${
+                    res.data.data.requestNo
+                  } for patient with MRN: ${patientDetails.profileNo.toUpperCase()} has been placed succesfully`,
                   patientDetails: patientDetails,
                 },
               });
@@ -784,7 +786,9 @@ function AddEditPurchaseRequest(props) {
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
                   // order #
-                  message: `Medical Order: ${res.data.data.requestNo} for patient with MRN: ${patientDetails.profileNo} has been updated`,
+                  message: `Medical Order: ${
+                    res.data.data.requestNo
+                  } for patient with MRN: ${patientDetails.profileNo.toUpperCase()} has been updated`,
                   patientDetails: patientDetails,
                 },
               });
@@ -1376,7 +1380,7 @@ function AddEditPurchaseRequest(props) {
     >
       <Header />
 
-      <div className="cPadding">
+      <div className="cPadding" style={{ marginLeft: 10, marginRight: 10 }}>
         <div className="row">
           <div className="subheader">
             <div>
@@ -1482,8 +1486,8 @@ function AddEditPurchaseRequest(props) {
                   style={{
                     zIndex: 3,
                     position: "absolute",
-                    width: "96%",
-                    left: "2%",
+                    width: "96.6%",
+                    left: 22,
                     marginTop: 5,
                   }}
                 >
@@ -1700,8 +1704,8 @@ function AddEditPurchaseRequest(props) {
                       style={{
                         zIndex: 3,
                         position: "absolute",
-                        width: "96%",
-                        left: "2%",
+                        width: "96.6%",
+                        left: 22,
                         marginTop: 5,
                       }}
                     >
@@ -1712,13 +1716,11 @@ function AddEditPurchaseRequest(props) {
                               <TableHead>
                                 <TableRow>
                                   <TableCell
-                                    align="center"
                                     style={styles.forTableCell}
                                   >
                                     Trade Name
                                   </TableCell>
                                   <TableCell
-                                    align="center"
                                     style={styles.forTableCell}
                                   >
                                     Scientific Name
@@ -1733,7 +1735,6 @@ function AddEditPurchaseRequest(props) {
 
                                   <TableCell
                                     style={styles.forTableCell}
-                                    align="center"
                                   >
                                     Description
                                   </TableCell>
@@ -1748,10 +1749,10 @@ function AddEditPurchaseRequest(props) {
                                       onClick={() => handleAddItem(i)}
                                       style={{ cursor: "pointer" }}
                                     >
-                                      <TableCell align="center">
+                                      <TableCell>
                                         {i.tradeName}
                                       </TableCell>
-                                      <TableCell align="center">
+                                      <TableCell>
                                         {i.scientificName}
                                       </TableCell>
 
@@ -1759,7 +1760,7 @@ function AddEditPurchaseRequest(props) {
                                         {i.form}
                                       </TableCell> */}
 
-                                      <TableCell align="center">
+                                      <TableCell>
                                         {i.description}
                                       </TableCell>
                                     </TableRow>

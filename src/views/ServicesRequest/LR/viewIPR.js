@@ -304,9 +304,9 @@ function AddEditPurchaseRequest(props) {
               pathname: 'success',
               state: {
                 //of request Id ${requestId}
-                message: `Lab services Request: ${
+                message: `Lab Services Request: ${
                   res.data.data.requestNo
-                } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} Updated successfully`,
+                } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} updated successfully`,
               },
             })
           } else {
@@ -492,7 +492,7 @@ function AddEditPurchaseRequest(props) {
           <div className='subheader' style={{ marginLeft: '-8px' }}>
             <div>
               <img src={business_Unit} />
-              <h4>In Patient</h4>
+              <h4>In-Patient</h4>
             </div>
           </div>
           <div
@@ -587,6 +587,7 @@ function AddEditPurchaseRequest(props) {
                       }}
                       currencySymbol='JD'
                       outputFormat='number'
+                      decimalPlaces='4'
                     />
                   </div>
                 </div>
@@ -601,7 +602,6 @@ function AddEditPurchaseRequest(props) {
                   >
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                       <DateTimePicker
-                        required
                         disabled={true}
                         inputVariant='filled'
                         fullWidth={true}

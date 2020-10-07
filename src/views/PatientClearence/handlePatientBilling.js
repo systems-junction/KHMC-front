@@ -5,17 +5,21 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
+import logoPatientInvoice from "../../assets/img/logoPatientSummaryInvoice.png";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 import {
   updateClaim,
   getSearchedpatient,
   addClaim,
   getedripr,
   uploadsUrl,
+  audioURL,
   searchpatient,
   addPatientClearanceURL,
   getPatientClearanceURL,
   updatePatientClearanceURL,
-  getSearchDischargedPatient
+  getSearchDischargedPatient,
 } from "../../public/endpoins";
 import axios from "axios";
 import Notification from "../../components/Snackbar/Notification.js";
@@ -50,8 +54,8 @@ import view_all from "../../assets/img/Eye.png";
 
 const tableHeadingForBillSummary = [
   "Date/Time",
+  "Service Type",
   "Service Name",
-  "Name",
   "Amount (JD)",
   "Quantity",
   //   "Invoice",
@@ -275,9 +279,14 @@ function AddEditPatientListing(props) {
   const [externalRequests, setExternalRequests] = useState("");
   const [externalRequestsFee, setExternalRequestsFee] = useState(0);
 
+  const [returnedAmount, setReturnedAmount] = useState(0);
+
   const [internalRequests, setInternalRequests] = useState("");
   const [internalRequestsFee, setInternalRequestsFee] = useState(0);
-
+  const [requestNo, setRequestNo] = useState("");
+  const [visitDate, setVisitDate] = useState("");
+  const [patientProfileNo, setPatientProfileNo] = useState("");
+  const [qr, setQr] = useState("");
   useEffect(() => {
     // setcomingFor(props.history.location.state.comingFor);
     setCurrentUser(cookie.load("current_user"));
@@ -384,6 +393,7 @@ function AddEditPatientListing(props) {
       residentFee: internalRequestsFee,
       subTotal: remainingAmount,
       total: grandTotal,
+      returnedAmount,
     };
 
     let obj = { ...params };
@@ -441,6 +451,7 @@ function AddEditPatientListing(props) {
       residentFee: internalRequestsFee,
       subTotal: remainingAmount,
       total: grandTotal,
+      returnedAmount,
     };
 
     let obj = { ...params };
@@ -504,6 +515,12 @@ function AddEditPatientListing(props) {
     let endTotal = remainingAmount + totalForExternal + totalForInternal;
 
     setGrandTotal(endTotal);
+
+    if (endTotal < patientDetails.amountReceived) {
+      setReturnedAmount(patientDetails.amountReceived - endTotal);
+    } else {
+      setReturnedAmount(0);
+    }
   };
 
   if (openNotification) {
@@ -514,13 +531,47 @@ function AddEditPatientListing(props) {
     }, 2000);
   }
 
+  const formatDate = (date) => {
+    const d = new Date(date);
+
+    let minutes = "";
+
+    if (d.getHours().toString().length === 1) {
+      minutes = "0" + d.getHours();
+    } else {
+      minutes = d.getHours();
+    }
+
+    return (
+      // d.getDate() +
+      d
+        .getDate()
+        .toString()
+        .padStart(2, "0") +
+      " - " +
+      (d.getMonth() + 1).toString().padStart(2, "0") +
+      " - " +
+      // (d.getMonth() + 1) +
+      d.getFullYear() +
+      " " +
+      // d.toLocaleTimeString()
+      minutes +
+      ":" +
+      ("00" + d.getMinutes()).slice(-2)
+    );
+  };
+
   const handleSearch = (e) => {
     const a = e.target.value.replace(/[^\w\s]/gi, "");
     setSearchQuery(a);
     if (a.length >= 3) {
       axios
         .get(
-          getSearchDischargedPatient + "/" + currentUser.functionalUnit._id + "/" + a
+          getSearchDischargedPatient +
+            "/" +
+            currentUser.functionalUnit._id +
+            "/" +
+            a
         )
         .then((res) => {
           if (res.data.success) {
@@ -545,6 +596,7 @@ function AddEditPatientListing(props) {
     dispatch({ field: "diagnosisArray", value: "" });
 
     console.log("selected banda", i);
+    setQr(i.QR);
 
     setSelectedPatient(i);
     setPatientDetails(i);
@@ -560,9 +612,138 @@ function AddEditPatientListing(props) {
     dispatch({ field: "insuranceVendor", value: i.insuranceVendor });
 
     setSearchQuery("");
-    getBillSummary(i._id, i.payment);
+    getBillSummary(i._id, i.amountReceived);
     getPatientByInfo(i._id);
   }
+
+  const onDischargeInvoice = () => {
+    if (grandTotal === "") {
+      setOpenNotification(true);
+      setErrorMsg("Please calculate total amount before creating invoice");
+    } else if (billSummaryArray.length === 0) {
+      setOpenNotification(true);
+      setErrorMsg("No service is used, So invoice cannot be generated");
+    } else {
+      var now = new Date();
+      var start = new Date(now.getFullYear(), 0, 0);
+      var diff =
+        now -
+        start +
+        (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000;
+      var oneDay = 1000 * 60 * 60 * 24;
+      var day = Math.floor(diff / oneDay);
+      var dateNow = new Date();
+      var YYYY = dateNow
+        .getFullYear()
+        .toString()
+        .substr(-2);
+      var HH = dateNow.getHours();
+      var mm = dateNow.getMinutes();
+      let ss = dateNow.getSeconds();
+      const invoiceNo = "IN" + day + YYYY + HH + mm + ss;
+
+      var doc = new jsPDF();
+
+      var logo = new Image();
+      logo.src = logoPatientInvoice;
+
+      // header
+      doc.setFontSize(15);
+      doc.addImage(logo, "PNG", 10, 10, 55, 30);
+      doc.text(60, 15, "Al-Khalidi Hospital & Medical Center");
+      doc.text(77, 20, "Detailed ER Invoice");
+      doc.line(80, 22.5, 120, 22.5);
+      doc.text(93, 28, "CASH");
+      doc.line(80, 30, 120, 30);
+      doc.setFontSize(12);
+      doc.text(170, 14, "Amman Jordan");
+
+      // background coloring
+      doc.setFillColor(255, 255, 200);
+      doc.rect(10, 45, 190, 20, "F");
+
+      // information of patient
+      doc.setFontSize(10);
+      doc.setFont("times", "bold");
+      doc.text(12, 50, "Patient Name:");
+      doc.text(12, 55, "Visit Date:");
+      doc.text(12, 60, "Patient MRN:");
+      doc.text(120, 50, "Invoice No:");
+      doc.text(120, 55, "Invoice Date");
+      doc.text(120, 60, "Visit No:");
+
+      // dynamic data info patient
+      doc.setFont("times", "normal");
+      doc.text(47, 50, `${firstName + ` ` + lastName}`);
+      doc.text(47, 55, `${visitDate.substr(0, 10)}`);
+      doc.text(47, 60, `${patientProfileNo}`);
+      doc.text(155, 50, `${invoiceNo}`);
+      doc.text(155, 55, `${dateNow.toISOString().substr(0, 10)} ${HH}:${mm}`);
+      doc.text(155, 60, `${requestNo}`);
+
+      // heading 1
+
+      // doc.setFontSize(20);
+      // doc.text(10, 80, "Not Covered");
+
+      // table 1
+
+      doc.autoTable({
+        margin: { top: 70, right: 10, left: 10 },
+        tableWidth: "auto",
+        headStyles: { fillColor: [44, 109, 221] },
+        html: "#my-table",
+      });
+
+      // heading 2
+
+      // doc.setFontSize(20);
+      // doc.text(10, 180, "Paid Doctor fee");
+
+      // table 2
+
+      // footer
+      doc.setFontSize(12);
+      doc.setFont("times", "bold");
+      doc.text(120, 230, "Consultant Fee");
+      doc.text(190, 230, "JD");
+      doc.text(120, 235, "Doctor Fee");
+      doc.text(190, 235, "JD");
+      doc.text(120, 240, "Deposited Amount");
+      doc.text(190, 240, "JD");
+      doc.text(120, 245, "Total Services Bill");
+      doc.text(190, 245, "JD");
+
+      doc.text(120, 250, "Sub Total");
+      doc.text(190, 250, "JD");
+      doc.text(120, 255, "Total");
+      doc.text(190, 255, "JD");
+
+      doc.text(10, 250, "Signature & Stamp");
+      doc.line(10, 255, 60, 255);
+
+      // dynamic text
+      doc.setFont("times", "normal");
+      doc.text(169, 230, `${externalRequestsFee}`);
+      doc.text(169, 235, `${internalRequestsFee}`);
+      doc.text(
+        169,
+        240,
+        `${patientDetails.payment ? patientDetails.payment : 0}`
+      );
+      doc.text(169, 245, `${totalBillingAmount}`);
+      doc.text(169, 250, `${remainingAmount}`);
+      doc.text(169, 255, `${grandTotal}`);
+
+      // bar code
+      doc.line(0, 260, 210, 260);
+      if (qr) {
+        doc.addImage(`${audioURL}${qr}`, "PNG", 172.9, 266, 25, 25);
+      }
+
+      doc.save("Discharge Patient.pdf");
+    }
+  };
 
   function getBillSummary(i, payment) {
     axios
@@ -571,8 +752,12 @@ function AddEditPatientListing(props) {
         if (res.data.success) {
           console.log("response for search", res.data.data);
 
+          setRequestNo(res.data.data.requestNo);
           setInternalRequests(res.data.data.residentNotes.length);
           setExternalRequests(res.data.data.consultationNote.length);
+          setVisitDate(res.data.data.createdAt);
+          setPatientProfileNo(res.data.data.patientId.profileNo);
+
           //   dispatch({
           //     field: "treatmentDetail",
           //     value: res.data.rc.treatmentDetail,
@@ -689,7 +874,11 @@ function AddEditPatientListing(props) {
           setTotalBillingAmount(totalAmount);
           console.log(payment);
           if (payment) {
-            setRemainingAmount(totalAmount - parseInt(payment));
+            if (totalAmount - parseInt(payment) > 0) {
+              setRemainingAmount(totalAmount - parseInt(payment));
+            } else {
+              setRemainingAmount(totalAmount);
+            }
           } else {
             setRemainingAmount(totalAmount);
           }
@@ -754,7 +943,6 @@ function AddEditPatientListing(props) {
       });
   };
 
-
   const handleInvoicePrint = () => {
     alert("Printer not attached");
   };
@@ -781,7 +969,7 @@ function AddEditPatientListing(props) {
               <h4>
                 {comingFor === "add"
                   ? "Patient Clearance"
-                  : " Edit Patient Clearance"}
+                  : "Edit Patient Clearance"}
               </h4>
             </div>
           </div>
@@ -912,7 +1100,7 @@ function AddEditPatientListing(props) {
                           style={{
                             zIndex: 3,
                             position: "absolute",
-                            width: "98%",
+                            width: "81%",
                             left: 14,
                             marginTop: 5,
                           }}
@@ -1058,7 +1246,9 @@ function AddEditPatientListing(props) {
                     style={{ display: "flex", flexDirection: "column" }}
                   >
                     <span style={styles.headingStyles}>MRN</span>
-                    <span style={styles.textStyles}>{profileNo}</span>
+                    <span style={styles.textStyles}>
+                      {profileNo.toUpperCase()}
+                    </span>
 
                     <span style={styles.headingStyles}>Patient</span>
                     <span style={styles.textStyles}>
@@ -1208,6 +1398,7 @@ function AddEditPatientListing(props) {
                   <CurrencyTextField
                     // style={{ backgroundColor: "white", borderRadius: 5 }}
                     className="textInputStyle"
+                    decimalPlaces={4}
                     id={"externalRequestsFee"}
                     label="Fee"
                     name={"externalRequestsFee"}
@@ -1263,6 +1454,7 @@ function AddEditPatientListing(props) {
                 >
                   <CurrencyTextField
                     required
+                    decimalPlaces={4}
                     style={{ backgroundColor: "white", borderRadius: 5 }}
                     className="textInputStyle"
                     id={"internalRequestsFee"}
@@ -1298,12 +1490,13 @@ function AddEditPatientListing(props) {
                 >
                   <CurrencyTextField
                     disabled
+                    decimalPlaces={4}
                     style={{ backgroundColor: "white", borderRadius: 5 }}
                     className="textInputStyle"
                     id="payment"
                     label=" Deposited Amount"
                     name={"payment"}
-                    value={patientDetails.payment ? patientDetails.payment : 0}
+                    value={patientDetails.amountReceived ? patientDetails.amountReceived : 0}
                     onBlur={onChangeValue}
                     variant="filled"
                     textAlign="left"
@@ -1322,7 +1515,7 @@ function AddEditPatientListing(props) {
                 </div>
 
                 <div
-                  className="col-md-3"
+                  className="col-md-2"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1331,6 +1524,7 @@ function AddEditPatientListing(props) {
                   <CurrencyTextField
                     disabled
                     required
+                    decimalPlaces={4}
                     style={{ backgroundColor: "white", borderRadius: 5 }}
                     className="textInputStyle"
                     id={"totalBillingAmount"}
@@ -1364,6 +1558,7 @@ function AddEditPatientListing(props) {
                   <CurrencyTextField
                     required
                     disabled
+                    decimalPlaces={4}
                     style={{ backgroundColor: "white", borderRadius: 5 }}
                     className="textInputStyle"
                     id={"remainingAmount"}
@@ -1389,7 +1584,7 @@ function AddEditPatientListing(props) {
                 </div>
 
                 <div
-                  className="col-md-3"
+                  className="col-md-2"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1398,12 +1593,48 @@ function AddEditPatientListing(props) {
                   <CurrencyTextField
                     required
                     disabled
+                    decimalPlaces={4}
                     style={{ backgroundColor: "white", borderRadius: 5 }}
                     className="textInputStyle"
                     id={"rgrandTotal"}
                     label="Total"
                     name={"grandTotal"}
                     value={grandTotal}
+                    onBlur={onChangeValue}
+                    variant="filled"
+                    textAlign="left"
+                    InputProps={{
+                      className: classesForInput.input,
+                      classes: { input: classesForInput.input },
+                    }}
+                    InputLabelProps={{
+                      className: classesForInput.label,
+                      classes: { label: classesForInput.label },
+                      readOnly: true,
+                    }}
+                    currencySymbol="JD"
+                    outputFormat="number"
+                    onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
+                  />
+                </div>
+
+                <div
+                  className="col-md-2"
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <CurrencyTextField
+                    required
+                    disabled
+                    decimalPlaces={4}
+                    style={{ backgroundColor: "white", borderRadius: 5 }}
+                    className="textInputStyle"
+                    id={"returnedAmount"}
+                    label="Returned Amount"
+                    name={"returnedAmount"}
+                    value={returnedAmount}
                     onBlur={onChangeValue}
                     variant="filled"
                     textAlign="left"
@@ -1433,8 +1664,27 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <Button
+                  style={{
+                    color: "white",
+                    cursor: "pointer",
+                    borderRadius: 5,
+                    backgroundColor: "#2c6ddd",
+                    width: "130px",
+                    height: "45px",
+                    outline: "none",
+                    marginRight: 15,
+                  }}
+                  // disabled={}
+                  onClick={onDischargeInvoice}
+                  variant="contained"
+                  color="default"
+                >
+                  Invoice
+                </Button>
+
+                <Button
                   style={styles.stylesForButton}
-                  //disabled={!validateFormType1()}
+                  // disabled={!validateFormType1()}
                   onClick={onCalculateTotal}
                   variant="contained"
                   color="default"
@@ -1510,6 +1760,34 @@ function AddEditPatientListing(props) {
           success={successMsg}
         />
       </div>
+      <Table aria-label="my table" id="my-table" style={{ display: "none" }}>
+        <TableHead>
+          <TableRow>
+            <TableCell>Date/Time</TableCell>
+            <TableCell align="right">Service Type</TableCell>
+            <TableCell align="right">Service Name</TableCell>
+            <TableCell align="right">Amount (JD)</TableCell>
+            <TableCell align="right">Quantity</TableCell>
+          </TableRow>
+        </TableHead>
+        {patientId && billSummaryArray != false ? (
+          <TableBody>
+            {billSummaryArray.map((row) => (
+              <TableRow key={row.date}>
+                <TableCell component="th" scope="row">
+                  {formatDate(row.date)}
+                </TableCell>
+                <TableCell align="right">{row.serviceId.type}</TableCell>
+                <TableCell align="right">{row.serviceId.name}</TableCell>
+                <TableCell align="right">{row.serviceId.price}</TableCell>
+                <TableCell align="right">{row.qty}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        ) : (
+          <h1>No service found</h1>
+        )}
+      </Table>
     </div>
   );
 }

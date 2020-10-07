@@ -259,28 +259,84 @@ export default function PurchaseRequest(props) {
       open={props.openItemDialog}
     >
       <DialogContent style={{ backgroundColor: "#60d69f" }}>
-        <div
-          style={{
-            flex: 4,
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <div className="conatiner">
-            <h5 style={{color:"white", fontWeight:'700'}}>Added Items</h5>
-          </div>
-          <Table>
-            <TableHead
-              className={classes["TableHeader"]}
-              style={{
-                backgroundColor: "#2873cf",
-              }}
-            >
-              <TableRow>
-                {tableHeading &&
-                  tableHeading.map((prop, index) => {
+        <div>
+          <h5 style={{ color: "white", fontWeight:'bold' }}>
+            Added Items
+          </h5>
+        </div>
+     
+            <Table>
+              <TableHead
+                className={classes["TableHeader"]}
+                style={{
+                  backgroundColor: "#2873cf",
+                }}
+              >
+                <TableRow>
+                  {tableHeading &&
+                    tableHeading.map((prop, index) => {
+                      return (
+                        <>
+                          <TableCell
+                            className={classes.tableHeadCell}
+                            style={{
+                              color: "white",
+                              fontWeight: "700",
+                              // textAlign: "center",
+                              borderTopLeftRadius: index === 0 ? 5 : 0,
+                              borderTopRightRadius:
+                                index === tableHeading.length - 1 ? 5 : 0,
+                            }}
+                            key={prop}
+                          >
+                            {prop}
+                          </TableCell>
+                        </>
+                      );
+                    })}
+                </TableRow>
+              </TableHead>
+
+              <TableBody>
+                {props.items &&
+                  props.items.map((prop, index) => {
                     return (
-                      <>
+                      <TableRow
+                        key={index}
+                        className={classes.tableBodyRow}
+                        style={{
+                          backgroundColor: "white",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {tableDataKeys
+                          ? tableDataKeys.map((val, key) => {
+                              return (
+                                <TableCell
+                                  className={classes.tableCell}
+                                  key={key}
+                                  onClick={() => handleClick(prop, val)}
+                                  style={{
+                                    // textAlign: "center",
+                                    cursor: props.handleModelMaterialReceiving
+                                      ? "pointer"
+                                      : "",
+                                  }}
+                                >
+                                  {Array.isArray(val)
+                                    ? prop[val[0]]
+                                      ? prop[val[0]][val[1]]
+                                      : null
+                                    : val.toLowerCase() === "timestamp"
+                                    ? new Intl.DateTimeFormat(
+                                        "en-US",
+                                        dateOptions
+                                      ).format(Date.parse(prop[val]))
+                                    : replaceSlugToTitle(prop[val])}
+                                </TableCell>
+                              );
+                            })
+                          : null}
                         <TableCell
                           className={classes.tableHeadCell}
                           style={{
@@ -295,75 +351,11 @@ export default function PurchaseRequest(props) {
                         >
                           {prop}
                         </TableCell>
-                      </>
+                      </TableRow>
                     );
                   })}
-              </TableRow>
-            </TableHead>
-
-            <TableBody>
-              {props.items &&
-                props.items.map((prop, index) => {
-                  return (
-                    <TableRow
-                      key={index}
-                      className={classes.tableBodyRow}
-                      style={{
-                        backgroundColor: "white",
-                        cursor: "pointer",
-                      }}
-                    >
-                      {tableDataKeys
-                        ? tableDataKeys.map((val, key) => {
-                            return (
-                              <TableCell
-                                className={classes.tableCell}
-                                key={key}
-                                onClick={() => handleClick(prop, val)}
-                                style={{
-                                  textAlign: "center",
-                                  cursor: props.handleModelMaterialReceiving
-                                    ? "pointer"
-                                    : "",
-                                }}
-                              >
-                                {Array.isArray(val)
-                                  ? prop[val[0]]
-                                    ? prop[val[0]][val[1]]
-                                    : null
-                                  : val.toLowerCase() === "timestamp"
-                                  ? new Intl.DateTimeFormat(
-                                      "en-US",
-                                      dateOptions
-                                    ).format(Date.parse(prop[val]))
-                                  : replaceSlugToTitle(prop[val])}
-                              </TableCell>
-                            );
-                          })
-                        : null}
-                      <TableCell
-                        style={{
-                          cursor: "pointer",
-                        }}
-                        className={classes.tableCell}
-                        colSpan="2"
-                      >
-                        <span onClick={() => props.viewSingleItem(prop)}>
-                          <i
-                            style={{
-                              color: "grey",
-                              fontSize: "30px",
-                            }}
-                            className=" ml-10 zmdi zmdi-eye zmdi-hc-3x"
-                          />
-                        </span>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-            </TableBody>
-          </Table>
-        </div>
+              </TableBody>
+            </Table>
       </DialogContent>
     </Dialog>
   );

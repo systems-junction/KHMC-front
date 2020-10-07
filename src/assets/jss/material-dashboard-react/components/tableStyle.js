@@ -21,67 +21,69 @@ const tableStyle = (theme) => ({
   //   color: grayColor[0]
   // },
   table: {
-    marginBottom: '0',
-    width: '100%',
-    maxWidth: '100%',
-    backgroundColor: 'transparent',
-    borderSpacing: '0',
-    borderCollapse: 'collapse',
+    marginBottom: "0",
+    width: "100%",
+    maxWidth: "100%",
+    backgroundColor: "transparent",
+    borderSpacing: "0",
+    borderCollapse: "collapse",
     // border: '1px solid rgb(165, 165, 165)',
-    fontFamily: 'Open Sans,sans-serif',
+    fontFamily: "Open Sans,sans-serif",
   },
   tableHeadCell: {
     // color: "inherit",
     // ...defaultFont,
-    '&, &$tableCell': {
+    "&, &$tableCell": {
       // fontSize: '1rem',
-      fontWeight: 'bold',
-      fontFamily: 'Open Sans,sans-serif',
+      fontWeight: "bold",
+      fontFamily: "Open Sans,sans-serif",
+      paddingLeft: 8,
+      paddingRight: 8,
     },
-    textAlign: 'center',
+    // textAlign: 'center',
   },
   tableCell: {
     // ...defaultFont,
-    lineHeight: '1.42857143',
-    padding: '12px 8px',
-    verticalAlign: 'middle',
+    lineHeight: "1.42857143",
+    padding: "12px 8px",
+    verticalAlign: "middle",
     // fontSize: '0.8125rem',
     // border: '0.5px solid rgb(165, 165, 165)',
-    fontFamily: 'Open Sans,sans-serif',
-    textAlign: 'center',
+    fontFamily: "Open Sans,sans-serif",
+    // textAlign: 'center',
   },
 
   tableResponsive: {
-    width: '100%',
+    width: "100%",
     marginTop: theme.spacing(3),
-    overflowX: 'auto',
+    overflowX: "auto",
   },
 
   tableHeadRow: {
-    height: '56px',
-    color: 'inherit',
-    display: 'table-row',
-    outline: 'none',
-    verticalAlign: 'middle',
+    // height: '56px',
+    color: "inherit",
+    display: "table-row",
+    outline: "none",
+    verticalAlign: "middle",
     // backgroundColor: '#2873CF'
   },
 
   tableBodyRow: {
-    height: '48px',
-    color: 'inherit',
-    display: 'table-row',
-    outline: 'none',
-    verticalAlign: 'middle',
+    height: "48px",
+    color: "inherit",
+    display: "table-row",
+    outline: "none",
+    verticalAlign: "middle",
   },
 
   tableData: {
-    fontSize: '0.8125rem',
-    fontWeight: '400',
+    fontSize: "0.8125rem",
+    fontWeight: "400",
     // fontFamily: 'Ubuntu'
   },
   pointer: {
-    cursor: 'pointer',
+    cursor: "pointer",
   },
-})
+});
 
-export default tableStyle
+export default tableStyle;

@@ -6,7 +6,6 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 // @material-ui/core components
 import { makeStyles, withStyles } from "@material-ui/core/styles";
-
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Table from "@material-ui/core/Table";
@@ -19,22 +18,17 @@ import styles from "../../assets/jss/material-dashboard-react/components/tableSt
 import TablePagination from "@material-ui/core/TablePagination";
 import RcIf from "rc-if";
 import { dateOptions } from "../../variables/public";
-
 import Active from "../../assets/img/Active.png";
 import In_Active from "../../assets/img/Inactive.png";
 import ReturnItem from "../../assets/img/Return Item Grey.png";
 import ReceiveItem from "../../assets/img/Receive Item Grey.png";
-import print from "../../assets/img/print.png";
-
 import EditIcon from "../../assets/img/Edit.png";
 import cookie from "react-cookies";
-
 import Tooltip from "@material-ui/core/Tooltip";
-
 import capitilizeLetter from "../../public/capitilizeLetter";
-
 import formatDate from "../../utils/formatDate";
 import mapDateToKeys from "../../utils/mapDateToKeys";
+import Chip from '@material-ui/core/Chip'
 
 const useStyles = makeStyles(styles);
 
@@ -95,17 +89,27 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
+const useStylesForChip = makeStyles((theme) => ({
+  root: {
+    "& .MuiChip-root": {
+      backgroundColor: "red",
+      color:'white',
+      borderRadius:'10px',
+      height:'25px'
+    },
+  },
+}));
+
 export default function CustomTable(props) {
   const { tableHeading, tableData, tableDataKeys, tableHeaderColor } = props;
 
   const classes = useStyles();
+  const classForChip = useStylesForChip();
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
   const [selectedRow, setSelectedRow] = React.useState("");
-
   const [hovered, setHovered] = React.useState("");
-
   const [currentUser, setCurrentUser] = React.useState(
     cookie.load("current_user")
   );
@@ -118,7 +122,65 @@ export default function CustomTable(props) {
     // props.tableData
   }, []);
 
-  const replaceSlugToTitle = (val) => {
+  const replaceSlugToTitle = (val, key) => {
+
+    if (key === "heartRate") {
+      if (val < 60 || val > 100) {
+        return (
+          <Chip label={val} />
+        )
+      }
+    }
+    if (key === "bloodPressureSys") {
+      if (val > 120 || val < 90) {
+        return (
+          <Chip label={val} />
+        )
+      }
+    }
+    if (key === "bloodPressureDia") {
+      if (val < 60 || val > 80) {
+        return (
+          <Chip label={val} />
+        )
+      }
+    }
+    if (key === "respiratoryRate") {
+      if (val < 12 || val > 25) {
+        return (
+          <Chip label={val} />
+        )
+      }
+    }
+    if (key === "temperature") {
+      if (val < 97 || val > 99) {
+        return (
+          <Chip label={val} />
+        )
+      }
+    }
+    if (key === "FSBS") {
+      if (val < 80 || val > 130) {
+        return (
+          <Chip label={val} />
+        )
+      }
+    }
+    if (key === "painScale") {
+      if (val >= 8) {
+        return (
+          <Chip label={val} />
+        )
+      }
+    }
+    if (key === "pulseOX") {
+      if (val < 80 || val > 100) {
+        return (
+          <Chip label={val} />
+        )
+      }
+    }
+
     if (val === "in_active") {
       return (
         <Button
@@ -199,8 +261,8 @@ export default function CustomTable(props) {
                 <strong>Can be fulfilled</strong>
               </Button>
             ) : (
-              ""
-            )}
+                        ""
+                      )}
           </>
         );
       } else {
@@ -242,22 +304,22 @@ export default function CustomTable(props) {
                 <strong>Can be fulfilled</strong>
               </Button>
             ) : (
-              ""
-            )}
+                      ""
+                    )}
           </>
         );
       }
     } else if (
-      val === 'in_progress' ||
-      val === 'po_sent' ||
-      val === 'items_in_transit' ||
-      val === 'pending_approval_from_accounts' ||
-      val === 'pending_approval' ||
-      val === 'Delivery in Progress' ||
-      val === 'Fulfillment Initiated' ||
-      val === 'Partial Fulfillment Initiated' ||
-      val === 'pending_administration' ||
-      val === 'pending_receipt'
+      val === "in_progress" ||
+      val === "po_sent" ||
+      val === "items_in_transit" ||
+      val === "pending_approval_from_accounts" ||
+      val === "pending_approval" ||
+      val === "Delivery in Progress" ||
+      val === "Fulfillment Initiated" ||
+      val === "Partial Fulfillment Initiated" ||
+      val === "pending_administration" ||
+      val === "pending_receipt"
     ) {
       return (
         <>
@@ -336,7 +398,7 @@ export default function CustomTable(props) {
             >
               <strong>Partial Ful Initiated</strong>
             </Button>
-          ) : val === 'pending_receipt' ? (
+          ) : val === "pending_receipt" ? (
             <Button
               style={stylesB.stylesForActive}
               variant="contained"
@@ -353,44 +415,46 @@ export default function CustomTable(props) {
               <strong>Pending Administration</strong>
             </Button>
           ) : (
-            <Button
-              style={stylesB.stylesForActive}
-              variant="contained"
-              color="primary"
-            >
-              <strong>Po Sent</strong>
-            </Button>
-          )}
+                                <Button
+                                  style={stylesB.stylesForActive}
+                                  variant="contained"
+                                  color="primary"
+                                >
+                                  <strong>Po Sent</strong>
+                                </Button>
+                              )}
         </>
       );
     } else if (
-      val === 'complete' ||
-      val === 'Complete' ||
-      val === 'pending' ||
-      val === 'modify' ||
-      val === 'closed' ||
-      val === 'delivered' ||
-      val === 'partially completed' ||
-      val === 'approved' ||
-      val === 'Approved' ||
-      val === 'Analysis In Progress' ||
-      val === 'reject' ||
-      val === 'response in progress' ||
-      val === 'partial approved' ||
-      val === 'Partial Approved' ||
-      val === 'completed' ||
-      val === 'approve' ||
-      val === 'received' ||
-      val === 'Partially Received' ||
-      val === 'Partially Completed' ||
-      val === 'Cannot be fulfilled' ||
-      val === 'Item Returned to Warehouse' ||
-      val === 'Returned' ||
-      val === 'receive' ||
-      val === 'Received' ||
-      val === 'Rejected' ||
-      val === 'Sent for PAR' ||
-      val === 'Completed'
+      val === "complete" ||
+      val === "Complete" ||
+      val === "pending" ||
+      val === "modify" ||
+      val === "closed" ||
+      val === "delivered" ||
+      val === "partially completed" ||
+      val === "approved" ||
+      val === "Approved" ||
+      val === "Analysis In Progress" ||
+      val === "reject" ||
+      val === "response in progress" ||
+      val === "partial approved" ||
+      val === "Partial Approved" ||
+      val === "completed" ||
+      val === "approve" ||
+      val === "received" ||
+      val === "Partially Received" ||
+      val === "Partially Completed" ||
+      val === "Cannot be fulfilled" ||
+      val === "Item Returned to Warehouse" ||
+      val === "Returned" ||
+      val === "receive" ||
+      val === "Received" ||
+      val === "Rejected" ||
+      val === "Sent for PAR" ||
+      val === "Completed" ||
+      val === "discharged" ||
+      val === "Discharged"
     ) {
       return (
         <>
@@ -577,19 +641,26 @@ export default function CustomTable(props) {
             >
               <strong>Received</strong>
             </Button>
-          ) : (
+          ) : val === "Discharged" || val === "discharged" ? (
             <Button
-              style={stylesB.stylesForActive}
+              style={{ ...stylesB.stylesForActive, backgroundColor: "#ba55d3" }}
               variant="contained"
               color="primary"
             >
-              <strong>Item Returned</strong>
+              <strong>Discharged</strong>
             </Button>
-          )}
+          ) : (
+                                                          <Button
+                                                            style={stylesB.stylesForActive}
+                                                            variant="contained"
+                                                            color="primary"
+                                                          >
+                                                            <strong>Item Returned</strong>
+                                                          </Button>
+                                                        )}
         </>
       );
     }
-
     return capitilizeLetter(val);
   };
 
@@ -611,7 +682,10 @@ export default function CustomTable(props) {
 
     return (
       // d.getDate() +
-      d.getDate() +
+      d
+        .getDate()
+        .toString()
+        .padStart(2, "0") +
       " - " +
       (d.getMonth() + 1).toString().padStart(2, "0") +
       " - " +
@@ -659,18 +733,17 @@ export default function CustomTable(props) {
                       className={classes.tableHeadCell}
                       style={{
                         color: "white",
-                        fontWeight: "700",
-                        // paddingTop: 30,
-                        // paddingBottom: 30,
-                        textAlign: "center",
+                        // fontWeight: '700',
+                        // paddingLeft:8, paddingRight:8,
                         borderTopLeftRadius: index === 0 ? 5 : 0,
                         borderTopRightRadius:
                           index === tableHeading.length - 1 ? 5 : 0,
+                        textAlign: (prop === "Actions" || prop === "Action") ? "center" : ""
                       }}
                       key={prop}
-                      onClick={() => console.log(prop)}
-                      onMouseEnter={() => setHovered(prop)}
-                      onMouseLeave={() => setHovered("")}
+                    // onClick={() => console.log(prop)}
+                    // onMouseEnter={() => setHovered(prop)}
+                    // onMouseLeave={() => setHovered('')}
                     >
                       {prop}
                     </TableCell>
@@ -692,85 +765,86 @@ export default function CustomTable(props) {
                   <>
                     <StyledTableRow
                       key={index}
-                      // className={classes.tableBodyRow}
-                      // style={{
-                      //   backgroundColor: "white",
-                      // }}
-                      // onClick={() => {
-                      //   setRow(prop);
-                      // }}
+                    // className={classes.tableBodyRow}
+                    // style={{
+                    //   backgroundColor: "white",
+                    // }}
+                    // onClick={() => {
+                    //   setRow(prop);
+                    // }}
                     >
                       {tableDataKeys
                         ? tableDataKeys.map((val, key) => {
-                            // if (val === 'date') {
-                            //   return (
-                            //     <TableCell
-                            //       className={classes.tableCell}
-                            //       key={key}
-                            //       style={{
-                            //         textAlign: 'center',
-                            //       }}
-                            //     >
-                            //       {formatDate(prop[val])}
-                            //     </TableCell>
-                            //   )
-                            // }
-                            if (mapDateToKeys(val)) {
-                              return (
-                                <TableCell
-                                  className={classes.tableCell}
-                                  key={key}
-                                  style={{
-                                    textAlign: "center",
-                                    borderWidth: 0,
-                                    maxWidth:400,
-                                  }}
-                                >
-                                  {Array.isArray(val)
-                                    ? prop[val[0]]
-                                      ? formatDate(prop[val[0]][val[1]])
-                                      : prop[val[0]][val[1]]
-                                    : formatDate(prop[val])}
-                                </TableCell>
-                              );
-                            } else {
-                              return (
-                                <TableCell
-                                  className={classes.tableCell}
-                                  key={key}
-                                  onClick={() => handleClick(prop, val)}
-                                  style={{
-                                    maxWidth:400,
-                                    textAlign: 'center',
-                                    cursor: props.handleModelMaterialReceiving
-                                      ? "pointer"
-                                      : "",
-                                    // borderTopLeftRadius: key === 0 ? 5 : 0,
-                                    // borderBottomLeftRadius: key === 0 ? 5 : 0,
+                          // if (val === 'date') {
+                          //   return (
+                          //     <TableCell
+                          //       className={classes.tableCell}
+                          //       key={key}
+                          //       style={{
+                          //         textAlign: 'center',
+                          //       }}
+                          //     >
+                          //       {formatDate(prop[val])}
+                          //     </TableCell>
+                          //   )
+                          // }
+                          if (mapDateToKeys(val)) {
+                            return (
+                              <TableCell
+                                className={classes.tableCell}
+                                key={key}
+                                style={{
+                                  // textAlign: 'center',
+                                  borderWidth: 0,
+                                  maxWidth: 400,
+                                }}
+                              >
+                                {Array.isArray(val)
+                                  ? prop[val[0]]
+                                    ? formatDate(prop[val[0]][val[1]])
+                                    : prop[val[0]][val[1]]
+                                  : formatDate(prop[val])}
+                              </TableCell>
+                            );
+                          } else {
+                            return (
+                              <TableCell
+                                className={`${classes.tableCell} ${classForChip.root}`}
+                                key={key}
+                                onClick={() => handleClick(prop, val)}
+                                style={{
+                                  maxWidth: 400,
+                                  // textAlign: 'center',
+                                  cursor: props.handleModelMaterialReceiving
+                                    ? "pointer"
+                                    : "",
+                                  // borderTopLeftRadius: key === 0 ? 5 : 0,
+                                  // borderBottomLeftRadius: key === 0 ? 5 : 0,
 
-                                    borderBottomLeftRadius:
-                                      props.tableData.length - 1 === index &&
+                                  borderBottomLeftRadius:
+                                    props.tableData.length - 1 === index &&
                                       key === 0
-                                        ? 5
-                                        : 0,
-                                    borderWidth: 0,
-                                  }}
-                                >
-                                  {Array.isArray(val)
-                                    ? prop[val[0]]
-                                      ? capitilizeLetter(prop[val[0]][val[1]])
-                                      : null
-                                    : val.toLowerCase() === "timestamp"
+                                      ? 5
+                                      : 0,
+                                  borderWidth: 0,
+                                }}
+                              >
+                                {Array.isArray(val)
+                                  ? prop[val[0]]
+                                    ? capitilizeLetter(prop[val[0]][val[1]])
+                                    : null
+                                  : val.toLowerCase() === "timestamp"
                                     ? new Intl.DateTimeFormat(
-                                        "en-US",
-                                        dateOptions
-                                      ).format(Date.parse(prop[val]))
+                                      "en-US",
+                                      dateOptions
+                                    ).format(Date.parse(prop[val]))
                                     : // : `${replaceSlugToTitle(prop[val])}`}
-                                      replaceSlugToTitle(prop[val])}
-                                </TableCell>
-                              );
-                            }
-                          })
+                                    replaceSlugToTitle(prop[val], val)
+                                }
+                              </TableCell>
+                            );
+                          }
+                        })
                         : null}
 
                       {props.action !== "" ? (
@@ -781,6 +855,7 @@ export default function CustomTable(props) {
                             borderBottomRightRadius:
                               props.tableData.length - 1 === index ? 5 : 0,
                             borderWidth: 0,
+                            // textAlign:'center'
                           }}
                           className={classes.tableCell}
                           colSpan="2"
@@ -829,19 +904,6 @@ export default function CustomTable(props) {
                                 </span>
                               </RcIf>
 
-                              <RcIf if={props.action.print}>
-                                <Tooltip title="Print">
-                                  <img
-                                    src={print}
-                                    onClick={() => props.printItem(prop)}
-                                    style={{
-                                      maxWidth: 40,
-                                      height: 30,
-                                    }}
-                                  />
-                                </Tooltip>
-                              </RcIf>
-
                               <RcIf if={props.action.receiveItem}>
                                 <Tooltip title="Receive Item">
                                   <img
@@ -887,12 +949,12 @@ export default function CustomTable(props) {
                               </RcIf>
                             </div>
                           ) : (
-                            undefined
-                          )}
+                              undefined
+                            )}
                         </TableCell>
                       ) : (
-                        ""
-                      )}
+                          ""
+                        )}
 
                       {/* {selectedRow && selectedRow._id === prop._id ? (
                         <TableCell

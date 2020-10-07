@@ -14,6 +14,7 @@ import {
   addFuInventoryUrl,
   updateFuInventoryUrl,
   getItemsUrl,
+  getFuInventoryByFUIdUrl,
 } from "../../public/endpoins";
 
 import Header from "../../components/Header/Header";
@@ -31,6 +32,7 @@ import ErrorMessage from "../../components/ErrorMessage/errorMessage";
 import InputLabelComponent from "../../components/InputLabel/inputLabel";
 
 import Loader from "react-loader-spinner";
+import cookie from "react-cookies";
 
 const styles = {
   // inputContainer: {
@@ -57,7 +59,7 @@ const styles = {
   stylesForButton: {
     color: "white",
     cursor: "pointer",
-    borderRadius: 15,
+    borderRadius: 5,
     backgroundColor: "#2c6ddd",
     width: "140px",
     height: "50px",
@@ -176,7 +178,13 @@ function AddEditBuInventory(props) {
       maximumLevel !== "0" &&
       itemId !== "" &&
       reorderLevel !== "" &&
-      reorderLevel !== "0"
+      reorderLevel !== "0" &&
+      minimumLevel !== "" &&
+      minimumLevel !== "0" &&
+      parseInt(minimumLevel) > 0 &&
+      parseInt(maximumLevel) > 0 &&
+      parseInt(reorderLevel) > 0 &&
+      parseInt(qty) > 0
     );
   }
 
@@ -190,6 +198,10 @@ function AddEditBuInventory(props) {
 
   const [selectedItem, setSelectedItem] = useState("");
   const [fuId, setFU] = useState("");
+
+  const [buInventories, setBuInventories] = useState("");
+
+  const [currentUser, setCurrentUser] = useState(cookie.load("current_user"));
 
   function getItems() {
     axios
@@ -209,8 +221,40 @@ function AddEditBuInventory(props) {
       });
   }
 
+  function getFuInventoryById() {
+    console.log(currentUser);
+    axios
+      .get(`${getFuInventoryByFUIdUrl}/${currentUser.functionalUnit._id}`)
+      .then((res) => {
+        if (res.data.success) {
+          console.log("response for inventory", res.data.data);
+          if (currentUser.staffTypeId.type === "admin") {
+            setBuInventories(res.data.data.fuInventory);
+          } else {
+            // let temp = res.data.data.fuInventory.filter(
+            //   (inventory) => inventory.fuId.fuHead === currentUser.staffId
+            // );
+            // setBuInventories(temp);
+            setBuInventories(res.data.data.fuInventory);
+          }
+          setItems(res.data.data.items);
+
+          // setBusinessUnit(res.data.data.functionalUnit);
+        } else if (!res.data.success) {
+          setErrorMsg(res.data.error);
+          setOpenNotification(true);
+        }
+        return res;
+      })
+      .catch((e) => {
+        console.log("error: ", e);
+      });
+  }
+
   useEffect(() => {
-    getItems();
+    // getItems();
+
+    getFuInventoryById();
 
     setFU(props.history.location.state.fuId);
     setcomingFor(props.history.location.state.comingFor);
@@ -237,12 +281,55 @@ function AddEditBuInventory(props) {
     }
   }, []);
 
+  function checkValues() {
+    if (maximumLevel <= minimumLevel) {
+      setOpenNotification(true);
+      setErrorMsg("Maximum level should be greater than minimum level");
+      return true;
+    } else if (reorderLevel <= minimumLevel) {
+      setOpenNotification(true);
+      setErrorMsg("Reorder level should be greater than minimum level");
+      return true;
+    } else if (reorderLevel >= maximumLevel) {
+      setOpenNotification(true);
+      setErrorMsg("Reorder level should be less than maximum level");
+      return true;
+    } else if (qty > maximumLevel) {
+      setOpenNotification(true);
+      setErrorMsg("Qty should be less than maximum level");
+      return true;
+    } else if (qty <= minimumLevel) {
+      setOpenNotification(true);
+      setErrorMsg("Qty should be greater than minimum level");
+      return true;
+    } else if (qty <= reorderLevel) {
+      setOpenNotification(true);
+      setErrorMsg("Qty should be greater than reorder level");
+      return true;
+    }
+
+    return false;
+  }
+
   const handleCancel = () => {
     props.history.goBack();
   };
 
   const handleAdd = () => {
-    setIsFormSubmitted(true);
+    // setIsFormSubmitted(true);
+    let alreadyAdded = false;
+    alreadyAdded = buInventories.find((inv) => inv.itemId._id === itemId);
+    console.log(alreadyAdded);
+    if (alreadyAdded) {
+      setOpenNotification(true);
+      setErrorMsg("Item has already been added");
+      return;
+    }
+
+    if (checkValues()) {
+      return;
+    }
+
     if (qty) {
       let params = "";
 
@@ -286,6 +373,10 @@ function AddEditBuInventory(props) {
 
   const handleEdit = () => {
     setIsFormSubmitted(true);
+
+    if (checkValues()) {
+      return;
+    }
     if (qty) {
       // const params = { _id, fuId: fuId._id, itemId, qty };
 
@@ -358,7 +449,9 @@ function AddEditBuInventory(props) {
           <div>
             <img src={functional_Unit} />
             <h4>
-              {comingFor === "add" ? " Add FU Inventory" : " Edit FU Inventory"}
+              {comingFor === "add"
+                ? " Add Functional Unit Inventory"
+                : " Edit Functional Unit Inventory"}
             </h4>
           </div>
 

@@ -45,7 +45,6 @@ import ViewSingleRequest from './viewRequest'
 import UpdateSingleRequest from './updateRequest'
 import Loader from 'react-loader-spinner'
 
-
 import { connect } from 'react-redux'
 import {
   funForReducer,
@@ -441,7 +440,6 @@ function LabRadRequest(props) {
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
-
     if (props.patientDetails) {
       setPatientDetails(props.patientDetails)
       getPatientByInfo(props.patientDetails._id)
@@ -829,13 +827,12 @@ function LabRadRequest(props) {
           props.history.push({
             pathname: 'cn/success',
             state: {
-              message: `Lab Request # ${
+              message: `Lab Request: ${
                 res.data.data.labRequest[res.data.data.labRequest.length - 1]
                   .LRrequestNo
-              } for patient MRN ${res.data.data.patientId} added successfully`,
+              } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
             },
             patientDetails: patientDetails,
-
           })
           notifyForLab(patientId)
         } else if (!res.data.success) {
@@ -916,7 +913,7 @@ function LabRadRequest(props) {
     var mm = dateNow.getMinutes()
     let ss = dateNow.getSeconds()
 
-    const RRrequestNo = 'RR' + day + YYYY + HH + mm + ss
+    const RRrequestNo = 'RAD' + day + YYYY + HH + mm + ss
     // setIsFormSubmitted(true);
     // if (validateItemsForm()) {
 
@@ -988,15 +985,12 @@ function LabRadRequest(props) {
           props.history.push({
             pathname: 'cn/success',
             state: {
-              message: `Radiology Request # ${
+              message: `Radiology Request: ${
                 res.data.data.radiologyRequest[
                   res.data.data.radiologyRequest.length - 1
                 ].RRrequestNo
-              } for patient MRN ${
-                res.data.data.patientId.profileNo
-              } added successfully`,
+              } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
               patientDetails: patientDetails,
-
             },
           })
           notifyForRad(patientId)
@@ -1162,8 +1156,6 @@ function LabRadRequest(props) {
     dispatch({ field: 'medicationArray', value: '' })
 
     props.setPatientDetailsForReducer(i)
-
-
     // setDialogOpen(true);
     console.log('selected banda : ', i)
     setPatientDetails(i)
@@ -1287,6 +1279,16 @@ function LabRadRequest(props) {
     })
   }
 
+  const PatientHistory = () => {
+    let path = `cn/patienthistory`
+    props.history.push({
+      pathname: path,
+      state: {
+        selectedItem: selectedItem,
+      },
+    })
+  }
+
   function viewLabRadReport(rec) {
     if (!rec.view) {
       let path = `cn/viewReport`
@@ -1310,6 +1312,15 @@ function LabRadRequest(props) {
   }
 
   const showAlert = () => {
+    // if (document.getElementById("ckDemo").disabled) {
+    //     alert("CheckBox is Disabled");
+    // }
+
+    setErrorMsg('Please Search Patient First ')
+    setOpenNotification(true)
+  }
+
+  const showAlertForPatientHistory = () => {
     // if (document.getElementById("ckDemo").disabled) {
     //     alert("CheckBox is Disabled");
     // }
@@ -1349,6 +1360,17 @@ function LabRadRequest(props) {
               color='primary'
             >
               Triage & Assessment
+            </Button>
+            &nbsp;&nbsp;
+            <Button
+              // disabled={enableForm}
+              onClick={enableForm ? showAlertForPatientHistory : PatientHistory}
+              style={styles.stylesForButton}
+              variant='contained'
+              color='primary'
+              Error={errorMsg}
+            >
+              Patient History
             </Button>
             <></>
             {/* <div style={{}}> */}
@@ -1517,6 +1539,9 @@ function LabRadRequest(props) {
               backgroundColor: 'white',
               borderRadius: 5,
               width: '100%',
+              maxHeight: '300px',
+              overflowY: 'scroll',
+              overflowX: 'hidden',
             }}
           >
             <div
@@ -1577,7 +1602,7 @@ function LabRadRequest(props) {
                 style={{ display: 'flex', flexDirection: 'column' }}
               >
                 <span style={styles.headingStyles}>MRN</span>
-                <span style={styles.textStyles}>
+                <span style={styles.textStyles} className='mrnUpperCase'>
                   {patientDetails.profileNo
                     ? patientDetails.profileNo
                     : '-----'}
@@ -1808,7 +1833,7 @@ function LabRadRequest(props) {
                 paddingLeft: '10px',
                 paddingRight: '10px',
               }}
-              className={`container-fluid ${classes.root}`}
+              className={`container-fluid `}
             >
               <div style={{ marginTop: '20px' }} className='row'>
                 <div
@@ -2024,7 +2049,8 @@ function LabRadRequest(props) {
                 paddingLeft: '10px',
                 paddingRight: '10px',
               }}
-              className={`container-fluid ${classes.root}`}
+              className={`container-fluid 
+              `}
             >
               <div style={{ marginTop: '20px' }} className='row'>
                 <div
@@ -2252,7 +2278,7 @@ function LabRadRequest(props) {
                   undefined
                 )}
               </div>
-            </div> /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/)
+            </div> /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/ /*: value === 5 ? (*/)
           ) : (
             //     : value === 5 ? (
             //         <div

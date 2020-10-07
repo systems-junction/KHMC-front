@@ -95,7 +95,7 @@ const tableHeadingForLabReq = [
   'Test Code',
   'Test',
   'Requester',
-  'Price',
+  'Price ( JD)',
   'Status',
   'Action',
 ]
@@ -221,6 +221,7 @@ function AddEditPurchaseRequest(props) {
     labServiceStatus: '',
     labComments: '',
     sampleID: '',
+    price: '',
 
     radioServiceId: '',
     radioServiceCode: '',
@@ -264,6 +265,7 @@ function AddEditPurchaseRequest(props) {
     labServiceStatus,
     labComments,
     sampleID,
+    price,
 
     radioServiceId,
     radioServiceCode,
@@ -361,6 +363,9 @@ function AddEditPurchaseRequest(props) {
                 if (key === 'patientId') {
                   dispatch({ field: 'patientId', value: val._id })
                 } else if (key === 'labRequest') {
+                  val.map(
+                    (d) => (d.serviceId.price = d.serviceId.price.toFixed(4))
+                  )
                   dispatch({ field: 'labRequestArray', value: val })
                 } else if (key === 'radiologyRequest') {
                   dispatch({ field: 'radiologyRequestArray', value: val })
@@ -647,7 +652,8 @@ function AddEditPurchaseRequest(props) {
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
-              console.log(res.data.data)
+              console.log(res.data.data, 'data')
+              res.data.data.map((d) => (d.price = d.price.toFixed(4)))
               setItemFoundSuccessfully(true)
               setItemFound(res.data.data)
             } else {
@@ -669,6 +675,7 @@ function AddEditPurchaseRequest(props) {
     dispatch({ field: 'labServiceCode', value: i.serviceNo })
     dispatch({ field: 'labServiceName', value: i.name })
     dispatch({ field: 'labServiceStatus', value: i.status })
+    dispatch({ field: 'price', value: i.price })
 
     setSearchQuery('')
     setaddLabRequest(true)
@@ -696,7 +703,7 @@ function AddEditPurchaseRequest(props) {
     const LRrequestNo = 'LR' + day + YYYY + HH + mm + ss
     // setIsFormSubmitted(true);
     // if (validateItemsForm()) {
-
+    console.log(labRequestArray, 'labRequestArray')
     let found =
       labRequestArray &&
       labRequestArray.find((item) => item.serviceId === labServiceId)
@@ -726,6 +733,7 @@ function AddEditPurchaseRequest(props) {
               sampleId: sampleID,
               results: results,
               LRrequestNo: LRrequestNo,
+              price: price,
             },
           ],
         })
@@ -740,6 +748,7 @@ function AddEditPurchaseRequest(props) {
     dispatch({ field: 'labComments', value: '' })
     dispatch({ field: 'results', value: '' })
     dispatch({ field: 'sampleID', value: '' })
+    dispatch({ field: 'price', value: '' })
 
     setRowId(labServiceId)
 
@@ -765,6 +774,7 @@ function AddEditPurchaseRequest(props) {
           sampleId: labRequestArray[i].sampleId,
           results: labRequestArray[i].results,
           LRrequestNo: labRequestArray[i].LRrequestNo,
+          price: labRequestArray[i].price,
         },
       ]
     }
@@ -944,7 +954,14 @@ function AddEditPurchaseRequest(props) {
             </div>
 
             {searchQuery ? (
-              <div style={{ zIndex: 10 }}>
+              <div
+                style={{
+                  zIndex: 10,
+                  marginTop: '10px',
+                  width: '93.4%',
+                  marginLeft: '-12px',
+                }}
+              >
                 <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
                   {setItemFoundSuccessfully ? (
                     itemFound && (
@@ -953,7 +970,7 @@ function AddEditPurchaseRequest(props) {
                           <TableRow>
                             <TableCell>Service Name</TableCell>
                             <TableCell>Service Number</TableCell>
-                            <TableCell>Price</TableCell>
+                            <TableCell>Price (JD)</TableCell>
                             <TableCell align='center'>Description</TableCell>
                           </TableRow>
                         </TableHead>

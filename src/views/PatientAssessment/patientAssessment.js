@@ -544,12 +544,9 @@ function PatientAssessment(props) {
           props.history.push({
             pathname: 'patientAssessment/success',
             state: {
-              message: `Lab Request: ${
-                res.data.data.labRequest[res.data.data.labRequest.length - 1]
-                  .LRrequestNo
-              } for patient MRN: ${
-                res.data.data.patientId.profileNo
-              } added successfully`,
+              message: `Lab Request: ${res.data.data.labRequest[
+                res.data.data.labRequest.length - 1
+              ].LRrequestNo.toUpperCase()} for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
               patientDetails: patientDetails,
             },
           })
@@ -618,7 +615,7 @@ function PatientAssessment(props) {
     var mm = dateNow.getMinutes()
     let ss = dateNow.getSeconds()
 
-    const RRrequestNo = 'RR' + day + YYYY + HH + mm + ss
+    const RRrequestNo = 'RAD' + day + YYYY + HH + mm + ss
     // setIsFormSubmitted(true);
     // if (validateItemsForm()) {
 
@@ -963,6 +960,16 @@ function PatientAssessment(props) {
     })
   }
 
+  const PatientHistory = () => {
+    let path = `patientAssessment/patienthistory`
+    props.history.push({
+      pathname: path,
+      state: {
+        selectedItem: selectedItem,
+      },
+    })
+  }
+
   function viewLabRadReport(rec) {
     if (!rec.view) {
       let path = `patientAssessment/viewReport`
@@ -1006,6 +1013,11 @@ function PatientAssessment(props) {
     setOpenNotification(true)
   }
 
+  const showAlertForPatientHistory = () => {
+    setErrorMsg('Please Search Patient First ')
+    setOpenNotification(true)
+  }
+
   return (
     <div
       style={{
@@ -1038,6 +1050,19 @@ function PatientAssessment(props) {
               color='primary'
             >
               Triage & Assessment
+            </Button>
+            &nbsp;&nbsp;
+            <Button
+              // disabled={enableForm}
+              onClick={
+                enableAssessment ? showAlertForPatientHistory : PatientHistory
+              }
+              style={styles.stylesForButton}
+              variant='contained'
+              color='primary'
+              Error={errorMsg}
+            >
+              Patient History
             </Button>
           </div>
         </div>
@@ -1200,6 +1225,9 @@ function PatientAssessment(props) {
               backgroundColor: 'white',
               borderRadius: 5,
               width: '100%',
+              maxHeight: '300px',
+              overflowY: 'scroll',
+              overflowX: 'hidden',
             }}
           >
             <div
@@ -1260,7 +1288,7 @@ function PatientAssessment(props) {
                 style={{ display: 'flex', flexDirection: 'column' }}
               >
                 <span style={styles.headingStyles}>MRN</span>
-                <span style={styles.textStyles}>
+                <span style={styles.textStyles} className='mrnUpperCase'>
                   {patientDetails.profileNo
                     ? patientDetails.profileNo
                     : '-----'}

@@ -882,35 +882,35 @@ function AddEditPurchaseRequest(props) {
       }}
     >
       <Header />
-      <div className="cPadding">
+      <div className="cPadding" style={{ marginLeft: 10, marginRight: 10 }}>
         <div className="subheader">
-          <div>
-            <img src={purchase_request} />
-            <h4>
-              {comingFor === "add"
-                ? "Order Items (Non-Medical)"
-                : comingFor === "edit"
-                ? "Order Items (Non-Medical)"
-                : comingFor === "view"
-                ? "Order Items (Non-Medical)"
-                : undefined}
-            </h4>
-          </div>
+            <div>
+              <img src={purchase_request} />
+              <h4>
+                {comingFor === "add"
+                  ? "Order Items (Non-Medical)"
+                  : comingFor === "edit"
+                  ? "Order Items (Non-Medical)"
+                  : comingFor === "view"
+                  ? "Order Items (Non-Medical)"
+                  : undefined}
+              </h4>
+            </div>
 
-          <div>
-            <Button
-              onClick={() =>
-                props.history.push("/home/wms/fus/professionalorder")
-              }
-              style={{ ...styles.stylesForButton, height: 45, fontSize:12 }}
-              variant="contained"
-              color="primary"
-            >
-              <img src={view_all} style={styles.stylesForIcon} />
-              &nbsp;&nbsp;
-              <strong>View All</strong>
-            </Button>
-          </div>
+            <div>
+              <Button
+                onClick={() =>
+                  props.history.push("/home/wms/fus/professionalorder")
+                }
+                style={{ ...styles.stylesForButton, height: 45, fontSize: 12 }}
+                variant="contained"
+                color="primary"
+              >
+                <img src={view_all} style={styles.stylesForIcon} />
+                &nbsp;&nbsp;
+                <strong>View All</strong>
+              </Button>
+            </div>
 
           {/* <ViewAllBtn history={props.history} /> */}
         </div>
@@ -1338,13 +1338,13 @@ function AddEditPurchaseRequest(props) {
               {searchQuery ? (
                 // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
                 <div
-                  style={{
-                    zIndex: 3,
-                    position: "absolute",
-                    width: "96%",
-                    left: "2%",
-                    marginTop: 5,
-                  }}
+                style={{
+                  zIndex: 3,
+                  position: "absolute",
+                  width: "96.6%",
+                  left: 22,
+                  marginTop: 5,
+                }}
                 >
                   <Paper style={{ ...stylesForPaper.paperStyle }}>
                     {itemFoundSuccessfull ? (
@@ -1359,7 +1359,6 @@ function AddEditPurchaseRequest(props) {
                                 Name
                               </TableCell> */}
                               <TableCell
-                                align="center"
                                 style={styles.forTableCell}
                               >
                                 Item Code
@@ -1371,7 +1370,6 @@ function AddEditPurchaseRequest(props) {
                                 Class
                               </TableCell> */}
                               <TableCell
-                                align="center"
                                 style={styles.forTableCell}
                               >
                                 Description
@@ -1388,7 +1386,7 @@ function AddEditPurchaseRequest(props) {
                                   style={{ cursor: "pointer" }}
                                 >
                                   {/* <TableCell align="center">{i.name}</TableCell> */}
-                                  <TableCell align="center">
+                                  <TableCell>
                                     {i.itemCode}
                                   </TableCell>
                                   {/* <TableCell align="center">
@@ -1396,7 +1394,7 @@ function AddEditPurchaseRequest(props) {
                                       ? "Non Medical"
                                       : ""}
                                   </TableCell> */}
-                                  <TableCell align="center">
+                                  <TableCell>
                                     {i.description}
                                   </TableCell>
                                 </TableRow>

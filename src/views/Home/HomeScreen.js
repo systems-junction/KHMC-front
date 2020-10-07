@@ -1,7 +1,7 @@
 // import React from 'react';
 import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
-import KHMC from '../../assets/img/KHMC Apps.png'
+import KHMC from '../../assets/img/KHMC Icon.png'
 import '../../components/MenuTree/MenuPage.css'
 import MenuTree from '../../components/MenuTree/MenuTree'
 import PatientRegistration from '../../assets/img/PatientRegistration.png'
@@ -46,6 +46,7 @@ import purchase_request from '../../assets/img/purchase request.png'
 import MaterialReceiving from '../../assets/img/Material Receiving.png'
 import AssessDiagIcon from '../../assets/img/Assessment & Diagnosis.png'
 import DischargeIcon from '../../assets/img/Doctor - Discharge.png'
+import HistoryIcon from '../../assets/img/Manual Request.png'
 import CRIcon from '../../assets/img/Consultation Request.png'
 import WMS_Back from '../../assets/img/WMS_Back.png'
 import OrderItems from '../../assets/img/Order Items.png'
@@ -63,20 +64,21 @@ import {
   funForReducer,
   setPatientDetailsForReducer,
 } from '../../actions/Checking'
+import PatientHistory from '../PatientHistory/PatientHistory'
 
 const admin = [
-  { img: KHMC, text: 'KHMC', path: '' },
-  {
-    img: RCM,
-    text: 'RCM',
-    path: '/home/rcm',
-  },
+  { img: KHMC, path: '' },
+  // {
+  //   img: RCM,
+  //   text: "RCM",
+  //   path: "/home/rcm",
+  // },
 
-  {
-    img: WMS,
-    text: 'WMS',
-    path: '/home/wms',
-  },
+  // {
+  //   img: WMS,
+  //   text: "WMS",
+  //   path: "/home/wms",
+  // },
 
   {
     img: FIN,
@@ -91,7 +93,7 @@ const admin = [
 ]
 
 const residentDoctor = [
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, path: '' },
   {
     img: RCM,
     text: 'RCM',
@@ -105,16 +107,21 @@ const residentDoctor = [
 ]
 
 const frontDesk = [
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, path: '' },
   {
     img: PatientRegistration,
     text: 'Patient Registration',
     path: '/home/rcm/patientListing/add',
   },
+  {
+    img: PatientRegistration,
+    text: 'Patient History',
+    path: '/home/rcm/patientHistory',
+  },
 ]
 
 const insuranceDepartment = [
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, path: '' },
   {
     img: PreApproval,
     text: 'Pre Approval',
@@ -128,7 +135,7 @@ const insuranceDepartment = [
 ]
 
 const registeredNurse = [
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, path: '' },
   {
     img: assessmentIcon,
     text: 'Patient Assessment',
@@ -182,7 +189,7 @@ const registeredNurse = [
 ]
 
 const radiologyImagingDepartment = [
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, path: '' },
   {
     img: IPR,
     text: 'In-Patient',
@@ -197,7 +204,7 @@ const radiologyImagingDepartment = [
 ]
 
 const labTechnician = [
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, path: '' },
   {
     img: IPR,
     text: 'In-Patient',
@@ -212,7 +219,7 @@ const labTechnician = [
 ]
 
 const pharmacist = [
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, path: '' },
   {
     img: IPR,
     text: 'In-Patient',
@@ -233,7 +240,7 @@ const pharmacist = [
 ]
 
 const doctorPhysician = [
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, path: '' },
   {
     img: AssessDiagIcon,
     text: 'Assessment & Diagnosis',
@@ -281,7 +288,7 @@ const doctorPhysician = [
 ]
 
 const consultantSpecialist = [
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, path: '' },
   {
     img: CN,
     text: 'Consultation Notes',
@@ -303,7 +310,7 @@ const buHead = [
 ]
 
 const committeeMember = [
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, path: '' },
 
   {
     img: purchase_request,
@@ -320,7 +327,7 @@ const committeeMember = [
 
 const accountsMember = [
   // { img: Control_Room, text: "Control Room", path: "" },
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, path: '' },
 
   {
     img: WMS,
@@ -330,7 +337,7 @@ const accountsMember = [
 ]
 
 const warehouseMember = [
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, path: '' },
 
   {
     img: FuncUFulfillment,
@@ -353,7 +360,7 @@ const warehouseMember = [
 
 const warehouseIncharge = [
   // { img: FunctionalUnit, text: "Functional Unit", path: "" },
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, path: '' },
 
   {
     img: FunctionalUnit,
@@ -415,7 +422,7 @@ const fuHead = [
 
 const buMember = [
   // { img: FunctionalUnit, text: "Functional Unit", path: "" },
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, path: '' },
 
   {
     img: MedicationOrder,
@@ -458,7 +465,7 @@ const buNurse = [
 ]
 
 const fuReturnRequestApprovalMember = [
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, path: '' },
 
   {
     img: ReturnItem,
@@ -491,7 +498,7 @@ const fuReturnRequestApprovalMember = [
 
 const fuInventoryKeeper = [
   // { img: FunctionalUnit, text: "Functional Unit", path: "" },
-  { img: KHMC, text: 'KHMC', path: '' },
+  { img: KHMC, path: '' },
 
   {
     img: RepRequestStatus,
@@ -518,9 +525,9 @@ const fuInventoryKeeper = [
   },
 
   {
-    img: '',
-    text: '',
-    path: '',
+    img: FunctionalUnit,
+    text: 'FuncU Inventory',
+    path: `/home/wms/fus/fuinventory`,
   },
 
   // {
@@ -563,7 +570,7 @@ const fuIncharge = [
 ]
 
 const warehouseInventoryKeeper = [
-  { img: KHMC, text: 'KHMC APPS', path: '' },
+  { img: KHMC, text: '', path: '' },
 
   {
     img: purchase_request,
@@ -615,7 +622,7 @@ const warehouseInventoryKeeper = [
 ]
 
 const purchasingManager = [
-  { img: KHMC, text: 'KHMC APPS', path: '' },
+  { img: KHMC, text: '', path: '' },
 
   {
     img: purchase_order,
@@ -625,7 +632,7 @@ const purchasingManager = [
 ]
 
 const purchasingOfficer = [
-  { img: KHMC, text: 'KHMC APPS', path: '' },
+  { img: KHMC, text: '', path: '' },
 
   {
     img: VendorReturns,
@@ -635,7 +642,7 @@ const purchasingOfficer = [
 ]
 
 const cashier = [
-  { img: KHMC, text: 'KHMC APPS', path: '' },
+  { img: KHMC, text: '', path: '' },
   {
     img: claimsReview,
     text: 'Patient Clearance',

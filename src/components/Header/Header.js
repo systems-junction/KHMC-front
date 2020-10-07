@@ -1,6 +1,6 @@
 import React from "react";
 import "./Header.css";
-import KHMC_White from "../../assets/img/KHMC_White.png";
+import KHMC_White from "../../assets/img/KHMC Logo.png";
 import Influence_white from "../../assets/img/Influence_white.png";
 import { Redirect } from "react-router-dom";
 import Card from "@material-ui/core/Card";
@@ -253,7 +253,7 @@ class Header extends React.Component {
               // color="primary"
               aria-label="add"
               onClick={() => this.logoutUser()}
-              style={{ backgroundColor: "#ba02ed" }}
+              style={{ backgroundColor: "#ba02ed", outline: "none" }}
             >
               {/* <AddIcon /> */}
               <i

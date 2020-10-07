@@ -51,8 +51,8 @@ const priorityArray = [
 const tableHeadingForPharmacyReq = [
   'Medicine Name',
   'Quantity',
-  'Unit Price',
-  'Total Price',
+  'Unit Price ( JD)',
+  'Total Price ( JD)',
   'Action',
 ]
 const tableDataKeysForPharmacyReq = [
@@ -215,7 +215,7 @@ function AddEditEDR(props) {
   } = state
 
   const onChangeValue = (e) => {
-    var pattern = /^[0-9. ]*$/
+    var pattern = /^[0-9]*$/
     if (
       e.target.name === 'frequency' ||
       e.target.name === 'dosage' ||
@@ -275,6 +275,12 @@ function AddEditEDR(props) {
               if (key1 === 'dischargeMedication') {
                 Object.entries(val1).map(([key2, val2]) => {
                   if (key2 === 'medicine') {
+                    val2.map(
+                      (d) => (
+                        (d.unitPrice = d.unitPrice.toFixed(4)),
+                        (d.totalPrice = d.totalPrice.toFixed(4))
+                      )
+                    )
                     dispatch({ field: 'dischargeMedicines', value: val2 })
                   }
                 })
@@ -544,12 +550,14 @@ function AddEditEDR(props) {
               dosage,
               frequency,
               duration,
-              requestedQty: (frequency * dosage * duration).toFixed(2),
+              requestedQty: frequency * dosage * duration,
               medicineName,
-              unitPrice: unitPrice.toFixed(2),
-              totalPrice: (unitPrice * frequency * dosage * duration).toFixed(
-                2
-              ),
+              // unitPrice: unitPrice,
+              unitPrice: parseFloat(unitPrice).toFixed(4),
+              // totalPrice: unitPrice * frequency * dosage * duration,
+              totalPrice: parseFloat(
+                unitPrice * frequency * dosage * duration
+              ).toFixed(4),
             },
           ],
         })
@@ -571,6 +579,7 @@ function AddEditEDR(props) {
 
   const editSelectedItem = () => {
     // if (validateItemsForm()) {
+    console.log('unitprice', unitPrice)
     setDialogOpen(false)
     let temp = []
 
@@ -583,10 +592,14 @@ function AddEditEDR(props) {
           dosage,
           frequency,
           duration,
-          requestedQty: (frequency * dosage * duration).toFixed(2),
+          requestedQty: frequency * dosage * duration,
           medicineName,
-          unitPrice: unitPrice.toFixed(2),
-          totalPrice: (unitPrice * frequency * dosage * duration).toFixed(2),
+          // unitPrice: unitPrice,
+          unitPrice: parseFloat(unitPrice).toFixed(4),
+          // totalPrice: unitPrice * frequency * dosage * duration,
+          totalPrice: parseFloat(
+            unitPrice * frequency * dosage * duration
+          ).toFixed(4),
         }
         temp[i] = obj
       } else {
@@ -777,15 +790,17 @@ function AddEditEDR(props) {
               >
                 Add Medicine
               </DialogTitle>
-              <div className='container-fluid'>
+              <div className={`${'container-fluid'} ${classes.root}`}>
                 <div className='row'>
                   <div
                     className='col-md-12 col-sm-12 col-12'
                     style={{
                       ...styles.textFieldPadding,
+                      ...styles.inputContainerForTextField,
                     }}
                   >
                     <TextField
+                      required
                       type='text'
                       label='Search Medicine by Name'
                       name={'searchQuery'}
@@ -838,7 +853,7 @@ function AddEditEDR(props) {
                                 <TableCell>Medicine Name</TableCell>
                                 <TableCell>Scientific Name</TableCell>
                                 <TableCell>Item Code</TableCell>
-                                <TableCell>Unit Price</TableCell>
+                                <TableCell>Unit Price (JD)</TableCell>
                                 {/* <TableCell>Total Price</TableCell> */}
                               </TableRow>
                             </TableHead>
@@ -854,7 +869,9 @@ function AddEditEDR(props) {
                                     <TableCell>{i.tradeName}</TableCell>
                                     <TableCell>{i.scientificName}</TableCell>
                                     <TableCell>{i.itemCode}</TableCell>
-                                    <TableCell>{i.issueUnitCost}</TableCell>
+                                    <TableCell>
+                                      {i.issueUnitCost.toFixed(4)}
+                                    </TableCell>
                                     {/* <TableCell>
                                       {i.purchasePrice + i.tax}
                                     </TableCell> */}
@@ -1093,7 +1110,7 @@ function AddEditEDR(props) {
                       disabled
                       label='Requested Quantity'
                       name={'requestedQty'}
-                      value={(dosage * duration * frequency).toFixed(2)}
+                      value={dosage * duration * frequency}
                       onChange={onChangeValue}
                       className='textInputStyle'
                       variant='filled'
@@ -1159,7 +1176,17 @@ function AddEditEDR(props) {
                       </Button>
                     ) : (
                       <Button
-                        style={{ paddingLeft: 30, paddingRight: 30 }}
+                        style={{
+                          color: 'white',
+                          cursor: 'pointer',
+                          borderRadius: 5,
+                          backgroundColor: '#2c6ddd',
+                          width: '140px',
+                          height: '50px',
+                          outline: 'none',
+                          paddingLeft: 30,
+                          paddingRight: 30,
+                        }}
                         // disabled={!validateItemsForm()}
                         onClick={editSelectedItem}
                         variant='contained'

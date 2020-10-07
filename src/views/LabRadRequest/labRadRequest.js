@@ -572,12 +572,9 @@ function LabRadRequest(props) {
           props.history.push({
             pathname: 'LabRadRequest/success',
             state: {
-              message: `Lab Request: ${
-                res.data.data.labRequest[res.data.data.labRequest.length - 1]
-                  .LRrequestNo
-              } for patient MRN: ${
-                res.data.data.patientId.profileNo
-              } added successfully`,
+              message: `Lab Request: ${res.data.data.labRequest[
+                res.data.data.labRequest.length - 1
+              ].LRrequestNo.toUpperCase()} for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
               patientDetails: patientDetails,
             },
           })
@@ -646,7 +643,7 @@ function LabRadRequest(props) {
     var mm = dateNow.getMinutes()
     let ss = dateNow.getSeconds()
 
-    const RRrequestNo = 'RR' + day + YYYY + HH + mm + ss
+    const RRrequestNo = 'RAD' + day + YYYY + HH + mm + ss
     // setIsFormSubmitted(true);
     // if (validateItemsForm()) {
 
@@ -720,13 +717,9 @@ function LabRadRequest(props) {
           props.history.push({
             pathname: 'LabRadRequest/success',
             state: {
-              message: `Radiology Request: ${
-                res.data.data.radiologyRequest[
-                  res.data.data.radiologyRequest.length - 1
-                ].RRrequestNo
-              } for patient MRN: ${
-                res.data.data.patientId.profileNo
-              } added successfully`,
+              message: `Radiology Request: ${res.data.data.radiologyRequest[
+                res.data.data.radiologyRequest.length - 1
+              ].RRrequestNo.toUpperCase()} for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
               patientDetails: patientDetails,
             },
           })
@@ -991,6 +984,16 @@ function LabRadRequest(props) {
     })
   }
 
+  const PatientHistory = () => {
+    let path = `LabRadRequest/patienthistory`
+    props.history.push({
+      pathname: path,
+      state: {
+        selectedItem: selectedItem,
+      },
+    })
+  }
+
   function viewLabRadReport(rec) {
     if (!rec.view) {
       let path = `LabRadRequest/viewReport`
@@ -1034,6 +1037,11 @@ function LabRadRequest(props) {
     setOpenNotification(true)
   }
 
+  const showAlertForPatientHistory = () => {
+    setErrorMsg('Please Search Patient First ')
+    setOpenNotification(true)
+  }
+
   return (
     <div
       style={{
@@ -1072,6 +1080,17 @@ function LabRadRequest(props) {
               color='primary'
             >
               Triage & Assessment
+            </Button>
+            &nbsp;&nbsp;
+            <Button
+              // disabled={enableForm}
+              onClick={enableForm ? showAlertForPatientHistory : PatientHistory}
+              style={styles.stylesForButton}
+              variant='contained'
+              color='primary'
+              Error={errorMsg}
+            >
+              Patient History
             </Button>
           </div>
         </div>
@@ -1231,6 +1250,9 @@ function LabRadRequest(props) {
               backgroundColor: 'white',
               borderRadius: 5,
               width: '100%',
+              maxHeight: '300px',
+              overflowY: 'scroll',
+              overflowX: 'hidden',
             }}
           >
             <div
@@ -1291,7 +1313,7 @@ function LabRadRequest(props) {
                 style={{ display: 'flex', flexDirection: 'column' }}
               >
                 <span style={styles.headingStyles}>MRN</span>
-                <span style={styles.textStyles}>
+                <span style={styles.textStyles} className='mrnUpperCase'>
                   {patientDetails.profileNo
                     ? patientDetails.profileNo
                     : '-----'}
@@ -1514,7 +1536,7 @@ function LabRadRequest(props) {
                 paddingLeft: 10,
                 paddingRight: 10,
               }}
-              className={`container-fluid ${classes.root}`}
+              className={`container-fluid `}
             >
               <div style={{ marginTop: '20px' }} className='row'>
                 <div
@@ -1728,7 +1750,7 @@ function LabRadRequest(props) {
                 paddingLeft: 9,
                 paddingRight: 9,
               }}
-              className={`container-fluid ${classes.root}`}
+              className={`container-fluid `}
             >
               <div style={{ marginTop: '20px' }} className='row'>
                 <div

@@ -44,8 +44,8 @@ const admin = [
   { img: RCM, text: "RCM", path: "controlroom/rcm" },
   { img: WMS, text: "WMS", path: "controlroom/wms" },
   { img: FIN, text: "FIN" },
-  { img: BU, text: "BU Mgmt", path: "controlroom/bus" },
-  { img: FunctionalUnit, text: "FU Mgmt", path: "controlroom/fus" },
+  { img: BU, text: "BusU Mgmt", path: "controlroom/bus" },
+  { img: FunctionalUnit, text: "FuncU Mgmt", path: "controlroom/fus" },
   { img: Staff, text: "Staff", path: "controlroom/staff" },
   { text: "", path: "", path: "" },
 ];

@@ -536,12 +536,9 @@ function PatientCare(props) {
           props.history.push({
             pathname: 'patientCare/success',
             state: {
-              message: `Lab Request: ${
-                res.data.data.labRequest[res.data.data.labRequest.length - 1]
-                  .LRrequestNo
-              } for patient MRN: ${
-                res.data.data.patientId.profileNo
-              } added successfully`,
+              message: `Lab Request: ${res.data.data.labRequest[
+                res.data.data.labRequest.length - 1
+              ].LRrequestNo.toUpperCase()} for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
 
               patientDetails: patientDetails,
             },
@@ -611,7 +608,7 @@ function PatientCare(props) {
     var mm = dateNow.getMinutes()
     let ss = dateNow.getSeconds()
 
-    const RRrequestNo = 'RR' + day + YYYY + HH + mm + ss
+    const RRrequestNo = 'RAD' + day + YYYY + HH + mm + ss
     // setIsFormSubmitted(true);
     // if (validateItemsForm()) {
 
@@ -685,13 +682,9 @@ function PatientCare(props) {
           props.history.push({
             pathname: 'patientCare/success',
             state: {
-              message: `Radiology Request: ${
-                res.data.data.radiologyRequest[
-                  res.data.data.radiologyRequest.length - 1
-                ].RRrequestNo
-              } for patient MRN: ${
-                res.data.data.patientId.profileNo
-              } added successfully`,
+              message: `Radiology Request: ${res.data.data.radiologyRequest[
+                res.data.data.radiologyRequest.length - 1
+              ].RRrequestNo.toUpperCase()} for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
 
               patientDetails: patientDetails,
             },
@@ -983,6 +976,25 @@ function PatientCare(props) {
     })
   }
 
+  const showAlertForPatientHistory = () => {
+    // if (document.getElementById("ckDemo").disabled) {
+    //     alert("CheckBox is Disabled");
+    // }
+
+    setErrorMsg('Please Search Patient First ')
+    setOpenNotification(true)
+  }
+
+  const PatientHistory = () => {
+    let path = `patientCare/patienthistory`
+    props.history.push({
+      pathname: path,
+      state: {
+        selectedItem: selectedItem,
+      },
+    })
+  }
+
   if (openNotification) {
     setTimeout(() => {
       setOpenNotification(false)
@@ -1032,6 +1044,19 @@ function PatientCare(props) {
               color='primary'
             >
               Triage & Assessment
+            </Button>
+            &nbsp;&nbsp;
+            <Button
+              // disabled={enableForm}
+              onClick={
+                enableAssessment ? showAlertForPatientHistory : PatientHistory
+              }
+              style={styles.stylesForButton}
+              variant='contained'
+              color='primary'
+              Error={errorMsg}
+            >
+              Patient History
             </Button>
           </div>
         </div>
@@ -1191,6 +1216,9 @@ function PatientCare(props) {
               backgroundColor: 'white',
               borderRadius: 5,
               width: '100%',
+              maxHeight: '300px',
+              overflowY: 'scroll',
+              overflowX: 'hidden',
             }}
           >
             <div
@@ -1251,7 +1279,7 @@ function PatientCare(props) {
                 style={{ display: 'flex', flexDirection: 'column' }}
               >
                 <span style={styles.headingStyles}>MRN</span>
-                <span style={styles.textStyles}>
+                <span style={styles.textStyles} className='mrnUpperCase'>
                   {patientDetails.profileNo
                     ? patientDetails.profileNo
                     : '-----'}

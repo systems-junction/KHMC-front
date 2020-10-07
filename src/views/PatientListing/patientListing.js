@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { getPatientUrl, searchPatientsURL } from '../../public/endpoins'
+import { getPatientUrl, getPatientEdrUrl, getPatientIprUrl } from '../../public/endpoins'
 import Notification from '../../components/Snackbar/Notification.js'
 import CustomTable from '../../components/Table/Table'
 import ButtonField from '../../components/common/Button'
@@ -76,22 +76,35 @@ export default function PatientListing(props) {
   const [openNotification, setOpenNotification] = useState(false)
   const [item, setItem] = useState('')
   const [searchPatientQuery, setSearchPatientQuery] = useState('')
+  const [staffType, setStaffType] = useState(cookie.load("current_user").staffTypeId.type)
+  const [PatientUrl, setPatientUrl] = useState('')
 
   
 
-  useEffect(() => {
+  useEffect(() => {    
     getPatientData()
   }, [])
 
    function  getPatientData() {
+     var PatientUrlValue= '';
+     console.log(staffType);
+     if(staffType == 'EDR Receptionist'){PatientUrlValue=getPatientEdrUrl;}
+     if(staffType == 'IPR Receptionist'){PatientUrlValue=getPatientIprUrl;}
+     console.log(PatientUrlValue);
+     setPatientUrl(PatientUrlValue);
+     
      axios
-      .get(getPatientUrl)
+      .get(PatientUrlValue)
       .then((res) => {
         if (res.data.success) {
-          res.data.data.map(
-            (d) => (d.patientName = d.firstName + ' ' + d.lastName)
-          )
-          setPatient(res.data.data)
+          let patientResult=[];
+          res.data.data.forEach( (d, index) => {
+           // (d) => (d.patientName = d.firstName + ' ' + d.lastName)
+            d.patientId.patientName = d.patientId.firstName + ' ' + d.patientId.lastName
+            patientResult.push(d.patientId);
+          })
+
+          setPatient(patientResult)
           console.log(res.data.data, 'get patient')
         } else if (!res.data.success) {
           setErrorMsg(res.data.error)
@@ -147,17 +160,20 @@ export default function PatientListing(props) {
     if (a.length >= 3) {
        axios
         .get(
-          searchPatientsURL + '/' + a
+          PatientUrl + '/' + a
         )
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
-               res.data.data.map(
-                 (d) => (d.patientName = d.firstName + ' ' + d.lastName) )
-               
-              console.log(res.data.data)
+              let patientResult=[];
+              res.data.data.forEach( (d, index) => {
+               // (d) => (d.patientName = d.firstName + ' ' + d.lastName)
+                d.patientId.patientName = d.patientId.firstName + ' ' + d.patientId.lastName
+                patientResult.push(d.patientId);
+              })
+              console.log(patientResult);
               
-              setPatient(res.data.data)
+              setPatient(patientResult)
             } else {
               
               setPatient(' ')
@@ -170,8 +186,6 @@ export default function PatientListing(props) {
     }
 
     else if(a.length == 0){
-      console.log("less");
-      console.log(patient);
       getPatientData();
     }
 
@@ -286,7 +300,7 @@ export default function PatientListing(props) {
           {patient !== ' ' ? (
             <div>
               <div>
-                <CustomTable
+                <CustomTable 
                   tableData={patient}
                   tableDataKeys={tableDataKeys}
                   tableHeading={tableHeading}

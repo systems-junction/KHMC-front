@@ -382,7 +382,7 @@ function TriageAndAssessment(props) {
           props.history.push({
             pathname: "success",
             state: {
-              message: `Triage & Assessment for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
+              message: `Triage & Assessment No: ${TAArequestNo.toUpperCase()}  for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
             },
             comingFor: "Triage",
           });
@@ -448,7 +448,7 @@ function TriageAndAssessment(props) {
                 outline: "none",
                 color: value === 0 ? "#12387a" : "#3B988C",
               }}
-              label="History"
+              label="RN Assessment"
             />
             <Tab
               style={{
@@ -1074,7 +1074,7 @@ function TriageAndAssessment(props) {
                       onChange={onSpecify}
                       name="respiratory"
                       value={respiratoryText}
-                      className="control-label textInputStyle"
+                      className="control-label textInputStyle tri-Alt-4-tab"
                       maxlength="500"
                     />
                   </div>
@@ -1256,7 +1256,7 @@ function TriageAndAssessment(props) {
                       onChange={onSpecify}
                       name="abdomen"
                       value={abdomenText}
-                      className=" textInputStyle"
+                      className=" textInputStyle tri-Alt-4-tab"
                       maxlength="500"
                     />
                   </div>
