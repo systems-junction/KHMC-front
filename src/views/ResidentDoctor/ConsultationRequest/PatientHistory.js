@@ -962,7 +962,7 @@ function LabRadRequest(props) {
     var mm = dateNow.getMinutes()
     let ss = dateNow.getSeconds()
 
-    const RRrequestNo = 'RR' + day + YYYY + HH + mm + ss
+    const RRrequestNo = 'RAD' + day + YYYY + HH + mm + ss
     // setIsFormSubmitted(true);
     // if (validateItemsForm()) {
 
@@ -1241,7 +1241,7 @@ function LabRadRequest(props) {
     dispatch({ field: 'medicationArray', value: '' })
     console.log('selected banda : ', i)
 
-    // props.setPatientDetailsForReducer(i)
+    props.setPatientDetailsForReducer(i)
 
     setPatientDetails(i)
     getPatientByInfo(i._id)
