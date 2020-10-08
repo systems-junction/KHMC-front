@@ -673,7 +673,7 @@ function AddEditPurchaseRequest(props) {
             }}
           />
           <div className='container-fluid'>
-            <div className='row'>
+            <div className='row' style={{ marginTop: '5px' }}>
               <div
                 className='col-md-12 col-sm-12'
                 style={{
@@ -718,7 +718,7 @@ function AddEditPurchaseRequest(props) {
             style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
             className='container-fluid'
           >
-            <div className='row' style={{ marginTop: '10px' }}>
+            <div className='row' style={{ marginTop: '5px' }}>
               {medicineDataArray !== 0 ? (
                 <CustomTable
                   tableData={medicineDataArray}

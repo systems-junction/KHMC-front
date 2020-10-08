@@ -1357,14 +1357,14 @@ function LabRadRequest(props) {
                 {medicationArray
                   ? medicationArray.map((d, index) => {
                       return (
-                       <div style={{ display: "flex", flexDirection: "row" }}>
+                        <div style={{ display: 'flex', flexDirection: 'row' }}>
                           <h6
                             style={{
                               ...styles.textStyles,
                             }}
                           >
                             {index + 1}
-                            {"."} &nbsp;
+                            {'.'} &nbsp;
                           </h6>
                           <h6
                             style={{
@@ -1644,13 +1644,13 @@ function LabRadRequest(props) {
                 undefined
               )}
 
-              <div style={{ marginTop: '20px' }} className='row'>
+              <div className='row'>
                 <div
                   className='col-md-5 col-sm-5 col-3'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
-                    paddingRight: 15,
+                    paddingRight: 5,
                   }}
                 >
                   <TextField
@@ -1703,9 +1703,10 @@ function LabRadRequest(props) {
                       borderRadius: 5,
                       backgroundColor: 'rgb(173, 107, 191)',
                       height: 56,
-                      width: '104%',
+                      width: '110%',
                       outline: 'none',
                       marginTop: 25,
+                      marginLeft: '-10px',
                     }}
                     disabled={!addLabRequest}
                     onClick={addSelectedLabItem}
@@ -1718,10 +1719,7 @@ function LabRadRequest(props) {
                 </div>
               </div>
 
-              <div
-                className='row'
-                style={{ marginTop: '20px', paddingLeft: 5, paddingRight: 5 }}
-              >
+              <div className='row' style={{ paddingLeft: 5, paddingRight: 5 }}>
                 {labRequestArray !== 0 ? (
                   <CustomTable
                     tableData={labRequestArray}
@@ -1858,13 +1856,13 @@ function LabRadRequest(props) {
                 undefined
               )}
 
-              <div style={{ marginTop: '20px' }} className='row'>
+              <div className='row'>
                 <div
                   className='col-md-5 col-sm-5 col-3'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
-                    paddingRight: 15,
+                    paddingRight: 5,
                   }}
                 >
                   <TextField
@@ -1916,8 +1914,8 @@ function LabRadRequest(props) {
                       borderRadius: 5,
                       backgroundColor: 'rgb(173, 107, 191)',
                       height: 56,
-                      width: '104%',
-
+                      width: '110%',
+                      marginLeft: '-10px',
                       outline: 'none',
                       marginTop: 25,
                     }}
@@ -1932,10 +1930,7 @@ function LabRadRequest(props) {
                 </div>
               </div>
 
-              <div
-                className='row'
-                style={{ marginTop: '20px', paddingLeft: 5, paddingRight: 5 }}
-              >
+              <div className='row' style={{ paddingLeft: 5, paddingRight: 5 }}>
                 {radiologyRequestArray !== 0 ? (
                   <CustomTable
                     tableData={radiologyRequestArray}

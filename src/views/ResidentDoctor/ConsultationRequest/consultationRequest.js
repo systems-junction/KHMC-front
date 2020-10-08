@@ -1772,14 +1772,14 @@ function LabRadRequest(props) {
                 {medicationArray
                   ? medicationArray.map((d, index) => {
                       return (
-                        <div style={{ display: "flex", flexDirection: "row" }}>
+                        <div style={{ display: 'flex', flexDirection: 'row' }}>
                           <h6
                             style={{
                               ...styles.textStyles,
                             }}
                           >
                             {index + 1}
-                            {"."} &nbsp;
+                            {'.'} &nbsp;
                           </h6>
                           <h6
                             style={{
@@ -2110,13 +2110,13 @@ function LabRadRequest(props) {
                 undefined
               )}
 
-              <div style={{ marginTop: '20px' }} className='row'>
+              <div className='row'>
                 <div
                   className='col-md-5 col-sm-5 col-3'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
-                    paddingRight: '15px',
+                    paddingRight: '5px',
                   }}
                 >
                   <TextField
@@ -2171,7 +2171,8 @@ function LabRadRequest(props) {
                       height: 56,
                       outline: 'none',
                       marginTop: 25,
-                      width: '104%',
+                      width: '110%',
+                      marginLeft: '-10px',
                     }}
                     disabled={!addLabRequest}
                     onClick={addSelectedLabItem}
@@ -2187,7 +2188,6 @@ function LabRadRequest(props) {
               <div
                 className='row'
                 style={{
-                  marginTop: '20px',
                   paddingLeft: '5px',
                   paddingRight: '5px',
                 }}
@@ -2327,13 +2327,13 @@ function LabRadRequest(props) {
                 undefined
               )}
 
-              <div style={{ marginTop: '20px' }} className='row'>
+              <div className='row'>
                 <div
                   className='col-md-5 col-sm-5 col-3'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
-                    paddingRight: '15px',
+                    paddingRight: '5px',
                   }}
                 >
                   <TextField
@@ -2389,7 +2389,8 @@ function LabRadRequest(props) {
                       height: 56,
                       outline: 'none',
                       marginTop: 25,
-                      width: '104%',
+                      width: '110%',
+                      marginLeft: '-10px',
                     }}
                     disabled={!addRadioRequest}
                     onClick={addSelectedRadioItem}
@@ -2405,7 +2406,6 @@ function LabRadRequest(props) {
               <div
                 className='row'
                 style={{
-                  marginTop: '20px',
                   paddingLeft: '5px',
                   paddingRight: '5px',
                 }}

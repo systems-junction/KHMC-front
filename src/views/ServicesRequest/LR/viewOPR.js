@@ -145,8 +145,8 @@ const styles = {
     padding: '15px',
   },
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
   input: {
     display: 'none',
@@ -907,8 +907,8 @@ function AddEditPurchaseRequest(props) {
               <div
                 className='col-md-11 col-sm-11 col-11'
                 style={{
-                  ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
+                  paddingRight: 0,
                 }}
               >
                 <TextField
@@ -938,7 +938,7 @@ function AddEditPurchaseRequest(props) {
               <div className='col-md-1 col-sm-2 col-2'>
                 <div
                   style={{
-                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -1015,7 +1015,7 @@ function AddEditPurchaseRequest(props) {
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
-                  paddingRight: '15px',
+                  paddingRight: '5px',
                 }}
               >
                 <TextField
@@ -1076,7 +1076,8 @@ function AddEditPurchaseRequest(props) {
                     height: 56,
                     outline: 'none',
                     marginTop: 7,
-                    width: '104%',
+                    width: '109%',
+                    marginLeft: '-10px',
                   }}
                   disabled={!addLabRequest}
                   onClick={addSelectedLabItem}
@@ -1092,7 +1093,6 @@ function AddEditPurchaseRequest(props) {
             <div
               className='row'
               style={{
-                marginTop: '20px',
                 paddingLeft: '5px',
                 paddingRight: '10px',
               }}

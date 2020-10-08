@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import React, { useState, useEffect } from 'react'
 import Notification from '../../../../components/Snackbar/Notification.js'
 import CustomTable from '../../../../components/Table/Table'
@@ -32,7 +31,7 @@ const tableDataKeys = [
 
 const styles = {
   textFieldPadding: {
-    paddingLeft: 0,
+    paddingLeft: 5,
     paddingRight: 5,
   },
 }
@@ -172,72 +171,78 @@ export default function Ipr(props) {
         </div>
 
         <div
-          className='row'
-          style={{ marginLeft: '0px', marginRight: '0px', marginTop: '20px' }}
+          className={`${'container-fluid'} ${classes.root}`}
+          style={{
+            marginTop: '25px',
+            paddingLeft: '10px',
+            paddingRight: '10px',
+          }}
         >
-          <div
-            className='col-md-10 col-sm-9 col-8'
-            style={styles.textFieldPadding}
-          >
-            <TextField
-              className='textInputStyle'
-              id='searchPatientQuery'
-              type='text'
-              variant='filled'
-              label='Search Patient by Name / MRN / National ID / Mobile Number'
-              name={'searchPatientQuery'}
-              value={searchPatientQuery}
-              onChange={handlePatientSearch}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position='end'>
-                    <AccountCircle />
-                  </InputAdornment>
-                ),
-                className: classes.input,
-                classes: { input: classes.input },
-                disableUnderline: true,
-              }}
-            />
-          </div>
-
-          <div
-            className='col-md-1 col-sm-2 col-2'
-            style={{
-              ...styles.textFieldPadding,
-            }}
-          >
+          <div className='row'>
             <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: 'white',
-                borderRadius: 5,
-                height: 55,
-              }}
+              className='col-md-10 col-sm-9 col-8'
+              style={styles.textFieldPadding}
             >
-              <img src={BarCode} style={{ width: 70, height: 60 }} />
+              <TextField
+                className='textInputStyle'
+                id='searchPatientQuery'
+                type='text'
+                variant='filled'
+                label='Search Patient by Name / MRN / National ID / Mobile Number'
+                name={'searchPatientQuery'}
+                value={searchPatientQuery}
+                onChange={handlePatientSearch}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <AccountCircle />
+                    </InputAdornment>
+                  ),
+                  className: classes.input,
+                  classes: { input: classes.input },
+                  disableUnderline: true,
+                }}
+              />
             </div>
-          </div>
 
-          <div
-            className='col-md-1 col-sm-1 col-2'
-            style={{
-              ...styles.textFieldPadding,
-            }}
-          >
             <div
+              className='col-md-1 col-sm-2 col-2'
               style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: 'white',
-                borderRadius: 5,
-                height: 55,
+                ...styles.textFieldPadding,
               }}
             >
-              <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: 'white',
+                  borderRadius: 5,
+                  height: 55,
+                }}
+              >
+                <img src={BarCode} style={{ width: 70, height: 60 }} />
+              </div>
+            </div>
+
+            <div
+              className='col-md-1 col-sm-1 col-2'
+              style={{
+                ...styles.textFieldPadding,
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: 'white',
+                  borderRadius: 5,
+                  height: 55,
+                }}
+              >
+                <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
+              </div>
             </div>
           </div>
         </div>

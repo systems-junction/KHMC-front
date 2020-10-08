@@ -184,7 +184,7 @@ const styles = {
     fontWeight: 'bold',
   },
   textFieldPadding: {
-    paddingLeft: 0,
+    paddingLeft: 5,
     paddingRight: 5,
   },
   headerHeading: {
@@ -1069,15 +1069,12 @@ function PatientAssessment(props) {
         <div
           className={`${'container-fluid'} ${classes.root}`}
           style={{
-            // marginTop: '25px',
-            // width: '100%',
-            // paddingRight: 10,
-            // paddingLeft: 10,
-            // marginRight: 'auto',
-            // marginLeft: 'auto',
             marginTop: '25px',
-            paddingLeft: '15px',
-            paddingRight: '10px',
+            width: '100%',
+            paddingRight: 10,
+            paddingLeft: 10,
+            marginRight: 'auto',
+            marginLeft: 'auto',
           }}
         >
           <div className='row'>
@@ -1332,14 +1329,14 @@ function PatientAssessment(props) {
                 {medicationArray
                   ? medicationArray.map((d, index) => {
                       return (
-                      <div style={{ display: "flex", flexDirection: "row" }}>
+                        <div style={{ display: 'flex', flexDirection: 'row' }}>
                           <h6
                             style={{
                               ...styles.textStyles,
                             }}
                           >
                             {index + 1}
-                            {"."} &nbsp;
+                            {'.'} &nbsp;
                           </h6>
                           <h6
                             style={{
@@ -1526,7 +1523,7 @@ function PatientAssessment(props) {
               }}
               className={`container-fluid ${classes.root}`}
             >
-              <div style={{ marginTop: '20px' }} className='row'>
+              <div className='row' style={{ marginTop: '20px' }}>
                 <div
                   className='col-md-12 col-sm-12 col-12'
                   style={{
@@ -1617,13 +1614,13 @@ function PatientAssessment(props) {
                 undefined
               )}
 
-              <div style={{ marginTop: '20px' }} className='row'>
+              <div className='row'>
                 <div
                   className='col-md-5 col-sm-5 col-3'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
-                    paddingRight: '15px',
+                    paddingRight: '5px',
                   }}
                 >
                   <TextField
@@ -1672,8 +1669,9 @@ function PatientAssessment(props) {
                       marginTop: '25px',
                       backgroundColor: '#ad6bbf',
                       height: '56px',
-                      width: '107%',
+                      width: '111%',
                       marginRight: '-15px',
+                      marginLeft: '-10px',
                     }}
                     disabled={!addLabRequest}
                     onClick={addSelectedLabItem}
@@ -1689,7 +1687,6 @@ function PatientAssessment(props) {
               <div
                 className='row'
                 style={{
-                  marginTop: '20px',
                   // paddingLeft: '5px',
                   // paddingRight: '5px',
                   marginRight: '-10px',
@@ -1739,7 +1736,7 @@ function PatientAssessment(props) {
               }}
               className={`container-fluid ${classes.root}`}
             >
-              <div style={{ marginTop: '20px' }} className='row'>
+              <div className='row' style={{ marginTop: '20px' }}>
                 <div
                   className='col-md-12 col-sm-12 col-12'
                   style={{
@@ -1831,13 +1828,13 @@ function PatientAssessment(props) {
                 undefined
               )}
 
-              <div style={{ marginTop: '20px' }} className='row'>
+              <div className='row'>
                 <div
                   className='col-md-5 col-sm-5 col-3'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
-                    paddingRight: '15px',
+                    paddingRight: '5px',
                   }}
                 >
                   <TextField
@@ -1886,7 +1883,8 @@ function PatientAssessment(props) {
                       marginTop: '25px',
                       backgroundColor: '#ad6bbf',
                       height: '56px',
-                      width: '107%',
+                      width: '111%',
+                      marginLeft: '-10px',
                     }}
                     disabled={!addRadioRequest}
                     onClick={addSelectedRadioItem}
@@ -1899,7 +1897,7 @@ function PatientAssessment(props) {
                 </div>
               </div>
 
-              <div className='row' style={{ marginTop: '20px' }}>
+              <div className='row'>
                 {radiologyRequestArray !== 0 ? (
                   <CustomTable
                     tableData={radiologyRequestArray}
@@ -1978,7 +1976,9 @@ function PatientAssessment(props) {
             setIsOpen(false)
           }}
         >
-          <DialogContent style={{ backgroundColor: '#31e2aa' }}>
+          <DialogContent
+            style={{ backgroundColor: '#31e2aa', marginBottom: '-20px' }}
+          >
             <DialogTitle
               id='simple-dialog-title'
               style={{ color: 'white', marginLeft: '-6px' }}
