@@ -30,14 +30,11 @@ const tableDataKeys = [
   'status',
 ]
 
-
 const styles = {
   textFieldPadding: {
     paddingLeft: 0,
     paddingRight: 5,
   },
-
-
 }
 
 const useStylesForInput = makeStyles((theme) => ({
@@ -54,8 +51,6 @@ const useStylesForInput = makeStyles((theme) => ({
       color: 'gray',
     },
   },
-
-
 }))
 
 const actions = { view: true }
@@ -91,7 +86,6 @@ export default function Ipr(props) {
       .get(getDischarge)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data, 'ecr1')
           res.data.data.map(
             (d) => (d.date = d.dischargeRequest.dischargeMedication.date)
           )
@@ -99,6 +93,8 @@ export default function Ipr(props) {
           setIpr(res.data.data.reverse())
           var sortedObjs = _.sortBy(res.data.data, 'date').reverse()
           setIpr(sortedObjs)
+          console.log(sortedObjs, 'ecr1')
+
           // setIpr(res.data.data.reverse())
         } else if (!res.data.success) {
           setErrorMsg(res.data.error)
@@ -122,15 +118,12 @@ export default function Ipr(props) {
     })
   }
 
-
-  const handlePatientSearch =  (e) => {
+  const handlePatientSearch = (e) => {
     const a = e.target.value.replace(/[^\w\s]/gi, '')
     setSearchPatientQuery(a)
     if (a.length >= 3) {
-       axios
-        .get(
-          getDischarge + '/' + a
-        )
+      axios
+        .get(getDischarge + '/' + a)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
@@ -143,24 +136,17 @@ export default function Ipr(props) {
               var sortedObjs = _.sortBy(res.data.data, 'date').reverse()
               setIpr(sortedObjs)
             } else {
-              setIpr(" ")
+              setIpr(' ')
             }
           }
         })
         .catch((e) => {
           console.log('error after searching patient request', e)
         })
+    } else if (a.length == 0) {
+      getIprsData()
     }
-
-    else if(a.length == 0){ 
-      getIprsData();
-    }
-    
   }
-
-
-
-
 
   return (
     <div
@@ -185,76 +171,76 @@ export default function Ipr(props) {
           </div>
         </div>
 
-        <div className='row' style={{marginLeft: '0px', marginRight: '0px', marginTop: '20px'}}>
-            <div
-              className='col-md-10 col-sm-9 col-8'
-              style={styles.textFieldPadding}
-            >
-              <TextField
-                className='textInputStyle'
-                id='searchPatientQuery'
-                type='text'
-                variant='filled'
-                label='Search Patient by Name / MRN / National ID / Mobile Number'
-                name={'searchPatientQuery'}
-                value={searchPatientQuery}
-                onChange={handlePatientSearch} 
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position='end'>
-                      <AccountCircle />
-                    </InputAdornment>
-                  ),
-                  className: classes.input,
-                  classes: { input: classes.input },
-                  disableUnderline: true,
-                }}
-              />
-            </div>
+        <div
+          className='row'
+          style={{ marginLeft: '0px', marginRight: '0px', marginTop: '20px' }}
+        >
+          <div
+            className='col-md-10 col-sm-9 col-8'
+            style={styles.textFieldPadding}
+          >
+            <TextField
+              className='textInputStyle'
+              id='searchPatientQuery'
+              type='text'
+              variant='filled'
+              label='Search Patient by Name / MRN / National ID / Mobile Number'
+              name={'searchPatientQuery'}
+              value={searchPatientQuery}
+              onChange={handlePatientSearch}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position='end'>
+                    <AccountCircle />
+                  </InputAdornment>
+                ),
+                className: classes.input,
+                classes: { input: classes.input },
+                disableUnderline: true,
+              }}
+            />
+          </div>
 
+          <div
+            className='col-md-1 col-sm-2 col-2'
+            style={{
+              ...styles.textFieldPadding,
+            }}
+          >
             <div
-              className='col-md-1 col-sm-2 col-2'
               style={{
-                ...styles.textFieldPadding,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: 'white',
+                borderRadius: 5,
+                height: 55,
               }}
             >
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: 'white',
-                  borderRadius: 5,
-                  height: 55,
-                }}
-              >
-                <img src={BarCode} style={{ width: 70, height: 60 }} />
-              </div>
+              <img src={BarCode} style={{ width: 70, height: 60 }} />
             </div>
+          </div>
 
+          <div
+            className='col-md-1 col-sm-1 col-2'
+            style={{
+              ...styles.textFieldPadding,
+            }}
+          >
             <div
-              className='col-md-1 col-sm-1 col-2'
               style={{
-                ...styles.textFieldPadding,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: 'white',
+                borderRadius: 5,
+                height: 55,
               }}
             >
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: 'white',
-                  borderRadius: 5,
-                  height: 55,
-                }}
-              >
-                <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
-              </div>
+              <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
             </div>
-            </div> 
-
-
-
+          </div>
+        </div>
 
         <div
           style={{
@@ -263,7 +249,7 @@ export default function Ipr(props) {
             flexDirection: 'column',
           }}
         >
-          {Ipr !== " " ? (
+          {Ipr !== ' ' ? (
             <div>
               <div>
                 <CustomTable
