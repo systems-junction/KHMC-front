@@ -20,7 +20,7 @@ export const socketUrl = "ws://localhost:4001";
 // export const socketUrl = "ws://192.168.10.20:4001";
 
 export const audioURL = "http://localhost:4000";
-//export const audioURL = "https://dev.khmc-staging.online/";
+//export const audioURL = "https://dev.khmc-staging.online";
 //export const uploadsUrl = 'https://demo.khmc-staging.com/'
 //export const uploadsUrl = 'https://test.khmc-staging.com/'
 export const uploadsUrl = "http://localhost:4000/uploads/";
@@ -248,6 +248,7 @@ export const updateReceiveRequestsUrl = `${baseUrl}/account/updateaccounts`;
 
 // replenishment request for FU
 export const getReplenishmentRequestUrlFU = `${baseUrl}/replenishmentRequest/getreplenishmentrequestsFU`;
+export const getReplenishmentRequestUrlFUSearch = `${baseUrl}/replenishmentRequest/getreplenishmentrequests`;
 export const addReplenishmentRequestUrl = `${baseUrl}/replenishmentRequest/addreplenishmentrequest`;
 export const deleteReplenishmentRequestUrl = `${baseUrl}/replenishmentRequest/deletereplenishmentrequests`;
 export const updateReplenishmentRequestUrl = `${baseUrl}/replenishmentRequest/updatereplenishmentrequest`;
