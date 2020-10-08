@@ -548,9 +548,9 @@ function AddEditPatientListing(props) {
       city &&
       city.length > 0 &&
       validateCountryCity(city) &&
-      otherCity &&
-      otherCity.length > 0 &&
-      validateCountryCity(otherCity) &&
+      // otherCity &&
+      // otherCity.length > 0 &&
+      // validateCountryCity(otherCity) &&
       address &&
       address.length > 0 &&
       validateAddress(address)
