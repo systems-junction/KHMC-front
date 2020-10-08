@@ -1037,6 +1037,7 @@ function AddEditPatientListing(props) {
           dispatch({ field: "otherDetails", value: i.otherDetails });
           if (i.otherCity) {
             dispatch({ field: "otherCity", value: i.otherCity });
+            setCityBoolean(true);
           }
           dispatch({
             field: "emergencyContactNo",
