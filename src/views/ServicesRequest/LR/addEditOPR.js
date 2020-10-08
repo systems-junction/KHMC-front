@@ -46,6 +46,7 @@ import {
   addPatientUrl,
   generateOPR,
   generateIPR,
+  getPatientById,
   searchPatientsURL,
   getVendorApproval,
 } from "../../../public/endpoins";
@@ -471,6 +472,7 @@ function AddEditPatientListing(props) {
   const [insuranceBoolean, setInsuranceBoolean] = useState(true);
   const [covTer, setCovTer] = useState("");
   const [cityBoolean, setCityBoolean] = useState(false);
+  const [timer, setTimer] = useState(null);
 
   useEffect(() => {
     setcomingFor(props.history.location.state.comingFor);
@@ -948,12 +950,33 @@ function AddEditPatientListing(props) {
       });
   };
 
-  const handleSearch = (e) => {
-    const a = e.target.value.replace(/[^\w.\s]/gi, "");
+  const handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      triggerChange();
+    }
+  };
+
+  const triggerChange = () => {
+    handleSearch(searchQuery);
+  };
+
+  const handlePauseSearch = (e) => {
+    clearTimeout(timer);
+
+    const a = e.target.value.replace(/[^\w\s]/gi, "");
     setSearchQuery(a);
-    if (a.length >= 3) {
+
+    setTimer(
+      setTimeout(() => {
+        triggerChange();
+      }, 600)
+    );
+  };
+
+  const handleSearch = (e) => {
+    if (e.length >= 3) {
       axios
-        .get(searchPatientsURL + "/" + a)
+        .get(searchPatientsURL + "/" + e)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
@@ -972,85 +995,110 @@ function AddEditPatientListing(props) {
     }
   };
 
-  function handleAddItem(i) {
-    console.log("selected banda", i);
+  function handleAddItem(item) {
+    console.log("selected banda", item);
 
-    // const dob = new Date(i.dob).toISOString().substr(0, 10)
-    let d = i.dob;
-    var dob;
-    let myDate = d.split("/");
-    if (myDate.length > 1) {
-      console.log(myDate, "mydate");
-      dob = new Date(myDate[2], myDate[1] - 1, myDate[0]);
-    } else {
-      dob = d;
-    }
+    axios
+      .get(getPatientById + "/" + item._id)
+      .then((res) => {
+        if (res.data.success) {
+          console.log("Data of selected banda ", res.data.data);
 
-    setPatientId(i._id);
-    dispatch({ field: "firstName", value: i.firstName });
-    dispatch({ field: "lastName", value: i.lastName });
-    dispatch({ field: "nationality", value: i.nationality });
-    dispatch({ field: "gender", value: i.gender });
-    dispatch({ field: "age", value: i.age });
-    dispatch({ field: "profileNo", value: i.profileNo });
-    dispatch({ field: "insuranceNo", value: i.insuranceNo });
-    dispatch({ field: "SIN", value: i.SIN });
-    dispatch({ field: "title", value: i.title });
-    dispatch({ field: "dob", value: dob });
-    dispatch({ field: "height", value: i.height });
-    dispatch({ field: "weight", value: i.weight });
-    dispatch({ field: "bloodGroup", value: i.bloodGroup });
-    dispatch({ field: "phoneNumber", value: i.phoneNumber });
-    dispatch({ field: "mobileNumber", value: i.mobileNumber });
-    dispatch({ field: "email", value: i.email });
-    dispatch({ field: "country", value: i.country });
-    dispatch({ field: "city", value: i.city });
-    if (i.otherCity) {
-      dispatch({ field: "otherCity", value: i.otherCity });
-    }
-    dispatch({ field: "address", value: i.address });
-    dispatch({ field: "otherDetails", value: i.otherDetails });
+          let i = res.data.data;
+          let d = i.dob;
+          var dob;
+          let myDate = d.split("/");
+          if (myDate.length > 1) {
+            console.log(myDate, "mydate");
+            dob = new Date(myDate[2], myDate[1] - 1, myDate[0]);
+          } else {
+            dob = d;
+          }
 
-    dispatch({ field: "emergencyContactNo", value: i.emergencyContactNo });
-    dispatch({ field: "emergencyName", value: i.emergencyName });
-    dispatch({ field: "emergencyRelation", value: i.emergencyRelation });
-    dispatch({ field: "coveredFamilyMembers", value: i.coveredFamilyMembers });
-    dispatch({ field: "otherCoverageDetails", value: i.otherCoverageDetails });
+          setPatientId(i._id);
+          dispatch({ field: "firstName", value: i.firstName });
+          dispatch({ field: "lastName", value: i.lastName });
+          dispatch({ field: "gender", value: i.gender });
+          dispatch({ field: "nationality", value: i.nationality });
+          dispatch({ field: "age", value: i.age });
+          dispatch({ field: "profileNo", value: i.profileNo });
+          dispatch({ field: "insuranceNo", value: i.insuranceNo });
+          dispatch({ field: "SIN", value: i.SIN });
+          dispatch({ field: "title", value: i.title });
+          dispatch({ field: "dob", value: dob });
+          dispatch({ field: "height", value: i.height });
+          dispatch({ field: "weight", value: i.weight });
+          dispatch({ field: "bloodGroup", value: i.bloodGroup });
+          dispatch({ field: "phoneNumber", value: i.phoneNumber });
+          dispatch({ field: "mobileNumber", value: i.mobileNumber });
+          dispatch({ field: "email", value: i.email });
+          dispatch({ field: "country", value: i.country });
+          dispatch({ field: "city", value: i.city });
+          dispatch({ field: "address", value: i.address });
+          dispatch({ field: "otherDetails", value: i.otherDetails });
+          if (i.otherCity) {
+            dispatch({ field: "otherCity", value: i.otherCity });
+          }
+          dispatch({
+            field: "emergencyContactNo",
+            value: i.emergencyContactNo,
+          });
+          dispatch({ field: "emergencyName", value: i.emergencyName });
+          dispatch({ field: "emergencyRelation", value: i.emergencyRelation });
+          dispatch({
+            field: "coveredFamilyMembers",
+            value: i.coveredFamilyMembers,
+          });
+          dispatch({
+            field: "otherCoverageDetails",
+            value: i.otherCoverageDetails,
+          });
 
-    // dispatch({ field: 'receiverName', value: i.receiverName })
+          dispatch({
+            field: "amountReceived",
+            value: i.amountReceived,
+          });
+          if (i.amountReceived === null) {
+            dispatch({ field: "amountReceived", value: "" });
+          }
+          if (i.amountReceived === 0) {
+            dispatch({ field: "amountReceived", value: "0.0000" });
+          }
+          dispatch({ field: "bankName", value: i.bankName });
+          dispatch({ field: "depositorName", value: i.depositorName });
 
-    dispatch({ field: "amountReceived", value: i.amountReceived });
-    if (i.amountReceived === null) {
-      dispatch({ field: "amountReceived", value: "" });
-    }
-    if (i.amountReceived === 0) {
-      dispatch({ field: "amountReceived", value: "0.00" });
-    }
-    dispatch({ field: "bankName", value: i.bankName });
-    dispatch({ field: "depositorName", value: i.depositorName });
+          dispatch({ field: "coverageDetails", value: i.coverageDetails });
+          dispatch({ field: "coverageTerms", value: i.coverageTerms });
+          dispatch({ field: "payment", value: i.payment });
+          dispatch({ field: "depositSlip", value: i.depositSlip });
+          dispatch({ field: "DateTime", value: i.DateTime });
+          dispatch({ field: "paymentMethod", value: i.paymentMethod });
+          dispatch({ field: "insuranceVendor", value: i.insuranceVendor });
+          dispatch({ field: "emergencyName", value: i.emergencyName });
+          dispatch({
+            field: "emergencyContactNo",
+            value: i.emergencyContactNo,
+          });
+          dispatch({ field: "emergencyRelation", value: i.emergencyRelation });
 
-    dispatch({ field: "coverageDetails", value: i.coverageDetails });
-    dispatch({ field: "coverageTerms", value: i.coverageTerms });
-    dispatch({ field: "payment", value: i.payment });
-    dispatch({ field: "depositSlip", value: i.depositSlip });
-    dispatch({ field: "DateTime", value: i.DateTime });
-    dispatch({ field: "paymentMethod", value: i.paymentMethod });
-    dispatch({ field: "insuranceVendor", value: i.insuranceVendor });
-    dispatch({ field: "emergencyName", value: i.emergencyName });
-    dispatch({ field: "emergencyContactNo", value: i.emergencyContactNo });
-    dispatch({ field: "emergencyRelation", value: i.emergencyRelation });
-
-    setSearchQuery("");
-    setsearchActivated(true);
-    if (i.paymentMethod === "Insurance") {
-      setenableForm(false);
-      setInsuranceForm(false);
-      setenableNext(false);
-    }
-    if (i.paymentMethod === "Cash") {
-      setenableForm(true);
-      setenableNext(true);
-    }
+          setSearchQuery("");
+          setsearchActivated(true);
+          if (i.paymentMethod === "Insurance") {
+            setenableForm(false);
+            setInsuranceForm(false);
+            setenableNext(false);
+          }
+          if (i.paymentMethod === "Cash") {
+            setenableForm(true);
+            setenableNext(true);
+          }
+        }
+      })
+      .catch((e) => {
+        console.log("Error while searching patient", e);
+        setOpenNotification(true);
+        setErrorMsg("Error while fetching details of patient");
+      });
   }
 
   const onChangeBloodGroup = (e) => {
@@ -1346,7 +1394,8 @@ function AddEditPatientListing(props) {
                       label="Search Patient by Name / MRN / National ID / Mobile Number"
                       name={"searchQuery"}
                       value={searchQuery}
-                      onChange={handleSearch}
+                      onChange={handlePauseSearch}
+                      onKeyDown={handleKeyDown}
                       className="textInputStyle"
                       variant="filled"
                       InputProps={{
@@ -1418,47 +1467,63 @@ function AddEditPatientListing(props) {
                     {searchQuery ? (
                       <div style={{ zIndex: 3 }}>
                         <Paper style={{ maxHeight: 300, overflow: "auto" }}>
-                          {itemFoundSuccessfull ? (
-                            itemFound && (
-                              <Table size="small">
-                                <TableHead>
-                                  <TableRow>
-                                    <TableCell>MRN</TableCell>
-                                    <TableCell>Patient Name</TableCell>
-                                    <TableCell>Gender</TableCell>
-                                    <TableCell>Age</TableCell>
-                                    <TableCell>Payment Method</TableCell>
-                                  </TableRow>
-                                </TableHead>
+                          {itemFoundSuccessfull && itemFound !== "" ? (
+                            <Table size="small">
+                              <TableHead>
+                                <TableRow>
+                                  <TableCell>MRN</TableCell>
+                                  <TableCell>Patient Name</TableCell>
+                                  <TableCell>Gender</TableCell>
+                                  <TableCell>Age</TableCell>
+                                </TableRow>
+                              </TableHead>
 
-                                <TableBody>
-                                  {itemFound.map((i) => {
-                                    return (
-                                      <TableRow
-                                        key={i._id}
-                                        onClick={() => handleAddItem(i)}
-                                        style={{ cursor: "pointer" }}
-                                      >
-                                        <TableCell>{i.profileNo}</TableCell>
-                                        <TableCell>
-                                          {i.firstName + ` ` + i.lastName}
-                                        </TableCell>
-                                        <TableCell>{i.gender}</TableCell>
-                                        <TableCell>{i.age}</TableCell>
-                                        <TableCell>{i.paymentMethod}</TableCell>
-                                      </TableRow>
-                                    );
-                                  })}
-                                </TableBody>
-                              </Table>
-                            )
-                          ) : (
-                            <h4
-                              style={{ textAlign: "center" }}
-                              onClick={() => setSearchQuery("")}
+                              <TableBody>
+                                {itemFound.map((i) => {
+                                  return (
+                                    <TableRow
+                                      key={i._id}
+                                      onClick={() => handleAddItem(i)}
+                                      style={{ cursor: "pointer" }}
+                                    >
+                                      <TableCell>{i.profileNo}</TableCell>
+                                      <TableCell>{i.name}</TableCell>
+                                      <TableCell>{i.gender}</TableCell>
+                                      <TableCell>{i.age}</TableCell>
+                                    </TableRow>
+                                  );
+                                })}
+                              </TableBody>
+                            </Table>
+                          ) : searchQuery ? (
+                            <div style={{ textAlign: "center" }}>
+                              <Loader
+                                type="TailSpin"
+                                color="#2c6ddd"
+                                height={25}
+                                width={25}
+                                style={{
+                                  display: "inline-block",
+                                  padding: "10px",
+                                }}
+                              />
+                              <span
+                                style={{
+                                  display: "inline-block",
+                                  padding: "10px",
+                                }}
+                              >
+                                <h4> Searching Patient...</h4>
+                              </span>
+                            </div>
+                          ) : searchQuery && !itemFoundSuccessfull ? (
+                            <div
+                              style={{ textAlign: "center", padding: "10px" }}
                             >
-                              Patient Not Found
-                            </h4>
+                              <h4>No Patient Found !</h4>
+                            </div>
+                          ) : (
+                            undefined
                           )}
                         </Paper>
                       </div>
@@ -2091,7 +2156,7 @@ function AddEditPatientListing(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
-                    marginBottom: 16
+                    marginBottom: 16,
                   }}
                 >
                   <TextField
