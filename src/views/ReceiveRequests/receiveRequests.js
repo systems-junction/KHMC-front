@@ -5,7 +5,7 @@ import Notification from "../../components/Snackbar/Notification.js";
 import CustomTable from "../../components/Table/Table";
 import ConfirmationModal from "../../components/Modal/confirmationModal";
 import axios from "axios";
-import { getReceiveRequestsUrl, socketUrl } from "../../public/endpoins";
+import { getReceiveRequestsUrl, socketUrl, getReceiveRequestsSearch } from "../../public/endpoins";
 import Loader from "react-loader-spinner";
 
 import Header from "../../components/Header/Header";
@@ -21,6 +21,11 @@ import Edit from "../../assets/img/Edit.png";
 import Inactive from "../../assets/img/Inactive.png";
 
 import Active from "../../assets/img/Active.png";
+
+import AccountCircle from '@material-ui/icons/SearchOutlined'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import TextField from '@material-ui/core/TextField'
+import { makeStyles } from "@material-ui/core/styles";
 
 import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 
@@ -48,10 +53,37 @@ const tableDataKeys = [
   "status",
 ];
 
+const styles = {
+  textFieldPadding: {
+    paddingLeft: 0,
+    paddingRight: 5,
+  },
+
+};
+
+
+const useStylesForInput = makeStyles((theme) => ({
+  input: {
+    backgroundColor: 'white',
+    borderRadius: 5,
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:disabled': {
+      color: 'gray',
+    },
+  },
+}))
+
 const actions = { view: true };
 
 export default function PurchaseRequest(props) {
   const [materialReceivings, setMaterialReceivings] = useState("");
+  const classesInput = useStylesForInput()
+
   const [vendors, setVendor] = useState("");
   const [statues, setStatus] = useState("");
   const [purchaseRequests, setPurchaseRequests] = useState("");
@@ -67,6 +99,7 @@ export default function PurchaseRequest(props) {
 
   const [selectedPurchaseOrder, setSelectedPurchaseOrder] = useState("");
   const [selectedPurchaseRequest, setSelectedPurchaseRequest] = useState("");
+  const [searchPatientQuery, setSearchPatientQuery] = useState('')
 
   if (openNotification) {
     setTimeout(() => {
@@ -159,6 +192,46 @@ export default function PurchaseRequest(props) {
     });
   }
 
+  const handlePatientSearch =  (e) => {
+    const a = e.target.value.replace(/[^\w\s]/gi, '')
+    setSearchPatientQuery(a)
+    if (a.length >= 3) {
+       axios
+        .get(
+          getReceiveRequestsSearch + '/' + a
+        )
+        .then((res) => {
+          if (res.data.success) {
+            if (res.data.data.length > 0) {
+              console.log(res.data.data)
+              let temp = [];
+              for (let i = 0; i < res.data.data.length; i++) {
+                let obj = {
+                  ...res.data.data[i],
+                  poId: res.data.data[i].mrId.poId,
+                };
+                temp = [...temp, obj];
+              }
+              console.log(temp, "temmp");
+
+              setMaterialReceivings(temp.reverse());
+            } else {
+              console.log(res.data.data, 'no-response');
+              setMaterialReceivings([]);
+            }
+          }
+        })
+        .catch((e) => {
+          console.log('error after searching patient request', e)
+        })
+    }
+
+    else if(a.length == 0){
+      getPurchaseRequests();
+    }
+    
+  }
+
   return (
     <div
       style={{
@@ -182,6 +255,51 @@ export default function PurchaseRequest(props) {
           </div>
         </div>
 
+        <div className='row' style={{marginLeft: '0px', marginRight: '0px', marginTop: '20px'}}>
+            <div
+              className='col-md-12 col-sm-9 col-8'
+              style={styles.textFieldPadding}
+            >
+              <TextField
+                className='textInputStyle'
+                id='searchPatientQuery'
+                type='text'
+                variant='filled'
+                label='Search By Return Request No'
+                name={'searchPatientQuery'}
+                value={searchPatientQuery}
+                onChange={handlePatientSearch} 
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <AccountCircle />
+                    </InputAdornment>
+                  ),
+                  className: classesInput.input,
+                  classes: { input: classesInput.input },
+                  disableUnderline: true,
+                }}
+              />
+            </div>
+
+            <div
+              className='col-md-1 col-sm-2 col-2'
+              style={{
+                ...styles.textFieldPadding,
+              }}
+            >
+            </div>
+
+            <div
+              className='col-md-1 col-sm-1 col-2'
+              style={{
+                ...styles.textFieldPadding,
+              }}
+            >
+              
+            </div>
+          </div>
+
         <div
           style={{
             flex: 4,
@@ -190,7 +308,7 @@ export default function PurchaseRequest(props) {
           }}
           className="container-fluid"
         >
-          {materialReceivings ? (
+          {materialReceivings &&  materialReceivings.length > 0  ? (
             <div>
               <div class="row">
                 <CustomTable
@@ -226,10 +344,32 @@ export default function PurchaseRequest(props) {
                 </div>
               </div>
             </div>
-          ) : (
-            <div className="LoaderStyle">
-              <Loader type="TailSpin" color="red" height={50} width={50} />
+          ) : materialReceivings && materialReceivings.length == 0 ? (
+            <div className='row ' style={{ marginTop: '25px' }}>
+              <div className='col-11'>
+                <h3
+                  style={{
+                    color: 'white',
+                    textAlign: 'center',
+                    width: '100%',
+                    position: 'absolute',
+                  }}
+                >
+                  Opps...No Data Found
+                </h3>
+              </div>
+              <div className='col-1' style={{ marginTop: 45 }}>
+                <img
+                  onClick={() => props.history.goBack()}
+                  src={Back_Arrow}
+                  style={{ maxWidth: '60%', height: 'auto', cursor: 'pointer' }}
+                />
+              </div>
             </div>
+          ) : 
+          ( <div className="LoaderStyle">
+            <Loader type="TailSpin" color="red" height={50} width={50} />
+          </div>
           )}
         </div>
       </div>

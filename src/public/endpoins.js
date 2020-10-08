@@ -210,7 +210,8 @@ export const deleteReceiveItemsUrl = `${baseUrl}/receiveitem/deletereceiveitem`;
 export const updateReceiveItemsUrl = `${baseUrl}/receiveitem/updatereceiveitem`;
 
 // material receivings
-export const getMaterialReceivingUrl = `${baseUrl}/materialreceiving/getmaterialreceivings`;
+export const getMaterialReceivingUrl = `${baseUrl}/materialreceiving/getmaterialreceivings`; 
+export const getMaterialReceivingUrlSearch = `${baseUrl}/materialreceiving/getmaterialreceivingskey`;
 export const addMaterialReceivingUrl = `${baseUrl}/materialreceiving/addmaterialreceiving`;
 export const deleteMaterialReceivingUrl = `${baseUrl}/materialreceiving/deletematerialreceiving`;
 export const updateMaterialReceivingUrl = `${baseUrl}/materialreceiving/updatematerialreceiving`;
@@ -242,6 +243,7 @@ export const updateSystemAdminUrl = `${baseUrl}/systemadmin/updatesystemadmin`;
 
 //receive items requests for accounts
 export const getReceiveRequestsUrl = `${baseUrl}/account/getaccounts`;
+export const getReceiveRequestsSearch = `${baseUrl}/account/getaccount`;
 // export const addSystemAdminUrl = `${baseUrl}/systemadmin/addsystemadmin`;
 // export const deleteSystemAdminUrl = `${baseUrl}/systemadmin/deletesystemadmin`;
 export const updateReceiveRequestsUrl = `${baseUrl}/account/updateaccounts`;
