@@ -571,9 +571,9 @@ function AddEditPatientListing(props) {
       city &&
       city.length > 0 &&
       validateCountryCity(city) &&
-      otherCity &&
-      otherCity.length > 0 &&
-      validateCountryCity(otherCity) &&
+      // otherCity &&
+      // otherCity.length > 0 &&
+      // validateCountryCity(otherCity) &&
       address &&
       address.length > 0 &&
       validateAddress(address)
@@ -1402,7 +1402,7 @@ function AddEditPatientListing(props) {
       }}
     >
       <Header />
-      <div className="cPadding" >
+      <div className="cPadding">
         <div className="subheader" style={{ marginLeft: "-10px" }}>
           <div>
             <img src={patientRegister} />
