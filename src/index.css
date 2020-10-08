@@ -12,6 +12,7 @@ ul li {
   /* padding: 0 3% !important; */
   padding-left: 25px;
   padding-right: 25px;
+  margin-top: -150px;
 }
 
 .addCode:before {

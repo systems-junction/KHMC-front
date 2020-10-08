@@ -117,6 +117,7 @@ class Login extends React.Component {
             flexDirection: "column",
             justifyContent: "center",
           }}
+          class="cPadding"
         >
           <div style={{ marginLeft: "1%", marginRight: "1%" }}>
             {/* <Notification msg={this.state.msg} open={this.state.tr} /> */}
