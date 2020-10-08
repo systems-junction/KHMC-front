@@ -643,7 +643,7 @@ export default function ReplenishmentRequest(props) {
               setPurchaseRequest(res.data.data.reverse());
             } else {
               console.log(res.data.data, 'no-response');
-              setPurchaseRequest(" ");
+              setPurchaseRequest([]);
             }
           }
         })
@@ -785,7 +785,7 @@ export default function ReplenishmentRequest(props) {
               flexDirection: "column",
             }}
           >
-            {purchaseRequests !== ' ' ? (
+            {purchaseRequests &&  purchaseRequests.length > 0 ? (
               <div>
                 <div>
                   <CustomTable
@@ -856,11 +856,34 @@ export default function ReplenishmentRequest(props) {
 
                 <Notification msg={errorMsg} open={openNotification} />
               </div>
-            ) : (
-              <div className="LoaderStyle">
+            ) : purchaseRequests && purchaseRequests.length == 0 ? (
+                <div className='row ' style={{ marginTop: '25px' }}>
+                  <div className='col-11'>
+                    <h3
+                      style={{
+                        color: 'white',
+                        textAlign: 'center',
+                        width: '100%',
+                        position: 'absolute',
+                      }}
+                    >
+                      Opps...No Data Found
+                    </h3>
+                  </div>
+                  <div className='col-1' style={{ marginTop: 45 }}>
+                    <img
+                      onClick={() => props.history.goBack()}
+                      src={Back_Arrow}
+                      style={{ maxWidth: '60%', height: 'auto', cursor: 'pointer' }}
+                    />
+                  </div>
+                </div>
+            ) : 
+             ( <div className="LoaderStyle">
                 <Loader type="TailSpin" color="red" height={50} width={50} />
               </div>
-            )}
+            
+             )}
           </div>
           <div style={{ marginBottom: 20 }}>
             <img
