@@ -1021,6 +1021,7 @@ function AddEditPurchaseRequest(props) {
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
+                  paddingRight: 0,
                 }}
               >
                 <TextField
@@ -1114,13 +1115,13 @@ function AddEditPurchaseRequest(props) {
               undefined
             )}
 
-            <div style={{ marginTop: '20px' }} className='row'>
+            <div style={{ marginTop: '15px' }} className='row'>
               <div
                 className='col-md-5 col-sm-10 col-6'
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
-                  paddingRight: '15px',
+                  paddingRight: '5px',
                 }}
               >
                 <TextField
@@ -1181,7 +1182,8 @@ function AddEditPurchaseRequest(props) {
                     height: 56,
                     outline: 'none',
                     marginTop: 7,
-                    width: '104%',
+                    width: '109%',
+                    marginLeft: '-10px',
                   }}
                   disabled={!addRadioRequest}
                   onClick={addSelectedRadioItem}
@@ -1197,7 +1199,7 @@ function AddEditPurchaseRequest(props) {
             <div
               className='row'
               style={{
-                marginTop: '20px',
+                marginTop: '5px',
                 scrollPaddingLeft: '5px',
                 paddingRight: '10px',
               }}

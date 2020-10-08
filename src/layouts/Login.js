@@ -204,7 +204,16 @@ class Login extends React.Component {
         }}
       >
         <div className='header'>
-          <img src={KHMC_White} style={{ maxWidth: '160px', height: '35px' }} />
+          {/* <img src={KHMC_White} style={{ maxWidth: '160px', height: '35px' }} /> */}
+          <h4
+            className='header1-style'
+            style={{ color: 'white', fontWeight: 'bold' }}
+            onClick={() => {
+              return this.setState({ goBack: true })
+            }}
+          >
+            KHMC Logo
+          </h4>
           <div style={{ textAlign: 'right' }}>
             <img
               src={Influence_white}

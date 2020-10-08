@@ -185,7 +185,7 @@ const styles = {
     fontWeight: 'bold',
   },
   textFieldPadding: {
-    paddingLeft: 0,
+    paddingLeft: 5,
     paddingRight: 5,
   },
   headerHeading: {
@@ -373,7 +373,7 @@ function PatientCare(props) {
   const [isOpen, setIsOpen] = useState(false)
   const [enableSave, setEnableSave] = useState(true)
   const [timer, setTimer] = useState(null)
-  
+
   useEffect(() => {
     if (props.patientDetails) {
       setPatientDetails(props.patientDetails)
@@ -806,28 +806,29 @@ function PatientCare(props) {
 
   const handleKeyDown = (e) => {
     if (e.keyCode === 13) {
-      triggerChange();
+      triggerChange()
     }
   }
 
   const triggerChange = () => {
-    handlePatientSearch(searchPatientQuery);
+    handlePatientSearch(searchPatientQuery)
   }
 
   const handlePauseSearch = (e) => {
-    clearTimeout(timer);
+    clearTimeout(timer)
 
-    const a = e.target.value.replace(/[^\w\s]/gi, "");
-    setSearchPatientQuery(a);
+    const a = e.target.value.replace(/[^\w\s]/gi, '')
+    setSearchPatientQuery(a)
 
-    setTimer(setTimeout(() => {
-      triggerChange()
-    }, 600))
+    setTimer(
+      setTimeout(() => {
+        triggerChange()
+      }, 600)
+    )
   }
 
   //for search patient
   const handlePatientSearch = (e) => {
-
     if (e.length >= 3) {
       axios
         .get(
@@ -1088,7 +1089,7 @@ function PatientCare(props) {
             marginTop: '25px',
             width: '100%',
             paddingRight: 10,
-            paddingLeft: 15,
+            paddingLeft: 10,
             marginRight: 'auto',
             marginLeft: 'auto',
           }}
@@ -1177,63 +1178,63 @@ function PatientCare(props) {
                   }}
                 >
                   <Paper style={{ maxHeight: 300, overflow: 'auto' }}>
-                    {patientFoundSuccessfull &&
-                      patientFound !== '' ?
-                      (
-                        <Table size='small'>
-                          <TableHead>
-                            <TableRow>
-                              <TableCell>MRN</TableCell>
-                              <TableCell>Patient Name</TableCell>
-                              <TableCell>Gender</TableCell>
-                              <TableCell>Age</TableCell>
-                            </TableRow>
-                          </TableHead>
+                    {patientFoundSuccessfull && patientFound !== '' ? (
+                      <Table size='small'>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>MRN</TableCell>
+                            <TableCell>Patient Name</TableCell>
+                            <TableCell>Gender</TableCell>
+                            <TableCell>Age</TableCell>
+                          </TableRow>
+                        </TableHead>
 
-                          <TableBody>
-                            {patientFound.map((i) => {
-                              return (
-                                <TableRow
-                                  key={i._id}
-                                  onClick={() => handleAddPatient(i)}
-                                  style={{ cursor: 'pointer' }}
-                                >
-                                  <TableCell>{i.profileNo}</TableCell>
-                                  <TableCell>
-                                    {i.firstName + ` ` + i.lastName}
-                                  </TableCell>
-                                  <TableCell>{i.gender}</TableCell>
-                                  <TableCell>{i.age}</TableCell>
-                                </TableRow>
-                              )
-                            })}
-                          </TableBody>
-                        </Table>
-                      ) : searchPatientQuery ? (
-                        <div style={{ textAlign: 'center' }}>
-                          <Loader
-                            type='TailSpin'
-                            color='#2c6ddd'
-                            height={25}
-                            width={25}
-                            style={{ display: 'inline-block', padding: '10px' }}
-                          />
-                          <span style={{ display: 'inline-block', padding: '10px' }}>
-                            <h4>Searching Patient...</h4>
-                          </span>
-                        </div>
-                      ) : searchPatientQuery && !patientFoundSuccessfull ? (
-                        <div style={{ textAlign: 'center', padding: '10px' }}>
-                          <h4> No Patient Found !</h4>
-                        </div>
-                      ) : (
-                            undefined
-                          )}
+                        <TableBody>
+                          {patientFound.map((i) => {
+                            return (
+                              <TableRow
+                                key={i._id}
+                                onClick={() => handleAddPatient(i)}
+                                style={{ cursor: 'pointer' }}
+                              >
+                                <TableCell>{i.profileNo}</TableCell>
+                                <TableCell>
+                                  {i.firstName + ` ` + i.lastName}
+                                </TableCell>
+                                <TableCell>{i.gender}</TableCell>
+                                <TableCell>{i.age}</TableCell>
+                              </TableRow>
+                            )
+                          })}
+                        </TableBody>
+                      </Table>
+                    ) : searchPatientQuery ? (
+                      <div style={{ textAlign: 'center' }}>
+                        <Loader
+                          type='TailSpin'
+                          color='#2c6ddd'
+                          height={25}
+                          width={25}
+                          style={{ display: 'inline-block', padding: '10px' }}
+                        />
+                        <span
+                          style={{ display: 'inline-block', padding: '10px' }}
+                        >
+                          <h4>Searching Patient...</h4>
+                        </span>
+                      </div>
+                    ) : searchPatientQuery && !patientFoundSuccessfull ? (
+                      <div style={{ textAlign: 'center', padding: '10px' }}>
+                        <h4> No Patient Found !</h4>
+                      </div>
+                    ) : (
+                      undefined
+                    )}
                   </Paper>
                 </div>
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
             </div>
           </div>
         </div>
@@ -1355,26 +1356,33 @@ function PatientCare(props) {
               >
                 {medicationArray
                   ? medicationArray.map((d, index) => {
-                    return (
-                      <div style={{ display: "flex", flexDirection: "row" }}>
-                        <h6
-                          style={{
-                            ...styles.textStyles,
-                          }}
-                        >
-                          {index + 1}
-                          {"."} &nbsp;
+                      return (
+                        <div style={{ display: 'flex', flexDirection: 'row' }}>
+                          <h6
+                            style={{
+                              ...styles.textStyles,
+                            }}
+                          >
+                            {index + 1}
+                            {'.'} &nbsp;
                           </h6>
-                        <h6
-                          style={{
-                            ...styles.textStyles,
-                          }}
-                        >
-                          {d}
-                        </h6>
-                      </div>
-                    )
-                  })
+                          <h6
+                            style={{
+                              ...styles.textStyles,
+                            }}
+                          >
+                            {d}
+                          </h6>
+                          <h6
+                            style={{
+                              ...styles.textStyles,
+                            }}
+                          >
+                            {d}
+                          </h6>
+                        </div>
+                      )
+                    })
                   : ''}
               </div>
 
@@ -1384,12 +1392,12 @@ function PatientCare(props) {
               >
                 {diagnosisArray
                   ? diagnosisArray.map((drug, index) => {
-                    return (
-                      <h6 style={styles.textStyles}>
-                        {index + 1}. {drug}
-                      </h6>
-                    )
-                  })
+                      return (
+                        <h6 style={styles.textStyles}>
+                          {index + 1}. {drug}
+                        </h6>
+                      )
+                    })
                   : ''}
               </div>
             </div>
@@ -1486,8 +1494,8 @@ function PatientCare(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
             </div>
           ) : value === 2 ? (
@@ -1507,8 +1515,8 @@ function PatientCare(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
               <div className='row' style={{ marginBottom: '25px' }}>
                 <div
@@ -1620,26 +1628,26 @@ function PatientCare(props) {
                         </Table>
                       )
                     ) : (
-                        <h4
-                          style={{ textAlign: 'center' }}
-                          onClick={() => setSearchQuery('')}
-                        >
-                          Service Not Found
-                        </h4>
-                      )}
+                      <h4
+                        style={{ textAlign: 'center' }}
+                        onClick={() => setSearchQuery('')}
+                      >
+                        Service Not Found
+                      </h4>
+                    )}
                   </Paper>
                 </div>
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
 
-              <div style={{ marginTop: '20px' }} className='row'>
+              <div className='row'>
                 <div
                   className='col-md-5 col-sm-5 col-3'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
-                    paddingRight: '15px',
+                    paddingRight: '5px',
                   }}
                 >
                   <TextField
@@ -1688,7 +1696,8 @@ function PatientCare(props) {
                       marginTop: '25px',
                       backgroundColor: '#ad6bbf',
                       height: '56px',
-                      width: '107%',
+                      width: '111%',
+                      marginLeft: '-10px',
                     }}
                     disabled={!addLabRequest}
                     onClick={addSelectedLabItem}
@@ -1701,7 +1710,7 @@ function PatientCare(props) {
                 </div>
               </div>
 
-              <div className='row' style={{ marginTop: '20px' }}>
+              <div className='row'>
                 {labRequestArray !== 0 ? (
                   <CustomTable
                     tableData={labRequestArray}
@@ -1713,8 +1722,8 @@ function PatientCare(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
 
               <div className='row' style={{ marginBottom: '25px' }}>
@@ -1825,26 +1834,26 @@ function PatientCare(props) {
                         </Table>
                       )
                     ) : (
-                        <h4
-                          style={{ textAlign: 'center' }}
-                          onClick={() => setSearchRadioQuery('')}
-                        >
-                          Service Not Found
-                        </h4>
-                      )}
+                      <h4
+                        style={{ textAlign: 'center' }}
+                        onClick={() => setSearchRadioQuery('')}
+                      >
+                        Service Not Found
+                      </h4>
+                    )}
                   </Paper>
                 </div>
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
 
-              <div style={{ marginTop: '20px' }} className='row'>
+              <div className='row'>
                 <div
                   className='col-md-5 col-sm-5 col-3'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
-                    paddingRight: '15px',
+                    paddingRight: '5px',
                   }}
                 >
                   <TextField
@@ -1893,7 +1902,8 @@ function PatientCare(props) {
                       marginTop: '25px',
                       backgroundColor: '#ad6bbf',
                       height: '56px',
-                      width: '107%',
+                      width: '111%',
+                      marginLeft: '-10px',
                     }}
                     disabled={!addRadioRequest}
                     onClick={addSelectedRadioItem}
@@ -1906,7 +1916,7 @@ function PatientCare(props) {
                 </div>
               </div>
 
-              <div className='row' style={{ marginTop: '20px' }}>
+              <div className='row'>
                 {radiologyRequestArray !== 0 ? (
                   <CustomTable
                     tableData={radiologyRequestArray}
@@ -1918,8 +1928,8 @@ function PatientCare(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
 
               <div className='row' style={{ marginBottom: '25px' }}>
@@ -1957,13 +1967,13 @@ function PatientCare(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
             </div>
           ) : (
-                      undefined
-                    )}
+            undefined
+          )}
 
           {/* // ) : value === 5 ? (
               //     <div
@@ -2128,8 +2138,8 @@ function PatientCare(props) {
               viewItem={viewItem}
             />
           ) : (
-              undefined
-            )}
+            undefined
+          )}
         </div>
 
         <Dialog
@@ -2156,20 +2166,20 @@ function PatientCare(props) {
                     ? tableHeadingForBUMemberForItems
                     : currentUser.staffTypeId.type === 'Registered Nurse' ||
                       currentUser.staffTypeId.type === 'BU Doctor'
-                      ? tableHeadingForBUMemberForItems
-                      : currentUser.staffTypeId.type === 'FU Inventory Keeper'
-                        ? tableHeadingForFUMemberForItems
-                        : tableHeadingForFUMemberForItems
+                    ? tableHeadingForBUMemberForItems
+                    : currentUser.staffTypeId.type === 'FU Inventory Keeper'
+                    ? tableHeadingForFUMemberForItems
+                    : tableHeadingForFUMemberForItems
                 }
                 tableDataKeys={
                   currentUser.staffTypeId.type === 'Doctor/Physician'
                     ? tableDataKeysForItemsForBUMember
                     : currentUser.staffTypeId.type === 'Registered Nurse' ||
                       currentUser.staffTypeId.type === 'BU Doctor'
-                      ? tableDataKeysForItemsForBUMember
-                      : currentUser.staffTypeId.type === 'FU Inventory Keeper'
-                        ? tableDataKeysForFUMemberForItems
-                        : tableDataKeysForItemsForBUMember
+                    ? tableDataKeysForItemsForBUMember
+                    : currentUser.staffTypeId.type === 'FU Inventory Keeper'
+                    ? tableDataKeysForFUMemberForItems
+                    : tableDataKeysForItemsForBUMember
                 }
                 borderBottomColor={'#60d69f'}
                 borderBottomWidth={20}
