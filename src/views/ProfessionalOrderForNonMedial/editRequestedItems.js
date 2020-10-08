@@ -110,6 +110,7 @@ const generatedArray = [
 const styles = {
   inputContainerForTextField: {
     marginTop: 6,
+    marginBottom: 10,
   },
 
   inputContainerForDropDown: {
@@ -146,8 +147,8 @@ const styles = {
     outline: "none",
   },
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 4,
+    paddingRight: 4,
   },
 };
 const useStyles = makeStyles(tableStyles);
@@ -618,20 +619,20 @@ function AddEditPurchaseRequest(props) {
       <Header />
       <div className="cPadding">
         <div className="subheader">
-            <div>
-              <img src={purchase_request} />
-              <h4>
-                {comingFor === "add"
-                  ? "Order Details (Non-Medical)"
-                  : comingFor === "edit"
-                  ? "Order Details (Non-Medical)"
-                  : comingFor === "view"
-                  ? "Order Details (Non-Medical)"
-                  : undefined}
-              </h4>
-            </div>
+          <div>
+            <img src={purchase_request} />
+            <h4>
+              {comingFor === "add"
+                ? "Order Details (Non-Medical)"
+                : comingFor === "edit"
+                ? "Order Details (Non-Medical)"
+                : comingFor === "view"
+                ? "Order Details (Non-Medical)"
+                : undefined}
+            </h4>
+          </div>
 
-            {/* <div>
+          {/* <div>
             <Button
               onClick={() => props.history.goBack()}
               style={styles.stylesForButton}
@@ -644,8 +645,8 @@ function AddEditPurchaseRequest(props) {
             </Button>
           </div> */}
 
-            <ViewAll history={props.history} />
-          </div>
+          <ViewAll history={props.history} />
+        </div>
 
         {fuArray && fuArray !== "" ? (
           <div style={{ flex: 4, display: "flex", flexDirection: "column" }}>
@@ -726,7 +727,7 @@ function AddEditPurchaseRequest(props) {
                     disabled={true}
                     // format="MM/dd/yyyy hh:mm a"
                     format={dateTimeFormat}
-                    label="Date"
+                    label="Date (DD-MM-YYY)"
                     fullWidth
                     InputProps={{
                       className: classes.input,

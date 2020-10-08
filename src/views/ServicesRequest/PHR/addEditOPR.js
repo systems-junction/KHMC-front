@@ -48,6 +48,7 @@ import {
   generateIPR,
   searchPatientsURL,
   getVendorApproval,
+  getPatientById,
 } from "../../../public/endpoins";
 import axios from "axios";
 import Notification from "../../../components/Snackbar/Notification.js";
@@ -341,6 +342,7 @@ function AddEditPatientListing(props) {
     email: "",
     country: "",
     city: "",
+    otherCity: "",
     address: "",
     otherDetails: "",
     amountReceived: "",
@@ -393,6 +395,7 @@ function AddEditPatientListing(props) {
     email,
     country,
     city,
+    otherCity,
     address,
     otherDetails,
     amountReceived,
@@ -468,6 +471,8 @@ function AddEditPatientListing(props) {
   const [insuranceForm, setinsuranceForm] = useState(false);
   const [insuranceBoolean, setInsuranceBoolean] = useState(true);
   const [covTer, setCovTer] = useState("");
+  const [cityBoolean, setCityBoolean] = useState(false);
+  const [timer, setTimer] = useState(null);
 
   useEffect(() => {
     setcomingFor(props.history.location.state.comingFor);
@@ -543,6 +548,9 @@ function AddEditPatientListing(props) {
       city &&
       city.length > 0 &&
       validateCountryCity(city) &&
+      otherCity &&
+      otherCity.length > 0 &&
+      validateCountryCity(otherCity) &&
       address &&
       address.length > 0 &&
       validateAddress(address)
@@ -645,6 +653,7 @@ function AddEditPatientListing(props) {
         bloodGroup,
         email,
         country,
+        otherCity,
         city,
         address,
         otherDetails,
@@ -738,6 +747,7 @@ function AddEditPatientListing(props) {
         email,
         country,
         city,
+        otherCity,
         height,
         weight,
         bloodGroup,
@@ -941,11 +951,9 @@ function AddEditPatientListing(props) {
   };
 
   const handleSearch = (e) => {
-    const a = e.target.value.replace(/[^\w.\s]/gi, "");
-    setSearchQuery(a);
-    if (a.length >= 3) {
+    if (e.length >= 3) {
       axios
-        .get(searchPatientsURL + "/" + a)
+        .get(searchPatientsURL + "/" + e)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
@@ -964,84 +972,136 @@ function AddEditPatientListing(props) {
     }
   };
 
-  function handleAddItem(i) {
-    console.log("selected banda", i);
-
-    // const dob = new Date(i.dob).toISOString().substr(0, 10)
-    let d = i.dob;
-    var dob;
-    let myDate = d.split("/");
-    if (myDate.length > 1) {
-      console.log(myDate, "mydate");
-      dob = new Date(myDate[2], myDate[1] - 1, myDate[0]);
-    } else {
-      dob = d;
+  const handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      triggerChange();
     }
+  };
 
-    setPatientId(i._id);
-    dispatch({ field: "firstName", value: i.firstName });
-    dispatch({ field: "lastName", value: i.lastName });
-    dispatch({ field: "nationality", value: i.nationality });
-    dispatch({ field: "gender", value: i.gender });
-    dispatch({ field: "age", value: i.age });
-    dispatch({ field: "profileNo", value: i.profileNo });
-    dispatch({ field: "insuranceNo", value: i.insuranceNo });
-    dispatch({ field: "SIN", value: i.SIN });
-    dispatch({ field: "title", value: i.title });
-    dispatch({ field: "dob", value: dob });
-    dispatch({ field: "height", value: i.height });
-    dispatch({ field: "weight", value: i.weight });
-    dispatch({ field: "bloodGroup", value: i.bloodGroup });
-    dispatch({ field: "phoneNumber", value: i.phoneNumber });
-    dispatch({ field: "mobileNumber", value: i.mobileNumber });
-    dispatch({ field: "email", value: i.email });
-    dispatch({ field: "country", value: i.country });
-    dispatch({ field: "city", value: i.city });
-    dispatch({ field: "address", value: i.address });
-    dispatch({ field: "otherDetails", value: i.otherDetails });
+  const triggerChange = () => {
+    handleSearch(searchQuery);
+  };
 
-    dispatch({ field: "emergencyContactNo", value: i.emergencyContactNo });
-    dispatch({ field: "emergencyName", value: i.emergencyName });
-    dispatch({ field: "emergencyRelation", value: i.emergencyRelation });
-    dispatch({ field: "coveredFamilyMembers", value: i.coveredFamilyMembers });
-    dispatch({ field: "otherCoverageDetails", value: i.otherCoverageDetails });
+  const handlePauseSearch = (e) => {
+    clearTimeout(timer);
 
-    // dispatch({ field: 'receiverName', value: i.receiverName })
+    const a = e.target.value.replace(/[^\w\s]/gi, "");
+    setSearchQuery(a);
 
-    dispatch({ field: "amountReceived", value: i.amountReceived });
-    if (i.amountReceived === null) {
-      dispatch({ field: "amountReceived", value: "" });
-    }
-    if (i.amountReceived === 0) {
-      dispatch({ field: "amountReceived", value: "0.00" });
-    }
-    dispatch({ field: "bankName", value: i.bankName });
-    dispatch({ field: "depositorName", value: i.depositorName });
+    setTimer(
+      setTimeout(() => {
+        triggerChange();
+      }, 600)
+    );
+  };
+  function handleAddItem(item) {
+    console.log("selected banda", item);
 
-    dispatch({ field: "coverageDetails", value: i.coverageDetails });
-    dispatch({ field: "coverageTerms", value: i.coverageTerms });
-    dispatch({ field: "payment", value: i.payment });
-    dispatch({ field: "depositSlip", value: i.depositSlip });
-    dispatch({ field: "DateTime", value: i.DateTime });
-    dispatch({ field: "paymentMethod", value: i.paymentMethod });
-    dispatch({ field: "insuranceVendor", value: i.insuranceVendor });
-    dispatch({ field: "emergencyName", value: i.emergencyName });
-    dispatch({ field: "emergencyContactNo", value: i.emergencyContactNo });
-    dispatch({ field: "emergencyRelation", value: i.emergencyRelation });
+    axios
+      .get(getPatientById + "/" + item._id)
+      .then((res) => {
+        if (res.data.success) {
+          console.log("Data of selected banda ", res.data.data);
 
-    setSearchQuery("");
-    setsearchActivated(true);
-    if (i.paymentMethod === "Insurance") {
-      setenableForm(false);
-      setInsuranceForm(false);
-      setenableNext(false);
-    }
-    if (i.paymentMethod === "Cash") {
-      setenableForm(true);
-      setenableNext(true);
-    }
+          let i = res.data.data;
+          if (i.dob) {
+            let d = i.dob;
+            var dob;
+            let myDate = d.split("/");
+            if (myDate.length > 1) {
+              console.log(myDate, "mydate");
+              dob = new Date(myDate[2], myDate[1] - 1, myDate[0]);
+            } else {
+              dob = d;
+            }
+          }
+
+          setPatientId(i._id);
+          dispatch({ field: "firstName", value: i.firstName });
+          dispatch({ field: "lastName", value: i.lastName });
+          dispatch({ field: "gender", value: i.gender });
+          dispatch({ field: "nationality", value: i.nationality });
+          dispatch({ field: "age", value: i.age });
+          dispatch({ field: "profileNo", value: i.profileNo });
+          dispatch({ field: "insuranceNo", value: i.insuranceNo });
+          dispatch({ field: "SIN", value: i.SIN });
+          dispatch({ field: "title", value: i.title });
+          dispatch({ field: "dob", value: dob });
+          dispatch({ field: "height", value: i.height });
+          dispatch({ field: "weight", value: i.weight });
+          dispatch({ field: "bloodGroup", value: i.bloodGroup });
+          dispatch({ field: "phoneNumber", value: i.phoneNumber });
+          dispatch({ field: "mobileNumber", value: i.mobileNumber });
+          dispatch({ field: "email", value: i.email });
+          dispatch({ field: "country", value: i.country });
+          dispatch({ field: "city", value: i.city });
+          dispatch({ field: "address", value: i.address });
+          dispatch({ field: "otherDetails", value: i.otherDetails });
+          if (i.otherCity) {
+            dispatch({ field: "otherCity", value: i.otherCity });
+            setCityBoolean(true);
+          }
+          dispatch({
+            field: "emergencyContactNo",
+            value: i.emergencyContactNo,
+          });
+          dispatch({ field: "emergencyName", value: i.emergencyName });
+          dispatch({ field: "emergencyRelation", value: i.emergencyRelation });
+          dispatch({
+            field: "coveredFamilyMembers",
+            value: i.coveredFamilyMembers,
+          });
+          dispatch({
+            field: "otherCoverageDetails",
+            value: i.otherCoverageDetails,
+          });
+
+          dispatch({
+            field: "amountReceived",
+            value: i.amountReceived,
+          });
+          if (i.amountReceived === null) {
+            dispatch({ field: "amountReceived", value: "" });
+          }
+          if (i.amountReceived === 0) {
+            dispatch({ field: "amountReceived", value: "0.0000" });
+          }
+          dispatch({ field: "bankName", value: i.bankName });
+          dispatch({ field: "depositorName", value: i.depositorName });
+
+          dispatch({ field: "coverageDetails", value: i.coverageDetails });
+          dispatch({ field: "coverageTerms", value: i.coverageTerms });
+          dispatch({ field: "payment", value: i.payment });
+          dispatch({ field: "depositSlip", value: i.depositSlip });
+          dispatch({ field: "DateTime", value: i.DateTime });
+          dispatch({ field: "paymentMethod", value: i.paymentMethod });
+          dispatch({ field: "insuranceVendor", value: i.insuranceVendor });
+          dispatch({ field: "emergencyName", value: i.emergencyName });
+          dispatch({
+            field: "emergencyContactNo",
+            value: i.emergencyContactNo,
+          });
+          dispatch({ field: "emergencyRelation", value: i.emergencyRelation });
+
+          setSearchQuery("");
+          setsearchActivated(true);
+          if (i.paymentMethod === "Insurance") {
+            setenableForm(false);
+            setInsuranceForm(false);
+            setenableNext(false);
+          }
+          if (i.paymentMethod === "Cash") {
+            setenableForm(true);
+            setenableNext(true);
+          }
+        }
+      })
+      .catch((e) => {
+        console.log("Error while searching patient", e);
+        setOpenNotification(true);
+        setErrorMsg("Error while fetching details of patient");
+      });
   }
-
   const onChangeBloodGroup = (e) => {
     dispatch({
       field: e.target.name,
@@ -1074,6 +1134,8 @@ function AddEditPatientListing(props) {
           setOpenNotification(true);
           setErrorMsg("Invalid insurance number/insurance number not verified");
         }
+
+        console.log(e);
       })
       .catch((error) => {
         setOpenNotification(true);
@@ -1083,6 +1145,24 @@ function AddEditPatientListing(props) {
 
   console.log("coverageTerms", coverageTerms);
   const onChangeValue = (e) => {
+    if (e.target.name === "city") {
+      if (e.target.value === "Other") {
+        console.log("e.target.value", e.target.value);
+        setCityBoolean(true);
+        dispatch({
+          field: city,
+          value: "Other",
+        });
+
+        dispatch({
+          field: otherCity,
+          value: e.target.value,
+        });
+      } else {
+        setCityBoolean(false);
+      }
+    }
+
     var heightWeightPattern = /^[0-9. ]*$/;
     if (e.target.name === "height" || e.target.name === "weight") {
       if (heightWeightPattern.test(e.target.value) === false) {
@@ -1125,14 +1205,14 @@ function AddEditPatientListing(props) {
         });
       }
     } else if (e.target.name === "address") {
-      if (/^[#.0-9a-zA-Z\s,-]*$/.test(e.target.value) === false) {
-        return;
-      } else {
-        dispatch({
-          field: e.target.name,
-          value: e.target.value,
-        });
-      }
+      // if (/^[#.0-9a-zA-Z\s,-]*$/.test(e.target.value) === false) {
+      //   return;
+      // } else {
+      dispatch({
+        field: e.target.name,
+        value: e.target.value,
+      });
+      // }
     } else {
       dispatch({
         field: e.target.name,
@@ -1299,12 +1379,14 @@ function AddEditPatientListing(props) {
               <>
                 <div
                   className="row"
-                  style={{ marginTop: "20px", marginBottom: "10px" }}
+                  style={{
+                    marginBottom: 18,
+                    marginTop: 30,
+                  }}
                 >
                   <div
                     className="col-md-10 col-sm-9 col-8"
                     style={{
-                      // ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
                     }}
                   >
@@ -1313,7 +1395,8 @@ function AddEditPatientListing(props) {
                       label="Search Patient by Name / MRN / National ID / Mobile Number"
                       name={"searchQuery"}
                       value={searchQuery}
-                      onChange={handleSearch}
+                      onChange={handlePauseSearch}
+                      onKeyDown={handleKeyDown}
                       className="textInputStyle"
                       variant="filled"
                       InputProps={{
@@ -1335,7 +1418,6 @@ function AddEditPatientListing(props) {
                   <div
                     className="col-md-1 col-sm-2 col-2"
                     style={{
-                      // ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
                     }}
                   >
@@ -1356,20 +1438,16 @@ function AddEditPatientListing(props) {
 
                   <div
                     className="col-md-1 col-sm-2 col-2"
-                    style={{
-                      // ...styles.inputContainerForTextField,
-                      ...styles.textFieldPadding,
-                    }}
+                    style={{ ...styles.textFieldPadding }}
                   >
                     <div
                       style={{
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
-                        height: 55,
                         backgroundColor: "white",
                         borderRadius: 5,
-                        // width: 100,
+                        height: 55,
                       }}
                     >
                       <img
@@ -1384,54 +1462,69 @@ function AddEditPatientListing(props) {
                   <div
                     className="col-md-11 col-sm-11 col-10"
                     style={{
-                      //  ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
                     }}
                   >
                     {searchQuery ? (
                       <div style={{ zIndex: 3 }}>
                         <Paper style={{ maxHeight: 300, overflow: "auto" }}>
-                          {itemFoundSuccessfull ? (
-                            itemFound && (
-                              <Table size="small">
-                                <TableHead>
-                                  <TableRow>
-                                    <TableCell>MRN</TableCell>
-                                    <TableCell>Patient Name</TableCell>
-                                    <TableCell>Gender</TableCell>
-                                    <TableCell>Age</TableCell>
-                                    <TableCell>Payment Method</TableCell>
-                                  </TableRow>
-                                </TableHead>
+                          {itemFoundSuccessfull && itemFound !== "" ? (
+                            <Table size="small">
+                              <TableHead>
+                                <TableRow>
+                                  <TableCell>MRN</TableCell>
+                                  <TableCell>Patient Name</TableCell>
+                                  <TableCell>Gender</TableCell>
+                                  <TableCell>Age</TableCell>
+                                </TableRow>
+                              </TableHead>
 
-                                <TableBody>
-                                  {itemFound.map((i) => {
-                                    return (
-                                      <TableRow
-                                        key={i._id}
-                                        onClick={() => handleAddItem(i)}
-                                        style={{ cursor: "pointer" }}
-                                      >
-                                        <TableCell>{i.profileNo}</TableCell>
-                                        <TableCell>
-                                          {i.firstName + ` ` + i.lastName}
-                                        </TableCell>
-                                        <TableCell>{i.gender}</TableCell>
-                                        <TableCell>{i.age}</TableCell>
-                                        <TableCell>{i.paymentMethod}</TableCell>
-                                      </TableRow>
-                                    );
-                                  })}
-                                </TableBody>
-                              </Table>
-                            )
-                          ) : (
-                            <h4
-                              style={{ textAlign: "center" }}
-                              onClick={() => setSearchQuery("")}
+                              <TableBody>
+                                {itemFound.map((i) => {
+                                  return (
+                                    <TableRow
+                                      key={i._id}
+                                      onClick={() => handleAddItem(i)}
+                                      style={{ cursor: "pointer" }}
+                                    >
+                                      <TableCell>{i.profileNo}</TableCell>
+                                      <TableCell>{i.name}</TableCell>
+                                      <TableCell>{i.gender}</TableCell>
+                                      <TableCell>{i.age}</TableCell>
+                                    </TableRow>
+                                  );
+                                })}
+                              </TableBody>
+                            </Table>
+                          ) : searchQuery ? (
+                            <div style={{ textAlign: "center" }}>
+                              <Loader
+                                type="TailSpin"
+                                color="#2c6ddd"
+                                height={25}
+                                width={25}
+                                style={{
+                                  display: "inline-block",
+                                  padding: "10px",
+                                }}
+                              />
+                              <span
+                                style={{
+                                  display: "inline-block",
+                                  padding: "10px",
+                                }}
+                              >
+                                <h4> Searching Patient...</h4>
+                              </span>
+                            </div>
+                          ) : searchQuery && !itemFoundSuccessfull ? (
+                            <div
+                              style={{ textAlign: "center", padding: "10px" }}
                             >
-                              Patient Not Found
-                            </h4>
+                              <h4>No Patient Found !</h4>
+                            </div>
+                          ) : (
+                            undefined
                           )}
                         </Paper>
                       </div>
@@ -1444,7 +1537,7 @@ function AddEditPatientListing(props) {
             ) : (
               undefined
             )}
-            {/* <br /> */}
+
             <div className="row">
               <div
                 className="col-md-6 col-sm-6"
@@ -1458,17 +1551,12 @@ function AddEditPatientListing(props) {
                   label="Patient MRN"
                   name={"profileNo"} // now Patient MRN
                   value={profileNo}
-                  disabled
+                  disabled={true}
                   onChange={onChangeValue}
                   className="textInputStyle"
                   variant="filled"
                   // error={profileNo === '' && isFormSubmitted}
                   InputProps={{
-                    // endAdornment: (
-                    //   <InputAdornment position="end">
-                    //     <AccountCircle />
-                    //   </InputAdornment>
-                    // ),
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
@@ -1478,9 +1566,9 @@ function AddEditPatientListing(props) {
                   }}
                 />
                 {/* <ErrorMessage
-                  name={profileNo}
-                  isFormSubmitted={isFormSubmitted}
-                /> */}
+                name={profileNo}
+                isFormSubmitted={isFormSubmitted}
+              /> */}
               </div>
               <div
                 className="col-md-6 col-sm-6"
@@ -1491,7 +1579,6 @@ function AddEditPatientListing(props) {
               >
                 <TextField
                   required
-                  //disabled={isDisabled}
                   type="number"
                   label="National ID"
                   name={"SIN"} // now Identity
@@ -1518,7 +1605,28 @@ function AddEditPatientListing(props) {
                   ...styles.textFieldPadding,
                 }}
               >
+                {/* <Autocomplete
+                id='combo-box-demo'
+                options={titles}
+                name='title'
+                getOptionLabel={(option) => option.value}
+                // onChange={onDropDownChange}
+                onChange={(val, e) => {
+                  onDropDownChange({
+                    target: { name: 'title', value: e.value },
+                  })
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    // value={title}
+                    label='Combo box'
+                    variant='outlined'
+                  />
+                )}
+              /> */}
                 <TextField
+                  // required
                   select
                   fullWidth
                   id="title"
@@ -1560,8 +1668,8 @@ function AddEditPatientListing(props) {
                   label="First Name"
                   name={"firstName"}
                   value={firstName}
+                  onChange={onChangeValue}
                   error={firstName === "" && detailsForm}
-                  onChange={(e) => onChangeValue(e)}
                   className="textInputStyle"
                   variant="filled"
                   InputProps={{
@@ -1572,7 +1680,6 @@ function AddEditPatientListing(props) {
                 />
                 <ErrorMessage
                   name={firstName}
-                  // type='text'
                   type="firstName"
                   isFormSubmitted={detailsForm}
                 />
@@ -1639,8 +1746,15 @@ function AddEditPatientListing(props) {
 
                   {genderArray.map((val) => {
                     return (
-                      <MenuItem key={val.key} value={val.key}>
-                        {val.value}
+                      <MenuItem
+                        key={
+                          val.key.charAt(0).toUpperCase() + val.value.slice(1)
+                        }
+                        value={
+                          val.key.charAt(0).toUpperCase() + val.value.slice(1)
+                        }
+                      >
+                        {val.value.charAt(0).toUpperCase() + val.value.slice(1)}
                       </MenuItem>
                     );
                   })}
@@ -1689,6 +1803,7 @@ function AddEditPatientListing(props) {
                 }}
               >
                 <TextField
+                  // required
                   type="text"
                   select
                   label="Nationality"
@@ -1703,7 +1818,7 @@ function AddEditPatientListing(props) {
                     classes: { input: classes.input },
                   }}
                 >
-                  <MenuItem value="">
+                  <MenuItem value="Jordan">
                     <em>None</em>
                   </MenuItem>
 
@@ -1718,10 +1833,10 @@ function AddEditPatientListing(props) {
                 </TextField>
 
                 {/* <ErrorMessage
-                  name={nationality}
-                  // type='nationName'
-                  isFormSubmitted={detailsForm}
-                /> */}
+                name={nationality}
+                // type='nationName'
+                isFormSubmitted={detailsForm}
+              /> */}
               </div>
             </div>
 
@@ -1749,10 +1864,10 @@ function AddEditPatientListing(props) {
                   }}
                 />
                 {/* <ErrorMessage
-                  name={age}
-                  type='numbers'
-                  isFormSubmitted={detailsForm}
-                /> */}
+                name={age}
+                // type='numbers'
+                isFormSubmitted={detailsForm}
+              /> */}
               </div>
               <div
                 className="col-md-3 col-sm-3 col-3"
@@ -1778,11 +1893,26 @@ function AddEditPatientListing(props) {
                   inputProps={{ maxLength: 4 }}
                   variant="filled"
                 />
+                {/* <TextField
+                // type='number'
+                label='Height (ft)'
+                name={'height'}
+                value={height}
+                onChange={onChangeValue}
+                // error={height === "" && isFormSubmitted}
+                className='textInputStyle'
+                variant='filled'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                inputProps={{ maxLength: 4 }}
+              /> */}
                 {/* <ErrorMessage
-                  name={height}
-                  type='height'
-                  isFormSubmitted={isFormSubmitted}
-                /> */}
+                name={height}
+                type="height"
+                isFormSubmitted={isFormSubmitted}
+              /> */}
               </div>
               <div
                 className="col-md-3 col-sm-3 col-3"
@@ -1808,11 +1938,26 @@ function AddEditPatientListing(props) {
                   inputProps={{ maxLength: 4 }}
                   variant="filled"
                 />
+                {/* <TextField
+                // type='number'
+                label='Weight (Kg)'
+                name={'weight'}
+                value={weight}
+                onChange={onChangeValue}
+                // error={weight === "" && isFormSubmitted}
+                className='textInputStyle'
+                variant='filled'
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                inputProps={{ maxLength: 4 }}
+              /> */}
                 {/* <ErrorMessage
-                  name={weight}
-                  type='weight'
-                  isFormSubmitted={isFormSubmitted}
-                /> */}
+                name={weight}
+                type="weight"
+                isFormSubmitted={isFormSubmitted}
+              /> */}
               </div>
 
               <div
@@ -1849,9 +1994,9 @@ function AddEditPatientListing(props) {
                   })}
                 </TextField>
                 {/* <ErrorMessage
-                  name={bloodGroup}
-                  isFormSubmitted={isFormSubmitted}
-                /> */}
+                name={bloodGroup}
+                isFormSubmitted={isFormSubmitted}
+              /> */}
               </div>
             </div>
 
@@ -1884,14 +2029,14 @@ function AddEditPatientListing(props) {
                   }}
                 />
                 {/* {phoneNumber && !validatePhone(phoneNumber) ? (
-                  undefined
-                ) : (
-                  <ErrorMessage
-                    name={phoneNumber}
-                    type='phone'
-                    isFormSubmitted={detailsForm}
-                  />
-                )} */}
+                undefined
+              ) : (
+                <ErrorMessage
+                  name={phoneNumber}
+                  type='phone'
+                  isFormSubmitted={detailsForm}
+                />
+              )} */}
               </div>
               <div
                 className="col-md-3 col-sm-3"
@@ -1905,7 +2050,7 @@ function AddEditPatientListing(props) {
                   label="Email"
                   name={"email"}
                   value={email}
-                  // error={email === "" && detailsForm}
+                  // error={email === '' && detailsForm}
                   onChange={onChangeValue}
                   className="textInputStyle"
                   variant="filled"
@@ -1957,16 +2102,6 @@ function AddEditPatientListing(props) {
                       );
                     })}
                 </TextField>
-                {/* <DropDown
-                  id="country"
-                  name={"country"}
-                  value={country}
-                  onChange={(e) => onChangeCountry(e)}
-                  label="Country"
-                  className="dropDownStyle"
-                  input={<BootstrapInput />}
-                  countries={countries}
-                /> */}
                 <ErrorMessage
                   name={country}
                   type="country"
@@ -2008,16 +2143,6 @@ function AddEditPatientListing(props) {
                       );
                     })}
                 </TextField>
-                {/* <DropDown
-                  id="city"
-                  name={"city"}
-                  value={city}
-                  onChange={(e) => onChangeValue(e)}
-                  label="City"
-                  className="dropDownStyle"
-                  input={<BootstrapInput />}
-                  cities={cities}
-                /> */}
                 <ErrorMessage
                   name={city}
                   type="city"
@@ -2025,10 +2150,38 @@ function AddEditPatientListing(props) {
                 />
               </div>
             </div>
-
+            {cityBoolean ? (
+              <div className="row">
+                <div
+                  className="col-md-12 col-sm-12"
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                    marginBottom: 16,
+                  }}
+                >
+                  <TextField
+                    fullWidth
+                    id="otherCity"
+                    name="otherCity"
+                    value={otherCity}
+                    onChange={(e) => onChangeValue(e)}
+                    label="Other City/ Village/ Town"
+                    variant="filled"
+                    className="dropDownStyle"
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  />
+                </div>
+              </div>
+            ) : (
+              undefined
+            )}
             <div className="row">
               <div
-                className="col-md-3"
+                className="col-md-3 col-sm-3"
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -2066,6 +2219,7 @@ function AddEditPatientListing(props) {
                   />
                 )}
               </div>
+
               <div
                 className="col-md-9"
                 style={{
@@ -2112,8 +2266,8 @@ function AddEditPatientListing(props) {
                   label="Other Details"
                   name={"otherDetails"}
                   value={otherDetails}
-                  onChange={onChangeValue}
                   // error={otherDetails === '' && detailsForm}
+                  onChange={onChangeValue}
                   rows={4}
                   className="textInputStyle"
                   variant="filled"
@@ -2123,23 +2277,24 @@ function AddEditPatientListing(props) {
                       input: classes.multilineColor,
                     },
                   }}
+                  // inputProps={{ maxLength: 12 }}
                 />
                 {/* <ErrorMessage
-                  name={otherDetails}
-                  // type='text'
-                  isFormSubmitted={detailsForm}
-                /> */}
+                name={otherDetails}
+                // type='text'
+                isFormSubmitted={detailsForm}
+              /> */}
               </div>
             </div>
 
             <div
               class="row"
               style={{
-                paddingRight: 6,
-                paddingLeft: 6,
                 display: "flex",
                 flex: 1,
                 justifyContent: "center",
+                paddingLeft: 6,
+                paddingRight: 6,
               }}
             >
               <div
@@ -2178,44 +2333,6 @@ function AddEditPatientListing(props) {
                 >
                   Next
                 </Button>
-                {/* <div
-                  style={{
-                    width: "10px",
-                    height: "auto",
-                    display: "inline-block",
-                  }}
-                /> */}
-                {/* {currentUser.staffTypeId.type === "EDR Receptionist" ? (
-                  <Button
-                    style={comingFor === "add" ? styles.generate : styles.None}
-                    disabled={comingFor === "add" ? !isFormSubmitted : false}
-                    onClick={
-                      comingFor === "add" ? handleGenerateEDR : handleEdit
-                    }
-                    variant="contained"
-                    color="primary"
-                  >
-                    {comingFor === "add" ? "Generate ED/IP Record" : "Update"}
-                  </Button>
-                ) : (
-                    undefined
-                  )}
-
-                {currentUser.staffTypeId.type === "IPR Receptionist" ? (
-                  <Button
-                    style={comingFor === "add" ? styles.generate : styles.None}
-                    disabled={comingFor === "add" ? !isFormSubmitted : false}
-                    onClick={
-                      comingFor === "add" ? handleGenerateIPR : handleEdit
-                    }
-                    variant="contained"
-                    color="primary"
-                  >
-                    {comingFor === "add" ? "Generate ED/IP Record" : "Update"}
-                  </Button>
-                ) : (
-                    undefined
-                  )} */}
               </div>
             </div>
           </div>
@@ -2486,7 +2603,7 @@ function AddEditPatientListing(props) {
             }}
             className={`${"container-fluid"} ${classes.root}`}
           >
-            <div className="row">
+            <div className="row" style={{ marginBottom: 20 }}>
               <div className="col-md-12" style={styles.form}>
                 <FormControl component="fieldset">
                   <FormLabel component="legend">Payment Method</FormLabel>
@@ -2517,7 +2634,7 @@ function AddEditPatientListing(props) {
               </div>
             </div>
 
-            <div className="row">
+            <div className="row" style={{ marginBottom: 20 }}>
               <div
                 className="col-md-6 col-sm-6"
                 style={{
@@ -2881,8 +2998,8 @@ function AddEditPatientListing(props) {
                   display: "flex",
                   flex: 1,
                   justifyContent: "flex",
-                  marginTop: "2%",
-                  marginBottom: "2%",
+                  marginTop: "1%",
+                  marginBottom: "1%",
                 }}
               >
                 <Button
@@ -2899,19 +3016,23 @@ function AddEditPatientListing(props) {
                   display: "flex",
                   flex: 1,
                   justifyContent: "flex-end",
-                  marginTop: "2%",
-                  marginBottom: "2%",
+                  marginTop: "1%",
+                  marginBottom: "1%",
                 }}
               >
-                <Button
-                  disabled={enableNext}
-                  style={styles.stylesForButton}
-                  onClick={onClick}
-                  variant="contained"
-                  color="primary"
-                >
-                  Next
-                </Button>
+                {paymentMethod === "Insurance" ? (
+                  <Button
+                    disabled={enableNext}
+                    style={styles.stylesForButton}
+                    onClick={onClick}
+                    variant="contained"
+                    color="primary"
+                  >
+                    Next
+                  </Button>
+                ) : (
+                  undefined
+                )}
                 <div
                   style={{
                     width: "10px",
@@ -2919,49 +3040,58 @@ function AddEditPatientListing(props) {
                     display: "inline-block",
                   }}
                 />
-                {comingFor === "add" ? (
-                  <>
-                    <Button
-                      style={styles.save}
-                      // disabled={
-                      //   !(validatePatientForm() && validatePaymentForm())
-                      // }
-                      onClick={searchActivated ? handleEdit : handleAdd}
-                      variant="contained"
-                      color="default"
-                    >
-                      Save
-                    </Button>
-                    <div
-                      style={{
-                        width: "10px",
-                        height: "auto",
-                        display: "inline-block",
-                      }}
-                    />
-                  </>
+                {paymentMethod === "Cash" ? (
+                  <div>
+                    {comingFor === "add" ? (
+                      <>
+                        <Button
+                          style={styles.save}
+                          // disabled={
+                          //   !(validatePatientForm() && validatePaymentForm())
+                          // }
+                          onClick={searchActivated ? handleEdit : handleAdd}
+                          variant="contained"
+                          color="default"
+                        >
+                          Save
+                        </Button>
+                        <div
+                          style={{
+                            width: "10px",
+                            height: "auto",
+                            display: "inline-block",
+                          }}
+                        />
+                      </>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
                 ) : (
-                  <></>
+                  undefined
                 )}
-                {/* {currentUser.staffTypeId.type === 'EDR Receptionist' ? ( */}
-                <Button
-                  style={styles.generate}
-                  //disabled={!validatePatientForm()}
-                  // disabled={comingFor === 'add' ? !isFormSubmitted : false}
-                  disabled={
-                    !(
-                      validatePatientForm() &&
-                      validateEmergencyForm() &&
-                      (validateInsuranceForm() || validateCashForm()) &&
-                      isPatientSubmitted
-                    )
-                  }
-                  onClick={comingFor === "add" ? handleGenerateEDR : handleEdit}
-                  variant="contained"
-                  color="primary"
-                >
-                  {comingFor === "add" ? "Generate OP Record" : "Update"}
-                </Button>
+                {paymentMethod === "Cash" ? (
+                  <Button
+                    style={styles.generate}
+                    disabled={
+                      !(
+                        validatePatientForm() &&
+                        validateEmergencyForm() &&
+                        (validateInsuranceForm() || validateCashForm()) &&
+                        isPatientSubmitted
+                      )
+                    }
+                    onClick={
+                      comingFor === "add" ? handleGenerateEDR : handleEdit
+                    }
+                    variant="contained"
+                    color="primary"
+                  >
+                    {comingFor === "add" ? "Generate OP Record" : "Update"}
+                  </Button>
+                ) : (
+                  undefined
+                )}
                 {/* ) : (
                     undefined
                   )} */}

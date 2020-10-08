@@ -55,6 +55,10 @@ const styles = {
   styleForLabel: {
     fontWeight: '700',
   },
+  textFieldPadding: {
+    paddingLeft: 5,
+    paddingRight: 5,
+  },
 }
 
 const useStyles = makeStyles(styles)
@@ -449,7 +453,7 @@ export default function EdrRequest(props) {
       <DialogContent style={{ backgroundColor: 'rgb(19 213 159)' }}>
         <DialogTitle
           id='simple-dialog-title'
-          style={{ color: 'white', paddingLeft: 15 }}
+          style={{ color: 'white', paddingLeft: 20 }}
         >
           Details
         </DialogTitle>
@@ -457,7 +461,7 @@ export default function EdrRequest(props) {
           <div className='row'>
             <div
               className='col-md-6 col-sm-6 col-6'
-              style={styles.inputContainerForTextField}
+              style={{ ...styles.textFieldPadding, marginTop: '25px' }}
             >
               {props.item.date ? (
                 <div>
@@ -499,7 +503,7 @@ export default function EdrRequest(props) {
             </div>
             <div
               className='col-md-6 col-sm-6 col-6'
-              style={styles.inputContainerForTextField}
+              style={{ ...styles.textFieldPadding, marginTop: '25px' }}
             >
               {props.item.doctor ? (
                 <div>
@@ -552,7 +556,7 @@ export default function EdrRequest(props) {
           <div className='row'>
             <div
               className='col-md-6 col-sm-6 col-6'
-              style={styles.inputContainerForTextField}
+              style={{ ...styles.textFieldPadding, marginTop: '25px' }}
             >
               {props.item.description ? (
                 <div>
@@ -577,7 +581,7 @@ export default function EdrRequest(props) {
             </div>
             <div
               className='col-md-6 col-sm-6 col-6'
-              style={styles.inputContainerForTextField}
+              style={{ ...styles.textFieldPadding, marginTop: '25px' }}
             >
               {props.item.note ? (
                 <div>
@@ -622,7 +626,7 @@ export default function EdrRequest(props) {
           <div className='row'>
             <div
               className='col-md-6 col-sm-6 col-6'
-              style={styles.inputContainerForTextField}
+              style={{ ...styles.textFieldPadding, marginTop: '25px' }}
             >
               {props.item.serviceCode ? (
                 <div>
@@ -647,7 +651,7 @@ export default function EdrRequest(props) {
             </div>
             <div
               className='col-md-6 col-sm-6 col-6'
-              style={styles.inputContainerForTextField}
+              style={{ ...styles.textFieldPadding, marginTop: '25px' }}
             >
               {props.item.serviceName ? (
                 <div>
@@ -672,12 +676,11 @@ export default function EdrRequest(props) {
             </div>
           </div>
           <div
+            style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
             className='container-fluid'
-            style={{ paddingRight: 0, paddingLeft: 0 }}
-            // style={styles.inputContainerForTextField}
           >
             {props.item.medicine ? (
-              <div>
+              <div className='row'>
                 {/* <InputLabel style={styles.styleForLabel} id='generated-label'>
                   Your PHR Medicine
                 </InputLabel>{' '} */}
@@ -702,7 +705,7 @@ export default function EdrRequest(props) {
           {/* <div className='row'>
             <div
               className='col-md-12 col-sm-12 col-12 d-flex justify-content-center text-center'
-              style={styles.inputContainerForTextField}
+              style={{ ...styles.textFieldPadding, marginTop: '25px' }}
             >
               {props.item.status ? (
                 <div>
@@ -717,7 +720,13 @@ export default function EdrRequest(props) {
             </div>
           </div> */}
 
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              marginLeft: '-10px',
+            }}
+          >
             <div style={{ marginTop: '2%', marginBottom: '2%' }}>
               <Button onClick={() => props.viewItem('')} variant='contained'>
                 Cancel

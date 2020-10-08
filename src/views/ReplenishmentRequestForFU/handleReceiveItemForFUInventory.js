@@ -116,6 +116,7 @@ const styles = {
 
   inputContainerForTextField: {
     marginTop: 6,
+    marginBottom: 10,
   },
 
   inputContainerForDropDown: {
@@ -160,8 +161,8 @@ const styles = {
     outline: "none",
   },
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 4,
+    paddingRight: 4,
   },
 };
 const useStyles = makeStyles(tableStyles);
@@ -315,6 +316,13 @@ function ReceiveItems(props) {
     notes,
     replenishmentRequestStatus,
   } = state;
+
+  const onBlurChangeValue = (e) => {
+    dispatch({
+      field: e.target.name,
+      value: e.target.value.replace(/,/g, ""),
+    });
+  };
 
   const onChangeValue = (e) => {
     var pattern = /^[a-zA-Z0-9 ]*$/;
@@ -858,7 +866,7 @@ function ReceiveItems(props) {
                   fullWidth={true}
                   // format="MM/dd/yyyy"
                   format={dateFormat}
-                  label="Expiry Date"
+                  label="Expiry Date (DD-MM-YYY)"
                   // variant="filled"
                   InputProps={{
                     className: classes.input,
@@ -1170,7 +1178,7 @@ function ReceiveItems(props) {
                 name={"finalUnitPrice"}
                 // value={finalUnitPrice}
                 value={selectedItem && selectedItem.itemId.issueUnitCost}
-                onBlur={onChangeValue}
+                onBlur={onBlurChangeValue}
                 variant="filled"
                 textAlign="left"
                 InputProps={{
@@ -1183,6 +1191,7 @@ function ReceiveItems(props) {
                 }}
                 currencySymbol="JD"
                 outputFormat="number"
+                decimalPlaces="4"
                 onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
               />
             </div>
@@ -1361,7 +1370,7 @@ function ReceiveItems(props) {
                   disableFuture
                   inputVariant="filled"
                   fullWidth={true}
-                  label="Date/Time Invoice (MM/DD/YYYY)"
+                  label="Date/Time Invoice (DD-MM-YYYY)"
                   // format="MM/dd/yyyy HH:mm a"
                   format={dateTimeFormat}
                   onChange={(val) => onChangeDate(val, "date")}
@@ -1388,7 +1397,7 @@ function ReceiveItems(props) {
                   required
                   inputVariant="filled"
                   fullWidth={true}
-                  label="Date/Time Received (MM/DD/YYYY)"
+                  label="Date/Time Received (DD-MM-YYYY)"
                   // format="MM/dd/yyyy HH:mm a"
                   format={dateTimeFormat}
                   disableFuture

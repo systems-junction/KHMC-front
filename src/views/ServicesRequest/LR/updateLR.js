@@ -55,8 +55,8 @@ const styles = {
     marginTop: 6,
   },
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
   input: {
     display: 'none',
@@ -478,7 +478,7 @@ function AddEditPurchaseRequest(props) {
             style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
             className={`container-fluid ${classes.root}`}
           >
-            <div className={classesForTabs.root}>
+            <div className={classesForTabs.root} style={{ marginTop: '20px' }}>
               <Tabs
                 value={value}
                 onChange={handleChange}
@@ -508,7 +508,7 @@ function AddEditPurchaseRequest(props) {
             </div>
             {value === 0 ? (
               <>
-                <div className='row'>
+                <div className='row' style={{ marginTop: '10px' }}>
                   <div
                     className='col-md-6 col-sm-6'
                     style={{
@@ -562,7 +562,7 @@ function AddEditPurchaseRequest(props) {
                   </div>
                 </div>
 
-                <div className='row'>
+                <div className='row' style={{ marginTop: '10px' }}>
                   <div
                     className='col-md-6 col-sm-6 col-6'
                     style={{
@@ -619,7 +619,7 @@ function AddEditPurchaseRequest(props) {
                   </div>
                 </div>
 
-                <div className='row'>
+                <div className='row' style={{ marginTop: '10px' }}>
                   <div
                     className='col-md-6 col-sm-6'
                     style={{
@@ -689,7 +689,7 @@ function AddEditPurchaseRequest(props) {
               </>
             ) : value === 1 ? (
               <>
-                <div className='row'>
+                <div className='row' style={{ marginTop: '10px' }}>
                   <div
                     className='col-md-12 col-sm-6 col-12'
                     style={{

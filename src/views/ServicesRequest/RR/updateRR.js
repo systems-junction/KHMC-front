@@ -53,8 +53,8 @@ const styles = {
     marginTop: 6,
   },
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
   input: {
     display: 'none',
@@ -510,7 +510,7 @@ function AddEditPurchaseRequest(props) {
               </div>
             </div>
 
-            <div className='row'>
+            <div className='row' style={{ marginTop: '15px' }}>
               <div
                 className='col-md-12 col-sm-12'
                 style={{
@@ -538,7 +538,7 @@ function AddEditPurchaseRequest(props) {
               </div>
             </div>
 
-            <div className='row'>
+            <div className='row' style={{ marginTop: '15px' }}>
               <div
                 className='col-md-6 col-sm-6'
                 style={{
@@ -606,7 +606,7 @@ function AddEditPurchaseRequest(props) {
               </div>
             </div>
 
-            <div className='row'>
+            <div className='row' style={{ marginTop: '15px' }}>
               <div
                 className='col-md-12 col-sm-6 col-12'
                 style={{
@@ -812,7 +812,7 @@ function AddEditPurchaseRequest(props) {
                 <Button
                   disabled={checkStatus === 'completed' ? true : false}
                   onClick={saveRadioReq}
-                  style={styles.stylesForButton}
+                  style={{ ...styles.stylesForButton, marginRight: '-12px' }}
                   variant='contained'
                   color='primary'
                 >
