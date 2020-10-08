@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useReducer } from "react";
+import React, { useEffect, useState, useReducer, useRef } from "react";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import { FaUpload } from "react-icons/fa";
@@ -26,7 +26,6 @@ import validateNumbers from "../../public/numbersValidator";
 import validateNationalId from "../../public/numbersValidator";
 import validateAmount from "../../public/amountValidator";
 import validateInsuranceNo from "../../public/insuranceValidator";
-
 import validateFloat from "../../public/FloatValidator";
 import validateInput from "../../public/FloatValidator";
 import validateNumberFloat from "../../public/numberFloatValidator";
@@ -40,7 +39,6 @@ import validateCountryCity from "../../public/countryCityValidator";
 import validateGender from "../../public/genderValidator";
 import validateRelation from "../../public/relationValidator";
 import validateAddress from "../../public/addressValidator";
-
 import {
   uploadsUrl,
   updatePatientUrl,
@@ -50,6 +48,7 @@ import {
   getSearchedpatient,
   getVendorApproval,
   searchPatientsURL,
+  getPatientById,
 } from "../../public/endpoins";
 import axios from "axios";
 import Notification from "../../components/Snackbar/Notification.js";
@@ -72,9 +71,13 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import AccountCircle from "@material-ui/icons/SearchOutlined";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import { CodeSharp } from "@material-ui/icons";
+import Loader from "react-loader-spinner";
 // import validatePhone from '../../public/validatePhone'
 
 let countriesList = require("../../assets/countries.json");
+
+const ENTER_KEY = 13;
 
 const styles = {
   stylesForButton: {
@@ -344,6 +347,8 @@ function AddEditPatientListing(props) {
     gender: "",
     age: "0",
     height: "",
+    otherCity: "",
+
     weight: "",
     bloodGroup: "",
     dob: new Date().toISOString().substr(0, 10),
@@ -352,7 +357,6 @@ function AddEditPatientListing(props) {
     email: "",
     country: "",
     city: "",
-    otherCity: "",
     address: "",
     otherDetails: "",
     amountReceived: "",
@@ -405,6 +409,7 @@ function AddEditPatientListing(props) {
     country,
     city,
     otherCity,
+
     address,
     otherDetails,
     amountReceived,
@@ -479,6 +484,7 @@ function AddEditPatientListing(props) {
   const [insuranceForm, setinsuranceForm] = useState(false);
   const [insuranceBoolean, setInsuranceBoolean] = useState(true);
   const [covTer, setCovTer] = useState("");
+  const [timer, setTimer] = useState(null);
   const [cityBoolean, setCityBoolean] = useState(false);
 
   useEffect(() => {
@@ -568,7 +574,7 @@ function AddEditPatientListing(props) {
       city.length > 0 &&
       validateCountryCity(city) &&
       otherCity &&
-      otherCity.length &&
+      otherCity.length > 0 &&
       validateCountryCity(otherCity) &&
       address &&
       address.length > 0 &&
@@ -1017,12 +1023,35 @@ function AddEditPatientListing(props) {
       });
   };
 
-  const handleSearch = (e) => {
+  const handleKeyDown = (e) => {
+    if (e.keyCode === ENTER_KEY) {
+      triggerChange();
+    }
+  };
+
+  const triggerChange = () => {
+    handleSearch(searchQuery);
+  };
+
+  const handlePauseSearch = (e) => {
+    clearTimeout(timer);
+
     const a = e.target.value.replace(/[^\w\s]/gi, "");
     setSearchQuery(a);
-    if (a.length >= 3) {
+
+    setTimer(
+      setTimeout(() => {
+        triggerChange();
+      }, 1000)
+    );
+  };
+
+  const handleSearch = (e) => {
+    console.log("input ", e);
+
+    if (e.length >= 3) {
       axios
-        .get(searchPatientsURL + "/" + a)
+        .get(searchPatientsURL + "/" + e)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
@@ -1041,88 +1070,110 @@ function AddEditPatientListing(props) {
     }
   };
 
-  function handleAddItem(i) {
-    console.log("selected banda", i);
+  function handleAddItem(item) {
+    console.log("selected banda", item);
 
-    let d = i.dob;
-    var dob;
-    let myDate = d.split("/");
-    if (myDate.length > 1) {
-      console.log(myDate, "mydate");
-      dob = new Date(myDate[2], myDate[1] - 1, myDate[0]);
-    } else {
-      dob = d;
-    }
+    axios
+      .get(getPatientById + "/" + item._id)
+      .then((res) => {
+        if (res.data.success) {
+          console.log("Data of selected banda ", res.data.data);
 
-    setPatientId(i._id);
-    dispatch({ field: "firstName", value: i.firstName });
-    dispatch({ field: "lastName", value: i.lastName });
-    dispatch({ field: "gender", value: i.gender });
-    dispatch({ field: "nationality", value: i.nationality });
-    dispatch({ field: "age", value: i.age });
-    dispatch({ field: "profileNo", value: i.profileNo });
-    dispatch({ field: "insuranceNo", value: i.insuranceNo });
-    dispatch({ field: "SIN", value: i.SIN });
-    dispatch({ field: "title", value: i.title });
-    dispatch({ field: "dob", value: dob });
-    dispatch({ field: "height", value: i.height });
-    dispatch({ field: "weight", value: i.weight });
-    dispatch({ field: "bloodGroup", value: i.bloodGroup });
-    dispatch({ field: "phoneNumber", value: i.phoneNumber });
-    dispatch({ field: "mobileNumber", value: i.mobileNumber });
-    dispatch({ field: "email", value: i.email });
-    dispatch({ field: "country", value: i.country });
-    dispatch({ field: "city", value: i.city });
-    if (i.otherCity) {
-      dispatch({ field: "otherCity", value: i.otherCity });
-      setCityBoolean(true);
-    }
-    dispatch({ field: "address", value: i.address });
-    dispatch({ field: "otherDetails", value: i.otherDetails });
+          let i = res.data.data;
+          let d = i.dob;
+          var dob;
+          let myDate = d.split("/");
+          if (myDate.length > 1) {
+            console.log(myDate, "mydate");
+            dob = new Date(myDate[2], myDate[1] - 1, myDate[0]);
+          } else {
+            dob = d;
+          }
 
-    dispatch({ field: "emergencyContactNo", value: i.emergencyContactNo });
-    dispatch({ field: "emergencyName", value: i.emergencyName });
-    dispatch({ field: "emergencyRelation", value: i.emergencyRelation });
-    dispatch({ field: "coveredFamilyMembers", value: i.coveredFamilyMembers });
-    dispatch({ field: "otherCoverageDetails", value: i.otherCoverageDetails });
+          setPatientId(i._id);
+          dispatch({ field: "firstName", value: i.firstName });
+          dispatch({ field: "lastName", value: i.lastName });
+          dispatch({ field: "gender", value: i.gender });
+          dispatch({ field: "nationality", value: i.nationality });
+          dispatch({ field: "age", value: i.age });
+          dispatch({ field: "profileNo", value: i.profileNo });
+          dispatch({ field: "insuranceNo", value: i.insuranceNo });
+          dispatch({ field: "SIN", value: i.SIN });
+          dispatch({ field: "title", value: i.title });
+          dispatch({ field: "dob", value: dob });
+          dispatch({ field: "height", value: i.height });
+          dispatch({ field: "weight", value: i.weight });
+          dispatch({ field: "bloodGroup", value: i.bloodGroup });
+          dispatch({ field: "phoneNumber", value: i.phoneNumber });
+          dispatch({ field: "mobileNumber", value: i.mobileNumber });
+          dispatch({ field: "email", value: i.email });
+          dispatch({ field: "country", value: i.country });
+          dispatch({ field: "city", value: i.city });
+          dispatch({ field: "address", value: i.address });
+          dispatch({ field: "otherDetails", value: i.otherDetails });
+          if (i.otherCity) {
+            dispatch({ field: "otherCity", value: i.otherCity });
+          }
+          dispatch({
+            field: "emergencyContactNo",
+            value: i.emergencyContactNo,
+          });
+          dispatch({ field: "emergencyName", value: i.emergencyName });
+          dispatch({ field: "emergencyRelation", value: i.emergencyRelation });
+          dispatch({
+            field: "coveredFamilyMembers",
+            value: i.coveredFamilyMembers,
+          });
+          dispatch({
+            field: "otherCoverageDetails",
+            value: i.otherCoverageDetails,
+          });
 
-    // dispatch({ field: 'receiverName', value: i.receiverName })
+          dispatch({
+            field: "amountReceived",
+            value: i.amountReceived,
+          });
+          if (i.amountReceived === null) {
+            dispatch({ field: "amountReceived", value: "" });
+          }
+          if (i.amountReceived === 0) {
+            dispatch({ field: "amountReceived", value: "0.0000" });
+          }
+          dispatch({ field: "bankName", value: i.bankName });
+          dispatch({ field: "depositorName", value: i.depositorName });
 
-    dispatch({
-      field: "amountReceived",
-      value: i.amountReceived,
-    });
-    if (i.amountReceived === null) {
-      dispatch({ field: "amountReceived", value: "" });
-    }
-    if (i.amountReceived === 0) {
-      dispatch({ field: "amountReceived", value: "0.00" });
-    }
-    dispatch({ field: "bankName", value: i.bankName });
-    dispatch({ field: "depositorName", value: i.depositorName });
+          dispatch({ field: "coverageDetails", value: i.coverageDetails });
+          dispatch({ field: "coverageTerms", value: i.coverageTerms });
+          dispatch({ field: "payment", value: i.payment });
+          dispatch({ field: "depositSlip", value: i.depositSlip });
+          dispatch({ field: "DateTime", value: i.DateTime });
+          dispatch({ field: "paymentMethod", value: i.paymentMethod });
+          dispatch({ field: "insuranceVendor", value: i.insuranceVendor });
+          dispatch({ field: "emergencyName", value: i.emergencyName });
+          dispatch({
+            field: "emergencyContactNo",
+            value: i.emergencyContactNo,
+          });
+          dispatch({ field: "emergencyRelation", value: i.emergencyRelation });
 
-    dispatch({ field: "coverageDetails", value: i.coverageDetails });
-    dispatch({ field: "coverageTerms", value: i.coverageTerms });
-    dispatch({ field: "payment", value: i.payment });
-    dispatch({ field: "depositSlip", value: i.depositSlip });
-    dispatch({ field: "DateTime", value: i.DateTime });
-    dispatch({ field: "paymentMethod", value: i.paymentMethod });
-    dispatch({ field: "insuranceVendor", value: i.insuranceVendor });
-    dispatch({ field: "emergencyName", value: i.emergencyName });
-    dispatch({ field: "emergencyContactNo", value: i.emergencyContactNo });
-    dispatch({ field: "emergencyRelation", value: i.emergencyRelation });
-
-    setSearchQuery("");
-    setsearchActivated(true);
-    if (i.paymentMethod === "Insurance") {
-      setenableForm(false);
-      setInsuranceForm(false);
-      setenableNext(false);
-    }
-    if (i.paymentMethod === "Cash") {
-      setenableForm(true);
-      setenableNext(true);
-    }
+          setSearchQuery("");
+          setsearchActivated(true);
+          if (i.paymentMethod === "Insurance") {
+            setenableForm(false);
+            setInsuranceForm(false);
+            setenableNext(false);
+          }
+          if (i.paymentMethod === "Cash") {
+            setenableForm(true);
+            setenableNext(true);
+          }
+        }
+      })
+      .catch((e) => {
+        console.log("Error while searching patient", e);
+        setOpenNotification(true);
+        setErrorMsg("Error while fetching details of patient");
+      });
   }
 
   const onPhoneNumberChange = (value) => {
@@ -1169,7 +1220,6 @@ function AddEditPatientListing(props) {
         setCityBoolean(false);
       }
     }
-
     // var pattern = /^[a-zA-Z' ]*$/
     // if (
     //   e.target.name === 'firstName' ||
@@ -1232,14 +1282,14 @@ function AddEditPatientListing(props) {
         });
       }
     } else if (e.target.name === "address") {
-      // if (/^[#.0-9a-zA-Z\s,-]*$/.test(e.target.value) === false) {
-      //   return;
-      // } else {
-      dispatch({
-        field: e.target.name,
-        value: e.target.value,
-      });
-      // }
+      if (/^[#.0-9a-zA-Z\s,-]*$/.test(e.target.value) === false) {
+        return;
+      } else {
+        dispatch({
+          field: e.target.name,
+          value: e.target.value,
+        });
+      }
     } else {
       dispatch({
         field: e.target.name,
@@ -1428,8 +1478,8 @@ function AddEditPatientListing(props) {
                 <div
                   className="row"
                   style={{
-                    marginBottom: 18,
-                    marginTop: 30,
+                    marginBottom: 16,
+                    marginTop: 10,
                   }}
                 >
                   <div
@@ -1443,7 +1493,9 @@ function AddEditPatientListing(props) {
                       label="Search Patient by Name / MRN / National ID / Mobile Number"
                       name={"searchQuery"}
                       value={searchQuery}
-                      onChange={handleSearch}
+                      // onChange={handleSearch}
+                      onChange={handlePauseSearch}
+                      onKeyDown={handleKeyDown}
                       className="textInputStyle"
                       variant="filled"
                       InputProps={{
@@ -1515,47 +1567,71 @@ function AddEditPatientListing(props) {
                     {searchQuery ? (
                       <div style={{ zIndex: 3 }}>
                         <Paper style={{ maxHeight: 300, overflow: "auto" }}>
-                          {itemFoundSuccessfull ? (
-                            itemFound && (
-                              <Table size="small">
-                                <TableHead>
-                                  <TableRow>
-                                    <TableCell>MRN</TableCell>
-                                    <TableCell>Patient Name</TableCell>
-                                    <TableCell>Gender</TableCell>
-                                    <TableCell>Age</TableCell>
-                                    <TableCell>Payment Method</TableCell>
-                                  </TableRow>
-                                </TableHead>
+                          {itemFoundSuccessfull && itemFound !== "" ? (
+                            <Table size="small">
+                              <TableHead>
+                                <TableRow>
+                                  <TableCell>MRN</TableCell>
+                                  <TableCell>Patient Name</TableCell>
+                                  <TableCell>Gender</TableCell>
+                                  <TableCell>Age</TableCell>
+                                </TableRow>
+                              </TableHead>
 
-                                <TableBody>
-                                  {itemFound.map((i) => {
-                                    return (
-                                      <TableRow
-                                        key={i._id}
-                                        onClick={() => handleAddItem(i)}
-                                        style={{ cursor: "pointer" }}
-                                      >
-                                        <TableCell>{i.profileNo}</TableCell>
-                                        <TableCell>
-                                          {i.firstName + ` ` + i.lastName}
-                                        </TableCell>
-                                        <TableCell>{i.gender}</TableCell>
-                                        <TableCell>{i.age}</TableCell>
-                                        <TableCell>{i.paymentMethod}</TableCell>
-                                      </TableRow>
-                                    );
-                                  })}
-                                </TableBody>
-                              </Table>
-                            )
-                          ) : (
-                            <h4
-                              style={{ textAlign: "center" }}
-                              onClick={() => setSearchQuery("")}
+                              <TableBody>
+                                {itemFound.map((i) => {
+                                  return (
+                                    <TableRow
+                                      key={i._id}
+                                      onClick={() => handleAddItem(i)}
+                                      style={{ cursor: "pointer" }}
+                                    >
+                                      <TableCell>{i.profileNo}</TableCell>
+                                      <TableCell>{i.name}</TableCell>
+                                      <TableCell>{i.gender}</TableCell>
+                                      <TableCell>{i.age}</TableCell>
+                                    </TableRow>
+                                  );
+                                })}
+                              </TableBody>
+                            </Table>
+                          ) : searchQuery ? (
+                            <div style={{ textAlign: "center" }}>
+                              <Loader
+                                type="TailSpin"
+                                color="#2c6ddd"
+                                height={25}
+                                width={25}
+                                style={{
+                                  display: "inline-block",
+                                  padding: "10px",
+                                }}
+                              />
+                              <span
+                                style={{
+                                  display: "inline-block",
+                                  padding: "10px",
+                                }}
+                              >
+                                <h4
+                                // onClick={() => setSearchQuery('')}
+                                >
+                                  Searching Patient...
+                                </h4>
+                              </span>
+                            </div>
+                          ) : searchQuery && !itemFoundSuccessfull ? (
+                            <div
+                              style={{ textAlign: "center", padding: "10px" }}
                             >
-                              Patient Not Found
-                            </h4>
+                              <h4
+                              // onClick={() => setSearchQuery('')}
+                              >
+                                No Patient Found !
+                              </h4>
+                            </div>
+                          ) : (
+                            undefined
                           )}
                         </Paper>
                       </div>
@@ -2181,6 +2257,7 @@ function AddEditPatientListing(props) {
                 />
               </div>
             </div>
+
             {cityBoolean ? (
               <div className="row">
                 <div
@@ -2188,6 +2265,7 @@ function AddEditPatientListing(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
+                    marginBottom: 16,
                   }}
                 >
                   <TextField
@@ -3064,7 +3142,6 @@ function AddEditPatientListing(props) {
                   Cancel
                 </Button>
               </div>
-
               <div
                 style={{
                   display: "flex",
@@ -3077,7 +3154,7 @@ function AddEditPatientListing(props) {
                 {paymentMethod === "Insurance" ? (
                   <Button
                     disabled={enableNext}
-                    style={{ ...styles.stylesForButton, marginRight: -9 }}
+                    style={styles.stylesForButton}
                     onClick={onClick}
                     variant="contained"
                     color="primary"
@@ -3087,7 +3164,6 @@ function AddEditPatientListing(props) {
                 ) : (
                   undefined
                 )}
-
                 <div
                   style={{
                     width: "10px",
@@ -3125,8 +3201,7 @@ function AddEditPatientListing(props) {
                 ) : (
                   undefined
                 )}
-
-                {paymentMethod === "Cash" ? (
+                {paymentMethod ? (
                   <div>
                     {currentUser.staffTypeId.type === "EDR Receptionist" ? (
                       <Button
@@ -3157,34 +3232,38 @@ function AddEditPatientListing(props) {
                 ) : (
                   undefined
                 )}
-
-                <div>
-                  {currentUser.staffTypeId.type === "IPR Receptionist" ? (
-                    <Button
-                      style={styles.generate}
-                      // disabled={comingFor === 'add' ? !isFormSubmitted : false}
-                      disabled={
-                        comingFor === "add"
-                          ? !(
-                              validatePatientForm() &&
-                              validateEmergencyForm() &&
-                              (validateInsuranceForm() || validateCashForm()) &&
-                              isPatientSubmitted
-                            )
-                          : false
-                      }
-                      onClick={
-                        comingFor === "add" ? handleGenerateIPR : handleEdit
-                      }
-                      variant="contained"
-                      color="primary"
-                    >
-                      {comingFor === "add" ? "Generate IP Record" : "Update"}
-                    </Button>
-                  ) : (
-                    undefined
-                  )}
-                </div>
+                {paymentMethod === "Cash" ? (
+                  <div>
+                    {currentUser.staffTypeId.type === "IPR Receptionist" ? (
+                      <Button
+                        style={styles.generate}
+                        // disabled={comingFor === 'add' ? !isFormSubmitted : false}
+                        disabled={
+                          comingFor === "add"
+                            ? !(
+                                validatePatientForm() &&
+                                validateEmergencyForm() &&
+                                (validateInsuranceForm() ||
+                                  validateCashForm()) &&
+                                isPatientSubmitted
+                              )
+                            : false
+                        }
+                        onClick={
+                          comingFor === "add" ? handleGenerateIPR : handleEdit
+                        }
+                        variant="contained"
+                        color="primary"
+                      >
+                        {comingFor === "add" ? "Generate IP Record" : "Update"}
+                      </Button>
+                    ) : (
+                      undefined
+                    )}
+                  </div>
+                ) : (
+                  undefined
+                )}
               </div>
             </div>
           </div>
@@ -3532,8 +3611,8 @@ function AddEditPatientListing(props) {
                   flex: 1,
                   // paddingLeft: 6,
                   justifyContent: "flex",
-                  marginTop: "2%",
-                  marginBottom: "2%",
+                  marginTop: "1%",
+                  marginBottom: "1%",
                 }}
               >
                 <Button

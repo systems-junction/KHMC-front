@@ -44,7 +44,7 @@ export const getSearchedItemsNonPharmaceuticalUrl = `${baseUrl}/item/getsearched
 export const getSearchedNonPharmaceuticalItemsUrl = `${baseUrl}/item/getsearcheditemsnm`;
 
 // patient endpoints
-export const getPatientById = `${baseUrl}/patient/getpatient/:id`;
+export const getPatientById = `${baseUrl}/patient/getpatient`;
 export const getPatientByProfileNo = `${baseUrl}/patient/getpatientbyprofileno`;
 export const getPatientUrl = `${baseUrl}/patient/getpatient`;
 export const getPatientUrlById = `${baseUrl}/patient/getpatient`;
