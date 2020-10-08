@@ -35,7 +35,7 @@ import {
   notifyDischarge,
   AddDischargeRequestUrl,
 } from '../../../public/endpoins'
-
+import Loader from 'react-loader-spinner'
 import { connect } from 'react-redux'
 import {
   funForReducer,
@@ -227,6 +227,7 @@ function DischargeRequest(props) {
   const [enableForm, setenableForm] = useState(true)
   const [backIsEmpty, setBackIsEmpty] = useState(false)
   const [dischargeForm, setDischargeForm] = useState(false)
+  const [timer, setTimer] = useState(null)
 
   useEffect(() => {
     if (props.patientDetails) {
@@ -263,13 +264,33 @@ function DischargeRequest(props) {
     }
   }
 
+  const handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      triggerChange();
+    }
+  }
+
+  const triggerChange = () => {
+    handlePatientSearch(searchPatientQuery);
+  }
+
+  const handlePauseSearch = (e) => {
+    clearTimeout(timer);
+
+    const a = e.target.value.replace(/[^\w\s]/gi, "");
+    setSearchPatientQuery(a);
+
+    setTimer(setTimeout(() => {
+      triggerChange()
+    }, 600))
+  }
+
   const handlePatientSearch = (e) => {
-    const a = e.target.value.replace(/[^\w\s]/gi, '')
-    setSearchPatientQuery(a)
-    if (a.length >= 3) {
+
+    if (e.length >= 3) {
       axios
         .get(
-          getSearchedpatient + '/' + currentUser.functionalUnit._id + '/' + a
+          getSearchedpatient + '/' + currentUser.functionalUnit._id + '/' + e
         )
         .then((res) => {
           if (res.data.success) {
@@ -496,9 +517,8 @@ function DischargeRequest(props) {
             props.history.push({
               pathname: 'dischargerequest/success',
               state: {
-                message: `Discharge Summary Request: ${
-                  res.data.data.requestNo
-                } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} Submitted successfully`,
+                message: `Discharge Summary Request: ${res.data.data.requestNo
+                  } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} Submitted successfully`,
               },
             })
             props.setPatientDetailsForReducer('')
@@ -592,7 +612,8 @@ function DischargeRequest(props) {
                 label='Search Patient by Name / MRN / National ID / Mobile Number'
                 name={'searchPatientQuery'}
                 value={searchPatientQuery}
-                onChange={handlePatientSearch}
+                onChange={handlePauseSearch}
+                onKeyDown={handleKeyDown}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position='end'>
@@ -662,8 +683,9 @@ function DischargeRequest(props) {
                   }}
                 >
                   <Paper style={{ maxHeight: 300, overflow: 'auto' }}>
-                    {patientFoundSuccessfull ? (
-                      patientFound && (
+                    {patientFoundSuccessfull &&
+                      patientFound !== '' ?
+                      (
                         <Table size='small'>
                           <TableHead>
                             <TableRow>
@@ -671,7 +693,6 @@ function DischargeRequest(props) {
                               <TableCell>Patient Name</TableCell>
                               <TableCell>Gender</TableCell>
                               <TableCell>Age</TableCell>
-                              <TableCell>Payment Method</TableCell>
                             </TableRow>
                           </TableHead>
 
@@ -689,26 +710,36 @@ function DischargeRequest(props) {
                                   </TableCell>
                                   <TableCell>{i.gender}</TableCell>
                                   <TableCell>{i.age}</TableCell>
-                                  <TableCell>{i.paymentMethod}</TableCell>
                                 </TableRow>
                               )
                             })}
                           </TableBody>
                         </Table>
-                      )
-                    ) : (
-                      <h4
-                        style={{ textAlign: 'center' }}
-                        onClick={() => setSearchPatientQuery('')}
-                      >
-                        Patient Not Found
-                      </h4>
-                    )}
+                      ) : searchPatientQuery ? (
+                        <div style={{ textAlign: 'center' }}>
+                          <Loader
+                            type='TailSpin'
+                            color='#2c6ddd'
+                            height={25}
+                            width={25}
+                            style={{ display: 'inline-block', padding: '10px' }}
+                          />
+                          <span style={{ display: 'inline-block', padding: '10px' }}>
+                            <h4>Searching Patient...</h4>
+                          </span>
+                        </div>
+                      ) : searchPatientQuery && !patientFoundSuccessfull ? (
+                        <div style={{ textAlign: 'center', padding: '10px' }}>
+                          <h4> No Patient Found !</h4>
+                        </div>
+                      ) : (
+                            undefined
+                          )}
                   </Paper>
                 </div>
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
             </div>
           </div>
         </div>
@@ -834,8 +865,8 @@ function DischargeRequest(props) {
               >
                 {medicationArray
                   ? medicationArray.map((d, index) => {
-                      return (
-                        <div style={{ display: "flex", flexDirection: "row" }}>
+                    return (
+                      <div style={{ display: "flex", flexDirection: "row" }}>
                         <h6
                           style={{
                             ...styles.textStyles,
@@ -852,8 +883,8 @@ function DischargeRequest(props) {
                           {d}
                         </h6>
                       </div>
-                      )
-                    })
+                    )
+                  })
                   : ''}
               </div>
 
@@ -863,12 +894,12 @@ function DischargeRequest(props) {
               >
                 {diagnosisArray
                   ? diagnosisArray.map((drug, index) => {
-                      return (
-                        <h6 style={styles.textStyles}>
-                          {index + 1}. {drug}
-                        </h6>
-                      )
-                    })
+                    return (
+                      <h6 style={styles.textStyles}>
+                        {index + 1}. {drug}
+                      </h6>
+                    )
+                  })
                   : ''}
               </div>
             </div>
@@ -933,10 +964,10 @@ function DischargeRequest(props) {
               <div
                 className='col-md-12'
                 style={{ marginTop: '20px' }}
-                // style={{
-                //   ...styles.inputContainerForTextField,
-                //   ...styles.textFieldPadding,
-                // }}
+              // style={{
+              //   ...styles.inputContainerForTextField,
+              //   ...styles.textFieldPadding,
+              // }}
               >
                 <TextField
                   required
@@ -1000,7 +1031,7 @@ function DischargeRequest(props) {
               </div>
               <div
                 style={{ display: 'flex', flex: 1, justifyContent: 'center' }}
-                // className='container-fluid'
+              // className='container-fluid'
               >
                 <div
                   style={{
@@ -1030,7 +1061,7 @@ function DischargeRequest(props) {
                       style={styles.stylesForButton}
                       variant='contained'
                       color='primary'
-                      // disabled={!validateDischargeForm()}
+                    // disabled={!validateDischargeForm()}
                     >
                       <strong style={{ fontSize: '12px' }}>Submit</strong>
                     </Button>
@@ -1056,16 +1087,16 @@ function DischargeRequest(props) {
                   borderBottomWidth={20}
                 />
               ) : (
-                <CustomTable
-                  tableData={[]}
-                  tableDataKeys={tableDataKeysForDischargeMed}
-                  tableHeading={tableHeadingForDischargeMed}
-                  handleView={viewItem}
-                  action={actions}
-                  borderBottomColor={'#60d69f'}
-                  borderBottomWidth={20}
-                />
-              )}
+                  <CustomTable
+                    tableData={[]}
+                    tableDataKeys={tableDataKeysForDischargeMed}
+                    tableHeading={tableHeadingForDischargeMed}
+                    handleView={viewItem}
+                    action={actions}
+                    borderBottomColor={'#60d69f'}
+                    borderBottomWidth={20}
+                  />
+                )}
             </div>
 
             <div className='row' style={{ marginBottom: '25px' }}>
@@ -1095,11 +1126,11 @@ function DischargeRequest(props) {
             </div>
           </div>
         ) : (
-          <div
-            style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-            className='container'
-          ></div>
-        )}
+              <div
+                style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+                className='container'
+              ></div>
+            )}
 
         {openItemDialog ? (
           <ViewSingleRequest
@@ -1108,8 +1139,8 @@ function DischargeRequest(props) {
             viewItem={viewItem}
           />
         ) : (
-          undefined
-        )}
+            undefined
+          )}
 
         <Notification msg={errorMsg} open={openNotification} />
       </div>

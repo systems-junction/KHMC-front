@@ -592,7 +592,7 @@ function AddEditPurchaseRequest(props) {
                   </div>
                 </div>
 
-                <div className='row'>
+                <div className='row' style={{ marginTop: '20px' }}>
                   <div
                     className='col-md-6 col-sm-6 col-6'
                     style={{
@@ -646,7 +646,7 @@ function AddEditPurchaseRequest(props) {
                   </div>
                 </div>
 
-                <div className='row'>
+                <div className='row' style={{ marginTop: '20px' }}>
                   <div
                     className='col-md-12 col-sm-12'
                     style={{
@@ -674,7 +674,7 @@ function AddEditPurchaseRequest(props) {
                   </div>
                 </div>
 
-                <div className='row'>
+                <div className='row' style={{ marginTop: '20px' }}>
                   <div
                     className='col-md-12 col-sm-12'
                     style={{
@@ -716,7 +716,10 @@ function AddEditPurchaseRequest(props) {
               </>
             ) : value === 1 ? (
               <>
-                <div className='row' style={{ marginTop: '20px' }}>
+                <div
+                  className='row'
+                  style={{ marginTop: '20px', marginBottom: '-10px' }}
+                >
                   <div
                     className='col-md-12 col-sm-12 col-12'
                     style={{
@@ -924,8 +927,8 @@ function AddEditPurchaseRequest(props) {
             <div
               className='row'
               style={{
-                marginBottom: '25px',
-                marginTop: '25px',
+                marginBottom: '30px',
+                marginTop: '30px',
               }}
             >
               <div className='col-md-6 col-sm-6 col-6'>

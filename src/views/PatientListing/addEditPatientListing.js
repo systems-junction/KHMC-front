@@ -77,8 +77,6 @@ import Loader from "react-loader-spinner";
 
 let countriesList = require("../../assets/countries.json");
 
-const ENTER_KEY = 13;
-
 const styles = {
   stylesForButton: {
     color: "white",
@@ -1024,7 +1022,7 @@ function AddEditPatientListing(props) {
   };
 
   const handleKeyDown = (e) => {
-    if (e.keyCode === ENTER_KEY) {
+    if (e.keyCode === 13) {
       triggerChange();
     }
   };
@@ -1039,12 +1037,10 @@ function AddEditPatientListing(props) {
     const a = e.target.value.replace(/[^\w\s]/gi, "");
     setSearchQuery(a);
 
-    setTimer(
-      setTimeout(() => {
-        triggerChange();
-      }, 1000)
-    );
-  };
+    setTimer(setTimeout(() => {
+      triggerChange()
+    }, 600))
+  }
 
   const handleSearch = (e) => {
     console.log("input ", e);
@@ -1493,7 +1489,6 @@ function AddEditPatientListing(props) {
                       label="Search Patient by Name / MRN / National ID / Mobile Number"
                       name={"searchQuery"}
                       value={searchQuery}
-                      // onChange={handleSearch}
                       onChange={handlePauseSearch}
                       onKeyDown={handleKeyDown}
                       className="textInputStyle"
@@ -1566,73 +1561,58 @@ function AddEditPatientListing(props) {
                   >
                     {searchQuery ? (
                       <div style={{ zIndex: 3 }}>
-                        <Paper style={{ maxHeight: 300, overflow: "auto" }}>
-                          {itemFoundSuccessfull && itemFound !== "" ? (
-                            <Table size="small">
-                              <TableHead>
-                                <TableRow>
-                                  <TableCell>MRN</TableCell>
-                                  <TableCell>Patient Name</TableCell>
-                                  <TableCell>Gender</TableCell>
-                                  <TableCell>Age</TableCell>
-                                </TableRow>
-                              </TableHead>
+                        <Paper style={{ maxHeight: 300, overflow: 'auto' }}>
+                          {itemFoundSuccessfull && itemFound !== "" ?
+                            (
+                              <Table size='small'>
+                                <TableHead>
+                                  <TableRow>
+                                    <TableCell>MRN</TableCell>
+                                    <TableCell>Patient Name</TableCell>
+                                    <TableCell>Gender</TableCell>
+                                    <TableCell>Age</TableCell>
+                                  </TableRow>
+                                </TableHead>
 
-                              <TableBody>
-                                {itemFound.map((i) => {
-                                  return (
-                                    <TableRow
-                                      key={i._id}
-                                      onClick={() => handleAddItem(i)}
-                                      style={{ cursor: "pointer" }}
-                                    >
-                                      <TableCell>{i.profileNo}</TableCell>
-                                      <TableCell>{i.name}</TableCell>
-                                      <TableCell>{i.gender}</TableCell>
-                                      <TableCell>{i.age}</TableCell>
-                                    </TableRow>
-                                  );
-                                })}
-                              </TableBody>
-                            </Table>
-                          ) : searchQuery ? (
-                            <div style={{ textAlign: "center" }}>
-                              <Loader
-                                type="TailSpin"
-                                color="#2c6ddd"
-                                height={25}
-                                width={25}
-                                style={{
-                                  display: "inline-block",
-                                  padding: "10px",
-                                }}
-                              />
-                              <span
-                                style={{
-                                  display: "inline-block",
-                                  padding: "10px",
-                                }}
-                              >
-                                <h4
-                                // onClick={() => setSearchQuery('')}
-                                >
-                                  Searching Patient...
-                                </h4>
-                              </span>
-                            </div>
-                          ) : searchQuery && !itemFoundSuccessfull ? (
-                            <div
-                              style={{ textAlign: "center", padding: "10px" }}
-                            >
-                              <h4
-                              // onClick={() => setSearchQuery('')}
-                              >
-                                No Patient Found !
-                              </h4>
-                            </div>
-                          ) : (
-                            undefined
-                          )}
+                                <TableBody>
+                                  {itemFound.map((i) => {
+                                    return (
+                                      <TableRow
+                                        key={i._id}
+                                        onClick={() => handleAddItem(i)}
+                                        style={{ cursor: 'pointer' }}
+                                      >
+                                        <TableCell>{i.profileNo}</TableCell>
+                                        <TableCell>
+                                          {i.name}
+                                        </TableCell>
+                                        <TableCell>{i.gender}</TableCell>
+                                        <TableCell>{i.age}</TableCell>
+                                      </TableRow>
+                                    )
+                                  })}
+                                </TableBody>
+                              </Table>
+                            ) : searchQuery ? (
+                              <div style={{ textAlign: 'center' }}>
+                                <Loader
+                                  type='TailSpin'
+                                  color='#2c6ddd'
+                                  height={25}
+                                  width={25}
+                                  style={{ display: 'inline-block', padding: '10px' }}
+                                />
+                                <span style={{ display: 'inline-block', padding: '10px' }}>
+                                  <h4> Searching Patient...</h4>
+                                </span>
+                              </div>
+                            ) : searchQuery && !itemFoundSuccessfull ? (
+                              <div style={{ textAlign: 'center', padding: '10px' }}>
+                                <h4>No Patient Found !</h4>
+                              </div>
+                            ) : (
+                                  undefined
+                                )}
                         </Paper>
                       </div>
                     ) : (
