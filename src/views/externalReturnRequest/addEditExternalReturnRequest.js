@@ -84,6 +84,7 @@ const styles = {
 
   inputContainerForTextField: {
     marginTop: 6,
+    marginBottom: 10,
   },
 
   inputContainerForDropDown: {
@@ -99,8 +100,8 @@ const styles = {
   },
 
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 4,
+    paddingRight: 4,
   },
 };
 
@@ -635,7 +636,7 @@ function AddEditPurchaseRequest(props) {
                         : new Date()
                       : dateGenerated
                   }
-                  label={"Date Generated (MM/DD/YYYY)"}
+                  label={"Date Generated (MM-DD-YYYY)"}
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
@@ -910,7 +911,7 @@ function AddEditPurchaseRequest(props) {
                           : null
                         : expiryDate
                     }
-                    label={"Expiry Date (MM/DD/YYYY)"}
+                    label={"Expiry Date (MM-DD-YYYY)"}
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },

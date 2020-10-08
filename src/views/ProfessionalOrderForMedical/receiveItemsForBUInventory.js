@@ -53,6 +53,7 @@ const statusArray = [
 const styles = {
   inputContainerForTextField: {
     marginTop: 6,
+    marginBottom: 10,
   },
 
   inputContainerForDropDown: {
@@ -77,8 +78,8 @@ const styles = {
   },
 
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 4,
+    paddingRight: 4,
   },
 
   stylesForButton: {
@@ -760,7 +761,7 @@ function ReceiveItems(props) {
                   inputVariant="filled"
                   fullWidth={true}
                   // format="MM/dd/yyyy"
-                  label="Expiry Date"
+                  label="Expiry Date (DD-MM-YYY)"
                   onChange={(val) => onChangeDate(val, "expiryDate")}
                   style={{ borderRadius: 10, backgroundColor: "white" }}
                   value={
@@ -1226,7 +1227,7 @@ function ReceiveItems(props) {
                   inputVariant={"filled"}
                   fullWidth={true}
                   disableFuture
-                  label="Date/Time Invoice (MM/DD/YYYY)"
+                  label="Date/Time Invoice (DD-MM-YYYY)"
                   onChange={(val) => onChangeDate(val, "date")}
                   // style={styles.styleForDate}
                   value={comingFor === "add" ? (date ? date : null) : date}
@@ -1256,7 +1257,7 @@ function ReceiveItems(props) {
                   required
                   inputVariant={"filled"}
                   fullWidth={true}
-                  label="Date/Time Received (MM/DD/YYYY)"
+                  label="Date/Time Received (DD-MM-YYYY)"
                   onChange={(val) => onChangeDate(val, "receivedDate")}
                   value={
                     comingFor === "add"

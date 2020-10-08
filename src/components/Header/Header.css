@@ -8,14 +8,14 @@
   justify-content: space-between;
 }
 .header1-style {
-  max-width: 35%;
-  height: 38%;
+  max-width: 25%;
+  /* height: 23%; */
   margin-top: -5px;
   /* margin-top: 10px; */
 }
 .header2-style {
-  max-width: 35%;
-  height: 38%;
+  max-width: 25%;
+  /* height: 23%; */
   margin-top: -5px;
 }
 
