@@ -1193,8 +1193,9 @@ function AddEditPurchaseRequest(props) {
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                       <DateTimePicker
                         // inputVariant="outlined"
+                        label="DD-MM-YYYY"
                         onChange={onChangeDate}
-                        format="MM/dd/yyyy hh:mm a"
+                        format="dd/mm/yyyy hh:mm a"
                         disabled={true}
                         fullWidth
                         style={{
