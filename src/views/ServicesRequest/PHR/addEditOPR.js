@@ -1004,14 +1004,16 @@ function AddEditPatientListing(props) {
           console.log("Data of selected banda ", res.data.data);
 
           let i = res.data.data;
-          let d = i.dob;
-          var dob;
-          let myDate = d.split("/");
-          if (myDate.length > 1) {
-            console.log(myDate, "mydate");
-            dob = new Date(myDate[2], myDate[1] - 1, myDate[0]);
-          } else {
-            dob = d;
+          if (i.dob) {
+            let d = i.dob;
+            var dob;
+            let myDate = d.split("/");
+            if (myDate.length > 1) {
+              console.log(myDate, "mydate");
+              dob = new Date(myDate[2], myDate[1] - 1, myDate[0]);
+            } else {
+              dob = d;
+            }
           }
 
           setPatientId(i._id);
