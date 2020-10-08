@@ -1220,7 +1220,6 @@ function LabRadRequest(props) {
                               <TableCell>Patient Name</TableCell>
                               <TableCell>Gender</TableCell>
                               <TableCell>Age</TableCell>
-                              <TableCell>Payment Method</TableCell>
                             </TableRow>
                           </TableHead>
 
@@ -1238,7 +1237,6 @@ function LabRadRequest(props) {
                                   </TableCell>
                                   <TableCell>{i.gender}</TableCell>
                                   <TableCell>{i.age}</TableCell>
-                                  <TableCell>{i.paymentMethod}</TableCell>
                                 </TableRow>
                               )
                             })}
