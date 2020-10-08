@@ -77,8 +77,6 @@ import Loader from 'react-loader-spinner'
 
 let countriesList = require('../../assets/countries.json')
 
-const ENTER_KEY = 13;
-
 const styles = {
   stylesForButton: {
     color: 'white',
@@ -1012,7 +1010,7 @@ function AddEditPatientListing(props) {
   }
 
   const handleKeyDown = (e) => {
-    if (e.keyCode === ENTER_KEY) {
+    if (e.keyCode === 13) {
       triggerChange();
     }
   }
@@ -1029,7 +1027,7 @@ function AddEditPatientListing(props) {
 
     setTimer(setTimeout(() => {
       triggerChange()
-    }, 1000))
+    }, 600))
   }
 
   const handleSearch = (e) => {
@@ -1447,7 +1445,6 @@ function AddEditPatientListing(props) {
                       label='Search Patient by Name / MRN / National ID / Mobile Number'
                       name={'searchQuery'}
                       value={searchQuery}
-                      // onChange={handleSearch}
                       onChange={handlePauseSearch}
                       onKeyDown={handleKeyDown}
                       className='textInputStyle'
@@ -1562,16 +1559,12 @@ function AddEditPatientListing(props) {
                                   style={{ display: 'inline-block', padding: '10px' }}
                                 />
                                 <span style={{ display: 'inline-block', padding: '10px' }}>
-                                  <h4
-                                  // onClick={() => setSearchQuery('')}
-                                  >Searching Patient...</h4>
+                                  <h4> Searching Patient...</h4>
                                 </span>
                               </div>
                             ) : searchQuery && !itemFoundSuccessfull ? (
                               <div style={{ textAlign: 'center', padding: '10px' }}>
-                                <h4
-                                // onClick={() => setSearchQuery('')}
-                                >No Patient Found !</h4>
+                                <h4>No Patient Found !</h4>
                               </div>
                             ) : (
                                   undefined
