@@ -29,6 +29,12 @@ import Active from "../../assets/img/Active.png";
 
 import cookie from "react-cookies";
 
+import AccountCircle from '@material-ui/icons/SearchOutlined'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import TextField from '@material-ui/core/TextField'
+import { makeStyles } from "@material-ui/core/styles";
+
+
 import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 
 import socketIOClient from "socket.io-client";
@@ -42,6 +48,10 @@ const styles = {
     width: "110px",
     height: "40px",
     outline: "none",
+  },
+  textFieldPadding: {
+    paddingLeft: 0,
+    paddingRight: 5,
   },
 };
 
@@ -87,6 +97,25 @@ const tableDataKeysForCommittee = [
   "committeeStatus",
 ];
 
+
+
+const useStylesForInput = makeStyles((theme) => ({
+  input: {
+    backgroundColor: 'white',
+    borderRadius: 5,
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:disabled': {
+      color: 'gray',
+    },
+  },
+}))
+
+
 const actionsForCommitteeMemeber = {
   edit: true,
 };
@@ -97,6 +126,7 @@ const actions = {
 
 export default function PurchaseRequest(props) {
   const [currentUser, setCurrentUser] = useState(cookie.load("current_user"));
+  const classesInput = useStylesForInput()
 
   const [purchaseOrders, setPurchaseOrders] = useState("");
   const [vendors, setVendor] = useState("");
@@ -109,6 +139,7 @@ export default function PurchaseRequest(props) {
   const [modalVisible, setModalVisible] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [openNotification, setOpenNotification] = useState(false);
+  const [searchPatientQuery, setSearchPatientQuery] = useState('')
 
   if (openNotification) {
     setTimeout(() => {
@@ -209,6 +240,36 @@ export default function PurchaseRequest(props) {
       });
   }
 
+  const handlePatientSearch =  (e) => {
+    const a = e.target.value.replace(/[^\w\s]/gi, '')
+    setSearchPatientQuery(a)
+    if (a.length >= 3) {
+       axios
+        .get(
+          getPurchaseOrderUrl + '/' + a
+        )
+        .then((res) => {
+          if (res.data.success) {
+            if (res.data.data.purchaseOrder.length > 0) {
+              console.log(res.data.data)
+              setPurchaseOrders(res.data.data.purchaseOrder.reverse());
+            } else {
+              console.log(res.data.data, 'no-response');
+              setPurchaseOrders([]);
+            }
+          }
+        })
+        .catch((e) => {
+          console.log('error after searching patient request', e)
+        })
+    }
+
+    else if(a.length == 0){
+      getPurchaseRequests();
+    }
+    
+  }
+
   return (
     <div
       style={{
@@ -252,6 +313,53 @@ export default function PurchaseRequest(props) {
           </div>
         </div>
 
+
+        <div className='row' style={{marginLeft: '0px', marginRight: '0px', marginTop: '20px'}}>
+            <div
+              className='col-md-12 col-sm-9 col-8'
+              style={styles.textFieldPadding}
+            >
+              <TextField
+                className='textInputStyle'
+                id='searchPatientQuery'
+                type='text'
+                variant='filled'
+                label='Search By Purchase Order No/ Vendor Name'
+                name={'searchPatientQuery'}
+                value={searchPatientQuery}
+                onChange={handlePatientSearch} 
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <AccountCircle />
+                    </InputAdornment>
+                  ),
+                  className: classesInput.input,
+                  classes: { input: classesInput.input },
+                  disableUnderline: true,
+                }}
+              />
+            </div>
+
+            <div
+              className='col-md-1 col-sm-2 col-2'
+              style={{
+                ...styles.textFieldPadding,
+              }}
+            >
+            </div>
+
+            <div
+              className='col-md-1 col-sm-1 col-2'
+              style={{
+                ...styles.textFieldPadding,
+              }}
+            >
+              
+            </div>
+          </div>
+
+
         <div
           style={{
             flex: 4,
@@ -260,7 +368,7 @@ export default function PurchaseRequest(props) {
             // height:'100%'
           }}
         >
-          {vendors ? (
+          { purchaseOrders &&  purchaseOrders.length > 0 ? (
             <div>
               <div>
                 {currentUser.staffTypeId.type === "Committe Member" ? (
@@ -307,10 +415,32 @@ export default function PurchaseRequest(props) {
               </div>
               <Notification msg={errorMsg} open={openNotification} />
             </div>
-          ) : (
-            <div className="LoaderStyle">
-              <Loader type="TailSpin" color="red" height={50} width={50} />
+          ) : purchaseOrders &&  purchaseOrders.length == 0 ? (
+            <div className='row ' style={{ marginTop: '25px' }}>
+              <div className='col-11'>
+                <h3
+                  style={{
+                    color: 'white',
+                    textAlign: 'center',
+                    width: '100%',
+                    position: 'absolute',
+                  }}
+                >
+                  Opps...No Data Found
+                </h3>
+              </div>
+              <div className='col-1' style={{ marginTop: 45 }}>
+                <img
+                  onClick={() => props.history.goBack()}
+                  src={Back}
+                  style={{ maxWidth: '60%', height: 'auto', cursor: 'pointer' }}
+                />
+              </div>
             </div>
+        ) : 
+         ( <div className="LoaderStyle">
+            <Loader type="TailSpin" color="red" height={50} width={50} />
+          </div>
           )}
         </div>
       </div>
