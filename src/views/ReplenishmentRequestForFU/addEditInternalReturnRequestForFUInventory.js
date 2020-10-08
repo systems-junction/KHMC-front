@@ -98,6 +98,7 @@ const styles = {
 
   inputContainerForTextField: {
     marginTop: 6,
+    marginBottom: 10,
   },
 
   inputContainerForDropDown: {
@@ -145,8 +146,8 @@ const styles = {
     outline: "none",
   },
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 4,
+    paddingRight: 4,
   },
 };
 const useStyles = makeStyles(tableStyles);
@@ -923,7 +924,7 @@ function AddEditPurchaseRequest(props) {
                     inputVariant="filled"
                     onChange={(val) => onChangeDate(val, "dateGenerated")}
                     name={"dateGenerated"}
-                    label="Date Generated (MM/DD/YYYY)"
+                    label="Date Generated (DD-MM-YYYY)"
                     disabled={true}
                     fullWidth
                     // format="MM/dd/yyyy hh:mm a"
@@ -958,7 +959,7 @@ function AddEditPurchaseRequest(props) {
                     inputVariant="filled"
                     onChange={(val) => onChangeDate(val, "expiryDate")}
                     name={"expiryDate"}
-                    label="Expiry Date (MM/DD/YYYY)"
+                    label="Expiry Date (DD-MM-YYYY)"
                     // format="MM/dd/yyyy hh:mm a"
                     format={dateFormat}
                     disabled={
@@ -1634,7 +1635,7 @@ function AddEditPurchaseRequest(props) {
               </DialogContent>
             </Dialog>
 
-            <div className='row' style={{ marginBottom: 20 }}>
+            <div className="row" style={{ marginBottom: 20 }}>
               <img
                 onClick={() => props.history.goBack()}
                 src={Back_Arrow}
