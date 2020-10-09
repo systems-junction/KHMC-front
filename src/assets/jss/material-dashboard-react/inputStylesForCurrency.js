@@ -1,28 +1,28 @@
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from '@material-ui/core/styles'
 
 export default makeStyles((theme) => ({
   input: {
-    backgroundColor: "white!important",
+    backgroundColor: 'white!important',
     borderRadius: 4,
-    "&:placeholder": {
+    '&:placeholder': {
       // color: "gray",
       // fontWeight: "400",
     },
 
-    "&:before": {
-      borderBottomWidth: "0px",
+    '&:before': {
+      borderBottomWidth: '0px',
     },
-    "&:after": {
-      color: "black",
-    },
-
-    "&:hover": {
-      backgroundColor: "white",
+    '&:after': {
+      color: 'black',
     },
 
-    "&:focus": {
-      backgroundColor: "white",
-      boxShadow: "none",
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
     },
   },
 
@@ -34,4 +34,4 @@ export default makeStyles((theme) => ({
   //     color: "black",
   //   },
   // },
-}));
+}))

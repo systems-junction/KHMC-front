@@ -266,27 +266,28 @@ function DischargeRequest(props) {
 
   const handleKeyDown = (e) => {
     if (e.keyCode === 13) {
-      triggerChange();
+      triggerChange()
     }
   }
 
   const triggerChange = () => {
-    handlePatientSearch(searchPatientQuery);
+    handlePatientSearch(searchPatientQuery)
   }
 
   const handlePauseSearch = (e) => {
-    clearTimeout(timer);
+    clearTimeout(timer)
 
-    const a = e.target.value.replace(/[^\w\s]/gi, "");
-    setSearchPatientQuery(a);
+    const a = e.target.value.replace(/[^\w\s]/gi, '')
+    setSearchPatientQuery(a)
 
-    setTimer(setTimeout(() => {
-      triggerChange()
-    }, 600))
+    setTimer(
+      setTimeout(() => {
+        triggerChange()
+      }, 600)
+    )
   }
 
   const handlePatientSearch = (e) => {
-
     if (e.length >= 3) {
       axios
         .get(
@@ -517,8 +518,9 @@ function DischargeRequest(props) {
             props.history.push({
               pathname: 'dischargerequest/success',
               state: {
-                message: `Discharge Summary Request: ${res.data.data.requestNo
-                  } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} Submitted successfully`,
+                message: `Discharge Summary Request: ${
+                  res.data.data.requestNo
+                } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} Submitted successfully`,
               },
             })
             props.setPatientDetailsForReducer('')
@@ -683,63 +685,63 @@ function DischargeRequest(props) {
                   }}
                 >
                   <Paper style={{ maxHeight: 300, overflow: 'auto' }}>
-                    {patientFoundSuccessfull &&
-                      patientFound !== '' ?
-                      (
-                        <Table size='small'>
-                          <TableHead>
-                            <TableRow>
-                              <TableCell>MRN</TableCell>
-                              <TableCell>Patient Name</TableCell>
-                              <TableCell>Gender</TableCell>
-                              <TableCell>Age</TableCell>
-                            </TableRow>
-                          </TableHead>
+                    {patientFoundSuccessfull && patientFound !== '' ? (
+                      <Table size='small'>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>MRN</TableCell>
+                            <TableCell>Patient Name</TableCell>
+                            <TableCell>Gender</TableCell>
+                            <TableCell>Age</TableCell>
+                          </TableRow>
+                        </TableHead>
 
-                          <TableBody>
-                            {patientFound.map((i) => {
-                              return (
-                                <TableRow
-                                  key={i._id}
-                                  onClick={() => handleAddPatient(i)}
-                                  style={{ cursor: 'pointer' }}
-                                >
-                                  <TableCell>{i.profileNo}</TableCell>
-                                  <TableCell>
-                                    {i.firstName + ` ` + i.lastName}
-                                  </TableCell>
-                                  <TableCell>{i.gender}</TableCell>
-                                  <TableCell>{i.age}</TableCell>
-                                </TableRow>
-                              )
-                            })}
-                          </TableBody>
-                        </Table>
-                      ) : searchPatientQuery ? (
-                        <div style={{ textAlign: 'center' }}>
-                          <Loader
-                            type='TailSpin'
-                            color='#2c6ddd'
-                            height={25}
-                            width={25}
-                            style={{ display: 'inline-block', padding: '10px' }}
-                          />
-                          <span style={{ display: 'inline-block', padding: '10px' }}>
-                            <h4>Searching Patient...</h4>
-                          </span>
-                        </div>
-                      ) : searchPatientQuery && !patientFoundSuccessfull ? (
-                        <div style={{ textAlign: 'center', padding: '10px' }}>
-                          <h4> No Patient Found !</h4>
-                        </div>
-                      ) : (
-                            undefined
-                          )}
+                        <TableBody>
+                          {patientFound.map((i) => {
+                            return (
+                              <TableRow
+                                key={i._id}
+                                onClick={() => handleAddPatient(i)}
+                                style={{ cursor: 'pointer' }}
+                              >
+                                <TableCell>{i.profileNo}</TableCell>
+                                <TableCell>
+                                  {i.firstName + ` ` + i.lastName}
+                                </TableCell>
+                                <TableCell>{i.gender}</TableCell>
+                                <TableCell>{i.age}</TableCell>
+                              </TableRow>
+                            )
+                          })}
+                        </TableBody>
+                      </Table>
+                    ) : searchPatientQuery ? (
+                      <div style={{ textAlign: 'center' }}>
+                        <Loader
+                          type='TailSpin'
+                          color='#2c6ddd'
+                          height={25}
+                          width={25}
+                          style={{ display: 'inline-block', padding: '10px' }}
+                        />
+                        <span
+                          style={{ display: 'inline-block', padding: '10px' }}
+                        >
+                          <h4>Searching Patient...</h4>
+                        </span>
+                      </div>
+                    ) : searchPatientQuery && !patientFoundSuccessfull ? (
+                      <div style={{ textAlign: 'center', padding: '10px' }}>
+                        <h4> No Patient Found !</h4>
+                      </div>
+                    ) : (
+                      undefined
+                    )}
                   </Paper>
                 </div>
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
             </div>
           </div>
         </div>
@@ -865,26 +867,26 @@ function DischargeRequest(props) {
               >
                 {medicationArray
                   ? medicationArray.map((d, index) => {
-                    return (
-                      <div style={{ display: "flex", flexDirection: "row" }}>
-                        <h6
-                          style={{
-                            ...styles.textStyles,
-                          }}
-                        >
-                          {index + 1}
-                          {"."} &nbsp;
-                        </h6>
-                        <h6
-                          style={{
-                            ...styles.textStyles,
-                          }}
-                        >
-                          {d}
-                        </h6>
-                      </div>
-                    )
-                  })
+                      return (
+                        <div style={{ display: 'flex', flexDirection: 'row' }}>
+                          <h6
+                            style={{
+                              ...styles.textStyles,
+                            }}
+                          >
+                            {index + 1}
+                            {'.'} &nbsp;
+                          </h6>
+                          <h6
+                            style={{
+                              ...styles.textStyles,
+                            }}
+                          >
+                            {d}
+                          </h6>
+                        </div>
+                      )
+                    })
                   : ''}
               </div>
 
@@ -894,12 +896,12 @@ function DischargeRequest(props) {
               >
                 {diagnosisArray
                   ? diagnosisArray.map((drug, index) => {
-                    return (
-                      <h6 style={styles.textStyles}>
-                        {index + 1}. {drug}
-                      </h6>
-                    )
-                  })
+                      return (
+                        <h6 style={styles.textStyles}>
+                          {index + 1}. {drug}
+                        </h6>
+                      )
+                    })
                   : ''}
               </div>
             </div>
@@ -964,10 +966,10 @@ function DischargeRequest(props) {
               <div
                 className='col-md-12'
                 style={{ marginTop: '20px' }}
-              // style={{
-              //   ...styles.inputContainerForTextField,
-              //   ...styles.textFieldPadding,
-              // }}
+                // style={{
+                //   ...styles.inputContainerForTextField,
+                //   ...styles.textFieldPadding,
+                // }}
               >
                 <TextField
                   required
@@ -1026,12 +1028,18 @@ function DischargeRequest(props) {
                     height: 35,
                     marginTop: '7px',
                     cursor: 'pointer',
+                    marginLeft: '10px',
                   }}
                 />
               </div>
               <div
-                style={{ display: 'flex', flex: 1, justifyContent: 'center' }}
-              // className='container-fluid'
+                style={{
+                  display: 'flex',
+                  flex: 1,
+                  justifyContent: 'center',
+                  marginRight: '2px',
+                }}
+                // className='container-fluid'
               >
                 <div
                   style={{
@@ -1061,7 +1069,7 @@ function DischargeRequest(props) {
                       style={styles.stylesForButton}
                       variant='contained'
                       color='primary'
-                    // disabled={!validateDischargeForm()}
+                      // disabled={!validateDischargeForm()}
                     >
                       <strong style={{ fontSize: '12px' }}>Submit</strong>
                     </Button>
@@ -1087,16 +1095,16 @@ function DischargeRequest(props) {
                   borderBottomWidth={20}
                 />
               ) : (
-                  <CustomTable
-                    tableData={[]}
-                    tableDataKeys={tableDataKeysForDischargeMed}
-                    tableHeading={tableHeadingForDischargeMed}
-                    handleView={viewItem}
-                    action={actions}
-                    borderBottomColor={'#60d69f'}
-                    borderBottomWidth={20}
-                  />
-                )}
+                <CustomTable
+                  tableData={[]}
+                  tableDataKeys={tableDataKeysForDischargeMed}
+                  tableHeading={tableHeadingForDischargeMed}
+                  handleView={viewItem}
+                  action={actions}
+                  borderBottomColor={'#60d69f'}
+                  borderBottomWidth={20}
+                />
+              )}
             </div>
 
             <div className='row' style={{ marginBottom: '25px' }}>
@@ -1104,7 +1112,12 @@ function DischargeRequest(props) {
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back}
-                  style={{ width: 45, height: 35, cursor: 'pointer' }}
+                  style={{
+                    width: 45,
+                    height: 35,
+                    cursor: 'pointer',
+                    marginLeft: '-10px',
+                  }}
                 />
               </div>
               <div
@@ -1126,11 +1139,11 @@ function DischargeRequest(props) {
             </div>
           </div>
         ) : (
-              <div
-                style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-                className='container'
-              ></div>
-            )}
+          <div
+            style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+            className='container'
+          ></div>
+        )}
 
         {openItemDialog ? (
           <ViewSingleRequest
@@ -1139,8 +1152,8 @@ function DischargeRequest(props) {
             viewItem={viewItem}
           />
         ) : (
-            undefined
-          )}
+          undefined
+        )}
 
         <Notification msg={errorMsg} open={openNotification} />
       </div>

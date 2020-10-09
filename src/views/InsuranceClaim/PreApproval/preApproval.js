@@ -59,8 +59,7 @@ const useStylesForInput = makeStyles((theme) => ({
 
 const actions = { view: true }
 
-export default function preApproval(props) 
-{
+export default function preApproval(props) {
   const classes = useStylesForInput()
 
   const [preApproval, setpreApproval] = useState('')
@@ -125,7 +124,7 @@ export default function preApproval(props)
           // )
           var sortedObjs = _.sortBy(
             [].concat(
-              res.data.data.reverse(),
+              res.data.data.reverse()
               // res.data.data.ipr.reverse()
               // res.data.data.opr.reverse()
             ),
@@ -157,15 +156,12 @@ export default function preApproval(props)
     })
   }
 
-
-  const handlePatientSearch =  (e) => {
+  const handlePatientSearch = (e) => {
     const a = e.target.value.replace(/[^\w\s]/gi, '')
     setSearchPatientQuery(a)
     if (a.length >= 3) {
-       axios
-        .get(
-          getPreApproval + '/' + a
-        )
+      axios
+        .get(getPreApproval + '/' + a)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
@@ -180,32 +176,26 @@ export default function preApproval(props)
               }
               var sortedObjs = _.sortBy(
                 [].concat(
-                  res.data.data.reverse(),
+                  res.data.data.reverse()
                   // res.data.data.ipr.reverse()
                   // res.data.data.opr.reverse()
                 ),
                 'updatedAt'
               ).reverse()
-              setpreApproval(sortedObjs);
-            
+              setpreApproval(sortedObjs)
             } else {
-              setpreApproval([]);
+              setpreApproval([])
             }
           }
         })
         .catch((e) => {
           console.log('error after searching patient request', e)
         })
+    } else if (a.length == 0) {
+      console.log('less')
+      getPreApprovalData()
     }
-
-    else if(a.length == 0){
-      console.log("less"); 
-      getPreApprovalData();
-    }
-    
   }
-
-
 
   return (
     <div
@@ -223,83 +213,83 @@ export default function preApproval(props)
       <Header />
 
       <div className='cPadding'>
-        <div className='subheader' style={{ marginLeft: '-10px' }}>
+        <div className='subheader' style={{ marginLeft: '-14px' }}>
           <div>
             <img src={PreApproval} />
             <h4>Pre-Approval</h4>
           </div>
         </div>
 
+        <div
+          className='row'
+          style={{ marginLeft: '0px', marginRight: '0px', marginTop: '20px' }}
+        >
+          <div
+            className='col-md-10 col-sm-9 col-8'
+            style={styles.textFieldPadding}
+          >
+            <TextField
+              className='textInputStyle'
+              id='searchPatientQuery'
+              type='text'
+              variant='filled'
+              label='Search By MRN / Request No'
+              name={'searchPatientQuery'}
+              value={searchPatientQuery}
+              onChange={handlePatientSearch}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position='end'>
+                    <AccountCircle />
+                  </InputAdornment>
+                ),
+                className: classes.input,
+                classes: { input: classes.input },
+                disableUnderline: true,
+              }}
+            />
+          </div>
 
-        <div className='row' style={{marginLeft: '0px', marginRight: '0px', marginTop: '20px'}}>
+          <div
+            className='col-md-1 col-sm-2 col-2'
+            style={{
+              ...styles.textFieldPadding,
+            }}
+          >
             <div
-              className='col-md-10 col-sm-9 col-8'
-              style={styles.textFieldPadding}
-            >
-              <TextField
-                className='textInputStyle'
-                id='searchPatientQuery'
-                type='text'
-                variant='filled'
-                label='Search By MRN / Request No'
-                name={'searchPatientQuery'}
-                value={searchPatientQuery}
-                onChange={handlePatientSearch} 
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position='end'>
-                      <AccountCircle />
-                    </InputAdornment>
-                  ),
-                  className: classes.input,
-                  classes: { input: classes.input },
-                  disableUnderline: true,
-                }}
-              />
-            </div>
-
-            <div
-              className='col-md-1 col-sm-2 col-2'
               style={{
-                ...styles.textFieldPadding,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: 'white',
+                borderRadius: 5,
+                height: 55,
               }}
             >
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: 'white',
-                  borderRadius: 5,
-                  height: 55,
-                }}
-              >
-                <img src={BarCode} style={{ width: 70, height: 60 }} />
-              </div>
+              <img src={BarCode} style={{ width: 70, height: 60 }} />
             </div>
+          </div>
 
+          <div
+            className='col-md-1 col-sm-1 col-2'
+            style={{
+              ...styles.textFieldPadding,
+            }}
+          >
             <div
-              className='col-md-1 col-sm-1 col-2'
               style={{
-                ...styles.textFieldPadding,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: 'white',
+                borderRadius: 5,
+                height: 55,
               }}
             >
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: 'white',
-                  borderRadius: 5,
-                  height: 55,
-                }}
-              >
-                <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
-              </div>
+              <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
             </div>
-            </div>
-
-
+          </div>
+        </div>
 
         <div
           style={{
@@ -308,7 +298,7 @@ export default function preApproval(props)
             flexDirection: 'column',
           }}
         >
-          {preApproval &&  preApproval.length > 0 ? (
+          {preApproval && preApproval.length > 0 ? (
             <div>
               <div>
                 <CustomTable
@@ -356,10 +346,10 @@ export default function preApproval(props)
                 />
               </div>
             </div>
-          ) : 
-          ( <div className="LoaderStyle">
-            <Loader type="TailSpin" color="red" height={50} width={50} />
-          </div>
+          ) : (
+            <div className='LoaderStyle'>
+              <Loader type='TailSpin' color='red' height={50} width={50} />
+            </div>
           )}
         </div>
       </div>
