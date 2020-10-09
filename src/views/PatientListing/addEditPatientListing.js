@@ -1284,14 +1284,14 @@ function AddEditPatientListing(props) {
         });
       }
     } else if (e.target.name === "address") {
-      if (/^[#.0-9a-zA-Z\s,-]*$/.test(e.target.value) === false) {
-        return;
-      } else {
-        dispatch({
-          field: e.target.name,
-          value: e.target.value,
-        });
-      }
+      // if (/^[#.0-9a-zA-Z\s,-]*$/.test(e.target.value) === false) {
+      //   return;
+      // } else {
+      dispatch({
+        field: e.target.name,
+        value: e.target.value,
+      });
+      // }
     } else {
       dispatch({
         field: e.target.name,
