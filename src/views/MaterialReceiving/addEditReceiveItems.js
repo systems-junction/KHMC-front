@@ -48,6 +48,10 @@ import MUIStyleForInputForCurrency from "../../../src/assets/jss/material-dashbo
 
 import CurrencyTextField from "@unicef/material-ui-currency-textfield";
 
+import TableforAddedQty from "./tableforAddedQty";
+import dateFormat from "../../constants/dateFormat";
+import dateTimeFormat from "../../constants/dateTimeFormat";
+
 const statusArray = [
   { key: "received", value: "Received" },
   { key: "rejected", value: "Rejected" },
@@ -108,9 +112,8 @@ function ReceiveItems(props) {
     itemName: "",
     currentQty: "",
     requiredQty: "",
-    receivedQty: "",
+    receivedQty: 0,
     bonusQty: "0",
-    batchNumber: "123",
     lotNo: "123",
     unit: "",
     discount: "5",
@@ -126,9 +129,14 @@ function ReceiveItems(props) {
     date: "",
     receivedDate: new Date(),
     comments: "Some comments for receiving",
-    expiryDate: "",
     discountPercentage: "",
     statusForReceivingItem: "",
+
+    selectedBatch: "",
+
+    quantity: "",
+    batchNumber: "",
+    expiryDate: "",
   };
 
   function reducer(state, { field, value }) {
@@ -148,7 +156,6 @@ function ReceiveItems(props) {
     requiredQty,
     receivedQty,
     bonusQty,
-    batchNumber,
     lotNo,
     unit,
     discount,
@@ -164,9 +171,14 @@ function ReceiveItems(props) {
     date,
     receivedDate,
     comments,
-    expiryDate,
     discountPercentage,
     statusForReceivingItem,
+
+    selectedBatch,
+
+    quantity,
+    batchNumber,
+    expiryDate,
   } = state;
 
   const onChangeValue = (e) => {
@@ -199,7 +211,7 @@ function ReceiveItems(props) {
 
   const [shippingTerms, setShippingTerms] = useState("");
 
-  const [currentUser, setCurrentUser] = useState("");
+  const [currentUser, setCurrentUser] = useState(cookie.load("current_user"));
 
   const [vendor, setVendor] = useState("");
 
@@ -213,23 +225,19 @@ function ReceiveItems(props) {
   const [addRetrunRequest, setAddReturnRequest] = useState(false);
   const [receivedExceeds, setReceivedExceeds] = useState(false);
 
+  const [batchArray, setBatchArray] = useState([]);
+
+  const [selectItemToEditId, setSelectItemToEditId] = useState("");
+
   useEffect(() => {
-    setCurrentUser(cookie.load("current_user"));
-
     // setcomingFor(props.history.location.state.comingFor);
-
     // setVendors(props.history.location.state.vendors);
-
     // setGeneratedArray(props.history.location.state.generatedArray);
-
     // setPaymentTermsArray(props.history.location.state.paymentTerms);
-
     // const selectedRec = props.history.location.state.selectedItem;
-
     // if (selectedRec) {
     //   setSelectedItem(selectedRec);
     // }
-
     // if (selectedRec) {
     //   Object.entries(selectedRec).map(([key, val]) => {
     //     if (val && typeof val === "object") {
@@ -243,12 +251,12 @@ function ReceiveItems(props) {
 
   function validateForm() {
     return (
-      receivedQty.length > 0 &&
-      receivedQty !== "0" &&
+      // receivedQty.length > 0 &&
+      receivedQty !== 0 &&
       bonusQty.length > 0 &&
       // batchNumber.length > 0 &&
       // lotNo.length > 0 &&
-      expiryDate !== "" &&
+      // expiryDate !== "" &&
       // unit.length > 0 &&
       // discount.length > 0 &&
       // uniyDiscount.length > 0 &&
@@ -263,11 +271,10 @@ function ReceiveItems(props) {
       date !== "" &&
       receivedDate !== "" &&
       comments.length > 0 &&
-      statusForReceivingItem.length > 0
+      statusForReceivingItem.length > 0 &&
+      batchArray.length > 0
     );
   }
-
-console.log("selected item",props.selectedItem)
 
   const handleAdd = () => {
     setIsFormSubmitted(true);
@@ -305,6 +312,7 @@ console.log("selected item",props.selectedItem)
         vendorId: selectedItem.itemId.vendorId,
         prId: selectedItem.prId,
         status: statusForReceivingItem,
+        batchArray: batchArray,
       };
 
       console.log("params send while receiving data", params);
@@ -336,8 +344,6 @@ console.log("selected item",props.selectedItem)
     }
   };
 
-  console.log(selectedItem);
-
   const handleEdit = () => {
     setIsFormSubmitted(true);
     if (validateForm()) {
@@ -366,6 +372,7 @@ console.log("selected item",props.selectedItem)
         expiryDate,
         discountPercentage,
         status: statusForReceivingItem,
+        batchArray: batchArray,
       };
       axios
         .put(updateReceiveItemsUrl, params)
@@ -391,8 +398,6 @@ console.log("selected item",props.selectedItem)
     }, 2000);
   }
 
-  // console.log("selectedItem", selectedItem);
-
   const handleAddReturnRequest = () => {
     console.log("rec", selectedItem);
     let path = `/home/wms/warehouse/materialreceiving/viewpo/externalreturn/add`;
@@ -416,16 +421,15 @@ console.log("selected item",props.selectedItem)
     setSelectedItem(props.selectedItem);
   }, [props.selectedItem]);
 
-  console.log(selectedItem);
-
   function calculateTotal() {
     if (receivedQty && receivedQty !== "0") {
       let taxValueAmountForSingleItem =
-        (selectedItem.itemId.tax * selectedItem.itemId.issueUnitCost) / 100;
+        (selectedItem.itemId.tax * selectedItem.itemId.receiptUnitCost) / 100;
 
       let totalTax = receivedQty * taxValueAmountForSingleItem;
 
-      let subTotal = receivedQty * selectedItem.itemId.issueUnitCost + totalTax;
+      let subTotal =
+        receivedQty * selectedItem.itemId.receiptUnitCost + totalTax;
 
       let discountedAmount = (discount * subTotal) / 100;
       let totalPrice = subTotal - discountedAmount;
@@ -436,6 +440,165 @@ console.log("selected item",props.selectedItem)
       dispatch({ field: "discountAmount", value: discountedAmount });
     }
   }
+
+  function validateBatchForm() {
+    return (
+      batchNumber &&
+      batchNumber !== "" &&
+      quantity &&
+      quantity !== "" &&
+      quantity !== "0" &&
+      expiryDate &&
+      expiryDate !== ""
+    );
+  }
+
+  const addNew = () => {
+    // if (quantity > selectedItem.reqQty) {
+    //   setOpenNotification(true);
+    //   setErrorMsg(
+    //     "Received quantity can not exceed from the requested quantity"
+    //   );
+    //   return;
+    // }
+
+    if (parseInt(receivedQty) + parseInt(quantity) > selectedItem.reqQty) {
+      setOpenNotification(true);
+      setErrorMsg(
+        "Received quantity can not exceed from the requested quantity"
+      );
+      return;
+    }
+
+    let found =
+      batchArray && batchArray.find((item) => item.batchNumber === batchNumber);
+    if (found) {
+      setOpenNotification(true);
+      setErrorMsg("Qty from that batch has already been added");
+      return;
+    }
+    setBatchArray([
+      ...batchArray,
+      {
+        quantity,
+        batchNumber,
+        expiryDate,
+      },
+    ]);
+
+    dispatch({
+      field: "receivedQty",
+      value: parseInt(receivedQty) + parseInt(quantity),
+    });
+
+    dispatch({ field: "batchNumber", value: "" });
+    dispatch({ field: "quantity", value: "" });
+    dispatch({ field: "expiryDate", value: "" });
+  };
+
+  useEffect(() => {
+    if (receivedQty !== 0) {
+      // console.log("sdsd", receivedQty);
+      calculateTotal();
+    }
+  }, [receivedQty]);
+
+  function handleItemDelete(item) {
+    // console.log(item);
+    dispatch({
+      field: "receivedQty",
+      value: parseInt(receivedQty) - parseInt(item.quantity),
+    });
+    // if (status === "pending_approval") {
+    let temp = batchArray.filter((i) => i.batchNumber !== item.batchNumber);
+
+    setBatchArray([...temp]);
+    // dispatch({
+    //   field: "returnBatchArray",
+    //   value: [...temp],
+    // });
+    // } else {
+    //   setOpenNotification(true);
+    //   setErrorMsg("Items can not be deleted once they are in progess");
+    // }
+  }
+
+  function handleRequestedItemEdit(i) {
+    // console.log(i);
+    // if (status === "pending") {
+    // setDialogOpen(true);
+    // setSelectedItem(i);
+    setSelectItemToEditId(i);
+
+    dispatch({
+      field: "receivedQty",
+      value: parseInt(receivedQty) - parseInt(i.quantity),
+    });
+    dispatch({ field: "batchNumber", value: i.batchNumber });
+    dispatch({ field: "quantity", value: i.quantity });
+    dispatch({ field: "expiryDate", value: i.expiryDate });
+    // } else {
+    //   setOpenNotification(true);
+    //   setErrorMsg("Item can not be updated once it is in progess");
+    // }
+  }
+
+  const editSelectedItem = () => {
+    if (!validateBatchForm()) {
+      setOpenNotification(true);
+      setErrorMsg("Please fill the fields properly");
+      return;
+    }
+
+    if (parseInt(receivedQty) + parseInt(quantity) > selectedItem.reqQty) {
+      setOpenNotification(true);
+      setErrorMsg(
+        "Received quantity can not exceed from the requested quantity"
+      );
+      return;
+    }
+
+    // let found =
+    //   batchArray && batchArray.find((item) => item.batchNumber === batchNumber);
+    // if (found) {
+    //   setOpenNotification(true);
+    //   setErrorMsg("Qty from that batch has already been added");
+    //   return;
+    // }
+
+    if (validateBatchForm()) {
+      // setDialogOpen(false);
+      let temp = [];
+
+      for (let i = 0; i < batchArray.length; i++) {
+        if (batchArray[i].batchNumber === selectItemToEditId.batchNumber) {
+          temp[i] = {
+            quantity,
+            batchNumber,
+            expiryDate,
+          };
+        } else {
+          temp = [...temp, batchArray[i]];
+        }
+      }
+
+      // dispatch({
+      //   field: "requestedItemsArray",
+      //   value: temp,
+      // });
+
+      setBatchArray([...temp]);
+      dispatch({
+        field: "receivedQty",
+        value: parseInt(receivedQty) + parseInt(quantity),
+      });
+      // setSelectedItem("");
+      setSelectItemToEditId("");
+      dispatch({ field: "quantity", value: "" });
+      dispatch({ field: "expiryDate", value: "" });
+      dispatch({ field: "batchNumber", value: "" });
+    }
+  };
 
   return (
     <div
@@ -465,9 +628,173 @@ console.log("selected item",props.selectedItem)
         </div> */}
 
         <div style={{ flex: 4, display: "flex", flexDirection: "column" }}>
+          {currentUser.staffTypeId.type === "Warehouse Inventory Keeper" ? (
+            <>
+              <div className="row">
+                <h6
+                  style={{
+                    fontWeight: "700",
+                    color: "white",
+                    paddingLeft: 3,
+                    marginTop: 15,
+                  }}
+                >
+                  Select Batch and Add Quantity
+                </h6>
+              </div>
+              <div className="row">
+                <div
+                  className="col-md-4"
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
+                    labelId="label"
+                    type="Select"
+                    name="batchNumber"
+                    value={batchNumber}
+                    onChange={onChangeValue}
+                    className="textInputStyle"
+                    variant="filled"
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                    label="Batch Number"
+                  ></TextField>
+                </div>
+
+                <div
+                  className="col-md-4"
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <DatePicker
+                      required
+                      inputVariant="filled"
+                      // onChange={(val) => onChangeDate(val, "expiryDatePerBatch")}
+                      name={"expiryDate"}
+                      label="Expiry Date Per Batch(DD - MM - YYYY)"
+                      // format="MM/dd/yyyy hh:mm a"
+                      format={dateFormat}
+                      onChange={(val) => onChangeDate(val, "expiryDate")}
+                      fullWidth
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                      value={expiryDate ? expiryDate : null}
+                    />
+                  </MuiPickersUtilsProvider>
+                </div>
+
+                <div
+                  className="col-md-4"
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
+                    type={"number"}
+                    name={"quantity"}
+                    value={quantity}
+                    onChange={onChangeValue}
+                    className="textInputStyle"
+                    variant="filled"
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                    label="Received Quantity"
+                    onKeyDown={(evt) => {
+                      (evt.key === "e" ||
+                        evt.key === "E" ||
+                        evt.key === "-" ||
+                        evt.key === "+") &&
+                        evt.preventDefault();
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div
+                className="row"
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  marginTop: 10,
+                  // marginBottom: 4,
+                }}
+              >
+                {selectItemToEditId === "" ? (
+                  <Button
+                    onClick={addNew}
+                    style={{
+                      ...styles.stylesForButton,
+                      borderRadius: 5,
+                    }}
+                    disabled={!validateBatchForm()}
+                    variant="contained"
+                    color="primary"
+                  >
+                    <strong style={{ fontSize: "12px" }}>Add New</strong>
+                  </Button>
+                ) : (
+                  <Button
+                    style={{
+                      ...styles.stylesForButton,
+                      borderRadius: 5,
+                    }}
+                    disabled={!validateBatchForm()}
+                    variant="contained"
+                    color="primary"
+                    onClick={editSelectedItem}
+                  >
+                    <strong style={{ fontSize: "12px" }}>Update</strong>
+                  </Button>
+                )}
+              </div>
+            </>
+          ) : (
+            undefined
+          )}
+
+          <div className="row" style={{ marginBottom: 15 }}>
+            {batchArray.length > 0 ? (
+              <>
+                <h5
+                  style={{
+                    color: "white",
+                    fontWeight: "bold",
+                    marginTop: 15,
+                    marginBottom: 15,
+                  }}
+                >
+                  Added Batches With Quantities
+                </h5>
+                <TableforAddedQty
+                  returnBatchArray={batchArray}
+                  onDelete={handleItemDelete}
+                  onEdit={handleRequestedItemEdit}
+                  comingFor={comingFor}
+                />
+              </>
+            ) : (
+              undefined
+            )}
+          </div>
+
           <div className="row">
             <div
-              className="col-md-6"
+              className="col-md-4"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -491,7 +818,7 @@ console.log("selected item",props.selectedItem)
             </div>
 
             <div
-              className="col-md-6"
+              className="col-md-4"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -510,6 +837,38 @@ console.log("selected item",props.selectedItem)
                 InputProps={{
                   className: classes.input,
                   classes: { input: classes.input },
+                }}
+              />
+            </div>
+
+            <div
+              className="col-md-4"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                disabled={true}
+                type="number"
+                label="LOT No"
+                name={"lotNo"}
+                value={lotNo}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                error={lotNo === "" && isFormSubmitted}
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                onKeyDown={(evt) => {
+                  (evt.key === "e" ||
+                    evt.key === "E" ||
+                    evt.key === "-" ||
+                    evt.key === "+") &&
+                    evt.preventDefault();
                 }}
               />
             </div>
@@ -575,9 +934,10 @@ console.log("selected item",props.selectedItem)
             >
               <TextField
                 required
-                disabled={selectedItem ? false : true}
+                // disabled={selectedItem ? false : true}
+                disabled={true}
                 type="number"
-                label="Received Qty"
+                label="Total Received Qty"
                 name={"receivedQty"}
                 value={receivedQty}
                 onChange={onChangeValue}
@@ -633,7 +993,7 @@ console.log("selected item",props.selectedItem)
             </div>
           </div>
 
-          <div className="row">
+          {/* <div className="row">
             <div
               className="col-md-4"
               style={{
@@ -651,38 +1011,6 @@ console.log("selected item",props.selectedItem)
                 onChange={onChangeValue}
                 className="textInputStyle"
                 error={batchNumber === "" && isFormSubmitted}
-                variant="filled"
-                InputProps={{
-                  className: classes.input,
-                  classes: { input: classes.input },
-                }}
-                onKeyDown={(evt) => {
-                  (evt.key === "e" ||
-                    evt.key === "E" ||
-                    evt.key === "-" ||
-                    evt.key === "+") &&
-                    evt.preventDefault();
-                }}
-              />
-            </div>
-
-            <div
-              className="col-md-4"
-              style={{
-                ...styles.inputContainerForTextField,
-                ...styles.textFieldPadding,
-              }}
-            >
-              <TextField
-                required
-                disabled={true}
-                type="number"
-                label="LOT No"
-                name={"lotNo"}
-                value={lotNo}
-                onChange={onChangeValue}
-                className="textInputStyle"
-                error={lotNo === "" && isFormSubmitted}
                 variant="filled"
                 InputProps={{
                   className: classes.input,
@@ -723,7 +1051,7 @@ console.log("selected item",props.selectedItem)
                 />
               </MuiPickersUtilsProvider>
             </div>
-          </div>
+          </div> */}
 
           <div className="row">
             <div
@@ -739,7 +1067,7 @@ console.log("selected item",props.selectedItem)
                 type="text"
                 label="Unit"
                 name={"unit"}
-                value={selectedItem && selectedItem.itemId.issueUnit}
+                value={selectedItem && selectedItem.itemId.receiptUnit}
                 onChange={onChangeValue}
                 className="textInputStyle"
                 variant="filled"
@@ -780,6 +1108,7 @@ console.log("selected item",props.selectedItem)
                     evt.key === "+") &&
                     evt.preventDefault();
                 }}
+                onBlur={calculateTotal}
               />
             </div>
 
@@ -795,7 +1124,7 @@ console.log("selected item",props.selectedItem)
                 disabled={true}
                 label="Unit Discount"
                 name={"uniyDiscount"}
-                value={selectedItem && selectedItem.itemId.issueUnit}
+                value={selectedItem && selectedItem.itemId.receiptUnit}
                 variant={"filled"}
                 onChange={onChangeValue}
                 className="textInputStyle"
@@ -847,6 +1176,7 @@ console.log("selected item",props.selectedItem)
                 name={"discountAmount"}
                 value={discountAmount}
                 onBlur={onChangeValue}
+                decimalPlaces={4}
                 variant="filled"
                 textAlign="left"
                 InputProps={{
@@ -878,6 +1208,7 @@ console.log("selected item",props.selectedItem)
                 type="number"
                 label="Tax %"
                 name={"tax"}
+                decimalPlaces={4}
                 value={selectedItem && selectedItem.itemId.tax}
                 variant={"filled"}
                 onChange={onChangeValue}
@@ -904,11 +1235,12 @@ console.log("selected item",props.selectedItem)
                 ...styles.textFieldPadding,
               }}
             >
-              <TextField
+              {/* <TextField
                 required
                 disabled={true}
                 type="number"
                 label="Tax Amount"
+                decimalPlaces={4}
                 name={"taxAmount"}
                 variant={"filled"}
                 value={taxAmount}
@@ -926,6 +1258,31 @@ console.log("selected item",props.selectedItem)
                     evt.key === "+") &&
                     evt.preventDefault();
                 }}
+              /> */}
+
+              <CurrencyTextField
+                disabled
+                style={{ backgroundColor: "white", borderRadius: 5 }}
+                className="textInputStyle"
+                id="taxAmount"
+                label="Tax Amount"
+                name={"taxAmount"}
+                value={taxAmount}
+                decimalPlaces={4}
+                onBlur={onChangeValue}
+                variant="filled"
+                textAlign="left"
+                InputProps={{
+                  className: classesForInput.input,
+                  classes: { input: classesForInput.input },
+                }}
+                InputLabelProps={{
+                  className: classesForInput.label,
+                  classes: { label: classesForInput.label },
+                }}
+                currencySymbol="JD"
+                outputFormat="number"
+                onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
               />
             </div>
           </div>
@@ -969,10 +1326,11 @@ console.log("selected item",props.selectedItem)
                 label="Final Unit Price"
                 name={"finalUnitPrice"}
                 // value={finalUnitPrice}
-                value={selectedItem && selectedItem.itemId.issueUnitCost}
+                value={selectedItem && selectedItem.itemId.receiptUnitCost}
                 onBlur={onChangeValue}
                 variant="filled"
                 textAlign="left"
+                decimalPlaces={4}
                 InputProps={{
                   className: classesForInput.input,
                   classes: { input: classesForInput.input },
@@ -1026,6 +1384,7 @@ console.log("selected item",props.selectedItem)
                 label="Sub Total"
                 name={"subTotal"}
                 value={subTotal}
+                decimalPlaces={4}
                 onBlur={onChangeValue}
                 variant="filled"
                 textAlign="left"
@@ -1082,6 +1441,7 @@ console.log("selected item",props.selectedItem)
                 label="Total Price"
                 name={"totalPrice"}
                 value={totalPrice}
+                decimalPlaces={4}
                 onBlur={onChangeValue}
                 variant="filled"
                 textAlign="left"
@@ -1142,7 +1502,7 @@ console.log("selected item",props.selectedItem)
             >
               <TextField
                 required
-                disabled={true}
+                // disabled={true}
                 label="Invoice"
                 name={"invoice"}
                 value={invoice}
@@ -1166,12 +1526,13 @@ console.log("selected item",props.selectedItem)
             >
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DateTimePicker
-                  format="MM/dd/yyyy HH:mm a"
+                  // format="MM/dd/yyyy HH:mm a"
+                  format={dateTimeFormat}
                   required
                   inputVariant="filled"
                   disabled={selectedItem ? false : true}
                   fullWidth={true}
-                  label="Date/Time Invoice (MM/DD/YYYY)"
+                  label="Date/Time Invoice(DD - MM - YYYY)"
                   className="textInputStyle"
                   onChange={(val) => onChangeDate(val, "date")}
                   disableFuture
@@ -1196,12 +1557,13 @@ console.log("selected item",props.selectedItem)
                 <DateTimePicker
                   required
                   disableFuture
-                  format="MM/dd/yyyy HH:mm a"
+                  // format="MM/dd/yyyy HH:mm a"
+                  format={dateTimeFormat}
                   inputVariant="filled"
                   fullWidth
                   disabled={selectedItem ? false : true}
-                  label="Date/Time Received"
-                  className="textInputStyle (MM/DD/YYYY)"
+                  label="Date/Time Received (DD - MM - YYYY)"
+                  className="textInputStyle"
                   onChange={(val) => onChangeDate(val, "receivedDate")}
                   InputProps={{
                     className: classes.input,

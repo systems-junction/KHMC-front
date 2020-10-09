@@ -674,7 +674,6 @@ function AddEditPurchaseRequest(props) {
     }
   }
 
-  console.log(purchaseRequest);
 
   return (
     <div

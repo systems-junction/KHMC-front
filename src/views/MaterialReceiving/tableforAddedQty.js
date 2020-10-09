@@ -55,8 +55,8 @@ const useStyles = makeStyles(styles);
 const tableHeadingForFUMember = [
   "No.",
   "Batch Number",
-  "Received Qty",
-  "Returned Qty",
+  "Received Qty Per Batch",
+  "Expiry Date",
   "Actions",
 ];
 
@@ -65,14 +65,6 @@ const tableHeadingForWarehouseMember = [
   "Batch Number",
   "Received Qty",
   "Returned Qty",
-];
-
-const tableHeadingForOthers = [
-  "No.",
-  "Trade Name",
-  "Item Code",
-  "Requested Qty",
-  "Functional Unit  Cost(JD)",
 ];
 
 const actions = { edit: true, view: false, delete: true };
@@ -110,11 +102,34 @@ export default function DenseTable(props) {
     props.onDelete(id);
   }
 
+  const formatDate = (date) => {
+    const d = new Date(date);
+
+    let minutes = "";
+
+    if (d.getHours().toString().length === 1) {
+      minutes = "0" + d.getHours();
+    } else {
+      minutes = d.getHours();
+    }
+
+    return (
+      d
+        .getDate()
+        .toString()
+        .padStart(2, "0") +
+      " - " +
+      (d.getMonth() + 1).toString().padStart(2, "0") +
+      " - " +
+      d.getFullYear()
+    );
+  };
+
   return (
     <Table aria-label="a dense table" size="small">
       <TableHead>
         <TableRow>
-          {currentUser.staffTypeId.type === "FU Inventory Keeper" &&
+          {currentUser.staffTypeId.type === "Warehouse Inventory Keeper" &&
             props.comingFor !== "view" &&
             tableHeadingForFUMember.map((h, index) => {
               return (
@@ -160,7 +175,7 @@ export default function DenseTable(props) {
       </TableHead>
       <TableBody>
         {props.returnBatchArray.map((row, index) => (
-          <StyledTableRow key={row.name} style={{}}>
+          <StyledTableRow key={index} style={{}}>
             <TableCell
               align="center"
               style={{
@@ -181,11 +196,19 @@ export default function DenseTable(props) {
 
             <TableCell align="center">{row.batchNumber}</TableCell>
 
-            <TableCell align="center">{row.receivedQtyPerBatch}</TableCell>
+            <TableCell align="center">{row.quantity}</TableCell>
 
-            <TableCell align="center">{row.returnedQtyPerBatch}</TableCell>
+            <TableCell align="center">
+              {/* {new Date(row.expiryDate).getDate() +
+                " - " +
+                new Date(row.expiryDate).getMonth() +
+                1 +
+                " - " +
+                new Date(row.expiryDate).getUTCFullYear()} */}
+              {formatDate(row.expiryDate)}
+            </TableCell>
 
-            {currentUser.staffTypeId.type === "FU Inventory Keeper" &&
+            {currentUser.staffTypeId.type === "Warehouse Inventory Keeper" &&
             props.comingFor !== "view" ? (
               <TableCell
                 align="center"

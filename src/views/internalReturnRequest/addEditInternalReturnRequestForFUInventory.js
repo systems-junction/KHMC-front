@@ -215,6 +215,8 @@ function AddEditPurchaseRequest(props) {
     returnedQtyPerBatch: "",
     receivedQtyPerBatch: "",
     expiryDatePerBatch: "",
+
+    approvalStatus: "",
   };
 
   function reducer(state, { field, value }) {
@@ -284,6 +286,8 @@ function AddEditPurchaseRequest(props) {
     returnedQtyPerBatch,
     receivedQtyPerBatch,
     expiryDatePerBatch,
+
+    approvalStatus,
   } = state;
 
   const [comingFor, setcomingFor] = useState("");
@@ -327,6 +331,9 @@ function AddEditPurchaseRequest(props) {
     const selectedRec = props.history.location.state.selectedItem;
     console.log("selected Rec", selectedRec);
     if (selectedRec) {
+      if (selectedRec.returnBatchArray) {
+        setReturnedBatchArray(selectedRec.returnBatchArray);
+      }
       Object.entries(selectedRec).map(([key, val]) => {
         if (val && typeof val === "object") {
           if (key === "itemId") {
@@ -415,6 +422,21 @@ function AddEditPurchaseRequest(props) {
                 value: receivedItems[i].receivedQty,
               });
             }
+
+            if (
+              props.history.location.state.selectedItem
+                .replenishmentRequestFU &&
+              receivedItems[i].replenishmentRequestId ===
+                props.history.location.state.selectedItem.replenishmentRequestFU
+                  ._id &&
+              receivedItems[i].itemId ===
+                props.history.location.state.selectedItem.itemId._id
+            ) {
+              dispatch({
+                field: "batchArray",
+                value: receivedItems[i].batchArray,
+              });
+            }
           }
           setReceiveRequests(res.data.data.receiveItems);
         } else if (!res.data.success) {
@@ -471,13 +493,14 @@ function AddEditPurchaseRequest(props) {
       //   recieptUnit !== "" &&
       //   issueUnit !== ""
       returnedQty !== "" &&
-      returnedQty > 0
+      returnedQty > 0 &&
+      returnBatchArray.length > 0
       // && returnedQty <= receivedQty
     );
   }
 
   function validateApproveForm() {
-    return status === "approved" || status === "reject";
+    return approvalStatus === "approved" || approvalStatus === "reject";
   }
 
   const handleAdd = () => {
@@ -631,6 +654,13 @@ function AddEditPurchaseRequest(props) {
 
   const handleApprove = () => {
     setIsFormSubmitted(true);
+
+    if (status === "Item Returned to Warehouse") {
+      setOpenNotification(true);
+      setErrorMsg("Return Request can not be modified once it has been approved");
+      return;
+    }
+
     if (validateForm()) {
       const obj = {
         _id,
@@ -653,7 +683,7 @@ function AddEditPurchaseRequest(props) {
           itemCostPerUnit: reason === "damaged" ? itemCostPerUnit : "",
         },
 
-        status,
+        status: approvalStatus,
         replenishmentRequestFU: replenishmentRequestFU._id,
         commentNote,
         returnedQty,
@@ -693,7 +723,7 @@ function AddEditPurchaseRequest(props) {
         .catch((e) => {
           console.log("error after updating purchase request", e);
           setOpenNotification(true);
-          setErrorMsg("Error while editing the purchase request");
+          setErrorMsg("Error while modifying the internal return request");
         });
     }
   };
@@ -819,7 +849,7 @@ function AddEditPurchaseRequest(props) {
       returnBatchArray.find((item) => item.batchNumber === selectedBatch);
     if (found) {
       setOpenNotification(true);
-      setErrorMsg("This item has already been added");
+      setErrorMsg("Qty from that batch has already been added");
       return;
     }
     setReturnedBatchArray([
@@ -843,8 +873,11 @@ function AddEditPurchaseRequest(props) {
   };
 
   function handleItemDelete(item) {
-    console.log(item);
-    console.log(status);
+    // console.log(item);
+    dispatch({
+      field: "returnedQty",
+      value: returnedQty - parseInt(item.returnedQtyPerBatch),
+    });
     // if (status === "pending_approval") {
     let temp = returnBatchArray.filter(
       (i) => i.batchNumber !== item.batchNumber
@@ -862,11 +895,12 @@ function AddEditPurchaseRequest(props) {
   }
 
   function handleRequestedItemEdit(i) {
-    console.log(i);
+    // console.log(i);
     // if (status === "pending") {
     // setDialogOpen(true);
     setSelectedItem(i);
     setSelectItemToEditId(i);
+
     dispatch({
       field: "returnedQty",
       value: returnedQty - parseInt(i.returnedQtyPerBatch),
@@ -1091,153 +1125,6 @@ function AddEditPurchaseRequest(props) {
 
             <div className="row">
               <div
-                className="col-md-3"
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <TextField
-                  labelId="label"
-                  select
-                  type="Select"
-                  name="selectedBatch"
-                  value={selectedBatch}
-                  onChange={handleChange}
-                  className="textInputStyle"
-                  variant="filled"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  label="Select Batch"
-                >
-                  {batchArray &&
-                    batchArray.map((name) => (
-                      <MenuItem key={name.batchNumber} value={name.batchNumber}>
-                        {name.batchNumber}
-                      </MenuItem>
-                    ))}
-                </TextField>
-              </div>
-
-              <div
-                className="col-md-3"
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <DatePicker
-                    disabled={true}
-                    inputVariant="filled"
-                    // onChange={(val) => onChangeDate(val, "expiryDatePerBatch")}
-                    name={"expiryDatePerBatch"}
-                    label="Expiry Date Per Batch"
-                    // format="MM/dd/yyyy hh:mm a"
-                    format={dateFormat}
-                    fullWidth
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                    value={expiryDatePerBatch ? expiryDatePerBatch : null}
-                  />
-                </MuiPickersUtilsProvider>
-              </div>
-
-              <div
-                className="col-md-3"
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <TextField
-                  type={"number"}
-                  disabled={true}
-                  value={receivedQtyPerBatch}
-                  className="textInputStyle"
-                  variant="filled"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  label="Received Qty"
-                />
-              </div>
-
-              <div
-                className="col-md-3"
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
-                }}
-              >
-                <TextField
-                  required
-                  type={"number"}
-                  name={"returnedQtyPerBatch"}
-                  value={returnedQtyPerBatch}
-                  onChange={handleChange}
-                  className="textInputStyle"
-                  variant="filled"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                  label="Return Quantity"
-                  onKeyDown={(evt) => {
-                    (evt.key === "e" ||
-                      evt.key === "E" ||
-                      evt.key === "-" ||
-                      evt.key === "+") &&
-                      evt.preventDefault();
-                  }}
-                />
-              </div>
-            </div>
-
-            <div
-              className="row"
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                marginTop: 10,
-                marginBottom: 4,
-              }}
-            >
-              {selectItemToEditId === "" ? (
-                <Button
-                  onClick={addNew}
-                  style={{
-                    ...styles.stylesForButton,
-                    // width: "100%",
-                    // height: "100%",
-                  }}
-                  disabled={!validateBatchForm()}
-                  variant="contained"
-                  color="primary"
-                >
-                  <strong style={{ fontSize: "12px" }}>Add New</strong>
-                </Button>
-              ) : (
-                <Button
-                  // onClick={editSelectedItem}
-                  style={styles.stylesForButton}
-                  disabled={!validateBatchForm()}
-                  variant="contained"
-                  color="primary"
-                  onClick={editSelectedItem}
-                >
-                  <strong style={{ fontSize: "12px" }}>Update</strong>
-                </Button>
-              )}
-            </div>
-
-            <div className="row">
-              <div
                 className="col-md-4"
                 style={{
                   ...styles.inputContainerForTextField,
@@ -1385,12 +1272,179 @@ function AddEditPurchaseRequest(props) {
               </div>
             </div>
 
+            {comingFor &&
+            comingFor !== "view" &&
+            currentUser.staffTypeId.type === "FU Inventory Keeper" ? (
+              <>
+                <div className="row">
+                  <h6
+                    style={{
+                      fontWeight: "700",
+                      color: "white",
+                      paddingLeft: 3,
+                      marginTop: 15,
+                    }}
+                  >
+                    Select Batch and Add Quantity
+                  </h6>
+                </div>
+                <div className="row">
+                  <div
+                    className="col-md-3"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      labelId="label"
+                      select
+                      type="Select"
+                      name="selectedBatch"
+                      value={selectedBatch}
+                      onChange={handleChange}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                      label="Select Batch"
+                    >
+                      {batchArray &&
+                        batchArray.map((name) => (
+                          <MenuItem
+                            key={name.batchNumber}
+                            value={name.batchNumber}
+                          >
+                            {name.batchNumber}
+                          </MenuItem>
+                        ))}
+                    </TextField>
+                  </div>
+
+                  <div
+                    className="col-md-3"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                      <DatePicker
+                        disabled={true}
+                        inputVariant="filled"
+                        // onChange={(val) => onChangeDate(val, "expiryDatePerBatch")}
+                        name={"expiryDatePerBatch"}
+                        label="Expiry Date Per Batch"
+                        // format="MM/dd/yyyy hh:mm a"
+                        format={dateFormat}
+                        fullWidth
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                        value={expiryDatePerBatch ? expiryDatePerBatch : null}
+                      />
+                    </MuiPickersUtilsProvider>
+                  </div>
+
+                  <div
+                    className="col-md-3"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      type={"number"}
+                      disabled={true}
+                      value={receivedQtyPerBatch}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                      label="Received Qty"
+                    />
+                  </div>
+
+                  <div
+                    className="col-md-3"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      required
+                      type={"number"}
+                      name={"returnedQtyPerBatch"}
+                      value={returnedQtyPerBatch}
+                      onChange={handleChange}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                      label="Return Quantity"
+                      onKeyDown={(evt) => {
+                        (evt.key === "e" ||
+                          evt.key === "E" ||
+                          evt.key === "-" ||
+                          evt.key === "+") &&
+                          evt.preventDefault();
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div
+                  className="row"
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginTop: 10,
+                    // marginBottom: 4,
+                  }}
+                >
+                  {selectItemToEditId === "" ? (
+                    <Button
+                      onClick={addNew}
+                      style={{
+                        ...styles.stylesForButton,
+                      }}
+                      disabled={!validateBatchForm()}
+                      variant="contained"
+                      color="primary"
+                    >
+                      <strong style={{ fontSize: "12px" }}>Add New</strong>
+                    </Button>
+                  ) : (
+                    <Button
+                      // onClick={editSelectedItem}
+                      style={styles.stylesForButton}
+                      disabled={!validateBatchForm()}
+                      variant="contained"
+                      color="primary"
+                      onClick={editSelectedItem}
+                    >
+                      <strong style={{ fontSize: "12px" }}>Update</strong>
+                    </Button>
+                  )}
+                </div>
+              </>
+            ) : (
+              undefined
+            )}
             <div
               style={{
-                marginTop: 30,
+                marginTop: 20,
               }}
             >
-              <h4 style={{ fontWeight: "700" }}>Reason</h4>
+              <h4 style={{ fontWeight: "bold", color: "white" }}>Reason</h4>
 
               <FormGroup
                 row
@@ -1580,8 +1634,8 @@ function AddEditPurchaseRequest(props) {
                       select
                       fullWidth
                       id="status"
-                      name="status"
-                      value={status}
+                      name="approvalStatus"
+                      value={approvalStatus}
                       onChange={onChangeValue}
                       label="Status"
                       variant="filled"
@@ -1646,12 +1700,13 @@ function AddEditPurchaseRequest(props) {
                       marginBottom: 15,
                     }}
                   >
-                    Added Batches
+                    Added Batches With Quantities
                   </h5>
                   <TableforAddedQty
                     returnBatchArray={returnBatchArray}
                     onDelete={handleItemDelete}
                     onEdit={handleRequestedItemEdit}
+                    comingFor={comingFor}
                   />
                 </>
               ) : (
