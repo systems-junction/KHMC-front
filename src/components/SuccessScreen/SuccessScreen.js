@@ -65,11 +65,12 @@ function AddBusinessUnit(props) {
       {/* </div> */}
 
       <div
+        className="thankyou"
         style={{
           alignItems: "center",
           flex: 4,
           display: "flex",
-          marginTop: -180,
+          marginTop: -600,
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "column",

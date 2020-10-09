@@ -28,7 +28,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import capitilizeLetter from "../../public/capitilizeLetter";
 import formatDate from "../../utils/formatDate";
 import mapDateToKeys from "../../utils/mapDateToKeys";
-import Chip from '@material-ui/core/Chip'
+import Chip from "@material-ui/core/Chip";
 
 const useStyles = makeStyles(styles);
 
@@ -93,9 +93,9 @@ const useStylesForChip = makeStyles((theme) => ({
   root: {
     "& .MuiChip-root": {
       backgroundColor: "red",
-      color:'white',
-      borderRadius:'10px',
-      height:'25px'
+      color: "white",
+      borderRadius: "10px",
+      height: "25px",
     },
   },
 }));
@@ -122,62 +122,45 @@ export default function CustomTable(props) {
     // props.tableData
   }, []);
 
-  const replaceSlugToTitle = (val, key) => {
-
+  const replaceSlugToTitle = (val, key, indexValue) => {
     if (key === "heartRate") {
       if (val < 60 || val > 100) {
-        return (
-          <Chip label={val} />
-        )
+        return <Chip label={val} />;
       }
     }
     if (key === "bloodPressureSys") {
       if (val > 120 || val < 90) {
-        return (
-          <Chip label={val} />
-        )
+        return <Chip label={val} />;
       }
     }
     if (key === "bloodPressureDia") {
       if (val < 60 || val > 80) {
-        return (
-          <Chip label={val} />
-        )
+        return <Chip label={val} />;
       }
     }
     if (key === "respiratoryRate") {
       if (val < 12 || val > 25) {
-        return (
-          <Chip label={val} />
-        )
+        return <Chip label={val} />;
       }
     }
     if (key === "temperature") {
       if (val < 97 || val > 99) {
-        return (
-          <Chip label={val} />
-        )
+        return <Chip label={val} />;
       }
     }
     if (key === "FSBS") {
       if (val < 80 || val > 130) {
-        return (
-          <Chip label={val} />
-        )
+        return <Chip label={val} />;
       }
     }
     if (key === "painScale") {
       if (val >= 8) {
-        return (
-          <Chip label={val} />
-        )
+        return <Chip label={val} />;
       }
     }
     if (key === "pulseOX") {
       if (val < 80 || val > 100) {
-        return (
-          <Chip label={val} />
-        )
+        return <Chip label={val} />;
       }
     }
 
@@ -261,8 +244,8 @@ export default function CustomTable(props) {
                 <strong>Can be fulfilled</strong>
               </Button>
             ) : (
-                        ""
-                      )}
+              ""
+            )}
           </>
         );
       } else {
@@ -304,8 +287,8 @@ export default function CustomTable(props) {
                 <strong>Can be fulfilled</strong>
               </Button>
             ) : (
-                      ""
-                    )}
+              ""
+            )}
           </>
         );
       }
@@ -415,14 +398,14 @@ export default function CustomTable(props) {
               <strong>Pending Administration</strong>
             </Button>
           ) : (
-                                <Button
-                                  style={stylesB.stylesForActive}
-                                  variant="contained"
-                                  color="primary"
-                                >
-                                  <strong>Po Sent</strong>
-                                </Button>
-                              )}
+            <Button
+              style={stylesB.stylesForActive}
+              variant="contained"
+              color="primary"
+            >
+              <strong>Po Sent</strong>
+            </Button>
+          )}
         </>
       );
     } else if (
@@ -650,17 +633,22 @@ export default function CustomTable(props) {
               <strong>Discharged</strong>
             </Button>
           ) : (
-                                                          <Button
-                                                            style={stylesB.stylesForActive}
-                                                            variant="contained"
-                                                            color="primary"
-                                                          >
-                                                            <strong>Item Returned</strong>
-                                                          </Button>
-                                                        )}
+            <Button
+              style={stylesB.stylesForActive}
+              variant="contained"
+              color="primary"
+            >
+              <strong>Item Returned</strong>
+            </Button>
+          )}
         </>
       );
     }
+
+    if (props.tableHeading[indexValue].includes("JD")) {
+      return capitilizeLetter(val) + " JD";
+    }
+
     return capitilizeLetter(val);
   };
 
@@ -738,12 +726,15 @@ export default function CustomTable(props) {
                         borderTopLeftRadius: index === 0 ? 5 : 0,
                         borderTopRightRadius:
                           index === tableHeading.length - 1 ? 5 : 0,
-                        textAlign: (prop === "Actions" || prop === "Action") ? "center" : ""
+                        textAlign:
+                          prop === "Actions" || prop === "Action"
+                            ? "center"
+                            : "",
                       }}
                       key={prop}
-                    // onClick={() => console.log(prop)}
-                    // onMouseEnter={() => setHovered(prop)}
-                    // onMouseLeave={() => setHovered('')}
+                      // onClick={() => console.log(prop)}
+                      // onMouseEnter={() => setHovered(prop)}
+                      // onMouseLeave={() => setHovered('')}
                     >
                       {prop}
                     </TableCell>
@@ -765,86 +756,85 @@ export default function CustomTable(props) {
                   <>
                     <StyledTableRow
                       key={index}
-                    // className={classes.tableBodyRow}
-                    // style={{
-                    //   backgroundColor: "white",
-                    // }}
-                    // onClick={() => {
-                    //   setRow(prop);
-                    // }}
+                      // className={classes.tableBodyRow}
+                      // style={{
+                      //   backgroundColor: "white",
+                      // }}
+                      // onClick={() => {
+                      //   setRow(prop);
+                      // }}
                     >
                       {tableDataKeys
                         ? tableDataKeys.map((val, key) => {
-                          // if (val === 'date') {
-                          //   return (
-                          //     <TableCell
-                          //       className={classes.tableCell}
-                          //       key={key}
-                          //       style={{
-                          //         textAlign: 'center',
-                          //       }}
-                          //     >
-                          //       {formatDate(prop[val])}
-                          //     </TableCell>
-                          //   )
-                          // }
-                          if (mapDateToKeys(val)) {
-                            return (
-                              <TableCell
-                                className={classes.tableCell}
-                                key={key}
-                                style={{
-                                  // textAlign: 'center',
-                                  borderWidth: 0,
-                                  maxWidth: 400,
-                                }}
-                              >
-                                {Array.isArray(val)
-                                  ? prop[val[0]]
-                                    ? formatDate(prop[val[0]][val[1]])
-                                    : prop[val[0]][val[1]]
-                                  : formatDate(prop[val])}
-                              </TableCell>
-                            );
-                          } else {
-                            return (
-                              <TableCell
-                                className={`${classes.tableCell} ${classForChip.root}`}
-                                key={key}
-                                onClick={() => handleClick(prop, val)}
-                                style={{
-                                  maxWidth: 400,
-                                  // textAlign: 'center',
-                                  cursor: props.handleModelMaterialReceiving
-                                    ? "pointer"
-                                    : "",
-                                  // borderTopLeftRadius: key === 0 ? 5 : 0,
-                                  // borderBottomLeftRadius: key === 0 ? 5 : 0,
+                            // if (val === 'date') {
+                            //   return (
+                            //     <TableCell
+                            //       className={classes.tableCell}
+                            //       key={key}
+                            //       style={{
+                            //         textAlign: 'center',
+                            //       }}
+                            //     >
+                            //       {formatDate(prop[val])}
+                            //     </TableCell>
+                            //   )
+                            // }
+                            if (mapDateToKeys(val)) {
+                              return (
+                                <TableCell
+                                  className={classes.tableCell}
+                                  key={key}
+                                  style={{
+                                    // textAlign: 'center',
+                                    borderWidth: 0,
+                                    maxWidth: 400,
+                                  }}
+                                >
+                                  {Array.isArray(val)
+                                    ? prop[val[0]]
+                                      ? formatDate(prop[val[0]][val[1]])
+                                      : prop[val[0]][val[1]]
+                                    : formatDate(prop[val])}
+                                </TableCell>
+                              );
+                            } else {
+                              return (
+                                <TableCell
+                                  className={`${classes.tableCell} ${classForChip.root}`}
+                                  key={key}
+                                  onClick={() => handleClick(prop, val)}
+                                  style={{
+                                    maxWidth: 400,
+                                    // textAlign: 'center',
+                                    cursor: props.handleModelMaterialReceiving
+                                      ? "pointer"
+                                      : "",
+                                    // borderTopLeftRadius: key === 0 ? 5 : 0,
+                                    // borderBottomLeftRadius: key === 0 ? 5 : 0,
 
-                                  borderBottomLeftRadius:
-                                    props.tableData.length - 1 === index &&
+                                    borderBottomLeftRadius:
+                                      props.tableData.length - 1 === index &&
                                       key === 0
-                                      ? 5
-                                      : 0,
-                                  borderWidth: 0,
-                                }}
-                              >
-                                {Array.isArray(val)
-                                  ? prop[val[0]]
-                                    ? capitilizeLetter(prop[val[0]][val[1]])
-                                    : null
-                                  : val.toLowerCase() === "timestamp"
+                                        ? 5
+                                        : 0,
+                                    borderWidth: 0,
+                                  }}
+                                >
+                                  {Array.isArray(val)
+                                    ? prop[val[0]]
+                                      ? capitilizeLetter(prop[val[0]][val[1]])
+                                      : null
+                                    : val.toLowerCase() === "timestamp"
                                     ? new Intl.DateTimeFormat(
-                                      "en-US",
-                                      dateOptions
-                                    ).format(Date.parse(prop[val]))
+                                        "en-US",
+                                        dateOptions
+                                      ).format(Date.parse(prop[val]))
                                     : // : `${replaceSlugToTitle(prop[val])}`}
-                                    replaceSlugToTitle(prop[val], val)
-                                }
-                              </TableCell>
-                            );
-                          }
-                        })
+                                      replaceSlugToTitle(prop[val], val, key)}
+                                </TableCell>
+                              );
+                            }
+                          })
                         : null}
 
                       {props.action !== "" ? (
@@ -949,12 +939,12 @@ export default function CustomTable(props) {
                               </RcIf>
                             </div>
                           ) : (
-                              undefined
-                            )}
+                            undefined
+                          )}
                         </TableCell>
                       ) : (
-                          ""
-                        )}
+                        ""
+                      )}
 
                       {/* {selectedRow && selectedRow._id === prop._id ? (
                         <TableCell
