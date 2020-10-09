@@ -1607,9 +1607,9 @@ function AddEditPatientListing(props) {
             {comingFor === 'edit' ? (
               <div
                 className={`container-fluid ${classes.root}`}
-                style={{ marginTop: '10px' }}
+                style={{ marginTop: '30px' }}
               >
-                <div className='row' style={{ marginLeft: 0, marginRight: 0 }}>
+                <div className='row'>
                   <TextField
                     required
                     select
@@ -1650,7 +1650,7 @@ function AddEditPatientListing(props) {
                 display: 'flex',
                 flex: 1,
                 justifyContent: 'center',
-                marginTop: '2%',
+                marginTop: '30px',
                 marginBottom: '2%',
               }}
               className='container-fluid'
@@ -1958,8 +1958,8 @@ function AddEditPatientListing(props) {
                 <div
                   className='col-md-6 col-sm-6 col-6'
                   style={{
-                    marginLeft: 0,
-                    marginRight: 0,
+                    paddingLeft: 5,
+                    paddingRight: 5,
                   }}
                 >
                   <Button
@@ -2002,8 +2002,8 @@ function AddEditPatientListing(props) {
                 <div
                   className='col-md-6 col-sm-6 col-6'
                   style={{
-                    marginLeft: 0,
-                    marginRight: 0,
+                    paddingLeft: 5,
+                    paddingRight: 5,
                   }}
                 >
                   <Button
@@ -2030,6 +2030,7 @@ function AddEditPatientListing(props) {
                         color: '#2c6ddd',
                         fontStyle: 'italic',
                         marginTop: '10px',
+                        marginLeft: '-26px',
                       }}
                     >
                       {pdfView.map((view, index) => {
@@ -2051,7 +2052,10 @@ function AddEditPatientListing(props) {
                 </div>
               </div>
 
-              <div className='row' style={{ marginTop: '20px' }}>
+              <div
+                className='row'
+                style={{ marginTop: '20px', marginLeft: '-26px' }}
+              >
                 {document && document.length > 0 ? (
                   <>
                     {document.map((item, index) => {
@@ -2235,20 +2239,26 @@ function AddEditPatientListing(props) {
                 display: 'flex',
                 flex: 1,
                 justifyContent: 'center',
-                marginTop: '2%',
+                marginTop: '1%',
                 marginBottom: '2%',
               }}
             >
               <img
                 onClick={() => props.history.goBack()}
                 src={Back_Arrow}
-                style={{ width: 45, height: 35, cursor: 'pointer' }}
+                style={{
+                  width: 45,
+                  height: 35,
+                  cursor: 'pointer',
+                  marginLeft: '-10px',
+                }}
               />
               <div
                 style={{
                   display: 'flex',
                   flex: 1,
                   justifyContent: 'flex-end',
+                  marginRight: '-10px',
                 }}
               >
                 {comingFor === 'add' ? (
