@@ -227,7 +227,7 @@ function AddEditPurchaseRequest(props) {
 
           selectedRec.pharmacyRequest[i] = {
             ...selectedRec.pharmacyRequest[i],
-            totalCost: amount.toFixed(4) + ' JD',
+            totalCost: amount.toFixed(4),
             RequestType: 'PHR',
             serviceName: 'Medical',
             insurance: 'Uncovered',
@@ -238,7 +238,7 @@ function AddEditPurchaseRequest(props) {
         selectedRec.labRequest.map(
           (d) => (
             (d.RequestType = 'LR'),
-            (d.totalCost = d.serviceId.price.toFixed(4) + ' JD'),
+            (d.totalCost = d.serviceId.price.toFixed(4)),
             (d.insurance = 'Uncovered')
           )
         )
@@ -247,7 +247,7 @@ function AddEditPurchaseRequest(props) {
         selectedRec.radiologyRequest.map(
           (d) => (
             (d.RequestType = 'RR'),
-            (d.totalCost = d.serviceId.price.toFixed(4) + ' JD'),
+            (d.totalCost = d.serviceId.price.toFixed(4)),
             (d.insurance = 'Uncovered')
           )
         )
