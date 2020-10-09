@@ -24,7 +24,7 @@ const tableHeadingForNeedApproval = [
   "Request No",
   "Request Type",
   "Item",
-  "Total Cost (JD)",
+  "Total Cost",
   "Status",
   "Insurance",
   "Action",
@@ -227,7 +227,7 @@ function AddEditPurchaseRequest(props) {
 
           selectedRec.pharmacyRequest[i] = {
             ...selectedRec.pharmacyRequest[i],
-            totalCost: amount.toFixed(4),
+            totalCost: amount.toFixed(4)+' JD',
             RequestType: "PHR",
             serviceName: "Medical",
             insurance: "Uncovered",
@@ -238,7 +238,7 @@ function AddEditPurchaseRequest(props) {
         selectedRec.labRequest.map(
           (d) => (
             (d.RequestType = "LR"),
-            (d.totalCost = d.serviceId.price.toFixed(4)),
+            (d.totalCost = d.serviceId.price.toFixed(4)+' JD'),
             (d.insurance = "Uncovered")
           )
         );
@@ -247,7 +247,7 @@ function AddEditPurchaseRequest(props) {
         selectedRec.radiologyRequest.map(
           (d) => (
             (d.RequestType = "RR"),
-            (d.totalCost = d.serviceId.price.toFixed(4)),
+            (d.totalCost = d.serviceId.price.toFixed(4)+' JD'),
             (d.insurance = "Uncovered")
           )
         );
