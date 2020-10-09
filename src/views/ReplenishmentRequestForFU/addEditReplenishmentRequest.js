@@ -143,7 +143,7 @@ const styles = {
 
   inputContainerForTextField: {
     marginTop: 6,
-    marginBottom: 10,
+    marginBottom: 20,
   },
 
   inputContainerForDropDown: {
@@ -169,8 +169,8 @@ const styles = {
     outline: "none",
   },
   textFieldPadding: {
-    paddingLeft: 4,
-    paddingRight: 4,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
 };
 

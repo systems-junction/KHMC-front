@@ -1138,6 +1138,7 @@ function AddEditPurchaseRequest(props) {
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
+                  marginTop: 20,
                 }}
               >
                 <TextField
