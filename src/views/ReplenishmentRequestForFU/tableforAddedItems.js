@@ -221,29 +221,35 @@ export default function DenseTable(props) {
             </TableCell>
             <TableCell
               align="center"
-              style={{
-                // fontSize: "0.9rem",
-              }}
+              style={
+                {
+                  // fontSize: "0.9rem",
+                }
+              }
             >
               {row.itemId.itemCode}
             </TableCell>
 
             <TableCell
               align="center"
-              style={{
-                // fontSize: "0.9rem",
-              }}
+              style={
+                {
+                  // fontSize: "0.9rem",
+                }
+              }
             >
               {row.requestedQty}
             </TableCell>
 
             <TableCell
               align="center"
-              style={{
-                // fontSize: "0.9rem",
-              }}
+              style={
+                {
+                  // fontSize: "0.9rem",
+                }
+              }
             >
-              {row.fuItemCost} JD
+              {row.fuItemCost.toFixed(4)} JD
             </TableCell>
 
             {currentUser.staffTypeId.type === "FU Inventory Keeper" ? (
@@ -294,7 +300,11 @@ export default function DenseTable(props) {
                 {/* {currentUser.staffTypeId.type === "Warehouse Member"
                   ? row.secondStatus
                   : row.status} */}
-                <Button style={{fontSize:10}} color="primary" variant="contained">
+                <Button
+                  style={{ fontSize: 10 }}
+                  color="primary"
+                  variant="contained"
+                >
                   {row.secondStatus}
                 </Button>
               </TableCell>

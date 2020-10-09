@@ -89,7 +89,6 @@ const styles = {
 };
 const useStyles = makeStyles(styles);
 
-
 const StyledTableRow = withStyles((theme) => ({
   root: {
     "&:nth-of-type(odd)": {
@@ -228,49 +227,59 @@ export default function DenseTable(props) {
             </TableCell>
             <TableCell
               align="center"
-              style={{
-                // fontSize: "0.9rem",
-              }}
+              style={
+                {
+                  // fontSize: "0.9rem",
+                }
+              }
             >
               {row.itemId.itemCode}
             </TableCell>
 
             <TableCell
               align="center"
-              style={{
-                // fontSize: "0.9rem",
-              }}
+              style={
+                {
+                  // fontSize: "0.9rem",
+                }
+              }
             >
               {row.itemId.vendorId.englishName}
             </TableCell>
 
             <TableCell
               align="center"
-              style={{
-                // fontSize: "0.9rem",
-              }}
+              style={
+                {
+                  // fontSize: "0.9rem",
+                }
+              }
             >
               {row.reqQty}
             </TableCell>
 
             <TableCell
               align="center"
-              style={{
-                // fontSize: "0.9rem",
-              }}
+              style={
+                {
+                  // fontSize: "0.9rem",
+                }
+              }
             >
-              {row.itemId.receiptUnitCost} JD
+              {row.itemId.receiptUnitCost.toFixed(4)} JD
             </TableCell>
 
             {currentUser &&
             currentUser.staffTypeId.type === "Committe Member" ? (
               <TableCell
                 align="center"
-                style={{
-                  // fontSize: "0.9rem",
-                }}
+                style={
+                  {
+                    // fontSize: "0.9rem",
+                  }
+                }
               >
-                {row.itemId.receiptUnitCost * row.reqQty} JD
+                {(row.itemId.receiptUnitCost * row.reqQty).toFixed(4)} JD
               </TableCell>
             ) : (
               undefined

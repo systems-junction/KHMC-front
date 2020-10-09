@@ -636,7 +636,7 @@ function AddEditPurchaseRequest(props) {
                         : new Date()
                       : dateGenerated
                   }
-                  label={"Date Generated (MM-DD-YYYY)"}
+                  label={"Date Generated (DD-MM-YYYY)"}
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
@@ -911,7 +911,7 @@ function AddEditPurchaseRequest(props) {
                           : null
                         : expiryDate
                     }
-                    label={"Expiry Date (MM-DD-YYYY)"}
+                    label={"Expiry Date (DD-MM-YYYY)"}
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
