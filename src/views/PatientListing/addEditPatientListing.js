@@ -1291,7 +1291,7 @@ function AddEditPatientListing(props) {
         field: e.target.name,
         value: e.target.value,
       })
-      //}
+      // }
     } else {
       dispatch({
         field: e.target.name,
