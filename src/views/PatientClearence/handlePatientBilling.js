@@ -189,8 +189,60 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+const useStylesForInput = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(0),
+  },
+  input: {
+    backgroundColor: 'white',
+    borderRadius: 5,
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:focus': {
+      boxShadow: 'none',
+      borderRadius: 5,
+    },
+  },
+  multilineColor: {
+    backgroundColor: 'white',
+    borderRadius: 5,
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
+  },
+  root: {
+    '& .MuiTextField-root': {
+      backgroundColor: 'white',
+    },
+    '& .Mui-focused': {
+      backgroundColor: 'white',
+      color: 'black',
+    },
+    '& .Mui-disabled': {
+      backgroundColor: 'white',
+      color: 'gray',
+    },
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
+  },
+}))
+
 function AddEditPatientListing(props) {
   const classes = MUIInputStyle()
+  const classesInput = useStylesForInput()
   // const classes = useStyles()
   const classesForInput = MUIInputStyleForCurrency()
 
@@ -971,7 +1023,7 @@ function AddEditPatientListing(props) {
       <Header />
       <div className='cPadding'>
         <div className='subheader'>
-          <div>
+          <div style={{ marginLeft: '-12px' }}>
             <img src={claimsReview} />
             <div style={{ flex: 4, display: 'flex', alignItems: 'center' }}>
               <h4>
@@ -1032,7 +1084,7 @@ function AddEditPatientListing(props) {
                 paddingLeft: '10px',
                 paddingRight: '10px',
               }}
-              className={`container-fluid ${classes.root}`}
+              className={`container-fluid ${classesInput.root}`}
             >
               {comingFor === 'add' ? (
                 <div>
@@ -1779,6 +1831,7 @@ function AddEditPatientListing(props) {
                   flex: 1,
                   marginTop: '2%',
                   marginBottom: '2%',
+                  marginLeft: '-5px',
                 }}
               >
                 <img

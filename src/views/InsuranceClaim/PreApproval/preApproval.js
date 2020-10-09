@@ -59,8 +59,7 @@ const useStylesForInput = makeStyles((theme) => ({
 
 const actions = { view: true }
 
-export default function preApproval(props) 
-{
+export default function preApproval(props) {
   const classes = useStylesForInput()
 
   const [preApproval, setpreApproval] = useState('')
@@ -125,7 +124,7 @@ export default function preApproval(props)
           // )
           var sortedObjs = _.sortBy(
             [].concat(
-              res.data.data.reverse(),
+              res.data.data.reverse()
               // res.data.data.ipr.reverse()
               // res.data.data.opr.reverse()
             ),
@@ -157,15 +156,12 @@ export default function preApproval(props)
     })
   }
 
-
-  const handlePatientSearch =  (e) => {
+  const handlePatientSearch = (e) => {
     const a = e.target.value.replace(/[^\w\s]/gi, '')
     setSearchPatientQuery(a)
     if (a.length >= 3) {
-       axios
-        .get(
-          getPreApproval + '/' + a
-        )
+      axios
+        .get(getPreApproval + '/' + a)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
@@ -180,16 +176,11 @@ export default function preApproval(props)
         .catch((e) => {
           console.log('error after searching patient request', e)
         })
-    }
-
-    else if(a.length == 0){
-      //console.log(Ipr); 
+    } else if (a.length == 0) {
+      //console.log(Ipr);
       //getIprsData();
     }
-    
   }
-
-
 
   return (
     <div
@@ -207,13 +198,12 @@ export default function preApproval(props)
       <Header />
 
       <div className='cPadding'>
-        <div className='subheader' style={{ marginLeft: '-10px' }}>
+        <div className='subheader' style={{ marginLeft: '-14px' }}>
           <div>
             <img src={PreApproval} />
             <h4>Pre-Approval</h4>
           </div>
         </div>
-
 
         {/*<div className='row' style={{marginLeft: '0px', marginRight: '0px', marginTop: '20px'}}>
             <div
@@ -282,8 +272,6 @@ export default function preApproval(props)
               </div>
             </div>
             </div>*/}
-
-
 
         <div
           style={{

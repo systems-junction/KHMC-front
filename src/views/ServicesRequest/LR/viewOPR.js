@@ -962,7 +962,12 @@ function AddEditPurchaseRequest(props) {
                   marginLeft: '-12px',
                 }}
               >
-                <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
+                <Paper
+                  style={{
+                    maxHeight: 200,
+                    overflow: 'auto',
+                  }}
+                >
                   {setItemFoundSuccessfully ? (
                     itemFound && (
                       <Table size='small'>

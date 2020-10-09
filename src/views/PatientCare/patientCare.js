@@ -1482,7 +1482,7 @@ function PatientCare(props) {
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
               className=' container-fluid'
             >
-              <div className='row' style={{ marginTop: '20px' }}>
+              <div className='row'>
                 {residentNoteArray !== 0 ? (
                   <CustomTable
                     tableData={residentNoteArray}
@@ -1503,7 +1503,7 @@ function PatientCare(props) {
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
               className='container-fluid'
             >
-              <div className='row' style={{ marginTop: '20px' }}>
+              <div className='row'>
                 {pharmacyRequestArray !== 0 ? (
                   <CustomTable
                     tableData={pharmacyRequestArray}
@@ -1549,7 +1549,7 @@ function PatientCare(props) {
               }}
               className={`container-fluid ${classes.root}`}
             >
-              <div style={{ marginTop: '20px' }} className='row'>
+              <div className={`row ${classes.root}`}>
                 <div
                   className='col-md-12 col-sm-12 col-12'
                   style={{
@@ -1667,7 +1667,7 @@ function PatientCare(props) {
                   />
                 </div>
                 <div
-                  className='col-md-5 col-sm-5 col-3'
+                  className={`col-md-5 col-sm-5 col-3 ${classes.root}`}
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1755,7 +1755,7 @@ function PatientCare(props) {
               }}
               className={`container-fluid ${classes.root}`}
             >
-              <div style={{ marginTop: '20px' }} className='row'>
+              <div className={`row ${classes.root}`}>
                 <div
                   className='col-md-12 col-sm-12 col-12'
                   style={{
@@ -1873,7 +1873,7 @@ function PatientCare(props) {
                   />
                 </div>
                 <div
-                  className='col-md-5 col-sm-5 col-3'
+                  className={`col-md-5 col-sm-5 col-3 ${classes.root}`}
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1955,7 +1955,7 @@ function PatientCare(props) {
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
               className='container-fluid'
             >
-              <div className='row' style={{ marginTop: '20px' }}>
+              <div className='row'>
                 {consultationNoteArray !== 0 ? (
                   <CustomTable
                     tableData={consultationNoteArray}

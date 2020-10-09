@@ -284,7 +284,7 @@ function AddEditEDR(props) {
     >
       <Header />
       <div className='cPadding'>
-        <div className='subheader'>
+        <div className='subheader' style={{ marginLeft: '-10px' }}>
           <div>
             <img src={PreApproval} />
             <h4>Pre-Approval</h4>

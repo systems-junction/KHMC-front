@@ -55,6 +55,10 @@ const styles = {
   styleForLabel: {
     fontWeight: '700',
   },
+  textFieldPadding: {
+    paddingLeft: 5,
+    paddingRight: 5,
+  },
 }
 
 const useStylesForInput = makeStyles((theme) => ({
@@ -177,7 +181,7 @@ export default function EdrRequest(props) {
       <DialogContent style={{ backgroundColor: 'rgb(19 213 159)' }}>
         <DialogTitle
           id='simple-dialog-title'
-          style={{ color: 'white', marginLeft: '-6px' }}
+          style={{ color: 'white', marginLeft: '-14px' }}
         >
           Details
         </DialogTitle>
@@ -186,7 +190,7 @@ export default function EdrRequest(props) {
             {props.item.doctor ? (
               <div
                 className='col-md-6 col-sm-6 col-6'
-                style={styles.inputContainerForTextField}
+                style={styles.textFieldPadding}
               >
                 <TextField
                   required
@@ -209,7 +213,7 @@ export default function EdrRequest(props) {
             ) : props.item.requester.firstName ? (
               <div
                 className='col-md-6 col-sm-6 col-6'
-                style={styles.inputContainerForTextField}
+                style={styles.textFieldPadding}
               >
                 <TextField
                   required
@@ -232,7 +236,7 @@ export default function EdrRequest(props) {
             ) : props.item.requesterName ? (
               <div
                 className='col-md-6 col-sm-6 col-6'
-                style={styles.inputContainerForTextField}
+                style={styles.textFieldPadding}
               >
                 <TextField
                   required
@@ -255,7 +259,7 @@ export default function EdrRequest(props) {
             {props.item.date ? (
               <div
                 className='col-md-6 col-sm-6 col-6'
-                style={styles.inputContainerForTextField}
+                style={styles.textFieldPadding}
               >
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <DateTimePicker
@@ -284,7 +288,7 @@ export default function EdrRequest(props) {
           <div className={`row ${classes.root}`}>
             <div
               className='col-md-6 col-sm-6 col-6'
-              style={styles.inputContainerForTextField}
+              style={styles.textFieldPadding}
             >
               {props.item.serviceCode ? (
                 <div>
@@ -309,7 +313,7 @@ export default function EdrRequest(props) {
             </div>
             <div
               className='col-md-6 col-sm-6 col-6'
-              style={styles.inputContainerForTextField}
+              style={styles.textFieldPadding}
             >
               {props.item.serviceName ? (
                 <div>
@@ -338,7 +342,7 @@ export default function EdrRequest(props) {
             {props.item.description ? (
               <div
                 className='col-md-6 col-sm-6 col-6'
-                style={styles.inputContainerForTextField}
+                style={styles.textFieldPadding}
               >
                 <TextField
                   multiline
@@ -363,7 +367,7 @@ export default function EdrRequest(props) {
             {props.item.note ? (
               <div
                 className='col-md-6 col-sm-6 col-6'
-                style={styles.inputContainerForTextField}
+                style={styles.textFieldPadding}
               >
                 <TextField
                   required
@@ -384,7 +388,7 @@ export default function EdrRequest(props) {
             ) : props.item.consultationNotes ? (
               <div
                 className='col-md-6 col-sm-6 col-6'
-                style={styles.inputContainerForTextField}
+                style={styles.textFieldPadding}
               >
                 <TextField
                   required
@@ -405,7 +409,7 @@ export default function EdrRequest(props) {
             ) : props.item.doctorNotes ? (
               <div
                 className='col-md-6 col-sm-6 col-6'
-                style={styles.inputContainerForTextField}
+                style={styles.textFieldPadding}
               >
                 <TextField
                   required
@@ -426,7 +430,7 @@ export default function EdrRequest(props) {
             ) : props.item.comments ? (
               <div
                 className='col-md-6 col-sm-6 col-6'
-                style={styles.inputContainerForTextField}
+                style={styles.textFieldPadding}
               >
                 <TextField
                   required
@@ -449,9 +453,15 @@ export default function EdrRequest(props) {
             )}
           </div>
 
-          <div className='container-fluid'>
+          <div>
             {props.item.medicine ? (
-              <div className='row'>
+              <div
+                className='row'
+                style={{
+                  marginLeft: '-10px',
+                  marginRight: '-10px',
+                }}
+              >
                 {props.item.medicine ? (
                   <CustomTable
                     tableData={props.item.medicine}
@@ -469,7 +479,13 @@ export default function EdrRequest(props) {
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <div style={{ marginTop: '2%', marginBottom: '2%' }}>
+            <div
+              style={{
+                marginTop: '-2%',
+                marginBottom: '2%',
+                marginLeft: '-10px',
+              }}
+            >
               <Button onClick={() => props.viewItem('')} variant='contained'>
                 Cancel
               </Button>

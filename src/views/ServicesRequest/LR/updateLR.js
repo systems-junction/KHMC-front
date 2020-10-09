@@ -507,7 +507,7 @@ function AddEditPurchaseRequest(props) {
               </Tabs>
             </div>
             {value === 0 ? (
-              <>
+              <div style={{ marginLeft: '-5px', marginRight: '-5px' }}>
                 <div className='row' style={{ marginTop: '10px' }}>
                   <div
                     className='col-md-6 col-sm-6'
@@ -686,9 +686,9 @@ function AddEditPurchaseRequest(props) {
                     </TextField>
                   </div>
                 </div>
-              </>
+              </div>
             ) : value === 1 ? (
-              <>
+              <div style={{ marginLeft: '-5px', marginRight: '-5px' }}>
                 <div className='row' style={{ marginTop: '10px' }}>
                   <div
                     className='col-md-12 col-sm-6 col-12'
@@ -879,13 +879,18 @@ function AddEditPurchaseRequest(props) {
                     undefined
                   )}
                 </div>
-              </>
+              </div>
             ) : (
               undefined
             )}
             <div
               className='row'
-              style={{ marginBottom: '25px', marginTop: '25px' }}
+              style={{
+                marginBottom: '25px',
+                marginTop: '25px',
+                marginLeft: '-30px',
+                marginRight: '-30px',
+              }}
             >
               <div className='col-md-6 col-sm-6 col-6'>
                 <img
@@ -895,14 +900,10 @@ function AddEditPurchaseRequest(props) {
                     width: 45,
                     height: 35,
                     cursor: 'pointer',
-                    marginLeft: '-10px',
                   }}
                 />
               </div>
-              <div
-                className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'
-                style={{ paddingRight: '5px' }}
-              >
+              <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
                 <Button
                   disabled={checkStatus === 'completed' ? true : false}
                   onClick={saveLabReq}

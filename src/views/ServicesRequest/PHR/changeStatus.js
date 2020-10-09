@@ -149,8 +149,8 @@ const styles = {
     outline: 'none',
   },
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
 
   stylesForButton: {
@@ -678,7 +678,7 @@ function ChangeStatus(props) {
               paddingRight: '10px',
             }}
           >
-            <div className='row'>
+            <div className='row' style={{ marginTop: '15px' }}>
               {comingFor === 'edit' || comingFor === 'view' ? (
                 <div
                   className='col-md-6'
@@ -739,7 +739,7 @@ function ChangeStatus(props) {
               </div>
             </div>
 
-            <div className='row'>
+            <div className='row' style={{ marginTop: '20px' }}>
               <div
                 className={comingFor === 'add' ? 'col-md-12' : 'col-md-4'}
                 style={{
@@ -826,7 +826,7 @@ function ChangeStatus(props) {
               </div>
             </div>
 
-            <div className='row'>
+            <div className='row' style={{ marginTop: '20px' }}>
               <div
                 className='col-md-12'
                 style={{
@@ -859,12 +859,12 @@ function ChangeStatus(props) {
                   color: 'white',
                   fontWeight: '700',
                   marginTop: 20,
-                  marginLeft: -13,
+                  marginLeft: -10,
                 }}
               >
                 Item Details
               </h5>
-              <div className='row'>
+              <div className='row' style={{ marginTop: '20px' }}>
                 <div
                   className={
                     currentUser && currentUser.staffTypeId.type === 'Pharmacist'
@@ -983,7 +983,7 @@ function ChangeStatus(props) {
 
               {currentUser && currentUser.staffTypeId.type !== 'Pharmacist' ? (
                 dosage && noOfTimes && duration ? (
-                  <div className='row'>
+                  <div className='row' style={{ marginTop: '20px' }}>
                     <div
                       className='col-md-4'
                       style={{
@@ -1066,7 +1066,7 @@ function ChangeStatus(props) {
 
             {currentUser && currentUser.staffTypeId.type !== 'Pharmacist' ? (
               priority && schedule ? (
-                <div className='row'>
+                <div className='row' style={{ marginTop: '20px' }}>
                   <div
                     className='col-md-6'
                     style={{
@@ -1120,7 +1120,7 @@ function ChangeStatus(props) {
             )}
 
             {make_model && size ? (
-              <div className='row'>
+              <div className='row' style={{ marginTop: '20px' }}>
                 <div
                   className='col-md-6 col-sm-6 col-6'
                   style={{
@@ -1205,7 +1205,7 @@ function ChangeStatus(props) {
               currentUser.staffTypeId.type === 'FU Incharge' ||
               currentUser.staffTypeId.type === 'BU Nurse' ||
               currentUser.staffTypeId.type === 'BU Inventory Keeper') ? (
-              <div className='row'>
+              <div className='row' style={{ marginTop: '20px' }}>
                 <div
                   className='col-md-6'
                   style={{
@@ -1330,7 +1330,13 @@ function ChangeStatus(props) {
                 alignItems: 'center',
               }}
             >
-              <div style={{ marginTop: '2%', marginBottom: '2%' }}>
+              <div
+                style={{
+                  marginTop: '2%',
+                  marginBottom: '2%',
+                  marginLeft: '10px',
+                }}
+              >
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back_Arrow}
@@ -1342,6 +1348,7 @@ function ChangeStatus(props) {
                 style={{
                   marginTop: '2%',
                   marginBottom: '2%',
+                  marginRight: '5px',
                 }}
               >
                 {comingFor === 'add' ? (

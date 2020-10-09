@@ -1212,7 +1212,7 @@ function AddEditPatientListing(props) {
     >
       <Header />
       <div className='cPadding'>
-        <div className='subheader'>
+        <div className='subheader' style={{ marginLeft: '-10px' }}>
           <div>
             <img src={claimsReview} />
             <div style={{ flex: 4, display: 'flex', alignItems: 'center' }}>
@@ -1347,11 +1347,25 @@ function AddEditPatientListing(props) {
                     </div>
                   </div>
 
-                  <div className='row' style={{ marginTop: 10 }}>
+                  <div className='row'>
                     <div className='col-md-10 col-sm-8 col-8'>
                       {searchQuery ? (
-                        <div style={{ zIndex: 3 }}>
-                          <Paper style={{ maxHeight: 300, overflow: 'auto' }}>
+                        <div
+                          style={{
+                            zIndex: 3,
+                            position: 'absolute',
+                            width: '99%',
+                          }}
+                        >
+                          <Paper
+                            style={{
+                              maxHeight: 300,
+                              overflow: 'auto',
+                              marginTop: ' 5px',
+                              marginLeft: '-10px',
+                              marginRight: '10px',
+                            }}
+                          >
                             {itemFoundSuccessfull ? (
                               itemFound && (
                                 <Table size='small'>
