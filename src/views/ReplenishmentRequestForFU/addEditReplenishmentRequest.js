@@ -1458,21 +1458,21 @@ function AddEditPurchaseRequest(props) {
                   ...styles.textFieldPadding,
                 }}
               >
-                <CurrencyTextField
+                <TextField
                   disabled={true}
                   label="Requested Functional Unit"
                   name={"requestNo"}
                   value={fuId.fuName}
-                  onChange={onBlurChangeValue}
+                  // onChange={onBlurChangeValue}
                   className="textInputStyle"
                   variant="filled"
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
-                  currencySymbol="JD"
-                  outputFormat="number"
-                  decimalPlaces="4"
+                  // currencySymbol="JD"
+                  // outputFormat="number"
+                  // decimalPlaces="4"
                   error={requestNo === "" && isFormSubmitted}
                 />
               </div>

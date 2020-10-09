@@ -1710,7 +1710,7 @@ function AddEditPurchaseRequest(props) {
                                       </TableCell> */}
 
                                       <TableCell align="center">
-                                        {i.receiptUnitCost}
+                                        {i.receiptUnitCost.toFixed(4)}
                                       </TableCell>
 
                                       {/* <TableCell>

@@ -29,11 +29,12 @@ import ViewAll from "../../components/ViewAllBtn/viewAll";
 const styles = {
   inputContainerForTextField: {
     marginTop: 6,
+    marginBottom: 20,
   },
 
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
   inputField: { outline: "none" },
 

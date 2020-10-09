@@ -1051,6 +1051,7 @@ function ReceiveItems(props) {
                 }}
                 currencySymbol="JD"
                 outputFormat="number"
+                decimalPlaces="4"
                 onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
               />
             </div>
@@ -1245,6 +1246,7 @@ function ReceiveItems(props) {
                 }}
                 currencySymbol="JD"
                 outputFormat="number"
+                decimalPlaces="4"
                 onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
               />
             </div>
@@ -1299,6 +1301,7 @@ function ReceiveItems(props) {
                 }}
                 currencySymbol="JD"
                 outputFormat="number"
+                decimalPlaces="4"
                 onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
               />
             </div>

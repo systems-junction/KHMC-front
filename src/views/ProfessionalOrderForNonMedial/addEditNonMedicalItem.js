@@ -1294,7 +1294,13 @@ function AddEditPurchaseRequest(props) {
                 </h5>
               </div>
               <div className="row">
-                <div className="col-sm-12" style={styles.textFieldPadding}>
+                <div
+                  className="col-sm-12"
+                  style={{
+                    ...styles.textFieldPadding,
+                    ...styles.inputContainerForTextField,
+                  }}
+                >
                   <TextField
                     className="textInputStyle"
                     id="searchQuery"

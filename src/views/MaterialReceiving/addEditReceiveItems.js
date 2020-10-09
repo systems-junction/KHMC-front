@@ -56,6 +56,7 @@ const statusArray = [
 const styles = {
   inputContainerForTextField: {
     marginTop: 6,
+    marginTop: 20,
   },
 
   inputContainerForDropDown: {
@@ -89,8 +90,8 @@ const styles = {
     outline: "none",
   },
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
 };
 
@@ -267,7 +268,7 @@ function ReceiveItems(props) {
     );
   }
 
-console.log("selected item",props.selectedItem)
+  console.log("selected item", props.selectedItem);
 
   const handleAdd = () => {
     setIsFormSubmitted(true);
@@ -711,8 +712,8 @@ console.log("selected item",props.selectedItem)
                   disabled={selectedItem ? false : true}
                   inputVariant="filled"
                   fullWidth
-                  format="MM/dd/yyyy"
-                  label="Expiry Date"
+                  format="DD-MM-YYYY"
+                  label="Expiry Date (DD-MM-YYYY)"
                   onChange={(val) => onChangeDate(val, "expiryDate")}
                   InputProps={{
                     className: classes.input,
@@ -859,6 +860,7 @@ console.log("selected item",props.selectedItem)
                 }}
                 currencySymbol="JD"
                 outputFormat="number"
+                decimalPlaces="4"
                 onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
               />
             </div>
@@ -983,6 +985,7 @@ console.log("selected item",props.selectedItem)
                 }}
                 currencySymbol="JD"
                 outputFormat="number"
+                decimalPlaces="4"
                 onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
               />
             </div>
@@ -1039,6 +1042,7 @@ console.log("selected item",props.selectedItem)
                 }}
                 currencySymbol="JD"
                 outputFormat="number"
+                decimalPlaces="4"
                 onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
               />
             </div>
@@ -1095,6 +1099,7 @@ console.log("selected item",props.selectedItem)
                 }}
                 currencySymbol="JD"
                 outputFormat="number"
+                decimalPlaces="4"
                 onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
               />
             </div>
@@ -1166,12 +1171,12 @@ console.log("selected item",props.selectedItem)
             >
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DateTimePicker
-                  format="MM/dd/yyyy HH:mm a"
+                  format="dd-mm-yyyy HH:mm a"
                   required
                   inputVariant="filled"
                   disabled={selectedItem ? false : true}
                   fullWidth={true}
-                  label="Date/Time Invoice (MM/DD/YYYY)"
+                  label="Date/Time Invoice (DD-MM-YYYY)"
                   className="textInputStyle"
                   onChange={(val) => onChangeDate(val, "date")}
                   disableFuture
@@ -1196,12 +1201,12 @@ console.log("selected item",props.selectedItem)
                 <DateTimePicker
                   required
                   disableFuture
-                  format="MM/dd/yyyy HH:mm a"
+                  format="dd-mm-yyyy HH:mm a"
                   inputVariant="filled"
                   fullWidth
                   disabled={selectedItem ? false : true}
-                  label="Date/Time Received"
-                  className="textInputStyle (MM/DD/YYYY)"
+                  label="Date/Time Received (DD-MM-YYYY)"
+                  className="textInputStyle (DD-MM-YYYY)"
                   onChange={(val) => onChangeDate(val, "receivedDate")}
                   InputProps={{
                     className: classes.input,
