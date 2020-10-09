@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { getPatientUrl, getPatientEdrUrl, getPatientIprUrl } from '../../public/endpoins'
+import {
+  getPatientUrl,
+  getPatientEdrUrl,
+  getPatientIprUrl,
+} from '../../public/endpoins'
 import Notification from '../../components/Snackbar/Notification.js'
 import CustomTable from '../../components/Table/Table'
 import ButtonField from '../../components/common/Button'
@@ -18,33 +22,69 @@ import ViewPatient from './viewPatient'
 import TextField from '@material-ui/core/TextField'
 import cookie from 'react-cookies'
 
-
-
 const styles = {
   textFieldPadding: {
-    paddingLeft: 0,
+    paddingLeft: 5,
     paddingRight: 5,
   },
-
-
 }
 
 const useStylesForInput = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(0),
+  },
   input: {
     backgroundColor: 'white',
+    boxShadow: 'none',
     borderRadius: 5,
     '&:after': {
       borderBottomColor: 'black',
+      boxShadow: 'none',
     },
     '&:hover': {
       backgroundColor: 'white',
+      boxShadow: 'none',
     },
-    '&:disabled': {
-      color: 'gray',
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+      borderRadius: 5,
     },
   },
-
-
+  multilineColor: {
+    boxShadow: 'none',
+    backgroundColor: 'white',
+    borderRadius: 5,
+    '&:hover': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
+    '&:after': {
+      borderBottomColor: 'black',
+      boxShadow: 'none',
+    },
+    '&:focus': {
+      boxShadow: 'none',
+    },
+  },
+  root: {
+    '& .MuiTextField-root': {
+      backgroundColor: 'white',
+    },
+    '& .Mui-focused': {
+      backgroundColor: 'white',
+      color: 'black',
+      boxShadow: 'none',
+    },
+    '& .Mui-disabled': {
+      backgroundColor: 'white',
+      color: 'gray',
+    },
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
+  },
 }))
 
 const tableHeading = [
@@ -76,32 +116,37 @@ export default function PatientListing(props) {
   const [openNotification, setOpenNotification] = useState(false)
   const [item, setItem] = useState('')
   const [searchPatientQuery, setSearchPatientQuery] = useState('')
-  const [staffType, setStaffType] = useState(cookie.load("current_user").staffTypeId.type)
+  const [staffType, setStaffType] = useState(
+    cookie.load('current_user').staffTypeId.type
+  )
   const [PatientUrl, setPatientUrl] = useState('')
 
-  
-
-  useEffect(() => {    
+  useEffect(() => {
     getPatientData()
   }, [])
 
-   function  getPatientData() {
-     var PatientUrlValue= '';
-     console.log(staffType);
-     if(staffType == 'EDR Receptionist'){PatientUrlValue=getPatientEdrUrl;}
-     if(staffType == 'IPR Receptionist'){PatientUrlValue=getPatientIprUrl;}
-     console.log(PatientUrlValue);
-     setPatientUrl(PatientUrlValue);
-     
-     axios
+  function getPatientData() {
+    var PatientUrlValue = ''
+    console.log(staffType)
+    if (staffType == 'EDR Receptionist') {
+      PatientUrlValue = getPatientEdrUrl
+    }
+    if (staffType == 'IPR Receptionist') {
+      PatientUrlValue = getPatientIprUrl
+    }
+    console.log(PatientUrlValue)
+    setPatientUrl(PatientUrlValue)
+
+    axios
       .get(PatientUrlValue)
       .then((res) => {
         if (res.data.success) {
-          let patientResult=[];
-          res.data.data.forEach( (d, index) => {
-           // (d) => (d.patientName = d.firstName + ' ' + d.lastName)
-            d.patientId.patientName = d.patientId.firstName + ' ' + d.patientId.lastName
-            patientResult.push(d.patientId);
+          let patientResult = []
+          res.data.data.forEach((d, index) => {
+            // (d) => (d.patientName = d.firstName + ' ' + d.lastName)
+            d.patientId.patientName =
+              d.patientId.firstName + ' ' + d.patientId.lastName
+            patientResult.push(d.patientId)
           })
 
           setPatient(patientResult)
@@ -154,28 +199,26 @@ export default function PatientListing(props) {
     }
   }
 
-   const handlePatientSearch =  (e) => {
+  const handlePatientSearch = (e) => {
     const a = e.target.value.replace(/[^\w\s]/gi, '')
     setSearchPatientQuery(a)
     if (a.length >= 3) {
-       axios
-        .get(
-          PatientUrl + '/' + a
-        )
+      axios
+        .get(PatientUrl + '/' + a)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
-              let patientResult=[];
-              res.data.data.forEach( (d, index) => {
-               // (d) => (d.patientName = d.firstName + ' ' + d.lastName)
-                d.patientId.patientName = d.patientId.firstName + ' ' + d.patientId.lastName
-                patientResult.push(d.patientId);
+              let patientResult = []
+              res.data.data.forEach((d, index) => {
+                // (d) => (d.patientName = d.firstName + ' ' + d.lastName)
+                d.patientId.patientName =
+                  d.patientId.firstName + ' ' + d.patientId.lastName
+                patientResult.push(d.patientId)
               })
-              console.log(patientResult);
-              
+              console.log(patientResult)
+
               setPatient(patientResult)
             } else {
-              
               setPatient(' ')
             }
           }
@@ -183,15 +226,10 @@ export default function PatientListing(props) {
         .catch((e) => {
           console.log('error after searching patient request', e)
         })
+    } else if (a.length == 0) {
+      getPatientData()
     }
-
-    else if(a.length == 0){
-      getPatientData();
-    }
-
   }
-
-
 
   return (
     <div
@@ -220,7 +258,11 @@ export default function PatientListing(props) {
           </div>
         </div>
 
-        <div className='row' style={{marginLeft: '0px', marginRight: '0px', marginTop: '20px'}}>
+        <div
+          style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+          className={`${'container-fluid'} ${classes.root}`}
+        >
+          <div className='row' style={{ marginTop: '20px' }}>
             <div
               className='col-md-10 col-sm-9 col-8'
               style={styles.textFieldPadding}
@@ -233,7 +275,7 @@ export default function PatientListing(props) {
                 label='Search Patient by Name / MRN / National ID / Mobile Number'
                 name={'searchPatientQuery'}
                 value={searchPatientQuery}
-                onChange={handlePatientSearch} 
+                onChange={handlePatientSearch}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position='end'>
@@ -287,9 +329,7 @@ export default function PatientListing(props) {
               </div>
             </div>
           </div>
-
-
-
+        </div>
         <div
           style={{
             flex: 4,
@@ -300,7 +340,7 @@ export default function PatientListing(props) {
           {patient !== ' ' ? (
             <div>
               <div>
-                <CustomTable 
+                <CustomTable
                   tableData={patient}
                   tableDataKeys={tableDataKeys}
                   tableHeading={tableHeading}

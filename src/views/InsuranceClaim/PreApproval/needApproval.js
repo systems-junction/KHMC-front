@@ -61,7 +61,7 @@ const styles = {
     borderRadius: 5,
     backgroundColor: '#2c6ddd',
     width: '115px',
-    height: '40px',
+    height: '50px',
     outline: 'none',
   },
   inputField: {
@@ -74,8 +74,8 @@ const styles = {
     marginTop: 25,
   },
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
   inputContainerForTextField: {
     marginTop: 6,
@@ -370,7 +370,10 @@ function AddEditEDR(props) {
                 </div>
               </div>
 
-              <div className={`row ${classes.root}`}>
+              <div
+                className={`row ${classes.root}`}
+                style={{ marginTop: '20px' }}
+              >
                 <div
                   className='col-md-12 col-sm-12 col-12'
                   style={{
@@ -404,7 +407,7 @@ function AddEditEDR(props) {
             undefined
           )}
 
-          <div className={`row ${classes.root}`}>
+          <div className={`row ${classes.root}`} style={{ marginTop: '20px' }}>
             <div
               className='col-md-6 col-sm-6 col-6'
               style={{
@@ -453,7 +456,7 @@ function AddEditEDR(props) {
             </div>
           </div>
 
-          <div className={`row ${classes.root}`}>
+          <div className={`row ${classes.root}`} style={{ marginTop: '20px' }}>
             <div
               className='col-md-6 col-sm-6 col-6'
               style={{
@@ -514,7 +517,7 @@ function AddEditEDR(props) {
             </div>
           </div>
 
-          <div className={`row ${classes.root}`}>
+          <div className={`row ${classes.root}`} style={{ marginTop: '20px' }}>
             <div
               className='col-md-12 col-sm-12 col-12'
               style={{
@@ -543,13 +546,18 @@ function AddEditEDR(props) {
           </div>
           <div
             className='row'
-            style={{ marginTop: '25px', marginBottom: '25px' }}
+            style={{ marginTop: '28px', marginBottom: '25px' }}
           >
             <div className='col-md-6 col-sm-6 col-6'>
               <img
                 onClick={() => props.history.goBack()}
                 src={Back}
-                style={{ width: 45, height: 35, cursor: 'pointer' }}
+                style={{
+                  width: 45,
+                  height: 35,
+                  cursor: 'pointer',
+                  marginLeft: '-10px',
+                }}
               />
             </div>
 
