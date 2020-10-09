@@ -191,6 +191,7 @@ const useStyles = makeStyles((theme) => ({
 
 function AddEditPatientListing(props) {
   const classes = MUIInputStyle()
+  // const classes = useStyles()
   const classesForInput = MUIInputStyleForCurrency()
 
   const initialState = {
@@ -1025,17 +1026,20 @@ function AddEditPatientListing(props) {
         {value === 0 ? (
           <div>
             <div
-              style={{ marginTop: '20px', marginBottom: '10px' }}
-              className={`container-fluid`}
+              style={{
+                marginTop: '20px',
+                marginBottom: '10px',
+                paddingLeft: '10px',
+                paddingRight: '10px',
+              }}
+              className={`container-fluid ${classes.root}`}
             >
               {comingFor === 'add' ? (
                 <div>
                   <div className='row'>
                     <div
                       className='col-md-10 col-sm-8 col-8'
-                      style={{
-                        ...styles.inputContainerForTextField,
-                      }}
+                      style={styles.textFieldPadding}
                     >
                       <TextField
                         required
@@ -1061,9 +1065,7 @@ function AddEditPatientListing(props) {
 
                     <div
                       className='col-md-1 col-sm-2 col-2'
-                      style={{
-                        ...styles.inputContainerForTextField,
-                      }}
+                      style={styles.textFieldPadding}
                     >
                       <div
                         style={{
@@ -1073,17 +1075,18 @@ function AddEditPatientListing(props) {
                           height: 55,
                           backgroundColor: 'white',
                           borderRadius: 5,
-                          width: 84,
                         }}
                       >
-                        <img src={BarCode} style={{ width: 80, height: 75 }} />
+                        <img src={BarCode} style={{ width: 70, height: 60 }} />
                       </div>
                     </div>
 
-                    <div className='col-md-1 col-sm-2 col-2'>
+                    <div
+                      className='col-md-1 col-sm-2 col-2'
+                      style={styles.textFieldPadding}
+                    >
                       <div
                         style={{
-                          ...styles.inputContainerForTextField,
                           display: 'flex',
                           justifyContent: 'center',
                           alignItems: 'center',
@@ -1170,7 +1173,7 @@ function AddEditPatientListing(props) {
               )}
             </div>
 
-            <div className='container-fluid'>
+            <div className={`${classes.root}`}>
               <h5
                 style={{
                   fontWeight: 'bold',
@@ -1343,7 +1346,12 @@ function AddEditPatientListing(props) {
               <img
                 onClick={() => props.history.goBack()}
                 src={Back_Arrow}
-                style={{ width: 45, height: 35, cursor: 'pointer' }}
+                style={{
+                  width: 45,
+                  height: 35,
+                  cursor: 'pointer',
+                  marginLeft: '-10px',
+                }}
               />
               {/* <div
                 style={{
@@ -1383,10 +1391,10 @@ function AddEditPatientListing(props) {
                 flex: 4,
                 display: 'flex',
                 flexDirection: 'column',
-                paddingLeft: 27,
-                paddingRight: 27,
+                paddingLeft: 10,
+                paddingRight: 10,
               }}
-              className='container-fluid'
+              className={`${classes.root}`}
             >
               <div className='row' style={{ marginTop: '20px' }}>
                 <div
@@ -1688,6 +1696,7 @@ function AddEditPatientListing(props) {
                   display: 'flex',
                   flex: 1,
                   justifyContent: 'flex-end',
+                  paddingRight: '5px',
                 }}
               >
                 <Button
@@ -1699,7 +1708,7 @@ function AddEditPatientListing(props) {
                     width: '130px',
                     height: '45px',
                     outline: 'none',
-                    marginRight: 15,
+                    marginRight: 10,
                   }}
                   // disabled={}
                   onClick={onDischargeInvoice}
@@ -1719,7 +1728,7 @@ function AddEditPatientListing(props) {
                   Calculate
                 </Button>
 
-                <div style={{ marginLeft: 15 }}>
+                <div style={{ marginLeft: 10 }}>
                   {comingFor === 'add' ? (
                     <Button
                       style={styles.stylesForButton}
@@ -1744,7 +1753,10 @@ function AddEditPatientListing(props) {
                 </div>
               </div>
 
-              <div className='row'>
+              <div
+                className='row'
+                style={{ paddingRight: '5px', paddingLeft: '5px' }}
+              >
                 {billSummaryArray !== 0 ? (
                   <CustomTable
                     tableData={billSummaryArray}
