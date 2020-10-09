@@ -353,6 +353,7 @@ function ReceiveItems(props) {
       if (date > receivedDate) {
         setOpenNotification(true);
         setErrorMsg("Invoice date can not be greater than received date");
+        return;
       }
       let params = {
         itemId: selectedItem.itemId._id,
