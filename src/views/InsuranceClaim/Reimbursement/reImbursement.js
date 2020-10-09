@@ -140,7 +140,7 @@ export default function Reimbursement(props) {
               res.data.data.map((d) => (d.insurer = 'N/A'))
               setinsurance(res.data.data.reverse());
             } else {
-              //setEdr(' ')
+              setinsurance([]);
             }
           }
         })
@@ -150,9 +150,8 @@ export default function Reimbursement(props) {
     }
 
     else if(a.length == 0){
-      console.log("less");
-      //console.log(Edr); 
-      //getinsuranceData();
+      console.log("less"); 
+      getinsuranceData();
     }
     
   }
@@ -194,7 +193,7 @@ export default function Reimbursement(props) {
           </div>
         </div>
 
-        {/*<div className='row' style={{marginLeft: '0px', marginRight: '0px', marginTop: '20px'}}>
+        <div className='row' style={{marginLeft: '0px', marginRight: '0px', marginTop: '20px'}}>
             <div
               className='col-md-10 col-sm-9 col-8'
               style={styles.textFieldPadding}
@@ -204,10 +203,10 @@ export default function Reimbursement(props) {
                 id='searchPatientQuery'
                 type='text'
                 variant='filled'
-                label='Search Patient by Name / MRN / National ID / Mobile Number'
+                label='Search By Request No'
                 name={'searchPatientQuery'}
                 value={searchPatientQuery}
-                //onChange={handlePatientSearch} 
+                onChange={handlePatientSearch} 
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position='end'>
@@ -260,7 +259,7 @@ export default function Reimbursement(props) {
                 <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
               </div>
             </div>
-            </div>*/}
+            </div>
 
 
         <div
@@ -270,7 +269,7 @@ export default function Reimbursement(props) {
             flexDirection: 'column',
           }}
         >
-          {insurance ? (
+          {insurance  &&  insurance.length > 0 ? (
             <div>
               <div>
                 <CustomTable
@@ -294,10 +293,32 @@ export default function Reimbursement(props) {
                 />
               </div>
             </div>
-          ) : (
-            <div className='LoaderStyle'>
-              <Loader type='TailSpin' color='red' height={50} width={50} />
+          ) : insurance && insurance.length == 0 ? (
+            <div className='row ' style={{ marginTop: '25px' }}>
+              <div className='col-11'>
+                <h3
+                  style={{
+                    color: 'white',
+                    textAlign: 'center',
+                    width: '100%',
+                    position: 'absolute',
+                  }}
+                >
+                  Opps...No Data Found
+                </h3>
+              </div>
+              <div className='col-1' style={{ marginTop: 45 }}>
+                <img
+                  onClick={() => props.history.goBack()}
+                  src={Back_Arrow}
+                  style={{ maxWidth: '60%', height: 'auto', cursor: 'pointer' }}
+                />
+              </div>
             </div>
+          ) : 
+          ( <div className="LoaderStyle">
+            <Loader type="TailSpin" color="red" height={50} width={50} />
+          </div>
           )}
         </div>
       </div>
