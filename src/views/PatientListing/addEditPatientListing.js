@@ -965,7 +965,7 @@ function AddEditPatientListing(props) {
           })
         } else if (!res.data.success) {
           setOpenNotification(true)
-          setErrorMsg('Error while generating EDR request')
+          setErrorMsg('EDR/ IPR already exists')
         }
       })
       .catch((e) => {
@@ -1012,6 +1012,7 @@ function AddEditPatientListing(props) {
           })
         } else if (!res.data.success) {
           setOpenNotification(true)
+          setErrorMsg('EDR/ IPR already exists')
         }
       })
       .catch((e) => {

@@ -13,7 +13,6 @@ import {
   addClaim,
   getedripr,
   uploadsUrl,
-  searchpatient,
   audioURL,
 } from '../../../public/endpoins'
 import axios from 'axios'
@@ -297,6 +296,8 @@ function AddEditPatientListing(props) {
     responseCode: '',
     diagnosisArray: '',
     medicationArray: '',
+    requestType: '',
+    edriprId: ''
   }
 
   function reducer(state, { field, value }) {
@@ -326,6 +327,8 @@ function AddEditPatientListing(props) {
     responseCode,
     diagnosisArray,
     medicationArray,
+    requestType,
+    edriprId
   } = state
 
   const classesForTabs = useStylesForTabs()
@@ -348,6 +351,7 @@ function AddEditPatientListing(props) {
   const [productData, setproductData] = useState([])
   const [searched, setsearched] = useState(false)
   const [selected, setSelected] = React.useState([])
+  const [timer, setTimer] = useState(null)
 
   useEffect(() => {
     setcomingFor(props.history.location.state.comingFor)
@@ -357,29 +361,28 @@ function AddEditPatientListing(props) {
     console.log('selected rec is ... ', selectedRec)
 
     if (props.history.location.state.comingFor === 'edit') {
-      getPatientByInfo(selectedRec.patient._id)
-      setsearched(true)
+      if (selectedRec) {
+        getBillSummary(selectedRec.patient._id)
+        setClaimId(selectedRec._id)
+        setsearched(true)
+      }
     }
 
     if (selectedRec) {
-      setClaimId(selectedRec._id)
       Object.entries(selectedRec).map(([key, val]) => {
         if (val && typeof val === 'object') {
           if (key === 'patient') {
             Object.entries(val).map(([key1, val1]) => {
               if (key1 === '_id') {
                 dispatch({ field: 'patientId', value: val1 })
-                getBillSummary(val1)
-                console.log('Patient id is ', val1)
               } else {
                 dispatch({ field: key1, value: val1 })
               }
             })
-          } else {
-            dispatch({ field: key, value: val._id })
           }
-        } else {
-          dispatch({ field: key, value: val })
+        }
+        else{
+        dispatch({ field: key, value: val })
         }
       })
     }
@@ -440,9 +443,10 @@ function AddEditPatientListing(props) {
       document: document,
       status: 'pending',
       responseCode: 'N/A',
+      requestType: requestType,
+      edriprId: edriprId
     }
     formData.append('data', JSON.stringify(params))
-    // console.log("PARAMSS ", params);
     console.log('DATAAA ', formData)
     axios
       .post(addClaim, formData, {
@@ -453,8 +457,8 @@ function AddEditPatientListing(props) {
         },
       })
       .then((res) => {
+        console.log("response for claim data ... ", res.data)
         if (res.data.success) {
-          console.log(res.data.data, 'patients data')
           dispatch({ field: 'patientId', value: '' })
           dispatch({ field: 'firstName', value: '' })
           dispatch({ field: 'lastName', value: '' })
@@ -471,9 +475,10 @@ function AddEditPatientListing(props) {
               message: `Claim against Patient MRN: ${profileNo.toUpperCase()} submitted successfully`,
             },
           })
-        } else if (!res.data.success) {
+        }
+        else if (!res.data.success) {
           setOpenNotification(true)
-          setErrorMsg('Error submitting Claim details')
+          setErrorMsg('A Claim is already submitted for this patient')
         }
       })
       .catch((e) => {
@@ -498,7 +503,7 @@ function AddEditPatientListing(props) {
       treatmentDetail: treatmentDetail,
       document: document,
       status: status,
-      responseCode: responseCode,
+      responseCode: 'N/A',
     }
     formData.append('data', JSON.stringify(params))
     // console.log("PARAMSS ", params);
@@ -543,7 +548,7 @@ function AddEditPatientListing(props) {
     for (let i = 0; i < fileType.length; i++) {
       let reader = new FileReader()
       reader.readAsDataURL(file[i])
-      reader.onload = function(event) {
+      reader.onload = function (event) {
         if (fileType[i] === 'pdf') {
           arr.push(file[i].name)
           setpdfView([...arr])
@@ -604,13 +609,35 @@ function AddEditPatientListing(props) {
     }, 2000)
   }
 
-  const handleSearch = (e) => {
+  const handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      triggerChange()
+    }
+  }
+
+  const triggerChange = () => {
+    handleSearch(searchQuery)
+  }
+
+  const handlePauseSearch = (e) => {
+    clearTimeout(timer)
+
     const a = e.target.value.replace(/[^\w\s]/gi, '')
     setSearchQuery(a)
-    if (a.length >= 3) {
+
+    setTimer(
+      setTimeout(() => {
+        triggerChange()
+      }, 600)
+    )
+  }
+
+  const handleSearch = (e) => {
+
+    if (e.length >= 3) {
       axios
         .get(
-          getInsuredPatients + '/' + currentUser.functionalUnit._id + '/' + a
+          getInsuredPatients + '/' + currentUser.functionalUnit._id + '/' + e
         )
         .then((res) => {
           if (res.data.success) {
@@ -648,7 +675,6 @@ function AddEditPatientListing(props) {
 
     setSearchQuery('')
     getBillSummary(i._id)
-    getPatientByInfo(i._id)
   }
 
   function getBillSummary(i) {
@@ -660,7 +686,6 @@ function AddEditPatientListing(props) {
           console.log('response for summary', res.data)
 
           if (res.data.rc) {
-            console.log('response for Claim', res.data.rc)
             dispatch({
               field: 'treatmentDetail',
               value: res.data.rc.treatmentDetail,
@@ -669,27 +694,35 @@ function AddEditPatientListing(props) {
           }
           dispatch({ field: 'requestNo', value: res.data.data.requestNo })
 
-          // let pharm = [];
-          // for (let i = 0; i < res.data.data.pharmacyRequest.length; i++) {
-          //   let amount = 0;
-          //   let singlePR = res.data.data.pharmacyRequest[i];
-          //   for (let j = 0; j < singlePR.item.length; j++) {
-          //     // console.log(singlePR.medicine[j].itemId.purchasePrice)
-          //     amount =
-          //       amount +
-          //       singlePR.item[j].itemId.issueUnitCost *
-          //         singlePR.item[j].requestedQty;
-          //   }
-          //   let obj = {
-          //     serviceId: {
-          //       name: "Pharmacy Item",
-          //       price: amount.toFixed(2),
-          //     },
-          //     date: res.data.data.pharmacyRequest[i].dateGenerated,
-          //     serviceType: "Pharmacy",
-          //   };
-          //   pharm.push(obj);
-          // }
+          Object.entries(res.data.data).map(([key, val]) => {
+            if (val && typeof val === 'object') {
+              if (key === 'residentNotes') {
+                if (val && val.length > 0) {
+                  dispatch({
+                    field: 'diagnosisArray',
+                    value: val.reverse()[0].code,
+                  })
+                }
+              } else if (key === 'pharmacyRequest') {
+                let data = []
+                val.map((d) => {
+                  d.item.map((item) => {
+                    let found = data.find((i) => i === item.itemId.name)
+                    if (!found) {
+                      data.push(item.itemId.name)
+                    }
+                  })
+                })
+                dispatch({ field: 'medicationArray', value: data })
+              }
+            }
+            else if (key === 'requestType') {
+              dispatch({ field: 'requestType', value: val })
+            }
+            else if (key === '_id') {
+              dispatch({ field: 'edriprId', value: val })
+            }
+          })
 
           let pharm = []
           for (let i = 0; i < res.data.data.pharmacyRequest.length; i++) {
@@ -710,8 +743,8 @@ function AddEditPatientListing(props) {
                       originalPrice: (
                         singlePR.item[j].itemId.issueUnitCost *
                         singlePR.item[j].requestedQty
-                      ).toFixed(4),
-                      insuredPrice: amount.toFixed(4),
+                      ).toFixed(4)+' JD',
+                      insuredPrice: amount.toFixed(4)+' JD',
                       insuranceStatus: 'Covered',
                     },
                     date: res.data.data.pharmacyRequest[i].dateGenerated,
@@ -729,7 +762,7 @@ function AddEditPatientListing(props) {
                 let obj = {
                   serviceId: {
                     name: singlePR.item[j].itemId.name,
-                    originalPrice: amount.toFixed(4),
+                    originalPrice: amount.toFixed(4)+' JD',
                     insuredPrice: '0',
                     insuranceStatus: 'Not Covered',
                   },
@@ -753,8 +786,8 @@ function AddEditPatientListing(props) {
                 let obj = {
                   serviceId: {
                     name: singleLR.serviceId.name,
-                    originalPrice: singleLR.serviceId.price.toFixed(4),
-                    insuredPrice: res.data.insured[j].price.toFixed(4),
+                    originalPrice: singleLR.serviceId.price.toFixed(4)+' JD',
+                    insuredPrice: res.data.insured[j].price.toFixed(4)+' JD',
                     insuranceStatus: 'Covered',
                   },
                   date: singleLR.date,
@@ -768,7 +801,7 @@ function AddEditPatientListing(props) {
               let obj = {
                 serviceId: {
                   name: singleLR.serviceId.name,
-                  originalPrice: singleLR.serviceId.price.toFixed(4),
+                  originalPrice: singleLR.serviceId.price.toFixed(4)+' JD',
                   insuredPrice: '0',
                   insuranceStatus: 'Not Covered',
                 },
@@ -791,8 +824,8 @@ function AddEditPatientListing(props) {
                 let obj = {
                   serviceId: {
                     name: singleRR.serviceId.name,
-                    originalPrice: singleRR.serviceId.price.toFixed(4),
-                    insuredPrice: res.data.insured[j].price.toFixed(4),
+                    originalPrice: singleRR.serviceId.price.toFixed(4)+' JD',
+                    insuredPrice: res.data.insured[j].price.toFixed(4)+' JD',
                     insuranceStatus: 'Covered',
                   },
                   date: singleRR.date,
@@ -806,7 +839,7 @@ function AddEditPatientListing(props) {
               let obj = {
                 serviceId: {
                   name: singleRR.serviceId.name,
-                  originalPrice: singleRR.serviceId.price.toFixed(4),
+                  originalPrice: singleRR.serviceId.price.toFixed(4)+' JD',
                   insuredPrice: '0',
                   insuranceStatus: 'Not Covered',
                 },
@@ -821,7 +854,8 @@ function AddEditPatientListing(props) {
           setbillSummaryArray(
             [].concat(lab.reverse(), radiology.reverse(), pharm.reverse())
           )
-        } else if (!res.data.success) {
+        }
+        else if (!res.data.success) {
           setErrorMsg(res.data.error)
           setOpenNotification(true)
         }
@@ -829,51 +863,6 @@ function AddEditPatientListing(props) {
       })
       .catch((e) => {
         console.log('error: ', e)
-      })
-  }
-
-  const getPatientByInfo = (id) => {
-    axios
-      .get(searchpatient + '/' + id)
-      .then((res) => {
-        if (res.data.success) {
-          if (res.data.data) {
-            console.log('Response after getting EDR/IPR data : ', res.data.data)
-
-            Object.entries(res.data.data).map(([key, val]) => {
-              if (val && typeof val === 'object') {
-                if (key === 'residentNotes') {
-                  if (val && val.length > 0) {
-                    dispatch({
-                      field: 'diagnosisArray',
-                      value: val.reverse()[0].code,
-                    })
-                  }
-                } else if (key === 'pharmacyRequest') {
-                  let data = []
-                  val.map((d) => {
-                    d.item.map((item) => {
-                      let found = data.find((i) => i === item.itemId.name)
-                      if (!found) {
-                        data.push(item.itemId.name)
-                      }
-                    })
-                  })
-                  dispatch({ field: 'medicationArray', value: data })
-                }
-              } else {
-                dispatch({ field: key, value: val })
-              }
-            })
-          }
-        } else {
-          setOpenNotification(true)
-          setErrorMsg('EDR/IPR not generated for patient')
-        }
-      })
-      .catch((e) => {
-        setOpenNotification(true)
-        setErrorMsg(e)
       })
   }
 
@@ -903,72 +892,8 @@ function AddEditPatientListing(props) {
     var logo = new Image()
     logo.src = logoPatientSummaryInvoice
 
-    // var doc = new jsPDF();
-
-    // doc.setFontSize(40);
-    // doc.setTextColor(44, 109, 221);
-    // var logo = new Image();
-
-    // logo.src = logoInvoice;
-    // doc.addImage(logo, "PNG", 5, 7);
-
-    // doc.setTextColor(0, 0, 0);
-
-    // doc.setFontSize(10);
-    // doc.text(139, 10, `Invoice No:`);
-    // doc.text(170, 10, `${invoiceNo}`);
-
-    // doc.setFontSize(12);
-    // doc.text(155, 20, "Date:");
-    // doc.text(184, 20, `${now.toISOString().substr(0, 10)}`);
-
-    // doc.text(155, 30, "Time:");
-    // doc.text(195, 30, `${time}`);
-
-    // doc.setFontSize(18);
-    // doc.text(5, 55, "Bill to:");
-    // doc.setFontSize(12);
-    // doc.line(5, 65, 50, 65);
-    // doc.text(5, 75, "Request No:");
-    // doc.text(5, 85, `${item.RRrequestNo || item.LRrequestNo}`);
-
-    // doc.text(178, 50, "Invoice Total");
-    // doc.setFontSize(23);
-    // doc.setTextColor(44, 109, 221);
-    // doc.text(167, 60, `${item.serviceId.price} JD`);
-
-    // doc.setTextColor(0, 0, 0);
-    // doc.setFontSize(12);
-    // doc.text(5, 100, `Service Name: ${item.serviceName}`);
-    // doc.text(5, 110, `Service Type: ${item.serviceType}`);
-    // doc.text(5, 120, `Comments: ${item.comments}`);
-
-    // doc.text(5, 252, "Signature & Stamp");
-    // doc.line(5, 257, 50, 257);
-
-    // doc.setTextColor(150, 150, 130);
-    // doc.text(162, 215, `Sub Total:`);
-    // doc.text(183, 215, `${item.serviceId.price} JD`);
-    // doc.text(163, 225, "Tax Rate:");
-    // doc.text(174, 235, "Tax:");
-    // doc.text(165, 245, "Discount:");
-    // doc.text(184, 245, " 999 JD");
-    // doc.setTextColor(0, 0, 0);
-    // doc.text(156, 255, "Total Amount:");
-    // doc.text(185, 255, `${item.serviceId.price} JD`);
-
-    // doc.line(0, 272, 1000, 272);
-
-    // doc.text(5, 285, "Prepared by:");
-    // if (QR) {
-    //   doc.addImage(`http://localhost:4000${QR}`, "PNG", 175, 275, 20, 20);
-    // }
-    // doc.save(`Invoice ${invoiceNo}.pdf`);
-
     var doc = new jsPDF()
-
     doc.addImage(logo, 'PNG', 10, 10, 55, 30)
-
     doc.setTextColor(0, 0, 0)
 
     // header
@@ -987,10 +912,9 @@ function AddEditPatientListing(props) {
     doc.text(
       155,
       60,
-      `${
-        item.serviceId.insuredPrice === '0'
-          ? item.serviceId.originalPrice
-          : item.serviceId.insuredPrice
+      `${item.serviceId.insuredPrice === '0'
+        ? item.serviceId.originalPrice
+        : item.serviceId.insuredPrice
       } JD`
     )
 
@@ -1017,10 +941,9 @@ function AddEditPatientListing(props) {
     doc.text(
       142,
       200,
-      `Sub Total: ${
-        item.serviceId.insuredPrice === '0'
-          ? item.serviceId.originalPrice
-          : item.serviceId.insuredPrice
+      `Sub Total: ${item.serviceId.insuredPrice === '0'
+        ? item.serviceId.originalPrice
+        : item.serviceId.insuredPrice
       } JD`
     )
     doc.text(143, 210, 'Tax Rate: 0.0000 JD')
@@ -1030,10 +953,9 @@ function AddEditPatientListing(props) {
     doc.text(
       135.4,
       240,
-      `Total Amount: ${
-        item.serviceId.insuredPrice === '0'
-          ? item.serviceId.originalPrice
-          : item.serviceId.insuredPrice
+      `Total Amount: ${item.serviceId.insuredPrice === '0'
+        ? item.serviceId.originalPrice
+        : item.serviceId.insuredPrice
       } JD`
     )
 
@@ -1287,7 +1209,8 @@ function AddEditPatientListing(props) {
                         name={'searchQuery'}
                         value={searchQuery}
                         style={{ borderRadius: '5px' }}
-                        onChange={handleSearch}
+                        onChange={handlePauseSearch}
+                        onKeyDown={handleKeyDown}
                         className='textInputStyle'
                         variant='filled'
                         InputProps={{
@@ -1407,20 +1330,22 @@ function AddEditPatientListing(props) {
                                 style={{ textAlign: 'center' }}
                                 onClick={() => setSearchQuery('')}
                               >
-                                Patient Not Found
-                              </h4>
-                            )}
+                                <h4>No Patient Found !</h4>
+                              </div>
+                            ) : (
+                                    undefined
+                                  )}
                           </Paper>
                         </div>
                       ) : (
-                        undefined
-                      )}
+                          undefined
+                        )}
                     </div>
                   </div>
                 </div>
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
             </div>
 
             <div className={`${classes.root}`}>
@@ -1539,28 +1464,28 @@ function AddEditPatientListing(props) {
                   >
                     {medicationArray
                       ? medicationArray.map((d, index) => {
-                          return (
-                            <div
-                              style={{ display: 'flex', flexDirection: 'row' }}
+                        return (
+                          <div
+                            style={{ display: 'flex', flexDirection: 'row' }}
+                          >
+                            <h6
+                              style={{
+                                ...styles.textStyles,
+                              }}
                             >
-                              <h6
-                                style={{
-                                  ...styles.textStyles,
-                                }}
-                              >
-                                {index + 1}
-                                {'.'} &nbsp;
+                              {index + 1}
+                              {'.'} &nbsp;
                               </h6>
-                              <h6
-                                style={{
-                                  ...styles.textStyles,
-                                }}
-                              >
-                                {d}
-                              </h6>
-                            </div>
-                          )
-                        })
+                            <h6
+                              style={{
+                                ...styles.textStyles,
+                              }}
+                            >
+                              {d}
+                            </h6>
+                          </div>
+                        )
+                      })
                       : ''}
                   </div>
 
@@ -1570,12 +1495,12 @@ function AddEditPatientListing(props) {
                   >
                     {diagnosisArray
                       ? diagnosisArray.map((drug, index) => {
-                          return (
-                            <h6 style={styles.textStyles}>
-                              {index + 1}. {drug}
-                            </h6>
-                          )
-                        })
+                        return (
+                          <h6 style={styles.textStyles}>
+                            {index + 1}. {drug}
+                          </h6>
+                        )
+                      })
                       : ''}
                   </div>
                 </div>
@@ -1643,7 +1568,9 @@ function AddEditPatientListing(props) {
                       disableUnderline: true,
                     }}
                   >
-                    <MenuItem value={status}>{status}</MenuItem>
+                    <MenuItem value=''>
+                      <em>None</em>
+                    </MenuItem>
 
                     {statusArray.map((val) => {
                       return (
@@ -1656,8 +1583,8 @@ function AddEditPatientListing(props) {
                 </div>
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             <div
               style={{
@@ -1825,8 +1752,8 @@ function AddEditPatientListing(props) {
                   </TableBody>
                 </Table>
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
             </div>
 
             <div
@@ -1966,8 +1893,8 @@ function AddEditPatientListing(props) {
                     </TableBody>
                   </Table>
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
 
                 <div
                   className='col-md-6 col-sm-6 col-6'
@@ -2044,7 +1971,6 @@ function AddEditPatientListing(props) {
                         color: '#2c6ddd',
                         fontStyle: 'italic',
                         marginTop: '10px',
-                        marginLeft: '-26px',
                       }}
                     >
                       {pdfView.map((view, index) => {
@@ -2061,8 +1987,8 @@ function AddEditPatientListing(props) {
                       })}
                     </div>
                   ) : (
-                    undefined
-                  )}
+                      undefined
+                    )}
                 </div>
               </div>
 
@@ -2162,57 +2088,57 @@ function AddEditPatientListing(props) {
                     })}
                   </>
                 ) : (
-                  // document &&
-                  //   document.length > 0 &&
-                  //   document.map((item, index) => item.includes("/")) ? (
-                  //     <>
-                  //       {document.map((item, index) => {
-                  //         if (item.slice(item.length - 3) !== "pdf") {
-                  //           return (
-                  //             <div
-                  //               className="col-md-4 col-sm-4 col-4"
-                  //               style={{
-                  //                 ...styles.inputContainerForTextField,
-                  //               }}
-                  //             >
-                  //               <img
-                  //                 src={uploadsUrl + item}
-                  //                 className="depositSlipImg"
-                  //               />
-                  //             </div>
-                  //           );
-                  //         } else if (item.slice(item.length - 3) === "pdf") {
-                  //           return (
-                  //             <div
-                  //               className="col-md-4 col-sm-4 col-4"
-                  //               style={{
-                  //                 ...styles.inputContainerForTextField,
-                  //               }}
-                  //             >
-                  //               <Button
-                  //                 style={{
-                  //                   ...styles.stylesForButton,
-                  //                   width: "100%",
-                  //                   backgroundColor: "#ba55d3",
-                  //                 }}
-                  //                 variant="contained"
-                  //                 color="default"
-                  //                 onClick={(e) => {
-                  //                   e.preventDefault();
-                  //                   // window.location.href = uploadsUrl + item;
-                  //                   console.log("show URL for live", uploadsUrl + item)
-                  //                 }}
-                  //               >
-                  //                 Click here to open document {index + 1}
-                  //               </Button>
-                  //             </div>
-                  //           );
-                  //         }
-                  //       })}
-                  //     </>
-                  //   ) :
-                  undefined
-                )}
+                    // document &&
+                    //   document.length > 0 &&
+                    //   document.map((item, index) => item.includes("/")) ? (
+                    //     <>
+                    //       {document.map((item, index) => {
+                    //         if (item.slice(item.length - 3) !== "pdf") {
+                    //           return (
+                    //             <div
+                    //               className="col-md-4 col-sm-4 col-4"
+                    //               style={{
+                    //                 ...styles.inputContainerForTextField,
+                    //               }}
+                    //             >
+                    //               <img
+                    //                 src={uploadsUrl + item}
+                    //                 className="depositSlipImg"
+                    //               />
+                    //             </div>
+                    //           );
+                    //         } else if (item.slice(item.length - 3) === "pdf") {
+                    //           return (
+                    //             <div
+                    //               className="col-md-4 col-sm-4 col-4"
+                    //               style={{
+                    //                 ...styles.inputContainerForTextField,
+                    //               }}
+                    //             >
+                    //               <Button
+                    //                 style={{
+                    //                   ...styles.stylesForButton,
+                    //                   width: "100%",
+                    //                   backgroundColor: "#ba55d3",
+                    //                 }}
+                    //                 variant="contained"
+                    //                 color="default"
+                    //                 onClick={(e) => {
+                    //                   e.preventDefault();
+                    //                   // window.location.href = uploadsUrl + item;
+                    //                   console.log("show URL for live", uploadsUrl + item)
+                    //                 }}
+                    //               >
+                    //                 Click here to open document {index + 1}
+                    //               </Button>
+                    //             </div>
+                    //           );
+                    //         }
+                    //       })}
+                    //     </>
+                    //   ) :
+                    undefined
+                  )}
 
                 {imagePreview && imagePreview.length > 0 ? (
                   <>
@@ -2236,15 +2162,15 @@ function AddEditPatientListing(props) {
                               New document
                             </div>
                           ) : (
-                            undefined
-                          )}
+                              undefined
+                            )}
                         </div>
                       )
                     })}
                   </>
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
               </div>
             </div>
             <div
@@ -2286,22 +2212,22 @@ function AddEditPatientListing(props) {
                     Submit
                   </Button>
                 ) : (
-                  <Button
-                    style={styles.stylesForButton}
-                    //disabled={!validateFormType1()}
-                    onClick={handleEdit}
-                    variant='contained'
-                    color='default'
-                  >
-                    Update
-                  </Button>
-                )}
+                    <Button
+                      style={styles.stylesForButton}
+                      //disabled={!validateFormType1()}
+                      onClick={handleEdit}
+                      variant='contained'
+                      color='default'
+                    >
+                      Update
+                    </Button>
+                  )}
               </div>
             </div>
           </div>
         ) : (
-          undefined
-        )}
+                undefined
+              )}
 
         <Notification
           msg={errorMsg}

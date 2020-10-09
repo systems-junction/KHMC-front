@@ -1,6 +1,6 @@
 import React from "react";
 import "./Header.css";
-import KHMC_White from "../../assets/img/KHMC Logo.png";
+import KHMC_White from "../../assets/img/KHMC LOGO FOR CIRCLE.png";
 import Influence_white from "../../assets/img/Influence_white.png";
 import { Redirect } from "react-router-dom";
 import Card from "@material-ui/core/Card";
@@ -70,11 +70,11 @@ class Header extends React.Component {
       }
     }
     return (
-      <div className="header">
+      <div className="header" style={{ marginBottom: 150 }}>
         <img
           src={KHMC_White}
           className="header1-style"
-          // style={{ maxWidth: "160px", height: "35px" }}
+          // style={{ height: "35px" }}
           onClick={() => {
             return this.setState({ goBack: true });
           }}
@@ -82,12 +82,14 @@ class Header extends React.Component {
         <img
           src={Influence_white}
           className="header2-style"
-          style={{
-            // maxWidth: "160px",
-            // height: "35px",
-            cursor: "pointer",
-            // boxShadow: this.state.hover ? '2px 2px 2px 2px #b2b0b0' : '',
-          }}
+          style={
+            {
+              // maxWidth: "160px",
+              // height: "35px",
+              // cursor: "pointer",
+              // boxShadow: this.state.hover ? '2px 2px 2px 2px #b2b0b0' : '',
+            }
+          }
           // onMouseEnter={() => this.setState({ hover: true })}
           // onMouseLeave={() => this.setState({ hover: false })}
           onClick={() => this.setState({ open: !this.state.open })}

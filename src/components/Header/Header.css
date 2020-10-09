@@ -8,14 +8,15 @@
   justify-content: space-between;
 }
 .header1-style {
-  max-width: 25%;
-  height: 23%;
-  margin-top: -5px;
+  max-width: 26%;
+  height: 27%;
+  margin-left: -23px;
+  margin-top: -32px;
 }
 .header2-style {
-  max-width: 19%;
-  height: 18%;
-  margin-top: -5px;
+  max-width: 20%;
+  height: 8%;
+  margin-top: -6px;
 }
 
 @media screen and (max-width: 768px) {
@@ -25,6 +26,9 @@
     width: 35%;
     height: auto;
     /* background-color: crimson; */
+  }
+  .thankyou {
+    margin-top: -900;
   }
 }
 
@@ -38,12 +42,17 @@
   }
 
   .header1-style {
-    max-width: 40%;
-    height: auto;
+    max-width: 26%;
+    height: 27%;
+    margin-left: -23px;
+    margin-top: -32px;
+    /* height: auto; */
   }
   .header2-style {
-    max-width: 40%;
-    height: auto;
+    max-width: 19%;
+    height: 7%;
+    margin-top: -6px;
+    /* height: auto; */
   }
 }
 @media screen and (max-width: 768px) {

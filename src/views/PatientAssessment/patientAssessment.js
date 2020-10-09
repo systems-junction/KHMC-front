@@ -1379,13 +1379,6 @@ function PatientAssessment(props) {
                           >
                             {d}
                           </h6>
-                          <h6
-                            style={{
-                              ...styles.textStyles,
-                            }}
-                          >
-                            {d}
-                          </h6>
                         </div>
                       )
                     })
