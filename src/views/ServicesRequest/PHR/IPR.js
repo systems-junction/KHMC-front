@@ -816,11 +816,12 @@ export default function ReplenishmentRequest(props) {
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
-              console.log(res.data.data)
-              //var sortedObjs = _.sortBy(res.data.data, 'date').reverse()
-              //setEdr(sortedObjs)
+              console.log(res.data.data);
+              setPurchaseRequest(res.data.data.reverse())
+            
             } else {
-              //setEdr(' ')
+              setPurchaseRequest([]);
+              
             }
           }
         })
@@ -830,9 +831,8 @@ export default function ReplenishmentRequest(props) {
     }
 
     else if(a.length == 0){
-      console.log("less");
-      //console.log(Edr); 
-      //getEDRsData();
+      console.log("less"); 
+      getPurchaseRequests();
     }
     
   }
@@ -886,7 +886,7 @@ export default function ReplenishmentRequest(props) {
           </div>
 
 
-          {/*<div className='row' style={{marginLeft: '0px', marginRight: '0px', marginTop: '20px'}}>
+          <div className='row' style={{marginLeft: '0px', marginRight: '0px', marginTop: '20px'}}>
             <div
               className='col-md-10 col-sm-9 col-8'
               style={styles.textFieldPadding}
@@ -896,10 +896,10 @@ export default function ReplenishmentRequest(props) {
                 id='searchPatientQuery'
                 type='text'
                 variant='filled'
-                label='Search Patient by Name / MRN / National ID / Mobile Number'
+                label='Search By MRN / Order No '
                 name={'searchPatientQuery'}
                 value={searchPatientQuery}
-                //onChange={handlePatientSearch} 
+                onChange={handlePatientSearch} 
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position='end'>
@@ -952,8 +952,7 @@ export default function ReplenishmentRequest(props) {
                 <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
               </div>
             </div>
-          </div> */}
-
+          </div>
 
 
           <div
@@ -963,7 +962,7 @@ export default function ReplenishmentRequest(props) {
               flexDirection: 'column',
             }}
           >
-            {purchaseRequests ? (
+            {purchaseRequests &&  purchaseRequests.length > 0 ?  (
               <div>
                 <div>
                   <CustomTable
@@ -999,10 +998,32 @@ export default function ReplenishmentRequest(props) {
 
                 <Notification msg={errorMsg} open={openNotification} />
               </div>
-            ) : (
-              <div className='LoaderStyle'>
-                <Loader type='TailSpin' color='red' height={50} width={50} />
+            )  : purchaseRequests && purchaseRequests.length == 0 ? (
+              <div className='row ' style={{ marginTop: '25px' }}>
+                <div className='col-11'>
+                  <h3
+                    style={{
+                      color: 'white',
+                      textAlign: 'center',
+                      width: '100%',
+                      position: 'absolute',
+                    }}
+                  >
+                    Opps...No Data Found
+                  </h3>
+                </div>
+                <div className='col-1' style={{ marginTop: 45 }}>
+                  <img
+                    onClick={() => props.history.goBack()}
+                    src={Back_Arrow}
+                    style={{ maxWidth: '60%', height: 'auto', cursor: 'pointer' }}
+                  />
+                </div>
               </div>
+          ) : 
+           ( <div className="LoaderStyle">
+              <Loader type="TailSpin" color="red" height={50} width={50} />
+            </div>
             )}
           </div>
           <div style={{ marginBottom: 20 }}>
