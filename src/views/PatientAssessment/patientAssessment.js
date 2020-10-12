@@ -391,6 +391,7 @@ function PatientAssessment(props) {
       openPatientDetailsDialog(true)
     }
 
+     
     // return function cleanup() {
     //   console.log("unmount");
     //   props.setPatientDetailsForReducer("");
@@ -1018,7 +1019,9 @@ function PatientAssessment(props) {
     props.history.push({
       pathname: path,
       state: {
-        selectedItem: selectedItem,
+          selectedItem: selectedItem,
+        diagnosisArray: diagnosisArray,
+        medicationArray: medicationArray,
       },
     })
   }

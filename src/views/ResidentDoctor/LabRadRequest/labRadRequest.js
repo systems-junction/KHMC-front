@@ -498,6 +498,7 @@ function LabRadRequest(props) {
     seticdSection(Object.keys(icdCodesList[0]))
     // getEDRById(props.history.location.state.selectedItem._id);
 
+    
     // setId(props.history.location.state.selectedItem._id);
     // setSelectedItem(props.history.location.state.selectedItem);
     // setrequestNo(props.history.location.state.selectedItem.requestNo);

@@ -471,7 +471,7 @@ function AddEditPatientListing(props) {
           props.history.push({
             pathname: 'success',
             state: {
-              message: `Claim against Patient MRN: ${profileNo.toUpperCase()} submitted successfully`,
+              message: `Claim: ${res.data.data.requestNo} against Patient MRN: ${profileNo.toUpperCase()} submitted successfully`,
             },
           })
         } else if (!res.data.success) {
@@ -504,16 +504,17 @@ function AddEditPatientListing(props) {
       responseCode: 'N/A',
     }
     formData.append('data', JSON.stringify(params))
-    // console.log("PARAMSS ", params);
+    console.log("PARAMSS ", params);
     // console.log("DATAAA ", formData);
     axios
       .put(updateClaim, formData)
       .then((res) => {
         if (res.data.success) {
+          console.log("res", res.data.data)
           props.history.push({
             pathname: 'success',
             state: {
-              message: `Claim against Patient MRN: ${profileNo.toUpperCase()} updated successfully`,
+              message: `Claim: ${res.data.data.requestNo} against Patient MRN: ${profileNo.toUpperCase()} updated successfully`,
             },
           })
         } else if (!res.data.success) {
