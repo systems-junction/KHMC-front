@@ -949,7 +949,12 @@ function AddEditPurchaseRequest(props) {
           />
 
           <div
-            style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+            style={{
+              flex: 4,
+              display: 'flex',
+              flexDirection: 'column',
+              marginTop: '-10px',
+            }}
             className='container-fluid'
           >
             <div className='row'>

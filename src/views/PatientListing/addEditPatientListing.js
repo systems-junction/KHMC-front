@@ -965,7 +965,7 @@ function AddEditPatientListing(props) {
           })
         } else if (!res.data.success) {
           setOpenNotification(true)
-          setErrorMsg('Error while generating EDR request')
+          setErrorMsg('EDR/ IPR already exists')
         }
       })
       .catch((e) => {
@@ -1012,6 +1012,7 @@ function AddEditPatientListing(props) {
           })
         } else if (!res.data.success) {
           setOpenNotification(true)
+          setErrorMsg('EDR/ IPR already exists')
         }
       })
       .catch((e) => {
@@ -1560,13 +1561,19 @@ function AddEditPatientListing(props) {
 
                 <div className='row'>
                   <div
-                    className='col-md-11 col-sm-11 col-10'
+                    className='col-md-10 col-sm-11 col-10'
                     style={{
                       ...styles.textFieldPadding,
                     }}
                   >
                     {searchQuery ? (
-                      <div style={{ zIndex: 3 }}>
+                      <div
+                        style={{
+                          zIndex: 3,
+                          position: 'absolute',
+                          width: '99%',
+                        }}
+                      >
                         <Paper style={{ maxHeight: 300, overflow: 'auto' }}>
                           {itemFoundSuccessfull && itemFound !== '' ? (
                             <Table size='small'>

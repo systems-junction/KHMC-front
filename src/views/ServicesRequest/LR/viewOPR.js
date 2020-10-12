@@ -948,66 +948,82 @@ function AddEditPurchaseRequest(props) {
                     marginRight: '-6px',
                   }}
                 >
-                  <img src={Fingerprint} style={{ maxWidth: 70, height: 60 }} />
+                  <img src={Fingerprint} style={{ maxWidth: 70, height: 60 }}  />
                 </div>
               </div>
             </div>
 
-            {searchQuery ? (
+            <div className='row'>
               <div
+                className='col-md-10 col-sm-11 col-10'
                 style={{
-                  zIndex: 10,
-                  marginTop: '10px',
-                  width: '93.4%',
-                  marginLeft: '-12px',
+                  ...styles.textFieldPadding,
                 }}
               >
-                <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
-                  {setItemFoundSuccessfully ? (
-                    itemFound && (
-                      <Table size='small'>
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>Service Name</TableCell>
-                            <TableCell>Service Number</TableCell>
-                            <TableCell>Price (JD)</TableCell>
-                            <TableCell align='center'>Description</TableCell>
-                          </TableRow>
-                        </TableHead>
-
-                        <TableBody>
-                          {itemFound.map((i, index) => {
-                            return (
-                              <TableRow
-                                key={i.serviceNo}
-                                onClick={() => handleAddItem(i)}
-                                style={{ cursor: 'pointer' }}
-                              >
-                                <TableCell>{i.name}</TableCell>
-                                <TableCell>{i.serviceNo}</TableCell>
-                                <TableCell>{i.price}</TableCell>
+                {searchQuery ? (
+                  <div
+                    style={{
+                      zIndex: 3,
+                      position: 'absolute',
+                      width: '109%',
+                      marginTop: '5px',
+                    }}
+                  >
+                    <Paper
+                      style={{
+                        maxHeight: 200,
+                        overflow: 'auto',
+                      }}
+                    >
+                      {setItemFoundSuccessfully ? (
+                        itemFound && (
+                          <Table size='small'>
+                            <TableHead>
+                              <TableRow>
+                                <TableCell>Service Name</TableCell>
+                                <TableCell>Service Number</TableCell>
+                                <TableCell>Price (JD)</TableCell>
                                 <TableCell align='center'>
-                                  {i.description}
+                                  Description
                                 </TableCell>
                               </TableRow>
-                            )
-                          })}
-                        </TableBody>
-                      </Table>
-                    )
-                  ) : (
-                    <h4
-                      style={{ textAlign: 'center' }}
-                      onClick={() => setSearchQuery('')}
-                    >
-                      Service Not Found
-                    </h4>
-                  )}
-                </Paper>
+                            </TableHead>
+
+                            <TableBody>
+                              {itemFound.map((i, index) => {
+                                return (
+                                  <TableRow
+                                    key={i.serviceNo}
+                                    onClick={() => handleAddItem(i)}
+                                    style={{ cursor: 'pointer' }}
+                                  >
+                                    <TableCell>{i.name}</TableCell>
+                                    <TableCell>{i.serviceNo}</TableCell>
+                                    <TableCell>{i.price}</TableCell>
+                                    <TableCell align='center'>
+                                      {i.description}
+                                    </TableCell>
+                                  </TableRow>
+                                )
+                              })}
+                            </TableBody>
+                          </Table>
+                        )
+                      ) : (
+                        <h4
+                          style={{ textAlign: 'center' }}
+                          onClick={() => setSearchQuery('')}
+                        >
+                          Service Not Found
+                        </h4>
+                      )}
+                    </Paper>
+                  </div>
+                ) : (
+                  undefined
+                )}
               </div>
-            ) : (
-              undefined
-            )}
+            </div>
 
             <div style={{ marginTop: '20px' }} className='row'>
               <div
@@ -1065,6 +1081,7 @@ function AddEditPurchaseRequest(props) {
 
               <div className='col-md-2 col-sm-2 col-6'>
                 <Button
+                 className='oprAddButton'
                   style={{
                     ...styles.stylesForButton,
                     marginTop: '25px',

@@ -47,15 +47,15 @@ const styles = {
 
   inputContainerForTextField: {
     marginTop: 6,
-    marginBottom: 10,
+    marginBottom: 20,
   },
 
   inputContainerForDropDown: {
     marginTop: 6,
   },
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
   stylesForButton: {
     color: "white",

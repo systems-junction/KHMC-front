@@ -37,34 +37,74 @@ const styles = {
     outline: 'none',
   },
   textFieldPadding: {
-    paddingLeft: 0,
+    paddingLeft: 5,
     paddingRight: 5,
   },
 
 }
 
-const useStylesForInput = makeStyles((theme) => ({
+const useStyles = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(0),
+  },
   input: {
     backgroundColor: 'white',
+    boxShadow: 'none',
     borderRadius: 5,
     '&:after': {
       borderBottomColor: 'black',
+      boxShadow: 'none',
     },
     '&:hover': {
       backgroundColor: 'white',
+      boxShadow: 'none',
     },
-    '&:disabled': {
-      color: 'gray',
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+      borderRadius: 5,
     },
   },
-
-
+  multilineColor: {
+    boxShadow: 'none',
+    backgroundColor: 'white',
+    borderRadius: 5,
+    '&:hover': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
+    '&:after': {
+      borderBottomColor: 'black',
+      boxShadow: 'none',
+    },
+    '&:focus': {
+      boxShadow: 'none',
+    },
+  },
+  root: {
+    '& .MuiTextField-root': {
+      backgroundColor: 'white',
+    },
+    '& .Mui-focused': {
+      backgroundColor: 'white',
+      color: 'black',
+      boxShadow: 'none',
+    },
+    '& .Mui-disabled': {
+      backgroundColor: 'white',
+      color: 'gray',
+    },
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
+  },
 }))
 
 const actions = { edit: true }
 
 export default function Reimbursement(props) {
-  const classes = useStylesForInput()
+  const classes = useStyles()
 
   const [insurance, setinsurance] = useState('')
   const [itemModalVisible, setitemModalVisible] = useState(false)
@@ -140,7 +180,7 @@ export default function Reimbursement(props) {
               res.data.data.map((d) => (d.insurer = 'N/A'))
               setinsurance(res.data.data.reverse());
             } else {
-              //setEdr(' ')
+              setinsurance([]);
             }
           }
         })
@@ -150,9 +190,8 @@ export default function Reimbursement(props) {
     }
 
     else if(a.length == 0){
-      console.log("less");
-      //console.log(Edr); 
-      //getinsuranceData();
+      console.log("less"); 
+      getinsuranceData();
     }
     
   }
@@ -194,7 +233,13 @@ export default function Reimbursement(props) {
           </div>
         </div>
 
-        {/*<div className='row' style={{marginLeft: '0px', marginRight: '0px', marginTop: '20px'}}>
+        <div
+          className={`${classes.root}`}
+          style={{
+            marginTop: '25px',
+          }}
+        >
+        <div className='row' style={{ marginRight: '-5px', marginLeft: '-5px', marginTop: '20px'}}>
             <div
               className='col-md-10 col-sm-9 col-8'
               style={styles.textFieldPadding}
@@ -204,10 +249,10 @@ export default function Reimbursement(props) {
                 id='searchPatientQuery'
                 type='text'
                 variant='filled'
-                label='Search Patient by Name / MRN / National ID / Mobile Number'
+                label='Search By Request No'
                 name={'searchPatientQuery'}
                 value={searchPatientQuery}
-                //onChange={handlePatientSearch} 
+                onChange={handlePatientSearch} 
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position='end'>
@@ -260,9 +305,9 @@ export default function Reimbursement(props) {
                 <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
               </div>
             </div>
-            </div>*/}
+            </div>
 
-
+</div>
         <div
           style={{
             flex: 4,
@@ -270,7 +315,7 @@ export default function Reimbursement(props) {
             flexDirection: 'column',
           }}
         >
-          {insurance ? (
+          {insurance  &&  insurance.length > 0 ? (
             <div>
               <div>
                 <CustomTable
@@ -294,10 +339,35 @@ export default function Reimbursement(props) {
                 />
               </div>
             </div>
-          ) : (
-            <div className='LoaderStyle'>
-              <Loader type='TailSpin' color='red' height={50} width={50} />
+          ) : insurance && insurance.length == 0 ? (
+            <>
+            <div className='row ' style={{ marginTop: '25px' }}>
+              <div className='col-11'>
+                <h3
+                  style={{
+                    color: 'white',
+                    textAlign: 'center',
+                    width: '100%',
+                    position: 'absolute',
+                  }}
+                >
+                  Opps...No Data Found
+                </h3>
+              </div>
+              
             </div>
+            <div className='col-1' style={{ marginTop: 45 }}>
+            <img
+              onClick={() => props.history.goBack()}
+              src={Back_Arrow}
+              style={{ maxWidth: '60%', height: 'auto', cursor: 'pointer', marginLeft: '-10px' }}
+            />
+          </div>
+          </>
+          ) : 
+          ( <div className="LoaderStyle">
+            <Loader type="TailSpin" color="red" height={50} width={50} />
+          </div>
           )}
         </div>
       </div>

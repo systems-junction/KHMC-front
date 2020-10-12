@@ -41,7 +41,8 @@ const tableHeadingForNeedApprovalMeds = [
 const tableDataKeysForNeedApprovalMeds = [
   ['itemId', 'name'],
   'requestedQty',
-  ['itemId', 'issueUnitCost'],
+  // ['itemId', 'issueUnitCost'],
+  'unitPrice',
   'totalPrice',
 ]
 
@@ -195,7 +196,7 @@ function AddEditEDR(props) {
     if (selectedRec.RequestType === 'LR' || selectedRec.RequestType === 'RR') {
       dispatch({
         field: 'price',
-        value: selectedRec.totalCost,
+        value: selectedRec.serviceId.price,
       })
       dispatch({
         field: 'testName',
@@ -214,7 +215,8 @@ function AddEditEDR(props) {
     if (selectedRec.item) {
       selectedRec.item.map(
         (d) =>
-          (d.totalPrice = (d.requestedQty * d.itemId.issueUnitCost).toFixed(2))
+          (d.totalPrice = (d.requestedQty * d.itemId.issueUnitCost).toFixed(4)+' JD',
+          d.unitPrice = d.itemId.issueUnitCost.toFixed(4)+' JD')
       )
       // dispatch({
       //   field: 'status',
@@ -284,7 +286,7 @@ function AddEditEDR(props) {
     >
       <Header />
       <div className='cPadding'>
-        <div className='subheader'>
+        <div className='subheader' style={{ marginLeft: '-10px' }}>
           <div>
             <img src={PreApproval} />
             <h4>Pre-Approval</h4>

@@ -1,4 +1,4 @@
-const local = "http://localhost:4000/api";
+const local = "http://192.168.10.62:4000/api";
 const live = "https://test.khmc-staging.com/api";
 const dev = "http://ec2-52-14-42-129.us-east-2.compute.amazonaws.com/api";
 //const devSecure = 'https://demo.khmc-staging.com/api'
@@ -210,7 +210,7 @@ export const deleteReceiveItemsUrl = `${baseUrl}/receiveitem/deletereceiveitem`;
 export const updateReceiveItemsUrl = `${baseUrl}/receiveitem/updatereceiveitem`;
 
 // material receivings
-export const getMaterialReceivingUrl = `${baseUrl}/materialreceiving/getmaterialreceivings`; 
+export const getMaterialReceivingUrl = `${baseUrl}/materialreceiving/getmaterialreceivings`;
 export const getMaterialReceivingUrlSearch = `${baseUrl}/materialreceiving/getmaterialreceivingskey`;
 export const addMaterialReceivingUrl = `${baseUrl}/materialreceiving/addmaterialreceiving`;
 export const deleteMaterialReceivingUrl = `${baseUrl}/materialreceiving/deletematerialreceiving`;

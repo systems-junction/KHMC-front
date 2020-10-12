@@ -1,10 +1,9 @@
-/*eslint-disable*/
 import React, { useState, useEffect } from 'react'
 import Notification from '../../../components/Snackbar/Notification.js'
 import CustomTable from '../../../components/Table/Table'
 import axios from 'axios'
 import _ from 'lodash'
-import { getPreApproval, searchPatientsURL } from '../../../public/endpoins'
+import { getPreApproval } from '../../../public/endpoins'
 import Loader from 'react-loader-spinner'
 import Back from '../../../assets/img/Back_Arrow.png'
 import Header from '../../../components/Header/Header'
@@ -36,32 +35,73 @@ const tableDataKeys = [
 
 const styles = {
   textFieldPadding: {
-    paddingLeft: 0,
+    paddingLeft: 5,
     paddingRight: 5,
   },
 }
 
-const useStylesForInput = makeStyles((theme) => ({
+const useStyles = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(0),
+  },
   input: {
     backgroundColor: 'white',
+    boxShadow: 'none',
     borderRadius: 5,
     '&:after': {
       borderBottomColor: 'black',
+      boxShadow: 'none',
     },
     '&:hover': {
       backgroundColor: 'white',
+      boxShadow: 'none',
     },
-    '&:disabled': {
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+      borderRadius: 5,
+    },
+  },
+  multilineColor: {
+    boxShadow: 'none',
+    backgroundColor: 'white',
+    borderRadius: 5,
+    '&:hover': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
+    '&:after': {
+      borderBottomColor: 'black',
+      boxShadow: 'none',
+    },
+    '&:focus': {
+      boxShadow: 'none',
+    },
+  },
+  root: {
+    '& .MuiTextField-root': {
+      backgroundColor: 'white',
+    },
+    '& .Mui-focused': {
+      backgroundColor: 'white',
+      color: 'black',
+      boxShadow: 'none',
+    },
+    '& .Mui-disabled': {
+      backgroundColor: 'white',
       color: 'gray',
+    },
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
     },
   },
 }))
 
 const actions = { view: true }
 
-export default function preApproval(props) 
-{
-  const classes = useStylesForInput()
+export default function PreApprovalScreen(props) {
+  const classes = useStyles()
 
   const [preApproval, setpreApproval] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
@@ -125,7 +165,7 @@ export default function preApproval(props)
           // )
           var sortedObjs = _.sortBy(
             [].concat(
-              res.data.data.reverse(),
+              res.data.data.reverse()
               // res.data.data.ipr.reverse()
               // res.data.data.opr.reverse()
             ),
@@ -157,39 +197,46 @@ export default function preApproval(props)
     })
   }
 
-
-  const handlePatientSearch =  (e) => {
+  const handlePatientSearch = (e) => {
     const a = e.target.value.replace(/[^\w\s]/gi, '')
     setSearchPatientQuery(a)
     if (a.length >= 3) {
-       axios
-        .get(
-          getPreApproval + '/' + a
-        )
+      axios
+        .get(getPreApproval + '/' + a)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
               console.log(res.data.data)
-              //var sortedObjs = _.sortBy(res.data.data, 'date').reverse()
-              //setIpr(sortedObjs)
+              if (res.data.data) {
+                res.data.data.map(
+                  (d) =>
+                    (d.Name = d.patientId
+                      ? d.patientId.firstName + ' ' + d.patientId.lastName
+                      : '')
+                )
+              }
+              var sortedObjs = _.sortBy(
+                [].concat(
+                  res.data.data.reverse()
+                  // res.data.data.ipr.reverse()
+                  // res.data.data.opr.reverse()
+                ),
+                'updatedAt'
+              ).reverse()
+              setpreApproval(sortedObjs)
             } else {
-              //setIpr(' ')
+              setpreApproval([])
             }
           }
         })
         .catch((e) => {
           console.log('error after searching patient request', e)
         })
+    } else if (a.length == 0) {
+      console.log('less')
+      getPreApprovalData()
     }
-
-    else if(a.length == 0){
-      //console.log(Ipr); 
-      //getIprsData();
-    }
-    
   }
-
-
 
   return (
     <div
@@ -207,83 +254,90 @@ export default function preApproval(props)
       <Header />
 
       <div className='cPadding'>
-        <div className='subheader' style={{ marginLeft: '-10px' }}>
+        <div className='subheader' style={{ marginLeft: '-14px' }}>
           <div>
             <img src={PreApproval} />
             <h4>Pre-Approval</h4>
           </div>
         </div>
 
+        <div
+          className={`${classes.root}`}
+          style={{
+            marginTop: '25px',
+          }}
+        >
+        <div
+          className='row'
+          style={{ marginLeft: '-5px', marginRight: '-5px', marginTop: '20px' }}
+        >
+          <div
+            className='col-md-10 col-sm-9 col-8'
+            style={styles.textFieldPadding}
+          >
+            <TextField
+              className='textInputStyle'
+              id='searchPatientQuery'
+              type='text'
+              variant='filled'
+              label='Search By MRN / Request No'
+              name={'searchPatientQuery'}
+              value={searchPatientQuery}
+              onChange={handlePatientSearch}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position='end'>
+                    <AccountCircle />
+                  </InputAdornment>
+                ),
+                className: classes.input,
+                classes: { input: classes.input },
+                disableUnderline: true,
+              }}
+            />
+          </div>
 
-        {/*<div className='row' style={{marginLeft: '0px', marginRight: '0px', marginTop: '20px'}}>
+          <div
+            className='col-md-1 col-sm-2 col-2'
+            style={{
+              ...styles.textFieldPadding,
+            }}
+          >
             <div
-              className='col-md-10 col-sm-9 col-8'
-              style={styles.textFieldPadding}
-            >
-              <TextField
-                className='textInputStyle'
-                id='searchPatientQuery'
-                type='text'
-                variant='filled'
-                label='Search Patient by Name / MRN / National ID / Mobile Number'
-                name={'searchPatientQuery'}
-                value={searchPatientQuery}
-                //onChange={handlePatientSearch} 
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position='end'>
-                      <AccountCircle />
-                    </InputAdornment>
-                  ),
-                  className: classes.input,
-                  classes: { input: classes.input },
-                  disableUnderline: true,
-                }}
-              />
-            </div>
-
-            <div
-              className='col-md-1 col-sm-2 col-2'
               style={{
-                ...styles.textFieldPadding,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: 'white',
+                borderRadius: 5,
+                height: 55,
               }}
             >
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: 'white',
-                  borderRadius: 5,
-                  height: 55,
-                }}
-              >
-                <img src={BarCode} style={{ width: 70, height: 60 }} />
-              </div>
+              <img src={BarCode} style={{ width: 70, height: 60 }} />
             </div>
+          </div>
 
+          <div
+            className='col-md-1 col-sm-1 col-2'
+            style={{
+              ...styles.textFieldPadding,
+            }}
+          >
             <div
-              className='col-md-1 col-sm-1 col-2'
               style={{
-                ...styles.textFieldPadding,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: 'white',
+                borderRadius: 5,
+                height: 55,
               }}
             >
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: 'white',
-                  borderRadius: 5,
-                  height: 55,
-                }}
-              >
-                <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
-              </div>
+              <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
             </div>
-            </div>*/}
-
-
+          </div>
+        </div>
+        </div>
 
         <div
           style={{
@@ -292,7 +346,7 @@ export default function preApproval(props)
             flexDirection: 'column',
           }}
         >
-          {preApproval ? (
+          {preApproval && preApproval.length > 0 ? (
             <div>
               <div>
                 <CustomTable
@@ -317,6 +371,28 @@ export default function preApproval(props)
                 />
               </div>
               <Notification msg={errorMsg} open={openNotification} />
+            </div>
+          ) : preApproval && preApproval.length == 0 ? (
+            <div className='row ' style={{ marginTop: '25px' }}>
+              <div className='col-11'>
+                <h3
+                  style={{
+                    color: 'white',
+                    textAlign: 'center',
+                    width: '100%',
+                    position: 'absolute',
+                  }}
+                >
+                  Opps...No Data Found
+                </h3>
+              </div>
+              <div className='col-1' style={{ marginTop: 45 }}>
+                <img
+                  onClick={() => props.history.goBack()}
+                  src={Back}
+                  style={{ maxWidth: '60%', height: 'auto', cursor: 'pointer' }}
+                />
+              </div>
             </div>
           ) : (
             <div className='LoaderStyle'>

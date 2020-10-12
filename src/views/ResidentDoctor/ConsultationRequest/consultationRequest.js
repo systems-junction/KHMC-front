@@ -1923,7 +1923,7 @@ function LabRadRequest(props) {
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
               className='container-fluid'
             >
-              <div className='row' style={{ marginTop: '20px' }}>
+              <div className='row'>
                 {consultationNoteArray !== 0 ? (
                   <CustomTable
                     tableData={consultationNoteArray}
@@ -1963,7 +1963,7 @@ function LabRadRequest(props) {
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
               className=' container-fluid'
             >
-              <div className='row' style={{ marginTop: '20px' }}>
+              <div className='row'>
                 {residentNoteArray !== 0 ? (
                   <CustomTable
                     tableData={residentNoteArray}
@@ -2005,7 +2005,7 @@ function LabRadRequest(props) {
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
               className='container-fluid'
             >
-              <div className='row' style={{ marginTop: '20px' }}>
+              <div className='row'>
                 {pharmacyRequestArray !== 0 ? (
                   <CustomTable
                     tableData={pharmacyRequestArray}
@@ -2052,7 +2052,10 @@ function LabRadRequest(props) {
               }}
               className={`container-fluid `}
             >
-              <div style={{ marginTop: '20px' }} className='row'>
+              <div
+                style={{ marginTop: '20px' }}
+                className={`row ${classes.root}`}
+              >
                 <div
                   className='col-md-12 col-sm-12 col-12'
                   style={{
@@ -2169,7 +2172,7 @@ function LabRadRequest(props) {
                   />
                 </div>
                 <div
-                  className='col-md-5 col-sm-5 col-3'
+                  className={`col-md-5 col-sm-5 col-3 ${classes.root}`}
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -2193,6 +2196,7 @@ function LabRadRequest(props) {
                 </div>
                 <div className='col-md-2 col-sm-2 col-6'>
                   <Button
+                  className='addButton'
                     style={{
                       ...styles.stylesForButton,
                       marginTop: '25px',
@@ -2249,7 +2253,7 @@ function LabRadRequest(props) {
                     // disabled={enableForm}
                     disabled={enableSave}
                     onClick={saveLabReq}
-                    style={{ ...styles.stylesForButton, width: '100px' }}
+                    style={{ ...styles.stylesForButton, width: '140px' }}
                     variant='contained'
                     color='primary'
                   >
@@ -2269,7 +2273,10 @@ function LabRadRequest(props) {
               }}
               className={`container-fluid `}
             >
-              <div style={{ marginTop: '20px' }} className='row'>
+              <div
+                style={{ marginTop: '20px' }}
+                className={`row ${classes.root}`}
+              >
                 <div
                   className='col-md-12 col-sm-12 col-12'
                   style={{
@@ -2387,7 +2394,7 @@ function LabRadRequest(props) {
                   />
                 </div>
                 <div
-                  className='col-md-5 col-sm-5 col-3'
+                  className={`col-md-5 col-sm-5 col-3 ${classes.root}`}
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -2411,6 +2418,7 @@ function LabRadRequest(props) {
                 </div>
                 <div className='col-md-2 col-sm-2 col-6'>
                   <Button
+                  className='addButton'
                     style={{
                       ...styles.stylesForButton,
                       marginTop: '25px',
@@ -2467,7 +2475,7 @@ function LabRadRequest(props) {
                     // disabled={enableForm}
                     disabled={enableSave}
                     onClick={saveRadioReq}
-                    style={{ ...styles.stylesForButton, width: '100px' }}
+                    style={{ ...styles.stylesForButton, width: '140px' }}
                     variant='contained'
                     color='primary'
                   >
