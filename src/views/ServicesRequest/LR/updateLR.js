@@ -307,11 +307,12 @@ function AddEditPurchaseRequest(props) {
           if (res.data.success) {
             console.log('response after adding Lab Request', res.data)
             // props.history.goBack()
+            console.log("selectedItem", selectedItem)
             props.history.push({
               pathname: 'success',
               state: {
                 //of Request No ${requestId}
-                message: `Lab Service for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} updated successfully`,
+                message: `Lab Service: ${selectedItem.LRrequestNo} for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} updated successfully`,
               },
             })
           } else if (!res.data.success) {
