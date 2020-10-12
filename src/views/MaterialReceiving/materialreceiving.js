@@ -328,7 +328,7 @@ export default function PurchaseRequest(props) {
           </div> */}
         </div>
 
-        <div className='row' style={{marginLeft: '0px', marginRight: '0px', marginTop: '20px'}}>
+        <div className='row' style={{marginLeft: '0px', marginRight: '-5px', marginTop: '20px'}}>
             <div
               className='col-md-12 col-sm-9 col-8'
               style={styles.textFieldPadding}
@@ -379,6 +379,7 @@ export default function PurchaseRequest(props) {
             flex: 4,
             display: "flex",
             flexDirection: "column",
+            
           }}
         >
           { materialReceivings &&  materialReceivings.length > 0 ?  (

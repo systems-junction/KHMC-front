@@ -333,17 +333,15 @@ function AddEditPurchaseRequest(props) {
   const [enableSave, setEnableSave] = useState(true)
   const [isLoading, setIsLoading] = useState(true)
   const [rowId, setRowId] = useState('')
-
   const [externalConsultant, setExternalConsultant] = useState('')
-
   const [allExternalConsultants, setAllExternalConsultants] = useState([])
-
   const [
     openExtenalConsultantDialog,
     setOpenExtenalConsultantDialog,
   ] = useState(false)
-
   const [statusBoolean, setStatusBoolean] = useState(false)
+  const [timer, setTimer] = useState(null)
+  
   const getEDRById = (id) => {
     axios
       .get(getOPRById + '/' + id)
@@ -643,12 +641,28 @@ function AddEditPurchaseRequest(props) {
     dispatch({ field: 'note', value: '' })
   }
 
-  const handleSearch = (e) => {
-    const a = e.target.value.replace(/[^\w-\s]/gi, '')
+  const triggerLabChange = () => {
+    handleSearch(searchQuery)
+  }
+
+  const handlePauseLabSearch = (e) => {
+    clearTimeout(timer)
+
+    const a = e.target.value.replace(/[^\w\s]/gi, '')
     setSearchQuery(a)
-    if (a.length >= 3) {
+
+    setTimer(
+      setTimeout(() => {
+        triggerLabChange()
+      }, 600)
+    )
+  }
+
+  const handleSearch = (e) => {
+
+    if (e.length >= 1) {
       axios
-        .get(getSearchedLaboratoryService + '/' + a)
+        .get(getSearchedLaboratoryService + '/' + e)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
@@ -792,10 +806,9 @@ function AddEditPurchaseRequest(props) {
           props.history.push({
             pathname: 'viewOPR/success',
             state: {
-              message: `Lab Request: ${
-                res.data.data.labRequest[res.data.data.labRequest.length - 1]
+              message: `Lab Request: ${res.data.data.labRequest[res.data.data.labRequest.length - 1]
                   .LRrequestNo
-              } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
+                } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
             },
           })
         } else if (!res.data.success) {
@@ -820,7 +833,7 @@ function AddEditPurchaseRequest(props) {
     var reader = new FileReader()
     var url = reader.readAsDataURL(file)
 
-    reader.onloadend = function() {
+    reader.onloadend = function () {
       if (fileType === 'pdf') {
         setpdfView(file.name)
       } else {
@@ -916,7 +929,7 @@ function AddEditPurchaseRequest(props) {
                   label='Search by Lab test name'
                   name={'searchQuery'}
                   value={searchQuery}
-                  onChange={handleSearch}
+                  onChange={handlePauseLabSearch}
                   className='textInputStyle'
                   variant='filled'
                   InputProps={{
@@ -948,7 +961,7 @@ function AddEditPurchaseRequest(props) {
                     marginRight: '-6px',
                   }}
                 >
-                  <img src={Fingerprint} style={{ maxWidth: 70, height: 60 }}  />
+                  <img src={Fingerprint} style={{ maxWidth: 70, height: 60 }} />
                 </div>
               </div>
             </div>
@@ -975,53 +988,73 @@ function AddEditPurchaseRequest(props) {
                         overflow: 'auto',
                       }}
                     >
-                      {setItemFoundSuccessfully ? (
-                        itemFound && (
-                          <Table size='small'>
-                            <TableHead>
-                              <TableRow>
-                                <TableCell>Service Name</TableCell>
-                                <TableCell>Service Number</TableCell>
-                                <TableCell>Price (JD)</TableCell>
-                                <TableCell align='center'>
-                                  Description
+                      {itemFoundSuccessfull && itemFound !== '' ? (
+                        <Table size='small'>
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>Service Name</TableCell>
+                              <TableCell>Service Number</TableCell>
+                              <TableCell>Price (JD)</TableCell>
+                              <TableCell align='center'>
+                                Description
                                 </TableCell>
-                              </TableRow>
-                            </TableHead>
+                            </TableRow>
+                          </TableHead>
 
-                            <TableBody>
-                              {itemFound.map((i, index) => {
-                                return (
-                                  <TableRow
-                                    key={i.serviceNo}
-                                    onClick={() => handleAddItem(i)}
-                                    style={{ cursor: 'pointer' }}
-                                  >
-                                    <TableCell>{i.name}</TableCell>
-                                    <TableCell>{i.serviceNo}</TableCell>
-                                    <TableCell>{i.price}</TableCell>
-                                    <TableCell align='center'>
-                                      {i.description}
-                                    </TableCell>
-                                  </TableRow>
-                                )
-                              })}
-                            </TableBody>
-                          </Table>
-                        )
-                      ) : (
-                        <h4
-                          style={{ textAlign: 'center' }}
-                          onClick={() => setSearchQuery('')}
+                          <TableBody>
+                            {itemFound.map((i, index) => {
+                              return (
+                                <TableRow
+                                  key={i.serviceNo}
+                                  onClick={() => handleAddItem(i)}
+                                  style={{ cursor: 'pointer' }}
+                                >
+                                  <TableCell>{i.name}</TableCell>
+                                  <TableCell>{i.serviceNo}</TableCell>
+                                  <TableCell>{i.price}</TableCell>
+                                  <TableCell align='center'>
+                                    {i.description}
+                                  </TableCell>
+                                </TableRow>
+                              )
+                            })}
+                          </TableBody>
+                        </Table>
+                      ) : searchQuery ? (
+                        <div style={{ textAlign: 'center' }}>
+                          <Loader
+                            type='TailSpin'
+                            color='#2c6ddd'
+                            height={25}
+                            width={25}
+                            style={{
+                              display: 'inline-block',
+                              padding: '10px',
+                            }}
+                          />
+                          <span
+                            style={{
+                              display: 'inline-block',
+                              padding: '10px',
+                            }}
+                          >
+                            <h4> Searching Lab Test...</h4>
+                          </span>
+                        </div>
+                      ) : searchQuery && !itemFoundSuccessfull ? (
+                        <div
+                          style={{ textAlign: 'center', padding: '10px' }}
                         >
-                          Service Not Found
-                        </h4>
-                      )}
+                          <h4>No Lab Test Found !</h4>
+                        </div>
+                      ) : (
+                              undefined
+                            )}
                     </Paper>
                   </div>
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
               </div>
             </div>
 
@@ -1081,7 +1114,7 @@ function AddEditPurchaseRequest(props) {
 
               <div className='col-md-2 col-sm-2 col-6'>
                 <Button
-                 className='oprAddButton'
+                  className='oprAddButton'
                   style={{
                     ...styles.stylesForButton,
                     marginTop: '25px',
@@ -1125,8 +1158,8 @@ function AddEditPurchaseRequest(props) {
                   borderBottomWidth={20}
                 />
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
             </div>
 
             <div className='row' style={{ marginBottom: '25px' }}>
@@ -1530,10 +1563,10 @@ function AddEditPurchaseRequest(props) {
           <Notification msg={errorMsg} open={openNotification} />
         </div>
       ) : (
-        <div className='LoaderStyle'>
-          <Loader type='TailSpin' color='red' height={50} width={50} />
-        </div>
-      )}
+          <div className='LoaderStyle'>
+            <Loader type='TailSpin' color='red' height={50} width={50} />
+          </div>
+        )}
     </div>
   )
 }

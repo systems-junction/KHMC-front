@@ -45,8 +45,9 @@ const stylesB = {
     cursor: "pointer",
     borderRadius: 5,
     background: "#2c6ddd",
-    width: Button.name === "add" ? "110px" : "auto",
-    height: "40px",
+    // width: Button.name === "add" ? "140px" : "auto",
+    width: '140px',
+    height: "50px",
     outline: "none",
   },
 };
@@ -222,7 +223,7 @@ function FunctionalUnit(props) {
       <Header />
       <div className="cPadding">
         <div className="subheader">
-          <div>
+          <div style={{marginLeft: '-7px'}}>
             <img src={functional_Unit} />
             <h4>Functional Unit</h4>
           </div>

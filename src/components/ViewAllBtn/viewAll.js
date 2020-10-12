@@ -8,8 +8,8 @@ const styles = {
     cursor: "pointer",
     borderRadius: 5,
     background: "#2c6ddd",
-    width: "120px",
-    height: "45px",
+    width: "140px",
+    height: "50px",
     // outline: "none",
     borderWidth:0,
     color:'white',
@@ -18,6 +18,7 @@ const styles = {
     justifyContent:'center',
     alignItems:'center',
     // fontSize:50
+    marginRight: 4
   },
 };
 
@@ -35,7 +36,7 @@ function ViewAllBtn(props) {
       >
         <img className="icon-view" src={view_all} />
         &nbsp;&nbsp;
-        <strong style={{ fontSize: "12px" }}>View All</strong>
+        <strong >View All</strong>
       </Button>
     </div>
   );

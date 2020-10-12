@@ -91,7 +91,7 @@ const styles = {
   },
   textFieldPadding: {
     paddingLeft: 0,
-    paddingRight: 5,
+    paddingRight: 0,
   },
 };
 const useStyles = makeStyles(styles);
