@@ -783,7 +783,7 @@ function AddEditPurchaseRequest(props) {
         </div>
 
         {receivedQty ? (
-          <div style={{ flex: 4, display: "flex", flexDirection: "column" }}>
+          <div style={{ flex: 4, display: "flex", flexDirection: "column", marginTop: '20px' }} className='container-fluid'>
             {comingFor === "edit" ? (
               <div className="row">
                 <div
@@ -1023,7 +1023,7 @@ function AddEditPurchaseRequest(props) {
             {/* <div className="row">
             <div
               className="col-md-12"
-              style={styles.inputContainerForTextField}
+              style={{...styles.inputContainerForTextField, ...styles.textFieldPadding,}}
             >
               <input
                 type="text"
@@ -1382,7 +1382,7 @@ function AddEditPurchaseRequest(props) {
               <DialogContent style={{ backgroundColor: "#31e2aa" }}>
                 <DialogTitle
                   id="simple-dialog-title"
-                  style={{ color: "white" }}
+                  style={{ color: "white", marginLeft: '-18px' }}
                 >
                   Damage Details
                 </DialogTitle>
@@ -1390,7 +1390,7 @@ function AddEditPurchaseRequest(props) {
                   {/* <div className="row">
                   <div
                     className="col-md-12"
-                    style={styles.inputContainerForTextField}
+                    style={{...styles.inputContainerForTextField, ...styles.textFieldPadding,}}
                   >
                     <InputLabel
                       id="generated-label"
@@ -1413,96 +1413,112 @@ function AddEditPurchaseRequest(props) {
                   <div className="row">
                     <div
                       className="col-md-4"
-                      style={styles.inputContainerForTextField}
+                      style={{...styles.inputContainerForTextField, ...styles.textFieldPadding,}}
                     >
-                      <InputLabelComponent>Damage Cause By</InputLabelComponent>
-
-                      <input
-                        type="text"
-                        label="Damage Cause"
-                        name={"causedBy"}
-                        value={causedBy}
-                        onChange={onChangeValue}
-                        className="textInputStyle"
-                      />
+                      <TextField
+                    required
+                    label='Damage Cause By'
+                    name={'causedBy'}
+                    value={causedBy}
+                    onChange={onChangeValue}
+                    className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  />
                     </div>
 
                     <div
                       className="col-md-4"
-                      style={styles.inputContainerForTextField}
+                      style={{...styles.inputContainerForTextField, ...styles.textFieldPadding,}}
                     >
-                      <InputLabelComponent>Item Code</InputLabelComponent>
-
-                      <input
-                        type="text"
-                        disabled={true}
-                        label="Item Code"
-                        name={"itemCode"}
-                        value={itemCode}
-                        onChange={onChangeValue}
-                        className="textInputStyle"
-                      />
+                      
+                      <TextField
+                    disabled={true}
+                    label='Item Code'
+                    name={'itemCode'}
+                    value={itemCode}
+                    onChange={onChangeValue}
+                    className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  />
                     </div>
                     <div
                       className="col-md-4"
-                      style={styles.inputContainerForTextField}
+                      style={{...styles.inputContainerForTextField, ...styles.textFieldPadding,}}
                     >
-                      <InputLabelComponent>Item Name</InputLabelComponent>
-
-                      <input
-                        type="text"
-                        disabled={true}
-                        label="Item Name"
-                        name={"itemName"}
-                        value={itemName}
-                        onChange={onChangeValue}
-                        className="textInputStyle"
-                      />
+                      
+                      <TextField
+                    disabled={true}
+                    label='Item Name'
+                    name={'itemName'}
+                    value={itemName}
+                    onChange={onChangeValue}
+                    className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  />
                     </div>
                   </div>
 
                   <div className="row">
                     <div
                       className="col-md-6"
-                      style={styles.inputContainerForTextField}
+                      style={{...styles.inputContainerForTextField, ...styles.textFieldPadding,}}
                     >
-                      <InputLabelComponent>Description</InputLabelComponent>
-
-                      <input
-                        type="text"
-                        disabled={true}
-                        label="Description"
-                        name={"description"}
-                        value={description}
-                        onChange={onChangeValue}
-                        className="textInputStyle"
-                      />
+                      
+                      <TextField
+                    disabled={true}
+                    label='Description'
+                    name={'description'}
+                    value={description}
+                    onChange={onChangeValue}
+                    className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  />
                     </div>
 
                     <div
                       className="col-md-6"
-                      style={styles.inputContainerForTextField}
+                      style={{...styles.inputContainerForTextField, ...styles.textFieldPadding,}}
                     >
-                      <InputLabelComponent>Item Sub Class</InputLabelComponent>
+                      
 
-                      <input
-                        type="text"
-                        disabled={true}
-                        label="Description"
-                        name={"description"}
-                        value={itemId.subClass}
-                        onChange={onChangeValue}
-                        className="textInputStyle"
-                      />
+<TextField
+                    disabled={true}
+                    label='Item Sub Class'
+                    name={'description'}
+                    value={itemId.subClass}
+                    onChange={onChangeValue}
+                    className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  />
                     </div>
                   </div>
 
                   <div className="row">
                     <div
                       className="col-md-6"
-                      style={styles.inputContainerForTextField}
+                      style={{...styles.inputContainerForTextField, ...styles.textFieldPadding,}}
                     >
-                      <InputLabelComponent>
+                      {/* <InputLabelComponent>
                         Item Cost Per Unit
                       </InputLabelComponent>
 
@@ -1516,56 +1532,85 @@ function AddEditPurchaseRequest(props) {
                         onKeyDown={(evt) =>
                           evt.key === "e" && evt.preventDefault()
                         }
-                      />
+                      /> */}
+
+<TextField
+required
+type="number"
+                    label='Item Cost Per Unit'
+                    name={'itemCostPerUnit'}
+                    value={itemCostPerUnit}
+                    onChange={onChangeValue}
+                    className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                    onKeyDown={(evt) =>
+                      evt.key === "e" && evt.preventDefault()
+                    }
+                  />
                     </div>
 
                     <div
                       className="col-md-6"
-                      style={styles.inputContainerForTextField}
+                      style={{...styles.inputContainerForTextField, ...styles.textFieldPadding,}}
                     >
-                      <InputLabelComponent>
-                        Total Damage Cost
-                      </InputLabelComponent>
-
-                      <input
-                        type="number"
-                        label="Total Damage Cost"
-                        name={"totalDamageCost"}
-                        value={totalDamageCost}
-                        onChange={onChangeValue}
-                        className="textInputStyle"
-                        onKeyDown={(evt) =>
-                          evt.key === "e" && evt.preventDefault()
-                        }
-                      />
+                      
+                      <TextField
+                      required
+type="number"
+                    label='Total Damage Cost'
+                    name={'totalDamageCost'}
+                    value={totalDamageCost}
+                    onChange={onChangeValue}
+                    className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                    onKeyDown={(evt) =>
+                      evt.key === "e" && evt.preventDefault()
+                    }
+                  />
                     </div>
                   </div>
 
                   <div className="row">
                     <div
                       className="col-md-6"
-                      style={styles.inputContainerForTextField}
+                      style={{...styles.inputContainerForTextField, ...styles.textFieldPadding,}}
                     >
-                      <InputLabelComponent>FU Name</InputLabelComponent>
-                      <input
-                        disabled={true}
-                        label="FU Name"
-                        name={"fuName"}
-                        value={fuId.fuName}
-                        onChange={onChangeValue}
-                        className="textInputStyle"
-                      />
+                      
+
+<TextField
+disabled={true}
+                    label='FU Name'
+                    name={'fuName'}
+                    value={fuId.fuName}
+                    onChange={onChangeValue}
+                    className='textInputStyle'
+                    variant='filled'
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  />
                     </div>
 
-                    <div className="col-md-6" style={{ marginTop: 35 }}>
-                      <InputLabelComponent>
+                    <div className="col-md-6" style={{ marginTop: 7, ...styles.textFieldPadding }}>
+                      {/* <InputLabelComponent>
                         Date/Time (MM/DD/YYYY)
-                      </InputLabelComponent>
+                      </InputLabelComponent> */}
                       <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <DateTimePicker
-                          inputVariant="outlined"
+                        required
+                          inputVariant="filled"
                           onChange={(val) => onChangeDate(val, "date")}
                           name={"date"}
+                          label='Date/Time (DD/MM/YYYY)'
                           // format="MM/dd/yyyy hh:mm a"
                           format={dateTimeFormat}
                           disabled={
@@ -1577,6 +1622,10 @@ function AddEditPurchaseRequest(props) {
                               : true
                           }
                           fullWidth
+                          InputProps={{
+                            className: classes.input,
+                            classes: { input: classes.input },
+                          }}
                           style={{
                             backgroundColor: "white",
                             borderRadius: 10,
@@ -1593,7 +1642,7 @@ function AddEditPurchaseRequest(props) {
                   <div
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
-                    <div style={{ marginTop: "2%", marginBottom: "2%" }}>
+                    <div style={{ marginTop: "2%", marginBottom: "2%", marginLeft: '-12px' }}>
                       <Button onClick={() => hideDialog()} variant="contained">
                         Cancel
                       </Button>
@@ -1605,6 +1654,7 @@ function AddEditPurchaseRequest(props) {
                         justifyContent: "flex-end",
                         marginTop: "2%",
                         marginBottom: "2%",
+                        marginRight: '-8px'
                       }}
                     >
                       {selectItemToEditId === "" ? (

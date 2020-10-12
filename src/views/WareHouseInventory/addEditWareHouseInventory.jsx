@@ -324,8 +324,8 @@ function AddEditWareHouseInventory(props) {
 
       <div className={`cPadding ${classes.root}`}>
         <div className="row">
-          <div className="subheader">
-            <div>
+          <div className="subheader" style={{marginRight: 15}}>
+            <div style={{marginLeft: 12}}>
               <img src={wh_inventory} />
               <h4>
                 {comingFor === "add"
@@ -337,7 +337,7 @@ function AddEditWareHouseInventory(props) {
           </div>
         </div>
 
-        <div style={{ flex: 4, display: "flex", flexDirection: "column" }}>
+        <div style={{ flex: 4, display: "flex", flexDirection: "column", marginTop: 20 }} className='container-fluid'>
           <div className="row">
             <div
               className="col-md-6"
@@ -405,7 +405,7 @@ function AddEditWareHouseInventory(props) {
             </div>
           </div>
 
-          <div className="row">
+          <div className="row" style={{marginBottom: '-20px'}}>
             <div
               className="col-md-4"
               style={{
@@ -504,6 +504,8 @@ function AddEditWareHouseInventory(props) {
               justifyContent: "space-between",
               marginBottom: 30,
               marginTop: 30,
+              marginLeft: -10,
+              marginRight: -9
             }}
           >
             <img

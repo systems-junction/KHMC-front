@@ -51,8 +51,8 @@ const styles = {
     cursor: "pointer",
     borderRadius: 5,
     background: "#2c6ddd",
-    width: "115px",
-    height: "40px",
+    width: "140px",
+    height: "50px",
     outline: "none",
   },
   textFieldPadding: {
@@ -284,7 +284,7 @@ export default function PurchaseRequest(props) {
               >
                 <img className="icon-style" src={plus_icon} />
                 &nbsp;&nbsp;
-                <strong style={{ fontSize: "12px" }}>Add New</strong>
+                <strong>Add New</strong>
               </Button>
             ) : (
               undefined
@@ -298,7 +298,7 @@ export default function PurchaseRequest(props) {
         </div>
 
         
-        <div className='row' style={{marginLeft: '0px', marginRight: '0px', marginTop: '20px'}}>
+        <div className='row' style={{marginLeft: '0px', marginRight: '-5px', marginTop: '20px'}}>
             <div
               className='col-md-12 col-sm-9 col-8'
               style={styles.textFieldPadding}

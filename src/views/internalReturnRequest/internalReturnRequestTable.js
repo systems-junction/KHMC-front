@@ -536,7 +536,7 @@ export default function ReplenishmentRequest(props) {
           <img
             onClick={() => props.history.goBack()}
             src={Back_Arrow}
-            style={{ width: 60, height: 40, cursor: "pointer" }}
+            style={{ width: 45, height: 35, cursor: "pointer" }}
           />
         </div>
       </div>
