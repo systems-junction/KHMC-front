@@ -410,7 +410,7 @@ function AddEditPurchaseRequest(props) {
     setIsFormSubmitted(true);
     // console.log("purchase request", purchaseRequest);
     if (validateForm()) {
-      if (status === "pending_reception" && committeeStatus === "approved") {
+      if (status === "pending_receipt" && committeeStatus === "approved") {
         setOpenNotification(true);
         setErrorMsg("PO can not be updated once it is in progress");
         return;
@@ -674,7 +674,6 @@ function AddEditPurchaseRequest(props) {
     }
   }
 
-
   return (
     <div
       style={{
@@ -882,7 +881,7 @@ function AddEditPurchaseRequest(props) {
                       }}
                       disabled={
                         committeeStatus === "approved" &&
-                        status === "pending_reception"
+                        status === "pending_receipt"
                           ? true
                           : false
                       }

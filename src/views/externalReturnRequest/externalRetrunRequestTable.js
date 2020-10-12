@@ -50,7 +50,7 @@ const tableDataKeysForFUHead = [
 const tableHeading = [
   "Return Request No",
   "Item Code",
-  "Item Name",
+  "Date/Time Generated",
   "Generated",
   "Reason",
   "Status",
@@ -59,7 +59,7 @@ const tableHeading = [
 const tableDataKeys = [
   "returnRequestNo",
   ["itemId", "itemCode"],
-  ["itemId", "name"],
+  "createdAt",
   "generated",
   "reasonToDisplay",
   "status",

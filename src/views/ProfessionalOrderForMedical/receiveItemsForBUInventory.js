@@ -44,6 +44,8 @@ import CurrencyTextField from "@unicef/material-ui-currency-textfield";
 import dateTimeFormat from "../../constants/dateTimeFormat";
 import dateFormat from "../../constants/dateFormat";
 
+import TableforAddedQtyFU from "../ReplenishmentRequestForFU/tableforAddedQtyFU";
+
 const statusArray = [
   // { key: "complete", value: "Complete" },
   { key: "Received", value: "Received" },
@@ -292,6 +294,8 @@ function ReceiveItems(props) {
 
   const [selectedItem, setSelectedItem] = useState("");
 
+  const [batchArray, setBatchArray] = useState([]);
+
   useEffect(() => {
     setCurrentUser(cookie.load("current_user"));
 
@@ -309,6 +313,7 @@ function ReceiveItems(props) {
 
     if (selectedRec) {
       setSelectedItem(selectedRec);
+      setBatchArray(selectedRec.batchArray);
     }
 
     if (selectedRec) {
@@ -510,9 +515,29 @@ function ReceiveItems(props) {
         </div>
 
         <div style={{ flex: 4, display: "flex", flexDirection: "column" }}>
+          <div className="row" style={{ marginBottom: 15 }}>
+            {batchArray.length > 0 ? (
+              <>
+                <h5
+                  style={{
+                    color: "white",
+                    fontWeight: "bold",
+                    marginTop: 15,
+                    marginBottom: 15,
+                  }}
+                >
+                  Added Batches With Quantities
+                </h5>
+                <TableforAddedQtyFU returnBatchArray={batchArray} />
+              </>
+            ) : (
+              undefined
+            )}
+          </div>
+
           <div className="row">
             <div
-              className="col-md-6"
+              className="col-md-4"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -540,7 +565,7 @@ function ReceiveItems(props) {
             </div>
 
             <div
-              className="col-md-6"
+              className="col-md-4"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -564,6 +589,36 @@ function ReceiveItems(props) {
                   className: classesForInput.label,
                   classes: { label: classesForInput.label },
                 }}
+              />
+            </div>
+
+            <div
+              className="col-md-4"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                disabled={true}
+                className="textInputStyle"
+                id="lotNo"
+                type={"number"}
+                variant="filled"
+                label="Lot No"
+                name={"lotNo"}
+                value={lotNo}
+                onChange={onChangeValue}
+                InputProps={{
+                  className: classesForInput.input,
+                  classes: { input: classesForInput.input },
+                }}
+                InputLabelProps={{
+                  className: classesForInput.label,
+                  classes: { label: classesForInput.label },
+                }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
               />
             </div>
           </div>
@@ -687,7 +742,7 @@ function ReceiveItems(props) {
             </div>
           </div>
 
-          <div className="row">
+          {/* <div className="row">
             <div
               className="col-md-4"
               style={{
@@ -716,36 +771,7 @@ function ReceiveItems(props) {
               />
             </div>
 
-            <div
-              className="col-md-4"
-              style={{
-                ...styles.inputContainerForTextField,
-                ...styles.textFieldPadding,
-              }}
-            >
-              <TextField
-                required
-                disabled={true}
-                className="textInputStyle"
-                id="lotNo"
-                type={"number"}
-                variant="filled"
-                label="Lot No"
-                name={"lotNo"}
-                value={lotNo}
-                onChange={onChangeValue}
-                InputProps={{
-                  className: classesForInput.input,
-                  classes: { input: classesForInput.input },
-                }}
-                InputLabelProps={{
-                  className: classesForInput.label,
-                  classes: { label: classesForInput.label },
-                }}
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              />
-            </div>
-
+      
             <div
               className="col-md-4"
               style={{
@@ -781,7 +807,7 @@ function ReceiveItems(props) {
                 />
               </MuiPickersUtilsProvider>
             </div>
-          </div>
+          </div> */}
 
           <div className="row">
             <div

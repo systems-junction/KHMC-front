@@ -1084,24 +1084,22 @@ function AddEditPurchaseRequest(props) {
             undefined
           )}
 
-          <div
-            style={{
-              display: "flex",
-              flex: 1,
-              justifyContent: "space-between",
-              marginTop: "2%",
-              marginBottom: "2%",
-              alignItems: "center",
-            }}
-          >
-            <div>
+          <div className="row">
+            <div
+              style={{
+                display: "flex",
+                flex: 1,
+                justifyContent: "space-between",
+                marginTop: "2%",
+                marginBottom: "2%",
+                alignItems: "center",
+              }}
+            >
               <img
                 onClick={() => props.history.goBack()}
                 src={Back_Arrow}
                 style={{ width: 60, height: 40, cursor: "pointer" }}
               />
-            </div>
-            <div style={{}}>
               {comingFor === "add" &&
               currentUser &&
               currentUser.staffTypeId.type === "Warehouse Inventory Keeper" ? (
@@ -1142,9 +1140,9 @@ function AddEditPurchaseRequest(props) {
                 undefined
               )}
             </div>
-          </div>
 
-          <Notification msg={errorMsg} open={openNotification} />
+            <Notification msg={errorMsg} open={openNotification} />
+          </div>
         </div>
       </div>
     </div>

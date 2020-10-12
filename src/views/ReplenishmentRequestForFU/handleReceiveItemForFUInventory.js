@@ -45,6 +45,8 @@ import CurrencyTextField from "@unicef/material-ui-currency-textfield";
 import dateTimeFormat from "../../constants/dateTimeFormat.js";
 import dateFormat from "../../constants/dateFormat.js";
 
+import TableforAddedQtyFU from "./tableforAddedQtyFU";
+
 const statusArray = [
   { key: "Partially Received", value: "Partially Received" },
   { key: "Received", value: "Received" },
@@ -73,58 +75,15 @@ const inputStyles = makeStyles((theme) => ({
       backgroundColor: "white",
     },
   },
-  // multilineColor: {
-  //   backgroundColor: "white",
-  //   borderRadius: 5,
-  //   "&:hover": {
-  //     backgroundColor: "white",
-  //   },
-  //   "&:after": {
-  //     borderBottomColor: "black",
-  //   },
-  // },
-  // root: {
-  //   "& .MuiTextField-root": {
-  //     backgroundColor: "white",
-  //     color: "blue",
-  //   },
-  //   "& .Mui-focused": {
-  //     backgroundColor: "white",
-  //     color: "blue",
-  //   },
-  //   "& .Mui-disabled": {
-  //     backgroundColor: undefined,
-  //     // color: "gray",
-  //   },
-  // },
 }));
 
 const styles = {
-  // inputContainer: {
-  //   marginTop: 25,
-  //   backgroundColor: "white",
-  //   borderRadius: 5,
-  //   paddingTop: 5,
-  //   paddingBottom: 5,
-  //   paddingLeft: 5,
-  //   paddingRight: 5,
-  // },
-
-  // buttonContainer: {
-  //   marginTop: 25,
-  // },
-
   inputContainerForTextField: {
     marginTop: 6,
   },
 
   inputContainerForDropDown: {
     marginTop: 25,
-    // backgroundColor: "white",
-    // borderRadius: 10,
-    // paddingLeft: 10,
-    // paddingRight: 10,
-    // paddingTop: 2,
   },
 
   styleForLabel: {
@@ -180,7 +139,7 @@ function ReceiveItems(props) {
     requiredQty: "",
     receivedQty: "",
     bonusQty: "0",
-    batchNumber: "123",
+    batchNumber: "",
     lotNo: "123",
     unit: "kg",
     discount: "5",
@@ -356,6 +315,7 @@ function ReceiveItems(props) {
   const [openNotification, setOpenNotification] = useState(false);
 
   const [selectedItem, setSelectedItem] = useState("");
+  const [batchArray, setBatchArray] = useState([]);
 
   useEffect(() => {
     setCurrentUser(cookie.load("current_user"));
@@ -372,6 +332,7 @@ function ReceiveItems(props) {
 
     if (selectedRec) {
       setSelectedItem(selectedRec);
+      setBatchArray(selectedRec.batchArray);
     }
 
     if (selectedRec) {
@@ -418,7 +379,7 @@ function ReceiveItems(props) {
       bonusQty.length > 0 &&
       // batchNumber.length > 0 &&
       // lotNo.length > 0 &&
-      expiryDate !== "" &&
+      // expiryDate !== "" &&
       // unit.length > 0 &&
       // discount.length > 0 &&
       // uniyDiscount.length > 0 &&
@@ -603,6 +564,26 @@ function ReceiveItems(props) {
         </div>
 
         <div style={{ flex: 4, display: "flex", flexDirection: "column" }}>
+          <div className="row" style={{ marginBottom: 15 }}>
+            {batchArray.length > 0 ? (
+              <>
+                <h5
+                  style={{
+                    color: "white",
+                    fontWeight: "bold",
+                    marginTop: 15,
+                    marginBottom: 15,
+                  }}
+                >
+                  Added Batches With Quantities
+                </h5>
+                <TableforAddedQtyFU returnBatchArray={batchArray} />
+              </>
+            ) : (
+              undefined
+            )}
+          </div>
+
           <div className="row">
             <div
               className="col-md-6"
@@ -782,7 +763,7 @@ function ReceiveItems(props) {
           </div>
 
           <div className="row">
-            <div
+            {/* <div
               className="col-md-3"
               style={{
                 ...styles.inputContainerForTextField,
@@ -811,10 +792,10 @@ function ReceiveItems(props) {
                     evt.preventDefault();
                 }}
               />
-            </div>
+            </div> */}
 
             <div
-              className="col-md-3"
+              className="col-md-6"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -844,7 +825,7 @@ function ReceiveItems(props) {
               />
             </div>
 
-            <div
+            {/* <div
               className="col-md-3"
               style={{
                 ...styles.inputContainerForTextField,
@@ -874,10 +855,10 @@ function ReceiveItems(props) {
                   }
                 />
               </MuiPickersUtilsProvider>
-            </div>
+            </div> */}
 
             <div
-              className="col-md-3"
+              className="col-md-6"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,

@@ -871,7 +871,8 @@ function AddEditPurchaseRequest(props) {
     if (validateItemsForm()) {
       if (reqQty > maximumLevel - currentQty) {
         setErrorMsg(
-          `You can not add qty which exceeds the maximum level ${maximumLevel}`
+          `You can not add qty more than ${maximumLevel -
+            currentQty} because it exceeds the maximum level in inventory`
         );
         setOpenNotification(true);
         return;
@@ -965,8 +966,8 @@ function AddEditPurchaseRequest(props) {
     if (validateItemsForm()) {
       if (reqQty > maximumLevel - currentQty) {
         setErrorMsg(
-          `You can not add qty which exceeds the maximum level ${maximumLevel}`
-        );
+          `You can not add qty more than ${maximumLevel -
+            currentQty} because it exceeds the maximum level in inventory`        );
         setOpenNotification(true);
         return;
       } else {
