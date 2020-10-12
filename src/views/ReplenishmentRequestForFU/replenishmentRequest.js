@@ -106,20 +106,62 @@ const styles = {
 };
 
 const useStylesForInput = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(0),
+  },
   input: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
+    boxShadow: 'none',
     borderRadius: 5,
-    "&:after": {
-      borderBottomColor: "black",
+    '&:after': {
+      borderBottomColor: 'black',
+      boxShadow: 'none',
     },
-    "&:hover": {
-      backgroundColor: "white",
+    '&:hover': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
     },
-    "&:disabled": {
-      color: "gray",
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+      borderRadius: 5,
     },
   },
-}));
+  multilineColor: {
+    boxShadow: 'none',
+    backgroundColor: 'white',
+    borderRadius: 5,
+    '&:hover': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
+    '&:after': {
+      borderBottomColor: 'black',
+      boxShadow: 'none',
+    },
+    '&:focus': {
+      boxShadow: 'none',
+    },
+  },
+  root: {
+    '& .MuiTextField-root': {
+      backgroundColor: 'white',
+    },
+    '& .Mui-focused': {
+      backgroundColor: 'white',
+      color: 'black',
+      boxShadow: 'none',
+    },
+    '& .Mui-disabled': {
+      backgroundColor: 'white',
+      color: 'gray',
+    },
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
+  },
+}))
 
 const actions = { view: true };
 const actionsForFUMemeberForReceive = { edit: false, view: true };
@@ -691,7 +733,7 @@ export default function ReplenishmentRequest(props) {
         <div className="cPadding">
           <div className="subheader">
             {props.history.location.pathname === "/home/wms/fus/receive" ? (
-              <div>
+              <div style={{marginLeft: '-10px'}}>
                 <img src={ReceiveItem} />
                 <h4>Order Receiving / Return</h4>
               </div>
@@ -723,8 +765,8 @@ export default function ReplenishmentRequest(props) {
           </div>
 
           <div
-            className="row"
-            style={{ marginLeft: "0px", marginRight: "0px", marginTop: "20px" }}
+            className={`row ${classesInput.root}`}
+            style={{ marginLeft: "0px", marginRight: "-5px", marginTop: "20px" }}
           >
             <div
               className="col-md-12 col-sm-9 col-8"
@@ -864,7 +906,8 @@ export default function ReplenishmentRequest(props) {
                     onClick={() => props.history.goBack()}
                     src={Back_Arrow}
                     style={{
-                      maxWidth: "60%",
+                     with: 45,
+                     height: 35,
                       height: "auto",
                       cursor: "pointer",
                     }}
@@ -881,7 +924,7 @@ export default function ReplenishmentRequest(props) {
             <img
               onClick={() => props.history.goBack()}
               src={Back_Arrow}
-              style={{ width: 60, height: 40, cursor: "pointer" }}
+              style={{ width: 45, height: 35, cursor: "pointer" }}
             />
           </div>
         </div>

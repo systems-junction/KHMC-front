@@ -64,8 +64,8 @@ const styles = {
     marginTop: 6,
   },
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
   input: {
     display: "none",
@@ -77,59 +77,62 @@ const styles = {
 };
 
 const useStyles = makeStyles((theme) => ({
-  // margin: {
-  //   margin: theme.spacing(0),
-  // },
-  // input: {
-  //   backgroundColor: "white",
-  //   borderRadius: 6,
-  //   "&:after": {
-  //     borderBottomColor: "black",
-  //   },
-  //   "&:hover": {
-  //     backgroundColor: "white",
-  //   },
-  //   "&:disabled": {
-  //     color: "gray",
-  //   },
-  // },
-  // multilineColor: {
-  //   backgroundColor: "white",
-  //   borderRadius: 6,
-  //   "&:hover": {
-  //     backgroundColor: "white",
-  //   },
-  //   "&:after": {
-  //     borderBottomColor: "black",
-  //   },
-  // },
-  // root: {
-  //   "& .MuiTextField-root": {
-  //     backgroundColor: "white",
-  //   },
-  //   "& .Mui-focused": {
-  //     backgroundColor: "white",
-  //     color: "black",
-  //   },
-  // },
   margin: {
     margin: theme.spacing(0),
   },
   input: {
-    backgroundColor: "white",
-    borderRadius: 4,
-    "&:placeholder": {
-      // color: "gray",
-      // fontWeight: "400",
+    backgroundColor: 'white',
+    boxShadow: 'none',
+    borderRadius: 5,
+    '&:after': {
+      borderBottomColor: 'black',
+      boxShadow: 'none',
     },
-    "&:before": {
-      borderBottomWidth: "0px",
+    '&:hover': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
     },
-    "&:after": {
-      color: "black",
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+      borderRadius: 5,
     },
   },
-}));
+  multilineColor: {
+    boxShadow: 'none',
+    backgroundColor: 'white',
+    borderRadius: 5,
+    '&:hover': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
+    '&:after': {
+      borderBottomColor: 'black',
+      boxShadow: 'none',
+    },
+    '&:focus': {
+      boxShadow: 'none',
+    },
+  },
+  root: {
+    '& .MuiTextField-root': {
+      backgroundColor: 'white',
+    },
+    '& .Mui-focused': {
+      backgroundColor: 'white',
+      color: 'black',
+      boxShadow: 'none',
+    },
+    '& .Mui-disabled': {
+      backgroundColor: 'white',
+      color: 'gray',
+    },
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
+  },
+}))
 
 const statues = [
   {
@@ -385,7 +388,7 @@ function AddEditStaff(props) {
       }}
     >
       <Header />
-      <div className={`cPadding ${classes.root}`}>
+      <div className={`cPadding `}>
         <div className="subheader">
           <div>
             <img src={business_Unit} />
@@ -405,8 +408,8 @@ function AddEditStaff(props) {
           </div> */}
           <ViewAllBtn history={props.history} />
         </div>
-        <div className="container-fluid">
-          <div className="row">
+        <div className={`${'container-fluid'} `}>
+          <div className={`row ${classes.root}`} style={{marginTop: '15px', marginRight: '-20px', marginLeft: '-20px'}}>
             <div
               className="col-md-6"
               style={{
@@ -460,7 +463,7 @@ function AddEditStaff(props) {
             </div>
           </div>
 
-          <div className="row">
+          <div className={`row ${classes.root}`} style={{marginTop: '20px', marginRight: '-20px', marginLeft: '-20px'}}>
             <div
               className="col-md-4"
               style={{
@@ -549,7 +552,7 @@ function AddEditStaff(props) {
             </div>
           </div>
 
-          <div className="row">
+          <div className={`row ${classes.root}`} style={{marginTop: '20px', marginRight: '-20px', marginLeft: '-20px'}}>
             <div
               className="col-md-4"
               style={{
@@ -660,7 +663,7 @@ function AddEditStaff(props) {
             </div>
           </div>
 
-          <div className="row">
+          <div className={`row ${classes.root}`} style={{marginTop: '20px', marginRight: '-20px', marginLeft: '-20px'}}>
             <div
               className="col-md-4"
               style={{
@@ -743,7 +746,7 @@ function AddEditStaff(props) {
             </div>
           </div>
 
-          <div className="row">
+          <div className={`row ${classes.root}`} style={{marginTop: '20px', marginRight: '-20px', marginLeft: '-20px'}}>
             <div
               className="col-md-4"
               style={{
