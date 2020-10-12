@@ -67,11 +67,11 @@ const admin = [
   //   text: "Surgery Service",
   //   path: "/home/controlroom/rcm/services/surgery",
   // },
-  // {
-  //   img: Nursing,
-  //   text: "Nursing Proc/Service",
-  //   path: "/home/controlroom/rcm/services/nursing",
-  // },
+  {
+    img: Nursing,
+    text: "Nursing Service",
+    path: "/home/controlroom/rcm/services/nursing",
+  },
   {
     text: '',
     path: '',
