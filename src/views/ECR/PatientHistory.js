@@ -543,12 +543,23 @@ function LabRadRequest(props) {
       setIcd(res.data.data);
     });
 
+    const selectedItem = props.history.location.state.selectedItem;
+    const diagnosisArray = props.history.location.state.diagnosisArray;
+    const medicationArray = props.history.location.state.medicationArray;
+
+    console.log("selectedItem", selectedItem);
+    console.log("diagnosisArray", diagnosisArray);
+    console.log("medicationArray", medicationArray);
+
+    setHistoryId(selectedItem._id);
+    setSelectedItem(selectedItem);
+    dispatch({ field: "diagnosisArray", value: diagnosisArray });
+    dispatch({ field: "medicationArray", value: medicationArray });
+
     seticdSection(Object.keys(icdCodesList[0]));
 
     // getEDRById(props.history.location.state.selectedItem._id);
 
-    setHistoryId(props.history.location.state.selectedItem._id);
-    setSelectedItem(props.history.location.state.selectedItem);
     // setrequestNo(props.history.location.state.selectedItem.requestNo);
     // setSelectedPatient(props.history.location.state.selectedItem.patientId);
   }, [icdCode]);

@@ -1012,6 +1012,8 @@ function LabRadRequest(props) {
       pathname: path,
       state: {
         selectedItem: selectedItem,
+        diagnosisArray: diagnosisArray,
+        medicationArray: medicationArray,
       },
     })
   }

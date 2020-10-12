@@ -553,6 +553,16 @@ function LabRadRequest(props) {
 
     seticdSection(Object.keys(icdCodesList[0]));
 
+    const selectedItem = props.history.location.state.selectedItem;
+    const diagnosisArray = props.history.location.state.diagnosisArray;
+    const medicationArray = props.history.location.state.medicationArray;
+
+    console.log("selectedItem", selectedItem);
+    // setHistoryId(selectedItem._id);
+    setSelectedItem(selectedItem);
+    dispatch({ field: "diagnosisArray", value: diagnosisArray });
+    dispatch({ field: "medicationArray", value: medicationArray });
+
     // getEDRById(props.history.location.state.selectedItem._id);
 
     // setId(props.history.location.state.selectedItem._id);

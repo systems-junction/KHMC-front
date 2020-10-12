@@ -521,6 +521,7 @@ function LabRadRequest(props) {
       setIcd(res.data.data)
     })
 
+
     seticdSection(Object.keys(icdCodesList[0]))
     // getEDRById(props.history.location.state.selectedItem._id);
 
