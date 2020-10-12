@@ -18,7 +18,7 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     // fontSize:50
-    marginRight: 4
+    // marginRight: 4
   },
 };
 
@@ -36,7 +36,7 @@ function ViewAllBtn(props) {
       >
         <img className="icon-view" src={view_all} />
         &nbsp;&nbsp;
-        <strong >View All</strong>
+        <strong>View All</strong>
       </Button>
     </div>
   );
