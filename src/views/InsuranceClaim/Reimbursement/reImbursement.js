@@ -37,34 +37,74 @@ const styles = {
     outline: 'none',
   },
   textFieldPadding: {
-    paddingLeft: 0,
+    paddingLeft: 5,
     paddingRight: 5,
   },
 
 }
 
-const useStylesForInput = makeStyles((theme) => ({
+const useStyles = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(0),
+  },
   input: {
     backgroundColor: 'white',
+    boxShadow: 'none',
     borderRadius: 5,
     '&:after': {
       borderBottomColor: 'black',
+      boxShadow: 'none',
     },
     '&:hover': {
       backgroundColor: 'white',
+      boxShadow: 'none',
     },
-    '&:disabled': {
-      color: 'gray',
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+      borderRadius: 5,
     },
   },
-
-
+  multilineColor: {
+    boxShadow: 'none',
+    backgroundColor: 'white',
+    borderRadius: 5,
+    '&:hover': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
+    '&:after': {
+      borderBottomColor: 'black',
+      boxShadow: 'none',
+    },
+    '&:focus': {
+      boxShadow: 'none',
+    },
+  },
+  root: {
+    '& .MuiTextField-root': {
+      backgroundColor: 'white',
+    },
+    '& .Mui-focused': {
+      backgroundColor: 'white',
+      color: 'black',
+      boxShadow: 'none',
+    },
+    '& .Mui-disabled': {
+      backgroundColor: 'white',
+      color: 'gray',
+    },
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
+  },
 }))
 
 const actions = { edit: true }
 
 export default function Reimbursement(props) {
-  const classes = useStylesForInput()
+  const classes = useStyles()
 
   const [insurance, setinsurance] = useState('')
   const [itemModalVisible, setitemModalVisible] = useState(false)
@@ -193,7 +233,13 @@ export default function Reimbursement(props) {
           </div>
         </div>
 
-        <div className='row' style={{marginLeft: '0px', marginRight: '0px', marginTop: '20px'}}>
+        <div
+          className={`${classes.root}`}
+          style={{
+            marginTop: '25px',
+          }}
+        >
+        <div className='row' style={{ marginRight: '-5px', marginLeft: '-5px', marginTop: '20px'}}>
             <div
               className='col-md-10 col-sm-9 col-8'
               style={styles.textFieldPadding}
@@ -261,7 +307,7 @@ export default function Reimbursement(props) {
             </div>
             </div>
 
-
+</div>
         <div
           style={{
             flex: 4,
@@ -294,6 +340,7 @@ export default function Reimbursement(props) {
               </div>
             </div>
           ) : insurance && insurance.length == 0 ? (
+            <>
             <div className='row ' style={{ marginTop: '25px' }}>
               <div className='col-11'>
                 <h3
@@ -307,14 +354,16 @@ export default function Reimbursement(props) {
                   Opps...No Data Found
                 </h3>
               </div>
-              <div className='col-1' style={{ marginTop: 45 }}>
-                <img
-                  onClick={() => props.history.goBack()}
-                  src={Back_Arrow}
-                  style={{ maxWidth: '60%', height: 'auto', cursor: 'pointer' }}
-                />
-              </div>
+              
             </div>
+            <div className='col-1' style={{ marginTop: 45 }}>
+            <img
+              onClick={() => props.history.goBack()}
+              src={Back_Arrow}
+              style={{ maxWidth: '60%', height: 'auto', cursor: 'pointer', marginLeft: '-10px' }}
+            />
+          </div>
+          </>
           ) : 
           ( <div className="LoaderStyle">
             <Loader type="TailSpin" color="red" height={50} width={50} />

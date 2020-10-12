@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import React, { useState, useEffect } from 'react'
 import Notification from '../../../components/Snackbar/Notification.js'
 import CustomTable from '../../../components/Table/Table'
@@ -36,31 +35,73 @@ const tableDataKeys = [
 
 const styles = {
   textFieldPadding: {
-    paddingLeft: 0,
+    paddingLeft: 5,
     paddingRight: 5,
   },
 }
 
-const useStylesForInput = makeStyles((theme) => ({
+const useStyles = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(0),
+  },
   input: {
     backgroundColor: 'white',
+    boxShadow: 'none',
     borderRadius: 5,
     '&:after': {
       borderBottomColor: 'black',
+      boxShadow: 'none',
     },
     '&:hover': {
       backgroundColor: 'white',
+      boxShadow: 'none',
     },
-    '&:disabled': {
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+      borderRadius: 5,
+    },
+  },
+  multilineColor: {
+    boxShadow: 'none',
+    backgroundColor: 'white',
+    borderRadius: 5,
+    '&:hover': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
+    '&:after': {
+      borderBottomColor: 'black',
+      boxShadow: 'none',
+    },
+    '&:focus': {
+      boxShadow: 'none',
+    },
+  },
+  root: {
+    '& .MuiTextField-root': {
+      backgroundColor: 'white',
+    },
+    '& .Mui-focused': {
+      backgroundColor: 'white',
+      color: 'black',
+      boxShadow: 'none',
+    },
+    '& .Mui-disabled': {
+      backgroundColor: 'white',
       color: 'gray',
+    },
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
     },
   },
 }))
 
 const actions = { view: true }
 
-export default function preApproval(props) {
-  const classes = useStylesForInput()
+export default function PreApprovalScreen(props) {
+  const classes = useStyles()
 
   const [preApproval, setpreApproval] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
@@ -221,8 +262,14 @@ export default function preApproval(props) {
         </div>
 
         <div
+          className={`${classes.root}`}
+          style={{
+            marginTop: '25px',
+          }}
+        >
+        <div
           className='row'
-          style={{ marginLeft: '0px', marginRight: '0px', marginTop: '20px' }}
+          style={{ marginLeft: '-5px', marginRight: '-5px', marginTop: '20px' }}
         >
           <div
             className='col-md-10 col-sm-9 col-8'
@@ -289,6 +336,7 @@ export default function preApproval(props) {
               <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
             </div>
           </div>
+        </div>
         </div>
 
         <div
