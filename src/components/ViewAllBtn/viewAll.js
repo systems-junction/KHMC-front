@@ -18,7 +18,7 @@ const styles = {
     justifyContent:'center',
     alignItems:'center',
     // fontSize:50
-    marginRight: 4
+    // marginRight: 4
   },
 };
 

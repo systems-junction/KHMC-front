@@ -389,7 +389,7 @@ function AddEditStaff(props) {
     >
       <Header />
       <div className={`cPadding `}>
-        <div className="subheader">
+        <div className="subheader" style={{marginRight: -10}}>
           <div>
             <img src={business_Unit} />
             <h4>{comingFor === "add" ? " Add Staff" : " Edit Staff"}</h4>
