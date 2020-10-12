@@ -1386,7 +1386,7 @@ function AddEditPurchaseRequest(props) {
       <Header />
       <div className="cPadding" style={{ marginLeft: 10, marginRight: 10 }}>
         <div className="subheader">
-          <div>
+          <div style={{ marginLeft: -23 }}>
             <img src={purchase_request} />
             <h4>
               {comingFor === "add"
@@ -1405,7 +1405,10 @@ function AddEditPurchaseRequest(props) {
           {comingFor === "add" &&
           !props.history.location.state.comingFromRCM ? (
             <div>
-              <div className="row">
+              <div
+                className="row "
+                style={{ marginLeft: -20, marginRight: -15 }}
+              >
                 {/* <span class="fa fa-search"></span> */}
                 <div
                   className="col-md-10 col-sm-12"
@@ -1554,7 +1557,7 @@ function AddEditPurchaseRequest(props) {
               </h5>
             </div>
 
-            <div className="row">
+            <div className="row sideMargin">
               {selectItemToEditId === "" ? (
                 <>
                   <div
@@ -1701,7 +1704,7 @@ function AddEditPurchaseRequest(props) {
               )}
             </div>
 
-            <div className="row">
+            <div className="row sideMargin">
               <div
                 className="col-md-3 col-sm-3 col-3"
                 style={{
@@ -1867,7 +1870,7 @@ function AddEditPurchaseRequest(props) {
               </div>
             </div>
 
-            <div className="row">
+            <div className="row sideMargin">
               <div
                 className="col-md-9 col-sm-9 col-9"
                 style={{

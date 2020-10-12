@@ -11,12 +11,12 @@ const styles = {
     width: "120px",
     height: "45px",
     // outline: "none",
-    borderWidth:0,
-    color:'white',
+    borderWidth: 0,
+    color: "white",
     // fontWeight:700,
-    display:'flex',
-    justifyContent:'center',
-    alignItems:'center',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     // fontSize:50
   },
 };
@@ -26,7 +26,7 @@ function ViewAllBtn(props) {
   const classes = useStyles();
 
   return (
-    <div>
+    <div style={{ marginRight: 5 }}>
       <Button
         onClick={() => props.history.goBack()}
         style={styles.stylesForButton}

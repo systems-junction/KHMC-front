@@ -1463,7 +1463,7 @@ function AddEditPurchaseRequest(props) {
                       height: 55,
                     }}
                   >
-                    <img src={BarCode} style={{ width: 80, height: 75 }} />
+                    <img src={BarCode} style={{ width: 70, height: 60 }} />
                   </div>
                 </div>
 
@@ -1559,7 +1559,7 @@ function AddEditPurchaseRequest(props) {
 
         {fuArray && fuArray !== "" ? (
           <div style={{ flex: 4, display: "flex", flexDirection: "column" }}>
-            <div className="row">
+            <div className="row" style={{ marginLeft: -8 }}>
               <h5 style={{ fontWeight: "bold", color: "white", marginTop: 20 }}>
                 Order Item
               </h5>
@@ -2471,7 +2471,10 @@ function AddEditPurchaseRequest(props) {
               />
               {comingFor === "add" ? (
                 <Button
-                  style={styles.stylesForPurchaseButton}
+                  style={{
+                    ...styles.stylesForPurchaseButton,
+                    marginRight: "5px ",
+                  }}
                   // disabled={!validateForm()}
                   onClick={handleAdd}
                   variant="contained"
@@ -2481,7 +2484,10 @@ function AddEditPurchaseRequest(props) {
                 </Button>
               ) : comingFor === "edit" ? (
                 <Button
-                  style={styles.stylesForPurchaseButton}
+                  style={{
+                    ...styles.stylesForPurchaseButton,
+                    marginRight: "5px ",
+                  }}
                   // disabled={!validateForm()}
                   onClick={handleEdit}
                   variant="contained"
