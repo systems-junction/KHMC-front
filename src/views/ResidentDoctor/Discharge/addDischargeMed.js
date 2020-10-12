@@ -39,13 +39,12 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import "../../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
 import CustomTable from "../../../components/Table/Table";
-
+import Loader from 'react-loader-spinner'
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
-
 import stylesForPaper from "../../../assets/jss/material-dashboard-react/components/paper.js";
 
 const scheduleArray = [
@@ -276,11 +275,11 @@ function AddEditEDR(props) {
   const [searchQuery, setSearchQuery] = useState("");
   const [itemFound, setItemFound] = useState("");
   const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false);
-
   const [patientId, setpatientId] = useState("");
   const [enableSave, setEnableSave] = useState(true);
   const [dischargeNotes, setdischargeNotes] = useState("");
   const [otherNotes, setotherNotes] = useState("");
+  const [timer, setTimer] = useState(null)
 
   useEffect(() => {
     // const soc = socketIOClient(socketUrl);
@@ -748,10 +747,26 @@ function AddEditEDR(props) {
     // }
   }
 
+  const triggerMedChange = () => {
+    handleSearch(searchQuery)
+  }
+
+  const handlePauseMedSearch = (e) => {
+    clearTimeout(timer)
+
+    const a = e.target.value.replace(/[^\w\s]/gi, '')
+    setSearchQuery(a)
+
+    setTimer(
+      setTimeout(() => {
+        triggerMedChange()
+      }, 600)
+    )
+  }
+
   const handleSearch = (e) => {
-    const a = e.target.value.replace(/[^\w-\s]/gi, "");
-    setSearchQuery(a);
-    if (a.length >= 1) {
+ 
+    if (e.length >= 1) {
       let url = "";
       if (selectedItemToSearch === "pharmaceutical") {
         url = getSearchedPharmaceuticalItemsUrl;
@@ -759,7 +774,7 @@ function AddEditEDR(props) {
         url = getSearchedItemsNonPharmaceuticalUrl;
       }
       axios
-        .get(url + "/" + a)
+        .get(url + "/" + e)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.items.length > 0) {
@@ -846,8 +861,8 @@ function AddEditEDR(props) {
                 borderBottomWidth={20}
               />
             ) : (
-              undefined
-            )}
+                undefined
+              )}
           </div>
 
           <div
@@ -1018,68 +1033,85 @@ function AddEditEDR(props) {
                       )}
                     </>
 
-                    {searchQuery ? (
-                      // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
-                      <div
-                        style={{
-                          zIndex: 3,
-                          marginTop: 10,
-                          marginLeft: -8,
-                          width: "101.5%",
-                        }}
-                      >
-                        <Paper style={{ maxHeight: 200, overflow: "auto" }}>
-                          {itemFoundSuccessfull ? (
-                            itemFound && (
-                              <Table size="small">
-                                <TableHead>
-                                  <TableRow>
-                                    <TableCell>Medicine Name</TableCell>
-                                    <TableCell>Scientific Name</TableCell>
-                                    <TableCell>Item Code</TableCell>
-                                    <TableCell>Unit Price (JD)</TableCell>
-                                    {/* <TableCell>Total Price</TableCell> */}
-                                  </TableRow>
-                                </TableHead>
+                {searchQuery ? (
+                  <div
+                    style={{
+                      zIndex: 3,
+                      marginTop: 5,
+                      marginLeft: -8,
+                      width: '101.5%',
+                    }}
+                  >
+                    <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
+                      {itemFoundSuccessfull && itemFound !== '' ? (
+                        <Table size='small'>
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>Medicine Name</TableCell>
+                              <TableCell>Scientific Name</TableCell>
+                              <TableCell>Item Code</TableCell>
+                              <TableCell>Unit Price (JD)</TableCell>
+                              {/* <TableCell>Total Price</TableCell> */}
+                            </TableRow>
+                          </TableHead>
 
-                                <TableBody>
-                                  {itemFound.map((i) => {
-                                    return (
-                                      <TableRow
-                                        key={i.itemCode}
-                                        onClick={() => handleAddItem(i)}
-                                        style={{ cursor: "pointer" }}
-                                      >
-                                        <TableCell>{i.tradeName}</TableCell>
-                                        <TableCell>
-                                          {i.scientificName}
-                                        </TableCell>
-                                        <TableCell>{i.itemCode}</TableCell>
-                                        <TableCell>
-                                          {i.issueUnitCost.toFixed(4)}
-                                        </TableCell>
-                                        {/* <TableCell>
+                          <TableBody>
+                            {itemFound.map((i) => {
+                              return (
+                                <TableRow
+                                  key={i.itemCode}
+                                  onClick={() => handleAddItem(i)}
+                                  style={{ cursor: 'pointer' }}
+                                >
+                                  <TableCell>{i.tradeName}</TableCell>
+                                  <TableCell>{i.scientificName}</TableCell>
+                                  <TableCell>{i.itemCode}</TableCell>
+                                  <TableCell>
+                                    {i.issueUnitCost.toFixed(4)}
+                                  </TableCell>
+                                  {/* <TableCell>
                                       {i.purchasePrice + i.tax}
                                     </TableCell> */}
-                                      </TableRow>
-                                    );
-                                  })}
-                                </TableBody>
-                              </Table>
-                            )
-                          ) : (
-                            <h4
-                              style={{ textAlign: "center" }}
-                              onClick={() => setSearchQuery("")}
-                            >
-                              Medicine Not Found
-                            </h4>
-                          )}
-                        </Paper>
-                      </div>
-                    ) : (
-                      undefined
-                    )}
+                                </TableRow>
+                              )
+                            })}
+                          </TableBody>
+                        </Table>
+                      ) : searchQuery ? (
+                        <div style={{ textAlign: 'center' }}>
+                          <Loader
+                            type='TailSpin'
+                            color='#2c6ddd'
+                            height={25}
+                            width={25}
+                            style={{
+                              display: 'inline-block',
+                              padding: '10px',
+                            }}
+                          />
+                          <span
+                            style={{
+                              display: 'inline-block',
+                              padding: '10px',
+                            }}
+                          >
+                            <h4> Searching Medicine...</h4>
+                          </span>
+                        </div>
+                      ) : searchQuery && !itemFoundSuccessfull ? (
+                        <div
+                          style={{ textAlign: 'center', padding: '10px' }}
+                        >
+                          <h4>No Medicince Found !</h4>
+                        </div>
+                      ) : (
+                              undefined
+                            )}
+                    </Paper>
+                  </div>
+                ) : (
+                    undefined
+                  )}
 
                     <div className="row" style={{ marginTop: 15 }}>
                       <div
@@ -1627,8 +1659,8 @@ function AddEditEDR(props) {
                       >
                         {" "}
                         Edit
-                      </Button>
-                    )}
+                        </Button>
+                      )}
                   </div>
                 </div>
               </div>

@@ -409,12 +409,28 @@ function PatientCare(props) {
     setRequestedItems(obj.item)
   }
 
-  const handleSearch = (e) => {
-    const a = e.target.value.replace(/[^\w-\s]/gi, '')
+  const triggerLabChange = () => {
+    handleSearch(searchQuery)
+  }
+
+  const handlePauseLabSearch = (e) => {
+    clearTimeout(timer)
+
+    const a = e.target.value.replace(/[^\w\s]/gi, '')
     setSearchQuery(a)
-    if (a.length >= 3) {
+
+    setTimer(
+      setTimeout(() => {
+        triggerLabChange()
+      }, 600)
+    )
+  }
+
+  const handleSearch = (e) => {
+
+    if (e.length >= 1) {
       axios
-        .get(getSearchedLaboratoryService + '/' + a)
+        .get(getSearchedLaboratoryService + '/' + e)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
@@ -556,12 +572,28 @@ function PatientCare(props) {
       })
   }
 
-  const handleRadioSearch = (e) => {
-    const a = e.target.value.replace(/[^\w-\s]/gi, '')
+  const triggerRadioChange = () => {
+    handleRadioSearch(searchRadioQuery)
+  }
+
+  const handleRadioPauseSearch = (e) => {
+    clearTimeout(timer)
+
+    const a = e.target.value.replace(/[^\w\s]/gi, '')
     setSearchRadioQuery(a)
-    if (a.length >= 3) {
+
+    setTimer(
+      setTimeout(() => {
+        triggerRadioChange()
+      }, 600)
+    )
+  }
+
+  const handleRadioSearch = (e) => {
+
+    if (e.length >= 1) {
       axios
-        .get(getSearchedRadiologyService + '/' + a)
+        .get(getSearchedRadiologyService + '/' + e)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
@@ -1014,6 +1046,8 @@ function PatientCare(props) {
       pathname: path,
       state: {
         selectedItem: selectedItem,
+        diagnosisArray: diagnosisArray,
+        medicationArray: medicationArray,
       },
     })
   }
@@ -1228,13 +1262,13 @@ function PatientCare(props) {
                         <h4> No Patient Found !</h4>
                       </div>
                     ) : (
-                      undefined
-                    )}
+                            undefined
+                          )}
                   </Paper>
                 </div>
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
             </div>
           </div>
         </div>
@@ -1356,26 +1390,26 @@ function PatientCare(props) {
               >
                 {medicationArray
                   ? medicationArray.map((d, index) => {
-                      return (
-                        <div style={{ display: 'flex', flexDirection: 'row' }}>
-                          <h6
-                            style={{
-                              ...styles.textStyles,
-                            }}
-                          >
-                            {index + 1}
-                            {'.'} &nbsp;
+                    return (
+                      <div style={{ display: 'flex', flexDirection: 'row' }}>
+                        <h6
+                          style={{
+                            ...styles.textStyles,
+                          }}
+                        >
+                          {index + 1}
+                          {'.'} &nbsp;
                           </h6>
-                          <h6
-                            style={{
-                              ...styles.textStyles,
-                            }}
-                          >
-                            {d}
-                          </h6>
-                        </div>
-                      )
-                    })
+                        <h6
+                          style={{
+                            ...styles.textStyles,
+                          }}
+                        >
+                          {d}
+                        </h6>
+                      </div>
+                    )
+                  })
                   : ''}
               </div>
 
@@ -1385,12 +1419,12 @@ function PatientCare(props) {
               >
                 {diagnosisArray
                   ? diagnosisArray.map((drug, index) => {
-                      return (
-                        <h6 style={styles.textStyles}>
-                          {index + 1}. {drug}
-                        </h6>
-                      )
-                    })
+                    return (
+                      <h6 style={styles.textStyles}>
+                        {index + 1}. {drug}
+                      </h6>
+                    )
+                  })
                   : ''}
               </div>
             </div>
@@ -1487,8 +1521,8 @@ function PatientCare(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
               </div>
             </div>
           ) : value === 2 ? (
@@ -1508,8 +1542,8 @@ function PatientCare(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
               </div>
               <div className='row' style={{ marginBottom: '25px' }}>
                 <div
@@ -1556,7 +1590,7 @@ function PatientCare(props) {
                     label='Search by Lab Test'
                     name={'searchQuery'}
                     value={searchQuery}
-                    onChange={handleSearch}
+                    onChange={handlePauseLabSearch}
                     className='textInputStyle'
                     variant='filled'
                     InputProps={{
@@ -1588,51 +1622,71 @@ function PatientCare(props) {
                   }}
                 >
                   <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
-                    {itemFoundSuccessfull ? (
-                      itemFound && (
-                        <Table size='small'>
-                          <TableHead>
-                            <TableRow>
-                              <TableCell>Service Name</TableCell>
-                              <TableCell>Service Number</TableCell>
-                              <TableCell>Price</TableCell>
-                              <TableCell align='center'>Description</TableCell>
-                            </TableRow>
-                          </TableHead>
+                    {itemFoundSuccessfull && itemFound !== '' ? (
+                      <Table size='small'>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>Service Name</TableCell>
+                            <TableCell>Service Number</TableCell>
+                            <TableCell>Price</TableCell>
+                            <TableCell align='center'>Description</TableCell>
+                          </TableRow>
+                        </TableHead>
 
-                          <TableBody>
-                            {itemFound.map((i) => {
-                              return (
-                                <TableRow
-                                  key={i.serviceNo}
-                                  onClick={() => handleAddItem(i)}
-                                  style={{ cursor: 'pointer' }}
-                                >
-                                  <TableCell>{i.name}</TableCell>
-                                  <TableCell>{i.serviceNo}</TableCell>
-                                  <TableCell>{i.price}</TableCell>
-                                  <TableCell align='center'>
-                                    {i.description}
-                                  </TableCell>
-                                </TableRow>
-                              )
-                            })}
-                          </TableBody>
-                        </Table>
-                      )
-                    ) : (
-                      <h4
-                        style={{ textAlign: 'center' }}
-                        onClick={() => setSearchQuery('')}
+                        <TableBody>
+                          {itemFound.map((i) => {
+                            return (
+                              <TableRow
+                                key={i.serviceNo}
+                                onClick={() => handleAddItem(i)}
+                                style={{ cursor: 'pointer' }}
+                              >
+                                <TableCell>{i.name}</TableCell>
+                                <TableCell>{i.serviceNo}</TableCell>
+                                <TableCell>{i.price}</TableCell>
+                                <TableCell align='center'>
+                                  {i.description}
+                                </TableCell>
+                              </TableRow>
+                            )
+                          })}
+                        </TableBody>
+                      </Table>
+                    ) : searchQuery ? (
+                      <div style={{ textAlign: 'center' }}>
+                        <Loader
+                          type='TailSpin'
+                          color='#2c6ddd'
+                          height={25}
+                          width={25}
+                          style={{
+                            display: 'inline-block',
+                            padding: '10px',
+                          }}
+                        />
+                        <span
+                          style={{
+                            display: 'inline-block',
+                            padding: '10px',
+                          }}
+                        >
+                          <h4> Searching Lab Test...</h4>
+                        </span>
+                      </div>
+                    ) : searchQuery && !itemFoundSuccessfull ? (
+                      <div
+                        style={{ textAlign: 'center', padding: '10px' }}
                       >
-                        Service Not Found
-                      </h4>
-                    )}
+                        <h4>No Lab Test Found !</h4>
+                      </div>
+                    ) : (
+                            undefined
+                          )}
                   </Paper>
                 </div>
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
 
               <div className='row'>
                 <div
@@ -1684,7 +1738,7 @@ function PatientCare(props) {
                 </div>
                 <div className='col-md-2 col-sm-2 col-6'>
                   <Button
-                  className='addButton'
+                    className='addButton'
                     style={{
                       ...styles.stylesForButton,
                       marginTop: '25px',
@@ -1716,8 +1770,8 @@ function PatientCare(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
               </div>
 
               <div className='row' style={{ marginBottom: '25px' }}>
@@ -1763,7 +1817,7 @@ function PatientCare(props) {
                     label='Search by Radiology / Imaging'
                     name={'searchRadioQuery'}
                     value={searchRadioQuery}
-                    onChange={handleRadioSearch}
+                    onChange={handleRadioPauseSearch}
                     className='textInputStyle'
                     variant='filled'
                     InputProps={{
@@ -1785,7 +1839,6 @@ function PatientCare(props) {
               </div>
 
               {searchRadioQuery ? (
-                // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
                 <div
                   style={{
                     zIndex: 10,
@@ -1795,8 +1848,8 @@ function PatientCare(props) {
                   }}
                 >
                   <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
-                    {radioItemFoundSuccessfull ? (
-                      radioItemFound && (
+                    {radioItemFoundSuccessfull &&
+                      radioItemFound !== '' ? (
                         <Table size='small'>
                           <TableHead>
                             <TableRow>
@@ -1826,20 +1879,41 @@ function PatientCare(props) {
                             })}
                           </TableBody>
                         </Table>
-                      )
-                    ) : (
-                      <h4
-                        style={{ textAlign: 'center' }}
-                        onClick={() => setSearchRadioQuery('')}
-                      >
-                        Service Not Found
-                      </h4>
-                    )}
+                      ) : searchRadioQuery ? (
+                        <div style={{ textAlign: 'center' }}>
+                          <Loader
+                            type='TailSpin'
+                            color='#2c6ddd'
+                            height={25}
+                            width={25}
+                            style={{
+                              display: 'inline-block',
+                              padding: '10px',
+                            }}
+                          />
+                          <span
+                            style={{
+                              display: 'inline-block',
+                              padding: '10px',
+                            }}
+                          >
+                            <h4> Searching Radiology Test...</h4>
+                          </span>
+                        </div>
+                      ) : searchRadioQuery && !radioItemFoundSuccessfull ? (
+                        <div
+                          style={{ textAlign: 'center', padding: '10px' }}
+                        >
+                          <h4>No Radiology Test Found !</h4>
+                        </div>
+                      ) : (
+                            undefined
+                          )}
                   </Paper>
                 </div>
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
 
               <div className='row'>
                 <div
@@ -1922,8 +1996,8 @@ function PatientCare(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
               </div>
 
               <div className='row' style={{ marginBottom: '25px' }}>
@@ -1961,13 +2035,13 @@ function PatientCare(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
               </div>
             </div>
           ) : (
-            undefined
-          )}
+                      undefined
+                    )}
 
           {/* // ) : value === 5 ? (
               //     <div
@@ -2132,8 +2206,8 @@ function PatientCare(props) {
               viewItem={viewItem}
             />
           ) : (
-            undefined
-          )}
+              undefined
+            )}
         </div>
 
         <Dialog
@@ -2160,20 +2234,20 @@ function PatientCare(props) {
                     ? tableHeadingForBUMemberForItems
                     : currentUser.staffTypeId.type === 'Registered Nurse' ||
                       currentUser.staffTypeId.type === 'BU Doctor'
-                    ? tableHeadingForBUMemberForItems
-                    : currentUser.staffTypeId.type === 'FU Inventory Keeper'
-                    ? tableHeadingForFUMemberForItems
-                    : tableHeadingForFUMemberForItems
+                      ? tableHeadingForBUMemberForItems
+                      : currentUser.staffTypeId.type === 'FU Inventory Keeper'
+                        ? tableHeadingForFUMemberForItems
+                        : tableHeadingForFUMemberForItems
                 }
                 tableDataKeys={
                   currentUser.staffTypeId.type === 'Doctor/Physician'
                     ? tableDataKeysForItemsForBUMember
                     : currentUser.staffTypeId.type === 'Registered Nurse' ||
                       currentUser.staffTypeId.type === 'BU Doctor'
-                    ? tableDataKeysForItemsForBUMember
-                    : currentUser.staffTypeId.type === 'FU Inventory Keeper'
-                    ? tableDataKeysForFUMemberForItems
-                    : tableDataKeysForItemsForBUMember
+                      ? tableDataKeysForItemsForBUMember
+                      : currentUser.staffTypeId.type === 'FU Inventory Keeper'
+                        ? tableDataKeysForFUMemberForItems
+                        : tableDataKeysForItemsForBUMember
                 }
                 borderBottomColor={'#60d69f'}
                 borderBottomWidth={20}
