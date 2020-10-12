@@ -625,61 +625,71 @@ export default function EdrRequest(props) {
             </div>
           </div>
 
-          <div className="row">
-            <div
-              className="col-md-6 col-sm-6 col-6"
-              style={{ ...styles.textFieldPadding, marginTop: "25px" }}
-            >
-              {props.item.serviceCode ? (
-                <div>
-                  <TextField
-                    required
-                    label="Service Code"
-                    disabled={true}
-                    placeholder="serviceCode"
-                    name={"serviceCode"}
-                    value={props.item.serviceCode}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
-                </div>
-              ) : (
-                undefined
-              )}
+          {props.item.serviceCode && props.item.serviceName ? (
+            <div className="row" style={{ marginTop: 25 }}>
+              <div
+                className="col-md-6 col-sm-6 col-6"
+                style={{ ...styles.textFieldPadding }}
+              >
+                {props.item.serviceCode ? (
+                  <div>
+                    <TextField
+                      required
+                      label="Service Code"
+                      disabled={true}
+                      placeholder="serviceCode"
+                      name={"serviceCode"}
+                      value={props.item.serviceCode}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                    />
+                  </div>
+                ) : (
+                  undefined
+                )}
+              </div>
+              <div
+                className="col-md-6 col-sm-6 col-6"
+                style={{ ...styles.textFieldPadding }}
+              >
+                {props.item.serviceName ? (
+                  <div>
+                    <TextField
+                      required
+                      label="Service Name"
+                      disabled={true}
+                      placeholder="serviceName"
+                      name={"serviceName"}
+                      value={props.item.serviceName}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                    />
+                  </div>
+                ) : (
+                  undefined
+                )}
+              </div>
             </div>
-            <div
-              className="col-md-6 col-sm-6 col-6"
-              style={{ ...styles.textFieldPadding, marginTop: "25px" }}
-            >
-              {props.item.serviceName ? (
-                <div>
-                  <TextField
-                    required
-                    label="Service Name"
-                    disabled={true}
-                    placeholder="serviceName"
-                    name={"serviceName"}
-                    value={props.item.serviceName}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
-                </div>
-              ) : (
-                undefined
-              )}
-            </div>
-          </div>
+          ) : (
+            undefined
+          )}
+
           <div
-            style={{ flex: 4, display: "flex", flexDirection: "column" }}
-            className="container-fluid"
+            style={{
+              flex: 4,
+              display: "flex",
+              flexDirection: "column",
+              paddingLeft: 2.5,
+              paddingRight: 2.5,
+            }}
           >
             {props.item.medicine ? (
               <div className="row">
