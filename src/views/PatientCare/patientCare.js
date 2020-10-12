@@ -1684,6 +1684,7 @@ function PatientCare(props) {
                 </div>
                 <div className='col-md-2 col-sm-2 col-6'>
                   <Button
+                  className='addButton'
                     style={{
                       ...styles.stylesForButton,
                       marginTop: '25px',
