@@ -44,12 +44,9 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import BarCode from '../../assets/img/Bar Code.png'
 import Fingerprint from '../../assets/img/fingerprint.png'
 import stylesForPaper from '../../assets/jss/material-dashboard-react/components/paper.js'
-
 import CurrencyTextField from '@unicef/material-ui-currency-textfield'
-
 import MUIInputStyle from '../../assets/jss/material-dashboard-react/inputStyle.js'
 import MUIInputStyleForCurrency from '../../assets/jss/material-dashboard-react/inputStylesForCurrency'
-
 import view_all from '../../assets/img/Eye.png'
 
 const tableHeadingForBillSummary = [
@@ -342,6 +339,8 @@ function AddEditPatientListing(props) {
   const [visitDate, setVisitDate] = useState('')
   const [patientProfileNo, setPatientProfileNo] = useState('')
   const [qr, setQr] = useState('')
+  const [timer, setTimer] = useState(null)
+
   useEffect(() => {
     // setcomingFor(props.history.location.state.comingFor);
     setCurrentUser(cookie.load('current_user'))
@@ -616,17 +615,39 @@ function AddEditPatientListing(props) {
     )
   }
 
-  const handleSearch = (e) => {
+  const handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      triggerChange()
+    }
+  }
+
+  const triggerChange = () => {
+    handleSearch(searchQuery)
+  }
+
+  const handlePauseSearch = (e) => {
+    clearTimeout(timer)
+
     const a = e.target.value.replace(/[^\w\s]/gi, '')
     setSearchQuery(a)
-    if (a.length >= 3) {
+
+    setTimer(
+      setTimeout(() => {
+        triggerChange()
+      }, 600)
+    )
+  }
+
+  const handleSearch = (e) => {
+
+    if (e.length >= 3) {
       axios
         .get(
           getSearchDischargedPatient +
-            '/' +
-            currentUser.functionalUnit._id +
-            '/' +
-            a
+          '/' +
+          currentUser.functionalUnit._id +
+          '/' +
+          e
         )
         .then((res) => {
           if (res.data.success) {
@@ -786,10 +807,9 @@ function AddEditPatientListing(props) {
       doc.text(
         169,
         240,
-        `${
-          patientDetails.amountReceived
-            ? patientDetails.amountReceived.toFixed(4)
-            : '0.0000'
+        `${patientDetails.amountReceived
+          ? patientDetails.amountReceived.toFixed(4)
+          : '0.0000'
         }`
       )
       doc.text(169, 245, `${totalBillingAmount.toFixed(4)}`)
@@ -838,12 +858,12 @@ function AddEditPatientListing(props) {
               amount =
                 amount +
                 singlePR.item[j].itemId.issueUnitCost *
-                  singlePR.item[j].requestedQty
+                singlePR.item[j].requestedQty
 
               totalAmount =
                 totalAmount +
                 singlePR.item[j].itemId.issueUnitCost *
-                  singlePR.item[j].requestedQty
+                singlePR.item[j].requestedQty
 
               let obj = {
                 serviceId: {
@@ -1099,7 +1119,8 @@ function AddEditPatientListing(props) {
                         name={'searchQuery'}
                         value={searchQuery}
                         style={{ borderRadius: '5px' }}
-                        onChange={handleSearch}
+                        onChange={handlePauseSearch}
+                        onKeyDown={handleKeyDown}
                         className='textInputStyle'
                         variant='filled'
                         InputProps={{
@@ -1156,73 +1177,92 @@ function AddEditPatientListing(props) {
                   </div>
 
                   <div className='row'>
-                    <div className='col-md-12 col-sm-8 col-8'>
+                    <div className='col-md-10 col-sm-11 col-10'
+                      style={{
+                        ...styles.textFieldPadding,
+                      }}
+                    >
                       {searchQuery ? (
                         <div
                           style={{
                             zIndex: 3,
                             position: 'absolute',
-                            width: '81%',
-                            left: 14,
-                            marginTop: 5,
+                            width: '99%',
+                            marginTop:'5px'
                           }}
                         >
                           <Paper style={{ ...stylesForPaper.paperStyle }}>
-                            {itemFoundSuccessfull ? (
-                              itemFound && (
-                                <Table size='small'>
-                                  <TableHead>
-                                    <TableRow>
-                                      <TableCell>MRN</TableCell>
-                                      <TableCell>Patient Name</TableCell>
-                                      <TableCell>Gender</TableCell>
-                                      <TableCell>Age</TableCell>
-                                      <TableCell>Payment Method</TableCell>
-                                    </TableRow>
-                                  </TableHead>
+                            {itemFoundSuccessfull && itemFound !== '' ? (
+                              <Table size='small'>
+                                <TableHead>
+                                  <TableRow>
+                                    <TableCell>MRN</TableCell>
+                                    <TableCell>Patient Name</TableCell>
+                                    <TableCell>Gender</TableCell>
+                                    <TableCell>Age</TableCell>
+                                  </TableRow>
+                                </TableHead>
 
-                                  <TableBody>
-                                    {itemFound.map((i) => {
-                                      return (
-                                        <TableRow
-                                          key={i._id}
-                                          onClick={() => handleAddItem(i)}
-                                          style={{ cursor: 'pointer' }}
-                                        >
-                                          <TableCell>{i.profileNo}</TableCell>
-                                          <TableCell>
-                                            {i.firstName + ` ` + i.lastName}
-                                          </TableCell>
-                                          <TableCell>{i.gender}</TableCell>
-                                          <TableCell>{i.age}</TableCell>
-                                          <TableCell>
-                                            {i.paymentMethod}
-                                          </TableCell>
-                                        </TableRow>
-                                      )
-                                    })}
-                                  </TableBody>
-                                </Table>
-                              )
-                            ) : (
-                              <h4
-                                style={{ textAlign: 'center' }}
-                                onClick={() => setSearchQuery('')}
+                                <TableBody>
+                                  {itemFound.map((i) => {
+                                    return (
+                                      <TableRow
+                                        key={i._id}
+                                        onClick={() => handleAddItem(i)}
+                                        style={{ cursor: 'pointer' }}
+                                      >
+                                        <TableCell>{i.profileNo}</TableCell>
+                                        <TableCell>
+                                          {i.firstName + ` ` + i.lastName}
+                                        </TableCell>
+                                        <TableCell>{i.gender}</TableCell>
+                                        <TableCell>{i.age}</TableCell>
+                                      </TableRow>
+                                    )
+                                  })}
+                                </TableBody>
+                              </Table>
+                            ) : searchQuery ? (
+                              <div style={{ textAlign: 'center' }}>
+                                <Loader
+                                  type='TailSpin'
+                                  color='#2c6ddd'
+                                  height={25}
+                                  width={25}
+                                  style={{
+                                    display: 'inline-block',
+                                    padding: '10px',
+                                  }}
+                                />
+                                <span
+                                  style={{
+                                    display: 'inline-block',
+                                    padding: '10px',
+                                  }}
+                                >
+                                  <h4> Searching Patient...</h4>
+                                </span>
+                              </div>
+                            ) : searchQuery && !itemFoundSuccessfull ? (
+                              <div
+                                style={{ textAlign: 'center', padding: '10px' }}
                               >
-                                Patient Not Found
-                              </h4>
-                            )}
+                                <h4>No Patient Found !</h4>
+                              </div>
+                            ) : (
+                                    undefined
+                                  )}
                           </Paper>
                         </div>
                       ) : (
-                        undefined
-                      )}
+                          undefined
+                        )}
                     </div>
                   </div>
                 </div>
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
             </div>
 
             <div className={`${classes.root}`}>
@@ -1340,28 +1380,28 @@ function AddEditPatientListing(props) {
                   >
                     {medicationArray
                       ? medicationArray.map((d, index) => {
-                          return (
-                            <div
-                              style={{ display: 'flex', flexDirection: 'row' }}
+                        return (
+                          <div
+                            style={{ display: 'flex', flexDirection: 'row' }}
+                          >
+                            <h6
+                              style={{
+                                ...styles.textStyles,
+                              }}
                             >
-                              <h6
-                                style={{
-                                  ...styles.textStyles,
-                                }}
-                              >
-                                {index + 1}
-                                {'.'} &nbsp;
+                              {index + 1}
+                              {'.'} &nbsp;
                               </h6>
-                              <h6
-                                style={{
-                                  ...styles.textStyles,
-                                }}
-                              >
-                                {d}
-                              </h6>
-                            </div>
-                          )
-                        })
+                            <h6
+                              style={{
+                                ...styles.textStyles,
+                              }}
+                            >
+                              {d}
+                            </h6>
+                          </div>
+                        )
+                      })
                       : ''}
                   </div>
 
@@ -1371,8 +1411,8 @@ function AddEditPatientListing(props) {
                   >
                     {diagnosisArray
                       ? diagnosisArray.map((drug, index) => {
-                          return <h6 style={styles.textStyles}>{drug}</h6>
-                        })
+                        return <h6 style={styles.textStyles}>{drug}</h6>
+                      })
                       : ''}
                   </div>
                 </div>
@@ -1792,16 +1832,16 @@ function AddEditPatientListing(props) {
                       Submit
                     </Button>
                   ) : (
-                    <Button
-                      style={styles.stylesForButton}
-                      //disabled={!validateFormType1()}
-                      onClick={handleEdit}
-                      variant='contained'
-                      color='default'
-                    >
-                      Update
-                    </Button>
-                  )}
+                      <Button
+                        style={styles.stylesForButton}
+                        //disabled={!validateFormType1()}
+                        onClick={handleEdit}
+                        variant='contained'
+                        color='default'
+                      >
+                        Update
+                      </Button>
+                    )}
                 </div>
               </div>
 
@@ -1820,8 +1860,8 @@ function AddEditPatientListing(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
               </div>
 
               <div
@@ -1843,8 +1883,8 @@ function AddEditPatientListing(props) {
             </div>
           </div>
         ) : (
-          undefined
-        )}
+              undefined
+            )}
 
         <Notification
           msg={errorMsg}
@@ -1879,8 +1919,8 @@ function AddEditPatientListing(props) {
             ))}
           </TableBody>
         ) : (
-          <h1>No service found</h1>
-        )}
+            <h1>No service found</h1>
+          )}
       </Table>
     </div>
   )
