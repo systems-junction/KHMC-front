@@ -12,17 +12,14 @@ import {
   updateNursingServiceUrl,
 } from '../../../../public/endpoins'
 import { makeStyles } from '@material-ui/core/styles'
-
-import RadiologyDepartment from '../../../../assets/img/Radiology Department.png'
+import Nursing from '../../../../assets/img/NP.png'
 import Header from '../../../../components/Header/Header'
 import view_all from '../../../../assets/img/Eye.png'
 import Back from '../../../../assets/img/Back_Arrow.png'
 import '../../../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
-
 import InputLabelComponent from '../../../../components/InputLabel/inputLabel'
 import BootstrapInput from '../../../../components/Dropdown/dropDown.js'
 import ErrorMessage from '../../../../components/ErrorMessage/errorMessage'
-
 import Notification from '../../../../components/Snackbar/Notification.js'
 
 const statusArray = [
@@ -37,7 +34,7 @@ const styles = {
   stylesForButton: {
     color: 'white',
     cursor: 'pointer',
-    borderRadius: 15,
+    borderRadius: 5,
     backgroundColor: '#2c6ddd',
     width: '140px',
     height: '50px',
@@ -47,7 +44,7 @@ const styles = {
   stylesForADD: {
     color: 'white',
     cursor: 'pointer',
-    borderRadius: 15,
+    borderRadius: 5,
     backgroundColor: '#2c6ddd',
     width: '60%',
     height: '50px',
@@ -55,15 +52,15 @@ const styles = {
   },
 
   inputContainerForTextField: {
-    marginTop: 6,
+    marginTop: 26,
   },
 
   inputContainerForDropDown: {
     marginTop: 6,
   },
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
   input: {
     display: 'none',
@@ -76,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
   },
   input: {
     backgroundColor: 'white',
-    borderRadius: 6,
+    borderRadius: 5,
     '&:after': {
       borderBottomColor: 'black',
     },
@@ -92,7 +89,7 @@ const useStyles = makeStyles((theme) => ({
   },
   multilineColor: {
     backgroundColor: 'white',
-    borderRadius: 6,
+    borderRadius: 5,
     '&:hover': {
       backgroundColor: 'white',
     },
@@ -116,7 +113,7 @@ function AddEditVendor(props) {
 
   const modalStyle = {
     backgroundColor: '#5074f4',
-    borderRadius: 30,
+    borderRadius: 5,
     height: '80%',
     marginLeft: '15%',
     marginRight: '15%',
@@ -277,18 +274,18 @@ function AddEditVendor(props) {
       <div className={`cPadding ${classes.root}`}>
         <div className='subheader'>
           <div>
-            <img src={RadiologyDepartment} />
+            <img src={Nursing} />
             <h4>
               {comingFor === 'add'
-                ? ' Add Nursing Proc/Service'
-                : ' Edit Nursing Proc/Service'}
+                ? ' Add Nursing Service'
+                : ' Edit Nursing Service'}
             </h4>
           </div>
 
           <div>
             <Button
               onClick={() => props.history.goBack()}
-              style={styles.stylesForButton}
+              style={{ ...styles.stylesForButton, marginRight: '3px' }}
               variant='contained'
               color='primary'
             >
@@ -296,7 +293,6 @@ function AddEditVendor(props) {
               &nbsp;&nbsp;
               <strong>View All</strong>
             </Button>
-            {/* <img src={Search} /> */}
           </div>
         </div>
 
@@ -331,8 +327,8 @@ function AddEditVendor(props) {
               </div>
             </div>
           ) : (
-            undefined
-          )}
+              undefined
+            )}
 
           <div className='row'>
             <div
@@ -374,8 +370,6 @@ function AddEditVendor(props) {
                 name={'price'}
                 value={price}
                 error={price === '' && isFormSubmitted}
-                // onChange={onChangeValue}
-                // type='number'
                 onBlur={onChangeValue}
                 className='textInputStyle'
                 variant='filled'
@@ -387,28 +381,7 @@ function AddEditVendor(props) {
                 currencySymbol='JD'
                 outputFormat='number'
                 decimalPlaces='4'
-                // onChange={(event, value) => setValue(value)}
               />
-              {/* <TextField
-                required
-                label="Price"
-                type="number"
-                name={"price"}
-                variant="filled"
-                error={price === "" && isFormSubmitted}
-                value={price}
-                onChange={onChangeValue}
-                className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                InputProps={{
-                  className: classes.input,
-                  classes: { input: classes.input },
-                }}
-                InputLabelProps={{
-                  className: classes.label,
-                  classes: { label: classes.label },
-                }}
-              /> */}
             </div>
           </div>
 
@@ -485,13 +458,19 @@ function AddEditVendor(props) {
 
           <Notification msg={errorMsg} open={openNotification} />
 
-          <div style={{ display: 'flex', flex: 1, justifyContent: 'center' }}>
+          <div class='row'
+            style={{
+              display: 'flex',
+              flex: 1,
+              justifyContent: 'center',
+              paddingLeft: 6,
+              paddingRight: 6,
+            }}>
             <div
               style={{
                 display: 'flex',
                 flex: 1,
-                height: 50,
-                justifyContent: 'center',
+                justifyContent: 'flex-end',
                 marginTop: '2%',
                 marginBottom: '2%',
               }}
@@ -502,22 +481,21 @@ function AddEditVendor(props) {
                   onClick={handleAdd}
                   variant='contained'
                   color='primary'
-                  style={styles.stylesForADD}
+                  style={{ ...styles.stylesForButton, marginRight: '-3px' }}
                 >
                   Add
                 </Button>
               ) : (
-                <Button
-                  className='pl30 pr30'
-                  disabled={!validateForm()}
-                  onClick={handleEdit}
-                  variant='contained'
-                  color='primary'
-                  style={{ width: '60%' }}
-                >
-                  Update
-                </Button>
-              )}
+                  <Button
+                    className='pl30 pr30'
+                    // disabled={!validateForm()}
+                    onClick={handleEdit}
+                    variant='contained'
+                    style={{ ...styles.stylesForButton, marginRight: '-3px' }}
+                  >
+                    Update
+                  </Button>
+                )}
             </div>
           </div>
         </div>
