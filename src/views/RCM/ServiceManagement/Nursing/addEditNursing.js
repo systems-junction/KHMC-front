@@ -293,7 +293,6 @@ function AddEditVendor(props) {
               &nbsp;&nbsp;
               <strong>View All</strong>
             </Button>
-            {/* <img src={Search} /> */}
           </div>
         </div>
 
@@ -371,8 +370,6 @@ function AddEditVendor(props) {
                 name={'price'}
                 value={price}
                 error={price === '' && isFormSubmitted}
-                // onChange={onChangeValue}
-                // type='number'
                 onBlur={onChangeValue}
                 className='textInputStyle'
                 variant='filled'
@@ -384,28 +381,7 @@ function AddEditVendor(props) {
                 currencySymbol='JD'
                 outputFormat='number'
                 decimalPlaces='4'
-              // onChange={(event, value) => setValue(value)}
               />
-              {/* <TextField
-                required
-                label="Price"
-                type="number"
-                name={"price"}
-                variant="filled"
-                error={price === "" && isFormSubmitted}
-                value={price}
-                onChange={onChangeValue}
-                className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                InputProps={{
-                  className: classes.input,
-                  classes: { input: classes.input },
-                }}
-                InputLabelProps={{
-                  className: classes.label,
-                  classes: { label: classes.label },
-                }}
-              /> */}
             </div>
           </div>
 
