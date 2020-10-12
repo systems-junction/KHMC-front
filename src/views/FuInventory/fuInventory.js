@@ -84,8 +84,8 @@ const styles = {
     cursor: "pointer",
     borderRadius: 5,
     background: "#2c6ddd",
-    // width: "140px",
-    height: "45px",
+    width: "140px",
+    height: "50px",
     outline: "none",
   },
 };
@@ -375,7 +375,7 @@ export default function BuInventory(props) {
 
       <div className="cPadding">
         <div className="subheader">
-          <div>
+          <div style={{marginLeft: '-5px'}}>
             <img src={business_Unit} />
             <h4>Functional Unit Inventory</h4>
           </div>
@@ -395,7 +395,7 @@ export default function BuInventory(props) {
         </div>
 
 
-        <div className='row' style={{marginLeft: '0px', marginRight: '0px', marginTop: '20px'}}>
+        <div className='row' style={{marginLeft: '0px', marginRight: '-5px', marginTop: '20px'}}>
             <div
               className='col-md-12 col-sm-9 col-8'
               style={stylesInput.textFieldPadding}

@@ -675,10 +675,10 @@ export default function ReplenishmentRequest(props) {
             )}
           </div>
 
-          <div className='row' style={{marginLeft: '0px', marginRight: '0px', marginTop: '20px'}}>
+          <div className='row' style={{marginLeft: '0px', marginRight: '-5px', marginTop: '20px', }}>
             <div
               className='col-md-12 col-sm-9 col-8'
-              style={styles.textFieldPadding}
+              style={{...styles.textFieldPadding}}
             >
               <TextField
                 className='textInputStyle'
@@ -814,7 +814,7 @@ export default function ReplenishmentRequest(props) {
                   <img
                     onClick={() => props.history.goBack()}
                     src={Back_Arrow}
-                    style={{ maxWidth: '60%', height: 'auto', cursor: 'pointer' }}
+                    style={{ width: 45, height: 35, cursor: 'pointer' }}
                   />
                 </div>
               </div>
@@ -828,7 +828,7 @@ export default function ReplenishmentRequest(props) {
             <img
               onClick={() => props.history.goBack()}
               src={Back_Arrow}
-              style={{ width: 60, height: 40, cursor: "pointer" }}
+              style={{ width: 45, height: 35, cursor: "pointer" }}
             />
           </div>
 
