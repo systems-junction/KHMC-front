@@ -42,11 +42,9 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
 import ErrorMessage from '../../../components/ErrorMessage/errorMessage'
 import Notification from '../../../components/Snackbar/Notification.js'
-
 import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
 import BootstrapInput from '../../../components/Dropdown/dropDown.js'
-
 import Loader from 'react-loader-spinner'
 import '../../../assets/jss/material-dashboard-react/components/loaderStyle.css'
 
@@ -318,15 +316,14 @@ function AddEditPurchaseRequest(props) {
   const [isLoading, setIsLoading] = useState(true)
   const [rowId, setRowId] = useState('')
   const [externalConsultant, setExternalConsultant] = useState('')
-
   const [allExternalConsultants, setAllExternalConsultants] = useState([])
-
   const [
     openExtenalConsultantDialog,
     setOpenExtenalConsultantDialog,
   ] = useState(false)
   const [statusBoolean, setStatusBoolean] = useState(false)
-
+  const [timer, setTimer] = useState(null)
+  
   const getEDRById = (id) => {
     axios
       .get(getOPRById + '/' + id)
@@ -712,12 +709,28 @@ function AddEditPurchaseRequest(props) {
       })
   }
 
-  const handleRadioSearch = (e) => {
-    const a = e.target.value.replace(/[^\w-\s]/gi, '')
+  const triggerRadioChange = () => {
+    handleRadioSearch(searchRadioQuery)
+  }
+
+  const handleRadioPauseSearch = (e) => {
+    clearTimeout(timer)
+
+    const a = e.target.value.replace(/[^\w\s]/gi, '')
     setSearchRadioQuery(a)
-    if (a.length >= 3) {
+
+    setTimer(
+      setTimeout(() => {
+        triggerRadioChange()
+      }, 600)
+    )
+  }
+
+  const handleRadioSearch = (e) => {
+   
+    if (e.length >= 1) {
       axios
-        .get(getSearchedRadiologyService + '/' + a)
+        .get(getSearchedRadiologyService + '/' + e)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
@@ -1029,7 +1042,7 @@ function AddEditPurchaseRequest(props) {
                   label='Search by Radiology / Imaging'
                   name={'searchRadioQuery'}
                   value={searchRadioQuery}
-                  onChange={handleRadioSearch}
+                  onChange={handleRadioPauseSearch}
                   className='textInputStyle'
                   variant='filled'
                   InputProps={{
@@ -1083,8 +1096,8 @@ function AddEditPurchaseRequest(props) {
                     }}
                   >
                     <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
-                      {radioItemFoundSuccessfull ? (
-                        radioItemFound && (
+                    {radioItemFoundSuccessfull &&
+                      radioItemFound !== '' ? (
                           <Table size='small'>
                             <TableHead>
                               <TableRow>
@@ -1116,15 +1129,36 @@ function AddEditPurchaseRequest(props) {
                               })}
                             </TableBody>
                           </Table>
-                        )
-                      ) : (
-                        <h4
-                          style={{ textAlign: 'center' }}
-                          onClick={() => setSearchRadioQuery('')}
-                        >
-                          Service Not Found
-                        </h4>
-                      )}
+                        ) : searchRadioQuery ? (
+                          <div style={{ textAlign: 'center' }}>
+                            <Loader
+                              type='TailSpin'
+                              color='#2c6ddd'
+                              height={25}
+                              width={25}
+                              style={{
+                                display: 'inline-block',
+                                padding: '10px',
+                              }}
+                            />
+                            <span
+                              style={{
+                                display: 'inline-block',
+                                padding: '10px',
+                              }}
+                            >
+                              <h4> Searching Radiology Test...</h4>
+                            </span>
+                          </div>
+                        ) : searchRadioQuery && !radioItemFoundSuccessfull ? (
+                          <div
+                            style={{ textAlign: 'center', padding: '10px' }}
+                          >
+                            <h4>No Radiology Test Found !</h4>
+                          </div>
+                        ) : (
+                              undefined
+                            )}
                     </Paper>
                   </div>
                 ) : (

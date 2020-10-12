@@ -17,11 +17,9 @@ import Header from '../../../../components/Header/Header'
 import view_all from '../../../../assets/img/Eye.png'
 import Back from '../../../../assets/img/Back_Arrow.png'
 import '../../../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
-
 import InputLabelComponent from '../../../../components/InputLabel/inputLabel'
 import BootstrapInput from '../../../../components/Dropdown/dropDown.js'
 import ErrorMessage from '../../../../components/ErrorMessage/errorMessage'
-
 import Notification from '../../../../components/Snackbar/Notification.js'
 
 const statusArray = [
@@ -287,7 +285,7 @@ function AddEditVendor(props) {
           <div>
             <img src={RadiologyDepartment} />
             <h4>
-              {comingFor === 'add' ? ' Add Radiology' : ' Edit Radiology'}
+              {comingFor === 'add' ? ' Add Radiology Service' : ' Edit Radiology Service'}
             </h4>
           </div>
 
@@ -310,7 +308,7 @@ function AddEditVendor(props) {
           {comingFor === 'edit' ? (
             <div
               className='row'
-              style={{ marginTop: '20px', marginBottom: '-20px' }}
+              style={{ marginTop: '20px'}}
             >
               <div
                 className='col-md-12'

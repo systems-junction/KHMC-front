@@ -244,6 +244,8 @@ function DischargeRequest(props) {
 
     // const selectedRec = props.history.location.state.selectedItem
 
+   
+
     // setSelectedItem(props.history.location.state.selectedItem)
     // setId(props.history.location.state.selectedItem._id)
     // setrequestNo(props.history.location.state.selectedItem.requestNo)

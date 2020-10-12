@@ -543,6 +543,16 @@ function LabRadRequest(props) {
 
     // getEDRById(props.history.location.state.selectedItem._id);
 
+    const selectedItem = props.history.location.state.selectedItem;
+    const diagnosisArray = props.history.location.state.diagnosisArray;
+    const medicationArray = props.history.location.state.medicationArray;
+
+    console.log("selectedItem", selectedItem);
+    // setHistoryId(selectedItem._id);
+    setSelectedItem(selectedItem);
+    dispatch({ field: "diagnosisArray", value: diagnosisArray });
+    dispatch({ field: "medicationArray", value: medicationArray });
+
     setHistoryId(props.history.location.state.selectedItem._id)
     setSelectedItem(props.history.location.state.selectedItem)
     // setrequestNo(props.history.location.state.selectedItem.requestNo);

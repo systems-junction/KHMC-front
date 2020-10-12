@@ -449,6 +449,7 @@ function AddEditPurchaseRequest(props) {
 
   const [allergicDialog, openAllergicDialog] = useState(false);
   const [allergic, setAllergic] = useState("");
+  const [timer, setTimer] = useState(null);
 
   function getFUsFromBU(buId) {
     axios
@@ -813,23 +814,33 @@ function AddEditPurchaseRequest(props) {
     }, 2600);
   }
 
-  const handlePatientSearch = (e) => {
+  const triggerChange = () => {
+    handlePatientSearch(searchPatientQuery);
+  };
+
+  const handlePauseSearch = (e) => {
+    clearTimeout(timer);
+
     var pattern = /^[a-zA-Z0-9 ]*$/;
     if (e.target.type === "text") {
       if (pattern.test(e.target.value) === false) {
         return;
       }
     }
-
     setSearchPatientQuery(e.target.value);
-    if (e.target.value.length >= 1) {
+
+    setTimer(
+      setTimeout(() => {
+        triggerChange();
+      }, 600)
+    );
+  };
+
+  const handlePatientSearch = (e) => {
+    if (e.length >= 1) {
       axios
         .get(
-          getSearchedpatient +
-            "/" +
-            currentUser.functionalUnit._id +
-            "/" +
-            e.target.value
+          getSearchedpatient + "/" + currentUser.functionalUnit._id + "/" + e
         )
         .then((res) => {
           if (res.data.success) {
@@ -937,15 +948,29 @@ function AddEditPurchaseRequest(props) {
       });
   };
 
-  const handleSearch = (e) => {
+  const triggerItemChange = () => {
+    handleSearch(searchQuery);
+  };
+
+  const handlePauseItemSearch = (e) => {
+    clearTimeout(timer);
+
     var pattern = /^[a-zA-Z0-9 ]*$/;
     if (e.target.type === "text") {
       if (pattern.test(e.target.value) === false) {
         return;
       }
     }
-
     setSearchQuery(e.target.value);
+
+    setTimer(
+      setTimeout(() => {
+        triggerItemChange();
+      }, 600)
+    );
+  };
+
+  const handleSearch = (e) => {
     // if (e.target.value.length >= 3) {
     let url = "";
     if (selectedItemToSearch === "pharmaceutical") {
@@ -954,7 +979,7 @@ function AddEditPurchaseRequest(props) {
       url = getSearchedItemsNonPharmaceuticalUrl;
     }
     axios
-      .get(url + "/" + e.target.value)
+      .get(url + "/" + e)
       .then((res) => {
         if (res.data.success) {
           if (res.data.data.items.length > 0) {
@@ -1430,7 +1455,7 @@ function AddEditPurchaseRequest(props) {
                     label="Search Patient by Name / MRN / National ID / Mobile Number"
                     name={"searchPatientQuery"}
                     value={searchPatientQuery}
-                    onChange={handlePatientSearch}
+                    onChange={handlePauseSearch}
                     InputProps={{
                       // endAdornment: (
                       //   <InputAdornment position="end">
@@ -1463,7 +1488,7 @@ function AddEditPurchaseRequest(props) {
                       height: 55,
                     }}
                   >
-                    <img src={BarCode} style={{ width: 70, height: 60 }} />
+                    <img src={BarCode} style={{ width: 80, height: 75 }} />
                   </div>
                 </div>
 
@@ -1478,7 +1503,7 @@ function AddEditPurchaseRequest(props) {
                     borderRadius: 4,
                   }}
                 >
-                  <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
+                  <img src={BarCode} style={{ width: 70, height: 60 }} />
                 </div>
               </div>
 
@@ -1493,47 +1518,59 @@ function AddEditPurchaseRequest(props) {
                   }}
                 >
                   <Paper style={{ ...stylesForPaper.paperStyle }}>
-                    {patientFoundSuccessfull ? (
-                      patientFound && (
-                        <Table stickyHeader size="small">
-                          <TableHead>
-                            <TableRow>
-                              <TableCell>MRN Number</TableCell>
-                              <TableCell>Patient Name</TableCell>
-                              <TableCell>Gender</TableCell>
-                              <TableCell>Age</TableCell>
-                              <TableCell>Payment Method</TableCell>
-                            </TableRow>
-                          </TableHead>
+                    {patientFoundSuccessfull && patientFound !== "" ? (
+                      <Table stickyHeader size="small">
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>MRN Number</TableCell>
+                            <TableCell>Patient Name</TableCell>
+                            <TableCell>Gender</TableCell>
+                            <TableCell>Age</TableCell>
+                            <TableCell>Payment Method</TableCell>
+                          </TableRow>
+                        </TableHead>
 
-                          <TableBody>
-                            {patientFound.map((i) => {
-                              return (
-                                <TableRow
-                                  key={i._id}
-                                  onClick={() => handleAddPatient(i)}
-                                  style={{ cursor: "pointer" }}
-                                >
-                                  <TableCell>{i.profileNo}</TableCell>
-                                  <TableCell>
-                                    {i.firstName + ` ` + i.lastName}
-                                  </TableCell>
-                                  <TableCell>{i.gender}</TableCell>
-                                  <TableCell>{i.age}</TableCell>
-                                  <TableCell>{i.paymentMethod}</TableCell>
-                                </TableRow>
-                              );
-                            })}
-                          </TableBody>
-                        </Table>
-                      )
+                        <TableBody>
+                          {patientFound.map((i) => {
+                            return (
+                              <TableRow
+                                key={i._id}
+                                onClick={() => handleAddPatient(i)}
+                                style={{ cursor: "pointer" }}
+                              >
+                                <TableCell>{i.profileNo}</TableCell>
+                                <TableCell>
+                                  {i.firstName + ` ` + i.lastName}
+                                </TableCell>
+                                <TableCell>{i.gender}</TableCell>
+                                <TableCell>{i.age}</TableCell>
+                                <TableCell>{i.paymentMethod}</TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                    ) : searchPatientQuery ? (
+                      <div style={{ textAlign: "center" }}>
+                        <Loader
+                          type="TailSpin"
+                          color="#2c6ddd"
+                          height={25}
+                          width={25}
+                          style={{ display: "inline-block", padding: "10px" }}
+                        />
+                        <span
+                          style={{ display: "inline-block", padding: "10px" }}
+                        >
+                          <h4>Searching Patient...</h4>
+                        </span>
+                      </div>
+                    ) : searchPatientQuery && !patientFoundSuccessfull ? (
+                      <div style={{ textAlign: "center", padding: "10px" }}>
+                        <h4> No Patient Found !</h4>
+                      </div>
                     ) : (
-                      <h4
-                        style={{ textAlign: "center" }}
-                        onClick={() => setSearchPatientQuery("")}
-                      >
-                        Patient Not Found
-                      </h4>
+                      undefined
                     )}
                   </Paper>
                 </div>
@@ -1646,7 +1683,7 @@ function AddEditPurchaseRequest(props) {
                           label="Trade Name / Scientific Name / Manufacturer / Vendor"
                           name={"searchQuery"}
                           value={searchQuery}
-                          onChange={handleSearch}
+                          onChange={handlePauseItemSearch}
                           className={classes.margin}
                           variant="filled"
                           InputProps={{
@@ -1712,60 +1749,78 @@ function AddEditPurchaseRequest(props) {
                       }}
                     >
                       <Paper style={{ ...stylesForPaper.paperStyle }}>
-                        {itemFoundSuccessfull ? (
-                          itemFound && (
-                            <Table stickyHeader size="small">
-                              <TableHead>
-                                <TableRow>
-                                  <TableCell style={styles.forTableCell}>
-                                    Trade Name
-                                  </TableCell>
-                                  <TableCell style={styles.forTableCell}>
-                                    Scientific Name
-                                  </TableCell>
+                        {itemFoundSuccessfull && itemFound !== "" ? (
+                          <Table stickyHeader size="small">
+                            <TableHead>
+                              <TableRow>
+                                <TableCell style={styles.forTableCell}>
+                                  Trade Name
+                                </TableCell>
+                                <TableCell style={styles.forTableCell}>
+                                  Scientific Name
+                                </TableCell>
 
-                                  {/* <TableCell
+                                {/* <TableCell
                                     align="center"
                                     style={styles.forTableCell}
                                   >
                                     Form
                                   </TableCell> */}
 
-                                  <TableCell style={styles.forTableCell}>
-                                    Description
-                                  </TableCell>
-                                </TableRow>
-                              </TableHead>
+                                <TableCell style={styles.forTableCell}>
+                                  Description
+                                </TableCell>
+                              </TableRow>
+                            </TableHead>
 
-                              <TableBody>
-                                {itemFound.map((i, index) => {
-                                  return (
-                                    <TableRow
-                                      key={i.itemCode}
-                                      onClick={() => handleAddItem(i)}
-                                      style={{ cursor: "pointer" }}
-                                    >
-                                      <TableCell>{i.tradeName}</TableCell>
-                                      <TableCell>{i.scientificName}</TableCell>
+                            <TableBody>
+                              {itemFound.map((i, index) => {
+                                return (
+                                  <TableRow
+                                    key={i.itemCode}
+                                    onClick={() => handleAddItem(i)}
+                                    style={{ cursor: "pointer" }}
+                                  >
+                                    <TableCell>{i.tradeName}</TableCell>
+                                    <TableCell>{i.scientificName}</TableCell>
 
-                                      {/* <TableCell align="center">
+                                    {/* <TableCell align="center">
                                         {i.form}
                                       </TableCell> */}
 
-                                      <TableCell>{i.description}</TableCell>
-                                    </TableRow>
-                                  );
-                                })}
-                              </TableBody>
-                            </Table>
-                          )
+                                    <TableCell>{i.description}</TableCell>
+                                  </TableRow>
+                                );
+                              })}
+                            </TableBody>
+                          </Table>
+                        ) : searchQuery ? (
+                          <div style={{ textAlign: "center" }}>
+                            <Loader
+                              type="TailSpin"
+                              color="#2c6ddd"
+                              height={25}
+                              width={25}
+                              style={{
+                                display: "inline-block",
+                                padding: "10px",
+                              }}
+                            />
+                            <span
+                              style={{
+                                display: "inline-block",
+                                padding: "10px",
+                              }}
+                            >
+                              <h4> Searching Items...</h4>
+                            </span>
+                          </div>
+                        ) : searchQuery && !itemFoundSuccessfull ? (
+                          <div style={{ textAlign: "center", padding: "10px" }}>
+                            <h4>No Item Found !</h4>
+                          </div>
                         ) : (
-                          <h4
-                            style={{ textAlign: "center" }}
-                            onClick={() => console.log("ddf")}
-                          >
-                            Item Not Found
-                          </h4>
+                          undefined
                         )}
                       </Paper>
                     </div>
@@ -2125,7 +2180,7 @@ function AddEditPurchaseRequest(props) {
                           label="Item Name / Manufacturer / Vendor"
                           name={"searchQuery"}
                           value={searchQuery}
-                          onChange={handleSearch}
+                          onChange={handlePauseItemSearch}
                           className={classes.margin}
                           variant="filled"
                           InputProps={{
@@ -2169,75 +2224,93 @@ function AddEditPurchaseRequest(props) {
                 {searchQuery ? (
                   <div style={{ zIndex: 3 }}>
                     <Paper style={{ ...stylesForPaper.paperStyle }}>
-                      {itemFoundSuccessfull ? (
-                        itemFound && (
-                          <Table size="small">
-                            <TableHead>
-                              <TableRow>
-                                <TableCell
-                                  align="center"
-                                  style={styles.forTableCell}
-                                >
-                                  Trade Name
-                                </TableCell>
-                                <TableCell
-                                  align="center"
-                                  style={styles.forTableCell}
-                                >
-                                  Scientific Name
-                                </TableCell>
+                      {itemFoundSuccessfull && itemFound !== "" ? (
+                        <Table size="small">
+                          <TableHead>
+                            <TableRow>
+                              <TableCell
+                                align="center"
+                                style={styles.forTableCell}
+                              >
+                                Trade Name
+                              </TableCell>
+                              <TableCell
+                                align="center"
+                                style={styles.forTableCell}
+                              >
+                                Scientific Name
+                              </TableCell>
 
-                                {/* <TableCell
+                              {/* <TableCell
                                   align="center"
                                   style={styles.forTableCell}
                                 >
                                   Form
                                 </TableCell> */}
 
-                                <TableCell
-                                  style={styles.forTableCell}
-                                  align="center"
+                              <TableCell
+                                style={styles.forTableCell}
+                                align="center"
+                              >
+                                Description
+                              </TableCell>
+                            </TableRow>
+                          </TableHead>
+
+                          <TableBody>
+                            {itemFound.map((i, index) => {
+                              return (
+                                <TableRow
+                                  key={i.itemCode}
+                                  onClick={() => handleAddItem(i)}
+                                  style={{ cursor: "pointer" }}
                                 >
-                                  Description
-                                </TableCell>
-                              </TableRow>
-                            </TableHead>
+                                  <TableCell align="center">
+                                    {i.tradeName}
+                                  </TableCell>
+                                  <TableCell align="center">
+                                    {i.scientificName}
+                                  </TableCell>
 
-                            <TableBody>
-                              {itemFound.map((i, index) => {
-                                return (
-                                  <TableRow
-                                    key={i.itemCode}
-                                    onClick={() => handleAddItem(i)}
-                                    style={{ cursor: "pointer" }}
-                                  >
-                                    <TableCell align="center">
-                                      {i.tradeName}
-                                    </TableCell>
-                                    <TableCell align="center">
-                                      {i.scientificName}
-                                    </TableCell>
-
-                                    {/* <TableCell align="center">
+                                  {/* <TableCell align="center">
                                       {i.form}
                                     </TableCell> */}
 
-                                    <TableCell align="center">
-                                      {i.description}
-                                    </TableCell>
-                                  </TableRow>
-                                );
-                              })}
-                            </TableBody>
-                          </Table>
-                        )
+                                  <TableCell align="center">
+                                    {i.description}
+                                  </TableCell>
+                                </TableRow>
+                              );
+                            })}
+                          </TableBody>
+                        </Table>
+                      ) : searchQuery ? (
+                        <div style={{ textAlign: "center" }}>
+                          <Loader
+                            type="TailSpin"
+                            color="#2c6ddd"
+                            height={25}
+                            width={25}
+                            style={{
+                              display: "inline-block",
+                              padding: "10px",
+                            }}
+                          />
+                          <span
+                            style={{
+                              display: "inline-block",
+                              padding: "10px",
+                            }}
+                          >
+                            <h4> Searching Items...</h4>
+                          </span>
+                        </div>
+                      ) : searchQuery && !itemFoundSuccessfull ? (
+                        <div style={{ textAlign: "center", padding: "10px" }}>
+                          <h4>No Item Found !</h4>
+                        </div>
                       ) : (
-                        <h4
-                          style={{ textAlign: "center" }}
-                          onClick={() => console.log("ddf")}
-                        >
-                          Item Not Found
-                        </h4>
+                        undefined
                       )}
                     </Paper>
                   </div>

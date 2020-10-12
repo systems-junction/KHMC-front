@@ -304,6 +304,7 @@ function AddEditPurchaseRequest(props) {
   const [buObj, setBUObj] = useState("");
 
   const [fuArray, setFUs] = useState("");
+  const [timer, setTimer] = useState(null)
 
   function getFUsFromBU(buId) {
     axios
@@ -539,22 +540,22 @@ function AddEditPurchaseRequest(props) {
           generated,
           status:
             currentUser.staffTypeId.type === "FU Member" &&
-            status === "pending" &&
-            secondStatus === "in_progress"
+              status === "pending" &&
+              secondStatus === "in_progress"
               ? "in_progress"
               : currentUser.staffTypeId.type === "FU Member" &&
                 status === "in_progress" &&
                 secondStatus === "Delivery in Progress"
-              ? "Delivery in Progress"
-              : currentUser.staffTypeId.type === "BU Nurse" &&
-                status === "Delivery in Progress" &&
-                secondStatus === "pending_administration"
-              ? "pending_administration"
-              : currentUser.staffTypeId.type === "BU Inventory Keeper" &&
-                status === "pending_administration" &&
-                secondStatus === "complete"
-              ? "complete"
-              : status,
+                ? "Delivery in Progress"
+                : currentUser.staffTypeId.type === "BU Nurse" &&
+                  status === "Delivery in Progress" &&
+                  secondStatus === "pending_administration"
+                  ? "pending_administration"
+                  : currentUser.staffTypeId.type === "BU Inventory Keeper" &&
+                    status === "pending_administration" &&
+                    secondStatus === "complete"
+                    ? "complete"
+                    : status,
           comments,
           item: requestedItems,
           // currentQty,
@@ -612,7 +613,13 @@ function AddEditPurchaseRequest(props) {
     }, 2000);
   }
 
-  const handleSearch = (e) => {
+  const triggerItemChange = () => {
+    handleSearch(searchQuery)
+  }
+
+  const handlePauseItemSearch = (e) => {
+    clearTimeout(timer)
+
     var pattern = /^[a-zA-Z0-9 ]*$/;
     if (e.target.type === "text") {
       if (pattern.test(e.target.value) === false) {
@@ -620,9 +627,19 @@ function AddEditPurchaseRequest(props) {
       }
     }
     setSearchQuery(e.target.value);
+
+    setTimer(
+      setTimeout(() => {
+        triggerItemChange()
+      }, 600)
+    )
+  }
+
+  const handleSearch = (e) => {
+
     // if (e.target.value.length >= 3) {
     axios
-      .get(getSearchedNonPharmaceuticalItemsUrl + "/" + e.target.value)
+      .get(getSearchedNonPharmaceuticalItemsUrl + "/" + e)
       .then((res) => {
         if (res.data.success) {
           if (res.data.data.items.length > 0) {
@@ -891,10 +908,10 @@ function AddEditPurchaseRequest(props) {
               {comingFor === "add"
                 ? "Order Items (Non-Medical)"
                 : comingFor === "edit"
-                ? "Order Items (Non-Medical)"
-                : comingFor === "view"
-                ? "Order Items (Non-Medical)"
-                : undefined}
+                  ? "Order Items (Non-Medical)"
+                  : comingFor === "view"
+                    ? "Order Items (Non-Medical)"
+                    : undefined}
             </h4>
           </div>
 
@@ -998,8 +1015,8 @@ function AddEditPurchaseRequest(props) {
                 </div>
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             {/* {comingFor === "edit" || comingFor === "view" ? (
                 <div className="col-md-4">
@@ -1112,8 +1129,8 @@ function AddEditPurchaseRequest(props) {
                   </div>
                 </>
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
 
               <div
                 className={comingFor === "edit" ? "col-md-4" : "col-md-12"}
@@ -1140,7 +1157,7 @@ function AddEditPurchaseRequest(props) {
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
-                  // error={secondStatus === "" && isFormSubmitted}
+                // error={secondStatus === "" && isFormSubmitted}
                 >
                   <MenuItem value="">
                     <em>None</em>
@@ -1309,7 +1326,7 @@ function AddEditPurchaseRequest(props) {
                     label="Search Items by name or code"
                     name={"searchQuery"}
                     value={searchQuery}
-                    onChange={handleSearch}
+                    onChange={handlePauseItemSearch}
                     InputProps={{
                       // endAdornment: (
                       //   <InputAdornment position="end">
@@ -1354,67 +1371,87 @@ function AddEditPurchaseRequest(props) {
                   }}
                 >
                   <Paper style={{ ...stylesForPaper.paperStyle }}>
-                    {itemFoundSuccessfull ? (
-                      itemFound && (
-                        <Table size="small" stickyHeader>
-                          <TableHead>
-                            <TableRow>
-                              {/* <TableCell
+                    {itemFoundSuccessfull && itemFound !== '' ? (
+                      <Table size="small" stickyHeader>
+                        <TableHead>
+                          <TableRow>
+                            {/* <TableCell
                                 align="center"
                                 style={styles.forTableCell}
                               >
                                 Name
                               </TableCell> */}
-                              <TableCell style={styles.forTableCell}>
-                                Item Code
+                            <TableCell style={styles.forTableCell}>
+                              Item Code
                               </TableCell>
-                              {/* <TableCell
+                            {/* <TableCell
                                 align="center"
                                 style={styles.forTableCell}
                               >
                                 Class
                               </TableCell> */}
-                              <TableCell style={styles.forTableCell}>
-                                Description
+                            <TableCell style={styles.forTableCell}>
+                              Description
                               </TableCell>
-                            </TableRow>
-                          </TableHead>
+                          </TableRow>
+                        </TableHead>
 
-                          <TableBody>
-                            {itemFound.map((i, index) => {
-                              return (
-                                <TableRow
-                                  key={i.itemCode}
-                                  onClick={() => handleAddItem(i)}
-                                  style={{ cursor: "pointer" }}
-                                >
-                                  {/* <TableCell align="center">{i.name}</TableCell> */}
-                                  <TableCell>{i.itemCode}</TableCell>
-                                  {/* <TableCell align="center">
+                        <TableBody>
+                          {itemFound.map((i, index) => {
+                            return (
+                              <TableRow
+                                key={i.itemCode}
+                                onClick={() => handleAddItem(i)}
+                                style={{ cursor: "pointer" }}
+                              >
+                                {/* <TableCell align="center">{i.name}</TableCell> */}
+                                <TableCell>{i.itemCode}</TableCell>
+                                {/* <TableCell align="center">
                                     {i.cls === "non_medical"
                                       ? "Non Medical"
                                       : ""}
                                   </TableCell> */}
-                                  <TableCell>{i.description}</TableCell>
-                                </TableRow>
-                              );
-                            })}
-                          </TableBody>
-                        </Table>
-                      )
-                    ) : (
-                      <h4
-                        style={{ textAlign: "center" }}
-                        onClick={() => console.log("ddf")}
+                                <TableCell>{i.description}</TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                    ) : searchQuery ? (
+                      <div style={{ textAlign: 'center' }}>
+                        <Loader
+                          type='TailSpin'
+                          color='#2c6ddd'
+                          height={25}
+                          width={25}
+                          style={{
+                            display: 'inline-block',
+                            padding: '10px',
+                          }}
+                        />
+                        <span
+                          style={{
+                            display: 'inline-block',
+                            padding: '10px',
+                          }}
+                        >
+                          <h4> Searching Items...</h4>
+                        </span>
+                      </div>
+                    ) : searchQuery && !itemFoundSuccessfull ? (
+                      <div
+                        style={{ textAlign: 'center', padding: '10px' }}
                       >
-                        Item Not Found
-                      </h4>
-                    )}
+                        <h4>No Item Found !</h4>
+                      </div>
+                    ) : (
+                            undefined
+                          )}
                   </Paper>
                 </div>
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
 
               <div className="row">
                 {/* <div
@@ -1588,38 +1625,38 @@ function AddEditPurchaseRequest(props) {
                       <strong>Add Item</strong>
                     </Button>
                   ) : (
-                    // <Button
-                    //   onClick={addSelectedItem}
-                    //   style={{ ...styles.stylesForButton }}
-                    //   variant="contained"
-                    //   color="primary"
-                    //   fullWidth
-                    //   disabled={!validateItemsForm()}
-                    // >
-                    //   <strong>Add Item</strong>
-                    // </Button>
-                    // <Button
-                    //   style={{ paddingLeft: 30, paddingRight: 30 }}
-                    //   disabled={!validateItemsForm()}
-                    //   onClick={editSelectedItem}
-                    //   variant="contained"
-                    //   color="primary"
-                    // >
-                    //   {" "}
-                    //   Edit Item{" "}
-                    // </Button>
+                      // <Button
+                      //   onClick={addSelectedItem}
+                      //   style={{ ...styles.stylesForButton }}
+                      //   variant="contained"
+                      //   color="primary"
+                      //   fullWidth
+                      //   disabled={!validateItemsForm()}
+                      // >
+                      //   <strong>Add Item</strong>
+                      // </Button>
+                      // <Button
+                      //   style={{ paddingLeft: 30, paddingRight: 30 }}
+                      //   disabled={!validateItemsForm()}
+                      //   onClick={editSelectedItem}
+                      //   variant="contained"
+                      //   color="primary"
+                      // >
+                      //   {" "}
+                      //   Edit Item{" "}
+                      // </Button>
 
-                    <Button
-                      onClick={editSelectedItem}
-                      style={{ ...styles.stylesForButton }}
-                      variant="contained"
-                      color="primary"
-                      disabled={!validateItemsForm()}
-                      fullWidth
-                    >
-                      <strong>Edit Item</strong>
-                    </Button>
-                  )}
+                      <Button
+                        onClick={editSelectedItem}
+                        style={{ ...styles.stylesForButton }}
+                        variant="contained"
+                        color="primary"
+                        disabled={!validateItemsForm()}
+                        fullWidth
+                      >
+                        <strong>Edit Item</strong>
+                      </Button>
+                    )}
                 </div>
               </div>
 
@@ -1886,7 +1923,7 @@ function AddEditPurchaseRequest(props) {
                     // disabled={!validateForm()}
                     onClick={handleAdd}
                     variant="contained"
-                    // color="primary"
+                  // color="primary"
                   >
                     Generate Order
                   </Button>
@@ -1903,8 +1940,8 @@ function AddEditPurchaseRequest(props) {
                 ) : comingFor === "view" ? (
                   undefined
                 ) : (
-                  undefined
-                )}
+                        undefined
+                      )}
               </div>
             </div>
 
@@ -1929,10 +1966,10 @@ function AddEditPurchaseRequest(props) {
             </Dialog> */}
           </div>
         ) : (
-          <div className="LoaderStyle">
-            <Loader type="TailSpin" color="red" height={50} width={50} />
-          </div>
-        )}
+            <div className="LoaderStyle">
+              <Loader type="TailSpin" color="red" height={50} width={50} />
+            </div>
+          )}
       </div>
     </div>
   );
