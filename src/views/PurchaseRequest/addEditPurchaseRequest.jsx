@@ -110,11 +110,12 @@ const styles = {
   //   marginTop: 6,
   // },
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
   inputContainerForTextField: {
     marginTop: 6,
+    marginBottom: 20,
   },
   inputField: {
     outline: "none",
@@ -1256,7 +1257,7 @@ function AddEditPurchaseRequest(props) {
                   inputVariant="filled"
                   // onChange={onChangeDate}
                   disabled={true}
-                  label="Date (MM/DD/YYYY)"
+                  label="Date (DD-MM-YYYY)"
                   // format="MM/dd/yyyy hh:mm a"
                   format={dateTimeFormat}
                   fullWidth
@@ -1710,7 +1711,7 @@ function AddEditPurchaseRequest(props) {
                                       </TableCell> */}
 
                                       <TableCell align="center">
-                                        {i.receiptUnitCost}
+                                        {i.receiptUnitCost.toFixed(4)}
                                       </TableCell>
 
                                       {/* <TableCell>

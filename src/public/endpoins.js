@@ -1,4 +1,4 @@
-const local = "http://localhost:4000/api";
+const local = "http://192.168.10.62:4000/api";
 const live = "https://test.khmc-staging.com/api";
 const dev = "http://ec2-52-14-42-129.us-east-2.compute.amazonaws.com/api";
 //const devSecure = 'https://demo.khmc-staging.com/api'
@@ -20,7 +20,7 @@ export const socketUrl = "ws://localhost:4001";
 // export const socketUrl = "ws://192.168.10.20:4001";
 
 export const audioURL = "http://localhost:4000";
-//export const audioURL = "https://dev.khmc-staging.online/";
+//export const audioURL = "https://dev.khmc-staging.online";
 //export const uploadsUrl = 'https://demo.khmc-staging.com/'
 //export const uploadsUrl = 'https://test.khmc-staging.com/'
 export const uploadsUrl = "http://localhost:4000/uploads/";
@@ -44,7 +44,7 @@ export const getSearchedItemsNonPharmaceuticalUrl = `${baseUrl}/item/getsearched
 export const getSearchedNonPharmaceuticalItemsUrl = `${baseUrl}/item/getsearcheditemsnm`;
 
 // patient endpoints
-export const getPatientById = `${baseUrl}/patient/getpatient/:id`;
+export const getPatientById = `${baseUrl}/patient/getpatient`;
 export const getPatientByProfileNo = `${baseUrl}/patient/getpatientbyprofileno`;
 export const getPatientUrl = `${baseUrl}/patient/getpatient`;
 export const getPatientUrlById = `${baseUrl}/patient/getpatient`;
@@ -211,6 +211,7 @@ export const updateReceiveItemsUrl = `${baseUrl}/receiveitem/updatereceiveitem`;
 
 // material receivings
 export const getMaterialReceivingUrl = `${baseUrl}/materialreceiving/getmaterialreceivings`;
+export const getMaterialReceivingUrlSearch = `${baseUrl}/materialreceiving/getmaterialreceivingskey`;
 export const addMaterialReceivingUrl = `${baseUrl}/materialreceiving/addmaterialreceiving`;
 export const deleteMaterialReceivingUrl = `${baseUrl}/materialreceiving/deletematerialreceiving`;
 export const updateMaterialReceivingUrl = `${baseUrl}/materialreceiving/updatematerialreceiving`;
@@ -242,12 +243,14 @@ export const updateSystemAdminUrl = `${baseUrl}/systemadmin/updatesystemadmin`;
 
 //receive items requests for accounts
 export const getReceiveRequestsUrl = `${baseUrl}/account/getaccounts`;
+export const getReceiveRequestsSearch = `${baseUrl}/account/getaccount`;
 // export const addSystemAdminUrl = `${baseUrl}/systemadmin/addsystemadmin`;
 // export const deleteSystemAdminUrl = `${baseUrl}/systemadmin/deletesystemadmin`;
 export const updateReceiveRequestsUrl = `${baseUrl}/account/updateaccounts`;
 
 // replenishment request for FU
 export const getReplenishmentRequestUrlFU = `${baseUrl}/replenishmentRequest/getreplenishmentrequestsFU`;
+export const getReplenishmentRequestUrlFUSearch = `${baseUrl}/replenishmentRequest/getreplenishmentrequests`;
 export const addReplenishmentRequestUrl = `${baseUrl}/replenishmentRequest/addreplenishmentrequest`;
 export const deleteReplenishmentRequestUrl = `${baseUrl}/replenishmentRequest/deletereplenishmentrequests`;
 export const updateReplenishmentRequestUrl = `${baseUrl}/replenishmentRequest/updatereplenishmentrequest`;

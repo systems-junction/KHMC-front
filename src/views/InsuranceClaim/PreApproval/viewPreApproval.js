@@ -340,7 +340,7 @@ function AddEditPurchaseRequest(props) {
       <Header />
 
       <div className='cPadding'>
-        <div className='subheader' style={{ marginLeft: '-10px' }}>
+        <div className='subheader' style={{ marginLeft: '-14px' }}>
           <div>
             <img src={PreApproval} />
             <h4>Pre-Approval</h4>
@@ -353,7 +353,7 @@ function AddEditPurchaseRequest(props) {
           }}
         />
 
-        <div className='container-fluid'>
+        <div>
           <h5 style={{ fontWeight: 'bold', color: 'white', marginTop: 25 }}>
             Patient Details
           </h5>
@@ -469,11 +469,25 @@ function AddEditPurchaseRequest(props) {
                 style={styles.textStyles}
               >
                 {medicationArray
-                  ? medicationArray.map((drug, index) => {
+                  ? medicationArray.map((d, index) => {
                       return (
-                        <h6 style={styles.textStyles}>
-                          {index + 1}. {drug}
-                        </h6>
+                        <div style={{ display: 'flex', flexDirection: 'row' }}>
+                          <h6
+                            style={{
+                              ...styles.textStyles,
+                            }}
+                          >
+                            {index + 1}
+                            {'.'} &nbsp;
+                          </h6>
+                          <h6
+                            style={{
+                              ...styles.textStyles,
+                            }}
+                          >
+                            {d}
+                          </h6>
+                        </div>
                       )
                     })
                   : ''}
@@ -566,7 +580,7 @@ function AddEditPurchaseRequest(props) {
                 style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
                 className='container-fluid'
               >
-                <div className='row' style={{ marginTop: '20px' }}>
+                <div className='row'>
                   {needApprovalArray !== 0 ? (
                     <CustomTable
                       tableData={needApprovalArray}

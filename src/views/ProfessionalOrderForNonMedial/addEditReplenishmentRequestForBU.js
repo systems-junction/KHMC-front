@@ -171,6 +171,7 @@ const modalArray = [
 const styles = {
   inputContainerForTextField: {
     marginTop: 6,
+    marginBottom: 20,
   },
 
   inputContainerForDropDown: {
@@ -226,8 +227,8 @@ const styles = {
   },
 
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
 };
 

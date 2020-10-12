@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import React, { useState, useEffect } from 'react'
 import Notification from '../../../../components/Snackbar/Notification.js'
 import CustomTable from '../../../../components/Table/Table'
@@ -30,17 +29,17 @@ const tableDataKeys = [
   'status',
 ]
 
-
 const styles = {
   textFieldPadding: {
-    paddingLeft: 0,
+    paddingLeft: 5,
     paddingRight: 5,
   },
-
-
 }
 
 const useStylesForInput = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(0),
+  },
   input: {
     backgroundColor: 'white',
     borderRadius: 5,
@@ -50,12 +49,42 @@ const useStylesForInput = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: 'white',
     },
-    '&:disabled': {
-      color: 'gray',
+    '&:focus': {
+      boxShadow: 'none',
+      borderRadius: 5,
     },
   },
-
-
+  multilineColor: {
+    backgroundColor: 'white',
+    borderRadius: 5,
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
+  },
+  root: {
+    '& .MuiTextField-root': {
+      backgroundColor: 'white',
+    },
+    '& .Mui-focused': {
+      backgroundColor: 'white',
+      color: 'black',
+    },
+    '& .Mui-disabled': {
+      backgroundColor: 'white',
+      color: 'gray',
+    },
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
+  },
 }))
 
 const actions = { view: true }
@@ -91,7 +120,6 @@ export default function Ipr(props) {
       .get(getDischarge)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data, 'ecr1')
           res.data.data.map(
             (d) => (d.date = d.dischargeRequest.dischargeMedication.date)
           )
@@ -99,6 +127,8 @@ export default function Ipr(props) {
           setIpr(res.data.data.reverse())
           var sortedObjs = _.sortBy(res.data.data, 'date').reverse()
           setIpr(sortedObjs)
+          console.log(sortedObjs, 'ecr1')
+
           // setIpr(res.data.data.reverse())
         } else if (!res.data.success) {
           setErrorMsg(res.data.error)
@@ -122,15 +152,12 @@ export default function Ipr(props) {
     })
   }
 
-
-  const handlePatientSearch =  (e) => {
+  const handlePatientSearch = (e) => {
     const a = e.target.value.replace(/[^\w\s]/gi, '')
     setSearchPatientQuery(a)
     if (a.length >= 3) {
-       axios
-        .get(
-          getDischarge + '/' + a
-        )
+      axios
+        .get(getDischarge + '/' + a)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
@@ -143,24 +170,17 @@ export default function Ipr(props) {
               var sortedObjs = _.sortBy(res.data.data, 'date').reverse()
               setIpr(sortedObjs)
             } else {
-              setIpr(" ")
+              setIpr(' ')
             }
           }
         })
         .catch((e) => {
           console.log('error after searching patient request', e)
         })
+    } else if (a.length == 0) {
+      getIprsData()
     }
-
-    else if(a.length == 0){ 
-      getIprsData();
-    }
-    
   }
-
-
-
-
 
   return (
     <div
@@ -185,7 +205,15 @@ export default function Ipr(props) {
           </div>
         </div>
 
-        <div className='row' style={{marginLeft: '0px', marginRight: '0px', marginTop: '20px'}}>
+        <div
+          className={`${'container-fluid'} ${classes.root}`}
+          style={{
+            marginTop: '25px',
+            paddingLeft: '10px',
+            paddingRight: '10px',
+          }}
+        >
+          <div className='row'>
             <div
               className='col-md-10 col-sm-9 col-8'
               style={styles.textFieldPadding}
@@ -198,7 +226,7 @@ export default function Ipr(props) {
                 label='Search Patient by Name / MRN / National ID / Mobile Number'
                 name={'searchPatientQuery'}
                 value={searchPatientQuery}
-                onChange={handlePatientSearch} 
+                onChange={handlePatientSearch}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position='end'>
@@ -251,10 +279,8 @@ export default function Ipr(props) {
                 <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
               </div>
             </div>
-            </div> 
-
-
-
+          </div>
+        </div>
 
         <div
           style={{
@@ -263,7 +289,7 @@ export default function Ipr(props) {
             flexDirection: 'column',
           }}
         >
-          {Ipr !== " " ? (
+          {Ipr !== ' ' ? (
             <div>
               <div>
                 <CustomTable

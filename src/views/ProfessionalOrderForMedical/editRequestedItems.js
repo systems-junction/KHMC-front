@@ -122,6 +122,7 @@ const modalArray = [
 const styles = {
   inputContainerForTextField: {
     marginTop: 6,
+    marginBottom: 20,
   },
 
   inputContainerForDropDown: {
@@ -153,8 +154,8 @@ const styles = {
     outline: "none",
   },
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
 
   stylesForButton: {
@@ -757,7 +758,7 @@ function AddEditPurchaseRequest(props) {
                           : new Date()
                         : dateGenerated
                     }
-                    label={"Date Generated (MM/DD/YYYY)"}
+                    label={"Date Generated (DD-MM-YYYY)"}
                   />
                 </MuiPickersUtilsProvider>
               </div>

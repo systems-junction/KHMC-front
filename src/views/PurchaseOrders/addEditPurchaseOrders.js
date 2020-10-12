@@ -124,6 +124,7 @@ const styles = {
 
   inputContainerForTextField: {
     marginTop: 6,
+    marginBottom: 10,
   },
 
   inputContainerForDropDown: {
@@ -147,8 +148,8 @@ const styles = {
     marginTop: 25,
   },
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 4,
+    paddingRight: 4,
   },
   textFieldPaddingNew: {
     paddingLeft: 15,
@@ -1135,6 +1136,7 @@ function AddEditPurchaseRequest(props) {
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
+                  marginTop: 20,
                 }}
               >
                 <TextField

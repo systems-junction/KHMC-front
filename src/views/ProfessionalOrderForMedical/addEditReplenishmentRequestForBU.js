@@ -170,6 +170,7 @@ const modalArray = [
 const styles = {
   inputContainerForTextField: {
     marginTop: 6,
+    marginBottom: 20,
   },
 
   inputContainerForDropDown: {
@@ -225,8 +226,8 @@ const styles = {
   },
 
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
 };
 
@@ -1707,6 +1708,7 @@ function AddEditPurchaseRequest(props) {
                         width: "96.6%",
                         left: 22,
                         marginTop: 5,
+                        marginBottom: 10,
                       }}
                     >
                       <Paper style={{ ...stylesForPaper.paperStyle }}>
@@ -1715,14 +1717,10 @@ function AddEditPurchaseRequest(props) {
                             <Table stickyHeader size="small">
                               <TableHead>
                                 <TableRow>
-                                  <TableCell
-                                    style={styles.forTableCell}
-                                  >
+                                  <TableCell style={styles.forTableCell}>
                                     Trade Name
                                   </TableCell>
-                                  <TableCell
-                                    style={styles.forTableCell}
-                                  >
+                                  <TableCell style={styles.forTableCell}>
                                     Scientific Name
                                   </TableCell>
 
@@ -1733,9 +1731,7 @@ function AddEditPurchaseRequest(props) {
                                     Form
                                   </TableCell> */}
 
-                                  <TableCell
-                                    style={styles.forTableCell}
-                                  >
+                                  <TableCell style={styles.forTableCell}>
                                     Description
                                   </TableCell>
                                 </TableRow>
@@ -1749,20 +1745,14 @@ function AddEditPurchaseRequest(props) {
                                       onClick={() => handleAddItem(i)}
                                       style={{ cursor: "pointer" }}
                                     >
-                                      <TableCell>
-                                        {i.tradeName}
-                                      </TableCell>
-                                      <TableCell>
-                                        {i.scientificName}
-                                      </TableCell>
+                                      <TableCell>{i.tradeName}</TableCell>
+                                      <TableCell>{i.scientificName}</TableCell>
 
                                       {/* <TableCell align="center">
                                         {i.form}
                                       </TableCell> */}
 
-                                      <TableCell>
-                                        {i.description}
-                                      </TableCell>
+                                      <TableCell>{i.description}</TableCell>
                                     </TableRow>
                                   );
                                 })}

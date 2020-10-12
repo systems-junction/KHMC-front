@@ -13,7 +13,7 @@ import {
   addClaim,
   getedripr,
   uploadsUrl,
-  searchpatient,
+  audioURL,
 } from '../../../public/endpoins'
 import axios from 'axios'
 import Notification from '../../../components/Snackbar/Notification.js'
@@ -122,10 +122,14 @@ const styles = {
   input: {
     display: 'none',
   },
+  textFieldPadding: {
+    paddingLeft: 5,
+    paddingRight: 5,
+  },
   patientDetails: {
     backgroundColor: 'white',
     borderRadius: 5,
-    padding: '10px',
+    // padding: '10px',
   },
   inputContainerForTextField: {
     marginTop: 10,
@@ -292,6 +296,8 @@ function AddEditPatientListing(props) {
     responseCode: '',
     diagnosisArray: '',
     medicationArray: '',
+    requestType: '',
+    edriprId: '',
   }
 
   function reducer(state, { field, value }) {
@@ -321,6 +327,8 @@ function AddEditPatientListing(props) {
     responseCode,
     diagnosisArray,
     medicationArray,
+    requestType,
+    edriprId,
   } = state
 
   const classesForTabs = useStylesForTabs()
@@ -343,6 +351,7 @@ function AddEditPatientListing(props) {
   const [productData, setproductData] = useState([])
   const [searched, setsearched] = useState(false)
   const [selected, setSelected] = React.useState([])
+  const [timer, setTimer] = useState(null)
 
   useEffect(() => {
     setcomingFor(props.history.location.state.comingFor)
@@ -352,26 +361,24 @@ function AddEditPatientListing(props) {
     console.log('selected rec is ... ', selectedRec)
 
     if (props.history.location.state.comingFor === 'edit') {
-      getPatientByInfo(selectedRec.patient._id)
-      setsearched(true)
+      if (selectedRec) {
+        getBillSummary(selectedRec.patient._id)
+        setClaimId(selectedRec._id)
+        setsearched(true)
+      }
     }
 
     if (selectedRec) {
-      setClaimId(selectedRec._id)
       Object.entries(selectedRec).map(([key, val]) => {
         if (val && typeof val === 'object') {
           if (key === 'patient') {
             Object.entries(val).map(([key1, val1]) => {
               if (key1 === '_id') {
                 dispatch({ field: 'patientId', value: val1 })
-                getBillSummary(val1)
-                console.log('Patient id is ', val1)
               } else {
                 dispatch({ field: key1, value: val1 })
               }
             })
-          } else {
-            dispatch({ field: key, value: val._id })
           }
         } else {
           dispatch({ field: key, value: val })
@@ -435,9 +442,10 @@ function AddEditPatientListing(props) {
       document: document,
       status: 'pending',
       responseCode: 'N/A',
+      requestType: requestType,
+      edriprId: edriprId,
     }
     formData.append('data', JSON.stringify(params))
-    // console.log("PARAMSS ", params);
     console.log('DATAAA ', formData)
     axios
       .post(addClaim, formData, {
@@ -448,8 +456,8 @@ function AddEditPatientListing(props) {
         },
       })
       .then((res) => {
+        console.log('response for claim data ... ', res.data)
         if (res.data.success) {
-          console.log(res.data.data, 'patients data')
           dispatch({ field: 'patientId', value: '' })
           dispatch({ field: 'firstName', value: '' })
           dispatch({ field: 'lastName', value: '' })
@@ -468,7 +476,7 @@ function AddEditPatientListing(props) {
           })
         } else if (!res.data.success) {
           setOpenNotification(true)
-          setErrorMsg('Error submitting Claim details')
+          setErrorMsg('A Claim is already submitted for this patient')
         }
       })
       .catch((e) => {
@@ -493,7 +501,7 @@ function AddEditPatientListing(props) {
       treatmentDetail: treatmentDetail,
       document: document,
       status: status,
-      responseCode: responseCode,
+      responseCode: 'N/A',
     }
     formData.append('data', JSON.stringify(params))
     // console.log("PARAMSS ", params);
@@ -599,13 +607,34 @@ function AddEditPatientListing(props) {
     }, 2000)
   }
 
-  const handleSearch = (e) => {
+  const handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      triggerChange()
+    }
+  }
+
+  const triggerChange = () => {
+    handleSearch(searchQuery)
+  }
+
+  const handlePauseSearch = (e) => {
+    clearTimeout(timer)
+
     const a = e.target.value.replace(/[^\w\s]/gi, '')
     setSearchQuery(a)
-    if (a.length >= 3) {
+
+    setTimer(
+      setTimeout(() => {
+        triggerChange()
+      }, 600)
+    )
+  }
+
+  const handleSearch = (e) => {
+    if (e.length >= 3) {
       axios
         .get(
-          getInsuredPatients + '/' + currentUser.functionalUnit._id + '/' + a
+          getInsuredPatients + '/' + currentUser.functionalUnit._id + '/' + e
         )
         .then((res) => {
           if (res.data.success) {
@@ -643,7 +672,6 @@ function AddEditPatientListing(props) {
 
     setSearchQuery('')
     getBillSummary(i._id)
-    getPatientByInfo(i._id)
   }
 
   function getBillSummary(i) {
@@ -655,7 +683,6 @@ function AddEditPatientListing(props) {
           console.log('response for summary', res.data)
 
           if (res.data.rc) {
-            console.log('response for Claim', res.data.rc)
             dispatch({
               field: 'treatmentDetail',
               value: res.data.rc.treatmentDetail,
@@ -664,27 +691,33 @@ function AddEditPatientListing(props) {
           }
           dispatch({ field: 'requestNo', value: res.data.data.requestNo })
 
-          // let pharm = [];
-          // for (let i = 0; i < res.data.data.pharmacyRequest.length; i++) {
-          //   let amount = 0;
-          //   let singlePR = res.data.data.pharmacyRequest[i];
-          //   for (let j = 0; j < singlePR.item.length; j++) {
-          //     // console.log(singlePR.medicine[j].itemId.purchasePrice)
-          //     amount =
-          //       amount +
-          //       singlePR.item[j].itemId.issueUnitCost *
-          //         singlePR.item[j].requestedQty;
-          //   }
-          //   let obj = {
-          //     serviceId: {
-          //       name: "Pharmacy Item",
-          //       price: amount.toFixed(2),
-          //     },
-          //     date: res.data.data.pharmacyRequest[i].dateGenerated,
-          //     serviceType: "Pharmacy",
-          //   };
-          //   pharm.push(obj);
-          // }
+          Object.entries(res.data.data).map(([key, val]) => {
+            if (val && typeof val === 'object') {
+              if (key === 'residentNotes') {
+                if (val && val.length > 0) {
+                  dispatch({
+                    field: 'diagnosisArray',
+                    value: val.reverse()[0].code,
+                  })
+                }
+              } else if (key === 'pharmacyRequest') {
+                let data = []
+                val.map((d) => {
+                  d.item.map((item) => {
+                    let found = data.find((i) => i === item.itemId.name)
+                    if (!found) {
+                      data.push(item.itemId.name)
+                    }
+                  })
+                })
+                dispatch({ field: 'medicationArray', value: data })
+              }
+            } else if (key === 'requestType') {
+              dispatch({ field: 'requestType', value: val })
+            } else if (key === '_id') {
+              dispatch({ field: 'edriprId', value: val })
+            }
+          })
 
           let pharm = []
           for (let i = 0; i < res.data.data.pharmacyRequest.length; i++) {
@@ -702,11 +735,12 @@ function AddEditPatientListing(props) {
                   let obj = {
                     serviceId: {
                       name: singlePR.item[j].itemId.name,
-                      originalPrice: (
-                        singlePR.item[j].itemId.issueUnitCost *
-                        singlePR.item[j].requestedQty
-                      ).toFixed(4),
-                      insuredPrice: amount.toFixed(4),
+                      originalPrice:
+                        (
+                          singlePR.item[j].itemId.issueUnitCost *
+                          singlePR.item[j].requestedQty
+                        ).toFixed(4) + ' JD',
+                      insuredPrice: amount.toFixed(4) + ' JD',
                       insuranceStatus: 'Covered',
                     },
                     date: res.data.data.pharmacyRequest[i].dateGenerated,
@@ -724,7 +758,7 @@ function AddEditPatientListing(props) {
                 let obj = {
                   serviceId: {
                     name: singlePR.item[j].itemId.name,
-                    originalPrice: amount.toFixed(4),
+                    originalPrice: amount.toFixed(4) + ' JD',
                     insuredPrice: '0',
                     insuranceStatus: 'Not Covered',
                   },
@@ -748,8 +782,8 @@ function AddEditPatientListing(props) {
                 let obj = {
                   serviceId: {
                     name: singleLR.serviceId.name,
-                    originalPrice: singleLR.serviceId.price.toFixed(4),
-                    insuredPrice: res.data.insured[j].price.toFixed(4),
+                    originalPrice: singleLR.serviceId.price.toFixed(4) + ' JD',
+                    insuredPrice: res.data.insured[j].price.toFixed(4) + ' JD',
                     insuranceStatus: 'Covered',
                   },
                   date: singleLR.date,
@@ -763,7 +797,7 @@ function AddEditPatientListing(props) {
               let obj = {
                 serviceId: {
                   name: singleLR.serviceId.name,
-                  originalPrice: singleLR.serviceId.price.toFixed(4),
+                  originalPrice: singleLR.serviceId.price.toFixed(4) + ' JD',
                   insuredPrice: '0',
                   insuranceStatus: 'Not Covered',
                 },
@@ -786,8 +820,8 @@ function AddEditPatientListing(props) {
                 let obj = {
                   serviceId: {
                     name: singleRR.serviceId.name,
-                    originalPrice: singleRR.serviceId.price.toFixed(4),
-                    insuredPrice: res.data.insured[j].price.toFixed(4),
+                    originalPrice: singleRR.serviceId.price.toFixed(4) + ' JD',
+                    insuredPrice: res.data.insured[j].price.toFixed(4) + ' JD',
                     insuranceStatus: 'Covered',
                   },
                   date: singleRR.date,
@@ -801,7 +835,7 @@ function AddEditPatientListing(props) {
               let obj = {
                 serviceId: {
                   name: singleRR.serviceId.name,
-                  originalPrice: singleRR.serviceId.price.toFixed(4),
+                  originalPrice: singleRR.serviceId.price.toFixed(4) + ' JD',
                   insuredPrice: '0',
                   insuranceStatus: 'Not Covered',
                 },
@@ -824,51 +858,6 @@ function AddEditPatientListing(props) {
       })
       .catch((e) => {
         console.log('error: ', e)
-      })
-  }
-
-  const getPatientByInfo = (id) => {
-    axios
-      .get(searchpatient + '/' + id)
-      .then((res) => {
-        if (res.data.success) {
-          if (res.data.data) {
-            console.log('Response after getting EDR/IPR data : ', res.data.data)
-
-            Object.entries(res.data.data).map(([key, val]) => {
-              if (val && typeof val === 'object') {
-                if (key === 'residentNotes') {
-                  if (val && val.length > 0) {
-                    dispatch({
-                      field: 'diagnosisArray',
-                      value: val.reverse()[0].code,
-                    })
-                  }
-                } else if (key === 'pharmacyRequest') {
-                  let data = []
-                  val.map((d) => {
-                    d.item.map((item) => {
-                      let found = data.find((i) => i === item.itemId.name)
-                      if (!found) {
-                        data.push(item.itemId.name)
-                      }
-                    })
-                  })
-                  dispatch({ field: 'medicationArray', value: data })
-                }
-              } else {
-                dispatch({ field: key, value: val })
-              }
-            })
-          }
-        } else {
-          setOpenNotification(true)
-          setErrorMsg('EDR/IPR not generated for patient')
-        }
-      })
-      .catch((e) => {
-        setOpenNotification(true)
-        setErrorMsg(e)
       })
   }
 
@@ -898,72 +887,8 @@ function AddEditPatientListing(props) {
     var logo = new Image()
     logo.src = logoPatientSummaryInvoice
 
-    // var doc = new jsPDF();
-
-    // doc.setFontSize(40);
-    // doc.setTextColor(44, 109, 221);
-    // var logo = new Image();
-
-    // logo.src = logoInvoice;
-    // doc.addImage(logo, "PNG", 5, 7);
-
-    // doc.setTextColor(0, 0, 0);
-
-    // doc.setFontSize(10);
-    // doc.text(139, 10, `Invoice No:`);
-    // doc.text(170, 10, `${invoiceNo}`);
-
-    // doc.setFontSize(12);
-    // doc.text(155, 20, "Date:");
-    // doc.text(184, 20, `${now.toISOString().substr(0, 10)}`);
-
-    // doc.text(155, 30, "Time:");
-    // doc.text(195, 30, `${time}`);
-
-    // doc.setFontSize(18);
-    // doc.text(5, 55, "Bill to:");
-    // doc.setFontSize(12);
-    // doc.line(5, 65, 50, 65);
-    // doc.text(5, 75, "Request No:");
-    // doc.text(5, 85, `${item.RRrequestNo || item.LRrequestNo}`);
-
-    // doc.text(178, 50, "Invoice Total");
-    // doc.setFontSize(23);
-    // doc.setTextColor(44, 109, 221);
-    // doc.text(167, 60, `${item.serviceId.price} JD`);
-
-    // doc.setTextColor(0, 0, 0);
-    // doc.setFontSize(12);
-    // doc.text(5, 100, `Service Name: ${item.serviceName}`);
-    // doc.text(5, 110, `Service Type: ${item.serviceType}`);
-    // doc.text(5, 120, `Comments: ${item.comments}`);
-
-    // doc.text(5, 252, "Signature & Stamp");
-    // doc.line(5, 257, 50, 257);
-
-    // doc.setTextColor(150, 150, 130);
-    // doc.text(162, 215, `Sub Total:`);
-    // doc.text(183, 215, `${item.serviceId.price} JD`);
-    // doc.text(163, 225, "Tax Rate:");
-    // doc.text(174, 235, "Tax:");
-    // doc.text(165, 245, "Discount:");
-    // doc.text(184, 245, " 999 JD");
-    // doc.setTextColor(0, 0, 0);
-    // doc.text(156, 255, "Total Amount:");
-    // doc.text(185, 255, `${item.serviceId.price} JD`);
-
-    // doc.line(0, 272, 1000, 272);
-
-    // doc.text(5, 285, "Prepared by:");
-    // if (QR) {
-    //   doc.addImage(`http://localhost:4000${QR}`, "PNG", 175, 275, 20, 20);
-    // }
-    // doc.save(`Invoice ${invoiceNo}.pdf`);
-
     var doc = new jsPDF()
-
     doc.addImage(logo, 'PNG', 10, 10, 55, 30)
-
     doc.setTextColor(0, 0, 0)
 
     // header
@@ -1037,7 +962,9 @@ function AddEditPatientListing(props) {
     doc.text(5, 288, `Prepared by: ${currentUser.name}`)
 
     if (QR) {
-      doc.addImage(`${uploadsUrl + QR}`, 'PNG', 172.9, 266, 25, 25)
+      var img = new Image()
+      img.src = `${audioURL + QR}`
+      doc.addImage(img, 'PNG', 172.9, 266, 25, 25)
     }
 
     doc.save(`Invoice ${invoiceNo}.pdf`)
@@ -1142,10 +1069,15 @@ function AddEditPatientListing(props) {
       doc.text(169, 240, '0') // down payment
       doc.text(190, 240, 'JD')
 
+      doc.text(5, 243, 'Signature & Stamp')
+      doc.line(5, 250, 75, 250)
+
       doc.line(0, 260, 210, 260)
       doc.text(5, 288, `Prepared by: ${currentUser.name}`)
       if (QR) {
-        doc.addImage(`${uploadsUrl + QR}`, 'PNG', 172.9, 266, 25, 25)
+        var img = new Image()
+        img.src = `${audioURL + QR}`
+        doc.addImage(img, 'PNG', 172.9, 266, 25, 25)
       }
 
       doc.save(`Patient Summary Invoice ${invoiceNo}.pdf`)
@@ -1200,7 +1132,7 @@ function AddEditPatientListing(props) {
     >
       <Header />
       <div className='cPadding'>
-        <div className='subheader'>
+        <div className='subheader' style={{ marginLeft: '-10px' }}>
           <div>
             <img src={claimsReview} />
             <div style={{ flex: 4, display: 'flex', alignItems: 'center' }}>
@@ -1254,7 +1186,12 @@ function AddEditPatientListing(props) {
         {value === 0 ? (
           <div>
             <div
-              style={{ marginTop: '20px', marginBottom: '10px' }}
+              style={{
+                marginTop: '20px',
+                marginBottom: '10px',
+                paddingLeft: '10px',
+                paddingRight: '10px',
+              }}
               className={`container-fluid ${classes.root}`}
             >
               {comingFor === 'add' ? (
@@ -1262,9 +1199,7 @@ function AddEditPatientListing(props) {
                   <div className='row'>
                     <div
                       className='col-md-10 col-sm-8 col-8'
-                      style={{
-                        ...styles.inputContainerForTextField,
-                      }}
+                      style={styles.textFieldPadding}
                     >
                       <TextField
                         required
@@ -1272,7 +1207,8 @@ function AddEditPatientListing(props) {
                         name={'searchQuery'}
                         value={searchQuery}
                         style={{ borderRadius: '5px' }}
-                        onChange={handleSearch}
+                        onChange={handlePauseSearch}
+                        onKeyDown={handleKeyDown}
                         className='textInputStyle'
                         variant='filled'
                         InputProps={{
@@ -1291,7 +1227,7 @@ function AddEditPatientListing(props) {
                     <div
                       className='col-md-1 col-sm-2 col-2'
                       style={{
-                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
                       }}
                     >
                       <div
@@ -1299,20 +1235,23 @@ function AddEditPatientListing(props) {
                           display: 'flex',
                           justifyContent: 'center',
                           alignItems: 'center',
-                          height: 55,
                           backgroundColor: 'white',
                           borderRadius: 5,
-                          width: 84,
+                          height: 55,
                         }}
                       >
-                        <img src={BarCode} style={{ width: 80, height: 75 }} />
+                        <img src={BarCode} style={{ width: 70, height: 60 }} />
                       </div>
                     </div>
 
-                    <div className='col-md-1 col-sm-2 col-2'>
+                    <div
+                      className='col-md-1 col-sm-2 col-2'
+                      style={{
+                        ...styles.textFieldPadding,
+                      }}
+                    >
                       <div
                         style={{
-                          ...styles.inputContainerForTextField,
                           display: 'flex',
                           justifyContent: 'center',
                           alignItems: 'center',
@@ -1330,53 +1269,74 @@ function AddEditPatientListing(props) {
                   </div>
 
                   <div className='row' style={{ marginTop: 10 }}>
-                    <div className='col-md-10 col-sm-8 col-8'>
+                    <div
+                      className='col-md-10 col-sm-8 col-8'
+                      style={{
+                        ...styles.textFieldPadding,
+                      }}
+                    >
                       {searchQuery ? (
                         <div style={{ zIndex: 3 }}>
                           <Paper style={{ maxHeight: 300, overflow: 'auto' }}>
-                            {itemFoundSuccessfull ? (
-                              itemFound && (
-                                <Table size='small'>
-                                  <TableHead>
-                                    <TableRow>
-                                      <TableCell>MRN</TableCell>
-                                      <TableCell>Patient Name</TableCell>
-                                      <TableCell>Gender</TableCell>
-                                      <TableCell>Age</TableCell>
-                                      <TableCell>Payment Method</TableCell>
-                                    </TableRow>
-                                  </TableHead>
+                            {itemFoundSuccessfull && itemFound !== '' ? (
+                              <Table size='small'>
+                                <TableHead>
+                                  <TableRow>
+                                    <TableCell>MRN</TableCell>
+                                    <TableCell>Patient Name</TableCell>
+                                    <TableCell>Gender</TableCell>
+                                    <TableCell>Age</TableCell>
+                                  </TableRow>
+                                </TableHead>
 
-                                  <TableBody>
-                                    {itemFound.map((i) => {
-                                      return (
-                                        <TableRow
-                                          key={i._id}
-                                          onClick={() => handleAddItem(i)}
-                                          style={{ cursor: 'pointer' }}
-                                        >
-                                          <TableCell>{i.profileNo}</TableCell>
-                                          <TableCell>
-                                            {i.firstName + ` ` + i.lastName}
-                                          </TableCell>
-                                          <TableCell>{i.gender}</TableCell>
-                                          <TableCell>{i.age}</TableCell>
-                                          <TableCell>
-                                            {i.paymentMethod}
-                                          </TableCell>
-                                        </TableRow>
-                                      )
-                                    })}
-                                  </TableBody>
-                                </Table>
-                              )
-                            ) : (
-                              <h4
-                                style={{ textAlign: 'center' }}
-                                onClick={() => setSearchQuery('')}
+                                <TableBody>
+                                  {itemFound.map((i) => {
+                                    return (
+                                      <TableRow
+                                        key={i._id}
+                                        onClick={() => handleAddItem(i)}
+                                        style={{ cursor: 'pointer' }}
+                                      >
+                                        <TableCell>{i.profileNo}</TableCell>
+                                        <TableCell>
+                                          {i.firstName + ` ` + i.lastName}
+                                        </TableCell>
+                                        <TableCell>{i.gender}</TableCell>
+                                        <TableCell>{i.age}</TableCell>
+                                      </TableRow>
+                                    )
+                                  })}
+                                </TableBody>
+                              </Table>
+                            ) : searchQuery ? (
+                              <div style={{ textAlign: 'center' }}>
+                                <Loader
+                                  type='TailSpin'
+                                  color='#2c6ddd'
+                                  height={25}
+                                  width={25}
+                                  style={{
+                                    display: 'inline-block',
+                                    padding: '10px',
+                                  }}
+                                />
+                                <span
+                                  style={{
+                                    display: 'inline-block',
+                                    padding: '10px',
+                                  }}
+                                >
+                                  <h4> Searching Patient...</h4>
+                                </span>
+                              </div>
+                            ) : searchQuery && !itemFoundSuccessfull ? (
+                              <div
+                                style={{ textAlign: 'center', padding: '10px' }}
                               >
-                                Patient Not Found
-                              </h4>
+                                <h4>No Patient Found !</h4>
+                              </div>
+                            ) : (
+                              undefined
                             )}
                           </Paper>
                         </div>
@@ -1391,14 +1351,12 @@ function AddEditPatientListing(props) {
               )}
             </div>
 
-            <div className='container-fluid'>
+            <div className={`${classes.root}`}>
               <h5
                 style={{
                   fontWeight: 'bold',
                   color: 'white',
-                  marginTop: 25,
-                  paddingLeft: 0,
-                  paddingRight: 0,
+                  marginTop: 10,
                 }}
               >
                 Patient Details
@@ -1508,11 +1466,27 @@ function AddEditPatientListing(props) {
                     style={styles.textStyles}
                   >
                     {medicationArray
-                      ? medicationArray.map((drug, index) => {
+                      ? medicationArray.map((d, index) => {
                           return (
-                            <h6 style={styles.textStyles}>
-                              {index + 1}. {drug}
-                            </h6>
+                            <div
+                              style={{ display: 'flex', flexDirection: 'row' }}
+                            >
+                              <h6
+                                style={{
+                                  ...styles.textStyles,
+                                }}
+                              >
+                                {index + 1}
+                                {'.'} &nbsp;
+                              </h6>
+                              <h6
+                                style={{
+                                  ...styles.textStyles,
+                                }}
+                              >
+                                {d}
+                              </h6>
+                            </div>
                           )
                         })
                       : ''}
@@ -1547,8 +1521,9 @@ function AddEditPatientListing(props) {
                 className='row'
                 style={{
                   ...styles.patientDetails,
-                  marginRight: 0,
-                  marginLeft: 0,
+                  marginTop: '20px',
+                  // marginRight: 0,
+                  // marginLeft: 0,
                 }}
               >
                 <TextField
@@ -1574,9 +1549,9 @@ function AddEditPatientListing(props) {
             {comingFor === 'edit' ? (
               <div
                 className={`container-fluid ${classes.root}`}
-                style={{ marginTop: '10px' }}
+                style={{ marginTop: '30px' }}
               >
-                <div className='row' style={{ marginLeft: 0, marginRight: 0 }}>
+                <div className='row'>
                   <TextField
                     required
                     select
@@ -1596,7 +1571,9 @@ function AddEditPatientListing(props) {
                       disableUnderline: true,
                     }}
                   >
-                    <MenuItem value={status}>{status}</MenuItem>
+                    <MenuItem value=''>
+                      <em>None</em>
+                    </MenuItem>
 
                     {statusArray.map((val) => {
                       return (
@@ -1617,7 +1594,7 @@ function AddEditPatientListing(props) {
                 display: 'flex',
                 flex: 1,
                 justifyContent: 'center',
-                marginTop: '2%',
+                marginTop: '30px',
                 marginBottom: '2%',
               }}
               className='container-fluid'
@@ -1625,26 +1602,42 @@ function AddEditPatientListing(props) {
               <img
                 onClick={() => props.history.goBack()}
                 src={Back_Arrow}
-                style={{ width: 45, height: 35, cursor: 'pointer' }}
+                style={{
+                  width: 45,
+                  height: 35,
+                  cursor: 'pointer',
+                  marginLeft: '-12px',
+                }}
               />
               <div
+                class='row'
                 style={{
                   display: 'flex',
                   flex: 1,
-                  justifyContent: 'flex-end',
+                  justifyContent: 'center',
+                  paddingLeft: 6,
+                  paddingRight: 6,
                 }}
               >
-                {/* {comingFor === "add" ? ( */}
-                <Button
-                  style={styles.stylesForButton}
-                  disabled={!searched}
-                  onClick={onClick}
-                  variant='contained'
-                  color='primary'
+                <div
+                  style={{
+                    display: 'flex',
+                    flex: 1,
+                    justifyContent: 'flex-end',
+                    marginRight: '-6px',
+                  }}
                 >
-                  Next
-                </Button>
-                {/* ) : (
+                  {/* {comingFor === "add" ? ( */}
+                  <Button
+                    style={styles.stylesForButton}
+                    disabled={!searched}
+                    onClick={onClick}
+                    variant='contained'
+                    color='primary'
+                  >
+                    Next
+                  </Button>
+                  {/* ) : (
                     <Button
                       style={styles.stylesForButton}
                       //disabled={!validateFormType1()}
@@ -1655,6 +1648,7 @@ function AddEditPatientListing(props) {
                       Update
                     </Button>
                   )} */}
+                </div>
               </div>
             </div>
           </div>
@@ -1908,8 +1902,8 @@ function AddEditPatientListing(props) {
                 <div
                   className='col-md-6 col-sm-6 col-6'
                   style={{
-                    marginLeft: 0,
-                    marginRight: 0,
+                    paddingLeft: 5,
+                    paddingRight: 5,
                   }}
                 >
                   <Button
@@ -1952,8 +1946,8 @@ function AddEditPatientListing(props) {
                 <div
                   className='col-md-6 col-sm-6 col-6'
                   style={{
-                    marginLeft: 0,
-                    marginRight: 0,
+                    paddingLeft: 5,
+                    paddingRight: 5,
                   }}
                 >
                   <Button
@@ -2001,7 +1995,10 @@ function AddEditPatientListing(props) {
                 </div>
               </div>
 
-              <div className='row' style={{ marginTop: '20px' }}>
+              <div
+                className='row'
+                style={{ marginTop: '20px', marginLeft: '-26px' }}
+              >
                 {document && document.length > 0 ? (
                   <>
                     {document.map((item, index) => {
@@ -2185,20 +2182,26 @@ function AddEditPatientListing(props) {
                 display: 'flex',
                 flex: 1,
                 justifyContent: 'center',
-                marginTop: '2%',
+                marginTop: '1%',
                 marginBottom: '2%',
               }}
             >
               <img
                 onClick={() => props.history.goBack()}
                 src={Back_Arrow}
-                style={{ width: 45, height: 35, cursor: 'pointer' }}
+                style={{
+                  width: 45,
+                  height: 35,
+                  cursor: 'pointer',
+                  marginLeft: '-10px',
+                }}
               />
               <div
                 style={{
                   display: 'flex',
                   flex: 1,
                   justifyContent: 'flex-end',
+                  marginRight: '-10px',
                 }}
               >
                 {comingFor === 'add' ? (

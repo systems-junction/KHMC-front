@@ -121,6 +121,7 @@ class Login extends React.Component {
             width: "100%",
             height: "100%",
           }}
+          class="cPadding"
         >
           <div
             style={{
@@ -147,7 +148,7 @@ class Login extends React.Component {
                 color: "white",
               }}
             >
-            Forgot your password? Just enter your email to gain access
+              Forgot your password? Just enter your email to gain access
             </h6>
           </div>
 
@@ -172,7 +173,6 @@ class Login extends React.Component {
                       minWidth: "70%",
                     }}
                   >
-                
                     <input
                       type="email"
                       placeholder="Email"

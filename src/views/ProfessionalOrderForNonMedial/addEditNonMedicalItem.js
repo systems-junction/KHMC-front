@@ -118,6 +118,7 @@ const orderByArray = [
 const styles = {
   inputContainerForTextField: {
     marginTop: 6,
+    marginBottom: 20,
   },
 
   inputContainerForDropDown: {
@@ -159,8 +160,8 @@ const styles = {
     fontSize: 14,
   },
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
 };
 const useStyles = makeStyles(tableStyles);
@@ -884,33 +885,33 @@ function AddEditPurchaseRequest(props) {
       <Header />
       <div className="cPadding" style={{ marginLeft: 10, marginRight: 10 }}>
         <div className="subheader">
-            <div>
-              <img src={purchase_request} />
-              <h4>
-                {comingFor === "add"
-                  ? "Order Items (Non-Medical)"
-                  : comingFor === "edit"
-                  ? "Order Items (Non-Medical)"
-                  : comingFor === "view"
-                  ? "Order Items (Non-Medical)"
-                  : undefined}
-              </h4>
-            </div>
+          <div>
+            <img src={purchase_request} />
+            <h4>
+              {comingFor === "add"
+                ? "Order Items (Non-Medical)"
+                : comingFor === "edit"
+                ? "Order Items (Non-Medical)"
+                : comingFor === "view"
+                ? "Order Items (Non-Medical)"
+                : undefined}
+            </h4>
+          </div>
 
-            <div>
-              <Button
-                onClick={() =>
-                  props.history.push("/home/wms/fus/professionalorder")
-                }
-                style={{ ...styles.stylesForButton, height: 45, fontSize: 12 }}
-                variant="contained"
-                color="primary"
-              >
-                <img src={view_all} style={styles.stylesForIcon} />
-                &nbsp;&nbsp;
-                <strong>View All</strong>
-              </Button>
-            </div>
+          <div>
+            <Button
+              onClick={() =>
+                props.history.push("/home/wms/fus/professionalorder")
+              }
+              style={{ ...styles.stylesForButton, height: 45, fontSize: 12 }}
+              variant="contained"
+              color="primary"
+            >
+              <img src={view_all} style={styles.stylesForIcon} />
+              &nbsp;&nbsp;
+              <strong>View All</strong>
+            </Button>
+          </div>
 
           {/* <ViewAllBtn history={props.history} /> */}
         </div>
@@ -1039,7 +1040,7 @@ function AddEditPurchaseRequest(props) {
                         inputVariant="filled"
                         onChange={onChangeDate}
                         // disabled={true}
-                        label="Date"
+                        label="Date "
                         format={dateTimeFormat}
                         fullWidth
                         // style={{
@@ -1293,7 +1294,13 @@ function AddEditPurchaseRequest(props) {
                 </h5>
               </div>
               <div className="row">
-                <div className="col-sm-12" style={styles.textFieldPadding}>
+                <div
+                  className="col-sm-12"
+                  style={{
+                    ...styles.textFieldPadding,
+                    ...styles.inputContainerForTextField,
+                  }}
+                >
                   <TextField
                     className="textInputStyle"
                     id="searchQuery"
@@ -1338,13 +1345,13 @@ function AddEditPurchaseRequest(props) {
               {searchQuery ? (
                 // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
                 <div
-                style={{
-                  zIndex: 3,
-                  position: "absolute",
-                  width: "96.6%",
-                  left: 22,
-                  marginTop: 5,
-                }}
+                  style={{
+                    zIndex: 3,
+                    position: "absolute",
+                    width: "96.6%",
+                    left: 22,
+                    marginTop: 5,
+                  }}
                 >
                   <Paper style={{ ...stylesForPaper.paperStyle }}>
                     {itemFoundSuccessfull ? (
@@ -1358,9 +1365,7 @@ function AddEditPurchaseRequest(props) {
                               >
                                 Name
                               </TableCell> */}
-                              <TableCell
-                                style={styles.forTableCell}
-                              >
+                              <TableCell style={styles.forTableCell}>
                                 Item Code
                               </TableCell>
                               {/* <TableCell
@@ -1369,9 +1374,7 @@ function AddEditPurchaseRequest(props) {
                               >
                                 Class
                               </TableCell> */}
-                              <TableCell
-                                style={styles.forTableCell}
-                              >
+                              <TableCell style={styles.forTableCell}>
                                 Description
                               </TableCell>
                             </TableRow>
@@ -1386,17 +1389,13 @@ function AddEditPurchaseRequest(props) {
                                   style={{ cursor: "pointer" }}
                                 >
                                   {/* <TableCell align="center">{i.name}</TableCell> */}
-                                  <TableCell>
-                                    {i.itemCode}
-                                  </TableCell>
+                                  <TableCell>{i.itemCode}</TableCell>
                                   {/* <TableCell align="center">
                                     {i.cls === "non_medical"
                                       ? "Non Medical"
                                       : ""}
                                   </TableCell> */}
-                                  <TableCell>
-                                    {i.description}
-                                  </TableCell>
+                                  <TableCell>{i.description}</TableCell>
                                 </TableRow>
                               );
                             })}

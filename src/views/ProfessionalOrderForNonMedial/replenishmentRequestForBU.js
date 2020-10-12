@@ -34,6 +34,12 @@ import Inactive from "../../assets/img/Inactive.png";
 
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 
+import Fingerprint from '../../assets/img/fingerprint.png'
+import AccountCircle from '@material-ui/icons/SearchOutlined'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import BarCode from '../../assets/img/Bar Code.png'
+import TextField from '@material-ui/core/TextField'
+
 import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -82,8 +88,31 @@ const styles = {
     height: "50px",
     outline: "none",
   },
+  textFieldPadding: {
+    paddingLeft: 0,
+    paddingRight: 5,
+  },
+
+
 };
 const useStyles = makeStyles(styles);
+
+const useStylesForInput = makeStyles((theme) => ({
+  input: {
+    backgroundColor: 'white',
+    borderRadius: 5,
+    '&:after': {
+      borderBottomColor: 'black',
+    },
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&:disabled': {
+      color: 'gray',
+    },
+  },
+}))
+
 
 const tableHeadingForBUMember = [
   "Order Type",
@@ -163,6 +192,7 @@ const actionsForItemsForFUMember = { edit: true };
 
 export default function ReplenishmentRequest(props) {
   const classes = useStyles();
+  const classesInput = useStylesForInput()
 
   const [purchaseRequests, setPurchaseRequest] = useState("");
   const [vendors, setVendor] = useState("");
@@ -181,6 +211,8 @@ export default function ReplenishmentRequest(props) {
   const [selectedOrder, setSelectedOrder] = useState("");
 
   const [isOpen, setIsOpen] = useState(false);
+  const [searchPatientQuery, setSearchPatientQuery] = useState('')
+
 
   if (openNotification) {
     setTimeout(() => {
@@ -501,6 +533,37 @@ export default function ReplenishmentRequest(props) {
     });
   }
 
+  const handlePatientSearch =  (e) => {
+    const a = e.target.value.replace(/[^\w\s]/gi, '')
+    setSearchPatientQuery(a)
+    if (a.length >= 3) {
+       axios
+        .get(
+          getRepRequestUrlBUForNonPharmaceutical + '/' + a
+        )
+        .then((res) => {
+          if (res.data.success) {
+            if (res.data.data.length > 0) {
+              console.log(res.data.data)
+              setPurchaseRequest(res.data.data.reverse());
+            } else {
+              console.log(res.data.data, 'no-response');
+              setPurchaseRequest([]);
+            }
+          }
+        })
+        .catch((e) => {
+          console.log('error after searching patient request', e)
+        })
+    }
+
+    else if(a.length == 0){
+      console.log("less");
+      getPurchaseRequests();
+    }
+    
+  }
+
   if (
     props.history.location.pathname ===
       "/home/wms/fus/professionalorder/addorder" &&
@@ -612,6 +675,54 @@ export default function ReplenishmentRequest(props) {
             )}
           </div>
 
+          <div className='row' style={{marginLeft: '0px', marginRight: '0px', marginTop: '20px'}}>
+            <div
+              className='col-md-12 col-sm-9 col-8'
+              style={styles.textFieldPadding}
+            >
+              <TextField
+                className='textInputStyle'
+                id='searchPatientQuery'
+                type='text'
+                variant='filled'
+                label='Search orders By Order No'
+                name={'searchPatientQuery'}
+                value={searchPatientQuery}
+                onChange={handlePatientSearch} 
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <AccountCircle />
+                    </InputAdornment>
+                  ),
+                  className: classesInput.input,
+                  classes: { input: classesInput.input },
+                  disableUnderline: true,
+                }}
+              />
+            </div>
+
+            <div
+              className='col-md-1 col-sm-2 col-2'
+              style={{
+                ...styles.textFieldPadding,
+              }}
+            >
+            </div>
+
+            <div
+              className='col-md-1 col-sm-1 col-2'
+              style={{
+                ...styles.textFieldPadding,
+              }}
+            >
+              
+            </div>
+          </div>
+
+
+          
+
           <div
             style={{
               flex: 4,
@@ -619,7 +730,7 @@ export default function ReplenishmentRequest(props) {
               flexDirection: "column",
             }}
           >
-            {purchaseRequests ? (
+            {purchaseRequests &&  purchaseRequests.length > 0 ? (
               <div>
                 <div>
                   <CustomTable
@@ -685,10 +796,32 @@ export default function ReplenishmentRequest(props) {
 
                 <Notification msg={errorMsg} open={openNotification} />
               </div>
-            ) : (
-              <div className="LoaderStyle">
-                <Loader type="TailSpin" color="red" height={50} width={50} />
+            ) : purchaseRequests && purchaseRequests.length == 0 ? (
+              <div className='row ' style={{ marginTop: '25px' }}>
+                <div className='col-11'>
+                  <h3
+                    style={{
+                      color: 'white',
+                      textAlign: 'center',
+                      width: '100%',
+                      position: 'absolute',
+                    }}
+                  >
+                    Opps...No Data Found
+                  </h3>
+                </div>
+                <div className='col-1' style={{ marginTop: 45 }}>
+                  <img
+                    onClick={() => props.history.goBack()}
+                    src={Back_Arrow}
+                    style={{ maxWidth: '60%', height: 'auto', cursor: 'pointer' }}
+                  />
+                </div>
               </div>
+            ) : 
+            ( <div className="LoaderStyle">
+              <Loader type="TailSpin" color="red" height={50} width={50} />
+            </div>
             )}
           </div>
           <div style={{ marginBottom: 20 }}>

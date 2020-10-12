@@ -534,8 +534,13 @@ function AddEditPurchaseRequest(props) {
               </Tabs>
             </div>
             {value === 0 ? (
-              <>
-                <div className='row' style={{ marginTop: '20px' }}>
+              <div style={{ marginLeft: '-5px', marginRight: '-5px' }}>
+                <div
+                  className='row'
+                  style={{
+                    marginTop: '20px',
+                  }}
+                >
                   <div
                     className='col-md-6 col-sm-6'
                     style={{
@@ -592,7 +597,7 @@ function AddEditPurchaseRequest(props) {
                   </div>
                 </div>
 
-                <div className='row'>
+                <div className='row' style={{ marginTop: '20px' }}>
                   <div
                     className='col-md-6 col-sm-6 col-6'
                     style={{
@@ -646,7 +651,7 @@ function AddEditPurchaseRequest(props) {
                   </div>
                 </div>
 
-                <div className='row'>
+                <div className='row' style={{ marginTop: '20px' }}>
                   <div
                     className='col-md-12 col-sm-12'
                     style={{
@@ -674,7 +679,7 @@ function AddEditPurchaseRequest(props) {
                   </div>
                 </div>
 
-                <div className='row'>
+                <div className='row' style={{ marginTop: '20px' }}>
                   <div
                     className='col-md-12 col-sm-12'
                     style={{
@@ -713,10 +718,13 @@ function AddEditPurchaseRequest(props) {
                     </TextField>
                   </div>
                 </div>
-              </>
+              </div>
             ) : value === 1 ? (
-              <>
-                <div className='row' style={{ marginTop: '20px' }}>
+              <div style={{ marginLeft: '-5px', marginRight: '-5px' }}>
+                <div
+                  className='row'
+                  style={{ marginTop: '20px', marginBottom: '-10px' }}
+                >
                   <div
                     className='col-md-12 col-sm-12 col-12'
                     style={{
@@ -916,7 +924,7 @@ function AddEditPurchaseRequest(props) {
                     undefined
                   )}
                 </div>
-              </>
+              </div>
             ) : (
               undefined
             )}
@@ -924,8 +932,10 @@ function AddEditPurchaseRequest(props) {
             <div
               className='row'
               style={{
-                marginBottom: '25px',
-                marginTop: '25px',
+                marginBottom: '30px',
+                marginTop: '30px',
+                marginLeft: '-30px',
+                marginRight: '-30px',
               }}
             >
               <div className='col-md-6 col-sm-6 col-6'>
@@ -936,14 +946,10 @@ function AddEditPurchaseRequest(props) {
                     width: 45,
                     height: 35,
                     cursor: 'pointer',
-                    marginLeft: '-10px',
                   }}
                 />
               </div>
-              <div
-                className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'
-                style={{ paddingRight: '5px' }}
-              >
+              <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
                 <Button
                   disabled={checkStatus === 'completed' ? true : false}
                   onClick={updateLRByIdURI}

@@ -60,6 +60,7 @@ const statusArray = [
 const styles = {
   inputContainerForTextField: {
     marginTop: 6,
+    marginTop: 20,
   },
 
   inputContainerForDropDown: {
@@ -93,8 +94,8 @@ const styles = {
     outline: "none",
   },
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
 };
 
@@ -1039,8 +1040,8 @@ function ReceiveItems(props) {
                   disabled={selectedItem ? false : true}
                   inputVariant="filled"
                   fullWidth
-                  format="MM/dd/yyyy"
-                  label="Expiry Date"
+                  format="DD-MM-YYYY"
+                  label="Expiry Date (DD-MM-YYYY)"
                   onChange={(val) => onChangeDate(val, "expiryDate")}
                   InputProps={{
                     className: classes.input,
@@ -1189,6 +1190,7 @@ function ReceiveItems(props) {
                 }}
                 currencySymbol="JD"
                 outputFormat="number"
+                decimalPlaces="4"
                 onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
               />
             </div>
@@ -1341,6 +1343,7 @@ function ReceiveItems(props) {
                 }}
                 currencySymbol="JD"
                 outputFormat="number"
+                decimalPlaces="4"
                 onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
               />
             </div>
@@ -1398,6 +1401,7 @@ function ReceiveItems(props) {
                 }}
                 currencySymbol="JD"
                 outputFormat="number"
+                decimalPlaces="4"
                 onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
               />
             </div>
@@ -1455,6 +1459,7 @@ function ReceiveItems(props) {
                 }}
                 currencySymbol="JD"
                 outputFormat="number"
+                decimalPlaces="4"
                 onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
               />
             </div>
@@ -1532,7 +1537,7 @@ function ReceiveItems(props) {
                   inputVariant="filled"
                   disabled={selectedItem ? false : true}
                   fullWidth={true}
-                  label="Date/Time Invoice(DD - MM - YYYY)"
+                  label="Date/Time Invoice (DD-MM-YYYY)"
                   className="textInputStyle"
                   onChange={(val) => onChangeDate(val, "date")}
                   disableFuture
@@ -1557,13 +1562,12 @@ function ReceiveItems(props) {
                 <DateTimePicker
                   required
                   disableFuture
-                  // format="MM/dd/yyyy HH:mm a"
-                  format={dateTimeFormat}
+                  format="dd-mm-yyyy HH:mm a"
                   inputVariant="filled"
                   fullWidth
                   disabled={selectedItem ? false : true}
-                  label="Date/Time Received (DD - MM - YYYY)"
-                  className="textInputStyle"
+                  label="Date/Time Received (DD-MM-YYYY)"
+                  className="textInputStyle (DD-MM-YYYY)"
                   onChange={(val) => onChangeDate(val, "receivedDate")}
                   InputProps={{
                     className: classes.input,

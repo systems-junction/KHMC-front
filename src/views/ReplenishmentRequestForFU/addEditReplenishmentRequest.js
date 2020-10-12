@@ -14,6 +14,7 @@ import TableCell from "@material-ui/core/TableCell";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
+
 import tableStyles from "../../assets/jss/material-dashboard-react/components/tableStyle.js";
 import axios from "axios";
 import Notification from "../../components/Snackbar/Notification.js";
@@ -142,6 +143,7 @@ const styles = {
 
   inputContainerForTextField: {
     marginTop: 6,
+    marginBottom: 20,
   },
 
   inputContainerForDropDown: {
@@ -167,8 +169,8 @@ const styles = {
     outline: "none",
   },
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
 };
 
@@ -392,6 +394,13 @@ function AddEditPurchaseRequest(props) {
       dispatch({ field: "items", value: props.history.location.state.items });
     }
   }, []);
+
+  const onBlurChangeValue = (e) => {
+    dispatch({
+      field: e.target.name,
+      value: e.target.value.replace(/,/g, ""),
+    });
+  };
 
   const onChangeValue = (e) => {
     var pattern = /^[a-zA-Z0-9 ]*$/;
@@ -1382,7 +1391,7 @@ function AddEditPurchaseRequest(props) {
                         : new Date()
                       : dateGenerated
                   }
-                  label={"Date (MM/DD/YYYY)"}
+                  label={"Date (DD-MM-YYYY)"}
                   // format="MM/dd/yyyy HH:mm a"
                   format={dateTimeFormat}
                 />
@@ -1454,13 +1463,16 @@ function AddEditPurchaseRequest(props) {
                   label="Requested Functional Unit"
                   name={"requestNo"}
                   value={fuId.fuName}
-                  onChange={onChangeValue}
+                  // onChange={onBlurChangeValue}
                   className="textInputStyle"
                   variant="filled"
                   InputProps={{
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
+                  // currencySymbol="JD"
+                  // outputFormat="number"
+                  // decimalPlaces="4"
                   error={requestNo === "" && isFormSubmitted}
                 />
               </div>

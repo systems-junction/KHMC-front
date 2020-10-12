@@ -1,43 +1,43 @@
-import React from 'react'
-import cookie from 'react-cookies'
-import { Route, Switch, Router, Redirect } from 'react-router-dom'
-import { createBrowserHistory } from 'history'
-import NotFound from '../components/NotFound/NotFound'
-import LR from '../views/ServicesRequest/LR/LR'
-import EDR from '../views/ServicesRequest/LR/EDR'
-import IPR from '../views/ServicesRequest/LR/IPR'
-import OPR from '../views/ServicesRequest/LR/OPR'
-import ViewIPR from '../views/ServicesRequest/LR/viewIPR'
-import ViewEDR from '../views/ServicesRequest/LR/viewEDR'
-import ViewOPR from '../views/ServicesRequest/LR/viewOPR'
-import UpdateLR from '../views/ServicesRequest/LR/updateLR'
-import EDRTriageAndAssessment from '../views/ServicesRequest/PHR/EDRTriageAndAssessment'
-import IPRTriageAndAssessment from '../views/ServicesRequest/PHR/IPRTriageAndAssessment'
-import AddEditOPR from '../views/ServicesRequest/LR/addEditOPR'
-import AddPharmacyOPR from '../views/ServicesRequest/LR/addLab'
-import SuccessScreen from '../components/SuccessScreen/SuccessScreen'
+import React from "react";
+import cookie from "react-cookies";
+import { Route, Switch, Router, Redirect } from "react-router-dom";
+import { createBrowserHistory } from "history";
+import NotFound from "../components/NotFound/NotFound";
+import LR from "../views/ServicesRequest/LR/LR";
+import EDR from "../views/ServicesRequest/LR/EDR";
+import IPR from "../views/ServicesRequest/LR/IPR";
+import OPR from "../views/ServicesRequest/LR/OPR";
+import ViewIPR from "../views/ServicesRequest/LR/viewIPR";
+import ViewEDR from "../views/ServicesRequest/LR/viewEDR";
+import ViewOPR from "../views/ServicesRequest/LR/viewOPR";
+import UpdateLR from "../views/ServicesRequest/LR/updateLR";
+import EDRTriageAndAssessment from "../views/ServicesRequest/PHR/EDRTriageAndAssessment";
+import IPRTriageAndAssessment from "../views/ServicesRequest/PHR/IPRTriageAndAssessment";
+import AddEditOPR from "../views/ServicesRequest/LR/addEditOPR";
+import AddPharmacyOPR from "../views/ServicesRequest/LR/addLab";
+import SuccessScreen from "../components/SuccessScreen/SuccessScreen";
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const [currentUser, setCurrentUser] = React.useState(
-    cookie.load('current_user')
-  )
+    cookie.load("current_user")
+  );
 
   return (
     <Route
       {...rest}
       render={(props) =>
-        currentUser.staffTypeId.type === 'admin' ||
-        currentUser.staffTypeId.type === 'Committe Member' ||
-        currentUser.staffTypeId.type === 'Accounts Member' ||
-        currentUser.staffTypeId.type === 'Warehouse Member' ? (
+        currentUser.staffTypeId.type === "admin" ||
+        currentUser.staffTypeId.type === "Committe Member" ||
+        currentUser.staffTypeId.type === "Accounts Member" ||
+        currentUser.staffTypeId.type === "Warehouse Member" ? (
           <Component {...props} />
         ) : (
-          <Redirect to='notfound' />
+          <Redirect to="notfound" />
         )
       }
     />
-  )
-}
+  );
+};
 
 class WMSRoutes extends React.PureComponent {
   render() {
@@ -117,10 +117,10 @@ class WMSRoutes extends React.PureComponent {
 
         <Route path={`${this.props.match.url}/notfound`} component={NotFound} />
 
-        <Route path='*' component={NotFound} />
+        <Route path="*" component={NotFound} />
       </Switch>
-    )
+    );
   }
 }
 
-export default WMSRoutes
+export default WMSRoutes;

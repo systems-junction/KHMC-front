@@ -38,6 +38,7 @@ import AccountCircle from '@material-ui/icons/SearchOutlined'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import BarCode from '../../../assets/img/Bar Code.png'
 import ViewSingleRequest from './viewRequest'
+import Loader from 'react-loader-spinner'
 
 import { connect } from 'react-redux'
 import {
@@ -468,6 +469,8 @@ function LabRadRequest(props) {
   const [isOpen, setIsOpen] = useState(false)
   const [icd, setIcd] = useState([])
   const [icdArr, setIcdArr] = useState([])
+  const [timer, setTimer] = useState(null)
+
   const validateForm = () => {
     return (
       doctorconsultationNotes &&
@@ -480,6 +483,7 @@ function LabRadRequest(props) {
       specialist.length > 0
     )
   }
+
   const validateFormRR = () => {
     return (
       section &&
@@ -1173,14 +1177,36 @@ function LabRadRequest(props) {
     setIcdArr(newList)
     console.log('icdArr', icdArr)
   }
-  //for search patient
-  const handlePatientSearch = (e) => {
+
+  const handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      triggerChange()
+    }
+  }
+
+  const triggerChange = () => {
+    handlePatientSearch(searchPatientQuery)
+  }
+
+  const handlePauseSearch = (e) => {
+    clearTimeout(timer)
+
     const a = e.target.value.replace(/[^\w\s]/gi, '')
     setSearchPatientQuery(a)
-    if (a.length >= 3) {
+
+    setTimer(
+      setTimeout(() => {
+        triggerChange()
+      }, 600)
+    )
+  }
+
+  //for search patient
+  const handlePatientSearch = (e) => {
+    if (e.length >= 3) {
       axios
         .get(
-          getSearchedpatient + '/' + currentUser.functionalUnit._id + '/' + a
+          getSearchedpatient + '/' + currentUser.functionalUnit._id + '/' + e
         )
         .then((res) => {
           if (res.data.success) {
@@ -1468,7 +1494,8 @@ function LabRadRequest(props) {
                 label='Search Patient by Name / MRN / National ID / Mobile Number'
                 name={'searchPatientQuery'}
                 value={searchPatientQuery}
-                onChange={handlePatientSearch}
+                onChange={handlePauseSearch}
+                onKeyDown={handleKeyDown}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position='end'>
@@ -1538,47 +1565,57 @@ function LabRadRequest(props) {
                   }}
                 >
                   <Paper style={{ maxHeight: 300, overflow: 'auto' }}>
-                    {patientFoundSuccessfull ? (
-                      patientFound && (
-                        <Table size='small'>
-                          <TableHead>
-                            <TableRow>
-                              <TableCell>MRN</TableCell>
-                              <TableCell>Patient Name</TableCell>
-                              <TableCell>Gender</TableCell>
-                              <TableCell>Age</TableCell>
-                              <TableCell>Payment Method</TableCell>
-                            </TableRow>
-                          </TableHead>
+                    {patientFoundSuccessfull && patientFound !== '' ? (
+                      <Table size='small'>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>MRN</TableCell>
+                            <TableCell>Patient Name</TableCell>
+                            <TableCell>Gender</TableCell>
+                            <TableCell>Age</TableCell>
+                          </TableRow>
+                        </TableHead>
 
-                          <TableBody>
-                            {patientFound.map((i) => {
-                              return (
-                                <TableRow
-                                  key={i._id}
-                                  onClick={() => handleAddPatient(i)}
-                                  style={{ cursor: 'pointer' }}
-                                >
-                                  <TableCell>{i.profileNo}</TableCell>
-                                  <TableCell>
-                                    {i.firstName + ` ` + i.lastName}
-                                  </TableCell>
-                                  <TableCell>{i.gender}</TableCell>
-                                  <TableCell>{i.age}</TableCell>
-                                  <TableCell>{i.paymentMethod}</TableCell>
-                                </TableRow>
-                              )
-                            })}
-                          </TableBody>
-                        </Table>
-                      )
+                        <TableBody>
+                          {patientFound.map((i) => {
+                            return (
+                              <TableRow
+                                key={i._id}
+                                onClick={() => handleAddPatient(i)}
+                                style={{ cursor: 'pointer' }}
+                              >
+                                <TableCell>{i.profileNo}</TableCell>
+                                <TableCell>
+                                  {i.firstName + ` ` + i.lastName}
+                                </TableCell>
+                                <TableCell>{i.gender}</TableCell>
+                                <TableCell>{i.age}</TableCell>
+                              </TableRow>
+                            )
+                          })}
+                        </TableBody>
+                      </Table>
+                    ) : searchPatientQuery ? (
+                      <div style={{ textAlign: 'center' }}>
+                        <Loader
+                          type='TailSpin'
+                          color='#2c6ddd'
+                          height={25}
+                          width={25}
+                          style={{ display: 'inline-block', padding: '10px' }}
+                        />
+                        <span
+                          style={{ display: 'inline-block', padding: '10px' }}
+                        >
+                          <h4>Searching Patient...</h4>
+                        </span>
+                      </div>
+                    ) : searchPatientQuery && !patientFoundSuccessfull ? (
+                      <div style={{ textAlign: 'center', padding: '10px' }}>
+                        <h4> No Patient Found !</h4>
+                      </div>
                     ) : (
-                      <h4
-                        style={{ textAlign: 'center' }}
-                        onClick={() => setSearchPatientQuery('')}
-                      >
-                        Patient Not Found
-                      </h4>
+                      undefined
                     )}
                   </Paper>
                 </div>
@@ -1705,11 +1742,28 @@ function LabRadRequest(props) {
                 style={styles.textStyles}
               >
                 {medicationArray
-                  ? medicationArray.map((drug, index) => {
+                  ? medicationArray.map((d, index) => {
                       return (
-                        <h6 style={styles.textStyles}>
-                          {index + 1}. {drug}
-                        </h6>
+                        // <h6 style={styles.textStyles}>
+                        //   {index + 1}. {drug}
+                        // </h6>
+                        <div style={{ display: 'flex', flexDirection: 'row' }}>
+                          <h6
+                            style={{
+                              ...styles.textStyles,
+                            }}
+                          >
+                            {index + 1}
+                            {'.'} &nbsp;
+                          </h6>
+                          <h6
+                            style={{
+                              ...styles.textStyles,
+                            }}
+                          >
+                            {d}
+                          </h6>
+                        </div>
                       )
                     })
                   : ''}
@@ -1811,7 +1865,7 @@ function LabRadRequest(props) {
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
               className='container-fluid'
             >
-              <div className='row' style={{ marginTop: '20px' }}>
+              <div className='row'>
                 {consultationNoteArray !== 0 ? (
                   <CustomTable
                     tableData={consultationNoteArray}
@@ -1851,7 +1905,7 @@ function LabRadRequest(props) {
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
               className=' container-fluid'
             >
-              <div className='row' style={{ marginTop: '20px' }}>
+              <div className='row'>
                 {residentNoteArray !== 0 ? (
                   <CustomTable
                     tableData={residentNoteArray}
@@ -1894,7 +1948,7 @@ function LabRadRequest(props) {
               style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
               className='container-fluid'
             >
-              <div className='row' style={{ marginTop: '20px' }}>
+              <div className='row'>
                 {pharmacyRequestArray !== 0 ? (
                   <CustomTable
                     tableData={pharmacyRequestArray}
@@ -1942,7 +1996,7 @@ function LabRadRequest(props) {
               }}
               className={`container-fluid `}
             >
-              <div style={{ marginTop: '20px' }} className='row'>
+              <div className={`row ${classes.root}`}>
                 <div
                   className='col-md-12 col-sm-12 col-12'
                   style={{
@@ -2033,13 +2087,13 @@ function LabRadRequest(props) {
                 undefined
               )}
 
-              <div style={{ marginTop: '20px' }} className='row'>
+              <div className='row'>
                 <div
                   className='col-md-5 col-sm-5 col-3'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
-                    paddingRight: '15px',
+                    paddingRight: '5px',
                   }}
                 >
                   <TextField
@@ -2059,7 +2113,7 @@ function LabRadRequest(props) {
                   />
                 </div>
                 <div
-                  className='col-md-5 col-sm-5 col-3'
+                  className={`col-md-5 col-sm-5 col-3 ${classes.root}`}
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -2094,7 +2148,8 @@ function LabRadRequest(props) {
                       height: 56,
                       outline: 'none',
                       marginTop: 25,
-                      width: '104%',
+                      width: '110%',
+                      marginLeft: '-10px',
                     }}
                     disabled={!addLabRequest}
                     onClick={addSelectedLabItem}
@@ -2110,7 +2165,6 @@ function LabRadRequest(props) {
               <div
                 className='row'
                 style={{
-                  marginTop: '20px',
                   paddingLeft: '5px',
                   paddingRight: '5px',
                 }}
@@ -2139,7 +2193,7 @@ function LabRadRequest(props) {
                     // disabled={enableForm}
                     disabled={enableSave}
                     onClick={saveLabReq}
-                    style={{ ...styles.stylesForSave, width: '100px' }}
+                    style={{ ...styles.stylesForSave, width: '140px' }}
                     variant='contained'
                     color='primary'
                   >
@@ -2159,7 +2213,7 @@ function LabRadRequest(props) {
               }}
               className={`container-fluid `}
             >
-              <div style={{ marginTop: '20px' }} className='row'>
+              <div className={`row ${classes.root}`}>
                 <div
                   className='col-md-12 col-sm-12 col-12'
                   style={{
@@ -2250,13 +2304,13 @@ function LabRadRequest(props) {
                 undefined
               )}
 
-              <div style={{ marginTop: '20px' }} className='row'>
+              <div className='row'>
                 <div
                   className='col-md-5 col-sm-5 col-3'
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
-                    paddingRight: '15px',
+                    paddingRight: '5px',
                   }}
                 >
                   <TextField
@@ -2277,7 +2331,7 @@ function LabRadRequest(props) {
                   />
                 </div>
                 <div
-                  className='col-md-5 col-sm-5 col-3'
+                  className={`col-md-5 col-sm-5 col-3 ${classes.root}`}
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -2312,7 +2366,8 @@ function LabRadRequest(props) {
                       height: 56,
                       outline: 'none',
                       marginTop: 25,
-                      width: '104%',
+                      width: '110%',
+                      marginLeft: '-10px',
                     }}
                     disabled={!addRadioRequest}
                     onClick={addSelectedRadioItem}
@@ -2328,7 +2383,6 @@ function LabRadRequest(props) {
               <div
                 className='row'
                 style={{
-                  marginTop: '20px',
                   paddingLeft: '5px',
                   paddingRight: '5px',
                 }}
@@ -2357,7 +2411,7 @@ function LabRadRequest(props) {
                     // disabled={enableForm}
                     disabled={enableSave}
                     onClick={saveRadioReq}
-                    style={{ ...styles.stylesForSave, width: '100px' }}
+                    style={{ ...styles.stylesForSave, width: '140px' }}
                     variant='contained'
                     color='primary'
                   >

@@ -51,8 +51,8 @@ const styles = {
     marginTop: 6,
   },
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
   input: {
     display: 'none',
@@ -420,7 +420,13 @@ function AddEditPurchaseRequest(props) {
           />
 
           <div
-            style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+            style={{
+              flex: 4,
+              display: 'flex',
+              flexDirection: 'column',
+              paddingLeft: '10px',
+              paddingRight: '10px',
+            }}
             className={`container-fluid ${classes.root}`}
           >
             <div className='row'>
@@ -451,7 +457,7 @@ function AddEditPurchaseRequest(props) {
               </div>
             </div>
 
-            <div className='row'>
+            <div className='row' style={{ marginTop: '15px' }}>
               <div
                 className='col-md-12 col-sm-12'
                 style={{
@@ -479,7 +485,7 @@ function AddEditPurchaseRequest(props) {
               </div>
             </div>
 
-            <div className='row'>
+            <div className='row' style={{ marginTop: '15px' }}>
               <div
                 className='col-md-6 col-sm-6'
                 style={{
@@ -548,7 +554,7 @@ function AddEditPurchaseRequest(props) {
               </div>
             </div>
 
-            <div className='row'>
+            <div className='row' style={{ marginTop: '15px' }}>
               <div
                 className='col-md-12 col-sm-12 col-12'
                 style={{
@@ -737,7 +743,12 @@ function AddEditPurchaseRequest(props) {
 
             <div
               className='row'
-              style={{ marginBottom: '25px', marginTop: '25px' }}
+              style={{
+                marginBottom: '25px',
+                marginTop: '25px',
+                marginLeft: '-25px',
+                marginRight: '-25px',
+              }}
             >
               <div className='col-md-6 col-sm-6 col-6'>
                 <img
@@ -747,18 +758,17 @@ function AddEditPurchaseRequest(props) {
                     width: 45,
                     height: 35,
                     cursor: 'pointer',
-                    marginLeft: '-10px',
                   }}
                 />
               </div>
               <div
                 className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'
-                style={{ paddingRight: '5px' }}
+                // style={{  }}
               >
                 <Button
                   disabled={checkStatus === 'completed' ? true : false}
                   onClick={updateLRByIdURI}
-                  style={styles.stylesForButton}
+                  style={{ ...styles.stylesForButton }}
                   variant='contained'
                   color='primary'
                 >

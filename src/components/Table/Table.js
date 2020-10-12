@@ -122,7 +122,7 @@ export default function CustomTable(props) {
     // props.tableData
   }, []);
 
-  const replaceSlugToTitle = (val, key) => {
+  const replaceSlugToTitle = (val, key, indexValue) => {
     if (key === "heartRate") {
       if (val < 60 || val > 100) {
         return <Chip label={val} />;
@@ -645,6 +645,11 @@ export default function CustomTable(props) {
         </>
       );
     }
+
+    if (props.tableHeading[indexValue].includes("JD")) {
+      return val.toFixed(4) + " JD";
+    }
+
     return capitilizeLetter(val);
   };
 
@@ -826,7 +831,7 @@ export default function CustomTable(props) {
                                         dateOptions
                                       ).format(Date.parse(prop[val]))
                                     : // : `${replaceSlugToTitle(prop[val])}`}
-                                      replaceSlugToTitle(prop[val], val)}
+                                      replaceSlugToTitle(prop[val], val, key)}
                                 </TableCell>
                               );
                             }

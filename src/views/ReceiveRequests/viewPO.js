@@ -63,6 +63,7 @@ const generatedArrayForPO = [
 const styles = {
   inputContainerForTextField: {
     marginTop: 6,
+    marginBottom: 20,
   },
 
   inputContainerForDropDown: {
@@ -75,8 +76,8 @@ const styles = {
   },
 
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
 };
 
@@ -411,7 +412,7 @@ function AddEditPurchaseRequest(props) {
                     fullWidth={true}
                     // format="MM/dd/yyyy hh:mm a"
                     format={dateTimeFormat}
-                    label="Date/Time Generated (MM/DD/YYYY)"
+                    label="Date/Time Generated (DD-MM-YYYY)"
                     style={{ borderRadius: 10, backgroundColor: "white" }}
                     value={poId.createdAt}
                     InputProps={{
@@ -435,8 +436,8 @@ function AddEditPurchaseRequest(props) {
                     inputVariant="filled"
                     fullWidth={true}
                     // format="MM/dd/yyyy hh:mm a"
-                  format={dateTimeFormat}
-                    label="Date/Time Sent (MM/DD/YYYY)"
+                    format={dateTimeFormat}
+                    label="Date/Time Sent (DD-MM-YYYY)"
                     style={{ borderRadius: 10, backgroundColor: "white" }}
                     value={poId.sentAt}
                     InputProps={{

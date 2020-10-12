@@ -768,7 +768,7 @@ function AddEditPurchaseRequest(props) {
     var mm = dateNow.getMinutes()
     let ss = dateNow.getSeconds()
 
-    const RRrequestNo = 'RR' + day + YYYY + HH + mm + ss
+    const RRrequestNo = 'RAD' + day + YYYY + HH + mm + ss
     // setIsFormSubmitted(true);
     // if (validateItemsForm()) {
 
@@ -1021,6 +1021,7 @@ function AddEditPurchaseRequest(props) {
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
+                  paddingRight: 0,
                 }}
               >
                 <TextField
@@ -1065,62 +1066,80 @@ function AddEditPurchaseRequest(props) {
                 </div>
               </div>
             </div>
-            {searchRadioQuery ? (
-              <div style={{ zIndex: 10 }}>
-                <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
-                  {radioItemFoundSuccessfull ? (
-                    radioItemFound && (
-                      <Table size='small'>
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>Service Name</TableCell>
-                            <TableCell>Service Number</TableCell>
-                            <TableCell>Price (JD)</TableCell>
-                            <TableCell align='center'>Description</TableCell>
-                          </TableRow>
-                        </TableHead>
 
-                        <TableBody>
-                          {radioItemFound.map((i, index) => {
-                            return (
-                              <TableRow
-                                key={i.serviceNo}
-                                onClick={() => handleAddRadioItem(i)}
-                                style={{ cursor: 'pointer' }}
-                              >
-                                <TableCell>{i.name}</TableCell>
-                                <TableCell>{i.serviceNo}</TableCell>
-                                <TableCell>{i.price.toFixed(4)}</TableCell>
+            <div className='row'>
+              <div
+                className='col-md-10 col-sm-11 col-10'
+                style={{
+                  ...styles.textFieldPadding,
+                }}
+              >
+                {searchRadioQuery ? (
+                  <div
+                    style={{
+                      zIndex: 3,
+                      position: 'absolute',
+                      width: '109%',
+                    }}
+                  >
+                    <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
+                      {radioItemFoundSuccessfull ? (
+                        radioItemFound && (
+                          <Table size='small'>
+                            <TableHead>
+                              <TableRow>
+                                <TableCell>Service Name</TableCell>
+                                <TableCell>Service Number</TableCell>
+                                <TableCell>Price (JD)</TableCell>
                                 <TableCell align='center'>
-                                  {i.description}
+                                  Description
                                 </TableCell>
                               </TableRow>
-                            )
-                          })}
-                        </TableBody>
-                      </Table>
-                    )
-                  ) : (
-                    <h4
-                      style={{ textAlign: 'center' }}
-                      onClick={() => setSearchRadioQuery('')}
-                    >
-                      Service Not Found
-                    </h4>
-                  )}
-                </Paper>
-              </div>
-            ) : (
-              undefined
-            )}
+                            </TableHead>
 
-            <div style={{ marginTop: '20px' }} className='row'>
+                            <TableBody>
+                              {radioItemFound.map((i, index) => {
+                                return (
+                                  <TableRow
+                                    key={i.serviceNo}
+                                    onClick={() => handleAddRadioItem(i)}
+                                    style={{ cursor: 'pointer' }}
+                                  >
+                                    <TableCell>{i.name}</TableCell>
+                                    <TableCell>{i.serviceNo}</TableCell>
+                                    <TableCell>{i.price.toFixed(4)}</TableCell>
+                                    <TableCell align='center'>
+                                      {i.description}
+                                    </TableCell>
+                                  </TableRow>
+                                )
+                              })}
+                            </TableBody>
+                          </Table>
+                        )
+                      ) : (
+                        <h4
+                          style={{ textAlign: 'center' }}
+                          onClick={() => setSearchRadioQuery('')}
+                        >
+                          Service Not Found
+                        </h4>
+                      )}
+                    </Paper>
+                  </div>
+                ) : (
+                  undefined
+                )}
+              </div>
+            </div>
+
+            <div style={{ marginTop: '15px' }} className='row'>
               <div
                 className='col-md-5 col-sm-10 col-6'
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
-                  paddingRight: '15px',
+                  paddingRight: '5px',
                 }}
               >
                 <TextField
@@ -1181,7 +1200,8 @@ function AddEditPurchaseRequest(props) {
                     height: 56,
                     outline: 'none',
                     marginTop: 7,
-                    width: '104%',
+                    width: '109%',
+                    marginLeft: '-10px',
                   }}
                   disabled={!addRadioRequest}
                   onClick={addSelectedRadioItem}
@@ -1197,7 +1217,7 @@ function AddEditPurchaseRequest(props) {
             <div
               className='row'
               style={{
-                marginTop: '20px',
+                marginTop: '5px',
                 scrollPaddingLeft: '5px',
                 paddingRight: '10px',
               }}
