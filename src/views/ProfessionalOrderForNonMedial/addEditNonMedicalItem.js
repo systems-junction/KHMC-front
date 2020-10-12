@@ -141,7 +141,7 @@ const styles = {
     borderRadius: 5,
     backgroundColor: "#2C6DDD",
     // width: "140px",
-    height: "54px",
+    height: "55px",
     outline: "none",
   },
 
@@ -901,8 +901,8 @@ function AddEditPurchaseRequest(props) {
     >
       <Header />
       <div className="cPadding" style={{ marginLeft: 10, marginRight: 10 }}>
-        <div className="subheader">
-          <div>
+        <div className="subheader" style={{ marginLeft: 8 }}>
+          <div style={{ marginLeft: -23 }}>
             <img src={purchase_request} />
             <h4>
               {comingFor === "add"
@@ -920,7 +920,7 @@ function AddEditPurchaseRequest(props) {
               onClick={() =>
                 props.history.push("/home/wms/fus/professionalorder")
               }
-              style={{ ...styles.stylesForButton, height: 45, fontSize: 12 }}
+              style={{ ...styles.stylesForButton }}
               variant="contained"
               color="primary"
             >
