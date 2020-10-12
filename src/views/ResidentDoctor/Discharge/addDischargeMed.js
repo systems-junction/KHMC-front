@@ -38,6 +38,7 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
 import '../../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
 import CustomTable from '../../../components/Table/Table'
+import Loader from 'react-loader-spinner'
 
 const scheduleArray = [
   { key: 'Now', value: 'Now/Immediate' },
@@ -248,6 +249,7 @@ function AddEditEDR(props) {
   const [enableSave, setEnableSave] = useState(true)
   const [dischargeNotes, setdischargeNotes] = useState('')
   const [otherNotes, setotherNotes] = useState('')
+  const [timer, setTimer] = useState(null)
 
   useEffect(() => {
     // const soc = socketIOClient(socketUrl);
@@ -653,12 +655,28 @@ function AddEditEDR(props) {
     // }
   }
 
-  const handleSearch = (e) => {
-    const a = e.target.value.replace(/[^\w-\s]/gi, '')
+  const triggerMedChange = () => {
+    handleSearch(searchQuery)
+  }
+
+  const handlePauseMedSearch = (e) => {
+    clearTimeout(timer)
+
+    const a = e.target.value.replace(/[^\w\s]/gi, '')
     setSearchQuery(a)
-    if (a.length >= 1) {
+
+    setTimer(
+      setTimeout(() => {
+        triggerMedChange()
+      }, 600)
+    )
+  }
+
+  const handleSearch = (e) => {
+
+    if (e.length >= 1) {
       axios
-        .get(getSearchedPharmaceuticalItemsUrl + '/' + a)
+        .get(getSearchedPharmaceuticalItemsUrl + '/' + e)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.items.length > 0) {
@@ -739,8 +757,8 @@ function AddEditEDR(props) {
                 borderBottomWidth={20}
               />
             ) : (
-              undefined
-            )}
+                undefined
+              )}
           </div>
 
           <div
@@ -805,7 +823,7 @@ function AddEditEDR(props) {
                       label='Search Medicine by Name'
                       name={'searchQuery'}
                       value={searchQuery}
-                      onChange={handleSearch}
+                      onChange={handlePauseMedSearch}
                       className='textInputStyle'
                       variant='filled'
                       InputProps={{
@@ -835,65 +853,84 @@ function AddEditEDR(props) {
                 </div>
 
                 {searchQuery ? (
-                  // <Paper style={{ width: ' 100%', marginTop: 20,  }} elevation={3}>
                   <div
                     style={{
                       zIndex: 3,
-                      marginTop: 10,
+                      marginTop: 5,
                       marginLeft: -8,
                       width: '101.5%',
                     }}
                   >
                     <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
-                      {itemFoundSuccessfull ? (
-                        itemFound && (
-                          <Table size='small'>
-                            <TableHead>
-                              <TableRow>
-                                <TableCell>Medicine Name</TableCell>
-                                <TableCell>Scientific Name</TableCell>
-                                <TableCell>Item Code</TableCell>
-                                <TableCell>Unit Price (JD)</TableCell>
-                                {/* <TableCell>Total Price</TableCell> */}
-                              </TableRow>
-                            </TableHead>
+                      {itemFoundSuccessfull && itemFound !== '' ? (
+                        <Table size='small'>
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>Medicine Name</TableCell>
+                              <TableCell>Scientific Name</TableCell>
+                              <TableCell>Item Code</TableCell>
+                              <TableCell>Unit Price (JD)</TableCell>
+                              {/* <TableCell>Total Price</TableCell> */}
+                            </TableRow>
+                          </TableHead>
 
-                            <TableBody>
-                              {itemFound.map((i) => {
-                                return (
-                                  <TableRow
-                                    key={i.itemCode}
-                                    onClick={() => handleAddItem(i)}
-                                    style={{ cursor: 'pointer' }}
-                                  >
-                                    <TableCell>{i.tradeName}</TableCell>
-                                    <TableCell>{i.scientificName}</TableCell>
-                                    <TableCell>{i.itemCode}</TableCell>
-                                    <TableCell>
-                                      {i.issueUnitCost.toFixed(4)}
-                                    </TableCell>
-                                    {/* <TableCell>
+                          <TableBody>
+                            {itemFound.map((i) => {
+                              return (
+                                <TableRow
+                                  key={i.itemCode}
+                                  onClick={() => handleAddItem(i)}
+                                  style={{ cursor: 'pointer' }}
+                                >
+                                  <TableCell>{i.tradeName}</TableCell>
+                                  <TableCell>{i.scientificName}</TableCell>
+                                  <TableCell>{i.itemCode}</TableCell>
+                                  <TableCell>
+                                    {i.issueUnitCost.toFixed(4)}
+                                  </TableCell>
+                                  {/* <TableCell>
                                       {i.purchasePrice + i.tax}
                                     </TableCell> */}
-                                  </TableRow>
-                                )
-                              })}
-                            </TableBody>
-                          </Table>
-                        )
-                      ) : (
-                        <h4
-                          style={{ textAlign: 'center' }}
-                          onClick={() => setSearchQuery('')}
+                                </TableRow>
+                              )
+                            })}
+                          </TableBody>
+                        </Table>
+                      ) : searchQuery ? (
+                        <div style={{ textAlign: 'center' }}>
+                          <Loader
+                            type='TailSpin'
+                            color='#2c6ddd'
+                            height={25}
+                            width={25}
+                            style={{
+                              display: 'inline-block',
+                              padding: '10px',
+                            }}
+                          />
+                          <span
+                            style={{
+                              display: 'inline-block',
+                              padding: '10px',
+                            }}
+                          >
+                            <h4> Searching Medicine...</h4>
+                          </span>
+                        </div>
+                      ) : searchQuery && !itemFoundSuccessfull ? (
+                        <div
+                          style={{ textAlign: 'center', padding: '10px' }}
                         >
-                          Medicine Not Found
-                        </h4>
-                      )}
+                          <h4>No Medicince Found !</h4>
+                        </div>
+                      ) : (
+                              undefined
+                            )}
                     </Paper>
                   </div>
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
 
                 <div className='row' style={{ marginTop: 15 }}>
                   <div
@@ -1175,27 +1212,27 @@ function AddEditEDR(props) {
                         Add
                       </Button>
                     ) : (
-                      <Button
-                        style={{
-                          color: 'white',
-                          cursor: 'pointer',
-                          borderRadius: 5,
-                          backgroundColor: '#2c6ddd',
-                          width: '140px',
-                          height: '50px',
-                          outline: 'none',
-                          paddingLeft: 30,
-                          paddingRight: 30,
-                        }}
-                        // disabled={!validateItemsForm()}
-                        onClick={editSelectedItem}
-                        variant='contained'
-                        color='primary'
-                      >
-                        {' '}
+                        <Button
+                          style={{
+                            color: 'white',
+                            cursor: 'pointer',
+                            borderRadius: 5,
+                            backgroundColor: '#2c6ddd',
+                            width: '140px',
+                            height: '50px',
+                            outline: 'none',
+                            paddingLeft: 30,
+                            paddingRight: 30,
+                          }}
+                          // disabled={!validateItemsForm()}
+                          onClick={editSelectedItem}
+                          variant='contained'
+                          color='primary'
+                        >
+                          {' '}
                         Edit
-                      </Button>
-                    )}
+                        </Button>
+                      )}
                   </div>
                 </div>
               </div>
