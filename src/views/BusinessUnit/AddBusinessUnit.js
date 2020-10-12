@@ -34,7 +34,7 @@ import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css"
 
 import ViewAll from "../../components/ViewAllBtn/viewAll";
 
-import MUIInputStyles from "../../assets/jss/material-dashboard-react/inputStyle";
+// import MUIInputStyles from "../../assets/jss/material-dashboard-react/inputStyle";
 
 const styles = {
   // buttonContainer: {
@@ -72,7 +72,7 @@ const styles = {
     borderRadius: 5,
     // backgroundColor: "#2c6ddd",
     width: "60%",
-    height: "40px",
+    height: "50px",
     outline: "none",
   },
   inputContainerForDropDown: {
@@ -92,6 +92,66 @@ const styles = {
     marginTop: 25,
   },
 };
+
+const MUIInputStyles = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(0),
+  },
+  input: {
+    backgroundColor: 'white',
+    boxShadow: 'none',
+    borderRadius: 5,
+    '&:after': {
+      borderBottomColor: 'black',
+      boxShadow: 'none',
+    },
+    '&:hover': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+      borderRadius: 5,
+    },
+  },
+  multilineColor: {
+    boxShadow: 'none',
+    backgroundColor: 'white',
+    borderRadius: 5,
+    '&:hover': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
+    '&:after': {
+      borderBottomColor: 'black',
+      boxShadow: 'none',
+    },
+    '&:focus': {
+      boxShadow: 'none',
+    },
+  },
+  root: {
+    '& .MuiTextField-root': {
+      backgroundColor: 'white',
+    },
+    '& .Mui-focused': {
+      backgroundColor: 'white',
+      color: 'black',
+      boxShadow: 'none',
+    },
+    '& .Mui-disabled': {
+      backgroundColor: 'white',
+      color: 'gray',
+    },
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
+  },
+}))
+
+
 
 function AddBusinessUnit(props) {
   const classes = MUIInputStyles();
@@ -302,9 +362,9 @@ function AddBusinessUnit(props) {
     >
       <Header />
 
-      <div className={`cPadding ${classes.root}`}>
+      <div className={`cPadding `}>
         <div className="subheader">
-          <div>
+          <div style={{marginLeft: '-8px'}}>
             <img src={business_Unit} />
             <h4>
               {comingFor === "add"
@@ -325,7 +385,7 @@ function AddBusinessUnit(props) {
         >
           {/* <h1>{comingFor === 'add' ? 'Add' : 'Edit'}</h1> */}
 
-          <div className="row ">
+          <div className={`row ${classes.root}`} style={{marginTop: '20px'}}>
             <div
               className="col-md-12"
               style={{
@@ -350,7 +410,7 @@ function AddBusinessUnit(props) {
             </div>
           </div>
 
-          <div className="row">
+          <div className={`row ${classes.root}`}  style={{marginTop: '20px'}}>
             <div
               className="col-md-12"
               style={{
@@ -388,6 +448,8 @@ function AddBusinessUnit(props) {
                   })}
               </TextField>
             </div>
+            </div>
+            <div className={`row ${classes.root}`} style={{marginTop: '20px'}}>
 
             <div
               className="col-md-12"
@@ -428,7 +490,7 @@ function AddBusinessUnit(props) {
             </div>
           </div>
 
-          <div className="row">
+          <div className={`row ${classes.root}`}  style={{marginTop: '20px'}}>
             <div
               className="col-md-12"
               style={{
@@ -456,7 +518,7 @@ function AddBusinessUnit(props) {
             </div>
           </div>
 
-          <div className="row">
+          <div className={`row ${classes.root}`} >
             {/* <div className="col-md-12" style={styles.inputContainer}>
             <InputLabel id="status-label">Status</InputLabel>
             <Select
@@ -522,6 +584,7 @@ function AddBusinessUnit(props) {
                   variant={status === "active" ? "contained" : "outlined"}
                   color={status === "active" ? "primary" : "outlined"}
                   style={{ color: "white" }}
+                  
                 >
                   Active
                 </Button>
@@ -553,6 +616,7 @@ function AddBusinessUnit(props) {
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
+                  marginTop: '25px'
                 }}
               >
                 <TextField

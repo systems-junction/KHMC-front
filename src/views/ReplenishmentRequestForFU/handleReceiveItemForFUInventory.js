@@ -610,8 +610,8 @@ function ReceiveItems(props) {
           </div>
         </div>
 
-        <div style={{ flex: 4, display: "flex", flexDirection: "column" }}>
-          <div className="row">
+        <div style={{ flex: 4, display: "flex", flexDirection: "column" }} className='container-fluid'>
+          <div className="row" style={{marginTop: '10px'}}>
             <div
               className="col-md-6"
               style={{
@@ -1501,12 +1501,14 @@ function ReceiveItems(props) {
                 alignItems: "center",
                 marginBottom: 20,
                 marginTop: 20,
+                marginRight: '5px',
+                marginLeft: '5px'
               }}
             >
               <img
                 onClick={() => props.history.goBack()}
                 src={Back_Arrow}
-                style={{ width: 60, height: 40, cursor: "pointer" }}
+                style={{ width: 45, height: 35, cursor: "pointer" }}
               />
 
               {comingFor === "add" ? (

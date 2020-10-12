@@ -692,7 +692,7 @@ function AddEditPurchaseRequest(props) {
     >
       <Header />
       <div className={"cPadding"}>
-        <div className="subheader">
+        <div className="subheader" >
           <div>
             <img src={purchase_order} />
             <h4>
@@ -705,8 +705,8 @@ function AddEditPurchaseRequest(props) {
           <ViewAllBtn history={props.history} />
         </div>
 
-        <div className="container-fluid">
-          <div className="row">
+        <div className="container-fluid" >
+          <div className="row" style={{marginTop: 20}}>
             <div
               className="col-md-12"
               style={{
@@ -753,7 +753,7 @@ function AddEditPurchaseRequest(props) {
           className="container-fluid"
         >
           {currentUser && currentUser.staffTypeId.type === "Committe Member" ? (
-            <div className="row">
+            <div className="row" style={{marginTop: 15}}>
               <div
                 className="col-md-4"
                 style={{
@@ -852,7 +852,7 @@ function AddEditPurchaseRequest(props) {
             undefined
           )}
 
-          <div className="row">
+          <div className="row" style={{marginTop: 15}}>
             {comingFor === "edit" &&
             (currentUser.staffTypeId.type === "admin" ||
               currentUser.staffTypeId.type === "Committe Member") ? (
@@ -985,7 +985,7 @@ function AddEditPurchaseRequest(props) {
           </div>
 
           {currentUser && currentUser.staffTypeId.type === "Committe Member" ? (
-            <div className="row">
+            <div className="row" style={{marginTop: 15}}>
               <div
                 className="col-md-12"
                 style={{
@@ -1174,6 +1174,7 @@ function AddEditPurchaseRequest(props) {
                   justifyContent: "flex-end",
                   marginTop: "2%",
                   marginBottom: "2%",
+                  marginRight: '5px'
                 }}
               >
                 {comingFor === "add" ? (
@@ -1224,9 +1225,10 @@ function AddEditPurchaseRequest(props) {
 
           {purchaseRequest.length !== 0 ? (
             <div style={{ marginLeft: -10, marginRight: -10 }}>
-              <h5 style={{ color: "white", fontWeight: "700" }}>
+              <h5 style={{ color: "white", fontWeight: "700", marginLeft: '5px' }}>
                 Added Purchase Requests
               </h5>
+              <div style={{marginTop: 20}}>
               <AddedPurchaseRequestTable
                 tableData={purchaseRequest}
                 vendors={vendors}
@@ -1237,6 +1239,7 @@ function AddEditPurchaseRequest(props) {
                 borderBottomColor={"#60d69f"}
                 borderBottomWidth={20}
               />
+              </div>
             </div>
           ) : (
             undefined
