@@ -456,7 +456,7 @@ function AddEditBuInventory(props) {
             </h4>
           </div>
 
-          <div>
+          <div style={{marginRight:' 4px'}}>
             <Button
               onClick={() => props.history.goBack()}
               style={styles.stylesForButton}
@@ -692,7 +692,7 @@ function AddEditBuInventory(props) {
 
           <Notification msg={errorMsg} open={openNotification} />
 
-          <div style={{ marginBottom: 20 }}>
+          <div style={{ marginBottom: 20, marginLeft: '-10px' }}>
             <img
               onClick={() => props.history.goBack()}
               src={Back_Arrow}
