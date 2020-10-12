@@ -60,8 +60,8 @@ const styles = {
     marginTop: 6,
   },
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
   input: {
     display: 'none',
@@ -422,7 +422,7 @@ function AddEditVendor(props) {
             </div>
           </div>
 
-          <div className='row'>
+          <div className='row' style={{marginTop:  '20px'}}>
             <div
               className='col-md-12'
               style={{
@@ -452,7 +452,7 @@ function AddEditVendor(props) {
             </div>
           </div>
 
-          <div className='row'>
+          <div className='row' style={{marginTop:  '20px'}}>
             <div
               className='col-md-12'
               style={{

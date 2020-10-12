@@ -16,7 +16,7 @@ ul li {
 }
 
 .addCode:before {
-  content: "\f055";
+  content: '\f055';
   font-family: FontAwesome;
   font-style: normal;
   font-weight: normal;
@@ -26,7 +26,7 @@ ul li {
 }
 
 .addedCode:before {
-  content: "\f058";
+  content: '\f058';
   font-family: FontAwesome;
   font-style: normal;
   font-weight: normal;
@@ -127,7 +127,7 @@ ul li {
   display: inline-block;
 } */
 
-@import url("//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css");
+@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css');
 .search {
   position: relative;
 }
@@ -166,6 +166,14 @@ ul li {
   .depositSlipImg {
     height: 250px;
     width: 250px;
+  }
+
+  .addButton {
+    width: 121% !important;
+  }
+
+  .oprAddButton {
+    width: 117% !important;
   }
 
   .tri-Alt-4-tab {
@@ -222,7 +230,7 @@ ul li {
 
 /* css  for radio tabs */
 
-input[type="radio"] {
+input[type='radio'] {
   box-shadow: none;
 }
 

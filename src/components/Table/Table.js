@@ -646,7 +646,7 @@ export default function CustomTable(props) {
     }
 
     if (props.tableHeading[indexValue].includes("JD")) {
-      return val.toFixed(4) + " JD";
+      return parseFloat(val).toFixed(4) + " JD";
     }
 
     return capitilizeLetter(val);
