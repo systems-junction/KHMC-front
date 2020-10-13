@@ -645,7 +645,7 @@ export default function CustomTable(props) {
       );
     }
 
-    console.log("sdsd",props.tableHeading[indexValue])
+    // console.log("sdsd",props.tableHeading[indexValue])
 
     if (props.tableHeading[indexValue].includes("JD")) {
       return parseFloat(val).toFixed(4) + " JD";

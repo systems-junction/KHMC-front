@@ -473,6 +473,7 @@ function AddEditPatientListing(props) {
   const [covTer, setCovTer] = useState('')
   const [cityBoolean, setCityBoolean] = useState(false)
   const [timer, setTimer] = useState(null)
+  const [loadSearchedData, setLoadSearchedData] = useState(false)
 
   useEffect(() => {
     setcomingFor(props.history.location.state.comingFor)
@@ -958,9 +959,11 @@ function AddEditPatientListing(props) {
               console.log('patient data ', res.data.data)
               setItemFoundSuccessfully(true)
               setItemFound(res.data.data)
+              setLoadSearchedData(false)
             } else {
               setItemFoundSuccessfully(false)
               setItemFound('')
+              setLoadSearchedData(false)
             }
           }
         })
@@ -976,11 +979,12 @@ function AddEditPatientListing(props) {
     }
   }
 
-  const triggerChange = () => {
-    handleSearch(searchQuery)
+  const triggerChange = (a) => {
+    handleSearch(a)
   }
 
   const handlePauseSearch = (e) => {
+    setLoadSearchedData(true)
     clearTimeout(timer)
 
     const a = e.target.value.replace(/[^\w\s]/gi, '')
@@ -988,7 +992,7 @@ function AddEditPatientListing(props) {
 
     setTimer(
       setTimeout(() => {
-        triggerChange()
+        triggerChange(a)
       }, 600)
     )
   }
@@ -1494,7 +1498,7 @@ function AddEditPatientListing(props) {
                                 })}
                               </TableBody>
                             </Table>
-                          ) : searchQuery ? (
+                          ) : loadSearchedData ? (
                             <div style={{ textAlign: 'center' }}>
                               <Loader
                                 type='TailSpin'

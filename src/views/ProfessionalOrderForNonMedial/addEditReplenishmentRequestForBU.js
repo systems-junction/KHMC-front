@@ -453,6 +453,7 @@ function AddEditPurchaseRequest(props) {
   const [allergicDialog, openAllergicDialog] = useState(false);
   const [allergic, setAllergic] = useState("");
   const [timer, setTimer] = useState(null)
+  const [loadSearchedData, setLoadSearchedData] = useState(false)
 
   function getFUsFromBU(buId) {
     axios
@@ -811,24 +812,29 @@ function AddEditPurchaseRequest(props) {
     }, 2600);
   }
 
-  const triggerChange = () => {
-    handlePatientSearch(searchPatientQuery)
+  const triggerChange = (value) => {
+    handlePatientSearch(value)
   }
 
   const handlePauseSearch = (e) => {
+    setLoadSearchedData(true)
     clearTimeout(timer)
 
+    var value;
     var pattern = /^[a-zA-Z0-9 ]*$/;
     if (e.target.type === "text") {
       if (pattern.test(e.target.value) === false) {
         return;
       }
+      else{
+        value = e.target.value
+      }
     }
-    setSearchPatientQuery(e.target.value);
+    setSearchPatientQuery(value);
 
     setTimer(
       setTimeout(() => {
-        triggerChange()
+        triggerChange(value)
       }, 600)
     )
   }
@@ -850,9 +856,11 @@ function AddEditPurchaseRequest(props) {
               console.log(res.data.data);
               setpatientFoundSuccessfully(true);
               setpatientFound(res.data.data);
+              setLoadSearchedData(false)
             } else {
               setpatientFoundSuccessfully(false);
               setpatientFound("");
+              setLoadSearchedData(false)
             }
           }
         })
@@ -946,24 +954,29 @@ function AddEditPurchaseRequest(props) {
       });
   };
 
-  const triggerItemChange = () => {
-    handleSearch(searchQuery)
+  const triggerItemChange = (value) => {
+    handleSearch(value)
   }
 
   const handlePauseItemSearch = (e) => {
+    setLoadSearchedData(true)
     clearTimeout(timer)
 
+    var value;
     var pattern = /^[a-zA-Z0-9 ]*$/;
     if (e.target.type === "text") {
       if (pattern.test(e.target.value) === false) {
         return;
       }
+      else{
+        value = e.target.value
+      }
     }
-    setSearchQuery(e.target.value);
+    setSearchQuery(value);
 
     setTimer(
       setTimeout(() => {
-        triggerItemChange()
+        triggerItemChange(value)
       }, 600)
     )
   }
@@ -985,9 +998,11 @@ function AddEditPurchaseRequest(props) {
             console.log(res.data.data.items);
             setItemFoundSuccessfully(true);
             setItem(res.data.data.items);
+            setLoadSearchedData(false)
           } else {
             setItemFoundSuccessfully(false);
             setItem("");
+            setLoadSearchedData(false)
           }
         }
       })
@@ -1548,7 +1563,7 @@ function AddEditPurchaseRequest(props) {
                             })}
                           </TableBody>
                         </Table>
-                        ) : searchPatientQuery ? (
+                        ) : loadSearchedData ? (
                           <div style={{ textAlign: 'center' }}>
                             <Loader
                               type='TailSpin'
@@ -1730,7 +1745,7 @@ function AddEditPurchaseRequest(props) {
                             })}
                           </TableBody>
                         </Table>
-                     ) : searchQuery ? (
+                     ) : loadSearchedData ? (
                       <div style={{ textAlign: 'center' }}>
                         <Loader
                           type='TailSpin'
