@@ -119,9 +119,9 @@ self.addEventListener("push", (event) => {
     sound:
       "https://notificationsounds.com/soundfiles/46922a0880a8f11f8f69cbb52b1396be/file-sounds-1129-hollow.mp3",
     image:
-      "https://image.shutterstock.com/z/stock-vector-logistic-company-vector-logo-arrow-icon-delivery-icon-arrow-icon-arrow-vector-delivery-service-643639804.jpg",
+      "https://dev.khmc-staging.online/uploads/2020-10-13T11-28-27.691Z-notif.png",
     badge:
-      "https://image.shutterstock.com/z/stock-vector-logistic-company-vector-logo-arrow-icon-delivery-icon-arrow-icon-arrow-vector-delivery-service-643639804.jpg"
+      "https://dev.khmc-staging.online/uploads/2020-10-13T11-28-27.691Z-notif.png"
   };
   event.waitUntil(self.registration.showNotification(data.title, options));
 

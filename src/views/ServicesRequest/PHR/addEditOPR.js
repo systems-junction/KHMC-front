@@ -2130,7 +2130,6 @@ function AddEditPatientListing(props) {
                     classes: { input: classes.input },
                   }}
                 >
-                  <MenuItem value={city}>{city}</MenuItem>
 
                   {cities &&
                     cities.map((val) => {
@@ -2140,6 +2139,8 @@ function AddEditPatientListing(props) {
                         </MenuItem>
                       )
                     })}
+                                      <MenuItem value="Other">Other</MenuItem>
+
                 </TextField>
                 <ErrorMessage
                   name={city}
