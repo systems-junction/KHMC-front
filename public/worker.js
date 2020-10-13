@@ -118,10 +118,20 @@ self.addEventListener("push", (event) => {
     requireInteraction: true,
     sound:
       "https://notificationsounds.com/soundfiles/46922a0880a8f11f8f69cbb52b1396be/file-sounds-1129-hollow.mp3",
+<<<<<<< HEAD
     image:
       "https://image.shutterstock.com/z/stock-vector-logistic-company-vector-logo-arrow-icon-delivery-icon-arrow-icon-arrow-vector-delivery-service-643639804.jpg",
     badge:
       "https://image.shutterstock.com/z/stock-vector-logistic-company-vector-logo-arrow-icon-delivery-icon-arrow-icon-arrow-vector-delivery-service-643639804.jpg",
+=======
+      icon: "https://dev.khmc-staging.online/uploads/2020-10-13T12-37-34.126Z-KHMC.png",
+
+
+    // image:
+    //   "https://dev.khmc-staging.online/uploads/2020-10-13T11-28-27.691Z-notif.png",
+    // badge:
+    //   "https://dev.khmc-staging.online/uploads/2020-10-13T11-28-27.691Z-notif.png"
+>>>>>>> 005a420daded8e571a8fe7ccdf4d3520d72fe1d0
   };
   event.waitUntil(self.registration.showNotification(data.title, options));
 
