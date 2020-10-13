@@ -765,7 +765,7 @@ function AddEditEDR(props) {
   }
 
   const handleSearch = (e) => {
- 
+
     if (e.length >= 1) {
       let url = "";
       if (selectedItemToSearch === "pharmaceutical") {
@@ -1000,7 +1000,7 @@ function AddEditEDR(props) {
                               label="Search Medicine by Name"
                               name={"searchQuery"}
                               value={searchQuery}
-                              onChange={handleSearch}
+                              onChange={handlePauseMedSearch}
                               className="textInputStyle"
                               variant="filled"
                               InputProps={{
@@ -1029,89 +1029,89 @@ function AddEditEDR(props) {
                           </div>
                         </div>
                       ) : (
-                        undefined
-                      )}
+                          undefined
+                        )}
                     </>
 
-                {searchQuery ? (
-                  <div
-                    style={{
-                      zIndex: 3,
-                      marginTop: 5,
-                      marginLeft: -8,
-                      width: '101.5%',
-                    }}
-                  >
-                    <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
-                      {itemFoundSuccessfull && itemFound !== '' ? (
-                        <Table size='small'>
-                          <TableHead>
-                            <TableRow>
-                              <TableCell>Medicine Name</TableCell>
-                              <TableCell>Scientific Name</TableCell>
-                              <TableCell>Item Code</TableCell>
-                              <TableCell>Unit Price (JD)</TableCell>
-                              {/* <TableCell>Total Price</TableCell> */}
-                            </TableRow>
-                          </TableHead>
+                    {searchQuery ? (
+                      <div
+                        style={{
+                          zIndex: 3,
+                          marginTop: 5,
+                          marginLeft: -8,
+                          width: '101.5%',
+                        }}
+                      >
+                        <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
+                          {itemFoundSuccessfull && itemFound !== '' ? (
+                            <Table size='small'>
+                              <TableHead>
+                                <TableRow>
+                                  <TableCell>Medicine Name</TableCell>
+                                  <TableCell>Scientific Name</TableCell>
+                                  <TableCell>Item Code</TableCell>
+                                  <TableCell>Unit Price (JD)</TableCell>
+                                  {/* <TableCell>Total Price</TableCell> */}
+                                </TableRow>
+                              </TableHead>
 
-                          <TableBody>
-                            {itemFound.map((i) => {
-                              return (
-                                <TableRow
-                                  key={i.itemCode}
-                                  onClick={() => handleAddItem(i)}
-                                  style={{ cursor: 'pointer' }}
-                                >
-                                  <TableCell>{i.tradeName}</TableCell>
-                                  <TableCell>{i.scientificName}</TableCell>
-                                  <TableCell>{i.itemCode}</TableCell>
-                                  <TableCell>
-                                    {i.issueUnitCost.toFixed(4)}
-                                  </TableCell>
-                                  {/* <TableCell>
+                              <TableBody>
+                                {itemFound.map((i) => {
+                                  return (
+                                    <TableRow
+                                      key={i.itemCode}
+                                      onClick={() => handleAddItem(i)}
+                                      style={{ cursor: 'pointer' }}
+                                    >
+                                      <TableCell>{i.tradeName}</TableCell>
+                                      <TableCell>{i.scientificName}</TableCell>
+                                      <TableCell>{i.itemCode}</TableCell>
+                                      <TableCell>
+                                        {i.issueUnitCost.toFixed(4)}
+                                      </TableCell>
+                                      {/* <TableCell>
                                       {i.purchasePrice + i.tax}
                                     </TableCell> */}
-                                </TableRow>
-                              )
-                            })}
-                          </TableBody>
-                        </Table>
-                      ) : searchQuery ? (
-                        <div style={{ textAlign: 'center' }}>
-                          <Loader
-                            type='TailSpin'
-                            color='#2c6ddd'
-                            height={25}
-                            width={25}
-                            style={{
-                              display: 'inline-block',
-                              padding: '10px',
-                            }}
-                          />
-                          <span
-                            style={{
-                              display: 'inline-block',
-                              padding: '10px',
-                            }}
-                          >
-                            <h4> Searching Medicine...</h4>
-                          </span>
-                        </div>
-                      ) : searchQuery && !itemFoundSuccessfull ? (
-                        <div
-                          style={{ textAlign: 'center', padding: '10px' }}
-                        >
-                          <h4>No Medicince Found !</h4>
-                        </div>
-                      ) : (
-                              undefined
-                            )}
-                    </Paper>
-                  </div>
-                ) : (
-                    undefined
-                  )}
+                                    </TableRow>
+                                  )
+                                })}
+                              </TableBody>
+                            </Table>
+                          ) : searchQuery ? (
+                            <div style={{ textAlign: 'center' }}>
+                              <Loader
+                                type='TailSpin'
+                                color='#2c6ddd'
+                                height={25}
+                                width={25}
+                                style={{
+                                  display: 'inline-block',
+                                  padding: '10px',
+                                }}
+                              />
+                              <span
+                                style={{
+                                  display: 'inline-block',
+                                  padding: '10px',
+                                }}
+                              >
+                                <h4> Searching Medicine...</h4>
+                              </span>
+                            </div>
+                          ) : searchQuery && !itemFoundSuccessfull ? (
+                            <div
+                              style={{ textAlign: 'center', padding: '10px' }}
+                            >
+                              <h4>No Medicince Found !</h4>
+                            </div>
+                          ) : (
+                                  undefined
+                                )}
+                        </Paper>
+                      </div>
+                    ) : (
+                        undefined
+                      )}
 
                     <div className="row" style={{ marginTop: 15 }}>
                       <div
@@ -1344,44 +1344,50 @@ function AddEditEDR(props) {
                     </div>
                   </div>
                 ) : (
-                  <div>
-                    <div className="row" style={{ marginTop: 15 }}>
-                      {selectItemToEditId === "" ? (
-                        <>
-                          <div
-                            className="col-md-12"
-                            style={{
-                              ...styles.inputContainerForTextField,
-                              ...styles.textFieldPadding,
-                            }}
-                          >
-                            <TextField
-                              type="text"
-                              label="Item Name / Manufacturer / Vendor"
-                              name={"searchQuery"}
-                              value={searchQuery}
-                              onChange={handleSearch}
-                              className={classes.margin}
-                              variant="filled"
-                              InputProps={{
-                                className: classes.input,
-                                classes: { input: classes.input },
+                    <div>
+                      <div className="row" style={{ marginTop: 15 }}>
+                        {selectItemToEditId === "" ? (
+                          <>
+                            <div
+                              className="col-md-12"
+                              style={{
+                                ...styles.inputContainerForTextField,
+                                ...styles.textFieldPadding,
                               }}
-                              className="textInputStyle"
-                            />
-                            {/* </div> */}
-                          </div>
-                        </>
-                      ) : (
-                        undefined
-                      )}
-                    </div>
+                            >
+                              <TextField
+                                type="text"
+                                label="Item Name / Manufacturer / Vendor"
+                                name={"searchQuery"}
+                                value={searchQuery}
+                                onChange={handlePauseMedSearch}
+                                className={classes.margin}
+                                variant="filled"
+                                InputProps={{
+                                  className: classes.input,
+                                  classes: { input: classes.input },
+                                }}
+                                className="textInputStyle"
+                              />
+                              {/* </div> */}
+                            </div>
+                          </>
+                        ) : (
+                            undefined
+                          )}
+                      </div>
 
-                    {searchQuery ? (
-                      <div style={{ zIndex: 3 }}>
-                        <Paper style={{ ...stylesForPaper.paperStyle }}>
-                          {itemFoundSuccessfull ? (
-                            itemFound && (
+                      {searchQuery ? (
+                        <div
+                          style={{
+                            zIndex: 3,
+                            marginTop: 5,
+                            marginLeft: -8,
+                            width: '101.5%',
+                          }}
+                        >
+                          <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
+                            {itemFoundSuccessfull && itemFound !== '' ? (
                               <Table size="small">
                                 <TableHead>
                                   <TableRow>
@@ -1441,156 +1447,177 @@ function AddEditEDR(props) {
                                   })}
                                 </TableBody>
                               </Table>
-                            )
-                          ) : (
-                            <h4
-                              style={{ textAlign: "center" }}
-                              onClick={() => console.log("ddf")}
-                            >
-                              Item Not Found
-                            </h4>
-                          )}
-                        </Paper>
-                      </div>
-                    ) : (
-                      undefined
-                    )}
+                            ) : searchQuery ? (
+                              <div style={{ textAlign: 'center' }}>
+                                <Loader
+                                  type='TailSpin'
+                                  color='#2c6ddd'
+                                  height={25}
+                                  width={25}
+                                  style={{
+                                    display: 'inline-block',
+                                    padding: '10px',
+                                  }}
+                                />
+                                <span
+                                  style={{
+                                    display: 'inline-block',
+                                    padding: '10px',
+                                  }}
+                                >
+                                  <h4> Searching Medicine...</h4>
+                                </span>
+                              </div>
+                            ) : searchQuery && !itemFoundSuccessfull ? (
+                              <div
+                                style={{ textAlign: 'center', padding: '10px' }}
+                              >
+                                <h4>No Medicince Found !</h4>
+                              </div>
+                            ) : (
+                                    undefined
+                                  )}
+                          </Paper>
+                        </div>
+                      ) : (
+                          undefined
+                        )}
 
-                    <div className="row" style={{ marginTop: 15 }}>
-                      <div
-                        className="col-md-3"
-                        style={{
-                          ...styles.inputContainerForTextField,
-                          ...styles.textFieldPadding,
-                        }}
-                      >
-                        <TextField
-                          required
-                          id="medicineName"
-                          label="Item Name"
-                          name={"medicineName"}
-                          disabled={true}
-                          type="text"
-                          value={medicineName}
-                          onChange={onChangeValue}
-                          variant="filled"
-                          className="textInputStyle"
-                          InputProps={{
-                            className: classes.input,
-                            classes: { input: classes.input },
+                      <div className="row" style={{ marginTop: 15 }}>
+                        <div
+                          className="col-md-3"
+                          style={{
+                            ...styles.inputContainerForTextField,
+                            ...styles.textFieldPadding,
                           }}
-                          error={medicineName === "" && isFormSubmitted}
-                        />
-                      </div>
-
-                      <div
-                        className="col-md-3"
-                        style={{
-                          ...styles.inputContainerForTextField,
-                          ...styles.textFieldPadding,
-                        }}
-                      >
-                        <TextField
-                          select
-                          // required
-                          fullWidth
-                          id="make_model"
-                          name="make_model"
-                          value={make_model}
-                          onChange={onChangeValue}
-                          label="Make/Model"
-                          variant="filled"
-                          InputProps={{
-                            className: classes.input,
-                            classes: { input: classes.input },
-                          }}
-                          error={make_model === "" && isFormSubmitted}
                         >
-                          <MenuItem value="">
-                            <em>None</em>
-                          </MenuItem>
+                          <TextField
+                            required
+                            id="medicineName"
+                            label="Item Name"
+                            name={"medicineName"}
+                            disabled={true}
+                            type="text"
+                            value={medicineName}
+                            onChange={onChangeValue}
+                            variant="filled"
+                            className="textInputStyle"
+                            InputProps={{
+                              className: classes.input,
+                              classes: { input: classes.input },
+                            }}
+                            error={medicineName === "" && isFormSubmitted}
+                          />
+                        </div>
 
-                          {modalArray.map((val) => {
-                            return (
-                              <MenuItem key={val.key} value={val.key}>
-                                {val.value}
-                              </MenuItem>
-                            );
-                          })}
-                        </TextField>
-                      </div>
-
-                      <div
-                        className="col-md-3"
-                        style={{
-                          ...styles.inputContainerForTextField,
-                          ...styles.textFieldPadding,
-                        }}
-                      >
-                        <TextField
-                          select
-                          // required
-                          fullWidth
-                          id="size"
-                          name="size"
-                          value={size}
-                          onChange={onChangeValue}
-                          label="Size"
-                          variant="filled"
-                          InputProps={{
-                            className: classes.input,
-                            classes: { input: classes.input },
+                        <div
+                          className="col-md-3"
+                          style={{
+                            ...styles.inputContainerForTextField,
+                            ...styles.textFieldPadding,
                           }}
-                          error={size === "" && isFormSubmitted}
                         >
-                          <MenuItem value="">
-                            <em>None</em>
-                          </MenuItem>
+                          <TextField
+                            select
+                            // required
+                            fullWidth
+                            id="make_model"
+                            name="make_model"
+                            value={make_model}
+                            onChange={onChangeValue}
+                            label="Make/Model"
+                            variant="filled"
+                            InputProps={{
+                              className: classes.input,
+                              classes: { input: classes.input },
+                            }}
+                            error={make_model === "" && isFormSubmitted}
+                          >
+                            <MenuItem value="">
+                              <em>None</em>
+                            </MenuItem>
 
-                          {sizeArray.map((val) => {
-                            return (
-                              <MenuItem key={val.key} value={val.key}>
-                                {val.value}
-                              </MenuItem>
-                            );
-                          })}
-                        </TextField>
-                      </div>
+                            {modalArray.map((val) => {
+                              return (
+                                <MenuItem key={val.key} value={val.key}>
+                                  {val.value}
+                                </MenuItem>
+                              );
+                            })}
+                          </TextField>
+                        </div>
 
-                      <div
-                        className="col-md-3"
-                        style={{
-                          ...styles.inputContainerForTextField,
-                          ...styles.textFieldPadding,
-                        }}
-                      >
-                        <TextField
-                          required
-                          id="requestedQty"
-                          label="Quantity"
-                          name={"requestedQty"}
-                          type="number"
-                          value={requestedQty}
-                          onChange={onChangeValue}
-                          className="textInputStyle"
-                          variant="filled"
-                          onKeyDown={(evt) => {
-                            (evt.key === "e" ||
-                              evt.key === "E" ||
-                              evt.key === "-" ||
-                              evt.key === "+") &&
-                              evt.preventDefault();
+                        <div
+                          className="col-md-3"
+                          style={{
+                            ...styles.inputContainerForTextField,
+                            ...styles.textFieldPadding,
                           }}
-                          InputProps={{
-                            className: classes.input,
-                            classes: { input: classes.input },
+                        >
+                          <TextField
+                            select
+                            // required
+                            fullWidth
+                            id="size"
+                            name="size"
+                            value={size}
+                            onChange={onChangeValue}
+                            label="Size"
+                            variant="filled"
+                            InputProps={{
+                              className: classes.input,
+                              classes: { input: classes.input },
+                            }}
+                            error={size === "" && isFormSubmitted}
+                          >
+                            <MenuItem value="">
+                              <em>None</em>
+                            </MenuItem>
+
+                            {sizeArray.map((val) => {
+                              return (
+                                <MenuItem key={val.key} value={val.key}>
+                                  {val.value}
+                                </MenuItem>
+                              );
+                            })}
+                          </TextField>
+                        </div>
+
+                        <div
+                          className="col-md-3"
+                          style={{
+                            ...styles.inputContainerForTextField,
+                            ...styles.textFieldPadding,
                           }}
-                          error={requestedQty === "" && isFormSubmitted}
-                        />
+                        >
+                          <TextField
+                            required
+                            id="requestedQty"
+                            label="Quantity"
+                            name={"requestedQty"}
+                            type="number"
+                            value={requestedQty}
+                            onChange={onChangeValue}
+                            className="textInputStyle"
+                            variant="filled"
+                            onKeyDown={(evt) => {
+                              (evt.key === "e" ||
+                                evt.key === "E" ||
+                                evt.key === "-" ||
+                                evt.key === "+") &&
+                                evt.preventDefault();
+                            }}
+                            InputProps={{
+                              className: classes.input,
+                              classes: { input: classes.input },
+                            }}
+                            error={requestedQty === "" && isFormSubmitted}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
                 <div
                   class="row"
@@ -1640,24 +1667,24 @@ function AddEditEDR(props) {
                         Add
                       </Button>
                     ) : (
-                      <Button
-                        style={{
-                          color: "white",
-                          cursor: "pointer",
-                          borderRadius: 5,
-                          backgroundColor: "#2c6ddd",
-                          width: "140px",
-                          height: "50px",
-                          outline: "none",
-                          paddingLeft: 30,
-                          paddingRight: 30,
-                        }}
-                        // disabled={!validateItemsForm()}
-                        onClick={editSelectedItem}
-                        variant="contained"
-                        color="primary"
-                      >
-                        {" "}
+                        <Button
+                          style={{
+                            color: "white",
+                            cursor: "pointer",
+                            borderRadius: 5,
+                            backgroundColor: "#2c6ddd",
+                            width: "140px",
+                            height: "50px",
+                            outline: "none",
+                            paddingLeft: 30,
+                            paddingRight: 30,
+                          }}
+                          // disabled={!validateItemsForm()}
+                          onClick={editSelectedItem}
+                          variant="contained"
+                          color="primary"
+                        >
+                          {" "}
                         Edit
                         </Button>
                       )}
