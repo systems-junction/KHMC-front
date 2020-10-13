@@ -121,7 +121,7 @@ self.addEventListener("push", (event) => {
     image:
       "https://image.shutterstock.com/z/stock-vector-logistic-company-vector-logo-arrow-icon-delivery-icon-arrow-icon-arrow-vector-delivery-service-643639804.jpg",
     badge:
-      "https://image.shutterstock.com/z/stock-vector-logistic-company-vector-logo-arrow-icon-delivery-icon-arrow-icon-arrow-vector-delivery-service-643639804.jpg"
+      "https://image.shutterstock.com/z/stock-vector-logistic-company-vector-logo-arrow-icon-delivery-icon-arrow-icon-arrow-vector-delivery-service-643639804.jpg",
   };
   event.waitUntil(self.registration.showNotification(data.title, options));
 
@@ -172,16 +172,16 @@ self.addEventListener("notificationclick", function(event) {
   const mapMsgToRoute = [
     {
       title: "Purchase Requested Generated",
-      url: `${baseUrl}/home/controlroom/wms/pr`
+      url: `${baseUrl}/home/controlroom/wms/pr`,
     },
     {
       title: "Purchase Order Generated",
-      url: `${baseUrl}/home/controlroom/wms/po`
+      url: `${baseUrl}/home/controlroom/wms/po`,
     },
     {
       title: "Account Approval Needed",
-      url: `${baseUrl}/home/controlroom/wms/receiverequests`
-    }
+      url: `${baseUrl}/home/controlroom/wms/receiverequests`,
+    },
   ];
 
   event.notification.close();
@@ -189,7 +189,7 @@ self.addEventListener("notificationclick", function(event) {
   event.waitUntil(
     clients
       .matchAll({
-        type: "window"
+        type: "window",
       })
       .then(function(clientList) {
         if (clients.openWindow) {
