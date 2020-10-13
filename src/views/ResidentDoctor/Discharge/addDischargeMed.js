@@ -280,6 +280,7 @@ function AddEditEDR(props) {
   const [dischargeNotes, setdischargeNotes] = useState("");
   const [otherNotes, setotherNotes] = useState("");
   const [timer, setTimer] = useState(null)
+  const [loadSearchedData, setLoadSearchedData] = useState(false)
 
   useEffect(() => {
     // const soc = socketIOClient(socketUrl);
@@ -747,11 +748,12 @@ function AddEditEDR(props) {
     // }
   }
 
-  const triggerMedChange = () => {
-    handleSearch(searchQuery)
+  const triggerMedChange = (a) => {
+    handleSearch(a)
   }
 
   const handlePauseMedSearch = (e) => {
+    setLoadSearchedData(true)
     clearTimeout(timer)
 
     const a = e.target.value.replace(/[^\w\s]/gi, '')
@@ -759,7 +761,7 @@ function AddEditEDR(props) {
 
     setTimer(
       setTimeout(() => {
-        triggerMedChange()
+        triggerMedChange(a)
       }, 600)
     )
   }
@@ -781,9 +783,11 @@ function AddEditEDR(props) {
               console.log("price data", res.data.data);
               setItemFoundSuccessfully(true);
               setItemFound(res.data.data.items);
+              setLoadSearchedData(false)
             } else {
               setItemFoundSuccessfully(false);
               setItemFound("");
+              setLoadSearchedData(false)
             }
           }
         })
@@ -1077,7 +1081,7 @@ function AddEditEDR(props) {
                                 })}
                               </TableBody>
                             </Table>
-                          ) : searchQuery ? (
+                          ) : loadSearchedData ? (
                             <div style={{ textAlign: 'center' }}>
                               <Loader
                                 type='TailSpin'
@@ -1447,7 +1451,7 @@ function AddEditEDR(props) {
                                   })}
                                 </TableBody>
                               </Table>
-                            ) : searchQuery ? (
+                            ) : loadSearchedData ? (
                               <div style={{ textAlign: 'center' }}>
                                 <Loader
                                   type='TailSpin'

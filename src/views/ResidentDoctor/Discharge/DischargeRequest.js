@@ -230,6 +230,7 @@ function DischargeRequest(props) {
   const [backIsEmpty, setBackIsEmpty] = useState(false);
   const [dischargeForm, setDischargeForm] = useState(false);
   const [timer, setTimer] = useState(null);
+  const [loadSearchedData, setLoadSearchedData] = useState(false)
 
   useEffect(() => {
     if (props.patientDetails) {
@@ -286,11 +287,12 @@ function DischargeRequest(props) {
     }
   };
 
-  const triggerChange = () => {
-    handlePatientSearch(searchPatientQuery);
+  const triggerChange = (a) => {
+    handlePatientSearch(a);
   };
 
   const handlePauseSearch = (e) => {
+    setLoadSearchedData(true)
     clearTimeout(timer);
 
     const a = e.target.value.replace(/[^\w\s]/gi, "");
@@ -298,7 +300,7 @@ function DischargeRequest(props) {
 
     setTimer(
       setTimeout(() => {
-        triggerChange();
+        triggerChange(a);
       }, 600)
     );
   };
@@ -315,9 +317,11 @@ function DischargeRequest(props) {
               console.log(res.data.data);
               setpatientFoundSuccessfully(true);
               setpatientFound(res.data.data);
+              setLoadSearchedData(false)
             } else {
               setpatientFoundSuccessfully(false);
               setpatientFound("");
+              setLoadSearchedData(false)
             }
           }
         })
@@ -734,7 +738,7 @@ function DischargeRequest(props) {
                           })}
                         </TableBody>
                       </Table>
-                    ) : searchPatientQuery ? (
+                    ) : loadSearchedData ? (
                       <div style={{ textAlign: "center" }}>
                         <Loader
                           type="TailSpin"
