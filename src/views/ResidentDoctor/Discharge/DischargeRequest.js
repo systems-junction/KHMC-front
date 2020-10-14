@@ -399,9 +399,18 @@ function DischargeRequest(props) {
                   dispatch({ field: "dischargeRequest", value: val });
                 } else if (key === "residentNotes") {
                   if (val && val.length > 0) {
+                    let data = [];
+                    val.map((d) => {
+                      d.code.map((singleCode) => {
+                        let found = data.find((i) => i === singleCode);
+                        if (!found) {
+                          data.push(singleCode);
+                        }
+                      });
+                    });
                     dispatch({
-                      field: "diagnosisArray",
-                      value: val.reverse()[0].code,
+                    field: "diagnosisArray",
+                      value: data,
                     });
                   }
                 } else if (key === "pharmacyRequest") {
