@@ -453,6 +453,7 @@ function AddEditPurchaseRequest(props) {
   const [allergicDialog, openAllergicDialog] = useState(false);
   const [allergic, setAllergic] = useState("");
   const [timer, setTimer] = useState(null)
+  const [loadSearchedData, setLoadSearchedData] = useState(false)
 
   function getFUsFromBU(buId) {
     axios
@@ -811,24 +812,29 @@ function AddEditPurchaseRequest(props) {
     }, 2600);
   }
 
-  const triggerChange = () => {
-    handlePatientSearch(searchPatientQuery)
+  const triggerChange = (value) => {
+    handlePatientSearch(value)
   }
 
   const handlePauseSearch = (e) => {
+    setLoadSearchedData(true)
     clearTimeout(timer)
 
+    var value;
     var pattern = /^[a-zA-Z0-9 ]*$/;
     if (e.target.type === "text") {
       if (pattern.test(e.target.value) === false) {
         return;
       }
+      else{
+        value = e.target.value
+      }
     }
-    setSearchPatientQuery(e.target.value);
+    setSearchPatientQuery(value);
 
     setTimer(
       setTimeout(() => {
-        triggerChange()
+        triggerChange(value)
       }, 600)
     )
   }
@@ -850,9 +856,11 @@ function AddEditPurchaseRequest(props) {
               console.log(res.data.data);
               setpatientFoundSuccessfully(true);
               setpatientFound(res.data.data);
+              setLoadSearchedData(false)
             } else {
               setpatientFoundSuccessfully(false);
               setpatientFound("");
+              setLoadSearchedData(false)
             }
           }
         })
@@ -946,24 +954,29 @@ function AddEditPurchaseRequest(props) {
       });
   };
 
-  const triggerItemChange = () => {
-    handleSearch(searchQuery)
+  const triggerItemChange = (value) => {
+    handleSearch(value)
   }
 
   const handlePauseItemSearch = (e) => {
+    setLoadSearchedData(true)
     clearTimeout(timer)
 
+    var value;
     var pattern = /^[a-zA-Z0-9 ]*$/;
     if (e.target.type === "text") {
       if (pattern.test(e.target.value) === false) {
         return;
       }
+      else{
+        value = e.target.value
+      }
     }
-    setSearchQuery(e.target.value);
+    setSearchQuery(value);
 
     setTimer(
       setTimeout(() => {
-        triggerItemChange()
+        triggerItemChange(value)
       }, 600)
     )
   }
@@ -985,9 +998,11 @@ function AddEditPurchaseRequest(props) {
             console.log(res.data.data.items);
             setItemFoundSuccessfully(true);
             setItem(res.data.data.items);
+            setLoadSearchedData(false)
           } else {
             setItemFoundSuccessfully(false);
             setItem("");
+            setLoadSearchedData(false)
           }
         }
       })
@@ -1417,7 +1432,7 @@ function AddEditPurchaseRequest(props) {
       <Header />
       <div className="cPadding" style={{ marginLeft: 10, marginRight: 10 }}>
         <div className="subheader">
-          <div>
+          <div style={{ marginLeft: -23 }}>
             <img src={purchase_request} />
             <h4>
               {comingFor === "add"
@@ -1436,7 +1451,10 @@ function AddEditPurchaseRequest(props) {
           {comingFor === "add" &&
           !props.history.location.state.comingFromRCM ? (
             <div>
-              <div className="row">
+              <div
+                className="row "
+                style={{ marginLeft: -20, marginRight: -15 }}
+              >
                 {/* <span class="fa fa-search"></span> */}
                 <div
                   className="col-md-10 col-sm-12"
@@ -1545,7 +1563,7 @@ function AddEditPurchaseRequest(props) {
                             })}
                           </TableBody>
                         </Table>
-                        ) : searchPatientQuery ? (
+                        ) : loadSearchedData ? (
                           <div style={{ textAlign: 'center' }}>
                             <Loader
                               type='TailSpin'
@@ -1597,7 +1615,7 @@ function AddEditPurchaseRequest(props) {
               </h5>
             </div>
 
-            <div className="row">
+            <div className="row sideMargin">
               {selectItemToEditId === "" ? (
                 <>
                   <div
@@ -1727,7 +1745,7 @@ function AddEditPurchaseRequest(props) {
                             })}
                           </TableBody>
                         </Table>
-                     ) : searchQuery ? (
+                     ) : loadSearchedData ? (
                       <div style={{ textAlign: 'center' }}>
                         <Loader
                           type='TailSpin'
@@ -1764,7 +1782,7 @@ function AddEditPurchaseRequest(props) {
               )}
             </div>
 
-            <div className="row">
+            <div className="row sideMargin">
               <div
                 className="col-md-3 col-sm-3 col-3"
                 style={{
@@ -1930,7 +1948,7 @@ function AddEditPurchaseRequest(props) {
               </div>
             </div>
 
-            <div className="row">
+            <div className="row sideMargin">
               <div
                 className="col-md-9 col-sm-9 col-9"
                 style={{

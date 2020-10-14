@@ -11,12 +11,12 @@ const styles = {
     width: "140px",
     height: "50px",
     // outline: "none",
-    borderWidth:0,
-    color:'white',
+    borderWidth: 0,
+    color: "white",
     // fontWeight:700,
-    display:'flex',
-    justifyContent:'center',
-    alignItems:'center',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     // fontSize:50
     // marginRight: 4
   },
@@ -27,7 +27,7 @@ function ViewAllBtn(props) {
   const classes = useStyles();
 
   return (
-    <div>
+    <div style={{ marginRight: 5 }}>
       <Button
         onClick={() => props.history.goBack()}
         style={styles.stylesForButton}
@@ -36,7 +36,7 @@ function ViewAllBtn(props) {
       >
         <img className="icon-view" src={view_all} />
         &nbsp;&nbsp;
-        <strong >View All</strong>
+        <strong>View All</strong>
       </Button>
     </div>
   );

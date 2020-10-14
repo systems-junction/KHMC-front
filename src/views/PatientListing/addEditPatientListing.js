@@ -484,6 +484,7 @@ function AddEditPatientListing(props) {
   const [covTer, setCovTer] = useState('')
   const [timer, setTimer] = useState(null)
   const [cityBoolean, setCityBoolean] = useState(false)
+  const [loadSearchedData, setLoadSearchedData] = useState(false)
 
   useEffect(() => {
     setcomingFor(
@@ -1028,11 +1029,12 @@ function AddEditPatientListing(props) {
     }
   }
 
-  const triggerChange = () => {
-    handleSearch(searchQuery)
+  const triggerChange = (a) => {
+    handleSearch(a)
   }
 
   const handlePauseSearch = (e) => {
+    setLoadSearchedData(true)
     clearTimeout(timer)
 
     const a = e.target.value.replace(/[^\w\s]/gi, '')
@@ -1040,7 +1042,7 @@ function AddEditPatientListing(props) {
 
     setTimer(
       setTimeout(() => {
-        triggerChange()
+        triggerChange(a)
       }, 600)
     )
   }
@@ -1057,9 +1059,11 @@ function AddEditPatientListing(props) {
               console.log('patient data ', res.data.data)
               setItemFoundSuccessfully(true)
               setItemFound(res.data.data)
+              setLoadSearchedData(false)
             } else {
               setItemFoundSuccessfully(false)
               setItemFound('')
+              setLoadSearchedData(false)
             }
           }
         })
@@ -1603,7 +1607,7 @@ function AddEditPatientListing(props) {
                                 })}
                               </TableBody>
                             </Table>
-                          ) : searchQuery ? (
+                          ) : loadSearchedData ? (
                             <div style={{ textAlign: 'center' }}>
                               <Loader
                                 type='TailSpin'
@@ -2239,8 +2243,6 @@ function AddEditPatientListing(props) {
                     classes: { input: classes.input },
                   }}
                 >
-                  <MenuItem value={city}>{city}</MenuItem>
-
                   {cities &&
                     cities.map((val) => {
                       return (
@@ -2249,6 +2251,8 @@ function AddEditPatientListing(props) {
                         </MenuItem>
                       )
                     })}
+                   <MenuItem value="Other">Other</MenuItem>
+
                 </TextField>
                 <ErrorMessage
                   name={city}

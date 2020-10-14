@@ -439,7 +439,8 @@ function LabRadRequest(props) {
   const [selectedOrder, setSelectedOrder] = useState('')
   const [isOpen, setIsOpen] = useState(false)
   const [timer, setTimer] = useState(null)
-
+  const [loadSearchedData, setLoadSearchedData] = useState(false)
+  
   useEffect(() => {
     if (props.patientDetails) {
       setPatientDetails(props.patientDetails)
@@ -701,11 +702,12 @@ function LabRadRequest(props) {
     dispatch({ field: 'note', value: '' })
   }
 
-  const triggerLabChange = () => {
-    handleSearch(searchQuery)
+  const triggerLabChange = (a) => {
+    handleSearch(a)
   }
 
   const handlePauseLabSearch = (e) => {
+    setLoadSearchedData(true)
     clearTimeout(timer)
 
     const a = e.target.value.replace(/[^\w\s]/gi, '')
@@ -713,7 +715,7 @@ function LabRadRequest(props) {
 
     setTimer(
       setTimeout(() => {
-        triggerLabChange()
+        triggerLabChange(a)
       }, 600)
     )
   }
@@ -729,9 +731,11 @@ function LabRadRequest(props) {
               console.log(res.data.data)
               setItemFoundSuccessfully(true)
               setItemFound(res.data.data)
+              setLoadSearchedData(false)
             } else {
               setItemFoundSuccessfully(false)
               setItemFound('')
+              setLoadSearchedData(false)
             }
           }
         })
@@ -875,11 +879,12 @@ function LabRadRequest(props) {
       })
   }
 
-  const triggerRadioChange = () => {
-    handleRadioSearch(searchRadioQuery)
+  const triggerRadioChange = (a) => {
+    handleRadioSearch(a)
   }
 
   const handleRadioPauseSearch = (e) => {
+    setLoadSearchedData(true)
     clearTimeout(timer)
 
     const a = e.target.value.replace(/[^\w\s]/gi, '')
@@ -887,7 +892,7 @@ function LabRadRequest(props) {
 
     setTimer(
       setTimeout(() => {
-        triggerRadioChange()
+        triggerRadioChange(a)
       }, 600)
     )
   }
@@ -903,9 +908,11 @@ function LabRadRequest(props) {
               console.log(res.data.data)
               setRadioItemFoundSuccessfully(true)
               setRadioItemFound(res.data.data)
+              setLoadSearchedData(false)
             } else {
               setRadioItemFoundSuccessfully(false)
               setRadioItemFound('')
+              setLoadSearchedData(false)
             }
           }
         })
@@ -1157,11 +1164,12 @@ function LabRadRequest(props) {
     }
   }
 
-  const triggerChange = () => {
-    handlePatientSearch(searchPatientQuery)
+  const triggerChange = (a) => {
+    handlePatientSearch(a)
   }
 
   const handlePauseSearch = (e) => {
+    setLoadSearchedData(true)
     clearTimeout(timer)
 
     const a = e.target.value.replace(/[^\w\s]/gi, '')
@@ -1169,7 +1177,7 @@ function LabRadRequest(props) {
 
     setTimer(
       setTimeout(() => {
-        triggerChange()
+        triggerChange(a)
       }, 600)
     )
   }
@@ -1187,9 +1195,11 @@ function LabRadRequest(props) {
               console.log(res.data.data)
               setpatientFoundSuccessfully(true)
               setpatientFound(res.data.data)
+              setLoadSearchedData(false)
             } else {
               setpatientFoundSuccessfully(false)
               setpatientFound('')
+              setLoadSearchedData(false)
             }
           }
         })
@@ -1366,19 +1376,11 @@ function LabRadRequest(props) {
   }
 
   const showAlert = () => {
-    // if (document.getElementById("ckDemo").disabled) {
-    //     alert("CheckBox is Disabled");
-    // }
-
     setErrorMsg('Please Search Patient First ')
     setOpenNotification(true)
   }
 
   const showAlertForPatientHistory = () => {
-    // if (document.getElementById("ckDemo").disabled) {
-    //     alert("CheckBox is Disabled");
-    // }
-
     setErrorMsg('Please Search Patient First ')
     setOpenNotification(true)
   }
@@ -1562,7 +1564,7 @@ function LabRadRequest(props) {
                           })}
                         </TableBody>
                       </Table>
-                    ) : searchPatientQuery ? (
+                    ) : loadSearchedData ? (
                       <div style={{ textAlign: 'center' }}>
                         <Loader
                           type='TailSpin'
@@ -1989,7 +1991,7 @@ function LabRadRequest(props) {
                           })}
                         </TableBody>
                       </Table>
-                    ) : searchQuery ? (
+                    ) : loadSearchedData ? (
                       <div style={{ textAlign: 'center' }}>
                         <Loader
                           type='TailSpin'
@@ -2228,7 +2230,7 @@ function LabRadRequest(props) {
                             })}
                           </TableBody>
                         </Table>
-                      ) : searchRadioQuery ? (
+                      ) : loadSearchedData ? (
                         <div style={{ textAlign: 'center' }}>
                           <Loader
                             type='TailSpin'

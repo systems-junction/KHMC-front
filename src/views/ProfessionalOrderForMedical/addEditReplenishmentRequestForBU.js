@@ -449,7 +449,8 @@ function AddEditPurchaseRequest(props) {
 
   const [allergicDialog, openAllergicDialog] = useState(false);
   const [allergic, setAllergic] = useState("");
-  const [timer, setTimer] = useState(null)
+  const [timer, setTimer] = useState(null);
+  const [loadSearchedData, setLoadSearchedData] = useState(false)
 
   function getFUsFromBU(buId) {
     axios
@@ -674,8 +675,9 @@ function AddEditPurchaseRequest(props) {
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
                   // order #
-                  message: `Medical Order: ${res.data.data.requestNo
-                    } for patient with MRN: ${patientDetails.profileNo.toUpperCase()} has been placed succesfully`,
+                  message: `Medical Order: ${
+                    res.data.data.requestNo
+                  } for patient with MRN: ${patientDetails.profileNo.toUpperCase()} has been placed succesfully`,
                   patientDetails: patientDetails,
                 },
               });
@@ -731,22 +733,22 @@ function AddEditPurchaseRequest(props) {
           generated,
           status:
             currentUser.staffTypeId.type === "FU Inventory Keeper" &&
-              status === "pending" &&
-              secondStatus === "in_progress"
+            status === "pending" &&
+            secondStatus === "in_progress"
               ? "in_progress"
               : currentUser.staffTypeId.type === "FU Inventory Keeper" &&
                 status === "in_progress" &&
                 secondStatus === "Delivery in Progress"
-                ? "Delivery in Progress"
-                : currentUser.staffTypeId.type === "BU Nurse" &&
-                  status === "Delivery in Progress" &&
-                  secondStatus === "pending_administration"
-                  ? "pending_administration"
-                  : currentUser.staffTypeId.type === "BU Inventory Keeper" &&
-                    status === "pending_administration" &&
-                    secondStatus === "complete"
-                    ? "complete"
-                    : status,
+              ? "Delivery in Progress"
+              : currentUser.staffTypeId.type === "BU Nurse" &&
+                status === "Delivery in Progress" &&
+                secondStatus === "pending_administration"
+              ? "pending_administration"
+              : currentUser.staffTypeId.type === "BU Inventory Keeper" &&
+                status === "pending_administration" &&
+                secondStatus === "complete"
+              ? "complete"
+              : status,
           comments,
           item: requestedItems,
           // currentQty,
@@ -787,8 +789,9 @@ function AddEditPurchaseRequest(props) {
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
                   // order #
-                  message: `Medical Order: ${res.data.data.requestNo
-                    } for patient with MRN: ${patientDetails.profileNo.toUpperCase()} has been updated`,
+                  message: `Medical Order: ${
+                    res.data.data.requestNo
+                  } for patient with MRN: ${patientDetails.profileNo.toUpperCase()} has been updated`,
                   patientDetails: patientDetails,
                 },
               });
@@ -812,38 +815,38 @@ function AddEditPurchaseRequest(props) {
     }, 2600);
   }
 
-  const triggerChange = () => {
-    handlePatientSearch(searchPatientQuery)
-  }
+  const triggerChange = (e) => {
+    handlePatientSearch(e);
+  };
 
   const handlePauseSearch = (e) => {
-    clearTimeout(timer)
+    setLoadSearchedData(true)
+    clearTimeout(timer);
 
+    var value;
     var pattern = /^[a-zA-Z0-9 ]*$/;
     if (e.target.type === "text") {
       if (pattern.test(e.target.value) === false) {
         return;
       }
+      else{
+        value = e.target.value
+      }
     }
-    setSearchPatientQuery(e.target.value);
+    setSearchPatientQuery(value);
 
     setTimer(
       setTimeout(() => {
-        triggerChange()
+        triggerChange(value);
       }, 600)
-    )
-  }
+    );
+  };
 
   const handlePatientSearch = (e) => {
-
     if (e.length >= 1) {
       axios
         .get(
-          getSearchedpatient +
-          "/" +
-          currentUser.functionalUnit._id +
-          "/" +
-          e
+          getSearchedpatient + "/" + currentUser.functionalUnit._id + "/" + e
         )
         .then((res) => {
           if (res.data.success) {
@@ -851,9 +854,11 @@ function AddEditPurchaseRequest(props) {
               console.log(res.data.data);
               setpatientFoundSuccessfully(true);
               setpatientFound(res.data.data);
+              setLoadSearchedData(false)
             } else {
               setpatientFoundSuccessfully(false);
               setpatientFound("");
+              setLoadSearchedData(false)
             }
           }
         })
@@ -951,30 +956,34 @@ function AddEditPurchaseRequest(props) {
       });
   };
 
-  const triggerItemChange = () => {
-    handleSearch(searchQuery)
-  }
+  const triggerItemChange = (e) => {
+    handleSearch(e);
+  };
 
   const handlePauseItemSearch = (e) => {
-    clearTimeout(timer)
+    setLoadSearchedData(true)
+    clearTimeout(timer);
 
+    var value;
     var pattern = /^[a-zA-Z0-9 ]*$/;
     if (e.target.type === "text") {
       if (pattern.test(e.target.value) === false) {
         return;
       }
+      else{
+        value = e.target.value
+      }
     }
-    setSearchQuery(e.target.value);
+    setSearchQuery(value);
 
     setTimer(
       setTimeout(() => {
-        triggerItemChange()
+        triggerItemChange(value);
       }, 600)
-    )
-  }
+    );
+  };
 
   const handleSearch = (e) => {
-  
     // if (e.target.value.length >= 3) {
     let url = "";
     if (selectedItemToSearch === "pharmaceutical") {
@@ -990,9 +999,11 @@ function AddEditPurchaseRequest(props) {
             console.log(res.data.data.items);
             setItemFoundSuccessfully(true);
             setItem(res.data.data.items);
+            setLoadSearchedData(false)
           } else {
             setItemFoundSuccessfully(false);
             setItem("");
+            setLoadSearchedData(false)
           }
         }
       })
@@ -1419,10 +1430,10 @@ function AddEditPurchaseRequest(props) {
                 {comingFor === "add"
                   ? "Order Items (Medical)"
                   : comingFor === "edit"
-                    ? "Order Items (Medical)"
-                    : comingFor === "view"
-                      ? "Order Items (Medical) Details"
-                      : undefined}
+                  ? "Order Items (Medical)"
+                  : comingFor === "view"
+                  ? "Order Items (Medical) Details"
+                  : undefined}
               </h4>
             </div>
 
@@ -1443,148 +1454,148 @@ function AddEditPurchaseRequest(props) {
 
         <div style={{ marginTop: "5px", marginBottom: "5px" }}>
           {comingFor === "add" &&
-            !props.history.location.state.comingFromRCM ? (
-              <div>
-                <div className="row">
-                  {/* <span class="fa fa-search"></span> */}
-                  <div
-                    className="col-md-10 col-sm-12"
-                    style={styles.textFieldPadding}
-                  >
-                    <TextField
-                      className="textInputStyle"
-                      id="searchPatientQuery"
-                      type="text"
-                      variant="filled"
-                      label="Search Patient by Name / MRN / National ID / Mobile Number"
-                      name={"searchPatientQuery"}
-                      value={searchPatientQuery}
-                      onChange={handlePauseSearch}
-                      InputProps={{
-                        // endAdornment: (
-                        //   <InputAdornment position="end">
-                        //     <AccountCircle />
-                        //   </InputAdornment>
-                        // ),
-                        className: classes.input,
-                        classes: { input: classes.input },
-                      }}
-                      InputLabelProps={{
-                        className: classes.label,
-                        classes: { label: classes.label },
-                      }}
-                    />
-                  </div>
-
-                  <div
-                    className="col-md-1 col-sm-6"
-                    style={{
-                      ...styles.textFieldPadding,
+          !props.history.location.state.comingFromRCM ? (
+            <div>
+              <div className="row">
+                {/* <span class="fa fa-search"></span> */}
+                <div
+                  className="col-md-10 col-sm-12"
+                  style={styles.textFieldPadding}
+                >
+                  <TextField
+                    className="textInputStyle"
+                    id="searchPatientQuery"
+                    type="text"
+                    variant="filled"
+                    label="Search Patient by Name / MRN / National ID / Mobile Number"
+                    name={"searchPatientQuery"}
+                    value={searchPatientQuery}
+                    onChange={handlePauseSearch}
+                    InputProps={{
+                      // endAdornment: (
+                      //   <InputAdornment position="end">
+                      //     <AccountCircle />
+                      //   </InputAdornment>
+                      // ),
+                      className: classes.input,
+                      classes: { input: classes.input },
                     }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        backgroundColor: "white",
-                        borderRadius: 5,
-                        height: 55,
-                      }}
-                    >
-                      <img src={BarCode} style={{ width: 80, height: 75 }} />
-                    </div>
-                  </div>
+                    InputLabelProps={{
+                      className: classes.label,
+                      classes: { label: classes.label },
+                    }}
+                  />
+                </div>
 
+                <div
+                  className="col-md-1 col-sm-6"
+                  style={{
+                    ...styles.textFieldPadding,
+                  }}
+                >
                   <div
-                    className="col-md-1 col-sm-6"
                     style={{
-                      ...styles.textFieldPadding,
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
                       backgroundColor: "white",
-                      borderRadius: 4,
+                      borderRadius: 5,
+                      height: 55,
                     }}
                   >
-                    <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
+                    <img src={BarCode} style={{ width: 80, height: 75 }} />
                   </div>
                 </div>
 
-                {searchPatientQuery ? (
-                  <div
-                    style={{
-                      zIndex: 3,
-                      position: "absolute",
-                      width: "96.6%",
-                      left: 22,
-                      marginTop: 5,
-                    }}
-                  >
-                    <Paper style={{ ...stylesForPaper.paperStyle }}>
-                      {patientFoundSuccessfull && patientFound !== '' ? (
-                        <Table stickyHeader size="small">
-                          <TableHead>
-                            <TableRow>
-                              <TableCell>MRN Number</TableCell>
-                              <TableCell>Patient Name</TableCell>
-                              <TableCell>Gender</TableCell>
-                              <TableCell>Age</TableCell>
-                              <TableCell>Payment Method</TableCell>
-                            </TableRow>
-                          </TableHead>
-
-                          <TableBody>
-                            {patientFound.map((i) => {
-                              return (
-                                <TableRow
-                                  key={i._id}
-                                  onClick={() => handleAddPatient(i)}
-                                  style={{ cursor: "pointer" }}
-                                >
-                                  <TableCell>{i.profileNo}</TableCell>
-                                  <TableCell>
-                                    {i.firstName + ` ` + i.lastName}
-                                  </TableCell>
-                                  <TableCell>{i.gender}</TableCell>
-                                  <TableCell>{i.age}</TableCell>
-                                  <TableCell>{i.paymentMethod}</TableCell>
-                                </TableRow>
-                              );
-                            })}
-                          </TableBody>
-                        </Table>
-                      ) : searchPatientQuery ? (
-                        <div style={{ textAlign: 'center' }}>
-                          <Loader
-                            type='TailSpin'
-                            color='#2c6ddd'
-                            height={25}
-                            width={25}
-                            style={{ display: 'inline-block', padding: '10px' }}
-                          />
-                          <span
-                            style={{ display: 'inline-block', padding: '10px' }}
-                          >
-                            <h4>Searching Patient...</h4>
-                          </span>
-                        </div>
-                      ) : searchPatientQuery && !patientFoundSuccessfull ? (
-                        <div style={{ textAlign: 'center', padding: '10px' }}>
-                          <h4> No Patient Found !</h4>
-                        </div>
-                      ) : (
-                              undefined
-                            )}
-                    </Paper>
-                  </div>
-                ) : (
-                    undefined
-                  )}
+                <div
+                  className="col-md-1 col-sm-6"
+                  style={{
+                    ...styles.textFieldPadding,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "white",
+                    borderRadius: 4,
+                  }}
+                >
+                  <img src={BarCode} style={{ width: 70, height: 60 }} />
+                </div>
               </div>
-            ) : (
-              undefined
-            )}
+
+              {searchPatientQuery ? (
+                <div
+                  style={{
+                    zIndex: 3,
+                    position: "absolute",
+                    width: "96.6%",
+                    left: 22,
+                    marginTop: 5,
+                  }}
+                >
+                  <Paper style={{ ...stylesForPaper.paperStyle }}>
+                    {patientFoundSuccessfull && patientFound !== "" ? (
+                      <Table stickyHeader size="small">
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>MRN Number</TableCell>
+                            <TableCell>Patient Name</TableCell>
+                            <TableCell>Gender</TableCell>
+                            <TableCell>Age</TableCell>
+                            <TableCell>Payment Method</TableCell>
+                          </TableRow>
+                        </TableHead>
+
+                        <TableBody>
+                          {patientFound.map((i) => {
+                            return (
+                              <TableRow
+                                key={i._id}
+                                onClick={() => handleAddPatient(i)}
+                                style={{ cursor: "pointer" }}
+                              >
+                                <TableCell>{i.profileNo}</TableCell>
+                                <TableCell>
+                                  {i.firstName + ` ` + i.lastName}
+                                </TableCell>
+                                <TableCell>{i.gender}</TableCell>
+                                <TableCell>{i.age}</TableCell>
+                                <TableCell>{i.paymentMethod}</TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                    ) : loadSearchedData ? (
+                      <div style={{ textAlign: "center" }}>
+                        <Loader
+                          type="TailSpin"
+                          color="#2c6ddd"
+                          height={25}
+                          width={25}
+                          style={{ display: "inline-block", padding: "10px" }}
+                        />
+                        <span
+                          style={{ display: "inline-block", padding: "10px" }}
+                        >
+                          <h4>Searching Patient...</h4>
+                        </span>
+                      </div>
+                    ) : searchPatientQuery && !patientFoundSuccessfull ? (
+                      <div style={{ textAlign: "center", padding: "10px" }}>
+                        <h4> No Patient Found !</h4>
+                      </div>
+                    ) : (
+                      undefined
+                    )}
+                  </Paper>
+                </div>
+              ) : (
+                undefined
+              )}
+            </div>
+          ) : (
+            undefined
+          )}
         </div>
 
         {patientDetails && patientDetailsDialog ? (
@@ -1595,12 +1606,12 @@ function AddEditPurchaseRequest(props) {
             pharmacyRequest={pharmacyRequest}
           />
         ) : (
-            undefined
-          )}
+          undefined
+        )}
 
         {fuArray && fuArray !== "" ? (
           <div style={{ flex: 4, display: "flex", flexDirection: "column" }}>
-            <div className="row">
+            <div className="row" style={{ marginLeft: -8 }}>
               <h5 style={{ fontWeight: "bold", color: "white", marginTop: 20 }}>
                 Order Item
               </h5>
@@ -1735,8 +1746,8 @@ function AddEditPurchaseRequest(props) {
                       </div>
                     </>
                   ) : (
-                      undefined
-                    )}
+                    undefined
+                  )}
                 </div>
 
                 <div>
@@ -1753,86 +1764,84 @@ function AddEditPurchaseRequest(props) {
                       }}
                     >
                       <Paper style={{ ...stylesForPaper.paperStyle }}>
-                      {itemFoundSuccessfull && itemFound !== '' ? (
-                            <Table stickyHeader size="small">
-                              <TableHead>
-                                <TableRow>
-                                  <TableCell style={styles.forTableCell}>
-                                    Trade Name
-                                  </TableCell>
-                                  <TableCell style={styles.forTableCell}>
-                                    Scientific Name
-                                  </TableCell>
+                        {itemFoundSuccessfull && itemFound !== "" ? (
+                          <Table stickyHeader size="small">
+                            <TableHead>
+                              <TableRow>
+                                <TableCell style={styles.forTableCell}>
+                                  Trade Name
+                                </TableCell>
+                                <TableCell style={styles.forTableCell}>
+                                  Scientific Name
+                                </TableCell>
 
-                                  {/* <TableCell
+                                {/* <TableCell
                                     align="center"
                                     style={styles.forTableCell}
                                   >
                                     Form
                                   </TableCell> */}
 
-                                  <TableCell style={styles.forTableCell}>
-                                    Description
-                                  </TableCell>
-                                </TableRow>
-                              </TableHead>
+                                <TableCell style={styles.forTableCell}>
+                                  Description
+                                </TableCell>
+                              </TableRow>
+                            </TableHead>
 
-                              <TableBody>
-                                {itemFound.map((i, index) => {
-                                  return (
-                                    <TableRow
-                                      key={i.itemCode}
-                                      onClick={() => handleAddItem(i)}
-                                      style={{ cursor: "pointer" }}
-                                    >
-                                      <TableCell>{i.tradeName}</TableCell>
-                                      <TableCell>{i.scientificName}</TableCell>
+                            <TableBody>
+                              {itemFound.map((i, index) => {
+                                return (
+                                  <TableRow
+                                    key={i.itemCode}
+                                    onClick={() => handleAddItem(i)}
+                                    style={{ cursor: "pointer" }}
+                                  >
+                                    <TableCell>{i.tradeName}</TableCell>
+                                    <TableCell>{i.scientificName}</TableCell>
 
-                                      {/* <TableCell align="center">
+                                    {/* <TableCell align="center">
                                         {i.form}
                                       </TableCell> */}
 
-                                      <TableCell>{i.description}</TableCell>
-                                    </TableRow>
-                                  );
-                                })}
-                              </TableBody>
-                            </Table>
-                         ) : searchQuery ? (
-                          <div style={{ textAlign: 'center' }}>
+                                    <TableCell>{i.description}</TableCell>
+                                  </TableRow>
+                                );
+                              })}
+                            </TableBody>
+                          </Table>
+                        ) : loadSearchedData ? (
+                          <div style={{ textAlign: "center" }}>
                             <Loader
-                              type='TailSpin'
-                              color='#2c6ddd'
+                              type="TailSpin"
+                              color="#2c6ddd"
                               height={25}
                               width={25}
                               style={{
-                                display: 'inline-block',
-                                padding: '10px',
+                                display: "inline-block",
+                                padding: "10px",
                               }}
                             />
                             <span
                               style={{
-                                display: 'inline-block',
-                                padding: '10px',
+                                display: "inline-block",
+                                padding: "10px",
                               }}
                             >
                               <h4> Searching Items...</h4>
                             </span>
                           </div>
                         ) : searchQuery && !itemFoundSuccessfull ? (
-                          <div
-                            style={{ textAlign: 'center', padding: '10px' }}
-                          >
+                          <div style={{ textAlign: "center", padding: "10px" }}>
                             <h4>No Item Found !</h4>
                           </div>
                         ) : (
-                                undefined
-                              )}
+                          undefined
+                        )}
                       </Paper>
                     </div>
                   ) : (
-                      undefined
-                    )}
+                    undefined
+                  )}
                 </div>
 
                 <div className="row">
@@ -1886,7 +1895,7 @@ function AddEditPurchaseRequest(props) {
                         className: classes.input,
                         classes: { input: classes.input },
                       }}
-                    // error={form === "" && isFormSubmitted}
+                      // error={form === "" && isFormSubmitted}
                     >
                       <MenuItem value="">
                         <em>None</em>
@@ -1923,7 +1932,7 @@ function AddEditPurchaseRequest(props) {
                         className: classes.input,
                         classes: { input: classes.input },
                       }}
-                    // error={priority === "" && isFormSubmitted}
+                      // error={priority === "" && isFormSubmitted}
                     >
                       <MenuItem value="">
                         <em>None</em>
@@ -1960,7 +1969,7 @@ function AddEditPurchaseRequest(props) {
                         className: classes.input,
                         classes: { input: classes.input },
                       }}
-                    // error={schedule === "" && isFormSubmitted}
+                      // error={schedule === "" && isFormSubmitted}
                     >
                       <MenuItem value="">
                         <em>None</em>
@@ -2155,365 +2164,363 @@ function AddEditPurchaseRequest(props) {
                         <strong>Add Item</strong>
                       </Button>
                     ) : (
-                        <Button
-                          disabled={!validateItemsForm()}
-                          onClick={editSelectedItem}
-                          style={{ ...styles.stylesForButton }}
-                          variant="contained"
-                          color="primary"
-                          fullWidth
-                        >
-                          <strong>Update Item</strong>
-                        </Button>
-                      )}
+                      <Button
+                        disabled={!validateItemsForm()}
+                        onClick={editSelectedItem}
+                        style={{ ...styles.stylesForButton }}
+                        variant="contained"
+                        color="primary"
+                        fullWidth
+                      >
+                        <strong>Update Item</strong>
+                      </Button>
+                    )}
                   </div>
                 </div>
               </div>
             ) : (
-                <div>
-                  <div className="row">
-                    {selectItemToEditId === "" ? (
-                      <>
-                        <div
-                          className="col-md-9"
-                          style={{
-                            ...styles.inputContainerForTextField,
-                            ...styles.textFieldPadding,
+              <div>
+                <div className="row">
+                  {selectItemToEditId === "" ? (
+                    <>
+                      <div
+                        className="col-md-9"
+                        style={{
+                          ...styles.inputContainerForTextField,
+                          ...styles.textFieldPadding,
+                        }}
+                      >
+                        <TextField
+                          type="text"
+                          label="Item Name / Manufacturer / Vendor"
+                          name={"searchQuery"}
+                          value={searchQuery}
+                          onChange={handlePauseItemSearch}
+                          className={classes.margin}
+                          variant="filled"
+                          InputProps={{
+                            className: classes.input,
+                            classes: { input: classes.input },
                           }}
-                        >
-                          <TextField
-                            type="text"
-                            label="Item Name / Manufacturer / Vendor"
-                            name={"searchQuery"}
-                            value={searchQuery}
-                            onChange={handlePauseItemSearch}
-                            className={classes.margin}
-                            variant="filled"
-                            InputProps={{
-                              className: classes.input,
-                              classes: { input: classes.input },
-                            }}
-                            className="textInputStyle"
-                          />
-                          {/* </div> */}
-                        </div>
-                        <div
-                          className="col-md-3"
-                          style={{
-                            ...styles.inputContainerForTextField,
-                            ...styles.textFieldPadding,
+                          className="textInputStyle"
+                        />
+                        {/* </div> */}
+                      </div>
+                      <div
+                        className="col-md-3"
+                        style={{
+                          ...styles.inputContainerForTextField,
+                          ...styles.textFieldPadding,
+                        }}
+                      >
+                        <TextField
+                          id="indication"
+                          variant="filled"
+                          type="text"
+                          label="Indication"
+                          name={"searchQuery"}
+                          //  value={searchQuery}
+                          //  onChange={handleSearch}
+                          className={classes.margin}
+                          variant="filled"
+                          InputProps={{
+                            className: classes.input,
+                            classes: { input: classes.input },
                           }}
-                        >
-                          <TextField
-                            id="indication"
-                            variant="filled"
-                            type="text"
-                            label="Indication"
-                            name={"searchQuery"}
-                            //  value={searchQuery}
-                            //  onChange={handleSearch}
-                            className={classes.margin}
-                            variant="filled"
-                            InputProps={{
-                              className: classes.input,
-                              classes: { input: classes.input },
-                            }}
-                            className="textInputStyle"
-                          />
-                        </div>
-                      </>
-                    ) : (
-                        undefined
-                      )}
-                  </div>
+                          className="textInputStyle"
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    undefined
+                  )}
+                </div>
 
-                  {searchQuery ? (
-                    <div style={{ zIndex: 3 }}>
-                      <Paper style={{ ...stylesForPaper.paperStyle }}>
-                      {itemFoundSuccessfull && itemFound !== '' ? (
-                            <Table size="small">
-                              <TableHead>
-                                <TableRow>
-                                  <TableCell
-                                    align="center"
-                                    style={styles.forTableCell}
-                                  >
-                                    Trade Name
-                                </TableCell>
-                                  <TableCell
-                                    align="center"
-                                    style={styles.forTableCell}
-                                  >
-                                    Scientific Name
-                                </TableCell>
+                {searchQuery ? (
+                  <div style={{ zIndex: 3 }}>
+                    <Paper style={{ ...stylesForPaper.paperStyle }}>
+                      {itemFoundSuccessfull && itemFound !== "" ? (
+                        <Table size="small">
+                          <TableHead>
+                            <TableRow>
+                              <TableCell
+                                align="center"
+                                style={styles.forTableCell}
+                              >
+                                Trade Name
+                              </TableCell>
+                              <TableCell
+                                align="center"
+                                style={styles.forTableCell}
+                              >
+                                Scientific Name
+                              </TableCell>
 
-                                  {/* <TableCell
+                              {/* <TableCell
                                   align="center"
                                   style={styles.forTableCell}
                                 >
                                   Form
                                 </TableCell> */}
 
-                                  <TableCell
-                                    style={styles.forTableCell}
-                                    align="center"
-                                  >
-                                    Description
-                                </TableCell>
-                                </TableRow>
-                              </TableHead>
+                              <TableCell
+                                style={styles.forTableCell}
+                                align="center"
+                              >
+                                Description
+                              </TableCell>
+                            </TableRow>
+                          </TableHead>
 
-                              <TableBody>
-                                {itemFound.map((i, index) => {
-                                  return (
-                                    <TableRow
-                                      key={i.itemCode}
-                                      onClick={() => handleAddItem(i)}
-                                      style={{ cursor: "pointer" }}
-                                    >
-                                      <TableCell align="center">
-                                        {i.tradeName}
-                                      </TableCell>
-                                      <TableCell align="center">
-                                        {i.scientificName}
-                                      </TableCell>
+                          <TableBody>
+                            {itemFound.map((i, index) => {
+                              return (
+                                <TableRow
+                                  key={i.itemCode}
+                                  onClick={() => handleAddItem(i)}
+                                  style={{ cursor: "pointer" }}
+                                >
+                                  <TableCell align="center">
+                                    {i.tradeName}
+                                  </TableCell>
+                                  <TableCell align="center">
+                                    {i.scientificName}
+                                  </TableCell>
 
-                                      {/* <TableCell align="center">
+                                  {/* <TableCell align="center">
                                       {i.form}
                                     </TableCell> */}
 
-                                      <TableCell align="center">
-                                        {i.description}
-                                      </TableCell>
-                                    </TableRow>
-                                  );
-                                })}
-                              </TableBody>
-                            </Table>
-                             ) : searchQuery ? (
-                              <div style={{ textAlign: 'center' }}>
-                                <Loader
-                                  type='TailSpin'
-                                  color='#2c6ddd'
-                                  height={25}
-                                  width={25}
-                                  style={{
-                                    display: 'inline-block',
-                                    padding: '10px',
-                                  }}
-                                />
-                                <span
-                                  style={{
-                                    display: 'inline-block',
-                                    padding: '10px',
-                                  }}
-                                >
-                                  <h4> Searching Items...</h4>
-                                </span>
-                              </div>
-                            ) : searchQuery && !itemFoundSuccessfull ? (
-                              <div
-                                style={{ textAlign: 'center', padding: '10px' }}
-                              >
-                                <h4>No Item Found !</h4>
-                              </div>
-                            ) : (
-                                    undefined
-                                  )}
-                      </Paper>
-                    </div>
-                  ) : (
-                      undefined
-                    )}
+                                  <TableCell align="center">
+                                    {i.description}
+                                  </TableCell>
+                                </TableRow>
+                              );
+                            })}
+                          </TableBody>
+                        </Table>
+                      ) : loadSearchedData ? (
+                        <div style={{ textAlign: "center" }}>
+                          <Loader
+                            type="TailSpin"
+                            color="#2c6ddd"
+                            height={25}
+                            width={25}
+                            style={{
+                              display: "inline-block",
+                              padding: "10px",
+                            }}
+                          />
+                          <span
+                            style={{
+                              display: "inline-block",
+                              padding: "10px",
+                            }}
+                          >
+                            <h4> Searching Items...</h4>
+                          </span>
+                        </div>
+                      ) : searchQuery && !itemFoundSuccessfull ? (
+                        <div style={{ textAlign: "center", padding: "10px" }}>
+                          <h4>No Item Found !</h4>
+                        </div>
+                      ) : (
+                        undefined
+                      )}
+                    </Paper>
+                  </div>
+                ) : (
+                  undefined
+                )}
 
-                  <div className="row">
-                    <div
-                      className="col-md-3"
-                      style={{
-                        ...styles.inputContainerForTextField,
-                        ...styles.textFieldPadding,
+                <div className="row">
+                  <div
+                    className="col-md-3"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      required
+                      id="itemName"
+                      label="Item Name"
+                      name={"itemName"}
+                      disabled={true}
+                      type="text"
+                      value={itemName}
+                      onChange={onChangeValue}
+                      variant="filled"
+                      className="textInputStyle"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
                       }}
-                    >
-                      <TextField
-                        required
-                        id="itemName"
-                        label="Item Name"
-                        name={"itemName"}
-                        disabled={true}
-                        type="text"
-                        value={itemName}
-                        onChange={onChangeValue}
-                        variant="filled"
-                        className="textInputStyle"
-                        InputProps={{
-                          className: classes.input,
-                          classes: { input: classes.input },
-                        }}
-                        error={itemName === "" && isFormSubmitted}
-                      />
-                    </div>
-
-                    <div
-                      className="col-md-3"
-                      style={{
-                        ...styles.inputContainerForTextField,
-                        ...styles.textFieldPadding,
-                      }}
-                    >
-                      <TextField
-                        select
-                        // required
-                        fullWidth
-                        id="make_model"
-                        name="make_model"
-                        value={make_model}
-                        onChange={onChangeValue}
-                        label="Make/Model"
-                        variant="filled"
-                        InputProps={{
-                          className: classes.input,
-                          classes: { input: classes.input },
-                        }}
-                        error={make_model === "" && isFormSubmitted}
-                      >
-                        <MenuItem value="">
-                          <em>None</em>
-                        </MenuItem>
-
-                        {modalArray.map((val) => {
-                          return (
-                            <MenuItem key={val.key} value={val.key}>
-                              {val.value}
-                            </MenuItem>
-                          );
-                        })}
-                      </TextField>
-                    </div>
-
-                    <div
-                      className="col-md-3"
-                      style={{
-                        ...styles.inputContainerForTextField,
-                        ...styles.textFieldPadding,
-                      }}
-                    >
-                      <TextField
-                        select
-                        // required
-                        fullWidth
-                        id="size"
-                        name="size"
-                        value={size}
-                        onChange={onChangeValue}
-                        label="Size"
-                        variant="filled"
-                        InputProps={{
-                          className: classes.input,
-                          classes: { input: classes.input },
-                        }}
-                        error={size === "" && isFormSubmitted}
-                      >
-                        <MenuItem value="">
-                          <em>None</em>
-                        </MenuItem>
-
-                        {sizeArray.map((val) => {
-                          return (
-                            <MenuItem key={val.key} value={val.key}>
-                              {val.value}
-                            </MenuItem>
-                          );
-                        })}
-                      </TextField>
-                    </div>
-
-                    <div
-                      className="col-md-3"
-                      style={{
-                        ...styles.inputContainerForTextField,
-                        ...styles.textFieldPadding,
-                      }}
-                    >
-                      <TextField
-                        required
-                        id="requestedQty"
-                        label="Quantity"
-                        name={"requestedQty"}
-                        type="number"
-                        value={requestedQty}
-                        onChange={onChangeValue}
-                        className="textInputStyle"
-                        variant="filled"
-                        onKeyDown={(evt) => {
-                          (evt.key === "e" ||
-                            evt.key === "E" ||
-                            evt.key === "-" ||
-                            evt.key === "+") &&
-                            evt.preventDefault();
-                        }}
-                        InputProps={{
-                          className: classes.input,
-                          classes: { input: classes.input },
-                        }}
-                        error={requestedQty === "" && isFormSubmitted}
-                      />
-                    </div>
+                      error={itemName === "" && isFormSubmitted}
+                    />
                   </div>
 
-                  <div className="row">
-                    <div
-                      className="col-md-9"
-                      style={{
-                        ...styles.inputContainerForTextField,
-                        ...styles.textFieldPadding,
+                  <div
+                    className="col-md-3"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      select
+                      // required
+                      fullWidth
+                      id="make_model"
+                      name="make_model"
+                      value={make_model}
+                      onChange={onChangeValue}
+                      label="Make/Model"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
                       }}
+                      error={make_model === "" && isFormSubmitted}
                     >
-                      <TextField
-                        id="Notes"
-                        type="text"
-                        label="Notes"
-                        name={"comments"}
-                        value={comments}
-                        onChange={onChangeValue}
-                        className="textInputStyle"
-                        variant="filled"
-                        InputProps={{
-                          className: classes.input,
-                          classes: { input: classes.input },
-                        }}
-                      />
-                    </div>
-                    <div
-                      className="col-md-3"
-                      style={styles.inputContainerForTextField}
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+
+                      {modalArray.map((val) => {
+                        return (
+                          <MenuItem key={val.key} value={val.key}>
+                            {val.value}
+                          </MenuItem>
+                        );
+                      })}
+                    </TextField>
+                  </div>
+
+                  <div
+                    className="col-md-3"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      select
+                      // required
+                      fullWidth
+                      id="size"
+                      name="size"
+                      value={size}
+                      onChange={onChangeValue}
+                      label="Size"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                      error={size === "" && isFormSubmitted}
                     >
-                      {selectItemToEditId === "" ? (
-                        <Button
-                          //   disabled={!validateItemsForm()}
-                          onClick={addSelectedItem}
-                          style={{ ...styles.stylesForButton }}
-                          variant="contained"
-                          color="primary"
-                          fullWidth
-                        >
-                          <strong>Add Item</strong>
-                        </Button>
-                      ) : (
-                          <Button
-                            disabled={!validateItemsForm()}
-                            onClick={editSelectedItem}
-                            style={{ ...styles.stylesForButton }}
-                            variant="contained"
-                            color="primary"
-                            fullWidth
-                          >
-                            <strong>Update Item</strong>
-                          </Button>
-                        )}
-                    </div>
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+
+                      {sizeArray.map((val) => {
+                        return (
+                          <MenuItem key={val.key} value={val.key}>
+                            {val.value}
+                          </MenuItem>
+                        );
+                      })}
+                    </TextField>
+                  </div>
+
+                  <div
+                    className="col-md-3"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      required
+                      id="requestedQty"
+                      label="Quantity"
+                      name={"requestedQty"}
+                      type="number"
+                      value={requestedQty}
+                      onChange={onChangeValue}
+                      className="textInputStyle"
+                      variant="filled"
+                      onKeyDown={(evt) => {
+                        (evt.key === "e" ||
+                          evt.key === "E" ||
+                          evt.key === "-" ||
+                          evt.key === "+") &&
+                          evt.preventDefault();
+                      }}
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                      error={requestedQty === "" && isFormSubmitted}
+                    />
                   </div>
                 </div>
-              )}
+
+                <div className="row">
+                  <div
+                    className="col-md-9"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      id="Notes"
+                      type="text"
+                      label="Notes"
+                      name={"comments"}
+                      value={comments}
+                      onChange={onChangeValue}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                      }}
+                    />
+                  </div>
+                  <div
+                    className="col-md-3"
+                    style={styles.inputContainerForTextField}
+                  >
+                    {selectItemToEditId === "" ? (
+                      <Button
+                        //   disabled={!validateItemsForm()}
+                        onClick={addSelectedItem}
+                        style={{ ...styles.stylesForButton }}
+                        variant="contained"
+                        color="primary"
+                        fullWidth
+                      >
+                        <strong>Add Item</strong>
+                      </Button>
+                    ) : (
+                      <Button
+                        disabled={!validateItemsForm()}
+                        onClick={editSelectedItem}
+                        style={{ ...styles.stylesForButton }}
+                        variant="contained"
+                        color="primary"
+                        fullWidth
+                      >
+                        <strong>Update Item</strong>
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
 
             {requestedItemsArray && (
               <div className="row">
@@ -2552,7 +2559,10 @@ function AddEditPurchaseRequest(props) {
               />
               {comingFor === "add" ? (
                 <Button
-                  style={styles.stylesForPurchaseButton}
+                  style={{
+                    ...styles.stylesForPurchaseButton,
+                    marginRight: "5px ",
+                  }}
                   // disabled={!validateForm()}
                   onClick={handleAdd}
                   variant="contained"
@@ -2562,7 +2572,10 @@ function AddEditPurchaseRequest(props) {
                 </Button>
               ) : comingFor === "edit" ? (
                 <Button
-                  style={styles.stylesForPurchaseButton}
+                  style={{
+                    ...styles.stylesForPurchaseButton,
+                    marginRight: "5px ",
+                  }}
                   // disabled={!validateForm()}
                   onClick={handleEdit}
                   variant="contained"
@@ -2573,8 +2586,8 @@ function AddEditPurchaseRequest(props) {
               ) : comingFor === "view" ? (
                 undefined
               ) : (
-                      undefined
-                    )}
+                undefined
+              )}
             </div>
             {/* </div> */}
 
@@ -2588,14 +2601,14 @@ function AddEditPurchaseRequest(props) {
                 hideDialog={hideDialog}
               />
             ) : (
-                undefined
-              )}
+              undefined
+            )}
           </div>
         ) : (
-            <div className="LoaderStyle">
-              <Loader type="TailSpin" color="red" height={50} width={50} />
-            </div>
-          )}
+          <div className="LoaderStyle">
+            <Loader type="TailSpin" color="red" height={50} width={50} />
+          </div>
+        )}
       </div>
     </div>
   );

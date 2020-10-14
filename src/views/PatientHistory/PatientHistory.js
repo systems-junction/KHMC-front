@@ -513,6 +513,7 @@ function LabRadRequest(props) {
   const [patientHistoryId, setPatientHistoryId] = useState("");
   const [EDRIPROPR, setEDRIPROPR] = useState([]);
   const [timer, setTimer] = useState(null)
+  const [loadSearchedData, setLoadSearchedData] = useState(false)
 
   const validateForm = () => {
     return (
@@ -553,15 +554,15 @@ function LabRadRequest(props) {
 
     seticdSection(Object.keys(icdCodesList[0]));
 
-    const selectedItem = props.history.location.state.selectedItem;
-    const diagnosisArray = props.history.location.state.diagnosisArray;
-    const medicationArray = props.history.location.state.medicationArray;
+    // const selectedItem = props.history.location.state.selectedItem;
+    // const diagnosisArray = props.history.location.state.diagnosisArray;
+    // const medicationArray = props.history.location.state.medicationArray;
 
-    console.log("selectedItem", selectedItem);
-    // setHistoryId(selectedItem._id);
-    setSelectedItem(selectedItem);
-    dispatch({ field: "diagnosisArray", value: diagnosisArray });
-    dispatch({ field: "medicationArray", value: medicationArray });
+    // console.log("selectedItem", selectedItem);
+    // // setHistoryId(selectedItem._id);
+    // setSelectedItem(selectedItem);
+    // dispatch({ field: "diagnosisArray", value: diagnosisArray });
+    // dispatch({ field: "medicationArray", value: medicationArray });
 
     // getEDRById(props.history.location.state.selectedItem._id);
 
@@ -1227,18 +1228,19 @@ function LabRadRequest(props) {
     }
   }
 
-  const triggerChange = () => {
-    handlePatientSearch(searchPatientQuery);
+  const triggerChange = (a) => {
+    handlePatientSearch(a);
   }
 
   const handlePauseSearch = (e) => {
+    setLoadSearchedData(true)
     clearTimeout(timer);
 
     const a = e.target.value.replace(/[^\w\s]/gi, "");
     setSearchPatientQuery(a);
 
     setTimer(setTimeout(() => {
-      triggerChange()
+      triggerChange(a)
     }, 600))
   }
 
@@ -1254,9 +1256,11 @@ function LabRadRequest(props) {
               console.log(res.data.data);
               setpatientFoundSuccessfully(true);
               setpatientFound(res.data.data);
+              setLoadSearchedData(false)
             } else {
               setpatientFoundSuccessfully(false);
               setpatientFound("");
+              setLoadSearchedData(false)
             }
           }
         })
@@ -1543,10 +1547,6 @@ function LabRadRequest(props) {
   }
 
   const showAlert = () => {
-    // if (document.getElementById("ckDemo").disabled) {
-    //     alert("CheckBox is Disabled");
-    // }
-
     setErrorMsg("Please Search Patient First ");
     setOpenNotification(true);
   };
@@ -1696,7 +1696,7 @@ function LabRadRequest(props) {
                             })}
                           </TableBody>
                         </Table>
-                      ) : searchPatientQuery ? (
+                      ) : loadSearchedData ? (
                         <div style={{ textAlign: 'center' }}>
                           <Loader
                             type='TailSpin'

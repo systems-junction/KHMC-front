@@ -374,7 +374,7 @@ function AddEditPurchaseRequest(props) {
             style={{ flex: 4, display: "flex", flexDirection: "column" }}
             className="container-fluid"
           >
-            <div className="row">
+            <div className="row" style={{ marginTop: 20 }}>
               <div
                 className="col-md-12"
                 style={{

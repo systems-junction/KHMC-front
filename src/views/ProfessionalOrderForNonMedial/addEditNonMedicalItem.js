@@ -141,7 +141,7 @@ const styles = {
     borderRadius: 5,
     backgroundColor: "#2C6DDD",
     // width: "140px",
-    height: "54px",
+    height: "55px",
     outline: "none",
   },
 
@@ -305,7 +305,8 @@ function AddEditPurchaseRequest(props) {
 
   const [fuArray, setFUs] = useState("");
   const [timer, setTimer] = useState(null)
-
+  const [loadSearchedData, setLoadSearchedData] = useState(false)
+  
   function getFUsFromBU(buId) {
     axios
       // .get(getFUFromBUUrl + "/" + buId)
@@ -613,24 +614,29 @@ function AddEditPurchaseRequest(props) {
     }, 2000);
   }
 
-  const triggerItemChange = () => {
-    handleSearch(searchQuery)
+  const triggerItemChange = (value) => {
+    handleSearch(value)
   }
 
   const handlePauseItemSearch = (e) => {
+    setLoadSearchedData(true)
     clearTimeout(timer)
 
+    var value;
     var pattern = /^[a-zA-Z0-9 ]*$/;
     if (e.target.type === "text") {
       if (pattern.test(e.target.value) === false) {
         return;
       }
+      else{
+        value = e.target.value
+      }
     }
-    setSearchQuery(e.target.value);
+    setSearchQuery(value);
 
     setTimer(
       setTimeout(() => {
-        triggerItemChange()
+        triggerItemChange(value)
       }, 600)
     )
   }
@@ -646,9 +652,11 @@ function AddEditPurchaseRequest(props) {
             console.log(res.data.data.items);
             setItemFoundSuccessfully(true);
             setItem(res.data.data.items);
+            setLoadSearchedData(false)
           } else {
             setItemFoundSuccessfully(false);
             setItem("");
+            setLoadSearchedData(false)
           }
         }
       })
@@ -901,8 +909,8 @@ function AddEditPurchaseRequest(props) {
     >
       <Header />
       <div className="cPadding" style={{ marginLeft: 10, marginRight: 10 }}>
-        <div className="subheader">
-          <div>
+        <div className="subheader" style={{ marginLeft: 8 }}>
+          <div style={{ marginLeft: -23 }}>
             <img src={purchase_request} />
             <h4>
               {comingFor === "add"
@@ -920,7 +928,7 @@ function AddEditPurchaseRequest(props) {
               onClick={() =>
                 props.history.push("/home/wms/fus/professionalorder")
               }
-              style={{ ...styles.stylesForButton, height: 45, fontSize: 12 }}
+              style={{ ...styles.stylesForButton }}
               variant="contained"
               color="primary"
             >
@@ -1417,7 +1425,7 @@ function AddEditPurchaseRequest(props) {
                           })}
                         </TableBody>
                       </Table>
-                    ) : searchQuery ? (
+                    ) : loadSearchedData ? (
                       <div style={{ textAlign: 'center' }}>
                         <Loader
                           type='TailSpin'
