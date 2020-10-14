@@ -41,7 +41,7 @@ import Fingerprint from "../../assets/img/fingerprint.png";
 import AccountCircle from "@material-ui/icons/SearchOutlined";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import BarCode from "../../assets/img/Bar Code.png";
-import ViewSingleRequest from "../ResidentDoctor/AssessmentAndDiagnosis/viewRequest";
+import ViewSingleRequest from "../../components/ViewRequest/ViewRequest";
 import Loader from "react-loader-spinner";
 import { connect } from "react-redux";
 import {
@@ -512,8 +512,8 @@ function LabRadRequest(props) {
   const [icdArr, setIcdArr] = useState([]);
   const [patientHistoryId, setPatientHistoryId] = useState("");
   const [EDRIPROPR, setEDRIPROPR] = useState([]);
-  const [timer, setTimer] = useState(null)
-  const [loadSearchedData, setLoadSearchedData] = useState(false)
+  const [timer, setTimer] = useState(null);
+  const [loadSearchedData, setLoadSearchedData] = useState(false);
 
   const validateForm = () => {
     return (
@@ -649,10 +649,11 @@ function LabRadRequest(props) {
               props.history.push({
                 pathname: "consultationrequest/success",
                 state: {
-                  message: `Consultation Request: ${res.data.data.consultationNote[
+                  message: `Consultation Request: ${
+                    res.data.data.consultationNote[
                       res.data.data.consultationNote.length - 1
                     ].consultationNo
-                    } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} submitted successfully`,
+                  } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} submitted successfully`,
 
                   patientDetails: patientDetails,
                 },
@@ -741,10 +742,11 @@ function LabRadRequest(props) {
               props.history.push({
                 pathname: "assessmentdiagnosis/success",
                 state: {
-                  message: `Consultation note:  ${res.data.data.residentNotes[
+                  message: `Consultation note:  ${
+                    res.data.data.residentNotes[
                       res.data.data.residentNotes.length - 1
                     ].residentNoteNo
-                    } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
+                  } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
                   patientDetails: patientDetails,
                 },
               });
@@ -904,9 +906,10 @@ function LabRadRequest(props) {
           props.history.push({
             pathname: "assessmentdiagnosis/success",
             state: {
-              message: `Lab Request: ${res.data.data.labRequest[res.data.data.labRequest.length - 1]
+              message: `Lab Request: ${
+                res.data.data.labRequest[res.data.data.labRequest.length - 1]
                   .LRrequestNo
-                } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
+              } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
               patientDetails: patientDetails,
             },
           });
@@ -1049,10 +1052,11 @@ function LabRadRequest(props) {
           props.history.push({
             pathname: "assessmentdiagnosis/success",
             state: {
-              message: `Radiology Request: ${res.data.data.radiologyRequest[
+              message: `Radiology Request: ${
+                res.data.data.radiologyRequest[
                   res.data.data.radiologyRequest.length - 1
                 ].RRrequestNo
-                } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
+              } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
               patientDetails: patientDetails,
             },
           });
@@ -1226,27 +1230,28 @@ function LabRadRequest(props) {
     if (e.keyCode === 13) {
       triggerChange();
     }
-  }
+  };
 
   const triggerChange = (a) => {
     handlePatientSearch(a);
-  }
+  };
 
   const handlePauseSearch = (e) => {
-    setLoadSearchedData(true)
+    setLoadSearchedData(true);
     clearTimeout(timer);
 
     const a = e.target.value.replace(/[^\w\s]/gi, "");
     setSearchPatientQuery(a);
 
-    setTimer(setTimeout(() => {
-      triggerChange(a)
-    }, 600))
-  }
+    setTimer(
+      setTimeout(() => {
+        triggerChange(a);
+      }, 600)
+    );
+  };
 
   //for search patient
   const handlePatientSearch = (e) => {
-
     if (e.length >= 3) {
       axios
         .get(getpatienthistoryUrl + "/" + e)
@@ -1256,11 +1261,11 @@ function LabRadRequest(props) {
               console.log(res.data.data);
               setpatientFoundSuccessfully(true);
               setpatientFound(res.data.data);
-              setLoadSearchedData(false)
+              setLoadSearchedData(false);
             } else {
               setpatientFoundSuccessfully(false);
               setpatientFound("");
-              setLoadSearchedData(false)
+              setLoadSearchedData(false);
             }
           }
         })
@@ -1353,16 +1358,16 @@ function LabRadRequest(props) {
                   });
                   if (val && val.length > 0) {
                     let data = [];
-                  val.map((d) => {
-                    d.code.map((singleCode) => {
-                      let found = data.find((i) => i === singleCode);
-                      if (!found) {
-                        data.push(singleCode);
-                      }
+                    val.map((d) => {
+                      d.code.map((singleCode) => {
+                        let found = data.find((i) => i === singleCode);
+                        if (!found) {
+                          data.push(singleCode);
+                        }
+                      });
                     });
-                  });
-                  console.log(data);
-                    dispatch({ field: "diagnosisArray", value: data});
+                    console.log(data);
+                    dispatch({ field: "diagnosisArray", value: data });
                   }
                 } else if (key === "pharmacyRequest") {
                   val.map(
@@ -1674,63 +1679,63 @@ function LabRadRequest(props) {
                   }}
                 >
                   <Paper style={{ maxHeight: 300, overflow: "auto" }}>
-                    {patientFoundSuccessfull &&
-                      patientFound !== '' ?
-                      (
-                        <Table size="small">
-                          <TableHead>
-                            <TableRow>
-                              <TableCell>MRN</TableCell>
-                              <TableCell>Patient Name</TableCell>
-                              <TableCell>Gender</TableCell>
-                              <TableCell>Age</TableCell>
-                            </TableRow>
-                          </TableHead>
+                    {patientFoundSuccessfull && patientFound !== "" ? (
+                      <Table size="small">
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>MRN</TableCell>
+                            <TableCell>Patient Name</TableCell>
+                            <TableCell>Gender</TableCell>
+                            <TableCell>Age</TableCell>
+                          </TableRow>
+                        </TableHead>
 
-                          <TableBody>
-                            {patientFound.map((i) => {
-                              return (
-                                <TableRow
-                                  key={i._id}
-                                  onClick={() => handleAddPatient(i)}
-                                  style={{ cursor: "pointer" }}
-                                >
-                                  <TableCell>{i.profileNo}</TableCell>
-                                  <TableCell>
-                                    {i.firstName + ` ` + i.lastName}
-                                  </TableCell>
-                                  <TableCell>{i.gender}</TableCell>
-                                  <TableCell>{i.age}</TableCell>
-                                </TableRow>
-                              );
-                            })}
-                          </TableBody>
-                        </Table>
-                      ) : loadSearchedData ? (
-                        <div style={{ textAlign: 'center' }}>
-                          <Loader
-                            type='TailSpin'
-                            color='#2c6ddd'
-                            height={25}
-                            width={25}
-                            style={{ display: 'inline-block', padding: '10px' }}
-                          />
-                          <span style={{ display: 'inline-block', padding: '10px' }}>
-                            <h4>Searching Patient...</h4>
-                          </span>
-                        </div>
-                      ) : searchPatientQuery && !patientFoundSuccessfull ? (
-                        <div style={{ textAlign: 'center', padding: '10px' }}>
-                          <h4> No Patient Found !</h4>
-                        </div>
-                      ) : (
-                            undefined
-                          )}
+                        <TableBody>
+                          {patientFound.map((i) => {
+                            return (
+                              <TableRow
+                                key={i._id}
+                                onClick={() => handleAddPatient(i)}
+                                style={{ cursor: "pointer" }}
+                              >
+                                <TableCell>{i.profileNo}</TableCell>
+                                <TableCell>
+                                  {i.firstName + ` ` + i.lastName}
+                                </TableCell>
+                                <TableCell>{i.gender}</TableCell>
+                                <TableCell>{i.age}</TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                    ) : loadSearchedData ? (
+                      <div style={{ textAlign: "center" }}>
+                        <Loader
+                          type="TailSpin"
+                          color="#2c6ddd"
+                          height={25}
+                          width={25}
+                          style={{ display: "inline-block", padding: "10px" }}
+                        />
+                        <span
+                          style={{ display: "inline-block", padding: "10px" }}
+                        >
+                          <h4>Searching Patient...</h4>
+                        </span>
+                      </div>
+                    ) : searchPatientQuery && !patientFoundSuccessfull ? (
+                      <div style={{ textAlign: "center", padding: "10px" }}>
+                        <h4> No Patient Found !</h4>
+                      </div>
+                    ) : (
+                      undefined
+                    )}
                   </Paper>
                 </div>
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
             </div>
           </div>
         </div>
@@ -1852,26 +1857,26 @@ function LabRadRequest(props) {
               >
                 {medicationArray
                   ? medicationArray.map((d, index) => {
-                    return (
-                      <div style={{ display: "flex", flexDirection: "row" }}>
-                        <h6
-                          style={{
-                            ...styles.textStyles,
-                          }}
-                        >
-                          {index + 1}
-                          {"."} &nbsp;
+                      return (
+                        <div style={{ display: "flex", flexDirection: "row" }}>
+                          <h6
+                            style={{
+                              ...styles.textStyles,
+                            }}
+                          >
+                            {index + 1}
+                            {"."} &nbsp;
                           </h6>
-                        <h6
-                          style={{
-                            ...styles.textStyles,
-                          }}
-                        >
-                          {d}
-                        </h6>
-                      </div>
-                    );
-                  })
+                          <h6
+                            style={{
+                              ...styles.textStyles,
+                            }}
+                          >
+                            {d}
+                          </h6>
+                        </div>
+                      );
+                    })
                   : ""}
               </div>
 
@@ -1881,12 +1886,12 @@ function LabRadRequest(props) {
               >
                 {diagnosisArray
                   ? diagnosisArray.map((drug, index) => {
-                    return (
-                      <h6 style={styles.textStyles}>
-                        {index + 1}. {drug}
-                      </h6>
-                    );
-                  })
+                      return (
+                        <h6 style={styles.textStyles}>
+                          {index + 1}. {drug}
+                        </h6>
+                      );
+                    })
                   : ""}
               </div>
             </div>
@@ -2026,8 +2031,8 @@ function LabRadRequest(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
             </div>
           ) : value === 0 ? (
@@ -2047,8 +2052,8 @@ function LabRadRequest(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
             </div>
           ) : value === 2 ? (
@@ -2069,8 +2074,8 @@ function LabRadRequest(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
             </div>
           ) : value === 3 ? (
@@ -2103,8 +2108,8 @@ function LabRadRequest(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
             </div>
           ) : value === 4 ? (
@@ -2137,8 +2142,8 @@ function LabRadRequest(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
             </div>
           ) : value === 6 ? (
@@ -2171,8 +2176,8 @@ function LabRadRequest(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
             </div>
           ) : value === 5 ? (
@@ -2205,13 +2210,13 @@ function LabRadRequest(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                    undefined
-                  )}
+                  undefined
+                )}
               </div>
             </div>
           ) : (
-                          undefined
-                        )}
+            undefined
+          )}
 
           {openItemDialog ? (
             <ViewSingleRequest
@@ -2220,8 +2225,8 @@ function LabRadRequest(props) {
               viewItem={viewItem}
             />
           ) : (
-              undefined
-            )}
+            undefined
+          )}
         </div>
 
         <Dialog
@@ -2261,7 +2266,7 @@ function LabRadRequest(props) {
                         input: classes.multilineColor,
                       },
                     }}
-                  // inputProps={{ maxLength: 300 }}
+                    // inputProps={{ maxLength: 300 }}
                   />
                 </div>
               </div>
@@ -2394,8 +2399,8 @@ function LabRadRequest(props) {
                   </div>
                 </div>
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
 
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div style={{ marginTop: "2%", marginBottom: "2%" }}>
@@ -2676,20 +2681,20 @@ function LabRadRequest(props) {
                     ? tableHeadingForBUMemberForItems
                     : currentUser.staffTypeId.type === "Registered Nurse" ||
                       currentUser.staffTypeId.type === "BU Doctor"
-                      ? tableHeadingForBUMemberForItems
-                      : currentUser.staffTypeId.type === "FU Inventory Keeper"
-                        ? tableHeadingForFUMemberForItems
-                        : tableHeadingForFUMemberForItems
+                    ? tableHeadingForBUMemberForItems
+                    : currentUser.staffTypeId.type === "FU Inventory Keeper"
+                    ? tableHeadingForFUMemberForItems
+                    : tableHeadingForFUMemberForItems
                 }
                 tableDataKeys={
                   currentUser.staffTypeId.type === "Doctor/Physician"
                     ? tableDataKeysForItemsForBUMember
                     : currentUser.staffTypeId.type === "Registered Nurse" ||
                       currentUser.staffTypeId.type === "BU Doctor"
-                      ? tableDataKeysForItemsForBUMember
-                      : currentUser.staffTypeId.type === "FU Inventory Keeper"
-                        ? tableDataKeysForFUMemberForItems
-                        : tableDataKeysForItemsForBUMember
+                    ? tableDataKeysForItemsForBUMember
+                    : currentUser.staffTypeId.type === "FU Inventory Keeper"
+                    ? tableDataKeysForFUMemberForItems
+                    : tableDataKeysForItemsForBUMember
                 }
                 borderBottomColor={"#60d69f"}
                 borderBottomWidth={20}
