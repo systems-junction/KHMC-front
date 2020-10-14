@@ -28,8 +28,8 @@ const styles = {
     cursor: "pointer",
     borderRadius: 5,
     background: "#2c6ddd",
-    width: "110px",
-    height: "45px",
+    width: "140px",
+    height: "50px",
     outline: "none",
   },
 };

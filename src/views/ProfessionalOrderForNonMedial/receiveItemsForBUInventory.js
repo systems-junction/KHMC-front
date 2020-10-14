@@ -359,6 +359,7 @@ function ReceiveItems(props) {
       if (date > receivedDate) {
         setOpenNotification(true);
         setErrorMsg("Invoice date can not be greater than received date");
+        return;
       }
 
       if (parseInt(receivedQty) !== parseInt(requestedQty)) {

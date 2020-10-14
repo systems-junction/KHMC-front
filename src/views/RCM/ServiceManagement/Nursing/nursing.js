@@ -9,7 +9,7 @@ import CustomTable from '../../../../components/Table/Table'
 import ConfirmationModal from '../../../../components/Modal/confirmationModal'
 import axios from 'axios'
 import Header from '../../../../components/Header/Header'
-import RadiologyDepartment from '../../../../assets/img/Radiology Department.png'
+import Nursing from '../../../../assets/img/NP.png'
 import Add_New from '../../../../assets/img/Add_New.png'
 import Search from '../../../../assets/img/Search.png'
 import Table from '../../../../components/Table/Table.js'
@@ -29,7 +29,7 @@ const stylesB = {
   stylesForButton: {
     color: 'white',
     cursor: 'pointer',
-    borderRadius: 15,
+    borderRadius: 5,
     background: '#2c6ddd',
     width: '140px',
     height: '50px',
@@ -163,8 +163,8 @@ export default function Vendor(props) {
       <div className='cPadding'>
         <div className='subheader'>
           <div>
-            <img src={RadiologyDepartment} />
-            <h4>Nursing Proc/Service</h4>
+            <img src={Nursing} />
+            <h4>Nursing Service</h4>
           </div>
 
           <div>

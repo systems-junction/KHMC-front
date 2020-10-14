@@ -352,6 +352,7 @@ function AddEditPatientListing(props) {
   const [searched, setsearched] = useState(false)
   const [selected, setSelected] = React.useState([])
   const [timer, setTimer] = useState(null)
+  const [loadSearchedData, setLoadSearchedData] = useState(false)
 
   useEffect(() => {
     setcomingFor(props.history.location.state.comingFor)
@@ -471,7 +472,7 @@ function AddEditPatientListing(props) {
           props.history.push({
             pathname: 'success',
             state: {
-              message: `Claim against Patient MRN: ${profileNo.toUpperCase()} submitted successfully`,
+              message: `Claim: ${res.data.data.requestNo} against Patient MRN: ${profileNo.toUpperCase()} submitted successfully`,
             },
           })
         } else if (!res.data.success) {
@@ -504,16 +505,17 @@ function AddEditPatientListing(props) {
       responseCode: 'N/A',
     }
     formData.append('data', JSON.stringify(params))
-    // console.log("PARAMSS ", params);
+    console.log("PARAMSS ", params);
     // console.log("DATAAA ", formData);
     axios
       .put(updateClaim, formData)
       .then((res) => {
         if (res.data.success) {
+          console.log("res", res.data.data)
           props.history.push({
             pathname: 'success',
             state: {
-              message: `Claim against Patient MRN: ${profileNo.toUpperCase()} updated successfully`,
+              message: `Claim: ${res.data.data.requestNo} against Patient MRN: ${profileNo.toUpperCase()} updated successfully`,
             },
           })
         } else if (!res.data.success) {
@@ -613,11 +615,12 @@ function AddEditPatientListing(props) {
     }
   }
 
-  const triggerChange = () => {
-    handleSearch(searchQuery)
+  const triggerChange = (a) => {
+    handleSearch(a)
   }
 
   const handlePauseSearch = (e) => {
+    setLoadSearchedData(true)
     clearTimeout(timer)
 
     const a = e.target.value.replace(/[^\w\s]/gi, '')
@@ -625,7 +628,7 @@ function AddEditPatientListing(props) {
 
     setTimer(
       setTimeout(() => {
-        triggerChange()
+        triggerChange(a)
       }, 600)
     )
   }
@@ -641,9 +644,11 @@ function AddEditPatientListing(props) {
             if (res.data.data.length > 0) {
               setItemFoundSuccessfully(true)
               setItemFound(res.data.data)
+              setLoadSearchedData(false)
             } else {
               setItemFoundSuccessfully(false)
               setItemFound('')
+              setLoadSearchedData(false)
             }
           }
         })
@@ -1308,7 +1313,7 @@ function AddEditPatientListing(props) {
                                   })}
                                 </TableBody>
                               </Table>
-                            ) : searchQuery ? (
+                            ) : loadSearchedData ? (
                               <div style={{ textAlign: 'center' }}>
                                 <Loader
                                   type='TailSpin'

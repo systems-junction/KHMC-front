@@ -53,7 +53,7 @@ import InputLabelComponent from "../../components/InputLabel/inputLabel";
 import ErrorMessage from "../../components/ErrorMessage/errorMessage";
 
 import add_new from "../../assets/img/Plus.png";
-import MUIStyleForinput from "../../../src/assets/jss/material-dashboard-react/inputStyle.js";
+// import MUIStyleForinput from "../../../src/assets/jss/material-dashboard-react/inputStyle.js";
 import MUIStyleForInputForCurrency from "../../../src/assets/jss/material-dashboard-react/inputStylesForCurrency.js";
 
 import ViewAllBtn from "../../components/ViewAllBtn/viewAll";
@@ -194,30 +194,63 @@ const styles = {
 //   },
 // }));
 
-const inputStyles = makeStyles((theme) => ({
+const MUIStyleForinput = makeStyles((theme) => ({
   margin: {
     margin: theme.spacing(0),
   },
   input: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
+    boxShadow: 'none',
     borderRadius: 5,
-    "&": {
-      backgroundColor: "white",
+    '&:after': {
+      borderBottomColor: 'black',
+      boxShadow: 'none',
     },
-    "&:after": {
-      backgroundColor: "white",
+    '&:hover': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
     },
-
-    "&:hover": {
-      backgroundColor: "white",
-    },
-
-    "&:focus": {
-      boxShadow: "none",
-      backgroundColor: "white",
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+      borderRadius: 5,
     },
   },
-}));
+  multilineColor: {
+    boxShadow: 'none',
+    backgroundColor: 'white',
+    borderRadius: 5,
+    '&:hover': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
+    '&:after': {
+      borderBottomColor: 'black',
+      boxShadow: 'none',
+    },
+    '&:focus': {
+      boxShadow: 'none',
+    },
+  },
+  root: {
+    '& .MuiTextField-root': {
+      backgroundColor: 'white',
+    },
+    '& .Mui-focused': {
+      backgroundColor: 'white',
+      color: 'black',
+      boxShadow: 'none',
+    },
+    '& .Mui-disabled': {
+      backgroundColor: 'white',
+      color: 'gray',
+    },
+    '&:focus': {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+    },
+  },
+}))
 function AddEditPurchaseRequest(props) {
   const classes = MUIStyleForinput();
   const classesForInputForCurrency = MUIStyleForInputForCurrency();
@@ -1241,7 +1274,7 @@ function AddEditPurchaseRequest(props) {
       <Header />
       <div className="cPadding">
         <div className="subheader">
-          <div>
+          <div style={{marginLeft: '-6px'}}>
             <img src={purchase_request} />
             <h4>
               {comingFor === "add"
@@ -1262,7 +1295,7 @@ function AddEditPurchaseRequest(props) {
           className="container-fluid"
         >
           {comingFor === "edit" ? (
-            <div className="row">
+            <div className={`row ${classes.root}`}>
               <div
                 className="col-md-4"
                 style={{
@@ -1359,7 +1392,7 @@ function AddEditPurchaseRequest(props) {
             undefined
           )}
 
-          <div className="row">
+          <div className={`row ${classes.root}`}>
             <div
               className={
                 currentUser &&
@@ -1482,7 +1515,7 @@ function AddEditPurchaseRequest(props) {
           </div>
 
           {reason === "jit" ? (
-            <div className="row">
+            <div className={`row ${classes.root}`}>
               <div
                 className="col-md-4"
                 style={{
@@ -1590,7 +1623,7 @@ function AddEditPurchaseRequest(props) {
             undefined
           )}
 
-          <div className="row">
+          <div className={`row ${classes.root}`}>
             <div
               className="col-md-12"
               style={{
@@ -1637,7 +1670,7 @@ function AddEditPurchaseRequest(props) {
                     color: "white",
                     fontWeight: "700",
                     marginTop: 20,
-                    marginLeft: 3,
+                    marginLeft: 7,
                   }}
                 >
                   Add Item
@@ -1645,7 +1678,7 @@ function AddEditPurchaseRequest(props) {
               </div>
 
               {selectItemToEditId === "" ? (
-                <div className="row">
+                <div className={`row ${classes.root}`}>
                   <div
                     className="col-md-12"
                     style={{
@@ -1784,7 +1817,7 @@ function AddEditPurchaseRequest(props) {
                 </div>
               </div>
 
-              <div className="row">
+              <div className={`row ${classes.root}`}>
                 <div
                   className="col-md-3"
                   style={{
@@ -1889,7 +1922,7 @@ function AddEditPurchaseRequest(props) {
                 </div>
               </div>
 
-              <div className="row">
+              <div className={`row ${classes.root}`}>
                 <div
                   className="col-md-3"
                   style={{
@@ -1985,6 +2018,7 @@ function AddEditPurchaseRequest(props) {
                     justifyContent: "flex-end",
                     marginTop: "2%",
                     // marginBottom: "1%",
+                    marginRight:'6px'
                   }}
                 >
                   {selectItemToEditId === "" ? (
@@ -2170,11 +2204,11 @@ function AddEditPurchaseRequest(props) {
               <img
                 onClick={() => props.history.goBack()}
                 src={Back_Arrow}
-                style={{ width: 60, height: 40, cursor: "pointer" }}
+                style={{ width: 45, height: 35, cursor: "pointer", marginLeft: '5px' }}
               />
               {comingFor === "add" ? (
                 <Button
-                  style={styles.stylesForWHButton}
+                  style={{...styles.stylesForWHButton, marginRight: '5px'}}
                   // disabled={!validateForm()}
                   onClick={handleAdd}
                   variant="contained"

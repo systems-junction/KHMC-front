@@ -646,6 +646,8 @@ export default function CustomTable(props) {
       );
     }
 
+    // console.log("sdsd",props.tableHeading[indexValue])
+
     if (props.tableHeading[indexValue].includes("JD")) {
       return parseFloat(val).toFixed(4) + " JD";
     }
@@ -823,7 +825,10 @@ export default function CustomTable(props) {
                                 >
                                   {Array.isArray(val)
                                     ? prop[val[0]]
-                                      ? capitilizeLetter(prop[val[0]][val[1]])
+                                      // ? capitilizeLetter(prop[val[0]][val[1]])
+                                      ?replaceSlugToTitle(prop[val[0]][val[1]], val, key)
+                                       
+
                                       : null
                                     : val.toLowerCase() === "timestamp"
                                     ? new Intl.DateTimeFormat(

@@ -49,8 +49,8 @@ const styles = {
     cursor: "pointer",
     borderRadius: 5,
     background: "#2c6ddd",
-    width: "110px",
-    height: "40px",
+    width: "140px",
+    height: "50px",
     outline: "none",
   },
 };
@@ -233,7 +233,7 @@ export default function Items(props) {
       <Header />
       <div className="cPadding">
         <div className="subheader">
-          <div>
+          <div style={{marginLeft: '-8px'}}>
             <img src={business_Unit} />
             <h4>Business Unit</h4>
           </div>
@@ -249,7 +249,7 @@ export default function Items(props) {
               >
                 <img src={plus_icon} className="icon-style" />
                 &nbsp;&nbsp;
-                <strong style={{ fontSize: "12px" }}>Add New</strong>
+                <strong >Add New</strong>
               </Button>
             ) : (
               undefined

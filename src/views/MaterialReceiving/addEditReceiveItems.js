@@ -1656,7 +1656,7 @@ function ReceiveItems(props) {
             style={{
               display: "flex",
               flex: 1,
-              marginTop: "1%",
+              marginTop: "2%",
               marginBottom: "1%",
             }}
           >
@@ -1666,6 +1666,7 @@ function ReceiveItems(props) {
                 flex: 1,
                 justifyContent: "flex-end",
                 flexDirection: "row",
+                marginRight: '5px'
               }}
             >
               <Button

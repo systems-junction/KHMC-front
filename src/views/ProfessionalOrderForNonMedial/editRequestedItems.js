@@ -617,11 +617,11 @@ function AddEditPurchaseRequest(props) {
       }}
     >
       <Header />
-      <div className="cPadding">
+      <div className="cPadding" >
         <div className="subheader">
-          <div>
+          <div style={{marginLeft: '-4px'}}>
             <img src={purchase_request} />
-            <h4>
+            <h4 >
               {comingFor === "add"
                 ? "Order Details (Non-Medical)"
                 : comingFor === "edit"
@@ -649,7 +649,7 @@ function AddEditPurchaseRequest(props) {
         </div>
 
         {fuArray && fuArray !== "" ? (
-          <div style={{ flex: 4, display: "flex", flexDirection: "column" }}>
+          <div style={{ flex: 4, display: "flex", flexDirection: "column" }} className='container-fluid'>
             <div className="row">
               {comingFor === "edit" || comingFor === "view" ? (
                 <div
@@ -838,7 +838,7 @@ function AddEditPurchaseRequest(props) {
             <div>
               <div className="row">
                 <h4
-                  style={{ color: "white", fontWeight: "700", marginTop: 20 }}
+                  style={{ color: "white", fontWeight: "700", marginTop: 20, marginLeft: '5px' }}
                 >
                   Item Details
                 </h4>
@@ -1283,12 +1283,14 @@ function AddEditPurchaseRequest(props) {
                   alignItems: "center",
                   marginTop: "2%",
                   marginBottom: "2%",
+                  marginRight: '5px',
+                  marginLeft: '5px'
                 }}
               >
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back_Arrow}
-                  style={{ width: 60, height: 40, cursor: "pointer" }}
+                  style={{ width: 45, height: 35, cursor: "pointer" }}
                 />
 
                 {comingFor === "add" ? (

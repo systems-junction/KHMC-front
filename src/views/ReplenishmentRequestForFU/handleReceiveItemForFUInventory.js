@@ -1490,12 +1490,14 @@ function ReceiveItems(props) {
                 alignItems: "center",
                 marginBottom: 20,
                 marginTop: 20,
+                marginRight: '5px',
+                marginLeft: '5px'
               }}
             >
               <img
                 onClick={() => props.history.goBack()}
                 src={Back_Arrow}
-                style={{ width: 60, height: 40, cursor: "pointer" }}
+                style={{ width: 45, height: 35, cursor: "pointer" }}
               />
 
               {comingFor === "add" ? (

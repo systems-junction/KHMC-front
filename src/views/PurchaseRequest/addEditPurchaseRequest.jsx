@@ -1119,7 +1119,7 @@ function AddEditPurchaseRequest(props) {
         </div>
 
         <div
-          style={{ flex: 4, display: "flex", flexDirection: "column" }}
+          style={{ flex: 4, display: "flex", flexDirection: "column", marginTop: '20px' }}
           className="container-fluid"
         >
           <div className="row">
@@ -1592,9 +1592,9 @@ function AddEditPurchaseRequest(props) {
 
           {currentUser && currentUser.staffTypeId.type !== "Committe Member" ? (
             <div>
-              <div className="row">
+              <div className="row" style={{marginLeft: '-9px'}}>
                 <h5
-                  style={{ color: "white", fontWeight: "700", marginTop: 15 }}
+                  style={{ color: "white", fontWeight: "700", marginTop: 15, }}
                 >
                   Item Details
                 </h5>
@@ -1947,6 +1947,7 @@ function AddEditPurchaseRequest(props) {
                     // height: 50,
                     justifyContent: "flex-end",
                     marginTop: "2%",
+                    marginRight: 6
                   }}
                 >
                   {selectItemToEditId === "" ? (
@@ -1988,6 +1989,7 @@ function AddEditPurchaseRequest(props) {
                   justifyContent: "flex-end",
                   marginTop: "1%",
                   marginBottom: "1%",
+                  marginRight: 6
                 }}
               >
                 <Button
@@ -2033,6 +2035,7 @@ function AddEditPurchaseRequest(props) {
                 justifyContent: "space-between",
                 marginTop: "2%",
                 marginBottom: "2%",
+                marginRight: '6px'
               }}
             >
               <img

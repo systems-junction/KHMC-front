@@ -16,7 +16,7 @@ ul li {
 }
 
 .addCode:before {
-  content: '\f055';
+  content: "\f055";
   font-family: FontAwesome;
   font-style: normal;
   font-weight: normal;
@@ -26,7 +26,7 @@ ul li {
 }
 
 .addedCode:before {
-  content: '\f058';
+  content: "\f058";
   font-family: FontAwesome;
   font-style: normal;
   font-weight: normal;
@@ -127,7 +127,7 @@ ul li {
   display: inline-block;
 } */
 
-@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css');
+@import url("//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css");
 .search {
   position: relative;
 }
@@ -181,6 +181,10 @@ ul li {
     width: 104%;
     /* background-color: red; */
   }
+  .medItembtn {
+    width: 235 !important;
+    height: 55 !important;
+  }
 }
 
 /* .responsiveButton {
@@ -230,10 +234,15 @@ ul li {
 
 /* css  for radio tabs */
 
-input[type='radio'] {
+input[type="radio"] {
   box-shadow: none;
 }
 
 .mrnUpperCase {
   text-transform: uppercase;
+}
+
+.sideMargin {
+  margin-left: -20px !important;
+  margin-right: -20px !important;
 }

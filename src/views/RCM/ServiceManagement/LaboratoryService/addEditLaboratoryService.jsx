@@ -12,16 +12,14 @@ import {
   addLaboratoryServiceUrl,
   updateLaboratoryServiceUrl,
 } from '../../../../public/endpoins'
-import RadiologyDepartment from '../../../../assets/img/Radiology Department.png'
+import LabortaryDepartment from '../../../../assets/img/Labortary Department.png'
 import Header from '../../../../components/Header/Header'
 import view_all from '../../../../assets/img/Eye.png'
 import Back from '../../../../assets/img/Back_Arrow.png'
 import '../../../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
-
 import InputLabelComponent from '../../../../components/InputLabel/inputLabel'
 import BootstrapInput from '../../../../components/Dropdown/dropDown.js'
 import ErrorMessage from '../../../../components/ErrorMessage/errorMessage'
-
 import Notification from '../../../../components/Snackbar/Notification.js'
 
 const statusArray = [
@@ -228,37 +226,37 @@ function AddEditVendor(props) {
   }
 
   const handleEdit = () => {
-    // if (!validateForm()) {
-    //   setIsFormSubmitted(true);
-    //   setOpenNotification(true);
-    //   setErrorMsg("Please fill the fields properly");
-    // } else {
-    // if (validateForm()) {
-    const params = {
-      _id,
-      name,
-      description,
-      serviceNo,
-      price,
-      status,
-    }
-    axios
-      .put(updateLaboratoryServiceUrl, params)
-      .then((res) => {
-        if (res.data.success) {
-          console.log('response is', res.data.data)
-          props.history.goBack()
-        } else if (!res.data.success) {
-          setOpenNotification(true)
+    if (!validateForm()) {
+      setIsFormSubmitted(true);
+      setOpenNotification(true);
+      setErrorMsg("Please fill the fields properly");
+    } else {
+      if (validateForm()) {
+        const params = {
+          _id,
+          name,
+          description,
+          serviceNo,
+          price,
+          status,
         }
-      })
-      .catch((e) => {
-        console.log('error after updating Lab Service', e)
-        setOpenNotification(true)
-        setErrorMsg('Error while updating Lab Service')
-      })
-    // }
-    // }
+        axios
+          .put(updateLaboratoryServiceUrl, params)
+          .then((res) => {
+            if (res.data.success) {
+              console.log('response is', res.data.data)
+              props.history.goBack()
+            } else if (!res.data.success) {
+              setOpenNotification(true)
+            }
+          })
+          .catch((e) => {
+            console.log('error after updating Lab Service', e)
+            setOpenNotification(true)
+            setErrorMsg('Error while updating Lab Service')
+          })
+      }
+    }
   }
 
   if (openNotification) {
@@ -286,11 +284,11 @@ function AddEditVendor(props) {
       <div className={`cPadding ${classes.root}`}>
         <div className='subheader'>
           <div>
-            <img src={RadiologyDepartment} />
+            <img src={LabortaryDepartment} />
             <h4>
               {comingFor === 'add'
-                ? ' Laboratory Service'
-                : ' Laboratory Service'}
+                ? ' Add Laboratory Service'
+                : ' Edit Laboratory Service'}
             </h4>
           </div>
 
@@ -313,7 +311,7 @@ function AddEditVendor(props) {
           {comingFor === 'edit' ? (
             <div
               className='row'
-              style={{ marginTop: '20px', marginBottom: '-20px' }}
+              style={{ marginTop: '20px' }}
             >
               <div
                 className='col-md-12'
@@ -341,8 +339,8 @@ function AddEditVendor(props) {
               </div>
             </div>
           ) : (
-            undefined
-          )}
+              undefined
+            )}
 
           <div className='row' style={{ marginTop: '20px' }}>
             <div
@@ -417,12 +415,12 @@ function AddEditVendor(props) {
                 currencySymbol='JD'
                 outputFormat='number'
                 decimalPlaces='4'
-                // onChange={(event, value) => setValue(value)}
+              // onChange={(event, value) => setValue(value)}
               />
             </div>
           </div>
 
-          <div className='row' style={{marginTop:  '20px'}}>
+          <div className='row' style={{ marginTop: '20px' }}>
             <div
               className='col-md-12'
               style={{
@@ -452,7 +450,7 @@ function AddEditVendor(props) {
             </div>
           </div>
 
-          <div className='row' style={{marginTop:  '20px'}}>
+          <div className='row' style={{ marginTop: '20px' }}>
             <div
               className='col-md-12'
               style={{
@@ -525,16 +523,16 @@ function AddEditVendor(props) {
                   Add
                 </Button>
               ) : (
-                <Button
-                  className='pl30 pr30'
-                  // disabled={!validateForm()}
-                  onClick={handleEdit}
-                  variant='contained'
-                  style={{ ...styles.stylesForButton, marginRight: '-3px' }}
-                >
-                  Update
-                </Button>
-              )}
+                  <Button
+                    className='pl30 pr30'
+                    // disabled={!validateForm()}
+                    onClick={handleEdit}
+                    variant='contained'
+                    style={{ ...styles.stylesForButton, marginRight: '-3px' }}
+                  >
+                    Update
+                  </Button>
+                )}
             </div>
           </div>
         </div>

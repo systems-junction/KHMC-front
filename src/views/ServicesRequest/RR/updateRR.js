@@ -305,12 +305,13 @@ function AddEditPurchaseRequest(props) {
         if (res.data.success) {
           console.log('response after adding Radio Request', res.data)
           // props.history.goBack()
+          console.log("selectedItem", selectedItem)
           props.history.push({
             pathname: 'success',
             state: {
               //of Request No ${requestId}
               // request #
-              message: `Radiology Service for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} updated successfully`,
+              message: `Radiology Service: ${selectedItem.RRrequestNo} for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} updated successfully`,
             },
           })
         } else if (!res.data.success) {

@@ -452,6 +452,8 @@ function AddEditPurchaseRequest(props) {
 
   const [allergicDialog, openAllergicDialog] = useState(false);
   const [allergic, setAllergic] = useState("");
+  const [timer, setTimer] = useState(null)
+  const [loadSearchedData, setLoadSearchedData] = useState(false)
 
   function getFUsFromBU(buId) {
     axios
@@ -810,23 +812,43 @@ function AddEditPurchaseRequest(props) {
     }, 2600);
   }
 
-  const handlePatientSearch = (e) => {
+  const triggerChange = (value) => {
+    handlePatientSearch(value)
+  }
+
+  const handlePauseSearch = (e) => {
+    setLoadSearchedData(true)
+    clearTimeout(timer)
+
+    var value;
     var pattern = /^[a-zA-Z0-9 ]*$/;
     if (e.target.type === "text") {
       if (pattern.test(e.target.value) === false) {
         return;
       }
+      else{
+        value = e.target.value
+      }
     }
+    setSearchPatientQuery(value);
 
-    setSearchPatientQuery(e.target.value);
-    if (e.target.value.length >= 1) {
+    setTimer(
+      setTimeout(() => {
+        triggerChange(value)
+      }, 600)
+    )
+  }
+
+  const handlePatientSearch = (e) => {
+  
+    if (e.length >= 1) {
       axios
         .get(
           getSearchedpatient +
             "/" +
             currentUser.functionalUnit._id +
             "/" +
-            e.target.value
+            e
         )
         .then((res) => {
           if (res.data.success) {
@@ -834,9 +856,11 @@ function AddEditPurchaseRequest(props) {
               console.log(res.data.data);
               setpatientFoundSuccessfully(true);
               setpatientFound(res.data.data);
+              setLoadSearchedData(false)
             } else {
               setpatientFoundSuccessfully(false);
               setpatientFound("");
+              setLoadSearchedData(false)
             }
           }
         })
@@ -930,15 +954,35 @@ function AddEditPurchaseRequest(props) {
       });
   };
 
-  const handleSearch = (e) => {
+  const triggerItemChange = (value) => {
+    handleSearch(value)
+  }
+
+  const handlePauseItemSearch = (e) => {
+    setLoadSearchedData(true)
+    clearTimeout(timer)
+
+    var value;
     var pattern = /^[a-zA-Z0-9 ]*$/;
     if (e.target.type === "text") {
       if (pattern.test(e.target.value) === false) {
         return;
       }
+      else{
+        value = e.target.value
+      }
     }
+    setSearchQuery(value);
 
-    setSearchQuery(e.target.value);
+    setTimer(
+      setTimeout(() => {
+        triggerItemChange(value)
+      }, 600)
+    )
+  }
+
+  const handleSearch = (e) => {
+  
     // if (e.target.value.length >= 3) {
     let url = "";
     if (selectedItemToSearch === "pharmaceutical") {
@@ -947,16 +991,18 @@ function AddEditPurchaseRequest(props) {
       url = getSearchedItemsNonPharmaceuticalUrl;
     }
     axios
-      .get(url + "/" + e.target.value)
+      .get(url + "/" + e)
       .then((res) => {
         if (res.data.success) {
           if (res.data.data.items.length > 0) {
             console.log(res.data.data.items);
             setItemFoundSuccessfully(true);
             setItem(res.data.data.items);
+            setLoadSearchedData(false)
           } else {
             setItemFoundSuccessfully(false);
             setItem("");
+            setLoadSearchedData(false)
           }
         }
       })
@@ -1386,7 +1432,7 @@ function AddEditPurchaseRequest(props) {
       <Header />
       <div className="cPadding" style={{ marginLeft: 10, marginRight: 10 }}>
         <div className="subheader">
-          <div>
+          <div style={{ marginLeft: -23 }}>
             <img src={purchase_request} />
             <h4>
               {comingFor === "add"
@@ -1405,7 +1451,10 @@ function AddEditPurchaseRequest(props) {
           {comingFor === "add" &&
           !props.history.location.state.comingFromRCM ? (
             <div>
-              <div className="row">
+              <div
+                className="row "
+                style={{ marginLeft: -20, marginRight: -15 }}
+              >
                 {/* <span class="fa fa-search"></span> */}
                 <div
                   className="col-md-10 col-sm-12"
@@ -1419,7 +1468,7 @@ function AddEditPurchaseRequest(props) {
                     label="Search Patient by Name / MRN / National ID / Mobile Number"
                     name={"searchPatientQuery"}
                     value={searchPatientQuery}
-                    onChange={handlePatientSearch}
+                    onChange={handlePauseSearch}
                     InputProps={{
                       // endAdornment: (
                       //   <InputAdornment position="end">
@@ -1482,8 +1531,7 @@ function AddEditPurchaseRequest(props) {
                   }}
                 >
                   <Paper style={{ ...stylesForPaper.paperStyle }}>
-                    {patientFoundSuccessfull ? (
-                      patientFound && (
+                  {patientFoundSuccessfull && patientFound !== '' ? (
                         <Table stickyHeader size="small">
                           <TableHead>
                             <TableRow>
@@ -1515,15 +1563,28 @@ function AddEditPurchaseRequest(props) {
                             })}
                           </TableBody>
                         </Table>
-                      )
-                    ) : (
-                      <h4
-                        style={{ textAlign: "center" }}
-                        onClick={() => setSearchPatientQuery("")}
-                      >
-                        Patient Not Found
-                      </h4>
-                    )}
+                        ) : loadSearchedData ? (
+                          <div style={{ textAlign: 'center' }}>
+                            <Loader
+                              type='TailSpin'
+                              color='#2c6ddd'
+                              height={25}
+                              width={25}
+                              style={{ display: 'inline-block', padding: '10px' }}
+                            />
+                            <span
+                              style={{ display: 'inline-block', padding: '10px' }}
+                            >
+                              <h4>Searching Patient...</h4>
+                            </span>
+                          </div>
+                        ) : searchPatientQuery && !patientFoundSuccessfull ? (
+                          <div style={{ textAlign: 'center', padding: '10px' }}>
+                            <h4> No Patient Found !</h4>
+                          </div>
+                        ) : (
+                                undefined
+                              )}
                   </Paper>
                 </div>
               ) : (
@@ -1554,7 +1615,7 @@ function AddEditPurchaseRequest(props) {
               </h5>
             </div>
 
-            <div className="row">
+            <div className="row sideMargin">
               {selectItemToEditId === "" ? (
                 <>
                   <div
@@ -1569,7 +1630,7 @@ function AddEditPurchaseRequest(props) {
                       label="Item Name / Manufacturer / Vendor"
                       name={"searchQuery"}
                       value={searchQuery}
-                      onChange={handleSearch}
+                      onChange={handlePauseItemSearch}
                       className={classes.margin}
                       variant="filled"
                       InputProps={{
@@ -1632,8 +1693,7 @@ function AddEditPurchaseRequest(props) {
                   }}
                 >
                   <Paper style={{ ...stylesForPaper.paperStyle }}>
-                    {itemFoundSuccessfull ? (
-                      itemFound && (
+                  {itemFoundSuccessfull && itemFound !== '' ? (
                         <Table stickyHeader size="small">
                           <TableHead>
                             <TableRow>
@@ -1685,15 +1745,36 @@ function AddEditPurchaseRequest(props) {
                             })}
                           </TableBody>
                         </Table>
-                      )
-                    ) : (
-                      <h4
-                        style={{ textAlign: "center" }}
-                        onClick={() => console.log("ddf")}
+                     ) : loadSearchedData ? (
+                      <div style={{ textAlign: 'center' }}>
+                        <Loader
+                          type='TailSpin'
+                          color='#2c6ddd'
+                          height={25}
+                          width={25}
+                          style={{
+                            display: 'inline-block',
+                            padding: '10px',
+                          }}
+                        />
+                        <span
+                          style={{
+                            display: 'inline-block',
+                            padding: '10px',
+                          }}
+                        >
+                          <h4> Searching Items...</h4>
+                        </span>
+                      </div>
+                    ) : searchQuery && !itemFoundSuccessfull ? (
+                      <div
+                        style={{ textAlign: 'center', padding: '10px' }}
                       >
-                        Item Not Found
-                      </h4>
-                    )}
+                        <h4>No Item Found !</h4>
+                      </div>
+                    ) : (
+                            undefined
+                          )}
                   </Paper>
                 </div>
               ) : (
@@ -1701,7 +1782,7 @@ function AddEditPurchaseRequest(props) {
               )}
             </div>
 
-            <div className="row">
+            <div className="row sideMargin">
               <div
                 className="col-md-3 col-sm-3 col-3"
                 style={{
@@ -1867,7 +1948,7 @@ function AddEditPurchaseRequest(props) {
               </div>
             </div>
 
-            <div className="row">
+            <div className="row sideMargin">
               <div
                 className="col-md-9 col-sm-9 col-9"
                 style={{
