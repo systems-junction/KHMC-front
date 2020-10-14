@@ -322,6 +322,7 @@ function ReceiveItems(props) {
         .post(addReceiveItemsUrl, params)
         .then((res) => {
           if (res.data.success) {
+            console.log(res.data.data)
             if (statusForReceivingItem === "rejected") {
               setAddReturnRequest(true);
             } else {
@@ -408,6 +409,7 @@ function ReceiveItems(props) {
       state: {
         comingFor: "add",
         selectedItem: selectedItem,
+        batchArray:batchArray
       },
     });
   };
@@ -1562,7 +1564,8 @@ function ReceiveItems(props) {
                 <DateTimePicker
                   required
                   disableFuture
-                  format="dd-mm-yyyy HH:mm a"
+                  // format="dd-mm-yyyy HH:mm a"
+                  format={dateTimeFormat}
                   inputVariant="filled"
                   fullWidth
                   disabled={selectedItem ? false : true}
@@ -1742,8 +1745,7 @@ function ReceiveItems(props) {
             </DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
-                While rejecting the return request you need to create the return
-                request for that.
+                While rejecting, all the received batches will be returned.
               </DialogContentText>
             </DialogContent>
             <DialogActions>

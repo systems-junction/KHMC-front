@@ -41,6 +41,8 @@ import Add_New from "../../assets/img/Add_New.png";
 import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
 import dateTimeFormat from "../../constants/dateTimeFormat.js";
 
+import TableforAddedQtyFU from "../ReplenishmentRequestForFU/tableforAddedQtyFU";
+
 const reasonArray = [
   { key: "jit", value: "JIT" },
   { key: "new_item", value: "New Item" },
@@ -267,6 +269,8 @@ function AddEditPurchaseRequest(props) {
 
   const [fuObj, setFUObj] = useState("");
 
+  const [batchArray, setBatchArray] = useState([]);
+
   useEffect(() => {
     setCurrentUser(cookie.load("current_user"));
 
@@ -276,6 +280,14 @@ function AddEditPurchaseRequest(props) {
 
     const selectedRec = props.history.location.state.selectedItem;
     setSelectedItem(props.history.location.state.selectedItem);
+
+    if (
+      props.history.location.state &&
+      props.history.location.state.batchArray
+    ) {
+      setBatchArray(props.history.location.state.batchArray);
+    }
+
     console.log(selectedRec);
     if (selectedRec) {
       if (props.history.location.state.comingFor === "add") {
@@ -283,8 +295,8 @@ function AddEditPurchaseRequest(props) {
           if (val && typeof val === "object") {
             if (key === "item") {
               dispatch({ field: "itemId", value: val.itemId });
-              dispatch({ field: "itemName", value: val.name });
-              dispatch({ field: "itemCode", value: val.itemCode });
+              dispatch({ field: "itemName", value: val.itemId.name });
+              dispatch({ field: "itemCode", value: val.itemId.itemCode });
               dispatch({ field: "currentQty", value: val.currQty });
               dispatch({ field: "description", value: val.description });
             } else if (key === "fuId") {
@@ -327,6 +339,8 @@ function AddEditPurchaseRequest(props) {
                 field: "itemCostPerUnit",
                 value: val.itemCostPerUnit,
               });
+            } else if (key === "batchArray") {
+              setBatchArray(val);
             } else {
               dispatch({ field: key, value: val });
             }
@@ -389,6 +403,7 @@ function AddEditPurchaseRequest(props) {
           reason === "expired"
             ? "pending_approval"
             : "approved",
+        batchArray: batchArray,
       };
 
       console.log("params", params);
@@ -445,6 +460,7 @@ function AddEditPurchaseRequest(props) {
               : "approved"
             : status,
         commentNote,
+        batchArray: batchArray
       };
 
       let params;
@@ -504,7 +520,6 @@ function AddEditPurchaseRequest(props) {
     }, 2000);
   }
 
-  console.log(selectedItem);
 
   return (
     <div
@@ -539,6 +554,26 @@ function AddEditPurchaseRequest(props) {
         </div>
 
         <div style={{ flex: 4, display: "flex", flexDirection: "column" }}>
+          <div className="row" style={{ marginBottom: 15 }}>
+            {batchArray.length > 0 ? (
+              <>
+                <h5
+                  style={{
+                    color: "white",
+                    fontWeight: "bold",
+                    marginTop: 15,
+                    marginBottom: 15,
+                  }}
+                >
+                  Added Batches With Quantities
+                </h5>
+                <TableforAddedQtyFU returnBatchArray={batchArray} />
+              </>
+            ) : (
+              undefined
+            )}
+          </div>
+
           <div className="row">
             <div
               className="col-md-4"
@@ -671,16 +706,6 @@ function AddEditPurchaseRequest(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <input
-                disabled={true}
-                type="text"
-                placeholder="Item Code"
-                name={"itemCode"}
-                value={itemCode}
-                onChange={onChangeValue}
-                className="textInputStyle"
-              /> */}
-
               <TextField
                 disabled={true}
                 label="Item Code"
@@ -701,16 +726,6 @@ function AddEditPurchaseRequest(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <input
-                type="text"
-                disabled={true}
-                placeholder="Item Name"
-                name={"itemName"}
-                value={itemName}
-                onChange={onChangeValue}
-                className="textInputStyle"
-              /> */}
-
               <TextField
                 disabled={true}
                 label="Item Name"
@@ -726,28 +741,6 @@ function AddEditPurchaseRequest(props) {
             </div>
           </div>
 
-          {/* <div className="row">
-            <div
-              className="col-md-12"
-              style={styles.inputContainerForTextField}
-            >
-              <input
-                type="text"
-                disabled={
-                  currentUser && currentUser.staffTypeId.type === "FU Member"
-                    ? false
-                    : true
-                }
-                rows={4}
-                placeholder="Notes/Comments"
-                name={"comments"}
-                value={comments}
-                onChange={onChangeValue}
-                className="textInputStyle"
-              />
-            </div>
-          </div> */}
-
           <div className="row">
             <div
               className="col-md-12"
@@ -756,16 +749,6 @@ function AddEditPurchaseRequest(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <input
-                disabled={true}
-                type="text"
-                placeholder="Description"
-                name={"description"}
-                value={description}
-                onChange={handleCheckBox}
-                className="textInputStyle"
-              /> */}
-
               <TextField
                 disabled={true}
                 label="Description"

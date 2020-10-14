@@ -2036,14 +2036,14 @@ function AddEditPurchaseRequest(props) {
                 </div>
               </DialogContent>
             </Dialog>
-
+{/* 
             <div className="row" style={{ marginBottom: 20 }}>
               <img
                 onClick={() => props.history.goBack()}
                 src={Back_Arrow}
                 style={{ width: 60, height: 40, cursor: "pointer" }}
               />
-            </div>
+            </div> */}
           </div>
         ) : (
           <div className="LoaderStyle">

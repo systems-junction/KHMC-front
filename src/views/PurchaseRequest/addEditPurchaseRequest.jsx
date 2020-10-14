@@ -816,7 +816,7 @@ function AddEditPurchaseRequest(props) {
     return (
       itemCode.length > 0 &&
       description.length > 0 &&
-      name.length > 0 &&
+      // name.length > 0 &&
       reqQty.length > 0 &&
       reqQty !== "0" &&
       // currentQty.length > 0 &&

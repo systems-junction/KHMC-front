@@ -325,6 +325,8 @@ function AddEditPurchaseRequest(props) {
 
     const selectedRec = props.history.location.state.selectedItem;
 
+    console.log(props.history.location.state)
+
     if (selectedRec) {
       Object.entries(selectedRec).map(([key, val]) => {
         if (key === "purchaseRequestId") {

@@ -48,7 +48,7 @@ import dateFormat from "../../constants/dateFormat.js";
 import TableforAddedQtyFU from "./tableforAddedQtyFU";
 
 const statusArray = [
-  { key: "Partially Received", value: "Partially Received" },
+  // { key: "Partially Received", value: "Partially Received" },
   { key: "Received", value: "Received" },
 ];
 
@@ -419,7 +419,15 @@ function ReceiveItems(props) {
       if (date > receivedDate) {
         setOpenNotification(true);
         setErrorMsg("Invoice date can not be greater than received date");
+        return;
       }
+
+      if (parseInt(requestedQty) !== parseInt(receivedQty)) {
+        setOpenNotification(true);
+        setErrorMsg("Received qty should be same as that of requested qty");
+        return;
+      }
+
       let params = {
         itemId: selectedItem.itemId._id,
         currentQty: currentQty,
@@ -1455,13 +1463,13 @@ function ReceiveItems(props) {
                 {statusArray.map((val) => {
                   return (
                     <MenuItem
-                      disabled={
-                        receivedQty &&
-                        ((val.key === "Received" &&
-                          receivedQty < requestedQty) ||
-                          (val.key === "Partially Recieved" &&
-                            receivedQty >= requestedQty))
-                      }
+                      // disabled={
+                      //   receivedQty &&
+                      //   ((val.key === "Received" &&
+                      //     receivedQty < requestedQty) ||
+                      //     (val.key === "Partially Recieved" &&
+                      //       receivedQty >= requestedQty))
+                      // }
                       key={val.key}
                       value={val.key}
                     >

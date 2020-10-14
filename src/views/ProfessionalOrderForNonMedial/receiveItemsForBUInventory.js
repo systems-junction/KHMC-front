@@ -43,10 +43,12 @@ import CurrencyTextField from "@unicef/material-ui-currency-textfield";
 import dateTimeFormat from "../../constants/dateTimeFormat.js";
 import dateFormat from "../../constants/dateFormat.js";
 
+import TableforAddedQtyFU from "../ReplenishmentRequestForFU/tableforAddedQtyFU";
+
 const statusArray = [
   // { key: "complete", value: "Complete" },
   { key: "Received", value: "Received" },
-  { key: "Partially Received", value: "Partially Received" },
+  // { key: "Partially Received", value: "Partially Received" },
 ];
 
 const styles = {
@@ -104,7 +106,7 @@ function ReceiveItems(props) {
     requiredQty: "",
     receivedQty: "",
     bonusQty: "0",
-    batchNumber: "12",
+    batchNumber: "",
     lotNo: "12",
     unit: "kg",
     discount: "10",
@@ -119,7 +121,7 @@ function ReceiveItems(props) {
     invoice: "FUINV-0091",
     date: "",
     receivedDate: new Date(),
-    expiryDate: "Mon Sep 30 2020 16:07:47 GMT+0500 (Pakistan Standard Time)",
+    expiryDate: "",
     discountPercentage: "",
 
     _id: "",
@@ -292,6 +294,8 @@ function ReceiveItems(props) {
 
   const [selectedItem, setSelectedItem] = useState("");
 
+  const [batchArray, setBatchArray] = useState([]);
+
   useEffect(() => {
     setCurrentUser(cookie.load("current_user"));
 
@@ -309,6 +313,7 @@ function ReceiveItems(props) {
 
     if (selectedRec) {
       setSelectedItem(selectedRec);
+      setBatchArray(selectedRec.batchArray);
     }
 
     if (selectedRec) {
@@ -328,7 +333,7 @@ function ReceiveItems(props) {
       bonusQty.length > 0 &&
       // batchNumber.length > 0 &&
       // lotNo.length > 0 &&
-      expiryDate !== "" &&
+      // expiryDate !== "" &&
       // unit.length > 0 &&
       // discount.length > 0 &&
       // uniyDiscount.length > 0 &&
@@ -354,6 +359,12 @@ function ReceiveItems(props) {
       if (date > receivedDate) {
         setOpenNotification(true);
         setErrorMsg("Invoice date can not be greater than received date");
+      }
+
+      if (parseInt(receivedQty) !== parseInt(requestedQty)) {
+        setOpenNotification(true);
+        setErrorMsg("Received qty must be same as that of requested qty.");
+        return;
       }
       let params = {
         itemId: selectedItem.itemId._id,
@@ -507,6 +518,26 @@ function ReceiveItems(props) {
         </div>
 
         <div style={{ flex: 4, display: "flex", flexDirection: "column" }}>
+          <div className="row" style={{ marginBottom: 15 }}>
+            {batchArray.length > 0 ? (
+              <>
+                <h5
+                  style={{
+                    color: "white",
+                    fontWeight: "bold",
+                    marginTop: 15,
+                    marginBottom: 15,
+                  }}
+                >
+                  Added Batches With Quantities
+                </h5>
+                <TableforAddedQtyFU returnBatchArray={batchArray} />
+              </>
+            ) : (
+              undefined
+            )}
+          </div>
+
           <div className="row">
             <div
               className="col-md-6"
@@ -1335,13 +1366,13 @@ function ReceiveItems(props) {
                 {statusArray.map((val) => {
                   return (
                     <MenuItem
-                      disabled={
-                        receivedQty &&
-                        ((val.key === "Received" &&
-                          receivedQty < requestedQty) ||
-                          (val.key === "Partially Recieved" &&
-                            receivedQty >= requestedQty))
-                      }
+                      // disabled={
+                      //   receivedQty &&
+                      //   ((val.key === "Received" &&
+                      //     receivedQty < requestedQty) ||
+                      //     (val.key === "Partially Recieved" &&
+                      //       receivedQty >= requestedQty))
+                      // }
                       key={val.key}
                       value={val.key}
                     >
