@@ -15,7 +15,7 @@ import ViewEDR from '../views/ServicesRequest/PHR/viewEDR'
 import ViewOPR from '../views/ServicesRequest/PHR/viewOPR'
 import EDRTriageAndAssessment from '../views/ServicesRequest/PHR/EDRTriageAndAssessment'
 import IPRTriageAndAssessment from '../views/ServicesRequest/PHR/IPRTriageAndAssessment'
-import AddEditOPR from '../views/ServicesRequest/PHR/addEditOPR'
+import AddEditOPR from '../components/PatientRegistration/PatientRegistration'
 import AddPharmacyOPR from '../views/ServicesRequest/PHR/addPharmacy'
 import UpdatePharmacyOPR from '../views/ServicesRequest/PHR/updatePHR'
 

@@ -29,7 +29,7 @@ const stylesB = {
   stylesForButton: {
     color: "white",
     cursor: "pointer",
-    borderRadius: 10,
+    borderRadius: 5,
     background: "#2c6ddd",
     width: "140px",
     height: "50px",
@@ -82,6 +82,7 @@ export default function Vendor(props) {
       .get(getVendorUrl)
       .then((res) => {
         if (res.data.success) {
+          console.log(res.data, 'data')
           setVendor(res.data.data.vendor);
           setStatuses(res.data.data.statues);
           setClasses(res.data.data.classes);
@@ -236,7 +237,7 @@ export default function Vendor(props) {
             >
               <img className="icon-style" src={plus_icon} />
               &nbsp;&nbsp;
-              <strong style={{ fontSize: "12px" }}>Add New</strong>
+              <strong >Add New</strong>
             </Button>
             {/* <img src={Search} /> */}
           </div>
