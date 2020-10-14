@@ -389,7 +389,7 @@ function AddEditStaff(props) {
     >
       <Header />
       <div className={`cPadding `}>
-        <div className="subheader" style={{marginRight: -10}}>
+        <div className="subheader">
           <div>
             <img src={business_Unit} />
             <h4>{comingFor === "add" ? " Add Staff" : " Edit Staff"}</h4>
@@ -406,7 +406,7 @@ function AddEditStaff(props) {
               <strong style={{ fontSize: "12px" }}>View All</strong>
             </Button>
           </div> */}
-          <ViewAllBtn history={props.history} />
+         <ViewAllBtn history={props.history} />
         </div>
         <div className={`${'container-fluid'} `}>
           <div className={`row ${classes.root}`} style={{marginTop: '15px', marginRight: '-20px', marginLeft: '-20px'}}>

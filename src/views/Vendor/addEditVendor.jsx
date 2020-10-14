@@ -65,9 +65,9 @@ const styles = {
   stylesForADD: {
     color: "white",
     cursor: "pointer",
-    borderRadius: 10,
+    borderRadius: 5,
     backgroundColor: "#2c6ddd",
-    width: "60%",
+    width: "140px",
     height: "50px",
     outline: "none",
   },
@@ -245,15 +245,17 @@ function AddEditVendor(props) {
   };
 
   function validateForm() {
+    return true
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+    
     let x =
       englishName.length > 0 &&
       arabicName.length > 0 &&
       telephone1.length > 6 &&
       address.length > 0 &&
       // pobox.length > 0 &&
-      zipcode.length > 0 &&
+      zipcode.length &&
       taxno.length > 0 &&
       contactPersonName.length > 0 &&
       contactPersonTelephone.length > 6 &&
@@ -273,6 +275,8 @@ function AddEditVendor(props) {
       return x;
     }
   }
+
+  console.log('zipcode', zipcode)
 
   const [comingFor, setcomingFor] = useState("");
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
@@ -300,14 +304,29 @@ function AddEditVendor(props) {
     setClasses(props.history.location.state.mainClasses);
     setStatuses(props.history.location.state.statues);
     setSubClasses(props.history.location.state.subClasses);
-
+    console.log('state', props.history.location.state.selectedItem)
     const selectedRec = props.history.location.state.selectedItem;
     if (selectedRec) {
       Object.entries(selectedRec).map(([key, val]) => {
         if (val && typeof val === "object") {
           dispatch({ field: key, value: val._id });
         } else {
-          dispatch({ field: key, value: val });
+          if(key === 'country'){
+            let cities = Object.entries(countriesList[0]);
+      for (var x in cities) {
+        let arr = cities[x];
+        if (arr[0] === val) {
+          console.log("cities", arr[1]);
+          setCities(arr[1]);
+          // dispatch({ field: key, value: val });
+        }
+        dispatch({ field: key, value: val });
+      }
+          }
+          else {
+            dispatch({ field: key, value: val });
+          }
+          
         }
       });
     }
@@ -506,7 +525,7 @@ function AddEditVendor(props) {
         <div className="subheader">
           <div>
             <img src={vendor} />
-            <h4>{comingFor === "add" ? " Add Vender" : " Edit Vender"}</h4>
+            <h4>{comingFor === "add" ? " Add Vendor" : " Edit Vendor"}</h4>
           </div>
 
           <div>
@@ -518,13 +537,13 @@ function AddEditVendor(props) {
             >
               <img src={view_all} className="icon-view" />
               &nbsp;&nbsp;
-              <strong style={{ fontSize: "12px" }}>View All</strong>
+              <strong >View All</strong>
             </Button>
             {/* <img src={Search} /> */}
           </div>
         </div>
 
-        <div className={`container-fluid ${classes.root}`}>
+        <div className={`container-fluid ${classes.root}`} style={{marginTop: 20}}>
           <div className="row sideMargin">
             <div
               className="col-md-6"
@@ -648,7 +667,7 @@ function AddEditVendor(props) {
             </div>
           </div>
 
-          <div className="row sideMargin">
+           <div className="row sideMargin">
             <div
               className="col-md-4"
               style={{
@@ -769,7 +788,7 @@ function AddEditVendor(props) {
           </div>
 
           <div className="row sideMargin">
-            <div
+             <div
               className="col-md-4"
               style={{
                 ...styles.inputContainerForTextField,
@@ -822,7 +841,7 @@ function AddEditVendor(props) {
                 name="city"
                 value={city}
                 error={city === "" && isFormSubmitted}
-                onChange={onChangeValue}
+                onChange={(e) => onChangeValue(e)}
                 label="City"
                 variant="filled"
                 className="dropDownStyle"
@@ -843,7 +862,7 @@ function AddEditVendor(props) {
                     );
                   })}
               </TextField>
-            </div>
+            </div> 
 
             <div
               className="col-md-4"
@@ -870,8 +889,8 @@ function AddEditVendor(props) {
             </div>
           </div>
 
-          <div className="row sideMargin">
-            {/* <div className="col-md-4" style={styles.inputContainerForTextField}>
+          {/* <div className="row sideMargin">
+            <div className="col-md-4" style={styles.inputContainerForTextField}>
               <input
                 type="number"
                 placeholder="PO Box"
@@ -881,8 +900,8 @@ function AddEditVendor(props) {
                 className="textInputStyle"
                 onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
               />
-            </div> */}
-          </div>
+            </div>
+          </div> */}
 
           <div className="row sideMargin">
             <div
@@ -1070,7 +1089,7 @@ function AddEditVendor(props) {
                   })}
               </TextField>
             </div>
-          </div>
+          </div> 
 
           {/* shipping terms modal */}
           {/* <Modal
@@ -1126,11 +1145,19 @@ function AddEditVendor(props) {
                 flex: 1,
                 height: 40,
                 justifyContent: "center",
-                marginTop: "2%",
-                marginBottom: "2%",
+                marginTop: "1%",
+                marginBottom: "1%",
+                marginRight: '-14px'
               }}
             >
               {comingFor === "add" ? (
+                <div
+                style={{
+                  display: 'flex',
+                  flex: 1,
+                  justifyContent: 'flex-end',
+                }}
+              >
                 <Button
                   disabled={!validateForm()}
                   onClick={handleAdd}
@@ -1140,17 +1167,26 @@ function AddEditVendor(props) {
                 >
                   <strong style={{ fontSize: "12px" }}>Add</strong>
                 </Button>
+                </div>
               ) : (
+                <div
+                style={{
+                  display: 'flex',
+                  flex: 1,
+                  justifyContent: 'flex-end',
+                }}
+              >
                 <Button
                   className="pl30 pr30"
                   disabled={!validateForm()}
                   onClick={handleEdit}
                   variant="contained"
                   color="primary"
-                  style={{ width: "60%" }}
+                  style={styles.stylesForButton}
                 >
                   <strong style={{ fontSize: "12px" }}>Update</strong>
                 </Button>
+                </div>
               )}
             </div>
           </div>

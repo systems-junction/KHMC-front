@@ -101,8 +101,8 @@ const styles = {
     outline: "none",
   },
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
 };
 
@@ -409,7 +409,7 @@ function AddItems(props) {
 
           <ViewAllBtn history={props.history} />
         </div>
-        <div className={`container-fluid ${classes.root}`}>
+        <div className={`container-fluid ${classes.root}`} style={{marginTop: 20}}>
           <div className="row">
             <div
               className="col-md-6"
@@ -1219,6 +1219,7 @@ function AddItems(props) {
                 alignItems: "center",
                 marginTop: "2%",
                 marginBottom: "2%",
+                marginRight: 2
               }}
             >
               <img
