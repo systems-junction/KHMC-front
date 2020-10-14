@@ -13,7 +13,8 @@ import ViewOPR from "../views/ServicesRequest/LR/viewOPR";
 import UpdateLR from "../views/ServicesRequest/LR/updateLR";
 import EDRTriageAndAssessment from "../views/ServicesRequest/PHR/EDRTriageAndAssessment";
 import IPRTriageAndAssessment from "../views/ServicesRequest/PHR/IPRTriageAndAssessment";
-import AddEditOPR from "../views/ServicesRequest/LR/addEditOPR";
+// import AddEditOPR from "../views/ServicesRequest/LR/addEditOPR";
+import AddEditOPR from "../components/PatientRegistration/PatientRegistration";
 import AddPharmacyOPR from "../views/ServicesRequest/LR/addLab";
 import SuccessScreen from "../components/SuccessScreen/SuccessScreen";
 

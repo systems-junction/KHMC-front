@@ -13,6 +13,8 @@ import {
   updateEdrIpr,
 } from '../../public/endpoins'
 import cookie from 'react-cookies'
+import PatientDetails from "../../components/PatientDetails/PatientDetailsRCM"
+
 import Header from '../../components/Header/Header'
 import patientCareIcon from '../../assets/img/PatientCare.png'
 import Back from '../../assets/img/Back_Arrow.png'
@@ -1038,7 +1040,17 @@ function PatientCare(props) {
                     value: val.reverse(),
                   })
                   if (val && val.length > 0) {
-                    dispatch({ field: 'diagnosisArray', value: val[0].code })
+                    let data = [];
+                  val.map((d) => {
+                    d.code.map((singleCode) => {
+                      let found = data.find((i) => i === singleCode);
+                      if (!found) {
+                        data.push(singleCode);
+                      }
+                    });
+                  });
+                  console.log(data);
+                    dispatch({ field: 'diagnosisArray', value: data})
                   }
                 } else if (key === 'pharmacyRequest') {
                   val.map(
@@ -1351,164 +1363,14 @@ function PatientCare(props) {
           </div>
         </div>
 
-        <div className={`${classes.root}`}>
-          <h5 style={{ fontWeight: 'bold', color: 'white', marginTop: 25 }}>
-            Patient Details
-          </h5>
-          <div
-            // className="row"
-            style={{
-              marginTop: 25,
-              backgroundColor: 'white',
-              borderRadius: 5,
-              width: '100%',
-              maxHeight: '300px',
-              overflowY: 'scroll',
-              overflowX: 'hidden',
-            }}
-          >
-            <div
-              className='row'
-              style={{
-                backgroundColor: '#2C6DDD',
-                paddingLeft: 10,
-                height: '30%',
-                borderTopLeftRadius: 5,
-                borderTopRightRadius: 5,
-                paddingBottom: 10,
-                paddingTop: 10,
-                marginLeft: 0,
-                marginRight: 0,
-              }}
-            >
-              <div
-                className={'col-md-3 col-sm-3 col-3'}
-                style={styles.headerHeading}
-              >
-                <h6 style={{ color: 'white', fontWeight: '700' }}>
-                  Patient Info
-                </h6>
-              </div>
-              <div
-                className={'col-md-3 col-sm-3 col-3'}
-                style={styles.headerHeading}
-              >
-                <h6 style={{ color: 'white', fontWeight: '700' }}>Allergy</h6>
-              </div>
-              <div
-                className={'col-md-3 col-sm-3 col-3'}
-                style={styles.headerHeading}
-              >
-                <h6 style={{ color: 'white', fontWeight: '700' }}>
-                  Medication
-                </h6>
-              </div>
-              <div
-                className={'col-md-3 col-sm-3 col-3'}
-                style={styles.headerHeading}
-              >
-                <h6 style={{ color: 'white', fontWeight: '700' }}>Diagnosis</h6>
-              </div>
-            </div>
-
-            <div
-              className='row'
-              style={{
-                marginTop: 10,
-                paddingLeft: 10,
-                height: '80%',
-                paddingBottom: 10,
-              }}
-            >
-              <div
-                className={'col-md-3 col-sm-3 col-3'}
-                style={{ display: 'flex', flexDirection: 'column' }}
-              >
-                <span style={styles.headingStyles}>MRN</span>
-                <span style={styles.textStyles} className='mrnUpperCase'>
-                  {patientDetails.profileNo
-                    ? patientDetails.profileNo
-                    : '-----'}
-                  {/* {patientDetails && patientDetails.profileNo} */}
-                </span>
-
-                <span style={styles.headingStyles}>Patient</span>
-                <span style={styles.textStyles}>
-                  {patientDetails.firstName && patientDetails.lastName
-                    ? patientDetails.firstName + ' ' + patientDetails.lastName
-                    : '---- ----'}
-                </span>
-
-                <span style={styles.headingStyles}>Gender</span>
-                <span style={styles.textStyles}>
-                  {patientDetails.gender ? patientDetails.gender : '----'}
-                </span>
-
-                <span style={styles.headingStyles}>Age</span>
-                <span style={styles.textStyles}>
-                  {patientDetails.age ? patientDetails.age : '--'}
-                </span>
-
-                <span style={styles.headingStyles}>Weight</span>
-                <span style={styles.textStyles}>
-                  {patientDetails.weight ? patientDetails.weight : '--'} kg
-                </span>
-              </div>
-
-              <div
-                className={'col-md-3 col-sm-3 col-3'}
-                style={styles.textStyles}
-              >
-                {''}
-              </div>
-
-              <div
-                className={'col-md-3 col-sm-3 col-3'}
-                style={styles.textStyles}
-              >
-                {medicationArray
-                  ? medicationArray.map((d, index) => {
-                    return (
-                      <div style={{ display: 'flex', flexDirection: 'row' }}>
-                        <h6
-                          style={{
-                            ...styles.textStyles,
-                          }}
-                        >
-                          {index + 1}
-                          {'.'} &nbsp;
-                          </h6>
-                        <h6
-                          style={{
-                            ...styles.textStyles,
-                          }}
-                        >
-                          {d}
-                        </h6>
-                      </div>
-                    )
-                  })
-                  : ''}
-              </div>
-
-              <div
-                className={'col-md-3 col-sm-3 col-3'}
-                style={styles.textStyles}
-              >
-                {diagnosisArray
-                  ? diagnosisArray.map((drug, index) => {
-                    return (
-                      <h6 style={styles.textStyles}>
-                        {index + 1}. {drug}
-                      </h6>
-                    )
-                  })
-                  : ''}
-              </div>
-            </div>
-          </div>
-        </div>
-
+        <PatientDetails
+         patientDetails={patientDetails}
+         // showPatientDetails={showPatientDetails}
+         diagnosisArray={diagnosisArray}
+         medicationArray={medicationArray}
+       />
+        
+                
         <div>
           <div
             style={{

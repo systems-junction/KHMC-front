@@ -191,7 +191,7 @@ export default function Items(props) {
             >
               <img src={plus_icon} className="icon-style" />
               &nbsp;&nbsp;
-              <strong style={{ fontSize: "12px" }}>Add New</strong>
+              <strong >Add New</strong>
             </Button>
             {/* <img src={Search} /> */}
           </div>
