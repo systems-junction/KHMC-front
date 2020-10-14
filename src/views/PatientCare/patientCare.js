@@ -1038,7 +1038,17 @@ function PatientCare(props) {
                     value: val.reverse(),
                   })
                   if (val && val.length > 0) {
-                    dispatch({ field: 'diagnosisArray', value: val[0].code })
+                    let data = [];
+                  val.map((d) => {
+                    d.code.map((singleCode) => {
+                      let found = data.find((i) => i === singleCode);
+                      if (!found) {
+                        data.push(singleCode);
+                      }
+                    });
+                  });
+                  console.log(data);
+                    dispatch({ field: 'diagnosisArray', value: data})
                   }
                 } else if (key === 'pharmacyRequest') {
                   val.map(
