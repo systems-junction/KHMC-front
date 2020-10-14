@@ -14,7 +14,7 @@ import ViewOPR from '../views/ServicesRequest/RR/viewOPR'
 import UpdateRR from '../views/ServicesRequest/RR/updateRR'
 import EDRTriageAndAssessment from '../views/ServicesRequest/PHR/EDRTriageAndAssessment'
 import IPRTriageAndAssessment from '../views/ServicesRequest/PHR/IPRTriageAndAssessment'
-import AddEditOPR from '../views/ServicesRequest/RR/addEditOPR'
+import AddEditOPR from '../components/PatientRegistration/PatientRegistration'
 import AddRadioOPR from '../views/ServicesRequest/RR/addRadiology'
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
