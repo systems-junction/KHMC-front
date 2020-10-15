@@ -1,7 +1,7 @@
 // import React from 'react';
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
-import KHMC from "../../assets/img/circleLogo.png";
+import KHMC from "../../assets/img/KHMC Header LOGO.png";
 import "../../components/MenuTree/MenuPage.css";
 import MenuTree from "../../components/MenuTree/MenuTree";
 import PatientRegistration from "../../assets/img/PatientRegistration.png";
