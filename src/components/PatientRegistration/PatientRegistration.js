@@ -497,14 +497,16 @@ function PatientRegistration(props) {
 
     const selectedRec =
       props.history.location.state && props.history.location.state.selectedItem
-
+      
     if (selectedRec) {
       setPatientId(selectedRec._id)
 
       Object.entries(selectedRec).map(([key, val]) => {
         if (val && typeof val === 'object') {
           dispatch({ field: key, value: val._id })
-        } else {
+        } 
+        
+        else {
 
           if (key === 'dob') {
             dispatch({
@@ -516,25 +518,31 @@ function PatientRegistration(props) {
           }
 
         }
+      })
 
-      //   else {
-      //     if(key === 'country'){
-      //       let cities = Object.entries(countriesList[0]);
-      // for (var x in cities) {
-      //   let arr = cities[x];
-      //   if (arr[0] === val) {
-      //     console.log("cities", arr[1]);
-      //     setCities(arr[1]);
-      //     // dispatch({ field: key, value: val });
-      //   }
-      //   dispatch({ field: key, value: val });
-      // }
-      //     }
-      //     else {
-      //       dispatch({ field: key, value: val });
-      //     }
+      Object.entries(selectedRec).map(([key, val]) => {
+        if (val && typeof val === 'object') {
+          dispatch({ field: key, value: val._id })
+        } 
+        
+        else {
+          if(key === 'country'){
+            let cities = Object.entries(countriesList[0]);
+      for (var x in cities) {
+        let arr = cities[x];
+        if (arr[0] === val) {
+          console.log("cities", arr[1]);
+          setCities(arr[1]);
+          // dispatch({ field: key, value: val });
+        }
+        dispatch({ field: key, value: val });
+      }
+          }
+          else {
+            dispatch({ field: key, value: val });
+          }
           
-      //   }
+        }
       })
     }
     if (
@@ -797,6 +805,18 @@ function PatientRegistration(props) {
   }
 
   const handleEdit = () => {
+
+    // let cities = Object.entries(countriesList[0]);
+    //   for (var x in cities) {
+    //     let arr = cities[x];
+    //     if (arr[0] === i.country) {
+    //       console.log("cities", arr[1]);
+    //       setCities(arr[1]);
+    //     }
+        
+    //   }
+    console.log('hello')
+
     let formData = new FormData()
     if (slipUpload) {
       formData.append('file', slipUpload, slipUpload.name)

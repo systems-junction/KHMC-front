@@ -8,15 +8,16 @@
   justify-content: space-between;
 }
 .header1-style {
-  max-width: 26%;
-  height: 27%;
-  margin-left: -23px;
-  margin-top: -32px;
+  max-width: 27%;
+  height: 18%;
+  margin-left: 0px;
+  margin-top: -7px;
 }
 .header2-style {
   max-width: 20%;
   height: 8%;
   margin-top: -6px;
+  margin-right: 0.5%;
 }
 
 @media screen and (max-width: 768px) {
