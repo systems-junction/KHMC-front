@@ -1,68 +1,68 @@
 import React, { useEffect, useState, useReducer } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
 import Button from "@material-ui/core/Button";
-import tableStyles from "../../../assets/jss/material-dashboard-react/components/tableStyle.js";
+import tableStyles from "../../assets/jss/material-dashboard-react/components/tableStyle.js";
 import axios from "axios";
 import TextField from "@material-ui/core/TextField";
-import MenuItem from "@material-ui/core/MenuItem";
-import PatientDetails from "../../../components/PatientDetails/PatientDetailsRCM";
-
+import _ from "lodash";
 import {
   getSearchedLaboratoryService,
   getSearchedRadiologyService,
-  getSearchedNurseService,
   updateEdrIpr,
   getIcd,
   searchpatient,
-  getSearchedpatient,
   notifyConsultation,
-} from "../../../public/endpoins";
+  getSearchedpatient,
+  getpatienthistoryUrl,
+  getpatientHistoryPre,
+  getpatientHistory,
+} from "../../public/endpoins";
 import cookie from "react-cookies";
-import Header from "../../../components/Header/Header";
-import Lab_RadIcon from "../../../assets/img/Consultation Request.png";
-import Back from "../../../assets/img/Back_Arrow.png";
-import "../../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
+import PatientDetails from "../../components/PatientDetails/PatientDetailsRCM";
+
+import Header from "../../components/Header/Header";
+import Lab_RadIcon from "../../assets/img/Manual Request.png";
+import Back from "../../assets/img/Back_Arrow.png";
+import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import CustomTable from "../../../components/Table/Table";
-import plus_icon from "../../../assets/img/Plus.png";
-import InputLabelComponent from "../../../components/InputLabel/inputLabel";
+import CustomTable from "../../components/Table/Table";
+import plus_icon from "../../assets/img/Plus.png";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
+import MenuItem from "@material-ui/core/MenuItem";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
-import ErrorMessage from "../../../components/ErrorMessage/errorMessage";
-import Notification from "../../../components/Snackbar/Notification.js";
-import Fingerprint from "../../../assets/img/fingerprint.png";
+import Notification from "../../components/Snackbar/Notification.js";
+import Fingerprint from "../../assets/img/fingerprint.png";
 import AccountCircle from "@material-ui/icons/SearchOutlined";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import BarCode from "../../../assets/img/Bar Code.png";
-import ViewSingleRequest from "../../../components/ViewRequest/ViewRequest";
+import BarCode from "../../assets/img/Bar Code.png";
+import ViewSingleRequest from "../../components/ViewRequest/ViewRequest";
 import Loader from "react-loader-spinner";
 import { connect } from "react-redux";
 import {
   funForReducer,
   setPatientDetailsForReducer,
-} from "../../../actions/Checking";
+} from "../../actions/Checking";
 
-let icdCodesList = require("../../../assets/icdCodes.json");
+let icdCodesList = require("../../assets/icdCodes.json");
 
 const tableHeadingForResident = [
-  "Date/Time",
-  "Description/Condition",
+  "Date / Time",
+  "Description / Condition",
   "Referring Doctor",
   "Action",
 ];
 const tableDataKeysForResident = ["date", "description", "doctorName"];
 const tableHeadingForConsultation = [
-  "Date/Time",
-  "Description/Condition",
+  "Date / Time",
+  "Description / Condition",
   "Specialist",
   "Referring Doctor",
   "Status",
@@ -70,9 +70,23 @@ const tableHeadingForConsultation = [
 ];
 const tableDataKeysForConsultation = [
   "date",
-  "doctorNotes",
+  "description",
   "specialist",
   "doctorName",
+  "status",
+];
+
+const tableHeadingForEDRIPROPR = [
+  "Request No",
+  "Date/Time",
+  "Department",
+  "Status",
+  "Action",
+];
+const tableDataKeysForEDRIPROPR = [
+  "requestNo",
+  "createdAt",
+  ["functionalUnit", "fuName"],
   "status",
 ];
 const tableHeadingForPharmacy = [
@@ -130,7 +144,6 @@ const tableDataKeysForFUMemberForItems = [
   "requestedQty",
   "secondStatus",
 ];
-
 const tableHeadingForFUMemberForItems = [
   "Name",
   "Type",
@@ -138,7 +151,6 @@ const tableHeadingForFUMemberForItems = [
   "Status",
   "",
 ];
-
 const tableHeadingForBUMemberForItems = [
   "Name",
   "Type",
@@ -147,20 +159,36 @@ const tableHeadingForBUMemberForItems = [
   "",
 ];
 const tableHeadingForNurse = [
-  "Request Id",
   "Service Code",
-  "Service",
+  "Service Name",
   "Requester",
   "Status",
   "Action",
 ];
 const tableDataKeysForNurse = [
-  "NSrequestNo",
   "serviceCode",
   "serviceName",
   "requesterName",
   "status",
 ];
+
+const tableDataHeadingForTriage = [
+  "RequestNo",
+  "Date/Time",
+  "Checked By",
+  "Heart Rate",
+  "BP (Systolic)",
+  "Action",
+];
+
+const tableDataKeysForTriage = [
+  "triageRequestNo",
+  "date",
+  "doctorName",
+  "heartRate",
+  "bloodPressureSys",
+];
+const actions = { view: true };
 
 const specialistArray = [
   {
@@ -191,7 +219,7 @@ const specialityArray = [
     value: "Dermatologist",
   },
 ];
-const actions = { view: true };
+
 const styles = {
   patientDetails: {
     backgroundColor: "white",
@@ -208,12 +236,20 @@ const styles = {
     paddingRight: 10,
     paddingTop: 2,
   },
-
   stylesForButton: {
     color: "white",
     cursor: "pointer",
     borderRadius: 5,
     backgroundColor: "#2c6ddd",
+    height: "50px",
+    outline: "none",
+  },
+  stylesForSave: {
+    color: "white",
+    cursor: "pointer",
+    borderRadius: 5,
+    backgroundColor: "#2c6ddd",
+    width: "150px",
     height: "50px",
     outline: "none",
   },
@@ -283,6 +319,10 @@ const useStylesForInput = makeStyles((theme) => ({
     "&:disabled": {
       color: "gray",
     },
+    "&:focus": {
+      backgroundColor: "white",
+      borderRadius: 5,
+    },
   },
   multilineColor: {
     boxShadow: "none",
@@ -308,10 +348,12 @@ const useStylesForInput = makeStyles((theme) => ({
       backgroundColor: "white",
       color: "black",
     },
+    "& .Mui-disabled": {
+      backgroundColor: "white",
+      color: "black",
+    },
   },
 }));
-
-const useStyles = makeStyles(tableStyles);
 
 function LabRadRequest(props) {
   const classesForTabs = useStylesForTabs();
@@ -332,12 +374,12 @@ function LabRadRequest(props) {
     radioServiceStatus: "",
     radioComments: "",
 
+    //for nurse
     nurseServiceId: "",
     nurseServiceCode: "",
     nurseServiceName: "",
-    nurseRequestArray: "",
+    nurseService: "",
     nurseServiceStatus: "",
-    nurseComments: "",
 
     consultationNoteArray: "",
     consultationNo: "",
@@ -349,7 +391,6 @@ function LabRadRequest(props) {
     requester: cookie.load("current_user").name,
     speciality: "",
     specialist: "",
-    status: "",
 
     residentNoteArray: "",
     rdescription: "",
@@ -359,10 +400,13 @@ function LabRadRequest(props) {
     pharmacyRequestArray: "",
     requestType: "",
     section: "",
-    code: "",
+    code: [],
     patientId: "",
     diagnosisArray: "",
     medicationArray: "",
+
+    triageAssessmentArray: "",
+    nurseServiceArray: "",
   };
 
   function reducer(state, { field, value }) {
@@ -389,36 +433,29 @@ function LabRadRequest(props) {
     radioServiceStatus,
     radioComments,
 
-    nurseServiceId,
-    nurseServiceCode,
-    nurseServiceName,
-    nurseRequestArray,
-    nurseServiceStatus,
-    nurseComments,
-
     consultationNoteArray,
-    consultationNo,
     date = new Date(),
     description,
     consultationNotes,
     doctorconsultationNotes,
+
     requester = cookie.load("current_user").name,
     speciality,
     specialist,
-    status,
+
+    pharmacyRequestArray,
 
     residentNoteArray,
     rdescription,
     note,
-    doctor = cookie.load("current_user").name,
-
-    pharmacyRequestArray,
     requestType,
     section,
     code,
     patientId,
     diagnosisArray,
     medicationArray,
+    triageAssessmentArray,
+    nurseServiceArray,
   } = state;
 
   const onChangeValue = (e) => {
@@ -435,10 +472,11 @@ function LabRadRequest(props) {
     }
   };
 
-  const [currentUser, setCurrentUser] = useState(cookie.load("current_user"));
+  const [currentUser] = useState(cookie.load("current_user"));
   const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, setsuccessMsg] = useState("");
   const [openNotification, setOpenNotification] = useState(false);
-  const [value, setValue] = useState(1);
+  const [value, setValue] = useState(0);
   const [selectedItem, setSelectedItem] = useState("");
   const [searchPatientQuery, setSearchPatientQuery] = useState("");
   const [patientFoundSuccessfull, setpatientFoundSuccessfully] = useState(
@@ -446,28 +484,17 @@ function LabRadRequest(props) {
   );
   const [patientFound, setpatientFound] = useState("");
   const [patientDetails, setPatientDetails] = useState("");
-  const [selectedPatientArray, setSelectedPatientArray] = useState([]);
-  const [patientDetailsDialog, openPatientDetailsDialog] = useState(false);
+  const [, setSelectedPatientArray] = useState([]);
+  const [, openPatientDetailsDialog] = useState(false);
   const [enableForm, setenableForm] = useState(true);
   const [openItemDialog, setOpenItemDialog] = useState(false);
   const [openAddConsultDialog, setOpenAddConsultDialog] = useState(false);
   const [openAddResidentDialog, setOpenAddResidentDialog] = useState(false);
   const [item, setItem] = useState("");
-  const [selectedPatient, setSelectedPatient] = useState("");
-  const [requestNo, setrequestNo] = useState("");
-  const [labRequest, setlabRequest] = useState("");
-  const [pharmacyRequest, setpharmacyRequest] = useState("");
-  const [radiologyRequest, setradiologyRequest] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [itemFound, setItemFound] = useState("");
   const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false);
-  const [selectedSearchedItem, setSelectedSearchedItem] = useState("");
-  const [selectedSearchedRadioItem, setSelectedSearchedRadioItem] = useState(
-    ""
-  );
-  const [selectedLabArray, setSelectedLabArray] = useState([]);
-  const [selectedRadioArray, setSelectedRadioArray] = useState([]);
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const [isFormSubmitted] = useState(false);
   const [id, setId] = useState("");
   const [searchRadioQuery, setSearchRadioQuery] = useState("");
   const [radioItemFoundSuccessfull, setRadioItemFoundSuccessfully] = useState(
@@ -476,21 +503,17 @@ function LabRadRequest(props) {
   const [radioItemFound, setRadioItemFound] = useState("");
   const [addLabRequest, setaddLabRequest] = useState(false);
   const [addRadioRequest, setaddRadioRequest] = useState(false);
-  const [nurseItemFoundSuccessfull, setNurseItemFoundSuccessfully] = useState(
-    ""
-  );
-  const [nurseItemFound, setNurseItemFound] = useState("");
-  const [addNurseRequest, setaddNurseRequest] = useState(false);
-  const [searchNurseQuery, setSearchNurseQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-  const [enableSave, setEnableSave] = useState(true);
+  const [, setIsLoading] = useState(true);
   const [icdSection, seticdSection] = useState("");
   const [icdCode, seticdCode] = useState([]);
+  const [enableSave, setEnableSave] = useState(true);
   const [requestedItems, setRequestedItems] = useState("");
   const [selectedOrder, setSelectedOrder] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [icd, setIcd] = useState([]);
   const [icdArr, setIcdArr] = useState([]);
+  const [patientHistoryId, setPatientHistoryId] = useState("");
+  const [EDRIPROPR, setEDRIPROPR] = useState([]);
   const [timer, setTimer] = useState(null);
   const [loadSearchedData, setLoadSearchedData] = useState(false);
 
@@ -532,6 +555,17 @@ function LabRadRequest(props) {
     });
 
     seticdSection(Object.keys(icdCodesList[0]));
+
+    // const selectedItem = props.history.location.state.selectedItem;
+    // const diagnosisArray = props.history.location.state.diagnosisArray;
+    // const medicationArray = props.history.location.state.medicationArray;
+
+    // console.log("selectedItem", selectedItem);
+    // // setHistoryId(selectedItem._id);
+    // setSelectedItem(selectedItem);
+    // dispatch({ field: "diagnosisArray", value: diagnosisArray });
+    // dispatch({ field: "medicationArray", value: medicationArray });
+
     // getEDRById(props.history.location.state.selectedItem._id);
 
     // setId(props.history.location.state.selectedItem._id);
@@ -555,63 +589,9 @@ function LabRadRequest(props) {
   }
 
   const handleView = (obj) => {
-    let path = `/home/wms/fus/medicinalorder/edit`;
-    // props.history.push({
-    //   pathname: path,
-    //   state: {
-    //     comingFor: "view",
-    //     selectedItem: obj,
-    //     vendors,
-    //     statues,
-    //     items,
-    //     buObj,
-    //   },
-    // });
-
-    // if (currentUser.staffTypeId.type === "Doctor/Physician") {
-    //   let repRequest = res.data.da;
-    //   let temp = [];
-    //   for (let i = 0; i < repRequest.length; i++) {
-    //     if (repRequest[i].buId.buHead === currentUser.staffId) {
-    //       temp.push(repRequest[i]);
-    //     }
-    //   }
-    //   console.log("rep array after filter", temp);
-    //   setPurchaseRequest(temp.reverse());
-    // }
-
-    // else {
-
-    // if (currentUser.staffTypeId.type === "Registered Nurse") {
-    //   let repRequest = obj.item;
-    //   let temp = [];
-    //   for (let i = 0; i < repRequest.length; i++) {
-    //     if (
-    //       repRequest[i].status === "Delivery in Progress" ||
-    //       repRequest[i].status === "pending_administration" ||
-    //       repRequest[i].status === "Received" ||
-    //       repRequest[i].status === "Partially Received"
-    //     ) {
-    //       temp.push(repRequest[i]);
-    //     }
-    //   }
-    //   console.log("rep array after filter", temp);
-
-    //   if (temp.length === 0) {
-    //     setOpenNotification(true);
-    //     setErrorMsg("Order is still pending from the pharmacy/sub store.");
-    //   } else {
-    //     setSelectedOrder(obj);
-    //     setIsOpen(true);
-    //     setRequestedItems(temp);
-    //   }
-    // }
-    // else {
     setSelectedOrder(obj);
     setIsOpen(true);
     setRequestedItems(obj.item);
-    // }
-    // }
   };
 
   function addConsultRequest() {
@@ -647,7 +627,6 @@ function LabRadRequest(props) {
           {
             consultationNo: consultationNoteNo,
             description: description,
-            // consultationNotes: consultationNotes,
             doctorNotes: doctorconsultationNotes,
             requester: currentUser.staffId,
             date: date,
@@ -672,11 +651,12 @@ function LabRadRequest(props) {
               props.history.push({
                 pathname: "consultationrequest/success",
                 state: {
-                  message: `Consultation Note of Request # ${
+                  message: `Consultation Request: ${
                     res.data.data.consultationNote[
                       res.data.data.consultationNote.length - 1
                     ].consultationNo
-                  } for patient MRN ${res.data.data.patientId.profileNo.toUpperCase()} submitted successfully`,
+                  } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} submitted successfully`,
+
                   patientDetails: patientDetails,
                 },
               });
@@ -764,11 +744,11 @@ function LabRadRequest(props) {
               props.history.push({
                 pathname: "assessmentdiagnosis/success",
                 state: {
-                  message: `Consultation note # ${
+                  message: `Consultation note:  ${
                     res.data.data.residentNotes[
                       res.data.data.residentNotes.length - 1
                     ].residentNoteNo
-                  } for patient MRN ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
+                  } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
                   patientDetails: patientDetails,
                 },
               });
@@ -788,63 +768,32 @@ function LabRadRequest(props) {
     }
   }
 
-  const addNewRequest = () => {
-    // let path = `assessmentdiagnosis/add`
-    let path = `/home/wms/fus/medicinalorder`;
-    props.history.push({
-      pathname: path,
-      state: {
-        comingFor: "add",
-        selectedPatient: selectedItem.patientId,
-        pharmacyRequestArray,
-      },
-    });
-  };
-
   function hideDialog() {
     setOpenAddConsultDialog(false);
     setOpenAddResidentDialog(false);
 
     dispatch({ field: "consultationNo", value: "" });
     dispatch({ field: "description", value: "" });
-    // dispatch({ field: "doctorconsultationNotes", value: "" });
+    dispatch({ field: "consultationNotes", value: "" });
     dispatch({ field: "rdescription", value: "" });
     dispatch({ field: "note", value: "" });
   }
 
-  const triggerLabChange = (a) => {
-    handleSearch(a);
-  };
-
-  const handlePauseLabSearch = (e) => {
-    setLoadSearchedData(true);
-    clearTimeout(timer);
-
-    const a = e.target.value.replace(/[^\w\s]/gi, "");
-    setSearchQuery(a);
-
-    setTimer(
-      setTimeout(() => {
-        triggerLabChange(a);
-      }, 600)
-    );
-  };
-
   const handleSearch = (e) => {
-    if (e.length >= 1) {
+    const a = e.target.value.replace(/[^\w-\s]/gi, "");
+    setSearchQuery(a);
+    if (a.length >= 3) {
       axios
-        .get(getSearchedLaboratoryService + "/" + e)
+        .get(getSearchedLaboratoryService + "/" + a)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
               console.log(res.data.data);
               setItemFoundSuccessfully(true);
               setItemFound(res.data.data);
-              setLoadSearchedData(false);
             } else {
               setItemFoundSuccessfully(false);
               setItemFound("");
-              setLoadSearchedData(false);
             }
           }
         })
@@ -886,6 +835,7 @@ function LabRadRequest(props) {
     let ss = dateNow.getSeconds();
 
     const LRrequestNo = "LR" + day + YYYY + HH + mm + ss;
+
     // setIsFormSubmitted(true);
     // if (validateItemsForm()) {
 
@@ -956,12 +906,12 @@ function LabRadRequest(props) {
         if (res.data.success) {
           console.log("response after adding Lab Request", res.data);
           props.history.push({
-            pathname: "consultationrequest/success",
+            pathname: "assessmentdiagnosis/success",
             state: {
-              message: `Lab Request # ${
+              message: `Lab Request: ${
                 res.data.data.labRequest[res.data.data.labRequest.length - 1]
                   .LRrequestNo
-              } for patient MRN ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
+              } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
               patientDetails: patientDetails,
             },
           });
@@ -976,39 +926,21 @@ function LabRadRequest(props) {
       });
   };
 
-  const triggerRadioChange = (a) => {
-    handleRadioSearch(a);
-  };
-
-  const handleRadioPauseSearch = (e) => {
-    setLoadSearchedData(true);
-    clearTimeout(timer);
-
-    const a = e.target.value.replace(/[^\w\s]/gi, "");
-    setSearchRadioQuery(a);
-
-    setTimer(
-      setTimeout(() => {
-        triggerRadioChange(a);
-      }, 600)
-    );
-  };
-
   const handleRadioSearch = (e) => {
-    if (e.length >= 1) {
+    const a = e.target.value.replace(/[^\w-\s]/gi, "");
+    setSearchRadioQuery(a);
+    if (a.length >= 3) {
       axios
-        .get(getSearchedRadiologyService + "/" + e)
+        .get(getSearchedRadiologyService + "/" + a)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
               console.log(res.data.data);
               setRadioItemFoundSuccessfully(true);
               setRadioItemFound(res.data.data);
-              setLoadSearchedData(false);
             } else {
               setRadioItemFoundSuccessfully(false);
               setRadioItemFound("");
-              setLoadSearchedData(false);
             }
           }
         })
@@ -1120,13 +1052,13 @@ function LabRadRequest(props) {
         if (res.data.success) {
           console.log("response after adding Radio Request", res.data);
           props.history.push({
-            pathname: "consultationrequest/success",
+            pathname: "assessmentdiagnosis/success",
             state: {
-              message: `Radiology Request # ${
+              message: `Radiology Request: ${
                 res.data.data.radiologyRequest[
                   res.data.data.radiologyRequest.length - 1
                 ].RRrequestNo
-              } for patient MRN ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
+              } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
               patientDetails: patientDetails,
             },
           });
@@ -1141,169 +1073,107 @@ function LabRadRequest(props) {
       });
   };
 
-  const triggerNurseChange = (a) => {
-    handleNurseSearch(a);
-  };
-
-  const handlePauseNurseSearch = (e) => {
-    setLoadSearchedData(true);
-    clearTimeout(timer);
-
-    const a = e.target.value.replace(/[^\w\s]/gi, "");
-    setSearchNurseQuery(a);
-
-    setTimer(
-      setTimeout(() => {
-        triggerNurseChange(a);
-      }, 600)
-    );
-  };
-
-  const handleNurseSearch = (e) => {
-    if (e.length >= 1) {
-      axios
-        .get(getSearchedNurseService + "/" + e)
-        .then((res) => {
-          if (res.data.success) {
-            if (res.data.data.length > 0) {
-              console.log(res.data.data);
-              setNurseItemFoundSuccessfully(true);
-              setNurseItemFound(res.data.data);
-              setLoadSearchedData(false);
-            } else {
-              setNurseItemFoundSuccessfully(false);
-              setNurseItemFound("");
-              setLoadSearchedData(false);
-            }
-          }
-        })
-        .catch((e) => {
-          console.log("error while searching req", e);
-        });
-    }
-  };
-
-  function handleAddNurseItem(i) {
-    console.log("selected nurse item", i);
-
-    dispatch({ field: "nurseServiceId", value: i._id });
-    dispatch({ field: "nurseServiceCode", value: i.serviceNo });
-    dispatch({ field: "nurseServiceName", value: i.name });
-    dispatch({ field: "nurseServiceStatus", value: i.status });
-
-    setSearchNurseQuery("");
-    setaddNurseRequest(true);
-  }
-
-  const addSelectedNurseItem = () => {
-    var now = new Date();
-    var start = new Date(now.getFullYear(), 0, 0);
-    var diff =
-      now -
-      start +
-      (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000;
-    var oneDay = 1000 * 60 * 60 * 24;
-    var day = Math.floor(diff / oneDay);
-
-    var dateNow = new Date();
-    var YYYY = dateNow
-      .getFullYear()
-      .toString()
-      .substr(-2);
-    var HH = dateNow.getHours();
-    var mm = dateNow.getMinutes();
-    let ss = dateNow.getSeconds();
-
-    const NSrequestNo = "NS" + day + YYYY + HH + mm + ss;
-
-    // setIsFormSubmitted(true);
-    // if (validateItemsForm()) {
-    let found =
-      nurseRequestArray &&
-      nurseRequestArray.find((item) => item.serviceId === nurseServiceId);
-
-    if (found) {
-      setOpenNotification(true);
-      setErrorMsg("This Service has already been added.");
-    } else {
-      dispatch({
-        field: "nurseRequestArray",
-        value: [
-          ...nurseRequestArray,
-          {
-            serviceId: nurseServiceId,
-            serviceCode: nurseServiceCode,
-            serviceName: nurseServiceName,
-            requester: currentUser.staffId,
-            requesterName: requester,
-            status: nurseServiceStatus,
-            comments: nurseComments,
-            NSrequestNo: NSrequestNo,
-          },
-        ],
-      });
-      // }
-    }
-    dispatch({ field: "nurseServiceId", value: "" });
-    dispatch({ field: "nurseServiceCode", value: "" });
-    dispatch({ field: "nurseServiceName", value: "" });
-    dispatch({ field: "nurseServiceStatus", value: "" });
-    dispatch({ field: "nurseComments", value: "" });
-
-    setaddLabRequest(false);
-    setEnableSave(false);
-  };
-
-  const saveNurseReq = () => {
-    let nurseItems = [];
-    for (let i = 0; i < nurseRequestArray.length; i++) {
-      nurseItems = [
-        ...nurseItems,
-        {
-          serviceId: nurseRequestArray[i].serviceId,
-          serviceCode: nurseRequestArray[i].serviceCode,
-          requester: nurseRequestArray[i].requester,
-          requesterName: nurseRequestArray[i].requesterName,
-          serviceName: nurseRequestArray[i].serviceName,
-          status: nurseRequestArray[i].status,
-          NSrequestNo: nurseRequestArray[i].NSrequestNo,
-          comments: nurseRequestArray[i].comments,
-        },
-      ];
-    }
-    const params = {
-      _id: id,
-      requestType,
-      nurseService: nurseItems,
-    };
-    console.log("Nurse params", params);
-    axios
-      .put(updateEdrIpr, params)
-      .then((res) => {
-        if (res.data.success) {
-          console.log("response after adding nurse Request", res.data);
-          props.history.push({
-            pathname: "assessmentdiagnosis/success",
-            state: {
-              message: `Nurse Service Request: ${
-                res.data.data.nurseService[
-                  res.data.data.nurseService.length - 1
-                ].NSrequestNo
-              } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
-              patientDetails: patientDetails,
-            },
-          });
-        } else if (!res.data.success) {
-          setOpenNotification(true);
-          setErrorMsg("Error while adding the Nurse Request");
-        }
-      })
-      .catch((e) => {
-        console.log("error after adding Nurse Request", e);
-        setOpenNotification(true);
-        setErrorMsg("Error while adding the Nurse Request");
-      });
-  };
+  // // for Nursing
+  // const handleNurseSearch = (e) => {
+  //     setSearchNurseQuery(e.target.value);
+  //     if (e.target.value.length >= 3) {
+  //         axios
+  //             .get(getSearchedNurseService + "/" + e.target.value)
+  //             .then((res) => {
+  //                 if (res.data.success) {
+  //                     if (res.data.data.length > 0) {
+  //                         console.log(res.data.data);
+  //                         setNurseItemFoundSuccessfully(true);
+  //                         setNurseItemFound(res.data.data);
+  //                     } else {
+  //                         setNurseItemFoundSuccessfully(false);
+  //                         setNurseItemFound("");
+  //                     }
+  //                 }
+  //             })
+  //             .catch((e) => {
+  //                 console.log("error while searching req", e);
+  //             });
+  //     }
+  // };
+  // function handleAddNurseItem(i) {
+  //     // console.log("selected item", i.serviceNo);
+  //     dispatch({ field: "nurseServiceId", value: i._id });
+  //     dispatch({ field: "nurseServiceCode", value: i.serviceNo });
+  //     dispatch({ field: "nurseServiceName", value: i.name });
+  //     dispatch({ field: "nurseServiceStatus", value: i.status });
+  //     setSearchNurseQuery("");
+  //     setaddNurseRequest(true);
+  // }
+  // const addSelectedNurseItem = () => {
+  //     // setIsFormSubmitted(true);
+  //     // if (validateItemsForm()) {
+  //     let found =
+  //         nurseService &&
+  //         nurseService.find((item) => item.serviceId === nurseServiceId);
+  //     if (found) {
+  //         setOpenNotification(true);
+  //         setErrorMsg("This Service has already been added.");
+  //     } else {
+  //         dispatch({
+  //             field: "nurseService",
+  //             value: [
+  //                 ...nurseService,
+  //                 {
+  //                     serviceId: nurseServiceId,
+  //                     serviceCode: nurseServiceCode,
+  //                     requesterName: requester,
+  //                     serviceName: nurseServiceName,
+  //                     requester: currentUser.staffId,
+  //                     status: nurseServiceStatus,
+  //                 },
+  //             ],
+  //         });
+  //         // }
+  //     }
+  //     dispatch({ field: "nurseServiceId", value: "" });
+  //     dispatch({ field: "nurseServiceCode", value: "" });
+  //     dispatch({ field: "nurseServiceName", value: "" });
+  //     dispatch({ field: "nurseServiceStatus", value: "" });
+  //     setaddLabRequest(false);
+  // };
+  // const saveNurseReq = () => {
+  //     // console.log("THISSSSS ISS ARRAYY",radiologyRequestArray)
+  //     let nurseItems = [];
+  //     for (let i = 0; i < nurseService.length; i++) {
+  //         nurseItems = [
+  //             ...nurseItems,
+  //             {
+  //                 serviceId: nurseService[i].serviceId,
+  //                 serviceCode: nurseService[i].serviceCode,
+  //                 requester: nurseService[i].requester,
+  //                 requesterName: nurseService[i].requesterName,
+  //                 serviceName: nurseService[i].serviceName,
+  //                 status: nurseService[i].status,
+  //             },
+  //         ];
+  //     }
+  //     const params = {
+  //         _id: id,
+  //         nurseService: nurseItems,
+  //     };
+  //     // console.log("params", params);
+  //     axios
+  //         .put(updateIPR, params)
+  //         .then((res) => {
+  //             if (res.data.success) {
+  //                 console.log("response after adding nurse Request", res.data);
+  //                 window.location.reload(false);
+  //             } else if (!res.data.success) {
+  //                 setOpenNotification(true);
+  //             }
+  //         })
+  //         .catch((e) => {
+  //             console.log("error after adding Nurse Request", e);
+  //             setOpenNotification(true);
+  //             setErrorMsg("Error while adding the Nurse Request");
+  //         });
+  // };
 
   const onChangeSection = (e) => {
     if (e.target.value) {
@@ -1312,7 +1182,8 @@ function LabRadRequest(props) {
       axios.get(getIcd + "/" + e.target.value).then((res) => {
         if (res.data.data) {
           console.log("hello", res.data.data);
-          setIcdArr(res.data.data);
+          const mappedArr = res.data.data.map((e) => e.icd10PCSCodes);
+          setIcdArr(mappedArr);
         }
       });
 
@@ -1340,7 +1211,7 @@ function LabRadRequest(props) {
       currentList = icdArr;
       console.log(icdArr);
       newList = currentList.filter((item) => {
-        const lc = item.icd10PCSCodes.toLowerCase();
+        const lc = item.toLowerCase();
         const filter = e.target.value.toLowerCase();
         return lc.includes(filter);
       });
@@ -1348,10 +1219,8 @@ function LabRadRequest(props) {
       axios.get(getIcd + "/" + section).then((res) => {
         if (res.data.data) {
           console.log("hello", res.data.data);
-          // const mappedArr = res.data.data.map(
-          //   (e) => e.icd10PCSCodes && e.procedureCodeDescriptions
-          // )
-          setIcdArr(res.data.data);
+          const mappedArr = res.data.data.map((e) => e.icd10PCSCodes);
+          setIcdArr(mappedArr);
         }
       });
     }
@@ -1387,9 +1256,7 @@ function LabRadRequest(props) {
   const handlePatientSearch = (e) => {
     if (e.length >= 3) {
       axios
-        .get(
-          getSearchedpatient + "/" + currentUser.functionalUnit._id + "/" + e
-        )
+        .get(getpatienthistoryUrl + "/" + e)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
@@ -1410,17 +1277,13 @@ function LabRadRequest(props) {
     }
   };
 
-  function showPatientDetails() {
-    openPatientDetailsDialog(false);
-  }
-
   function handleAddPatient(i) {
     dispatch({ field: "diagnosisArray", value: "" });
     dispatch({ field: "medicationArray", value: "" });
-    // setDialogOpen(true);
+    console.log("selected banda : ", i);
+
     props.setPatientDetailsForReducer(i);
 
-    console.log("selected banda : ", i);
     setPatientDetails(i);
     getPatientByInfo(i._id);
     openPatientDetailsDialog(true);
@@ -1432,6 +1295,17 @@ function LabRadRequest(props) {
     setSelectedPatientArray((pervState) => [...pervState, obj]);
     setSearchPatientQuery("");
   }
+
+  const getEDRIPROPR = (id) => {
+    axios.get(getpatientHistoryPre + "/" + id).then((res) => {
+      if (res.data.success) {
+        var objectSorted = _.sortBy(res.data.data, "createdAt").reverse();
+        setEDRIPROPR(objectSorted);
+
+        console.log("responseee", res.data.data);
+      }
+    });
+  };
 
   const getPatientByInfo = (id) => {
     axios
@@ -1447,7 +1321,9 @@ function LabRadRequest(props) {
             setIsLoading(false);
             setSelectedItem(res.data.data);
             setId(res.data.data._id);
-            setenableForm(false);
+            setPatientHistoryId(res.data.data.patientId._id);
+            getEDRIPROPR(res.data.data.patientId._id);
+            // setenableForm(false)
 
             Object.entries(res.data.data).map(([key, val]) => {
               if (val && typeof val === "object") {
@@ -1484,7 +1360,6 @@ function LabRadRequest(props) {
                   });
                   if (val && val.length > 0) {
                     let data = [];
-
                     val.map((d) => {
                       d.code.map((singleCode) => {
                         let found = data.find((i) => i === singleCode);
@@ -1493,6 +1368,7 @@ function LabRadRequest(props) {
                         }
                       });
                     });
+                    console.log(data);
                     dispatch({ field: "diagnosisArray", value: data });
                   }
                 } else if (key === "pharmacyRequest") {
@@ -1516,12 +1392,10 @@ function LabRadRequest(props) {
                     });
                   });
                   dispatch({ field: "medicationArray", value: data });
-                } else if (key === "nurseService") {
-                  dispatch({
-                    field: "nurseRequestArray",
-                    value: val.reverse(),
-                  });
                 }
+                //  else if (key === "nurseService") {
+                //     dispatch({ field: "nurseService", value: val });
+                // }
               } else {
                 dispatch({ field: key, value: val });
               }
@@ -1531,6 +1405,13 @@ function LabRadRequest(props) {
           setOpenNotification(true);
           setErrorMsg("EDR/IPR not generated for patient");
         }
+        setenableForm(true);
+        setValue(0);
+        dispatch({ field: "labRequestArray", value: "" });
+        dispatch({ field: "radiologyRequestArray", value: "" });
+        dispatch({ field: "consultationNoteArray", value: "" });
+        dispatch({ field: "residentNoteArray", value: "" });
+        dispatch({ field: "pharmacyRequestArray", value: "" });
       })
       .catch((e) => {
         setOpenNotification(true);
@@ -1556,31 +1437,22 @@ function LabRadRequest(props) {
     console.log("code after", code);
   };
 
-  const TriageAssessment = () => {
-    let path = `consultationrequest/triageAssessment`;
+  const addNewRequest = () => {
+    // let path = `assessmentdiagnosis/add`
+    let path = `/home/wms/fus/medicinalorder`;
     props.history.push({
       pathname: path,
       state: {
-        selectedItem: selectedItem,
-      },
-    });
-  };
-
-  const PatientHistory = () => {
-    let path = `consultationrequest/patienthistory`;
-    props.history.push({
-      pathname: path,
-      state: {
-        selectedItem: selectedItem,
-        diagnosisArray: diagnosisArray,
-        medicationArray: medicationArray,
+        comingFor: "add",
+        selectedPatient: selectedItem.patientId,
+        pharmacyRequestArray,
       },
     });
   };
 
   function viewLabRadReport(rec) {
     if (!rec.view) {
-      let path = `consultationrequest/viewReport`;
+      let path = `patienthistory/viewReport`;
       props.history.push({
         pathname: path,
         state: {
@@ -1592,23 +1464,106 @@ function LabRadRequest(props) {
     }
   }
 
+  function handlePatientHistoryView(obj) {
+    console.log("obj", obj);
+
+    axios
+      .get(getpatientHistory + "/" + obj._id + "/" + obj.requestType)
+      .then((res) => {
+        if (res.data.success) {
+          console.log("patient history", res.data.data);
+          setenableForm(false);
+          Object.entries(res.data.data).map(([key, val]) => {
+            if (val && typeof val === "object") {
+              if (key === "patientId") {
+                dispatch({ field: "patientId", value: val._id });
+              } else if (key === "labRequest") {
+                dispatch({ field: "labRequestArray", value: val.reverse() });
+              } else if (key === "triageAssessment") {
+                val.map(
+                  (d) =>
+                    (d.doctorName = d.requester
+                      ? d.requester.firstName + " " + d.requester.lastName
+                      : "")
+                );
+                dispatch({
+                  field: "triageAssessmentArray",
+                  value: val.reverse(),
+                });
+              } else if (key === "nurseService") {
+                dispatch({ field: "nurseServiceArray", value: val.reverse() });
+              } else if (key === "radiologyRequest") {
+                dispatch({
+                  field: "radiologyRequestArray",
+                  value: val.reverse(),
+                });
+              } else if (key === "consultationNote") {
+                val.map(
+                  (d) =>
+                    (d.doctorName = d.requester
+                      ? d.requester.firstName + " " + d.requester.lastName
+                      : "")
+                );
+                dispatch({
+                  field: "consultationNoteArray",
+                  value: val.reverse(),
+                });
+              } else if (key === "residentNotes") {
+                val.map(
+                  (d) =>
+                    (d.doctorName = d.doctor
+                      ? d.doctor.firstName + " " + d.doctor.lastName
+                      : "")
+                );
+                dispatch({
+                  field: "residentNoteArray",
+                  value: val.reverse(),
+                });
+                if (val && val.length > 0) {
+                  dispatch({ field: "diagnosisArray", value: val[0].code });
+                }
+              } else if (key === "pharmacyRequest") {
+                val.map(
+                  (d) =>
+                    (d.doctorName = d.requester
+                      ? d.requester.firstName + " " + d.requester.lastName
+                      : "")
+                );
+                dispatch({
+                  field: "pharmacyRequestArray",
+                  value: val.reverse(),
+                });
+                let data = [];
+                val.map((d) => {
+                  d.item.map((item) => {
+                    let found = data.find((i) => i === item.itemId.name);
+                    if (!found) {
+                      data.push(item.itemId.name);
+                    }
+                  });
+                });
+                dispatch({ field: "medicationArray", value: data });
+              }
+              //  else if (key === "nurseService") {
+              //     dispatch({ field: "nurseService", value: val });
+              // }
+            } else {
+              dispatch({ field: key, value: val });
+            }
+          });
+        }
+      });
+  }
+
   if (openNotification) {
     setTimeout(() => {
       setOpenNotification(false);
       setErrorMsg("");
+      setsuccessMsg("");
     }, 2000);
   }
 
   const showAlert = () => {
-    // if (document.getElementById("ckDemo").disabled) {
-    //     alert("CheckBox is Disabled");
-    // }
-
-    setErrorMsg("Please Search Patient First ");
-    // setOpenNotification(true);
-  };
-
-  const showAlertForPatientHistory = () => {
     setErrorMsg("Please Search Patient First ");
     setOpenNotification(true);
   };
@@ -1631,32 +1586,7 @@ function LabRadRequest(props) {
         <div className="subheader" style={{ marginLeft: "-10px" }}>
           <div>
             <img src={Lab_RadIcon} />
-            <h4>Consultation Request</h4>
-          </div>
-
-          <div style={{ marginRight: "-10px" }}>
-            <Button
-              // disabled={enableForm}
-              // onClick={TriageAssessment}
-              onClick={enableForm ? showAlert : TriageAssessment}
-              style={styles.stylesForButton}
-              style={styles.stylesForButton}
-              variant="contained"
-              color="primary"
-            >
-              Triage & Assessment
-            </Button>
-            &nbsp;&nbsp;
-            <Button
-              // disabled={enableForm}
-              onClick={enableForm ? showAlertForPatientHistory : PatientHistory}
-              style={styles.stylesForButton}
-              variant="contained"
-              color="primary"
-              Error={errorMsg}
-            >
-              Patient History
-            </Button>
+            <h4>Patient history</h4>
           </div>
         </div>
         <div
@@ -1812,14 +1742,36 @@ function LabRadRequest(props) {
           </div>
         </div>
 
+        <PatientDetails
+          patientDetails={patientDetails}
+          // showPatientDetails={showPatientDetails}
+          diagnosisArray={diagnosisArray}
+          medicationArray={medicationArray}
+        />
+
         <div className={`${classes.root}`}>
-          <PatientDetails
-            patientDetails={patientDetails}
-            // showPatientDetails={showPatientDetails}
-            diagnosisArray={diagnosisArray}
-            medicationArray={medicationArray}
-          />
+          <h5 style={{ fontWeight: "bold", color: "white", marginTop: 25 }}>
+            EDR / IPR / OPR
+          </h5>
         </div>
+
+        <div
+          style={{ flex: 4, display: "flex", flexDirection: "column" }}
+          className="container-fluid"
+        >
+          <div className="row">
+            <CustomTable
+              tableData={EDRIPROPR}
+              tableDataKeys={tableDataKeysForEDRIPROPR}
+              tableHeading={tableHeadingForEDRIPROPR}
+              handleView={handlePatientHistoryView}
+              action={actions}
+              borderBottomColor={"#60d69f"}
+              borderBottomWidth={20}
+            />
+          </div>
+        </div>
+
         <div>
           <div
             style={{
@@ -1890,29 +1842,35 @@ function LabRadRequest(props) {
                 label="Rad"
                 disabled={enableForm}
               />
-              {requestType === "IPR" ? (
-                <Tab
-                  style={{
-                    color: "white",
-                    borderRadius: 5,
-                    outline: "none",
-                    color: value === 5 ? "#12387a" : "#3B988C",
-                  }}
-                  label="Nurse Service"
-                  disabled={enableForm}
-                />
-              ) : (
-                undefined
-              )}
+              <Tab
+                style={{
+                  color: "white",
+                  borderRadius: 5,
+                  outline: "none",
+                  color: value === 5 ? "#12387a" : "#3B988C",
+                }}
+                label="Triage And Assessment"
+                disabled={enableForm}
+              />
+
+              {/* <Tab
+                style={{
+                  color: 'white',
+                  borderRadius: 5,
+                  outline: 'none',
+                  color: value === 6 ? '#12387a' : '#3B988C',
+                }}
+                label='Nurse Services'
+                disabled={enableForm}
+              /> */}
             </Tabs>
           </div>
-
           {value === 1 ? (
             <div
               style={{ flex: 4, display: "flex", flexDirection: "column" }}
               className="container-fluid"
             >
-              <div className="row">
+              <div className="row" style={{ marginTop: "20px" }}>
                 {consultationNoteArray !== 0 ? (
                   <CustomTable
                     tableData={consultationNoteArray}
@@ -1927,32 +1885,13 @@ function LabRadRequest(props) {
                   undefined
                 )}
               </div>
-              <div className="row" style={{ marginBottom: "25px" }}>
-                <div className="col-md-6 col-sm-6 col-6"></div>
-                <div
-                  className="col-md-6 col-sm-6 col-6 d-flex justify-content-end"
-                  style={{ paddingRight: "1px" }}
-                >
-                  <Button
-                    onClick={() => setOpenAddConsultDialog(true)}
-                    style={styles.stylesForButton}
-                    variant="contained"
-                    color="primary"
-                    disabled={enableForm}
-                  >
-                    <strong style={{ fontSize: "12px" }}>
-                      Consultation Request
-                    </strong>
-                  </Button>
-                </div>
-              </div>
             </div>
           ) : value === 0 ? (
             <div
               style={{ flex: 4, display: "flex", flexDirection: "column" }}
               className=" container-fluid"
             >
-              <div className="row">
+              <div className="row" style={{ marginTop: "20px" }}>
                 {residentNoteArray !== 0 ? (
                   <CustomTable
                     tableData={residentNoteArray}
@@ -1967,39 +1906,19 @@ function LabRadRequest(props) {
                   undefined
                 )}
               </div>
-              <div className="row" style={{ marginBottom: "25px" }}>
-                <div className="col-md-6 col-sm-6 col-6"></div>
-                <div
-                  className="col-md-6 col-sm-6 col-6 d-flex justify-content-end"
-                  style={{ paddingRight: "1px" }}
-                >
-                  <Button
-                    onClick={() => setOpenAddResidentDialog(true)}
-                    style={styles.stylesForButton}
-                    variant="contained"
-                    color="primary"
-                    disabled={enableForm}
-                  >
-                    <img className="icon-style" src={plus_icon} />
-                    &nbsp;&nbsp;
-                    <strong style={{ fontSize: "12px" }}>
-                      Add New Consultation
-                    </strong>
-                  </Button>
-                </div>
-              </div>
             </div>
           ) : value === 2 ? (
             <div
               style={{ flex: 4, display: "flex", flexDirection: "column" }}
               className="container-fluid"
             >
-              <div className="row">
+              <div className="row" style={{ marginTop: "20px" }}>
                 {pharmacyRequestArray !== 0 ? (
                   <CustomTable
                     tableData={pharmacyRequestArray}
                     tableDataKeys={tableDataKeysForPharmacy}
                     tableHeading={tableHeadingForPharmacy}
+                    // handleView={viewItem}
                     handleView={handleView}
                     action={actions}
                     borderBottomColor={"#60d69f"}
@@ -2008,26 +1927,6 @@ function LabRadRequest(props) {
                 ) : (
                   undefined
                 )}
-              </div>
-
-              <div className="row" style={{ marginBottom: "25px" }}>
-                <div
-                  className="col-md-12 col-sm-12 col-12 d-flex justify-content-end"
-                  style={{ paddingRight: "1px" }}
-                >
-                  <Button
-                    onClick={addNewRequest}
-                    style={styles.stylesForButton}
-                    variant="contained"
-                    color="primary"
-                  >
-                    <img className="icon-style" src={plus_icon} />
-                    &nbsp;&nbsp;
-                    <strong style={{ fontSize: "12px" }}>
-                      Pharmacy Request
-                    </strong>
-                  </Button>
-                </div>
               </div>
             </div>
           ) : value === 3 ? (
@@ -2042,196 +1941,9 @@ function LabRadRequest(props) {
               className={`container-fluid `}
             >
               <div
-                style={{ marginTop: "20px" }}
-                className={`row ${classes.root}`}
-              >
-                <div
-                  className="col-md-12 col-sm-12 col-12"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    disabled={enableForm}
-                    label="Search by Lab Test"
-                    name={"searchQuery"}
-                    value={searchQuery}
-                    onChange={handlePauseLabSearch}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <AccountCircle />
-                        </InputAdornment>
-                      ),
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                    InputLabelProps={{
-                      className: classes.label,
-                      classes: { label: classes.label },
-                    }}
-                  />
-                </div>
-              </div>
-
-              {searchQuery ? (
-                <div
-                  style={{
-                    zIndex: 10,
-                    marginTop: 10,
-                    marginLeft: -8,
-                    width: "101.5%",
-                  }}
-                >
-                  <Paper style={{ maxHeight: 200, overflow: "auto" }}>
-                    {itemFoundSuccessfull && itemFound !== "" ? (
-                      <Table size="small">
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>Service Name</TableCell>
-                            <TableCell>Service Number</TableCell>
-                            <TableCell>Price</TableCell>
-                            <TableCell align="center">Description</TableCell>
-                          </TableRow>
-                        </TableHead>
-
-                        <TableBody>
-                          {itemFound.map((i, index) => {
-                            return (
-                              <TableRow
-                                key={i.serviceNo}
-                                onClick={() => handleAddItem(i)}
-                                style={{ cursor: "pointer" }}
-                              >
-                                <TableCell>{i.name}</TableCell>
-                                <TableCell>{i.serviceNo}</TableCell>
-                                <TableCell>{i.price}</TableCell>
-                                <TableCell align="center">
-                                  {i.description}
-                                </TableCell>
-                              </TableRow>
-                            );
-                          })}
-                        </TableBody>
-                      </Table>
-                    ) : loadSearchedData ? (
-                      <div style={{ textAlign: "center" }}>
-                        <Loader
-                          type="TailSpin"
-                          color="#2c6ddd"
-                          height={25}
-                          width={25}
-                          style={{
-                            display: "inline-block",
-                            padding: "10px",
-                          }}
-                        />
-                        <span
-                          style={{
-                            display: "inline-block",
-                            padding: "10px",
-                          }}
-                        >
-                          <h4> Searching Lab Test...</h4>
-                        </span>
-                      </div>
-                    ) : searchQuery && !itemFoundSuccessfull ? (
-                      <div style={{ textAlign: "center", padding: "10px" }}>
-                        <h4>No Lab Test Found !</h4>
-                      </div>
-                    ) : (
-                      undefined
-                    )}
-                  </Paper>
-                </div>
-              ) : (
-                undefined
-              )}
-
-              <div className="row">
-                <div
-                  className="col-md-5 col-sm-5 col-3"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                    paddingRight: "5px",
-                  }}
-                >
-                  <TextField
-                    required
-                    disabled
-                    label="Selected Service"
-                    name={"labServiceName"}
-                    value={labServiceName}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                  />
-                </div>
-                <div
-                  className={`col-md-5 col-sm-5 col-3 ${classes.root}`}
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    disabled={enableForm}
-                    label="Comments / Notes"
-                    name={"labComments"}
-                    value={labComments}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                  />
-                </div>
-                <div className="col-md-2 col-sm-2 col-6">
-                  <Button
-                    className="addButton"
-                    style={{
-                      ...styles.stylesForButton,
-                      marginTop: "25px",
-                      backgroundColor: "#AD6BBF",
-                      color: "white",
-                      cursor: "pointer",
-                      borderRadius: 5,
-                      backgroundColor: "rgb(173, 107, 191)",
-                      height: 56,
-                      outline: "none",
-                      marginTop: 25,
-                      width: "110%",
-                      marginLeft: "-10px",
-                    }}
-                    disabled={!addLabRequest}
-                    onClick={addSelectedLabItem}
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                  >
-                    Add
-                  </Button>
-                </div>
-              </div>
-
-              <div
                 className="row"
                 style={{
+                  marginTop: "20px",
                   paddingLeft: "5px",
                   paddingRight: "5px",
                 }}
@@ -2250,24 +1962,6 @@ function LabRadRequest(props) {
                   undefined
                 )}
               </div>
-
-              <div className="row" style={{ marginBottom: "25px" }}>
-                <div
-                  className="col-md-12 col-sm-12 col-12 d-flex justify-content-end"
-                  style={{ paddingRight: "5px" }}
-                >
-                  <Button
-                    // disabled={enableForm}
-                    disabled={enableSave}
-                    onClick={saveLabReq}
-                    style={{ ...styles.stylesForButton, width: "140px" }}
-                    variant="contained"
-                    color="primary"
-                  >
-                    <strong style={{ fontSize: "12px" }}>Save</strong>
-                  </Button>
-                </div>
-              </div>
             </div>
           ) : value === 4 ? (
             <div
@@ -2281,196 +1975,9 @@ function LabRadRequest(props) {
               className={`container-fluid `}
             >
               <div
-                style={{ marginTop: "20px" }}
-                className={`row ${classes.root}`}
-              >
-                <div
-                  className="col-md-12 col-sm-12 col-12"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    label="Search by Radiology / Imaging"
-                    name={"searchRadioQuery"}
-                    value={searchRadioQuery}
-                    onChange={handleRadioPauseSearch}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <AccountCircle />
-                        </InputAdornment>
-                      ),
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                    InputLabelProps={{
-                      className: classes.label,
-                      classes: { label: classes.label },
-                    }}
-                  />
-                </div>
-              </div>
-
-              {searchRadioQuery ? (
-                <div
-                  style={{
-                    zIndex: 10,
-                    marginTop: 10,
-                    marginLeft: -8,
-                    width: "101.5%",
-                  }}
-                >
-                  <Paper style={{ maxHeight: 200, overflow: "auto" }}>
-                    {radioItemFoundSuccessfull && radioItemFound !== "" ? (
-                      <Table size="small">
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>Service Name</TableCell>
-                            <TableCell>Service Number</TableCell>
-                            <TableCell>Price</TableCell>
-                            <TableCell align="center">Description</TableCell>
-                          </TableRow>
-                        </TableHead>
-
-                        <TableBody>
-                          {radioItemFound.map((i, index) => {
-                            return (
-                              <TableRow
-                                key={i.serviceNo}
-                                onClick={() => handleAddRadioItem(i)}
-                                style={{ cursor: "pointer" }}
-                              >
-                                <TableCell>{i.name}</TableCell>
-                                <TableCell>{i.serviceNo}</TableCell>
-                                <TableCell>{i.price}</TableCell>
-                                <TableCell align="center">
-                                  {i.description}
-                                </TableCell>
-                              </TableRow>
-                            );
-                          })}
-                        </TableBody>
-                      </Table>
-                    ) : loadSearchedData ? (
-                      <div style={{ textAlign: "center" }}>
-                        <Loader
-                          type="TailSpin"
-                          color="#2c6ddd"
-                          height={25}
-                          width={25}
-                          style={{
-                            display: "inline-block",
-                            padding: "10px",
-                          }}
-                        />
-                        <span
-                          style={{
-                            display: "inline-block",
-                            padding: "10px",
-                          }}
-                        >
-                          <h4> Searching Radiology Test...</h4>
-                        </span>
-                      </div>
-                    ) : searchRadioQuery && !radioItemFoundSuccessfull ? (
-                      <div style={{ textAlign: "center", padding: "10px" }}>
-                        <h4>No Radiology Test Found !</h4>
-                      </div>
-                    ) : (
-                      undefined
-                    )}
-                  </Paper>
-                </div>
-              ) : (
-                undefined
-              )}
-
-              <div className="row">
-                <div
-                  className="col-md-5 col-sm-5 col-3"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                    paddingRight: "5px",
-                  }}
-                >
-                  <TextField
-                    required
-                    disabled
-                    label="Selected Service"
-                    name={"radioServiceName"}
-                    value={radioServiceName}
-                    // error={radioServiceName === '' && isFormSubmitted}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                  />
-                </div>
-                <div
-                  className={`col-md-5 col-sm-5 col-3 ${classes.root}`}
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    disabled={enableForm}
-                    label="Comments / Notes"
-                    name={"radioComments"}
-                    value={radioComments}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                  />
-                </div>
-                <div className="col-md-2 col-sm-2 col-6">
-                  <Button
-                    className="addButton"
-                    style={{
-                      ...styles.stylesForButton,
-                      marginTop: "25px",
-                      backgroundColor: "#AD6BBF",
-                      color: "white",
-                      cursor: "pointer",
-                      borderRadius: 5,
-                      backgroundColor: "rgb(173, 107, 191)",
-                      height: 56,
-                      outline: "none",
-                      marginTop: 25,
-                      width: "110%",
-                      marginLeft: "-10px",
-                    }}
-                    disabled={!addRadioRequest}
-                    onClick={addSelectedRadioItem}
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                  >
-                    Add
-                  </Button>
-                </div>
-              </div>
-
-              <div
                 className="row"
                 style={{
+                  marginTop: "20px",
                   paddingLeft: "5px",
                   paddingRight: "5px",
                 }}
@@ -2489,23 +1996,39 @@ function LabRadRequest(props) {
                   undefined
                 )}
               </div>
-
-              <div className="row" style={{ marginBottom: "25px" }}>
-                <div
-                  className="col-md-12 col-sm-12 col-12 d-flex justify-content-end"
-                  style={{ paddingRight: "5px" }}
-                >
-                  <Button
-                    // disabled={enableForm}
-                    disabled={enableSave}
-                    onClick={saveRadioReq}
-                    style={{ ...styles.stylesForButton, width: "140px" }}
-                    variant="contained"
-                    color="primary"
-                  >
-                    <strong style={{ fontSize: "12px" }}>Save</strong>
-                  </Button>
-                </div>
+            </div>
+          ) : value === 6 ? (
+            <div
+              style={{
+                flex: 4,
+                display: "flex",
+                flexDirection: "column",
+                paddingLeft: "10px",
+                paddingRight: "10px",
+              }}
+              className={`container-fluid `}
+            >
+              <div
+                className="row"
+                style={{
+                  marginTop: "20px",
+                  paddingLeft: "5px",
+                  paddingRight: "5px",
+                }}
+              >
+                {nurseServiceArray !== 0 ? (
+                  <CustomTable
+                    tableData={nurseServiceArray}
+                    tableDataKeys={tableDataKeysForNurse}
+                    tableHeading={tableHeadingForNurse}
+                    handleView={viewItem}
+                    action={actions}
+                    borderBottomColor={"#60D69F"}
+                    borderBottomWidth={20}
+                  />
+                ) : (
+                  undefined
+                )}
               </div>
             </div>
           ) : value === 5 ? (
@@ -2519,201 +2042,19 @@ function LabRadRequest(props) {
               }}
               className={`container-fluid `}
             >
-              <div className={`row ${classes.root}`}>
-                <div
-                  className="col-md-12 col-sm-12 col-12"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    disabled={enableForm}
-                    label="Search by Service Name"
-                    name={"searchNurseQuery"}
-                    value={searchNurseQuery}
-                    onChange={handlePauseNurseSearch}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <AccountCircle />
-                        </InputAdornment>
-                      ),
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                    InputLabelProps={{
-                      className: classes.label,
-                      classes: { label: classes.label },
-                    }}
-                  />
-                </div>
-              </div>
-
-              {searchNurseQuery ? (
-                <div
-                  style={{
-                    zIndex: 10,
-                    marginTop: 10,
-                    marginLeft: -8,
-                    width: "101.5%",
-                  }}
-                >
-                  <Paper style={{ maxHeight: 200, overflow: "auto" }}>
-                    {nurseItemFoundSuccessfull && nurseItemFound !== "" ? (
-                      <Table size="small">
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>Service Name</TableCell>
-                            <TableCell>Service Number</TableCell>
-                            <TableCell>Price</TableCell>
-                            <TableCell align="center">Description</TableCell>
-                          </TableRow>
-                        </TableHead>
-
-                        <TableBody>
-                          {nurseItemFound.map((i, index) => {
-                            return (
-                              <TableRow
-                                key={i.serviceNo}
-                                onClick={() => handleAddNurseItem(i)}
-                                style={{ cursor: "pointer" }}
-                              >
-                                <TableCell>{i.name}</TableCell>
-                                <TableCell>{i.serviceNo}</TableCell>
-                                <TableCell>{i.price}</TableCell>
-                                <TableCell>{i.description}</TableCell>
-                              </TableRow>
-                            );
-                          })}
-                        </TableBody>
-                      </Table>
-                    ) : loadSearchedData ? (
-                      <div style={{ textAlign: "center" }}>
-                        <Loader
-                          type="TailSpin"
-                          color="#2c6ddd"
-                          height={25}
-                          width={25}
-                          style={{
-                            display: "inline-block",
-                            padding: "10px",
-                          }}
-                        />
-                        <span
-                          style={{
-                            display: "inline-block",
-                            padding: "10px",
-                          }}
-                        >
-                          <h4> Searching Service...</h4>
-                        </span>
-                      </div>
-                    ) : searchNurseQuery && !nurseItemFoundSuccessfull ? (
-                      <div style={{ textAlign: "center", padding: "10px" }}>
-                        <h4>No Service Found !</h4>
-                      </div>
-                    ) : (
-                      undefined
-                    )}
-                  </Paper>
-                </div>
-              ) : (
-                undefined
-              )}
-
-              <div className="row">
-                <div
-                  className="col-md-5 col-sm-5 col-3"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                    paddingRight: "5px",
-                  }}
-                >
-                  <TextField
-                    required
-                    disabled
-                    label="Selected Service"
-                    name={"nurseServiceName"}
-                    value={nurseServiceName}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                  />
-                </div>
-                <div
-                  className={`col-md-5 col-sm-5 col-3 ${classes.root}`}
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    disabled={enableForm}
-                    label="Comments / Notes"
-                    name={"nurseComments"}
-                    value={nurseComments}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                  />
-                </div>
-                <div className="col-md-2 col-sm-2 col-6">
-                  <Button
-                    className="addButton"
-                    style={{
-                      ...styles.stylesForButton,
-                      marginTop: "25px",
-                      backgroundColor: "#AD6BBF",
-                      color: "white",
-                      cursor: "pointer",
-                      borderRadius: 5,
-                      backgroundColor: "rgb(173, 107, 191)",
-                      height: 56,
-                      outline: "none",
-                      marginTop: 25,
-                      width: "110%",
-                      marginLeft: "-10px",
-                    }}
-                    disabled={!addNurseRequest}
-                    onClick={addSelectedNurseItem}
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                  >
-                    Add
-                  </Button>
-                </div>
-              </div>
-
               <div
                 className="row"
                 style={{
+                  marginTop: "20px",
                   paddingLeft: "5px",
                   paddingRight: "5px",
                 }}
               >
-                {nurseRequestArray !== 0 ? (
+                {triageAssessmentArray !== 0 ? (
                   <CustomTable
-                    tableData={nurseRequestArray}
-                    tableDataKeys={tableDataKeysForNurse}
-                    tableHeading={tableHeadingForNurse}
+                    tableData={triageAssessmentArray}
+                    tableDataKeys={tableDataKeysForTriage}
+                    tableHeading={tableDataHeadingForTriage}
                     handleView={viewItem}
                     action={actions}
                     borderBottomColor={"#60D69F"}
@@ -2722,23 +2063,6 @@ function LabRadRequest(props) {
                 ) : (
                   undefined
                 )}
-              </div>
-
-              <div className="row" style={{ marginBottom: "25px" }}>
-                <div
-                  className="col-md-12 col-sm-12 col-12 d-flex justify-content-end"
-                  style={{ paddingRight: "4px" }}
-                >
-                  <Button
-                    disabled={enableSave}
-                    onClick={saveNurseReq}
-                    style={{ ...styles.stylesForButton, width: "140px" }}
-                    variant="contained"
-                    color="primary"
-                  >
-                    <strong style={{ fontSize: "12px" }}>Save</strong>
-                  </Button>
-                </div>
               </div>
             </div>
           ) : (
@@ -2793,6 +2117,7 @@ function LabRadRequest(props) {
                         input: classes.multilineColor,
                       },
                     }}
+                    // inputProps={{ maxLength: 300 }}
                   />
                 </div>
               </div>
@@ -2830,7 +2155,7 @@ function LabRadRequest(props) {
                   style={styles.inputContainerForTextField}
                 ></div>
                 <span
-                  style={{ fontWeight: 600, color: "white", marginLeft: 16 }}
+                  style={{ fontWeight: 600, color: "white", marginLeft: 15 }}
                 >
                   ICD Diagnosis
                 </span>
@@ -2879,7 +2204,7 @@ function LabRadRequest(props) {
                   <TextField
                     type="text"
                     label="Code"
-                    onChange={(e) => handleCodeSearch(e)}
+                    onChange={handleCodeSearch}
                     className="textInputStyle"
                     variant="filled"
                     InputProps={{
@@ -2918,7 +2243,7 @@ function LabRadRequest(props) {
                             onClick={(e) => addICDcodes(item, e)}
                             style={{ marginRight: 20, marginTop: 5 }}
                           />
-                          {`Code: ${item.icd10PCSCodes}      Description: ${item.procedureCodeDescriptions}`}
+                          {item}
                         </li>
                       ))}
                     </ul>
@@ -2985,7 +2310,7 @@ function LabRadRequest(props) {
           <DialogContent style={{ backgroundColor: "#31e2aa" }}>
             <DialogTitle
               id="simple-dialog-title"
-              style={{ color: "white", marginLeft: -9 }}
+              style={{ color: "white", marginLeft: -20 }}
             >
               Add Consultation Note
             </DialogTitle>
@@ -3008,6 +2333,7 @@ function LabRadRequest(props) {
                     error={doctorconsultationNotes === "" && isFormSubmitted}
                     onChange={onChangeValue}
                     className="textInputStyle"
+                    variant="filled"
                     variant="filled"
                     InputProps={{
                       className: classes.multilineColor,
@@ -3221,19 +2547,6 @@ function LabRadRequest(props) {
                     ? tableDataKeysForFUMemberForItems
                     : tableDataKeysForItemsForBUMember
                 }
-                // action={
-                //   currentUser.staffTypeId.type === "Registered Nurse"
-                //     ? actionsForItemsForReceiver
-                //     : currentUser.staffTypeId.type === "BU Doctor"
-                //       ? actionsForItemsForOther
-                //       : currentUser.staffTypeId.type === "FU Inventory Keeper"
-                //         ? actionsForItemsForFUMember
-                //         : actionsForItemsForOther
-                // }
-                // handleEdit={handleEditRequestedItem}
-                // handleDelete={handleDelete}
-                // receiveItem={handleReceive}
-                // handleView={handleEditRequestedItem}
                 borderBottomColor={"#60d69f"}
                 borderBottomWidth={20}
               />
@@ -3254,7 +2567,11 @@ function LabRadRequest(props) {
           </div>
         </div>
 
-        <Notification msg={errorMsg} open={openNotification} />
+        <Notification
+          msg={errorMsg}
+          open={openNotification}
+          success={successMsg}
+        />
       </div>
     </div>
   );

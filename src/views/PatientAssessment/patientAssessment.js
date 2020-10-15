@@ -4,6 +4,7 @@ import Button from "@material-ui/core/Button";
 import tableStyles from "../../assets/jss/material-dashboard-react/components/tableStyle.js";
 import axios from "axios";
 import TextField from "@material-ui/core/TextField";
+import PatientDetails from "../../components/PatientDetails/PatientDetailsRCM";
 import {
   searchpatient,
   getSearchedpatient,
@@ -34,7 +35,7 @@ import Fingerprint from "../../assets/img/fingerprint.png";
 import AccountCircle from "@material-ui/icons/SearchOutlined";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import BarCode from "../../assets/img/Bar Code.png";
-import ViewSingleRequest from "../../components/ViewRequest/ViewRequest";
+import ViewSingleRequest from "./viewRequest";
 import plus_icon from "../../assets/img/Plus.png";
 import { connect } from "react-redux";
 import {
