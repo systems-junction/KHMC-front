@@ -57,14 +57,31 @@ export default function ViewPatient(props) {
 
   const formatDate = (date) => {
     const d = new Date(date);
+
+    let minutes = "";
+
+    if (d.getHours().toString().length === 1) {
+      minutes = "0" + d.getHours();
+    } else {
+      minutes = d.getHours();
+    }
+
     return (
-      d.getDate() +
-      "/" +
-      (d.getMonth() + 1) +
-      "/" +
+      // d.getDate() +
+      d
+        .getDate()
+        .toString()
+        .padStart(2, "0") +
+      " - " +
+      (d.getMonth() + 1).toString().padStart(2, "0") +
+      " - " +
+      // (d.getMonth() + 1) +
       d.getFullYear() +
       " " +
-      d.toLocaleTimeString()
+      // d.toLocaleTimeString()
+      minutes +
+      ":" +
+      ("00" + d.getMinutes()).slice(-2)
     );
   };
 
