@@ -1,44 +1,44 @@
-import React from 'react'
-import cookie from 'react-cookies'
-import { Route, Switch, Router, Redirect } from 'react-router-dom'
-import { createBrowserHistory } from 'history'
-import NotFound from '../components/NotFound/NotFound'
-import ECR from '../views/ECR/ECRMenu'
-import EDR from '../views/ECR/EcrEDR'
-import IPR from '../views/ECR/EcrIPR'
-import CN from '../views/ECR/ConsultationNotes'
-import ViewReport from '../views/ECR/viewLabRadReport'
-import PatientHistory from '../views/ECR/PatientHistory'
-import ViewEDR from '../views/ECR/viewEcrEDR'
-import ViewIPR from '../views/ECR/viewEcrIPR'
-import AddIPR from '../views/ECR/addIPR'
-import AddEDR from '../views/ECR/addEDR'
-import TriageAndAssessmentEDR from '../views/ECR/TriageAndAssessmentEDR'
-import TriageAndAssessmentIPR from '../views/ECR/TriageAndAssessmentIPR'
-import TriageAndAssessment from '../views/ECR/TriageAndAssessment'
-import ViewConsultationNotes from '../views/ECR/viewConsultationNotes'
-import SuccessScreen from '../components/SuccessScreen/SuccessScreen'
+import React from "react";
+import cookie from "react-cookies";
+import { Route, Switch, Router, Redirect } from "react-router-dom";
+import { createBrowserHistory } from "history";
+import NotFound from "../components/NotFound/NotFound";
+import ECR from "../views/ECR/ECRMenu";
+import EDR from "../views/ECR/EcrEDR";
+import IPR from "../views/ECR/EcrIPR";
+import CN from "../views/ECR/ConsultationNotes";
+import ViewReport from "../views/ECR/viewLabRadReport";
+import PatientHistory from "../components/PatientHistory/PatientHistory";
+import ViewEDR from "../views/ECR/viewEcrEDR";
+import ViewIPR from "../views/ECR/viewEcrIPR";
+import AddIPR from "../views/ECR/addIPR";
+import AddEDR from "../views/ECR/addEDR";
+// import TriageAndAssessmentEDR from '../views/ECR/TriageAndAssessmentEDR'
+// import TriageAndAssessmentIPR from '../views/ECR/TriageAndAssessmentIPR'
+import TriageAndAssessment from "../components/TriageAndAssessment/TriageAndAssessment";
+import ViewConsultationNotes from "../views/ECR/viewConsultationNotes";
+import SuccessScreen from "../components/SuccessScreen/SuccessScreen";
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const [currentUser, setCurrentUser] = React.useState(
-    cookie.load('current_user')
-  )
+    cookie.load("current_user")
+  );
   return (
     <Route
       {...rest}
       render={(props) =>
-        currentUser.staffTypeId.type === 'admin' ||
-        currentUser.staffTypeId.type === 'Committe Member' ||
-        currentUser.staffTypeId.type === 'Accounts Member' ||
-        currentUser.staffTypeId.type === 'Warehouse Member' ? (
+        currentUser.staffTypeId.type === "admin" ||
+        currentUser.staffTypeId.type === "Committe Member" ||
+        currentUser.staffTypeId.type === "Accounts Member" ||
+        currentUser.staffTypeId.type === "Warehouse Member" ? (
           <Component {...props} />
         ) : (
-          <Redirect to='notfound' />
+          <Redirect to="notfound" />
         )
       }
     />
-  )
-}
+  );
+};
 class WMSRoutes extends React.PureComponent {
   render() {
     return (
@@ -72,14 +72,14 @@ class WMSRoutes extends React.PureComponent {
           path={`${this.props.match.url}/edr/viewEDR`}
           component={ViewEDR}
         />
-        <Route
+        {/* <Route
           path={`${this.props.match.url}/edr/viewEDR/TriageAndAssessment`}
           component={TriageAndAssessmentEDR}
-        />
-        <Route
+        /> */}
+        {/* <Route
           path={`${this.props.match.url}/ipr/viewIPR/TriageAndAssessment`}
           component={TriageAndAssessmentIPR}
-        />
+        /> */}
         <Route
           path={`${this.props.match.url}/cn/TriageAndAssessment`} //for consultation Triage & Assesment
           component={TriageAndAssessment}
@@ -109,9 +109,9 @@ class WMSRoutes extends React.PureComponent {
           component={AddEDR}
         />
         <Route path={`${this.props.match.url}/notfound`} component={NotFound} />
-        <Route path='*' component={NotFound} />
+        <Route path="*" component={NotFound} />
       </Switch>
-    )
+    );
   }
 }
-export default WMSRoutes
+export default WMSRoutes;

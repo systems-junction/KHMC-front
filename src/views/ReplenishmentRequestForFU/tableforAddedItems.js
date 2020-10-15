@@ -165,6 +165,7 @@ export default function DenseTable(props) {
                     borderTopRightRadius:
                       index === tableHeadingForFUMember.length - 1 ? 5 : 0,
                   }}
+                  key={index}
                 >
                   {h}
                 </TableCell>
@@ -185,6 +186,8 @@ export default function DenseTable(props) {
                         ? 5
                         : 0,
                   }}
+                  key={index}
+
                 >
                   {h}
                 </TableCell>
@@ -194,7 +197,7 @@ export default function DenseTable(props) {
       </TableHead>
       <TableBody>
         {props.items.map((row, index) => (
-          <StyledTableRow key={row.name} style={{}}>
+          <StyledTableRow key={index} style={{}}>
             <TableCell
               align="center"
               style={{

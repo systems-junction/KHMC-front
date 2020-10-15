@@ -1,7 +1,7 @@
 import React from "react";
 import "./Header.css";
-import KHMC_White from "../../assets/img/KHMC LOGO FOR CIRCLE.png";
-import Influence_white from "../../assets/img/Influence_white.png";
+import KHMC_White from "../../assets/img/KHMC Header LOGO.png";
+import Influence_white from "../../assets/img/Influence Original.png";
 import { Redirect } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
