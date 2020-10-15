@@ -64,6 +64,8 @@ import dateTimeFormat from "../../constants/dateTimeFormat.js";
 
 import CurrencyTextField from "@unicef/material-ui-currency-textfield";
 
+import messageTimeOut from "../../constants/messageTimeOut";
+
 const reasonArray = [
   { key: "jit", value: "JIT" },
   { key: "new_item", value: "New Item" },
@@ -199,58 +201,58 @@ const MUIStyleForinput = makeStyles((theme) => ({
     margin: theme.spacing(0),
   },
   input: {
-    backgroundColor: 'white',
-    boxShadow: 'none',
+    backgroundColor: "white",
+    boxShadow: "none",
     borderRadius: 5,
-    '&:after': {
-      borderBottomColor: 'black',
-      boxShadow: 'none',
+    "&:after": {
+      borderBottomColor: "black",
+      boxShadow: "none",
     },
-    '&:hover': {
-      backgroundColor: 'white',
-      boxShadow: 'none',
+    "&:hover": {
+      backgroundColor: "white",
+      boxShadow: "none",
     },
-    '&:focus': {
-      backgroundColor: 'white',
-      boxShadow: 'none',
+    "&:focus": {
+      backgroundColor: "white",
+      boxShadow: "none",
       borderRadius: 5,
     },
   },
   multilineColor: {
-    boxShadow: 'none',
-    backgroundColor: 'white',
+    boxShadow: "none",
+    backgroundColor: "white",
     borderRadius: 5,
-    '&:hover': {
-      backgroundColor: 'white',
-      boxShadow: 'none',
+    "&:hover": {
+      backgroundColor: "white",
+      boxShadow: "none",
     },
-    '&:after': {
-      borderBottomColor: 'black',
-      boxShadow: 'none',
+    "&:after": {
+      borderBottomColor: "black",
+      boxShadow: "none",
     },
-    '&:focus': {
-      boxShadow: 'none',
+    "&:focus": {
+      boxShadow: "none",
     },
   },
   root: {
-    '& .MuiTextField-root': {
-      backgroundColor: 'white',
+    "& .MuiTextField-root": {
+      backgroundColor: "white",
     },
-    '& .Mui-focused': {
-      backgroundColor: 'white',
-      color: 'black',
-      boxShadow: 'none',
+    "& .Mui-focused": {
+      backgroundColor: "white",
+      color: "black",
+      boxShadow: "none",
     },
-    '& .Mui-disabled': {
-      backgroundColor: 'white',
-      color: 'gray',
+    "& .Mui-disabled": {
+      backgroundColor: "white",
+      color: "gray",
     },
-    '&:focus': {
-      backgroundColor: 'white',
-      boxShadow: 'none',
+    "&:focus": {
+      backgroundColor: "white",
+      boxShadow: "none",
     },
   },
-}))
+}));
 function AddEditPurchaseRequest(props) {
   const classes = MUIStyleForinput();
   const classesForInputForCurrency = MUIStyleForInputForCurrency();
@@ -964,8 +966,14 @@ function AddEditPurchaseRequest(props) {
   if (openNotification) {
     setTimeout(() => {
       setOpenNotification(false);
+      console.log("called open notification");
       setErrorMsg("");
-    }, 2000);
+    }, messageTimeOut);
+  }
+
+  function hideNotification() {
+    setOpenNotification(false);
+    setErrorMsg("");
   }
 
   const handleSearch = (e) => {
@@ -1000,19 +1008,40 @@ function AddEditPurchaseRequest(props) {
   };
 
   const getCurrentQty = (id) => {
-    // const params = {
-    //   itemId: id,
-    //   // fuId: fuObj._id,
-    // };
-    // console.log("params for curr qty", params);
+    const params = {
+      itemId: id,
+      fuId: currentUser.functionalUnit._id,
+    };
+    console.log("params for curr qty", params);
 
+    // axios
+    //   .get(getPurchaseRequestItemQtyUrl + "/" + id)
+    //   .then((res) => {
+    //     if (res.data.success) {
+    //       console.log("current quantity", res.data.data);
+    //       if (res.data.data) {
+    //         dispatch({ field: "currentQty", value: res.data.data.qty });
+    //       } else {
+    //         dispatch({ field: "currentQty", value: 0 });
+    //       }
+    //     }
+    //   })
+    //   .catch((e) => {
+    //     console.log("error after adding purchase request", e);
+    //     setOpenNotification(true);
+    //     setErrorMsg("Error while adding the purchase request");
+    //   });
     axios
-      .get(getPurchaseRequestItemQtyUrl + "/" + id)
+      .post(getCurrentQtyForFURepRequestUrl, params)
       .then((res) => {
         if (res.data.success) {
           console.log("current quantity", res.data.data);
           if (res.data.data) {
             dispatch({ field: "currentQty", value: res.data.data.qty });
+            dispatch({
+              field: "maximumLevel",
+              value: res.data.data.maximumLevel,
+            });
           } else {
             dispatch({ field: "currentQty", value: 0 });
           }
@@ -1081,6 +1110,7 @@ function AddEditPurchaseRequest(props) {
       dispatch({ field: "recieptUnit", value: "" });
       dispatch({ field: "requestedQty", value: "" });
       dispatch({ field: "fuItemCost", value: "" });
+      dispatch({ field: "maximumLevel", value: "" });
 
       // dispatch({ field: "maximumLevel", value: "" });
     } else {
@@ -1100,7 +1130,18 @@ function AddEditPurchaseRequest(props) {
     if (!validateItemsForm()) {
       setOpenNotification(true);
       setErrorMsg("Please fill the fields properly");
+      return;
     }
+
+    if (requestedQty > maximumLevel - currentQty) {
+      setErrorMsg(
+        `You can not add qty more than ${maximumLevel -
+          currentQty} as it exceeds the maximum level.`
+      );
+      setOpenNotification(true);
+      return;
+    }
+
     if (validateItemsForm()) {
       setDialogOpen(false);
       let found =
@@ -1126,11 +1167,11 @@ function AddEditPurchaseRequest(props) {
                 name: itemName,
                 vendorId,
                 description,
-                maximumLevel,
                 issueUnit,
                 recieptUnit: recieptUnit,
               },
               requestedQty: requestedQty,
+              maximumLevel,
               currentQty,
               status: "pending",
               secondStatus: "pending",
@@ -1156,6 +1197,7 @@ function AddEditPurchaseRequest(props) {
       dispatch({ field: "recieptUnit", value: "" });
       dispatch({ field: "requestedQty", value: "" });
       dispatch({ field: "fuItemCost", value: "" });
+      dispatch({ field: "maximumLevel", value: "" });
     }
   };
 
@@ -1170,7 +1212,7 @@ function AddEditPurchaseRequest(props) {
       dispatch({ field: "itemName", value: i.itemId.name });
       dispatch({ field: "vendorId", value: i.itemId.vendorId });
       dispatch({ field: "description", value: i.itemId.description });
-      dispatch({ field: "maximumLevel", value: i.itemId.maximumLevel });
+      dispatch({ field: "maximumLevel", value: i.maximumLevel });
       dispatch({ field: "issueUnit", value: i.itemId.issueUnit });
       dispatch({ field: "recieptUnit", value: i.itemId.recieptUnit });
       dispatch({ field: "currentQty", value: i.currentQty });
@@ -1205,6 +1247,15 @@ function AddEditPurchaseRequest(props) {
       setErrorMsg("Please fill the fields properly");
     }
     if (validateItemsForm()) {
+      if (requestedQty > maximumLevel - currentQty) {
+        setErrorMsg(
+          `You can not add qty more than ${maximumLevel -
+            currentQty} as it exceeds the maximum level.`
+        );
+        setOpenNotification(true);
+        return;
+      }
+
       setDialogOpen(false);
       let temp = [];
 
@@ -1219,7 +1270,6 @@ function AddEditPurchaseRequest(props) {
               name: itemName,
               vendorId,
               description,
-              maximumLevel,
               issueUnit,
               recieptUnit: recieptUnit,
             },
@@ -1228,6 +1278,7 @@ function AddEditPurchaseRequest(props) {
             status: requestedItemsArray[i].status,
             secondStatus: requestedItemsArray[i].secondStatus,
             fuItemCost,
+            maximumLevel,
           };
           temp[i] = obj;
         } else {
@@ -1255,6 +1306,7 @@ function AddEditPurchaseRequest(props) {
       dispatch({ field: "recieptUnit", value: "" });
       dispatch({ field: "requestedQty", value: "" });
       dispatch({ field: "fuItemCost", value: "" });
+      dispatch({ field: "maximumLevel", value: "" });
     }
   };
 
@@ -1274,7 +1326,7 @@ function AddEditPurchaseRequest(props) {
       <Header />
       <div className="cPadding">
         <div className="subheader">
-          <div style={{marginLeft: '-6px'}}>
+          <div style={{ marginLeft: "-6px" }}>
             <img src={purchase_request} />
             <h4>
               {comingFor === "add"
@@ -1772,7 +1824,7 @@ function AddEditPurchaseRequest(props) {
 
               <div className="row">
                 <div
-                  className="col-md-6"
+                  className="col-md-4"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1794,7 +1846,7 @@ function AddEditPurchaseRequest(props) {
                   />
                 </div>
                 <div
-                  className="col-md-6"
+                  className="col-md-4"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1806,6 +1858,29 @@ function AddEditPurchaseRequest(props) {
                     label="Item Name"
                     name={"itemName"}
                     value={itemName}
+                    onChange={onChangeValue}
+                    className="textInputStyle"
+                    variant="filled"
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  />
+                </div>
+
+                <div
+                  className="col-md-4"
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    type="text"
+                    disabled={true}
+                    label="Maximum Level"
+                    name={"maximumLevel"}
+                    value={maximumLevel}
                     onChange={onChangeValue}
                     className="textInputStyle"
                     variant="filled"
@@ -2018,7 +2093,7 @@ function AddEditPurchaseRequest(props) {
                     justifyContent: "flex-end",
                     marginTop: "2%",
                     // marginBottom: "1%",
-                    marginRight:'6px'
+                    marginRight: "6px",
                   }}
                 >
                   {selectItemToEditId === "" ? (
@@ -2168,8 +2243,6 @@ function AddEditPurchaseRequest(props) {
             undefined
           )}
 
-          <Notification msg={errorMsg} open={openNotification} />
-
           {requestedItemsArray && (
             <div className="row">
               <h5
@@ -2204,11 +2277,16 @@ function AddEditPurchaseRequest(props) {
               <img
                 onClick={() => props.history.goBack()}
                 src={Back_Arrow}
-                style={{ width: 45, height: 35, cursor: "pointer", marginLeft: '5px' }}
+                style={{
+                  width: 45,
+                  height: 35,
+                  cursor: "pointer",
+                  marginLeft: "5px",
+                }}
               />
               {comingFor === "add" ? (
                 <Button
-                  style={{...styles.stylesForWHButton, marginRight: '5px'}}
+                  style={{ ...styles.stylesForWHButton, marginRight: "5px" }}
                   // disabled={!validateForm()}
                   onClick={handleAdd}
                   variant="contained"
@@ -2257,6 +2335,12 @@ function AddEditPurchaseRequest(props) {
               )}
             </div>
           </div>
+
+          <Notification
+            msg={errorMsg}
+            open={openNotification}
+            hideNotification={hideNotification}
+          />
         </div>
       </div>
     </div>

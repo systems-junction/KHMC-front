@@ -48,6 +48,9 @@ import MUIStyleForInputForCurrency from "../../../src/assets/jss/material-dashbo
 
 import CurrencyTextField from "@unicef/material-ui-currency-textfield";
 
+import dateFormat from "../../constants/dateFormat";
+import dateTimeFormat from "../../constants/dateTimeFormat";
+
 const statusArray = [
   { key: "received", value: "Received" },
   { key: "rejected", value: "Rejected" },
@@ -712,7 +715,8 @@ function ReceiveItems(props) {
                   disabled={selectedItem ? false : true}
                   inputVariant="filled"
                   fullWidth
-                  format="DD-MM-YYYY"
+                  // format="DD-MM-YYYY"
+                  format={dateFormat}
                   label="Expiry Date (DD-MM-YYYY)"
                   onChange={(val) => onChangeDate(val, "expiryDate")}
                   InputProps={{
@@ -1171,7 +1175,8 @@ function ReceiveItems(props) {
             >
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DateTimePicker
-                  format="dd-mm-yyyy HH:mm a"
+                  // format="dd-mm-yyyy HH:mm a"
+                  format={dateTimeFormat}
                   required
                   inputVariant="filled"
                   disabled={selectedItem ? false : true}
@@ -1201,7 +1206,8 @@ function ReceiveItems(props) {
                 <DateTimePicker
                   required
                   disableFuture
-                  format="dd-mm-yyyy HH:mm a"
+                  // format="dd-mm-yyyy HH:mm a"
+                  format={dateTimeFormat}
                   inputVariant="filled"
                   fullWidth
                   disabled={selectedItem ? false : true}
@@ -1302,7 +1308,7 @@ function ReceiveItems(props) {
                 flex: 1,
                 justifyContent: "flex-end",
                 flexDirection: "row",
-                marginRight: '5px'
+                marginRight: "5px",
               }}
             >
               <Button
