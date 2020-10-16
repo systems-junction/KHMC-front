@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom'
 import NotFound from '../components/NotFound/NotFound'
 import SuccessScreen from '../components/SuccessScreen/SuccessScreen'
 // import AddEditPatientListing from '../views/PatientListing/addEditPatientListing'
-import AddEditPatientListing from '../components/PatientRegistration/PatientRegistration'
+import AddEditPatientListing from '../views/PatientRegistration/PatientRegistration'
 import patientListing from '../views/PatientListing/patientListing'
 
 class PatientListing extends React.PureComponent {

@@ -1,11 +1,12 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import NotFound from "../components/NotFound/NotFound";
-import labRadRequest from "../views/LabRadRequest/labRadRequest";
-import triageAssessment from "../components/TriageAndAssessment/TriageAndAssessment";
-import viewLabRadReport from "../views/LabRadRequest/viewLabRadReport";
+import labRadRequest from "../views/MainScreen/MainScreen";
+import triageAssessment from "../views/TriageAndAssessment/TriageAndAssessment";
+import viewLabRadReport from "../components/ViewLabRadReport/ViewLabRadReport";
+import PatientHistoryViewLabRadReport from "../views/LabRadRequest/viewLabRadReport";
 import SuccessScreen from "../components/SuccessScreen/SuccessScreen";
-import PatientHistory from "../components/PatientHistory/PatientHistory";
+import PatientHistory from "../views/PatientHistory/PatientHistory";
 
 class LabRadRequest extends React.PureComponent {
   render() {
@@ -24,6 +25,7 @@ class LabRadRequest extends React.PureComponent {
           path={`${this.props.match.url}/viewReport`}
           component={viewLabRadReport}
         />
+        
 
         <Route
           path={`${this.props.match.url}/patienthistory`}

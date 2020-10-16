@@ -1,11 +1,11 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import NotFound from "../components/NotFound/NotFound";
-import patientCare from "../views/PatientCare/patientCare";
-import PatientHistory from "../components/PatientHistory/PatientHistory";
-import triageAssessment from "../components/TriageAndAssessment/TriageAndAssessment";
+import patientCare from "../views/MainScreen/MainScreen";
+import PatientHistory from "../views/PatientHistory/PatientHistory";
+import triageAssessment from "../views/TriageAndAssessment/TriageAndAssessment";
 import SuccessScreen from "../components/SuccessScreen/SuccessScreen";
-import viewReport from "../views/PatientCare/viewLabRadReport";
+import viewReport from "../components/ViewLabRadReport/ViewLabRadReport";
 
 class PatientCare extends React.PureComponent {
   render() {

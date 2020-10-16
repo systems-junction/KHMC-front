@@ -14,7 +14,7 @@ import UpdateLR from "../views/ServicesRequest/LR/updateLR";
 import EDRTriageAndAssessment from "../views/ServicesRequest/PHR/EDRTriageAndAssessment";
 import IPRTriageAndAssessment from "../views/ServicesRequest/PHR/IPRTriageAndAssessment";
 // import AddEditOPR from "../views/ServicesRequest/LR/addEditOPR";
-import AddEditOPR from "../components/PatientRegistration/PatientRegistration";
+import AddEditOPR from "../views/PatientRegistration/PatientRegistration";
 import AddPharmacyOPR from "../views/ServicesRequest/LR/addLab";
 import SuccessScreen from "../components/SuccessScreen/SuccessScreen";
 
