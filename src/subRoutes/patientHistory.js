@@ -2,8 +2,8 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import NotFound from "../components/NotFound/NotFound";
-import patientHistory from "../components/PatientHistory/PatientHistoryWithSearch";
-import LabRadReport from "../views/PatientHistory/viewLabRadReport";
+import patientHistory from "../views/PatientHistory/PatientHistoryWithSearch";
+import LabRadReport from "../components/ViewLabRadReport/ViewLabRadReport";
 
 class PatientHistory extends React.PureComponent {
   render() {
