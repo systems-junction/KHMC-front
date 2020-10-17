@@ -1787,7 +1787,7 @@ function AddEditPatientListing(props) {
                 <TableCell align="right">{row.serviceId.type}</TableCell>
                 <TableCell align="right">{row.serviceId.name}</TableCell>
                 <TableCell align="right">
-                  {row.serviceId.price.toFixed(4)}
+                  {`${row.serviceId.price.toFixed(4)} JD` }
                 </TableCell>
                 <TableCell align="right">{row.qty}</TableCell>
               </TableRow>
