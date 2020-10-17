@@ -824,10 +824,12 @@ export default function CustomTable(props) {
                                 >
                                   {Array.isArray(val)
                                     ? prop[val[0]]
-                                      // ? capitilizeLetter(prop[val[0]][val[1]])
-                                      ?replaceSlugToTitle(prop[val[0]][val[1]], val, key)
-                                       
-
+                                      ? // ? capitilizeLetter(prop[val[0]][val[1]])
+                                        replaceSlugToTitle(
+                                          prop[val[0]][val[1]],
+                                          val,
+                                          key
+                                        )
                                       : null
                                     : val.toLowerCase() === "timestamp"
                                     ? new Intl.DateTimeFormat(
@@ -940,6 +942,22 @@ export default function CustomTable(props) {
                                   title="Active"
                                 >
                                   <i className=" ml-10 zmdi zmdi-check zmdi-hc-2x" />
+                                </span>
+                              </RcIf>
+
+                              <RcIf if={props.action.print}>
+                                <span
+                                  onClick={() =>
+                                    props.handlePrint(prop)
+                                      ? props.handlePrint(prop)
+                                      : {}
+                                  }
+                                  title="Active"
+                                >
+                                  <i
+                                    style={{ color: "grey" }}
+                                    class="zmdi zmdi-print zmdi-hc-2x"
+                                  ></i>
                                 </span>
                               </RcIf>
                             </div>
