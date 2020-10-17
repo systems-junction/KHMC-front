@@ -109,8 +109,12 @@
 // });
 
 self.addEventListener("push", (event) => {
+
+  // let notifications = [];
   const data = event.data.json();
-  console.log("New notification data", event.data.json());
+  console.log("New notification data", data);
+
+  // notifications.push(data)
 
   const options = {
     body: data.message,

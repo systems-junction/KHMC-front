@@ -14,9 +14,9 @@ import axios from "axios";
 import cookie from "react-cookies";
 import { loginUrl, getStaffUrl } from "../public/endpoins";
 
-import KHMC_White from "../assets/img/KHMC LOGO FOR CIRCLE.png";
+import KHMC_White from "../assets/img/KHMC Header LOGO.png";
 
-import Influence_white from "../assets/img/Influence_white.png";
+import Influence_white from "../assets/img/Influence Original.png";
 
 import Splash from "./Splash";
 

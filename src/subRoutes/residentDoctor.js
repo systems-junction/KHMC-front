@@ -1,66 +1,66 @@
-import React from 'react'
-import cookie from 'react-cookies'
-import { Route, Switch, Router, Redirect } from 'react-router-dom'
-import { createBrowserHistory } from 'history'
-import NotFound from '../components/NotFound/NotFound'
-import ResidentDoctor from '../views/ResidentDoctor/ResidentDoctor'
-import EDR from '../views/ResidentDoctor/EDR/EDR'
-import ViewEDR from '../views/ResidentDoctor/EDR/viewEDR'
-import DischargeRequest from '../views/ResidentDoctor/EDR/DischargeRequest'
-import AddDischargeMed from '../views/ResidentDoctor/EDR/addDischargeMed'
-import AddEDR from '../views/ResidentDoctor/EDR/addEditEDR'
-import EDRTriageAndAssessment from '../views/ResidentDoctor/EDR/TriageAndAssessment'
-import IPR from '../views/ResidentDoctor/IPR/IPR'
-import LabRadRequest from '../views/ResidentDoctor/LabRadRequest/labRadRequest'
-import PatientHistoryLabRadRequest from '../views/ResidentDoctor/LabRadRequest/PatientHistory'
-import viewReport from '../views/ResidentDoctor/LabRadRequest/viewLabRadReport'
-import AssessmentAndDiagnosis from '../views/ResidentDoctor/AssessmentAndDiagnosis/AssessmentAndDiagnosis'
-import viewReportAssDia from '../views/ResidentDoctor/AssessmentAndDiagnosis/viewLabRadReport'
-import PatientHistoryAD from '../views/ResidentDoctor/AssessmentAndDiagnosis/PatientHistory'
-import viewReportCons from '../views/ResidentDoctor/ConsultationRequest/viewLabRadReport'
-import triageAssessment from '../views/ResidentDoctor/LabRadRequest/TriageAndAssessment'
-import triageAssessmentAssessDiagnosis from '../views/ResidentDoctor/AssessmentAndDiagnosis/TriageAndAssessment'
-import AssessmentDiagnosisPatientHistory from '../views/PatientHistory/PatientHistory'
-import triageAssessmentConRequest from '../views/ResidentDoctor/ConsultationRequest/TriageAndAssessment'
-import Discharge from '../views/ResidentDoctor/Discharge/DischargeRequest'
-import ConsultationRequest from '../views/ResidentDoctor/ConsultationRequest/consultationRequest'
-import PatientHistoryConsultationRequest from '../views/ResidentDoctor/ConsultationRequest/PatientHistory'
+import React from "react";
+import cookie from "react-cookies";
+import { Route, Switch, Router, Redirect } from "react-router-dom";
+import { createBrowserHistory } from "history";
+import NotFound from "../components/NotFound/NotFound";
+import ResidentDoctor from "../views/ResidentDoctor/ResidentDoctor";
+import EDR from "../views/ResidentDoctor/EDR/EDR";
+import ViewEDR from "../views/ResidentDoctor/EDR/viewEDR";
+import DischargeRequest from "../views/ResidentDoctor/EDR/DischargeRequest";
+import AddDischargeMed from "../views/ResidentDoctor/EDR/addDischargeMed";
+import AddEDR from "../views/ResidentDoctor/EDR/addEditEDR";
+import EDRTriageAndAssessment from "../views/ResidentDoctor/EDR/TriageAndAssessment";
+import IPR from "../views/ResidentDoctor/IPR/IPR";
+import LabRadRequest from "../views/ResidentDoctor/LabRadRequest/labRadRequest";
+import PatientHistoryLabRadRequest from "../components/PatientHistory/PatientHistory";
+import viewReport from "../views/ResidentDoctor/LabRadRequest/viewLabRadReport";
+import AssessmentAndDiagnosis from "../views/ResidentDoctor/AssessmentAndDiagnosis/AssessmentAndDiagnosis";
+import viewReportAssDia from "../views/ResidentDoctor/AssessmentAndDiagnosis/viewLabRadReport";
+import PatientHistoryAD from "../components/PatientHistory/PatientHistory";
+import viewReportCons from "../components/TriageAndAssessment/TriageAndAssessment";
+import triageAssessment from "../components/TriageAndAssessment/TriageAndAssessment";
+import triageAssessmentAssessDiagnosis from "../components/TriageAndAssessment/TriageAndAssessment";
+import AssessmentDiagnosisPatientHistory from "../components/PatientHistory/PatientHistory";
+import triageAssessmentConRequest from "../components/TriageAndAssessment/TriageAndAssessment";
+import Discharge from "../views/ResidentDoctor/Discharge/DischargeRequest";
+import ConsultationRequest from "../views/ResidentDoctor/ConsultationRequest/consultationRequest";
+import PatientHistoryConsultationRequest from "../components/PatientHistory/PatientHistory";
 
-import AddPharm from '../views/ResidentDoctor/ConsultationRequest/addPharm'
-import AddPharmacy from '../views/ResidentDoctor/AssessmentAndDiagnosis/addPharm'
-import AddPharmLab from '../views/ResidentDoctor/LabRadRequest/addPharm'
-import AddDischargeMedication from '../views/ResidentDoctor/Discharge/addDischargeMed'
-import ViewIPR from '../views/ResidentDoctor/IPR/viewIPR'
-import iprDischargeRequest from '../views/ResidentDoctor/IPR/DischargeRequest'
-import iprAddDischargeMed from '../views/ResidentDoctor/IPR/addDischargeMed'
-import addViewFollowUp from '../views/ResidentDoctor/IPR/addViewFollowUp'
-import AddIPR from '../views/ResidentDoctor/IPR/addEditIPR'
-import IPRTriageAndAssessment from '../views/ResidentDoctor/IPR/TriageAndAssessment'
-import SuccessScreen from '../components/SuccessScreen/SuccessScreen'
-import PatientHistory from '../views/ResidentDoctor/AssessmentAndDiagnosis/PatientHistory'
-import ViewLabRadReport from '../views/ResidentDoctor/LabRadRequest/viewLabRadReport'
+import AddPharm from "../views/ResidentDoctor/ConsultationRequest/addPharm";
+import AddPharmacy from "../views/ResidentDoctor/AssessmentAndDiagnosis/addPharm";
+import AddPharmLab from "../views/ResidentDoctor/LabRadRequest/addPharm";
+import AddDischargeMedication from "../views/ResidentDoctor/Discharge/addDischargeMed";
+import ViewIPR from "../views/ResidentDoctor/IPR/viewIPR";
+import iprDischargeRequest from "../views/ResidentDoctor/IPR/DischargeRequest";
+import iprAddDischargeMed from "../views/ResidentDoctor/IPR/addDischargeMed";
+import addViewFollowUp from "../views/ResidentDoctor/IPR/addViewFollowUp";
+import AddIPR from "../views/ResidentDoctor/IPR/addEditIPR";
+import IPRTriageAndAssessment from "../views/ResidentDoctor/IPR/TriageAndAssessment";
+import SuccessScreen from "../components/SuccessScreen/SuccessScreen";
+import PatientHistory from "../views/ResidentDoctor/AssessmentAndDiagnosis/PatientHistory";
+import ViewLabRadReport from "../views/ResidentDoctor/LabRadRequest/viewLabRadReport";
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const [currentUser, setCurrentUser] = React.useState(
-    cookie.load('current_user')
-  )
+    cookie.load("current_user")
+  );
 
   return (
     <Route
       {...rest}
       render={(props) =>
-        currentUser.staffTypeId.type === 'admin' ||
-        currentUser.staffTypeId.type === 'Committe Member' ||
-        currentUser.staffTypeId.type === 'Accounts Member' ||
-        currentUser.staffTypeId.type === 'Warehouse Member' ? (
+        currentUser.staffTypeId.type === "admin" ||
+        currentUser.staffTypeId.type === "Committe Member" ||
+        currentUser.staffTypeId.type === "Accounts Member" ||
+        currentUser.staffTypeId.type === "Warehouse Member" ? (
           <Component {...props} />
         ) : (
-          <Redirect to='notfound' />
+          <Redirect to="notfound" />
         )
       }
     />
-  )
-}
+  );
+};
 
 class WMSRoutes extends React.PureComponent {
   render() {
@@ -279,10 +279,10 @@ class WMSRoutes extends React.PureComponent {
 
         <Route path={`${this.props.match.url}/notfound`} component={NotFound} />
 
-        <Route path='*' component={NotFound} />
+        <Route path="*" component={NotFound} />
       </Switch>
-    )
+    );
   }
 }
 
-export default WMSRoutes
+export default WMSRoutes;

@@ -744,8 +744,8 @@ function AddEditPatientListing(props) {
                         (
                           singlePR.item[j].itemId.issueUnitCost *
                           singlePR.item[j].requestedQty
-                        ).toFixed(4) + ' JD',
-                      insuredPrice: amount.toFixed(4) + ' JD',
+                        ).toFixed(4),
+                      insuredPrice: amount.toFixed(4),
                       insuranceStatus: 'Covered',
                     },
                     date: res.data.data.pharmacyRequest[i].dateGenerated,
@@ -763,7 +763,7 @@ function AddEditPatientListing(props) {
                 let obj = {
                   serviceId: {
                     name: singlePR.item[j].itemId.name,
-                    originalPrice: amount.toFixed(4) + ' JD',
+                    originalPrice: amount.toFixed(4),
                     insuredPrice: '0',
                     insuranceStatus: 'Not Covered',
                   },
@@ -787,8 +787,8 @@ function AddEditPatientListing(props) {
                 let obj = {
                   serviceId: {
                     name: singleLR.serviceId.name,
-                    originalPrice: singleLR.serviceId.price.toFixed(4) + ' JD',
-                    insuredPrice: res.data.insured[j].price.toFixed(4) + ' JD',
+                    originalPrice: singleLR.serviceId.price.toFixed(4),
+                    insuredPrice: res.data.insured[j].price.toFixed(4),
                     insuranceStatus: 'Covered',
                   },
                   date: singleLR.date,
@@ -802,7 +802,7 @@ function AddEditPatientListing(props) {
               let obj = {
                 serviceId: {
                   name: singleLR.serviceId.name,
-                  originalPrice: singleLR.serviceId.price.toFixed(4) + ' JD',
+                  originalPrice: singleLR.serviceId.price.toFixed(4),
                   insuredPrice: '0',
                   insuranceStatus: 'Not Covered',
                 },
@@ -825,8 +825,8 @@ function AddEditPatientListing(props) {
                 let obj = {
                   serviceId: {
                     name: singleRR.serviceId.name,
-                    originalPrice: singleRR.serviceId.price.toFixed(4) + ' JD',
-                    insuredPrice: res.data.insured[j].price.toFixed(4) + ' JD',
+                    originalPrice: singleRR.serviceId.price.toFixed(4),
+                    insuredPrice: res.data.insured[j].price.toFixed(4),
                     insuranceStatus: 'Covered',
                   },
                   date: singleRR.date,
@@ -840,7 +840,7 @@ function AddEditPatientListing(props) {
               let obj = {
                 serviceId: {
                   name: singleRR.serviceId.name,
-                  originalPrice: singleRR.serviceId.price.toFixed(4) + ' JD',
+                  originalPrice: singleRR.serviceId.price.toFixed(4),
                   insuredPrice: '0',
                   insuranceStatus: 'Not Covered',
                 },
