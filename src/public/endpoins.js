@@ -2,7 +2,7 @@ const local = "http://192.168.10.62:4000/api";
 const live = "https://test.khmc-staging.com/api";
 const dev = "http://ec2-52-14-42-129.us-east-2.compute.amazonaws.com/api";
 //const devSecure = 'https://demo.khmc-staging.com/api'
-const notificationsUrl = "http://localhost:4000"
+const notificationsUrl = "http://localhost:4000";
 // http://165.232.66.148/api
 //const stagingDigitalOcean = 'http://165.232.66.148:8080/api'
 //const stagingDigitalOcean = 'https://dev.khmc-staging.online/api'
