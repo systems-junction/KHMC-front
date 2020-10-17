@@ -6,7 +6,7 @@ import NotFound from "../components/NotFound/NotFound";
 import ECR from "../views/ECR/ECRMenu";
 import EDR from "../views/ECR/EcrEDR";
 import IPR from "../views/ECR/EcrIPR";
-import CN from "../views/MainScreen/MainScreen";
+import CN from "../views/PatientAssessmentCareLabRad/PatientAssessmentCareLabRad";
 import ViewReport from "../components/ViewLabRadReport/ViewLabRadReport";
 import PatientHistory from "../views/PatientHistory/PatientHistory";
 import ViewEDR from "../views/ECR/viewEcrEDR";

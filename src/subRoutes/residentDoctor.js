@@ -11,10 +11,10 @@ import AddDischargeMed from "../views/ResidentDoctor/EDR/addDischargeMed";
 import AddEDR from "../views/ResidentDoctor/EDR/addEditEDR";
 import EDRTriageAndAssessment from "../views/ResidentDoctor/EDR/TriageAndAssessment";
 import IPR from "../views/ResidentDoctor/IPR/IPR";
-import LabRadRequest from "../views/MainScreen/MainScreen";
+import LabRadRequest from "../views/PatientAssessmentCareLabRad/PatientAssessmentCareLabRad";
 import PatientHistoryLabRadRequest from "../views/PatientHistory/PatientHistory";
 import viewReport from "../components/ViewLabRadReport/ViewLabRadReport";
-import AssessmentAndDiagnosis from "../views/MainScreen/MainScreen";
+import AssessmentAndDiagnosis from "../views/PatientAssessmentCareLabRad/PatientAssessmentCareLabRad";
 import viewReportAssDia from "../components/ViewLabRadReport/ViewLabRadReport";
 import PatientHistoryAD from "../views/PatientHistory/PatientHistory";
 import viewReportCons from "../components/ViewLabRadReport/ViewLabRadReport";
@@ -23,7 +23,7 @@ import triageAssessmentAssessDiagnosis from "../views/TriageAndAssessment/Triage
 import AssessmentDiagnosisPatientHistory from "../views/PatientHistory/PatientHistory";
 import triageAssessmentConRequest from "../views/TriageAndAssessment/TriageAndAssessment";
 import Discharge from "../views/ResidentDoctor/Discharge/DischargeRequest";
-import ConsultationRequest from "../views/MainScreen/MainScreen";
+import ConsultationRequest from "../views/PatientAssessmentCareLabRad/PatientAssessmentCareLabRad";
 import PatientHistoryConsultationRequest from "../views/PatientHistory/PatientHistory";
 
 import AddPharm from "../views/ResidentDoctor/ConsultationRequest/addPharm";
