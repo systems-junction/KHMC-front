@@ -26,9 +26,9 @@ import Discharge from "../views/ResidentDoctor/Discharge/DischargeRequest";
 import ConsultationRequest from "../views/PatientAssessmentCareLabRad/PatientAssessmentCareLabRad";
 import PatientHistoryConsultationRequest from "../views/PatientHistory/PatientHistory";
 
-import AddPharm from "../views/ResidentDoctor/ConsultationRequest/addPharm";
-import AddPharmacy from "../views/ResidentDoctor/AssessmentAndDiagnosis/addPharm";
-import AddPharmLab from "../views/ResidentDoctor/LabRadRequest/addPharm";
+import AddPharm from "../views/InPatient/InPatientPharm";
+import AddPharmacy from "../views/InPatient/InPatientPharm";
+import AddPharmLab from "../views/InPatient/InPatientPharm";
 import AddDischargeMedication from "../views/ResidentDoctor/Discharge/addDischargeMed";
 import ViewIPR from "../views/ResidentDoctor/IPR/viewIPR";
 import iprDischargeRequest from "../views/ResidentDoctor/IPR/DischargeRequest";
