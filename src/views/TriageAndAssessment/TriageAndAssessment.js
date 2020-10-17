@@ -4,7 +4,7 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Button from "@material-ui/core/Button";
 import tableStyles from "../../assets/jss/material-dashboard-react/components/tableStyle.js";
-import Header from "../Header/Header";
+import Header from "../../components/Header/Header";
 import business_Unit from "../../assets/img/Purchase Order.png";
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 import cookie from "react-cookies";
@@ -12,8 +12,8 @@ import axios from "axios";
 import _ from "lodash";
 import { updateEdrIpr } from "../../public/endpoins";
 import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
-import Notification from "../Snackbar/Notification.js";
-import CustomTable from "../Table/Table";
+import Notification from "../../components/Snackbar/Notification.js";
+import CustomTable from "../../components/Table/Table";
 import TextField from "@material-ui/core/TextField";
 
 const tableHeadingForTriage = [

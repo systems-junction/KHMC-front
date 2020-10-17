@@ -6,16 +6,16 @@ import NotFound from "../components/NotFound/NotFound";
 import ECR from "../views/ECR/ECRMenu";
 import EDR from "../views/ECR/EcrEDR";
 import IPR from "../views/ECR/EcrIPR";
-import CN from "../views/ECR/ConsultationNotes";
-import ViewReport from "../views/ECR/viewLabRadReport";
-import PatientHistory from "../components/PatientHistory/PatientHistory";
+import CN from "../views/PatientAssessmentCareLabRad/PatientAssessmentCareLabRad";
+import ViewReport from "../components/ViewLabRadReport/ViewLabRadReport";
+import PatientHistory from "../views/PatientHistory/PatientHistory";
 import ViewEDR from "../views/ECR/viewEcrEDR";
 import ViewIPR from "../views/ECR/viewEcrIPR";
 import AddIPR from "../views/ECR/addIPR";
 import AddEDR from "../views/ECR/addEDR";
 // import TriageAndAssessmentEDR from '../views/ECR/TriageAndAssessmentEDR'
 // import TriageAndAssessmentIPR from '../views/ECR/TriageAndAssessmentIPR'
-import TriageAndAssessment from "../components/TriageAndAssessment/TriageAndAssessment";
+import TriageAndAssessment from "../views/TriageAndAssessment/TriageAndAssessment";
 import ViewConsultationNotes from "../views/ECR/viewConsultationNotes";
 import SuccessScreen from "../components/SuccessScreen/SuccessScreen";
 

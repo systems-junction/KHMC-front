@@ -4,7 +4,7 @@ import Button from "@material-ui/core/Button";
 import tableStyles from "../../assets/jss/material-dashboard-react/components/tableStyle.js";
 import axios from "axios";
 import TextField from "@material-ui/core/TextField";
-import _ from "lodash";
+import _, { set } from "lodash";
 import {
   getSearchedLaboratoryService,
   getSearchedRadiologyService,
@@ -516,6 +516,8 @@ function LabRadRequest(props) {
   const [EDRIPROPR, setEDRIPROPR] = useState([]);
   const [timer, setTimer] = useState(null);
   const [loadSearchedData, setLoadSearchedData] = useState(false);
+  const [viewData, setViewData] = useState(false);
+  const [loadEDRIPROPR, setLoadEDRIPROPR] = useState(false);
 
   const validateForm = () => {
     return (
@@ -1254,6 +1256,7 @@ function LabRadRequest(props) {
 
   //for search patient
   const handlePatientSearch = (e) => {
+    
     if (e.length >= 3) {
       axios
         .get(getpatienthistoryUrl + "/" + e)
@@ -1281,7 +1284,7 @@ function LabRadRequest(props) {
     dispatch({ field: "diagnosisArray", value: "" });
     dispatch({ field: "medicationArray", value: "" });
     console.log("selected banda : ", i);
-
+    setViewData(false)
     props.setPatientDetailsForReducer(i);
 
     setPatientDetails(i);
@@ -1297,14 +1300,17 @@ function LabRadRequest(props) {
   }
 
   const getEDRIPROPR = (id) => {
+    setLoadEDRIPROPR(true)
     axios.get(getpatientHistoryPre + "/" + id).then((res) => {
       if (res.data.success) {
+        setLoadEDRIPROPR(false)
         var objectSorted = _.sortBy(res.data.data, "createdAt").reverse();
         setEDRIPROPR(objectSorted);
 
         console.log("responseee", res.data.data);
       }
     });
+    
   };
 
   const getPatientByInfo = (id) => {
@@ -1553,6 +1559,7 @@ function LabRadRequest(props) {
           });
         }
       });
+      setViewData(true)
   }
 
   if (openNotification) {
@@ -1759,7 +1766,16 @@ function LabRadRequest(props) {
           style={{ flex: 4, display: "flex", flexDirection: "column" }}
           className="container-fluid"
         >
-          <div className="row">
+           {loadEDRIPROPR ?
+           <div style={{ textAlign: "center" }}>
+           <Loader
+             type="TailSpin"
+             color="#2c6ddd"
+             height={50}
+             width={50}
+             style={{ display: "inline-block", padding: "10px" }}
+           /></div> :
+          (<div className="row">
             <CustomTable
               tableData={EDRIPROPR}
               tableDataKeys={tableDataKeysForEDRIPROPR}
@@ -1769,9 +1785,9 @@ function LabRadRequest(props) {
               borderBottomColor={"#60d69f"}
               borderBottomWidth={20}
             />
-          </div>
+          </div> )}
         </div>
-
+        {viewData ?
         <div>
           <div
             style={{
@@ -2079,7 +2095,7 @@ function LabRadRequest(props) {
             undefined
           )}
         </div>
-
+: undefined}
         <Dialog
           aria-labelledby="form-dialog-title"
           open={openAddResidentDialog}
