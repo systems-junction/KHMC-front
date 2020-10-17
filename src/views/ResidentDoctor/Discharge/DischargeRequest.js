@@ -9,7 +9,7 @@ import business_Unit from "../../../assets/img/Doctor - Discharge.png";
 import Back from "../../../assets/img/Back_Arrow.png";
 import "../../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
 import PatientDetails from "../../../components/PatientDetails/PatientDetailsRCM"
-
+import { jsPDF } from 'jspdf'
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import CustomTable from "../../../components/Table/Table";
@@ -36,6 +36,7 @@ import {
   searchpatient,
   notifyDischarge,
   AddDischargeRequestUrl,
+  audioURL
 } from "../../../public/endpoins";
 import Loader from "react-loader-spinner";
 import { connect } from "react-redux";
@@ -43,6 +44,7 @@ import {
   funForReducer,
   setPatientDetailsForReducer,
 } from "../../../actions/Checking";
+import logoPatientSummaryInvoice from '../../../assets/img/logoPatientSummaryInvoice.png'
 
 const tableHeadingForDischargeMed = [
   "Request ID",
@@ -51,7 +53,7 @@ const tableHeadingForDischargeMed = [
   "Action",
 ];
 const tableDataKeysForDischargeMed = [["requester", "_id"], "date", "status"];
-const actions = { view: true };
+const actions = { view: true, print: true };
 const styles = {
   patientDetails: {
     backgroundColor: "white",
@@ -171,6 +173,7 @@ function DischargeRequest(props) {
 
   const initialState = {
     dischargeMedArray: "",
+    dischargeReportArray: '',
     dischargeRequest: "",
     dischargeSummary: "",
     otherNotes: "",
@@ -179,6 +182,12 @@ function DischargeRequest(props) {
     patientId: "",
     diagnosisArray: "",
     medicationArray: "",
+    firstName: "",
+    lastName: "",
+    profileNo: "",
+    createdAt: "", //admittedOn
+    QR: "",
+    requestNo: ""
   };
 
   function reducer(state, { field, value }) {
@@ -192,6 +201,7 @@ function DischargeRequest(props) {
 
   const {
     dischargeMedArray,
+    dischargeReportArray,
     dischargeRequest,
     dischargeSummary,
     otherNotes,
@@ -200,6 +210,12 @@ function DischargeRequest(props) {
     patientId,
     diagnosisArray,
     medicationArray,
+    firstName,
+    lastName,
+    profileNo,
+    createdAt, //admittedOn
+    QR,
+    requestNo
   } = state;
 
   const onChangeValue = (e) => {
@@ -217,7 +233,6 @@ function DischargeRequest(props) {
   const [item, setItem] = useState("");
   const [selectedItem, setSelectedItem] = useState("");
   const [selectedPatient, setSelectedPatient] = useState("");
-  const [requestNo, setrequestNo] = useState("");
   const [id, setId] = useState("");
   const [searchPatientQuery, setSearchPatientQuery] = useState("");
   const [patientFoundSuccessfull, setpatientFoundSuccessfully] = useState(
@@ -240,15 +255,11 @@ function DischargeRequest(props) {
       getPatientByInfo(props.patientDetails._id);
       openPatientDetailsDialog(true);
     }
-
     setCurrentUser(cookie.load("current_user"));
 
     // console.log(props.history.location.state.selectedItem)
 
     // const selectedRec = props.history.location.state.selectedItem
-
-   
-
     // setSelectedItem(props.history.location.state.selectedItem)
     // setId(props.history.location.state.selectedItem._id)
     // setrequestNo(props.history.location.state.selectedItem.requestNo)
@@ -281,6 +292,116 @@ function DischargeRequest(props) {
       setOpenItemDialog(false);
       setItem("");
     }
+  }
+
+  const formatDate = (date) => {
+    const d = new Date(date)
+
+    let minutes = ''
+
+    if (d.getHours().toString().length === 1) {
+      minutes = '0' + d.getHours()
+    } else {
+      minutes = d.getHours()
+    }
+    return (
+      // d.getDate() +
+      d.getDate() +
+      ' - ' +
+      (d.getMonth() + 1).toString().padStart(2, '0') +
+      ' - ' +
+      // (d.getMonth() + 1) +
+      d.getFullYear() +
+      ' ' +
+      // d.toLocaleTimeString()
+      minutes +
+      ':' +
+      ('00' + d.getMinutes()).slice(-2)
+    )
+  }
+
+  function printPDFReport(item) {
+    console.log("printing item", item)
+
+    var now = new Date()
+    var start = new Date(now.getFullYear(), 0, 0)
+    var diff =
+      now -
+      start +
+      (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000
+    var oneDay = 1000 * 60 * 60 * 24
+    var day = Math.floor(diff / oneDay)
+    var dateNow = new Date()
+    var YYYY = dateNow
+      .getFullYear()
+      .toString()
+      .substr(-2)
+    var HH = dateNow.getHours()
+    var mm = dateNow.getMinutes()
+    let ss = dateNow.getSeconds()
+
+    var dischargeNo = 'DR' + day + YYYY + HH + mm + ss
+
+    var doc = new jsPDF()
+
+    var logo = new Image()
+    logo.src = logoPatientSummaryInvoice
+
+    // header
+    doc.setFontSize(15)
+    doc.addImage(logo, 'PNG', 10, 5, 50, 28)
+    doc.text(60, 15, 'Al-Khalidi Hospital & Medical Center')
+    doc.line(73, 18, 135, 18)
+    doc.text(78, 24.5, 'Discharge Medication')
+    doc.line(73, 28, 135, 28)
+    doc.setFontSize(12)
+    doc.text(170, 8, 'Amman Jordan')
+
+    // background coloring
+    doc.setFillColor(255, 255, 200)
+    doc.rect(10, 45, 190, 20, 'F')
+
+    // information of patient
+    // labels
+    doc.setFontSize(10)
+    doc.setFont('times', 'bold')
+    doc.text(12, 50, 'Patient Name:')
+    doc.text(12, 55, 'Visit Date:')
+    doc.text(12, 60, 'Patient MRN:')
+    doc.text(120, 50, 'Request No:')
+    doc.text(120, 55, 'Request Date')
+    doc.text(120, 60, 'Visit No:')
+
+    // dynamic data of patient
+    doc.setFont('times', 'normal')
+    doc.text(47, 50, firstName + ' ' + lastName) // Patient Name
+    doc.text(47, 55, createdAt !== '' ? formatDate(createdAt) : '--')
+    doc.text(47, 60, profileNo.toUpperCase())
+    doc.text(155, 50, dischargeNo)
+    doc.text(155, 55, formatDate(dateNow))
+    doc.text(155, 60, `${requestNo}`)
+
+    // table
+    doc.autoTable({
+      margin: { top: 70, right: 10, left: 10 },
+      tableWidth: 'auto',
+      headStyles: { fillColor: [44, 109, 221] },
+      html: '#dischargeRequestForm',
+    })
+
+    // footer
+    doc.text(10, 243, 'Signature & Stamp')
+    doc.line(10, 250, 75, 250)
+
+    doc.line(0, 260, 210, 260)
+    doc.text(10, 290, `Prepared by: ${currentUser.name}`)
+    if (QR) {
+      var img = new Image()
+      img.src = `${audioURL + QR}`
+      doc.addImage(img, 'PNG', 172.9, 266, 25, 25)
+    }
+
+    doc.save(`Discharge Request ${dischargeNo}.pdf`)
   }
 
   const handleKeyDown = (e) => {
@@ -375,7 +496,9 @@ function DischargeRequest(props) {
               if (val && typeof val === "object") {
                 if (key === "patientId") {
                   dispatch({ field: "patientId", value: val._id });
-                  console.log(key, val._id);
+                  Object.entries(val).map(([key1, val1]) => {
+                    dispatch({ field: key1, value: val1 })
+                  })
                 } else if (key === "dischargeRequest") {
                   Object.entries(val).map(([key1, val1]) => {
                     if (key1 === "dischargeSummary") {
@@ -387,15 +510,7 @@ function DischargeRequest(props) {
                       dispatch({ field: "otherNotes", value: val1.otherNotes });
                     } else if (key1 === "dischargeMedication") {
                       dispatch({ field: "dischargeMedArray", value: [val1] });
-                      console.log("====================================");
-                      console.log(
-                        "dischargeMedArray",
-                        res.data.data.dischargeRequest.dischargeMedication
-                          .status === undefined
-                          ? setBackIsEmpty(true)
-                          : undefined
-                      );
-                      console.log("====================================");
+                      dispatch({ field: "dischargeReportArray", value: val1.medicine ? val1.medicine : '' });
                     }
                   });
                   dispatch({ field: "dischargeRequest", value: val });
@@ -411,7 +526,7 @@ function DischargeRequest(props) {
                       });
                     });
                     dispatch({
-                    field: "diagnosisArray",
+                      field: "diagnosisArray",
                       value: data,
                     });
                   }
@@ -495,18 +610,9 @@ function DischargeRequest(props) {
         receivedBy: currentUser.staffId,
       };
     }
-
-    // formData.append("data", JSON.stringify(params));
     console.log("PARAMSS ", params);
     // console.log("DATAAA ", formData);
     axios
-      // .post(AddDischargeRequestUrl, params, {
-      //   headers: {
-      //     accept: "application/json",
-      //     "Accept-Language": "en-US,en;q=0.8",
-      //     "content-type": "multipart/form-data",
-      //   },
-      // })
       .post(AddDischargeRequestUrl, params)
       .then((res) => {
         if (res.data.success) {
@@ -552,9 +658,8 @@ function DischargeRequest(props) {
             props.history.push({
               pathname: "dischargerequest/success",
               state: {
-                message: `Discharge Summary Request: ${
-                  res.data.data.requestNo
-                } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} Submitted successfully`,
+                message: `Discharge Summary Request: ${res.data.data.requestNo
+                  } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} Submitted successfully`,
               },
             });
             props.setPatientDetailsForReducer("");
@@ -769,13 +874,13 @@ function DischargeRequest(props) {
                         <h4> No Patient Found !</h4>
                       </div>
                     ) : (
-                      undefined
-                    )}
+                            undefined
+                          )}
                   </Paper>
                 </div>
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
             </div>
           </div>
         </div>
@@ -784,16 +889,16 @@ function DischargeRequest(props) {
             height: "20px",
           }}
         />
- <div className={`${classes.root}`}>
-       
-       <PatientDetails
-         patientDetails={patientDetails}
-         // showPatientDetails={showPatientDetails}
-         diagnosisArray={diagnosisArray}
-         medicationArray={medicationArray}
-       />
-     
-     </div>
+        <div className={`${classes.root}`}>
+
+          <PatientDetails
+            patientDetails={patientDetails}
+            // showPatientDetails={showPatientDetails}
+            diagnosisArray={diagnosisArray}
+            medicationArray={medicationArray}
+          />
+
+        </div>
         <div
           style={{
             height: "20px",
@@ -852,10 +957,10 @@ function DischargeRequest(props) {
               <div
                 className="col-md-12"
                 style={{ marginTop: "20px" }}
-                // style={{
-                //   ...styles.inputContainerForTextField,
-                //   ...styles.textFieldPadding,
-                // }}
+              // style={{
+              //   ...styles.inputContainerForTextField,
+              //   ...styles.textFieldPadding,
+              // }}
               >
                 <TextField
                   required
@@ -925,7 +1030,7 @@ function DischargeRequest(props) {
                   justifyContent: "center",
                   marginRight: "2px",
                 }}
-                // className='container-fluid'
+              // className='container-fluid'
               >
                 <div
                   style={{
@@ -955,7 +1060,7 @@ function DischargeRequest(props) {
                       style={styles.stylesForButton}
                       variant="contained"
                       color="primary"
-                      // disabled={!validateDischargeForm()}
+                    // disabled={!validateDischargeForm()}
                     >
                       <strong style={{ fontSize: "12px" }}>Submit</strong>
                     </Button>
@@ -969,6 +1074,39 @@ function DischargeRequest(props) {
             style={{ flex: 4, display: "flex", flexDirection: "column" }}
             className="container-fluid"
           >
+            {dischargeReportArray && dischargeReportArray.length > 0 ? (
+              <Table
+                id='dischargeRequestForm'
+                style={{ display: 'none' }}
+                aria-label='dischargeRequestForm'
+              >
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Ser.</TableCell>
+                    <TableCell>Item Code</TableCell>
+                    <TableCell align='right'>Item Name</TableCell>
+                    <TableCell align='right'>Requested Qty</TableCell>
+                    <TableCell align='right'>Price (JD)</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {dischargeReportArray.map((row, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{index+1}</TableCell>
+                      <TableCell component='th' scope='row'>
+                        {row.itemId.itemCode}
+                      </TableCell>
+                      <TableCell align='right'>{row.medicineName}</TableCell>
+                      <TableCell align='right'>{row.requestedQty}</TableCell>
+                      <TableCell align='right'>{row.totalPrice.toFixed(4)+' JD'}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            ) : (
+                undefined
+              )}
+
             <div className="row" style={{ marginTop: "20px" }}>
               {dischargeMedArray !== 0 && backIsEmpty === false ? (
                 <CustomTable
@@ -976,21 +1114,22 @@ function DischargeRequest(props) {
                   tableDataKeys={tableDataKeysForDischargeMed}
                   tableHeading={tableHeadingForDischargeMed}
                   handleView={viewItem}
+                  handlePrint={printPDFReport}
                   action={actions}
                   borderBottomColor={"#60d69f"}
                   borderBottomWidth={20}
                 />
               ) : (
-                <CustomTable
-                  tableData={[]}
-                  tableDataKeys={tableDataKeysForDischargeMed}
-                  tableHeading={tableHeadingForDischargeMed}
-                  handleView={viewItem}
-                  action={actions}
-                  borderBottomColor={"#60d69f"}
-                  borderBottomWidth={20}
-                />
-              )}
+                  <CustomTable
+                    tableData={[]}
+                    tableDataKeys={tableDataKeysForDischargeMed}
+                    tableHeading={tableHeadingForDischargeMed}
+                    handleView={viewItem}
+                    action={actions}
+                    borderBottomColor={"#60d69f"}
+                    borderBottomWidth={20}
+                  />
+                )}
             </div>
 
             <div className="row" style={{ marginBottom: "25px" }}>
@@ -1025,11 +1164,11 @@ function DischargeRequest(props) {
             </div>
           </div>
         ) : (
-          <div
-            style={{ flex: 4, display: "flex", flexDirection: "column" }}
-            className="container"
-          ></div>
-        )}
+              <div
+                style={{ flex: 4, display: "flex", flexDirection: "column" }}
+                className="container"
+              ></div>
+            )}
 
         {openItemDialog ? (
           <ViewSingleRequest
@@ -1038,8 +1177,8 @@ function DischargeRequest(props) {
             viewItem={viewItem}
           />
         ) : (
-          undefined
-        )}
+            undefined
+          )}
 
         <Notification msg={errorMsg} open={openNotification} />
       </div>

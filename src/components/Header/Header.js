@@ -1,7 +1,7 @@
 import React from "react";
 import "./Header.css";
-import KHMC_White from "../../assets/img/KHMC LOGO FOR CIRCLE.png";
-import Influence_white from "../../assets/img/Influence_white.png";
+import KHMC_White from "../../assets/img/KHMC Header LOGO.png";
+import Influence_white from "../../assets/img/Influence Original.png";
 import { Redirect } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
@@ -9,11 +9,10 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Fade from "@material-ui/core/Fade";
-
 import cookie from "react-cookies";
-
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
+import NotifyMe from 'react-notification-timeline';
 
 const styles = {
   stylesForButton: {
@@ -35,11 +34,22 @@ const styles = {
   },
 };
 class Header extends React.Component {
+
   state = {
     goBack: false,
     hover: false,
     open: false,
     currentUser: "",
+    data: [
+      {
+        "message": "70 new employees are shifted",
+        "timestamp": 1596119688264
+      },
+      {
+        "message": "Time to take a Break, TADA!!!",
+        "timestamp": 1596119686811
+      }
+    ]
   };
 
   componentDidMount() {
@@ -73,23 +83,27 @@ class Header extends React.Component {
       <div className="header" style={{ marginBottom: 150 }}>
         <img
           src={KHMC_White}
-          className="header1-style"
-          // style={{ height: "35px" }}
+          className="header1-style mr-auto p-2"
           onClick={() => {
             return this.setState({ goBack: true });
           }}
         />
+        <NotifyMe
+          data={this.state.data}
+          storageKey='notific_key'
+          notific_key='timestamp'
+          notific_value='message'
+          heading='Notification Alerts'
+          sortedByKey={false}
+          showDate={true}
+          size={35}
+          color="white"
+          className="notification-style p-2"
+          class="notification-style"
+        />
         <img
           src={Influence_white}
           className="header2-style"
-          style={
-            {
-              // maxWidth: "160px",
-              // height: "35px",
-              // cursor: "pointer",
-              // boxShadow: this.state.hover ? '2px 2px 2px 2px #b2b0b0' : '',
-            }
-          }
           // onMouseEnter={() => this.setState({ hover: true })}
           // onMouseLeave={() => this.setState({ hover: false })}
           onClick={() => this.setState({ open: !this.state.open })}
@@ -246,8 +260,8 @@ class Header extends React.Component {
             </Fade>
           </div>
         ) : (
-          undefined
-        )}
+            undefined
+          )}
 
         {this.state.currentUser ? (
           <div style={{ position: "fixed", right: 35, bottom: 45, zIndex: 5 }}>
@@ -265,8 +279,8 @@ class Header extends React.Component {
             </Fab>
           </div>
         ) : (
-          undefined
-        )}
+            undefined
+          )}
       </div>
     );
   }

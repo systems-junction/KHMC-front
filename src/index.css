@@ -12,11 +12,11 @@ ul li {
   /* padding: 0 3% !important; */
   padding-left: 25px;
   padding-right: 25px;
-  margin-top: -530px;
+  margin-top: -550px;
 }
 
 .addCode:before {
-  content: "\f055";
+  content: '\f055';
   font-family: FontAwesome;
   font-style: normal;
   font-weight: normal;
@@ -26,7 +26,7 @@ ul li {
 }
 
 .addedCode:before {
-  content: "\f058";
+  content: '\f058';
   font-family: FontAwesome;
   font-style: normal;
   font-weight: normal;
@@ -127,7 +127,7 @@ ul li {
   display: inline-block;
 } */
 
-@import url("//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css");
+@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css');
 .search {
   position: relative;
 }
@@ -234,7 +234,7 @@ ul li {
 
 /* css  for radio tabs */
 
-input[type="radio"] {
+input[type='radio'] {
   box-shadow: none;
 }
 
