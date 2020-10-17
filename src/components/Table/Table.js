@@ -942,6 +942,22 @@ export default function CustomTable(props) {
                                   <i className=" ml-10 zmdi zmdi-check zmdi-hc-2x" />
                                 </span>
                               </RcIf>
+
+                              <RcIf if={props.action.print}>
+                                <span
+                                  onClick={() =>
+                                    props.handlePrint(prop)
+                                      ? props.handlePrint(prop)
+                                      : {}
+                                  }
+                                  title="Active"
+                                >
+                                  <i
+                                    style={{ color: "grey" }}
+                                    class="zmdi zmdi-print zmdi-hc-2x"
+                                  ></i>
+                                </span>
+                              </RcIf>
                             </div>
                           ) : (
                             undefined
