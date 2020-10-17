@@ -504,6 +504,8 @@ function LabRadRequest(props) {
   const [icdArr, setIcdArr] = useState([]);
   const [patientHistoryId, setPatientHistoryId] = useState("");
   const [EDRIPROPR, setEDRIPROPR] = useState([]);
+  const [viewData, setViewData] = useState(false);
+  const [loadEDRIPROPR, setLoadEDRIPROPR] = useState(false);
 
   const validateForm = () => {
     return (
@@ -1265,8 +1267,10 @@ function LabRadRequest(props) {
   }
 
   const getEDRIPROPR = (historyId) => {
+    setLoadEDRIPROPR(true)
     axios.get(getpatientHistoryPre + "/" + historyId).then((res) => {
       if (res.data.success) {
+        setLoadEDRIPROPR(false)
         var obj = _.sortBy(res.data.data, "createdAt").reverse();
         setEDRIPROPR(obj);
 
@@ -1517,6 +1521,7 @@ function LabRadRequest(props) {
           });
         }
       });
+      setViewData(true)
   }
 
   if (openNotification) {
@@ -1727,7 +1732,7 @@ function LabRadRequest(props) {
             />
           </div>
         </div>
-
+        {viewData ?
         <div>
           <div
             style={{
@@ -2034,7 +2039,7 @@ function LabRadRequest(props) {
           ) : (
             undefined
           )}
-        </div>
+        </div> : undefined}
 
         <Dialog
           aria-labelledby="form-dialog-title"

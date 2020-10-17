@@ -46,7 +46,7 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import BarCode from '../../assets/img/Bar Code.png'
 import ViewSingleRequest from '../../components/ViewRequest/ViewRequest'
 import Loader from 'react-loader-spinner'
-import UpdateSingleRequest from "../../views/ECR/updateRequest";
+import UpdateSingleRequest from "../ECR/updateRequest";
 
 import { connect } from 'react-redux'
 import {

@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import NotFound from "../components/NotFound/NotFound";
-import patientAssessment from "../views/MainScreen/MainScreen";
+import patientAssessment from "../views/PatientAssessmentCareLabRad/PatientAssessmentCareLabRad";
 import triageAssessment from "../views/TriageAndAssessment/TriageAndAssessment";
 import SuccessScreen from "../components/SuccessScreen/SuccessScreen";
 import viewReport from "../components/ViewLabRadReport/ViewLabRadReport";
