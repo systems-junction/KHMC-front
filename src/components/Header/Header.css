@@ -3,21 +3,24 @@
   padding-left: 25px;
   padding-right: 25px;
   padding-top: 28px;
-
   display: flex;
   justify-content: space-between;
 }
 .header1-style {
   max-width: 27%;
-  height: 18%;
-  margin-left: 0px;
-  margin-top: -7px;
+  height: 20%;
+  margin-left: -5px;
+  margin-top: -15px;
 }
 .header2-style {
   max-width: 20%;
   height: 8%;
-  margin-top: -6px;
-  margin-right: 0.5%;
+  /* margin-top: -6px;
+  margin-right: 0.5%; */
+  cursor: pointer;
+}
+.notification-style{
+  margin-right: 20px ;
 }
 
 @media screen and (max-width: 768px) {
