@@ -1,49 +1,6 @@
 /*eslint-disable*/
 import React, { useState, useEffect } from "react";
 // @material-ui/core components
-import Button from "@material-ui/core/Button";
-import Notification from "../../components/Snackbar/Notification.js";
-import Paper from "@material-ui/core/Paper";
-import CustomTable from "../../components/Table/Table";
-import ConfirmationModal from "../../components/Modal/confirmationModal";
-import cookie from "react-cookies";
-
-import axios from "axios";
-import {
-  getPurchaseRequestUrl,
-  deletePurchaseRequestUrl,
-  socketUrl,
-} from "../../public/endpoins";
-import Loader from "react-loader-spinner";
-
-import Header from "../../components/Header/Header";
-
-import Add_New from "../../assets/img/Add_New.png";
-import purchase_request from "../../assets/img/purchase request.png";
-import plus_icon from "../../assets/img/Plus.png";
-import Back from "../../assets/img/Back_Arrow.png";
-
-import Search from "../../assets/img/Search.png";
-import Control_Room from "../../assets/img/Control_Room.png";
-
-import Edit from "../../assets/img/Edit.png";
-
-import Inactive from "../../assets/img/Inactive.png";
-
-import Active from "../../assets/img/Active.png";
-
-import LogoPatientSummaryInvoice from "../../assets/img/logoPatientSummaryInvoice.png";
-
-import Fingerprint from "../../assets/img/fingerprint.png";
-import AccountCircle from "@material-ui/icons/SearchOutlined";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import BarCode from "../../assets/img/Bar Code.png";
-import TextField from "@material-ui/core/TextField";
-import { makeStyles } from "@material-ui/core/styles";
-
-import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
-
-import socketIOClient from "socket.io-client";
 
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
@@ -63,37 +20,15 @@ const CustomTableCell = withStyles((theme) => ({
   },
 }))(TableCell);
 
-const styles = {
-  stylesForButton: {
-    color: "white",
-    cursor: "pointer",
-    borderRadius: 5,
-    background: "#2c6ddd",
-    width: "140px",
-    height: "50px",
-    outline: "none",
-  },
-  textFieldPadding: {
-    paddingLeft: 0,
-    paddingRight: 5,
-  },
-};
-
 const tableHeadingToPrint = [
-  "Ser.",
+  "No.",
   "PR No",
   "Item Code",
+  "Batch",
+  "Expiry Date",
   "Unit",
-  //   "Item Name",
-  //   "Balance",
-  //   "Unit",
-  //   "Consumption",
-  //   "Vendor",
-  //   "Last Price",
-  //   "Unit",
-  "Requested Qty",
-  //   "Current Qty",
-  "Receipt Unit Cost JD",
+  "Qty",
+  //   "Price(JD)",
 ];
 
 export default function PurchaseRequest(props) {
@@ -130,6 +65,8 @@ export default function PurchaseRequest(props) {
                   <TableCell>{count}</TableCell>
                   <TableCell>{po.id.requestNo}</TableCell>
                   <TableCell>{pr.itemId.itemCode}</TableCell>
+                  <TableCell>--</TableCell>
+                  <TableCell>--</TableCell>
                   <TableCell>{pr.itemId.receiptUnit}</TableCell>
 
                   {/* <TableCell>
@@ -137,7 +74,9 @@ export default function PurchaseRequest(props) {
                   </TableCell> */}
                   <TableCell>{pr.reqQty}</TableCell>
                   {/* <TableCell>{pr.currQty}</TableCell> */}
-                  <TableCell>{pr.itemId.receiptUnitCost} JD</TableCell>
+                  {/* <TableCell>
+                    {pr.itemId.receiptUnitCost.toFixed(4)} JD
+                  </TableCell> */}
                 </TableRow>
               );
             });
