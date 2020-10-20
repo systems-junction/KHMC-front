@@ -46,18 +46,21 @@ const tableDataKeysForCommittee = [
 ];
 
 const tableHeadingToPrint = [
-  "Ser.",
+  "No.",
   "Item Code",
   "Item Name",
   //   "Balance",
+  "Batch",
+  "Exp Date",
   "Unit",
-  "Price(JD)",
+  "Qty",
+//   "Price(JD)",
   //   "Consumption",
   //   "Vendor",
   //   "Last Price",
   //   "Unit",
-  "Returned Qty",
-  "Return Reason",
+  //   "Return Reason",
+//   "Total(JD)",
 ];
 
 export default function PurchaseRequest(props) {
@@ -80,6 +83,7 @@ export default function PurchaseRequest(props) {
       <TableBody>
         <TableRow>
           <TableCell>1</TableCell>
+
           <TableCell>
             {props.selectedPRToPrint && props.selectedPRToPrint.itemId.itemCode}
           </TableCell>
@@ -88,24 +92,37 @@ export default function PurchaseRequest(props) {
             {props.selectedPRToPrint && props.selectedPRToPrint.itemId.name}
           </TableCell>
 
+          <TableCell>--</TableCell>
+
+          <TableCell>--</TableCell>
+
           <TableCell>
             {props.selectedPRToPrint &&
               props.selectedPRToPrint.itemId.receiptUnit}
           </TableCell>
 
-          <TableCell>
+          {/* <TableCell>
             {props.selectedPRToPrint &&
               props.selectedPRToPrint.itemId.receiptUnitCost.toFixed(4)}
             &nbsp; JD
-          </TableCell>
+          </TableCell> */}
 
           <TableCell>
             {props.selectedPRToPrint && props.selectedPRToPrint.returnedQty}
           </TableCell>
 
-          <TableCell>
+          {/* <TableCell>
+            {props.selectedPRToPrint &&
+              (
+                props.selectedPRToPrint.returnedQty *
+                props.selectedPRToPrint.itemId.receiptUnitCost
+              ).toFixed(4)}{" "}
+            JD
+          </TableCell> */}
+
+          {/* <TableCell>
             {props.selectedPRToPrint && props.selectedPRToPrint.reason}
-          </TableCell>
+          </TableCell> */}
         </TableRow>
       </TableBody>
     </Table>

@@ -134,6 +134,12 @@ const actionsForFUInventoryKeeper = {
   print: true,
 };
 
+const actionsForApprovalMember = {
+  edit: true,
+  view: true,
+  print:true,
+};
+
 const actionsForWareHouseMembers = {
   view: true,
 };
@@ -388,7 +394,7 @@ export default function ReplenishmentRequest(props) {
     // header
     doc.setFontSize(13);
     doc.text(60, 15, "Al-Khalidi Hospital & Medical Center");
-    doc.text(77, 22, "Purchase Request Form");
+    doc.text(85, 22, "Internal Return");
     doc.setFontSize(12);
     doc.text(170, 14, "Amman Jordan");
     // background coloring
@@ -415,7 +421,7 @@ export default function ReplenishmentRequest(props) {
     // footer
 
     doc.autoTable({
-      margin: { top: 60, right: 3, left: 3 },
+      margin: { top: 60, right: 10, left: 10 },
       tableWidth: "auto",
       headStyles: { fillColor: [44, 109, 221] },
       html: "#my_table",
@@ -423,18 +429,17 @@ export default function ReplenishmentRequest(props) {
 
     doc.setFontSize(12);
     doc.setFont("times", "bold");
-    doc.text(50, 250, "Department Manager");
-    doc.line(50, 258, 90, 258);
-    doc.text(140, 250, "Section Head");
-    doc.line(140, 258, 165, 258);
+    doc.text(10, 250, "Received By");
+    doc.line(10, 258, 50, 258);
+    // doc.text(175, 250, "Section Head");
+    // doc.line(175, 258, 200, 258);
     doc.setFont("times", "normal");
     doc.text(10, 270, "User name:");
     doc.text(35, 270, currentUser.name);
     doc.text(160, 270, "Module:");
-    doc.text(180, 270, "Internal Return");
-    doc.text(140, 275, "Date:");
-    doc.text(150, 275, new Date().toLocaleString());
-
+    doc.text(180, 270, "Inventory");
+    doc.text(145, 275, "Date:");
+    doc.text(155, 275, new Date().toLocaleString());
     doc.save(`${selectedPRToPrint.returnRequestNo}.pdf`);
   };
 
@@ -550,10 +555,11 @@ export default function ReplenishmentRequest(props) {
                       : tableHeading
                   }
                   action={
-                    currentUser.staffTypeId.type === "FU Inventory Keeper" ||
-                    currentUser.staffTypeId.type ===
-                      "FU Internal Request Return Approval Member"
+                    currentUser.staffTypeId.type === "FU Inventory Keeper"
                       ? actionsForFUInventoryKeeper
+                      : currentUser.staffTypeId.type ===
+                        "FU Internal Request Return Approval Member"
+                      ? actionsForApprovalMember
                       : currentUser.staffTypeId.type === "Warehouse Member"
                       ? actionsForWareHouseMembers
                       : actions

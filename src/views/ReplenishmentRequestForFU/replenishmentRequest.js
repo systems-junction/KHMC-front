@@ -59,6 +59,8 @@ import "jspdf-autotable";
 import PrintTable from "./printReplenishmentRequest";
 import LogoPatientSummaryInvoice from "../../assets/img/logoPatientSummaryInvoice.png";
 
+import twenthyfive from "../../assets/img/25.png";
+
 const tableHeadingForFUHead = [
   "Replenishemt Request No",
   "Generated",
@@ -169,14 +171,14 @@ const useStylesForInput = makeStyles((theme) => ({
 }));
 
 const actions = { view: true };
-const actionsForFUMemeberForReceive = { edit: false, view: true };
+const actionsForFUMemeberForReceive = { edit: false, view: true, print: true };
 const actionsForFUMemeberForReplenishment = {
   edit: true,
   view: true,
   print: true,
 };
 
-const actionsForWarehouseMember = { edit: true, view: true };
+const actionsForWarehouseMember = { edit: true, view: true, print: true };
 const actionsForBUDoctor = { view: true };
 
 const tableDataKeysForItemsForWarehouseMember = [
@@ -708,7 +710,6 @@ export default function ReplenishmentRequest(props) {
     setSelectedPRToPrint(selectedPr);
   }
 
-
   const handlePrint = () => {
     let imgData = new Image();
     imgData.src = LogoPatientSummaryInvoice;
@@ -724,7 +725,7 @@ export default function ReplenishmentRequest(props) {
     // header
     doc.setFontSize(13);
     doc.text(60, 15, "Al-Khalidi Hospital & Medical Center");
-    doc.text(77, 22, "Purchase Request Form");
+    doc.text(65, 22, "Department Transactions Report");
     doc.setFontSize(12);
     doc.text(170, 14, "Amman Jordan");
     // background coloring
@@ -733,25 +734,28 @@ export default function ReplenishmentRequest(props) {
     // information of patient
     doc.setFontSize(10);
     doc.setFont("times", "normal");
-    doc.text(12, 50, "From");
-    doc.text(12, 55, "To");
+
+    // doc.text(12, 50, "From");
+    // doc.text(12, 55, "To");
+
     // doc.text(80, 50, "Department");
     // doc.text(80, 55, "Warehouse");
-    doc.text(135, 50, "Doc No.");
-    doc.text(135, 55, "Date");
+    doc.text(12, 50, "Doc No.");
+    doc.text(12, 55, "Date");
+
     // dynamic data info patient
     doc.setFont("times", "bold");
-    doc.text(30, 50, currentUser.functionalUnit.fuName);
-    doc.text(30, 55, "Warehouse");
+    // doc.text(30, 50, currentUser.functionalUnit.fuName);
+    // doc.text(30, 55, "Warehouse");
     // doc.text(100, 50, "HERE");
     // doc.text(100, 55, "HERE");
-    doc.text(150, 50, selectedPRToPrint.requestNo);
-    doc.text(150, 55, createdAt);
+    doc.text(30, 50, selectedPRToPrint.requestNo);
+    doc.text(30, 55, createdAt);
     // table
     // footer
 
     doc.autoTable({
-      margin: { top: 60, right: 3, left: 3 },
+      margin: { top: 60, right: 10, left: 10 },
       tableWidth: "auto",
       headStyles: { fillColor: [44, 109, 221] },
       html: "#my_table",
@@ -759,17 +763,17 @@ export default function ReplenishmentRequest(props) {
 
     doc.setFontSize(12);
     doc.setFont("times", "bold");
-    doc.text(50, 250, "Department Manager");
-    doc.line(50, 258, 90, 258);
-    doc.text(140, 250, "Section Head");
-    doc.line(140, 258, 165, 258);
+    doc.text(10, 250, "Department Manager");
+    doc.line(10, 258, 50, 258);
+    doc.text(175, 250, "Section Head");
+    doc.line(175, 258, 200, 258);
     doc.setFont("times", "normal");
     doc.text(10, 270, "User name:");
     doc.text(35, 270, currentUser.name);
     doc.text(160, 270, "Module:");
-    doc.text(180, 270, "Replenishment");
-    doc.text(140, 275, "Date:");
-    doc.text(150, 275, new Date().toLocaleString());
+    doc.text(180, 270, "Inventory");
+    doc.text(145, 275, "Date:");
+    doc.text(155, 275, new Date().toLocaleString());
 
     doc.save(`${selectedPRToPrint.requestNo}.pdf`);
   };
@@ -914,13 +918,11 @@ export default function ReplenishmentRequest(props) {
                   <CustomTable
                     tableData={purchaseRequests}
                     tableDataKeys={
-                      currentUser.staffTypeId.type === "FU Inventory Keeper" ||
                       currentUser.staffTypeId.type === "FU Inventory Keeper"
                         ? tableDataKeysForFUHead
                         : tableDataKeys
                     }
                     tableHeading={
-                      currentUser.staffTypeId.type === "FU Inventory Keeper" ||
                       currentUser.staffTypeId.type === "FU Inventory Keeper"
                         ? tableHeadingForFUHead
                         : tableHeading
