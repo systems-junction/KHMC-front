@@ -12,7 +12,7 @@ import Fade from "@material-ui/core/Fade";
 import cookie from "react-cookies";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
-import NotifyMe from 'react-notification-timeline';
+// import NotifyMe from 'react-notification-timeline';
 
 const styles = {
   stylesForButton: {
@@ -88,7 +88,7 @@ class Header extends React.Component {
             return this.setState({ goBack: true });
           }}
         />
-        <NotifyMe
+        {/* <NotifyMe
           data={this.state.data}
           storageKey='notific_key'
           notific_key='timestamp'
@@ -100,7 +100,7 @@ class Header extends React.Component {
           color="white"
           className="notification-style p-2"
           class="notification-style"
-        />
+        /> */}
         <img
           src={Influence_white}
           className="header2-style"

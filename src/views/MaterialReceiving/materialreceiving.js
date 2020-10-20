@@ -361,7 +361,7 @@ export default function PurchaseRequest(props) {
     // footer
 
     doc.autoTable({
-      margin: { top: 60, right: 3, left: 3 },
+      margin: { top: 60, right: 10, left: 10 },
       tableWidth: "auto",
       headStyles: { fillColor: [44, 109, 221] },
       html: "#my_tableForPO",
@@ -369,17 +369,17 @@ export default function PurchaseRequest(props) {
 
     doc.setFontSize(12);
     doc.setFont("times", "bold");
-    doc.text(50, 250, "Received By");
-    doc.line(50, 258, 90, 258);
-    // doc.text(140, 250, "Section Head");
-    // doc.line(140, 258, 165, 258);
+    doc.text(10, 250, "Received By");
+    doc.line(10, 258, 50, 258);
+    // doc.text(175, 250, "Section Head");
+    // doc.line(175, 258, 200, 258);
     doc.setFont("times", "normal");
     doc.text(10, 270, "User name:");
     doc.text(35, 270, currentUser.name);
-    doc.text(160, 270, "Module:");
-    doc.text(180, 270, "Inventory");
-    doc.text(140, 275, "Date:");
-    doc.text(150, 275, new Date().toLocaleString());
+    doc.text(162, 270, "Module:");
+    doc.text(182, 270, "Inventory");
+    doc.text(147, 275, "Date:");
+    doc.text(157, 275, new Date().toLocaleString());
 
     doc.save(`${selectedPRToPrint.poId.purchaseOrderNo}.pdf`);
   };

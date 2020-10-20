@@ -20,38 +20,19 @@ const CustomTableCell = withStyles((theme) => ({
   },
 }))(TableCell);
 
-const styles = {
-  stylesForButton: {
-    color: "white",
-    cursor: "pointer",
-    borderRadius: 5,
-    background: "#2c6ddd",
-    width: "140px",
-    height: "50px",
-    outline: "none",
-  },
-  textFieldPadding: {
-    paddingLeft: 0,
-    paddingRight: 5,
-  },
-};
-
 const tableHeadingToPrint = [
   "No.",
   "Item Code",
   "Item Name",
-    "Balance",
-  "Unit",
-  "Consumption",
-  "Last Supplier",
-  "Last Price(JD)",
-  "Unit",
-  "Qty",
-  // "Vendor",
-  //   "Last Price",
+  //   "Item Type",
+  //   "Balance",
   //   "Unit",
-  // "Req Qty",
-  // "Curr Qty",
+  //   "Consumption",
+  //   "Vendor",
+  "Price",
+  //   "Unit",
+  "Req Qty",
+  "Curr Qty",
 ];
 
 export default function PurchaseRequest(props) {
@@ -61,8 +42,14 @@ export default function PurchaseRequest(props) {
     backgroundColor: "green",
   };
 
+  let count = 0;
+
   return (
-    <Table id="my_table" aria-label="simple table" style={{ display: "none" }}>
+    <Table
+      id="my_tableForMedicalOrder"
+      aria-label="simple table"
+      style={{ display: "none" }}
+    >
       <TableHead>
         <TableRow>
           {tableHeadingToPrint.map((h, index) => {
@@ -74,21 +61,17 @@ export default function PurchaseRequest(props) {
       <TableBody>
         {props.selectedPRToPrint &&
           props.selectedPRToPrint.item.map((pr, index) => {
+            console.log(pr);
+            count++;
             return (
               <TableRow key={index}>
-                <TableCell>{index + 1}</TableCell>;
-                <TableCell>{pr.itemId.itemCode}</TableCell>;
-                <TableCell> {pr.itemId.name}</TableCell>
-                <TableCell>--</TableCell>
-                <TableCell>{pr.itemId.receiptUnit}</TableCell>;
-                <TableCell>--</TableCell>
-                <TableCell>
-                  {props.selectedPRToPrint.vendorId.englishName}
-                </TableCell>
-                <TableCell>{pr.itemId.receiptUnitCost.toFixed(4)}JD </TableCell>
-                <TableCell>{pr.itemId.receiptUnit}</TableCell>;
-                <TableCell>{pr.reqQty}</TableCell>
-                {/* <TableCell>{pr.currQty}</TableCell> */}
+                <TableCell>{count}</TableCell>
+                <TableCell>{pr.itemId.itemCode}</TableCell>
+                <TableCell>{pr.itemId.name}</TableCell>
+                <TableCell>{pr.itemId.issueUnitCost.toFixed(4)}JD</TableCell>
+                {/* <TableCell>{pr.itemId.medClass}</TableCell> */}
+                <TableCell>{pr.requestedQty}</TableCell>
+                <TableCell>{pr.currentQty}</TableCell>
               </TableRow>
             );
           })}

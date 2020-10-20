@@ -1,49 +1,6 @@
 /*eslint-disable*/
 import React, { useState, useEffect } from "react";
 // @material-ui/core components
-import Button from "@material-ui/core/Button";
-import Notification from "../../components/Snackbar/Notification.js";
-import Paper from "@material-ui/core/Paper";
-import CustomTable from "../../components/Table/Table";
-import ConfirmationModal from "../../components/Modal/confirmationModal";
-import cookie from "react-cookies";
-
-import axios from "axios";
-import {
-  getPurchaseRequestUrl,
-  deletePurchaseRequestUrl,
-  socketUrl,
-} from "../../public/endpoins";
-import Loader from "react-loader-spinner";
-
-import Header from "../../components/Header/Header";
-
-import Add_New from "../../assets/img/Add_New.png";
-import purchase_request from "../../assets/img/purchase request.png";
-import plus_icon from "../../assets/img/Plus.png";
-import Back from "../../assets/img/Back_Arrow.png";
-
-import Search from "../../assets/img/Search.png";
-import Control_Room from "../../assets/img/Control_Room.png";
-
-import Edit from "../../assets/img/Edit.png";
-
-import Inactive from "../../assets/img/Inactive.png";
-
-import Active from "../../assets/img/Active.png";
-
-import LogoPatientSummaryInvoice from "../../assets/img/logoPatientSummaryInvoice.png";
-
-import Fingerprint from "../../assets/img/fingerprint.png";
-import AccountCircle from "@material-ui/icons/SearchOutlined";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import BarCode from "../../assets/img/Bar Code.png";
-import TextField from "@material-ui/core/TextField";
-import { makeStyles } from "@material-ui/core/styles";
-
-import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
-
-import socketIOClient from "socket.io-client";
 
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
@@ -79,28 +36,21 @@ const styles = {
   },
 };
 
-const tableDataKeysForCommittee = [
-  "requestNo",
-  "createdAt",
-  "generated",
-  ["vendorId", "englishName"],
-  ["approvedBy", "firstName"],
-  "committeeStatus",
-];
+
 
 const tableHeadingToPrint = [
-  "Ser.",
+  "No.",
   "PR No",
   "Item Code",
-  //   "Item Name",
+    "Item Name",
   //   "Balance",
   //   "Unit",
   //   "Consumption",
-  "Vendor",
+//   "Vendor",
   //   "Last Price",
   //   "Unit",
-  "Requested Qty",
-  "Current Qty",
+  "Req Qty",
+  "Curr Qty",
 ];
 
 export default function PurchaseRequest(props) {
@@ -130,16 +80,17 @@ export default function PurchaseRequest(props) {
         {props.selectedPRToPrint &&
           props.selectedPRToPrint.purchaseRequestId.map((po) => {
             return po.item.map((pr, index) => {
-              console.log(pr);
               count++;
               return (
                 <TableRow key={index}>
                   <TableCell>{count}</TableCell>
                   <TableCell>{po.requestNo}</TableCell>
                   <TableCell>{pr.itemCode}</TableCell>
-                  <TableCell>
+                  <TableCell>{pr.name}</TableCell>
+
+                  {/* <TableCell>
                     {props.selectedPRToPrint.vendorId.englishName}
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell>{pr.reqQty}</TableCell>
                   <TableCell>{pr.currQty}</TableCell>
                 </TableRow>

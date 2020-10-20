@@ -20,44 +20,14 @@ const CustomTableCell = withStyles((theme) => ({
   },
 }))(TableCell);
 
-const styles = {
-  stylesForButton: {
-    color: "white",
-    cursor: "pointer",
-    borderRadius: 5,
-    background: "#2c6ddd",
-    width: "140px",
-    height: "50px",
-    outline: "none",
-  },
-  textFieldPadding: {
-    paddingLeft: 0,
-    paddingRight: 5,
-  },
-};
-
-const tableDataKeysForCommittee = [
-  "requestNo",
-  "createdAt",
-  "generated",
-  ["vendorId", "englishName"],
-  ["approvedBy", "firstName"],
-  "committeeStatus",
-];
-
 const tableHeadingToPrint = [
-  "Ser.",
+  "No.",
   "Item Code",
   "Item Name",
-  //   "Balance",
+  "Batch",
+  "Exp Date",
   "Unit",
-  //   "Consumption",
-  //   "Vendor",
-  //   "Last Price",
-  //   "Unit",
-  "Requested Qty",
-  "Current Qty",
-  "Price(JD)",
+  "Qty",
 ];
 
 export default function PurchaseRequest(props) {
@@ -85,13 +55,17 @@ export default function PurchaseRequest(props) {
                 <TableCell>{index + 1}</TableCell>;
                 <TableCell>{pr.itemId.itemCode}</TableCell>;
                 <TableCell>{pr.itemId.name}</TableCell>;
+                <TableCell>--</TableCell>;
+                <TableCell>--</TableCell>;  
                 <TableCell>{pr.itemId.receiptUnit}</TableCell>;
                 {/* <TableCell>
                   {props.selectedPRToPrint.vendorId.englishName}
                 </TableCell> */}
                 <TableCell>{pr.requestedQty}</TableCell>
-                <TableCell>{pr.currentQty}</TableCell>
-                <TableCell>{pr.issueUnitCost.toFixed(4)}&nbsp;JD</TableCell>
+                {/* <TableCell>{pr.currentQty}</TableCell> */}
+                {/* <TableCell>
+                  {pr.itemId.issueUnitCost.toFixed(4)}&nbsp;JD
+                </TableCell> */}
               </TableRow>
             );
           })}
