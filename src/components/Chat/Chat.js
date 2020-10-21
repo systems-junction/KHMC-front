@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import TextField from '@material-ui/core/TextField'
@@ -57,12 +57,12 @@ export default function Chat(props) {
       <Header />
       <div className='cPadding'>
         <div className='subheader' style={{ marginLeft: '-10px' }}>
-        <div>
+          <div>
             <h4>Chat</h4>
           </div>
-    </div>
+        </div>
 
-<div className={classesForTabs.root}>
+        <div className={classesForTabs.root}>
           <Tabs
             value={value}
             onChange={handleChange}
@@ -88,160 +88,169 @@ export default function Chat(props) {
               }}
               label='Paramedics'
             />
-            
+
           </Tabs>
         </div>
-        <div className='container-fluid' style={{backgroundColor: 'white', marginTop: 20, borderRadius:5}}>
-          <div className='row' style={{padding: 20}}>
+        <div className='container-fluid' style={{ backgroundColor: 'white', marginTop: 20, borderRadius: 5 }}>
+          <div className='row' style={{ padding: 20 }}>
             <div className='col-md-6'><h4>All Messages</h4></div>
-        
-        <div className='col-md-6' style={{ display: 'flex', justifyContent: 'flex-end'}}>
-        <SearchIcon style={{ marginTop: 7}}/>
-        <input placeholder='Search' style={{border: 'none'}} />
-      {/* <TextField
+
+            <div className='col-md-6' style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <SearchIcon style={{ marginTop: 7 }} />
+              <input placeholder='Search Name...' style={{ border: 'none' }} />
+              {/* <TextField
            label="Search by Name"
         /> */}
-        
+
+            </div>
+
+          </div>
+          <div className={classes.root} style={{
+            maxWidth: 1300, overflowY: 'hidden',
+            overflowX: 'scroll',
+          }}>
+            <div>
+              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
+              <h4>name</h4>
+            </div>
+            <div>
+              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
+              <h4>name</h4>
+            </div>
+            <div>
+              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
+              <h4>name</h4>
+            </div>
+            <div>
+              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
+              <h4>name</h4>
+            </div>
+            <div>
+              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
+              <h4>name</h4>
+            </div>
+            <div>
+              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
+              <h4>name</h4>
+            </div>
+            <div>
+              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
+              <h4>name</h4>
+            </div>
+            <div>
+              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
+              <h4>name</h4>
+            </div>
+            <div>
+              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
+              <h4>name</h4>
+            </div>
+            <div>
+              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
+              <h4>name</h4>
+            </div>
+            <div>
+              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
+              <h4>name</h4>
+            </div>
+            <div>
+              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
+              <h4>name</h4>
+            </div>
+            <div>
+              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
+              <h4>name</h4>
+            </div>
+            <div>
+              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
+              <h4>name</h4>
+            </div>
+          </div>
         </div>
 
-        </div>
-    <div className={classes.root} style={{maxWidth: 1300, overflowY: 'hidden',
-                overflowX: 'scroll',}}>
-      <div>
-      <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-      <h4>name</h4>
-      </div>
-      <div>
-      <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-      <h4>name</h4>
-      </div>
-      <div>
-      <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-      <h4>name</h4>
-      </div>
-      <div>
-      <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-      <h4>name</h4>
-      </div>
-      <div>
-      <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-      <h4>name</h4>
-      </div>
-      <div>
-      <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-      <h4>name</h4>
-      </div>
-      <div>
-      <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-      <h4>name</h4>
-      </div>
-      <div>
-      <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-      <h4>name</h4>
-      </div>
-      <div>
-      <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-      <h4>name</h4>
-      </div>
-      <div>
-      <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-      <h4>name</h4>
-      </div>
-      <div>
-      <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-      <h4>name</h4>
-      </div>
-      <div>
-      <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-      <h4>name</h4>
-      </div>
-      <div>
-      <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-      <h4>name</h4>
-      </div>
-      <div>
-      <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-      <h4>name</h4>
-      </div>
-      </div>
-      </div>
-      
-      <div style={{backgroundColor: 'white', marginTop: 20, borderri:5, borderLeft: 5, padding: 20, maxHeight: '800px',
-                overflowY: 'scroll',
-                overflowX: 'hidden', borderTopLeftRadius: 5, borderTopRightRadius: 5}}>
-        <div className={classes.root}>
-        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar}/>
-        <div><h4>Ingrendia Nutritia</h4>
-        <h4 style={{color: 'blue'}}>patinet denstis</h4></div>
-        
-        <div style={{marginLeft: 800}}>
-          <h3>05 Min</h3>
-        </div>
-        </div>
-        <hr />
+        <div style={{
+          backgroundColor: 'white', marginTop: 20, borderri: 5, borderLeft: 5, padding: 20,
+          borderTopLeftRadius: 5, borderTopRightRadius: 5
+        }}>
+          <div className={classes.root}>
+            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
+            <div><h4>Ingrendia Nutritia</h4>
+              <h4 style={{ color: 'blue' }}>patinet denstis</h4></div>
 
-        <div style={{display: 'flex', justifyContent: 'center' }}>
-        <Button variant="contained" color="primary" style={{backgroundColor: 'cadetblue', borderRadius: 20}}>
-  <span style={{fontSize: 10}}>Yesterday</span>
-</Button>
-</div>
-        <div className={classes.root}>
+            <div style={{ marginLeft: 800 }}>
+              <h3>05 Min</h3>
+            </div>
+          </div>
+          <hr />
+          <div style={{
+            overflowY: 'scroll',
+            overflowX: 'hidden', maxHeight: '500px',
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <Button variant="contained" color="primary" style={{ backgroundColor: 'cadetblue', borderRadius: 20 }}>
+                <span style={{ fontSize: 10 }}>Yesterday</span>
+              </Button>
+            </div>
+            <div className={classes.root}>
 
-        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar}/>
-        <div  style={{backgroundColor: 'beige', width: '50%', overflow: 'hidden', padding: 20, borderRadius: 5}}>
-          <h4>Ingrendfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffjkjllllllllllllllllllllllllllllllllllllllfdfdjfkdsajfdkfjkia Nutritia</h4></div>
-        </div>
-        
-        <div style={{display: 'flex', justifyContent: 'flex-end' }}>
-          <div style={{width: '50%', overflow: 'hidden', padding: 20, borderRadius: 5, backgroundColor: 'aliceblue',}}>
-            <h4>Ingrendia Nutrifdfdfdsffsdtia Ingrendia Nutrifdfdfdsffsdtia Ingrendia Nutrifdfdfdsffsdtia</h4></div>
-        
-        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar}/>
-        </div>
-
-        <div className={classes.root}>
-        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar}/>
-        <div  style={{backgroundColor: 'beige', width: '50%', overflow: 'hidden', padding: 20, borderRadius: 5}}>
-          <h4>Ingrendfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffjkjllllllllllllllllllllllllllllllllllllllfdfdjfkdsajfdkfjkia Nutritia</h4></div>
-        </div>
-        
-      </div>
-      <div
-                  className={`${classes.root} col-md-12`}
-                  style={{ display: "flex", justifyContent: "center", backgroundColor: 'papayawhip', borderBottomLeftRadius: 5, borderBottomRightRadius: 5 }}
-                >
-                  <div
-                  className={`${classes.root} row`}
-                  
-                    style={{
-                      marginTop: 20,
-                      width: "90%",
-                      display: 'contents'
-                    }}
-                  >
-                    <input
-                      type="email"
-                      placeholder="Type Message"
-                      name={"email"}
-                      className="textInputStyle"
-                      
-                    />
-                    <CameraAltIcon style={{marginTop: 18}}/>
-                    <AttachFileIcon style={{marginTop: 18}}/>
-                    <SendIcon style={{marginTop: 18}} />
-                  </div>
-                </div>
-                </div>
-                <div className='col-1' style={{ marginTop: 45 }}>
-                <img
-                  onClick={() => props.history.goBack()}
-                  src={Back_Arrow}
-                  style={{ maxWidth: '60%', height: 'auto', cursor: 'pointer' }}
-                />
+              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
+              <div style={{ backgroundColor: 'beige', width: '50%', overflow: 'hidden', padding: 20, borderRadius: 5 }}>
+                <h4>Ingrendfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffjkjllllllllllllllllllllllllllllllllllllllfdfdjfkdsajfdkfjkia Nutritia</h4>
               </div>
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <div style={{ width: '50%', overflow: 'hidden', padding: 20, borderRadius: 5, backgroundColor: 'aliceblue', }}>
+                <h4>Ingrendia Nutrifdfdfdsffsdtia Ingrendia Nutrifdfdfdsffsdtia Ingrendia Nutrifdfdfdsffsdtia</h4>
+              </div>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
+              &nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+
+            <div className={classes.root}>
+              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
+              <div style={{ backgroundColor: 'beige', width: '50%', overflow: 'hidden', padding: 20, borderRadius: 5 }}>
+                <h4>Ingrendfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffjkjllllllllllllllllllllllllllllllllllllllfdfdjfkdsajfdkfjkia Nutritia</h4></div>
+            </div>
+          </div>
+        </div>
+        <div
+          className={`${classes.root} col-md-12`}
+          style={{ display: "flex", justifyContent: "center", backgroundColor: 'papayawhip', borderBottomLeftRadius: 5, borderBottomRightRadius: 5 }}
+        >
+          <div
+            className={`${classes.root} row`}
+
+            style={{
+              marginTop: 20,
+              width: "90%",
+              display: 'contents'
+            }}
+          >
+            <input
+              type="message"
+              placeholder="Type Message"
+              name={"message"}
+              className="textInputStyle"
+
+            />
+            <CameraAltIcon style={{ marginTop: 18 }} />
+            <AttachFileIcon style={{ marginTop: 18 }} />
+            <SendIcon style={{ marginTop: 18 }} />
+          </div>
+        </div>
+      </div>
+      <div className='col-1' style={{ marginTop: 45 }}>
+        <img
+          onClick={() => props.history.goBack()}
+          src={Back_Arrow}
+          style={{ maxWidth: '60%', height: 'auto', cursor: 'pointer' }}
+        />
+      </div>
 
 
-    
+
     </div>
   )
 }
