@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import TextField from '@material-ui/core/TextField'
 import Tabs from '@material-ui/core/Tabs'
@@ -11,6 +11,7 @@ import AttachFileIcon from '@material-ui/icons/AttachFile';
 import CameraAltIcon from '@material-ui/icons/CameraAlt';
 import Header from '../../components/Header/Header'
 import Back_Arrow from '../../assets/img/Back_Arrow.png'
+import Badge from '@material-ui/core/Badge';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,6 +25,36 @@ const useStyles = makeStyles((theme) => ({
     width: 80,
   }
 }));
+
+const StyledBadge = withStyles((theme) => ({
+  badge: {
+    backgroundColor: '#44b700',
+    color: '#44b700',
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    '&::after': {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      borderRadius: '50%',
+      animation: '$ripple 1.2s infinite ease-in-out',
+      border: '1px solid currentColor',
+      content: '""',
+    },
+  },
+  '@keyframes ripple': {
+    '0%': {
+      transform: 'scale(.8)',
+      opacity: 1,
+    },
+    '100%': {
+      transform: 'scale(2.4)',
+      opacity: 0,
+    },
+  },
+}))(Badge);
+
 
 const useStylesForTabs = makeStyles((theme) => ({
   root: {
@@ -75,6 +106,7 @@ export default function Chat(props) {
                 color: 'white',
                 borderRadius: 5,
                 outline: 'none',
+                fontSize: 'large',
                 color: value === 0 ? '#12387a' : '#3B988C',
               }}
               label='Sensie'
@@ -84,6 +116,7 @@ export default function Chat(props) {
                 color: 'white',
                 borderRadius: 5,
                 outline: 'none',
+                fontSize: 'large',
                 color: value === 1 ? '#12387a' : '#3B988C',
               }}
               label='Paramedics'
@@ -93,7 +126,7 @@ export default function Chat(props) {
         </div>
         <div className='container-fluid' style={{ backgroundColor: 'white', marginTop: 20, borderRadius: 5 }}>
           <div className='row' style={{ padding: 20 }}>
-            <div className='col-md-6'><h4>All Messages</h4></div>
+            <div className='col-md-6'><h4 style={{ fontWeight: 'bold' }}>All Messages</h4></div>
 
             <div className='col-md-6' style={{ display: 'flex', justifyContent: 'flex-end' }}>
               <SearchIcon style={{ marginTop: 7 }} />
@@ -110,7 +143,16 @@ export default function Chat(props) {
             overflowX: 'scroll',
           }}>
             <div>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
+              <StyledBadge
+                overlap="circle"
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}
+                variant="dot"
+              >
+                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
+              </StyledBadge>
               <h4>name</h4>
             </div>
             <div>
