@@ -15,8 +15,7 @@
 .header2-style {
   max-width: 20%;
   height: 8%;
-  /* margin-top: -6px;
-  margin-right: 0.5%; */
+  margin-left: 10px;
   cursor: pointer;
 }
 .notification-style{
