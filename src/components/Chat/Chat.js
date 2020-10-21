@@ -39,6 +39,10 @@ const useStyles = makeStyles((theme) => ({
   shapeCircle: {
     borderRadius: '50%',
   },
+  badge: {
+    backgroundColor: '#FF0C0C',
+    color: 'white'
+  }
 }));
 
 const BootstrapInput = withStyles((theme) => ({
@@ -140,7 +144,7 @@ export default function Chat(props) {
                 textTransform: 'none'
               }}
               classes={{ root: classesForTabs.tab }}
-              label={<Badge color="primary" badgeContent="2">Sensei</Badge>}
+              label={<Badge classes={{ badge: classes.badge }} badgeContent="2">Sensei</Badge>}
             />
             <Tab
               style={{
@@ -152,7 +156,7 @@ export default function Chat(props) {
                 textTransform: 'none'
               }}
               classes={{ root: classesForTabs.tab }}
-              label={<Badge color="primary" badgeContent="2">Paramedics</Badge>}
+              label={<Badge classes={{ badge: classes.badge }} badgeContent="2">Paramedics</Badge>}
             />
 
           </Tabs>
@@ -180,7 +184,7 @@ export default function Chat(props) {
           }}>
             <div>
 
-              <Badge color="primary" overlap="circle" badgeContent="2">
+              <Badge classes={{ badge: classes.badge }} overlap="circle" badgeContent="2">
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
               </Badge>
               <h4>name</h4>
@@ -266,7 +270,7 @@ export default function Chat(props) {
 
             <div className={classes.root} style={{ marginTop: 10 }}>
               <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-              <div style={{ padding: 20, borderTopLeftRadius: 10, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, backgroundColor: '#f3f3f3', width: '50%' }}>
+              <div style={{ padding: 20, borderTopRightRadius: 10, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, backgroundColor: '#f3f3f3', width: '50%' }}>
                 <span>Ingrendia Nutrifdfdfdsffsdtia Ingrendia Nutrifdfdfdsffsdtia Ingrendia Nutrifdfdfdsffsdtia</span>
               </div>
             </div>
@@ -282,7 +286,7 @@ export default function Chat(props) {
 
             <div className={classes.root}>
               <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-              <div style={{ padding: 20, borderTopLeftRadius: 10, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, backgroundColor: '#f3f3f3', width: '50%' }}>
+              <div style={{ padding: 20, borderTopRightRadius: 10, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, backgroundColor: '#f3f3f3', width: '50%' }}>
                 <span>Ingrendia Nutrifdfdfdsffsdtia Ingrendia Nutrifdfdfdsffsdtia Ingrendia Nutrifdfdfdsffsdtia</span>
               </div>
             </div>
