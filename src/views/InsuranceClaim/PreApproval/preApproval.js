@@ -251,7 +251,7 @@ export default function PreApprovalScreen(props) {
         overflowY: 'scroll',
       }}
     >
-      <Header />
+      <Header history={props.history}/>
 
       <div className='cPadding'>
         <div className='subheader' style={{ marginLeft: '-14px' }}>

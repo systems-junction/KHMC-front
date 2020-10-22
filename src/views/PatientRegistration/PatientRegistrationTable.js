@@ -436,9 +436,9 @@ export default function PatientListing(props) {
         overflowY: "scroll",
       }}
     >
-      <Header />
-      <div className="cPadding">
-        <div className="subheader" style={{ marginLeft: "-10px" }}>
+      <Header history={props.history}/>
+      <div className='cPadding'>
+        <div className='subheader' style={{ marginLeft: '-10px' }}>
           <div>
             {staffType == "EDR Receptionist" ||
             staffType == "IPR Receptionist" ? (

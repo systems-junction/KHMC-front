@@ -320,7 +320,7 @@ class HomeScreen extends React.Component {
           backgroundSize: '100%',
         }}
       >
-        <Header />
+        <Header history={this.props.history}/>
 
         <MenuTree
           history={this.props.history}

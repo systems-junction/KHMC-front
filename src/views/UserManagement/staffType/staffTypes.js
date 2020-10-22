@@ -142,7 +142,7 @@ export default function StaffTypes(props) {
       }}
     >
       <div style={{ alignItems: "center", display: "flex", marginTop: 15 }}>
-        <Header />
+        <Header history={props.history}/>
       </div>
 
       <div style={{ alignItems: "center", flex: 0.5, display: "flex" }}>

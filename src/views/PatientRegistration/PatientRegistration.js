@@ -1636,9 +1636,9 @@ function PatientRegistration(props) {
         overflowY: "scroll",
       }}
     >
-      <Header />
-      <div className="cPadding">
-        <div className="subheader" style={{ marginLeft: "-10px" }}>
+      <Header history={props.history}/>
+      <div className='cPadding'>
+        <div className='subheader' style={{ marginLeft: '-10px' }}>
           <div>
             <img src={patientRegister} />
             <div style={{ flex: 4, display: "flex", alignItems: "center" }}>

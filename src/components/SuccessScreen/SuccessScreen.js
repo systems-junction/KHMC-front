@@ -61,7 +61,7 @@ function AddBusinessUnit(props) {
       }}
     >
       {/* <div style={{ alignItems: 'center', flex: 1, display: 'flex' }}> */}
-      <Header />
+      <Header  history={props.history}  />
       {/* </div> */}
 
       <div

@@ -223,7 +223,7 @@ function AddEditAccessLevel(props) {
           marginTop: 15,
         }}
       >
-        <Header />
+        <Header history={props.history}/>
       </div>
 
       <div style={{ alignItems: "center", flex: 0.5, display: "flex" }}>

@@ -1702,9 +1702,9 @@ function LabRadRequest(props) {
         overflowY: "scroll",
       }}
     >
-      <Header />
-      <div className="cPadding">
-        <div className="subheader" style={{ marginLeft: "-10px" }}>
+      <Header history={props.history}/>
+      <div className='cPadding'>
+        <div className='subheader' style={{ marginLeft: '-10px' }}>
           <div>
             {props.location.pathname === "/home/rcm/rd/assessmentdiagnosis" ? (
               <img src={AssessIcon} />
