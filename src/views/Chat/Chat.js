@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import { makeStyles, withStyles, fade } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import InputBase from '@material-ui/core/InputBase';
@@ -18,6 +18,19 @@ import CameraAltIcon from '../../assets/img/Camera.png';
 import Header from '../../components/Header/Header'
 import Back_Arrow from '../../assets/img/Back_Arrow.png'
 import Badge from '@material-ui/core/Badge';
+import io from 'socket.io-client';
+import { socketUrl} from "../../public/endpoins"
+import User from "../../components/Chat/User"
+import Reciever from "../../components/Chat/Reciever"
+import Sender from "../../components/Chat/Sender"
+import _, {debounce} from 'lodash';
+import cookie from 'react-cookies'
+
+import {DropzoneDialog} from 'material-ui-dropzone'
+
+import { Picker } from 'emoji-mart'
+import 'emoji-mart/css/emoji-mart.css'
+import "./chat.css"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,6 +52,17 @@ const useStyles = makeStyles((theme) => ({
   shapeCircle: {
     borderRadius: '50%',
   },
+  badge: {
+    backgroundColor: '#FF0C0C',
+    color: 'white',
+    top: "16px",
+    right: "-18px"
+  },
+  badgeImage: {
+    backgroundColor: '#FF0C0C',
+    color: 'white',
+    
+  }
 }));
 
 const BootstrapInput = withStyles((theme) => ({
@@ -89,15 +113,118 @@ const useStylesForTabs = makeStyles((theme) => ({
 
 
 export default function Chat(props) {
+  const [chat, setChat] = useState([])
+  const [chosenEmoji, setChosenEmoji] = useState(null);
+  const [content, setContent] = useState("")
+  const [messageText, setMessageText] = useState("")
+  const [message, setMessage] = useState("")
+  const [open, setOpen] = useState(false)
+  const [files, setFiles] = useState([])
+
+  const [search, setSearch] = useState("")
+
+  const [onlineUser, setOnlineUser] = useState([{name: "Izaz", id: 1}, {name: "Mudassir", id: 2}, {name: "Hanan", id: 3}, {name: "Saad", id: 4}, {name:"Farhan", id: 5}, {name:"Noman", id: 6}, {name:"Itzaz", id: 7}, {name:"Hamza", id: 8}, {name:"Bilal", id: 9},  {name:"Saqib", id: 10} ,  {name:"Mufasal", id: 11},  {name:"Zeeshan", id: 12} ,  {name:"Bilal Ahmed", id: 13},  {name:"Mustafa", id: 14},  {name:"Saira", id: 15} , {name:"John Doe", id: 16} ,  {name:"Kim", id: 17}])
+  const [socket, setSocket] =  useState("")
+  const [name, setName] = useState("")
+  const [messageError, setMessageError] = useState(false)
+  const [emojiStatus, setEmojiStatus] = useState(false)
+  const [currentUser] = useState(cookie.load('current_user'))
   const classes = useStyles();
   const classesForTabs = useStylesForTabs()
   const circle = <div className={clsx(classes.shape, classes.shapeCircle)} />;
 
   const [value, setValue] = React.useState(0)
 
+  useEffect(() => {
+
+   
+  })
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
+
+  const sendMessage = () => {
+    let socket = io(socketUrl)
+    if(message != ""){
+      let objectSendToBackend = {}
+      objectSendToBackend.message = message
+      objectSendToBackend.sender = currentUser._id
+      objectSendToBackend.receiver = "5ecf686f085c54292cb29c53"
+      console.log("objectSendToBackend", objectSendToBackend)
+      socket.emit('test', objectSendToBackend);
+    }else{
+      setMessageError(true)
+    }
+   
+  
+  }
+  const uploadFile = () => {
+    console.log("upload file");
+  }
+  const camera = () => {
+    console.log("camera")
+  }
+
+ const handleClose = () => {
+   setOpen(false)
+}
+
+const  handleSave = (file) => {
+    //Saving files to state for further use and closing Modal.
+    setFiles(file)
+    console.log(file)
+    setOpen(false)
+}
+
+const  handleOpen = () => {
+   setOpen(true)
+}
+
+  const  addEmoji = (e) => {
+    let sym = e.unified.split('-')
+    let codesArray = []
+    sym.forEach(el => codesArray.push('0x' + el))
+    let emoji = String.fromCodePoint(...codesArray)
+    setMessage(
+       message + emoji
+    )
+    console.log(e)
+  }
+  const changeEmojiStatus = () => {
+    setEmojiStatus(true)
+  }
+  const onMessageSend = (e) => {
+    setMessage(e.target.value)
+  }
+
+  const searchOnlineUser = (e) => {
+  //   var target = e.target.value.trim().toLowerCase();
+  //   var o = onlineUser
+  //   console.log("before", o)
+  //  o =  onlineUser.filter(o=>{
+  //     return o.name === target
+  //   })
+
+  // //  o = _.sortBy(o, o => o.name === target);
+  //  setOnlineUser(o)
+  //  console.log("after",o)
+
+  setSearch(e.target.value)
+
+  }
+
+  const RenderUser = user => {
+    if(search !== "" && user.name.toLocaleLowerCase().indexOf(search.toLocaleLowerCase()) === -1){
+      return null
+    }
+    else {
+      return (
+        <User name={user.name}/>
+      )
+    }
+    
+  }
+
   return (
     <div
       style={{
@@ -140,7 +267,7 @@ export default function Chat(props) {
                 textTransform: 'none'
               }}
               classes={{ root: classesForTabs.tab }}
-              label={<Badge color="primary" badgeContent="2">Sensei</Badge>}
+              label={<Badge color="primary" badgeContent="2" classes={{ badge: classes.badge }}>Sensei</Badge>}
             />
             <Tab
               style={{
@@ -152,7 +279,9 @@ export default function Chat(props) {
                 textTransform: 'none'
               }}
               classes={{ root: classesForTabs.tab }}
-              label={<Badge color="primary" badgeContent="2">Paramedics</Badge>}
+              label={<Badge color="primary" badgeContent="2" classes={{ badge: classes.badge }}
+
+              >Paramedics</Badge>}
             />
 
           </Tabs>
@@ -163,14 +292,7 @@ export default function Chat(props) {
 
             <div className='col-md-6' style={{ display: 'flex', justifyContent: 'flex-end' }}>
               <img style={{ height: 40, width: 40 }} src={SearchIcon} />
-              {/* <input placeholder='Search Name...' style={{ border: 'none', marginRight: -35 }} /> */}
-              <FormControl className={classes.margin}>
-                <BootstrapInput placeholder='Search Name...'
-                  // defaultValue="data"
-                  id="bootstrap-input"
-                />
-              </FormControl>
-
+              <input placeholder='Search Name...' style={{ border: 'none', marginRight: -35 }} onChange={searchOnlineUser}/>
             </div>
 
           </div>
@@ -178,65 +300,9 @@ export default function Chat(props) {
             maxWidth: 1300, overflowY: 'hidden',
             overflowX: 'scroll',
           }}>
-            <div>
-
-              <Badge color="primary" overlap="circle" badgeContent="2">
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-              </Badge>
-              <h4>name</h4>
-            </div>
-            <div>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-              <h4>name</h4>
-            </div>
-            <div>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-              <h4>name</h4>
-            </div>
-            <div>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-              <h4>name</h4>
-            </div>
-            <div>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-              <h4>name</h4>
-            </div>
-            <div>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-              <h4>name</h4>
-            </div>
-            <div>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-              <h4>name</h4>
-            </div>
-            <div>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-              <h4>name</h4>
-            </div>
-            <div>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-              <h4>name</h4>
-            </div>
-            <div>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-              <h4>name</h4>
-            </div>
-            <div>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-              <h4>name</h4>
-            </div>
-            <div>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-              <h4>name</h4>
-            </div>
-            <div>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-              <h4>name</h4>
-            </div>
-            <div>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-              <h4>name</h4>
-            </div>
+            {onlineUser.map(user=>{
+              return RenderUser(user)
+            })}           
           </div>
         </div>
 
@@ -264,28 +330,8 @@ export default function Chat(props) {
               </Button>
             </div>
 
-            <div className={classes.root} style={{ marginTop: 10 }}>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-              <div style={{ padding: 20, borderTopLeftRadius: 10, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, backgroundColor: '#f3f3f3', width: '50%' }}>
-                <span>Ingrendia Nutrifdfdfdsffsdtia Ingrendia Nutrifdfdfdsffsdtia Ingrendia Nutrifdfdfdsffsdtia</span>
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <div style={{ padding: 20, borderTopLeftRadius: 10, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, backgroundColor: '#e8f0f6', width: '50%' }}>
-                <span>Ingrendia Nutrifdfdfdsffsdtia Ingrendia Nutrifdfdfdsffsdtia Ingrendia Nutrifdfdfdsffsdtia</span>
-              </div>
-              &nbsp;&nbsp;&nbsp;&nbsp;
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-              &nbsp;&nbsp;&nbsp;&nbsp;
-            </div>
-
-            <div className={classes.root}>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-              <div style={{ padding: 20, borderTopLeftRadius: 10, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, backgroundColor: '#f3f3f3', width: '50%' }}>
-                <span>Ingrendia Nutrifdfdfdsffsdtia Ingrendia Nutrifdfdfdsffsdtia Ingrendia Nutrifdfdfdsffsdtia</span>
-              </div>
-            </div>
+            <Reciever recieve="This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message"/>
+            <Sender send="This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message"/>          
           </div>
         </div>
         <div
@@ -301,34 +347,22 @@ export default function Chat(props) {
               display: 'contents',
             }}
           >
-            {/* <FormControl className={classes.margin}>
-
-              <BootstrapInput defaultValue="Type Message" id="bootstrap-input"
-                endAdornment={
-                  <InputAdornment position="start">
-                    <img style={{ height: 40, width: 40 }} src={CameraAltIcon} />
-                    <img style={{ height: 40, width: 40 }} src={AttachFileIcon} />
-                    <img style={{ height: 40, width: 40 }} src={Emoji} />
-
-                  </InputAdornment>
-                }
-                style={{ ouline: 'none' }}
-              />
-            </FormControl> */}
-
             <TextField
               label='Type Message'
               className='textInputStyle'
               id="outlined-size-small"
               variant="outlined"
+              onChange={onMessageSend}
+              error={messageError}
               size="small"
+              value={message}
               style={{ backgroundColor: 'white', borderRadius: 20, outline: 'none' }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="start">
-                    <img style={{ height: 40, width: 40 }} src={CameraAltIcon} />
-                    <img style={{ height: 40, width: 40 }} src={AttachFileIcon} />
-                    <img style={{ height: 40, width: 40 }} src={Emoji} />
+                    <img style={{ height: 40, width: 40 , cursor: "pointer"}} src={CameraAltIcon} onClick={camera}/>
+                    <img style={{ height: 40, width: 40 , cursor: "pointer"}} src={AttachFileIcon} onClick={handleOpen}/>
+                    {emojiStatus === false ? <img style={{ height: 40, width: 40 , cursor: "pointer"}} src={Emoji} onClick={changeEmojiStatus}/> : <Picker onSelect={addEmoji}/>}
 
                   </InputAdornment>
                 )
@@ -336,7 +370,15 @@ export default function Chat(props) {
 
             />
 
-            <img style={{ height: 40, width: 40 }} src={SendIcon} />
+          <DropzoneDialog
+              open={open}
+              onSave={handleSave}
+              // acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
+              showPreviews={true}
+              maxFileSize={5000000}
+              onClose={handleClose}
+          />
+            <img style={{ height: 40, width: 40 , cursor: "pointer"}} src={SendIcon} onClick={sendMessage}/>
           </div>
         </div>
       </div>
@@ -347,9 +389,6 @@ export default function Chat(props) {
           style={{ maxWidth: '60%', height: 'auto', cursor: 'pointer' }}
         />
       </div>
-
-
-
     </div>
   )
 }

@@ -423,3 +423,5 @@ export const updatePatientClearanceURL = `${baseUrl}/patientclearance/updatepati
 // icd code
 
 export const getIcd = `${baseUrl}/codes/geticdcat`;
+
+export const chatApi = `${baseUrl}/chat`
