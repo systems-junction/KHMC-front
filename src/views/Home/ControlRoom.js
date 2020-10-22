@@ -280,7 +280,7 @@ class HomeScreen extends React.Component {
           backgroundColor: "#2B62CC",
         }}
       >
-        <Header />
+        <Header history={this.props.history}/>
 
         {/* <div
           className="menupage"

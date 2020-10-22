@@ -907,7 +907,7 @@ function AddEditPurchaseRequest(props) {
         overflowY: "scroll",
       }}
     >
-      <Header />
+      <Header history={props.history}/>
       <div className="cPadding" style={{ marginLeft: 10, marginRight: 10 }}>
         <div className="subheader" style={{ marginLeft: 8 }}>
           <div style={{ marginLeft: -23 }}>

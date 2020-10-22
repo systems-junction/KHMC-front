@@ -434,7 +434,7 @@ else if(staffType === 'Pharmacist'){
         overflowY: 'scroll',
       }}
     >
-      <Header />
+      <Header history={props.history}/>
       <div className='cPadding'>
         <div className='subheader' style={{ marginLeft: '-10px' }}>
           <div>

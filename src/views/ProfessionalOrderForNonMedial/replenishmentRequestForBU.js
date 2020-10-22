@@ -637,7 +637,7 @@ export default function ReplenishmentRequest(props) {
           overflowY: "scroll",
         }}
       >
-        <Header />
+        <Header history={props.history}/>
         <div className="cPadding">
           <div className="subheader">
             <div>
@@ -898,7 +898,7 @@ export default function ReplenishmentRequest(props) {
           // alignItems: "center",
         }}
       >
-        <Header />
+        <Header history={props.history}/>
 
         <div
           style={{

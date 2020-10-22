@@ -30,8 +30,6 @@ class Header extends React.Component
   {
     const loggedUser = cookie.load("current_user")
     this.setState({ currentUser: loggedUser});
-    
-    console.log("User logged in",loggedUser._id)
 
     const socket = socketIOClient(socketUrl);
 
@@ -47,7 +45,6 @@ class Header extends React.Component
           if(checkId[j].userId === loggedUser._id)
           {
             notifyData.push(data[i])
-            
           }
         }
       }
@@ -70,11 +67,6 @@ class Header extends React.Component
     cookie.remove("user_staff", { path: "/" });
     window.location.reload();
   }
-
-  // handleNotificationIconClick() {
-  //   console.log("Clicked me !!")
-  //   // console.log("history", this.props.history)
-  // }
 
   render() {
     const {history} = this.props
@@ -100,14 +92,12 @@ class Header extends React.Component
           onNotificationIconClick={()=>history.push({
                             pathname: '/home/notificationCenter',
                             state: {
-                              notificationData:this.state.data
+                              notificationData : this.state.data
                             },
                           })
                         }
           storageKey='notific_key'
           notific_key='timestamp'
-          notific_value='message'
-          heading='Notification Alerts'
           sortedByKey={false}
           showDate={true}
           size={35}
