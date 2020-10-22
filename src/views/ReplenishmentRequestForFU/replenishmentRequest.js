@@ -54,6 +54,13 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 
+import { jsPDF } from "jspdf";
+import "jspdf-autotable";
+import PrintTable from "./printReplenishmentRequest";
+import LogoPatientSummaryInvoice from "../../assets/img/logoPatientSummaryInvoice.png";
+
+import twenthyfive from "../../assets/img/25.png";
+
 const tableHeadingForFUHead = [
   "Replenishemt Request No",
   "Generated",
@@ -110,64 +117,68 @@ const useStylesForInput = makeStyles((theme) => ({
     margin: theme.spacing(0),
   },
   input: {
-    backgroundColor: 'white',
-    boxShadow: 'none',
+    backgroundColor: "white",
+    boxShadow: "none",
     borderRadius: 5,
-    '&:after': {
-      borderBottomColor: 'black',
-      boxShadow: 'none',
+    "&:after": {
+      borderBottomColor: "black",
+      boxShadow: "none",
     },
-    '&:hover': {
-      backgroundColor: 'white',
-      boxShadow: 'none',
+    "&:hover": {
+      backgroundColor: "white",
+      boxShadow: "none",
     },
-    '&:focus': {
-      backgroundColor: 'white',
-      boxShadow: 'none',
+    "&:focus": {
+      backgroundColor: "white",
+      boxShadow: "none",
       borderRadius: 5,
     },
   },
   multilineColor: {
-    boxShadow: 'none',
-    backgroundColor: 'white',
+    boxShadow: "none",
+    backgroundColor: "white",
     borderRadius: 5,
-    '&:hover': {
-      backgroundColor: 'white',
-      boxShadow: 'none',
+    "&:hover": {
+      backgroundColor: "white",
+      boxShadow: "none",
     },
-    '&:after': {
-      borderBottomColor: 'black',
-      boxShadow: 'none',
+    "&:after": {
+      borderBottomColor: "black",
+      boxShadow: "none",
     },
-    '&:focus': {
-      boxShadow: 'none',
+    "&:focus": {
+      boxShadow: "none",
     },
   },
   root: {
-    '& .MuiTextField-root': {
-      backgroundColor: 'white',
+    "& .MuiTextField-root": {
+      backgroundColor: "white",
     },
-    '& .Mui-focused': {
-      backgroundColor: 'white',
-      color: 'black',
-      boxShadow: 'none',
+    "& .Mui-focused": {
+      backgroundColor: "white",
+      color: "black",
+      boxShadow: "none",
     },
-    '& .Mui-disabled': {
-      backgroundColor: 'white',
-      color: 'gray',
+    "& .Mui-disabled": {
+      backgroundColor: "white",
+      color: "gray",
     },
-    '&:focus': {
-      backgroundColor: 'white',
-      boxShadow: 'none',
+    "&:focus": {
+      backgroundColor: "white",
+      boxShadow: "none",
     },
   },
-}))
+}));
 
 const actions = { view: true };
-const actionsForFUMemeberForReceive = { edit: false, view: true };
-const actionsForFUMemeberForReplenishment = { edit: true, view: true };
+const actionsForFUMemeberForReceive = { edit: false, view: true, print: true };
+const actionsForFUMemeberForReplenishment = {
+  edit: true,
+  view: true,
+  print: true,
+};
 
-const actionsForWarehouseMember = { edit: true, view: true };
+const actionsForWarehouseMember = { edit: true, view: true, print: true };
 const actionsForBUDoctor = { view: true };
 
 const tableDataKeysForItemsForWarehouseMember = [
@@ -253,6 +264,8 @@ export default function ReplenishmentRequest(props) {
   const [selectedOrder, setSelectedOrder] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [searchPatientQuery, setSearchPatientQuery] = useState("");
+
+  const [selectedPRToPrint, setSelectedPRToPrint] = useState("");
 
   function getPurchaseRequests() {
     axios
@@ -692,6 +705,85 @@ export default function ReplenishmentRequest(props) {
     }
   };
 
+  function handlePrintPR(selectedPr) {
+    console.log(selectedPr);
+    setSelectedPRToPrint(selectedPr);
+  }
+
+  const handlePrint = () => {
+    let imgData = new Image();
+    imgData.src = LogoPatientSummaryInvoice;
+
+    var doc = new jsPDF();
+
+    let date = new Date(selectedPRToPrint.createdAt);
+    let month = date.getMonth() + 1;
+    let createdAt = date.getDate() + " - " + month + " - " + date.getFullYear();
+
+    doc.addImage(imgData, "JPG", 10, 10, 40, 20);
+
+    // header
+    doc.setFontSize(13);
+    doc.text(60, 15, "Al-Khalidi Hospital & Medical Center");
+    doc.text(65, 22, "Department Transactions Report");
+    doc.setFontSize(12);
+    doc.text(170, 14, "Amman Jordan");
+    // background coloring
+    doc.setFillColor(255, 255, 200);
+    doc.rect(10, 45, 190, 12, "F");
+    // information of patient
+    doc.setFontSize(10);
+    doc.setFont("times", "normal");
+
+    // doc.text(12, 50, "From");
+    // doc.text(12, 55, "To");
+
+    // doc.text(80, 50, "Department");
+    // doc.text(80, 55, "Warehouse");
+    doc.text(12, 50, "Doc No.");
+    doc.text(12, 55, "Date");
+
+    // dynamic data info patient
+    doc.setFont("times", "bold");
+    // doc.text(30, 50, currentUser.functionalUnit.fuName);
+    // doc.text(30, 55, "Warehouse");
+    // doc.text(100, 50, "HERE");
+    // doc.text(100, 55, "HERE");
+    doc.text(30, 50, selectedPRToPrint.requestNo);
+    doc.text(30, 55, createdAt);
+    // table
+    // footer
+
+    doc.autoTable({
+      margin: { top: 60, right: 10, left: 10 },
+      tableWidth: "auto",
+      headStyles: { fillColor: [44, 109, 221] },
+      html: "#my_table",
+    });
+
+    doc.setFontSize(12);
+    doc.setFont("times", "bold");
+    doc.text(10, 250, "Department Manager");
+    doc.line(10, 258, 50, 258);
+    doc.text(175, 250, "Section Head");
+    doc.line(175, 258, 200, 258);
+    doc.setFont("times", "normal");
+    doc.text(10, 270, "User name:");
+    doc.text(35, 270, currentUser.name);
+    doc.text(160, 270, "Module:");
+    doc.text(180, 270, "Inventory");
+    doc.text(145, 275, "Date:");
+    doc.text(155, 275, new Date().toLocaleString());
+
+    doc.save(`${selectedPRToPrint.requestNo}.pdf`);
+  };
+
+  useEffect(() => {
+    if (selectedPRToPrint) {
+      handlePrint();
+    }
+  }, [selectedPRToPrint]);
+
   if (
     props.history.location.pathname === "/home/wms/fus/replenishment/add/manual"
   ) {
@@ -733,7 +825,7 @@ export default function ReplenishmentRequest(props) {
         <div className="cPadding">
           <div className="subheader">
             {props.history.location.pathname === "/home/wms/fus/receive" ? (
-              <div style={{marginLeft: '-10px'}}>
+              <div style={{ marginLeft: "-10px" }}>
                 <img src={ReceiveItem} />
                 <h4>Order Receiving / Return</h4>
               </div>
@@ -766,7 +858,11 @@ export default function ReplenishmentRequest(props) {
 
           <div
             className={`row ${classesInput.root}`}
-            style={{ marginLeft: "0px", marginRight: "-5px", marginTop: "20px" }}
+            style={{
+              marginLeft: "0px",
+              marginRight: "-5px",
+              marginTop: "20px",
+            }}
           >
             <div
               className="col-md-12 col-sm-9 col-8"
@@ -822,13 +918,11 @@ export default function ReplenishmentRequest(props) {
                   <CustomTable
                     tableData={purchaseRequests}
                     tableDataKeys={
-                      currentUser.staffTypeId.type === "FU Inventory Keeper" ||
                       currentUser.staffTypeId.type === "FU Inventory Keeper"
                         ? tableDataKeysForFUHead
                         : tableDataKeys
                     }
                     tableHeading={
-                      currentUser.staffTypeId.type === "FU Inventory Keeper" ||
                       currentUser.staffTypeId.type === "FU Inventory Keeper"
                         ? tableHeadingForFUHead
                         : tableHeading
@@ -874,6 +968,7 @@ export default function ReplenishmentRequest(props) {
                     addReturnRequest={handleAddReturnRequest}
                     borderBottomColor={"#60d69f"}
                     borderBottomWidth={20}
+                    handlePrint={handlePrintPR}
                   />
                 </div>
 
@@ -906,8 +1001,8 @@ export default function ReplenishmentRequest(props) {
                     onClick={() => props.history.goBack()}
                     src={Back_Arrow}
                     style={{
-                     with: 45,
-                     height: 35,
+                      with: 45,
+                      height: 35,
                       height: "auto",
                       cursor: "pointer",
                     }}
@@ -1002,6 +1097,8 @@ export default function ReplenishmentRequest(props) {
             </div>
           </DialogContent>
         </Dialog>
+
+        <PrintTable selectedPRToPrint={selectedPRToPrint} />
       </div>
     );
   }

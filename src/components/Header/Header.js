@@ -12,6 +12,7 @@ import Fab from "@material-ui/core/Fab";
 import NotifyMe from './NotificationTray';
 import { socketUrl } from '../../public/endpoins';
 import socketIOClient from 'socket.io-client'
+import AddIcon from "@material-ui/icons/Add";
 
 class Header extends React.Component 
 {

@@ -4,7 +4,6 @@ import NotFound from "../components/NotFound/NotFound";
 import labRadRequest from "../views/PatientAssessmentCareLabRad/PatientAssessmentCareLabRad";
 import triageAssessment from "../views/TriageAndAssessment/TriageAndAssessment";
 import viewLabRadReport from "../components/ViewLabRadReport/ViewLabRadReport";
-import PatientHistoryViewLabRadReport from "../views/LabRadRequest/viewLabRadReport";
 import SuccessScreen from "../components/SuccessScreen/SuccessScreen";
 import PatientHistory from "../views/PatientHistory/PatientHistory";
 

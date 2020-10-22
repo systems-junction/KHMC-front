@@ -43,6 +43,11 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 
+import { jsPDF } from "jspdf";
+import "jspdf-autotable";
+import PrintTable from "./printInternalReturn";
+import LogoPatientSummaryInvoice from "../../assets/img/logoPatientSummaryInvoice.png";
+
 const tableHeadingForFUHead = [
   "Return Request No",
   "Functional Unit Name",
@@ -126,6 +131,13 @@ const actions = { edit: true, view: true };
 const actionsForFUInventoryKeeper = {
   edit: true,
   view: true,
+  print: true,
+};
+
+const actionsForApprovalMember = {
+  edit: true,
+  view: true,
+  print:true,
 };
 
 const actionsForWareHouseMembers = {
@@ -147,6 +159,8 @@ export default function ReplenishmentRequest(props) {
   const [currentUser, setCurrentUser] = useState(cookie.load("current_user"));
   const [fuObj, setFUObj] = useState("");
   const [searchPatientQuery, setSearchPatientQuery] = useState("");
+
+  const [selectedPRToPrint, setSelectedPRToPrint] = useState("");
 
   if (openNotification) {
     setTimeout(() => {
@@ -360,6 +374,81 @@ export default function ReplenishmentRequest(props) {
     }
   };
 
+  function handlePrintPR(selectedPr) {
+    console.log(selectedPr);
+    setSelectedPRToPrint(selectedPr);
+  }
+
+  const handlePrint = () => {
+    let imgData = new Image();
+    imgData.src = LogoPatientSummaryInvoice;
+
+    var doc = new jsPDF();
+
+    let date = new Date(selectedPRToPrint.createdAt);
+    let month = date.getMonth() + 1;
+    let createdAt = date.getDate() + " - " + month + " - " + date.getFullYear();
+
+    doc.addImage(imgData, "JPG", 10, 10, 40, 20);
+
+    // header
+    doc.setFontSize(13);
+    doc.text(60, 15, "Al-Khalidi Hospital & Medical Center");
+    doc.text(85, 22, "Internal Return");
+    doc.setFontSize(12);
+    doc.text(170, 14, "Amman Jordan");
+    // background coloring
+    doc.setFillColor(255, 255, 200);
+    doc.rect(10, 45, 190, 12, "F");
+    // information of patient
+    doc.setFontSize(10);
+    doc.setFont("times", "normal");
+    doc.text(12, 50, "From");
+    doc.text(12, 55, "Description");
+    // doc.text(80, 50, "Department");
+    // doc.text(80, 55, "Warehouse");
+    doc.text(135, 50, "Doc No.");
+    doc.text(135, 55, "Date");
+    // dynamic data info patient
+    doc.setFont("times", "bold");
+    doc.text(30, 50, currentUser.functionalUnit.fuName);
+    doc.text(30, 55, "Warehouse");
+    // doc.text(100, 50, "HERE");
+    // doc.text(100, 55, "HERE");
+    doc.text(150, 50, selectedPRToPrint.returnRequestNo);
+    doc.text(150, 55, createdAt);
+    // table
+    // footer
+
+    doc.autoTable({
+      margin: { top: 60, right: 10, left: 10 },
+      tableWidth: "auto",
+      headStyles: { fillColor: [44, 109, 221] },
+      html: "#my_table",
+    });
+
+    doc.setFontSize(12);
+    doc.setFont("times", "bold");
+    doc.text(10, 250, "Received By");
+    doc.line(10, 258, 50, 258);
+    // doc.text(175, 250, "Section Head");
+    // doc.line(175, 258, 200, 258);
+    doc.setFont("times", "normal");
+    doc.text(10, 270, "User name:");
+    doc.text(35, 270, currentUser.name);
+    doc.text(160, 270, "Module:");
+    doc.text(180, 270, "Inventory");
+    doc.text(145, 275, "Date:");
+    doc.text(155, 275, new Date().toLocaleString());
+    doc.save(`${selectedPRToPrint.returnRequestNo}.pdf`);
+  };
+
+  useEffect(() => {
+    if (selectedPRToPrint) {
+      handlePrint();
+    }
+  }, [selectedPRToPrint]);
+
   return (
     <div
       style={{
@@ -466,10 +555,11 @@ export default function ReplenishmentRequest(props) {
                       : tableHeading
                   }
                   action={
-                    currentUser.staffTypeId.type === "FU Inventory Keeper" ||
-                    currentUser.staffTypeId.type ===
-                      "FU Internal Request Return Approval Member"
+                    currentUser.staffTypeId.type === "FU Inventory Keeper"
                       ? actionsForFUInventoryKeeper
+                      : currentUser.staffTypeId.type ===
+                        "FU Internal Request Return Approval Member"
+                      ? actionsForApprovalMember
                       : currentUser.staffTypeId.type === "Warehouse Member"
                       ? actionsForWareHouseMembers
                       : actions
@@ -481,6 +571,7 @@ export default function ReplenishmentRequest(props) {
                   addReturnRequest={handleAddReturnRequest}
                   borderBottomColor={"#60d69f"}
                   borderBottomWidth={20}
+                  handlePrint={handlePrintPR}
                 />
               </div>
 
@@ -530,6 +621,7 @@ export default function ReplenishmentRequest(props) {
           />
         </div>
       </div>
+      <PrintTable selectedPRToPrint={selectedPRToPrint} />
     </div>
   );
 }

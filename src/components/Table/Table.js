@@ -824,10 +824,12 @@ export default function CustomTable(props) {
                                 >
                                   {Array.isArray(val)
                                     ? prop[val[0]]
-                                      // ? capitilizeLetter(prop[val[0]][val[1]])
-                                      ?replaceSlugToTitle(prop[val[0]][val[1]], val, key)
-                                       
-
+                                      ? // ? capitilizeLetter(prop[val[0]][val[1]])
+                                        replaceSlugToTitle(
+                                          prop[val[0]][val[1]],
+                                          val,
+                                          key
+                                        )
                                       : null
                                     : val.toLowerCase() === "timestamp"
                                     ? new Intl.DateTimeFormat(

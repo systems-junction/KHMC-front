@@ -17,6 +17,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 
+import cookie from "react-cookies";
+
 import Header from "../../components/Header/Header";
 
 import Add_New from "../../assets/img/Add_New.png";
@@ -31,9 +33,9 @@ import Inactive from "../../assets/img/Inactive.png";
 
 import Active from "../../assets/img/Active.png";
 
-import AccountCircle from '@material-ui/icons/SearchOutlined'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import TextField from '@material-ui/core/TextField'
+import AccountCircle from "@material-ui/icons/SearchOutlined";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 
 import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
@@ -41,6 +43,11 @@ import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 import AddedPurchaseRequestTable from "../PurchaseOrders/addedPurchaseRequestTable";
 
 import socketIOClient from "socket.io-client";
+
+import LogoPatientSummaryInvoice from "../../assets/img/logoPatientSummaryInvoice.png";
+import { jsPDF } from "jspdf";
+import "jspdf-autotable";
+import PrintTable from "./printMaterialReceiving";
 
 const tableHeading = [
   "Purchase Orders",
@@ -93,30 +100,30 @@ const styles = {
     paddingLeft: 0,
     paddingRight: 5,
   },
-
 };
-
 
 const useStylesForInput = makeStyles((theme) => ({
   input: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 5,
-    '&:after': {
-      borderBottomColor: 'black',
+    "&:after": {
+      borderBottomColor: "black",
     },
-    '&:hover': {
-      backgroundColor: 'white',
+    "&:hover": {
+      backgroundColor: "white",
     },
-    '&:disabled': {
-      color: 'gray',
+    "&:disabled": {
+      color: "gray",
     },
   },
-}))
+}));
 
-const actions = { view: true };
+const actions = { view: true, print: true };
 
 export default function PurchaseRequest(props) {
-  const classesInput = useStylesForInput()
+  const classesInput = useStylesForInput();
+
+  const [currentUser, setCurrentUser] = useState(cookie.load("current_user"));
 
   const [materialReceivings, setMaterialReceivings] = useState("");
   const [vendors, setVendor] = useState("");
@@ -134,7 +141,9 @@ export default function PurchaseRequest(props) {
 
   const [selectedPurchaseOrder, setSelectedPurchaseOrder] = useState("");
   const [selectedPurchaseRequest, setSelectedPurchaseRequest] = useState("");
-  const [searchPatientQuery, setSearchPatientQuery] = useState('')
+  const [searchPatientQuery, setSearchPatientQuery] = useState("");
+
+  const [selectedPRToPrint, setSelectedPRToPrint] = useState("");
 
   if (openNotification) {
     setTimeout(() => {
@@ -270,35 +279,116 @@ export default function PurchaseRequest(props) {
     }
   }
 
-  const handlePatientSearch =  (e) => {
-    const a = e.target.value.replace(/[^\w\s]/gi, '')
-    setSearchPatientQuery(a)
+  const handlePatientSearch = (e) => {
+    const a = e.target.value.replace(/[^\w\s]/gi, "");
+    setSearchPatientQuery(a);
     if (a.length >= 3) {
-       axios
-        .get(
-          getMaterialReceivingUrlSearch + '/' + a
-        )
+      axios
+        .get(getMaterialReceivingUrlSearch + "/" + a)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.materialReceivings.length > 0) {
-              console.log(res.data.data)
+              console.log(res.data.data);
               setMaterialReceivings(res.data.data.materialReceivings.reverse());
             } else {
-              console.log(res.data.data.materialReceivings, 'no-response');
+              console.log(res.data.data.materialReceivings, "no-response");
               setMaterialReceivings([]);
             }
           }
         })
         .catch((e) => {
-          console.log('error after searching patient request', e)
-        })
-    }
-
-    else if(a.length == 0){
+          console.log("error after searching patient request", e);
+        });
+    } else if (a.length == 0) {
       getPurchaseRequests();
     }
-    
+  };
+
+  function handlePrintPR(selectedPr) {
+    console.log(selectedPr);
+    setSelectedPRToPrint(selectedPr);
   }
+
+  const handlePrint = () => {
+    let imgData = new Image();
+    imgData.src = LogoPatientSummaryInvoice;
+
+    var doc = new jsPDF();
+
+    let date = new Date(selectedPRToPrint.createdAt);
+    let month = date.getMonth() + 1;
+    let createdAt = date.getDate() + " - " + month + " - " + date.getFullYear();
+
+    let dateForPO = new Date(selectedPRToPrint.poId.createdAt);
+    let mo = dateForPO.getMonth() + 1;
+    let createdAtForPO =
+      dateForPO.getDate() + " - " + mo + " - " + dateForPO.getFullYear();
+
+    doc.addImage(imgData, "JPG", 10, 10, 40, 20);
+
+    // header
+    doc.setFontSize(13);
+    doc.text(60, 15, "Al-Khalidi Hospital & Medical Center");
+    doc.text(77, 22, "Vendor Transaction");
+    doc.text(70, 29, "Store Receiving Voucher");
+
+    doc.setFontSize(12);
+    doc.text(170, 14, "Amman Jordan");
+
+    // background coloring
+    doc.setFillColor(255, 255, 200);
+    doc.rect(10, 45, 190, 12, "F");
+    // information of patient
+    doc.setFontSize(10);
+    doc.setFont("times", "normal");
+    doc.text(12, 50, "From");
+    doc.text(12, 55, "Supplier");
+
+    doc.text(100, 50, "PO No.");
+    doc.text(100, 55, "PO Date.");
+
+    doc.text(160, 50, "Doc No.");
+    doc.text(160, 55, "Date");
+    // dynamic data info patient
+    doc.setFont("times", "bold");
+    doc.text(30, 50, "Warehouse");
+    doc.text(30, 55, selectedPRToPrint.poId.vendorId.englishName);
+    doc.text(120, 50, selectedPRToPrint.poId.purchaseOrderNo);
+    doc.text(120, 55, createdAtForPO);
+    doc.text(175, 50, selectedPRToPrint.poId.purchaseOrderNo);
+    doc.text(175, 55, createdAt);
+    // table
+    // footer
+
+    doc.autoTable({
+      margin: { top: 60, right: 10, left: 10 },
+      tableWidth: "auto",
+      headStyles: { fillColor: [44, 109, 221] },
+      html: "#my_tableForPO",
+    });
+
+    doc.setFontSize(12);
+    doc.setFont("times", "bold");
+    doc.text(10, 250, "Received By");
+    doc.line(10, 258, 50, 258);
+    // doc.text(175, 250, "Section Head");
+    // doc.line(175, 258, 200, 258);
+    doc.setFont("times", "normal");
+    doc.text(10, 270, "User name:");
+    doc.text(35, 270, currentUser.name);
+    doc.text(162, 270, "Module:");
+    doc.text(182, 270, "Inventory");
+    doc.text(147, 275, "Date:");
+    doc.text(157, 275, new Date().toLocaleString());
+
+    doc.save(`${selectedPRToPrint.poId.purchaseOrderNo}.pdf`);
+  };
+
+  useEffect(() => {
+    if (selectedPRToPrint) {
+      handlePrint();
+    }
+  }, [selectedPRToPrint]);
 
   return (
     <div
@@ -328,61 +418,59 @@ export default function PurchaseRequest(props) {
           </div> */}
         </div>
 
-        <div className='row' style={{marginLeft: '0px', marginRight: '-5px', marginTop: '20px'}}>
-            <div
-              className='col-md-12 col-sm-9 col-8'
-              style={styles.textFieldPadding}
-            >
-              <TextField
-                className='textInputStyle'
-                id='searchPatientQuery'
-                type='text'
-                variant='filled'
-                label='Search By Purchase Order No/ Vendor Name'
-                name={'searchPatientQuery'}
-                value={searchPatientQuery}
-                onChange={handlePatientSearch} 
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position='end'>
-                      <AccountCircle />
-                    </InputAdornment>
-                  ),
-                  className: classesInput.input,
-                  classes: { input: classesInput.input },
-                  disableUnderline: true,
-                }}
-              />
-            </div>
-
-            <div
-              className='col-md-1 col-sm-2 col-2'
-              style={{
-                ...styles.textFieldPadding,
+        <div
+          className="row"
+          style={{ marginLeft: "0px", marginRight: "-5px", marginTop: "20px" }}
+        >
+          <div
+            className="col-md-12 col-sm-9 col-8"
+            style={styles.textFieldPadding}
+          >
+            <TextField
+              className="textInputStyle"
+              id="searchPatientQuery"
+              type="text"
+              variant="filled"
+              label="Search By Purchase Order No/ Vendor Name"
+              name={"searchPatientQuery"}
+              value={searchPatientQuery}
+              onChange={handlePatientSearch}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <AccountCircle />
+                  </InputAdornment>
+                ),
+                className: classesInput.input,
+                classes: { input: classesInput.input },
+                disableUnderline: true,
               }}
-            >
-            </div>
-
-            <div
-              className='col-md-1 col-sm-1 col-2'
-              style={{
-                ...styles.textFieldPadding,
-              }}
-            >
-              
-            </div>
+            />
           </div>
-          
+
+          <div
+            className="col-md-1 col-sm-2 col-2"
+            style={{
+              ...styles.textFieldPadding,
+            }}
+          ></div>
+
+          <div
+            className="col-md-1 col-sm-1 col-2"
+            style={{
+              ...styles.textFieldPadding,
+            }}
+          ></div>
+        </div>
 
         <div
           style={{
             flex: 4,
             display: "flex",
             flexDirection: "column",
-            
           }}
         >
-          { materialReceivings &&  materialReceivings.length > 0 ?  (
+          {materialReceivings && materialReceivings.length > 0 ? (
             <div>
               <div>
                 <CustomTable
@@ -394,6 +482,7 @@ export default function PurchaseRequest(props) {
                   handleModelMaterialReceiving={handleModelMaterialReceiving}
                   borderBottomColor={"#60d69f"}
                   borderBottomWidth={20}
+                  handlePrint={handlePrintPR}
                 />
               </div>
 
@@ -417,32 +506,32 @@ export default function PurchaseRequest(props) {
               </div>
               <Notification msg={errorMsg} open={openNotification} />
             </div>
-          ): materialReceivings && materialReceivings.length == 0 ? (
-            <div className='row ' style={{ marginTop: '25px' }}>
-              <div className='col-11'>
+          ) : materialReceivings && materialReceivings.length == 0 ? (
+            <div className="row " style={{ marginTop: "25px" }}>
+              <div className="col-11">
                 <h3
                   style={{
-                    color: 'white',
-                    textAlign: 'center',
-                    width: '100%',
-                    position: 'absolute',
+                    color: "white",
+                    textAlign: "center",
+                    width: "100%",
+                    position: "absolute",
                   }}
                 >
                   Opps...No Data Found
                 </h3>
               </div>
-              <div className='col-1' style={{ marginTop: 45 }}>
+              <div className="col-1" style={{ marginTop: 45 }}>
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back}
-                  style={{ maxWidth: '60%', height: 'auto', cursor: 'pointer' }}
+                  style={{ maxWidth: "60%", height: "auto", cursor: "pointer" }}
                 />
               </div>
             </div>
-          ) : 
-          ( <div className="LoaderStyle">
-            <Loader type="TailSpin" color="red" height={50} width={50} />
-          </div>
+          ) : (
+            <div className="LoaderStyle">
+              <Loader type="TailSpin" color="red" height={50} width={50} />
+            </div>
           )}
 
           <Dialog
@@ -522,6 +611,8 @@ export default function PurchaseRequest(props) {
           </Dialog>
         </div>
       </div>
+
+      <PrintTable selectedPRToPrint={selectedPRToPrint} />
     </div>
   );
 }

@@ -928,7 +928,7 @@ function AddEditPurchaseRequest(props) {
               onClick={() =>
                 props.history.push("/home/wms/fus/professionalorder")
               }
-              style={{ ...styles.stylesForButton }}
+              style={{ ...styles.stylesForButton, height:45 }}
               variant="contained"
               color="primary"
             >

@@ -228,7 +228,7 @@ else if(staffType === 'Radiology/Imaging'){
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
-              console.log(res.data.data)
+              console.log('searched data',res.data.data)
               res.data.data.map((d) => (d.profileNo = d.patientData.profileNo))
               const sortedObjs = _.sortBy(res.data.data, 'date').reverse()
               setradInPatient(sortedObjs)
