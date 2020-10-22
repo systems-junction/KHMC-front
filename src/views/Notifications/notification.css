@@ -5,7 +5,6 @@
 }
 
 /* Notifications */
-
 .notification {
     display: inline-block;
     position: relative;
@@ -15,6 +14,11 @@
     font-size: 1.3em;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     cursor: pointer;
+}
+
+.notify-bell{
+    width: 35px;
+    height: 35px;
 }
 
 .notification::before, 
@@ -105,4 +109,23 @@
 .notification-info-panel .notification-message.unread {
     background-color: lightgray ;
     color: black;
+}
+
+/* for mobile view  */
+@media only screen and (max-width: 500px) {
+    .notification-container {
+        margin-right: 5px;
+        margin-top: -10px;
+    }
+    
+    /* Notifications */   
+    .notification {
+        font-size: 0px;
+    }
+
+    .notify-bell{
+        width: 20px;
+        height: 20px;
+    }
+    
 }

@@ -89,7 +89,7 @@ ul li {
 
 .subheader div:first-of-type > h4 {
   color: #fff;
-  margin-left: 20px;
+  margin-left: 15px;
   font-weight: 900;
   padding-top: 16px;
   padding-bottom: 5px;
@@ -262,10 +262,14 @@ input[type="radio"] {
     width: 50% !important;
   }
   .subheader div:first-of-type > h4 {
-    margin-left: -6px;
+    margin-left: 2px;
     font-weight: 700;
     padding-top: 8px;
     font-size: 15px;
+  }
+  .subheader div:first-of-type > img{
+    width: 30px;
+    height: inherit;
   }
   .MuiFormLabel-root {
     color: red;
