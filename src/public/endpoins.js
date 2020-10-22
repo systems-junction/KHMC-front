@@ -32,8 +32,11 @@ export const loginUrl = `${baseUrl}/auth/login`;
 
 export const addSubscriber = `${baseUrl}/subscriber/postsubscriber`;
 
-// items endpoints
+// notificationCenter Endpoints
+export const markNotification = `${baseUrl}/notifications/updatenotifications`;
+export const getNotifications = `${baseUrl}/notifications/getnotifications`;
 
+// items endpoints
 export const getItemsUrl = `${baseUrl}/item/getitems`;
 export const addItemUrl = `${baseUrl}/item/additem`;
 export const updateItemUrl = `${baseUrl}/item/updateitem`;
@@ -435,3 +438,4 @@ export const stockLevelsFU = `${baseUrl}/reports/stocklevelsfu`;
 
 //Supplier Fulfillment PO
 export const supplierfulfillmentPO = `${baseUrl}/reports/supplierfulfillmentpo`;
+export const chatApi = `${baseUrl}/chat`

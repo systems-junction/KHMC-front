@@ -15,12 +15,11 @@
 .header2-style {
   max-width: 20%;
   height: 8%;
-  /* margin-top: -6px;
-  margin-right: 0.5%; */
+  margin-left: 10px;
   cursor: pointer;
 }
-.notification-style{
-  margin-right: 20px ;
+.notification-style {
+  margin-right: 20px;
 }
 
 @media screen and (max-width: 768px) {
@@ -113,6 +112,27 @@
 .subheader div:nth-of-type(2) > img {
   height: 75px;
   width: 190px;
+}
+
+@media only screen and (max-width: 500px) {
+  /* start of medium tablet styles */
+  /* Adding a fixed/percentage min-width could ensure that the image doesn't get too small */
+  /* .KHMC {
+    width: 10%;
+    height: auto;
+    /* background-color: crimson; */
+  .header1-style {
+    max-width: 26%;
+    height: 12%;
+    margin-left: -14px;
+    margin-top: -19px;
+  }
+  .header2-style {
+    max-width: 26%;
+    height: 5%;
+    margin-top: -6px;
+    /* height: auto; */
+  }
 }
 
 /* color: "white",  fontWeight: "700" */
