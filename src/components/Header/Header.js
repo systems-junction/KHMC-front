@@ -70,11 +70,11 @@ class Header extends React.Component
         { 
           if(checkId[j].userId._id === loggedUser._id)
           {
-            this.state.data.push(data[i])
+            var newData = [].concat(data[i],this.state.data)
+            this.setState({ data : newData})
           }
         }
       }
-      console.log("Added the socket notify to all",this.state.data)
     });
   }
 
