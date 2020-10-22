@@ -34,6 +34,7 @@ export const addSubscriber = `${baseUrl}/subscriber/postsubscriber`;
 
 // notificationCenter Endpoints
 export const markNotification = `${baseUrl}/notifications/updatenotifications`;
+export const getNotifications = `${baseUrl}/notifications/getnotifications`;
 
 // items endpoints
 export const getItemsUrl = `${baseUrl}/item/getitems`;
