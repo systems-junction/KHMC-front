@@ -288,7 +288,7 @@ class Login extends React.Component {
                   style={{ display: "flex", justifyContent: "center" }}
                 >
                   <div
-                    className="row"
+                    className="row inputForLogin"
                     style={{
                       marginTop: 20,
                       width: "55%",
@@ -316,7 +316,7 @@ class Login extends React.Component {
                   style={{ display: "flex", justifyContent: "center" }}
                 >
                   <div
-                    className="row"
+                    className="row inputForLogin"
                     style={{
                       marginTop: 25,
                       width: "55%",
@@ -370,6 +370,7 @@ class Login extends React.Component {
                           type="submit"
                           variant="contained"
                           color="primary"
+                          className="Loginbtn"
                         >
                           Login
                         </Button>
