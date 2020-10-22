@@ -26,7 +26,7 @@ export default function NotifyMe(props) {
     // const notificationMsg = props.notific_value;
     const sortedByKey = props.sortedByKey;
     // const heading = props.heading || 'Notifications';
-    const bellSize = props.size || 32;
+    // const bellSize = props.size || 32;
     const bellColor = props.color || '#FFFFFF';
     // const multiLineSplitter = props.multiLineSplitter || '\n';
     // const showDate = props.showDate || false;
@@ -155,7 +155,7 @@ export default function NotifyMe(props) {
                 /*#__PURE__*/
                 React.createElement(Bell, {
                     color: bellColor,
-                    size: bellSize
+                    className:'notify-bell'
                 }))),
         /*#__PURE__*/
         React.createElement("div", {
@@ -245,9 +245,9 @@ NotifyMe.prototype = {
     notific_value: PropTypes.string.isRequired,
     sortedByKey: PropTypes.bool,
     color: PropTypes.string,
-    size: PropTypes.string,
-    heading: PropTypes.string,
-    multiLineSplitter: PropTypes.string,
-    showDate: PropTypes.bool
+    // size: PropTypes.string,
+    // heading: PropTypes.string,
+    // multiLineSplitter: PropTypes.string,
+    // showDate: PropTypes.bool
 };
 // export default NotifyMe;

@@ -101,7 +101,6 @@ class Header extends React.Component
           notific_key='timestamp'
           sortedByKey={false}
           showDate={true}
-          size={35}
           color="white"
         />
         <img
