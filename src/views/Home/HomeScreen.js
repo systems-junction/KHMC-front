@@ -16,6 +16,7 @@ import RCM from "../../assets/img/RCM.png";
 import WMS from "../../assets/img/WMS.png";
 import FIN from "../../assets/img/FIN.png";
 import Control_Room from "../../assets/img/Control_Room.png";
+import Reports from "../../assets/img/Reports.png";
 import BU from "../../assets/img/business_Unit.png";
 import FunctionalUnit from "../../assets/img/Functional Unit.png";
 import Staff from "../../assets/img/Staff.png";
@@ -89,6 +90,12 @@ const admin = [
     img: Control_Room,
     text: "Control Room",
     path: `/home/controlroom`,
+  },
+
+  {
+    img: Reports,
+    text: "Reports",
+    path: `/home/reports`,
   },
 ];
 
@@ -591,11 +598,10 @@ const warehouseInventoryKeeper = [
   },
 
   {
-    img: "",
-    text: "",
-    path: "",
+    img: Reports,
+    text: "Reports",
+    path: `/home/reports`,
   },
-
   {
     img: "",
     text: "",

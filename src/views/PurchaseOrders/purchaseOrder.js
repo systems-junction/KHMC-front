@@ -315,7 +315,7 @@ export default function PurchaseRequest(props) {
     doc.text(35, 50, selectedPRToPrint.purchaseOrderNo);
     doc.text(35, 55, createdAt);
     doc.text(110, 50, selectedPRToPrint.vendorId.englishName);
-    doc.text(110, 55, selectedPRToPrint.generatedBy);
+    doc.text(110, 55, selectedPRToPrint.generated);
     // doc.text(100, 50, "HERE");
     // doc.text(100, 55, "HERE");
     // table

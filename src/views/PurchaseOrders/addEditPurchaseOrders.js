@@ -411,50 +411,18 @@ function AddEditPurchaseRequest(props) {
     setIsFormSubmitted(true);
     // console.log("purchase request", purchaseRequest);
     if (validateForm()) {
-      if (status === "pending_reception" && committeeStatus === "approved") {
+      if (status === "pending_receipt" && committeeStatus === "approved") {
         setOpenNotification(true);
-        setErrorMsg("PO can not be updated once it is in progress");
+        setErrorMsg("PO can not be updated once it has been approved by committee.");
         return;
       }
 
       let temp = [];
-
       for (let i = 0; i < purchaseRequest.length; i++) {
         temp.push({ id: purchaseRequest[i]._id });
       }
 
-      let params = "";
-
-      // if (currentUser.staffTypeId.type === "Committe Member") {
-      //   // if (
-      //   //   currentUser.permission.add === false &&
-      //   //   currentUser.permission.edit === true
-      //   // ) {
-      //   params = {
-      //     _id,
-      //     status,
-      //     generated,
-      //     purchaseRequestId: purchaseRequest,
-      //     generatedBy: generatedBy,
-      //     date: new Date(),
-      //     vendorId: vendorId,
-      //     sentAt: "",
-      //     committeeStatus:
-      //       currentUser.staffTypeId.type === "Committe Member"
-      //         ? committeeStatus
-      //         : "po_created",
-
-      //     // committeeStatus:
-      //     //  ( currentUser.permission.add === false &&
-      //     //   currentUser.permission.edit === true)
-      //     //     ? committeeStatus
-      //     //     : "po_created",
-      //     prId: temp,
-      //     comments,
-      //     commentNotes,
-      //   };
-      // } else {
-      params = {
+      let params = {
         _id,
         status,
         generated,
@@ -518,6 +486,13 @@ function AddEditPurchaseRequest(props) {
   const handleApprove = () => {
     setIsFormSubmitted(true);
     // console.log("purchase request", purchaseRequest);
+
+    if (status === "pending_receipt") {
+      setOpenNotification(true);
+      setErrorMsg("Once approved you can not update the purchase order");
+      return;
+    }
+
     if (validateForm()) {
       let temp = [];
 
@@ -534,7 +509,7 @@ function AddEditPurchaseRequest(props) {
         // ) {
         params = {
           _id,
-          status,
+          status: committeeStatus !== "approved" ? committeeStatus : status,
           generated,
           purchaseOrderNo,
           purchaseRequestId: purchaseRequest,
@@ -542,48 +517,13 @@ function AddEditPurchaseRequest(props) {
           date: new Date(),
           vendorId: vendorId,
           sentAt: "",
-          committeeStatus:
-            currentUser.staffTypeId.type === "Committe Member"
-              ? committeeStatus
-              : "po_created",
-
-          // committeeStatus:
-          //  ( currentUser.permission.add === false &&
-          //   currentUser.permission.edit === true)
-          //     ? committeeStatus
-          //     : "po_created",
+          committeeStatus: committeeStatus,
           prId: temp,
           comments,
           commentNotes,
           approvedBy: currentUser.staffId,
         };
       }
-
-      // else {
-      //   params = {
-      //     _id,
-      //     status,
-      //     generated,
-      //     purchaseRequestId: purchaseRequest,
-      //     generatedBy: generatedBy,
-      //     date: new Date(),
-      //     vendorId: vendorId,
-      //     sentAt: "",
-      //     // committeeStatus:
-      //     //   currentUser.staffTypeId.type === "Committe Member"
-      //     //     ? committeeStatus
-      //     //     : "po_created",
-      //     committeeStatus: committeeStatus,
-      //     comments,
-      //     commentNotes,
-      //     // committeeStatus:
-      //     //   currentUser.permission.add === false &&
-      //     //   currentUser.permission.edit === true
-      //     //     ? committeeStatus
-      //     //     : "po_created",
-      //   };
-      // }
-
       console.log("params", params);
 
       axios
@@ -692,7 +632,7 @@ function AddEditPurchaseRequest(props) {
     >
       <Header />
       <div className={"cPadding"}>
-        <div className="subheader" >
+        <div className="subheader">
           <div>
             <img src={purchase_order} />
             <h4>
@@ -705,8 +645,8 @@ function AddEditPurchaseRequest(props) {
           <ViewAllBtn history={props.history} />
         </div>
 
-        <div className="container-fluid" >
-          <div className="row" style={{marginTop: 20}}>
+        <div className="container-fluid">
+          <div className="row" style={{ marginTop: 20 }}>
             <div
               className="col-md-12"
               style={{
@@ -753,7 +693,7 @@ function AddEditPurchaseRequest(props) {
           className="container-fluid"
         >
           {currentUser && currentUser.staffTypeId.type === "Committe Member" ? (
-            <div className="row" style={{marginTop: 15}}>
+            <div className="row" style={{ marginTop: 15 }}>
               <div
                 className="col-md-4"
                 style={{
@@ -852,7 +792,7 @@ function AddEditPurchaseRequest(props) {
             undefined
           )}
 
-          <div className="row" style={{marginTop: 15}}>
+          <div className="row" style={{ marginTop: 15 }}>
             {comingFor === "edit" &&
             (currentUser.staffTypeId.type === "admin" ||
               currentUser.staffTypeId.type === "Committe Member") ? (
@@ -985,7 +925,7 @@ function AddEditPurchaseRequest(props) {
           </div>
 
           {currentUser && currentUser.staffTypeId.type === "Committe Member" ? (
-            <div className="row" style={{marginTop: 15}}>
+            <div className="row" style={{ marginTop: 15 }}>
               <div
                 className="col-md-12"
                 style={{
@@ -1174,7 +1114,7 @@ function AddEditPurchaseRequest(props) {
                   justifyContent: "flex-end",
                   marginTop: "2%",
                   marginBottom: "2%",
-                  marginRight: '5px'
+                  marginRight: "5px",
                 }}
               >
                 {comingFor === "add" ? (
@@ -1225,20 +1165,22 @@ function AddEditPurchaseRequest(props) {
 
           {purchaseRequest.length !== 0 ? (
             <div style={{ marginLeft: -10, marginRight: -10 }}>
-              <h5 style={{ color: "white", fontWeight: "700", marginLeft: '5px' }}>
+              <h5
+                style={{ color: "white", fontWeight: "700", marginLeft: "5px" }}
+              >
                 Added Purchase Requests
               </h5>
-              <div style={{marginTop: 20}}>
-              <AddedPurchaseRequestTable
-                tableData={purchaseRequest}
-                vendors={vendors}
-                tableDataKeys={tableDataKeysForPR}
-                tableHeading={tableHeadingForPR}
-                // action={actions}
-                viewItem={viewItem}
-                borderBottomColor={"#60d69f"}
-                borderBottomWidth={20}
-              />
+              <div style={{ marginTop: 20 }}>
+                <AddedPurchaseRequestTable
+                  tableData={purchaseRequest}
+                  vendors={vendors}
+                  tableDataKeys={tableDataKeysForPR}
+                  tableHeading={tableHeadingForPR}
+                  // action={actions}
+                  viewItem={viewItem}
+                  borderBottomColor={"#60d69f"}
+                  borderBottomWidth={20}
+                />
               </div>
             </div>
           ) : (
