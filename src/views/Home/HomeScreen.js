@@ -730,7 +730,7 @@ class HomeScreen extends React.Component {
           backgroundSize: "100%",
         }}
       >
-        <Header />
+        <Header history={this.props.history} />
         {/* <div
           className="menupage"
           style={{

@@ -16,7 +16,7 @@ ul li {
 }
 
 .addCode:before {
-  content: '\f055';
+  content: "\f055";
   font-family: FontAwesome;
   font-style: normal;
   font-weight: normal;
@@ -26,7 +26,7 @@ ul li {
 }
 
 .addedCode:before {
-  content: '\f058';
+  content: "\f058";
   font-family: FontAwesome;
   font-style: normal;
   font-weight: normal;
@@ -89,10 +89,15 @@ ul li {
 
 .subheader div:first-of-type > h4 {
   color: #fff;
-  margin-left: 20px;
+  margin-left: 15px;
   font-weight: 900;
   padding-top: 16px;
   padding-bottom: 5px;
+}
+
+.subheader div:first-of-type > img{
+  width: 50px;
+  height: inherit;
 }
 
 .subheader div {
@@ -127,7 +132,7 @@ ul li {
   display: inline-block;
 } */
 
-@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css');
+@import url("//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css");
 .search {
   position: relative;
 }
@@ -142,16 +147,6 @@ ul li {
   left: 10px;
   font-size: 15px;
 }
-
-/* .addButton {
-  color: 'white';
-  cursor: pointer;
-  border-radius: 15;
-  background: #2c6ddd;
-  width: 140px;
-  height: 50px;
-  outline: none;
-} */
 
 @media screen and (max-width: 768px) {
   .subheader div {
@@ -234,7 +229,7 @@ ul li {
 
 /* css  for radio tabs */
 
-input[type='radio'] {
+input[type="radio"] {
   box-shadow: none;
 }
 
@@ -245,4 +240,37 @@ input[type='radio'] {
 .sideMargin {
   margin-left: -20px !important;
   margin-right: -20px !important;
+}
+
+/* for mobile view  */
+@media only screen and (max-width: 500px) {
+  .inputForLogin {
+    /* background-color: red; */
+    width: 80% !important;
+  }
+  .Loginbtn {
+    width: 50% !important;
+  }
+  .subheader div:first-of-type > h4 {
+    margin-left: 2px;
+    font-weight: 700;
+    padding-top: 8px;
+    font-size: 15px;
+  }
+  .subheader div:first-of-type > img{
+    width: 30px;
+    height: inherit;
+  }
+  .MuiFormLabel-root {
+    color: red;
+  }
+  .scroll-4-patient-detail {
+    overflow: auto;
+  }
+  /* .addButton {
+    width: 106 !important;
+  } */
+}
+.for-view-btn-font {
+  color: red;
 }
