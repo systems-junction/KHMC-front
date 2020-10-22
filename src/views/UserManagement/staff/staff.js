@@ -180,7 +180,7 @@ export default function Staff(props) {
       {/* <div
         style={{ alignItems: "center",  display: "flex", marginTop: 5 }}
       > */}
-      <Header />
+      <Header history={props.history}/>
       {/* </div> */}
       <div className="cPadding">
         <div className="subheader">

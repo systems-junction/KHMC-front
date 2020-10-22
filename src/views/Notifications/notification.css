@@ -1,0 +1,131 @@
+/* Notification Component Styles */
+
+.notification-container {
+    margin-right: 15px;
+}
+
+/* Notifications */
+.notification {
+    display: inline-block;
+    position: relative;
+    padding: 6px;
+    background: #2c6ddd;
+    border-radius: 45px;
+    font-size: 1.3em;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.notify-bell{
+    width: 35px;
+    height: 35px;
+}
+
+.notification::before, 
+.notification::after {
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.notification::before {
+    display: block;
+    font-family: "FontAwesome";
+    transform-origin: top center;
+}
+
+.notification::after {
+    font-family: Arial;
+    font-size: 12px;
+    font-weight: 700;
+    position: absolute;
+    top: -9px;
+    right: -15px;
+    padding: 5px 8px;
+    line-height: 100%;
+    border: 2px #fff solid;
+    border-radius: 60px;
+    background: #db3434;
+    opacity: 0;
+    content: attr(data-count);
+    opacity: 0;
+    transform: scale(0.5);
+    transition: transform, opacity;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-out;
+}
+
+.notification.notify::before {
+    animation: ring 1.5s ease;
+}
+
+.notification.show-count::after {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.notification-info-panel {
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.notification-info-panel .notification-message {
+    list-style: none;
+    padding: 4px;
+    margin-bottom: 8px;
+    /* border: 1px solid #ececec; */
+    border-radius: 5px;
+    background-color: #FFFFFF;
+    color: black;
+}
+
+.no-notify{
+    text-align: center;
+}
+
+.notification-info-panel .notification-message .title {
+    font-weight: 600;
+    font-size: 18px;
+    color: #2c6ddd;
+}
+
+.notify-dot{
+    top: 2px;
+    right: -20px;
+    height: 10px;
+    min-width: 10px;
+}
+
+.notification-info-panel .notification-message .time {
+    font-size: 14px;
+    color: gray;
+}
+
+.notification-info-panel .notification-message .content {
+    font-size: 16px;
+    cursor: pointer;
+    padding: .5rem!important;
+}
+
+.notification-info-panel .notification-message.unread {
+    background-color: lightgray ;
+    color: black;
+}
+
+/* for mobile view  */
+@media only screen and (max-width: 500px) {
+    .notification-container {
+        margin-right: 5px;
+        margin-top: -10px;
+    }
+    
+    /* Notifications */   
+    .notification {
+        font-size: 0px;
+    }
+
+    .notify-bell{
+        width: 20px;
+        height: 20px;
+    }
+    
+}

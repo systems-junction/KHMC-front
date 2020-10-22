@@ -767,7 +767,7 @@ function AddEditEDR(props) {
         overflowY: 'scroll',
       }}
     >
-      <Header />
+      <Header history={props.history}/>
       <div className={`cPadding ${classes.root}`}>
         <div className='subheader' style={{ marginLeft: '-10px' }}>
           <div>

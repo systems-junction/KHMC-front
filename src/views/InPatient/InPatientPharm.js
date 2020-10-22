@@ -850,9 +850,9 @@ export default function ReplenishmentRequest(props) {
           overflowY: "scroll",
         }}
       >
-        <Header />
-        <div className="cPadding">
-          <div className="subheader" style={{ marginLeft: "-10px" }}>
+        <Header history={props.history}/>
+        <div className='cPadding'>
+          <div className='subheader' style={{ marginLeft: '-10px' }}>
             <div>
               <img src={business_Unit} />
               <h4>In-Patient</h4>

@@ -966,7 +966,7 @@ function AddEditPurchaseRequest(props) {
         overflowY: 'scroll',
       }}
     >
-      <Header />
+      <Header history={props.history}/>
       {!isLoading ? (
         <div className='cPadding'>
           <div className='subheader'>
