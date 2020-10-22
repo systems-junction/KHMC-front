@@ -15,15 +15,21 @@ export default function Notifications(props)
     const [errorMsg, setErrorMsg] = useState('')
     const [successMsg, setsuccessMsg] = useState('')
     const [openNotification, setOpenNotification] = useState(false)
+    const [notificationData, setnotificationData] = useState('')
 
     useEffect(() => {
+
+        if(props.history.location.state && props.history.location.state.notificationData)
+        {
+        setnotificationData(props.history.location.state.notificationData)
         console.log("Data Passed", props.history.location.state.notificationData)
-    }, [])
+        }
+    }, [notificationData,props.history.location.state,props.history.location.state.notificationData])
 
     const getWhen = timestamp => {
         let when = `${moment(timestamp).format('DD-MM-YYYY')} ${moment(timestamp).format('LTS')}`;
         return when;
-    }; // Get the notification message
+    }; 
 
     const getContent = message => {
         // console.log("Data Passed",message)
@@ -47,7 +53,7 @@ export default function Notifications(props)
         return {
             __html: `<ul><li>${message}</li></ul>`
         };
-    }; // Hide the notification on clicking outside
+    }; // Get the notification message
 
     const handleViewNotification = (message,userId) => {
         console.log("mesaageee", message)
@@ -106,13 +112,13 @@ export default function Notifications(props)
                     </div>
                 </div>
 
-                {props.history.location.state.notificationData.length > 0 ?
+                {notificationData.length > 0 ?
                     (<ul className="notification-info-panel">
-                        {props.history.location.state.notificationData.map((message, index) => {
+                        {notificationData.map((message, index) => {
                             return (
                                 message.sendTo.map((checkRead, indexx) => {
                                     if (checkRead.read === false && checkRead.userId._id === cookie.load("current_user")._id) {
-                                        console.log("Unread", index)
+                                        // console.log("Unread", index)
                                         return (
                                             <li key={index}
                                                 className={
@@ -131,7 +137,7 @@ export default function Notifications(props)
                                         )
                                     }
                                     else if (checkRead.read === true && checkRead.userId._id === cookie.load("current_user")._id) {
-                                        console.log("Read", index)
+                                        // console.log("Read", index)
                                         return (
                                             <li key={index}
                                                 className={
