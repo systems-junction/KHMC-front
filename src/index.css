@@ -143,16 +143,6 @@ ul li {
   font-size: 15px;
 }
 
-/* .addButton {
-  color: 'white';
-  cursor: pointer;
-  border-radius: 15;
-  background: #2c6ddd;
-  width: 140px;
-  height: 50px;
-  outline: none;
-} */
-
 @media screen and (max-width: 768px) {
   .subheader div {
     width: 50%;
@@ -268,6 +258,9 @@ input[type="radio"] {
   .scroll-4-patient-detail {
     overflow: auto;
   }
+  /* .addButton {
+    width: 106 !important;
+  } */
 }
 .for-view-btn-font {
   color: red;
