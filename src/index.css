@@ -95,7 +95,7 @@ ul li {
   padding-bottom: 5px;
 }
 
-.subheader div:first-of-type > img{
+.subheader div:first-of-type > img {
   width: 50px;
   height: inherit;
 }
@@ -243,7 +243,7 @@ input[type="radio"] {
 }
 
 /* for mobile view  */
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 600px) {
   .inputForLogin {
     /* background-color: red; */
     width: 80% !important;
@@ -257,7 +257,7 @@ input[type="radio"] {
     padding-top: 8px;
     font-size: 15px;
   }
-  .subheader div:first-of-type > img{
+  .subheader div:first-of-type > img {
     width: 30px;
     height: inherit;
   }
@@ -266,6 +266,10 @@ input[type="radio"] {
   }
   .scroll-4-patient-detail {
     overflow: auto;
+  }
+  .pat-det-heading {
+    font-size: 12px !important;
+    color: red;
   }
   /* .addButton {
     width: 106 !important;
