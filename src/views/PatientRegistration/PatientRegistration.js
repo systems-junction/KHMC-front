@@ -1688,7 +1688,7 @@ function PatientRegistration(props) {
           </div>
         </div>
         <div style={{ width: "auto", height: "20px" }} />
-        <div style={{ overflowX: "scroll" }} className={classesForTabs.root}>
+        <div className={classesForTabs.root}>
           <Tabs
             value={value}
             onChange={handleChange}
