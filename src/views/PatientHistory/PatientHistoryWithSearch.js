@@ -352,6 +352,11 @@ const useStylesForInput = makeStyles((theme) => ({
       backgroundColor: "white",
       color: "black",
     },
+    "& .MuiFormLabel-root": {
+      fontSize: "12px",
+
+      paddingRight: "50px",
+    },
   },
 }));
 
@@ -1256,7 +1261,6 @@ function LabRadRequest(props) {
 
   //for search patient
   const handlePatientSearch = (e) => {
-    
     if (e.length >= 3) {
       axios
         .get(getpatienthistoryUrl + "/" + e)
@@ -1284,7 +1288,7 @@ function LabRadRequest(props) {
     dispatch({ field: "diagnosisArray", value: "" });
     dispatch({ field: "medicationArray", value: "" });
     console.log("selected banda : ", i);
-    setViewData(false)
+    setViewData(false);
     props.setPatientDetailsForReducer(i);
 
     setPatientDetails(i);
@@ -1300,17 +1304,16 @@ function LabRadRequest(props) {
   }
 
   const getEDRIPROPR = (id) => {
-    setLoadEDRIPROPR(true)
+    setLoadEDRIPROPR(true);
     axios.get(getpatientHistoryPre + "/" + id).then((res) => {
       if (res.data.success) {
-        setLoadEDRIPROPR(false)
+        setLoadEDRIPROPR(false);
         var objectSorted = _.sortBy(res.data.data, "createdAt").reverse();
         setEDRIPROPR(objectSorted);
 
         console.log("responseee", res.data.data);
       }
     });
-    
   };
 
   const getPatientByInfo = (id) => {
@@ -1559,7 +1562,7 @@ function LabRadRequest(props) {
           });
         }
       });
-      setViewData(true)
+    setViewData(true);
   }
 
   if (openNotification) {
@@ -1588,7 +1591,7 @@ function LabRadRequest(props) {
         overflowY: "scroll",
       }}
     >
-      <Header history={props.history}/>
+      <Header history={props.history} />
       <div className="cPadding">
         <div className="subheader" style={{ marginLeft: "-10px" }}>
           <div>
@@ -1766,110 +1769,113 @@ function LabRadRequest(props) {
           style={{ flex: 4, display: "flex", flexDirection: "column" }}
           className="container-fluid"
         >
-           {loadEDRIPROPR ?
-           <div style={{ textAlign: "center" }}>
-           <Loader
-             type="TailSpin"
-             color="#2c6ddd"
-             height={50}
-             width={50}
-             style={{ display: "inline-block", padding: "10px" }}
-           /></div> :
-          (<div className="row">
-            <CustomTable
-              tableData={EDRIPROPR}
-              tableDataKeys={tableDataKeysForEDRIPROPR}
-              tableHeading={tableHeadingForEDRIPROPR}
-              handleView={handlePatientHistoryView}
-              action={actions}
-              borderBottomColor={"#60d69f"}
-              borderBottomWidth={20}
-            />
-          </div> )}
+          {loadEDRIPROPR ? (
+            <div style={{ textAlign: "center" }}>
+              <Loader
+                type="TailSpin"
+                color="#2c6ddd"
+                height={50}
+                width={50}
+                style={{ display: "inline-block", padding: "10px" }}
+              />
+            </div>
+          ) : (
+            <div className="row">
+              <CustomTable
+                tableData={EDRIPROPR}
+                tableDataKeys={tableDataKeysForEDRIPROPR}
+                tableHeading={tableHeadingForEDRIPROPR}
+                handleView={handlePatientHistoryView}
+                action={actions}
+                borderBottomColor={"#60d69f"}
+                borderBottomWidth={20}
+              />
+            </div>
+          )}
         </div>
-        {viewData ?
-        <div>
-          <div
-            style={{
-              height: "20px",
-            }}
-          />
-          <div className={classesForTabs.root}>
-            <Tabs
-              classes={{
-                root: classesForTabs.root,
-                scroller: classesForTabs.scroller,
+        {viewData ? (
+          <div>
+            <div
+              style={{
+                height: "20px",
               }}
-              value={value}
-              onChange={handleChange}
-              textColor="primary"
-              TabIndicatorProps={{ style: { background: "#12387a" } }}
-              centered={false}
-              variant="scrollable"
-              fullWidth={true}
-            >
-              <Tab
-                style={{
-                  color: "white",
-                  borderRadius: 5,
-                  outline: "none",
-                  color: value === 0 ? "#12387a" : "#3B988C",
+            />
+            <div className={classesForTabs.root}>
+              <Tabs
+                classes={{
+                  root: classesForTabs.root,
+                  scroller: classesForTabs.scroller,
                 }}
-                label="Doctor/Physician Notes"
-                disabled={enableForm}
-              />
-              <Tab
-                style={{
-                  color: "white",
-                  borderRadius: 5,
-                  outline: "none",
-                  color: value === 1 ? "#12387a" : "#3B988C",
-                }}
-                label="Consultant/Specialist Notes"
-                disabled={enableForm}
-              />
-              <Tab
-                style={{
-                  color: "white",
-                  borderRadius: 5,
-                  outline: "none",
-                  color: value === 2 ? "#12387a" : "#3B988C",
-                }}
-                label="Pharm"
-                disabled={enableForm}
-              />
-              <Tab
-                style={{
-                  color: "white",
-                  borderRadius: 5,
-                  outline: "none",
-                  color: value === 3 ? "#12387a" : "#3B988C",
-                }}
-                label="Lab"
-                disabled={enableForm}
-              />
-              <Tab
-                style={{
-                  color: "white",
-                  borderRadius: 5,
-                  outline: "none",
-                  color: value === 4 ? "#12387a" : "#3B988C",
-                }}
-                label="Rad"
-                disabled={enableForm}
-              />
-              <Tab
-                style={{
-                  color: "white",
-                  borderRadius: 5,
-                  outline: "none",
-                  color: value === 5 ? "#12387a" : "#3B988C",
-                }}
-                label="Triage And Assessment"
-                disabled={enableForm}
-              />
+                value={value}
+                onChange={handleChange}
+                textColor="primary"
+                TabIndicatorProps={{ style: { background: "#12387a" } }}
+                centered={false}
+                variant="scrollable"
+                fullWidth={true}
+              >
+                <Tab
+                  style={{
+                    color: "white",
+                    borderRadius: 5,
+                    outline: "none",
+                    color: value === 0 ? "#12387a" : "#3B988C",
+                  }}
+                  label="Doctor/Physician Notes"
+                  disabled={enableForm}
+                />
+                <Tab
+                  style={{
+                    color: "white",
+                    borderRadius: 5,
+                    outline: "none",
+                    color: value === 1 ? "#12387a" : "#3B988C",
+                  }}
+                  label="Consultant/Specialist Notes"
+                  disabled={enableForm}
+                />
+                <Tab
+                  style={{
+                    color: "white",
+                    borderRadius: 5,
+                    outline: "none",
+                    color: value === 2 ? "#12387a" : "#3B988C",
+                  }}
+                  label="Pharm"
+                  disabled={enableForm}
+                />
+                <Tab
+                  style={{
+                    color: "white",
+                    borderRadius: 5,
+                    outline: "none",
+                    color: value === 3 ? "#12387a" : "#3B988C",
+                  }}
+                  label="Lab"
+                  disabled={enableForm}
+                />
+                <Tab
+                  style={{
+                    color: "white",
+                    borderRadius: 5,
+                    outline: "none",
+                    color: value === 4 ? "#12387a" : "#3B988C",
+                  }}
+                  label="Rad"
+                  disabled={enableForm}
+                />
+                <Tab
+                  style={{
+                    color: "white",
+                    borderRadius: 5,
+                    outline: "none",
+                    color: value === 5 ? "#12387a" : "#3B988C",
+                  }}
+                  label="Triage And Assessment"
+                  disabled={enableForm}
+                />
 
-              {/* <Tab
+                {/* <Tab
                 style={{
                   color: 'white',
                   borderRadius: 5,
@@ -1879,223 +1885,225 @@ function LabRadRequest(props) {
                 label='Nurse Services'
                 disabled={enableForm}
               /> */}
-            </Tabs>
-          </div>
-          {value === 1 ? (
-            <div
-              style={{ flex: 4, display: "flex", flexDirection: "column" }}
-              className="container-fluid"
-            >
-              <div className="row" style={{ marginTop: "20px" }}>
-                {consultationNoteArray !== 0 ? (
-                  <CustomTable
-                    tableData={consultationNoteArray}
-                    tableDataKeys={tableDataKeysForConsultation}
-                    tableHeading={tableHeadingForConsultation}
-                    handleView={viewItem}
-                    action={actions}
-                    borderBottomColor={"#60d69f"}
-                    borderBottomWidth={20}
-                  />
-                ) : (
-                  undefined
-                )}
-              </div>
+              </Tabs>
             </div>
-          ) : value === 0 ? (
-            <div
-              style={{ flex: 4, display: "flex", flexDirection: "column" }}
-              className=" container-fluid"
-            >
-              <div className="row" style={{ marginTop: "20px" }}>
-                {residentNoteArray !== 0 ? (
-                  <CustomTable
-                    tableData={residentNoteArray}
-                    tableDataKeys={tableDataKeysForResident}
-                    tableHeading={tableHeadingForResident}
-                    handleView={viewItem}
-                    action={actions}
-                    borderBottomColor={"#60d69f"}
-                    borderBottomWidth={20}
-                  />
-                ) : (
-                  undefined
-                )}
-              </div>
-            </div>
-          ) : value === 2 ? (
-            <div
-              style={{ flex: 4, display: "flex", flexDirection: "column" }}
-              className="container-fluid"
-            >
-              <div className="row" style={{ marginTop: "20px" }}>
-                {pharmacyRequestArray !== 0 ? (
-                  <CustomTable
-                    tableData={pharmacyRequestArray}
-                    tableDataKeys={tableDataKeysForPharmacy}
-                    tableHeading={tableHeadingForPharmacy}
-                    // handleView={viewItem}
-                    handleView={handleView}
-                    action={actions}
-                    borderBottomColor={"#60d69f"}
-                    borderBottomWidth={20}
-                  />
-                ) : (
-                  undefined
-                )}
-              </div>
-            </div>
-          ) : value === 3 ? (
-            <div
-              style={{
-                flex: 4,
-                display: "flex",
-                flexDirection: "column",
-                paddingLeft: "10px",
-                paddingRight: "10px",
-              }}
-              className={`container-fluid `}
-            >
+            {value === 1 ? (
               <div
-                className="row"
-                style={{
-                  marginTop: "20px",
-                  paddingLeft: "5px",
-                  paddingRight: "5px",
-                }}
+                style={{ flex: 4, display: "flex", flexDirection: "column" }}
+                className="container-fluid"
               >
-                {labRequestArray !== 0 ? (
-                  <CustomTable
-                    tableData={labRequestArray}
-                    tableDataKeys={tableDataKeysForLabReq}
-                    tableHeading={tableHeadingForLabReq}
-                    handleView={viewLabRadReport}
-                    action={actions}
-                    borderBottomColor={"#60d69f"}
-                    borderBottomWidth={20}
-                  />
-                ) : (
-                  undefined
-                )}
+                <div className="row" style={{ marginTop: "20px" }}>
+                  {consultationNoteArray !== 0 ? (
+                    <CustomTable
+                      tableData={consultationNoteArray}
+                      tableDataKeys={tableDataKeysForConsultation}
+                      tableHeading={tableHeadingForConsultation}
+                      handleView={viewItem}
+                      action={actions}
+                      borderBottomColor={"#60d69f"}
+                      borderBottomWidth={20}
+                    />
+                  ) : (
+                    undefined
+                  )}
+                </div>
               </div>
-            </div>
-          ) : value === 4 ? (
-            <div
-              style={{
-                flex: 4,
-                display: "flex",
-                flexDirection: "column",
-                paddingLeft: "10px",
-                paddingRight: "10px",
-              }}
-              className={`container-fluid `}
-            >
+            ) : value === 0 ? (
               <div
-                className="row"
-                style={{
-                  marginTop: "20px",
-                  paddingLeft: "5px",
-                  paddingRight: "5px",
-                }}
+                style={{ flex: 4, display: "flex", flexDirection: "column" }}
+                className=" container-fluid"
               >
-                {radiologyRequestArray !== 0 ? (
-                  <CustomTable
-                    tableData={radiologyRequestArray}
-                    tableDataKeys={tableDataKeysForRadiology}
-                    tableHeading={tableHeadingForRadiology}
-                    handleView={viewLabRadReport}
-                    action={actions}
-                    borderBottomColor={"#60d69f"}
-                    borderBottomWidth={20}
-                  />
-                ) : (
-                  undefined
-                )}
+                <div className="row" style={{ marginTop: "20px" }}>
+                  {residentNoteArray !== 0 ? (
+                    <CustomTable
+                      tableData={residentNoteArray}
+                      tableDataKeys={tableDataKeysForResident}
+                      tableHeading={tableHeadingForResident}
+                      handleView={viewItem}
+                      action={actions}
+                      borderBottomColor={"#60d69f"}
+                      borderBottomWidth={20}
+                    />
+                  ) : (
+                    undefined
+                  )}
+                </div>
               </div>
-            </div>
-          ) : value === 6 ? (
-            <div
-              style={{
-                flex: 4,
-                display: "flex",
-                flexDirection: "column",
-                paddingLeft: "10px",
-                paddingRight: "10px",
-              }}
-              className={`container-fluid `}
-            >
+            ) : value === 2 ? (
               <div
-                className="row"
-                style={{
-                  marginTop: "20px",
-                  paddingLeft: "5px",
-                  paddingRight: "5px",
-                }}
+                style={{ flex: 4, display: "flex", flexDirection: "column" }}
+                className="container-fluid"
               >
-                {nurseServiceArray !== 0 ? (
-                  <CustomTable
-                    tableData={nurseServiceArray}
-                    tableDataKeys={tableDataKeysForNurse}
-                    tableHeading={tableHeadingForNurse}
-                    handleView={viewItem}
-                    action={actions}
-                    borderBottomColor={"#60D69F"}
-                    borderBottomWidth={20}
-                  />
-                ) : (
-                  undefined
-                )}
+                <div className="row" style={{ marginTop: "20px" }}>
+                  {pharmacyRequestArray !== 0 ? (
+                    <CustomTable
+                      tableData={pharmacyRequestArray}
+                      tableDataKeys={tableDataKeysForPharmacy}
+                      tableHeading={tableHeadingForPharmacy}
+                      // handleView={viewItem}
+                      handleView={handleView}
+                      action={actions}
+                      borderBottomColor={"#60d69f"}
+                      borderBottomWidth={20}
+                    />
+                  ) : (
+                    undefined
+                  )}
+                </div>
               </div>
-            </div>
-          ) : value === 5 ? (
-            <div
-              style={{
-                flex: 4,
-                display: "flex",
-                flexDirection: "column",
-                paddingLeft: "10px",
-                paddingRight: "10px",
-              }}
-              className={`container-fluid `}
-            >
+            ) : value === 3 ? (
               <div
-                className="row"
                 style={{
-                  marginTop: "20px",
-                  paddingLeft: "5px",
-                  paddingRight: "5px",
+                  flex: 4,
+                  display: "flex",
+                  flexDirection: "column",
+                  paddingLeft: "10px",
+                  paddingRight: "10px",
                 }}
+                className={`container-fluid `}
               >
-                {triageAssessmentArray !== 0 ? (
-                  <CustomTable
-                    tableData={triageAssessmentArray}
-                    tableDataKeys={tableDataKeysForTriage}
-                    tableHeading={tableDataHeadingForTriage}
-                    handleView={viewItem}
-                    action={actions}
-                    borderBottomColor={"#60D69F"}
-                    borderBottomWidth={20}
-                  />
-                ) : (
-                  undefined
-                )}
+                <div
+                  className="row"
+                  style={{
+                    marginTop: "20px",
+                    paddingLeft: "5px",
+                    paddingRight: "5px",
+                  }}
+                >
+                  {labRequestArray !== 0 ? (
+                    <CustomTable
+                      tableData={labRequestArray}
+                      tableDataKeys={tableDataKeysForLabReq}
+                      tableHeading={tableHeadingForLabReq}
+                      handleView={viewLabRadReport}
+                      action={actions}
+                      borderBottomColor={"#60d69f"}
+                      borderBottomWidth={20}
+                    />
+                  ) : (
+                    undefined
+                  )}
+                </div>
               </div>
-            </div>
-          ) : (
-            undefined
-          )}
+            ) : value === 4 ? (
+              <div
+                style={{
+                  flex: 4,
+                  display: "flex",
+                  flexDirection: "column",
+                  paddingLeft: "10px",
+                  paddingRight: "10px",
+                }}
+                className={`container-fluid `}
+              >
+                <div
+                  className="row"
+                  style={{
+                    marginTop: "20px",
+                    paddingLeft: "5px",
+                    paddingRight: "5px",
+                  }}
+                >
+                  {radiologyRequestArray !== 0 ? (
+                    <CustomTable
+                      tableData={radiologyRequestArray}
+                      tableDataKeys={tableDataKeysForRadiology}
+                      tableHeading={tableHeadingForRadiology}
+                      handleView={viewLabRadReport}
+                      action={actions}
+                      borderBottomColor={"#60d69f"}
+                      borderBottomWidth={20}
+                    />
+                  ) : (
+                    undefined
+                  )}
+                </div>
+              </div>
+            ) : value === 6 ? (
+              <div
+                style={{
+                  flex: 4,
+                  display: "flex",
+                  flexDirection: "column",
+                  paddingLeft: "10px",
+                  paddingRight: "10px",
+                }}
+                className={`container-fluid `}
+              >
+                <div
+                  className="row"
+                  style={{
+                    marginTop: "20px",
+                    paddingLeft: "5px",
+                    paddingRight: "5px",
+                  }}
+                >
+                  {nurseServiceArray !== 0 ? (
+                    <CustomTable
+                      tableData={nurseServiceArray}
+                      tableDataKeys={tableDataKeysForNurse}
+                      tableHeading={tableHeadingForNurse}
+                      handleView={viewItem}
+                      action={actions}
+                      borderBottomColor={"#60D69F"}
+                      borderBottomWidth={20}
+                    />
+                  ) : (
+                    undefined
+                  )}
+                </div>
+              </div>
+            ) : value === 5 ? (
+              <div
+                style={{
+                  flex: 4,
+                  display: "flex",
+                  flexDirection: "column",
+                  paddingLeft: "10px",
+                  paddingRight: "10px",
+                }}
+                className={`container-fluid `}
+              >
+                <div
+                  className="row"
+                  style={{
+                    marginTop: "20px",
+                    paddingLeft: "5px",
+                    paddingRight: "5px",
+                  }}
+                >
+                  {triageAssessmentArray !== 0 ? (
+                    <CustomTable
+                      tableData={triageAssessmentArray}
+                      tableDataKeys={tableDataKeysForTriage}
+                      tableHeading={tableDataHeadingForTriage}
+                      handleView={viewItem}
+                      action={actions}
+                      borderBottomColor={"#60D69F"}
+                      borderBottomWidth={20}
+                    />
+                  ) : (
+                    undefined
+                  )}
+                </div>
+              </div>
+            ) : (
+              undefined
+            )}
 
-          {openItemDialog ? (
-            <ViewSingleRequest
-              item={item}
-              openItemDialog={openItemDialog}
-              viewItem={viewItem}
-            />
-          ) : (
-            undefined
-          )}
-        </div>
-: undefined}
+            {openItemDialog ? (
+              <ViewSingleRequest
+                item={item}
+                openItemDialog={openItemDialog}
+                viewItem={viewItem}
+              />
+            ) : (
+              undefined
+            )}
+          </div>
+        ) : (
+          undefined
+        )}
         <Dialog
           aria-labelledby="form-dialog-title"
           open={openAddResidentDialog}
