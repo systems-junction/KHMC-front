@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 // import Overlay from 'react-bootstrap/Overlay';
 // import Popover from 'react-bootstrap/Popover';
@@ -9,7 +9,7 @@ import { Bell, BellOff, BookOpen, AlertTriangle } from 'react-feather';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import cookie from "react-cookies";
 
-// const NotifyMe = props => 
+// const NotifyMe = props =>
 export default function NotifyMe(props) {
     moment.locale(navigator.languages[0].toLowerCase()); // State variabls
 
@@ -169,12 +169,16 @@ export default function NotifyMe(props) {
                 /*#__PURE__*/
                 React.createElement(Bell, {
                     color: bellColor,
-                    className: 'notify-bell'
-                }))),
+                    className: "notify-bell",
+                })
+            )
+        ),
         /*#__PURE__*/
-        React.createElement("div", {
-            ref: ref
-        },
+        React.createElement(
+            "div",
+            {
+                ref: ref,
+            }
             // /*#__PURE__*/
             // React.createElement(Overlay, {
             //     show: show,
@@ -250,7 +254,7 @@ export default function NotifyMe(props) {
             // )
         )
     );
-};
+}
 
 NotifyMe.prototype = {
     storageKey: PropTypes.string,

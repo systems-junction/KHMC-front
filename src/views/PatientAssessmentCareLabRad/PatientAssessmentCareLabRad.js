@@ -337,7 +337,7 @@ const useStylesForInput = makeStyles((theme) => ({
 }));
 
 function LabRadRequest(props) {
-  const matches = useMediaQuery("(min-width:500px)");
+  const matches = useMediaQuery("(min-width:600px)");
 
   const classesForTabs = useStylesForTabs();
   const classes = useStylesForInput();
@@ -2442,7 +2442,7 @@ function LabRadRequest(props) {
 
               <div className="row">
                 <div
-                  className="col-md-5 col-sm-5 col-3"
+                  className="col-xs-12 col-md-5"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -2466,7 +2466,7 @@ function LabRadRequest(props) {
                   />
                 </div>
                 <div
-                  className={`col-md-5 col-sm-5 col-3 ${classes.root}`}
+                  className={`col-xs-12 col-md-5   ${classes.root}`}
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -2488,9 +2488,9 @@ function LabRadRequest(props) {
                     }}
                   />
                 </div>
-                <div className="col-md-2 col-sm-2 col-6">
+                <div className="col-xs-10 col-md-2">
                   <Button
-                    className="addButton"
+                    // className="addButton"
                     style={{
                       ...styles.stylesForButton,
                       marginTop: "25px",
@@ -2502,7 +2502,7 @@ function LabRadRequest(props) {
                       height: 56,
                       outline: "none",
                       marginTop: 25,
-                      width: "110%",
+                      width: matches ? "110%" : "106%",
                       marginLeft: "-10px",
                     }}
                     disabled={!addLabRequest}
@@ -2676,7 +2676,7 @@ function LabRadRequest(props) {
 
               <div className="row">
                 <div
-                  className="col-md-5 col-sm-5 col-3"
+                  className="col-xs-12 col-md-5"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -2701,7 +2701,7 @@ function LabRadRequest(props) {
                   />
                 </div>
                 <div
-                  className={`col-md-5 col-sm-5 col-3 ${classes.root}`}
+                  className={`col-xs-12 col-md-5 ${classes.root}`}
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -2723,9 +2723,9 @@ function LabRadRequest(props) {
                     }}
                   />
                 </div>
-                <div className="col-md-2 col-sm-2 col-6">
+                <div className="col-xs-10 col-md-2">
                   <Button
-                    className="addButton"
+                    // className="addButton"
                     style={{
                       ...styles.stylesForButton,
                       marginTop: "25px",
@@ -2737,7 +2737,7 @@ function LabRadRequest(props) {
                       height: 56,
                       outline: "none",
                       marginTop: 25,
-                      width: "110%",
+                      width: matches ? "110%" : "106%",
                       marginLeft: "-10px",
                     }}
                     disabled={!addRadioRequest}
