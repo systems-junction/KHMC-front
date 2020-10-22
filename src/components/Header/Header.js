@@ -10,8 +10,9 @@ import Fade from "@material-ui/core/Fade";
 import cookie from "react-cookies";
 import Fab from "@material-ui/core/Fab";
 import NotifyMe from './NotificationTray';
-import { socketUrl } from '../../public/endpoins';
+import { socketUrl, getNotifications } from '../../public/endpoins';
 import socketIOClient from 'socket.io-client'
+import axios from 'axios'
 import AddIcon from "@material-ui/icons/Add";
 
 class Header extends React.Component 
@@ -32,25 +33,48 @@ class Header extends React.Component
     const loggedUser = cookie.load("current_user")
     this.setState({ currentUser: loggedUser});
 
+    axios.get(getNotifications + "/" + loggedUser._id )
+    .then((res) => {
+        if (res.data.success) {
+            console.log("Load Notifications",res.data.data)
+
+            let notifyData = []
+            for(let i=0; i < res.data.data.length; i++)
+            {
+              var checkId = res.data.data[i].sendTo
+              for (let j=0; j < checkId.length; j++)
+              { 
+                if(checkId[j].userId._id === loggedUser._id)
+                {
+                  notifyData.push(res.data.data[i])
+                }
+              }
+            }
+            console.log("After checking User's Notifications",notifyData)
+            this.setState({ data: notifyData });
+        }
+    })
+    .catch((e) => {
+        console.log('Cannot get Notifications', e)
+    })
+
     const socket = socketIOClient(socketUrl);
 
     socket.on("get_data", (data) => {
-      console.log("response through socket", data);
+      console.log("response coming through socket", data);
 
-      let notifyData = []
       for(let i=0; i < data.length; i++)
       {
         var checkId = data[i].sendTo
         for (let j=0; j < checkId.length; j++)
         { 
-          if(checkId[j].userId === loggedUser._id)
+          if(checkId[j].userId._id === loggedUser._id)
           {
-            notifyData.push(data[i])
+            this.state.data.push(data[i])
           }
         }
       }
-      console.log("After checking User's Notifications",notifyData)
-      this.setState({ data: notifyData });
+      console.log("Added the socket notify to all",this.state.data)
     });
   }
 

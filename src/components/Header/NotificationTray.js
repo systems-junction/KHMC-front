@@ -4,9 +4,10 @@ import PropTypes from "prop-types";
 // import Popover from 'react-bootstrap/Popover';
 // import Button from 'react-bootstrap/Button';
 import moment from 'moment';
-import { reactLocalStorage } from 'reactjs-localstorage';
+// import { reactLocalStorage } from 'reactjs-localstorage';
 import { Bell, BellOff, BookOpen, AlertTriangle } from 'react-feather';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import cookie from "react-cookies";
 
 // const NotifyMe = props => 
 export default function NotifyMe(props) {
@@ -33,36 +34,49 @@ export default function NotifyMe(props) {
 
     useEffect(() => {
 
-        console.log("Data passed in the icon",data)
+        console.log("Data passed in the icon", data)
 
-        if (!sortedByKey) {
-            data.sort((a, b) => b[key] - a[key]);
-        } // We read if any last read item id is in the local storage
-
-
-        let readItemLs = reactLocalStorage.getObject(storageKey);
-        let readMsgId = Object.keys(readItemLs).length > 0 ? readItemLs['id'] : ''; 
-        // if the id found, we check what is the index of that message in the array and query it. If not found,
-        // nothing has been read. Hence count should be same as all the message count.
-
-        let readIndex = readMsgId === '' ? data.length : data.findIndex(elem => elem[key] === readMsgId); // if the id is not found, it all flushed out and start again
-
-        if (readIndex === -1) {
-            readIndex = data.length
+        var count = 0;
+        for (let i = 0; i < data.length; i++) {
+            var checkRead = data[i].sendTo
+            for (let j = 0; j < checkRead.length; j++) {
+                if (checkRead[j].read === false && checkRead[j].userId._id === cookie.load("current_user")._id) {
+                    count++
+                    setShowCount(true)
+                }
+            }
         }
-        else {
-            setReadIndex(readIndex);    // If there are messages and readIndex is pointing to at least one message, we will show the count bubble.
-        }
+        setMessageCount(count);
 
-        (data.length && readIndex) > 0 ? setShowCount(true) : setShowCount(false);
-        setMessageCount(readIndex);
+        // if (!sortedByKey) {
+        //     data.sort((a, b) => b[key] - a[key]);
+        // } // We read if any last read item id is in the local storage
+
+
+        // let readItemLs = reactLocalStorage.getObject(storageKey);
+        // let readMsgId = Object.keys(readItemLs).length > 0 ? readItemLs['id'] : '';
+        // // if the id found, we check what is the index of that message in the array and query it. If not found,
+        // // nothing has been read. Hence count should be same as all the message count.
+
+        // let readIndex = readMsgId === '' ? data.length : data.findIndex(elem => elem[key] === readMsgId); // if the id is not found, it all flushed out and start again
+
+        // if (readIndex === -1) {
+        //     readIndex = data.length
+        // }
+        // else {
+        //     setReadIndex(readIndex);    // If there are messages and readIndex is pointing to at least one message, we will show the count bubble.
+        // }
+
+        // (data.length && readIndex) > 0 ? setShowCount(true) : setShowCount(false);
+        // setMessageCount(readIndex);
+
     }, [data]);
 
     const handleClick = event => {
         props.onNotificationIconClick()
         // setShow(!show);
         // setTarget(event.target);
-        
+
     }; // Handle the click on the notification bell
 
     // const getDayDiff = timestamp => {
@@ -155,7 +169,7 @@ export default function NotifyMe(props) {
                 /*#__PURE__*/
                 React.createElement(Bell, {
                     color: bellColor,
-                    className:'notify-bell'
+                    className: 'notify-bell'
                 }))),
         /*#__PURE__*/
         React.createElement("div", {

@@ -97,6 +97,7 @@ export default function Notifications(props)
             }}
         >
             <Header history={props.history} />
+
             <div className='cPadding'>
                 <div className='subheader'>
                     <div>
@@ -110,7 +111,7 @@ export default function Notifications(props)
                         {props.history.location.state.notificationData.map((message, index) => {
                             return (
                                 message.sendTo.map((checkRead, indexx) => {
-                                    if (checkRead.read === false && checkRead.userId === cookie.load("current_user")._id) {
+                                    if (checkRead.read === false && checkRead.userId._id === cookie.load("current_user")._id) {
                                         console.log("Unread", index)
                                         return (
                                             <li key={index}
@@ -118,18 +119,18 @@ export default function Notifications(props)
                                                     'notification-message unread'
                                                     // 'notification-message'
                                                 }
-                                                onClick={() => handleViewNotification(message,checkRead.userId)}
+                                                onClick={() => handleViewNotification(message,checkRead.userId._id)}
                                             >
                                                 <div className="timestamp d-flex">
                                                     <span className="title mr-auto p-2">{message.title}<Badge className="notify-dot" color="error" variant="dot" /></span>
-                                                    <span className="time p-2">{getWhen(message['timestamp'])}</span>
+                                                    <span className="time p-2">{getWhen(message.date)}</span>
                                                 </div>
                                                 <hr style={{ marginTop: 0, marginBottom: '5px' }} />
                                                 <div className="content" dangerouslySetInnerHTML={getContent(message['message'])} />
                                             </li>
                                         )
                                     }
-                                    else if (checkRead.read === true && checkRead.userId === cookie.load("current_user")._id) {
+                                    else if (checkRead.read === true && checkRead.userId._id === cookie.load("current_user")._id) {
                                         console.log("Read", index)
                                         return (
                                             <li key={index}
@@ -141,7 +142,7 @@ export default function Notifications(props)
                                             >
                                                 <div className="timestamp d-flex">
                                                     <span className="title mr-auto p-2">{message.title}</span>
-                                                    <span className="time p-2">{getWhen(message['timestamp'])}</span>
+                                                    <span className="time p-2">{getWhen(message.date)}</span>
                                                 </div>
                                                 <hr style={{ marginTop: 0, marginBottom: '5px' }} />
                                                 <div className="content" dangerouslySetInnerHTML={getContent(message['message'])} />
