@@ -13,7 +13,7 @@ import PatientListingRoutes from "./patientListing";
 import PatientHistory from "./patientHistory";
 import patientAssessment from "./patientAssessment";
 import patientCare from "./patientCare";
-import Chat from "../components/Chat/Chat";
+import Chat from "../views/Chat/Chat";
 import LabRadRequest from "./labRadRequest";
 import EDR from "./EDR";
 import IPR from "./iprRoutes";
