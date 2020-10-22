@@ -1,28 +1,29 @@
-import React from 'react'
-import Button from '@material-ui/core/Button'
-import plus_icon from '../../assets/img/Plus.png'
-import VIewAll from '../../assets/img/Eye.png'
+import React from "react";
+import Button from "@material-ui/core/Button";
+import plus_icon from "../../assets/img/Plus.png";
+import VIewAll from "../../assets/img/Eye.png";
 
 const styles = {
   stylesForButton: {
-    color: 'white',
-    cursor: 'pointer',
+    color: "white",
+    cursor: "pointer",
     borderRadius: 5,
-    background: '#2c6ddd',
-    width: '140px',
-    height: '50px',
-    outline: 'none',
+    background: "#2c6ddd",
+    width: "140px",
+    height: "50px",
+    outline: "none",
   },
-}
+};
 const buttonField = ({ onClick, name }) => {
   return (
     <Button
+      className="for-view-btn-font"
       onClick={onClick}
-      style={styles.stylesForButton}
-      variant='contained'
-      color='primary'
+      style={{ ...styles.stylesForButton }}
+      variant="contained"
+      color="primary"
     >
-      {name === 'add' ? (
+      {name === "add" ? (
         <>
           <img src={plus_icon} />
           &nbsp;&nbsp;
@@ -36,7 +37,7 @@ const buttonField = ({ onClick, name }) => {
         </>
       )}
     </Button>
-  )
-}
+  );
+};
 
-export default buttonField
+export default buttonField;

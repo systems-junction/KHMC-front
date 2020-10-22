@@ -16,7 +16,7 @@ ul li {
 }
 
 .addCode:before {
-  content: '\f055';
+  content: "\f055";
   font-family: FontAwesome;
   font-style: normal;
   font-weight: normal;
@@ -26,7 +26,7 @@ ul li {
 }
 
 .addedCode:before {
-  content: '\f058';
+  content: "\f058";
   font-family: FontAwesome;
   font-style: normal;
   font-weight: normal;
@@ -127,7 +127,7 @@ ul li {
   display: inline-block;
 } */
 
-@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css');
+@import url("//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css");
 .search {
   position: relative;
 }
@@ -234,7 +234,7 @@ ul li {
 
 /* css  for radio tabs */
 
-input[type='radio'] {
+input[type="radio"] {
   box-shadow: none;
 }
 
@@ -245,4 +245,30 @@ input[type='radio'] {
 .sideMargin {
   margin-left: -20px !important;
   margin-right: -20px !important;
+}
+
+/* for mobile view  */
+@media only screen and (max-width: 500px) {
+  .inputForLogin {
+    /* background-color: red; */
+    width: 80% !important;
+  }
+  .Loginbtn {
+    width: 50% !important;
+  }
+  .subheader div:first-of-type > h4 {
+    margin-left: -6px;
+    font-weight: 700;
+    padding-top: 8px;
+    font-size: 15px;
+  }
+  .MuiFormLabel-root {
+    color: red;
+  }
+  .scroll-4-patient-detail {
+    overflow: auto;
+  }
+}
+.for-view-btn-font {
+  color: red;
 }
