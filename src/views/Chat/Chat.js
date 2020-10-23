@@ -317,8 +317,8 @@ const  handleOpen = () => {
             <div><h4>Ingrendia Nutritia</h4>
               <h4 style={{ color: '#2962CC' }}>Dentist Patients</h4></div>
 
-            <div style={{ marginLeft: 865, }}>
-              <h3 style={{ fontSize: 'large', fontWeight: 550 }}>05 Min</h3>
+            <div>
+              <h3 className='time-style' style={{ fontSize: 'large', fontWeight: 550 }}>05 Min</h3>
             </div>
           </div>
           <hr />
@@ -386,7 +386,7 @@ const  handleOpen = () => {
                     // error={messageError}
                     endAdornment={
                         <InputAdornment position="start">
-                          <img style={{ height: 40, width: 40 , cursor: "pointer"}} src={CameraAltIcon} onClick={camera}/>
+                          <img className='camera-style' style={{ height: 40, width: 40 , cursor: "pointer"}} src={CameraAltIcon} onClick={camera}/>
                           <img style={{ height: 40, width: 40 , cursor: "pointer"}} src={AttachFileIcon} onClick={handleOpen}/>
                           <img style={{ height: 40, width: 40 , cursor: "pointer"}} src={Emoji} onClick={changeEmojiStatus}/>
                           {/* {emojiStatus === false ? <img style={{ height: 40, width: 40 , cursor: "pointer"}} src={Emoji} onClick={changeEmojiStatus}/> : <Picker onSelect={addEmoji}/>} */}

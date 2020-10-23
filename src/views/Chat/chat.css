@@ -16,6 +16,14 @@ button:focus {
   margin-top: -32%;
 }
 
+.camera-style {
+  display: none;
+}
+
+.time-style {
+  margin-left: 860px;
+}
+
 @media screen and (max-width: 768px) {
   .emojiStyle {
     z-index: 3;
@@ -23,6 +31,12 @@ button:focus {
     position: absolute;
     margin-left: 37%;
     margin-top: -57%;
+  }
+  .camera-style {
+    display: revert;
+  }
+  .time-style {
+    margin-left: 290px;
   }
 }
 
