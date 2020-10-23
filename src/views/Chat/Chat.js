@@ -191,6 +191,9 @@ const  handleOpen = () => {
     )
     console.log(e)
   }
+
+  
+
   const changeEmojiStatus = () => {
     setEmojiStatus(value => !value)
     console.log('emojiStatus',emojiStatus)
@@ -309,7 +312,7 @@ const  handleOpen = () => {
         </div>
 
         <div style={{
-          backgroundColor: 'white', marginTop: 20, borderri: 5, borderLeft: 5, padding: 20,
+          backgroundColor: 'white', marginTop: 20, borderri: 5, borderLeft: 5, padding: 20, paddingBottom: 5,
           borderTopLeftRadius: 5, borderTopRightRadius: 5
         }}>
           <div className={classes.root}>
@@ -322,10 +325,13 @@ const  handleOpen = () => {
             </div>
           </div>
           <hr />
-          <div style={{
+          {/* <div style={{
             overflowY: 'scroll',
             overflowX: 'hidden', maxHeight: '500px',
-          }}>
+          }}> */}
+          <div id="wrapper">
+          <div class="scrollbar" id="style-2">
+              <div class="force-overflow">
             <div style={{ display: 'flex', justifyContent: 'center' }}>
               <Button variant="contained" color="black" style={{ backgroundColor: '#edf3f8', borderRadius: 20, textTransform: 'none' }}>
                 <span style={{ fontSize: 10, }}>Yesterday</span>
@@ -334,8 +340,10 @@ const  handleOpen = () => {
 
             <Reciever recieve="This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message"/>
             <Sender send="This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message"/>          
-          </div>
+          {/* </div> */}
+          </div></div></div>
         </div>
+
         <div className='emojiStyle'>{emojiStatus === true ? <Picker onSelect={addEmoji} /> : undefined}</div>
         
         <div
@@ -380,6 +388,7 @@ const  handleOpen = () => {
                     inputProps={{ 'aria-label': 'description' }}
                     style={{ backgroundColor: 'white', borderRadius: 20, outline: 'none', width: '95%' }} 
                     // defaultValue="Hello world" 
+                    autoFocus
                     className='InputForMessage'
                     value={message}
                     onChange={onMessageSend}
