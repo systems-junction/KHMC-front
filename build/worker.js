@@ -109,8 +109,12 @@
 // });
 
 self.addEventListener("push", (event) => {
+
+  // let notifications = [];
   const data = event.data.json();
-  console.log("New notification data", event.data);
+  console.log("New notification data", data);
+
+  // notifications.push(data)
 
   const options = {
     body: data.message,
@@ -118,9 +122,13 @@ self.addEventListener("push", (event) => {
     requireInteraction: true,
     sound:
       "https://notificationsounds.com/soundfiles/46922a0880a8f11f8f69cbb52b1396be/file-sounds-1129-hollow.mp3",
-    // image: "http://localhost:4000/uploads/notification.png",
-    //   badge:
-    //   "http://localhost:4000/uploads/notification.png"
+    icon:
+      "https://dev.khmc-staging.online/uploads/2020-10-13T12-37-34.126Z-KHMC.png",
+
+    // image:
+    //   "https://dev.khmc-staging.online/uploads/2020-10-13T11-28-27.691Z-notif.png",
+    // badge:
+    //   "https://dev.khmc-staging.online/uploads/2020-10-13T11-28-27.691Z-notif.png"
   };
   event.waitUntil(self.registration.showNotification(data.title, options));
 
@@ -171,16 +179,16 @@ self.addEventListener("notificationclick", function(event) {
   const mapMsgToRoute = [
     {
       title: "Purchase Requested Generated",
-      url: `${baseUrl}/home/controlroom/wms/pr`
+      url: `${baseUrl}/home/controlroom/wms/pr`,
     },
     {
       title: "Purchase Order Generated",
-      url: `${baseUrl}/home/controlroom/wms/po`
+      url: `${baseUrl}/home/controlroom/wms/po`,
     },
     {
       title: "Account Approval Needed",
-      url: `${baseUrl}/home/controlroom/wms/receiverequests`
-    }
+      url: `${baseUrl}/home/controlroom/wms/receiverequests`,
+    },
   ];
 
   event.notification.close();
@@ -188,7 +196,7 @@ self.addEventListener("notificationclick", function(event) {
   event.waitUntil(
     clients
       .matchAll({
-        type: "window"
+        type: "window",
       })
       .then(function(clientList) {
         if (clients.openWindow) {
