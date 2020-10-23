@@ -16,7 +16,7 @@ const baseUrl = "http://localhost:4000/api";
 
 //export const socketUrl = 'wss://p1.khmc-staging.com:4001'
 //export const socketUrl = 'wss://dev.khmc-staging.online:4001'
-export const socketUrl = "ws://localhost:4001";
+export const socketUrl = "ws://192.168.8.102:4001";
 // export const socketUrl = "ws://192.168.10.20:4001";
 
 export const audioURL = "http://localhost:4000";
@@ -427,4 +427,4 @@ export const updatePatientClearanceURL = `${baseUrl}/patientclearance/updatepati
 
 export const getIcd = `${baseUrl}/codes/geticdcat`;
 
-export const chatApi = `${baseUrl}/chat`
+export const chatApi = `${baseUrl}/chatroom/createchat`

@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from 'react';
+import React, { useState , useEffect, useRef} from 'react';
 import { makeStyles, withStyles, fade } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import InputBase from '@material-ui/core/InputBase';
@@ -19,7 +19,7 @@ import Header from '../../components/Header/Header'
 import Back_Arrow from '../../assets/img/Back_Arrow.png'
 import Badge from '@material-ui/core/Badge';
 import io from 'socket.io-client';
-import { socketUrl} from "../../public/endpoins"
+import { chatApi, socketUrl} from "../../public/endpoins"
 import User from "../../components/Chat/User"
 import Reciever from "../../components/Chat/Reciever"
 import Sender from "../../components/Chat/Sender"
@@ -118,6 +118,8 @@ export default function Chat(props) {
   const [content, setContent] = useState("")
   const [messageText, setMessageText] = useState("")
   const [message, setMessage] = useState("")
+  const [messageFromSender, setMessageFromSender] = useState("")
+
   const [open, setOpen] = useState(false)
   const [files, setFiles] = useState([])
 
@@ -139,6 +141,17 @@ export default function Chat(props) {
 
    
   })
+
+
+  const messagesEndRef = useRef(null)
+
+  const scrollToBottom = () => {
+    messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
+  }
+
+  useEffect(scrollToBottom, [chat]);
+
+
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
@@ -151,12 +164,20 @@ export default function Chat(props) {
       objectSendToBackend.sender = currentUser._id
       objectSendToBackend.receiver = "5ecf686f085c54292cb29c53"
       console.log("objectSendToBackend", objectSendToBackend)
-      socket.emit('test', objectSendToBackend);
+      if(socket.emit('test', objectSendToBackend)){
+        setMessageFromSender(true)
+
+      }
+let c = [...chat]
+c.push(message)
+      // let newMessageChat = chat.push(message)
+      chat.push(message)
+      // setChat(newMessageChat)
+      setChat(c)
+      
     }else{
       setMessageError(true)
     }
-   
-  
   }
   const uploadFile = () => {
     console.log("upload file");
@@ -198,19 +219,7 @@ const  handleOpen = () => {
   }
 
   const searchOnlineUser = (e) => {
-  //   var target = e.target.value.trim().toLowerCase();
-  //   var o = onlineUser
-  //   console.log("before", o)
-  //  o =  onlineUser.filter(o=>{
-  //     return o.name === target
-  //   })
-
-  // //  o = _.sortBy(o, o => o.name === target);
-  //  setOnlineUser(o)
-  //  console.log("after",o)
-
-  setSearch(e.target.value)
-
+    setSearch(e.target.value)
   }
 
   const RenderUser = user => {
@@ -219,9 +228,13 @@ const  handleOpen = () => {
     }
     else {
       return (
-        <User name={user.name}/>
+        <User name={user.name} onClick={getChatHandler}/>
       )
     }
+    
+  }
+
+  const getChatHandler = () => {
     
   }
 
@@ -322,7 +335,7 @@ const  handleOpen = () => {
           <hr />
           <div style={{
             overflowY: 'scroll',
-            overflowX: 'hidden', maxHeight: '500px',
+            overflowX: 'hidden', maxHeight: '400px', minHeight:"400px"
           }}>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
               <Button variant="contained" color="black" style={{ backgroundColor: '#edf3f8', borderRadius: 20, textTransform: 'none' }}>
@@ -330,9 +343,19 @@ const  handleOpen = () => {
               </Button>
             </div>
 
-            <Reciever recieve="This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message"/>
-            <Sender send="This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message"/>          
+            {/* <Reciever recieve="This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message"/> */}
+            {chat.map(msg=>{
+              console.log("message", msg)
+              return(
+                <div>
+                  {messageFromSender ? <Sender send={msg}/>  : undefined}  
+                </div>
+              )
+            })}
+          <div ref={messagesEndRef} />
+                   
           </div>
+
         </div>
         <div
           className={`${classes.root} col-md-12`}
