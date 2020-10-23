@@ -32,7 +32,7 @@ import Reports from "../../../assets/img/Reports.png";
 const admin = [
   { img: Reports, text: "FU Reports" },
   { img: Reports, text: "Stock Levels", path: "fureports/stocklevels" },
-//   { img: Reports, text: "Items Balance", path: "fureports/itemsbalance" },
+  { img: Reports, text: "Items Balance", path: "fureports/itemsbalance" },
 
   //   { img: WMS, text: "WMS", path: "controlroom/wms" },
   //   { img: FIN, text: "FIN" },
@@ -43,8 +43,10 @@ const admin = [
 ];
 
 const fuInventoryKeeper = [
+  { img: Reports, text: "FU Reports" },
   { img: Reports, text: "Stock Levels", path: "fureports/stocklevels" },
-//   { img: Reports, text: "Items Balance", path: "fureports/itemsbalance" },
+  { img: Reports, text: "Items Balance", path: "fureports/itemsbalance" },
+  //   { img: Reports, text: "Items Balance", path: "fureports/itemsbalance" },
 ];
 
 class HomeScreen extends React.Component {
