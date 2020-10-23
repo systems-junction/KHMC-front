@@ -427,4 +427,15 @@ export const updatePatientClearanceURL = `${baseUrl}/patientclearance/updatepati
 
 export const getIcd = `${baseUrl}/codes/geticdcat`;
 
+//Reports
+export const trackingPO = `${baseUrl}/reports/trackingpo`;
+
+//Stock level for warehosue
+export const stockLevelsWarehouse = `${baseUrl}/reports/stocklevelswh`;
+
+//Stock level for fu
+export const stockLevelsFU = `${baseUrl}/reports/stocklevelsfu`;
+
+//Supplier Fulfillment PO
+export const supplierfulfillmentPO = `${baseUrl}/reports/supplierfulfillmentpo`;
 export const chatApi = `${baseUrl}/chat`
