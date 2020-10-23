@@ -116,7 +116,9 @@ function AddEditPurchaseRequest(props) {
               borderTopRightRadius: 5,
               paddingBottom: 10,
               paddingTop: 10,
-              width: "120%",
+              minWidth: 600,
+              overflow: "scroll",
+              // width: "120%",
             }}
           >
             <div
@@ -173,6 +175,8 @@ function AddEditPurchaseRequest(props) {
             paddingLeft: 10,
             height: "80%",
             paddingBottom: 10,
+            minWidth: 600,
+            overflow: "scroll",
           }}
         >
           <div

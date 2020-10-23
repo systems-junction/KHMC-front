@@ -14,24 +14,28 @@ const styles = {
     outline: "none",
   },
 };
+
+// const getWidth= window.innerWidth
+// const getheight= window.innerHeight
+
 const buttonField = ({ onClick, name }) => {
   return (
     <Button
-      className="for-view-btn-font"
       onClick={onClick}
       style={{ ...styles.stylesForButton }}
       variant="contained"
       color="primary"
+      className="mobile-btn"
     >
       {name === "add" ? (
         <>
-          <img src={plus_icon} />
+          <img className="mobile-icon" src={plus_icon} />
           &nbsp;&nbsp;
           <strong>Add New</strong>
         </>
       ) : (
         <>
-          <img onClick={onClick} src={VIewAll} />
+          <img className="mobile-icon-view" onClick={onClick} src={VIewAll} />
           &nbsp;&nbsp;
           <strong>View All</strong>
         </>

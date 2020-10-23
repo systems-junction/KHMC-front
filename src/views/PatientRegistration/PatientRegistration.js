@@ -144,7 +144,10 @@ const styles = {
 
 const useStylesForTabs = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
+    justifyContent: "center",
+  },
+  scroller: {
+    flexGrow: "0",
   },
 }));
 
@@ -332,7 +335,7 @@ const useStyles = makeStyles((theme) => ({
     "& .MuiFormLabel-root": {
       fontSize: "12px",
 
-      paddingRight: "15px",
+      paddingRight: "45px",
     },
   },
 }));
@@ -1636,9 +1639,9 @@ function PatientRegistration(props) {
         overflowY: "scroll",
       }}
     >
-      <Header history={props.history}/>
-      <div className='cPadding'>
-        <div className='subheader' style={{ marginLeft: '-10px' }}>
+      <Header history={props.history} />
+      <div className="cPadding">
+        <div className="subheader" style={{ marginLeft: "-10px" }}>
           <div>
             <img src={patientRegister} />
             <div style={{ flex: 4, display: "flex", alignItems: "center" }}>
@@ -1649,7 +1652,7 @@ function PatientRegistration(props) {
               </h4>
             </div>
           </div>
-          <div style={{ marginRight: "-5px" }}>
+          <div style={{ marginRight: "-5px", width: "auto" }}>
             {currentUser.staffTypeId.type === "EDR Receptionist" ||
             currentUser.staffTypeId.type === "IPR Receptionist" ? (
               <ButtonField
@@ -1690,11 +1693,16 @@ function PatientRegistration(props) {
         <div style={{ width: "auto", height: "20px" }} />
         <div className={classesForTabs.root}>
           <Tabs
+            classes={{
+              root: classesForTabs.root,
+              scroller: classesForTabs.scroller,
+            }}
             value={value}
             onChange={handleChange}
             textColor="primary"
+            variant="scrollable"
             TabIndicatorProps={{ style: { background: "#12387a" } }}
-            centered
+            // centered
           >
             <Tab
               style={{
@@ -3575,7 +3583,7 @@ function PatientRegistration(props) {
             >
               <div className="row">
                 <div
-                  className="col-md-8 col-sm-7 col-6"
+                  className="col-md-8 col-sm-7 col-12"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -3605,7 +3613,7 @@ function PatientRegistration(props) {
                 </div>
 
                 <div
-                  className="col-md-1 col-sm-2 col-2"
+                  className="col-md-1 col-sm-2 col-4"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -3626,7 +3634,7 @@ function PatientRegistration(props) {
                 </div>
 
                 <div
-                  className="col-md-1 col-sm-1 col-1"
+                  className="col-md-1 col-sm-1 col-4"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -3649,7 +3657,7 @@ function PatientRegistration(props) {
                   </div>
                 </div>
                 <div
-                  className="col-md-1 col-sm-1 col-1"
+                  className="col-md-1 col-sm-1 col-2"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,

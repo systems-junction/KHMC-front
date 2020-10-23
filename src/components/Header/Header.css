@@ -114,7 +114,7 @@
   width: 190px;
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 600px) {
   /* start of medium tablet styles */
   /* Adding a fixed/percentage min-width could ensure that the image doesn't get too small */
   /* .KHMC {
@@ -123,12 +123,12 @@
     /* background-color: crimson; */
   .header1-style {
     max-width: 26%;
-    height: 12%;
+    height: 13%;
     margin-left: -14px;
-    margin-top: -19px;
+    margin-top: -29px;
   }
   .header2-style {
-    max-width: 26%;
+    max-width: 30%;
     height: 5%;
     margin-top: -6px;
     /* height: auto; */

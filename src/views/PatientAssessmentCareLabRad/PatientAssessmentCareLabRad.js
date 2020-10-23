@@ -1925,6 +1925,7 @@ function LabRadRequest(props) {
           <h5 style={{ fontWeight: "bold", color: "white", marginTop: 25 }}>
             Patient Details
           </h5>
+
           <div
             // className="row"
             style={{
@@ -1949,13 +1950,19 @@ function LabRadRequest(props) {
                 paddingTop: 10,
                 marginLeft: 0,
                 marginRight: 0,
+                minWidth: 600,
+                overflow: "scroll",
+                // width: "auto"
               }}
             >
               <div
                 className={"col-md-3 col-sm-3 col-3"}
                 style={styles.headerHeading}
               >
-                <h6 style={{ color: "white", fontWeight: "700" }}>
+                <h6
+                  className="pat-det-heading"
+                  style={{ color: "white", fontWeight: "700" }}
+                >
                   Patient Info
                 </h6>
               </div>
@@ -1963,13 +1970,21 @@ function LabRadRequest(props) {
                 className={"col-md-3 col-sm-3 col-3"}
                 style={styles.headerHeading}
               >
-                <h6 style={{ color: "white", fontWeight: "700" }}>Allergy</h6>
+                <h6
+                  className="pat-det-heading"
+                  style={{ color: "white", fontWeight: "700" }}
+                >
+                  Allergy
+                </h6>
               </div>
               <div
                 className={"col-md-3 col-sm-3 col-3"}
                 style={styles.headerHeading}
               >
-                <h6 style={{ color: "white", fontWeight: "700" }}>
+                <h6
+                  className="pat-det-heading"
+                  style={{ color: "white", fontWeight: "700" }}
+                >
                   Medication
                 </h6>
               </div>
@@ -1977,7 +1992,12 @@ function LabRadRequest(props) {
                 className={"col-md-3 col-sm-3 col-3"}
                 style={styles.headerHeading}
               >
-                <h6 style={{ color: "white", fontWeight: "700" }}>Diagnosis</h6>
+                <h6
+                  className="pat-det-heading"
+                  style={{ color: "white", fontWeight: "700" }}
+                >
+                  Diagnosis
+                </h6>
               </div>
             </div>
 
@@ -1988,6 +2008,8 @@ function LabRadRequest(props) {
                 paddingLeft: 10,
                 height: "80%",
                 paddingBottom: 10,
+                minWidth: 600,
+                overflow: "scroll",
               }}
             >
               <div
@@ -2065,8 +2087,8 @@ function LabRadRequest(props) {
               </div>
 
               <div
-                className={"col-md-3 col-sm-3 col-3"}
-                style={styles.textStyles}
+                className={"col-md-3 col-sm-3 col-3 "}
+                style={{ ...styles.textStyles }}
               >
                 {diagnosisArray
                   ? diagnosisArray.map((drug, index) => {
