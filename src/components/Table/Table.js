@@ -434,6 +434,7 @@ export default function CustomTable(props) {
       val === "receive" ||
       val === "Received" ||
       val === "Rejected" ||
+      val === "rejected" ||
       val === "Sent for PAR" ||
       val === "Completed" ||
       val === "discharged" ||
@@ -544,7 +545,7 @@ export default function CustomTable(props) {
             >
               <strong>Response in progress</strong>
             </Button>
-          ) : val === "reject" ? (
+          ) : val === "reject" || val === "rejected" ? (
             <Button
               style={{ ...stylesB.stylesForActive, backgroundColor: "#2c6ddd" }}
               variant="contained"
@@ -707,7 +708,7 @@ export default function CustomTable(props) {
 
   return (
     <div className={classes.tableResponsive}>
-      <Table>
+      <Table id={props.id ? props.id : "table_component"}>
         {tableHeading !== undefined ? (
           <TableHead
             className={classes[tableHeaderColor + "TableHeader"]}
