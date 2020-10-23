@@ -11,7 +11,7 @@ const notificationsUrl = "http://localhost:4000";
 
 // const baseUrl = dev;
 //const baseUrl = devSecure;
-const baseUrl = "http://localhost:4000/api";
+const baseUrl = "http://192.168.8.102:4000/api";
 //const baseUrl = stagingDigitalOcean;
 
 //export const socketUrl = 'wss://p1.khmc-staging.com:4001'

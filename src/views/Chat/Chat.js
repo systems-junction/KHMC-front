@@ -24,6 +24,7 @@ import User from "../../components/Chat/User"
 import Reciever from "../../components/Chat/Reciever"
 import Sender from "../../components/Chat/Sender"
 import _, {debounce} from 'lodash';
+import axios from "axios"
 import cookie from 'react-cookies'
 import Input from '@material-ui/core/Input';
 
@@ -123,7 +124,7 @@ export default function Chat(props) {
 
   const [open, setOpen] = useState(false)
   const [files, setFiles] = useState([])
-
+  const [chatId, setChatId] = useState({})
   const [search, setSearch] = useState("")
 
   const [onlineUser, setOnlineUser] = useState([{name: "Izaz", id: 1}, {name: "Mudassir", id: 2}, {name: "Hanan", id: 3}, {name: "Saad", id: 4}, {name:"Farhan", id: 5}, {name:"Noman", id: 6}, {name:"Itzaz", id: 7}, {name:"Hamza", id: 8}, {name:"Bilal", id: 9},  {name:"Saqib", id: 10} ,  {name:"Mufasal", id: 11},  {name:"Zeeshan", id: 12} ,  {name:"Bilal Ahmed", id: 13},  {name:"Mustafa", id: 14},  {name:"Saira", id: 15} , {name:"John Doe", id: 16} ,  {name:"Kim", id: 17}])
@@ -139,8 +140,10 @@ export default function Chat(props) {
   const [value, setValue] = React.useState(0)
 
   useEffect(() => {
-
-   
+    // if(chatId){
+    //   let socket = io(socketUrl)
+    //   socket.emit('chat_receive', chatId)
+    // }
   })
 
 
@@ -164,13 +167,19 @@ export default function Chat(props) {
       objectSendToBackend.message = message
       objectSendToBackend.sender = currentUser._id
       objectSendToBackend.receiver = "5ecf686f085c54292cb29c53"
+      objectSendToBackend.chatId = chatId
+      // if(chatId){
+      //   let socket = io(socketUrl)
+      //   socket.emit('chat_receive', chatId)
+      // }
       console.log("objectSendToBackend", objectSendToBackend)
       if(socket.emit('test', objectSendToBackend)){
         setMessageFromSender(true)
 
       }
-let c = [...chat]
-c.push(message)
+      setMessage("")
+      let c = [...chat]
+      c.push(message)
       // let newMessageChat = chat.push(message)
       chat.push(message)
       // setChat(newMessageChat)
@@ -230,14 +239,26 @@ const  handleOpen = () => {
     }
     else {
       return (
-        <User name={user.name} onClick={getChatHandler}/>
+        <User name={user.name} getChatHandler={onGetChatHandler}/>
       )
     }
     
   }
 
-  const getChatHandler = () => {
-    
+  const onGetChatHandler =  () => {
+    console.log("Hello")
+    var obj = {}
+    obj.sender = currentUser._id
+    obj.receiver = "5ecf686f085c54292cb29c53"
+    console.log("chat obj", obj)
+     axios
+    .post(chatApi, obj)
+    .then((res) => {
+      console.log("res", res)
+      setChatId(res.data.data)
+    }).catch(error=>{
+      console.log(error)
+    })
   }
 
   return (
