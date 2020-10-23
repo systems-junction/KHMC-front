@@ -3,3 +3,30 @@ button:focus {
   outline: none;
   box-shadow: none;
 }
+
+.InputForMessage {
+  padding-left: 13px;
+}
+
+.emojiStyle {
+  z-index: 3;
+  overflow: 'auto';
+  position: absolute;
+  margin-left: 63%;
+  margin-top: -32%;
+}
+
+@media screen and (max-width: 768px) {
+  .emojiStyle {
+    z-index: 3;
+    overflow: 'auto';
+    position: absolute;
+    margin-left: 37%;
+    margin-top: -57%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .emojiStyle {
+  }
+}

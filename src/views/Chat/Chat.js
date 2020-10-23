@@ -25,6 +25,7 @@ import Reciever from "../../components/Chat/Reciever"
 import Sender from "../../components/Chat/Sender"
 import _, {debounce} from 'lodash';
 import cookie from 'react-cookies'
+import Input from '@material-ui/core/Input';
 
 import {DropzoneDialog} from 'material-ui-dropzone'
 
@@ -191,7 +192,8 @@ const  handleOpen = () => {
     console.log(e)
   }
   const changeEmojiStatus = () => {
-    setEmojiStatus(true)
+    setEmojiStatus(value => !value)
+    console.log('emojiStatus',emojiStatus)
   }
   const onMessageSend = (e) => {
     setMessage(e.target.value)
@@ -334,6 +336,8 @@ const  handleOpen = () => {
             <Sender send="This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message"/>          
           </div>
         </div>
+        <div className='emojiStyle'>{emojiStatus === true ? <Picker onSelect={addEmoji} /> : undefined}</div>
+        
         <div
           className={`${classes.root} col-md-12`}
           style={{ display: "flex", justifyContent: "center", backgroundColor: '#e8f0f6', borderBottomLeftRadius: 5, borderBottomRightRadius: 5 }}
@@ -347,7 +351,7 @@ const  handleOpen = () => {
               display: 'contents',
             }}
           >
-            <TextField
+            {/* <TextField
               label='Type Message'
               className='textInputStyle'
               id="outlined-size-small"
@@ -368,7 +372,29 @@ const  handleOpen = () => {
                 )
               }}
 
-            />
+            /> */}
+
+                  <Input 
+                    disableUnderline={true} 
+                    placeholder="Type a message"
+                    inputProps={{ 'aria-label': 'description' }}
+                    style={{ backgroundColor: 'white', borderRadius: 20, outline: 'none', width: '95%' }} 
+                    // defaultValue="Hello world" 
+                    className='InputForMessage'
+                    value={message}
+                    onChange={onMessageSend}
+                    // error={messageError}
+                    endAdornment={
+                        <InputAdornment position="start">
+                          <img style={{ height: 40, width: 40 , cursor: "pointer"}} src={CameraAltIcon} onClick={camera}/>
+                          <img style={{ height: 40, width: 40 , cursor: "pointer"}} src={AttachFileIcon} onClick={handleOpen}/>
+                          <img style={{ height: 40, width: 40 , cursor: "pointer"}} src={Emoji} onClick={changeEmojiStatus}/>
+                          {/* {emojiStatus === false ? <img style={{ height: 40, width: 40 , cursor: "pointer"}} src={Emoji} onClick={changeEmojiStatus}/> : <Picker onSelect={addEmoji}/>} */}
+                          
+
+                        </InputAdornment>
+                    } 
+                   />
 
           <DropzoneDialog
               open={open}
@@ -378,9 +404,13 @@ const  handleOpen = () => {
               maxFileSize={5000000}
               onClose={handleClose}
           />
+
+
             <img style={{ height: 40, width: 40 , cursor: "pointer"}} src={SendIcon} onClick={sendMessage}/>
           </div>
         </div>
+
+        
       </div>
       <div className='col-1' style={{ marginTop: 45 }}>
         <img
