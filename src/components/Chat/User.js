@@ -24,11 +24,11 @@ export default function User(props) {
   const classes = useStyles();
 
     return (
-        <div style={{ marginRight: 30   }} key={props.key}>
+        <div style={{ marginRight: 30 , cursor: "pointer"  }} key={props.key} onClick={props.getChatHandler}>
             <Badge color="primary" overlap="circle" badgeContent="2" classes={{ badge: classes.badgeImage }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg"  className={classes.avatar}/>
             </Badge>
-            <h6 style={{marginLeft: 10}}>{props.name}</h6>
+            <h6 style={{marginLeft: 10, marginTop: 10}}>{props.name}</h6>
         </div>
     )
 }

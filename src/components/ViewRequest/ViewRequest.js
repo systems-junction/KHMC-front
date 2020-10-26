@@ -147,8 +147,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             {props.item.serviceName ? (
               <div
@@ -172,8 +172,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
           </div>
           <div className={`row ${classes.root}`}>
             {props.item.doctor ? (
@@ -245,8 +245,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                    undefined
+                  )}
 
             {props.item.date ? (
               <div
@@ -309,9 +309,38 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
+                  undefined
+                )}
+          </div>
+
+          {props.item.serviceId && props.item.serviceId.serviceNo && props.item.comments ? (
+            <div className={`row ${classes.root}`}>
+              <div
+                className="col-md-12 col-sm-12 col-12"
+                style={{ ...styles.textFieldPadding, marginTop: "25px" }}
+              >
+                <TextField
+                  required
+                  multiline
+                  disabled={true}
+                  label="Comments"
+                  name={"comments"}
+                  value={props.item.comments}
+                  className="textInputStyle"
+                  rows={4}
+                  variant="filled"
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            </div>
+          ) : (
               undefined
             )}
-          </div>
+
 
           {props.item.heartRate ? (
             <DialogTitle
@@ -326,8 +355,8 @@ export default function EdrRequest(props) {
               Vital Signs
             </DialogTitle>
           ) : (
-            undefined
-          )}
+              undefined
+            )}
 
           <div className={`row ${classes.root}`}>
             {props.item.heartRate ? (
@@ -351,8 +380,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             {props.item.bloodPressureSys ? (
               <div
@@ -375,8 +404,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             {props.item.bloodPressureDia ? (
               <div
@@ -399,8 +428,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
           </div>
 
           <div className={`row ${classes.root}`}>
@@ -425,8 +454,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             {props.item.temperature ? (
               <div
@@ -449,8 +478,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             {props.item.FSBS ? (
               <div
@@ -473,8 +502,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
           </div>
 
           <div className={`row ${classes.root}`}>
@@ -499,8 +528,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             {props.item.pulseOX ? (
               <div
@@ -523,8 +552,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             {/* {props.item.requester.firstName ? (
               <div
@@ -567,8 +596,8 @@ export default function EdrRequest(props) {
               Physical Examination
             </DialogTitle>
           ) : (
-            undefined
-          )}
+              undefined
+            )}
 
           <div className={`row ${classes.root}`}>
             {props.item.triageLevel ? (
@@ -592,8 +621,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             {props.item.generalAppearance ? (
               <div
@@ -616,8 +645,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             {props.item.headNeck ? (
               <div
@@ -640,8 +669,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
           </div>
 
           <div className={`row ${classes.root}`}>
@@ -666,8 +695,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             {props.item.respiratory ? (
               <div
@@ -690,8 +719,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             {props.item.cardiac ? (
               <div
@@ -714,8 +743,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
           </div>
 
           <div className={`row ${classes.root}`}>
@@ -740,8 +769,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
           </div>
 
           <div className={`row ${classes.root}`}>
@@ -768,8 +797,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
           </div>
           <div className={`row ${classes.root}`}>
             {props.item.note ? (
@@ -817,8 +846,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                  undefined
+                )}
           </div>
 
           {props.item.audioNotes ? (
@@ -847,8 +876,8 @@ export default function EdrRequest(props) {
               />
             </div>
           ) : (
-            undefined
-          )}
+              undefined
+            )}
 
           <div
             style={{
