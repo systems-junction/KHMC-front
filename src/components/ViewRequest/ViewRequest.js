@@ -11,6 +11,7 @@ import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { DateTimePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { audioURL } from "../../public/endpoins";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 const styles = {
   inputContainer: {
@@ -96,6 +97,7 @@ const useStylesForInput = makeStyles((theme) => ({
 }));
 
 export default function EdrRequest(props) {
+  const matches = useMediaQuery("(min-width:600px)");
   const classes = useStylesForInput();
   const [] = React.useState(cookie.load("current_user"));
 
@@ -125,7 +127,7 @@ export default function EdrRequest(props) {
           <div className="row">
             {props.item.serviceCode ? (
               <div
-                className="col-md-6 col-sm-6 col-6"
+                className="col-md-6 col-sm-6 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <TextField
@@ -150,7 +152,7 @@ export default function EdrRequest(props) {
 
             {props.item.serviceName ? (
               <div
-                className="col-md-6 col-sm-6 col-6"
+                className="col-md-6 col-sm-6 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <TextField
@@ -176,7 +178,7 @@ export default function EdrRequest(props) {
           <div className={`row ${classes.root}`}>
             {props.item.doctor ? (
               <div
-                className="col-md-6 col-sm-6 col-6"
+                className="col-md-6 col-sm-6 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <TextField
@@ -200,7 +202,7 @@ export default function EdrRequest(props) {
               </div>
             ) : props.item.requester.firstName ? (
               <div
-                className="col-md-6 col-sm-6 col-6"
+                className="col-md-6 col-sm-6 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <TextField
@@ -224,7 +226,7 @@ export default function EdrRequest(props) {
               </div>
             ) : props.item.requesterName && !props.item.comments ? (
               <div
-                className="col-md-6 col-sm-6 col-6"
+                className="col-md-6 col-sm-6 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <TextField
@@ -248,7 +250,7 @@ export default function EdrRequest(props) {
 
             {props.item.date ? (
               <div
-                className="col-md-6 col-sm-6 col-6"
+                className="col-md-6 col-sm-6 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -286,7 +288,7 @@ export default function EdrRequest(props) {
               </div>
             ) : props.item.comments ? (
               <div
-                className="col-md-6 col-sm-6 col-6"
+                className="col-md-6 col-sm-6 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <TextField
@@ -852,7 +854,7 @@ export default function EdrRequest(props) {
             <div
               style={{
                 display: "flex",
-                flexDirection: "row",
+                flexDirection: matches ? "row": "column",
                 alignItems: "center",
                 // justifyContent: "center",
               }}
@@ -868,7 +870,7 @@ export default function EdrRequest(props) {
                 Voice notes from Consultant/Specialists
               </label>
               <audio
-                style={{ marginTop: 20, marginLeft: 20 }}
+                style={{ marginTop: 20, marginLeft: matches ? 20 : 0 }}
                 src={`${audioURL}/${props.item.audioNotes}`}
                 controls="controls"
               />
@@ -882,6 +884,7 @@ export default function EdrRequest(props) {
               display: "flex",
               justifyContent: "space-between",
               marginLeft: "-10px",
+              marginTop: "10px"
             }}
           >
             <div style={{ marginTop: "2%", marginBottom: "2%" }}>
