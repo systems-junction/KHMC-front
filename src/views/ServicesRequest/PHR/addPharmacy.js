@@ -947,7 +947,7 @@ function AddEditEDR(props) {
                         <div
                           style={{ textAlign: 'center', padding: '10px' }}
                         >
-                          <h4>No Medicince Found !</h4>
+                          <h4>No Medicine Found !</h4>
                         </div>
                       ) : (
                               undefined
