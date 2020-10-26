@@ -1,9 +1,6 @@
 import React, { useState , useEffect, useRef} from 'react';
-import { makeStyles, withStyles, fade } from '@material-ui/core/styles';
-import FormControl from '@material-ui/core/FormControl';
-import InputBase from '@material-ui/core/InputBase';
+import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
-import TextField from '@material-ui/core/TextField'
 import Tabs from '@material-ui/core/Tabs'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import clsx from 'clsx';
@@ -19,11 +16,11 @@ import Header from '../../components/Header/Header'
 import Back_Arrow from '../../assets/img/Back_Arrow.png'
 import Badge from '@material-ui/core/Badge';
 import io from 'socket.io-client';
-import { chatApi, socketUrl} from "../../public/endpoins"
+import { createChat, deleteChat, socketUrl} from "../../public/endpoins"
 import User from "../../components/Chat/User"
 import Reciever from "../../components/Chat/Reciever"
 import Sender from "../../components/Chat/Sender"
-import _, {debounce} from 'lodash';
+import ChatContent from "../../components/Chat/ChatContent"
 import axios from "axios"
 import cookie from 'react-cookies'
 import Input from '@material-ui/core/Input';
@@ -67,55 +64,22 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const BootstrapInput = withStyles((theme) => ({
-  root: {
-    'label + &': {
-      marginTop: theme.spacing(3),
-    },
-  },
-  input: {
-    borderRadius: 4,
-    position: 'relative',
-    backgroundColor: theme.palette.common.white,
-    border: '1px solid #ced4da',
-    fontSize: 16,
-    width: 'auto',
-    padding: '10px 12px',
-    transition: theme.transitions.create(['border-color', 'box-shadow']),
-    // Use the system font instead of the default Roboto font.
-    fontFamily: [
-      '-apple-system',
-      'BlinkMacSystemFont',
-      '"Segoe UI"',
-      'Roboto',
-      '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(','),
-    '&:focus': {
-      boxShadow: `${fade(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
-      borderColor: theme.palette.primary.main,
-    },
-  },
-}))(InputBase);
-
 
 const useStylesForTabs = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
   tab: {
-    minWidth: 360, // a number of your choice
-    width: 360, // a number of your choice
+    minWidth: 360, 
+    width: 360,
   }
 }))
 
 
 export default function Chat(props) {
   const [chat, setChat] = useState([])
+  const [chatEmit, setChatEmit] = useState([])
+
   const [chosenEmoji, setChosenEmoji] = useState(null);
   const [content, setContent] = useState("")
   const [messageText, setMessageText] = useState("")
@@ -124,28 +88,32 @@ export default function Chat(props) {
 
   const [open, setOpen] = useState(false)
   const [files, setFiles] = useState([])
-  const [chatId, setChatId] = useState({})
+  const [chatId, setChatId] = useState("")
   const [search, setSearch] = useState("")
 
-  const [onlineUser, setOnlineUser] = useState([{name: "Izaz", id: 1}, {name: "Mudassir", id: 2}, {name: "Hanan", id: 3}, {name: "Saad", id: 4}, {name:"Farhan", id: 5}, {name:"Noman", id: 6}, {name:"Itzaz", id: 7}, {name:"Hamza", id: 8}, {name:"Bilal", id: 9},  {name:"Saqib", id: 10} ,  {name:"Mufasal", id: 11},  {name:"Zeeshan", id: 12} ,  {name:"Bilal Ahmed", id: 13},  {name:"Mustafa", id: 14},  {name:"Saira", id: 15} , {name:"John Doe", id: 16} ,  {name:"Kim", id: 17}])
-  const [socket, setSocket] =  useState("")
   const [name, setName] = useState("")
   const [messageError, setMessageError] = useState(false)
   const [emojiStatus, setEmojiStatus] = useState(false)
   const [currentUser] = useState(cookie.load('current_user'))
+  const [onlineUser, setOnlineUser] = useState([{name: currentUser.name, id: 1}, {name: "Mudassir", id: 2}, {name: "Hanan", id: 3}, {name: "Saad", id: 4}, {name:"Farhan", id: 5}, {name:"Noman", id: 6}, {name:"Itzaz", id: 7}, {name:"Hamza", id: 8}, {name:"Bilal", id: 9},  {name:"Saqib", id: 10} ,  {name:"Mufasal", id: 11},  {name:"Zeeshan", id: 12} ,  {name:"Bilal Ahmed", id: 13},  {name:"Mustafa", id: 14},  {name:"Saira", id: 15} , {name:"John Doe", id: 16} ,  {name:"Kim", id: 17}])
+
   const classes = useStyles();
   const classesForTabs = useStylesForTabs()
   const circle = <div className={clsx(classes.shape, classes.shapeCircle)} />;
 
   const [value, setValue] = React.useState(0)
 
-  useEffect(() => {
-    // if(chatId){
-    //   let socket = io(socketUrl)
-    //   socket.emit('chat_receive', chatId)
-    // }
-  })
+  var socket = io(socketUrl)
 
+  useEffect(() => {
+
+  },[])
+
+  
+  socket.on("chat_receive",(message)=>{
+    let temp =[...chat,message.message]
+    setChat(temp)
+  }) 
 
   const messagesEndRef = useRef(null)
 
@@ -161,29 +129,35 @@ export default function Chat(props) {
   }
 
   const sendMessage = () => {
-    let socket = io(socketUrl)
+   
     if(message != ""){
       let objectSendToBackend = {}
       objectSendToBackend.message = message
-      objectSendToBackend.sender = currentUser._id
-      objectSendToBackend.receiver = "5ecf686f085c54292cb29c53"
-      objectSendToBackend.chatId = chatId
-      // if(chatId){
-      //   let socket = io(socketUrl)
-      //   socket.emit('chat_receive', chatId)
-      // }
-      console.log("objectSendToBackend", objectSendToBackend)
-      if(socket.emit('test', objectSendToBackend)){
-        setMessageFromSender(true)
 
+
+
+      if(currentUser.staffTypeId.type==='Doctor/Physician')
+      {
+        objectSendToBackend.sender = currentUser._id
+        objectSendToBackend.receiver = "5f28fbeac179170dfc2b1416"
+      }
+      else{
+        objectSendToBackend.sender = currentUser._id
+        objectSendToBackend.receiver = "5f4ffff4277ba8b380f2ef3d"
+      } 
+
+      let objectSendToBackend1 = {}
+      objectSendToBackend1.chatId = chatId
+      let params = {
+        obj1: objectSendToBackend,
+        obj2: objectSendToBackend1
+      }
+      console.log("objectSendToBackend", params)
+      if(socket.emit('chat_sent', params)){
+        setMessageFromSender(true)
       }
       setMessage("")
-      let c = [...chat]
-      c.push(message)
-      // let newMessageChat = chat.push(message)
-      chat.push(message)
-      // setChat(newMessageChat)
-      setChat(c)
+
       
     }else{
       setMessageError(true)
@@ -201,10 +175,8 @@ export default function Chat(props) {
 }
 
 const  handleSave = (file) => {
-    //Saving files to state for further use and closing Modal.
-    setFiles(file)
-    console.log(file)
-    setOpen(false)
+  setFiles(file)
+  setOpen(false)
 }
 
 const  handleOpen = () => {
@@ -245,22 +217,36 @@ const  handleOpen = () => {
     
   }
 
+  console.log("current user", currentUser)
   const onGetChatHandler =  () => {
-    console.log("Hello")
+   
+    
+
     var obj = {}
+    if(currentUser.staffTypeId.type==="Doctor/Physician")
+    {
+      obj.sender = currentUser._id
+      obj.receiver = "5f28fbeac179170dfc2b1416"
+    }
+    else{
     obj.sender = currentUser._id
-    obj.receiver = "5ecf686f085c54292cb29c53"
-    console.log("chat obj", obj)
-     axios
-    .post(chatApi, obj)
+    obj.receiver = "5f4ffff4277ba8b380f2ef3d"
+    } 
+    axios
+    .post(createChat, obj)
     .then((res) => {
-      console.log("res", res)
-      setChatId(res.data.data)
+      console.log("res", res.data.data)
+      setChatId(res.data.data._id)
+
+      var listWithoutTel = res.data.data.chat.map(({ read, sentAt, _id, ...item }) => item);
+
+      setChat(listWithoutTel)
     }).catch(error=>{
       console.log(error)
-    })
+    })   
   }
 
+  console.log("chat recieved", chat)
   return (
     <div
       style={{
@@ -332,13 +318,16 @@ const  handleOpen = () => {
             </div>
 
           </div>
+          <div className="style-horizontal">
+
+         
           <div className={classes.root} style={{
-            maxWidth: 1300, overflowY: 'hidden',
-            overflowX: 'scroll',
+           
           }}>
             {onlineUser.map(user=>{
               return RenderUser(user)
             })}           
+          </div>
           </div>
         </div>
 
@@ -348,7 +337,7 @@ const  handleOpen = () => {
         }}>
           <div className={classes.root}>
             <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-            <div><h4>Ingrendia Nutritia</h4>
+            <div><h4 style={{paddingTop: 8}}>Ingrendia Nutritia</h4>
               <h4 style={{ color: '#2962CC' }}>Dentist Patients</h4></div>
 
             <div>
@@ -356,27 +345,30 @@ const  handleOpen = () => {
             </div>
           </div>
           <hr />
-          <div style={{
-            overflowY: 'scroll',
-            overflowX: 'hidden', maxHeight: '400px', minHeight:"400px"
-          }}>
+          {/* <ChatContent /> */}
+          <div id="wrapper">
+          <div class="scrollbar" id="style-vertical">
+            <div class="force-overflow">
             <div style={{ display: 'flex', justifyContent: 'center' }}>
               <Button variant="contained" color="black" style={{ backgroundColor: '#edf3f8', borderRadius: 20, textTransform: 'none' }}>
                 <span style={{ fontSize: 10, }}>Yesterday</span>
               </Button>
             </div>
 
-            {/* <Reciever recieve="This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message"/> */}
             {chat.map(msg=>{
-              console.log("message", msg)
+              // console.log("CHAT", msg)
               return(
                 <div>
-                  {messageFromSender ? <Sender send={msg}/>  : undefined}  
+                  {msg.sender === currentUser._id ? <Sender send={msg.message}/>  : <Reciever recieve={msg.message}/> }
                 </div>
               )
             })}
+
+            
           <div ref={messagesEndRef} />
-                   
+              </div>  
+              </div>     
+   
           </div>
 
         </div>
@@ -450,7 +442,7 @@ const  handleOpen = () => {
           />
 
 
-            <img style={{ height: 40, width: 40 , cursor: "pointer"}} src={SendIcon} onClick={sendMessage}/>
+            <img style={{ height: 40, width: 40 , cursor: "pointer"}} src={SendIcon} onClick={sendMessage} />
           </div>
         </div>
 
