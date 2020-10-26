@@ -108,7 +108,7 @@ function AddEditPurchaseRequest(props) {
       >
         <div className="container-fluid">
           <div
-            className="row for-patient-detail"
+            className="row"
             style={{
               backgroundColor: "#2C6DDD",
               paddingLeft: 10,
@@ -116,13 +116,19 @@ function AddEditPurchaseRequest(props) {
               borderTopRightRadius: 5,
               paddingBottom: 10,
               paddingTop: 10,
+              minWidth: 600,
+              overflow: "scroll",
+              // width: "120%",
             }}
           >
             <div
               className={"col-md-3 col-sm-3 col-3"}
               style={styles.headerHeading}
             >
-              <h6 style={{ color: "white", fontWeight: "700" }}>
+              <h6
+                className="pat-det-heading"
+                style={{ color: "white", fontWeight: "700" }}
+              >
                 Patient Info
               </h6>
             </div>
@@ -130,19 +136,34 @@ function AddEditPurchaseRequest(props) {
               className={"col-md-3 col-sm-3 col-3"}
               style={styles.headerHeading}
             >
-              <h6 style={{ color: "white", fontWeight: "700" }}>Allergy</h6>
+              <h6
+                className="pat-det-heading"
+                style={{ color: "white", fontWeight: "700" }}
+              >
+                Allergy
+              </h6>
             </div>
             <div
               className={"col-md-3 col-sm-3 col-3"}
               style={styles.headerHeading}
             >
-              <h6 style={{ color: "white", fontWeight: "700" }}>Medication</h6>
+              <h6
+                className="pat-det-heading"
+                style={{ color: "white", fontWeight: "700" }}
+              >
+                Medication
+              </h6>
             </div>
             <div
               className={"col-md-3 col-sm-3 col-3"}
               style={styles.headerHeading}
             >
-              <h6 style={{ color: "white", fontWeight: "700" }}>Diagnosis</h6>
+              <h6
+                className="pat-det-heading"
+                style={{ color: "white", fontWeight: "700" }}
+              >
+                Diagnosis
+              </h6>
             </div>
           </div>
         </div>
@@ -154,6 +175,8 @@ function AddEditPurchaseRequest(props) {
             paddingLeft: 10,
             height: "80%",
             paddingBottom: 10,
+            minWidth: 600,
+            overflow: "scroll",
           }}
         >
           <div

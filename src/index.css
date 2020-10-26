@@ -95,7 +95,7 @@ ul li {
   padding-bottom: 5px;
 }
 
-.subheader div:first-of-type > img{
+.subheader div:first-of-type > img {
   width: 50px;
   height: inherit;
 }
@@ -210,7 +210,7 @@ ul li {
     font-size: 16px;
   }
   .subheader div {
-    width: 23%;
+    /* width: 23%; */
     align-items: center;
     display: flex;
   }
@@ -243,7 +243,7 @@ input[type="radio"] {
 }
 
 /* for mobile view  */
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 600px) {
   .inputForLogin {
     /* background-color: red; */
     width: 80% !important;
@@ -257,8 +257,8 @@ input[type="radio"] {
     padding-top: 8px;
     font-size: 15px;
   }
-  .subheader div:first-of-type > img{
-    width: 30px;
+  .subheader div:first-of-type > img {
+    width: 55px;
     height: inherit;
   }
   .MuiFormLabel-root {
@@ -267,10 +267,25 @@ input[type="radio"] {
   .scroll-4-patient-detail {
     overflow: auto;
   }
+  .pat-det-heading {
+    font-size: 12px !important;
+    color: red;
+  }
+  .mobile-btn {
+    width: 120px !important;
+    height: 40px !important;
+    font-size: 10px !important;
+  }
+
+  .mobile-icon {
+    width: 12px !important;
+    height: 12px !important;
+  }
+
   /* .addButton {
     width: 106 !important;
   } */
-}
-.for-view-btn-font {
-  color: red;
+  .cPadding {
+    margin-top: -600px;
+  }
 }
