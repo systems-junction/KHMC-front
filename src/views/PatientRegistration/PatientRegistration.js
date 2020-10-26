@@ -1530,7 +1530,7 @@ function PatientRegistration(props) {
     } else {
       dispatch({
         field: e.target.name,
-        value: e.target.value.replace(/[^\w.\s]/gi, ""),
+        value: e.target.value.replace(/[^\w.'-\s]/gi, ""),
       });
     }
 

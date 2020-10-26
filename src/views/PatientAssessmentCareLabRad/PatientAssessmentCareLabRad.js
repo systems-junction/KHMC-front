@@ -652,9 +652,23 @@ function LabRadRequest(props) {
           .then((res) => {
             if (res.data.success) {
               console.log("response while adding Consult Req", res.data.data);
+              var pathname;
+  if (currentUser.staffTypeId.type === "Doctor/Physician") {
+    if (props.location.pathname === "/home/rcm/rd/assessmentdiagnosis") {
+      pathname = "assessmentdiagnosis/success";
+    } else if (props.location.pathname === "/home/rcm/rd/labradrequest") {
+      pathname = "labradrequest/success";
+    } else if (props.location.pathname === "/home/rcm/rd/consultationrequest") {
+      pathname = "consultationrequest/success";
+    }
+  }
+
+
+
+  
               notifyForConsult(patientId);
               props.history.push({
-                pathname: "consultationrequest/success",
+                pathname,
                 state: {
                   message: `Consultation Request: ${
                     res.data.data.consultationNote[
@@ -747,8 +761,19 @@ function LabRadRequest(props) {
           .then((res) => {
             if (res.data.success) {
               console.log("response while adding Resident Req", res.data.data);
+              var pathname;
+  if (currentUser.staffTypeId.type === "Doctor/Physician") {
+    if (props.location.pathname === "/home/rcm/rd/assessmentdiagnosis") {
+      pathname = "assessmentdiagnosis/success";
+    } else if (props.location.pathname === "/home/rcm/rd/labradrequest") {
+      pathname = "labradrequest/success";
+    } else if (props.location.pathname === "/home/rcm/rd/consultationrequest") {
+      pathname = "consultationrequest/success";
+    }
+  }
+
               props.history.push({
-                pathname: "assessmentdiagnosis/success",
+                pathname,
                 state: {
                   message: `Consultation note:  ${
                     res.data.data.residentNotes[
@@ -929,8 +954,34 @@ function LabRadRequest(props) {
       .then((res) => {
         if (res.data.success) {
           console.log("response after adding Lab Request", res.data);
+          var pathname;
+  if (currentUser.staffTypeId.type === "Doctor/Physician") {
+    if (props.location.pathname === "/home/rcm/rd/assessmentdiagnosis") {
+      pathname = "assessmentdiagnosis/success";
+    } else if (props.location.pathname === "/home/rcm/rd/labradrequest") {
+      pathname = "labradrequest/success";
+    } else if (props.location.pathname === "/home/rcm/rd/consultationrequest") {
+      pathname = "consultationrequest/success";
+    }
+  }
+
+  if (currentUser.staffTypeId.type === "Registered Nurse") {
+    if (props.location.pathname === "/home/rcm/patientAssessment") {
+      pathname = "patientAssessment/success";
+    } else if (props.location.pathname === "/home/rcm/patientCare") {
+      pathname = "patientCare/success";
+    } else if (props.location.pathname === "/home/rcm/LabRadRequest") {
+      pathname = "LabRadRequest/success";
+    }
+  }
+
+  if (currentUser.staffTypeId.type === "Consultant/Specialist") {
+    if (props.location.pathname === "/home/rcm/ecr/cn") {
+      pathname = "cn/success";
+    }
+  }
           props.history.push({
-            pathname: "assessmentdiagnosis/success",
+            pathname,
             state: {
               message: `Lab Request: ${
                 res.data.data.labRequest[res.data.data.labRequest.length - 1]
@@ -1094,8 +1145,34 @@ function LabRadRequest(props) {
       .then((res) => {
         if (res.data.success) {
           console.log("response after adding Radio Request", res.data);
+          var pathname;
+  if (currentUser.staffTypeId.type === "Doctor/Physician") {
+    if (props.location.pathname === "/home/rcm/rd/assessmentdiagnosis") {
+      pathname = "assessmentdiagnosis/success";
+    } else if (props.location.pathname === "/home/rcm/rd/labradrequest") {
+      pathname = "labradrequest/success";
+    } else if (props.location.pathname === "/home/rcm/rd/consultationrequest") {
+      pathname = "consultationrequest/success";
+    }
+  }
+
+  if (currentUser.staffTypeId.type === "Registered Nurse") {
+    if (props.location.pathname === "/home/rcm/patientAssessment") {
+      pathname = "patientAssessment/success";
+    } else if (props.location.pathname === "/home/rcm/patientCare") {
+      pathname = "patientCare/success";
+    } else if (props.location.pathname === "/home/rcm/LabRadRequest") {
+      pathname = "LabRadRequest/success";
+    }
+  }
+
+  if (currentUser.staffTypeId.type === "Consultant/Specialist") {
+    if (props.location.pathname === "/home/rcm/ecr/cn") {
+      pathname = "cn/success";
+    }
+  }
           props.history.push({
-            pathname: "assessmentdiagnosis/success",
+            pathname,
             state: {
               message: `Radiology Request: ${
                 res.data.data.radiologyRequest[
@@ -1257,8 +1334,34 @@ function LabRadRequest(props) {
       .then((res) => {
         if (res.data.success) {
           console.log("response after adding nurse Request", res.data);
+          var pathname;
+  if (currentUser.staffTypeId.type === "Doctor/Physician") {
+    if (props.location.pathname === "/home/rcm/rd/assessmentdiagnosis") {
+      pathname = "assessmentdiagnosis/success";
+    } else if (props.location.pathname === "/home/rcm/rd/labradrequest") {
+      pathname = "labradrequest/success";
+    } else if (props.location.pathname === "/home/rcm/rd/consultationrequest") {
+      pathname = "consultationrequest/success";
+    }
+  }
+
+  if (currentUser.staffTypeId.type === "Registered Nurse") {
+    if (props.location.pathname === "/home/rcm/patientAssessment") {
+      pathname = "patientAssessment/success";
+    } else if (props.location.pathname === "/home/rcm/patientCare") {
+      pathname = "patientCare/success";
+    } else if (props.location.pathname === "/home/rcm/LabRadRequest") {
+      pathname = "LabRadRequest/success";
+    }
+  }
+
+  if (currentUser.staffTypeId.type === "Consultant/Specialist") {
+    if (props.location.pathname === "/home/rcm/ecr/cn") {
+      pathname = "cn/success";
+    }
+  }
           props.history.push({
-            pathname: "assessmentdiagnosis/success",
+            pathname,
             state: {
               message: `Nurse Service Request: ${
                 res.data.data.nurseService[
@@ -1925,6 +2028,7 @@ function LabRadRequest(props) {
           <h5 style={{ fontWeight: "bold", color: "white", marginTop: 25 }}>
             Patient Details
           </h5>
+
           <div
             // className="row"
             style={{
@@ -1949,13 +2053,19 @@ function LabRadRequest(props) {
                 paddingTop: 10,
                 marginLeft: 0,
                 marginRight: 0,
+                minWidth: 600,
+                overflow: "scroll",
+                // width: "auto"
               }}
             >
               <div
                 className={"col-md-3 col-sm-3 col-3"}
                 style={styles.headerHeading}
               >
-                <h6 style={{ color: "white", fontWeight: "700" }}>
+                <h6
+                  className="pat-det-heading"
+                  style={{ color: "white", fontWeight: "700" }}
+                >
                   Patient Info
                 </h6>
               </div>
@@ -1963,13 +2073,21 @@ function LabRadRequest(props) {
                 className={"col-md-3 col-sm-3 col-3"}
                 style={styles.headerHeading}
               >
-                <h6 style={{ color: "white", fontWeight: "700" }}>Allergy</h6>
+                <h6
+                  className="pat-det-heading"
+                  style={{ color: "white", fontWeight: "700" }}
+                >
+                  Allergy
+                </h6>
               </div>
               <div
                 className={"col-md-3 col-sm-3 col-3"}
                 style={styles.headerHeading}
               >
-                <h6 style={{ color: "white", fontWeight: "700" }}>
+                <h6
+                  className="pat-det-heading"
+                  style={{ color: "white", fontWeight: "700" }}
+                >
                   Medication
                 </h6>
               </div>
@@ -1977,7 +2095,12 @@ function LabRadRequest(props) {
                 className={"col-md-3 col-sm-3 col-3"}
                 style={styles.headerHeading}
               >
-                <h6 style={{ color: "white", fontWeight: "700" }}>Diagnosis</h6>
+                <h6
+                  className="pat-det-heading"
+                  style={{ color: "white", fontWeight: "700" }}
+                >
+                  Diagnosis
+                </h6>
               </div>
             </div>
 
@@ -1988,6 +2111,8 @@ function LabRadRequest(props) {
                 paddingLeft: 10,
                 height: "80%",
                 paddingBottom: 10,
+                minWidth: 600,
+                overflow: "scroll",
               }}
             >
               <div
@@ -2065,8 +2190,8 @@ function LabRadRequest(props) {
               </div>
 
               <div
-                className={"col-md-3 col-sm-3 col-3"}
-                style={styles.textStyles}
+                className={"col-md-3 col-sm-3 col-3 "}
+                style={{ ...styles.textStyles }}
               >
                 {diagnosisArray
                   ? diagnosisArray.map((drug, index) => {
