@@ -1951,7 +1951,7 @@ function LabRadRequest(props) {
                 marginLeft: 0,
                 marginRight: 0,
                 minWidth: 600,
-                overflow: "scroll",
+                
                 // width: "auto"
               }}
             >
@@ -2933,7 +2933,7 @@ function LabRadRequest(props) {
 
               <div className="row">
                 <div
-                  className="col-md-5 col-sm-5 col-3"
+                  className="col-md-5 col-sm-5 col-12"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -2957,7 +2957,7 @@ function LabRadRequest(props) {
                   />
                 </div>
                 <div
-                  className={`col-md-5 col-sm-5 col-3 ${classes.root}`}
+                  className={`col-md-5 col-sm-5 col-12 ${classes.root}`}
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -2979,9 +2979,9 @@ function LabRadRequest(props) {
                     }}
                   />
                 </div>
-                <div className="col-md-2 col-sm-2 col-6">
+                <div className="col-xs-10 col-md-2">
                   <Button
-                    className="addButton"
+                    // className="addButton"
                     style={{
                       ...styles.stylesForButton,
                       marginTop: "25px",
@@ -2993,7 +2993,7 @@ function LabRadRequest(props) {
                       height: 56,
                       outline: "none",
                       marginTop: 25,
-                      width: "110%",
+                      width: matches ? "110%" : "106%",
                       marginLeft: "-10px",
                     }}
                     disabled={!addNurseRequest}

@@ -11,8 +11,8 @@ const StagingDigitalOceanUploadsUrl = 'https://dev.khmc-staging.online/'
 
 // const baseUrl = dev;
 //const baseUrl = devSecure;
-// const baseUrl = "http://localhost:4000/api";
-const baseUrl = stagingDigitalOcean;
+const baseUrl4local = "http://localhost:4000/api";
+const baseUrl = baseUrl4local;
 
 //export const socketUrl = 'wss://p1.khmc-staging.com:4001'
 export const socketUrl = 'wss://dev.khmc-staging.online:4001'
