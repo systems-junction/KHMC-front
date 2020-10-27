@@ -19,7 +19,7 @@ import Header from '../../components/Header/Header'
 import Back_Arrow from '../../assets/img/Back_Arrow.png'
 import Badge from '@material-ui/core/Badge';
 import io from 'socket.io-client';
-import { createChat, deleteChat, socketUrl} from "../../public/endpoins"
+import { createChat, uploadsUrl, deleteChat, uploadChatFile,socketUrl} from "../../public/endpoins"
 import User from "../../components/Chat/User"
 import Reciever from "../../components/Chat/Reciever"
 import Sender from "../../components/Chat/Sender"
@@ -97,6 +97,7 @@ export default function Chat(props) {
   const [name, setName] = useState("")
   const [messageError, setMessageError] = useState(false)
   const [emojiStatus, setEmojiStatus] = useState(false)
+  const [fileChatName, setFileChatName] = useState("")
   const [currentUser] = useState(cookie.load('current_user'))
   const [onlineUser, setOnlineUser] = useState([{name: currentUser.name, id: 1}, {name: "Mudassir", id: 2}, {name: "Hanan", id: 3}, {name: "Saad", id: 4}, {name:"Farhan", id: 5}, {name:"Noman", id: 6}, {name:"Itzaz", id: 7}, {name:"Hamza", id: 8}, {name:"Bilal", id: 9},  {name:"Saqib", id: 10} ,  {name:"Mufasal", id: 11},  {name:"Zeeshan", id: 12} ,  {name:"Bilal Ahmed", id: 13},  {name:"Mustafa", id: 14},  {name:"Saira", id: 15} , {name:"John Doe", id: 16} ,  {name:"Kim", id: 17}])
 
@@ -135,6 +136,7 @@ export default function Chat(props) {
    
     if(message != ""){
       let objectSendToBackend = {}
+      
       objectSendToBackend.message = message
 
 
@@ -179,8 +181,59 @@ export default function Chat(props) {
 
 const  handleSave = (file) => {
   setFiles(file)
+  console.log("file.type", file[0].type)
+  const data = new FormData()
+  data.append('file', file[0])
+  axios.post(uploadChatFile, data).then(res=> {
+    console.log("RES", res.data.filename)
+    // setFileChatName(`${uploadsUrl}chats/${res.data.filename}`)
+    sendingChatFile(`${uploadsUrl}chats/${res.data.filename}`, file[0].type)
+
+  }).catch(error=>{
+    console.log("ERROR", error)
+  })
+  // if(fileChatName !== ""){
+  // }
+  console.log("files", file)
   setOpen(false)
 }
+console.log("fileChatName", fileChatName)
+
+const sendingChatFile = (fileUrl, type) => {
+  let objectSendToBackend = {}
+  // if(fileChatName !== ""){
+
+    // objectSendToBackend.message = fileChatName
+    objectSendToBackend.message = fileUrl
+    objectSendToBackend.msgType = type
+
+  // }
+
+
+
+  if(currentUser.staffTypeId.type==='Doctor/Physician')
+  {
+    objectSendToBackend.sender = currentUser._id
+    objectSendToBackend.receiver = "5f28fbeac179170dfc2b1416"
+  }
+  else{
+    objectSendToBackend.sender = currentUser._id
+    objectSendToBackend.receiver = "5f4ffff4277ba8b380f2ef3d"
+  } 
+
+  let objectSendToBackend1 = {}
+  objectSendToBackend1.chatId = chatId
+  let params = {
+    obj1: objectSendToBackend,
+    obj2: objectSendToBackend1
+  }
+  console.log("objectSendToBackend", params)
+  if(socket.emit('chat_sent', params)){
+    setMessageFromSender(true)
+  }
+  
+
+} 
 
 const  handleOpen = () => {
    setOpen(true)
@@ -365,7 +418,7 @@ const  handleOpen = () => {
             <div class="force-overflow">
             <div style={{ display: 'flex', justifyContent: 'center' }}>
               <Button variant="contained" color="black" style={{ backgroundColor: '#edf3f8', borderRadius: 20, textTransform: 'none' }}>
-                <span style={{ fontSize: 10, }}>Yesterday</span>
+                <span style={{ fontSize: 10, }}>Yesterday 1</span>
               </Button>
             </div>
 
@@ -373,7 +426,7 @@ const  handleOpen = () => {
               // console.log("CHAT", msg)
               return(
                 <div>
-                  {msg.sender === currentUser._id ? <Sender send={msg.message}/>  : <Reciever recieve={msg.message}/> }
+                  {msg.sender === currentUser._id ? <Sender send={msg.message} type={msg.msgType}/>  : <Reciever recieve={msg.message} type={msg.msgType} /> }
                 </div>
               )
             })}
@@ -448,6 +501,7 @@ const  handleOpen = () => {
 
           <DropzoneDialog
               open={open}
+              filesLimit={1}
               onSave={handleSave}
               // acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
               showPreviews={true}

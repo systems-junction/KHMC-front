@@ -426,3 +426,5 @@ export const stockLevelsFU = `${baseUrl}/reports/stocklevelsfu`;
 export const supplierfulfillmentPO = `${baseUrl}/reports/supplierfulfillmentpo`;
 export const createChat = `${baseUrl}/chatroom/createchat`
 export const deleteChat = `${baseUrl}/chatroom/deletechat`
+export const uploadChatFile = `${baseUrl}/chatroom/uploadchatfile`
+
