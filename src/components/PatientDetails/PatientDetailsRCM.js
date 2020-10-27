@@ -117,7 +117,7 @@ function AddEditPurchaseRequest(props) {
               paddingBottom: 10,
               paddingTop: 10,
               minWidth: 600,
-              overflow: "scroll",
+              // overflow: "scroll",
               // width: "120%",
             }}
           >
