@@ -7,6 +7,9 @@ import clsx from 'clsx';
 import Tab from '@material-ui/core/Tab'
 import Button from '@material-ui/core/Button'
 import SendIcon from '../../assets/img/Send.png';
+import CallIcon from '../../assets/img/Call.png';
+import VideoCallIcon from '../../assets/img/Video Call.png';
+
 import SearchIcon from '../../assets/img/Search (2).png';
 import ChatIcon from '../../assets/img/Chat.png';
 import Emoji from '../../assets/img/Emoji.png';
@@ -335,13 +338,24 @@ const  handleOpen = () => {
           backgroundColor: 'white', marginTop: 20, borderri: 5, borderLeft: 5, padding: 20,
           borderTopLeftRadius: 5, borderTopRightRadius: 5
         }}>
-          <div className={classes.root}>
+          <div className={classes.root} style={{display:'flex', flexDirection:"row", justifyContent:"space-between"}}>
+           
+            <div style={{display:'flex', flexDirection:"row", alignItems:'center'}}>
             <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-            <div><h4 style={{paddingTop: 8}}>Ingrendia Nutritia</h4>
-              <h4 style={{ color: '#2962CC' }}>Dentist Patients</h4></div>
-
+              
+              <div style={{marginLeft: 20}}>
+                <h4 style={{paddingTop: 8}}>Ingrendia Nutritia</h4>
+                <h4 style={{ color: '#2962CC' }}>Dentist Patients</h4></div>
+              </div>
             <div>
-              <h3 className='time-style' style={{ fontSize: 'large', fontWeight: 550 }}>05 Min</h3>
+              <h3  style={{ fontSize: 'large', fontWeight: 550 }}>05 Min</h3>
+              <div  style={{display:"flex", flexDirection:"row",     marginLeft: -4
+}}>
+              <img style={{ height: 30, width: 30 , cursor: "pointer"}}   src={CallIcon} onClick={()=> console.log("Call")}/>
+              <img style={{ height: 35, width: 35 , cursor: "pointer"}}   src={VideoCallIcon} onClick={()=> console.log("Video")}/>
+              </div>
+
+
             </div>
           </div>
           <hr />

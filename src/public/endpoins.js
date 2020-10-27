@@ -1,31 +1,17 @@
-const local = "http://192.168.10.62:4000/api";
-const live = "https://test.khmc-staging.com/api";
-const dev = "http://ec2-52-14-42-129.us-east-2.compute.amazonaws.com/api";
-//const devSecure = 'https://demo.khmc-staging.com/api'
+const local = "http://localhost:4000/api";
 const notificationsUrl = "http://localhost:4000";
-// http://165.232.66.148/api
-//const stagingDigitalOcean = 'http://165.232.66.148:8080/api'
 const stagingDigitalOcean = 'https://dev.khmc-staging.online/api'
 const StagingDigitalOceanUploadsUrl = 'https://dev.khmc-staging.online/'
-//const StagingSocketUrl = 'wss://165.232.66.148:4001'
 
-// const baseUrl = dev;
-//const baseUrl = devSecure;
-const baseUrl = "http://localhost:4000/api";
-//const baseUrl = stagingDigitalOcean;
-
-//export const socketUrl = 'wss://p1.khmc-staging.com:4001'
-//export const socketUrl = 'wss://dev.khmc-staging.online:4001'
+const baseUrl = local;
+// const baseUrl = stagingDigitalOcean;
+// export const socketUrl = 'wss://dev.khmc-staging.online:4001'
 export const socketUrl = "ws://localhost:4001";
-// export const socketUrl = "ws://192.168.10.20:4001";
 
-// export const audioURL = "http://localhost:4000";
-export const audioURL = "https://dev.khmc-staging.online";
-//export const uploadsUrl = 'https://demo.khmc-staging.com/'
-//export const uploadsUrl = 'https://test.khmc-staging.com/'
-// export const uploadsUrl = "http://localhost:4000/uploads/";
-// export const uploadsUrl = 'http://ec2-52-14-42-129.us-east-2.compute.amazonaws.com/'
-export const uploadsUrl = StagingDigitalOceanUploadsUrl
+export const audioURL = "http://localhost:4000";
+// export const audioURL = "https://dev.khmc-staging.online";
+export const uploadsUrl = "http://localhost:4000/uploads/";
+// export const uploadsUrl = StagingDigitalOceanUploadsUrl
 
 // auth endpoints
 export const loginUrl = `${baseUrl}/auth/login`;
@@ -427,5 +413,16 @@ export const updatePatientClearanceURL = `${baseUrl}/patientclearance/updatepati
 
 export const getIcd = `${baseUrl}/codes/geticdcat`;
 
+//Reports
+export const trackingPO = `${baseUrl}/reports/trackingpo`;
+
+//Stock level for warehosue
+export const stockLevelsWarehouse = `${baseUrl}/reports/stocklevelswh`;
+
+//Stock level for fu
+export const stockLevelsFU = `${baseUrl}/reports/stocklevelsfu`;
+
+//Supplier Fulfillment PO
+export const supplierfulfillmentPO = `${baseUrl}/reports/supplierfulfillmentpo`;
 export const createChat = `${baseUrl}/chatroom/createchat`
 export const deleteChat = `${baseUrl}/chatroom/deletechat`

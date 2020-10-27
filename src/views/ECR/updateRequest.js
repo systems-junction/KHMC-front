@@ -13,6 +13,7 @@ import TextField from "@material-ui/core/TextField";
 import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 import MicIcon from "@material-ui/icons/Mic";
 import StopIcon from "@material-ui/icons/Stop";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import {
   updateEdrIprItem,
   notifyConsultation,
@@ -224,6 +225,7 @@ const useStylesForInput = makeStyles((theme) => ({
 const useStyles = makeStyles(styles);
 
 export default function EdrRequest(props) {
+  const matches = useMediaQuery("(min-width:600px)");
   const classes = useStylesForInput();
 
   const initialState = { consultationNotes: "" };
@@ -733,7 +735,7 @@ export default function EdrRequest(props) {
             <div>
               {props.item.audioNotes ? (
                 <audio
-                  style={{ marginTop: 10, marginLeft: 30 }}
+                  style={{ marginTop: 10, marginLeft: matches ? "inherit": "15px" , width: matches ?  "inherit" : "230px" } }
                   src={`${audioURL}/${props.item.audioNotes}`}
                   controls="controls"
                 />

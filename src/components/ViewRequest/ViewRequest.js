@@ -11,6 +11,7 @@ import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { DateTimePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { audioURL } from "../../public/endpoins";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 const styles = {
   inputContainer: {
@@ -96,6 +97,7 @@ const useStylesForInput = makeStyles((theme) => ({
 }));
 
 export default function EdrRequest(props) {
+  const matches = useMediaQuery("(min-width:600px)");
   const classes = useStylesForInput();
   const [] = React.useState(cookie.load("current_user"));
 
@@ -125,7 +127,7 @@ export default function EdrRequest(props) {
           <div className="row">
             {props.item.serviceCode ? (
               <div
-                className="col-md-6 col-sm-6 col-6"
+                className="col-md-6 col-sm-6 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <TextField
@@ -145,12 +147,12 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             {props.item.serviceName ? (
               <div
-                className="col-md-6 col-sm-6 col-6"
+                className="col-md-6 col-sm-6 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <TextField
@@ -170,13 +172,13 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
           </div>
           <div className={`row ${classes.root}`}>
             {props.item.doctor ? (
               <div
-                className="col-md-6 col-sm-6 col-6"
+                className="col-md-6 col-sm-6 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <TextField
@@ -200,7 +202,7 @@ export default function EdrRequest(props) {
               </div>
             ) : props.item.requester.firstName ? (
               <div
-                className="col-md-6 col-sm-6 col-6"
+                className="col-md-6 col-sm-6 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <TextField
@@ -224,7 +226,7 @@ export default function EdrRequest(props) {
               </div>
             ) : props.item.requesterName && !props.item.comments ? (
               <div
-                className="col-md-6 col-sm-6 col-6"
+                className="col-md-6 col-sm-6 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <TextField
@@ -243,12 +245,12 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                    undefined
+                  )}
 
             {props.item.date ? (
               <div
-                className="col-md-6 col-sm-6 col-6"
+                className="col-md-6 col-sm-6 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -286,7 +288,7 @@ export default function EdrRequest(props) {
               </div>
             ) : props.item.comments ? (
               <div
-                className="col-md-6 col-sm-6 col-6"
+                className="col-md-6 col-sm-6 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <TextField
@@ -307,9 +309,38 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
+                  undefined
+                )}
+          </div>
+
+          {props.item.serviceId && props.item.serviceId.serviceNo && props.item.comments ? (
+            <div className={`row ${classes.root}`}>
+              <div
+                className="col-md-12 col-sm-12 col-12"
+                style={{ ...styles.textFieldPadding, marginTop: "25px" }}
+              >
+                <TextField
+                  required
+                  multiline
+                  disabled={true}
+                  label="Comments"
+                  name={"comments"}
+                  value={props.item.comments}
+                  className="textInputStyle"
+                  rows={4}
+                  variant="filled"
+                  InputProps={{
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+            </div>
+          ) : (
               undefined
             )}
-          </div>
+
 
           {props.item.heartRate ? (
             <DialogTitle
@@ -324,8 +355,8 @@ export default function EdrRequest(props) {
               Vital Signs
             </DialogTitle>
           ) : (
-            undefined
-          )}
+              undefined
+            )}
 
           <div className={`row ${classes.root}`}>
             {props.item.heartRate ? (
@@ -349,8 +380,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             {props.item.bloodPressureSys ? (
               <div
@@ -373,8 +404,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             {props.item.bloodPressureDia ? (
               <div
@@ -397,8 +428,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
           </div>
 
           <div className={`row ${classes.root}`}>
@@ -423,8 +454,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             {props.item.temperature ? (
               <div
@@ -447,8 +478,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             {props.item.FSBS ? (
               <div
@@ -471,8 +502,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
           </div>
 
           <div className={`row ${classes.root}`}>
@@ -497,8 +528,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             {props.item.pulseOX ? (
               <div
@@ -521,8 +552,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             {/* {props.item.requester.firstName ? (
               <div
@@ -565,8 +596,8 @@ export default function EdrRequest(props) {
               Physical Examination
             </DialogTitle>
           ) : (
-            undefined
-          )}
+              undefined
+            )}
 
           <div className={`row ${classes.root}`}>
             {props.item.triageLevel ? (
@@ -590,8 +621,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             {props.item.generalAppearance ? (
               <div
@@ -614,8 +645,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             {props.item.headNeck ? (
               <div
@@ -638,8 +669,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
           </div>
 
           <div className={`row ${classes.root}`}>
@@ -664,8 +695,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             {props.item.respiratory ? (
               <div
@@ -688,8 +719,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
 
             {props.item.cardiac ? (
               <div
@@ -712,8 +743,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
           </div>
 
           <div className={`row ${classes.root}`}>
@@ -738,8 +769,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
           </div>
 
           <div className={`row ${classes.root}`}>
@@ -766,8 +797,8 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                undefined
+              )}
           </div>
           <div className={`row ${classes.root}`}>
             {props.item.note ? (
@@ -815,15 +846,15 @@ export default function EdrRequest(props) {
                 />
               </div>
             ) : (
-              undefined
-            )}
+                  undefined
+                )}
           </div>
 
           {props.item.audioNotes ? (
             <div
               style={{
                 display: "flex",
-                flexDirection: "row",
+                flexDirection: matches ? "row": "column",
                 alignItems: "center",
                 // justifyContent: "center",
               }}
@@ -839,20 +870,21 @@ export default function EdrRequest(props) {
                 Voice notes from Consultant/Specialists
               </label>
               <audio
-                style={{ marginTop: 20, marginLeft: 20 }}
+                style={{ marginTop: 20, marginLeft: matches ? 20 : 0 }}
                 src={`${audioURL}/${props.item.audioNotes}`}
                 controls="controls"
               />
             </div>
           ) : (
-            undefined
-          )}
+              undefined
+            )}
 
           <div
             style={{
               display: "flex",
               justifyContent: "space-between",
               marginLeft: "-10px",
+              marginTop: "10px"
             }}
           >
             <div style={{ marginTop: "2%", marginBottom: "2%" }}>

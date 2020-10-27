@@ -170,7 +170,7 @@ export default function EdrRequest(props) {
 
             {props.item.doctor ? (
               <div
-                className='col-md-6 col-sm-6 col-6'
+                className='col-md-6 col-sm-6 col-12'
                 style={styles.inputContainerForTextField}
               >
                 <TextField
@@ -193,7 +193,7 @@ export default function EdrRequest(props) {
               </div>
             ) : props.item.requester.firstName ? (
               <div
-                className='col-md-6 col-sm-6 col-6'
+                className='col-md-6 col-sm-6 col-12'
                 style={styles.inputContainerForTextField}
               >
                 <TextField
@@ -412,7 +412,7 @@ export default function EdrRequest(props) {
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <div style={{ marginTop: '2%', marginBottom: '2%' }}>
+            <div style={{ marginTop: '4%', marginBottom: '2%' }}>
               <Button onClick={() => props.viewItem('')} variant='contained'>
                 Cancel
               </Button>
