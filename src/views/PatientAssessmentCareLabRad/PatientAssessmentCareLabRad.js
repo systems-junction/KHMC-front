@@ -2330,13 +2330,13 @@ function LabRadRequest(props) {
               <div className="row" style={{ marginBottom: "25px" }}>
                 <div className="col-md-6 col-sm-6 col-6"></div>
                 <div
-                  className="col-md-6 col-sm-6 col-6 d-flex justify-content-end"
+                  className="col-md-6 col-sm-6 col-12 d-flex justify-content-end"
                   style={{ paddingRight: "1px" }}
                 >
                   {currentUser.staffTypeId.type === "Doctor/Physician" ? (
                     <Button
                       onClick={() => setOpenAddConsultDialog(true)}
-                      style={styles.stylesForButton}
+                      style={{...styles.stylesForButton, width: matches ? " " : "104%" , marginLeft : matches ? "inherit" : " -12px" }}
                       variant="contained"
                       color="primary"
                       disabled={enableForm}
@@ -2375,13 +2375,13 @@ function LabRadRequest(props) {
               <div className="row" style={{ marginBottom: "25px" }}>
                 <div className="col-md-6 col-sm-6 col-6"></div>
                 <div
-                  className="col-md-6 col-sm-6 col-6 d-flex justify-content-end"
+                  className="col-md-6 col-sm-6 col-12 d-flex justify-content-end"
                   style={{ paddingRight: "1px" }}
                 >
                   {currentUser.staffTypeId.type === "Doctor/Physician" ? (
                     <Button
                       onClick={() => setOpenAddResidentDialog(true)}
-                      style={styles.stylesForButton}
+                      style={{...styles.stylesForButton, width: matches ? " " : "104%" , marginLeft : matches ? "inherit" : " -12px" }}
                       variant="contained"
                       color="primary"
                       disabled={enableForm}
@@ -2429,7 +2429,7 @@ function LabRadRequest(props) {
                   currentUser.staffTypeId.type === "Registered Nurse" ? (
                     <Button
                       onClick={addNewRequest}
-                      style={styles.stylesForButton}
+                      style={{...styles.stylesForButton, width: matches ? " " : "104%" , marginLeft : matches ? "inherit" : " -12px" }}
                       variant="contained"
                       color="primary"
                     >
@@ -3259,7 +3259,7 @@ function LabRadRequest(props) {
               </div>
               <div className="row">
                 <div
-                  className="col-md-6 col-sm-6 col-6"
+                  className="col-md-6 col-sm-6 col-12"
                   style={styles.inputContainerForTextField}
                 >
                   <TextField
@@ -3295,7 +3295,7 @@ function LabRadRequest(props) {
                   </TextField>
                 </div>
                 <div
-                  className="col-md-6 col-sm-6 col-6"
+                  className="col-md-6 col-sm-6 col-12"
                   style={styles.inputContainerForTextField}
                 >
                   <TextField
@@ -3350,7 +3350,7 @@ function LabRadRequest(props) {
                 undefined
               )}
 
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", marginTop: 20 }}>
                 <div style={{ marginTop: "2%", marginBottom: "2%" }}>
                   <Button
                     onClick={() => hideDialog()}

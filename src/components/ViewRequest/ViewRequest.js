@@ -870,7 +870,7 @@ export default function EdrRequest(props) {
                 Voice notes from Consultant/Specialists
               </label>
               <audio
-                style={{ marginTop: 20, marginLeft: matches ? 20 : 0 }}
+                style={{ marginTop: 20, marginLeft: matches ? 20 : 0 , width : matches ? "inherit": 245}}
                 src={`${audioURL}/${props.item.audioNotes}`}
                 controls="controls"
               />

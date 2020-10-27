@@ -44,19 +44,19 @@
     /* background-color: crimson; */
   }
 
-  .header1-style {
+  /* .header1-style {
     max-width: 26%;
     height: 27%;
     margin-left: -23px;
-    margin-top: -32px;
+    margin-top: -25px;
     /* height: auto; */
-  }
-  .header2-style {
+
+  /* .header2-style {
     max-width: 19%;
     height: 7%;
     margin-top: -6px;
-    /* height: auto; */
-  }
+    
+  } */
 }
 @media screen and (max-width: 768px) {
   /* start of medium tablet styles */
@@ -125,7 +125,7 @@
     max-width: 26%;
     height: 13%;
     margin-left: -14px;
-    margin-top: -29px;
+    margin-top: -25px;
   }
   .header2-style {
     max-width: 30%;
