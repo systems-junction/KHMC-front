@@ -418,7 +418,7 @@ const  handleOpen = () => {
             <div class="force-overflow">
             <div style={{ display: 'flex', justifyContent: 'center' }}>
               <Button variant="contained" color="black" style={{ backgroundColor: '#edf3f8', borderRadius: 20, textTransform: 'none' }}>
-                <span style={{ fontSize: 10, }}>Yesterday 1</span>
+                <span style={{ fontSize: 10, }}>Yesterday</span>
               </Button>
             </div>
 
@@ -503,7 +503,7 @@ const  handleOpen = () => {
               open={open}
               filesLimit={1}
               onSave={handleSave}
-              // acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
+              acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
               showPreviews={true}
               maxFileSize={5000000}
               onClose={handleClose}
