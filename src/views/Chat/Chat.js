@@ -23,7 +23,7 @@ import { createChat, uploadsUrl, deleteChat, uploadChatFile,socketUrl} from "../
 import User from "../../components/Chat/User"
 import Reciever from "../../components/Chat/Reciever"
 import Sender from "../../components/Chat/Sender"
-import RTC from "../../components/Chat/RTC"
+import RTC from "../../components/Chat/RTCMain.js"
 
 import ChatContent from "../../components/Chat/ChatContent"
 import axios from "axios"

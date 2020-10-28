@@ -5,7 +5,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-export default function AlertDialog(props) {
+import RTCFunc from "../Chat/RTC/RTCFunc"
+export default function RTCMain(props) {
   // const [open, setOpen] = React.useState(false);
   const handleClose = () => {
     // setOpen(false);
@@ -21,21 +22,22 @@ export default function AlertDialog(props) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Video Call Component"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
+            This component is mainly deals with ReactJs Agora Video/Audio calls
           </DialogContentText>
+          <RTCFunc/>
         </DialogContent>
-        <DialogActions>
+        
+        {/* <DialogActions>
           <Button onClick={handleClose} color="primary">
-            Disagree
+            Call
           </Button>
           <Button onClick={handleClose} color="primary" autoFocus>
-            Agree
+            End
           </Button>
-        </DialogActions>
+        </DialogActions> */}
       </Dialog>
     </div>
   );
