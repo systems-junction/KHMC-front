@@ -63,7 +63,7 @@ const stylesB = {
     width: "100px",
     height: "35px",
     outline: "none",
-    fontSize:'0.7rem'
+    fontSize: "0.7rem",
   },
 };
 
@@ -112,6 +112,7 @@ export default function PurchaseRequest(props) {
       .get(getPurchaseRequestUrl)
       .then((res) => {
         if (res.data.success) {
+          console.log(res.data.data);
           if (props.comingFor === "add") {
             setPurchaseRequest(res.data.data.purchaseRequest.reverse());
             // setFilteredRequests(res.data.data.purchaseRequest.reverse());
@@ -164,7 +165,8 @@ export default function PurchaseRequest(props) {
           return (
             pr.vendorId._id === props.selectedVendor &&
             pr.committeeStatus === "approved" &&
-            pr.generated === "Manual"
+            pr.generated === "Manual" &&
+            pr.availability === true
           );
         });
       setFilteredRequests(temp);
@@ -397,9 +399,11 @@ export default function PurchaseRequest(props) {
                                     <TableCell
                                       className={classes.tableCell}
                                       key={key}
-                                      style={{
-                                        // textAlign: "center",
-                                      }}
+                                      style={
+                                        {
+                                          // textAlign: "center",
+                                        }
+                                      }
                                     >
                                       {formatDate(prop[val])}
                                     </TableCell>
@@ -410,9 +414,11 @@ export default function PurchaseRequest(props) {
                                       className={classes.tableCell}
                                       key={key}
                                       // onClick={() => handleClick(prop, val)}
-                                      style={{
-                                        // textAlign: "center",
-                                      }}
+                                      style={
+                                        {
+                                          // textAlign: "center",
+                                        }
+                                      }
                                     >
                                       {Array.isArray(val)
                                         ? prop[val[0]]
@@ -469,7 +475,7 @@ export default function PurchaseRequest(props) {
                 fontWeight: "bold",
               }}
             >
-              No Purchase Request Found for that selected vendor
+              No active purchase request found for that selected vendor
             </h5>
           ) : (
             undefined

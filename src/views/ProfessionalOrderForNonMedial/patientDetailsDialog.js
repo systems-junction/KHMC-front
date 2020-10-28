@@ -172,6 +172,9 @@ function AddEditPurchaseRequest(props) {
               // minHeight: 200,
               borderRadius: 5,
               width: "100%",
+              maxHeight: "300px",
+              overflowY: "scroll",
+              overflowX: "hidden",
             }}
           >
             {/* </Paper> */}

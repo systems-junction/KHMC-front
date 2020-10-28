@@ -34,11 +34,11 @@ import Inactive from "../../assets/img/Inactive.png";
 
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 
-import Fingerprint from '../../assets/img/fingerprint.png'
-import AccountCircle from '@material-ui/icons/SearchOutlined'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import BarCode from '../../assets/img/Bar Code.png'
-import TextField from '@material-ui/core/TextField'
+import Fingerprint from "../../assets/img/fingerprint.png";
+import AccountCircle from "@material-ui/icons/SearchOutlined";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import BarCode from "../../assets/img/Bar Code.png";
+import TextField from "@material-ui/core/TextField";
 
 import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 import { makeStyles } from "@material-ui/core/styles";
@@ -49,6 +49,11 @@ import Dialog from "@material-ui/core/Dialog";
 
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
+
+import LogoPatientSummaryInvoice from "../../assets/img/logoPatientSummaryInvoice.png";
+import { jsPDF } from "jspdf";
+import "jspdf-autotable";
+import PrintTable from "./printNonMedicalOrder";
 
 const styles = {
   inputContainerForTextField: {
@@ -92,27 +97,24 @@ const styles = {
     paddingLeft: 0,
     paddingRight: 5,
   },
-
-
 };
 const useStyles = makeStyles(styles);
 
 const useStylesForInput = makeStyles((theme) => ({
   input: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 5,
-    '&:after': {
-      borderBottomColor: 'black',
+    "&:after": {
+      borderBottomColor: "black",
     },
-    '&:hover': {
-      backgroundColor: 'white',
+    "&:hover": {
+      backgroundColor: "white",
     },
-    '&:disabled': {
-      color: 'gray',
+    "&:disabled": {
+      color: "gray",
     },
   },
-}))
-
+}));
 
 const tableHeadingForBUMember = [
   "Order Type",
@@ -175,10 +177,10 @@ const tableHeadingForFUMemberForItems = [
   "Actions",
 ];
 
-const actions = { view: true };
+const actions = { view: true, print: true };
 const actionsForBUMemeber = { edit: true, view: true };
-const actionsForBUMemeberForReceive = { edit: false, view: true };
-const actionsForBUMemeberForEdit = { edit: true, view: false };
+const actionsForBUMemeberForReceive = { edit: false, view: true, print:true };
+const actionsForBUMemeberForEdit = { edit: true, view: false, print: true };
 const actionsForBUNurse = { view: true, edit: true };
 const actionsForBUDoctor = { view: true };
 
@@ -192,7 +194,7 @@ const actionsForItemsForFUMember = { edit: true };
 
 export default function ReplenishmentRequest(props) {
   const classes = useStyles();
-  const classesInput = useStylesForInput()
+  const classesInput = useStylesForInput();
 
   const [purchaseRequests, setPurchaseRequest] = useState("");
   const [vendors, setVendor] = useState("");
@@ -211,8 +213,9 @@ export default function ReplenishmentRequest(props) {
   const [selectedOrder, setSelectedOrder] = useState("");
 
   const [isOpen, setIsOpen] = useState(false);
-  const [searchPatientQuery, setSearchPatientQuery] = useState('')
+  const [searchPatientQuery, setSearchPatientQuery] = useState("");
 
+  const [selectedPRToPrint, setSelectedPRToPrint] = useState("");
 
   if (openNotification) {
     setTimeout(() => {
@@ -533,36 +536,31 @@ export default function ReplenishmentRequest(props) {
     });
   }
 
-  const handlePatientSearch =  (e) => {
-    const a = e.target.value.replace(/[^\w\s]/gi, '')
-    setSearchPatientQuery(a)
+  const handlePatientSearch = (e) => {
+    const a = e.target.value.replace(/[^\w\s]/gi, "");
+    setSearchPatientQuery(a);
     if (a.length >= 3) {
-       axios
-        .get(
-          getRepRequestUrlBUForNonPharmaceutical + '/' + a
-        )
+      axios
+        .get(getRepRequestUrlBUForNonPharmaceutical + "/" + a)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
-              console.log(res.data.data)
+              console.log(res.data.data);
               setPurchaseRequest(res.data.data.reverse());
             } else {
-              console.log(res.data.data, 'no-response');
+              console.log(res.data.data, "no-response");
               setPurchaseRequest([]);
             }
           }
         })
         .catch((e) => {
-          console.log('error after searching patient request', e)
-        })
-    }
-
-    else if(a.length == 0){
+          console.log("error after searching patient request", e);
+        });
+    } else if (a.length == 0) {
       console.log("less");
       getPurchaseRequests();
     }
-    
-  }
+  };
 
   if (
     props.history.location.pathname ===
@@ -620,6 +618,82 @@ export default function ReplenishmentRequest(props) {
     });
   }
 
+  function handlePrintPR(selectedPr) {
+    console.log(selectedPr);
+    setSelectedPRToPrint(selectedPr);
+  }
+
+  const handlePrint = () => {
+    let imgData = new Image();
+    imgData.src = LogoPatientSummaryInvoice;
+
+    var doc = new jsPDF();
+
+    let date = new Date(selectedPRToPrint.createdAt);
+    let month = date.getMonth() + 1;
+    let createdAt = date.getDate() + " - " + month + " - " + date.getFullYear();
+
+    doc.addImage(imgData, "JPG", 10, 10, 40, 20);
+
+    // header
+    doc.setFontSize(13);
+    doc.text(60, 15, "Al-Khalidi Hospital & Medical Center");
+    doc.text(85, 22, "Non - Medical Order");
+    doc.setFontSize(12);
+    doc.text(170, 14, "Amman Jordan");
+    // background coloring
+    doc.setFillColor(255, 255, 200);
+    doc.rect(10, 45, 190, 12, "F");
+    // information of patient
+    doc.setFontSize(10);
+    doc.setFont("times", "normal");
+    doc.text(12, 50, "From");
+    doc.text(12, 55, "To");
+    // doc.text(80, 50, "Department");
+    // doc.text(80, 55, "Warehouse");
+    doc.text(135, 50, "Doc No.");
+    doc.text(135, 55, "Date");
+    // dynamic data info patient
+    doc.setFont("times", "bold");
+    doc.text(35, 50, "Nurse");
+    doc.text(35, 55, "Functional Unit Inventory");
+    // doc.text(100, 50, "HERE");
+    // doc.text(100, 55, "HERE");
+    doc.text(150, 50, selectedPRToPrint.requestNo);
+    doc.text(150, 55, createdAt);
+    // table
+    // footer
+
+    doc.autoTable({
+      margin: { top: 60, right: 10, left: 10 },
+      tableWidth: "auto",
+      headStyles: { fillColor: [44, 109, 221] },
+      html: "#my_tableForMedicalOrder",
+    });
+
+    doc.setFontSize(12);
+    doc.setFont("times", "bold");
+    doc.text(10, 250, "Department Manager");
+    doc.line(10, 258, 50, 258);
+    doc.text(175, 250, "Section Head");
+    doc.line(175, 258, 200, 258);
+    doc.setFont("times", "normal");
+    doc.text(10, 270, "User name:");
+    doc.text(35, 270, currentUser.name);
+    doc.text(160, 270, "Module:");
+    doc.text(180, 270, "Purchasing");
+    doc.text(147, 275, "Date:");
+    doc.text(157, 275, new Date().toLocaleString());
+
+    doc.save(`${selectedPRToPrint.requestNo}.pdf`);
+  };
+
+  useEffect(() => {
+    if (selectedPRToPrint) {
+      handlePrint();
+    }
+  }, [selectedPRToPrint]);
+
   if (
     props.history.location.pathname !==
     "/home/wms/fus/professionalorder/addorder"
@@ -637,7 +711,7 @@ export default function ReplenishmentRequest(props) {
           overflowY: "scroll",
         }}
       >
-        <Header />
+        <Header history={props.history}/>
         <div className="cPadding">
           <div className="subheader">
             <div>
@@ -675,23 +749,30 @@ export default function ReplenishmentRequest(props) {
             )}
           </div>
 
-          <div className='row' style={{marginLeft: '0px', marginRight: '-5px', marginTop: '20px', }}>
+          <div
+            className="row"
+            style={{
+              marginLeft: "0px",
+              marginRight: "-5px",
+              marginTop: "20px",
+            }}
+          >
             <div
-              className='col-md-12 col-sm-9 col-8'
-              style={{...styles.textFieldPadding}}
+              className="col-md-12 col-sm-9 col-8"
+              style={{ ...styles.textFieldPadding }}
             >
               <TextField
-                className='textInputStyle'
-                id='searchPatientQuery'
-                type='text'
-                variant='filled'
-                label='Search orders By Order No'
-                name={'searchPatientQuery'}
+                className="textInputStyle"
+                id="searchPatientQuery"
+                type="text"
+                variant="filled"
+                label="Search orders By Order No"
+                name={"searchPatientQuery"}
                 value={searchPatientQuery}
-                onChange={handlePatientSearch} 
+                onChange={handlePatientSearch}
                 InputProps={{
                   endAdornment: (
-                    <InputAdornment position='end'>
+                    <InputAdornment position="end">
                       <AccountCircle />
                     </InputAdornment>
                   ),
@@ -703,25 +784,19 @@ export default function ReplenishmentRequest(props) {
             </div>
 
             <div
-              className='col-md-1 col-sm-2 col-2'
+              className="col-md-1 col-sm-2 col-2"
               style={{
                 ...styles.textFieldPadding,
               }}
-            >
-            </div>
+            ></div>
 
             <div
-              className='col-md-1 col-sm-1 col-2'
+              className="col-md-1 col-sm-1 col-2"
               style={{
                 ...styles.textFieldPadding,
               }}
-            >
-              
-            </div>
+            ></div>
           </div>
-
-
-          
 
           <div
             style={{
@@ -730,7 +805,7 @@ export default function ReplenishmentRequest(props) {
               flexDirection: "column",
             }}
           >
-            {purchaseRequests &&  purchaseRequests.length > 0 ? (
+            {purchaseRequests && purchaseRequests.length > 0 ? (
               <div>
                 <div>
                   <CustomTable
@@ -759,13 +834,9 @@ export default function ReplenishmentRequest(props) {
                     tableDataKeys={tableDataKeysForBUMember}
                     tableHeading={tableHeadingForBUMember}
                     action={
-                      // currentUser.staffTypeId.type === "Registered Nurse"
-                      //   ? actionsForBUNurse
-                      currentUser.staffTypeId.type === "BU Doctor"
-                        ? actionsForBUDoctor
-                        : currentUser.staffTypeId.type === "Registered Nurse" &&
-                          props.history.location.pathname ===
-                            "/home/wms/fus/professionalorder/addorder"
+                      currentUser.staffTypeId.type === "Registered Nurse" &&
+                      props.history.location.pathname ===
+                        "/home/wms/fus/professionalorder/addorder"
                         ? actionsForBUMemeber
                         : currentUser.staffTypeId.type === "Registered Nurse" &&
                           props.history.location.pathname ===
@@ -783,6 +854,7 @@ export default function ReplenishmentRequest(props) {
                     handleView={handleView}
                     borderBottomColor={"#60d69f"}
                     borderBottomWidth={20}
+                    handlePrint={handlePrintPR}
                   />
                 </div>
 
@@ -797,31 +869,31 @@ export default function ReplenishmentRequest(props) {
                 <Notification msg={errorMsg} open={openNotification} />
               </div>
             ) : purchaseRequests && purchaseRequests.length == 0 ? (
-              <div className='row ' style={{ marginTop: '25px' }}>
-                <div className='col-11'>
+              <div className="row " style={{ marginTop: "25px" }}>
+                <div className="col-11">
                   <h3
                     style={{
-                      color: 'white',
-                      textAlign: 'center',
-                      width: '100%',
-                      position: 'absolute',
+                      color: "white",
+                      textAlign: "center",
+                      width: "100%",
+                      position: "absolute",
                     }}
                   >
                     Opps...No Data Found
                   </h3>
                 </div>
-                <div className='col-1' style={{ marginTop: 45 }}>
+                <div className="col-1" style={{ marginTop: 45 }}>
                   <img
                     onClick={() => props.history.goBack()}
                     src={Back_Arrow}
-                    style={{ width: 45, height: 35, cursor: 'pointer' }}
+                    style={{ width: 45, height: 35, cursor: "pointer" }}
                   />
                 </div>
               </div>
-            ) : 
-            ( <div className="LoaderStyle">
-              <Loader type="TailSpin" color="red" height={50} width={50} />
-            </div>
+            ) : (
+              <div className="LoaderStyle">
+                <Loader type="TailSpin" color="red" height={50} width={50} />
+              </div>
             )}
           </div>
           <div style={{ marginBottom: 20 }}>
@@ -880,6 +952,8 @@ export default function ReplenishmentRequest(props) {
             </DialogContent>
           </Dialog>
         </div>
+
+        <PrintTable selectedPRToPrint={selectedPRToPrint} />
       </div>
     );
   } else {
@@ -898,7 +972,7 @@ export default function ReplenishmentRequest(props) {
           // alignItems: "center",
         }}
       >
-        <Header />
+        <Header history={props.history}/>
 
         <div
           style={{

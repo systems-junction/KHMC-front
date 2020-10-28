@@ -14,9 +14,9 @@ import axios from "axios";
 import cookie from "react-cookies";
 import { loginUrl, getStaffUrl } from "../public/endpoins";
 
-import KHMC_White from "../assets/img/KHMC LOGO FOR CIRCLE.png";
+import KHMC_White from "../assets/img/KHMC Header LOGO.png";
 
-import Influence_white from "../assets/img/Influence_white.png";
+import Influence_white from "../assets/img/Influence Original.png";
 
 import Splash from "./Splash";
 
@@ -288,7 +288,7 @@ class Login extends React.Component {
                   style={{ display: "flex", justifyContent: "center" }}
                 >
                   <div
-                    className="row"
+                    className="row inputForLogin"
                     style={{
                       marginTop: 20,
                       width: "55%",
@@ -316,7 +316,7 @@ class Login extends React.Component {
                   style={{ display: "flex", justifyContent: "center" }}
                 >
                   <div
-                    className="row"
+                    className="row inputForLogin"
                     style={{
                       marginTop: 25,
                       width: "55%",
@@ -370,6 +370,7 @@ class Login extends React.Component {
                           type="submit"
                           variant="contained"
                           color="primary"
+                          className="Loginbtn"
                         >
                           Login
                         </Button>

@@ -34,6 +34,12 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 
+import PrintTable from "./printExternalReturnRequest";
+
+import LogoPatientSummaryInvoice from "../../assets/img/logoPatientSummaryInvoice.png";
+import { jsPDF } from "jspdf";
+import "jspdf-autotable";
+
 const tableHeadingForFUHead = [
   "Return Request No",
   "Item Code",
@@ -93,7 +99,7 @@ const useStylesForInput = makeStyles((theme) => ({
   },
 }));
 
-const actions = { edit: true, view: true };
+const actions = { edit: true, view: true, print: true };
 const actionsForFUInventoryKeeper = {
   edit: true,
   view: true,
@@ -114,6 +120,8 @@ export default function ReplenishmentRequest(props) {
   const [currentUser, setCurrentUser] = useState(cookie.load("current_user"));
   const [fuObj, setFUObj] = useState("");
   const [searchPatientQuery, setSearchPatientQuery] = useState("");
+
+  const [selectedPRToPrint, setSelectedPRToPrint] = useState("");
 
   if (openNotification) {
     setTimeout(() => {
@@ -320,6 +328,82 @@ export default function ReplenishmentRequest(props) {
     }
   };
 
+  function handlePrintPR(selectedPr) {
+    console.log(selectedPr);
+    setSelectedPRToPrint(selectedPr);
+  }
+
+  const handlePrint = () => {
+    let imgData = new Image();
+    imgData.src = LogoPatientSummaryInvoice;
+
+    var doc = new jsPDF();
+
+    let date = new Date(selectedPRToPrint.createdAt);
+    let month = date.getMonth() + 1;
+    let createdAt = date.getDate() + " - " + month + " - " + date.getFullYear();
+
+    doc.addImage(imgData, "JPG", 10, 10, 40, 20);
+
+    // header
+    doc.setFontSize(13);
+    doc.text(60, 15, "Al-Khalidi Hospital & Medical Center");
+    doc.text(77, 22, "Return To Vendor");
+    doc.setFontSize(12);
+    doc.text(170, 14, "Amman Jordan");
+    // background coloring
+    doc.setFillColor(255, 255, 200);
+    doc.rect(10, 45, 190, 12, "F");
+    // information of patient
+    doc.setFontSize(10);
+    doc.setFont("times", "normal");
+    doc.text(12, 50, "From");
+    doc.text(12, 55, "Supplier");
+    // doc.text(80, 50, "Department");
+    // doc.text(80, 55, "Warehouse");
+    doc.text(135, 50, "Doc No.");
+    doc.text(135, 55, "Date");
+    // dynamic data info patient
+    doc.setFont("times", "bold");
+    doc.text(30, 50, "Warehouse");
+    doc.text(30, 55, selectedPRToPrint.itemId.vendorId.englishName);
+    // doc.text(100, 50, "HERE");
+    // doc.text(100, 55, "HERE");
+    doc.text(150, 50, selectedPRToPrint.returnRequestNo);
+    doc.text(150, 55, createdAt);
+    // table
+    // footer
+
+    doc.autoTable({
+      margin: { top: 60, right: 3, left: 3 },
+      tableWidth: "auto",
+      headStyles: { fillColor: [44, 109, 221] },
+      html: "#my_tableForPO",
+    });
+
+    doc.setFontSize(12);
+    doc.setFont("times", "bold");
+    doc.text(50, 250, "Received By");
+    doc.line(50, 258, 90, 258);
+    // doc.text(140, 250, "Section Head");
+    // doc.line(140, 258, 165, 258);
+    doc.setFont("times", "normal");
+    doc.text(10, 270, "User name:");
+    doc.text(35, 270, currentUser.name);
+    doc.text(160, 270, "Module:");
+    doc.text(180, 270, "Inventory");
+    doc.text(140, 275, "Date:");
+    doc.text(150, 275, new Date().toLocaleString());
+
+    doc.save(`${selectedPRToPrint.returnRequestNo}.pdf`);
+  };
+
+  useEffect(() => {
+    if (selectedPRToPrint) {
+      handlePrint();
+    }
+  }, [selectedPRToPrint]);
+
   return (
     <div
       style={{
@@ -333,7 +417,7 @@ export default function ReplenishmentRequest(props) {
         overflowY: "scroll",
       }}
     >
-      <Header />
+      <Header history={props.history}/>
       <div className="cPadding">
         <div className="subheader">
           <div>
@@ -407,35 +491,14 @@ export default function ReplenishmentRequest(props) {
               <div>
                 <CustomTable
                   tableData={purchaseRequests}
-                  // tableDataKeys={
-                  //   currentUser.staffTypeId.type ===
-                  //     "FU Internal Request Return Approval Member" ||
-                  //   currentUser.staffTypeId.type === "admin"
-                  //     ? tableDataKeysForFUHead
-                  //     : tableDataKeys
-                  // }
-
                   tableDataKeys={tableDataKeys}
-                  // tableHeading={
-                  //   currentUser.staffTypeId.type ===
-                  //     "FU Internal Request Return Approval Member" ||
-                  //   currentUser.staffTypeId.type === "admin"
-                  //     ? tableHeadingForFUHead
-                  //     : tableHeading
-                  // }
                   tableHeading={tableHeading}
-                  // action={
-                  //   currentUser.staffTypeId.type === "admin" ||
-                  //   currentUser.staffTypeId.type ===
-                  //     "FU Internal Request Return Approval Member"
-                  //     ? actionsForFUInventoryKeeper
-                  //     : actions
-                  // }
                   action={actions}
                   handleEdit={handleEdit}
                   handleDelete={handleDelete}
                   receiveItem={handleReceive}
                   handleView={handleView}
+                  handlePrint={handlePrintPR}
                   addReturnRequest={handleAddReturnRequest}
                   borderBottomColor={"#60d69f"}
                   borderBottomWidth={20}
@@ -487,6 +550,8 @@ export default function ReplenishmentRequest(props) {
             style={{ width: 60, height: 40, cursor: "pointer" }}
           />
         </div>
+
+        <PrintTable selectedPRToPrint={selectedPRToPrint} />
       </div>
     </div>
   );

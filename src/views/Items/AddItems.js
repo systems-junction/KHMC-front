@@ -26,13 +26,13 @@ import BootstrapInput from "../../components/Dropdown/dropDown.js";
 // import { Formik, Form, Field, ErrorMessage } from "formik";
 
 import ErrorMessage from "../../components/ErrorMessage/errorMessage";
-
 import capitalizeFirstLetter from "../../public/capitilizeLetter";
-
 import AvaliabilityComponent from "../../components/Avaliability/avaliability";
 import ViewAllBtn from "../../components/ViewAllBtn/viewAll";
-
 import useStyleforinput from "../../../src/assets/jss/material-dashboard-react/inputStyle.js";
+import CurrencyTextField from "@unicef/material-ui-currency-textfield";
+import MUIStyleForInputForCurrency from "../../../src/assets/jss/material-dashboard-react/inputStylesForCurrency.js";
+
 
 const unit = [
   {
@@ -52,16 +52,26 @@ const unit = [
     value: "Dm",
   },
 ];
+
 const con = [
   {
-    key: "true",
-    value: "Yes",
-  },
-  {
-    key: "false",
+    key: "NO",
     value: "No",
   },
+  {
+    key: "YES",
+    value: "Yes",
+  },
 ];
+
+const formArray = [
+  { key: "Tablet", value: "Tablet" },
+  { key: "Powder", value: "Powder" },
+  { key: "Syrup", value: "Syrup" },
+  { key: "Capsule", value: "Capsule" },
+  // { key: "Liquid", value: "Liquid" },
+];
+
 const styles = {
   inputContainerForTextField: {
     marginTop: 6,
@@ -101,8 +111,8 @@ const styles = {
     outline: "none",
   },
   textFieldPadding: {
-    paddingLeft: 3,
-    paddingRight: 3,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
 };
 
@@ -110,6 +120,8 @@ const useStyles = makeStyles(tableStyles);
 
 function AddItems(props) {
   const classes = useStyleforinput();
+  const classesForInputForCurrency = MUIStyleForInputForCurrency();
+
   const initialState = {
     _id: "",
     name: "",
@@ -128,6 +140,7 @@ function AddItems(props) {
     cls: "",
     medClass: "",
     grandSubClass: "",
+    form: "",
     comments: "",
     tax: "",
     receiptUnitCost: "",
@@ -140,7 +153,6 @@ function AddItems(props) {
     lightSensitive: "",
     resuableItem: "",
     storageCondition: "",
-
     avaliable: "avaliable",
   };
 
@@ -169,6 +181,7 @@ function AddItems(props) {
     cls,
     medClass,
     grandSubClass,
+    form,
     comments,
     tax,
     receiptUnitCost,
@@ -197,6 +210,9 @@ function AddItems(props) {
 
   const [msg, setMsg] = useState("");
   const [tr, setTr] = useState(false);
+
+  const [errorMsg, setErrorMsg] = useState("");
+  const [openNotification, setOpenNotification] = useState(false);
 
   useEffect(() => {
     setcomingFor(props.history.location.state.comingFor);
@@ -230,7 +246,20 @@ function AddItems(props) {
   }, []);
 
   const onChangeValue = (e) => {
-    console.log(e.target.name, e.target.value);
+    var pattern = /^[a-zA-Z0-9 ]*$/;
+    if (e.target.type === "text") {
+      if (pattern.test(e.target.value) === false) {
+        return;
+      }
+    }
+
+    if (e.target.type === "number") {
+      if (e.target.value < 0) {
+        return;
+      }
+    }
+
+    // console.log(e.target.name, e.target.value);
     dispatch({ field: e.target.name, value: e.target.value });
   };
 
@@ -240,9 +269,11 @@ function AddItems(props) {
       dispatch({ field: "medClass", value: "" });
       dispatch({ field: "subClass", value: "" });
       dispatch({ field: "grandSubClass", value: "" });
+      dispatch({ field: "form", value: "" });
     } else if (e.target.name === "medClass") {
       dispatch({ field: "subClass", value: "" });
       dispatch({ field: "grandSubClass", value: "" });
+      dispatch({ field: "form", value: "" });
     }
 
     if (e.target.name === "subClass") {
@@ -257,51 +288,70 @@ function AddItems(props) {
   }
   function validateForm() {
     const res =
-      name.length > 0 &&
-      description.length > 0 &&
-      subClass.length > 0 &&
-      itemCode.length > 0 &&
-      receiptUnit.length > 0 &&
+      name !== "" &&
+      itemCode !== "" &&
+      description !== "" &&
+      receiptUnit !== "" &&
       receiptUnitCost !== "" &&
-      issueUnit.length > 0 &&
+      issueUnit !== "" &&
       issueUnitCost !== "" &&
-      vendorId.length > 0 &&
+      vendorId !== "" &&
       purchasePrice !== "" &&
-      maximumLevel !== "" &&
-      minimumLevel !== "" &&
-      reorderLevel !== "" &&
-      cls.length > 0 &&
       tax !== "" &&
-      grandSubClass.length > 0;
+      cls !== "" &&
+      subClass !== "" &&
+      grandSubClass !== "" &&
+      comments !== "";
+
+    // && maximumLevel !== "" &&
+    // minimumLevel !== "" &&
+    // reorderLevel !== "";
 
     return res;
   }
+
   const handleCancel = () => {
     props.history.goBack();
   };
+
+  function validateValues() {
+    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    if (parseInt(tax) > 100 || parseInt(tax) < 0) {
+      setOpenNotification(true);
+      setErrorMsg("Please add tax value in the range of 0-100");
+      return false;
+    }
+
+    return true;
+  }
 
   const handleAdd = () => {
     if (!validateForm()) {
       setIsFormSubmitted(true);
     } else if (validateForm()) {
+      if (!validateValues()) {
+        return;
+      }
       const params = {
         name,
-        description,
-        subClass,
         itemCode,
+        description,
         receiptUnit,
         issueUnit,
+        receiptUnitCost,
+        issueUnitCost,
         vendorId,
-        purchasePrice,
+        purchasePrice: purchasePrice.toString(),
+        tax: parseInt(tax),
         maximumLevel,
         minimumLevel,
         reorderLevel,
         cls,
+        medClass,
+        subClass,
+        form,
         grandSubClass,
-        comments,
-        tax,
-        receiptUnitCost,
-        issueUnitCost,
         scientificName,
         tradeName,
         temperature,
@@ -310,7 +360,10 @@ function AddItems(props) {
         lightSensitive,
         resuableItem,
         storageCondition,
+        comments,
       };
+
+      console.log("params for item", params);
 
       axios
         .post(addItemUrl, params)
@@ -333,25 +386,29 @@ function AddItems(props) {
   const handleEdit = () => {
     setIsFormSubmitted(true);
     if (validateForm()) {
+      if (!validateValues()) {
+        return;
+      }
       const params = {
         _id,
         name,
-        description,
-        subClass,
         itemCode,
+        description,
         receiptUnit,
         issueUnit,
+        receiptUnitCost,
+        issueUnitCost,
         vendorId,
-        purchasePrice,
+        purchasePrice: purchasePrice.toString(),
+        tax: parseInt(tax),
         maximumLevel,
         minimumLevel,
         reorderLevel,
         cls,
+        medClass,
+        subClass,
         grandSubClass,
-        comments,
-        tax,
-        receiptUnitCost,
-        issueUnitCost,
+        form,
         scientificName,
         tradeName,
         temperature,
@@ -360,6 +417,7 @@ function AddItems(props) {
         lightSensitive,
         resuableItem,
         storageCondition,
+        comments,
       };
       axios
         .put(updateItemUrl, params)
@@ -386,6 +444,13 @@ function AddItems(props) {
     }, 2000);
   }
 
+  if (openNotification) {
+    setTimeout(() => {
+      setOpenNotification(false);
+      setErrorMsg("");
+    }, 4000);
+  }
+
   return (
     <div
       style={{
@@ -399,7 +464,7 @@ function AddItems(props) {
         overflowY: "scroll",
       }}
     >
-      <Header />
+      <Header history={props.history} />
       <div className="cPadding">
         <div className="subheader">
           <div>
@@ -409,7 +474,10 @@ function AddItems(props) {
 
           <ViewAllBtn history={props.history} />
         </div>
-        <div className={`container-fluid ${classes.root}`}>
+        <div
+          className={`container-fluid ${classes.root}`}
+          style={{ marginTop: 20 }}
+        >
           <div className="row">
             <div
               className="col-md-6"
@@ -419,6 +487,7 @@ function AddItems(props) {
               }}
             >
               <TextField
+                required
                 // style={styles.inputField}
                 type="text"
                 label="Name"
@@ -442,6 +511,7 @@ function AddItems(props) {
               }}
             >
               <TextField
+                required
                 // style={styles.inputField}
                 // type="number"
                 label="Item Code"
@@ -469,6 +539,7 @@ function AddItems(props) {
             >
               <TextField
                 // style={styles.inputField}
+                required
                 type="text"
                 label="Description"
                 name={"description"}
@@ -487,7 +558,7 @@ function AddItems(props) {
 
           <div className="row">
             <div
-              className="col-md-6"
+              className="col-md-3"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -495,7 +566,7 @@ function AddItems(props) {
             >
               <TextField
                 required
-                select
+                // select
                 fullWidth
                 id="receiptUnit"
                 name="receiptUnit"
@@ -510,7 +581,7 @@ function AddItems(props) {
                   classes: { input: classes.input },
                 }}
               >
-                <MenuItem value="">
+                {/* <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
                 {unit.map((val) => {
@@ -519,17 +590,17 @@ function AddItems(props) {
                       {val.value}
                     </MenuItem>
                   );
-                })}
+                })} */}
               </TextField>
             </div>
             <div
-              className="col-md-6"
+              className="col-md-3"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
               }}
             >
-              <TextField
+              {/* <TextField
                 required
                 type="number"
                 label="Receipt Unit Cost"
@@ -544,12 +615,40 @@ function AddItems(props) {
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
+              /> */}
+
+              <CurrencyTextField
+                required
+                style={{ backgroundColor: "white", borderRadius: 5 }}
+                className="textInputStyle"
+                id="receiptUnitCost"
+                label="Receipt Unit Cost"
+                name={"receiptUnitCost"}
+                value={receiptUnitCost}
+                // onBlur={onChangeCurrency}
+                onChange={(event, value) => {
+                  dispatch({ field: "receiptUnitCost", value: value });
+                }}
+                error={receiptUnitCost === "" && isFormSubmitted}
+                variant="filled"
+                textAlign="left"
+                decimalPlaces={4}
+                InputProps={{
+                  className: classesForInputForCurrency.input,
+                  classes: { input: classesForInputForCurrency.input },
+                }}
+                InputLabelProps={{
+                  className: classesForInputForCurrency.label,
+                  classes: { label: classesForInputForCurrency.label },
+                }}
+                currencySymbol="JD"
+                // outputFormat="string"
+                onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
               />
             </div>
-          </div>
-          <div className="row">
+
             <div
-              className="col-md-6"
+              className="col-md-3"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -557,7 +656,7 @@ function AddItems(props) {
             >
               <TextField
                 required
-                select
+                // select
                 fullWidth
                 id="issueUnit"
                 name="issueUnit"
@@ -572,7 +671,7 @@ function AddItems(props) {
                   classes: { input: classes.input },
                 }}
               >
-                <MenuItem value="">
+                {/* <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
                 {unit.map((val) => {
@@ -581,17 +680,18 @@ function AddItems(props) {
                       {val.value}
                     </MenuItem>
                   );
-                })}
+                })} */}
               </TextField>
             </div>
+
             <div
-              className="col-md-6"
+              className="col-md-3"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
               }}
             >
-              <TextField
+              {/* <TextField
                 required
                 label="Issue Unit Cost"
                 name={"issueUnitCost"}
@@ -605,9 +705,39 @@ function AddItems(props) {
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
+              /> */}
+
+              <CurrencyTextField
+                required
+                style={{ backgroundColor: "white", borderRadius: 5 }}
+                className="textInputStyle"
+                id="issueUnitCost"
+                label="Issue Unit Cost"
+                name={"issueUnitCost"}
+                value={issueUnitCost}
+                // onBlur={onChangeCurrency}
+                onChange={(event, value) => {
+                  dispatch({ field: "issueUnitCost", value: value });
+                }}
+                variant="filled"
+                textAlign="left"
+                decimalPlaces={4}
+                InputProps={{
+                  className: classesForInputForCurrency.input,
+                  classes: { input: classesForInputForCurrency.input },
+                }}
+                InputLabelProps={{
+                  className: classesForInputForCurrency.label,
+                  classes: { label: classesForInputForCurrency.label },
+                }}
+                error={issueUnitCost === "" && isFormSubmitted}
+                currencySymbol="JD"
+                // outputFormat="string"
+                onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
               />
             </div>
           </div>
+
           <div className="row">
             <div
               className="col-md-4"
@@ -654,7 +784,7 @@ function AddItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              <TextField
+              {/* <TextField
                 required
                 type="number"
                 label="Purchase Price"
@@ -669,6 +799,34 @@ function AddItems(props) {
                   className: classes.input,
                   classes: { input: classes.input },
                 }}
+              /> */}
+              <CurrencyTextField
+                required
+                style={{ backgroundColor: "white", borderRadius: 5 }}
+                className="textInputStyle"
+                id="purchasePrice"
+                label="Purchase Price"
+                name={"purchasePrice"}
+                value={purchasePrice}
+                // onBlur={onChangeCurrency}
+                onChange={(event, value) => {
+                  dispatch({ field: "purchasePrice", value: value });
+                }}
+                error={receiptUnitCost === "" && isFormSubmitted}
+                variant="filled"
+                textAlign="left"
+                decimalPlaces={4}
+                InputProps={{
+                  className: classesForInputForCurrency.input,
+                  classes: { input: classesForInputForCurrency.input },
+                }}
+                InputLabelProps={{
+                  className: classesForInputForCurrency.label,
+                  classes: { label: classesForInputForCurrency.label },
+                }}
+                currencySymbol="JD"
+                // outputFormat="string"
+                onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
               />
             </div>
             <div
@@ -680,14 +838,20 @@ function AddItems(props) {
             >
               <TextField
                 required
-                label="Tax"
+                label="Tax %"
                 type="number"
+                onKeyDown={(evt) =>
+                  (evt.key === "e" ||
+                    evt.key === "+" ||
+                    evt.key === "-" ||
+                    evt.key === "E") &&
+                  evt.preventDefault()
+                }
                 name={"tax"}
                 value={tax}
                 error={tax === "" && isFormSubmitted}
                 onChange={(e) => onChangeValue(e)}
                 className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 variant="filled"
                 InputProps={{
                   className: classes.input,
@@ -696,85 +860,10 @@ function AddItems(props) {
               />
             </div>
           </div>
+
           <div className="row">
             <div
-              className="col-md-4"
-              style={{
-                ...styles.inputContainerForTextField,
-                ...styles.textFieldPadding,
-              }}
-            >
-              <TextField
-                required
-                type="number"
-                label="Minimum Level"
-                name={"minimumLevel"}
-                value={minimumLevel}
-                error={minimumLevel === "" && isFormSubmitted}
-                onChange={(e) => onChangeValue(e)}
-                className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                variant="filled"
-                InputProps={{
-                  className: classes.input,
-                  classes: { input: classes.input },
-                }}
-              />
-            </div>
-
-            <div
-              className="col-md-4"
-              style={{
-                ...styles.inputContainerForTextField,
-                ...styles.textFieldPadding,
-              }}
-            >
-              <TextField
-                required
-                type="number"
-                label="Maximum Level"
-                name={"maximumLevel"}
-                value={maximumLevel}
-                error={maximumLevel === "" && isFormSubmitted}
-                onChange={(e) => onChangeValue(e)}
-                className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                variant="filled"
-                InputProps={{
-                  className: classes.input,
-                  classes: { input: classes.input },
-                }}
-              />
-            </div>
-
-            <div
-              className="col-md-4"
-              style={{
-                ...styles.inputContainerForTextField,
-                ...styles.textFieldPadding,
-              }}
-            >
-              <TextField
-                required
-                type="number"
-                label="Reorder Level"
-                name={"reorderLevel"}
-                value={reorderLevel}
-                error={reorderLevel === "" && isFormSubmitted}
-                onChange={(e) => onChangeValue(e)}
-                className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                variant="filled"
-                InputProps={{
-                  className: classes.input,
-                  classes: { input: classes.input },
-                }}
-              />
-            </div>
-          </div>
-          <div className="row">
-            <div
-              className="col-md-4"
+              className="col-md-6"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -811,48 +900,47 @@ function AddItems(props) {
               </TextField>
             </div>
 
-            {cls === "Medical" ? (
-              <div
-                className="col-md-4"
-                style={{
-                  ...styles.inputContainerForTextField,
-                  ...styles.textFieldPadding,
+            <div
+              className="col-md-6"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                disabled={cls === "Medical" ? false : true}
+                select
+                fullWidth
+                id="medClass"
+                name="medClass"
+                value={medClass}
+                error={medClass === "" && isFormSubmitted}
+                onChange={onChangeValueForClasses}
+                label="Medical Class"
+                variant="filled"
+                className="dropDownStyle"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
                 }}
               >
-                <TextField
-                  required
-                  select
-                  fullWidth
-                  id="medClass"
-                  name="medClass"
-                  value={medClass}
-                  error={medClass === "" && isFormSubmitted}
-                  onChange={onChangeValueForClasses}
-                  label="Medical Class"
-                  variant="filled"
-                  className="dropDownStyle"
-                  InputProps={{
-                    className: classes.input,
-                    classes: { input: classes.input },
-                  }}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  {medClasses &&
-                    medClasses.map((val) => {
-                      return (
-                        <MenuItem key={val.key} value={val.key}>
-                          {val.value}
-                        </MenuItem>
-                      );
-                    })}
-                </TextField>
-              </div>
-            ) : (
-              undefined
-            )}
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {medClasses &&
+                  medClasses.map((val) => {
+                    return (
+                      <MenuItem key={val.key} value={val.key}>
+                        {val.value}
+                      </MenuItem>
+                    );
+                  })}
+              </TextField>
+            </div>
+          </div>
 
+          <div className="row">
             <div
               className="col-md-4"
               style={{
@@ -930,245 +1018,245 @@ function AddItems(props) {
                   })}
               </TextField>
             </div>
+
+            <div
+              className="col-md-4"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                select
+                fullWidth
+                id="form"
+                disabled={
+                  cls === "Medical" && medClass === "Pharmaceutical"
+                    ? false
+                    : true
+                }
+                name="form"
+                value={form}
+                onChange={onChangeValueForClasses}
+                label="Form"
+                variant="filled"
+                className="dropDownStyle"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {formArray &&
+                  formArray.map((val) => {
+                    return (
+                      <MenuItem key={val.key} value={val.key}>
+                        {val.value}
+                      </MenuItem>
+                    );
+                  })}
+              </TextField>
+            </div>
           </div>
+
           <div className="row">
-            {(grandSubClass == "me_medicines" ||
-              grandSubClass == "cm_contrast" ||
-              grandSubClass == "mri_contrast") && (
-              <>
-                <div
-                  className="col-md-4"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    label="Scientific Name"
-                    name={"scientificName"}
-                    value={scientificName}
-                    error={scientificName === "" && isFormSubmitted}
-                    onChange={(e) => onChangeValue(e)}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
-                </div>
-                <div
-                  className="col-md-4"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    label="TradeName"
-                    name={"tradeName"}
-                    value={tradeName}
-                    error={tradeName === "" && isFormSubmitted}
-                    onChange={(e) => onChangeValue(e)}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
-                </div>
-              </>
-            )}
-            {(subClass == "radiology_medicine" ||
-              grandSubClass == "me_medicines" ||
-              subClass == "laboratory_supplies" ||
-              (subClass == "medical_supplies" &&
-                grandSubClass != "os_orthopedic")) && (
-              <>
-                <div
-                  className="col-md-4"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    type="number"
-                    label="Temperature"
-                    name={"temperature"}
-                    value={temperature}
-                    error={temperature === "" && isFormSubmitted}
-                    onChange={(e) => onChangeValue(e)}
-                    className="textInputStyle"
-                    onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                    variant="filled"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
-                </div>
-              </>
-            )}
-            {(grandSubClass == "fs_food_supplies" ||
-              grandSubClass == "hs_house_keeping" ||
-              subClass == "radiology_medicine" ||
-              grandSubClass == "me_medicines" ||
-              subClass == "laboratory_supplies" ||
-              (subClass == "medical_supplies" &&
-                grandSubClass != "os_orthopedic")) && (
-              <>
-                <div
-                  className="col-md-4"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    label="Humidity"
-                    name={"humidity"}
-                    value={humidity}
-                    error={humidity === "" && isFormSubmitted}
-                    onChange={(e) => onChangeValue(e)}
-                    className="textInputStyle"
-                    onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-                    variant="filled"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
-                </div>
-              </>
-            )}
-            {grandSubClass == "me_medicines" && (
-              <>
-                <div
-                  className="col-md-4"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    select
-                    fullWidth
-                    id="lightSensitive"
-                    name="lightSensitive"
-                    value={lightSensitive}
-                    error={lightSensitive === "" && isFormSubmitted}
-                    onChange={onChangeValue}
-                    label="Light Sensitive"
-                    variant="filled"
-                    className="dropDownStyle"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    {con.map((val) => {
-                      return (
-                        <MenuItem key={val.key} value={val.key}>
-                          {val.value}
-                        </MenuItem>
-                      );
-                    })}
-                  </TextField>
-                </div>
-              </>
-            )}
-            {(grandSubClass == "ms_medical" ||
-              grandSubClass == "mei_medical" ||
-              grandSubClass == "cs_cardiac") && (
-              <>
-                <div
-                  className="col-md-4"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    select
-                    fullWidth
-                    id="resuableItem"
-                    name="resuableItem"
-                    value={resuableItem}
-                    error={resuableItem === "" && isFormSubmitted}
-                    onChange={onChangeValue}
-                    label="Reusable"
-                    variant="filled"
-                    className="dropDownStyle"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    {con.map((val) => {
-                      return (
-                        <MenuItem key={val.key} value={val.key}>
-                          {val.value}
-                        </MenuItem>
-                      );
-                    })}
-                  </TextField>
-                </div>
-              </>
-            )}
-            {(subClass == "food_beverage" ||
-              subClass == "laboratory_supplies" ||
-              subClass == "radiology_medicine" ||
-              grandSubClass == "housekeeping_supplies" ||
-              grandSubClass == "of_office" ||
-              grandSubClass == "mei_medical" ||
-              grandSubClass == "cs_cardiac" ||
-              (subClass == "medical_supplies" &&
-                grandSubClass != "mei_medical")) && (
-              <>
-                <div
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                  className={comingFor === "add" ? "col-md-12" : "col-md-12"}
-                >
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <DateTimePicker
-                      inputVariant="filled"
-                      label="Expiration"
-                      fullWidth
-                      onChange={(val) => onChangeDate(val, "expiration")}
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                      }}
-                      value={
-                        comingFor === "add"
-                          ? expiration
-                            ? expiration
-                            : new Date()
-                          : expiration
-                      }
-                    />
-                  </MuiPickersUtilsProvider>
-                </div>
-              </>
-            )}
+            <div
+              className="col-md-4"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                // required
+                label="Scientific Name"
+                name={"scientificName"}
+                value={scientificName}
+                // error={scientificName === "" && isFormSubmitted}
+                onChange={(e) => onChangeValue(e)}
+                className="textInputStyle"
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              />
+            </div>
+
+            <div
+              className="col-md-4"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                // required
+                label="Trade Name"
+                name={"tradeName"}
+                value={tradeName}
+                // error={tradeName === "" && isFormSubmitted}
+                onChange={(e) => onChangeValue(e)}
+                className="textInputStyle"
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              />
+            </div>
+
+            <div
+              className="col-md-4"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                // required
+                label="Temperature"
+                name={"temperature"}
+                value={temperature}
+                // error={temperature === "" && isFormSubmitted}
+                onChange={(e) => onChangeValue(e)}
+                className="textInputStyle"
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              />
+            </div>
           </div>
+
+          <div className="row">
+            <div
+              className="col-md-3"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                // required
+                label="Humidity"
+                name={"humidity"}
+                value={humidity}
+                // error={humidity === "" && isFormSubmitted}
+                onChange={(e) => onChangeValue(e)}
+                className="textInputStyle"
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              />
+            </div>
+
+            <div
+              className="col-md-3"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                // required
+                select
+                fullWidth
+                id="lightSensitive"
+                name="lightSensitive"
+                value={lightSensitive}
+                // error={lightSensitive === "" && isFormSubmitted}
+                onChange={onChangeValue}
+                label="Light Sensitive"
+                variant="filled"
+                className="dropDownStyle"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {con.map((val) => {
+                  return (
+                    <MenuItem key={val.key} value={val.key}>
+                      {val.value}
+                    </MenuItem>
+                  );
+                })}
+              </TextField>
+            </div>
+
+            <div
+              className="col-md-3"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                // required
+                select
+                fullWidth
+                id="resuableItem"
+                name="resuableItem"
+                value={resuableItem}
+                // error={resuableItem === "" && isFormSubmitted}
+                onChange={onChangeValue}
+                label="Reusable"
+                variant="filled"
+                className="dropDownStyle"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {con.map((val) => {
+                  return (
+                    <MenuItem key={val.key} value={val.key}>
+                      {val.value}
+                    </MenuItem>
+                  );
+                })}
+              </TextField>
+            </div>
+
+            <div
+              className="col-md-3"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                // required
+                label="Storage Condition"
+                name={"storageCondition"}
+                value={storageCondition}
+                // error={humidity === "" && isFormSubmitted}
+                onChange={(e) => onChangeValue(e)}
+                className="textInputStyle"
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              />
+            </div>
+          </div>
+
           <div className="row">
             <div
               className="col-md-12"
@@ -1196,12 +1284,11 @@ function AddItems(props) {
               />
             </div>
           </div>
-          <br />
 
           <div className="row">
             <div className="col-md-12">
               <div style={styles.inputContainer}>
-                <InputLabelComponent>Avaliability</InputLabelComponent>
+                <InputLabelComponent>Availability</InputLabelComponent>
                 <AvaliabilityComponent
                   avaliable={avaliable}
                   onChange={onChangeValue}
@@ -1219,6 +1306,7 @@ function AddItems(props) {
                 alignItems: "center",
                 marginTop: "2%",
                 marginBottom: "2%",
+                marginRight: 2,
               }}
             >
               <img
@@ -1230,7 +1318,7 @@ function AddItems(props) {
               {comingFor === "AddItems" ? (
                 <Button
                   style={styles.stylesForPurchaseButton}
-                  // disabled={!validateForm()}
+                  disabled={!validateForm()}
                   onClick={handleAdd}
                   variant="contained"
                   color="primary"
@@ -1251,7 +1339,7 @@ function AddItems(props) {
             </div>
           </div>
 
-          <Notification msg={msg} open={tr} />
+          <Notification msg={errorMsg} open={openNotification} />
         </div>
       </div>
     </div>
@@ -1259,3 +1347,349 @@ function AddItems(props) {
 }
 
 export default AddItems;
+
+{
+  /* <div className="row">
+<div
+  className="col-md-4"
+  style={{
+    ...styles.inputContainerForTextField,
+    ...styles.textFieldPadding,
+  }}
+>
+  <TextField
+    required
+    type="number"
+    label="Minimum Level"
+    name={"minimumLevel"}
+    value={minimumLevel}
+    error={minimumLevel === "" && isFormSubmitted}
+    onChange={(e) => onChangeValue(e)}
+    className="textInputStyle"
+    onKeyDown={(evt) =>
+      (evt.key === "e" ||
+        evt.key === "+" ||
+        evt.key === "-" ||
+        evt.key === "E") &&
+      evt.preventDefault()
+    }
+    variant="filled"
+    InputProps={{
+      className: classes.input,
+      classes: { input: classes.input },
+    }}
+  />
+</div>
+
+<div
+  className="col-md-4"
+  style={{
+    ...styles.inputContainerForTextField,
+    ...styles.textFieldPadding,
+  }}
+>
+  <TextField
+    required
+    type="number"
+    label="Maximum Level"
+    name={"maximumLevel"}
+    value={maximumLevel}
+    error={maximumLevel === "" && isFormSubmitted}
+    onChange={(e) => onChangeValue(e)}
+    className="textInputStyle"
+    onKeyDown={(evt) =>
+      (evt.key === "e" ||
+        evt.key === "+" ||
+        evt.key === "-" ||
+        evt.key === "E") &&
+      evt.preventDefault()
+    }
+    variant="filled"
+    InputProps={{
+      className: classes.input,
+      classes: { input: classes.input },
+    }}
+  />
+</div>
+
+<div
+  className="col-md-4"
+  style={{
+    ...styles.inputContainerForTextField,
+    ...styles.textFieldPadding,
+  }}
+>
+  <TextField
+    required
+    type="number"
+    label="Reorder Level"
+    name={"reorderLevel"}
+    value={reorderLevel}
+    error={reorderLevel === "" && isFormSubmitted}
+    onChange={(e) => onChangeValue(e)}
+    className="textInputStyle"
+    onKeyDown={(evt) =>
+      (evt.key === "e" ||
+        evt.key === "+" ||
+        evt.key === "-" ||
+        evt.key === "E") &&
+      evt.preventDefault()
+    }
+    variant="filled"
+    InputProps={{
+      className: classes.input,
+      classes: { input: classes.input },
+    }}
+  />
+</div>
+</div> */
+}
+
+// {(subClass === "food_beverage" ||
+// subClass === "laboratory_supplies" ||
+// subClass === "radiology_medicine" ||
+// grandSubClass === "housekeeping_supplies" ||
+// grandSubClass === "of_office" ||
+// grandSubClass === "mei_medical" ||
+// grandSubClass === "cs_cardiac" ||
+// (subClass === "medical_supplies" &&
+//   grandSubClass !== "mei_medical")) && (
+// <>
+//   <div
+//     style={{
+//       ...styles.inputContainerForTextField,
+//       ...styles.textFieldPadding,
+//     }}
+//     className={comingFor === "add" ? "col-md-12" : "col-md-12"}
+//   >
+//     <MuiPickersUtilsProvider utils={DateFnsUtils}>
+//       <DateTimePicker
+//         inputVariant="filled"
+//         label="Expiration"
+//         fullWidth
+//         onChange={(val) => onChangeDate(val, "expiration")}
+//         InputProps={{
+//           className: classes.input,
+//           classes: { input: classes.input },
+//         }}
+//         value={
+//           comingFor === "add"
+//             ? expiration
+//               ? expiration
+//               : new Date()
+//             : expiration
+//         }
+//       />
+//     </MuiPickersUtilsProvider>
+//   </div>
+// </>
+// )}
+
+{
+  /* <div className="row">
+{(grandSubClass == "ME - Medicines" ||
+  grandSubClass == "CM-Contrast Media Supplies" ||
+  grandSubClass == "MRI Contrast Media" ||
+  grandSubClass == "XR-Supplies"
+  ) && (
+  <>
+    <div
+      className="col-md-4"
+      style={{
+        ...styles.inputContainerForTextField,
+        ...styles.textFieldPadding,
+      }}
+    >
+      <TextField
+        // required
+        label="Scientific Name"
+        name={"scientificName"}
+        value={scientificName}
+        error={scientificName === "" && isFormSubmitted}
+        onChange={(e) => onChangeValue(e)}
+        className="textInputStyle"
+        variant="filled"
+        InputProps={{
+          className: classes.input,
+          classes: { input: classes.input },
+        }}
+      />
+    </div>
+    <div
+      className="col-md-4"
+      style={{
+        ...styles.inputContainerForTextField,
+        ...styles.textFieldPadding,
+      }}
+    >
+      <TextField
+        // required
+        label="Trade Name"
+        name={"tradeName"}
+        value={tradeName}
+        error={tradeName === "" && isFormSubmitted}
+        onChange={(e) => onChangeValue(e)}
+        className="textInputStyle"
+        variant="filled"
+        InputProps={{
+          className: classes.input,
+          classes: { input: classes.input },
+        }}
+      />
+    </div>
+  </>
+)}
+
+
+{(subClass == "radiology_medicine" ||
+  grandSubClass == "me_medicines" ||
+  subClass == "laboratory_supplies" ||
+  (subClass == "medical_supplies" &&
+    grandSubClass != "os_orthopedic")) && (
+  <>
+    <div
+      className="col-md-4"
+      style={{
+        ...styles.inputContainerForTextField,
+        ...styles.textFieldPadding,
+      }}
+    >
+      <TextField
+        required
+        type="number"
+        label="Temperature"
+        name={"temperature"}
+        value={temperature}
+        error={temperature === "" && isFormSubmitted}
+        onChange={(e) => onChangeValue(e)}
+        className="textInputStyle"
+        onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+        variant="filled"
+        InputProps={{
+          className: classes.input,
+          classes: { input: classes.input },
+        }}
+      />
+    </div>
+  </>
+)}
+
+
+{(grandSubClass == "fs_food_supplies" ||
+  grandSubClass == "hs_house_keeping" ||
+  subClass == "radiology_medicine" ||
+  grandSubClass == "me_medicines" ||
+  subClass == "laboratory_supplies" ||
+  (subClass == "medical_supplies" &&
+    grandSubClass != "os_orthopedic")) && (
+  <>
+    <div
+      className="col-md-4"
+      style={{
+        ...styles.inputContainerForTextField,
+        ...styles.textFieldPadding,
+      }}
+    >
+      <TextField
+        required
+        label="Humidity"
+        name={"humidity"}
+        value={humidity}
+        error={humidity === "" && isFormSubmitted}
+        onChange={(e) => onChangeValue(e)}
+        className="textInputStyle"
+        onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+        variant="filled"
+        InputProps={{
+          className: classes.input,
+          classes: { input: classes.input },
+        }}
+      />
+    </div>
+  </>
+)}
+{grandSubClass === "ME - Medicines" && (
+  <>
+    <div
+      className="col-md-4"
+      style={{
+        ...styles.inputContainerForTextField,
+        ...styles.textFieldPadding,
+      }}
+    >
+      <TextField
+        required
+        select
+        fullWidth
+        id="lightSensitive"
+        name="lightSensitive"
+        value={lightSensitive}
+        error={lightSensitive === "" && isFormSubmitted}
+        onChange={onChangeValue}
+        label="Light Sensitive"
+        variant="filled"
+        className="dropDownStyle"
+        InputProps={{
+          className: classes.input,
+          classes: { input: classes.input },
+        }}
+      >
+        <MenuItem value="">
+          <em>None</em>
+        </MenuItem>
+        {con.map((val) => {
+          return (
+            <MenuItem key={val.key} value={val.key}>
+              {val.value}
+            </MenuItem>
+          );
+        })}
+      </TextField>
+    </div>
+  </>
+)}
+{(grandSubClass === "ms_medical" ||
+  grandSubClass === "mei_medical" ||
+  grandSubClass === "cs_cardiac") && (
+  <>
+    <div
+      className="col-md-4"
+      style={{
+        ...styles.inputContainerForTextField,
+        ...styles.textFieldPadding,
+      }}
+    >
+      <TextField
+        required
+        select
+        fullWidth
+        id="resuableItem"
+        name="resuableItem"
+        value={resuableItem}
+        error={resuableItem === "" && isFormSubmitted}
+        onChange={onChangeValue}
+        label="Reusable"
+        variant="filled"
+        className="dropDownStyle"
+        InputProps={{
+          className: classes.input,
+          classes: { input: classes.input },
+        }}
+      >
+        <MenuItem value="">
+          <em>None</em>
+        </MenuItem>
+        {con.map((val) => {
+          return (
+            <MenuItem key={val.key} value={val.key}>
+              {val.value}
+            </MenuItem>
+          );
+        })}
+      </TextField>
+    </div>
+  </>
+)}
+
+</div> */
+}

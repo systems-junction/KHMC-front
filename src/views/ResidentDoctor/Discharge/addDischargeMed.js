@@ -827,7 +827,7 @@ function AddEditEDR(props) {
         overflowY: "scroll",
       }}
     >
-      <Header />
+      <Header history={props.history}/>
       <div className="cPadding">
         <div className="subheader" style={{ marginLeft: "-14px" }}>
           <div>
@@ -1106,7 +1106,7 @@ function AddEditEDR(props) {
                             <div
                               style={{ textAlign: 'center', padding: '10px' }}
                             >
-                              <h4>No Medicince Found !</h4>
+                              <h4>No Medicine Found !</h4>
                             </div>
                           ) : (
                                   undefined
@@ -1476,7 +1476,7 @@ function AddEditEDR(props) {
                               <div
                                 style={{ textAlign: 'center', padding: '10px' }}
                               >
-                                <h4>No Medicince Found !</h4>
+                                <h4>No Medicine Found !</h4>
                               </div>
                             ) : (
                                     undefined

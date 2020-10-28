@@ -29,10 +29,10 @@ const stylesB = {
   stylesForButton: {
     color: "white",
     cursor: "pointer",
-    borderRadius: 10,
+    borderRadius: 5,
     background: "#2c6ddd",
-    width: "140px",
-    height: "50px",
+    // width: "140px",
+    height: "45px",
     outline: "none",
   },
 };
@@ -55,7 +55,7 @@ const tableDataKeys = [
   "status",
 ];
 
-const actions = { edit: true, delete: true };
+const actions = { edit: true, delete: false };
 
 export default function Vendor(props) {
   const classes = useStyles();
@@ -82,7 +82,8 @@ export default function Vendor(props) {
       .get(getVendorUrl)
       .then((res) => {
         if (res.data.success) {
-          setVendor(res.data.data.vendor);
+          console.log(res.data, 'data')
+          setVendor(res.data.data.vendor.reverse());
           setStatuses(res.data.data.statues);
           setClasses(res.data.data.classes);
           setSubClasses(res.data.data.subClasses);
@@ -141,7 +142,7 @@ export default function Vendor(props) {
     };
 
     axios
-      .delete(deleteVendorUrl + "/" + params._id)
+      .delete(deleteVendorUrl + "/" + deleteItem._id)
       .then((res) => {
         if (res.data.success) {
           setdeleteItem("");
@@ -219,12 +220,12 @@ export default function Vendor(props) {
         overflowY: "scroll",
       }}
     >
-      <Header />
+      <Header history={props.history}/>
       <div className="cPadding">
         <div className="subheader">
           <div>
             <img src={vendor} />
-            <h4>Vendor Unit</h4>
+            <h4>Vendor Mgmt</h4>
           </div>
 
           <div>
@@ -236,7 +237,7 @@ export default function Vendor(props) {
             >
               <img className="icon-style" src={plus_icon} />
               &nbsp;&nbsp;
-              <strong style={{ fontSize: "12px" }}>Add New</strong>
+              <strong >Add New</strong>
             </Button>
             {/* <img src={Search} /> */}
           </div>

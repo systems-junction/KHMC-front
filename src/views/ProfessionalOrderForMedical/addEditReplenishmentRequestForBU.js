@@ -31,6 +31,7 @@ import {
   getPatientByProfileNo,
   getSearchedpatient,
   searchpatient,
+  notifyPharmacy,
 } from "../../public/endpoins";
 
 import Paper from "@material-ui/core/Paper";
@@ -72,7 +73,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import { ThemeProvider } from "@material-ui/styles";
-
+// import Fingerprint from "../../../assets/img/fingerprint.png";
 import BarCode from "../../assets/img/Bar Code.png";
 
 import stylesForPaper from "../../assets/jss/material-dashboard-react/components/paper.js";
@@ -450,7 +451,7 @@ function AddEditPurchaseRequest(props) {
   const [allergicDialog, openAllergicDialog] = useState(false);
   const [allergic, setAllergic] = useState("");
   const [timer, setTimer] = useState(null);
-  const [loadSearchedData, setLoadSearchedData] = useState(false)
+  const [loadSearchedData, setLoadSearchedData] = useState(false);
 
   function getFUsFromBU(buId) {
     axios
@@ -671,6 +672,7 @@ function AddEditPurchaseRequest(props) {
           .then((res) => {
             if (res.data.success) {
               console.log("response after adding RR", res.data);
+              notifyForPharmacy(selectedPatient._id)
               props.history.push({
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
@@ -692,6 +694,19 @@ function AddEditPurchaseRequest(props) {
           });
       }
     }
+  };
+
+  const notifyForPharmacy = (id) => {
+    axios
+      .get(notifyPharmacy + "/" + id)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("error after notify", e);
+        setOpenNotification(true);
+        setErrorMsg(e);
+      });
   };
 
   const handleEdit = () => {
@@ -820,7 +835,7 @@ function AddEditPurchaseRequest(props) {
   };
 
   const handlePauseSearch = (e) => {
-    setLoadSearchedData(true)
+    setLoadSearchedData(true);
     clearTimeout(timer);
 
     var value;
@@ -828,9 +843,8 @@ function AddEditPurchaseRequest(props) {
     if (e.target.type === "text") {
       if (pattern.test(e.target.value) === false) {
         return;
-      }
-      else{
-        value = e.target.value
+      } else {
+        value = e.target.value;
       }
     }
     setSearchPatientQuery(value);
@@ -854,11 +868,11 @@ function AddEditPurchaseRequest(props) {
               console.log(res.data.data);
               setpatientFoundSuccessfully(true);
               setpatientFound(res.data.data);
-              setLoadSearchedData(false)
+              setLoadSearchedData(false);
             } else {
               setpatientFoundSuccessfully(false);
               setpatientFound("");
-              setLoadSearchedData(false)
+              setLoadSearchedData(false);
             }
           }
         })
@@ -961,7 +975,7 @@ function AddEditPurchaseRequest(props) {
   };
 
   const handlePauseItemSearch = (e) => {
-    setLoadSearchedData(true)
+    setLoadSearchedData(true);
     clearTimeout(timer);
 
     var value;
@@ -969,9 +983,8 @@ function AddEditPurchaseRequest(props) {
     if (e.target.type === "text") {
       if (pattern.test(e.target.value) === false) {
         return;
-      }
-      else{
-        value = e.target.value
+      } else {
+        value = e.target.value;
       }
     }
     setSearchQuery(value);
@@ -999,11 +1012,11 @@ function AddEditPurchaseRequest(props) {
             console.log(res.data.data.items);
             setItemFoundSuccessfully(true);
             setItem(res.data.data.items);
-            setLoadSearchedData(false)
+            setLoadSearchedData(false);
           } else {
             setItemFoundSuccessfully(false);
             setItem("");
-            setLoadSearchedData(false)
+            setLoadSearchedData(false);
           }
         }
       })
@@ -1419,7 +1432,7 @@ function AddEditPurchaseRequest(props) {
         overflowX: "hidden",
       }}
     >
-      <Header />
+      <Header history={props.history}/>
 
       <div className="cPadding" style={{ marginLeft: 10, marginRight: 10 }}>
         <div className="row">
@@ -1503,7 +1516,7 @@ function AddEditPurchaseRequest(props) {
                       height: 55,
                     }}
                   >
-                    <img src={BarCode} style={{ width: 80, height: 75 }} />
+                    <img src={BarCode} style={{ width: 70, height: 60 }} />
                   </div>
                 </div>
 
@@ -1515,10 +1528,10 @@ function AddEditPurchaseRequest(props) {
                     justifyContent: "center",
                     alignItems: "center",
                     backgroundColor: "white",
-                    borderRadius: 4,
+                    borderRadius: 5,
                   }}
                 >
-                  <img src={BarCode} style={{ width: 70, height: 60 }} />
+                  <img src={Fingerprint} style={{ width: 43, height: 43 }} />
                 </div>
               </div>
 

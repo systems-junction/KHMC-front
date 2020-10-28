@@ -13,6 +13,7 @@ import PatientListingRoutes from "./patientListing";
 import PatientHistory from "./patientHistory";
 import patientAssessment from "./patientAssessment";
 import patientCare from "./patientCare";
+import Chat from "../views/Chat/Chat";
 import LabRadRequest from "./labRadRequest";
 import EDR from "./EDR";
 import IPR from "./iprRoutes";
@@ -54,7 +55,7 @@ class WMSRoutes extends React.PureComponent {
         <Route path={"/home/rcm/rd"} component={ResidentDoctor} />
         <Route path={"/home/rcm/ecr"} component={ECR} />
         <Route path={"/home/rcm/patientHistory"} component={PatientHistory} />
-
+        <Route path={"/home/rcm/chat"} component={Chat} />
         <Route path={`${this.props.match.url}/edr`} component={EDR} />
         <Route path={`${this.props.match.url}/ipr`} component={IPR} />
         <Route path={"/home/rcm/ic"} component={InsuranceClaimRoutes} />

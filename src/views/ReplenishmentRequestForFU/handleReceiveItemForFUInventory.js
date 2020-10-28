@@ -44,6 +44,7 @@ import BootstrapInput from "../../components/Dropdown/dropDown.js";
 import CurrencyTextField from "@unicef/material-ui-currency-textfield";
 import dateTimeFormat from "../../constants/dateTimeFormat.js";
 import dateFormat from "../../constants/dateFormat.js";
+import messageTimeOut from "../../constants/messageTimeOut.js";
 
 import TableforAddedQtyFU from "./tableforAddedQtyFU";
 
@@ -533,10 +534,13 @@ function ReceiveItems(props) {
     setTimeout(() => {
       setOpenNotification(false);
       setErrorMsg("");
-    }, 2000);
+    }, messageTimeOut);
   }
 
-  console.log("vendor id in receive items", selectedItem);
+  function hideNotification() {
+    setOpenNotification(false);
+    setErrorMsg("");
+  }
 
   function calculateTotal() {
     if (receivedQty && receivedQty !== "0") {
@@ -570,7 +574,7 @@ function ReceiveItems(props) {
         overflowY: "scroll",
       }}
     >
-      <Header />
+      <Header history={props.history}/>
       <div className="cPadding">
         <div className="subheader">
           <div>
@@ -579,7 +583,7 @@ function ReceiveItems(props) {
           </div>
         </div>
 
-        <div style={{ flex: 4, display: "flex", flexDirection: "column" }}>
+        <div style={{ flex: 4, display: "flex", flexDirection: "column" }}  className="container-fluid">
           <div className="row" style={{ marginBottom: 15 }}>
             {batchArray.length > 0 ? (
               <>
@@ -600,7 +604,7 @@ function ReceiveItems(props) {
             )}
           </div>
 
-          <div className="row">
+          <div className="row" style={{ marginTop: "10px" }}>
             <div
               className="col-md-6"
               style={{
@@ -1490,8 +1494,8 @@ function ReceiveItems(props) {
                 alignItems: "center",
                 marginBottom: 20,
                 marginTop: 20,
-                marginRight: '5px',
-                marginLeft: '5px'
+                marginRight: "5px",
+                marginLeft: "5px",
               }}
             >
               <img
@@ -1546,7 +1550,11 @@ function ReceiveItems(props) {
             </div>
           </div>
 
-          <Notification msg={errorMsg} open={openNotification} />
+          <Notification
+            msg={errorMsg}
+            open={openNotification}
+            hideNotification={hideNotification}
+          />
         </div>
       </div>
     </div>

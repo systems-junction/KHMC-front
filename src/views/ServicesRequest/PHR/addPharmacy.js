@@ -10,6 +10,7 @@ import TextField from '@material-ui/core/TextField'
 import InputLabel from '@material-ui/core/InputLabel'
 import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
 import axios from 'axios'
 import Notification from '../../../components/Snackbar/Notification.js'
@@ -92,7 +93,7 @@ const styles = {
     outline: 'none',
   },
   inputContainerForTextField: {
-    marginTop: 6,
+    marginTop: 20,
   },
 
   inputContainerForDropDown: {
@@ -152,6 +153,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function AddEditEDR(props) {
+  const matches = useMediaQuery("(min-width:600px)");
   const classes = useStyles()
   const initialState = {
     date: new Date(),
@@ -767,7 +769,7 @@ function AddEditEDR(props) {
         overflowY: 'scroll',
       }}
     >
-      <Header />
+      <Header history={props.history}/>
       <div className={`cPadding ${classes.root}`}>
         <div className='subheader' style={{ marginLeft: '-10px' }}>
           <div>
@@ -947,7 +949,7 @@ function AddEditEDR(props) {
                         <div
                           style={{ textAlign: 'center', padding: '10px' }}
                         >
-                          <h4>No Medicince Found !</h4>
+                          <h4>No Medicine Found !</h4>
                         </div>
                       ) : (
                               undefined
@@ -963,7 +965,7 @@ function AddEditEDR(props) {
                   style={{ marginTop: '20px', marginBottom: '20px' }}
                 >
                   <div
-                    className='col-md-4 col-sm-4 col-4'
+                    className='col-md-4 col-sm-4 col-12'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -988,7 +990,7 @@ function AddEditEDR(props) {
                     />
                   </div>
                   <div
-                    className='col-md-4 col-sm-4 col-4'
+                    className='col-md-4 col-sm-4 col-12'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1025,7 +1027,7 @@ function AddEditEDR(props) {
                   </div>
 
                   <div
-                    className='col-md-4 col-sm-4 col-4'
+                    className='col-md-4 col-sm-4 col-12'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1064,7 +1066,7 @@ function AddEditEDR(props) {
 
                 <div className='row'>
                   <div
-                    className='col-md-3 col-sm-3 col-3'
+                    className='col-md-3 col-sm-3 col-12'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1090,7 +1092,7 @@ function AddEditEDR(props) {
                     />
                   </div>
                   <div
-                    className='col-md-3 col-sm-3 col-3'
+                    className='col-md-3 col-sm-3 col-12'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1116,7 +1118,7 @@ function AddEditEDR(props) {
                     />
                   </div>
                   {/* <div
-                    className='col-md-3 col-sm-3 col-3'
+                    className='col-md-3 col-sm-3 col-12'
                     style={styles.inputContainerForDropDown}
                   >
                     <InputLabelComponent>Duration*</InputLabelComponent>
@@ -1147,7 +1149,7 @@ function AddEditEDR(props) {
                     />
                   </div> */}
                   <div
-                    className='col-md-3 col-sm-3 col-3'
+                    className='col-md-3 col-sm-3 col-12'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1173,7 +1175,7 @@ function AddEditEDR(props) {
                     />
                   </div>
                   <div
-                    className='col-md-3 col-sm-3 col-3'
+                    className='col-md-3 col-sm-3 col-12'
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1202,10 +1204,12 @@ function AddEditEDR(props) {
                 </div>
 
                 <div
-                  style={{ display: 'flex', justifyContent: 'space-between' }}
+                  style={{ ...styles.inputContainerForTextField,  display: 'flex', justifyContent: 'space-between' }}
                 >
                   <div
                     style={{
+   
+   
                       marginTop: '2%',
                       marginBottom: '2%',
                       marginLeft: '-10px',
@@ -1213,7 +1217,7 @@ function AddEditEDR(props) {
                   >
                     <Button
                       onClick={() => hideDialog()}
-                      style={styles.stylesForButton}
+                      style={{...styles.stylesForButton, width : matches ? "140px" : 100}}
                       variant='contained'
                     >
                       <strong>Cancel</strong>
@@ -1236,8 +1240,8 @@ function AddEditEDR(props) {
                           cursor: 'pointer',
                           borderRadius: 5,
                           backgroundColor: '#2c6ddd',
-                          width: '140px',
-                          height: '50px',
+                          width: matches ? '140px': '100px',
+                          height: matches ?  '50px' : '53px',
                           outline: 'none',
                           paddingLeft: 30,
                           paddingRight: 30,

@@ -1,95 +1,129 @@
 import React from "react";
 import "./Header.css";
-import KHMC_White from "../../assets/img/KHMC LOGO FOR CIRCLE.png";
-import Influence_white from "../../assets/img/Influence_white.png";
+import KHMC_White from "../../assets/img/KHMC Header LOGO.png";
+import Influence_white from "../../assets/img/Influence Original.png";
 import { Redirect } from "react-router-dom";
 import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Fade from "@material-ui/core/Fade";
-
 import cookie from "react-cookies";
-
 import Fab from "@material-ui/core/Fab";
+import NotifyMe from './NotificationTray';
+import { socketUrl, getNotifications } from '../../public/endpoins';
+import socketIOClient from 'socket.io-client'
+import axios from 'axios'
 import AddIcon from "@material-ui/icons/Add";
 
-const styles = {
-  stylesForButton: {
-    color: "white",
-    cursor: "pointer",
-    borderRadius: 5,
-    backgroundColor: "#2c6ddd",
-    width: "140px",
-    height: "45px",
-    outline: "none",
-  },
-  stylesForCancel: {
-    color: "#000",
-    cursor: "pointer",
-    borderRadius: 5,
-    width: "140px",
-    height: "45px",
-    outline: "none",
-  },
-};
 class Header extends React.Component {
-  state = {
-    goBack: false,
-    hover: false,
-    open: false,
-    currentUser: "",
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      goBack: false,
+      hover: false,
+      open: false,
+      currentUser: "",
+      data: [],
+    };
+  }
 
   componentDidMount() {
-    this.setState({ currentUser: cookie.load("current_user") });
+    const loggedUser = cookie.load("current_user")
+    this.setState({ currentUser: loggedUser });
+
+    axios.get(getNotifications + "/" + loggedUser._id)
+      .then((res) => {
+        if (res.data.success) {
+          // console.log("Load Notifications", res.data.data)
+
+          let notifyData = []
+          for (let i = 0; i < res.data.data.length; i++) {
+            var checkId = res.data.data[i].sendTo
+            for (let j = 0; j < checkId.length; j++) {
+              if (checkId[j].userId._id === loggedUser._id) {
+                notifyData.push(res.data.data[i])
+              }
+            }
+          }
+          // console.log("After checking User's Notifications", notifyData)
+          this.setState({ data: notifyData });
+        }
+      })
+      .catch((e) => {
+        console.log('Cannot get Notifications', e)
+      })
+
+    const socket = socketIOClient(socketUrl);
+
+    socket.on("get_data", (data) => {
+      console.log("response coming through socket", data);
+
+      for (let i = 0; i < data.length; i++) {
+        var checkId = data[i].sendTo
+        if (data[i].sendTo) {
+          for (let j = 0; j < checkId.length; j++) {
+            if (checkId[j].userId._id === loggedUser._id) {
+              var newData = [].concat(data[i], this.state.data)
+              this.setState({ data: newData })
+            }
+          }
+        }
+      }
+    });
   }
 
   handleClickOpen() {
-    console.log("====================================");
-    console.log("clicked logout");
-    console.log("====================================");
     this.setState({ dialogue: true, open: !this.state.open });
   }
+
   handleClose() {
     this.setState({ dialogue: false });
   }
+
   logoutUser() {
-    console.log("called");
     cookie.remove("token", { path: "/" });
     cookie.remove("current_user", { path: "/" });
     cookie.remove("user_staff", { path: "/" });
     window.location.reload();
   }
+
   render() {
+    const { history } = this.props
+
     if (this.state.goBack) {
       var currentLocation = window.location.pathname;
       if (currentLocation !== "/home") {
         return <Redirect to={"/home"} />;
       }
     }
+
     return (
       <div className="header" style={{ marginBottom: 150 }}>
         <img
           src={KHMC_White}
-          className="header1-style"
-          // style={{ height: "35px" }}
+          className="header1-style mr-auto p-2"
           onClick={() => {
             return this.setState({ goBack: true });
           }}
         />
+        <NotifyMe
+          data={this.state.data}
+          onNotificationIconClick={() => history.push({
+            pathname: '/home/notificationCenter',
+            state: {
+              notificationData: this.state.data
+            },
+          })
+          }
+          storageKey='notific_key'
+          notific_key='timestamp'
+          sortedByKey={false}
+          showDate={true}
+          color="white"
+        />
         <img
           src={Influence_white}
           className="header2-style"
-          style={
-            {
-              // maxWidth: "160px",
-              // height: "35px",
-              // cursor: "pointer",
-              // boxShadow: this.state.hover ? '2px 2px 2px 2px #b2b0b0' : '',
-            }
-          }
           // onMouseEnter={() => this.setState({ hover: true })}
           // onMouseLeave={() => this.setState({ hover: false })}
           onClick={() => this.setState({ open: !this.state.open })}
@@ -109,7 +143,7 @@ class Header extends React.Component {
             }}
           >
             <Fade in={this.state.open} timeout={1000}>
-              <Card style={{ marginTop: 20 }}>
+              <Card style={{ marginTop: 40 }}>
                 <CardContent>
                   <Typography
                     // variant="h6"
@@ -123,7 +157,6 @@ class Header extends React.Component {
                   <Typography
                     variant="body2"
                     color="textSecondary"
-                    // gutterBottom
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
                     {this.state.currentUser &&
@@ -131,9 +164,7 @@ class Header extends React.Component {
                   </Typography>
 
                   <Typography
-                    // variant="h6"
                     color="textSecondary"
-                    // gutterBottom
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
@@ -246,8 +277,8 @@ class Header extends React.Component {
             </Fade>
           </div>
         ) : (
-          undefined
-        )}
+            undefined
+          )}
 
         {this.state.currentUser ? (
           <div style={{ position: "fixed", right: 35, bottom: 45, zIndex: 5 }}>
@@ -259,17 +290,16 @@ class Header extends React.Component {
             >
               {/* <AddIcon /> */}
               <i
-                class="zmdi zmdi-power zmdi-hc-3x"
+                className="zmdi zmdi-power zmdi-hc-3x"
                 style={{ color: "white" }}
               ></i>
             </Fab>
           </div>
         ) : (
-          undefined
-        )}
+            undefined
+          )}
       </div>
     );
   }
 }
-
 export default Header;

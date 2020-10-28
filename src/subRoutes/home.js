@@ -8,6 +8,7 @@ import ControlRoom from "../views/Home/ControlRoom";
 import WMS from "../views/Home/WMS";
 import BusinessUnitRoutes from "../subRoutes/business_unit";
 import ControlRoomRoutes from "../subRoutes/controlRoom";
+import ReportsRoutes from "../subRoutes/ReportsRoutes";
 import WMSRoutes from "../subRoutes/wms";
 import RCMRoutes from "../subRoutes/rcmRoutes";
 import PatientListingRoutes from "./patientListing";
@@ -35,14 +36,20 @@ import AccessLevel from "../views/UserManagement/accessLevel/accessLevel";
 import AddEditAccessLevel from "../views/UserManagement/accessLevel/addEditAccessLevel";
 import systemAdmin from "../views/UserManagement/systemAdmin/systemAdmin";
 import addEditSystemAdmin from "../views/UserManagement/systemAdmin/addEditSystemAdmin";
+import notificationCenter from '../views/Notifications/notifications'
+import dashboard from '../views/Dashboard/dashboard'
+
 const hist = createBrowserHistory();
 class HomeScreenRoutes extends React.PureComponent {
   render() {
     return (
       <Switch>
         <Route exact path={"/home"} component={HomeScreen} />
+        <Route exact path={"/home/dashboard"} component={dashboard} />
         <Route exact path={"/home/patientFHIR"} component={PatientFHIR} />
         <Route path={"/home/controlroom"} component={ControlRoomRoutes} />
+        <Route path={"/home/reports"} component={ReportsRoutes} />
+        <Route path={"/home/notificationCenter"} component={notificationCenter} />
         <Route path={"/home/wms"} component={WMSRoutes} />
         <Route path={"/home/rcm"} component={RCMRoutes} />
         <Route exact path={"/home/bureturn"} component={BuReturn} />

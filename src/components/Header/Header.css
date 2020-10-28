@@ -3,20 +3,23 @@
   padding-left: 25px;
   padding-right: 25px;
   padding-top: 28px;
-
   display: flex;
   justify-content: space-between;
 }
 .header1-style {
-  max-width: 26%;
-  height: 27%;
-  margin-left: -23px;
-  margin-top: -32px;
+  max-width: 27%;
+  height: 20%;
+  margin-left: -5px;
+  margin-top: -15px;
 }
 .header2-style {
   max-width: 20%;
   height: 8%;
-  margin-top: -6px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+.notification-style {
+  margin-right: 20px;
 }
 
 @media screen and (max-width: 768px) {
@@ -41,19 +44,19 @@
     /* background-color: crimson; */
   }
 
-  .header1-style {
+  /* .header1-style {
     max-width: 26%;
     height: 27%;
     margin-left: -23px;
-    margin-top: -32px;
+    margin-top: -25px;
     /* height: auto; */
-  }
-  .header2-style {
+
+  /* .header2-style {
     max-width: 19%;
     height: 7%;
     margin-top: -6px;
-    /* height: auto; */
-  }
+    
+  } */
 }
 @media screen and (max-width: 768px) {
   /* start of medium tablet styles */
@@ -109,6 +112,27 @@
 .subheader div:nth-of-type(2) > img {
   height: 75px;
   width: 190px;
+}
+
+@media only screen and (max-width: 600px) {
+  /* start of medium tablet styles */
+  /* Adding a fixed/percentage min-width could ensure that the image doesn't get too small */
+  /* .KHMC {
+    width: 10%;
+    height: auto;
+    /* background-color: crimson; */
+  .header1-style {
+    max-width: 26%;
+    height: 13%;
+    margin-left: -14px;
+    margin-top: -25px;
+  }
+  .header2-style {
+    max-width: 30%;
+    height: 5%;
+    margin-top: -6px;
+    /* height: auto; */
+  }
 }
 
 /* color: "white",  fontWeight: "700" */

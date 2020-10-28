@@ -6,6 +6,8 @@ import Tab from "@material-ui/core/Tab";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import logoPatientInvoice from "../../assets/img/logoPatientSummaryInvoice.png";
+import PatientDetails from "../../components/PatientDetails/PatientDetailsRCM"
+
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import {
@@ -995,9 +997,19 @@ function AddEditPatientListing(props) {
               if (val && typeof val === "object") {
                 if (key === "residentNotes") {
                   if (val && val.length > 0) {
+                    let data = [];
+                  val.map((d) => {
+                    d.code.map((singleCode) => {
+                      let found = data.find((i) => i === singleCode);
+                      if (!found) {
+                        data.push(singleCode);
+                      }
+                    });
+                  });
+                  console.log(data);
                     dispatch({
                       field: "diagnosisArray",
-                      value: val.reverse()[0].code,
+                      value: data,
                     });
                   }
                 } else if (key === "pharmacyRequest") {
@@ -1047,7 +1059,7 @@ function AddEditPatientListing(props) {
         overflowY: "scroll",
       }}
     >
-      <Header />
+      <Header history={props.history}/>
       <div className="cPadding">
         <div className="subheader">
           <div style={{ marginLeft: "-12px" }}>
@@ -1272,161 +1284,16 @@ function AddEditPatientListing(props) {
                 undefined
               )}
             </div>
+   
+            <PatientDetails
+         patientDetails={patientDetails}
+         // showPatientDetails={showPatientDetails}
+         diagnosisArray={diagnosisArray}
+         medicationArray={medicationArray}
+       />
+     
 
-            <div className={`${classes.root}`}>
-              <h5
-                style={{
-                  fontWeight: "bold",
-                  color: "white",
-                  marginTop: 25,
-                  paddingLeft: 0,
-                  paddingRight: 0,
-                }}
-              >
-                Patient Details
-              </h5>
-              <div
-                // className="row"
-                style={{
-                  marginTop: 25,
-                  backgroundColor: "white",
-                  borderRadius: 5,
-                  width: "100%",
-                }}
-              >
-                <div
-                  className="row"
-                  style={{
-                    backgroundColor: "#2C6DDD",
-                    paddingLeft: 10,
-                    height: "30%",
-                    borderTopLeftRadius: 5,
-                    borderTopRightRadius: 5,
-                    paddingBottom: 10,
-                    paddingTop: 10,
-                    marginLeft: 0,
-                    marginRight: 0,
-                  }}
-                >
-                  <div
-                    className={"col-md-3 col-sm-3 col-3"}
-                    style={styles.headerHeading}
-                  >
-                    <h6 style={{ color: "white", fontWeight: "700" }}>
-                      Patient Info
-                    </h6>
-                  </div>
-                  <div
-                    className={"col-md-3 col-sm-3 col-3"}
-                    style={styles.headerHeading}
-                  >
-                    <h6 style={{ color: "white", fontWeight: "700" }}>
-                      Allergy
-                    </h6>
-                  </div>
-                  <div
-                    className={"col-md-3 col-sm-3 col-3"}
-                    style={styles.headerHeading}
-                  >
-                    <h6 style={{ color: "white", fontWeight: "700" }}>
-                      Medication
-                    </h6>
-                  </div>
-                  <div
-                    className={"col-md-3 col-sm-3 col-3"}
-                    style={styles.headerHeading}
-                  >
-                    <h6 style={{ color: "white", fontWeight: "700" }}>
-                      Diagnosis
-                    </h6>
-                  </div>
-                </div>
-
-                <div
-                  className="row"
-                  style={{
-                    marginTop: 10,
-                    paddingLeft: 10,
-                    height: "80%",
-                    paddingBottom: 10,
-                  }}
-                >
-                  <div
-                    className={"col-md-3 col-sm-3 col-3"}
-                    style={{ display: "flex", flexDirection: "column" }}
-                  >
-                    <span style={styles.headingStyles}>MRN</span>
-                    <span style={styles.textStyles}>
-                      {profileNo.toUpperCase()}
-                    </span>
-
-                    <span style={styles.headingStyles}>Patient</span>
-                    <span style={styles.textStyles}>
-                      {firstName + ` ` + lastName}{" "}
-                    </span>
-
-                    <span style={styles.headingStyles}>Gender</span>
-                    <span style={styles.textStyles}>{gender}</span>
-
-                    <span style={styles.headingStyles}>Age</span>
-                    <span style={styles.textStyles}>{age}</span>
-
-                    <span style={styles.headingStyles}>Weight</span>
-                    <span style={styles.textStyles}>{weight} kg</span>
-                  </div>
-
-                  <div
-                    className={"col-md-3 col-sm-3 col-3"}
-                    style={styles.textStyles}
-                  >
-                    {""}
-                  </div>
-
-                  <div
-                    className={"col-md-3 col-sm-3 col-3"}
-                    style={styles.textStyles}
-                  >
-                    {medicationArray
-                      ? medicationArray.map((d, index) => {
-                          return (
-                            <div
-                              style={{ display: "flex", flexDirection: "row" }}
-                            >
-                              <h6
-                                style={{
-                                  ...styles.textStyles,
-                                }}
-                              >
-                                {index + 1}
-                                {"."} &nbsp;
-                              </h6>
-                              <h6
-                                style={{
-                                  ...styles.textStyles,
-                                }}
-                              >
-                                {d}
-                              </h6>
-                            </div>
-                          );
-                        })
-                      : ""}
-                  </div>
-
-                  <div
-                    className={"col-md-3 col-sm-3 col-3"}
-                    style={styles.textStyles}
-                  >
-                    {diagnosisArray
-                      ? diagnosisArray.map((drug, index) => {
-                          return <h6 style={styles.textStyles}>{drug}</h6>;
-                        })
-                      : ""}
-                  </div>
-                </div>
-              </div>
-            </div>
-
+       
             <div
               style={{
                 height: "10px",
@@ -1920,7 +1787,7 @@ function AddEditPatientListing(props) {
                 <TableCell align="right">{row.serviceId.type}</TableCell>
                 <TableCell align="right">{row.serviceId.name}</TableCell>
                 <TableCell align="right">
-                  {row.serviceId.price.toFixed(4)}
+                  {`${row.serviceId.price.toFixed(4)} JD` }
                 </TableCell>
                 <TableCell align="right">{row.qty}</TableCell>
               </TableRow>

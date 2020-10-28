@@ -22,13 +22,16 @@ import ConfirmationModal from "../../components/Modal/confirmationModal";
 
 import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 
+// import { CircularProgressbar, buildStyles, CircularProgressbarWithChildren } from 'react-circular-progressbar';
+// import 'react-circular-progressbar/dist/styles.css';
+
 const styles = {
   stylesForButton: {
     color: "white",
     cursor: "pointer",
     borderRadius: 5,
     background: "#2c6ddd",
-    width: "140px",
+    // width: "140px",
     height: "50px",
     outline: "none",
   },
@@ -37,20 +40,24 @@ const styles = {
 const tableHeading = [
   "Item Code",
   "Item Name",
+  "Class",
   "Sub Class",
-  "Purchase Price",
-  "Minimum Level",
-  "Maximum Level",
+  "Vendor",
+  // "Purchase Price",
+  // "Minimum Level",
+  // "Maximum Level",
   "Actions",
 ];
 
 const tableDataKeys = [
   "itemCode",
   "name",
+  "cls",
   "subClass",
-  "purchasePrice",
-  "minimumLevel",
-  "maximumLevel",
+  ["vendorId","englishName"]
+  // "purchasePrice",
+  // "minimumLevel",
+  // "maximumLevel",
 ];
 
 const actions = { edit: true, delete: true };
@@ -174,7 +181,7 @@ export default function Items(props) {
         overflowY: "scroll",
       }}
     >
-      <Header />
+      <Header history={props.history}/>
       <div className="cPadding">
         <div className="subheader">
           <div>
@@ -191,7 +198,7 @@ export default function Items(props) {
             >
               <img src={plus_icon} className="icon-style" />
               &nbsp;&nbsp;
-              <strong style={{ fontSize: "12px" }}>Add New</strong>
+              <strong >Add New</strong>
             </Button>
             {/* <img src={Search} /> */}
           </div>
@@ -239,8 +246,63 @@ export default function Items(props) {
               </div>
             )}
           </div>
+
+
         </div>
       </div>
     </div>
   );
 }
+
+
+
+
+// import React from "react";
+// import _ from "lodash";
+
+// function Separator(props) {
+//   return (
+//     <div
+//       style={{
+//         position: "absolute",
+//         height: "100%",
+//         transform: `rotate(${props.turns}turn)`
+//       }}
+//     >
+//       <div style={props.style} />
+//     </div>
+//   );
+// }
+
+// function RadialSeparators(props) {
+//   const turns = 1 / props.count;
+//   return _.range(props.count).map(index => (
+//     <Separator turns={index * turns} style={props.style} />
+//   ));
+// }
+
+// export default RadialSeparators;
+
+
+{/* <CircularProgressbarWithChildren
+        value={10}
+        text={`${80}%`}
+        strokeWidth={10}
+        circleRatio={0.75}
+        styles={buildStyles({
+          strokeLinecap: "butt",
+              // rotation: 1 / 6,
+              rotation: 1 / 2 + 1 / 8,
+
+        })}
+      >
+        <RadialSeparators
+          count={13}
+          style={{
+            background: "#fff",
+            width: "2px",
+            // This needs to be equal to props.strokeWidth
+            height: `${10}%`
+          }}
+        />
+      </CircularProgressbarWithChildren> */}

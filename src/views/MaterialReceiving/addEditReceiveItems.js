@@ -618,7 +618,7 @@ function ReceiveItems(props) {
         }
       }
     >
-      {/* <Header /> */}
+      {/* <Header history={props.history}/> */}
       <div>
         {/* <div className="subheader">
           <div>
@@ -1042,7 +1042,8 @@ function ReceiveItems(props) {
                   disabled={selectedItem ? false : true}
                   inputVariant="filled"
                   fullWidth
-                  format="DD-MM-YYYY"
+                  // format="DD-MM-YYYY"
+                  format={dateFormat}
                   label="Expiry Date (DD-MM-YYYY)"
                   onChange={(val) => onChangeDate(val, "expiryDate")}
                   InputProps={{
@@ -1534,6 +1535,7 @@ function ReceiveItems(props) {
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DateTimePicker
                   // format="MM/dd/yyyy HH:mm a"
+                  // format="dd-mm-yyyy HH:mm a"
                   format={dateTimeFormat}
                   required
                   inputVariant="filled"
@@ -1666,7 +1668,7 @@ function ReceiveItems(props) {
                 flex: 1,
                 justifyContent: "flex-end",
                 flexDirection: "row",
-                marginRight: '5px'
+                marginRight: "5px",
               }}
             >
               <Button

@@ -57,6 +57,7 @@ import InputLabelComponent from "../../components/InputLabel/inputLabel";
 import dateFormat from "../../constants/dateFormat";
 import dateTimeFormat from "../../constants/dateTimeFormat";
 import TableforAddedQty from "./tableforAddedQty";
+import messageTimeOut from "../../constants/messageTimeOut.js";
 
 const reasonArray = [
   { key: "jit", value: "JIT" },
@@ -733,7 +734,7 @@ function AddEditPurchaseRequest(props) {
     setTimeout(() => {
       setOpenNotification(false);
       setErrorMsg("");
-    }, 2000);
+    }, messageTimeOut);
   }
 
   //   const handleSearch = (e) => {
@@ -967,6 +968,11 @@ function AddEditPurchaseRequest(props) {
     }
   };
 
+  function hideNotification() {
+    setOpenNotification(false);
+    setErrorMsg("");
+  }
+
   return (
     <div
       style={{
@@ -980,7 +986,7 @@ function AddEditPurchaseRequest(props) {
         overflowY: "scroll",
       }}
     >
-      <Header />
+      <Header history={props.history}/>
       <div className="cPadding">
         <div className="subheader">
           <div>
@@ -996,7 +1002,15 @@ function AddEditPurchaseRequest(props) {
         </div>
 
         {receivedQty ? (
-          <div style={{ flex: 4, display: "flex", flexDirection: "column", marginTop: '20px' }} className='container-fluid'>
+          <div
+            style={{
+              flex: 4,
+              display: "flex",
+              flexDirection: "column",
+              marginTop: "20px",
+            }}
+            className="container-fluid"
+          >
             {comingFor === "edit" ? (
               <div className="row">
                 <div
@@ -1772,7 +1786,11 @@ function AddEditPurchaseRequest(props) {
               )}
             </div>
 
-            <Notification msg={errorMsg} open={openNotification} />
+            <Notification
+              msg={errorMsg}
+              open={openNotification}
+              hideNotification={hideNotification}
+            />
 
             <Dialog
               aria-labelledby="form-dialog-title"
@@ -1784,7 +1802,7 @@ function AddEditPurchaseRequest(props) {
               <DialogContent style={{ backgroundColor: "#31e2aa" }}>
                 <DialogTitle
                   id="simple-dialog-title"
-                  style={{ color: "white", marginLeft: '-18px' }}
+                  style={{ color: "white", marginLeft: "-18px" }}
                 >
                   Damage Details
                 </DialogTitle>
@@ -1815,110 +1833,123 @@ function AddEditPurchaseRequest(props) {
                   <div className="row">
                     <div
                       className="col-md-4"
-                      style={{...styles.inputContainerForTextField, ...styles.textFieldPadding,}}
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
                     >
                       <TextField
-                    required
-                    label='Damage Cause By'
-                    name={'causedBy'}
-                    value={causedBy}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
+                        required
+                        label="Damage Cause By"
+                        name={"causedBy"}
+                        value={causedBy}
+                        onChange={onChangeValue}
+                        className="textInputStyle"
+                        variant="filled"
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                      />
                     </div>
 
                     <div
                       className="col-md-4"
-                      style={{...styles.inputContainerForTextField, ...styles.textFieldPadding,}}
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
                     >
-                      
                       <TextField
-                    disabled={true}
-                    label='Item Code'
-                    name={'itemCode'}
-                    value={itemCode}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
+                        disabled={true}
+                        label="Item Code"
+                        name={"itemCode"}
+                        value={itemCode}
+                        onChange={onChangeValue}
+                        className="textInputStyle"
+                        variant="filled"
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                      />
                     </div>
                     <div
                       className="col-md-4"
-                      style={{...styles.inputContainerForTextField, ...styles.textFieldPadding,}}
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
                     >
-                      
                       <TextField
-                    disabled={true}
-                    label='Item Name'
-                    name={'itemName'}
-                    value={itemName}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
+                        disabled={true}
+                        label="Item Name"
+                        name={"itemName"}
+                        value={itemName}
+                        onChange={onChangeValue}
+                        className="textInputStyle"
+                        variant="filled"
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                      />
                     </div>
                   </div>
 
                   <div className="row">
                     <div
                       className="col-md-6"
-                      style={{...styles.inputContainerForTextField, ...styles.textFieldPadding,}}
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
                     >
-                      
                       <TextField
-                    disabled={true}
-                    label='Description'
-                    name={'description'}
-                    value={description}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
+                        disabled={true}
+                        label="Description"
+                        name={"description"}
+                        value={description}
+                        onChange={onChangeValue}
+                        className="textInputStyle"
+                        variant="filled"
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                      />
                     </div>
 
                     <div
                       className="col-md-6"
-                      style={{...styles.inputContainerForTextField, ...styles.textFieldPadding,}}
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
                     >
-                      
-
-<TextField
-                    disabled={true}
-                    label='Item Sub Class'
-                    name={'description'}
-                    value={itemId.subClass}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
+                      <TextField
+                        disabled={true}
+                        label="Item Sub Class"
+                        name={"description"}
+                        value={itemId.subClass}
+                        onChange={onChangeValue}
+                        className="textInputStyle"
+                        variant="filled"
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                      />
                     </div>
                   </div>
 
                   <div className="row">
                     <div
                       className="col-md-6"
-                      style={{...styles.inputContainerForTextField, ...styles.textFieldPadding,}}
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
                     >
                       {/* <InputLabelComponent>
                         Item Cost Per Unit
@@ -1936,83 +1967,89 @@ function AddEditPurchaseRequest(props) {
                         }
                       /> */}
 
-<TextField
-required
-type="number"
-                    label='Item Cost Per Unit'
-                    name={'itemCostPerUnit'}
-                    value={itemCostPerUnit}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                    onKeyDown={(evt) =>
-                      evt.key === "e" && evt.preventDefault()
-                    }
-                  />
+                      <TextField
+                        required
+                        type="number"
+                        label="Item Cost Per Unit"
+                        name={"itemCostPerUnit"}
+                        value={itemCostPerUnit}
+                        onChange={onChangeValue}
+                        className="textInputStyle"
+                        variant="filled"
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                        onKeyDown={(evt) =>
+                          evt.key === "e" && evt.preventDefault()
+                        }
+                      />
                     </div>
 
                     <div
                       className="col-md-6"
-                      style={{...styles.inputContainerForTextField, ...styles.textFieldPadding,}}
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
                     >
-                      
                       <TextField
-                      required
-type="number"
-                    label='Total Damage Cost'
-                    name={'totalDamageCost'}
-                    value={totalDamageCost}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                    onKeyDown={(evt) =>
-                      evt.key === "e" && evt.preventDefault()
-                    }
-                  />
+                        required
+                        type="number"
+                        label="Total Damage Cost"
+                        name={"totalDamageCost"}
+                        value={totalDamageCost}
+                        onChange={onChangeValue}
+                        className="textInputStyle"
+                        variant="filled"
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                        onKeyDown={(evt) =>
+                          evt.key === "e" && evt.preventDefault()
+                        }
+                      />
                     </div>
                   </div>
 
                   <div className="row">
                     <div
                       className="col-md-6"
-                      style={{...styles.inputContainerForTextField, ...styles.textFieldPadding,}}
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.textFieldPadding,
+                      }}
                     >
-                      
-
-<TextField
-disabled={true}
-                    label='FU Name'
-                    name={'fuName'}
-                    value={fuId.fuName}
-                    onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                    }}
-                  />
+                      <TextField
+                        disabled={true}
+                        label="FU Name"
+                        name={"fuName"}
+                        value={fuId.fuName}
+                        onChange={onChangeValue}
+                        className="textInputStyle"
+                        variant="filled"
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                        }}
+                      />
                     </div>
 
-                    <div className="col-md-6" style={{ marginTop: 7, ...styles.textFieldPadding }}>
+                    <div
+                      className="col-md-6"
+                      style={{ marginTop: 7, ...styles.textFieldPadding }}
+                    >
                       {/* <InputLabelComponent>
                         Date/Time (MM/DD/YYYY)
                       </InputLabelComponent> */}
                       <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <DateTimePicker
-                        required
+                          required
                           inputVariant="filled"
                           onChange={(val) => onChangeDate(val, "date")}
                           name={"date"}
-                          label='Date/Time (DD/MM/YYYY)'
+                          label="Date/Time (DD/MM/YYYY)"
                           // format="MM/dd/yyyy hh:mm a"
                           format={dateTimeFormat}
                           disabled={
@@ -2044,7 +2081,13 @@ disabled={true}
                   <div
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
-                    <div style={{ marginTop: "2%", marginBottom: "2%", marginLeft: '-12px' }}>
+                    <div
+                      style={{
+                        marginTop: "2%",
+                        marginBottom: "2%",
+                        marginLeft: "-12px",
+                      }}
+                    >
                       <Button onClick={() => hideDialog()} variant="contained">
                         Cancel
                       </Button>
@@ -2056,7 +2099,7 @@ disabled={true}
                         justifyContent: "flex-end",
                         marginTop: "2%",
                         marginBottom: "2%",
-                        marginRight: '-8px'
+                        marginRight: "-8px",
                       }}
                     >
                       {selectItemToEditId === "" ? (
