@@ -39,6 +39,7 @@ import validateCountryCity from "../../public/countryCityValidator";
 import validateGender from "../../public/genderValidator";
 import validateRelation from "../../public/relationValidator";
 import validateAddress from "../../public/addressValidator";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import {
   uploadsUrl,
   updatePatientUrl,
@@ -77,7 +78,7 @@ import Loader from "react-loader-spinner";
 // import validatePhone from '../../public/validatePhone'
 
 let countriesList = require("../../assets/countries.json");
-
+let matches  ;
 const styles = {
   stylesForButton: {
     color: "white",
@@ -331,16 +332,33 @@ const useStyles = makeStyles((theme) => ({
     "&:focus": {
       backgroundColor: "white",
       boxShadow: "none",
+      display : matches ? " ": "none"
+      
     },
     "& .MuiFormLabel-root": {
       fontSize: "12px",
 
       paddingRight: "45px",
+      
     },
+
+    
+   
   },
+  label: {
+    "&$focusedLabel": {
+      color: "red",
+      display: "none"
+    },
+    // "&$erroredLabel": {
+    //   color: "orange"
+    // }
+  },
+  focusedLabel: {},
 }));
 
 function PatientRegistration(props) {
+  matches = useMediaQuery("(min-width:600px)");
   const classes = useStyles();
 
   const initialState = {
@@ -1773,19 +1791,27 @@ function PatientRegistration(props) {
                       onKeyDown={handleKeyDown}
                       className="textInputStyle"
                       variant="filled"
+                      InputLabelProps={{
+                        classes: {
+                          root: classes.label,
+                          focused: classes.focusedLabel,
+                          error: classes.erroredLabel
+                        }
+                      }}
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
                             <AccountCircle />
                           </InputAdornment>
                         ),
+                        
                         className: classes.input,
                         classes: { input: classes.input },
                       }}
-                      InputLabelProps={{
-                        className: classes.label,
-                        classes: { label: classes.label },
-                      }}
+                      // InputLabelProps={{
+                      //   className: classes.label,
+                      //   classes: { label: classes.label },
+                      // }}
                     />
                   </div>
 
@@ -3063,7 +3089,8 @@ function PatientRegistration(props) {
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
-                  paddingRight: "0px",
+                  paddingRight: matches ? "0px": "5px",
+                  paddingLeft: matches ? "5px": "0px",
                 }}
               >
                 <TextField
@@ -3125,7 +3152,9 @@ function PatientRegistration(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
-                    paddingRight: 0,
+                    
+                    paddingRight: matches ? "0px": "5px",
+                    paddingLeft: matches ? "5px": "0px",
                   }}
                 >
                   <CurrencyTextField
@@ -3394,7 +3423,7 @@ function PatientRegistration(props) {
 
             <div
               style={{ display: "flex", flex: 1, justifyContent: "center" }}
-              class="row"
+              className="row"
             >
               <div
                 style={{
@@ -3444,11 +3473,11 @@ function PatientRegistration(props) {
                   }}
                 />
                 {paymentMethod === "Cash" ? (
-                  <div>
+                  <>
                     {comingFor === "add" ? (
                       <>
                         <Button
-                          style={styles.save}
+                           style={{...styles.save, marginLeft: -50}} 
                           // disabled={
                           //   !(validatePatientForm() && validatePaymentForm())
                           // }
@@ -3456,7 +3485,7 @@ function PatientRegistration(props) {
                           variant="contained"
                           color="default"
                         >
-                          Save
+                          Save 1
                         </Button>
                         <div
                           style={{
@@ -3469,7 +3498,7 @@ function PatientRegistration(props) {
                     ) : (
                       <></>
                     )}
-                  </div>
+                  </>
                 ) : (
                   undefined
                 )}
@@ -3953,7 +3982,7 @@ function PatientRegistration(props) {
                       variant="contained"
                       color="default"
                     >
-                      Save
+                      Save 2
                     </Button>
                     <div
                       style={{
