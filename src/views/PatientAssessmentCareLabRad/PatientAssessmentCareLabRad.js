@@ -24,7 +24,6 @@ import Lab_RadIcon from "../../assets/img/Lab-Rad Request.png";
 import ConsultIcon from "../../assets/img/Consultation Request.png";
 import PatientAssessIcon from "../../assets/img/PatientAssessment.png";
 import consultationIcon from "../../assets/img/Consultation_Notes.png";
-
 import PatientCare from "../../assets/img/PatientCare.png";
 import Back from "../../assets/img/Back_Arrow.png";
 import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
