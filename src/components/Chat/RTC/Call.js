@@ -160,7 +160,7 @@ export default class Call extends Component {
             <div
               key={streamId}
               id={`agora_remote ${streamId}`}
-              style={{ width: "400px", height: "400px" }}
+              style={{ width: "200px", height: "200px" }}
             />
           );
         })}
