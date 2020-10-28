@@ -461,7 +461,7 @@ export default function PatientListing(props) {
             </h4>
           </div>
 
-          <div style={{ marginRight: "-10px" }}>
+          <div style={{ marginRight: "-5px" }}>
             <ButtonField onClick={addNewItem} name="add" />
             {/* <SearchField /> */}
           </div>

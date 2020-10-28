@@ -1,5 +1,6 @@
 import React from 'react'
 import Avatar from '@material-ui/core/Avatar';
+import FileViewer from 'react-file-viewer';
 
 import { makeStyles, withStyles, fade } from '@material-ui/core/styles';
 
@@ -27,7 +28,19 @@ export default function Sender(props) {
     return (
         <div style={{ display: 'flex', justifyContent: 'flex-end',  marginTop: 20 }} >
                 <div style={{ padding: 20, borderTopLeftRadius: 10, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, backgroundColor: '#e8f0f6', maxWidth: '50%' }}>
-                    <span>{props.send}</span>
+                    {/* {props.type === "application/pdf" || props.type === "image/jpeg" || props.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||  props.type === "image/png"?  */}
+                    {props.type === "image/jpeg" ||  props.type === "image/png"? 
+
+                       <FileViewer
+                       fileType={"png" || "jpeg"}
+
+                        // fileType={"pdf" || "csv" || "xslx" || "docx" || "png" || "jpeg" || "gif" || "bmp" || "mp4" || "webm" || "mp3"}
+                        filePath={props.send}
+                       /> 
+                       
+                       : <span>{props.send}</span>
+                    } 
+                    
                 </div>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />

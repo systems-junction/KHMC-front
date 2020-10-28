@@ -15,6 +15,8 @@ import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css"
 import Notification from "../../components/Snackbar/Notification.js";
 import CustomTable from "../../components/Table/Table";
 import TextField from "@material-ui/core/TextField";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+
 
 const tableHeadingForTriage = [
   "Request No.",
@@ -82,11 +84,14 @@ const styles = {
   },
 };
 
-const useStylesForTabs = makeStyles({
+const useStylesForTabs = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
+    justifyContent: "center",
   },
-});
+  scroller: {
+    flexGrow: "0",
+  },
+}));
 
 const useStyles = makeStyles((theme) => ({
   margin: {
@@ -146,6 +151,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function TriageAndAssessment(props) {
+  const matches = useMediaQuery("(min-width:600px)");
   const classes = useStyles();
 
   const initialState = {
@@ -442,7 +448,7 @@ function TriageAndAssessment(props) {
           <div>
             <img src={business_Unit} />
             <div style={{ flex: 4, display: "flex", alignItems: "center" }}>
-              <h3 style={{ color: "white", fontWeight: "700" }}>
+              <h3 style={{ color: "white", fontWeight: "700", fontSize: matches ? " " : "15px " }}>
                 {"Triage & Assessment"}
               </h3>
             </div>
@@ -451,9 +457,14 @@ function TriageAndAssessment(props) {
 
         <div className={classesForTabs.root}>
           <Tabs
+           classes={{
+            root: classesForTabs.root,
+            scroller: classesForTabs.scroller,
+          }}
             value={value}
             onChange={handleChange}
             textColor="primary"
+            variant="scrollable"
             TabIndicatorProps={{ style: { background: "#12387a" } }}
             centered
           >
@@ -500,9 +511,14 @@ function TriageAndAssessment(props) {
           <>
             <div className={classesForTabs.root}>
               <Tabs
+                classes={{
+                  root: classesForTabs.root,
+                  scroller: classesForTabs.scroller,
+                }}
                 value={historyValue}
                 onChange={handleHistoryTabChange}
                 textColor="primary"
+                variant="scrollable"
                 TabIndicatorProps={{ style: { background: "#12387a" } }}
                 centered
               >
@@ -584,7 +600,7 @@ function TriageAndAssessment(props) {
               <div className={`container-fluid ${classes.root}`}>
                 <div className="row">
                   <div
-                    className="form-group col-md-4 col-sm-4 col-4"
+                    className="form-group col-md-4 col-sm-4 col-12"
                     style={{
                       paddingLeft: 5,
                       paddingRight: 5,
@@ -607,7 +623,7 @@ function TriageAndAssessment(props) {
                     />
                   </div>
                   <div
-                    className="form-group col-md-4 col-sm-4 col-4"
+                    className="form-group col-md-4 col-sm-4 col-12"
                     style={{
                       paddingLeft: 5,
                       paddingRight: 5,
@@ -630,7 +646,7 @@ function TriageAndAssessment(props) {
                     />
                   </div>
                   <div
-                    className="form-group col-md-4 col-sm-4 col-4"
+                    className="form-group col-md-4 col-sm-4 col-12"
                     style={{
                       paddingLeft: 5,
                       paddingRight: 5,
@@ -655,7 +671,7 @@ function TriageAndAssessment(props) {
                 </div>
                 <div className="row">
                   <div
-                    className="form-group col-md-4 col-sm-4 col-4"
+                    className="form-group col-md-4 col-sm-4 col-12"
                     style={{
                       paddingLeft: 5,
                       paddingRight: 5,
@@ -678,7 +694,7 @@ function TriageAndAssessment(props) {
                     />
                   </div>
                   <div
-                    className="form-group col-md-4 col-sm-4 col-4"
+                    className="form-group col-md-4 col-sm-4 col-12"
                     style={{
                       paddingLeft: 5,
                       paddingRight: 5,
@@ -701,7 +717,7 @@ function TriageAndAssessment(props) {
                     />
                   </div>
                   <div
-                    className="form-group col-md-4 col-sm-4 col-4"
+                    className="form-group col-md-4 col-sm-4 col-12"
                     style={{
                       paddingLeft: 5,
                       paddingRight: 5,
@@ -726,7 +742,7 @@ function TriageAndAssessment(props) {
                 </div>
                 <div className="row">
                   <div
-                    className="form-group col-md-6 col-sm-6 col-6"
+                    className="form-group col-md-6 col-sm-6 col-12"
                     style={{
                       paddingLeft: 5,
                       paddingRight: 5,
@@ -756,7 +772,7 @@ function TriageAndAssessment(props) {
                     />
                   </div>
                   <div
-                    className="form-group col-md-6 col-sm-6 col-6"
+                    className="form-group col-md-6 col-sm-6 col-12"
                     style={{
                       paddingLeft: 5,
                       paddingRight: 5,
@@ -894,7 +910,7 @@ function TriageAndAssessment(props) {
                                 > */}
                 <div className="form-group col-md-12">
                   <input
-                    style={{ outline: "none", backgroundColor: "#F7F5F5" }}
+                    style={{ outline: "none", backgroundColor: "#F7F5F5", width : matches ? "" : "114%" }}
                     disabled={generalAppearanceText === null}
                     type="text"
                     placeholder="Specify"
@@ -977,7 +993,7 @@ function TriageAndAssessment(props) {
                                     value={headNeck}> */}
                 <div className="form-group col-md-12">
                   <input
-                    style={{ outline: "none", backgroundColor: "#F7F5F5" }}
+                    style={{ outline: "none", backgroundColor: "#F7F5F5" , width : matches ? "" : "114%"}}
                     disabled={headNeckText === null}
                     type="text"
                     onChange={onSpecify}
@@ -1153,12 +1169,13 @@ function TriageAndAssessment(props) {
                                     onChange={onCheckedValue}
                                     value={cardiac}
                                 > */}
-                <div className="form-group col-md-12">
+                <div className="form-group col-md-12 ">
                   <input
                     style={{
                       outline: "none",
                       backgroundColor: "#F7F5F5",
                       marginLeft: "-5px",
+                      width : matches ? "" : "114%"
                     }}
                     disabled={cardiacText === null}
                     type="text"
@@ -1355,6 +1372,7 @@ function TriageAndAssessment(props) {
                       outline: "none",
                       backgroundColor: "#F7F5F5",
                       marginLeft: "-5px",
+                      width : matches ? "" : "114%"
                     }}
                     disabled={neurologicalText === null}
                     type="text"
