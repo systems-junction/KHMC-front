@@ -23,6 +23,8 @@ import { createChat, uploadsUrl, deleteChat, uploadChatFile,socketUrl} from "../
 import User from "../../components/Chat/User"
 import Reciever from "../../components/Chat/Reciever"
 import Sender from "../../components/Chat/Sender"
+import RTC from "../../components/Chat/RTC"
+
 import ChatContent from "../../components/Chat/ChatContent"
 import axios from "axios"
 import cookie from 'react-cookies'
@@ -100,6 +102,8 @@ export default function Chat(props) {
   const [fileChatName, setFileChatName] = useState("")
   const [currentUser] = useState(cookie.load('current_user'))
   const [onlineUser, setOnlineUser] = useState([{name: currentUser.name, id: 1}, {name: "Mudassir", id: 2}, {name: "Hanan", id: 3}, {name: "Saad", id: 4}, {name:"Farhan", id: 5}, {name:"Noman", id: 6}, {name:"Itzaz", id: 7}, {name:"Hamza", id: 8}, {name:"Bilal", id: 9},  {name:"Saqib", id: 10} ,  {name:"Mufasal", id: 11},  {name:"Zeeshan", id: 12} ,  {name:"Bilal Ahmed", id: 13},  {name:"Mustafa", id: 14},  {name:"Saira", id: 15} , {name:"John Doe", id: 16} ,  {name:"Kim", id: 17}])
+  const [video, setVideo] = useState(false)
+
 
   const classes = useStyles();
   const classesForTabs = useStylesForTabs()
@@ -302,6 +306,10 @@ const  handleOpen = () => {
     })   
   }
 
+  const videoCall = () => {
+    setVideo(true)
+  }
+
   console.log("chat recieved", chat)
   return (
     <div
@@ -405,8 +413,11 @@ const  handleOpen = () => {
               <div  style={{display:"flex", flexDirection:"row",     marginLeft: -4
 }}>
               <img style={{ height: 30, width: 30 , cursor: "pointer"}}   src={CallIcon} onClick={()=> console.log("Call")}/>
-              <img style={{ height: 35, width: 35 , cursor: "pointer"}}   src={VideoCallIcon} onClick={()=> console.log("Video")}/>
+              <img style={{ height: 35, width: 35 , cursor: "pointer"}}   src={VideoCallIcon} onClick={videoCall}/>
               </div>
+
+              {video ? <RTC video={setVideo}/> : undefined}
+
 
 
             </div>
