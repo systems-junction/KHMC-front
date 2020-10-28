@@ -1,15 +1,15 @@
-import React, { useState , useEffect} from 'react';
-import { makeStyles, withStyles, fade } from '@material-ui/core/styles';
-import FormControl from '@material-ui/core/FormControl';
-import InputBase from '@material-ui/core/InputBase';
+import React, { useState , useEffect, useRef} from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
-import TextField from '@material-ui/core/TextField'
 import Tabs from '@material-ui/core/Tabs'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import clsx from 'clsx';
 import Tab from '@material-ui/core/Tab'
 import Button from '@material-ui/core/Button'
 import SendIcon from '../../assets/img/Send.png';
+import CallIcon from '../../assets/img/Call.png';
+import VideoCallIcon from '../../assets/img/Video Call.png';
+
 import SearchIcon from '../../assets/img/Search (2).png';
 import ChatIcon from '../../assets/img/Chat.png';
 import Emoji from '../../assets/img/Emoji.png';
@@ -19,12 +19,14 @@ import Header from '../../components/Header/Header'
 import Back_Arrow from '../../assets/img/Back_Arrow.png'
 import Badge from '@material-ui/core/Badge';
 import io from 'socket.io-client';
-import { socketUrl} from "../../public/endpoins"
+import { createChat, uploadsUrl, deleteChat, uploadChatFile,socketUrl} from "../../public/endpoins"
 import User from "../../components/Chat/User"
 import Reciever from "../../components/Chat/Reciever"
 import Sender from "../../components/Chat/Sender"
-import _, {debounce} from 'lodash';
+import ChatContent from "../../components/Chat/ChatContent"
+import axios from "axios"
 import cookie from 'react-cookies'
+import Input from '@material-ui/core/Input';
 
 import {DropzoneDialog} from 'material-ui-dropzone'
 
@@ -65,98 +67,106 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const BootstrapInput = withStyles((theme) => ({
-  root: {
-    'label + &': {
-      marginTop: theme.spacing(3),
-    },
-  },
-  input: {
-    borderRadius: 4,
-    position: 'relative',
-    backgroundColor: theme.palette.common.white,
-    border: '1px solid #ced4da',
-    fontSize: 16,
-    width: 'auto',
-    padding: '10px 12px',
-    transition: theme.transitions.create(['border-color', 'box-shadow']),
-    // Use the system font instead of the default Roboto font.
-    fontFamily: [
-      '-apple-system',
-      'BlinkMacSystemFont',
-      '"Segoe UI"',
-      'Roboto',
-      '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(','),
-    '&:focus': {
-      boxShadow: `${fade(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
-      borderColor: theme.palette.primary.main,
-    },
-  },
-}))(InputBase);
-
 
 const useStylesForTabs = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
   tab: {
-    minWidth: 360, // a number of your choice
-    width: 360, // a number of your choice
+    minWidth: 360, 
+    width: 360,
   }
 }))
 
 
 export default function Chat(props) {
   const [chat, setChat] = useState([])
+  const [chatEmit, setChatEmit] = useState([])
+
   const [chosenEmoji, setChosenEmoji] = useState(null);
   const [content, setContent] = useState("")
   const [messageText, setMessageText] = useState("")
   const [message, setMessage] = useState("")
+  const [messageFromSender, setMessageFromSender] = useState("")
+
   const [open, setOpen] = useState(false)
   const [files, setFiles] = useState([])
-
+  const [chatId, setChatId] = useState("")
   const [search, setSearch] = useState("")
 
-  const [onlineUser, setOnlineUser] = useState([{name: "Izaz", id: 1}, {name: "Mudassir", id: 2}, {name: "Hanan", id: 3}, {name: "Saad", id: 4}, {name:"Farhan", id: 5}, {name:"Noman", id: 6}, {name:"Itzaz", id: 7}, {name:"Hamza", id: 8}, {name:"Bilal", id: 9},  {name:"Saqib", id: 10} ,  {name:"Mufasal", id: 11},  {name:"Zeeshan", id: 12} ,  {name:"Bilal Ahmed", id: 13},  {name:"Mustafa", id: 14},  {name:"Saira", id: 15} , {name:"John Doe", id: 16} ,  {name:"Kim", id: 17}])
-  const [socket, setSocket] =  useState("")
   const [name, setName] = useState("")
   const [messageError, setMessageError] = useState(false)
   const [emojiStatus, setEmojiStatus] = useState(false)
+  const [fileChatName, setFileChatName] = useState("")
   const [currentUser] = useState(cookie.load('current_user'))
+  const [onlineUser, setOnlineUser] = useState([{name: currentUser.name, id: 1}, {name: "Mudassir", id: 2}, {name: "Hanan", id: 3}, {name: "Saad", id: 4}, {name:"Farhan", id: 5}, {name:"Noman", id: 6}, {name:"Itzaz", id: 7}, {name:"Hamza", id: 8}, {name:"Bilal", id: 9},  {name:"Saqib", id: 10} ,  {name:"Mufasal", id: 11},  {name:"Zeeshan", id: 12} ,  {name:"Bilal Ahmed", id: 13},  {name:"Mustafa", id: 14},  {name:"Saira", id: 15} , {name:"John Doe", id: 16} ,  {name:"Kim", id: 17}])
+
   const classes = useStyles();
   const classesForTabs = useStylesForTabs()
   const circle = <div className={clsx(classes.shape, classes.shapeCircle)} />;
 
   const [value, setValue] = React.useState(0)
 
+  var socket = io(socketUrl)
+
   useEffect(() => {
 
-   
-  })
+  },[])
+
+  
+  socket.on("chat_receive",(message)=>{
+    let temp =[...chat,message.message]
+    setChat(temp)
+  }) 
+
+  const messagesEndRef = useRef(null)
+
+  const scrollToBottom = () => {
+    messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
+  }
+
+  useEffect(scrollToBottom, [chat]);
+
+
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
 
   const sendMessage = () => {
-    let socket = io(socketUrl)
+   
     if(message != ""){
       let objectSendToBackend = {}
+      
       objectSendToBackend.message = message
-      objectSendToBackend.sender = currentUser._id
-      objectSendToBackend.receiver = "5ecf686f085c54292cb29c53"
-      console.log("objectSendToBackend", objectSendToBackend)
-      socket.emit('test', objectSendToBackend);
+
+
+
+      if(currentUser.staffTypeId.type==='Doctor/Physician')
+      {
+        objectSendToBackend.sender = currentUser._id
+        objectSendToBackend.receiver = "5f28fbeac179170dfc2b1416"
+      }
+      else{
+        objectSendToBackend.sender = currentUser._id
+        objectSendToBackend.receiver = "5f4ffff4277ba8b380f2ef3d"
+      } 
+
+      let objectSendToBackend1 = {}
+      objectSendToBackend1.chatId = chatId
+      let params = {
+        obj1: objectSendToBackend,
+        obj2: objectSendToBackend1
+      }
+      console.log("objectSendToBackend", params)
+      if(socket.emit('chat_sent', params)){
+        setMessageFromSender(true)
+      }
+      setMessage("")
+
+      
     }else{
       setMessageError(true)
     }
-   
-  
   }
   const uploadFile = () => {
     console.log("upload file");
@@ -170,11 +180,60 @@ export default function Chat(props) {
 }
 
 const  handleSave = (file) => {
-    //Saving files to state for further use and closing Modal.
-    setFiles(file)
-    console.log(file)
-    setOpen(false)
+  setFiles(file)
+  console.log("file.type", file[0].type)
+  const data = new FormData()
+  data.append('file', file[0])
+  axios.post(uploadChatFile, data).then(res=> {
+    console.log("RES", res.data.filename)
+    // setFileChatName(`${uploadsUrl}chats/${res.data.filename}`)
+    sendingChatFile(`${uploadsUrl}chats/${res.data.filename}`, file[0].type)
+
+  }).catch(error=>{
+    console.log("ERROR", error)
+  })
+  // if(fileChatName !== ""){
+  // }
+  console.log("files", file)
+  setOpen(false)
 }
+console.log("fileChatName", fileChatName)
+
+const sendingChatFile = (fileUrl, type) => {
+  let objectSendToBackend = {}
+  // if(fileChatName !== ""){
+
+    // objectSendToBackend.message = fileChatName
+    objectSendToBackend.message = fileUrl
+    objectSendToBackend.msgType = type
+
+  // }
+
+
+
+  if(currentUser.staffTypeId.type==='Doctor/Physician')
+  {
+    objectSendToBackend.sender = currentUser._id
+    objectSendToBackend.receiver = "5f28fbeac179170dfc2b1416"
+  }
+  else{
+    objectSendToBackend.sender = currentUser._id
+    objectSendToBackend.receiver = "5f4ffff4277ba8b380f2ef3d"
+  } 
+
+  let objectSendToBackend1 = {}
+  objectSendToBackend1.chatId = chatId
+  let params = {
+    obj1: objectSendToBackend,
+    obj2: objectSendToBackend1
+  }
+  console.log("objectSendToBackend", params)
+  if(socket.emit('chat_sent', params)){
+    setMessageFromSender(true)
+  }
+  
+
+} 
 
 const  handleOpen = () => {
    setOpen(true)
@@ -191,26 +250,15 @@ const  handleOpen = () => {
     console.log(e)
   }
   const changeEmojiStatus = () => {
-    setEmojiStatus(true)
+    setEmojiStatus(value => !value)
+    console.log('emojiStatus',emojiStatus)
   }
   const onMessageSend = (e) => {
     setMessage(e.target.value)
   }
 
   const searchOnlineUser = (e) => {
-  //   var target = e.target.value.trim().toLowerCase();
-  //   var o = onlineUser
-  //   console.log("before", o)
-  //  o =  onlineUser.filter(o=>{
-  //     return o.name === target
-  //   })
-
-  // //  o = _.sortBy(o, o => o.name === target);
-  //  setOnlineUser(o)
-  //  console.log("after",o)
-
-  setSearch(e.target.value)
-
+    setSearch(e.target.value)
   }
 
   const RenderUser = user => {
@@ -219,12 +267,42 @@ const  handleOpen = () => {
     }
     else {
       return (
-        <User name={user.name}/>
+        <User name={user.name} getChatHandler={onGetChatHandler}/>
       )
     }
     
   }
 
+  console.log("current user", currentUser)
+  const onGetChatHandler =  () => {
+   
+    
+
+    var obj = {}
+    if(currentUser.staffTypeId.type==="Doctor/Physician")
+    {
+      obj.sender = currentUser._id
+      obj.receiver = "5f28fbeac179170dfc2b1416"
+    }
+    else{
+    obj.sender = currentUser._id
+    obj.receiver = "5f4ffff4277ba8b380f2ef3d"
+    } 
+    axios
+    .post(createChat, obj)
+    .then((res) => {
+      console.log("res", res.data.data)
+      setChatId(res.data.data._id)
+
+      var listWithoutTel = res.data.data.chat.map(({ read, sentAt, _id, ...item }) => item);
+
+      setChat(listWithoutTel)
+    }).catch(error=>{
+      console.log(error)
+    })   
+  }
+
+  console.log("chat recieved", chat)
   return (
     <div
       style={{
@@ -296,13 +374,16 @@ const  handleOpen = () => {
             </div>
 
           </div>
+          <div className="style-horizontal">
+
+         
           <div className={classes.root} style={{
-            maxWidth: 1300, overflowY: 'hidden',
-            overflowX: 'scroll',
+           
           }}>
             {onlineUser.map(user=>{
               return RenderUser(user)
             })}           
+          </div>
           </div>
         </div>
 
@@ -310,30 +391,56 @@ const  handleOpen = () => {
           backgroundColor: 'white', marginTop: 20, borderri: 5, borderLeft: 5, padding: 20,
           borderTopLeftRadius: 5, borderTopRightRadius: 5
         }}>
-          <div className={classes.root}>
+          <div className={classes.root} style={{display:'flex', flexDirection:"row", justifyContent:"space-between"}}>
+           
+            <div style={{display:'flex', flexDirection:"row", alignItems:'center'}}>
             <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar} />
-            <div><h4>Ingrendia Nutritia</h4>
-              <h4 style={{ color: '#2962CC' }}>Dentist Patients</h4></div>
+              
+              <div style={{marginLeft: 20}}>
+                <h4 style={{paddingTop: 8}}>Ingrendia Nutritia</h4>
+                <h4 style={{ color: '#2962CC' }}>Dentist Patients</h4></div>
+              </div>
+            <div>
+              <h3  style={{ fontSize: 'large', fontWeight: 550 }}>05 Min</h3>
+              <div  style={{display:"flex", flexDirection:"row",     marginLeft: -4
+}}>
+              <img style={{ height: 30, width: 30 , cursor: "pointer"}}   src={CallIcon} onClick={()=> console.log("Call")}/>
+              <img style={{ height: 35, width: 35 , cursor: "pointer"}}   src={VideoCallIcon} onClick={()=> console.log("Video")}/>
+              </div>
 
-            <div style={{ marginLeft: 865, }}>
-              <h3 style={{ fontSize: 'large', fontWeight: 550 }}>05 Min</h3>
+
             </div>
           </div>
           <hr />
-          <div style={{
-            overflowY: 'scroll',
-            overflowX: 'hidden', maxHeight: '500px',
-          }}>
+          {/* <ChatContent /> */}
+          <div id="wrapper">
+          <div class="scrollbar" id="style-vertical">
+            <div class="force-overflow">
             <div style={{ display: 'flex', justifyContent: 'center' }}>
               <Button variant="contained" color="black" style={{ backgroundColor: '#edf3f8', borderRadius: 20, textTransform: 'none' }}>
                 <span style={{ fontSize: 10, }}>Yesterday</span>
               </Button>
             </div>
 
-            <Reciever recieve="This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message"/>
-            <Sender send="This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message This is reciever message"/>          
+            {chat.map(msg=>{
+              // console.log("CHAT", msg)
+              return(
+                <div>
+                  {msg.sender === currentUser._id ? <Sender send={msg.message} type={msg.msgType}/>  : <Reciever recieve={msg.message} type={msg.msgType} /> }
+                </div>
+              )
+            })}
+
+            
+          <div ref={messagesEndRef} />
+              </div>  
+              </div>     
+   
           </div>
+
         </div>
+        <div className='emojiStyle'>{emojiStatus === true ? <Picker onSelect={addEmoji} /> : undefined}</div>
+        
         <div
           className={`${classes.root} col-md-12`}
           style={{ display: "flex", justifyContent: "center", backgroundColor: '#e8f0f6', borderBottomLeftRadius: 5, borderBottomRightRadius: 5 }}
@@ -347,7 +454,7 @@ const  handleOpen = () => {
               display: 'contents',
             }}
           >
-            <TextField
+            {/* <TextField
               label='Type Message'
               className='textInputStyle'
               id="outlined-size-small"
@@ -368,19 +475,46 @@ const  handleOpen = () => {
                 )
               }}
 
-            />
+            /> */}
+
+                  <Input 
+                    disableUnderline={true} 
+                    placeholder="Type a message"
+                    inputProps={{ 'aria-label': 'description' }}
+                    style={{ backgroundColor: 'white', borderRadius: 20, outline: 'none', width: '95%' }} 
+                    // defaultValue="Hello world" 
+                    className='InputForMessage'
+                    value={message}
+                    onChange={onMessageSend}
+                    // error={messageError}
+                    endAdornment={
+                        <InputAdornment position="start">
+                          <img className='camera-style' style={{ height: 40, width: 40 , cursor: "pointer"}} src={CameraAltIcon} onClick={camera}/>
+                          <img style={{ height: 40, width: 40 , cursor: "pointer"}} src={AttachFileIcon} onClick={handleOpen}/>
+                          <img style={{ height: 40, width: 40 , cursor: "pointer"}} src={Emoji} onClick={changeEmojiStatus}/>
+                          {/* {emojiStatus === false ? <img style={{ height: 40, width: 40 , cursor: "pointer"}} src={Emoji} onClick={changeEmojiStatus}/> : <Picker onSelect={addEmoji}/>} */}
+                          
+
+                        </InputAdornment>
+                    } 
+                   />
 
           <DropzoneDialog
               open={open}
+              filesLimit={1}
               onSave={handleSave}
-              // acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
+              acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
               showPreviews={true}
               maxFileSize={5000000}
               onClose={handleClose}
           />
-            <img style={{ height: 40, width: 40 , cursor: "pointer"}} src={SendIcon} onClick={sendMessage}/>
+
+
+            <img style={{ height: 40, width: 40 , cursor: "pointer"}} src={SendIcon} onClick={sendMessage} />
           </div>
         </div>
+
+        
       </div>
       <div className='col-1' style={{ marginTop: 45 }}>
         <img

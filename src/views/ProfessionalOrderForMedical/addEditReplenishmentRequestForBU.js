@@ -31,6 +31,7 @@ import {
   getPatientByProfileNo,
   getSearchedpatient,
   searchpatient,
+  notifyPharmacy,
 } from "../../public/endpoins";
 
 import Paper from "@material-ui/core/Paper";
@@ -671,6 +672,7 @@ function AddEditPurchaseRequest(props) {
           .then((res) => {
             if (res.data.success) {
               console.log("response after adding RR", res.data);
+              notifyForPharmacy(selectedPatient._id)
               props.history.push({
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
@@ -692,6 +694,19 @@ function AddEditPurchaseRequest(props) {
           });
       }
     }
+  };
+
+  const notifyForPharmacy = (id) => {
+    axios
+      .get(notifyPharmacy + "/" + id)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("error after notify", e);
+        setOpenNotification(true);
+        setErrorMsg(e);
+      });
   };
 
   const handleEdit = () => {
@@ -1417,7 +1432,7 @@ function AddEditPurchaseRequest(props) {
         overflowX: "hidden",
       }}
     >
-      <Header />
+      <Header history={props.history}/>
 
       <div className="cPadding" style={{ marginLeft: 10, marginRight: 10 }}>
         <div className="row">

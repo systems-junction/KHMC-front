@@ -424,4 +424,7 @@ export const stockLevelsFU = `${baseUrl}/reports/stocklevelsfu`;
 
 //Supplier Fulfillment PO
 export const supplierfulfillmentPO = `${baseUrl}/reports/supplierfulfillmentpo`;
-export const chatApi = `${baseUrl}/chat`
+export const createChat = `${baseUrl}/chatroom/createchat`
+export const deleteChat = `${baseUrl}/chatroom/deletechat`
+export const uploadChatFile = `${baseUrl}/chatroom/uploadchatfile`
+

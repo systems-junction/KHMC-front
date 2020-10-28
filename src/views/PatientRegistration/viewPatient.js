@@ -109,7 +109,7 @@ export default function ViewPatient(props) {
           </div>
           <div className="row">
             <div
-              className="col-md-3 col-sm-3 col-3"
+              className="col-md-3 col-sm-3 col-12"
               style={styles.inputContainerForTextField}
             >
               <InputLabel style={styles.styleForLabel} id="generated-label">
@@ -118,7 +118,7 @@ export default function ViewPatient(props) {
               <h6>{props.item.profileNo}</h6>
             </div>
             <div
-              className="col-md-3 col-sm-3 col-3"
+              className="col-md-3 col-sm-3 col-12"
               style={styles.inputContainerForTextField}
             >
               <InputLabel style={styles.styleForLabel} id="generated-label">
@@ -127,7 +127,7 @@ export default function ViewPatient(props) {
               <h6>{props.item.firstName + ` ` + props.item.lastName}</h6>
             </div>
             <div
-              className="col-md-3 col-sm-3 col-3"
+              className="col-md-3 col-sm-3 col-12"
               style={styles.inputContainerForTextField}
             >
               <InputLabel style={styles.styleForLabel} id="generated-label">
@@ -136,7 +136,7 @@ export default function ViewPatient(props) {
               <h6>{props.item.age}</h6>
             </div>
             <div
-              className="col-md-3 col-sm-3 col-3"
+              className="col-md-3 col-sm-3 col-12"
               style={styles.inputContainerForTextField}
             >
               <InputLabel style={styles.styleForLabel} id="generated-label">
@@ -148,7 +148,7 @@ export default function ViewPatient(props) {
 
           <div className="row">
             <div
-              className="col-md-3 col-sm-3 col-3"
+              className="col-md-3 col-sm-3 col-12"
               style={styles.inputContainerForTextField}
             >
               <InputLabel style={styles.styleForLabel} id="generated-label">
@@ -157,7 +157,7 @@ export default function ViewPatient(props) {
               <h6>{props.item.SIN}</h6>
             </div>
             <div
-              className="col-md-3 col-sm-3 col-3"
+              className="col-md-3 col-sm-3 col-12"
               style={styles.inputContainerForTextField}
             >
               <InputLabel style={styles.styleForLabel} id="generated-label">
@@ -166,7 +166,7 @@ export default function ViewPatient(props) {
               <h6>{props.item.address}</h6>
             </div>
             <div
-              className="col-md-3 col-sm-3 col-3"
+              className="col-md-3 col-sm-3 col-12"
               style={styles.inputContainerForTextField}
             >
               <InputLabel style={styles.styleForLabel} id="generated-label">
@@ -175,7 +175,7 @@ export default function ViewPatient(props) {
               <h6>{props.item.city}</h6>
             </div>
             <div
-              className="col-md-3 col-sm-3 col-3"
+              className="col-md-3 col-sm-3 col-12"
               style={styles.inputContainerForTextField}
             >
               <InputLabel style={styles.styleForLabel} id="generated-label">
@@ -187,7 +187,7 @@ export default function ViewPatient(props) {
 
           <div className="row">
             <div
-              className="col-md-3 col-sm-3 col-3"
+              className="col-md-3 col-sm-3 col-12"
               style={styles.inputContainerForTextField}
             >
               <InputLabel style={styles.styleForLabel} id="generated-label">
@@ -196,13 +196,13 @@ export default function ViewPatient(props) {
               <h6>{props.item.phoneNumber}</h6>
             </div>
             <div
-              className="col-md-3 col-sm-3 col-3"
+              className="col-md-3 col-sm-3 col-12"
               style={styles.inputContainerForTextField}
             >
               <InputLabel style={styles.styleForLabel} id="generated-label">
                 Other Details
               </InputLabel>
-              <h6>{props.item.otherDetails}</h6>
+              <h6 style={{ textAlign: "justify"}}>{props.item.otherDetails}</h6>
             </div>
           </div>
 
@@ -222,7 +222,7 @@ export default function ViewPatient(props) {
               </div>
               <div className="row">
                 <div
-                  className="col-md-4 col-sm-4 col-4"
+                  className="col-md-4 col-sm-4 col-12"
                   style={styles.inputContainerForTextField}
                 >
                   <InputLabel style={styles.styleForLabel} id="generated-label">
@@ -230,8 +230,9 @@ export default function ViewPatient(props) {
                   </InputLabel>
                   <h6>{props.item.paymentMethod}</h6>
                 </div>
+            
                 <div
-                  className="col-md-4 col-sm-4 col-4"
+                  className="col-md-4 col-sm-4 col-12"
                   style={styles.inputContainerForTextField}
                 >
                   <InputLabel style={styles.styleForLabel} id="generated-label">
@@ -240,7 +241,7 @@ export default function ViewPatient(props) {
                   <h6>{props.item.depositorName}</h6>
                 </div>
                 <div
-                  className="col-md-4 col-sm-4 col-4"
+                  className="col-md-4 col-sm-4 col-12"
                   style={styles.inputContainerForTextField}
                 >
                   <InputLabel style={styles.styleForLabel} id="generated-label">
@@ -288,7 +289,7 @@ export default function ViewPatient(props) {
               </div>
               <div className="row">
                 <div
-                  className="col-md-4 col-sm-4 col-4"
+                  className="col-md-4 col-sm-4 col-12"
                   style={styles.inputContainerForTextField}
                 >
                   <InputLabel style={styles.styleForLabel} id="generated-label">
@@ -297,7 +298,7 @@ export default function ViewPatient(props) {
                   <h6>{props.item.insuranceNo}</h6>
                 </div>
                 <div
-                  className="col-md-4 col-sm-4 col-4"
+                  className="col-md-4 col-sm-4 col-12"
                   style={styles.inputContainerForTextField}
                 >
                   <InputLabel style={styles.styleForLabel} id="generated-label">
@@ -306,13 +307,13 @@ export default function ViewPatient(props) {
                   <h6>{props.item.insuranceVendor}</h6>
                 </div>
                 <div
-                  className="col-md-4 col-sm-4 col-4"
+                  className="col-md-4 col-sm-4 col-12"
                   style={styles.inputContainerForTextField}
                 >
                   <InputLabel style={styles.styleForLabel} id="generated-label">
                     Coverage Details
                   </InputLabel>
-                  <h6>{props.item.coverageDetails}</h6>
+                  <h6 style={{ textAlign: "justify"}}>{props.item.coverageDetails}</h6>
                 </div>
               </div>
 

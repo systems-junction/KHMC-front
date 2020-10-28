@@ -123,7 +123,7 @@ const styles = {
     padding: '20px',
   },
   inputContainerForTextField: {
-    marginTop: 6,
+    marginTop: 20,
   },
 
   inputContainerForDropDown: {
@@ -1029,7 +1029,7 @@ function AddEditPurchaseRequest(props) {
               }}
             >
               <div
-                className='col-md-11 col-sm-11 col-11'
+                className='col-md-10 col-sm-11 col-9'
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -1061,7 +1061,7 @@ function AddEditPurchaseRequest(props) {
                 />
               </div>
 
-              <div className='col-md-1 col-sm-1 col-1'>
+              <div className='col-md-2 col-sm-1 col-3'>
                 <div
                   style={{
                     ...styles.inputContainerForTextField,
@@ -1168,7 +1168,7 @@ function AddEditPurchaseRequest(props) {
 
             <div style={{ marginTop: '15px' }} className='row'>
               <div
-                className='col-md-5 col-sm-10 col-6'
+                className='col-md-5 col-sm-10 col-12'
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -1197,7 +1197,7 @@ function AddEditPurchaseRequest(props) {
               </div>
 
               <div
-                className='col-md-5 col-sm-5 col-3'
+                className='col-md-5 col-sm-5 col-12'
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -1220,7 +1220,7 @@ function AddEditPurchaseRequest(props) {
                 />
               </div>
 
-              <div className='col-md-2 col-sm-2 col-6'>
+              <div className='col-md-2 col-sm-2 col-11'>
                 <Button
                 className='oprAddButton'
                   style={{
@@ -1233,7 +1233,7 @@ function AddEditPurchaseRequest(props) {
                     backgroundColor: 'rgb(173, 107, 191)',
                     height: 56,
                     outline: 'none',
-                    marginTop: 7,
+                    marginTop: 20,
                     width: '109%',
                     marginLeft: '-10px',
                   }}

@@ -59,19 +59,22 @@ export default function Notifications(props)
         console.log("mesaageee", message)
 
         var id = message._id
-        console.log("Id : ", id)
-        console.log("User Id : ",userId)
 
         const params = {
             read: true,
         }
-
         axios.get(markNotification + "/" + id + "/" + userId, params)
             .then((res) => {
                 if (res.data.success) {
                     console.log("Response data ",res.data.data)
-                    setOpenNotification(true)
-                    setsuccessMsg('Read Notification Successfully')
+                    // setOpenNotification(true)
+                    // setsuccessMsg('Read Notification Successfully')
+                    props.history.push({
+                        pathname: message.route,
+                        state: {
+                          
+                        },
+                      });
                 }
             })
             .catch((e) => {

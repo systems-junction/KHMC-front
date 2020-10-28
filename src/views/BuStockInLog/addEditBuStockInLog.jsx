@@ -235,7 +235,7 @@ function AddEditBuReturn(props) {
       }}
     >
       <div style={{ alignItems: "center", marginTop: "2rem", display: "flex" }}>
-        <Header />
+        <Header history={props.history}/>
       </div>
 
       <div style={{ alignItems: "center", marginTop: "1rem", display: "flex" }}>

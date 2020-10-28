@@ -189,7 +189,7 @@ export default function EdrRequest(props) {
           <div className={`row ${classes.root}`}>
             {props.item.doctor ? (
               <div
-                className='col-md-6 col-sm-6 col-6'
+                className='col-md-6 col-sm-6 col-12'
                 style={styles.textFieldPadding}
               >
                 <TextField
@@ -212,7 +212,7 @@ export default function EdrRequest(props) {
               </div>
             ) : props.item.requester.firstName ? (
               <div
-                className='col-md-6 col-sm-6 col-6'
+                className='col-md-6 col-sm-6 col-12'
                 style={styles.textFieldPadding}
               >
                 <TextField
@@ -235,7 +235,7 @@ export default function EdrRequest(props) {
               </div>
             ) : props.item.requesterName ? (
               <div
-                className='col-md-6 col-sm-6 col-6'
+                className='col-md-6 col-sm-6 col-12'
                 style={styles.textFieldPadding}
               >
                 <TextField
@@ -258,8 +258,8 @@ export default function EdrRequest(props) {
 
             {props.item.date ? (
               <div
-                className='col-md-6 col-sm-6 col-6'
-                style={styles.textFieldPadding}
+                className='col-md-6 col-sm-6 col-12'
+                style={{...styles.textFieldPadding, ...styles.inputContainerForTextField}}
               >
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <DateTimePicker
@@ -287,7 +287,7 @@ export default function EdrRequest(props) {
 
           <div className={`row ${classes.root}`}>
             <div
-              className='col-md-6 col-sm-6 col-6'
+              className='col-md-6 col-sm-6 col-12'
               style={styles.textFieldPadding}
             >
               {props.item.serviceCode ? (
@@ -312,7 +312,7 @@ export default function EdrRequest(props) {
               )}
             </div>
             <div
-              className='col-md-6 col-sm-6 col-6'
+              className='col-md-6 col-sm-6 col-12'
               style={styles.textFieldPadding}
             >
               {props.item.serviceName ? (
@@ -341,7 +341,7 @@ export default function EdrRequest(props) {
           <div className={`row ${classes.root}`}>
             {props.item.description ? (
               <div
-                className='col-md-6 col-sm-6 col-6'
+                className='col-md-6 col-sm-6 col-12'
                 style={styles.textFieldPadding}
               >
                 <TextField
@@ -366,7 +366,7 @@ export default function EdrRequest(props) {
 
             {props.item.note ? (
               <div
-                className='col-md-6 col-sm-6 col-6'
+                className='col-md-6 col-sm-6 col-12'
                 style={styles.textFieldPadding}
               >
                 <TextField
@@ -387,7 +387,7 @@ export default function EdrRequest(props) {
               </div>
             ) : props.item.consultationNotes ? (
               <div
-                className='col-md-6 col-sm-6 col-6'
+                className='col-md-6 col-sm-6 col-12'
                 style={styles.textFieldPadding}
               >
                 <TextField
@@ -408,7 +408,7 @@ export default function EdrRequest(props) {
               </div>
             ) : props.item.doctorNotes ? (
               <div
-                className='col-md-6 col-sm-6 col-6'
+                className='col-md-6 col-sm-6 col-12'
                 style={styles.textFieldPadding}
               >
                 <TextField
@@ -429,7 +429,7 @@ export default function EdrRequest(props) {
               </div>
             ) : props.item.comments ? (
               <div
-                className='col-md-6 col-sm-6 col-6'
+                className='col-md-6 col-sm-6 col-12'
                 style={styles.textFieldPadding}
               >
                 <TextField
