@@ -267,7 +267,7 @@ function AddEditPurchaseRequest(props) {
         overflowY: "scroll",
       }}
     >
-      <Header />
+      <Header history={props.history}/>
 
       <div style={{ alignItems: "center", marginTop: "1rem", display: "flex" }}>
         <div

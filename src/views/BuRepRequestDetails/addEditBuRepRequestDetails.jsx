@@ -166,7 +166,7 @@ function AddEditBuRepRequestDetails(props) {
       }}
     >
       <div style={{ alignItems: "center", flex: 1, display: "flex" }}>
-        <Header />
+        <Header history={props.history}/>
       </div>
 
       <div style={{ alignItems: "center", flex: 0.5, display: "flex" }}>

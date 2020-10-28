@@ -14,6 +14,8 @@ import {
   searchpatient,
   notifyConsultation,
   getSearchedpatient,
+  notifyLab,
+  notifyRad,
 } from "../../public/endpoins";
 import cookie from "react-cookies";
 import Header from "../../components/Header/Header";
@@ -929,6 +931,7 @@ function LabRadRequest(props) {
       .then((res) => {
         if (res.data.success) {
           console.log("response after adding Lab Request", res.data);
+          notifyForLab(patientId)
           props.history.push({
             pathname: "assessmentdiagnosis/success",
             state: {
@@ -948,6 +951,19 @@ function LabRadRequest(props) {
         console.log("error after adding Lab Request", e);
         setOpenNotification(true);
         setErrorMsg("Error while adding the Lab Request");
+      });
+  };
+
+  const notifyForLab = (id) => {
+    axios
+      .get(notifyLab + "/" + id)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("error after notify", e);
+        setOpenNotification(true);
+        setErrorMsg(e);
       });
   };
 
@@ -1094,6 +1110,7 @@ function LabRadRequest(props) {
       .then((res) => {
         if (res.data.success) {
           console.log("response after adding Radio Request", res.data);
+          notifyForRadiology(patientId)
           props.history.push({
             pathname: "assessmentdiagnosis/success",
             state: {
@@ -1113,6 +1130,19 @@ function LabRadRequest(props) {
         console.log("error after adding Radio Request", e);
         setOpenNotification(true);
         setErrorMsg("Error while adding the Radiology Request");
+      });
+  };
+
+  const notifyForRadiology = (id) => {
+    axios
+      .get(notifyRad + "/" + id)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("error after notify", e);
+        setOpenNotification(true);
+        setErrorMsg(e);
       });
   };
 

@@ -1421,7 +1421,7 @@ function AddEditPurchaseRequest(props) {
         overflowX: "hidden",
       }}
     >
-      <Header />
+      <Header history={props.history}/>
       <div className="cPadding" style={{ marginLeft: 10, marginRight: 10 }}>
         <div className="subheader">
           <div style={{ marginLeft: -23 }}>

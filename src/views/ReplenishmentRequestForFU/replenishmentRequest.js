@@ -821,7 +821,7 @@ export default function ReplenishmentRequest(props) {
           overflowY: "scroll",
         }}
       >
-        <Header />
+        <Header history={props.history}/>
         <div className="cPadding">
           <div className="subheader">
             {props.history.location.pathname === "/home/wms/fus/receive" ? (
