@@ -28,11 +28,17 @@ export default function Sender(props) {
     return (
         <div style={{ display: 'flex', justifyContent: 'flex-end',  marginTop: 20 }} >
                 <div style={{ padding: 20, borderTopLeftRadius: 10, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, backgroundColor: '#e8f0f6', maxWidth: '50%' }}>
-                    {props.type === "application/pdf" ? 
+                    {/* {props.type === "application/pdf" || props.type === "image/jpeg" || props.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||  props.type === "image/png"?  */}
+                    {props.type === "image/jpeg" ||  props.type === "image/png"? 
+
                        <FileViewer
-                       fileType={"pdf" || "csv" || "xslx" || "docx" || "png" || "jpeg" || "gif" || "bmp" || "mp4" || "webm" || "mp3"}
-                       filePath={props.send}
-                       /> : <span>{props.send}</span>
+                       fileType={"png" || "jpeg"}
+
+                        // fileType={"pdf" || "csv" || "xslx" || "docx" || "png" || "jpeg" || "gif" || "bmp" || "mp4" || "webm" || "mp3"}
+                        filePath={props.send}
+                       /> 
+                       
+                       : <span>{props.send}</span>
                     } 
                     
                 </div>
