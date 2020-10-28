@@ -16,28 +16,28 @@ const Avalibility = (props) => {
         style={{ paddingRight: 30 }}
         control={
           <Radio
-            name={"avaliable"}
+            name={"available"}
             color="primary"
-            checked={props.avaliable === "avaliable"}
+            checked={props.avaliable === "available"}
             onChange={props.onChange}
-            value="avaliable"
+            value="available"
           />
         }
-        label="Avaliable"
+        label="Available"
       />
       <FormControlLabel
         style={{ paddingLeft: 30 }}
         value="end"
         control={
           <Radio
-            name={"avaliable"}
+            name={"available"}
             color="primary"
-            checked={props.avaliable === "not_avaliable"}
+            checked={props.avaliable === "not_available"}
             onChange={props.onChange}
-            value="not_avaliable"
+            value="not_available"
           />
         }
-        label="Not Avaliable"
+        label="Not Available"
       />
     </div>
   );
