@@ -428,7 +428,7 @@ function ReceiveItems(props) {
         }
       }
     >
-      {/* <Header /> */}
+      {/* <Header history={props.history}/> */}
       <div>
         {/* <div className="subheader">
           <div>

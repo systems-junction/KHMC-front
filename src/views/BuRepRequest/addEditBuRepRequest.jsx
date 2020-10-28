@@ -178,7 +178,7 @@ function AddEditBuRepRequest(props) {
         overflowY: "scroll",
       }}
     >
-        <Header />
+        <Header history={props.history}/>
       
       <div style={{ alignItems: "center", flex: 0.5, display: "flex" }}>
         <div
