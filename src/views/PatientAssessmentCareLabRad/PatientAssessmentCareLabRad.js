@@ -14,6 +14,8 @@ import {
   searchpatient,
   notifyConsultation,
   getSearchedpatient,
+  notifyLab,
+  notifyRad,
 } from "../../public/endpoins";
 import cookie from "react-cookies";
 import Header from "../../components/Header/Header";
@@ -22,7 +24,6 @@ import Lab_RadIcon from "../../assets/img/Lab-Rad Request.png";
 import ConsultIcon from "../../assets/img/Consultation Request.png";
 import PatientAssessIcon from "../../assets/img/PatientAssessment.png";
 import consultationIcon from "../../assets/img/Consultation_Notes.png";
-
 import PatientCare from "../../assets/img/PatientCare.png";
 import Back from "../../assets/img/Back_Arrow.png";
 import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
@@ -468,19 +469,19 @@ function LabRadRequest(props) {
       props.location.pathname === "/home/rcm/rd/assessmentdiagnosis"
         ? 0
         : props.location.pathname === "/home/rcm/rd/labradrequest"
-        ? 3
-        : props.location.pathname === "/home/rcm/rd/consultationrequest"
-        ? 1
-        : undefined;
+          ? 3
+          : props.location.pathname === "/home/rcm/rd/consultationrequest"
+            ? 1
+            : undefined;
   } else if (currentUser.staffTypeId.type === "Registered Nurse") {
     defaultValue =
       props.location.pathname === "/home/rcm/patientAssessment"
         ? 0
         : props.location.pathname === "/home/rcm/patientCare"
-        ? 2
-        : props.location.pathname === "/home/rcm/LabRadRequest"
-        ? 3
-        : undefined;
+          ? 2
+          : props.location.pathname === "/home/rcm/LabRadRequest"
+            ? 3
+            : undefined;
   } else if (currentUser.staffTypeId.type === "Consultant/Specialist") {
     defaultValue =
       props.location.pathname === "/home/rcm/ecr/cn" ? 1 : undefined;
@@ -654,28 +655,27 @@ function LabRadRequest(props) {
             if (res.data.success) {
               console.log("response while adding Consult Req", res.data.data);
               var pathname;
-  if (currentUser.staffTypeId.type === "Doctor/Physician") {
-    if (props.location.pathname === "/home/rcm/rd/assessmentdiagnosis") {
-      pathname = "assessmentdiagnosis/success";
-    } else if (props.location.pathname === "/home/rcm/rd/labradrequest") {
-      pathname = "labradrequest/success";
-    } else if (props.location.pathname === "/home/rcm/rd/consultationrequest") {
-      pathname = "consultationrequest/success";
-    }
-  }
+              if (currentUser.staffTypeId.type === "Doctor/Physician") {
+                if (props.location.pathname === "/home/rcm/rd/assessmentdiagnosis") {
+                  pathname = "assessmentdiagnosis/success";
+                } else if (props.location.pathname === "/home/rcm/rd/labradrequest") {
+                  pathname = "labradrequest/success";
+                } else if (props.location.pathname === "/home/rcm/rd/consultationrequest") {
+                  pathname = "consultationrequest/success";
+                }
+              }
 
 
 
-  
+
               notifyForConsult(patientId);
               props.history.push({
                 pathname,
                 state: {
-                  message: `Consultation Request: ${
-                    res.data.data.consultationNote[
-                      res.data.data.consultationNote.length - 1
-                    ].consultationNo
-                  } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} submitted successfully`,
+                  message: `Consultation Request: ${res.data.data.consultationNote[
+                    res.data.data.consultationNote.length - 1
+                  ].consultationNo
+                    } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} submitted successfully`,
 
                   patientDetails: patientDetails,
                 },
@@ -763,24 +763,23 @@ function LabRadRequest(props) {
             if (res.data.success) {
               console.log("response while adding Resident Req", res.data.data);
               var pathname;
-  if (currentUser.staffTypeId.type === "Doctor/Physician") {
-    if (props.location.pathname === "/home/rcm/rd/assessmentdiagnosis") {
-      pathname = "assessmentdiagnosis/success";
-    } else if (props.location.pathname === "/home/rcm/rd/labradrequest") {
-      pathname = "labradrequest/success";
-    } else if (props.location.pathname === "/home/rcm/rd/consultationrequest") {
-      pathname = "consultationrequest/success";
-    }
-  }
+              if (currentUser.staffTypeId.type === "Doctor/Physician") {
+                if (props.location.pathname === "/home/rcm/rd/assessmentdiagnosis") {
+                  pathname = "assessmentdiagnosis/success";
+                } else if (props.location.pathname === "/home/rcm/rd/labradrequest") {
+                  pathname = "labradrequest/success";
+                } else if (props.location.pathname === "/home/rcm/rd/consultationrequest") {
+                  pathname = "consultationrequest/success";
+                }
+              }
 
               props.history.push({
                 pathname,
                 state: {
-                  message: `Consultation note:  ${
-                    res.data.data.residentNotes[
-                      res.data.data.residentNotes.length - 1
-                    ].residentNoteNo
-                  } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
+                  message: `Consultation note:  ${res.data.data.residentNotes[
+                    res.data.data.residentNotes.length - 1
+                  ].residentNoteNo
+                    } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
                   patientDetails: patientDetails,
                 },
               });
@@ -955,39 +954,39 @@ function LabRadRequest(props) {
       .then((res) => {
         if (res.data.success) {
           console.log("response after adding Lab Request", res.data);
+          notifyForLab(patientId)
           var pathname;
-  if (currentUser.staffTypeId.type === "Doctor/Physician") {
-    if (props.location.pathname === "/home/rcm/rd/assessmentdiagnosis") {
-      pathname = "assessmentdiagnosis/success";
-    } else if (props.location.pathname === "/home/rcm/rd/labradrequest") {
-      pathname = "labradrequest/success";
-    } else if (props.location.pathname === "/home/rcm/rd/consultationrequest") {
-      pathname = "consultationrequest/success";
-    }
-  }
+          if (currentUser.staffTypeId.type === "Doctor/Physician") {
+            if (props.location.pathname === "/home/rcm/rd/assessmentdiagnosis") {
+              pathname = "assessmentdiagnosis/success";
+            } else if (props.location.pathname === "/home/rcm/rd/labradrequest") {
+              pathname = "labradrequest/success";
+            } else if (props.location.pathname === "/home/rcm/rd/consultationrequest") {
+              pathname = "consultationrequest/success";
+            }
+          }
 
-  if (currentUser.staffTypeId.type === "Registered Nurse") {
-    if (props.location.pathname === "/home/rcm/patientAssessment") {
-      pathname = "patientAssessment/success";
-    } else if (props.location.pathname === "/home/rcm/patientCare") {
-      pathname = "patientCare/success";
-    } else if (props.location.pathname === "/home/rcm/LabRadRequest") {
-      pathname = "LabRadRequest/success";
-    }
-  }
+          if (currentUser.staffTypeId.type === "Registered Nurse") {
+            if (props.location.pathname === "/home/rcm/patientAssessment") {
+              pathname = "patientAssessment/success";
+            } else if (props.location.pathname === "/home/rcm/patientCare") {
+              pathname = "patientCare/success";
+            } else if (props.location.pathname === "/home/rcm/LabRadRequest") {
+              pathname = "LabRadRequest/success";
+            }
+          }
 
-  if (currentUser.staffTypeId.type === "Consultant/Specialist") {
-    if (props.location.pathname === "/home/rcm/ecr/cn") {
-      pathname = "cn/success";
-    }
-  }
+          if (currentUser.staffTypeId.type === "Consultant/Specialist") {
+            if (props.location.pathname === "/home/rcm/ecr/cn") {
+              pathname = "cn/success";
+            }
+          }
           props.history.push({
             pathname,
             state: {
-              message: `Lab Request: ${
-                res.data.data.labRequest[res.data.data.labRequest.length - 1]
-                  .LRrequestNo
-              } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
+              message: `Lab Request: ${res.data.data.labRequest[res.data.data.labRequest.length - 1]
+                .LRrequestNo
+                } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
               patientDetails: patientDetails,
             },
           });
@@ -1000,6 +999,19 @@ function LabRadRequest(props) {
         console.log("error after adding Lab Request", e);
         setOpenNotification(true);
         setErrorMsg("Error while adding the Lab Request");
+      });
+  };
+
+  const notifyForLab = (id) => {
+    axios
+      .get(notifyLab + "/" + id)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("error after notify", e);
+        setOpenNotification(true);
+        setErrorMsg(e);
       });
   };
 
@@ -1146,40 +1158,40 @@ function LabRadRequest(props) {
       .then((res) => {
         if (res.data.success) {
           console.log("response after adding Radio Request", res.data);
+          notifyForRadiology(patientId)
           var pathname;
-  if (currentUser.staffTypeId.type === "Doctor/Physician") {
-    if (props.location.pathname === "/home/rcm/rd/assessmentdiagnosis") {
-      pathname = "assessmentdiagnosis/success";
-    } else if (props.location.pathname === "/home/rcm/rd/labradrequest") {
-      pathname = "labradrequest/success";
-    } else if (props.location.pathname === "/home/rcm/rd/consultationrequest") {
-      pathname = "consultationrequest/success";
-    }
-  }
+          if (currentUser.staffTypeId.type === "Doctor/Physician") {
+            if (props.location.pathname === "/home/rcm/rd/assessmentdiagnosis") {
+              pathname = "assessmentdiagnosis/success";
+            } else if (props.location.pathname === "/home/rcm/rd/labradrequest") {
+              pathname = "labradrequest/success";
+            } else if (props.location.pathname === "/home/rcm/rd/consultationrequest") {
+              pathname = "consultationrequest/success";
+            }
+          }
 
-  if (currentUser.staffTypeId.type === "Registered Nurse") {
-    if (props.location.pathname === "/home/rcm/patientAssessment") {
-      pathname = "patientAssessment/success";
-    } else if (props.location.pathname === "/home/rcm/patientCare") {
-      pathname = "patientCare/success";
-    } else if (props.location.pathname === "/home/rcm/LabRadRequest") {
-      pathname = "LabRadRequest/success";
-    }
-  }
+          if (currentUser.staffTypeId.type === "Registered Nurse") {
+            if (props.location.pathname === "/home/rcm/patientAssessment") {
+              pathname = "patientAssessment/success";
+            } else if (props.location.pathname === "/home/rcm/patientCare") {
+              pathname = "patientCare/success";
+            } else if (props.location.pathname === "/home/rcm/LabRadRequest") {
+              pathname = "LabRadRequest/success";
+            }
+          }
 
-  if (currentUser.staffTypeId.type === "Consultant/Specialist") {
-    if (props.location.pathname === "/home/rcm/ecr/cn") {
-      pathname = "cn/success";
-    }
-  }
+          if (currentUser.staffTypeId.type === "Consultant/Specialist") {
+            if (props.location.pathname === "/home/rcm/ecr/cn") {
+              pathname = "cn/success";
+            }
+          }
           props.history.push({
             pathname,
             state: {
-              message: `Radiology Request: ${
-                res.data.data.radiologyRequest[
-                  res.data.data.radiologyRequest.length - 1
-                ].RRrequestNo
-              } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
+              message: `Radiology Request: ${res.data.data.radiologyRequest[
+                res.data.data.radiologyRequest.length - 1
+              ].RRrequestNo
+                } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
               patientDetails: patientDetails,
             },
           });
@@ -1191,6 +1203,19 @@ function LabRadRequest(props) {
         console.log("error after adding Radio Request", e);
         setOpenNotification(true);
         setErrorMsg("Error while adding the Radiology Request");
+      });
+  };
+
+  const notifyForRadiology = (id) => {
+    axios
+      .get(notifyRad + "/" + id)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("error after notify", e);
+        setOpenNotification(true);
+        setErrorMsg(e);
       });
   };
 
@@ -1336,39 +1361,38 @@ function LabRadRequest(props) {
         if (res.data.success) {
           console.log("response after adding nurse Request", res.data);
           var pathname;
-  if (currentUser.staffTypeId.type === "Doctor/Physician") {
-    if (props.location.pathname === "/home/rcm/rd/assessmentdiagnosis") {
-      pathname = "assessmentdiagnosis/success";
-    } else if (props.location.pathname === "/home/rcm/rd/labradrequest") {
-      pathname = "labradrequest/success";
-    } else if (props.location.pathname === "/home/rcm/rd/consultationrequest") {
-      pathname = "consultationrequest/success";
-    }
-  }
+          if (currentUser.staffTypeId.type === "Doctor/Physician") {
+            if (props.location.pathname === "/home/rcm/rd/assessmentdiagnosis") {
+              pathname = "assessmentdiagnosis/success";
+            } else if (props.location.pathname === "/home/rcm/rd/labradrequest") {
+              pathname = "labradrequest/success";
+            } else if (props.location.pathname === "/home/rcm/rd/consultationrequest") {
+              pathname = "consultationrequest/success";
+            }
+          }
 
-  if (currentUser.staffTypeId.type === "Registered Nurse") {
-    if (props.location.pathname === "/home/rcm/patientAssessment") {
-      pathname = "patientAssessment/success";
-    } else if (props.location.pathname === "/home/rcm/patientCare") {
-      pathname = "patientCare/success";
-    } else if (props.location.pathname === "/home/rcm/LabRadRequest") {
-      pathname = "LabRadRequest/success";
-    }
-  }
+          if (currentUser.staffTypeId.type === "Registered Nurse") {
+            if (props.location.pathname === "/home/rcm/patientAssessment") {
+              pathname = "patientAssessment/success";
+            } else if (props.location.pathname === "/home/rcm/patientCare") {
+              pathname = "patientCare/success";
+            } else if (props.location.pathname === "/home/rcm/LabRadRequest") {
+              pathname = "LabRadRequest/success";
+            }
+          }
 
-  if (currentUser.staffTypeId.type === "Consultant/Specialist") {
-    if (props.location.pathname === "/home/rcm/ecr/cn") {
-      pathname = "cn/success";
-    }
-  }
+          if (currentUser.staffTypeId.type === "Consultant/Specialist") {
+            if (props.location.pathname === "/home/rcm/ecr/cn") {
+              pathname = "cn/success";
+            }
+          }
           props.history.push({
             pathname,
             state: {
-              message: `Nurse Service Request: ${
-                res.data.data.nurseService[
-                  res.data.data.nurseService.length - 1
-                ].NSrequestNo
-              } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
+              message: `Nurse Service Request: ${res.data.data.nurseService[
+                res.data.data.nurseService.length - 1
+              ].NSrequestNo
+                } for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
               patientDetails: patientDetails,
             },
           });
@@ -1816,35 +1840,35 @@ function LabRadRequest(props) {
               <img src={Lab_RadIcon} />
             ) : props.location.pathname ===
               "/home/rcm/rd/consultationrequest" ? (
-              <img src={ConsultIcon} />
-            ) : props.location.pathname === "/home/rcm/patientAssessment" ? (
-              <img src={PatientAssessIcon} />
-            ) : props.location.pathname === "/home/rcm/patientCare" ? (
-              <img src={PatientCare} />
-            ) : props.location.pathname === "/home/rcm/LabRadRequest" ? (
-              <img src={Lab_RadIcon} />
-            ) : props.location.pathname === "/home/rcm/ecr/cn" ? (
-              <img src={consultationIcon} />
-            ) : (
-              undefined
-            )}
+                    <img src={ConsultIcon} />
+                  ) : props.location.pathname === "/home/rcm/patientAssessment" ? (
+                    <img src={PatientAssessIcon} />
+                  ) : props.location.pathname === "/home/rcm/patientCare" ? (
+                    <img src={PatientCare} />
+                  ) : props.location.pathname === "/home/rcm/LabRadRequest" ? (
+                    <img src={Lab_RadIcon} />
+                  ) : props.location.pathname === "/home/rcm/ecr/cn" ? (
+                    <img src={consultationIcon} />
+                  ) : (
+                            undefined
+                          )}
 
             <h4>
               {props.location.pathname === "/home/rcm/rd/assessmentdiagnosis"
                 ? "Assessment & Diagnosis"
                 : props.location.pathname === "/home/rcm/rd/labradrequest"
-                ? "Lab / Rad Request"
-                : props.location.pathname === "/home/rcm/rd/consultationrequest"
-                ? "Consultation Request"
-                : props.location.pathname === "/home/rcm/patientAssessment"
-                ? "Patient Assessment"
-                : props.location.pathname === "/home/rcm/patientCare"
-                ? "Patient Care"
-                : props.location.pathname === "/home/rcm/LabRadRequest"
-                ? "Lab / Rad Request"
-                : props.location.pathname === "/home/rcm/ecr/cn"
-                ? "Consulataion Notes"
-                : undefined}
+                  ? "Lab / Rad Request"
+                  : props.location.pathname === "/home/rcm/rd/consultationrequest"
+                    ? "Consultation Request"
+                    : props.location.pathname === "/home/rcm/patientAssessment"
+                      ? "Patient Assessment"
+                      : props.location.pathname === "/home/rcm/patientCare"
+                        ? "Patient Care"
+                        : props.location.pathname === "/home/rcm/LabRadRequest"
+                          ? "Lab / Rad Request"
+                          : props.location.pathname === "/home/rcm/ecr/cn"
+                            ? "Consulataion Notes"
+                            : undefined}
             </h4>
           </div>
 
@@ -2014,13 +2038,13 @@ function LabRadRequest(props) {
                         <h4> No Patient Found !</h4>
                       </div>
                     ) : (
-                      undefined
-                    )}
+                            undefined
+                          )}
                   </Paper>
                 </div>
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
             </div>
           </div>
         </div>
@@ -2055,7 +2079,7 @@ function LabRadRequest(props) {
                 marginLeft: 0,
                 marginRight: 0,
                 minWidth: 600,
-                
+
                 // width: "auto"
               }}
             >
@@ -2164,29 +2188,29 @@ function LabRadRequest(props) {
               >
                 {medicationArray
                   ? medicationArray.map((d, index) => {
-                      return (
-                        // <h6 style={styles.textStyles}>
-                        //   {index + 1}. {drug}
-                        // </h6>
-                        <div style={{ display: "flex", flexDirection: "row" }}>
-                          <h6
-                            style={{
-                              ...styles.textStyles,
-                            }}
-                          >
-                            {index + 1}
-                            {"."} &nbsp;
+                    return (
+                      // <h6 style={styles.textStyles}>
+                      //   {index + 1}. {drug}
+                      // </h6>
+                      <div style={{ display: "flex", flexDirection: "row" }}>
+                        <h6
+                          style={{
+                            ...styles.textStyles,
+                          }}
+                        >
+                          {index + 1}
+                          {"."} &nbsp;
                           </h6>
-                          <h6
-                            style={{
-                              ...styles.textStyles,
-                            }}
-                          >
-                            {d}
-                          </h6>
-                        </div>
-                      );
-                    })
+                        <h6
+                          style={{
+                            ...styles.textStyles,
+                          }}
+                        >
+                          {d}
+                        </h6>
+                      </div>
+                    );
+                  })
                   : ""}
               </div>
 
@@ -2196,12 +2220,12 @@ function LabRadRequest(props) {
               >
                 {diagnosisArray
                   ? diagnosisArray.map((drug, index) => {
-                      return (
-                        <h6 style={styles.textStyles}>
-                          {index + 1}. {drug}
-                        </h6>
-                      );
-                    })
+                    return (
+                      <h6 style={styles.textStyles}>
+                        {index + 1}. {drug}
+                      </h6>
+                    );
+                  })
                   : ""}
               </div>
             </div>
@@ -2290,8 +2314,8 @@ function LabRadRequest(props) {
                   disabled={enableForm}
                 />
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
             </Tabs>
           </div>
 
@@ -2302,31 +2326,31 @@ function LabRadRequest(props) {
             >
               <div className="row">
                 {currentUser.staffTypeId.type === "Consultant/Specialist" &&
-                consultationNoteArray !== 0 ? (
-                  <CustomTable
-                    tableData={consultationNoteArray}
-                    tableDataKeys={tableDataKeysForConsultation}
-                    tableHeading={tableHeadingForConsultation}
-                    // handleView={UpdateItem}
-                    handleEdit={UpdateItem}
-                    action={actions1}
-                    borderBottomColor={"#60d69f"}
-                    borderBottomWidth={20}
-                  />
-                ) : currentUser.staffTypeId.type !== "Consultant/Specialist" &&
                   consultationNoteArray !== 0 ? (
-                  <CustomTable
-                    tableData={consultationNoteArray}
-                    tableDataKeys={tableDataKeysForConsultation}
-                    tableHeading={tableHeadingForConsultation}
-                    handleView={viewItem}
-                    action={actions}
-                    borderBottomColor={"#60d69f"}
-                    borderBottomWidth={20}
-                  />
-                ) : (
-                  undefined
-                )}
+                    <CustomTable
+                      tableData={consultationNoteArray}
+                      tableDataKeys={tableDataKeysForConsultation}
+                      tableHeading={tableHeadingForConsultation}
+                      // handleView={UpdateItem}
+                      handleEdit={UpdateItem}
+                      action={actions1}
+                      borderBottomColor={"#60d69f"}
+                      borderBottomWidth={20}
+                    />
+                  ) : currentUser.staffTypeId.type !== "Consultant/Specialist" &&
+                    consultationNoteArray !== 0 ? (
+                      <CustomTable
+                        tableData={consultationNoteArray}
+                        tableDataKeys={tableDataKeysForConsultation}
+                        tableHeading={tableHeadingForConsultation}
+                        handleView={viewItem}
+                        action={actions}
+                        borderBottomColor={"#60d69f"}
+                        borderBottomWidth={20}
+                      />
+                    ) : (
+                      undefined
+                    )}
               </div>
               <div className="row" style={{ marginBottom: "25px" }}>
                 <div className="col-md-6 col-sm-6 col-6"></div>
@@ -2337,7 +2361,7 @@ function LabRadRequest(props) {
                   {currentUser.staffTypeId.type === "Doctor/Physician" ? (
                     <Button
                       onClick={() => setOpenAddConsultDialog(true)}
-                      style={{...styles.stylesForButton, width: matches ? " " : "104%" , marginLeft : matches ? "inherit" : " -12px" }}
+                      style={{ ...styles.stylesForButton, width: matches ? " " : "104%", marginLeft: matches ? "inherit" : " -12px" }}
                       variant="contained"
                       color="primary"
                       disabled={enableForm}
@@ -2347,8 +2371,8 @@ function LabRadRequest(props) {
                       </strong>
                     </Button>
                   ) : (
-                    undefined
-                  )}
+                      undefined
+                    )}
                 </div>
               </div>
             </div>
@@ -2369,8 +2393,8 @@ function LabRadRequest(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
               </div>
 
               <div className="row" style={{ marginBottom: "25px" }}>
@@ -2382,7 +2406,7 @@ function LabRadRequest(props) {
                   {currentUser.staffTypeId.type === "Doctor/Physician" ? (
                     <Button
                       onClick={() => setOpenAddResidentDialog(true)}
-                      style={{...styles.stylesForButton, width: matches ? " " : "104%" , marginLeft : matches ? "inherit" : " -12px" }}
+                      style={{ ...styles.stylesForButton, width: matches ? " " : "104%", marginLeft: matches ? "inherit" : " -12px" }}
                       variant="contained"
                       color="primary"
                       disabled={enableForm}
@@ -2394,8 +2418,8 @@ function LabRadRequest(props) {
                       </strong>
                     </Button>
                   ) : (
-                    undefined
-                  )}
+                      undefined
+                    )}
                 </div>
               </div>
             </div>
@@ -2417,8 +2441,8 @@ function LabRadRequest(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
               </div>
 
               <div className="row" style={{ marginBottom: "25px" }}>
@@ -2427,22 +2451,22 @@ function LabRadRequest(props) {
                   style={{ paddingRight: "1px" }}
                 >
                   {currentUser.staffTypeId.type === "Doctor/Physician" ||
-                  currentUser.staffTypeId.type === "Registered Nurse" ? (
-                    <Button
-                      onClick={addNewRequest}
-                      style={{...styles.stylesForButton, width: matches ? " " : "104%" , marginLeft : matches ? "inherit" : " -12px" }}
-                      variant="contained"
-                      color="primary"
-                    >
-                      <img className="icon-style" src={plus_icon} />
+                    currentUser.staffTypeId.type === "Registered Nurse" ? (
+                      <Button
+                        onClick={addNewRequest}
+                        style={{ ...styles.stylesForButton, width: matches ? " " : "104%", marginLeft: matches ? "inherit" : " -12px" }}
+                        variant="contained"
+                        color="primary"
+                      >
+                        <img className="icon-style" src={plus_icon} />
                       &nbsp;&nbsp;
-                      <strong style={{ fontSize: "12px" }}>
-                        Pharmacy Request
+                        <strong style={{ fontSize: "12px" }}>
+                          Pharmacy Request
                       </strong>
-                    </Button>
-                  ) : (
-                    undefined
-                  )}
+                      </Button>
+                    ) : (
+                      undefined
+                    )}
                 </div>
               </div>
             </div>
@@ -2558,13 +2582,13 @@ function LabRadRequest(props) {
                         <h4>No Lab Test Found !</h4>
                       </div>
                     ) : (
-                      undefined
-                    )}
+                            undefined
+                          )}
                   </Paper>
                 </div>
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
 
               <div className="row">
                 <div
@@ -2660,8 +2684,8 @@ function LabRadRequest(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
               </div>
 
               <div className="row" style={{ marginBottom: "25px" }}>
@@ -2792,13 +2816,13 @@ function LabRadRequest(props) {
                         <h4>No Radiology Test Found !</h4>
                       </div>
                     ) : (
-                      undefined
-                    )}
+                            undefined
+                          )}
                   </Paper>
                 </div>
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
 
               <div className="row">
                 <div
@@ -2895,8 +2919,8 @@ function LabRadRequest(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
               </div>
 
               <div className="row" style={{ marginBottom: "25px" }}>
@@ -3027,13 +3051,13 @@ function LabRadRequest(props) {
                         <h4>No Service Found !</h4>
                       </div>
                     ) : (
-                      undefined
-                    )}
+                            undefined
+                          )}
                   </Paper>
                 </div>
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
 
               <div className="row">
                 <div
@@ -3129,8 +3153,8 @@ function LabRadRequest(props) {
                     borderBottomWidth={20}
                   />
                 ) : (
-                  undefined
-                )}
+                    undefined
+                  )}
               </div>
 
               <div className="row" style={{ marginBottom: "25px" }}>
@@ -3151,8 +3175,8 @@ function LabRadRequest(props) {
               </div>
             </div>
           ) : (
-            undefined
-          )}
+                        undefined
+                      )}
 
           {openItemDialog ? (
             <ViewSingleRequest
@@ -3161,8 +3185,8 @@ function LabRadRequest(props) {
               viewItem={viewItem}
             />
           ) : (
-            undefined
-          )}
+              undefined
+            )}
 
           {openUpdateItemDialog ? (
             <UpdateSingleRequest
@@ -3174,8 +3198,8 @@ function LabRadRequest(props) {
               viewItem={UpdateItem}
             />
           ) : (
-            undefined
-          )}
+              undefined
+            )}
         </div>
 
         <Dialog
@@ -3215,7 +3239,7 @@ function LabRadRequest(props) {
                         input: classes.multilineColor,
                       },
                     }}
-                    // inputProps={{ maxLength: 300 }}
+                  // inputProps={{ maxLength: 300 }}
                   />
                 </div>
               </div>
@@ -3348,8 +3372,8 @@ function LabRadRequest(props) {
                   </div>
                 </div>
               ) : (
-                undefined
-              )}
+                  undefined
+                )}
 
               <div style={{ display: "flex", justifyContent: "space-between", marginTop: 20 }}>
                 <div style={{ marginTop: "2%", marginBottom: "2%" }}>
@@ -3631,20 +3655,20 @@ function LabRadRequest(props) {
                     ? tableHeadingForBUMemberForItems
                     : currentUser.staffTypeId.type === "Registered Nurse" ||
                       currentUser.staffTypeId.type === "BU Doctor"
-                    ? tableHeadingForBUMemberForItems
-                    : currentUser.staffTypeId.type === "FU Inventory Keeper"
-                    ? tableHeadingForFUMemberForItems
-                    : tableHeadingForFUMemberForItems
+                      ? tableHeadingForBUMemberForItems
+                      : currentUser.staffTypeId.type === "FU Inventory Keeper"
+                        ? tableHeadingForFUMemberForItems
+                        : tableHeadingForFUMemberForItems
                 }
                 tableDataKeys={
                   currentUser.staffTypeId.type === "Doctor/Physician"
                     ? tableDataKeysForItemsForBUMember
                     : currentUser.staffTypeId.type === "Registered Nurse" ||
                       currentUser.staffTypeId.type === "BU Doctor"
-                    ? tableDataKeysForItemsForBUMember
-                    : currentUser.staffTypeId.type === "FU Inventory Keeper"
-                    ? tableDataKeysForFUMemberForItems
-                    : tableDataKeysForItemsForBUMember
+                      ? tableDataKeysForItemsForBUMember
+                      : currentUser.staffTypeId.type === "FU Inventory Keeper"
+                        ? tableDataKeysForFUMemberForItems
+                        : tableDataKeysForItemsForBUMember
                 }
                 borderBottomColor={"#60d69f"}
                 borderBottomWidth={20}

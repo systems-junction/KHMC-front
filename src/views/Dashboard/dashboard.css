@@ -1,0 +1,27 @@
+.subheader-span{
+    color: white;
+    font-size: 12px;
+    margin-right: 5px;
+}
+.first-chunk{
+    margin-top: 10px;
+}
+.all-chunk{
+    margin-top: 10px;
+}
+.dashboard-chunk-area{
+    background-color: white;
+    border-radius: 5px;
+    padding: 15px;
+}
+.dashboard-chunk{
+    padding-right: 0px;
+    padding-left: 10px;
+}
+.dashboard-chunk-area-heading{
+    margin-left: 0px;
+}
+.dashboard-chunk-area-heading h4 {
+    font-size: 18px;
+    font-weight: 700;
+}

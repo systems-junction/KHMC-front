@@ -156,7 +156,7 @@ export default function BuReturn(props) {
       <div
         style={{ alignItems: "center", flex: 1, display: "flex", marginTop: 5 }}
       >
-        <Header />
+        <Header history={props.history}/>
       </div>
 
       <div style={{ alignItems: "center", flex: 0.5, display: "flex" }}>
