@@ -36,7 +36,8 @@ import AccessLevel from "../views/UserManagement/accessLevel/accessLevel";
 import AddEditAccessLevel from "../views/UserManagement/accessLevel/addEditAccessLevel";
 import systemAdmin from "../views/UserManagement/systemAdmin/systemAdmin";
 import addEditSystemAdmin from "../views/UserManagement/systemAdmin/addEditSystemAdmin";
-import notificationCenter from '../views/Notifications/notifications.js'
+import notificationCenter from '../views/Notifications/notifications'
+import dashboard from '../views/Dashboard/dashboard'
 
 const hist = createBrowserHistory();
 class HomeScreenRoutes extends React.PureComponent {
@@ -44,6 +45,7 @@ class HomeScreenRoutes extends React.PureComponent {
     return (
       <Switch>
         <Route exact path={"/home"} component={HomeScreen} />
+        <Route exact path={"/home/dashboard"} component={dashboard} />
         <Route exact path={"/home/patientFHIR"} component={PatientFHIR} />
         <Route path={"/home/controlroom"} component={ControlRoomRoutes} />
         <Route path={"/home/reports"} component={ReportsRoutes} />
