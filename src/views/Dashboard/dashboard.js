@@ -8,8 +8,11 @@ import LabIcon from "../../assets/img/Consultation Request.png";
 import RadIcon from "../../assets/img/PatientAssessment.png";
 import PharmacistIcon from "../../assets/img/PatientCare.png";
 import InsuranceIcon from "../../assets/img/PatientCare.png";
+
+import GuageIcon from "../../assets/img/25.png";
+
 import Back from "../../assets/img/Back_Arrow.png";
-import { MdRefresh } from 'react-icons/md'
+import { MdRefresh, MdKeyboardArrowRight } from 'react-icons/md'
 import './dashboard.css';
 
 function Dashboard(props) {
@@ -41,6 +44,8 @@ function Dashboard(props) {
                 width: "100%",
                 height: "100%",
                 backgroundColor: "#2B62CC",
+                overflow: 'auto',
+                paddingBottom: '30px'
             }}
         >
 
@@ -107,16 +112,22 @@ function Dashboard(props) {
                                 <div className='dashboard-chunk-area-heading row'>
                                     <h4>Notifications</h4>
                                 </div>
-                                <div className='row'>
-                                    Notifications rows
-                            </div>
+                                <div className='dashboard-chunk-area-notifications row'>
+                                    <div className='col-md-6 col-sm-6 col-6'>
+                                        Notifications rows
+                                    </div>
+                                    <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
+                                        <MdKeyboardArrowRight color={'#4472C4'} size='24' />
+                                    </div>
+                                </div>
+                                <hr style={{ marginTop: '5px' }} />
                             </div>
                         </div>
                     </div>
 
                     <div className='row all-chunk'>
                         <div className='dashboard-chunk col-md-6 col-sm-6 col-6'>
-                            <div className='dashboard-chunk-area'>
+                            <div className='dashboard-chunk-area bar-area'>
                                 <div className='dashboard-chunk-area-heading row'>
                                     <h4>ED Beds Available</h4>
                                 </div>
@@ -126,13 +137,229 @@ function Dashboard(props) {
                             </div>
                         </div>
                         <div className='dashboard-chunk col-md-6 col-sm-6 col-6'>
-                            <div className='dashboard-chunk-area'>
+                            <div className='dashboard-chunk-area bar-area'>
                                 <div className='dashboard-chunk-area-heading row'>
                                     <h4>IP Beds Available</h4>
                                 </div>
                                 <div className='row'>
                                     70
                             </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className='row all-chunk'>
+                        <div className='dashboard-chunk col-md-4 col-sm-4 col-4'>
+                            <div className='dashboard-chunk-area guage-area'>
+                                <div className='dashboard-chunk-area-heading row'>
+                                    <h4>Patient Assessment/Triage Pending</h4>
+                                </div>
+                                <div className='row'>
+                                    <div className='guage-img-area'>
+                                        <img src={GuageIcon} className='guage' />
+                                    </div>
+                                </div>
+                                <hr style={{ marginLeft: '-15px', marginRight: '-15px', marginBottom: '5px' }} />
+                                <div className='guage-footer row'>
+                                    <div className='col-md-6 col-sm-6 col-6'>
+                                        <span className='guage-footer-text'>
+                                            TAT
+                                        </span>
+                                    </div>
+                                    <div className='col-md-6 col-sm-6 col-6'>
+                                        <span className='guage-footer-area-counter'>
+                                            30
+                                        </span>
+                                    </div>
+                                    <div className='col-md-6 col-sm-6 col-6'>
+                                        <span className='guage-footer-area-counter below left'>
+                                            Registration to Triage
+                                        </span>
+                                    </div>
+                                    <div className='col-md-6 col-sm-6 col-6'>
+                                        <span className='guage-footer-area-counter below'>
+                                            Minutes
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='dashboard-chunk col-md-4 col-sm-4 col-4'>
+                            <div className='dashboard-chunk-area guage-area'>
+                                <div className='dashboard-chunk-area-heading row'>
+                                    <h4>Patient Assessment/Triage Pending</h4>
+                                </div>
+                                <div className='row'>
+                                    <div className='guage-img-area'>
+                                        <img src={GuageIcon} className='guage' />
+                                    </div>
+                                </div>
+                                <hr style={{ marginLeft: '-15px', marginRight: '-15px', marginBottom: '5px' }} />
+                                <div className='guage-footer row'>
+                                    <div className='col-md-6 col-sm-6 col-6'>
+                                        <span className='guage-footer-text'>
+                                            TAT
+                                        </span>
+                                    </div>
+                                    <div className='col-md-6 col-sm-6 col-6'>
+                                        <span className='guage-footer-area-counter'>
+                                            30
+                                        </span>
+                                    </div>
+                                    <div className='col-md-6 col-sm-6 col-6'>
+                                        <span className='guage-footer-area-counter below left'>
+                                            Registration to Triage
+                                        </span>
+                                    </div>
+                                    <div className='col-md-6 col-sm-6 col-6'>
+                                        <span className='guage-footer-area-counter below'>
+                                            Minutes
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='dashboard-chunk col-md-4 col-sm-4 col-4'>
+                            <div className='dashboard-chunk-area guage-area'>
+                                <div className='dashboard-chunk-area-heading row'>
+                                    <h4>Patient Assessment/Triage Pending</h4>
+                                </div>
+                                <div className='row'>
+                                    <div className='guage-img-area'>
+                                        <img src={GuageIcon} className='guage' />
+                                    </div>
+                                </div>
+                                <hr style={{ marginLeft: '-15px', marginRight: '-15px', marginBottom: '5px' }} />
+                                <div className='guage-footer row'>
+                                    <div className='col-md-6 col-sm-6 col-6'>
+                                        <span className='guage-footer-text'>
+                                            TAT
+                                        </span>
+                                    </div>
+                                    <div className='col-md-6 col-sm-6 col-6'>
+                                        <span className='guage-footer-area-counter'>
+                                            30
+                                        </span>
+                                    </div>
+                                    <div className='col-md-6 col-sm-6 col-6'>
+                                        <span className='guage-footer-area-counter below left'>
+                                            Registration to Triage
+                                        </span>
+                                    </div>
+                                    <div className='col-md-6 col-sm-6 col-6'>
+                                        <span className='guage-footer-area-counter below'>
+                                            Minutes
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className='row all-chunk'>
+                        <div className='dashboard-chunk col-md-4 col-sm-4 col-4'>
+                            <div className='dashboard-chunk-area guage-area'>
+                                <div className='dashboard-chunk-area-heading row'>
+                                    <h4>Patient Assessment/Triage Pending</h4>
+                                </div>
+                                <div className='row'>
+                                    <div className='guage-img-area'>
+                                        <img src={GuageIcon} className='guage' />
+                                    </div>
+                                </div>
+                                <hr style={{ marginLeft: '-15px', marginRight: '-15px', marginBottom: '5px' }} />
+                                <div className='guage-footer row'>
+                                    <div className='col-md-6 col-sm-6 col-6'>
+                                        <span className='guage-footer-text'>
+                                            TAT
+                                        </span>
+                                    </div>
+                                    <div className='col-md-6 col-sm-6 col-6'>
+                                        <span className='guage-footer-area-counter'>
+                                            30
+                                        </span>
+                                    </div>
+                                    <div className='col-md-6 col-sm-6 col-6'>
+                                        <span className='guage-footer-area-counter below left'>
+                                            Registration to Triage
+                                        </span>
+                                    </div>
+                                    <div className='col-md-6 col-sm-6 col-6'>
+                                        <span className='guage-footer-area-counter below'>
+                                            Minutes
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='dashboard-chunk col-md-4 col-sm-4 col-4'>
+                            <div className='dashboard-chunk-area guage-area'>
+                                <div className='dashboard-chunk-area-heading row'>
+                                    <h4>Patient Assessment/Triage Pending</h4>
+                                </div>
+                                <div className='row'>
+                                    <div className='guage-img-area'>
+                                        <img src={GuageIcon} className='guage' />
+                                    </div>
+                                </div>
+                                <hr style={{ marginLeft: '-15px', marginRight: '-15px', marginBottom: '5px' }} />
+                                <div className='guage-footer row'>
+                                    <div className='col-md-6 col-sm-6 col-6'>
+                                        <span className='guage-footer-text'>
+                                            TAT
+                                        </span>
+                                    </div>
+                                    <div className='col-md-6 col-sm-6 col-6'>
+                                        <span className='guage-footer-area-counter'>
+                                            30
+                                        </span>
+                                    </div>
+                                    <div className='col-md-6 col-sm-6 col-6'>
+                                        <span className='guage-footer-area-counter below left'>
+                                            Registration to Triage
+                                        </span>
+                                    </div>
+                                    <div className='col-md-6 col-sm-6 col-6'>
+                                        <span className='guage-footer-area-counter below'>
+                                            Minutes
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='dashboard-chunk col-md-4 col-sm-4 col-4'>
+                            <div className='dashboard-chunk-area guage-area'>
+                                <div className='dashboard-chunk-area-heading row'>
+                                    <h4>Patient Assessment/Triage Pending</h4>
+                                </div>
+                                <div className='row'>
+                                    <div className='guage-img-area'>
+                                        <img src={GuageIcon} className='guage' />
+                                    </div>
+                                </div>
+                                <hr style={{ marginLeft: '-15px', marginRight: '-15px', marginBottom: '5px' }} />
+                                <div className='guage-footer row'>
+                                    <div className='col-md-6 col-sm-6 col-6'>
+                                        <span className='guage-footer-text'>
+                                            TAT
+                                        </span>
+                                    </div>
+                                    <div className='col-md-6 col-sm-6 col-6'>
+                                        <span className='guage-footer-area-counter'>
+                                            30
+                                        </span>
+                                    </div>
+                                    <div className='col-md-6 col-sm-6 col-6'>
+                                        <span className='guage-footer-area-counter below left'>
+                                            Registration to Triage
+                                        </span>
+                                    </div>
+                                    <div className='col-md-6 col-sm-6 col-6'>
+                                        <span className='guage-footer-area-counter below'>
+                                            Minutes
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
