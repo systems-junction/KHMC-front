@@ -78,7 +78,7 @@ import Loader from "react-loader-spinner";
 // import validatePhone from '../../public/validatePhone'
 
 let countriesList = require("../../assets/countries.json");
-let matches  ;
+let matches;
 const styles = {
   stylesForButton: {
     color: "white",
@@ -332,23 +332,18 @@ const useStyles = makeStyles((theme) => ({
     "&:focus": {
       backgroundColor: "white",
       boxShadow: "none",
-      display : matches ? " ": "none"
-      
+      display: matches ? " " : "none",
     },
     "& .MuiFormLabel-root": {
       fontSize: "12px",
 
       paddingRight: "45px",
-      
     },
-
-    
-   
   },
   label: {
     "&$focusedLabel": {
       color: "red",
-      display: "none"
+      display: "none",
     },
     // "&$erroredLabel": {
     //   color: "orange"
@@ -1795,8 +1790,8 @@ function PatientRegistration(props) {
                         classes: {
                           root: classes.label,
                           focused: classes.focusedLabel,
-                          error: classes.erroredLabel
-                        }
+                          error: classes.erroredLabel,
+                        },
                       }}
                       InputProps={{
                         endAdornment: (
@@ -1804,7 +1799,7 @@ function PatientRegistration(props) {
                             <AccountCircle />
                           </InputAdornment>
                         ),
-                        
+
                         className: classes.input,
                         classes: { input: classes.input },
                       }}
@@ -3089,8 +3084,8 @@ function PatientRegistration(props) {
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
-                  paddingRight: matches ? "0px": "5px",
-                  paddingLeft: matches ? "5px": "0px",
+                  paddingRight: matches ? "0px" : "5px",
+                  paddingLeft: matches ? "5px" : "0px",
                 }}
               >
                 <TextField
@@ -3152,9 +3147,9 @@ function PatientRegistration(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
-                    
-                    paddingRight: matches ? "0px": "5px",
-                    paddingLeft: matches ? "5px": "0px",
+
+                    paddingRight: matches ? "0px" : "5px",
+                    paddingLeft: matches ? "5px" : "0px",
                   }}
                 >
                   <CurrencyTextField
@@ -3422,17 +3417,21 @@ function PatientRegistration(props) {
             )}
 
             <div
-              style={{ display: "flex", flex: 1, justifyContent: "center" }}
+              // style={{ display: "flex", flex: 1, justifyContent: "center" }}
               className="row"
             >
               <div
                 style={{
-                  display: "flex",
-                  flex: 1,
-                  justifyContent: "flex",
+                  // display: "flex",
+                  // flex: 1,
+                  // justifyContent: "flex",
                   marginTop: "10px",
                   marginBottom: "1%",
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                  marginLeft: -3,
                 }}
+                className="col-md-6"
               >
                 <Button
                   style={styles.stylesForButton}
@@ -3443,19 +3442,27 @@ function PatientRegistration(props) {
                   Cancel
                 </Button>
               </div>
+
               <div
                 style={{
                   display: "flex",
-                  flex: 1,
-                  justifyContent: "flex-end",
+                  // flex: 1,
+                  justifyContent: matches ? "flex-end" : "flex-start",
                   marginTop: "10px",
                   marginBottom: "1%",
+                  marginLeft: !matches ? -3 : 0,
+                  ...styles.inputContainerForTextField,
+                  ...styles.textFieldPadding,
+                  paddingRight: 0,
                 }}
+                className="col-md-6"
               >
                 {paymentMethod === "Insurance" ? (
                   <Button
                     disabled={enableNext}
-                    style={{ ...styles.stylesForButton, marginRight: "-10px" }}
+                    style={{
+                      ...styles.stylesForButton,
+                    }}
                     onClick={onClick}
                     variant="contained"
                     color="primary"
@@ -3463,21 +3470,22 @@ function PatientRegistration(props) {
                     next
                   </Button>
                 ) : (
+                  //  <div
+                  //   style={{
+                  //     width: "10px",
+                  //     height: "auto",
+                  //     display: "inline-block",
+                  //   }}
+                  // />
                   undefined
                 )}
-                <div
-                  style={{
-                    width: "10px",
-                    height: "auto",
-                    display: "inline-block",
-                  }}
-                />
+
                 {paymentMethod === "Cash" ? (
                   <>
                     {comingFor === "add" ? (
                       <>
                         <Button
-                           style={{...styles.save, marginLeft: -50}} 
+                          style={{ ...styles.save }}
                           // disabled={
                           //   !(validatePatientForm() && validatePaymentForm())
                           // }
@@ -3496,12 +3504,13 @@ function PatientRegistration(props) {
                         />
                       </>
                     ) : (
-                      <></>
+                      undefined
                     )}
                   </>
                 ) : (
                   undefined
                 )}
+
                 {paymentMethod === "Cash" ? (
                   <div>
                     {currentUser.staffTypeId.type === "EDR Receptionist" ? (
@@ -3533,35 +3542,33 @@ function PatientRegistration(props) {
                 ) : (
                   undefined
                 )}
+
                 {paymentMethod === "Cash" ? (
-                  <div>
-                    {currentUser.staffTypeId.type === "IPR Receptionist" ? (
-                      <Button
-                        style={styles.generate}
-                        // disabled={comingFor === 'add' ? !isFormSubmitted : false}
-                        disabled={
-                          comingFor === "add"
-                            ? !(
-                                validatePatientForm() &&
-                                validateEmergencyForm() &&
-                                (validateInsuranceForm() ||
-                                  validateCashForm()) &&
-                                isPatientSubmitted
-                              )
-                            : false
-                        }
-                        onClick={
-                          comingFor === "add" ? handleGenerateIPR : handleEdit
-                        }
-                        variant="contained"
-                        color="primary"
-                      >
-                        {comingFor === "add" ? "Generate IP Record" : "Update"}
-                      </Button>
-                    ) : (
-                      undefined
-                    )}
-                  </div>
+                  currentUser.staffTypeId.type === "IPR Receptionist" ? (
+                    <Button
+                      style={styles.generate}
+                      // disabled={comingFor === 'add' ? !isFormSubmitted : false}
+                      disabled={
+                        comingFor === "add"
+                          ? !(
+                              validatePatientForm() &&
+                              validateEmergencyForm() &&
+                              (validateInsuranceForm() || validateCashForm()) &&
+                              isPatientSubmitted
+                            )
+                          : false
+                      }
+                      onClick={
+                        comingFor === "add" ? handleGenerateIPR : handleEdit
+                      }
+                      variant="contained"
+                      color="primary"
+                    >
+                      {comingFor === "add" ? "Generate IP Record" : "Update"}
+                    </Button>
+                  ) : (
+                    undefined
+                  )
                 ) : (
                   undefined
                 )}
@@ -3932,25 +3939,19 @@ function PatientRegistration(props) {
             </div>
 
             <div
-              style={{
-                display: "flex",
-                flex: 1,
-
-                justifyContent: "center",
-                // paddingLeft: 6,
-              }}
+              // style={{
+              //   display: "flex",
+              //   flex: 1,
+              // }}
               className="row"
             >
               <div
                 style={{
-                  paddingLeft: 20,
-                  display: "flex",
-                  flex: 1,
-                  // paddingLeft: 6,
-                  justifyContent: "flex",
                   marginTop: "30px",
                   marginBottom: "1%",
+                  paddingLeft: 20,
                 }}
+                className="col-md-6"
               >
                 <Button
                   style={styles.stylesForButton}
@@ -3964,12 +3965,13 @@ function PatientRegistration(props) {
               <div
                 style={{
                   display: "flex",
-                  flex: 1,
-                  justifyContent: "flex-end",
+                  // flex: 1,
+                  justifyContent: matches ? "flex-end" : "flex-start",
                   marginTop: "30px",
                   marginBottom: "2%",
-                  paddingRight: 20,
+                  // paddingRight: !matches ? 20 : 0,
                 }}
+                className="col-md-6"
               >
                 {comingFor === "add" ? (
                   <>
@@ -3993,7 +3995,7 @@ function PatientRegistration(props) {
                     />
                   </>
                 ) : (
-                  <></>
+                  undefined
                 )}
 
                 {currentUser.staffTypeId.type === "EDR Receptionist" ? (
@@ -4021,6 +4023,7 @@ function PatientRegistration(props) {
                 ) : (
                   undefined
                 )}
+
                 {currentUser.staffTypeId.type === "IPR Receptionist" ? (
                   <Button
                     style={styles.generate}
