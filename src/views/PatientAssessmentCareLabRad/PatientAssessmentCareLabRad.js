@@ -308,6 +308,7 @@ const useStylesForInput = makeStyles((theme) => ({
     "&:hover": {
       backgroundColor: "white",
       boxShadow: "none",
+      display: "none",
     },
     "&:after": {
       borderBottomColor: "black",
@@ -335,6 +336,16 @@ const useStylesForInput = makeStyles((theme) => ({
       paddingRight: "50px",
     },
   },
+  label: {
+    "&$focusedLabel": {
+      color: "red",
+      display: "none"
+    },
+    // "&$erroredLabel": {
+    //   color: "orange"
+    // }
+  },
+  focusedLabel: {},
 }));
 
 function LabRadRequest(props) {
@@ -1918,6 +1929,13 @@ function LabRadRequest(props) {
                 value={searchPatientQuery}
                 onChange={handlePauseSearch}
                 onKeyDown={handleKeyDown}
+                InputLabelProps={{
+                  classes: {
+                    root: classes.label,
+                    focused: classes.focusedLabel,
+                    error: classes.erroredLabel
+                  }
+                }}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -3403,7 +3421,7 @@ function LabRadRequest(props) {
                       cursor: "pointer",
                       borderRadius: 5,
                       backgroundColor: "#2c6ddd",
-                      width: "140px",
+                      width: matches ? "140px" : "110px",
                       height: "50px",
                       outline: "none",
                       paddingLeft: 30,
@@ -3579,6 +3597,7 @@ function LabRadRequest(props) {
                   justifyContent: "space-between",
                   paddingLeft: 5,
                   paddingRight: 5,
+                  marginTop: 20
                 }}
               >
                 <div style={{ marginTop: "2%", marginBottom: "2%" }}>

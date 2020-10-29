@@ -192,6 +192,11 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: 'white',
       color: 'black',
     },
+    "& .MuiFormLabel-root": {
+      fontSize: "12px",
+
+      paddingRight: "50px",
+    },
   },
 }))
 
