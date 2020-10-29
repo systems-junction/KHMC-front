@@ -38,6 +38,7 @@
     "rc-if": "0.0.12",
     "react": "16.9.0",
     "react-chartist": "0.13.3",
+    "react-circular-progressbar": "^2.0.3",
     "react-cookies": "^0.1.1",
     "react-dom": "16.9.0",
     "react-export-excel": "^0.5.3",
