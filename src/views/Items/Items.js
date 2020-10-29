@@ -25,6 +25,8 @@ import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 // import { CircularProgressbar, buildStyles, CircularProgressbarWithChildren } from 'react-circular-progressbar';
 // import 'react-circular-progressbar/dist/styles.css';
 
+import Dialer from "../../components/Dial/dialer";
+
 const styles = {
   stylesForButton: {
     color: "white",
@@ -211,7 +213,7 @@ export default function Items(props) {
             flexDirection: "column",
           }}
         >
-          <div className="row">
+          {/* <div className="row">
             {itemsArray ? (
               <div className="container-fluid">
                 <Table
@@ -245,7 +247,9 @@ export default function Items(props) {
                 <Loader type="TailSpin" color="red" height={50} width={50} />
               </div>
             )}
-          </div>
+          </div> */}
+
+          <Dialer />
 
 
         </div>
