@@ -13,6 +13,16 @@
     background-color: white;
     border-radius: 5px;
     padding: 15px;
+    height: 10rem;
+}
+.bar-area{
+    height: 8rem;
+}
+.guage-area{
+    height: 16rem;
+}
+.guage-area h4{
+    margin: auto;
 }
 .dashboard-chunk{
     padding-right: 0px;
@@ -21,7 +31,41 @@
 .dashboard-chunk-area-heading{
     margin-left: 0px;
 }
+.dashboard-chunk-area-notifications{
+    margin-top: 5px;
+    cursor: pointer;
+}
 .dashboard-chunk-area-heading h4 {
     font-size: 18px;
     font-weight: 700;
+}
+.guage-img-area{
+    margin: auto;
+    padding-top: 10px;
+}
+.guage{
+    height: 120px;
+    width: 200px;
+}
+.guage-footer{
+    margin-right: 0px;
+    margin-left: 0px;
+}
+.guage-footer-text{
+    font-size: 18px;
+    font-weight: 700;
+}
+.guage-footer-area-counter{
+    margin-top: -10px;
+    font-size: 40px;
+    color: #13D59F;
+    font-weight: 900;
+    float: right;
+}
+.below{
+    font-size: 12px;
+    color: #7F7F7F;
+}
+.left{
+    float: left;
 }
