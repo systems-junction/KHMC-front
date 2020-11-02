@@ -499,7 +499,7 @@ function ReceiveItems(props) {
       }}
     >
       <Header history={props.history}/>
-      <div className="cPadding">
+      <div className="cPadding" style={{ marginLeft: 10, marginRight: 10 }}>
         <div className="subheader">
           <div>
             <img src={business_Unit} />

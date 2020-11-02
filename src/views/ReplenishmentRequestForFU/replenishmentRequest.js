@@ -865,7 +865,7 @@ export default function ReplenishmentRequest(props) {
             }}
           >
             <div
-              className="col-md-12 col-sm-9 col-8"
+              className="col-md-12 col-sm-9 col-12"
               style={styles.textFieldPadding}
             >
               <TextField
