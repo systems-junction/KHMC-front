@@ -38,6 +38,7 @@ import systemAdmin from "../views/UserManagement/systemAdmin/systemAdmin";
 import addEditSystemAdmin from "../views/UserManagement/systemAdmin/addEditSystemAdmin";
 import notificationCenter from '../views/Notifications/notifications'
 import dashboard from '../views/Dashboard/dashboard'
+import webRTC from '../views/WebRTC/webRTC'
 
 const hist = createBrowserHistory();
 class HomeScreenRoutes extends React.PureComponent {
@@ -46,6 +47,7 @@ class HomeScreenRoutes extends React.PureComponent {
       <Switch>
         <Route exact path={"/home"} component={HomeScreen} />
         <Route exact path={"/home/dashboard"} component={dashboard} />
+        <Route exact path={"/home/webRTC"} component={webRTC} />
         <Route exact path={"/home/patientFHIR"} component={PatientFHIR} />
         <Route path={"/home/controlroom"} component={ControlRoomRoutes} />
         <Route path={"/home/reports"} component={ReportsRoutes} />
