@@ -250,6 +250,26 @@ const useStyles = makeStyles((theme) => ({
       color: "black",
     },
   },
+  root: {
+   
+    "& .MuiFormLabel-root": {
+      fontSize: "12px",
+
+      paddingRight: "50px",
+    },
+    
+  },
+  label: {
+    "&$focusedLabel": {
+      color: "red",
+      display: "none"
+    },
+    // "&$erroredLabel": {
+    //   color: "orange"
+    // }
+  },
+  focusedLabel: {},
+ 
   // label: {
   //   "&:focused": {
   //     color: "black",
@@ -1468,11 +1488,11 @@ function AddEditPurchaseRequest(props) {
         <div style={{ marginTop: "5px", marginBottom: "5px" }}>
           {comingFor === "add" &&
           !props.history.location.state.comingFromRCM ? (
-            <div>
-              <div className="row">
+            <div >
+              <div className={`${"row"} ${classes.root}`}>
                 {/* <span class="fa fa-search"></span> */}
                 <div
-                  className="col-md-10 col-sm-12"
+                  className="col-md-10 col-8"
                   style={styles.textFieldPadding}
                 >
                   <TextField
@@ -1484,6 +1504,13 @@ function AddEditPurchaseRequest(props) {
                     name={"searchPatientQuery"}
                     value={searchPatientQuery}
                     onChange={handlePauseSearch}
+                    InputLabelProps={{
+                      classes: {
+                        root: classes.label,
+                        focused: classes.focusedLabel,
+                        error: classes.erroredLabel
+                      }
+                    }}
                     InputProps={{
                       // endAdornment: (
                       //   <InputAdornment position="end">
@@ -1493,15 +1520,12 @@ function AddEditPurchaseRequest(props) {
                       className: classes.input,
                       classes: { input: classes.input },
                     }}
-                    InputLabelProps={{
-                      className: classes.label,
-                      classes: { label: classes.label },
-                    }}
+                    
                   />
                 </div>
 
                 <div
-                  className="col-md-1 col-sm-6"
+                  className="col-md-1 col-sm-6 col-2"
                   style={{
                     ...styles.textFieldPadding,
                   }}
@@ -1521,7 +1545,7 @@ function AddEditPurchaseRequest(props) {
                 </div>
 
                 <div
-                  className="col-md-1 col-sm-6"
+                  className="col-md-1 col-sm-6 col-2"
                   style={{
                     ...styles.textFieldPadding,
                     display: "flex",
@@ -1694,7 +1718,7 @@ function AddEditPurchaseRequest(props) {
 
             {selectedItemToSearch === "pharmaceutical" ? (
               <div>
-                <div className="row">
+               <div className={`${"row"} ${classes.root}`}>
                   {selectItemToEditId === "" ? (
                     <>
                       <div
