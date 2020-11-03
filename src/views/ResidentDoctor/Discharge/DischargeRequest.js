@@ -170,6 +170,16 @@ const useStylesForInput = makeStyles((theme) => ({
       paddingRight: "50px",
     },
   },
+  label: {
+    "&$focusedLabel": {
+      color: "red",
+      display: "none"
+    },
+    // "&$erroredLabel": {
+    //   color: "orange"
+    // }
+  },
+  focusedLabel: {},
 }));
 
 function DischargeRequest(props) {
@@ -764,6 +774,13 @@ function DischargeRequest(props) {
                 value={searchPatientQuery}
                 onChange={handlePauseSearch}
                 onKeyDown={handleKeyDown}
+                InputLabelProps={{
+                  classes: {
+                    root: classes.label,
+                    focused: classes.focusedLabel,
+                    error: classes.erroredLabel
+                  }
+                }}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">

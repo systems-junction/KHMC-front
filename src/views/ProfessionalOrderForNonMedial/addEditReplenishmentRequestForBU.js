@@ -250,6 +250,24 @@ const useStyles = makeStyles((theme) => ({
       color: "black",
     },
   },
+  root: {
+    
+    "& .MuiFormLabel-root": {
+      fontSize: "12px",
+
+      paddingRight: "50px",
+    },
+  },
+  label: {
+    "&$focusedLabel": {
+      color: "red",
+      display: "none"
+    },
+    // "&$erroredLabel": {
+    //   color: "orange"
+    // }
+  },
+  focusedLabel: {},
   // label: {
   //   "&:focused": {
   //     color: "black",
@@ -1421,7 +1439,7 @@ function AddEditPurchaseRequest(props) {
         overflowX: "hidden",
       }}
     >
-      <Header />
+      <Header history={props.history}/>
       <div className="cPadding" style={{ marginLeft: 10, marginRight: 10 }}>
         <div className="subheader">
           <div style={{ marginLeft: -23 }}>
@@ -1458,12 +1476,13 @@ function AddEditPurchaseRequest(props) {
           !props.history.location.state.comingFromRCM ? (
             <div>
               <div
-                className="row "
+                
+                className={`${"row"} ${classes.root}`}
                 style={{ marginLeft: -20, marginRight: -15 }}
               >
                 {/* <span class="fa fa-search"></span> */}
                 <div
-                  className="col-md-10 col-sm-12"
+                  className="col-md-10 col-8"
                   style={styles.textFieldPadding}
                 >
                   <TextField
@@ -1485,14 +1504,17 @@ function AddEditPurchaseRequest(props) {
                       classes: { input: classes.input },
                     }}
                     InputLabelProps={{
-                      className: classes.label,
-                      classes: { label: classes.label },
+                      classes: {
+                        root: classes.label,
+                        focused: classes.focusedLabel,
+                        error: classes.erroredLabel
+                      }
                     }}
                   />
                 </div>
 
                 <div
-                  className="col-md-1 col-sm-6"
+                  className="col-md-1 col-2"
                   style={{
                     ...styles.textFieldPadding,
                   }}
@@ -1507,12 +1529,12 @@ function AddEditPurchaseRequest(props) {
                       height: 55,
                     }}
                   >
-                    <img src={BarCode} style={{ width: 80, height: 75 }} />
+                    <img src={BarCode} style={{ width: 70, height: 60 }} />
                   </div>
                 </div>
 
                 <div
-                  className="col-md-1 col-sm-6"
+                  className="col-md-1 col-2"
                   style={{
                     ...styles.textFieldPadding,
                     display: "flex",
@@ -1625,7 +1647,7 @@ function AddEditPurchaseRequest(props) {
               {selectItemToEditId === "" ? (
                 <>
                   <div
-                    className="col-md-9 col-sm-9 col-9"
+                    className="col-md-9 col-sm-9 col-12"
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1653,7 +1675,7 @@ function AddEditPurchaseRequest(props) {
                     {/* </div> */}
                   </div>
                   <div
-                    className="col-md-3 col-sm-3 col-3"
+                    className="col-md-3 col-sm-3 col-12"
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1788,7 +1810,7 @@ function AddEditPurchaseRequest(props) {
 
             <div className="row sideMargin">
               <div
-                className="col-md-3 col-sm-3 col-3"
+                className="col-md-3 col-6"
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -1836,7 +1858,7 @@ function AddEditPurchaseRequest(props) {
               </div>
 
               <div
-                className="col-md-3 col-sm-3 col-3"
+                className="col-md-3 col-sm-3 col-6"
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -1875,7 +1897,7 @@ function AddEditPurchaseRequest(props) {
               </div>
 
               <div
-                className="col-md-3 col-sm-3 col-3"
+                className="col-md-3 col-sm-3 col-6"
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -1912,7 +1934,7 @@ function AddEditPurchaseRequest(props) {
               </div>
 
               <div
-                className="col-md-3 col-sm-3 col-3"
+                className="col-md-3 col-sm-3 col-6"
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -1954,7 +1976,7 @@ function AddEditPurchaseRequest(props) {
 
             <div className="row sideMargin">
               <div
-                className="col-md-9 col-sm-9 col-9"
+                className="col-md-9 col-sm-9 col-12"
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
@@ -1976,7 +1998,7 @@ function AddEditPurchaseRequest(props) {
                 />
               </div>
               <div
-                className="col-md-3 col-sm-3 col-3"
+                className="col-md-3 col-sm-3 col-12"
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,

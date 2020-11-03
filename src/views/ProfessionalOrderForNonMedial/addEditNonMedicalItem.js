@@ -914,11 +914,11 @@ function AddEditPurchaseRequest(props) {
             <img src={purchase_request} />
             <h4>
               {comingFor === "add"
-                ? "Order Items (Non-Medical)"
+                ? "Order Items  (Non-Medical)"
                 : comingFor === "edit"
                   ? "Order Items (Non-Medical)"
                   : comingFor === "view"
-                    ? "Order Items (Non-Medical)"
+                    ? "Order Items  (Non-Medical)"
                     : undefined}
             </h4>
           </div>
@@ -1507,7 +1507,7 @@ function AddEditPurchaseRequest(props) {
                       />
                     </div> */}
                 <div
-                  className="col-md-4 col-sm-4 col-4"
+                  className="col-md-4 col-sm-4 col-12"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1534,7 +1534,7 @@ function AddEditPurchaseRequest(props) {
                   />
                 </div>
                 <div
-                  className="col-md-4 col-sm-4 col-4"
+                  className="col-md-4 col-sm-4 col-12"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1600,7 +1600,7 @@ function AddEditPurchaseRequest(props) {
                 </div> */}
 
                 <div
-                  className="col-md-4 col-sm-4 col-4"
+                  className="col-md-4 col-sm-4 col-12"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,

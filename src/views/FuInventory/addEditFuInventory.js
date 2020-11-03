@@ -443,7 +443,7 @@ function AddEditBuInventory(props) {
         overflowY: "scroll",
       }}
     >
-      <Header />
+      <Header history={props.history}/>
 
       <div className={`cPadding ${classes.root}`}>
         <div className="subheader">
