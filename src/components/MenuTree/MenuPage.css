@@ -13,11 +13,33 @@
   -webkit-transition: -webkit-transform ease 0.5s;
   transition: transform ease 0.5s;
 }
+@media screen and (max-width: 600px) {
+  .menu-item {
+    /* background: #eeeeee;
+    border-radius: 50%; */
+    width: 90px !important;
+    height: 90px !important;
+    /* margin-left: -40px;
+    position: absolute;
+    color: #ffffff;
+    text-align: center;
+    line-height: 80px;
+    -webkit-transform: translate(0, 0);
+    transform: translate(0, 0);
+    -webkit-transition: -webkit-transform ease 0.5s;
+    transition: transform ease 0.5s; */
+  }
+
+  .menu-open-button {
+    width: 95px !important;
+    height: 95px !important;
+  }
+}
 
 .menu-open-button {
   background: #4472c4;
   border-radius: 50%;
-  width: 95px;
+  width: 95px !important;
   height: 95px;
   margin-left: -40px;
   position: absolute;
