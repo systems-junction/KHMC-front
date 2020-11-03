@@ -4,6 +4,7 @@ import TextField from "@material-ui/core/TextField";
 
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
+import cookie from "react-cookies";
 
 // import Notification from 'components/Snackbar/Notification.js';
 
@@ -11,12 +12,11 @@ import AddAlert from "@material-ui/icons/AddAlert";
 
 import { Redirect } from "react-router-dom";
 import axios from "axios";
-import cookie from "react-cookies";
-import { loginUrl } from "../public/endpoins";
+import { resetPassword, emailReset } from "../public/endpoins";
 
-import KHMC_White from "../assets/img/KHMC_White.png";
+import KHMC_White from "../assets/img/KHMC Header LOGO.png";
 
-import Influence_white from "../assets/img/Influence_white.png";
+import Influence_white from "../assets/img/Influence Original.png";
 import Header from "../components/Header/Header";
 
 class Login extends React.Component {
@@ -35,6 +35,8 @@ class Login extends React.Component {
       verifiedUser: false,
 
       msg: "",
+      savedEmail: this.props.history.location.state.email,
+      savedContent: this.props.history.location.state.content,
     };
   }
 
@@ -42,45 +44,27 @@ class Login extends React.Component {
     this.setState({ [key]: e.target.value });
   }
 
-  handleLogin() {
-    // if (this.state.userName === '' && this.state.password === '') {
-    //   this.setState({ null_userName: true, null_password: true });
-    // } else if (this.state.userName === '') {
-    //   this.setState({ null_userName: true });
-    // } else if (this.state.password === '') {
-    //   this.setState({ null_password: true });
-    // } else {
-    //   var re = /\S+@\S+\.\S+/;
-    //   if (!re.test(this.state.userName)) {
-    //     this.setState({ tr: true, msg: 'Enter the valid email address' });
-    //   } else {
-    //     const params = {
-    //       email: this.state.userName,
-    //       password: this.state.password
-    //     };
-    //     axios
-    //       .post(loginUrl, params)
-    //       .then(res => {
-    //         if (res.data.success) {
-    //           console.log(res.data);
-    //           cookie.save('token', res.data.data.token, { path: '/' });
-    //           cookie.save('current_user', res.data.data.user, { path: '/' });
-    //           this.setState({
-    //             verifiedUser: true
-    //           });
-    //         }
-    //         // else if (!res.data.success) {
-    //         //   this.setState({ tr: true });
-    //         // }
-    //       })
-    //       .catch(e => {
-    //         console.log('error is ', e);
-    //         this.setState({ tr: true, msg: 'Login failed' });
-    //       });
-    //   }
-    // }
-    // this.props.history.push('/emailsendstatus');
-  }
+  resendEmail = () => {
+    const params = {
+      email: this.state.savedEmail,
+      content: this.state.savedContent,
+    };
+
+    console.log("params", params);
+    axios
+      .post(resetPassword, params)
+      .then((res) => {
+        if (res.data.data.email) {
+          console.log("SUCCESS Resend Email", res.data.data.email);
+        } else {
+          this.props.history.push("/");
+        }
+      })
+      .catch((e) => {
+        console.log("error is ", e);
+        this.setState({ tr: true, msg: "Login failed" });
+      });
+  };
 
   handleNameChange(name) {
     this.setState({ name });
@@ -108,8 +92,39 @@ class Login extends React.Component {
           backgroundColor: "#0154E8",
         }}
       >
-        <Header />
-
+        {/* <Header /> */}
+        <div className="header">
+          <img
+            src={KHMC_White}
+            className="header1-style"
+            // style={{ maxWidth: "160px", height: "35px" }}
+            // onClick={() => {
+            //   return this.setState({ goBack: true });
+            // }}
+          />{" "}
+          {/* <h4
+            className='header1-style'
+            style={{ color: 'white', fontWeight: 'bold' }}
+            onClick={() => {
+              return this.setState({ goBack: true })
+            }}
+          >
+            KHMC Logo
+          </h4> */}
+          <img
+            src={Influence_white}
+            className="header2-style"
+            style={{
+              // maxWidth: "160px",
+              // height: "35px",
+              cursor: "pointer",
+              // boxShadow: this.state.hover ? '2px 2px 2px 2px #b2b0b0' : '',
+            }}
+            // onMouseEnter={() => this.setState({ hover: true })}
+            // onMouseLeave={() => this.setState({ hover: false })}
+            // onClick={() => this.setState({ open: !this.state.open })}
+          />
+        </div>
         <div
           style={{
             flex: 3.5,
@@ -139,7 +154,7 @@ class Login extends React.Component {
                   color: "white",
                 }}
               >
-                Pleas check your email and follow the instructions given in the
+                Please check your email and follow the instructions given in the
                 mail
               </h6>
             </div>
@@ -186,7 +201,7 @@ class Login extends React.Component {
                     backgroundColor: "#002164",
                     borderRadius: 10,
                   }}
-                  onClick={() => this.handleLogin()}
+                  onClick={this.resendEmail}
                   variant="contained"
                   color="primary"
                 >

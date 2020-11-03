@@ -10,11 +10,11 @@ export default class Call extends Component {
     streamID: USER_ID,
     audio: true,
     video: true,
-    screen: false
+    screen: false,
   });
 
   state = {
-    remoteStreams: []
+    remoteStreams: [],
   };
 
   componentDidMount() {
@@ -37,7 +37,7 @@ export default class Call extends Component {
       },
       function(err) {
         console.log("getUserMedia failed", err);
-      }
+      },
     );
   };
 
@@ -49,7 +49,7 @@ export default class Call extends Component {
       },
       function(err) {
         console.log("AgoraRTC client init failed", err);
-      }
+      },
     );
     this.subscribeToClient();
   };
@@ -64,7 +64,7 @@ export default class Call extends Component {
     client.on("peer-leave", me.onPeerLeave);
   };
 
-  onStreamAdded = evt => {
+  onStreamAdded = (evt) => {
     let me = this;
     let stream = evt.stream;
     console.log("New stream added: " + stream.getId());
@@ -72,8 +72,8 @@ export default class Call extends Component {
       {
         remoteStreams: {
           ...me.state.remoteStream,
-          [stream.getId()]: stream
-        }
+          [stream.getId()]: stream,
+        },
       },
       () => {
         // Subscribe after new remoteStreams state set to make sure
@@ -81,7 +81,7 @@ export default class Call extends Component {
         client.subscribe(stream, function(err) {
           console.log("Subscribe stream failed", err);
         });
-      }
+      },
     );
   };
 
@@ -103,19 +103,19 @@ export default class Call extends Component {
       },
       function(err) {
         console.log("Join channel failed", err);
-      }
+      },
     );
   };
 
-  onRemoteClientAdded = evt => {
+  onRemoteClientAdded = (evt) => {
     let me = this;
     let remoteStream = evt.stream;
     me.state.remoteStreams[remoteStream.getId()].play(
-      "agora_remote " + remoteStream.getId()
+      "agora_remote " + remoteStream.getId(),
     );
   };
 
-  onStreamRemoved = evt => {
+  onStreamRemoved = (evt) => {
     let me = this;
     let stream = evt.stream;
     if (stream) {
@@ -131,7 +131,7 @@ export default class Call extends Component {
     }
   };
 
-  onPeerLeave = evt => {
+  onPeerLeave = (evt) => {
     let me = this;
     let stream = evt.stream;
     if (stream) {
@@ -150,10 +150,10 @@ export default class Call extends Component {
   render() {
     return (
       <div>
-        <div id="agora_local" style={{ width: "400px", height: "400px" }} >
-            <button >Hello This is fr</button>
+        <div id="agora_local" style={{ width: "400px", height: "400px" }}>
+          <button>Hello This is fr</button>
         </div>
-        {Object.keys(this.state.remoteStreams).map(key => {
+        {Object.keys(this.state.remoteStreams).map((key) => {
           let stream = this.state.remoteStreams[key];
           let streamId = stream.getId();
           return (

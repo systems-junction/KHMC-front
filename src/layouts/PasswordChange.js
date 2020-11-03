@@ -14,13 +14,14 @@ import Influence_white from "../assets/img/Influence Original.png";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
 import cookie from "react-cookies";
-import { resetPassword, emailReset } from "../public/endpoins";
+import { resetPassword, changePassword } from "../public/endpoins";
+import jwt_decode from "jwt-decode";
 
 import Header from "../components/Header/Header";
 
 import "../assets/jss/material-dashboard-react/components/TextInputStyle.css";
 
-class ForgetPassword extends React.Component {
+class PasswordChange extends React.Component {
   constructor(props) {
     super(props);
 
@@ -29,6 +30,7 @@ class ForgetPassword extends React.Component {
       null_userName: false,
 
       password: "",
+      passwordConfirm: "",
       null_password: "",
 
       tr: false,
@@ -44,23 +46,34 @@ class ForgetPassword extends React.Component {
   }
 
   handleResetPassword = () => {
+    var token = this.props.match.params.email;
+    console.log("token", token);
+    var decoded = jwt_decode(token);
+    console.log("decoded", decoded.email_token);
+
     const params = {
-      email: this.state.email,
-      content: `${emailReset}/passwordchange`,
+      email: decoded.email_token,
+      password: this.state.password,
     };
 
+    console.log("params", params);
+
     axios
-      .post(resetPassword, params)
+      .post(changePassword, params)
       .then((res) => {
-        if (res.data.data.email) {
-          console.log("SUCCESS", res.data.data.email);
-          this.props.history.push({
-            pathname: "/emailsendstatus",
-            state: {
-              email: params.email,
-              content: params.content,
-            },
-          });
+        if (res) {
+          console.log(res);
+          // console.log("SUCCESS", res.data.data.email);
+          // this.props.history.push("/emailsendstatus");
+          // console.log(res.data);
+          // cookie.save("emailSaved", res.data.data.email, {
+          //   path: "/emailsendstatus",
+          // });
+          // cookie.save("current_user", res.data.data.user, { path: "/" });
+          // this.setState({
+          //   verifiedUser: true,
+          // });
+          this.props.history.push("/login");
         } else {
           this.props.history.push("/");
         }
@@ -156,7 +169,7 @@ class ForgetPassword extends React.Component {
                 fontWeight: "700",
               }}
             >
-              Reset Password
+              Change Password
             </h1>
             <h6
               style={{
@@ -166,7 +179,7 @@ class ForgetPassword extends React.Component {
                 color: "white",
               }}
             >
-              Forgot your password? Just enter your email to gain access
+              Please enter your passwords
             </h6>
           </div>
 
@@ -192,11 +205,33 @@ class ForgetPassword extends React.Component {
                     }}
                   >
                     <input
-                      type="email"
-                      placeholder="Email"
-                      name={"email"}
-                      value={this.state.email}
-                      onChange={(e) => this.handleInput(e, "email")}
+                      type="password"
+                      placeholder="Password"
+                      name={"password"}
+                      value={this.state.password}
+                      onChange={(e) => this.handleInput(e, "password")}
+                      className="textInputStyle"
+                      style={{
+                        borderColor:
+                          !this.state.email && this.state.null_userName
+                            ? "red"
+                            : "white",
+                      }}
+                    />
+                  </div>
+                  <div
+                    className="row inputForLogin"
+                    style={{
+                      marginTop: 25,
+                      width: "55%",
+                    }}
+                  >
+                    <input
+                      type="password"
+                      placeholder="Password Confirm"
+                      name={"passwordConfirm"}
+                      value={this.state.passwordConfirm}
+                      onChange={(e) => this.handleInput(e, "passwordConfirm")}
                       className="textInputStyle"
                       style={{
                         borderColor:
@@ -256,4 +291,4 @@ class ForgetPassword extends React.Component {
   }
 }
 
-export default ForgetPassword;
+export default PasswordChange;

@@ -1,7 +1,7 @@
 const local = "http://localhost:4000/api";
 const notificationsUrl = "http://localhost:4000";
-const stagingDigitalOcean = 'https://dev.khmc-staging.online/api'
-const StagingDigitalOceanUploadsUrl = 'https://dev.khmc-staging.online/'
+const stagingDigitalOcean = "https://dev.khmc-staging.online/api";
+const StagingDigitalOceanUploadsUrl = "https://dev.khmc-staging.online/";
 
 const baseUrl = local;
 // const baseUrl = stagingDigitalOcean;
@@ -9,12 +9,17 @@ const baseUrl = local;
 export const socketUrl = "ws://localhost:4001";
 
 export const audioURL = "http://localhost:4000";
+
+// please change emailReset string according to dev
+export const emailReset = "http://localhost:3000";
 // export const audioURL = "https://dev.khmc-staging.online";
 export const uploadsUrl = "http://localhost:4000/uploads/";
 // export const uploadsUrl = StagingDigitalOceanUploadsUrl
 
 // auth endpoints
 export const loginUrl = `${baseUrl}/auth/login`;
+export const resetPassword = `${baseUrl}/auth/resetpassword`;
+export const changePassword = `${baseUrl}/auth/passwordchange`;
 
 export const addSubscriber = `${baseUrl}/subscriber/postsubscriber`;
 
@@ -424,7 +429,6 @@ export const stockLevelsFU = `${baseUrl}/reports/stocklevelsfu`;
 
 //Supplier Fulfillment PO
 export const supplierfulfillmentPO = `${baseUrl}/reports/supplierfulfillmentpo`;
-export const createChat = `${baseUrl}/chatroom/createchat`
-export const deleteChat = `${baseUrl}/chatroom/deletechat`
-export const uploadChatFile = `${baseUrl}/chatroom/uploadchatfile`
-
+export const createChat = `${baseUrl}/chatroom/createchat`;
+export const deleteChat = `${baseUrl}/chatroom/deletechat`;
+export const uploadChatFile = `${baseUrl}/chatroom/uploadchatfile`;
