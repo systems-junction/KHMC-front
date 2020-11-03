@@ -39,7 +39,7 @@
 .menu-open-button {
   background: #4472c4;
   border-radius: 50%;
-  width: 95px !important;
+  width: 95px;
   height: 95px;
   margin-left: -40px;
   position: absolute;
@@ -152,7 +152,7 @@
 
 .menu-open:checked ~ .item-3::after {
   width: 2px !important;
-  height: 110px !important;
+  height: 100px !important;
 }
 
 .item-4 {
