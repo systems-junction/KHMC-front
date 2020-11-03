@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useReducer } from "react";
 import TextField from "@material-ui/core/TextField";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Select from "@material-ui/core/Select";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -281,6 +282,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function AddEditPurchaseRequest(props) {
+  const matches = useMediaQuery("(min-width:600px)");
   const classes = useStyles();
   const initialState = {
     _id: "",
@@ -1665,7 +1667,8 @@ function AddEditPurchaseRequest(props) {
                 className="row"
                 style={{
                   backgroundColor: "white",
-                  height: 55,
+                  height: matches? 55 : 160,
+                  paddingLeft: matches ? 0 : 10,
                   display: "flex",
                   alignItems: "center",
                   borderRadius: 5,
