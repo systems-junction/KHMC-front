@@ -32,16 +32,9 @@ import Active from "../../assets/img/Active.png";
 import cookie from "react-cookies";
 import BusinessUnit from "../../subRoutes/business_unit.js";
 
-import {
-  SwipeableList,
-  SwipeableListItem,
-} from "@sandstreamdev/react-swipeable-list";
-import "@sandstreamdev/react-swipeable-list/dist/styles.css";
-
 import Loader from "react-loader-spinner";
 import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 
-import { useSwipeable, Swipeable } from "react-swipeable";
 
 const styles = {
   stylesForButton: {
