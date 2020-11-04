@@ -5,7 +5,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import RTCFunc from "../Chat/RTC/RTCFunc";
+import RTCFunc from "./webRTC";
 export default function RTCMain(props) {
   // const [open, setOpen] = React.useState(false);
   const handleClose = () => {

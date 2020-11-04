@@ -1,5 +1,5 @@
 import io from "socket.io-client";
-import { socketUrlForWebRTC } from "../../../public/endpoins";
+import { socketUrlForWebRTC } from "../../public/endpoins";
 
 // const socket = io({ path: '/bridge' });
 const socket = io.connect(socketUrlForWebRTC);

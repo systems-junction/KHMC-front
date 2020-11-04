@@ -3,11 +3,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 import Tabs from "@material-ui/core/Tabs";
 import MicRecorder from "mic-recorder-to-mp3";
-import DeleteIcon from "@material-ui/icons/Delete";
 import MicIcon from "@material-ui/icons/Mic";
 import StopIcon from "@material-ui/icons/Stop";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import clsx from "clsx";
 import Tab from "@material-ui/core/Tab";
 import Button from "@material-ui/core/Button";
 import SendIcon from "../../assets/img/Send.png";
@@ -23,6 +21,7 @@ import Header from "../../components/Header/Header";
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 import Badge from "@material-ui/core/Badge";
 import io from "socket.io-client";
+import RTC from "../WebRTC/DialogueRTC";
 import {
   createChat,
   uploadsUrl,
@@ -33,8 +32,6 @@ import {
 import User from "../../components/Chat/User";
 import Reciever from "../../components/Chat/Reciever";
 import Sender from "../../components/Chat/Sender";
-import RTC from "../../components/Chat/RTCMain.js";
-import ChatContent from "../../components/Chat/ChatContent";
 import axios from "axios";
 import cookie from "react-cookies";
 import Input from "@material-ui/core/Input";
@@ -144,10 +141,16 @@ export default function Chat(props) {
   }, []);
 
   socket.on("chat_receive", (message) => {
+    console.log("message before", message.message.sentAt);
+    message.message.sentAt = convertTime();
+    console.log("message after", message.message);
     let temp = [...chat, message.message];
-    setChat(temp);
+    onChatRecieved(temp);
   });
 
+  const onChatRecieved = (temp) => {
+    setChat(temp);
+  };
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -163,6 +166,17 @@ export default function Chat(props) {
     setValue(newValue);
   };
 
+  function convertTime() {
+    var currentDate = new Date();
+    currentDate.toLocaleTimeString(undefined, {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+    var convertedDate = `${currentDate.getHours()}:${currentDate.getMinutes()}`;
+    return convertedDate;
+  }
+
   const sendMessage = () => {
     if (message != "") {
       let objectSendToBackend = {};
@@ -173,6 +187,7 @@ export default function Chat(props) {
       } else {
         objectSendToBackend.sender = currentUser._id;
         objectSendToBackend.receiver = "5f4ffff4277ba8b380f2ef3d";
+        objectSendToBackend.sentAt = new Date();
       }
       let objectSendToBackend1 = {};
       objectSendToBackend1.chatId = chatId;
@@ -388,8 +403,6 @@ export default function Chat(props) {
       sendMessage();
     }
   };
-
-  console.log("chat recieved", chat);
 
   return (
     <div
