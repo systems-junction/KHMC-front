@@ -17,8 +17,8 @@
   .menu-item {
     /* background: #eeeeee;
     border-radius: 50%; */
-    width: 90px !important;
-    height: 90px !important;
+    width: 100px !important;
+    height: 100px !important;
     /* margin-left: -40px;
     position: absolute;
     color: #ffffff;
@@ -33,6 +33,11 @@
   .menu-open-button {
     width: 95px !important;
     height: 95px !important;
+  }
+  .headingStyle {
+    font-size: 9px !important;
+
+    line-height: 1.2 !important;
   }
 }
 
