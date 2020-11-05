@@ -2,21 +2,20 @@ import React from "react";
 import "./Header.css";
 import KHMC_White from "../../assets/img/KHMC Header LOGO.png";
 import Influence_white from "../../assets/img/Influence Original.png";
-import { Redirect} from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Fade from "@material-ui/core/Fade";
 import cookie from "react-cookies";
 import Fab from "@material-ui/core/Fab";
-import NotifyMe from './NotificationTray';
-import { socketUrl, getNotifications } from '../../public/endpoins';
-import socketIOClient from 'socket.io-client'
-import axios from 'axios'
+import NotifyMe from "./NotificationTray";
+import { socketUrl, getNotifications } from "../../public/endpoins";
+import socketIOClient from "socket.io-client";
+import axios from "axios";
 import AddIcon from "@material-ui/icons/Add";
 
-class Header extends React.Component 
-{
+class Header extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -28,50 +27,46 @@ class Header extends React.Component
     };
   }
 
-  componentDidMount() 
-  {
-    const loggedUser = cookie.load("current_user")
-    this.setState({ currentUser: loggedUser});
+  componentDidMount() {
+    const loggedUser = cookie.load("current_user");
+    this.setState({ currentUser: loggedUser });
 
-    axios.get(getNotifications + "/" + loggedUser._id )
-    .then((res) => {
+    axios
+      .get(getNotifications + "/" + loggedUser._id)
+      .then((res) => {
         if (res.data.success) {
-            console.log("Load Notifications",res.data.data)
+          // console.log("Load Notifications", res.data.data)
 
-            let notifyData = []
-            for(let i=0; i < res.data.data.length; i++)
-            {
-              var checkId = res.data.data[i].sendTo
-              for (let j=0; j < checkId.length; j++)
-              { 
-                if(checkId[j].userId._id === loggedUser._id)
-                {
-                  notifyData.push(res.data.data[i])
-                }
+          let notifyData = [];
+          for (let i = 0; i < res.data.data.length; i++) {
+            var checkId = res.data.data[i].sendTo;
+            for (let j = 0; j < checkId.length; j++) {
+              if (checkId[j].userId._id === loggedUser._id) {
+                notifyData.push(res.data.data[i]);
               }
             }
-            console.log("After checking User's Notifications",notifyData)
-            this.setState({ data: notifyData });
+          }
+          // console.log("After checking User's Notifications", notifyData)
+          this.setState({ data: notifyData });
         }
-    })
-    .catch((e) => {
-        console.log('Cannot get Notifications', e)
-    })
+      })
+      .catch((e) => {
+        console.log("Cannot get Notifications", e);
+      });
 
     const socket = socketIOClient(socketUrl);
 
     socket.on("get_data", (data) => {
       console.log("response coming through socket", data);
 
-      for(let i=0; i < data.length; i++)
-      {
-        var checkId = data[i].sendTo
-        for (let j=0; j < checkId.length; j++)
-        { 
-          if(checkId[j].userId._id === loggedUser._id)
-          {
-            var newData = [].concat(data[i],this.state.data)
-            this.setState({ data : newData})
+      for (let i = 0; i < data.length; i++) {
+        var checkId = data[i].sendTo;
+        if (data[i].sendTo) {
+          for (let j = 0; j < checkId.length; j++) {
+            if (checkId[j].userId._id === loggedUser._id) {
+              var newData = [].concat(data[i], this.state.data);
+              this.setState({ data: newData });
+            }
           }
         }
       }
@@ -94,7 +89,7 @@ class Header extends React.Component
   }
 
   render() {
-    const {history} = this.props
+    const { history } = this.props;
 
     if (this.state.goBack) {
       var currentLocation = window.location.pathname;
@@ -114,15 +109,16 @@ class Header extends React.Component
         />
         <NotifyMe
           data={this.state.data}
-          onNotificationIconClick={()=>history.push({
-                            pathname: '/home/notificationCenter',
-                            state: {
-                              notificationData : this.state.data
-                            },
-                          })
-                        }
-          storageKey='notific_key'
-          notific_key='timestamp'
+          onNotificationIconClick={() =>
+            history.push({
+              pathname: "/home/notificationCenter",
+              state: {
+                notificationData: this.state.data,
+              },
+            })
+          }
+          storageKey="notific_key"
+          notific_key="timestamp"
           sortedByKey={false}
           showDate={true}
           color="white"
@@ -157,7 +153,7 @@ class Header extends React.Component
                     gutterBottom
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
-                    {this.state.currentUser && this.state.currentUser.name}
+                    {this.state.currentUser && this.state.currentUser._id}
                   </Typography>
 
                   <Typography
@@ -283,8 +279,8 @@ class Header extends React.Component
             </Fade>
           </div>
         ) : (
-            undefined
-          )}
+          undefined
+        )}
 
         {this.state.currentUser ? (
           <div style={{ position: "fixed", right: 35, bottom: 45, zIndex: 5 }}>
@@ -302,8 +298,8 @@ class Header extends React.Component
             </Fab>
           </div>
         ) : (
-            undefined
-          )}
+          undefined
+        )}
       </div>
     );
   }

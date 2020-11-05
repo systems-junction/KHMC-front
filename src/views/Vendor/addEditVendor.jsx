@@ -9,6 +9,8 @@ import Modal from "@material-ui/core/Modal";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
 import Select from "@material-ui/core/Select";
+import FormControl from "@material-ui/core/FormControl";
+
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import { ToastsStore } from "react-toasts";
@@ -31,6 +33,8 @@ import BootstrapInput from "../../components/Dropdown/dropDown.js";
 import ErrorMessage from "../../components/ErrorMessage/errorMessage";
 import capitalizeFirstLetter from "../../public/capitilizeLetter";
 import AvaliabilityComponent from "../../components/Avaliability/avaliability";
+import useStyles from "../../../src/assets/jss/material-dashboard-react/inputStyle.js";
+import Notification from "../../components/Snackbar/Notification.js";
 
 import countryList from "react-select-country-list";
 
@@ -103,7 +107,7 @@ const styles = {
   },
 };
 
-const useStyles = makeStyles((theme) => ({
+const useStylesForSelect = makeStyles({
   underline: {
     "&&&:before": {
       borderBottom: "none",
@@ -112,58 +116,11 @@ const useStyles = makeStyles((theme) => ({
       borderBottom: "none",
     },
   },
-  margin: {
-    margin: theme.spacing(0),
-  },
-  input: {
-    backgroundColor: "white",
-    borderRadius: 6,
-    "&:after": {
-      borderBottomColor: "black",
-    },
-    "&:hover": {
-      backgroundColor: "white",
-    },
-    "&:disabled": {
-      color: "gray",
-    },
-  },
-  multilineColor: {
-    backgroundColor: "white",
-    borderRadius: 6,
-    "&:hover": {
-      backgroundColor: "white",
-    },
-    "&:after": {
-      borderBottomColor: "black",
-    },
-  },
-  root: {
-    "& .MuiTextField-root": {
-      backgroundColor: "white",
-    },
-    "& .Mui-focused": {
-      backgroundColor: "white",
-      color: "black",
-    },
-  },
-}));
+});
 
 function AddEditVendor(props) {
   const classes = useStyles();
-  const modalStyle = {
-    backgroundColor: "#5074f4",
-    borderRadius: 30,
-    height: "80%",
-    marginLeft: "15%",
-    marginRight: "15%",
-    marginTop: "5%",
-    display: "flex",
-    justifyContent: "center",
-    flexDirection: "column",
-    flex: 1,
-    position: "fixed",
-  };
+  const classesForSelect = useStylesForSelect();
 
   const initialState = {
     _id: "",
@@ -241,48 +198,34 @@ function AddEditVendor(props) {
   };
 
   const onChangeValue = (e) => {
-    dispatch({ field: e.target.name, value: e.target.value });
-  };
-
-  function validateForm() {
-    return true
-    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-    
-    let x =
-      englishName.length > 0 &&
-      arabicName.length > 0 &&
-      telephone1.length > 6 &&
-      address.length > 0 &&
-      // pobox.length > 0 &&
-      zipcode.length &&
-      taxno.length > 0 &&
-      contactPersonName.length > 0 &&
-      contactPersonTelephone.length > 6 &&
-      subClass.length > 0 &&
-      cls.length > 0 &&
-      status.length > 0;
-
-    if (contactEmail && contactPersonEmail === "") {
-      return x && re.test(contactEmail);
-    } else if (contactPersonEmail && contactEmail === "") {
-      return x && re.test(contactPersonEmail);
-    } else if (contactPersonEmail && contactEmail) {
-      return x && re.test(contactPersonEmail) && re.test(contactEmail);
-    } else if (telephone2) {
-      return x && telephone2.length > 6;
-    } else {
-      return x;
+    var pattern = /^[a-zA-Z0-9 ]*$/;
+    if (e.target.type === "text") {
+      if (pattern.test(e.target.value) === false) {
+        return;
+      }
     }
-  }
 
-  console.log('zipcode', zipcode)
+    if (e.target.type === "number") {
+      if (e.target.value < 0) {
+        return;
+      }
+    }
+
+    if (e.target.name === "cls") {
+      dispatch({ field: e.target.name, value: e.target.value });
+      dispatch({ field: "subClass", value: [] });
+    } else {
+      dispatch({ field: e.target.name, value: e.target.value });
+    }
+  };
 
   const [comingFor, setcomingFor] = useState("");
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [openShippingTermModal, setOpenShippingTermModal] = useState(false);
   const [shippingTermsData, setShippingTermsData] = useState([]);
   const [modeForShippingTerms, setModeForShippingTerms] = useState("add");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [openNotification, setOpenNotification] = useState(false);
 
   const [mainClasses, setClasses] = useState("");
 
@@ -304,33 +247,90 @@ function AddEditVendor(props) {
     setClasses(props.history.location.state.mainClasses);
     setStatuses(props.history.location.state.statues);
     setSubClasses(props.history.location.state.subClasses);
-    console.log('state', props.history.location.state.selectedItem)
+    console.log("state", props.history.location.state.selectedItem);
     const selectedRec = props.history.location.state.selectedItem;
     if (selectedRec) {
       Object.entries(selectedRec).map(([key, val]) => {
         if (val && typeof val === "object") {
-          dispatch({ field: key, value: val._id });
-        } else {
-          if(key === 'country'){
-            let cities = Object.entries(countriesList[0]);
-      for (var x in cities) {
-        let arr = cities[x];
-        if (arr[0] === val) {
-          console.log("cities", arr[1]);
-          setCities(arr[1]);
-          // dispatch({ field: key, value: val });
-        }
-        dispatch({ field: key, value: val });
-      }
+          if (key === "subClass") {
+            dispatch({ field: key, value: val });
+          } else {
+            dispatch({ field: key, value: val._id });
           }
-          else {
+        } else {
+          if (key === "country") {
+            let cities = Object.entries(countriesList[0]);
+            for (var x in cities) {
+              let arr = cities[x];
+              if (arr[0] === val) {
+                console.log("cities", arr[1]);
+                setCities(arr[1]);
+                // dispatch({ field: key, value: val });
+              }
+              dispatch({ field: key, value: val });
+            }
+          } else {
             dispatch({ field: key, value: val });
           }
-          
         }
       });
     }
   }, []);
+
+  function validateForm() {
+    return (
+      englishName !== "" &&
+      arabicName !== "" &&
+      telephone1 !== "" &&
+      telephone2 !== "" &&
+      contactPersonTelephone !== "" &&
+      address !== "" &&
+      // pobox.length > 0 &&
+      zipcode !== "" &&
+      taxno !== "" &&
+      contactPersonName !== "" &&
+      subClass !== "" &&
+      subClass.length > 0 &&
+      cls !== "" &&
+      status !== "" &&
+      contactPersonEmail != "" &&
+      contactEmail !== "" &&
+      rating !== "" &&
+      paymentTerms !== "" &&
+      city !== "" &&
+      country !== ""
+    );
+  }
+
+  function validatePhoneAndEmail() {
+    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    if (telephone1.length <= 6) {
+      setOpenNotification(true);
+      setErrorMsg("Please add telephone1 of length greater than 6.");
+      return false;
+    } else if (telephone2.length <= 6) {
+      setOpenNotification(true);
+      setErrorMsg("Please add telephone2 of length greater than 6.");
+      return false;
+    } else if (contactPersonTelephone.length <= 6) {
+      setOpenNotification(true);
+      setErrorMsg(
+        "Please add Contact Person Telephone of length greater than 6."
+      );
+      return false;
+    } else if (!re.test(contactPersonEmail)) {
+      setOpenNotification(true);
+      setErrorMsg("Please add valid email address for contact person email.");
+      return false;
+    } else if (!re.test(contactEmail)) {
+      setOpenNotification(true);
+      setErrorMsg("Please add valid email address for contact email.");
+      return false;
+    }
+
+    return true;
+  }
 
   const handleCancel = () => {
     props.history.goBack();
@@ -339,6 +339,10 @@ function AddEditVendor(props) {
   const handleAdd = () => {
     setIsFormSubmitted(true);
     if (validateForm()) {
+      if (!validatePhoneAndEmail()) {
+        return;
+      }
+
       const params = {
         englishName,
         arabicName,
@@ -410,6 +414,10 @@ function AddEditVendor(props) {
   const handleEdit = () => {
     setIsFormSubmitted(true);
     if (validateForm()) {
+      if (!validatePhoneAndEmail()) {
+        return;
+      }
+
       const params = {
         _id,
         englishName,
@@ -438,22 +446,23 @@ function AddEditVendor(props) {
         .then((res) => {
           if (res.data.success) {
             // console.log('response is', res.data.data._id);
-            if (shippingTermsData.length > 0) {
-              let withId = [];
-              let withOutId = [];
+            // if (shippingTermsData.length > 0) {
+            //   let withId = [];
+            //   let withOutId = [];
 
-              for (let i = 0; i < shippingTermsData.length; i++) {
-                if (shippingTermsData[i]._id) {
-                  withId.push(shippingTermsData[i]);
-                } else {
-                  withOutId.push(shippingTermsData[i]);
-                }
-              }
-              editShippingTerms(_id, withId);
-              addShippingTerms(_id, withOutId);
-            } else {
-              props.history.goBack();
-            }
+            //   for (let i = 0; i < shippingTermsData.length; i++) {
+            //     if (shippingTermsData[i]._id) {
+            //       withId.push(shippingTermsData[i]);
+            //     } else {
+            //       withOutId.push(shippingTermsData[i]);
+            //     }
+            //   }
+            //   editShippingTerms(_id, withId);
+            //   addShippingTerms(_id, withOutId);
+            // } else {
+            //   props.history.goBack();
+            // }
+            props.history.goBack();
           } else if (!res.data.success) {
             ToastsStore.error(res.data.error);
           }
@@ -507,6 +516,13 @@ function AddEditVendor(props) {
     setOpenShippingTermModal(false);
   };
 
+  if (openNotification) {
+    setTimeout(() => {
+      setOpenNotification(false);
+      setErrorMsg("");
+    }, 4000);
+  }
+
   return (
     <section
       style={{
@@ -520,7 +536,7 @@ function AddEditVendor(props) {
         overflowY: "scroll",
       }}
     >
-      <Header />
+      <Header history={props.history}/>
       <div className="cPadding">
         <div className="subheader">
           <div>
@@ -537,13 +553,16 @@ function AddEditVendor(props) {
             >
               <img src={view_all} className="icon-view" />
               &nbsp;&nbsp;
-              <strong >View All</strong>
+              <strong>View All</strong>
             </Button>
             {/* <img src={Search} /> */}
           </div>
         </div>
 
-        <div className={`container-fluid ${classes.root}`} style={{marginTop: 20}}>
+        <div
+          className={`container-fluid ${classes.root}`}
+          style={{ marginTop: 20 }}
+        >
           <div className="row sideMargin">
             <div
               className="col-md-6"
@@ -553,6 +572,7 @@ function AddEditVendor(props) {
               }}
             >
               <TextField
+                type={"text"}
                 required
                 label="English Name"
                 name={"englishName"}
@@ -576,6 +596,7 @@ function AddEditVendor(props) {
               }}
             >
               <TextField
+                type={"text"}
                 required
                 label="Arabic Name"
                 name={"arabicName"}
@@ -607,7 +628,9 @@ function AddEditVendor(props) {
                 error={telephone1 === "" && isFormSubmitted}
                 onChange={(e) => onChangeValue(e)}
                 className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                onKeyDown={(evt) =>
+                  (evt.key === "e" || evt.key === "E") && evt.preventDefault()
+                }
                 variant="filled"
                 InputProps={{
                   className: classes.input,
@@ -632,7 +655,9 @@ function AddEditVendor(props) {
                 error={telephone2 === "" && isFormSubmitted}
                 onChange={(e) => onChangeValue(e)}
                 className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                onKeyDown={(evt) =>
+                  (evt.key === "e" || evt.key === "E") && evt.preventDefault()
+                }
                 variant="filled"
                 InputProps={{
                   className: classes.input,
@@ -657,7 +682,9 @@ function AddEditVendor(props) {
                 error={faxno === "" && isFormSubmitted}
                 onChange={(e) => onChangeValue(e)}
                 className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                onKeyDown={(evt) =>
+                  (evt.key === "e" || evt.key === "E") && evt.preventDefault()
+                }
                 variant="filled"
                 InputProps={{
                   className: classes.input,
@@ -667,7 +694,7 @@ function AddEditVendor(props) {
             </div>
           </div>
 
-           <div className="row sideMargin">
+          <div className="row sideMargin">
             <div
               className="col-md-4"
               style={{
@@ -676,6 +703,7 @@ function AddEditVendor(props) {
               }}
             >
               <TextField
+                type={"text"}
                 required
                 label="Contact Person Name"
                 name={"contactPersonName"}
@@ -700,13 +728,16 @@ function AddEditVendor(props) {
             >
               <TextField
                 required
+                type={"number"}
                 label="Contact Person Telephone"
                 name={"contactPersonTelephone"}
                 value={contactPersonTelephone}
                 error={contactPersonTelephone === "" && isFormSubmitted}
                 onChange={(e) => onChangeValue(e)}
                 className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                onKeyDown={(evt) =>
+                  (evt.key === "e" || evt.key === "E") && evt.preventDefault()
+                }
                 variant="filled"
                 InputProps={{
                   className: classes.input,
@@ -723,6 +754,7 @@ function AddEditVendor(props) {
               }}
             >
               <TextField
+                type={"email"}
                 required
                 label="Contact Person Email"
                 name={"contactPersonEmail"}
@@ -749,6 +781,7 @@ function AddEditVendor(props) {
             >
               <TextField
                 required
+                type={"email"}
                 label="Contact Email"
                 name={"contactEmail"}
                 value={contactEmail}
@@ -772,6 +805,7 @@ function AddEditVendor(props) {
             >
               <TextField
                 required
+                type={"text"}
                 label="Address"
                 name={"address"}
                 value={address}
@@ -788,7 +822,7 @@ function AddEditVendor(props) {
           </div>
 
           <div className="row sideMargin">
-             <div
+            <div
               className="col-md-4"
               style={{
                 ...styles.inputContainerForTextField,
@@ -862,7 +896,7 @@ function AddEditVendor(props) {
                     );
                   })}
               </TextField>
-            </div> 
+            </div>
 
             <div
               className="col-md-4"
@@ -873,13 +907,20 @@ function AddEditVendor(props) {
             >
               <TextField
                 required
+                type={"number"}
                 label="Zip Code"
                 name={"zipcode"}
                 value={zipcode}
                 error={zipcode === "" && isFormSubmitted}
                 onChange={(e) => onChangeValue(e)}
                 className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                onKeyDown={(evt) =>
+                  (evt.key === "e" ||
+                    evt.key === "+" ||
+                    evt.key === "-" ||
+                    evt.key === "E") &&
+                  evt.preventDefault()
+                }
                 variant="filled"
                 InputProps={{
                   className: classes.input,
@@ -913,13 +954,14 @@ function AddEditVendor(props) {
             >
               <TextField
                 required
+                type={"text"}
                 label="Tax No"
                 name={"taxno"}
                 value={taxno}
                 error={taxno === "" && isFormSubmitted}
                 onChange={(e) => onChangeValue(e)}
                 className="textInputStyle"
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                // onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
                 variant="filled"
                 InputProps={{
                   className: classes.input,
@@ -973,36 +1015,52 @@ function AddEditVendor(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              <TextField
-                required
-                select
-                fullWidth
-                id="subClass"
-                name="subClass"
-                value={subClass}
-                error={subClass === "" && isFormSubmitted}
-                onChange={handleChange}
-                label="Sub Class"
-                variant="filled"
-                className="dropDownStyle"
-                InputProps={{
-                  className: classes.input,
-                  classes: { input: classes.input },
+              <FormControl
+              variant="filled" 
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  backgroundColor: "white",
+                  borderRadius: 3,
                 }}
               >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                {subClasses &&
-                  subClasses.map((val) => {
-                    if (val.parent === cls)
-                      return (
-                        <MenuItem key={val.key} value={val.key}>
-                          {val.value}
-                        </MenuItem>
-                      );
-                  })}
-              </TextField>
+                <InputLabel
+                  style={{  }}
+                  id="demo-simple-select-label"
+                >
+                  Sub Class
+                </InputLabel>
+
+                <Select
+                  labelId="demo-simple-select-label"
+                  required
+                  multiple
+                  fullWidth
+                  id="subClass"
+                  name="subClass"
+                  value={subClass}
+                  error={subClass === "" && isFormSubmitted}
+                  onChange={handleChange}
+                  label="Sub Class"
+                  // variant="filled"
+                  disableUnderline
+                  // style={{ paddingLeft: 12 }}
+                  // className={classesForSelect.root}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  {subClasses &&
+                    subClasses.map((val) => {
+                      if (val.parent === cls)
+                        return (
+                          <MenuItem key={val.key} value={val.key}>
+                            {val.value}
+                          </MenuItem>
+                        );
+                    })}
+                </Select>
+              </FormControl>
             </div>
           </div>
 
@@ -1016,6 +1074,7 @@ function AddEditVendor(props) {
             >
               <TextField
                 required
+                type={"text"}
                 label="Payment Terms"
                 name={"paymentTerms"}
                 value={paymentTerms}
@@ -1038,6 +1097,7 @@ function AddEditVendor(props) {
             >
               <TextField
                 required
+                type={"number"}
                 label="Rating"
                 name={"rating"}
                 value={rating}
@@ -1045,6 +1105,13 @@ function AddEditVendor(props) {
                 onChange={(e) => onChangeValue(e)}
                 className="textInputStyle"
                 variant="filled"
+                onKeyDown={(evt) =>
+                  (evt.key === "e" ||
+                    evt.key === "+" ||
+                    evt.key === "-" ||
+                    evt.key === "E") &&
+                  evt.preventDefault()
+                }
                 InputProps={{
                   className: classes.input,
                   classes: { input: classes.input },
@@ -1089,7 +1156,9 @@ function AddEditVendor(props) {
                   })}
               </TextField>
             </div>
-          </div> 
+          </div>
+
+          <Notification msg={errorMsg} open={openNotification} />
 
           {/* shipping terms modal */}
           {/* <Modal
@@ -1147,45 +1216,45 @@ function AddEditVendor(props) {
                 justifyContent: "center",
                 marginTop: "1%",
                 marginBottom: "1%",
-                marginRight: '-14px'
+                marginRight: "-14px",
               }}
             >
               {comingFor === "add" ? (
                 <div
-                style={{
-                  display: 'flex',
-                  flex: 1,
-                  justifyContent: 'flex-end',
-                }}
-              >
-                <Button
-                  disabled={!validateForm()}
-                  onClick={handleAdd}
-                  variant="contained"
-                  color="primary"
-                  style={styles.stylesForADD}
+                  style={{
+                    display: "flex",
+                    flex: 1,
+                    justifyContent: "flex-end",
+                  }}
                 >
-                  <strong style={{ fontSize: "12px" }}>Add</strong>
-                </Button>
+                  <Button
+                    disabled={!validateForm()}
+                    onClick={handleAdd}
+                    variant="contained"
+                    color="primary"
+                    style={styles.stylesForADD}
+                  >
+                    <strong style={{ fontSize: "12px" }}>Add</strong>
+                  </Button>
                 </div>
               ) : (
                 <div
-                style={{
-                  display: 'flex',
-                  flex: 1,
-                  justifyContent: 'flex-end',
-                }}
-              >
-                <Button
-                  className="pl30 pr30"
-                  disabled={!validateForm()}
-                  onClick={handleEdit}
-                  variant="contained"
-                  color="primary"
-                  style={styles.stylesForButton}
+                  style={{
+                    display: "flex",
+                    flex: 1,
+                    justifyContent: "flex-end",
+                  }}
                 >
-                  <strong style={{ fontSize: "12px" }}>Update</strong>
-                </Button>
+                  <Button
+                    className="pl30 pr30"
+                    disabled={!validateForm()}
+                    onClick={handleEdit}
+                    variant="contained"
+                    color="primary"
+                    style={styles.stylesForButton}
+                  >
+                    <strong style={{ fontSize: "12px" }}>Update</strong>
+                  </Button>
                 </div>
               )}
             </div>

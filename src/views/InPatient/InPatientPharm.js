@@ -85,7 +85,7 @@
 //         overflowY: "scroll",
 //       }}
 //     >
-//       <Header />
+//       <Header history={props.history}/>
 
 //       <div className="cPadding">
 //         <div className="subheader">
@@ -268,6 +268,16 @@ const useStylesForInput = makeStyles((theme) => ({
       paddingRight: "15px",
     },
   },
+  label: {
+    "&$focusedLabel": {
+      color: "red",
+      display: "none"
+    },
+    // "&$erroredLabel": {
+    //   color: "orange"
+    // }
+  },
+  focusedLabel: {},
 }));
 
 const tableHeadingForBUMember = [
@@ -890,10 +900,17 @@ export default function ReplenishmentRequest(props) {
                 id="searchPatientQuery"
                 type="text"
                 variant="filled"
-                label="Search By MRN / Order No "
+                label="Search By MRN / Order No"
                 name={"searchPatientQuery"}
                 value={searchPatientQuery}
                 onChange={handlePatientSearch}
+                InputLabelProps={{
+                  classes: {
+                    root: classes.label,
+                    focused: classes.focusedLabel,
+                    error: classes.erroredLabel
+                  }
+                }}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">

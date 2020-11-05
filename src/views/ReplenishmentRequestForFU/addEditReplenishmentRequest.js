@@ -1323,7 +1323,7 @@ function AddEditPurchaseRequest(props) {
         overflowY: "scroll",
       }}
     >
-      <Header />
+      <Header history={props.history}/>
       <div className="cPadding">
         <div className="subheader">
           <div style={{ marginLeft: "-6px" }}>
@@ -2244,13 +2244,17 @@ function AddEditPurchaseRequest(props) {
           )}
 
           {requestedItemsArray && (
-            <div className="row">
+            <div className="row"  style={{
+             overflowX: "scroll"
+             
+            }} > 
               <h5
                 style={{
                   color: "white",
                   marginTop: 15,
                   marginBottom: 15,
                   fontWeight: "700",
+                 
                 }}
               >
                 Items Ordered

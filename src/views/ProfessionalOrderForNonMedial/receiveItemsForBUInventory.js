@@ -498,8 +498,8 @@ function ReceiveItems(props) {
         overflowY: "scroll",
       }}
     >
-      <Header />
-      <div className="cPadding">
+      <Header history={props.history}/>
+      <div className="cPadding" style={{ marginLeft: 10, marginRight: 10 }}>
         <div className="subheader">
           <div>
             <img src={business_Unit} />

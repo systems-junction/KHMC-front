@@ -462,7 +462,7 @@ export default function ReplenishmentRequest(props) {
         overflowY: "scroll",
       }}
     >
-      <Header />
+      <Header history={props.history}/>
       <div className="cPadding">
         <div className="subheader">
           <div>
@@ -484,7 +484,7 @@ export default function ReplenishmentRequest(props) {
           style={{ marginLeft: "0px", marginRight: "0px", marginTop: "20px" }}
         >
           <div
-            className="col-md-12 col-sm-9 col-8"
+            className="col-md-12 col-sm-9 col-12"
             style={styles.textFieldPadding}
           >
             <TextField

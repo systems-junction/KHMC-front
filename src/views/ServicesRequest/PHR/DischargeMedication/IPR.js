@@ -90,6 +90,16 @@ const useStylesForInput = makeStyles((theme) => ({
       paddingRight: "15px",
     },
   },
+  label: {
+    "&$focusedLabel": {
+      color: "red",
+      display: "none"
+    },
+    // "&$erroredLabel": {
+    //   color: "orange"
+    // }
+  },
+  focusedLabel: {},
 }));
 
 const actions = { view: true };
@@ -232,6 +242,13 @@ export default function Ipr(props) {
                 name={"searchPatientQuery"}
                 value={searchPatientQuery}
                 onChange={handlePatientSearch}
+                InputLabelProps={{
+                  classes: {
+                    root: classes.label,
+                    focused: classes.focusedLabel,
+                    error: classes.erroredLabel
+                  }
+                }}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">

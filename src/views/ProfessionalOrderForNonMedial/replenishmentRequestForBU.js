@@ -719,9 +719,9 @@ export default function ReplenishmentRequest(props) {
 
               {props.history.location.pathname ===
               "/home/wms/fus/professionalorder/receiveorder" ? (
-                <h4>Ordered Items (Non-Medical)</h4>
+                <h4>Ordered Items   (Non-Medical)</h4>
               ) : (
-                <h4>Ordered Items (Non-Medical)</h4>
+                <h4>Ordered Items   (Non-Medical)</h4>
               )}
             </div>
 
@@ -758,7 +758,7 @@ export default function ReplenishmentRequest(props) {
             }}
           >
             <div
-              className="col-md-12 col-sm-9 col-8"
+              className="col-md-12 col-sm-9 col-12"
               style={{ ...styles.textFieldPadding }}
             >
               <TextField

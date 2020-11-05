@@ -15,6 +15,7 @@ import Login from "./layouts/Login";
 import ForgetPassword from "./layouts/ForgetPassword";
 
 import ResetPasswordStatus from "./layouts/ResetPasswordStatus";
+import PasswordChange from "./layouts/PasswordChange";
 
 import purchaseRequest from "../src/views/PurchaseRequest/purchaseRequest";
 import addEditPurchaseRequest from "../src/views/PurchaseRequest/addEditPurchaseRequest";
@@ -25,7 +26,7 @@ import HomeRoutes from "../src/subRoutes/home";
 
 import MaterialReceiving from "../src/views/BuReturn/buReturn";
 import AddEditMaterialReceiving from "../src/views/BuReturn/addEditBuReturn";
-import './index.css';
+import "./index.css";
 
 export const { persistor, store } = configureStore();
 
@@ -72,7 +73,7 @@ function interceptor() {
     function(error) {
       // Do something with request error
       return Promise.reject(error);
-    }
+    },
   );
   axios.interceptors.response.use(
     function(response) {
@@ -85,7 +86,7 @@ function interceptor() {
         console.log("error: ", error);
       }
       return error;
-    }
+    },
   );
 }
 
@@ -121,6 +122,11 @@ const MainApp = () => {
               exact
               path="/emailsendstatus"
               component={ResetPasswordStatus}
+            />
+            <Route
+              exact
+              path="/passwordchange/:email"
+              component={PasswordChange}
             />
             {/* <Route  path="/home/controlroom" component={ControlRoom} /> */}
 

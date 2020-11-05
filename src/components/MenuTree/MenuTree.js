@@ -28,6 +28,7 @@ import Items from "../../assets/img/Items.png";
 
 import React, { useEffect } from "react";
 import "./MenuPage.css";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { render } from "react-dom";
 
 import Back from "../../assets/img/Back_Arrow.png";
@@ -37,8 +38,12 @@ import KHMC_White from "../../assets/img/KHMC_White.png";
 import Influence_white from "../../assets/img/Influence_white.png";
 
 class MenuTree extends React.Component {
+  
   constructor(props) {
+    
     super(props);
+
+
 
     this.state = {};
   }
@@ -73,7 +78,7 @@ class MenuTree extends React.Component {
           />
 
           <label
-            className="menu-open-button"
+            className="menu-open-button "
             for="menu-open"
             style={{
               boxShadow: "3px 3px 3px #2433a5",

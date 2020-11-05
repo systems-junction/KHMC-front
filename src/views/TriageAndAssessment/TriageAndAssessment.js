@@ -10,7 +10,7 @@ import Back_Arrow from "../../assets/img/Back_Arrow.png";
 import cookie from "react-cookies";
 import axios from "axios";
 import _ from "lodash";
-import { updateEdrIpr } from "../../public/endpoins";
+import { updateEdrIpr, notifyTriage } from "../../public/endpoins";
 import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
 import Notification from "../../components/Snackbar/Notification.js";
 import CustomTable from "../../components/Table/Table";
@@ -223,22 +223,24 @@ function TriageAndAssessment(props) {
 
   const [value, setValue] = useState(0);
   const [historyValue, sethistoryValue] = useState(0);
-  const [id, setId] = React.useState("");
+  const [id, setId] = useState("");
   const [currentUser, setCurrentUser] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setsuccessMsg] = useState("");
   const [requestType, setrequestType] = useState("");
   const [openNotification, setOpenNotification] = useState(false);
   const [MRN, setMRN] = useState("");
+  const [patientId, setpatientId ] = useState('')
 
   useEffect(() => {
     setCurrentUser(cookie.load("current_user"));
 
     const selectedRec = props.history.location.state.selectedItem;
-    console.log("In triage : ", selectedRec.patientId.profileNo);
+    console.log("In triage : ", selectedRec.patientId._id);
     setMRN(selectedRec.patientId.profileNo);
     setId(selectedRec._id);
     setrequestType(selectedRec.requestType);
+    setpatientId(selectedRec.patientId._id)
 
     if (selectedRec.triageAssessment) {
       selectedRec.triageAssessment.map(
@@ -385,6 +387,7 @@ function TriageAndAssessment(props) {
             "Update Patient data patient assessment: ",
             res.data.data
           );
+          notifyForTriage(patientId);
           props.history.push({
             pathname: "success",
             state: {
@@ -401,6 +404,19 @@ function TriageAndAssessment(props) {
         console.log("error after submitting Assessment", e);
         setOpenNotification(true);
         setErrorMsg("Error while submitting Assessment");
+      });
+  };
+
+  const notifyForTriage = (id) => {
+    axios
+      .get(notifyTriage + "/" + id)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("error after notify", e);
+        setOpenNotification(true);
+        setErrorMsg(e);
       });
   };
 

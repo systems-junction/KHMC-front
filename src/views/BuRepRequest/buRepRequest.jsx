@@ -183,7 +183,7 @@ export default function BuRepRequest(props) {
       }}
     >
       
-        <Header />
+        <Header history={props.history}/>
       
       <div style={{ alignItems: "center", flex: 0.5, display: "flex" }}>
         <div
