@@ -7,7 +7,7 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import logoPatientInvoice from "../../assets/img/logoPatientSummaryInvoice.png";
 import PatientDetails from "../../components/PatientDetails/PatientDetailsRCM"
-
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import {
@@ -186,6 +186,15 @@ const useStyles = makeStyles((theme) => ({
       boxShadow: "none",
     },
   },
+  // root: {
+    
+  //   "& .MuiFormLabel-root": {
+  //     fontSize: "12px",
+
+  //     paddingRight: "50px",
+  //   },
+  // },
+ 
 }));
 
 const useStylesForInput = makeStyles((theme) => ({
@@ -236,10 +245,27 @@ const useStylesForInput = makeStyles((theme) => ({
       backgroundColor: "white",
       boxShadow: "none",
     },
+    "& .MuiFormLabel-root": {
+      fontSize: "11px",
+
+      paddingRight: "50px",
+    },
   },
+  label: {
+    "&$focusedLabel": {
+      color: "red",
+      display: "none"
+    },
+    // "&$erroredLabel": {
+    //   color: "orange"
+    // }
+  },
+  focusedLabel: {},
+
 }));
 
 function AddEditPatientListing(props) {
+  const matches = useMediaQuery("(min-width:600px)");
   const classes = MUIInputStyle();
   const classesInput = useStylesForInput();
   // const classes = useStyles()
@@ -1117,13 +1143,14 @@ function AddEditPatientListing(props) {
         {value === 0 ? (
           <div>
             <div
+              className={`container-fluid ${classesInput.root}`}
               style={{
                 marginTop: "20px",
                 marginBottom: "10px",
                 paddingLeft: "10px",
                 paddingRight: "10px",
               }}
-              className={`container-fluid ${classesInput.root}`}
+            
             >
               {comingFor === "add" ? (
                 <div>
@@ -1142,15 +1169,20 @@ function AddEditPatientListing(props) {
                         onKeyDown={handleKeyDown}
                         className="textInputStyle"
                         variant="filled"
+                        InputLabelProps={{
+                          classes: {
+                            root: classesInput.label,
+                            focused: classesInput.focusedLabel,
+                            error: classesInput.erroredLabel
+                          }
+                        }}
                         InputProps={{
                           endAdornment: (
                             <InputAdornment position="end">
                               <AccountCircle />
                             </InputAdornment>
                           ),
-                          className: classes.input,
-                          classes: { input: classes.input },
-                          disableUnderline: true,
+                          
                         }}
                       />
                     </div>
@@ -1666,6 +1698,7 @@ function AddEditPatientListing(props) {
                   paddingRight: "5px",
                 }}
               >
+                
                 <Button
                   style={{
                     color: "white",
@@ -1695,7 +1728,7 @@ function AddEditPatientListing(props) {
                   Calculate
                 </Button>
 
-                <div style={{ marginLeft: 10 }}>
+                <div style={{ marginLeft: 10, paddingTop: matches ? 0 : 20 }}>
                   {comingFor === "add" ? (
                     <Button
                       style={styles.stylesForButton}

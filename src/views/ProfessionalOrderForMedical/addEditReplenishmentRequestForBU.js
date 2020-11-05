@@ -2563,13 +2563,14 @@ function AddEditPurchaseRequest(props) {
             )}
 
             {requestedItemsArray && (
-              <div className="row">
+              <div className="row" style={{overflowX: "scroll"}}>
                 <h5
                   style={{
                     color: "white",
                     marginTop: 15,
                     marginBottom: 15,
                     fontWeight: "700",
+                    
                   }}
                 >
                   Items Ordered
