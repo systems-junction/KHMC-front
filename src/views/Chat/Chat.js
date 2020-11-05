@@ -21,7 +21,6 @@ import Header from "../../components/Header/Header";
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 import Badge from "@material-ui/core/Badge";
 import io from "socket.io-client";
-import RTC from "../WebRTC/DialogueRTC";
 import {
   createChat,
   uploadsUrl,
@@ -326,7 +325,12 @@ export default function Chat(props) {
   };
 
   const videoCall = () => {
-    setVideo(true);
+    props.history.push({
+      pathname: "/home/webRTC",
+      state: {
+        userId: "5f4ffff4277ba8b380f2ef3d",
+      },
+    });
   };
 
   function changeTime(chatArr) {
@@ -568,8 +572,6 @@ export default function Chat(props) {
                       onClick={videoCall}
                     />
                   </div>
-
-                  {video ? <RTC video={setVideo} /> : undefined}
                 </div>
               </div>
               <hr />
