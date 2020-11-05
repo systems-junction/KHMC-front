@@ -297,7 +297,7 @@ export default function WareHouseInventory(props) {
 
         <div className='row' style={{marginLeft: '0px', marginRight: '-5px', marginTop: '20px'}}>
             <div
-              className='col-md-12 col-sm-9 col-8'
+              className='col-md-12 col-sm-9 col-12'
               style={stylesInput.textFieldPadding}
             >
               <TextField

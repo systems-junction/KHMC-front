@@ -116,6 +116,14 @@ const useStylesForInput = makeStyles((theme) => ({
       color: "gray",
     },
   },
+  root: {
+    
+    "& .MuiFormLabel-root": {
+      fontSize: "12px",
+
+      paddingRight: "50px",
+    },
+  },
 }));
 
 const actionsForCommitteeMemeber = {
@@ -395,11 +403,11 @@ export default function PurchaseRequest(props) {
         </div>
 
         <div
-          className="row"
+           className={`${"row"} ${classesInput.root}`}
           style={{ marginLeft: "0px", marginRight: "0px", marginTop: "20px" }}
         >
           <div
-            className="col-md-12 col-sm-9 col-8"
+            className="col-md-12 col-sm-9 col-12"
             style={styles.textFieldPadding}
           >
             <TextField
