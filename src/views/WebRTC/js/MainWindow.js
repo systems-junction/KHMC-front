@@ -15,7 +15,7 @@ function MainWindow({ startCall, clientId, callTo }) {
 
   return (
     <div className="container main-window">
-      <div>
+      <div style={{ display: "none" }}>
         <h3>
           Hi, your ID is
           <input
@@ -29,6 +29,7 @@ function MainWindow({ startCall, clientId, callTo }) {
       </div>
       <div>
         <input
+          style={{ display: "none" }}
           type="text"
           className="txt-clientId"
           spellCheck={false}

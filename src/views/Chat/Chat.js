@@ -21,6 +21,7 @@ import Header from "../../components/Header/Header";
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 import Badge from "@material-ui/core/Badge";
 import io from "socket.io-client";
+import WebRTC from "../WebRTC/webRTC";
 import {
   createChat,
   uploadsUrl,
@@ -561,7 +562,12 @@ export default function Chat(props) {
                       marginLeft: -4,
                     }}
                   >
-                    <img
+                    {div ? (
+                      <WebRTC userId={"5f4ffff4277ba8b380f2ef3d"} />
+                    ) : (
+                      undefined
+                    )}
+                    {/* <img
                       style={{ height: 30, width: 30, cursor: "pointer" }}
                       src={CallIcon}
                       onClick={() => console.log("Call")}
@@ -569,8 +575,8 @@ export default function Chat(props) {
                     <img
                       style={{ height: 35, width: 35, cursor: "pointer" }}
                       src={VideoCallIcon}
-                      onClick={videoCall}
-                    />
+                      // onClick={videoCall}
+                    /> */}
                   </div>
                 </div>
               </div>

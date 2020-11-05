@@ -102,17 +102,14 @@ class App extends Component {
       localSrc,
       peerSrc,
     } = this.state;
-    console.log("userId", this.props.history.location.state.userId);
+    // console.log("userId", this.props.history.location.state.userId);
     return (
       <div>
         <MainWindow
           clientId={clientId}
           startCall={this.startCallHandler}
           callTo={
-            this.props.history.location.state &&
-            this.props.history.location.state.userId
-              ? this.props.history.location.state.userId
-              : "No Id Found"
+            this.props && this.props.userId ? this.props.userId : "No Id Found"
           }
         />
 
