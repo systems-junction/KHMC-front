@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Switch, Router } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import NotFound from "../components/NotFound/NotFound";
+import PhotoEditor from "../components/PhotoEditor/PhotoEditor";
 import HomeScreen from "../views/Home/HomeScreen";
 import PatientFHIR from "../views/patientFHIR/patientFHIR";
 import ControlRoom from "../views/Home/ControlRoom";
@@ -36,9 +37,9 @@ import AccessLevel from "../views/UserManagement/accessLevel/accessLevel";
 import AddEditAccessLevel from "../views/UserManagement/accessLevel/addEditAccessLevel";
 import systemAdmin from "../views/UserManagement/systemAdmin/systemAdmin";
 import addEditSystemAdmin from "../views/UserManagement/systemAdmin/addEditSystemAdmin";
-import notificationCenter from '../views/Notifications/notifications'
-import dashboard from '../views/Dashboard/dashboard'
-import webRTC from '../views/WebRTC/webRTC'
+import notificationCenter from "../views/Notifications/notifications";
+import dashboard from "../views/Dashboard/dashboard";
+import webRTC from "../views/WebRTC/webRTC";
 
 const hist = createBrowserHistory();
 class HomeScreenRoutes extends React.PureComponent {
@@ -48,10 +49,14 @@ class HomeScreenRoutes extends React.PureComponent {
         <Route exact path={"/home"} component={HomeScreen} />
         <Route exact path={"/home/dashboard"} component={dashboard} />
         <Route exact path={"/home/webRTC"} component={webRTC} />
+        <Route exact path={"/home/photoEditor"} component={PhotoEditor} />
         <Route exact path={"/home/patientFHIR"} component={PatientFHIR} />
         <Route path={"/home/controlroom"} component={ControlRoomRoutes} />
         <Route path={"/home/reports"} component={ReportsRoutes} />
-        <Route path={"/home/notificationCenter"} component={notificationCenter} />
+        <Route
+          path={"/home/notificationCenter"}
+          component={notificationCenter}
+        />
         <Route path={"/home/wms"} component={WMSRoutes} />
         <Route path={"/home/rcm"} component={RCMRoutes} />
         <Route exact path={"/home/bureturn"} component={BuReturn} />

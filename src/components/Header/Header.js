@@ -153,7 +153,7 @@ class Header extends React.Component {
                     gutterBottom
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
-                    {this.state.currentUser && this.state.currentUser._id}
+                    {this.state.currentUser && this.state.currentUser.name}
                   </Typography>
 
                   <Typography
