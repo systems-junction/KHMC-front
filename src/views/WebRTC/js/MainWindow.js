@@ -41,7 +41,7 @@ function MainWindow({ startCall, clientId, callTo }) {
         />
         <div>
           <img
-                      style={{ height: 30, width: 30, cursor: "pointer" }}
+                      style={{ height: 30, width: 30, cursor: "pointer", marginRight: 12 }}
                       src={CallIcon}
                       onClick={callWithVideo(true)}
                     />

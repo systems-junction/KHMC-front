@@ -29,7 +29,7 @@ export default function Reciever(props) {
   const classes = useStyles();
 
   return (
-    <div className={classes.root} style={{ marginTop: 10 }}>
+    <div className={classes.root} style={{ marginTop: 10, marginLeft: 20  }}>
       <Avatar
         alt="Remy Sharp"
         src="/static/images/avatar/1.jpg"

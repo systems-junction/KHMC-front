@@ -66,7 +66,7 @@
 
 .video-control,
 .call-modal {
-  margin-top: 260px;
+  margin-top: 245px;
   .btn-action {
     $height: 50px;
     height: $height;
@@ -95,5 +95,34 @@
         background-color: $red;
       }
     }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .call-window {
+    &.active {
+      opacity: 1;
+      z-index: 1;
+      width: 80%;
+      margin-left: 10%;
+
+      .video-control {
+        z-index: auto;
+        @include animation(in-fadeout 3s ease);
+        margin-bottom: 310px;
+      }
+    }
+    #localVideo {
+      bottom: 0;
+      right: 0;
+      width: 20%;
+      height: 20%;
+      margin-right: 0;
+      margin-bottom: 271px;
+    }
+  }
+  .video-control,
+  .call-modal {
+    margin-top: 40px;
   }
 }

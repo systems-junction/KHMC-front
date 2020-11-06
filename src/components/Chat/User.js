@@ -32,7 +32,7 @@ export default function User(props) {
 
   return (
     <div
-      style={{ marginRight: 30, cursor: "pointer" }}
+      style={{ marginRight: 30, cursor: "pointer", width: 60 }}
       key={props.key}
       onClick={props.getChatHandler}
     >
