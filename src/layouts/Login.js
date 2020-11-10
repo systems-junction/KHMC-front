@@ -16,7 +16,7 @@ import { loginUrl, getStaffUrl } from "../public/endpoins";
 
 import KHMC_White from "../assets/img/KHMC Header LOGO.png";
 
-import Influence_white from "../assets/img/Influence Original.png";
+import Influence_white from "../assets/img/Influence Original - White.png";
 
 import Splash from "./Splash";
 

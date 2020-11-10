@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import { jsPDF } from 'jspdf'
 import 'jspdf-autotable'
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import {
   updateClaim,
   getInsuredPatients,
@@ -161,9 +162,12 @@ const styles = {
 
 const useStylesForTabs = makeStyles({
   root: {
-    flexGrow: 1,
+    justifyContent: "center",
   },
-})
+  scroller: {
+    flexGrow: "0",
+  },
+});
 const useStyles1 = makeStyles(tableStyles)
 const useStyles = makeStyles((theme) => ({
   underline: {
@@ -218,7 +222,22 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: '#CCCCCC',
       },
     },
+    "& .MuiFormLabel-root": {
+      fontSize: "11px",
+
+      paddingRight: "50px",
+    },
   },
+  label: {
+    "&$focusedLabel": {
+      color: "red",
+      display: "none"
+    },
+    // "&$erroredLabel": {
+    //   color: "orange"
+    // }
+  },
+  focusedLabel: {},
 }))
 
 const StyledTableRow = withStyles((theme) => ({
@@ -275,6 +294,7 @@ function EnhancedTableHead(props) {
 }
 
 function AddEditPatientListing(props) {
+  const matches = useMediaQuery("(min-width:600px)");
   const classes = useStyles()
   const classes1 = useStyles1()
 
@@ -1151,11 +1171,17 @@ function AddEditPatientListing(props) {
         <div style={{ width: 'auto', height: '20px' }} />
         <div className={classesForTabs.root}>
           <Tabs
+           classes={{
+            root: classesForTabs.root,
+            scroller: classesForTabs.scroller,
+          }}
             value={value}
             onChange={handleChange}
             textColor='primary'
             TabIndicatorProps={{ style: { background: '#12387a' } }}
-            centered
+            centered={false}
+              variant="scrollable"
+              fullWidth={true}
           >
             <Tab
               style={{
@@ -1216,6 +1242,13 @@ function AddEditPatientListing(props) {
                         onKeyDown={handleKeyDown}
                         className='textInputStyle'
                         variant='filled'
+                        InputLabelProps={{
+                          classes: {
+                            root: classes.label,
+                            focused: classes.focusedLabel,
+                            error: classes.erroredLabel
+                          }
+                        }}
                         InputProps={{
                           endAdornment: (
                             <InputAdornment position='end'>
@@ -1375,7 +1408,7 @@ function AddEditPatientListing(props) {
                   width: '100%',
                   maxHeight: '300px',
                   overflowY: 'scroll',
-                  overflowX: 'hidden',
+                  overflowX: 'scroll',
                 }}
               >
                 <div
@@ -1390,6 +1423,7 @@ function AddEditPatientListing(props) {
                     paddingTop: 10,
                     marginLeft: 0,
                     marginRight: 0,
+                    minWidth: 600,
                   }}
                 >
                   <div
@@ -1433,6 +1467,8 @@ function AddEditPatientListing(props) {
                     paddingLeft: 10,
                     height: '80%',
                     paddingBottom: 10,
+                    minWidth: 600,
+                    overflow: "scroll",
                   }}
                 >
                   <div
@@ -1659,7 +1695,7 @@ function AddEditPatientListing(props) {
           </div>
         ) : value === 1 ? (
           <div
-            style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+            style={{ flex: 4, display: 'flex', flexDirection: 'column', overflowX: "scroll" }}
             className='container-fluid'
           >
             <div className='row' style={{ marginTop: '20px' }}>
@@ -1905,10 +1941,11 @@ function AddEditPatientListing(props) {
                 )}
 
                 <div
-                  className='col-md-6 col-sm-6 col-6'
+                  className='col-md-6 col-sm-6 col-12'
                   style={{
                     paddingLeft: 5,
                     paddingRight: 5,
+                    marginBottom: matches ? 0 : 15,
                   }}
                 >
                   <Button
@@ -1949,10 +1986,11 @@ function AddEditPatientListing(props) {
                 </div> */}
 
                 <div
-                  className='col-md-6 col-sm-6 col-6'
+                  className='col-md-6 col-sm-6 col-12'
                   style={{
                     paddingLeft: 5,
                     paddingRight: 5,
+                    marginBottom: matches ? 0 : 15,
                   }}
                 >
                   <Button
@@ -2025,9 +2063,10 @@ function AddEditPatientListing(props) {
                         } else if (item.slice(item.length - 3) === 'pdf') {
                           return (
                             <div
-                              className='col-md-4 col-sm-4 col-4'
+                              className='col-md-4 col-sm-4 col-12'
                               style={{
                                 ...styles.inputContainerForTextField,
+                                marginBottom: matches ? 0 : 15,
                               }}
                             >
                               <Button
@@ -2068,9 +2107,10 @@ function AddEditPatientListing(props) {
                         } else if (item.slice(item.length - 3) === 'pdf') {
                           return (
                             <div
-                              className='col-md-4 col-sm-4 col-4'
+                              className='col-md-4 col-sm-4 col-12'
                               style={{
                                 ...styles.inputContainerForTextField,
+                                marginBottom: matches ? 0 : 15,
                               }}
                             >
                               <Button

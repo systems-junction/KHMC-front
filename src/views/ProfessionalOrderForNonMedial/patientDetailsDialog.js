@@ -174,7 +174,7 @@ function AddEditPurchaseRequest(props) {
               width: "100%",
               maxHeight: "300px",
               overflowY: "scroll",
-              overflowX: "hidden",
+              overflowX: "scroll",
             }}
           >
             {/* </Paper> */}
@@ -191,6 +191,7 @@ function AddEditPurchaseRequest(props) {
                   borderTopRightRadius: 5,
                   paddingBottom: 10,
                   paddingTop: 10,
+                  minWidth: 600,
                 }}
               >
                 <div
@@ -233,6 +234,8 @@ function AddEditPurchaseRequest(props) {
                 paddingLeft: 10,
                 height: "80%",
                 paddingBottom: 10,
+                minWidth: 600,
+                overflow: "scroll",
               }}
             >
               <div

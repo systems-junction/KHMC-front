@@ -308,7 +308,7 @@ const useStylesForInput = makeStyles((theme) => ({
     "&:hover": {
       backgroundColor: "white",
       boxShadow: "none",
-      display: "none",
+      // display: "none",
     },
     "&:after": {
       borderBottomColor: "black",
@@ -331,7 +331,7 @@ const useStylesForInput = makeStyles((theme) => ({
       color: "black",
     },
     "& .MuiFormLabel-root": {
-      fontSize: "12px",
+      fontSize: "11px",
 
       paddingRight: "50px",
     },
@@ -2416,7 +2416,7 @@ function LabRadRequest(props) {
 
               <div className="row" style={{ marginBottom: "25px" }}>
                 <div className="col-md-6 col-sm-6 col-6"></div>
-                <div
+                <div  
                   className="col-md-6 col-sm-6 col-12 d-flex justify-content-end"
                   style={{ paddingRight: "1px" }}
                 >
@@ -3453,7 +3453,7 @@ function LabRadRequest(props) {
             >
               Add Consultation Note
             </DialogTitle>
-            <div className={`container-fluid ${classes.root}`}>
+            <div className={`container-fluid`}>
               <div className="row">
                 <div
                   className="col-md-12 col-sm-12 col-12"

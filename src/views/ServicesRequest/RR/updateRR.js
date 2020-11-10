@@ -491,7 +491,7 @@ function AddEditPurchaseRequest(props) {
               </div>
 
               <div
-                className='col-md-6 col-sm-6 col-6'
+                className='col-md-6 col-sm-6 col-12'
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
