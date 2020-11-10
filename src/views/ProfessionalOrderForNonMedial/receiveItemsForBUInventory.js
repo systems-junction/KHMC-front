@@ -109,16 +109,16 @@ function ReceiveItems(props) {
     batchNumber: "",
     lotNo: "12",
     unit: "kg",
-    discount: "10",
+    discount: "0",
     uniyDiscount: "10",
-    discountAmount: "",
+    discountAmount: "0",
     tax: "",
     taxAmount: "",
     finalUnitPrice: "",
     discountAmount2: "0",
     subTotal: "",
     totalPrice: "",
-    invoice: "FUINV-0091",
+    invoice: "",
     date: "",
     receivedDate: new Date(),
     expiryDate: "",
@@ -172,6 +172,8 @@ function ReceiveItems(props) {
     replenishmentRequestId: "",
 
     rrBUId: "",
+
+    qualityRate: "",
   };
 
   function reducer(state, { field, value }) {
@@ -250,6 +252,7 @@ function ReceiveItems(props) {
     replenishmentRequestId,
 
     rrBUId,
+    qualityRate,
   } = state;
 
   const onChangeValue = (e) => {
@@ -329,13 +332,15 @@ function ReceiveItems(props) {
 
   function validateForm() {
     return (
-      receivedQty.length > 0 &&
+      receivedQty !== "" &&
+      parseInt(receivedQty) > 0 &&
       bonusQty.length > 0 &&
       // batchNumber.length > 0 &&
       // lotNo.length > 0 &&
       // expiryDate !== "" &&
       // unit.length > 0 &&
-      // discount.length > 0 &&
+      discount !== "" &&
+      parseInt(discount) <= 100 &&
       // uniyDiscount.length > 0 &&
       // discountAmount.length > 0 &&
       // tax.length > 0 &&
@@ -349,7 +354,9 @@ function ReceiveItems(props) {
       receivedDate !== "" &&
       notes.length > 0 &&
       replenishmentRequestStatus !== "" &&
-      receivedQty <= requestedQty
+      receivedQty <= requestedQty &&
+      qualityRate !== "" &&
+      parseInt(qualityRate) <= 100
       // discountPercentage.length > 0
     );
   }
@@ -397,6 +404,8 @@ function ReceiveItems(props) {
 
         rrBUId: replenishmentRequestId,
         replenishmentRequestItemId: _id,
+
+        qualityRate: parseInt(qualityRate),
       };
 
       console.log("params", params);
@@ -509,8 +518,8 @@ function ReceiveItems(props) {
         overflowY: "scroll",
       }}
     >
-      <Header history={props.history}/>
-      <div className="cPadding">
+      <Header history={props.history} />
+      <div className="cPadding" style={{ marginLeft: 10, marginRight: 10 }}>
         <div className="subheader">
           <div>
             <img src={business_Unit} />
@@ -850,7 +859,7 @@ function ReceiveItems(props) {
             >
               <TextField
                 required
-                disabled
+                // disabled
                 className="textInputStyle"
                 type={"number"}
                 id="discount"
@@ -1214,7 +1223,7 @@ function ReceiveItems(props) {
             >
               <TextField
                 required
-                disabled
+                // disabled
                 className="textInputStyle"
                 id="invoice"
                 // type={"number"}
@@ -1305,7 +1314,7 @@ function ReceiveItems(props) {
 
           <div className="row">
             <div
-              className="col-md-6"
+              className="col-md-12"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -1319,6 +1328,36 @@ function ReceiveItems(props) {
                 label="Notes"
                 name={"notes"}
                 value={notes}
+                onChange={onChangeValue}
+                InputProps={{
+                  className: classesForInput.input,
+                  classes: { input: classesForInput.input },
+                }}
+                InputLabelProps={{
+                  className: classesForInput.label,
+                  classes: { label: classesForInput.label },
+                }}
+              />
+            </div>
+          </div>
+
+          <div className="row">
+            <div
+              className="col-md-6"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                type={"number"}
+                className="textInputStyle"
+                id="qualityRate"
+                variant="filled"
+                label="Rate item quality out of 100"
+                name={"qualityRate"}
+                value={qualityRate}
                 onChange={onChangeValue}
                 InputProps={{
                   className: classesForInput.input,

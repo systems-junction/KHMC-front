@@ -308,6 +308,7 @@ const useStylesForInput = makeStyles((theme) => ({
     "&:hover": {
       backgroundColor: "white",
       boxShadow: "none",
+      // display: "none",
     },
     "&:after": {
       borderBottomColor: "black",
@@ -330,11 +331,21 @@ const useStylesForInput = makeStyles((theme) => ({
       color: "black",
     },
     "& .MuiFormLabel-root": {
-      fontSize: "12px",
+      fontSize: "11px",
 
       paddingRight: "50px",
     },
   },
+  label: {
+    "&$focusedLabel": {
+      color: "red",
+      display: "none"
+    },
+    // "&$erroredLabel": {
+    //   color: "orange"
+    // }
+  },
+  focusedLabel: {},
 }));
 
 function LabRadRequest(props) {
@@ -1918,6 +1929,13 @@ function LabRadRequest(props) {
                 value={searchPatientQuery}
                 onChange={handlePauseSearch}
                 onKeyDown={handleKeyDown}
+                InputLabelProps={{
+                  classes: {
+                    root: classes.label,
+                    focused: classes.focusedLabel,
+                    error: classes.erroredLabel
+                  }
+                }}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -2398,7 +2416,7 @@ function LabRadRequest(props) {
 
               <div className="row" style={{ marginBottom: "25px" }}>
                 <div className="col-md-6 col-sm-6 col-6"></div>
-                <div
+                <div  
                   className="col-md-6 col-sm-6 col-12 d-flex justify-content-end"
                   style={{ paddingRight: "1px" }}
                 >
@@ -3403,7 +3421,7 @@ function LabRadRequest(props) {
                       cursor: "pointer",
                       borderRadius: 5,
                       backgroundColor: "#2c6ddd",
-                      width: "140px",
+                      width: matches ? "140px" : "110px",
                       height: "50px",
                       outline: "none",
                       paddingLeft: 30,
@@ -3435,7 +3453,7 @@ function LabRadRequest(props) {
             >
               Add Consultation Note
             </DialogTitle>
-            <div className={`container-fluid ${classes.root}`}>
+            <div className={`container-fluid`}>
               <div className="row">
                 <div
                   className="col-md-12 col-sm-12 col-12"
@@ -3579,6 +3597,7 @@ function LabRadRequest(props) {
                   justifyContent: "space-between",
                   paddingLeft: 5,
                   paddingRight: 5,
+                  marginTop: 20
                 }}
               >
                 <div style={{ marginTop: "2%", marginBottom: "2%" }}>

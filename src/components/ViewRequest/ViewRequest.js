@@ -361,7 +361,7 @@ export default function EdrRequest(props) {
           <div className={`row ${classes.root}`}>
             {props.item.heartRate ? (
               <div
-                className="col-md-4 col-sm-4 col-4"
+                className="col-md-4 col-sm-4 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <TextField
@@ -385,7 +385,7 @@ export default function EdrRequest(props) {
 
             {props.item.bloodPressureSys ? (
               <div
-                className="col-md-4 col-sm-4 col-4"
+                className="col-md-4 col-sm-4 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <TextField
@@ -409,7 +409,7 @@ export default function EdrRequest(props) {
 
             {props.item.bloodPressureDia ? (
               <div
-                className="col-md-4 col-sm-4 col-4"
+                className="col-md-4 col-sm-4 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <TextField
@@ -435,7 +435,7 @@ export default function EdrRequest(props) {
           <div className={`row ${classes.root}`}>
             {props.item.respiratoryRate ? (
               <div
-                className="col-md-4 col-sm-4 col-4"
+                className="col-md-4 col-sm-4 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <TextField
@@ -459,7 +459,7 @@ export default function EdrRequest(props) {
 
             {props.item.temperature ? (
               <div
-                className="col-md-4 col-sm-4 col-4"
+                className="col-md-4 col-sm-4 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <TextField
@@ -483,7 +483,7 @@ export default function EdrRequest(props) {
 
             {props.item.FSBS ? (
               <div
-                className="col-md-4 col-sm-4 col-4"
+                className="col-md-4 col-sm-4 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <TextField
@@ -509,7 +509,7 @@ export default function EdrRequest(props) {
           <div className={`row ${classes.root}`}>
             {props.item.painScale ? (
               <div
-                className="col-md-4 col-sm-4 col-4"
+                className="col-md-4 col-sm-4 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <TextField
@@ -533,7 +533,7 @@ export default function EdrRequest(props) {
 
             {props.item.pulseOX ? (
               <div
-                className="col-md-4 col-sm-4 col-4"
+                className="col-md-4 col-sm-4 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <TextField
@@ -557,7 +557,7 @@ export default function EdrRequest(props) {
 
             {/* {props.item.requester.firstName ? (
               <div
-                className='col-md-4 col-sm-4 col-4'
+                className='col-md-4 col-sm-4 col-12'
                 style={{...styles.textFieldPadding}}
               >
                 <TextField
@@ -602,7 +602,7 @@ export default function EdrRequest(props) {
           <div className={`row ${classes.root}`}>
             {props.item.triageLevel ? (
               <div
-                className="col-md-4 col-sm-4 col-4"
+                className="col-md-4 col-sm-4 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <TextField
@@ -626,7 +626,7 @@ export default function EdrRequest(props) {
 
             {props.item.generalAppearance ? (
               <div
-                className="col-md-4 col-sm-4 col-4"
+                className="col-md-4 col-sm-4 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <TextField
@@ -650,7 +650,7 @@ export default function EdrRequest(props) {
 
             {props.item.headNeck ? (
               <div
-                className="col-md-4 col-sm-4 col-4"
+                className="col-md-4 col-sm-4 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <TextField
@@ -676,7 +676,7 @@ export default function EdrRequest(props) {
           <div className={`row ${classes.root}`}>
             {props.item.neurological ? (
               <div
-                className="col-md-4 col-sm-4 col-4"
+                className="col-md-4 col-sm-4 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <TextField
@@ -700,7 +700,7 @@ export default function EdrRequest(props) {
 
             {props.item.respiratory ? (
               <div
-                className="col-md-4 col-sm-4 col-4"
+                className="col-md-4 col-sm-4 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <TextField
@@ -724,7 +724,7 @@ export default function EdrRequest(props) {
 
             {props.item.cardiac ? (
               <div
-                className="col-md-4 col-sm-4 col-4"
+                className="col-md-4 col-sm-4 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <TextField
@@ -750,7 +750,7 @@ export default function EdrRequest(props) {
           <div className={`row ${classes.root}`}>
             {props.item.abdomen ? (
               <div
-                className="col-md-4 col-sm-4 col-4"
+                className="col-md-4 col-sm-4 col-12"
                 style={{ ...styles.textFieldPadding, marginTop: "25px" }}
               >
                 <TextField

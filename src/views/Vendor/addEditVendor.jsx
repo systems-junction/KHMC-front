@@ -144,6 +144,8 @@ function AddEditVendor(props) {
     status: "",
     cls: "",
     subClass: [],
+
+    compliance: "",
   };
 
   function reducer(state, { field, value }) {
@@ -177,6 +179,8 @@ function AddEditVendor(props) {
     status,
     subClass,
     cls,
+
+    compliance,
   } = state;
 
   const onChangeCountry = (e) => {
@@ -298,7 +302,9 @@ function AddEditVendor(props) {
       rating !== "" &&
       paymentTerms !== "" &&
       city !== "" &&
-      country !== ""
+      country !== "" &&
+      parseInt(compliance) >= 1 &&
+      parseInt(compliance) <= 10
     );
   }
 
@@ -364,6 +370,7 @@ function AddEditVendor(props) {
         status,
         cls,
         subClass,
+        compliance: parseInt(compliance),
       };
 
       console.log("param for vendor", params);
@@ -440,6 +447,7 @@ function AddEditVendor(props) {
         status,
         cls,
         subClass,
+        compliance: parseInt(compliance),
       };
       axios
         .put(updateVendorUrl, params)
@@ -536,7 +544,7 @@ function AddEditVendor(props) {
         overflowY: "scroll",
       }}
     >
-      <Header history={props.history}/>
+      <Header history={props.history} />
       <div className="cPadding">
         <div className="subheader">
           <div>
@@ -1016,7 +1024,7 @@ function AddEditVendor(props) {
               }}
             >
               <FormControl
-              variant="filled" 
+                variant="filled"
                 style={{
                   width: "100%",
                   height: "100%",
@@ -1024,10 +1032,7 @@ function AddEditVendor(props) {
                   borderRadius: 3,
                 }}
               >
-                <InputLabel
-                  style={{  }}
-                  id="demo-simple-select-label"
-                >
+                <InputLabel style={{}} id="demo-simple-select-label">
                   Sub Class
                 </InputLabel>
 
@@ -1066,7 +1071,7 @@ function AddEditVendor(props) {
 
           <div className="row sideMargin">
             <div
-              className="col-md-4"
+              className="col-md-6"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -1089,7 +1094,7 @@ function AddEditVendor(props) {
               />
             </div>
             <div
-              className="col-md-4"
+              className="col-md-6"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -1118,9 +1123,42 @@ function AddEditVendor(props) {
                 }}
               />
             </div>
+          </div>
+
+          <div className="row sideMargin">
+            <div
+              className="col-md-6"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                type={"number"}
+                label="Compliance(1-10)"
+                name={"compliance"}
+                value={compliance}
+                error={compliance === "" && isFormSubmitted}
+                onChange={(e) => onChangeValue(e)}
+                className="textInputStyle"
+                variant="filled"
+                onKeyDown={(evt) =>
+                  (evt.key === "e" ||
+                    evt.key === "+" ||
+                    evt.key === "-" ||
+                    evt.key === "E") &&
+                  evt.preventDefault()
+                }
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+              />
+            </div>
 
             <div
-              className="col-md-4"
+              className="col-md-6"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,

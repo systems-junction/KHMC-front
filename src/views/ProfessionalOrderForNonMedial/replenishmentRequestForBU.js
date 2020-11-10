@@ -719,9 +719,9 @@ export default function ReplenishmentRequest(props) {
 
               {props.history.location.pathname ===
               "/home/wms/fus/professionalorder/receiveorder" ? (
-                <h4>Ordered Items (Non-Medical)</h4>
+                <h4>Ordered Items   (Non-Medical)</h4>
               ) : (
-                <h4>Ordered Items (Non-Medical)</h4>
+                <h4>Ordered Items   (Non-Medical)</h4>
               )}
             </div>
 
@@ -758,7 +758,7 @@ export default function ReplenishmentRequest(props) {
             }}
           >
             <div
-              className="col-md-12 col-sm-9 col-8"
+              className="col-md-12 col-sm-9 col-12"
               style={{ ...styles.textFieldPadding }}
             >
               <TextField
@@ -925,9 +925,6 @@ export default function ReplenishmentRequest(props) {
                   tableDataKeys={
                     currentUser.staffTypeId.type === "Registered Nurse"
                       ? tableDataKeysForItemsForBUMember
-                      : currentUser.staffTypeId.type === "Registered Nurse" ||
-                        currentUser.staffTypeId.type === "BU Doctor"
-                      ? tableDataKeysForItemsForBUMember
                       : currentUser.staffTypeId.type === "FU Inventory Keeper"
                       ? tableDataKeysForFUMemberForItems
                       : tableDataKeysForItemsForBUMember
@@ -935,8 +932,6 @@ export default function ReplenishmentRequest(props) {
                   action={
                     currentUser.staffTypeId.type === "Registered Nurse"
                       ? actionsForItemsForReceiver
-                      : currentUser.staffTypeId.type === "BU Doctor"
-                      ? actionsForItemsForOther
                       : currentUser.staffTypeId.type === "FU Inventory Keeper"
                       ? actionsForItemsForFUMember
                       : actionsForItemsForOther

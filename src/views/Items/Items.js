@@ -25,6 +25,10 @@ import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 // import { CircularProgressbar, buildStyles, CircularProgressbarWithChildren } from 'react-circular-progressbar';
 // import 'react-circular-progressbar/dist/styles.css';
 
+import Dialer from "../../components/Dial/dialer";
+import LineChart from "../../components/LineChart/LineChart";
+import DashboardComponent from "../../components/DashboardComponent/dashboardComponent";
+
 const styles = {
   stylesForButton: {
     color: "white",
@@ -54,13 +58,13 @@ const tableDataKeys = [
   "name",
   "cls",
   "subClass",
-  ["vendorId","englishName"]
+  ["vendorId", "englishName"],
   // "purchasePrice",
   // "minimumLevel",
   // "maximumLevel",
 ];
 
-const actions = { edit: true, delete: true };
+const actions = { edit: true, delete: false };
 
 export default function Items(props) {
   const [itemsArray, setItem] = useState("");
@@ -76,6 +80,8 @@ export default function Items(props) {
   const [subClasses, setSubClasses] = useState("");
 
   const [grandSubClasses, setGrandSubClasses] = useState("");
+
+  // const [data, setData] = useState([]);
 
   async function getItems() {
     axios
@@ -103,6 +109,7 @@ export default function Items(props) {
 
   useEffect(() => {
     getItems();
+    // regenerateData();
   }, []);
 
   const addNewItem = () => {
@@ -168,6 +175,36 @@ export default function Items(props) {
       });
   }
 
+  // function regenerateData() {
+  //   const chartData = [];
+  //   chartData.push({
+  //     label: 2,
+  //     value: 10,
+  //   });
+
+  //   chartData.push({
+  //     label: 3,
+  //     value: 30,
+  //   });
+  //   chartData.push({
+  //     label: 4,
+  //     value: 50,
+  //   });
+  //   chartData.push({
+  //     label: 5,
+  //     value: 55,
+  //   });
+  //   chartData.push({
+  //     label: 6,
+  //     value: 70,
+  //   });
+  //   chartData.push({
+  //     label: 7,
+  //     value: 100,
+  //   });
+  //   setData(chartData);
+  // }
+
   return (
     <div
       style={{
@@ -181,7 +218,7 @@ export default function Items(props) {
         overflowY: "scroll",
       }}
     >
-      <Header history={props.history}/>
+      <Header history={props.history} />
       <div className="cPadding">
         <div className="subheader">
           <div>
@@ -198,7 +235,7 @@ export default function Items(props) {
             >
               <img src={plus_icon} className="icon-style" />
               &nbsp;&nbsp;
-              <strong >Add New</strong>
+              <strong>Add New</strong>
             </Button>
             {/* <img src={Search} /> */}
           </div>
@@ -247,62 +284,11 @@ export default function Items(props) {
             )}
           </div>
 
+      
 
+          {/* {data.length !== 0 ? <DashboardComponent data={data} /> : undefined} */}
         </div>
       </div>
     </div>
   );
 }
-
-
-
-
-// import React from "react";
-// import _ from "lodash";
-
-// function Separator(props) {
-//   return (
-//     <div
-//       style={{
-//         position: "absolute",
-//         height: "100%",
-//         transform: `rotate(${props.turns}turn)`
-//       }}
-//     >
-//       <div style={props.style} />
-//     </div>
-//   );
-// }
-
-// function RadialSeparators(props) {
-//   const turns = 1 / props.count;
-//   return _.range(props.count).map(index => (
-//     <Separator turns={index * turns} style={props.style} />
-//   ));
-// }
-
-// export default RadialSeparators;
-
-
-{/* <CircularProgressbarWithChildren
-        value={10}
-        text={`${80}%`}
-        strokeWidth={10}
-        circleRatio={0.75}
-        styles={buildStyles({
-          strokeLinecap: "butt",
-              // rotation: 1 / 6,
-              rotation: 1 / 2 + 1 / 8,
-
-        })}
-      >
-        <RadialSeparators
-          count={13}
-          style={{
-            background: "#fff",
-            width: "2px",
-            // This needs to be equal to props.strokeWidth
-            height: `${10}%`
-          }}
-        />
-      </CircularProgressbarWithChildren> */}
