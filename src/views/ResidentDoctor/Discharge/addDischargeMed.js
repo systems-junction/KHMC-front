@@ -40,6 +40,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import "../../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
 import CustomTable from "../../../components/Table/Table";
 import Loader from 'react-loader-spinner'
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -188,6 +189,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function AddEditEDR(props) {
+  const matches = useMediaQuery("(min-width:600px)");
   const classes = useStyles();
   const initialState = {
     date: new Date(),
@@ -928,7 +930,8 @@ function AddEditEDR(props) {
                     className="row"
                     style={{
                       backgroundColor: "white",
-                      height: 55,
+                      height: matches ? 55: 155,
+                      paddingLeft : matches ? 0 : 10,
                       display: "flex",
                       alignItems: "center",
                       borderRadius: 5,
@@ -1119,7 +1122,7 @@ function AddEditEDR(props) {
 
                     <div className="row" style={{ marginTop: 15 }}>
                       <div
-                        className="col-md-4 col-sm-4 col-4"
+                        className="col-md-4 col-sm-4 col-12"
                         style={{
                           ...styles.inputContainerForTextField,
                           ...styles.textFieldPadding,
@@ -1140,7 +1143,7 @@ function AddEditEDR(props) {
                         />
                       </div>
                       <div
-                        className="col-md-4 col-sm-4 col-4"
+                        className="col-md-4 col-sm-4 col-12"
                         style={{
                           ...styles.inputContainerForTextField,
                           ...styles.textFieldPadding,
@@ -1178,7 +1181,7 @@ function AddEditEDR(props) {
                       </div>
 
                       <div
-                        className="col-md-4 col-sm-4 col-4"
+                        className="col-md-4 col-sm-4 col-12"
                         style={{
                           ...styles.inputContainerForTextField,
                           ...styles.textFieldPadding,
