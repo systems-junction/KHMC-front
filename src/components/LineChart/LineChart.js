@@ -56,11 +56,13 @@ function LineChart(props) {
     svg
       .append("g")
       .attr("class", "grid")
+      .attr("color", "grey")
       .style("stroke-dasharray", "4 4")
       .call(
         d3
           .axisLeft(yScale)
           .tickSize(-width)
+          .ticks(2)
           .tickFormat("")
       );
 
@@ -74,6 +76,7 @@ function LineChart(props) {
           .axisBottom()
           .scale(xScale)
           .tickSize(0)
+          .ticks(7)
       );
 
     svg
@@ -85,6 +88,7 @@ function LineChart(props) {
           .axisLeft()
           .scale(yScale)
           .tickSize(0)
+          .ticks(3)
       );
 
     svg
@@ -93,8 +97,7 @@ function LineChart(props) {
       .style("font-size", "9px")
       .style("opacity", "70%");
 
-
-      svg
+    svg
       .select(".y.axis")
       .selectAll("text")
       .style("font-size", "9px")
@@ -131,17 +134,17 @@ function LineChart(props) {
       .append("rect")
       .attr("width", 55)
       .attr("height", 25)
-      .attr("x", -25)
-      .attr("y", -40)
-      .attr("rx", 4)
-      .attr("ry", 4)
+      .attr("x", -20)
+      .attr("y", -10)
+      .attr("rx", 3)
+      .attr("ry", 3)
       .attr("fill", "#f26d91");
 
     focus
       .append("text")
       .attr("class", "tooltip-value")
       .attr("x", -3)
-      .attr("y", -22)
+      .attr("y", 7)
       .attr("fill", "#ffff")
       .style("font-size", "15px");
 
@@ -162,6 +165,8 @@ function LineChart(props) {
       })
       .on("mouseout", () => {
         // tooltip.transition().duration(300).style("opacity", 0);
+        focus.select(".tooltip-value").text("");
+
         xa.transition()
           .duration(0)
           .style("opacity", 0);
@@ -185,13 +190,6 @@ function LineChart(props) {
           "transform",
           `translate(${xScale(d0.label)},${yScale(d0.value)})`
         );
-
-        //   tooltip.transition().duration(100).style("opacity", 0.9);
-        //   tooltip.html(d0.tooltipContent || d0.label);
-        //   .style(
-        //     "transform",
-        //     `translate(${xScale(d0.label) + 30}px,${yScale(d0.value) - 30}px)`
-        //   );
       }
     }
   }

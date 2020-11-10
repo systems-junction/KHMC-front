@@ -64,7 +64,7 @@ const tableDataKeys = [
   // "maximumLevel",
 ];
 
-const actions = { edit: true, delete: true };
+const actions = { edit: true, delete: false };
 
 export default function Items(props) {
   const [itemsArray, setItem] = useState("");
@@ -81,7 +81,7 @@ export default function Items(props) {
 
   const [grandSubClasses, setGrandSubClasses] = useState("");
 
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
 
   async function getItems() {
     axios
@@ -109,7 +109,7 @@ export default function Items(props) {
 
   useEffect(() => {
     getItems();
-    regenerateData();
+    // regenerateData();
   }, []);
 
   const addNewItem = () => {
@@ -175,41 +175,35 @@ export default function Items(props) {
       });
   }
 
-  function regenerateData() {
-    const chartData = [];
-    // for (let i = 0; i < 6; i++) {
-    //   const value = Math.floor(Math.random() * i + 3);
+  // function regenerateData() {
+  //   const chartData = [];
+  //   chartData.push({
+  //     label: 2,
+  //     value: 10,
+  //   });
 
-    // }
-
-    chartData.push({
-      label: 2,
-      value: 10,
-    });
-
-    chartData.push({
-      label: 3,
-      value: 30,
-    });
-    chartData.push({
-      label: 4,
-      value: 50,
-    });
-    chartData.push({
-      label: 5,
-      value: 55,
-    });
-    chartData.push({
-      label: 6,
-      value: 70,
-    });
-    chartData.push({
-      label: 7,
-      value: 100,
-    });
-
-    setData(chartData);
-  }
+  //   chartData.push({
+  //     label: 3,
+  //     value: 30,
+  //   });
+  //   chartData.push({
+  //     label: 4,
+  //     value: 50,
+  //   });
+  //   chartData.push({
+  //     label: 5,
+  //     value: 55,
+  //   });
+  //   chartData.push({
+  //     label: 6,
+  //     value: 70,
+  //   });
+  //   chartData.push({
+  //     label: 7,
+  //     value: 100,
+  //   });
+  //   setData(chartData);
+  // }
 
   return (
     <div
@@ -254,7 +248,7 @@ export default function Items(props) {
             flexDirection: "column",
           }}
         >
-          {/* <div className="row">
+          <div className="row">
             {itemsArray ? (
               <div className="container-fluid">
                 <Table
@@ -288,20 +282,11 @@ export default function Items(props) {
                 <Loader type="TailSpin" color="red" height={50} width={50} />
               </div>
             )}
-          </div> */}
+          </div>
 
-          {/* <Dialer mainHeading={"Patients Treatment/Medication Pending"} value={55} color={'#FFBC28'} subHeading={"TAT"}
-          childHeading={"Registration to Assessment/Triage"}
-          time={"70"}
-          /> */}
+      
 
-          {/* <div >
-      {data.length !== 0 ? (
-        <LineChart data={data} width={250} height={200} scaleWidth={200} scaleHeight={150}  />
-      ) : undefined}
-    </div> */}
-
-          {data.length !== 0 ? <DashboardComponent data={data} /> : undefined}
+          {/* {data.length !== 0 ? <DashboardComponent data={data} /> : undefined} */}
         </div>
       </div>
     </div>

@@ -118,7 +118,6 @@ function Dialer(props) {
           height: "70%",
           // justifyContent: "center",
         //   alignItems: "center",
-          backgroundColor:'red'
         }}
       >
         <div className="row">
@@ -128,7 +127,7 @@ function Dialer(props) {
               width={250}
               height={140}
               scaleWidth={180}
-              scaleHeight={130}
+              scaleHeight={100}
             />
           </div>
         </div>
