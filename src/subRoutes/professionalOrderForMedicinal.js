@@ -3,7 +3,7 @@ import { Router, Route, Switch, Redirect } from "react-router-dom";
 import NotFound from "../components/NotFound/NotFound";
 import ReplenishmentRequest from "../views/ProfessionalOrderForMedical/replenishmentRequestForBU";
 import AddEditReplenishmentRequest from "../views/ProfessionalOrderForMedical/addEditReplenishmentRequestForBU";
-import ReceiveItemsForBUInventory from "../views/ProfessionalOrderForMedical/receiveItemsForBUInventory";
+import ReceiveItemsForBUInventory from "../views/ProfessionalOrderForMedical/receiveItemsForMedicalOrder";
 import EditRequestedItems from "../views/ProfessionalOrderForMedical/editRequestedItems";
 
 import SuccessScreen from "../components/SuccessScreen/SuccessScreen";
