@@ -10,14 +10,20 @@ import Fade from "@material-ui/core/Fade";
 import cookie from "react-cookies";
 import Fab from "@material-ui/core/Fab";
 import NotifyMe from './NotificationTray';
-import { socketUrl, getNotifications } from '../../public/endpoins';
+import { socketUrl, getNotifications,recordLogout } from '../../public/endpoins';
 import socketIOClient from 'socket.io-client'
 import axios from 'axios'
 import AddIcon from "@material-ui/icons/Add";
+import IdleTimer from 'react-idle-timer'
 
 class Header extends React.Component {
   constructor(props) {
     super(props);
+    this.idleTimer = null
+    this.handleOnAction = this.handleOnAction.bind(this)
+    this.handleOnActive = this.handleOnActive.bind(this)
+    this.handleOnIdle = this.handleOnIdle.bind(this)
+
     this.state = {
       goBack: false,
       hover: false,
@@ -25,6 +31,21 @@ class Header extends React.Component {
       currentUser: "",
       data: [],
     };
+  }
+
+  handleOnAction(event) {
+    // console.log('user did something', event)
+  }
+
+  handleOnActive(event) {
+    console.log('User is active now but the session has expired.')
+    // console.log('time remaining', new Date(this.idleTimer.getRemainingTime()))
+  }
+
+  handleOnIdle(event) {
+    console.log('user is idle')
+    console.log('last active', new Date(this.idleTimer.getLastActiveTime()))
+    this.logoutUser()
   }
 
   componentDidMount() {
@@ -80,7 +101,28 @@ class Header extends React.Component {
     this.setState({ dialogue: false });
   }
 
+  recordLogout() {
+    const loggedUser = cookie.load("current_user")
+    const token = cookie.load("token")
+
+    const params = {
+      token: token,
+      userId: loggedUser._id,
+    }
+    axios
+      .post(recordLogout, params)
+      .then((res) => {
+        if (res.data.success) {
+          console.log("response after recording the logout", res.data);
+        }
+      })
+      .catch((e) => {
+        console.log("error is ", e);
+      });
+  }
+
   logoutUser() {
+    this.recordLogout()
     cookie.remove("token", { path: "/" });
     cookie.remove("current_user", { path: "/" });
     cookie.remove("user_staff", { path: "/" });
@@ -298,6 +340,20 @@ class Header extends React.Component {
         ) : (
             undefined
           )}
+
+        {this.state.currentUser ? (
+          <IdleTimer
+            ref={ref => { this.idleTimer = ref }}
+            timeout={1000 * 60 * 10}
+            onActive={this.handleOnActive}
+            onIdle={this.handleOnIdle}
+            onAction={this.handleOnAction}
+            debounce={250}
+          />
+        ) : (
+            undefined
+          )}
+
       </div>
     );
   }
