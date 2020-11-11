@@ -10,7 +10,7 @@ import Fade from "@material-ui/core/Fade";
 import cookie from "react-cookies";
 import Fab from "@material-ui/core/Fab";
 import NotifyMe from './NotificationTray';
-import { socketUrl, getNotifications } from '../../public/endpoins';
+import { socketUrl, getNotifications,recordLogout } from '../../public/endpoins';
 import socketIOClient from 'socket.io-client'
 import axios from 'axios'
 import AddIcon from "@material-ui/icons/Add";
@@ -101,7 +101,28 @@ class Header extends React.Component {
     this.setState({ dialogue: false });
   }
 
+  recordLogout() {
+    const loggedUser = cookie.load("current_user")
+    const token = cookie.load("token")
+
+    const params = {
+      token: token,
+      userId: loggedUser._id,
+    }
+    axios
+      .post(recordLogout, params)
+      .then((res) => {
+        if (res.data.success) {
+          console.log("response after recording the logout", res.data);
+        }
+      })
+      .catch((e) => {
+        console.log("error is ", e);
+      });
+  }
+
   logoutUser() {
+    this.recordLogout()
     cookie.remove("token", { path: "/" });
     cookie.remove("current_user", { path: "/" });
     cookie.remove("user_staff", { path: "/" });

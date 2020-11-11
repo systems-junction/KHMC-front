@@ -22,6 +22,10 @@ export const addSubscriber = `${baseUrl}/subscriber/postsubscriber`;
 export const markNotification = `${baseUrl}/notifications/updatenotifications`;
 export const getNotifications = `${baseUrl}/notifications/getnotifications`;
 
+// login/logout recording endpoints
+export const recordLogin = `${baseUrl}/loginRecord/createLogin`;
+export const recordLogout = `${baseUrl}/loginRecord/recordLogout`;
+
 // items endpoints
 export const getItemsUrl = `${baseUrl}/item/getitems`;
 export const addItemUrl = `${baseUrl}/item/additem`;
