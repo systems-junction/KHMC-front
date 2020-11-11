@@ -57,6 +57,7 @@ const tableHeadingForFUMember = [
   "Batch Number",
   "Received Qty",
   "Returned Qty",
+  "Price",
   "Actions",
 ];
 
@@ -65,6 +66,7 @@ const tableHeadingForWarehouseMember = [
   "Batch Number",
   "Received Qty",
   "Returned Qty",
+  "Price",
 ];
 
 const tableHeadingForOthers = [
@@ -119,6 +121,7 @@ export default function DenseTable(props) {
             tableHeadingForFUMember.map((h, index) => {
               return (
                 <TableCell
+                key={index}
                   align="center"
                   style={{
                     ...styles.stylesForTableHeadCell,
@@ -142,6 +145,7 @@ export default function DenseTable(props) {
             tableHeadingForWarehouseMember.map((h, index) => {
               return (
                 <TableCell
+                key={index}
                   align="center"
                   style={{
                     ...styles.stylesForTableHeadCell,
@@ -160,7 +164,7 @@ export default function DenseTable(props) {
       </TableHead>
       <TableBody>
         {props.returnBatchArray.map((row, index) => (
-          <StyledTableRow key={row.name} style={{}}>
+          <StyledTableRow key={index} style={{}}>
             <TableCell
               align="center"
               style={{
@@ -180,10 +184,11 @@ export default function DenseTable(props) {
             </TableCell>
 
             <TableCell align="center">{row.batchNumber}</TableCell>
-
             <TableCell align="center">{row.receivedQtyPerBatch}</TableCell>
-
             <TableCell align="center">{row.returnedQtyPerBatch}</TableCell>
+            <TableCell align="center">
+              {parseFloat(row.price).toFixed(4)} JD
+            </TableCell>
 
             {currentUser.staffTypeId.type === "FU Inventory Keeper" &&
             props.comingFor !== "view" ? (

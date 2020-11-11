@@ -144,16 +144,16 @@ function ReceiveItems(props) {
     batchNumber: "",
     lotNo: "123",
     unit: "kg",
-    discount: "5",
+    discount: "0",
     uniyDiscount: "kg",
-    discountAmount: "",
+    discountAmount: "0",
     tax: "",
     taxAmount: "",
     finalUnitPrice: "",
     discountAmount2: "0",
     subTotal: "",
     totalPrice: "",
-    invoice: "FU-INV-123",
+    invoice: "",
     date: "",
     receivedDate: new Date(),
     expiryDate: "",
@@ -384,7 +384,8 @@ function ReceiveItems(props) {
 
   function validateForm() {
     return (
-      receivedQty.length > 0 &&
+      receivedQty !== "" &&
+      parseInt(receivedQty) !== 0 &&
       bonusQty.length > 0 &&
       // batchNumber.length > 0 &&
       // lotNo.length > 0 &&
@@ -574,7 +575,7 @@ function ReceiveItems(props) {
         overflowY: "scroll",
       }}
     >
-      <Header history={props.history}/>
+      <Header history={props.history} />
       <div className="cPadding">
         <div className="subheader">
           <div>
@@ -583,7 +584,10 @@ function ReceiveItems(props) {
           </div>
         </div>
 
-        <div style={{ flex: 4, display: "flex", flexDirection: "column" }}  className="container-fluid">
+        <div
+          style={{ flex: 4, display: "flex", flexDirection: "column" }}
+          className="container-fluid"
+        >
           <div className="row" style={{ marginBottom: 15 }}>
             {batchArray.length > 0 ? (
               <>
@@ -930,7 +934,6 @@ function ReceiveItems(props) {
               }}
             >
               <TextField
-                disabled
                 required
                 type="number"
                 label="Discount %"
@@ -1339,7 +1342,6 @@ function ReceiveItems(props) {
             >
               <TextField
                 required
-                disabled
                 label="Invoice"
                 name={"invoice"}
                 value={invoice}

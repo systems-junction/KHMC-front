@@ -115,21 +115,21 @@ function ReceiveItems(props) {
     requiredQty: "",
     receivedQty: 0,
     bonusQty: "0",
-    lotNo: "123",
+    lotNo: "",
     unit: "",
-    discount: "5",
+    discount: "0",
     uniyDiscount: "",
-    discountAmount: "",
+    discountAmount: "0",
     tax: "",
     taxAmount: "",
     finalUnitPrice: "",
     discountAmount2: "0",
     subTotal: "",
     totalPrice: "",
-    invoice: "WHI-12345",
+    invoice: "",
     date: "",
     receivedDate: new Date(),
-    comments: "Some comments for receiving",
+    comments: "",
     discountPercentage: "",
     statusForReceivingItem: "",
 
@@ -138,6 +138,11 @@ function ReceiveItems(props) {
     quantity: "",
     batchNumber: "",
     expiryDate: "",
+    price: "",
+
+    batchStatus: "",
+
+    returnedQty: 0,
   };
 
   function reducer(state, { field, value }) {
@@ -180,6 +185,11 @@ function ReceiveItems(props) {
     quantity,
     batchNumber,
     expiryDate,
+    price,
+
+    batchStatus,
+
+    returnedQty,
   } = state;
 
   const onChangeValue = (e) => {
@@ -230,6 +240,8 @@ function ReceiveItems(props) {
 
   const [selectItemToEditId, setSelectItemToEditId] = useState("");
 
+  const [rejectedBatches, setRejectedBatches] = useState("");
+
   useEffect(() => {
     // setcomingFor(props.history.location.state.comingFor);
     // setVendors(props.history.location.state.vendors);
@@ -252,14 +264,14 @@ function ReceiveItems(props) {
 
   function validateForm() {
     return (
-      // receivedQty.length > 0 &&
-      receivedQty !== 0 &&
+      // receivedQty !== 0 &&
       bonusQty.length > 0 &&
       // batchNumber.length > 0 &&
-      // lotNo.length > 0 &&
+      lotNo !== "" &&
       // expiryDate !== "" &&
       // unit.length > 0 &&
-      // discount.length > 0 &&
+      discount !== "" &&
+      parseInt(discount) <= 100 &&
       // uniyDiscount.length > 0 &&
       // discountAmount.length > 0 &&
       // tax.length > 0 &&
@@ -267,12 +279,12 @@ function ReceiveItems(props) {
       // finalUnitPrice.length > 0 &&
       // subTotal.length > 0 &&
       // discountAmount2.length > 0 &&
-      totalPrice !== "" &&
-      invoice.length > 0 &&
+      // totalPrice !== "" &&
+      invoice !== "" &&
       date !== "" &&
       receivedDate !== "" &&
-      comments.length > 0 &&
-      statusForReceivingItem.length > 0 &&
+      comments !== "" &&
+      // statusForReceivingItem.length > 0 &&
       batchArray.length > 0
     );
   }
@@ -283,9 +295,26 @@ function ReceiveItems(props) {
       if (date > receivedDate) {
         setOpenNotification(true);
         setErrorMsg("Invoice date can not be greater than received date");
-
         return;
       }
+
+      let statusForRequest = "rejected";
+
+      let generateReturn = false;
+
+      let batchArrayWithReceivedStatus = [];
+      let batchArrayWithRejectedStatus = [];
+
+      for (let i = 0; i < batchArray.length; i++) {
+        if (batchArray[i].batchStatus === "received") {
+          batchArrayWithReceivedStatus.push(batchArray[i]);
+          statusForRequest = "received";
+        } else if (batchArray[i].batchStatus === "rejected") {
+          batchArrayWithRejectedStatus.push(batchArray[i]);
+          generateReturn = true;
+        }
+      }
+
       let params = {
         itemId: selectedItem.itemId._id,
         currentQty: selectedItem.currQty,
@@ -312,8 +341,10 @@ function ReceiveItems(props) {
         materialId: props.materialReceivingId,
         vendorId: selectedItem.itemId.vendorId,
         prId: selectedItem.prId,
-        status: statusForReceivingItem,
-        batchArray: batchArray,
+        // status: statusForReceivingItem,
+        status: statusForRequest,
+        batchArray: batchArrayWithReceivedStatus,
+        returnedQty,
       };
 
       console.log("params send while receiving data", params);
@@ -322,9 +353,10 @@ function ReceiveItems(props) {
         .post(addReceiveItemsUrl, params)
         .then((res) => {
           if (res.data.success) {
-            console.log(res.data.data)
-            if (statusForReceivingItem === "rejected") {
+            console.log(res.data.data);
+            if (generateReturn) {
               setAddReturnRequest(true);
+              setRejectedBatches(batchArrayWithRejectedStatus);
             } else {
               // props.history.goBack();
               props.history.replace({
@@ -409,7 +441,7 @@ function ReceiveItems(props) {
       state: {
         comingFor: "add",
         selectedItem: selectedItem,
-        batchArray:batchArray
+        batchArray: rejectedBatches,
       },
     });
   };
@@ -450,9 +482,11 @@ function ReceiveItems(props) {
       batchNumber !== "" &&
       quantity &&
       quantity !== "" &&
-      quantity !== "0" &&
+      parseInt(quantity) !== 0 &&
+      price !== "" &&
       expiryDate &&
-      expiryDate !== ""
+      expiryDate !== "" &&
+      batchStatus !== ""
     );
   }
 
@@ -465,7 +499,10 @@ function ReceiveItems(props) {
     //   return;
     // }
 
-    if (parseInt(receivedQty) + parseInt(quantity) > selectedItem.reqQty) {
+    if (
+      parseInt(receivedQty) + parseInt(quantity) + parseInt(returnedQty) >
+      selectedItem.reqQty
+    ) {
       setOpenNotification(true);
       setErrorMsg(
         "Received quantity can not exceed from the requested quantity"
@@ -480,23 +517,35 @@ function ReceiveItems(props) {
       setErrorMsg("Qty from that batch has already been added");
       return;
     }
+
     setBatchArray([
       ...batchArray,
       {
         quantity,
         batchNumber,
         expiryDate,
+        price,
+        batchStatus,
       },
     ]);
 
-    dispatch({
-      field: "receivedQty",
-      value: parseInt(receivedQty) + parseInt(quantity),
-    });
+    if (batchStatus === "received") {
+      dispatch({
+        field: "receivedQty",
+        value: parseInt(receivedQty) + parseInt(quantity),
+      });
+    } else if (batchStatus === "rejected") {
+      dispatch({
+        field: "returnedQty",
+        value: parseInt(returnedQty) + parseInt(quantity),
+      });
+    }
 
     dispatch({ field: "batchNumber", value: "" });
     dispatch({ field: "quantity", value: "" });
     dispatch({ field: "expiryDate", value: "" });
+    dispatch({ field: "price", value: "" });
+    dispatch({ field: "batchStatus", value: "" });
   };
 
   useEffect(() => {
@@ -533,13 +582,29 @@ function ReceiveItems(props) {
     // setSelectedItem(i);
     setSelectItemToEditId(i);
 
-    dispatch({
-      field: "receivedQty",
-      value: parseInt(receivedQty) - parseInt(i.quantity),
-    });
+    // dispatch({
+    //   field: "receivedQty",
+    //   value: parseInt(receivedQty) - parseInt(i.quantity),
+    // });
+
+    if (i.batchStatus === "received") {
+      dispatch({
+        field: "receivedQty",
+        value: parseInt(receivedQty) - parseInt(i.quantity),
+      });
+    } else if (i.batchStatus === "rejected") {
+      dispatch({
+        field: "returnedQty",
+        value: parseInt(returnedQty) - parseInt(i.quantity),
+      });
+    }
+
     dispatch({ field: "batchNumber", value: i.batchNumber });
     dispatch({ field: "quantity", value: i.quantity });
     dispatch({ field: "expiryDate", value: i.expiryDate });
+    dispatch({ field: "price", value: i.price });
+    dispatch({ field: "batchStatus", value: i.batchStatus });
+
     // } else {
     //   setOpenNotification(true);
     //   setErrorMsg("Item can not be updated once it is in progess");
@@ -553,7 +618,10 @@ function ReceiveItems(props) {
       return;
     }
 
-    if (parseInt(receivedQty) + parseInt(quantity) > selectedItem.reqQty) {
+    if (
+      parseInt(receivedQty) + parseInt(quantity) + parseInt(returnedQty) >
+      selectedItem.reqQty
+    ) {
       setOpenNotification(true);
       setErrorMsg(
         "Received quantity can not exceed from the requested quantity"
@@ -579,6 +647,8 @@ function ReceiveItems(props) {
             quantity,
             batchNumber,
             expiryDate,
+            price,
+            batchStatus,
           };
         } else {
           temp = [...temp, batchArray[i]];
@@ -591,15 +661,30 @@ function ReceiveItems(props) {
       // });
 
       setBatchArray([...temp]);
-      dispatch({
-        field: "receivedQty",
-        value: parseInt(receivedQty) + parseInt(quantity),
-      });
+
+      // dispatch({
+      //   field: "receivedQty",
+      //   value: parseInt(receivedQty) + parseInt(quantity),
+      // });
+
+      if (batchStatus === "received") {
+        dispatch({
+          field: "receivedQty",
+          value: parseInt(receivedQty) + parseInt(quantity),
+        });
+      } else if (batchStatus === "rejected") {
+        dispatch({
+          field: "returnedQty",
+          value: parseInt(returnedQty) + parseInt(quantity),
+        });
+      }
       // setSelectedItem("");
       setSelectItemToEditId("");
       dispatch({ field: "quantity", value: "" });
       dispatch({ field: "expiryDate", value: "" });
       dispatch({ field: "batchNumber", value: "" });
+      dispatch({ field: "price", value: "" });
+      dispatch({ field: "batchStatus", value: "" });
     }
   };
 
@@ -642,12 +727,12 @@ function ReceiveItems(props) {
                     marginTop: 15,
                   }}
                 >
-                  Select Batch and Add Quantity
+                  Add Batch With Received Quantity(Per Batch)
                 </h6>
               </div>
               <div className="row">
                 <div
-                  className="col-md-4"
+                  className="col-md-6"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -656,6 +741,7 @@ function ReceiveItems(props) {
                   <TextField
                     required
                     labelId="label"
+                    disabled={selectItemToEditId ? true : false}
                     type="Select"
                     name="batchNumber"
                     value={batchNumber}
@@ -671,7 +757,7 @@ function ReceiveItems(props) {
                 </div>
 
                 <div
-                  className="col-md-4"
+                  className="col-md-6"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -696,7 +782,9 @@ function ReceiveItems(props) {
                     />
                   </MuiPickersUtilsProvider>
                 </div>
+              </div>
 
+              <div className="row">
                 <div
                   className="col-md-4"
                   style={{
@@ -725,6 +813,80 @@ function ReceiveItems(props) {
                         evt.preventDefault();
                     }}
                   />
+                </div>
+
+                <div
+                  className="col-md-4"
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <CurrencyTextField
+                    required
+                    style={{ backgroundColor: "white", borderRadius: 5 }}
+                    className="textInputStyle"
+                    id="price"
+                    label="Price"
+                    name={"price"}
+                    value={price}
+                    // onBlur={onChangeCurrency}
+                    onChange={(event, value) => {
+                      dispatch({ field: "price", value: value });
+                    }}
+                    decimalPlaces={4}
+                    variant="filled"
+                    textAlign="left"
+                    InputProps={{
+                      className: classesForInput.input,
+                      classes: { input: classesForInput.input },
+                    }}
+                    InputLabelProps={{
+                      className: classesForInput.label,
+                      classes: { label: classesForInput.label },
+                    }}
+                    currencySymbol="JD"
+                    // outputFormat="number"
+                    onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
+                  />
+                </div>
+
+                <div
+                  className="col-md-4"
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    required
+                    variant={"filled"}
+                    select
+                    fullWidth
+                    id="batchStatus"
+                    name="batchStatus"
+                    value={batchStatus}
+                    onChange={onChangeValue}
+                    label="Batch Status"
+                    className="dropDownStyle"
+                    // input={<BootstrapInput />}
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+
+                    {statusArray.map((val) => {
+                      return (
+                        <MenuItem key={val.key} value={val.key}>
+                          {val.value}
+                        </MenuItem>
+                      );
+                    })}
+                  </TextField>
                 </div>
               </div>
 
@@ -853,7 +1015,6 @@ function ReceiveItems(props) {
             >
               <TextField
                 required
-                disabled={true}
                 type="number"
                 label="LOT No"
                 name={"lotNo"}
@@ -879,57 +1040,7 @@ function ReceiveItems(props) {
 
           <div className="row">
             <div
-              className="col-md-3"
-              style={{
-                ...styles.inputContainerForTextField,
-                ...styles.textFieldPadding,
-              }}
-            >
-              <TextField
-                required
-                disabled={true}
-                type="number"
-                label="Current Qty"
-                name={"currentQty"}
-                value={selectedItem && selectedItem.currQty}
-                onChange={onChangeValue}
-                className="textInputStyle"
-                variant="filled"
-                InputProps={{
-                  className: classes.input,
-                  classes: { input: classes.input },
-                }}
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              />
-            </div>
-
-            <div
-              className="col-md-3"
-              style={{
-                ...styles.inputContainerForTextField,
-                ...styles.textFieldPadding,
-              }}
-            >
-              <TextField
-                required
-                type="number"
-                disabled={true}
-                label="Required Qty"
-                name={"requiredQty"}
-                value={selectedItem && selectedItem.reqQty}
-                onChange={onChangeValue}
-                className="textInputStyle"
-                variant="filled"
-                InputProps={{
-                  className: classes.input,
-                  classes: { input: classes.input },
-                }}
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              />
-            </div>
-
-            <div
-              className="col-md-3"
+              className="col-md-6"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -964,7 +1075,92 @@ function ReceiveItems(props) {
             </div>
 
             <div
-              className="col-md-3"
+              className="col-md-6"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                // disabled={selectedItem ? false : true}
+                disabled={true}
+                type="number"
+                label="Total Returned Qty"
+                name={"returnedQty"}
+                value={returnedQty}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                error={returnedQty === "" && isFormSubmitted}
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                onKeyDown={(evt) => {
+                  (evt.key === "e" ||
+                    evt.key === "E" ||
+                    evt.key === "-" ||
+                    evt.key === "+") &&
+                    evt.preventDefault();
+                }}
+              />
+            </div>
+          </div>
+
+          <div className="row">
+            <div
+              className="col-md-4"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                disabled={true}
+                type="number"
+                label="Current Qty"
+                name={"currentQty"}
+                value={selectedItem && selectedItem.currQty}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
+            </div>
+
+            <div
+              className="col-md-4"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                type="number"
+                disabled={true}
+                label="Required Qty"
+                name={"requiredQty"}
+                value={selectedItem && selectedItem.reqQty}
+                onChange={onChangeValue}
+                className="textInputStyle"
+                variant="filled"
+                InputProps={{
+                  className: classes.input,
+                  classes: { input: classes.input },
+                }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
+            </div>
+
+            <div
+              className="col-md-4"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -1611,7 +1807,7 @@ function ReceiveItems(props) {
             </div>
           </div>
 
-          <div className="row">
+          {/* <div className="row">
             <div
               className="col-md-12"
               style={{
@@ -1651,7 +1847,7 @@ function ReceiveItems(props) {
                 })}
               </TextField>
             </div>
-          </div>
+          </div> */}
 
           <div
             className="row"
@@ -1671,14 +1867,14 @@ function ReceiveItems(props) {
                 marginRight: "5px",
               }}
             >
-              <Button
+              {/* <Button
                 style={{ minWidth: "20%", marginRight: 30, height: 50 }}
                 disabled={true}
                 // onClick={handleAdd}
                 variant="contained"
               >
                 Upload Invoice
-              </Button>
+              </Button> */}
 
               <Button
                 style={{ minWidth: "10%", height: 50 }}

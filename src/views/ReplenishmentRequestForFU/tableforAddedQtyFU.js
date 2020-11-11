@@ -57,8 +57,8 @@ const tableHeadingForFUMember = [
   "Batch Number",
   "Received Qty Per Batch",
   "Expiry Date",
+  "Price(JD)"
 ];
-
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
@@ -151,10 +151,11 @@ export default function DenseTable(props) {
             </TableCell>
 
             <TableCell align="center">{row.batchNumber}</TableCell>
-
             <TableCell align="center">{row.quantity}</TableCell>
-
             <TableCell align="center">{formatDate(row.expiryDate)}</TableCell>
+            <TableCell align="center">
+              {parseFloat(row.price).toFixed(4)} JD
+            </TableCell>
           </StyledTableRow>
         ))}
       </TableBody>

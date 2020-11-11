@@ -219,6 +219,8 @@ function AddEditPurchaseRequest(props) {
     expiryDatePerBatch: "",
 
     approvalStatus: "",
+
+    price:""
   };
 
   function reducer(state, { field, value }) {
@@ -290,6 +292,8 @@ function AddEditPurchaseRequest(props) {
     expiryDatePerBatch,
 
     approvalStatus,
+
+    price,
   } = state;
 
   const [comingFor, setcomingFor] = useState("");
@@ -394,6 +398,8 @@ function AddEditPurchaseRequest(props) {
       let batch = batchArray.find((b) => b.batchNumber === e.target.value);
       dispatch({ field: "receivedQtyPerBatch", value: batch.quantity });
       dispatch({ field: "expiryDatePerBatch", value: batch.expiryDate });
+      dispatch({ field: "price", value: batch.price });
+
     } else {
       dispatch({ field: e.target.name, value: e.target.value });
     }
@@ -861,6 +867,7 @@ function AddEditPurchaseRequest(props) {
         returnedQtyPerBatch,
         batchNumber: selectedBatch,
         expiryDatePerBatch,
+        price
       },
     ]);
 
@@ -872,6 +879,7 @@ function AddEditPurchaseRequest(props) {
     dispatch({ field: "returnedQtyPerBatch", value: "" });
     dispatch({ field: "receivedQtyPerBatch", value: "" });
     dispatch({ field: "expiryDatePerBatch", value: "" });
+    dispatch({ field: "price", value: "" });
   };
 
   function handleItemDelete(item) {
@@ -911,6 +919,7 @@ function AddEditPurchaseRequest(props) {
     dispatch({ field: "returnedQtyPerBatch", value: i.returnedQtyPerBatch });
     dispatch({ field: "receivedQtyPerBatch", value: i.receivedQtyPerBatch });
     dispatch({ field: "expiryDatePerBatch", value: i.expiryDatePerBatch });
+    dispatch({ field: "price", value: i.price });
     // } else {
     //   setOpenNotification(true);
     //   setErrorMsg("Item can not be updated once it is in progess");
@@ -943,6 +952,7 @@ function AddEditPurchaseRequest(props) {
             returnedQtyPerBatch,
             batchNumber: selectedBatch,
             expiryDatePerBatch,
+            price
           };
         } else {
           temp = [...temp, returnBatchArray[i]];
@@ -965,6 +975,7 @@ function AddEditPurchaseRequest(props) {
       dispatch({ field: "returnedQtyPerBatch", value: "" });
       dispatch({ field: "receivedQtyPerBatch", value: "" });
       dispatch({ field: "expiryDatePerBatch", value: "" });
+      dispatch({ field: "price", value: "" });
     }
   };
 

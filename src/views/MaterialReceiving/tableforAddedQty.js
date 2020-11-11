@@ -57,6 +57,8 @@ const tableHeadingForFUMember = [
   "Batch Number",
   "Received Qty Per Batch",
   "Expiry Date",
+  "Price(JD)",
+  "Status",
   "Actions",
 ];
 
@@ -195,17 +197,13 @@ export default function DenseTable(props) {
             </TableCell>
 
             <TableCell align="center">{row.batchNumber}</TableCell>
-
             <TableCell align="center">{row.quantity}</TableCell>
-
+            <TableCell align="center">{formatDate(row.expiryDate)}</TableCell>
             <TableCell align="center">
-              {/* {new Date(row.expiryDate).getDate() +
-                " - " +
-                new Date(row.expiryDate).getMonth() +
-                1 +
-                " - " +
-                new Date(row.expiryDate).getUTCFullYear()} */}
-              {formatDate(row.expiryDate)}
+              {parseFloat(row.price).toFixed(4)}
+            </TableCell>
+            <TableCell align="center">
+              {row.batchStatus.toUpperCase()}
             </TableCell>
 
             {currentUser.staffTypeId.type === "Warehouse Inventory Keeper" &&

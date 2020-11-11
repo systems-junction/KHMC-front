@@ -338,7 +338,7 @@ function ReceiveItems(props) {
       bonusQty.length > 0 &&
       // batchNumber.length > 0 &&
       // lotNo.length > 0 &&
-      expiryDate !== "" &&
+      // expiryDate !== "" &&
       // unit.length > 0 &&
       discount !== "" &&
       parseInt(discount) <= 100 &&
@@ -410,6 +410,7 @@ function ReceiveItems(props) {
         replenishmentRequestItemId: _id,
         qualityRate: parseInt(qualityRate),
 
+        batchArray: batchArray,
       };
 
       console.log("params", params);
@@ -508,6 +509,8 @@ function ReceiveItems(props) {
       dispatch({ field: "discountAmount", value: discountedAmount });
     }
   }
+
+  console.log(batchArray);
 
   return (
     <div

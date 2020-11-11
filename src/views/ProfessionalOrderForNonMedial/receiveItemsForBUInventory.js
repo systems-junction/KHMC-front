@@ -406,6 +406,8 @@ function ReceiveItems(props) {
         replenishmentRequestItemId: _id,
 
         qualityRate: parseInt(qualityRate),
+
+        batchArray: batchArray,
       };
 
       console.log("params", params);
