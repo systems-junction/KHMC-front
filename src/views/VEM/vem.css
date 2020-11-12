@@ -1,0 +1,19 @@
+.buttonStyle {
+    cursor: pointer;
+    border-radius: 5;
+    height: 50px;
+    border-width: 0;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  };
+
+.textfield-padding {
+    padding-left: 5;
+    padding-right: 5;
+};
+
+.input-container{
+    margin-top: 10;
+};

@@ -23,6 +23,7 @@ import MaterialReceivingRoutes from './materialReceiving'
 import ReceiveRequestsRoutes from './receiveRequests'
 import RCMRoutes from './rcm'
 import FUMgmtRoutes from './fuMgmtRoutes'
+import vem from './VEM'
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const [currentUser, setCurrentUser] = React.useState(
@@ -51,6 +52,8 @@ class ControlRoomRoutes extends React.PureComponent {
     return (
       <Switch>
         <Route exact path={`${this.props.match.url}`} component={ControlRoom} />
+        <Route exact path={`${this.props.match.url}/vem`} component={vem} />
+        
         <Route exact path={`${this.props.match.url}/wms`} component={WMS2} />
         <Route path={`${this.props.match.url}/rcm`} component={RCMRoutes} />
         <PrivateRoute
