@@ -11,9 +11,30 @@ import { makeStyles } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
-import './vem.css'
 
 let matches;
+
+const styles = {
+    textfieldPadding: {
+        paddingRight: '5px',
+        paddingLeft: '5px'
+    },
+    inputContainer: {
+        marginTop: 10,
+    },
+    stylesForButton: {
+        cursor: 'pointer',
+        borderRadius: '5',
+        height: '50px',
+        width: '150px',
+        borderWidth: 0,
+        color: 'white',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        background: '#2c6ddd'
+    }
+}
 
 const useStylesForTabs = makeStyles((theme) => ({
     root: {
@@ -197,9 +218,9 @@ function Vem(props) {
     const onTotalRateClick = () => {
         let path = 'vem/totalRates'
         props.history.push({
-          pathname: path,
-          state: {
-          },
+            pathname: path,
+            state: {
+            },
         })
     };
 
@@ -224,7 +245,7 @@ function Vem(props) {
             <Header history={props.history} />
             <div className="cPadding">
                 <div className="subheader">
-                    <div>
+                    <div style={{marginLeft:'-10px'}}>
                         <img src={VemIcon} />
                         <h4>
                             Vendor Evaluation
@@ -235,8 +256,7 @@ function Vem(props) {
                         onClick={onTotalRateClick}
                         variant="contained"
                         color="primary"
-                        className='buttonStyle'
-                        style={{ background: '#2c6ddd' }}
+                        style={{ ...styles.stylesForButton, marginRight: '5px' }}
                     >
                         <img className="icon-view" src={view_all} />
                         &nbsp;&nbsp;
@@ -248,7 +268,11 @@ function Vem(props) {
 
                 <div className={`${"container-fluid"} ${classes.root}`}>
                     <div className='row'>
-                        <div className='col-md-12 col-sm-12 col-12'>
+                        <div className='col-md-12 col-sm-12 col-12'
+                            style={{
+                                ...styles.textfieldPadding
+                            }}
+                        >
                             <TextField
                                 select
                                 fullWidth
@@ -332,14 +356,13 @@ function Vem(props) {
                         style={{ flex: 4, display: "flex", flexDirection: "column" }}
                         className={`${"container-fluid"} ${classes.root}`}
                     >
-                        <div className="input-container row">
+                        <div className="row">
                             <div
-                                // className="textfield-padding input-container col-md-6 col-sm-6"
-                                className='testing'
-                            // style={{
-                            //     ...styles.input-container,
-                            //     ...styles.textfield-padding,
-                            // }}
+                                className="col-md-6 col-sm-6"
+                                style={{
+                                    ...styles.inputContainer,
+                                    ...styles.textfieldPadding
+                                }}
                             >
                                 <TextField
                                     type="number"
@@ -362,11 +385,11 @@ function Vem(props) {
                                 />
                             </div>
                             <div
-                                className="textfield-padding input-container col-md-6 col-sm-6 "
-                            // style={{
-                            //     ...styles.input-container,
-                            //     ...styles.textfield-padding,
-                            // }}
+                                className="col-md-6 col-sm-6 "
+                                style={{
+                                    ...styles.inputContainer,
+                                    ...styles.textfieldPadding,
+                                }}
                             >
                                 <TextField
                                     type="number"
@@ -391,11 +414,11 @@ function Vem(props) {
 
                         <div className="row">
                             <div
-                                className="col-md-6 col-sm-6 textfield-padding input-container"
-                            // style={{
-                            //     ...styles.input-container,
-                            //     ...styles.textfield-padding,
-                            // }}
+                                className="col-md-6 col-sm-6 "
+                                style={{
+                                    ...styles.inputContainer,
+                                    ...styles.textfieldPadding,
+                                }}
                             >
                                 <TextField
                                     type="number"
@@ -418,11 +441,11 @@ function Vem(props) {
                                 />
                             </div>
                             <div
-                                className="col-md-6 col-sm-6 textfield-padding input-container"
-                            // style={{
-                            //     ...styles.input-container,
-                            //     ...styles.textfield-padding,
-                            // }}
+                                className="col-md-6 col-sm-6 "
+                                style={{
+                                    ...styles.inputContainer,
+                                    ...styles.textfieldPadding,
+                                }}
                             >
                                 <TextField
                                     type="number"
@@ -447,11 +470,11 @@ function Vem(props) {
 
                         <div className="row">
                             <div
-                                className="col-md-6 col-sm-6 textfield-padding input-container"
-                            // style={{
-                            //     ...styles.input-container,
-                            //     ...styles.textfield-padding,
-                            // }}
+                                className="col-md-6 col-sm-6 "
+                                style={{
+                                    ...styles.inputContainer,
+                                    ...styles.textfieldPadding,
+                                }}
                             >
                                 <TextField
                                     type="number"
@@ -474,11 +497,11 @@ function Vem(props) {
                                 />
                             </div>
                             <div
-                                className="col-md-6 col-sm-6 textfield-padding input-container"
-                            // style={{
-                            //     ...styles.input-container,
-                            //     ...styles.textfield-padding,
-                            // }}
+                                className="col-md-6 col-sm-6 "
+                                style={{
+                                    ...styles.inputContainer,
+                                    ...styles.textfieldPadding,
+                                }}
                             >
                                 <TextField
                                     type="number"
@@ -501,22 +524,22 @@ function Vem(props) {
                             </div>
                         </div>
 
-                        <div className='row'>
-                            <div className='col-md-6 col-sm-6 col-6'>
+                        <div className='row' style={{ marginTop: '30px', marginBottom: '25px' }}>
+                            <div className='col-md-6 col-sm-6 col-6' style={styles.textfieldPadding}>
                                 <img
                                     onClick={() => props.history.goBack()}
                                     src={Back}
                                     style={{ width: 45, height: 35, cursor: "pointer" }}
                                 />
                             </div>
-                            <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
+                            <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'
+                                style={styles.textfieldPadding}
+                            >
                                 <Button
-                                    // style={styles.stylesForButton}
+                                    style={styles.stylesForButton}
                                     onClick={onNextClick}
                                     variant="contained"
                                     color="primary"
-                                    className='buttonStyle'
-                                    style={{ background: '#2c6ddd' }}
                                 >
                                     Next
                                 </Button>
@@ -530,11 +553,11 @@ function Vem(props) {
                     >
                         <div className="row">
                             <div
-                                className="col-md-6 col-sm-6 textfield-padding input-container"
-                            // style={{
-                            //     ...styles.input-container,
-                            //     ...styles.textfield-padding,
-                            // }}
+                                className="col-md-6 col-sm-6 "
+                                style={{
+                                    ...styles.inputContainer,
+                                    ...styles.textfieldPadding,
+                                }}
                             >
                                 <TextField
                                     type="number"
@@ -557,11 +580,11 @@ function Vem(props) {
                                 />
                             </div>
                             <div
-                                className="col-md-6 col-sm-6 textfield-padding input-container"
-                            // style={{
-                            //     ...styles.input-container,
-                            //     ...styles.textfield-padding,
-                            // }}
+                                className="col-md-6 col-sm-6 "
+                                style={{
+                                    ...styles.inputContainer,
+                                    ...styles.textfieldPadding,
+                                }}
                             >
                                 <TextField
                                     type="number"
@@ -586,11 +609,11 @@ function Vem(props) {
 
                         <div className="row">
                             <div
-                                className="col-md-6 col-sm-6 textfield-padding input-container"
-                            // style={{
-                            //     ...styles.input-container,
-                            //     ...styles.textfield-padding,
-                            // }}
+                                className="col-md-6 col-sm-6 "
+                                style={{
+                                    ...styles.inputContainer,
+                                    ...styles.textfieldPadding,
+                                }}
                             >
                                 <TextField
                                     type="number"
@@ -613,11 +636,11 @@ function Vem(props) {
                                 />
                             </div>
                             <div
-                                className="col-md-6 col-sm-6 textfield-padding input-container"
-                            // style={{
-                            //     ...styles.input-container,
-                            //     ...styles.textfield-padding,
-                            // }}
+                                className="col-md-6 col-sm-6 "
+                                style={{
+                                    ...styles.inputContainer,
+                                    ...styles.textfieldPadding,
+                                }}
                             >
                                 <TextField
                                     type="number"
@@ -642,11 +665,11 @@ function Vem(props) {
 
                         <div className="row">
                             <div
-                                className="col-md-6 col-sm-6 textfield-padding input-container"
-                            // style={{
-                            //     ...styles.input-container,
-                            //     ...styles.textfield-padding,
-                            // }}
+                                className="col-md-6 col-sm-6"
+                                style={{
+                                    ...styles.inputContainer,
+                                    ...styles.textfieldPadding,
+                                }}
                             >
                                 <TextField
                                     type="number"
@@ -669,11 +692,11 @@ function Vem(props) {
                                 />
                             </div>
                             <div
-                                className="col-md-6 col-sm-6 textfield-padding input-container"
-                            // style={{
-                            //     ...styles.input-container,
-                            //     ...styles.textfield-padding,
-                            // }}
+                                className="col-md-6 col-sm-6"
+                                style={{
+                                    ...styles.inputContainer,
+                                    ...styles.textfieldPadding,
+                                }}
                             >
                                 <TextField
                                     type="number"
@@ -698,11 +721,11 @@ function Vem(props) {
 
                         <div className="row">
                             <div
-                                className="col-md-6 col-sm-6 textfield-padding input-container"
-                            // style={{
-                            //     ...styles.input-container,
-                            //     ...styles.textfield-padding,
-                            // }}
+                                className="col-md-6 col-sm-6"
+                                style={{
+                                    ...styles.inputContainer,
+                                    ...styles.textfieldPadding,
+                                }}
                             >
                                 <TextField
                                     type="number"
@@ -725,11 +748,11 @@ function Vem(props) {
                                 />
                             </div>
                             <div
-                                className="col-md-6 col-sm-6 textfield-padding input-container"
-                            // style={{
-                            //     ...styles.input-container,
-                            //     ...styles.textfield-padding,
-                            // }}
+                                className="col-md-6 col-sm-6"
+                                style={{
+                                    ...styles.inputContainer,
+                                    ...styles.textfieldPadding,
+                                }}
                             >
                                 <TextField
                                     type="number"
@@ -752,22 +775,22 @@ function Vem(props) {
                             </div>
                         </div>
 
-                        <div className='row'>
-                            <div className='col-md-6 col-sm-6 col-6'>
+                        <div className='row' style={{ marginTop: '30px', marginBottom: '25px' }}>
+                            <div className='col-md-6 col-sm-6 col-6' style={styles.textfieldPadding}>
                                 <img
                                     onClick={() => props.history.goBack()}
                                     src={Back}
                                     style={{ width: 45, height: 35, cursor: "pointer" }}
                                 />
                             </div>
-                            <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
+                            <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'
+                                style={styles.textfieldPadding}
+                            >
                                 <Button
-                                    // style={styles.stylesForButton}
+                                    style={styles.stylesForButton}
                                     onClick={onNextClick}
                                     variant="contained"
                                     color="primary"
-                                    className='buttonStyle'
-                                    style={{ background: '#2c6ddd' }}
                                 >
                                     Next
                                 </Button>
@@ -781,11 +804,11 @@ function Vem(props) {
                     >
                         <div className="row">
                             <div
-                                className="col-md-6 col-sm-6 textfield-padding input-container"
-                            // style={{
-                            //     ...styles.input-container,
-                            //     ...styles.textfield-padding,
-                            // }}
+                                className="col-md-6 col-sm-6"
+                                style={{
+                                    ...styles.inputContainer,
+                                    ...styles.textfieldPadding,
+                                }}
                             >
                                 <TextField
                                     type="number"
@@ -808,11 +831,11 @@ function Vem(props) {
                                 />
                             </div>
                             <div
-                                className="col-md-6 col-sm-6 textfield-padding input-container"
-                            // style={{
-                            //     ...styles.input-container,
-                            //     ...styles.textfield-padding,
-                            // }}
+                                className="col-md-6 col-sm-6"
+                                style={{
+                                    ...styles.inputContainer,
+                                    ...styles.textfieldPadding,
+                                }}
                             >
                                 <TextField
                                     type="number"
@@ -837,11 +860,11 @@ function Vem(props) {
 
                         <div className="row">
                             <div
-                                className="col-md-6 col-sm-6 textfield-padding input-container"
-                            // style={{
-                            //     ...styles.input-container,
-                            //     ...styles.textfield-padding,
-                            // }}
+                                className="col-md-6 col-sm-6"
+                                style={{
+                                    ...styles.inputContainer,
+                                    ...styles.textfieldPadding,
+                                }}
                             >
                                 <TextField
                                     type="number"
@@ -864,11 +887,11 @@ function Vem(props) {
                                 />
                             </div>
                             <div
-                                className="col-md-6 col-sm-6 textfield-padding input-container"
-                            // style={{
-                            //     ...styles.input-container,
-                            //     ...styles.textfield-padding,
-                            // }}
+                                className="col-md-6 col-sm-6"
+                                style={{
+                                    ...styles.inputContainer,
+                                    ...styles.textfieldPadding,
+                                }}
                             >
                                 <TextField
                                     type="number"
@@ -893,11 +916,11 @@ function Vem(props) {
 
                         <div className="row">
                             <div
-                                className="col-md-4 col-sm-4 textfield-padding input-container"
-                            // style={{
-                            //     ...styles.input-container,
-                            //     ...styles.textfield-padding,
-                            // }}
+                                className="col-md-4 col-sm-4"
+                                style={{
+                                    ...styles.inputContainer,
+                                    ...styles.textfieldPadding,
+                                }}
                             >
                                 <TextField
                                     type="number"
@@ -920,11 +943,11 @@ function Vem(props) {
                                 />
                             </div>
                             <div
-                                className="col-md-4 col-sm-4 textfield-padding input-container"
-                            // style={{
-                            //     ...styles.input-container,
-                            //     ...styles.textfield-padding,
-                            // }}
+                                className="col-md-4 col-sm-4"
+                                style={{
+                                    ...styles.inputContainer,
+                                    ...styles.textfieldPadding,
+                                }}
                             >
                                 <TextField
                                     type="number"
@@ -946,11 +969,11 @@ function Vem(props) {
                                 />
                             </div>
                             <div
-                                className="col-md-4 col-sm-4 textfield-padding input-container"
-                            // style={{
-                            //     ...styles.input-container,
-                            //     ...styles.textfield-padding,
-                            // }}
+                                className="col-md-4 col-sm-4"
+                                style={{
+                                    ...styles.inputContainer,
+                                    ...styles.textfieldPadding,
+                                }}
                             >
                                 <TextField
                                     type="number"
@@ -975,11 +998,11 @@ function Vem(props) {
 
                         <div className="row">
                             <div
-                                className="col-md-6 col-sm-6 textfield-padding input-container"
-                            // style={{
-                            //     ...styles.input-container,
-                            //     ...styles.textfield-padding,
-                            // }}
+                                className="col-md-6 col-sm-6"
+                                style={{
+                                    ...styles.inputContainer,
+                                    ...styles.textfieldPadding,
+                                }}
                             >
                                 <TextField
                                     type="number"
@@ -1002,11 +1025,11 @@ function Vem(props) {
                                 />
                             </div>
                             <div
-                                className="col-md-6 col-sm-6 textfield-padding input-container"
-                            // style={{
-                            //     ...styles.input-container,
-                            //     ...styles.textfield-padding,
-                            // }}
+                                className="col-md-6 col-sm-6"
+                                style={{
+                                    ...styles.inputContainer,
+                                    ...styles.textfieldPadding,
+                                }}
                             >
                                 <TextField
                                     type="number"
@@ -1031,11 +1054,11 @@ function Vem(props) {
 
                         <div className="row">
                             <div
-                                className="col-md-12 col-sm-12 textfield-padding input-container"
-                            // style={{
-                            //     ...styles.input-container,
-                            //     ...styles.textfield-padding,
-                            // }}
+                                className="col-md-12 col-sm-12"
+                                style={{
+                                    ...styles.inputContainer,
+                                    ...styles.textfieldPadding,
+                                }}
                             >
                                 <TextField
                                     type="number"
@@ -1059,22 +1082,22 @@ function Vem(props) {
                             </div>
                         </div>
 
-                        <div className='row'>
-                            <div className='col-md-6 col-sm-6 col-6'>
+                        <div className='row' style={{ marginTop: '30px', marginBottom: '25px' }}>
+                            <div className='col-md-6 col-sm-6 col-6' style={styles.textfieldPadding}>
                                 <img
                                     onClick={() => props.history.goBack()}
                                     src={Back}
                                     style={{ width: 45, height: 35, cursor: "pointer" }}
                                 />
                             </div>
-                            <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
+                            <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'
+                                style={styles.textfieldPadding}
+                            >
                                 <Button
-                                    // style={styles.stylesForButton}
+                                    style={styles.stylesForButton}
                                     onClick={onSubmit}
                                     variant="contained"
                                     color="primary"
-                                    className='buttonStyle'
-                                    style={{ background: '#2c6ddd' }}
                                 >
                                     Submit
                                 </Button>

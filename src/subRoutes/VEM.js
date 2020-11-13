@@ -3,7 +3,7 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import NotFound from "../components/NotFound/NotFound";
 import vem from '../views/VEM/vem'
-import totalRates from "../views/VEM/vemTotalRates";
+import vemTotalRates from "../views/VEM/vemTotalRates";
 
 class VEM extends React.PureComponent {
   render() {
@@ -13,7 +13,7 @@ class VEM extends React.PureComponent {
 
         <Route
           path={`${this.props.match.url}/totalRates`}
-          component={totalRates}
+          component={vemTotalRates}
         />
 
         <Route path="*" component={NotFound} />

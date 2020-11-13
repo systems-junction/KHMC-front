@@ -52,7 +52,7 @@ class ControlRoomRoutes extends React.PureComponent {
     return (
       <Switch>
         <Route exact path={`${this.props.match.url}`} component={ControlRoom} />
-        <Route exact path={`${this.props.match.url}/vem`} component={vem} />
+        <Route path={`${this.props.match.url}/vem`} component={vem} />
         
         <Route exact path={`${this.props.match.url}/wms`} component={WMS2} />
         <Route path={`${this.props.match.url}/rcm`} component={RCMRoutes} />
