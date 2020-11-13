@@ -8,7 +8,7 @@ const baseUrl = local;
 // export const socketUrl = 'wss://dev.khmc-staging.online:4001'
 export const socketUrl = "ws://localhost:4001";
 
-export const audioURL = "http://localhost:4000";
+export const audioURL = "http://192.168.8.100:4000";
 // export const audioURL = "https://dev.khmc-staging.online";
 export const uploadsUrl = "http://localhost:4000/uploads/";
 // export const uploadsUrl = StagingDigitalOceanUploadsUrl
