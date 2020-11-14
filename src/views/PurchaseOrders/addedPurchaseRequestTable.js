@@ -44,7 +44,6 @@ import styles from "../../assets/jss/material-dashboard-react/components/tableSt
 
 import cookie from "react-cookies";
 
-
 const StyledTableRow = withStyles((theme) => ({
   root: {
     "&:nth-of-type(odd)": {
@@ -341,9 +340,11 @@ export default function PurchaseRequest(props) {
                                 <TableCell
                                   className={classes.tableCell}
                                   key={key}
-                                  style={{
-                                    // textAlign: "center",
-                                  }}
+                                  style={
+                                    {
+                                      // textAlign: "center",
+                                    }
+                                  }
                                 >
                                   {formatDate(prop[val])}
                                 </TableCell>
@@ -353,9 +354,11 @@ export default function PurchaseRequest(props) {
                                 <TableCell
                                   className={classes.tableCell}
                                   key={key}
-                                  style={{
-                                    // textAlign: "center",
-                                  }}
+                                  style={
+                                    {
+                                      // textAlign: "center",
+                                    }
+                                  }
                                 >
                                   {typeof prop[val] === "string"
                                     ? props.vendors.map((v) => {
@@ -401,6 +404,7 @@ export default function PurchaseRequest(props) {
                         style={{
                           cursor: "pointer",
                         }}
+                        key={index}
                         className={classes.tableCell}
                         colSpan="2"
                       >

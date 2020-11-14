@@ -83,7 +83,7 @@ const stylesB = {
 const useStyles = makeStyles(styles);
 
 const tableHeading = ["Item Code", "Item Name", "Requested Qty", "Action"];
-const tableDataKeys = ["itemCode", "name", "reqQty"];
+const tableDataKeys = [ "itemCode", "name", "reqQty"];
 
 const actions = { add: true };
 
@@ -260,105 +260,118 @@ export default function PurchaseRequest(props) {
     >
       <DialogContent style={{ backgroundColor: "#60d69f" }}>
         <div>
-          <h5 style={{ color: "white", fontWeight:'bold' }}>
-            Added Items
-          </h5>
+          <h5 style={{ color: "white", fontWeight: "bold" }}>Added Items</h5>
         </div>
-     
-            <Table>
-              <TableHead
-                className={classes["TableHeader"]}
-                style={{
-                  backgroundColor: "#2873cf",
-                }}
-              >
-                <TableRow>
-                  {tableHeading &&
-                    tableHeading.map((prop, index) => {
-                      return (
-                        <>
-                          <TableCell
-                            className={classes.tableHeadCell}
-                            style={{
-                              color: "white",
-                              fontWeight: "700",
-                              // textAlign: "center",
-                              borderTopLeftRadius: index === 0 ? 5 : 0,
-                              borderTopRightRadius:
-                                index === tableHeading.length - 1 ? 5 : 0,
-                            }}
-                            key={prop}
-                          >
-                            {prop}
-                          </TableCell>
-                        </>
-                      );
-                    })}
-                </TableRow>
-              </TableHead>
 
-              <TableBody>
-                {props.items &&
-                  props.items.map((prop, index) => {
-                    return (
-                      <TableRow
-                        key={index}
-                        className={classes.tableBodyRow}
+        <Table>
+          <TableHead
+            className={classes["TableHeader"]}
+            style={{
+              backgroundColor: "#2873cf",
+            }}
+          >
+            <TableRow>
+              {tableHeading &&
+                tableHeading.map((prop, index) => {
+                  return (
+                    <>
+                      <TableCell
+                        className={classes.tableHeadCell}
                         style={{
-                          backgroundColor: "white",
-                          cursor: "pointer",
+                          color: "white",
+                          fontWeight: "700",
+                          // textAlign: "center",
+                          borderTopLeftRadius: index === 0 ? 5 : 0,
+                          borderTopRightRadius:
+                            index === tableHeading.length - 1 ? 5 : 0,
                         }}
+                        key={prop}
                       >
-                        {tableDataKeys
-                          ? tableDataKeys.map((val, key) => {
-                              return (
-                                <TableCell
-                                  className={classes.tableCell}
-                                  key={key}
-                                  onClick={() => handleClick(prop, val)}
-                                  style={{
-                                    // textAlign: "center",
-                                    cursor: props.handleModelMaterialReceiving
-                                      ? "pointer"
-                                      : "",
-                                  }}
-                                >
-                                  {Array.isArray(val)
-                                    ? prop[val[0]]
-                                      ? prop[val[0]][val[1]]
-                                      : null
-                                    : val.toLowerCase() === "timestamp"
-                                    ? new Intl.DateTimeFormat(
-                                        "en-US",
-                                        dateOptions
-                                      ).format(Date.parse(prop[val]))
-                                    : replaceSlugToTitle(prop[val])}
-                                </TableCell>
-                              );
-                            })
-                          : null}
-                        <TableCell
-                          style={{
-                            cursor: "pointer",
-                          }}
-                          className={classes.tableCell}
-                          colSpan="2"
-                        >
-                          <span onClick={() => props.viewSingleItem(prop)}>
-                            <i
+                        {prop}
+                      </TableCell>
+                    </>
+                  );
+                })}
+            </TableRow>
+          </TableHead>
+
+          <TableBody>
+            {props.items &&
+              props.items.map((prop, index) => {
+                return (
+                  <TableRow
+                    key={index}
+                    className={classes.tableBodyRow}
+                    style={{
+                      backgroundColor: "white",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {tableDataKeys
+                      ? tableDataKeys.map((val, key) => {
+                          return (
+                            <TableCell
+                              className={classes.tableCell}
+                              key={key}
+                              onClick={() => handleClick(prop, val)}
                               style={{
-                                color: "grey",
-                                fontSize: "30px",
+                                // textAlign: "center",
+                                cursor: props.handleModelMaterialReceiving
+                                  ? "pointer"
+                                  : "",
                               }}
-                              className=" ml-10 zmdi zmdi-eye zmdi-hc-3x"
-                            />
-                          </span>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-              </TableBody>
-            </Table>
+                            >
+                              {Array.isArray(val)
+                                ? prop[val[0]]
+                                  ? prop[val[0]][val[1]]
+                                  : null
+                                : val.toLowerCase() === "timestamp"
+                                ? new Intl.DateTimeFormat(
+                                    "en-US",
+                                    dateOptions
+                                  ).format(Date.parse(prop[val]))
+                                : replaceSlugToTitle(prop[val])}
+                            </TableCell>
+                          );
+                        })
+                      : null}
+                    {/* <TableCell
+                          className={classes.tableHeadCell}
+                          style={{
+                            color: "white",
+                            fontWeight: "700",
+                            textAlign: "center",
+                            borderTopLeftRadius: index === 0 ? 5 : 0,
+                            borderTopRightRadius:
+                              index === tableHeading.length - 1 ? 5 : 0,
+                          }}
+                          key={prop}
+                        >
+                          {prop}
+                        </TableCell> */}
+
+                    <TableCell
+                      style={{
+                        cursor: "pointer",
+                      }}
+                      className={classes.tableCell}
+                      colSpan="2"
+                    >
+                      <span onClick={() => props.viewSingleItem(prop)}>
+                        <i
+                          style={{
+                            color: "grey",
+                            fontSize: "30px",
+                          }}
+                          className=" ml-10 zmdi zmdi-eye zmdi-hc-3x"
+                        />
+                      </span>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+          </TableBody>
+        </Table>
       </DialogContent>
     </Dialog>
   );
