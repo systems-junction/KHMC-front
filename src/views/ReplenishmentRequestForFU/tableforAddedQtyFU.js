@@ -57,7 +57,7 @@ const tableHeadingForFUMember = [
   "Batch Number",
   "Received Qty Per Batch",
   "Expiry Date",
-  "Price(JD)"
+  "Price Per Unit(JD)"
 ];
 
 const StyledTableRow = withStyles((theme) => ({

@@ -19,7 +19,7 @@ import { audioURL } from "../../public/endpoins";
 const tableHeading = [
   "Batch No",
   "Expiry date",
-  "Price",
+  "Price (JD)",
   "Quantity",
   "Print QR Code",
 ];
