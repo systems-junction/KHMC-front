@@ -1,7 +1,7 @@
 import React from "react";
 import "./Header.css";
 import KHMC_White from "../../assets/img/KHMC Header LOGO.png";
-import Influence_white from "../../assets/img/Influence Original.png";
+import Influence_white from "../../assets/img/Influence Original - White.png";
 import { Redirect } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -9,15 +9,28 @@ import Typography from "@material-ui/core/Typography";
 import Fade from "@material-ui/core/Fade";
 import cookie from "react-cookies";
 import Fab from "@material-ui/core/Fab";
+<<<<<<< HEAD
 import NotifyMe from "./NotificationTray";
 import { socketUrl, getNotifications } from "../../public/endpoins";
 import socketIOClient from "socket.io-client";
 import axios from "axios";
+=======
+import NotifyMe from './NotificationTray';
+import { socketUrl, getNotifications,recordLogout } from '../../public/endpoins';
+import socketIOClient from 'socket.io-client'
+import axios from 'axios'
+>>>>>>> e2b354995150d6dd93fa1a23724afa15d0960fad
 import AddIcon from "@material-ui/icons/Add";
+import IdleTimer from 'react-idle-timer'
 
 class Header extends React.Component {
   constructor(props) {
     super(props);
+    this.idleTimer = null
+    this.handleOnAction = this.handleOnAction.bind(this)
+    this.handleOnActive = this.handleOnActive.bind(this)
+    this.handleOnIdle = this.handleOnIdle.bind(this)
+
     this.state = {
       goBack: false,
       hover: false,
@@ -25,6 +38,21 @@ class Header extends React.Component {
       currentUser: "",
       data: [],
     };
+  }
+
+  handleOnAction(event) {
+    // console.log('user did something', event)
+  }
+
+  handleOnActive(event) {
+    console.log('User is active now but the session has expired.')
+    // console.log('time remaining', new Date(this.idleTimer.getRemainingTime()))
+  }
+
+  handleOnIdle(event) {
+    console.log('user is idle')
+    console.log('last active', new Date(this.idleTimer.getLastActiveTime()))
+    this.logoutUser()
   }
 
   componentDidMount() {
@@ -81,7 +109,28 @@ class Header extends React.Component {
     this.setState({ dialogue: false });
   }
 
+  recordLogout() {
+    const loggedUser = cookie.load("current_user")
+    const token = cookie.load("token")
+
+    const params = {
+      token: token,
+      userId: loggedUser._id,
+    }
+    axios
+      .post(recordLogout, params)
+      .then((res) => {
+        if (res.data.success) {
+          console.log("response after recording the logout", res.data);
+        }
+      })
+      .catch((e) => {
+        console.log("error is ", e);
+      });
+  }
+
   logoutUser() {
+    this.recordLogout()
     cookie.remove("token", { path: "/" });
     cookie.remove("current_user", { path: "/" });
     cookie.remove("user_staff", { path: "/" });
@@ -141,7 +190,7 @@ class Header extends React.Component {
               right: 0,
               bottom: 0,
               position: "fixed",
-              zIndex: 5,
+              zIndex: 10,
             }}
           >
             <Fade in={this.state.open} timeout={1000}>
@@ -283,7 +332,7 @@ class Header extends React.Component {
         )}
 
         {this.state.currentUser ? (
-          <div style={{ position: "fixed", right: 35, bottom: 45, zIndex: 5 }}>
+          <div style={{ position: "fixed", right: 35, bottom: 45, zIndex: 10 }}>
             <Fab
               // color="primary"
               aria-label="add"
@@ -298,8 +347,27 @@ class Header extends React.Component {
             </Fab>
           </div>
         ) : (
+<<<<<<< HEAD
           undefined
         )}
+=======
+            undefined
+          )}
+
+        {this.state.currentUser ? (
+          <IdleTimer
+            ref={ref => { this.idleTimer = ref }}
+            timeout={1000 * 60 * 10}
+            onActive={this.handleOnActive}
+            onIdle={this.handleOnIdle}
+            onAction={this.handleOnAction}
+            debounce={250}
+          />
+        ) : (
+            undefined
+          )}
+
+>>>>>>> e2b354995150d6dd93fa1a23724afa15d0960fad
       </div>
     );
   }

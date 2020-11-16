@@ -1080,7 +1080,7 @@ function AddEditPurchaseRequest(props) {
   function validateItemsForm() {
     return (
       itemCode !== "" &&
-      itemName !== "" &&
+      // itemName !== "" &&
       requestedQty !== "" &&
       fuItemCost !== "" &&
       currentQty !== 0 &&

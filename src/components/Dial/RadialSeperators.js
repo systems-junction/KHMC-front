@@ -7,16 +7,17 @@ function Separator(props) {
       style={{
         position: "absolute",
         height: "100%",
-        transform: `rotate(${props.turns}turn)`,
+        transform: `rotate(${props.turns}turn)`
       }}
     >
-      <div style={{...props.style,}} />
+      <div style={props.style} />
     </div>
   );
 }
 
 function RadialSeparators(props) {
-  const turns = 1 / props.count-3;
+  const turns = 1 / props.count;
+  console.log(turns)
   return _.range(props.count).map(index => (
     <Separator turns={index * turns} style={props.style} />
   ));

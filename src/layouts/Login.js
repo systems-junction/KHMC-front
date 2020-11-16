@@ -12,11 +12,11 @@ import AddAlert from "@material-ui/icons/AddAlert";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
 import cookie from "react-cookies";
-import { loginUrl, getStaffUrl } from "../public/endpoins";
+import { loginUrl, getStaffUrl, recordLogin } from "../public/endpoins";
 
 import KHMC_White from "../assets/img/KHMC Header LOGO.png";
 
-import Influence_white from "../assets/img/Influence Original.png";
+import Influence_white from "../assets/img/Influence Original - White.png";
 
 import Splash from "./Splash";
 
@@ -99,6 +99,25 @@ class Login extends React.Component {
     this.setState({ [key]: e.target.value });
   }
 
+  recordLogin(response) {
+    console.log("Handle login record ", response)
+
+    const params = {
+      token: response.token,
+      userId: response.user._id,
+    }
+    axios
+      .post(recordLogin, params)
+      .then((res) => {
+        if (res.data.success) {
+          console.log("response after recording the login", res.data);
+        }
+      })
+      .catch((e) => {
+        console.log("error is ", e);
+      });
+  }
+
   handleLogin(e) {
     e.preventDefault();
     if (this.state.userName === "" && this.state.password === "") {
@@ -123,11 +142,13 @@ class Login extends React.Component {
           .post(loginUrl, params)
           .then((res) => {
             if (res.data.success) {
-              console.log("full response", res.data.data);
+              // console.log("full response", res.data.data);
               this.getStaffTypes(res.data.data.user);
               cookie.save("token", res.data.data.token, { path: "/" });
               cookie.save("current_user", res.data.data.user, { path: "/" });
               subscribeUser(res.data.data.user);
+
+              this.recordLogin(res.data.data)
 
               // this.props.history.push('/home'+ '/'+res.data.data.user.staffTypeId.routeAccess);
 
@@ -207,10 +228,10 @@ class Login extends React.Component {
           <img
             src={KHMC_White}
             className="header1-style"
-            // style={{ maxWidth: "160px", height: "35px" }}
-            // onClick={() => {
-            //   return this.setState({ goBack: true });
-            // }}
+          // style={{ maxWidth: "160px", height: "35px" }}
+          // onClick={() => {
+          //   return this.setState({ goBack: true });
+          // }}
           />{" "}
           {/* <h4
             className='header1-style'
@@ -230,9 +251,9 @@ class Login extends React.Component {
               cursor: "pointer",
               // boxShadow: this.state.hover ? '2px 2px 2px 2px #b2b0b0' : '',
             }}
-            // onMouseEnter={() => this.setState({ hover: true })}
-            // onMouseLeave={() => this.setState({ hover: false })}
-            // onClick={() => this.setState({ open: !this.state.open })}
+          // onMouseEnter={() => this.setState({ hover: true })}
+          // onMouseLeave={() => this.setState({ hover: false })}
+          // onClick={() => this.setState({ open: !this.state.open })}
           />
         </div>
         {/* <Header /> */}
@@ -376,23 +397,23 @@ class Login extends React.Component {
                         </Button>
                       </div>
                     ) : (
-                      <div
-                        className="row"
-                        style={{
-                          marginTop: 25,
-                          width: "100%",
-                          display: "flex",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <Loader
-                          type="TailSpin"
-                          color="white"
-                          height={50}
-                          width={50}
-                        />
-                      </div>
-                    )}
+                        <div
+                          className="row"
+                          style={{
+                            marginTop: 25,
+                            width: "100%",
+                            display: "flex",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <Loader
+                            type="TailSpin"
+                            color="white"
+                            height={50}
+                            width={50}
+                          />
+                        </div>
+                      )}
                   </div>
                 </div>
               </div>

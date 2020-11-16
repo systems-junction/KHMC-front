@@ -325,6 +325,8 @@ function AddEditPurchaseRequest(props) {
 
     const selectedRec = props.history.location.state.selectedItem;
 
+    console.log(props.history.location.state)
+
     if (selectedRec) {
       Object.entries(selectedRec).map(([key, val]) => {
         if (key === "purchaseRequestId") {
@@ -615,8 +617,6 @@ function AddEditPurchaseRequest(props) {
     }
   }
 
-  console.log(purchaseRequest);
-
   return (
     <div
       style={{
@@ -824,7 +824,7 @@ function AddEditPurchaseRequest(props) {
                       }}
                       disabled={
                         committeeStatus === "approved" &&
-                        status === "pending_reception"
+                        status === "pending_receipt"
                           ? true
                           : false
                       }

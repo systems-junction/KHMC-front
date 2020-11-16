@@ -603,9 +603,9 @@ const warehouseInventoryKeeper = [
     path: `/home/reports`,
   },
   {
-    img: "",
-    text: "",
-    path: "",
+    img: ReceiveItem,
+    text: "Received Items",
+    path: "/home/wms/warehouse/receiveitems",
   },
 
   {

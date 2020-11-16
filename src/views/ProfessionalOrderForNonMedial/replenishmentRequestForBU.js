@@ -925,9 +925,6 @@ export default function ReplenishmentRequest(props) {
                   tableDataKeys={
                     currentUser.staffTypeId.type === "Registered Nurse"
                       ? tableDataKeysForItemsForBUMember
-                      : currentUser.staffTypeId.type === "Registered Nurse" ||
-                        currentUser.staffTypeId.type === "BU Doctor"
-                      ? tableDataKeysForItemsForBUMember
                       : currentUser.staffTypeId.type === "FU Inventory Keeper"
                       ? tableDataKeysForFUMemberForItems
                       : tableDataKeysForItemsForBUMember
@@ -935,8 +932,6 @@ export default function ReplenishmentRequest(props) {
                   action={
                     currentUser.staffTypeId.type === "Registered Nurse"
                       ? actionsForItemsForReceiver
-                      : currentUser.staffTypeId.type === "BU Doctor"
-                      ? actionsForItemsForOther
                       : currentUser.staffTypeId.type === "FU Inventory Keeper"
                       ? actionsForItemsForFUMember
                       : actionsForItemsForOther

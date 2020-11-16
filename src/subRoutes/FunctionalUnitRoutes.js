@@ -10,7 +10,7 @@ import ProfessionalOrderForNonMedical from "./professionalOrderForNonMedical";
 import FunctionalUnit from "../views/FunctionalUnit/functionalUnit";
 import FU from "../views/Home/FU";
 import FuInventoryRoutes from "./fuInventory";
-import ReturnItemsForFUInventory from "../views/ReplenishmentRequestForFU/addEditInternalReturnRequestForFUInventory";
+import ReturnItemsForFUInventory from "../views/internalReturnRequest/addEditInternalReturnRequestForFUInventory";
 import RequestReturnTable from "../views/internalReturnRequest/internalReturnRequestTable";
 import ReceiveItemsForFUInventory from "../views/ReplenishmentRequestForFU/handleReceiveItemForFUInventory";
 

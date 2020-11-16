@@ -28,6 +28,10 @@ export const addSubscriber = `${baseUrl}/subscriber/postsubscriber`;
 export const markNotification = `${baseUrl}/notifications/updatenotifications`;
 export const getNotifications = `${baseUrl}/notifications/getnotifications`;
 
+// login/logout recording endpoints
+export const recordLogin = `${baseUrl}/loginRecord/createLogin`;
+export const recordLogout = `${baseUrl}/loginRecord/recordLogout`;
+
 // items endpoints
 export const getItemsUrl = `${baseUrl}/item/getitems`;
 export const addItemUrl = `${baseUrl}/item/additem`;
@@ -433,3 +437,10 @@ export const supplierfulfillmentPO = `${baseUrl}/reports/supplierfulfillmentpo`;
 export const createChat = `${baseUrl}/chatroom/createchat`;
 export const deleteChat = `${baseUrl}/chatroom/deletechat`;
 export const uploadChatFile = `${baseUrl}/chatroom/uploadchatfile`;
+<<<<<<< HEAD
+=======
+
+//Margin Levels
+export const createMargin = `${baseUrl}/margin/createmargin`;
+export const getMargin = `${baseUrl}/margin/getmargin`;
+>>>>>>> e2b354995150d6dd93fa1a23724afa15d0960fad
