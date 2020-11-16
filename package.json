@@ -20,19 +20,13 @@
     "bootstrap": "^4.5.3",
     "classnames": "2.2.6",
     "connected-react-router": "^6.8.0",
-<<<<<<< HEAD
     "css-loader": "3.5.3",
-=======
-    "d3": "^5.16.0",
->>>>>>> e2b354995150d6dd93fa1a23724afa15d0960fad
+    "d3": "^6.2.0",
     "date-fns": "^2.12.0",
     "downloadjs": "^1.4.7",
     "emoji-mart": "^3.0.0",
-<<<<<<< HEAD
     "font-awesome": "^4.7.0",
     "formik": "^2.1.5",
-=======
->>>>>>> e2b354995150d6dd93fa1a23724afa15d0960fad
     "history": "4.9.0",
     "howler": "^2.2.1",
     "install": "^0.13.0",
@@ -58,18 +52,13 @@
     "react-export-excel": "^0.5.3",
     "react-feather": "^2.0.8",
     "react-file-viewer": "^1.2.1",
-<<<<<<< HEAD
     "react-github-btn": "^1.2.0",
     "react-google-maps": "9.4.5",
     "react-html-table-to-excel": "^2.0.0",
     "react-icons": "^3.10.0",
+    "react-idle-timer": "^4.5.0",
     "react-jitsi": "^1.0.4",
     "react-jutsu": "^2.3.0",
-=======
-    "react-html-table-to-excel": "^2.0.0",
-    "react-icons": "^3.10.0",
-    "react-idle-timer": "^4.5.0",
->>>>>>> e2b354995150d6dd93fa1a23724afa15d0960fad
     "react-loader-spinner": "^3.1.14",
     "react-modal": "^3.11.2",
     "react-moment": "^0.9.7",

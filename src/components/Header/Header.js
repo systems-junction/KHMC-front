@@ -9,17 +9,10 @@ import Typography from "@material-ui/core/Typography";
 import Fade from "@material-ui/core/Fade";
 import cookie from "react-cookies";
 import Fab from "@material-ui/core/Fab";
-<<<<<<< HEAD
-import NotifyMe from "./NotificationTray";
-import { socketUrl, getNotifications } from "../../public/endpoins";
-import socketIOClient from "socket.io-client";
-import axios from "axios";
-=======
 import NotifyMe from './NotificationTray';
 import { socketUrl, getNotifications,recordLogout } from '../../public/endpoins';
 import socketIOClient from 'socket.io-client'
 import axios from 'axios'
->>>>>>> e2b354995150d6dd93fa1a23724afa15d0960fad
 import AddIcon from "@material-ui/icons/Add";
 import IdleTimer from 'react-idle-timer'
 
@@ -56,21 +49,20 @@ class Header extends React.Component {
   }
 
   componentDidMount() {
-    const loggedUser = cookie.load("current_user");
+    const loggedUser = cookie.load("current_user")
     this.setState({ currentUser: loggedUser });
 
-    axios
-      .get(getNotifications + "/" + loggedUser._id)
+    axios.get(getNotifications + "/" + loggedUser._id)
       .then((res) => {
         if (res.data.success) {
           // console.log("Load Notifications", res.data.data)
 
-          let notifyData = [];
+          let notifyData = []
           for (let i = 0; i < res.data.data.length; i++) {
-            var checkId = res.data.data[i].sendTo;
+            var checkId = res.data.data[i].sendTo
             for (let j = 0; j < checkId.length; j++) {
               if (checkId[j].userId._id === loggedUser._id) {
-                notifyData.push(res.data.data[i]);
+                notifyData.push(res.data.data[i])
               }
             }
           }
@@ -79,8 +71,8 @@ class Header extends React.Component {
         }
       })
       .catch((e) => {
-        console.log("Cannot get Notifications", e);
-      });
+        console.log('Cannot get Notifications', e)
+      })
 
     const socket = socketIOClient(socketUrl);
 
@@ -88,12 +80,12 @@ class Header extends React.Component {
       console.log("response coming through socket", data);
 
       for (let i = 0; i < data.length; i++) {
-        var checkId = data[i].sendTo;
+        var checkId = data[i].sendTo
         if (data[i].sendTo) {
           for (let j = 0; j < checkId.length; j++) {
             if (checkId[j].userId._id === loggedUser._id) {
-              var newData = [].concat(data[i], this.state.data);
-              this.setState({ data: newData });
+              var newData = [].concat(data[i], this.state.data)
+              this.setState({ data: newData })
             }
           }
         }
@@ -138,7 +130,7 @@ class Header extends React.Component {
   }
 
   render() {
-    const { history } = this.props;
+    const { history } = this.props
 
     if (this.state.goBack) {
       var currentLocation = window.location.pathname;
@@ -158,16 +150,15 @@ class Header extends React.Component {
         />
         <NotifyMe
           data={this.state.data}
-          onNotificationIconClick={() =>
-            history.push({
-              pathname: "/home/notificationCenter",
-              state: {
-                notificationData: this.state.data,
-              },
-            })
+          onNotificationIconClick={() => history.push({
+            pathname: '/home/notificationCenter',
+            state: {
+              notificationData: this.state.data
+            },
+          })
           }
-          storageKey="notific_key"
-          notific_key="timestamp"
+          storageKey='notific_key'
+          notific_key='timestamp'
           sortedByKey={false}
           showDate={true}
           color="white"
@@ -190,7 +181,7 @@ class Header extends React.Component {
               right: 0,
               bottom: 0,
               position: "fixed",
-              zIndex: 10,
+              zIndex: 5,
             }}
           >
             <Fade in={this.state.open} timeout={1000}>
@@ -328,11 +319,11 @@ class Header extends React.Component {
             </Fade>
           </div>
         ) : (
-          undefined
-        )}
+            undefined
+          )}
 
         {this.state.currentUser ? (
-          <div style={{ position: "fixed", right: 35, bottom: 45, zIndex: 10 }}>
+          <div style={{ position: "fixed", right: 35, bottom: 45, zIndex: 5 }}>
             <Fab
               // color="primary"
               aria-label="add"
@@ -347,10 +338,6 @@ class Header extends React.Component {
             </Fab>
           </div>
         ) : (
-<<<<<<< HEAD
-          undefined
-        )}
-=======
             undefined
           )}
 
@@ -367,7 +354,6 @@ class Header extends React.Component {
             undefined
           )}
 
->>>>>>> e2b354995150d6dd93fa1a23724afa15d0960fad
       </div>
     );
   }

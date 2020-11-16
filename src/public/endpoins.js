@@ -437,10 +437,7 @@ export const supplierfulfillmentPO = `${baseUrl}/reports/supplierfulfillmentpo`;
 export const createChat = `${baseUrl}/chatroom/createchat`;
 export const deleteChat = `${baseUrl}/chatroom/deletechat`;
 export const uploadChatFile = `${baseUrl}/chatroom/uploadchatfile`;
-<<<<<<< HEAD
-=======
 
 //Margin Levels
 export const createMargin = `${baseUrl}/margin/createmargin`;
 export const getMargin = `${baseUrl}/margin/getmargin`;
->>>>>>> e2b354995150d6dd93fa1a23724afa15d0960fad
