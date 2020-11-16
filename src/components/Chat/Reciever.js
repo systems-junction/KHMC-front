@@ -29,7 +29,7 @@ export default function Reciever(props) {
   const classes = useStyles();
 
   return (
-    <div className={classes.root} style={{ marginTop: 10, marginLeft: 20  }}>
+    <div className={classes.root} style={{ marginTop: 10, marginLeft: 20 }}>
       <Avatar
         alt="Remy Sharp"
         src="/static/images/avatar/1.jpg"
@@ -57,9 +57,9 @@ export default function Reciever(props) {
         >
           <span>{props.recieve}</span>
           <br />
-          <small style={{ fontWeight: 30, fontSize: "60%" }}>
-            {props.time}
-          </small>
+          <div style={{ fontWeight: 30, fontSize: "60%", textAlign: "left" }}>
+            <small>{props.time}</small>
+          </div>
         </div>
       )}
       &nbsp;&nbsp;&nbsp;&nbsp;

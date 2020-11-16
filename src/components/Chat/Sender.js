@@ -32,7 +32,7 @@ export default function Sender(props) {
   return (
     <div
       className={classes.root}
-      style={{ display: "flex", justifyContent: "flex-end", marginTop: 10}}
+      style={{ display: "flex", justifyContent: "flex-end", marginTop: 10 }}
     >
       {props.type === "image/jpeg" || props.type === "image/png" ? (
         <Avatar
@@ -55,9 +55,9 @@ export default function Sender(props) {
         >
           <span>{props.send}</span>
           <br />
-          <small style={{ fontWeight: 30, fontSize: "60%" }}>
-            {props.time}
-          </small>
+          <div style={{ fontWeight: 30, fontSize: "60%", textAlign: "right" }}>
+            <small>{props.time}</small>
+          </div>
         </div>
       )}
       &nbsp;&nbsp;&nbsp;&nbsp;

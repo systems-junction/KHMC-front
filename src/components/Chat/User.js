@@ -48,7 +48,7 @@ export default function User(props) {
           className={online ? classes.onlineAvatar : classes.avatar}
         />
       </Badge>
-      <h6 style={{ marginLeft: 10, marginTop: 10 }}>{props.name}</h6>
+      <h6 style={{ textAlign: "center", marginTop: 10 }}>{props.name}</h6>
     </div>
   );
 }

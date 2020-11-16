@@ -38,6 +38,8 @@ import AddEditAccessLevel from "../views/UserManagement/accessLevel/addEditAcces
 import systemAdmin from "../views/UserManagement/systemAdmin/systemAdmin";
 import addEditSystemAdmin from "../views/UserManagement/systemAdmin/addEditSystemAdmin";
 import notificationCenter from "../views/Notifications/notifications";
+import CareStreamMain from "../views/CareStream/CareStreamMain";
+
 import dashboard from "../views/Dashboard/dashboard";
 import webRTC from "../views/WebRTC/webRTC";
 
@@ -53,6 +55,8 @@ class HomeScreenRoutes extends React.PureComponent {
         <Route exact path={"/home/patientFHIR"} component={PatientFHIR} />
         <Route path={"/home/controlroom"} component={ControlRoomRoutes} />
         <Route path={"/home/reports"} component={ReportsRoutes} />
+        <Route path={"/home/careStream"} component={CareStreamMain} />
+
         <Route
           path={"/home/notificationCenter"}
           component={notificationCenter}

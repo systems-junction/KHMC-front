@@ -292,30 +292,27 @@ export default function Chat(props) {
       return null;
     } else {
       // if(user.name.length > 5 && search === ""){
-      if(user.name.length > 5){
+      if (user.name.length > 5) {
         return (
           <User
-            name={user.name.substring(0, 7) + '...'}
+            name={user.name.substring(0, 7) + "..."}
             online={true}
             getChatHandler={onGetChatHandler}
           />
         );
-      } 
-      else {
+      } else {
         return (
-        <User
-          name={user.name}
-          online={true}
-          getChatHandler={onGetChatHandler}
-        />
-      );
+          <User
+            name={user.name}
+            online={true}
+            getChatHandler={onGetChatHandler}
+          />
+        );
       }
-      
     }
   };
 
   const onGetChatHandler = () => {
-    setDiv(true);
     var obj = {};
     if (currentUser.staffTypeId.type === "Doctor/Physician") {
       obj.sender = currentUser._id;
@@ -330,11 +327,13 @@ export default function Chat(props) {
         console.log("res", res.data.data);
         setChatId(res.data.data._id);
         var listWithoutTel = res.data.data.chat.map((item) => item);
+        console.log("listWithoutTel", listWithoutTel);
         changeTime(listWithoutTel);
       })
       .catch((error) => {
         console.log(error);
       });
+    setDiv(true);
   };
 
   const videoCall = () => {
@@ -440,7 +439,14 @@ export default function Chat(props) {
         <div className="subheader" style={{ marginLeft: "-10px" }}>
           <div>
             <img src={ChatIcon} />
-            <div style={{ flex: 4, display: "flex", alignItems: "center", marginTop: -30 }}>
+            <div
+              style={{
+                flex: 4,
+                display: "flex",
+                alignItems: "center",
+                marginTop: -30,
+              }}
+            >
               <h4 style={{ color: "white", fontWeight: "700" }}>Chat</h4>
             </div>
           </div>
@@ -509,7 +515,10 @@ export default function Chat(props) {
               className="col-md-6"
               style={{ display: "flex", justifyContent: "flex-end" }}
             >
-              <img style={{ height: 40, width: 40, marginTop: 8 }} src={SearchIcon} />
+              <img
+                style={{ height: 40, width: 40, marginTop: 8 }}
+                src={SearchIcon}
+              />
               <input
                 placeholder="Search Name..."
                 style={{ border: "none", marginRight: -35 }}
@@ -560,13 +569,23 @@ export default function Chat(props) {
                     className={classes.avatar}
                   />
 
-                  <div style={{ marginLeft: 20,  }}>
+                  <div style={{ marginLeft: 20 }}>
                     <h4 style={{ marginTop: 15 }}>Ingrendia Nutritia</h4>
-                    <h4 style={{ color: "#2962CC", marginTop: 0 }}>Dentist Patients</h4>
+                    <h4 style={{ color: "#2962CC", marginTop: 0 }}>
+                      Dentist Patients
+                    </h4>
                   </div>
                 </div>
                 <div>
-                  <h3 style={{ fontSize: "large", fontWeight: 550, marginLeft: 22 }}>05 Min</h3>
+                  <h3
+                    style={{
+                      fontSize: "large",
+                      fontWeight: 550,
+                      marginLeft: 22,
+                    }}
+                  >
+                    05 Min
+                  </h3>
                   <div
                     style={{
                       display: "flex",
@@ -579,11 +598,10 @@ export default function Chat(props) {
                     ) : (
                       undefined
                     )}
-                    
                   </div>
                 </div>
               </div>
-              <hr style={{marginBottom: -5}} />
+              <hr style={{ marginBottom: -5 }} />
               <div id="wrapper">
                 <div class="scrollbar" id="style-vertical">
                   <div class="force-overflow">
@@ -602,6 +620,7 @@ export default function Chat(props) {
                     </div>
 
                     {chat.map((msg) => {
+                      console.log("date", msg.sentAt);
                       return (
                         <div>
                           {msg.sender === currentUser._id ? (
