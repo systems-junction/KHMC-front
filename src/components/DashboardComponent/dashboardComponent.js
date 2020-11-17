@@ -13,10 +13,10 @@ function DashboardComponent(props) {
   return (
     <div
       style={{
-        width: 310,
+        // width: 310,
         height: 250,
-        backgroundColor: "white",
-        borderRadius: 10,
+        // borderRadius: 10,
+        // width:"100%"
       }}
       onClick={() => {
         setShowGraph(!showGraph);

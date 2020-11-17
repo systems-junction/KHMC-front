@@ -138,6 +138,13 @@ export default function PurchaseRequest(props) {
 
   useEffect(() => {
     getFUs();
+
+    if (
+      currentUser.staffTypeId.type === "FU Inventory Keeper" &&
+      currentUser.functionalUnit
+    ) {
+      setFU(currentUser.functionalUnit._id);
+    }
   }, []);
 
   if (openNotification) {
@@ -329,7 +336,7 @@ export default function PurchaseRequest(props) {
         overflowY: "scroll",
       }}
     >
-      <Header history={props.history}/>
+      <Header history={props.history} />
       <div className="cPadding">
         <div className="subheader">
           <div>
@@ -429,6 +436,11 @@ export default function PurchaseRequest(props) {
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
+                  disabled={
+                    currentUser && currentUser.staffTypeId.type === "admin"
+                      ? false
+                      : true
+                  }
                 >
                   <MenuItem value="">
                     <em>None</em>

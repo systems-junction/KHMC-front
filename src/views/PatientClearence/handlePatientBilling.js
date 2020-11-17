@@ -55,16 +55,16 @@ const tableHeadingForBillSummary = [
   "Date/Time",
   "Service Type",
   "Service Name",
-  "Amount (JD)",
   "Quantity",
+  "Total Price(JD)",
   //   "Invoice",
 ];
 const tableDataKeysForBillSummary = [
   "date",
   ["serviceId", "type"],
   ["serviceId", "name"],
-  ["serviceId", "price"],
   "qty",
+  ["serviceId", "price"],
 ];
 
 const statusArray = [
@@ -708,10 +708,11 @@ function AddEditPatientListing(props) {
   };
 
   function handleAddItem(i) {
+    console.log("selected banda", i);
+
     dispatch({ field: "medicationArray", value: "" });
     dispatch({ field: "diagnosisArray", value: "" });
 
-    console.log("selected banda", i);
     setQr(i.QR);
 
     setSelectedPatient(i);
@@ -726,7 +727,7 @@ function AddEditPatientListing(props) {
     dispatch({ field: "QR", value: i.QR });
 
     dispatch({ field: "profileNo", value: i.profileNo });
-    dispatch({ field: "insuranceNumber", value: i.insuranceNumber });
+    dispatch({ field: "insuranceNumber", value: i.insuranceNo });
     dispatch({ field: "insuranceVendor", value: i.insuranceVendor });
 
     setSearchQuery("");
@@ -940,7 +941,7 @@ function AddEditPatientListing(props) {
           for (let i = 0; i < res.data.data.radiologyRequest.length; i++) {
             let singlePR = res.data.data.radiologyRequest[i];
 
-            totalAmount = totalAmount + singlePR.serviceId.price;
+            totalAmount = totalAmount + singlePR.price;
 
             let obj = {
               serviceId: {
@@ -958,9 +959,7 @@ function AddEditPatientListing(props) {
           let lab = [];
           for (let i = 0; i < res.data.data.labRequest.length; i++) {
             let singlePR = res.data.data.labRequest[i];
-
-            totalAmount = totalAmount + singlePR.serviceId.price;
-
+            totalAmount = totalAmount + singlePR.price;
             let obj = {
               serviceId: {
                 ...singlePR.serviceId,
@@ -976,29 +975,29 @@ function AddEditPatientListing(props) {
 
           let nurse = [];
           if (res.data.data.nurseService) {
-            //   for (let i = 0; i < res.data.data.nurseService.length; i++) {
-            //     let singlePR = res.data.data.nurseService[i];
-            //     totalAmount = totalAmount + singlePR.serviceId.price;
-            //     let obj = {
-            //       serviceId: {
-            //         ...singlePR.serviceId,
-            //         type: "Nurse Service",
-            //         name: singlePR.serviceId.name,
-            //         price: singlePR.serviceId.price,
-            //       },
-            //       date: res.data.data.nurseService[i].date,
-            //       qty: 1,
-            //     };
-            //     nurse.push(obj);
-            //   }
+            for (let i = 0; i < res.data.data.nurseService.length; i++) {
+              let singlePR = res.data.data.nurseService[i];
+              totalAmount = totalAmount + singlePR.price;
+              let obj = {
+                serviceId: {
+                  ...singlePR.serviceId,
+                  type: "Nurse Service",
+                  name: singlePR.serviceId.name,
+                  price: singlePR.price,
+                },
+                date: res.data.data.nurseService[i].date,
+                qty: 1,
+              };
+              nurse.push(obj);
+            }
           }
           setbillSummaryArray(
             [].concat(
               //   res.data.data.labRequest.reverse(),
               //   res.data.data.radiologyRequest.reverse(),
-              rad.reverse(),
               pharm.reverse(),
               lab.reverse(),
+              rad.reverse(),
               nurse.reverse()
             )
           );
@@ -1880,8 +1879,8 @@ function AddEditPatientListing(props) {
             <TableCell>Date/Time</TableCell>
             <TableCell align="right">Service Type</TableCell>
             <TableCell align="right">Service Name</TableCell>
-            {/* <TableCell align="right">Amount (JD)</TableCell> */}
             <TableCell align="right">Quantity</TableCell>
+            <TableCell align="right">Total Price(JD)</TableCell>
           </TableRow>
         </TableHead>
         {patientId && billSummaryArray != false ? (
@@ -1893,10 +1892,11 @@ function AddEditPatientListing(props) {
                 </TableCell>
                 <TableCell align="right">{row.serviceId.type}</TableCell>
                 <TableCell align="right">{row.serviceId.name}</TableCell>
-                {/* <TableCell align="right">
-                  {`${row.serviceId.price.toFixed(4)} JD` }
-                </TableCell> */}
+
                 <TableCell align="right">{row.qty}</TableCell>
+                <TableCell align="right">
+                  {`${row.serviceId.price.toFixed(4)} JD`}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

@@ -28,6 +28,8 @@ import MenuTree from "../../../components/MenuTree/MenuTree";
 
 import Reports from "../../../assets/img/Reports.png";
 
+import FunctionalUnit from "../../../assets/img/Functional Unit.png";
+
 const admin = [
   { img: Reports, text: "Reports", path: "" },
   { img: Reports, text: "Functional Unit Reports", path: "reports/fureports" },
@@ -42,6 +44,11 @@ const warehouseInventoryKeeper = [
 const fuInventoryKeeper = [
   { img: Reports, text: "Reports", path: "" },
   { img: Reports, text: "Functional Unit Reports", path: "reports/fureports" },
+  {
+    img: FunctionalUnit,
+    text: "FuncU Inventory",
+    path: `/home/wms/fus/fuinventory`,
+  },
 ];
 
 class HomeScreen extends React.Component {
@@ -92,7 +99,7 @@ class HomeScreen extends React.Component {
           backgroundColor: "#2B62CC",
         }}
       >
-        <Header history={this.props.history}/>
+        <Header history={this.props.history} />
 
         <MenuTree
           history={this.props.history}

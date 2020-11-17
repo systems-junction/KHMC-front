@@ -51,6 +51,7 @@ import HistoryIcon from "../../assets/img/Manual Request.png";
 import CRIcon from "../../assets/img/Consultation Request.png";
 import WMS_Back from "../../assets/img/WMS_Back.png";
 import OrderItems from "../../assets/img/Order Items.png";
+import Others from "../../assets/img/Others.png";
 
 import RepRequestStatus from "../../assets/img/Replenishment Requests Status.png";
 // import FuncUFulfillment from "../../assets/img/FuncUFulfillment.png";
@@ -65,7 +66,15 @@ import {
   funForReducer,
   setPatientDetailsForReducer,
 } from "../../actions/Checking";
+
 import PatientHistory from "../PatientHistory/PatientHistory";
+
+import GenericDashboad from "../../components/GenericDashboad/GenericDashboard";
+import ApprovalCommitteeMember from "../../assets/img/Approval Committee Member.png";
+import NewPurchaseRequests from "../../assets/img/New Purchase Requests.png";
+import NewPurchaseOrders from "../../assets/img/New Purchase Orders.png";
+
+import CommitteeMember from "../UsersDashboards/CommitteeMember";
 
 const admin = [
   { img: KHMC, path: "" },
@@ -531,10 +540,16 @@ const fuInventoryKeeper = [
     path: `/home/wms/fus/returnitems`,
   },
 
+  // {
+  //   img: FunctionalUnit,
+  //   text: "FuncU Inventory",
+  //   path: `/home/wms/fus/fuinventory`,
+  // },
+
   {
-    img: FunctionalUnit,
-    text: "FuncU Inventory",
-    path: `/home/wms/fus/fuinventory`,
+    img: Others,
+    text: "Others",
+    path: `/home/reports`,
   },
 
   // {
@@ -666,6 +681,12 @@ class HomeScreen extends React.Component {
       userStaff: "",
 
       options: "",
+
+      openHome: false,
+
+      notificationArray: [],
+
+      headingIcon: "",
     };
   }
 
@@ -710,304 +731,127 @@ class HomeScreen extends React.Component {
 
     this.props.setPatientDetailsForReducer("");
 
-    setTimeout(() => {
-      document.getElementById("menu-open").checked = true;
-    }, 120);
+    if (this.state.openHome)
+      setTimeout(() => {
+        document.getElementById("menu-open").checked = true;
+      }, 120);
+
+    if (this.state.currentUser.staffTypeId.type === "Committe Member") {
+      this.setState({
+        notificationArray: [
+          { icon: NewPurchaseRequests, title: "New Purchase Requests" },
+          { icon: NewPurchaseOrders, title: "New Purchase Order" },
+        ],
+        headingIcon: ApprovalCommitteeMember,
+        headingTitle: "Approval Committee Member",
+      });
+    }
+  }
+
+  openApps() {
+    this.setState({ openHome: true });
   }
 
   render() {
     const userType = this.state.currentUser.staffTypeId;
     console.log(userType);
 
-    return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          flex: 1,
-          position: "fixed",
-          width: "100%",
-          height: "100%",
-          // backgroundColor: "#2B62CC",
-          background: "rgb(101,228,193)",
-          background:
-            "linear-gradient(25deg, rgba(101,228,193,1) 0%, rgba(58,219,175,1) 33%, rgba(15,206,147,1) 66%, rgba(6,142,103,1) 100%)",
-          // backgroundImage: `url("${WMS_Back}")`,
-          backgroundSize: "100%",
-        }}
-      >
-        <Header history={this.props.history} />
-        {/* <div
-          className="menupage"
+    if (this.state.openHome) {
+      return (
+        <div
           style={{
             display: "flex",
-            flex: 4,
-            minHeight: "100%",
-            alignItems: "center",
-            justifyContent: "center",
-            position: "center",
-            left: "45%",
+            flexDirection: "column",
+            flex: 1,
+            position: "fixed",
+            width: "100%",
+            height: "100%",
+            // backgroundColor: "#2B62CC",
+            background: "rgb(101,228,193)",
+            background:
+              "linear-gradient(25deg, rgba(101,228,193,1) 0%, rgba(58,219,175,1) 33%, rgba(15,206,147,1) 66%, rgba(6,142,103,1) 100%)",
+            // backgroundImage: `url("${WMS_Back}")`,
+            backgroundSize: "100%",
           }}
         >
-          <nav className="menu">
-            <input
-              type="checkbox"
-              href="#"
-              className="menu-open"
-              name="menu-open"
-              id="menu-open"
-            />
-            <label
-              className="menu-open-button"
-              for="menu-open"
-              style={{
-                boxShadow: "5px 5px 5px #2433a5",
-                height: 100,
-                width: 100,
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  height: "100%",
-                }}
-                onClick={() => this.setState({ openApps: true })}
-              >
-                <h5
-                  style={{
-                    color: "white",
-                    fontWeight: "700",
-                    position: "absolute",
-                    textAlign: "center",
-                    left: 21,
-                    top: 33,
-                  }}
-                >
-                  KHMC
-                </h5>
-                <h6
-                  style={{
-                    color: "white",
-                    top: 55,
-                    position: "absolute",
-                    left: 32,
-                    textAlign: "center",
-                  }}
-                >
-                  Apps
-                </h6>
-              </div>
-            </label>
+          <Header history={this.props.history} />
 
-            <a className="menu-item item-1">
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                }}
-                onClick={() => this.props.history.push("/home/rcm")}
-              >
-                <img
-                  src={RCM}
-                  style={{
-                    maxWidth: "40%",
-                    height: "auto",
-                    position: "absolute",
-                    top: 20,
-                  }}
-                />
-                <h6
-                  style={{
-                    position: "absolute",
-                    top: 60,
-                    color: "white",
-                    fontWeight: "700",
-                  }}
-                >
-                  RCM
-                </h6>
-              </div>
-            </a>
-            <a className="menu-item item-2">
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                }}
-                onClick={() => this.props.history.push("/home/wms")}
-              >
-                <img
-                  src={WMS}
-                  style={{
-                    maxWidth: "40%",
-                    height: "auto",
-                    position: "absolute",
-                    top: 20,
-                  }}
-                />
-                <h6
-                  style={{
-                    position: "absolute",
-                    top: 55,
-                    color: "white",
-                    fontWeight: "700",
-                  }}
-                >
-                  WMS
-                </h6>
-              </div>
-            </a>
-            <a className="menu-item item-3">
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                }}
-              >
-                <img
-                  src={FIN}
-                  style={{
-                    maxWidth: "40%",
-                    height: "auto",
-                    position: "absolute",
-                    top: 20,
-                  }}
-                />
-                <h6
-                  style={{
-                    position: "absolute",
-                    top: 55,
-                    color: "white",
-                    fontWeight: "700",
-                  }}
-                >
-                  FIN
-                </h6>
-              </div>
-            </a>
-            <a className="menu-item item-4">
-              {this.state.currentUser &&
-              this.state.currentUser.staffTypeId.type === "admin" ? (
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: "100%",
-                  }}
-                  onClick={() => this.props.history.push("/home/controlroom")}
-                >
-                  <img
-                    src={Control_Room}
-                    style={{
-                      maxWidth: "30%",
-                      height: "auto",
-                      position: "absolute",
-                      top: 11,
-                    }}
-                  />
-                  <h6
-                    style={{
-                      position: "absolute",
-                      top: 40,
-                      color: "white",
-                      fontWeight: "700",
-                    }}
-                  >
-                    Control Room
-                  </h6>
-                </div>
-              ) : (
-                undefined
-              )}
-            </a>
-            <a className="menu-item item-5"></a>
-            <a className="menu-item item-6"></a>
-            <a className="menu-item item-7"></a>
-          </nav>
-        </div> */}
-
-        {/* <MenuTree
-          history={this.props.history}
-          options={this.state.options ? this.state.options : admin}
-        /> */}
-
-        <MenuTree
-          history={this.props.history}
-          options={
-            userType && userType.type === "BU Head"
-              ? buHead
-              : userType && userType.type === "Committe Member"
-              ? committeeMember
-              : userType && userType.type === "Accounts Member"
-              ? accountsMember
-              : userType && userType.type === "Purchasing Officer"
-              ? purchasingOfficer
-              : userType && userType.type === "Purchasing Manager"
-              ? purchasingManager
-              : userType && userType.type === "Warehouse Member"
-              ? warehouseMember
-              : userType && userType.type === "FU Member"
-              ? fuHead
-              : userType && userType.type === "Warehouse Incharge"
-              ? warehouseIncharge
-              : userType && userType.type === "Warehouse Inventory Keeper"
-              ? warehouseInventoryKeeper
-              : userType && userType.type === "FU Inventory Keeper"
-              ? fuInventoryKeeper
-              : userType &&
-                userType.type === "FU Internal Request Return Approval Member"
-              ? fuReturnRequestApprovalMember
-              : userType && userType.type === "FU Incharge"
-              ? fuIncharge
-              : userType && userType.type === "BU Nurse"
-              ? buNurse
-              : (userType && userType.type === "BU Member") ||
-                (userType && userType.type === "BU Inventory Keeper") ||
-                (userType && userType.type === "BU Doctor")
-              ? buMember
-              : userType && userType.type === "Warehouse Incharge"
-              ? warehouseIncharge
-              : userType && userType.type === "FU Inventory Keeper"
-              ? fuInventoryKeeper
-              : userType && userType.type === "Resident Doctor"
-              ? residentDoctor
-              : (userType && userType.type === "IPR Receptionist") ||
-                (userType && userType.type === "EDR Receptionist")
-              ? frontDesk
-              : userType && userType.type === "Insurance Department"
-              ? insuranceDepartment
-              : userType && userType.type === "Registered Nurse"
-              ? registeredNurse
-              : userType && userType.type === "Radiology/Imaging"
-              ? radiologyImagingDepartment
-              : userType && userType.type === "Lab Technician"
-              ? labTechnician
-              : userType && userType.type === "Pharmacist"
-              ? pharmacist
-              : userType && userType.type === "Doctor/Physician"
-              ? doctorPhysician
-              : userType && userType.type === "Consultant/Specialist"
-              ? consultantSpecialist
-              : userType && userType.type === "Cashier"
-              ? cashier
-              : admin
-          }
-        />
-      </div>
-    );
+          <MenuTree
+            history={this.props.history}
+            options={
+              userType && userType.type === "BU Head"
+                ? buHead
+                : userType && userType.type === "Committe Member"
+                ? committeeMember
+                : userType && userType.type === "Accounts Member"
+                ? accountsMember
+                : userType && userType.type === "Purchasing Officer"
+                ? purchasingOfficer
+                : userType && userType.type === "Purchasing Manager"
+                ? purchasingManager
+                : userType && userType.type === "Warehouse Member"
+                ? warehouseMember
+                : userType && userType.type === "FU Member"
+                ? fuHead
+                : userType && userType.type === "Warehouse Incharge"
+                ? warehouseIncharge
+                : userType && userType.type === "Warehouse Inventory Keeper"
+                ? warehouseInventoryKeeper
+                : userType && userType.type === "FU Inventory Keeper"
+                ? fuInventoryKeeper
+                : userType &&
+                  userType.type === "FU Internal Request Return Approval Member"
+                ? fuReturnRequestApprovalMember
+                : userType && userType.type === "FU Incharge"
+                ? fuIncharge
+                : userType && userType.type === "BU Nurse"
+                ? buNurse
+                : (userType && userType.type === "BU Member") ||
+                  (userType && userType.type === "BU Inventory Keeper") ||
+                  (userType && userType.type === "BU Doctor")
+                ? buMember
+                : userType && userType.type === "Warehouse Incharge"
+                ? warehouseIncharge
+                : userType && userType.type === "FU Inventory Keeper"
+                ? fuInventoryKeeper
+                : userType && userType.type === "Resident Doctor"
+                ? residentDoctor
+                : (userType && userType.type === "IPR Receptionist") ||
+                  (userType && userType.type === "EDR Receptionist")
+                ? frontDesk
+                : userType && userType.type === "Insurance Department"
+                ? insuranceDepartment
+                : userType && userType.type === "Registered Nurse"
+                ? registeredNurse
+                : userType && userType.type === "Radiology/Imaging"
+                ? radiologyImagingDepartment
+                : userType && userType.type === "Lab Technician"
+                ? labTechnician
+                : userType && userType.type === "Pharmacist"
+                ? pharmacist
+                : userType && userType.type === "Doctor/Physician"
+                ? doctorPhysician
+                : userType && userType.type === "Consultant/Specialist"
+                ? consultantSpecialist
+                : userType && userType.type === "Cashier"
+                ? cashier
+                : admin
+            }
+          />
+        </div>
+      );
+    } else {
+      return (
+        <GenericDashboad
+          notificationArray={this.state.notificationArray}
+          headingIcon={this.state.headingIcon}
+          headingTitle={this.state.headingTitle}
+          openApps={this.openApps.bind(this)}
+        >
+          <CommitteeMember />
+        </GenericDashboad>
+      );
+    }
   }
 }
 
