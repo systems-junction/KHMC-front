@@ -1,50 +1,51 @@
-import React from "react";
-import { Route, Switch, Router } from "react-router-dom";
-import { createBrowserHistory } from "history";
-import NotFound from "../components/NotFound/NotFound";
-import PhotoEditor from "../components/PhotoEditor/PhotoEditor";
-import HomeScreen from "../views/Home/HomeScreen";
-import PatientFHIR from "../views/patientFHIR/patientFHIR";
-import ControlRoom from "../views/Home/ControlRoom";
-import WMS from "../views/Home/WMS";
-import BusinessUnitRoutes from "../subRoutes/business_unit";
-import ControlRoomRoutes from "../subRoutes/controlRoom";
-import ReportsRoutes from "../subRoutes/ReportsRoutes";
-import WMSRoutes from "../subRoutes/wms";
-import RCMRoutes from "../subRoutes/rcmRoutes";
-import FINRoutes from "../subRoutes/finRoutes";
-import PatientListingRoutes from "./patientListing";
-import PurchaseRequest from "../views/PurchaseRequest/purchaseRequest";
-import AddEditPurchaseRequest from "../views/PurchaseRequest/addEditPurchaseRequest";
-import PurchaseOrders from "../views/PurchaseOrders/purchaseOrder";
-import AddEditPurchaseOrders from "../views/PurchaseOrders/addEditPurchaseOrders";
-import BuReturn from "../views/BuReturn/buReturn";
-import AddEditBuReturn from "../views/BuReturn/addEditBuReturn";
-import MaterialReceiving from "../views/MaterialReceiving/materialreceiving";
-import AddEditMaterialReceiving from "../views/MaterialReceiving/addEditMaterialReceiving";
-import BuStockInLog from "../views/BuStockInLog/buStockInLog";
-import AddEditBuStockInLog from "../views/BuStockInLog/addEditBuStockInLog";
-import ReceiveItems from "../views/ReceiveItems/receiveItems";
-import AddEditReceiveItems from "../views/ReceiveItems/addEditReceiveItems";
-import WareHouseInventory from "../views/WareHouseInventory/wareHouseInventory";
-import AddEditWareHouseInventory from "../views/WareHouseInventory/addEditWareHouseInventory";
-import BuStockOutLog from "../views/BuStockOutLog/buStockOutLog";
-import AddEditBuStockOutLog from "../views/BuStockOutLog/addEditStockOutLog";
-import staff from "../views/UserManagement/staff/staff";
-import AddEditStaff from "../views/UserManagement/staff/addEditStaff";
-import StaffTypes from "../views/UserManagement/staffType/staffTypes";
-import AddEditStaffTypes from "../views/UserManagement/staffType/addEditStaffTypes";
-import AccessLevel from "../views/UserManagement/accessLevel/accessLevel";
-import AddEditAccessLevel from "../views/UserManagement/accessLevel/addEditAccessLevel";
-import systemAdmin from "../views/UserManagement/systemAdmin/systemAdmin";
-import addEditSystemAdmin from "../views/UserManagement/systemAdmin/addEditSystemAdmin";
-import notificationCenter from "../views/Notifications/notifications";
-import CareStreamMain from "../views/CareStream/CareStreamMain";
+import React from "react"
+import { Route, Switch, Router } from "react-router-dom"
+import { createBrowserHistory } from "history"
+import NotFound from "../components/NotFound/NotFound"
+import PhotoEditor from "../components/PhotoEditor/PhotoEditor"
+import HomeScreen from "../views/Home/HomeScreen"
+import PatientFHIR from "../views/patientFHIR/patientFHIR"
+import ControlRoom from "../views/Home/ControlRoom"
+import WMS from "../views/Home/WMS"
+import BusinessUnitRoutes from "../subRoutes/business_unit"
+import ControlRoomRoutes from "../subRoutes/controlRoom"
+import ReportsRoutes from "../subRoutes/ReportsRoutes"
+import WMSRoutes from "../subRoutes/wms"
+import RCMRoutes from "../subRoutes/rcmRoutes"
+import FINRoutes from "../subRoutes/finRoutes"
+import PatientListingRoutes from "./patientListing"
+import PurchaseRequest from "../views/PurchaseRequest/purchaseRequest"
+import AddEditPurchaseRequest from "../views/PurchaseRequest/addEditPurchaseRequest"
+import PurchaseOrders from "../views/PurchaseOrders/purchaseOrder"
+import AddEditPurchaseOrders from "../views/PurchaseOrders/addEditPurchaseOrders"
+import BuReturn from "../views/BuReturn/buReturn"
+import AddEditBuReturn from "../views/BuReturn/addEditBuReturn"
+import MaterialReceiving from "../views/MaterialReceiving/materialreceiving"
+import AddEditMaterialReceiving from "../views/MaterialReceiving/addEditMaterialReceiving"
+import BuStockInLog from "../views/BuStockInLog/buStockInLog"
+import AddEditBuStockInLog from "../views/BuStockInLog/addEditBuStockInLog"
+import ReceiveItems from "../views/ReceiveItems/receiveItems"
+import AddEditReceiveItems from "../views/ReceiveItems/addEditReceiveItems"
+import WareHouseInventory from "../views/WareHouseInventory/wareHouseInventory"
+import AddEditWareHouseInventory from "../views/WareHouseInventory/addEditWareHouseInventory"
+import BuStockOutLog from "../views/BuStockOutLog/buStockOutLog"
+import AddEditBuStockOutLog from "../views/BuStockOutLog/addEditStockOutLog"
+import staff from "../views/UserManagement/staff/staff"
+import AddEditStaff from "../views/UserManagement/staff/addEditStaff"
+import StaffTypes from "../views/UserManagement/staffType/staffTypes"
+import AddEditStaffTypes from "../views/UserManagement/staffType/addEditStaffTypes"
+import AccessLevel from "../views/UserManagement/accessLevel/accessLevel"
+import AddEditAccessLevel from "../views/UserManagement/accessLevel/addEditAccessLevel"
+import systemAdmin from "../views/UserManagement/systemAdmin/systemAdmin"
+import addEditSystemAdmin from "../views/UserManagement/systemAdmin/addEditSystemAdmin"
+import notificationCenter from "../views/Notifications/notifications"
+import CareStreamMain from "../views/CareStream/CareStreamMain"
+import PrintCareStream from "../views/CareStream/Steps/PrintCareStream"
 
-import dashboard from "../views/Dashboard/dashboard";
-import webRTC from "../views/WebRTC/webRTC";
+import dashboard from "../views/Dashboard/dashboard"
+import webRTC from "../views/WebRTC/webRTC"
 
-const hist = createBrowserHistory();
+const hist = createBrowserHistory()
 class HomeScreenRoutes extends React.PureComponent {
   render() {
     return (
@@ -56,7 +57,11 @@ class HomeScreenRoutes extends React.PureComponent {
         <Route exact path={"/home/patientFHIR"} component={PatientFHIR} />
         <Route path={"/home/controlroom"} component={ControlRoomRoutes} />
         <Route path={"/home/reports"} component={ReportsRoutes} />
-        <Route path={"/home/careStream"} component={CareStreamMain} />
+        <Route exact path={"/home/careStream"} component={CareStreamMain} />
+        <Route
+          path={"/home/careStream/printCareStream"}
+          component={PrintCareStream}
+        />
 
         <Route
           path={"/home/notificationCenter"}
@@ -102,7 +107,7 @@ class HomeScreenRoutes extends React.PureComponent {
         /> */}
         <Route path="*" component={NotFound} />
       </Switch>
-    );
+    )
   }
 }
-export default HomeScreenRoutes;
+export default HomeScreenRoutes

@@ -1,11 +1,6 @@
 import React from "react"
-import patientRegister from "../../../assets/img/PatientRegistration.png"
 import CareSteam from "../../../components/CareStream/CareStream"
-
-const dropDownArray = [
-  { key: "carestream1", value: "Care Stream 1" },
-  { key: "carestream2", value: "Care Stream 2" },
-]
+import patientRegister from "../../../assets/img/PatientRegistration.png"
 
 const arrayOfObjects = [
   { key: "key1", value: "value1" },
@@ -17,18 +12,15 @@ const arrayOfObjects = [
 ]
 
 export default function Assign() {
-  const dropDownHandler = () => {
-    console.log("dropDownHandler")
-  }
   return (
     <div>
       <div className="subheader" style={{ marginLeft: "-10px" }}>
         <img src={patientRegister} />
         <div style={{ flex: 4, display: "flex", alignItems: "center" }}>
-          <h4 style={{ color: "white", fontWeight: "700" }}>Investigations</h4>
+          <h4 style={{ color: "white", fontWeight: "700" }}>MD Notification</h4>
         </div>
       </div>
-      <CareSteam title={""} checkBoxes={arrayOfObjects} />
+      <CareSteam title="" checkBoxes={arrayOfObjects} />
     </div>
   )
 }
