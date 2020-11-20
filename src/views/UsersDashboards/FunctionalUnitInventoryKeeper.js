@@ -132,7 +132,7 @@ export default function CommitteeMemberDashboard() {
         >
           <div>
             <Dialer
-              mainHeading={"Non-Pharma (Medical) Orders Pending"}
+              mainHeading={"Non-Pharma(Medical) Orders Pending"}
               value={orderPending.nonPharma}
               color={orderPendingColor}
               subHeading={"TAT"}
@@ -166,7 +166,7 @@ export default function CommitteeMemberDashboard() {
         >
           <div>
             <Dialer
-              mainHeading={"Pharma Request for Fulfilment Pending"}
+              mainHeading={"Pharma Request for Fulfillment Pending"}
               value={fulfillmentPending.pharma}
               color={fulfillmentPendingColor}
               subHeading={"TAT"}
@@ -183,7 +183,7 @@ export default function CommitteeMemberDashboard() {
           <div>
             <Dialer
               mainHeading={
-                "Non-Pharma (Medical) Request for Fulfilment Pending"
+                "Non-Pharma(Medical) Request for Fulfillment Pending"
               }
               value={fulfillmentPending.nonPharma}
               color={fulfillmentPendingColor}
@@ -200,7 +200,7 @@ export default function CommitteeMemberDashboard() {
         >
           <div>
             <Dialer
-              mainHeading={"Non-Medical Request for Fulfilment Pending"}
+              mainHeading={"Non-Medical Request for Fulfillment Pending"}
               value={fulfillmentPending.nonMedical}
               color={fulfillmentPendingColor}
               subHeading={"TAT"}
@@ -218,8 +218,8 @@ export default function CommitteeMemberDashboard() {
         >
           <div>
             <Dialer
-              mainHeading={"JIT Request for Fulfilment Pending"}
-              value={jitRrVerificationPending}
+              mainHeading={"JIT Request for Fulfillment Pending"}
+              value={120}
               color={jitRrVerificationPendingColor}
               subHeading={"TAT"}
               childHeading={"Request received to Processed"}

@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from "react"
-import useMediaQuery from "@material-ui/core/useMediaQuery"
-import Dialer from "../../components/Dial/dialer"
-import TwoValue from "../../components/Dial/TwoValue"
-import axios from "axios"
-import { purchasingOfficer } from "../../public/endpoins"
+import React, { useEffect, useState } from "react";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import Dialer from "../../components/Dial/dialer";
+import TwoValue from "../../components/Dial/TwoValue";
+import axios from "axios";
+import { purchasingOfficer } from "../../public/endpoins";
 export default function CommitteeMemberDashboard() {
-  const matches = useMediaQuery("(min-width:600px)")
-  const [externalReturn, setExternalReturn] = useState({})
-  const [purchaseOrders, setPurchaseOrders] = useState("")
-  const [externalReturnColor, setExternalReturnColor] = useState("")
-  const [purchaseOrdersColor, setPurchaseOrdersColor] = useState("")
+  const matches = useMediaQuery("(min-width:600px)");
+  const [externalReturn, setExternalReturn] = useState({});
+  const [purchaseOrders, setPurchaseOrders] = useState("");
+  const [externalReturnColor, setExternalReturnColor] = useState("");
+  const [purchaseOrdersColor, setPurchaseOrdersColor] = useState("");
 
   useEffect(() => {
     axios
       .get(purchasingOfficer)
       .then((res) => {
-        console.log(res.data)
+        console.log(res.data);
         if (res.data.success) {
           if (
             (res.data.externalReturn.pending ||
@@ -25,7 +25,7 @@ export default function CommitteeMemberDashboard() {
               res.data.externalReturn.approved ||
               res.data.externalReturn.denied <= 39)
           ) {
-            setExternalReturnColor("#60D69F")
+            setExternalReturnColor("#60D69F");
           } else if (
             (res.data.externalReturn.pending ||
               res.data.externalReturn.approved ||
@@ -34,7 +34,7 @@ export default function CommitteeMemberDashboard() {
               res.data.externalReturn.approved ||
               res.data.externalReturn.denied <= 79)
           ) {
-            setExternalReturnColor("#FFBC28")
+            setExternalReturnColor("#FFBC28");
           } else if (
             (res.data.externalReturn.pending ||
               res.data.externalReturn.approved ||
@@ -43,30 +43,30 @@ export default function CommitteeMemberDashboard() {
               res.data.externalReturn.approved ||
               res.data.externalReturn.denied <= 100)
           ) {
-            setExternalReturnColor("#FF0000")
+            setExternalReturnColor("#FF0000");
           }
           if (res.data.purchaseOrder >= 0 && res.data.purchaseOrder <= 39) {
-            setPurchaseOrdersColor("#60D69F")
+            setPurchaseOrdersColor("#60D69F");
           } else if (
             res.data.purchaseOrder >= 40 &&
             res.data.purchaseOrder <= 79
           ) {
-            setPurchaseOrdersColor("#FFBC28")
+            setPurchaseOrdersColor("#FFBC28");
           } else if (
             res.data.purchaseOrder >= 80 &&
             res.data.purchaseOrder <= 100
           ) {
-            setPurchaseOrdersColor("#FF0000")
+            setPurchaseOrdersColor("#FF0000");
           }
-          console.log("purchaseOrder", res.data.purchaseOrder)
-          setExternalReturn(res.data.externalReturn)
-          setPurchaseOrders(res.data.purchaseOrder)
+          console.log("purchaseOrder", res.data.purchaseOrder);
+          setExternalReturn(res.data.externalReturn);
+          setPurchaseOrders(res.data.purchaseOrder);
         }
       })
       .catch((error) => {
-        console.log(error)
-      })
-  }, [])
+        console.log(error);
+      });
+  }, []);
 
   return (
     <div className="container-fluid" style={{ marginBottom: 10 }}>
@@ -113,12 +113,12 @@ export default function CommitteeMemberDashboard() {
               time1={externalReturn.approved}
               time1Color={externalReturnColor}
               time2Color={externalReturnColor}
-              heading2={"Total Return Requests Approved"}
+              heading2={"Total Return Requests Denied"}
               time2={externalReturn.denied}
             />
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

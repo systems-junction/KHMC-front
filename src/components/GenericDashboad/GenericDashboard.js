@@ -38,8 +38,8 @@ import MyApps from "../../assets/img/My Apps.png";
 const styles = {
   underlineStyle: {
     width: "100%",
-    height: 0.2,
-    backgroundColor: "grey",
+    height: 0.3,
+    backgroundColor: "#E2E2E2",
     marginTop: 3,
   },
 
@@ -57,6 +57,12 @@ const styles = {
     borderRadius: 5,
     padding: 15,
   },
+
+  styleForNotificationTitle: {
+    fontSize: 17,
+    fontWeight: "500",
+    marginLeft: 10,
+  },
 };
 
 function Dashboard(props) {
@@ -71,7 +77,7 @@ function Dashboard(props) {
         height: "100%",
         backgroundColor: "#2962CC",
         overflowY: "scroll",
-        overflowX:'hidden'
+        overflowX: "hidden",
       }}
     >
       <Header history={props.history} />
@@ -167,9 +173,7 @@ function Dashboard(props) {
                           />
                           <span
                             style={{
-                              fontSize: 15,
-                              fontWeight: "500",
-                              marginLeft: 10,
+                              ...styles.styleForNotificationTitle,
                             }}
                           >
                             {notification.title}

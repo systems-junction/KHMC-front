@@ -80,7 +80,7 @@ export default function CommitteeMemberDashboard() {
         >
           <div>
             <Dialer
-              mainHeading={"Radiology Result Pending"}
+              mainHeading={"Radiology Results Pending"}
               value={resultPending}
               color={resultPendingColor}
               subHeading={"TAT"}
