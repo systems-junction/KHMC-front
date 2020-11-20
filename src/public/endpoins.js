@@ -1,4 +1,4 @@
-const local = "http://192.168.18.7:4000/api"
+const local = "http://localhost:4000/api"
 const notificationsUrl = "http://localhost:4000"
 const stagingDigitalOcean = "https://dev.khmc-staging.online/api"
 const StagingDigitalOceanUploadsUrl = "https://dev.khmc-staging.online/"
@@ -321,6 +321,7 @@ export const updateECRUrl = `${baseUrl}/ecr/updateecr`
 export const getECRUrl = `${baseUrl}/ecr/getecr`
 export const addECRUrl = `${baseUrl}/ecr/addecr`
 export const getAllExternalConsultantsUrl = `${baseUrl}/staff/getexternalconsultant`
+export const getExternalConsultantsNames = `${baseUrl}/staff/getexternalconsultantname`
 
 // PHR
 export const getPHREDRUrl = `${baseUrl}/edr/getphredr`
@@ -449,3 +450,5 @@ export const labTechnician = `${baseUrl}/reports/ltdashboard`
 export const pharmacist = `${baseUrl}/reports/pharmacistdashboard`
 export const registrationOfficer = `${baseUrl}/reports/rodashboard`
 export const registuredNurse = `${baseUrl}/reports/nursedashboard`
+export const consultant = `${baseUrl}/reports/consultantdashboard/5f28f5a8acb8191094acdc22`
+export const doctor = `${baseUrl}/reports/doctordashboard/5f28f5a8acb8191094acdc22`

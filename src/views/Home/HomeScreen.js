@@ -85,6 +85,8 @@ import LabTechnician from "../UsersDashboards/LabTechnician"
 import Pharmacist from "../UsersDashboards/Pharmacist"
 import RegistrationOfficer from "../UsersDashboards/RegistrationOfficer"
 import Nurse from "../UsersDashboards/Nurse"
+import Consultant from "../UsersDashboards/Consultant"
+import Doctor from "../UsersDashboards/Doctor"
 
 const admin = [
   { img: KHMC, path: "" },
@@ -881,6 +883,10 @@ class HomeScreen extends React.Component {
             <RegistrationOfficer />
           ) : userType && userType.type === "Registered Nurse" ? (
             <Nurse />
+          ) : userType && userType.type === "Consultant/Specialist" ? (
+            <Consultant />
+          ) : userType && userType.type === "Doctor/Physician" ? (
+            <Doctor />
           ) : (
             undefined
           )}

@@ -16,7 +16,7 @@ import {
   getSearchedpatient,
   notifyLab,
   notifyRad,
-  getAllExternalConsultantsUrl,
+  getExternalConsultantsNames,
 } from "../../public/endpoins"
 import cookie from "react-cookies"
 import Header from "../../components/Header/Header"
@@ -77,7 +77,7 @@ const tableHeadingForConsultation = [
 const tableDataKeysForConsultation = [
   "date",
   "description",
-  "specialist",
+  ["specialist", "fullName"],
   "doctorName",
   "status",
 ]
@@ -167,21 +167,6 @@ const tableDataKeysForNurse = [
 ]
 const actions = { view: true }
 const actions1 = { edit: true }
-
-const specialistArray = [
-  {
-    key: "Dr.Hammad",
-    value: "Dr.Hammad",
-  },
-  {
-    key: "Dr.Asad",
-    value: "Dr.Asad",
-  },
-  {
-    key: "Dr.Hameed",
-    value: "Dr.Hameed",
-  },
-]
 
 const specialityArray = [
   {
@@ -545,7 +530,7 @@ function LabRadRequest(props) {
   const [loadSearchedData, setLoadSearchedData] = useState(false)
   const [openUpdateItemDialog, setopenUpdateItemDialog] = useState(false)
   const [updateItem, setUpdateItem] = useState("")
-
+  const [externalConsultants, setExternalConsultations] = useState([])
   const validateForm = () => {
     return (
       doctorconsultationNotes &&
@@ -580,9 +565,11 @@ function LabRadRequest(props) {
     }
 
     axios
-      .get(getAllExternalConsultantsUrl)
+      .get(getExternalConsultantsNames)
       .then((res) => {
-        console.log("res.data[0].firstName", res.data[0].firstName)
+        console.log("res.data[0].firstName", res.data.data)
+
+        setExternalConsultations(res.data.data)
       })
       .catch((error) => {
         console.log("Error", error)
@@ -616,6 +603,7 @@ function LabRadRequest(props) {
     }
   }
 
+  console.log("specialist", specialist)
   const handleView = (obj) => {
     setSelectedOrder(obj)
     setIsOpen(true)
@@ -650,8 +638,15 @@ function LabRadRequest(props) {
       if (validateForm()) {
         let consultationNote = []
 
+        let c = [...consultationNoteArray]
+        c.map((d) => {
+          if (d.specialist && typeof d.specialist === "object") {
+            d.specialist = d.specialist._id
+          }
+        })
+
         consultationNote = [
-          ...consultationNoteArray,
+          ...c,
           {
             consultationNo: consultationNoteNo,
             description: description,
@@ -1642,6 +1637,26 @@ function LabRadRequest(props) {
                         ? d.requester.firstName + " " + d.requester.lastName
                         : ""),
                   )
+
+                  // const mapped = val.map((e) => {
+                  //   e.specialist.firstName + " " + e.specialist.lastName
+                  // })
+                  // console.log("mapped", mapped)
+
+                  val.map((d) => {
+                    if (d.specialist && typeof d.specialist === "object") {
+                      d.specialist = {
+                        ...d.specialist,
+                        fullName:
+                          d.specialist.firstName + " " + d.specialist.lastName,
+                      }
+                    } else {
+                      d.specialist = "N/A"
+                    }
+                  })
+
+                  console.log("consultationNoteArray", val)
+
                   dispatch({
                     field: "consultationNoteArray",
                     value: val.reverse(),
@@ -3649,10 +3664,10 @@ function LabRadRequest(props) {
                       <em>Specialist</em>
                     </MenuItem>
 
-                    {specialistArray.map((val) => {
+                    {externalConsultants.map((val) => {
                       return (
-                        <MenuItem key={val.key} value={val.key}>
-                          {val.value}
+                        <MenuItem key={val._id} value={val._id}>
+                          {val.name}
                         </MenuItem>
                       )
                     })}
