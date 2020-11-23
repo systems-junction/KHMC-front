@@ -3,6 +3,7 @@ import useMediaQuery from "@material-ui/core/useMediaQuery"
 import Dialer from "../../components/Dial/dialer"
 import OneValue from "../../components/Dial/OneValue"
 import axios from "axios"
+import cookies from "react-cookies"
 import { doctor } from "../../public/endpoins"
 export default function CommitteeMemberDashboard() {
   const matches = useMediaQuery("(min-width:600px)")
@@ -21,10 +22,14 @@ export default function CommitteeMemberDashboard() {
   )
   const [patientPerHourColor, setPatientPerHourColor] = useState("")
   const [radConsultColor, setRadConsultColor] = useState("")
+  const [currentUser, setCurrentUser] = useState(
+    cookies.load("current_user")._id,
+  )
 
   useEffect(() => {
+    console.log("currentUser", currentUser)
     axios
-      .get(doctor)
+      .get(`${doctor}/${currentUser}`)
       .then((res) => {
         console.log(res.data)
         if (res.data.success) {
