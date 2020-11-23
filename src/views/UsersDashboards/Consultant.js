@@ -5,20 +5,22 @@ import TwoValue from "../../components/Dial/TwoValue"
 import OneValue from "../../components/Dial/OneValue"
 import axios from "axios"
 import { consultant } from "../../public/endpoins"
-import cookie from "react-cookies"
+import cookies from "react-cookies"
 
 export default function CommitteeMemberDashboard() {
   const matches = useMediaQuery("(min-width:600px)")
   const [completed, setCompleted] = useState("")
-  const [user, setUser] = useState(cookie.load("current_user"))
 
   // colors
   const [completedColor, setCompletedColor] = useState("")
 
-  console.log("user", user)
+  const [currentUser, setCurrentUser] = useState(
+    cookies.load("current_user")._id,
+  )
+
   useEffect(() => {
     axios
-      .get(consultant)
+      .get(`${consultant}/${currentUser}`)
       .then((res) => {
         console.log(res.data)
         if (res.data.success) {
