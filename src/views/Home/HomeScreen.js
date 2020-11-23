@@ -93,7 +93,7 @@ import PharmacistIcon from "../../assets/img/Pharmacist.png";
 import NewPatientsArriving from "../../assets/img/New Patients Arriving.png";
 import RegisteredNurse from "../../assets/img/Registered Nurse.png";
 import RegistrationOfficerIcon from "../../assets/img/Registration Officer.png";
-
+import ResidentDoctorIcon from "../../assets/img/ResidentDoctor.png";
 
 import CommitteeMember from "../UsersDashboards/CommitteeMember";
 import PurchasingOfficer from "../UsersDashboards/PurchasingOfficer";
@@ -106,8 +106,8 @@ import LabTechnician from "../UsersDashboards/LabTechnician";
 import Pharmacist from "../UsersDashboards/Pharmacist";
 import RegistrationOfficer from "../UsersDashboards/RegistrationOfficer";
 import Nurse from "../UsersDashboards/Nurse";
-import Consultant from "../UsersDashboards/Consultant"
-import Doctor from "../UsersDashboards/Doctor"
+import Consultant from "../UsersDashboards/Consultant";
+import Doctor from "../UsersDashboards/Doctor";
 
 const admin = [
   { img: KHMC, path: "" },
@@ -909,6 +909,23 @@ class HomeScreen extends React.Component {
         ],
         headingIcon: RegistrationOfficerIcon,
         headingTitle: "Registration Officer",
+      });
+    } else if (
+      this.state.currentUser.staffTypeId.type === "Doctor/Physician" ||
+      this.state.currentUser.staffTypeId.type === "Consultant/Specialist"
+    ) {
+      this.setState({
+        notificationArray: [
+          {
+            icon: Notifications,
+            title: "Notifications",
+          },
+        ],
+        headingIcon: ResidentDoctorIcon,
+        headingTitle:
+          this.state.currentUser.staffTypeId.type === "Consultant/Specialist"
+            ? "Consultant"
+            : "Doctor / Physician",
       });
     }
   }
