@@ -9,20 +9,24 @@ import Typography from "@material-ui/core/Typography";
 import Fade from "@material-ui/core/Fade";
 import cookie from "react-cookies";
 import Fab from "@material-ui/core/Fab";
-import NotifyMe from './NotificationTray';
-import { socketUrl, getNotifications,recordLogout } from '../../public/endpoins';
-import socketIOClient from 'socket.io-client'
-import axios from 'axios'
+import NotifyMe from "./NotificationTray";
+import {
+  socketUrl,
+  getNotifications,
+  recordLogout,
+} from "../../public/endpoins";
+import socketIOClient from "socket.io-client";
+import axios from "axios";
 import AddIcon from "@material-ui/icons/Add";
-import IdleTimer from 'react-idle-timer'
+import IdleTimer from "react-idle-timer";
 
 class Header extends React.Component {
   constructor(props) {
     super(props);
-    this.idleTimer = null
-    this.handleOnAction = this.handleOnAction.bind(this)
-    this.handleOnActive = this.handleOnActive.bind(this)
-    this.handleOnIdle = this.handleOnIdle.bind(this)
+    this.idleTimer = null;
+    this.handleOnAction = this.handleOnAction.bind(this);
+    this.handleOnActive = this.handleOnActive.bind(this);
+    this.handleOnIdle = this.handleOnIdle.bind(this);
 
     this.state = {
       goBack: false,
@@ -38,31 +42,32 @@ class Header extends React.Component {
   }
 
   handleOnActive(event) {
-    console.log('User is active now but the session has expired.')
+    console.log("User is active now but the session has expired.");
     // console.log('time remaining', new Date(this.idleTimer.getRemainingTime()))
   }
 
   handleOnIdle(event) {
-    console.log('user is idle')
-    console.log('last active', new Date(this.idleTimer.getLastActiveTime()))
-    this.logoutUser()
+    console.log("user is idle");
+    console.log("last active", new Date(this.idleTimer.getLastActiveTime()));
+    this.logoutUser();
   }
 
   componentDidMount() {
-    const loggedUser = cookie.load("current_user")
+    const loggedUser = cookie.load("current_user");
     this.setState({ currentUser: loggedUser });
 
-    axios.get(getNotifications + "/" + loggedUser._id)
+    axios
+      .get(getNotifications + "/" + loggedUser._id)
       .then((res) => {
         if (res.data.success) {
           // console.log("Load Notifications", res.data.data)
 
-          let notifyData = []
+          let notifyData = [];
           for (let i = 0; i < res.data.data.length; i++) {
-            var checkId = res.data.data[i].sendTo
+            var checkId = res.data.data[i].sendTo;
             for (let j = 0; j < checkId.length; j++) {
               if (checkId[j].userId._id === loggedUser._id) {
-                notifyData.push(res.data.data[i])
+                notifyData.push(res.data.data[i]);
               }
             }
           }
@@ -71,8 +76,8 @@ class Header extends React.Component {
         }
       })
       .catch((e) => {
-        console.log('Cannot get Notifications', e)
-      })
+        console.log("Cannot get Notifications", e);
+      });
 
     const socket = socketIOClient(socketUrl);
 
@@ -80,12 +85,12 @@ class Header extends React.Component {
       console.log("response coming through socket", data);
 
       for (let i = 0; i < data.length; i++) {
-        var checkId = data[i].sendTo
+        var checkId = data[i].sendTo;
         if (data[i].sendTo) {
           for (let j = 0; j < checkId.length; j++) {
             if (checkId[j].userId._id === loggedUser._id) {
-              var newData = [].concat(data[i], this.state.data)
-              this.setState({ data: newData })
+              var newData = [].concat(data[i], this.state.data);
+              this.setState({ data: newData });
             }
           }
         }
@@ -102,13 +107,13 @@ class Header extends React.Component {
   }
 
   recordLogout() {
-    const loggedUser = cookie.load("current_user")
-    const token = cookie.load("token")
+    const loggedUser = cookie.load("current_user");
+    const token = cookie.load("token");
 
     const params = {
       token: token,
       userId: loggedUser._id,
-    }
+    };
     axios
       .post(recordLogout, params)
       .then((res) => {
@@ -122,7 +127,7 @@ class Header extends React.Component {
   }
 
   logoutUser() {
-    this.recordLogout()
+    this.recordLogout();
     cookie.remove("token", { path: "/" });
     cookie.remove("current_user", { path: "/" });
     cookie.remove("user_staff", { path: "/" });
@@ -130,7 +135,7 @@ class Header extends React.Component {
   }
 
   render() {
-    const { history } = this.props
+    const { history } = this.props;
 
     if (this.state.goBack) {
       var currentLocation = window.location.pathname;
@@ -140,25 +145,30 @@ class Header extends React.Component {
     }
 
     return (
-      <div className="header" style={{ marginBottom: 150 }}>
+      <div
+        className="header M-bottom"
+        // style={{ marginBottom: this.matches ? "15%" : " 55%" }}
+      >
         <img
           src={KHMC_White}
           className="header1-style mr-auto p-2"
+          style={{}}
           onClick={() => {
             return this.setState({ goBack: true });
           }}
         />
         <NotifyMe
           data={this.state.data}
-          onNotificationIconClick={() => history.push({
-            pathname: '/home/notificationCenter',
-            state: {
-              notificationData: this.state.data
-            },
-          })
+          onNotificationIconClick={() =>
+            history.push({
+              pathname: "/home/notificationCenter",
+              state: {
+                notificationData: this.state.data,
+              },
+            })
           }
-          storageKey='notific_key'
-          notific_key='timestamp'
+          storageKey="notific_key"
+          notific_key="timestamp"
           sortedByKey={false}
           showDate={true}
           color="white"
@@ -319,8 +329,8 @@ class Header extends React.Component {
             </Fade>
           </div>
         ) : (
-            undefined
-          )}
+          undefined
+        )}
 
         {this.state.currentUser ? (
           <div style={{ position: "fixed", right: 35, bottom: 45, zIndex: 10 }}>
@@ -338,12 +348,14 @@ class Header extends React.Component {
             </Fab>
           </div>
         ) : (
-            undefined
-          )}
+          undefined
+        )}
 
         {this.state.currentUser ? (
           <IdleTimer
-            ref={ref => { this.idleTimer = ref }}
+            ref={(ref) => {
+              this.idleTimer = ref;
+            }}
             timeout={1000 * 60 * 10}
             onActive={this.handleOnActive}
             onIdle={this.handleOnIdle}
@@ -351,9 +363,8 @@ class Header extends React.Component {
             debounce={250}
           />
         ) : (
-            undefined
-          )}
-
+          undefined
+        )}
       </div>
     );
   }

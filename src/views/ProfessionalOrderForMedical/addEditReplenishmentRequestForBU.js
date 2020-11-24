@@ -252,25 +252,23 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   root: {
-   
     "& .MuiFormLabel-root": {
       fontSize: "12px",
 
       paddingRight: "50px",
     },
-    
   },
   label: {
     "&$focusedLabel": {
       color: "red",
-      display: "none"
+      display: "none",
     },
     // "&$erroredLabel": {
     //   color: "orange"
     // }
   },
   focusedLabel: {},
- 
+
   // label: {
   //   "&:focused": {
   //     color: "black",
@@ -694,7 +692,7 @@ function AddEditPurchaseRequest(props) {
           .then((res) => {
             if (res.data.success) {
               console.log("response after adding RR", res.data);
-              notifyForPharmacy(selectedPatient._id)
+              notifyForPharmacy(selectedPatient._id);
               props.history.push({
                 pathname: "/home/wms/fus/medicinalorder/success",
                 state: {
@@ -1454,7 +1452,7 @@ function AddEditPurchaseRequest(props) {
         overflowX: "hidden",
       }}
     >
-      <Header history={props.history}/>
+      <Header history={props.history} />
 
       <div className="cPadding" style={{ marginLeft: 10, marginRight: 10 }}>
         <div className="row">
@@ -1490,7 +1488,7 @@ function AddEditPurchaseRequest(props) {
         <div style={{ marginTop: "5px", marginBottom: "5px" }}>
           {comingFor === "add" &&
           !props.history.location.state.comingFromRCM ? (
-            <div >
+            <div>
               <div className={`${"row"} ${classes.root}`}>
                 {/* <span class="fa fa-search"></span> */}
                 <div
@@ -1510,8 +1508,8 @@ function AddEditPurchaseRequest(props) {
                       classes: {
                         root: classes.label,
                         focused: classes.focusedLabel,
-                        error: classes.erroredLabel
-                      }
+                        error: classes.erroredLabel,
+                      },
                     }}
                     InputProps={{
                       // endAdornment: (
@@ -1522,7 +1520,6 @@ function AddEditPurchaseRequest(props) {
                       className: classes.input,
                       classes: { input: classes.input },
                     }}
-                    
                   />
                 </div>
 
@@ -1667,7 +1664,7 @@ function AddEditPurchaseRequest(props) {
                 className="row"
                 style={{
                   backgroundColor: "white",
-                  height: matches? 55 : 160,
+                  height: matches ? 55 : 160,
                   paddingLeft: matches ? 0 : 10,
                   display: "flex",
                   alignItems: "center",
@@ -1721,7 +1718,7 @@ function AddEditPurchaseRequest(props) {
 
             {selectedItemToSearch === "pharmaceutical" ? (
               <div>
-               <div className={`${"row"} ${classes.root}`}>
+                <div className={`${"row"} ${classes.root}`}>
                   {selectItemToEditId === "" ? (
                     <>
                       <div
@@ -1799,7 +1796,7 @@ function AddEditPurchaseRequest(props) {
                         position: "absolute",
                         width: "96.6%",
                         left: 22,
-                        marginTop: 5,
+                        marginTop: matches ? 5 : -92,
                         marginBottom: 10,
                       }}
                     >
@@ -2277,7 +2274,15 @@ function AddEditPurchaseRequest(props) {
                 </div>
 
                 {searchQuery ? (
-                  <div style={{ zIndex: 3 }}>
+                  <div
+                    style={{
+                      zIndex: 3,
+                      position: "absolute",
+                      width: "92%",
+                      marginTop: matches ? 5 : -95,
+                      marginBottom: 10,
+                    }}
+                  >
                     <Paper style={{ ...stylesForPaper.paperStyle }}>
                       {itemFoundSuccessfull && itemFound !== "" ? (
                         <Table size="small">
@@ -2563,14 +2568,13 @@ function AddEditPurchaseRequest(props) {
             )}
 
             {requestedItemsArray && (
-              <div className="row" style={{overflowX: "scroll"}}>
+              <div className="row" style={{ overflowX: "scroll" }}>
                 <h5
                   style={{
                     color: "white",
                     marginTop: 15,
                     marginBottom: 15,
                     fontWeight: "700",
-                    
                   }}
                 >
                   Items Ordered

@@ -36,8 +36,17 @@ import AccessLevel from "../views/UserManagement/accessLevel/accessLevel";
 import AddEditAccessLevel from "../views/UserManagement/accessLevel/addEditAccessLevel";
 import systemAdmin from "../views/UserManagement/systemAdmin/systemAdmin";
 import addEditSystemAdmin from "../views/UserManagement/systemAdmin/addEditSystemAdmin";
-import notificationCenter from '../views/Notifications/notifications'
-import dashboard from '../views/Dashboard/dashboard'
+import notificationCenter from "../views/Notifications/notifications";
+import dashboard from "../views/Dashboard/dashboard";
+import DCD from "../views/DHR/DCD/DashboardDCD";
+import ViewPhysicalExam from "../views/DHR/DCD/VIewPhysicalExam/VIewPhysicalExam";
+import ViewROS from "../views/DHR/DCD/ViewROS/ViewROS";
+import ViewPastMedHistory from "../views/DHR/DCD/ViewROS/ViewROS";
+import ViewActionAndPlan from "../views/DHR/DCD/ViewActionAndPlan/ViewActionAndPlan";
+import ViewCourseOfVisit from "../views/DHR/DCD/ViewCourseOfVisit/ViewCourseOfVisit";
+import ViewInvestigation from "../views/DHR/DCD/ViewInvestigation/ViewInvestigation";
+import ViewPatientDetails from "../views/DHR/DCD/VIewPatientDetails/ViewPatientDetails";
+import ViewTriageAndAssessment from "../views/DHR/DCD/ViewTriageAndAssessment/ViewTriageAndAssessment";
 
 const hist = createBrowserHistory();
 class HomeScreenRoutes extends React.PureComponent {
@@ -46,10 +55,50 @@ class HomeScreenRoutes extends React.PureComponent {
       <Switch>
         <Route exact path={"/home"} component={HomeScreen} />
         <Route exact path={"/home/dashboard"} component={dashboard} />
+        <Route exact path={"/home/dcd"} component={DCD} />
+        <Route
+          exact
+          path={"/home/viewphysicalexam"}
+          component={ViewPhysicalExam}
+        />
+        <Route exact path={"/home/viewros"} component={ViewROS} />
+        <Route
+          exact
+          path={"/home/viewpastmedicalhistory"}
+          component={ViewPastMedHistory}
+        />
+        <Route
+          exact
+          path={"/home/viewactionandplan"}
+          component={ViewActionAndPlan}
+        />
+        <Route
+          exact
+          path={"/home/viewcourseofvisit"}
+          component={ViewCourseOfVisit}
+        />
+        <Route
+          exact
+          path={"/home/viewinvestigation"}
+          component={ViewInvestigation}
+        />
+        <Route
+          exact
+          path={"/home/viewpatientdetails"}
+          component={ViewPatientDetails}
+        />
+        <Route
+          exact
+          path={"/home/viewtriageandassessment"}
+          component={ViewTriageAndAssessment}
+        />
         <Route exact path={"/home/patientFHIR"} component={PatientFHIR} />
         <Route path={"/home/controlroom"} component={ControlRoomRoutes} />
         <Route path={"/home/reports"} component={ReportsRoutes} />
-        <Route path={"/home/notificationCenter"} component={notificationCenter} />
+        <Route
+          path={"/home/notificationCenter"}
+          component={notificationCenter}
+        />
         <Route path={"/home/wms"} component={WMSRoutes} />
         <Route path={"/home/rcm"} component={RCMRoutes} />
         <Route exact path={"/home/bureturn"} component={BuReturn} />
