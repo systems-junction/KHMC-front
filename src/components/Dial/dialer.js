@@ -52,25 +52,27 @@ function Dialer(props) {
   return (
     <div
       style={{
-        width: 310,
-        height: 250,
+        width: '100%',
+        // height: '100%',
         backgroundColor: "white",
-        borderRadius: 10,
+        borderRadius: 5,
+        height: 270
       }}
     >
       <div
         style={{
           display: "flex",
-          height: "13%",
+          height: "14%",
           justifyContent: "center",
           alignItems: "center",
         }}
       >
         <span
           style={{
-            fontSize: 15,
+            fontSize: 14,
             fontWeight: "700",
             opacity: "70%",
+            textAlign:'center'
           }}
         >
           {props.mainHeading}
@@ -79,7 +81,7 @@ function Dialer(props) {
 
       <div
         style={{
-          height: "59%",
+          height: "58%",
           width: "100%",
           justifyContent: "center",
           display: "flex",
@@ -236,7 +238,7 @@ function Dialer(props) {
         </div>
       </div>
 
-      <div style={{ width: "100%", height: "0.5%", backgroundColor: "grey" }} />
+      <div style={{ width: "100%", height: 0.5, backgroundColor: "grey" }} />
 
       <div
         className="container-fluid"

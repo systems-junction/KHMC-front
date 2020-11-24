@@ -38,12 +38,8 @@ import KHMC_White from "../../assets/img/KHMC_White.png";
 import Influence_white from "../../assets/img/Influence_white.png";
 
 class MenuTree extends React.Component {
-  
   constructor(props) {
-    
     super(props);
-
-
 
     this.state = {};
   }
@@ -104,7 +100,9 @@ class MenuTree extends React.Component {
               <div
                 className="containerStyle"
                 onClick={() =>
-                  this.props.options[1].path
+                  this.props.handleLoginUser
+                    ? this.props.handleLoginUser(this.props.options[1].user)
+                    : this.props.options[1].path
                     ? this.props.history.push(this.props.options[1].path)
                     : {}
                 }
@@ -120,17 +118,11 @@ class MenuTree extends React.Component {
           <a className="menu-item item-2">
             {this.props.options[2] ? (
               <div
-                // style={{
-                //   display: "flex",
-                //   flexDirection: "column",
-                //   justifyContent: "center",
-                //   alignItems: "center",
-                //   height: "100%",
-                //   width: "100%",
-                // }}
                 className="containerStyle"
                 onClick={() =>
-                  this.props.options[2].path
+                  this.props.handleLoginUser
+                    ? this.props.handleLoginUser(this.props.options[2].user)
+                    : this.props.options[2].path
                     ? this.props.history.push(this.props.options[2].path)
                     : {}
                 }
@@ -148,7 +140,9 @@ class MenuTree extends React.Component {
               <div
                 className="containerStyle"
                 onClick={() =>
-                  this.props.options[3].path
+                  this.props.handleLoginUser
+                    ? this.props.handleLoginUser(this.props.options[3].user)
+                    : this.props.options[3].path
                     ? this.props.history.push(this.props.options[3].path)
                     : {}
                 }
@@ -166,7 +160,9 @@ class MenuTree extends React.Component {
               <div
                 className="containerStyle"
                 onClick={() =>
-                  this.props.options[4].path
+                  this.props.handleLoginUser
+                    ? this.props.handleLoginUser(this.props.options[4].user)
+                    : this.props.options[4].path
                     ? this.props.history.push(this.props.options[4].path)
                     : {}
                 }
@@ -184,7 +180,9 @@ class MenuTree extends React.Component {
               <div
                 className="containerStyle"
                 onClick={() =>
-                  this.props.options[5].path
+                  this.props.handleLoginUser
+                    ? this.props.handleLoginUser(this.props.options[5].user)
+                    : this.props.options[5].path
                     ? this.props.history.push(this.props.options[5].path)
                     : {}
                 }
@@ -202,7 +200,9 @@ class MenuTree extends React.Component {
               <div
                 className="containerStyle"
                 onClick={() =>
-                  this.props.options[6].path
+                  this.props.handleLoginUser
+                    ? this.props.handleLoginUser(this.props.options[6].user)
+                    : this.props.options[6].path
                     ? this.props.history.push(this.props.options[6].path)
                     : {}
                 }
@@ -220,7 +220,9 @@ class MenuTree extends React.Component {
               <div
                 className="containerStyle"
                 onClick={() =>
-                  this.props.options[7]
+                  this.props.handleLoginUser
+                    ? this.props.handleLoginUser(this.props.options[7].user)
+                    : this.props.options[7]
                     ? this.props.history.push(this.props.options[7].path)
                     : {}
                 }

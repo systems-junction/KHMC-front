@@ -984,7 +984,7 @@ function AddEditPurchaseRequest(props) {
       }
     }
     setSearchQuery(e.target.value);
-    if (e.target.value.length >= 1) {
+    if (e.target.value.length >= 3) {
       axios
         .get(getSearchedItemUrl + "/" + e.target.value)
         .then((res) => {

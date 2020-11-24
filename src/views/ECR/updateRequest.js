@@ -1,32 +1,32 @@
 /*eslint-disable*/
-import React, { useReducer, useEffect, useState } from "react";
-import Button from "@material-ui/core/Button";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
-import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
-import capitilizeLetter from "../../public/capitilizeLetter";
-import cookie from "react-cookies";
-import CustomTable from "../../components/Table/Table";
-import TextField from "@material-ui/core/TextField";
-import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
-import MicIcon from "@material-ui/icons/Mic";
-import StopIcon from "@material-ui/icons/Stop";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
+import React, { useReducer, useEffect, useState } from "react"
+import Button from "@material-ui/core/Button"
+import DialogTitle from "@material-ui/core/DialogTitle"
+import Dialog from "@material-ui/core/Dialog"
+import DialogContent from "@material-ui/core/DialogContent"
+import { makeStyles } from "@material-ui/core/styles"
+import InputLabel from "@material-ui/core/InputLabel"
+import capitilizeLetter from "../../public/capitilizeLetter"
+import cookie from "react-cookies"
+import CustomTable from "../../components/Table/Table"
+import TextField from "@material-ui/core/TextField"
+import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline"
+import MicIcon from "@material-ui/icons/Mic"
+import StopIcon from "@material-ui/icons/Stop"
+import useMediaQuery from "@material-ui/core/useMediaQuery"
 import {
   updateEdrIprItem,
   notifyConsultation,
   audioURL,
-} from "../../public/endpoins";
-import axios from "axios";
-import Notification from "../../components/Snackbar/Notification.js";
-import AudioNotes from "../../components/AudioNotes/audioNotes";
+} from "../../public/endpoins"
+import axios from "axios"
+import Notification from "../../components/Snackbar/Notification.js"
+import AudioNotes from "../../components/AudioNotes/audioNotes"
 
-import Loader from "react-loader-spinner";
+import Loader from "react-loader-spinner"
 
-import MicRecorder from "mic-recorder-to-mp3";
-const Mp3Recorder = new MicRecorder({ bitRate: 128 });
+import MicRecorder from "mic-recorder-to-mp3"
+const Mp3Recorder = new MicRecorder({ bitRate: 128 })
 const tableHeadingForPHR = [
   "Medicine Name",
   "Requested Qty",
@@ -34,14 +34,14 @@ const tableHeadingForPHR = [
   "Frequency",
   "Duration",
   "",
-];
+]
 const tableDataKeysForPHR = [
   "medicineName",
   "requestedQty",
   "dosage",
   "frequency",
   "duration",
-];
+]
 
 // const actions = { view: false };
 
@@ -81,7 +81,7 @@ const styles = {
     height: "45px",
     outline: "none",
   },
-};
+}
 const stylesB = {
   stylesForActive: {
     verticalAlign: "center",
@@ -119,7 +119,7 @@ const stylesB = {
     boxShadow: "none",
     outline: "none",
   },
-};
+}
 
 const useStylesForInput = makeStyles((theme) => ({
   underline: {
@@ -220,67 +220,67 @@ const useStylesForInput = makeStyles((theme) => ({
       boxShadow: "none",
     },
   },
-}));
+}))
 
-const useStyles = makeStyles(styles);
+const useStyles = makeStyles(styles)
 
 export default function EdrRequest(props) {
-  const matches = useMediaQuery("(min-width:600px)");
-  const classes = useStylesForInput();
+  const matches = useMediaQuery("(min-width:600px)")
+  const classes = useStylesForInput()
 
-  const initialState = { consultationNotes: "" };
+  const initialState = { consultationNotes: "" }
 
   function reducer(state, { field, value }) {
     return {
       ...state,
       [field]: value,
-    };
+    }
   }
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState)
 
-  const { consultationNotes } = state;
+  const { consultationNotes } = state
 
   const [currentUser, setCurrentUser] = React.useState(
-    cookie.load("current_user")
-  );
-  const [errorMsg, setErrorMsg] = useState("");
-  const [successMsg, setsuccessMsg] = useState("");
-  const [openNotification, setOpenNotification] = useState(false);
-  const [itemID, setitemID] = useState("");
-  const [id, setId] = useState("");
-  const [requestType, setrequestType] = useState("");
-  const [patientId, setpatientId] = useState("");
-  const [isRecording, setIsRecording] = useState(false);
-  const [fileAudio, setFileAudio] = useState({});
-  const [blobURL, setblobURL] = useState("");
+    cookie.load("current_user"),
+  )
+  const [errorMsg, setErrorMsg] = useState("")
+  const [successMsg, setsuccessMsg] = useState("")
+  const [openNotification, setOpenNotification] = useState(false)
+  const [itemID, setitemID] = useState("")
+  const [id, setId] = useState("")
+  const [requestType, setrequestType] = useState("")
+  const [patientId, setpatientId] = useState("")
+  const [isRecording, setIsRecording] = useState(false)
+  const [fileAudio, setFileAudio] = useState({})
+  const [blobURL, setblobURL] = useState("")
 
-  const [isBlocked, setIsBlocked] = useState(false);
+  const [isBlocked, setIsBlocked] = useState(false)
 
-  const [response, setResponse] = useState("");
+  const [response, setResponse] = useState("")
   const onChangeValue = (e) => {
-    dispatch({ field: e.target.name, value: e.target.value });
-  };
+    dispatch({ field: e.target.name, value: e.target.value })
+  }
 
   useEffect(() => {
     navigator.mediaDevices &&
       navigator.mediaDevices.getUserMedia(
         { audio: true },
         () => {
-          console.log("Permission Granted");
-          setIsBlocked(false);
+          console.log("Permission Granted")
+          setIsBlocked(false)
         },
         () => {
-          console.log("Permission Denied");
-          setIsBlocked(true);
-        }
-      );
+          console.log("Permission Denied")
+          setIsBlocked(true)
+        },
+      )
 
-    setpatientId(props.patientId);
-    setitemID(props.item._id);
+    setpatientId(props.patientId)
+    setitemID(props.item._id)
 
-    setId(props.id);
-    setrequestType(props.requestType);
-  }, []);
+    setId(props.id)
+    setrequestType(props.requestType)
+  }, [])
 
   const replaceSlugToTitle = (val) => {
     if (
@@ -497,17 +497,17 @@ export default function EdrRequest(props) {
             </Button>
           )}
         </>
-      );
+      )
     }
 
-    return capitilizeLetter(val);
-  };
+    return capitilizeLetter(val)
+  }
 
   const handleSubmit = () => {
-    let formData = new FormData();
+    let formData = new FormData()
 
     if (fileAudio) {
-      formData.append("file", fileAudio);
+      formData.append("file", fileAudio)
     }
     const params = {
       consultationNotes: consultationNotes,
@@ -517,46 +517,48 @@ export default function EdrRequest(props) {
       requestType: requestType,
       status: "Complete",
       consultationNo: props.item.consultationNo,
-    };
-    formData.append("data", JSON.stringify(params));
-    console.log("PARAMSS ", formData);
+      completedTime: new Date(),
+    }
+    console.log("paramrs before formdata", params)
+    formData.append("data", JSON.stringify(params))
+    console.log("PARAMSS ", formData)
     if (isRecording) {
-      setOpenNotification(true);
-      setErrorMsg("Please record voice then submit");
+      setOpenNotification(true)
+      setErrorMsg("Please record voice then submit")
     } else {
       axios
         .put(updateEdrIprItem, formData)
         .then((res) => {
           if (res.data.success) {
-            setOpenNotification(true);
-            setsuccessMsg("Submitted");
-            window.location.reload(false);
-            console.log(res.data, "test");
-            notifyForConsult(patientId);
+            setOpenNotification(true)
+            setsuccessMsg("Submitted")
+            window.location.reload(false)
+            console.log(res.data, "test")
+            notifyForConsult(patientId)
           } else if (!res.data.success) {
-            setOpenNotification(true);
-            setErrorMsg("Error while submitting Request");
+            setOpenNotification(true)
+            setErrorMsg("Error while submitting Request")
           }
         })
         .catch((e) => {
-          console.log("error after submitting Request", e);
-          setOpenNotification(true);
-          setErrorMsg("Error while submitting Request");
-        });
+          console.log("error after submitting Request", e)
+          setOpenNotification(true)
+          setErrorMsg("Error while submitting Request")
+        })
     }
-  };
+  }
 
   const start = () => {
     if (isBlocked) {
-      console.log("Permission Denied");
+      console.log("Permission Denied")
     } else {
       Mp3Recorder.start()
         .then(() => {
-          setIsRecording(true);
+          setIsRecording(true)
         })
-        .catch((e) => console.error(e));
+        .catch((e) => console.error(e))
     }
-  };
+  }
 
   // const uploadFile = (selectedFile) => {
 
@@ -566,52 +568,52 @@ export default function EdrRequest(props) {
     Mp3Recorder.stop()
       .getMp3()
       .then(([buffer, blob]) => {
-        console.log("blob", blob);
-        const blobURL = URL.createObjectURL(blob);
-        console.log("blob after", blobURL);
-        setblobURL(blobURL);
-        setIsRecording(false);
-        var file = new File([blob], "first", { type: "audio/mp3" });
-        setFileAudio(file);
+        console.log("blob", blob)
+        const blobURL = URL.createObjectURL(blob)
+        console.log("blob after", blobURL)
+        setblobURL(blobURL)
+        setIsRecording(false)
+        var file = new File([blob], "first", { type: "audio/mp3" })
+        setFileAudio(file)
       })
-      .catch((e) => console.log(e));
-  };
+      .catch((e) => console.log(e))
+  }
 
   const getFile = () => {
-    var url = "http://localhost:4000/api/patient";
+    var url = "http://localhost:4000/api/patient"
     axios
       .get(`${url}/updateEdrIprItem`)
       .then((res) => {
         if (res.data.success) {
-          console.log("response after adding item", res.data.data);
-          setResponse(res.data.data);
+          console.log("response after adding item", res.data.data)
+          setResponse(res.data.data)
         } else if (!res.data.success) {
         }
       })
       .catch((e) => {
-        console.log("error after adding item", e);
-      });
-  };
+        console.log("error after adding item", e)
+      })
+  }
 
   const notifyForConsult = (id) => {
     axios
       .get(notifyConsultation + "/" + id)
       .then((res) => {
-        console.log(res);
+        console.log(res)
       })
       .catch((e) => {
-        console.log("error after notify", e);
-        setOpenNotification(true);
-        setErrorMsg(e);
-      });
-  };
+        console.log("error after notify", e)
+        setOpenNotification(true)
+        setErrorMsg(e)
+      })
+  }
 
   if (openNotification) {
     setTimeout(() => {
-      setOpenNotification(false);
-      setErrorMsg("");
-      setsuccessMsg("");
-    }, 2000);
+      setOpenNotification(false)
+      setErrorMsg("")
+      setsuccessMsg("")
+    }, 2000)
   }
 
   return (
@@ -735,7 +737,11 @@ export default function EdrRequest(props) {
             <div>
               {props.item.audioNotes ? (
                 <audio
-                  style={{ marginTop: 10, marginLeft: matches ? "inherit": "15px" , width: matches ?  "inherit" : "230px" } }
+                  style={{
+                    marginTop: 10,
+                    marginLeft: matches ? "inherit" : "15px",
+                    width: matches ? "inherit" : "230px",
+                  }}
                   src={`${audioURL}/${props.item.audioNotes}`}
                   controls="controls"
                 />
@@ -860,5 +866,5 @@ export default function EdrRequest(props) {
         </div>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

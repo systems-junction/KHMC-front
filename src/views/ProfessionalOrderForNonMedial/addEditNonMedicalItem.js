@@ -304,9 +304,9 @@ function AddEditPurchaseRequest(props) {
   const [buObj, setBUObj] = useState("");
 
   const [fuArray, setFUs] = useState("");
-  const [timer, setTimer] = useState(null)
-  const [loadSearchedData, setLoadSearchedData] = useState(false)
-  
+  const [timer, setTimer] = useState(null);
+  const [loadSearchedData, setLoadSearchedData] = useState(false);
+
   function getFUsFromBU(buId) {
     axios
       // .get(getFUFromBUUrl + "/" + buId)
@@ -541,22 +541,22 @@ function AddEditPurchaseRequest(props) {
           generated,
           status:
             currentUser.staffTypeId.type === "FU Member" &&
-              status === "pending" &&
-              secondStatus === "in_progress"
+            status === "pending" &&
+            secondStatus === "in_progress"
               ? "in_progress"
               : currentUser.staffTypeId.type === "FU Member" &&
                 status === "in_progress" &&
                 secondStatus === "Delivery in Progress"
-                ? "Delivery in Progress"
-                : currentUser.staffTypeId.type === "BU Nurse" &&
-                  status === "Delivery in Progress" &&
-                  secondStatus === "pending_administration"
-                  ? "pending_administration"
-                  : currentUser.staffTypeId.type === "BU Inventory Keeper" &&
-                    status === "pending_administration" &&
-                    secondStatus === "complete"
-                    ? "complete"
-                    : status,
+              ? "Delivery in Progress"
+              : currentUser.staffTypeId.type === "BU Nurse" &&
+                status === "Delivery in Progress" &&
+                secondStatus === "pending_administration"
+              ? "pending_administration"
+              : currentUser.staffTypeId.type === "BU Inventory Keeper" &&
+                status === "pending_administration" &&
+                secondStatus === "complete"
+              ? "complete"
+              : status,
           comments,
           item: requestedItems,
           // currentQty,
@@ -615,35 +615,34 @@ function AddEditPurchaseRequest(props) {
   }
 
   const triggerItemChange = (value) => {
-    handleSearch(value)
-  }
+    handleSearch(value);
+  };
 
   const handlePauseItemSearch = (e) => {
-    setLoadSearchedData(true)
-    clearTimeout(timer)
-
     var value;
     var pattern = /^[a-zA-Z0-9 ]*$/;
     if (e.target.type === "text") {
       if (pattern.test(e.target.value) === false) {
         return;
-      }
-      else{
-        value = e.target.value
+      } else {
+        value = e.target.value;
       }
     }
     setSearchQuery(value);
 
-    setTimer(
-      setTimeout(() => {
-        triggerItemChange(value)
-      }, 600)
-    )
-  }
+    if (e.target.value.length >= 3) {
+      setLoadSearchedData(true);
+      clearTimeout(timer);
+
+      setTimer(
+        setTimeout(() => {
+          triggerItemChange(value);
+        }, 600)
+      );
+    }
+  };
 
   const handleSearch = (e) => {
-
-    // if (e.target.value.length >= 3) {
     axios
       .get(getSearchedNonPharmaceuticalItemsUrl + "/" + e)
       .then((res) => {
@@ -652,11 +651,11 @@ function AddEditPurchaseRequest(props) {
             console.log(res.data.data.items);
             setItemFoundSuccessfully(true);
             setItem(res.data.data.items);
-            setLoadSearchedData(false)
+            setLoadSearchedData(false);
           } else {
             setItemFoundSuccessfully(false);
             setItem("");
-            setLoadSearchedData(false)
+            setLoadSearchedData(false);
           }
         }
       })
@@ -665,7 +664,6 @@ function AddEditPurchaseRequest(props) {
         // setOpenNotification(true);
         // setErrorMsg("Error while adding the purchase request");
       });
-    // }
   };
 
   const getCurrentQty = (id) => {
@@ -907,7 +905,7 @@ function AddEditPurchaseRequest(props) {
         overflowY: "scroll",
       }}
     >
-      <Header history={props.history}/>
+      <Header history={props.history} />
       <div className="cPadding" style={{ marginLeft: 10, marginRight: 10 }}>
         <div className="subheader" style={{ marginLeft: 8 }}>
           <div style={{ marginLeft: -23 }}>
@@ -916,10 +914,10 @@ function AddEditPurchaseRequest(props) {
               {comingFor === "add"
                 ? "Order Items  (Non-Medical)"
                 : comingFor === "edit"
-                  ? "Order Items (Non-Medical)"
-                  : comingFor === "view"
-                    ? "Order Items  (Non-Medical)"
-                    : undefined}
+                ? "Order Items (Non-Medical)"
+                : comingFor === "view"
+                ? "Order Items  (Non-Medical)"
+                : undefined}
             </h4>
           </div>
 
@@ -928,7 +926,7 @@ function AddEditPurchaseRequest(props) {
               onClick={() =>
                 props.history.push("/home/wms/fus/professionalorder")
               }
-              style={{ ...styles.stylesForButton, height:45 }}
+              style={{ ...styles.stylesForButton, height: 45 }}
               variant="contained"
               color="primary"
             >
@@ -1023,8 +1021,8 @@ function AddEditPurchaseRequest(props) {
                 </div>
               </div>
             ) : (
-                undefined
-              )}
+              undefined
+            )}
 
             {/* {comingFor === "edit" || comingFor === "view" ? (
                 <div className="col-md-4">
@@ -1137,8 +1135,8 @@ function AddEditPurchaseRequest(props) {
                   </div>
                 </>
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
 
               <div
                 className={comingFor === "edit" ? "col-md-4" : "col-md-12"}
@@ -1165,7 +1163,7 @@ function AddEditPurchaseRequest(props) {
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
-                // error={secondStatus === "" && isFormSubmitted}
+                  // error={secondStatus === "" && isFormSubmitted}
                 >
                   <MenuItem value="">
                     <em>None</em>
@@ -1379,7 +1377,7 @@ function AddEditPurchaseRequest(props) {
                   }}
                 >
                   <Paper style={{ ...stylesForPaper.paperStyle }}>
-                    {itemFoundSuccessfull && itemFound !== '' ? (
+                    {itemFoundSuccessfull && itemFound !== "" ? (
                       <Table size="small" stickyHeader>
                         <TableHead>
                           <TableRow>
@@ -1391,7 +1389,7 @@ function AddEditPurchaseRequest(props) {
                               </TableCell> */}
                             <TableCell style={styles.forTableCell}>
                               Item Code
-                              </TableCell>
+                            </TableCell>
                             {/* <TableCell
                                 align="center"
                                 style={styles.forTableCell}
@@ -1400,7 +1398,7 @@ function AddEditPurchaseRequest(props) {
                               </TableCell> */}
                             <TableCell style={styles.forTableCell}>
                               Description
-                              </TableCell>
+                            </TableCell>
                           </TableRow>
                         </TableHead>
 
@@ -1426,40 +1424,38 @@ function AddEditPurchaseRequest(props) {
                         </TableBody>
                       </Table>
                     ) : loadSearchedData ? (
-                      <div style={{ textAlign: 'center' }}>
+                      <div style={{ textAlign: "center" }}>
                         <Loader
-                          type='TailSpin'
-                          color='#2c6ddd'
+                          type="TailSpin"
+                          color="#2c6ddd"
                           height={25}
                           width={25}
                           style={{
-                            display: 'inline-block',
-                            padding: '10px',
+                            display: "inline-block",
+                            padding: "10px",
                           }}
                         />
                         <span
                           style={{
-                            display: 'inline-block',
-                            padding: '10px',
+                            display: "inline-block",
+                            padding: "10px",
                           }}
                         >
                           <h4> Searching Items...</h4>
                         </span>
                       </div>
                     ) : searchQuery && !itemFoundSuccessfull ? (
-                      <div
-                        style={{ textAlign: 'center', padding: '10px' }}
-                      >
+                      <div style={{ textAlign: "center", padding: "10px" }}>
                         <h4>No Item Found !</h4>
                       </div>
                     ) : (
-                            undefined
-                          )}
+                      undefined
+                    )}
                   </Paper>
                 </div>
               ) : (
-                  undefined
-                )}
+                undefined
+              )}
 
               <div className="row">
                 {/* <div
@@ -1633,38 +1629,38 @@ function AddEditPurchaseRequest(props) {
                       <strong>Add Item</strong>
                     </Button>
                   ) : (
-                      // <Button
-                      //   onClick={addSelectedItem}
-                      //   style={{ ...styles.stylesForButton }}
-                      //   variant="contained"
-                      //   color="primary"
-                      //   fullWidth
-                      //   disabled={!validateItemsForm()}
-                      // >
-                      //   <strong>Add Item</strong>
-                      // </Button>
-                      // <Button
-                      //   style={{ paddingLeft: 30, paddingRight: 30 }}
-                      //   disabled={!validateItemsForm()}
-                      //   onClick={editSelectedItem}
-                      //   variant="contained"
-                      //   color="primary"
-                      // >
-                      //   {" "}
-                      //   Edit Item{" "}
-                      // </Button>
+                    // <Button
+                    //   onClick={addSelectedItem}
+                    //   style={{ ...styles.stylesForButton }}
+                    //   variant="contained"
+                    //   color="primary"
+                    //   fullWidth
+                    //   disabled={!validateItemsForm()}
+                    // >
+                    //   <strong>Add Item</strong>
+                    // </Button>
+                    // <Button
+                    //   style={{ paddingLeft: 30, paddingRight: 30 }}
+                    //   disabled={!validateItemsForm()}
+                    //   onClick={editSelectedItem}
+                    //   variant="contained"
+                    //   color="primary"
+                    // >
+                    //   {" "}
+                    //   Edit Item{" "}
+                    // </Button>
 
-                      <Button
-                        onClick={editSelectedItem}
-                        style={{ ...styles.stylesForButton }}
-                        variant="contained"
-                        color="primary"
-                        disabled={!validateItemsForm()}
-                        fullWidth
-                      >
-                        <strong>Edit Item</strong>
-                      </Button>
-                    )}
+                    <Button
+                      onClick={editSelectedItem}
+                      style={{ ...styles.stylesForButton }}
+                      variant="contained"
+                      color="primary"
+                      disabled={!validateItemsForm()}
+                      fullWidth
+                    >
+                      <strong>Edit Item</strong>
+                    </Button>
+                  )}
                 </div>
               </div>
 
@@ -1931,7 +1927,7 @@ function AddEditPurchaseRequest(props) {
                     // disabled={!validateForm()}
                     onClick={handleAdd}
                     variant="contained"
-                  // color="primary"
+                    // color="primary"
                   >
                     Generate Order
                   </Button>
@@ -1948,8 +1944,8 @@ function AddEditPurchaseRequest(props) {
                 ) : comingFor === "view" ? (
                   undefined
                 ) : (
-                        undefined
-                      )}
+                  undefined
+                )}
               </div>
             </div>
 
@@ -1974,10 +1970,10 @@ function AddEditPurchaseRequest(props) {
             </Dialog> */}
           </div>
         ) : (
-            <div className="LoaderStyle">
-              <Loader type="TailSpin" color="red" height={50} width={50} />
-            </div>
-          )}
+          <div className="LoaderStyle">
+            <Loader type="TailSpin" color="red" height={50} width={50} />
+          </div>
+        )}
       </div>
     </div>
   );

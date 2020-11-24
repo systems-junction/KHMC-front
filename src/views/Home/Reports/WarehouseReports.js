@@ -110,7 +110,7 @@ class HomeScreen extends React.Component {
         <MenuTree
           history={this.props.history}
           options={
-            userType && userType.type === "admin"
+            userType && (userType.type === "admin" || userType.type === "super admin") 
               ? admin
               : userType && userType.type === "Warehouse Inventory Keeper"
               ? admin

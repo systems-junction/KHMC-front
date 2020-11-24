@@ -37,8 +37,12 @@ import AccessLevel from "../views/UserManagement/accessLevel/accessLevel";
 import AddEditAccessLevel from "../views/UserManagement/accessLevel/addEditAccessLevel";
 import systemAdmin from "../views/UserManagement/systemAdmin/systemAdmin";
 import addEditSystemAdmin from "../views/UserManagement/systemAdmin/addEditSystemAdmin";
-import notificationCenter from '../views/Notifications/notifications'
-import dashboard from '../views/Dashboard/dashboard'
+import notificationCenter from "../views/Notifications/notifications";
+import dashboard from "../views/Dashboard/dashboard";
+
+import WMSAllUsers from "../views/Home/WMSAllUsers";
+import RCMAllUsers from "../views/Home/RCMAllUsers";
+import SingleUserHome from "../views/Home/singleUserHome";
 
 const hist = createBrowserHistory();
 class HomeScreenRoutes extends React.PureComponent {
@@ -46,11 +50,30 @@ class HomeScreenRoutes extends React.PureComponent {
     return (
       <Switch>
         <Route exact path={"/home"} component={HomeScreen} />
+
+        <Route exact path={"/home/allwmsusers"} component={WMSAllUsers} />
+        <Route exact path={"/home/allrcmusers"} component={RCMAllUsers} />
+
+        <Route
+          exact
+          path={"/home/allrcmusers/others"}
+          component={RCMAllUsers}
+        />
+
+        <Route
+          exact
+          path={"/home/allwmsusers/singleuser"}
+          component={SingleUserHome}
+        />
+
         <Route exact path={"/home/dashboard"} component={dashboard} />
         <Route exact path={"/home/patientFHIR"} component={PatientFHIR} />
         <Route path={"/home/controlroom"} component={ControlRoomRoutes} />
         <Route path={"/home/reports"} component={ReportsRoutes} />
-        <Route path={"/home/notificationCenter"} component={notificationCenter} />
+        <Route
+          path={"/home/notificationCenter"}
+          component={notificationCenter}
+        />
         <Route path={"/home/wms"} component={WMSRoutes} />
         <Route path={"/home/rcm"} component={RCMRoutes} />
         <Route path={"/home/fin"} component={FINRoutes} />
