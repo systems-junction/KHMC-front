@@ -1,45 +1,45 @@
-import React, { useEffect, useState, useReducer, useRef } from "react";
-import TextField from "@material-ui/core/TextField";
-import { makeStyles } from "@material-ui/core/styles";
-import { FaUpload } from "react-icons/fa";
-import Paper from "@material-ui/core/Paper";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import MenuItem from "@material-ui/core/MenuItem";
-import Button from "@material-ui/core/Button";
-import DateFnsUtils from "@date-io/date-fns";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import { DateTimePicker } from "@material-ui/pickers";
-import Fingerprint from "../../assets/img/fingerprint.png";
-import clsx from "clsx";
-import BarCode from "../../assets/img/Bar Code.png";
-import ErrorMessage from "../../components/ErrorMessage/errorMessage";
-import validateEmail from "../../public/emailValidator";
-import validateFirstName from "../../public/inputValidator";
-import validateLastName from "../../public/inputValidator";
-import validateEmergencyName from "../../public/inputValidator";
-import validateInsuranceVendor from "../../public/inputValidator";
-import validateNationName from "../../public/inputValidator";
-import validateNumber from "../../public/numberValidator";
-import validateNumbers from "../../public/numbersValidator";
-import validateNationalId from "../../public/numbersValidator";
-import validateAmount from "../../public/amountValidator";
-import validateInsuranceNo from "../../public/insuranceValidator";
-import validateFloat from "../../public/FloatValidator";
-import validateInput from "../../public/FloatValidator";
-import validateNumberFloat from "../../public/numberFloatValidator";
-import validateWeight from "../../public/numberFloatValidator";
-import validateCoPayment from "../../public/numberFloatValidator";
-import MuiPhoneNumber from "material-ui-phone-number";
-import validatePhone from "../../public/validatePhone";
-import CurrencyTextField from "@unicef/material-ui-currency-textfield";
-import validateHeight from "../../public/numberFloatValidator";
-import validateCountryCity from "../../public/countryCityValidator";
-import validateGender from "../../public/genderValidator";
-import validateRelation from "../../public/relationValidator";
-import validateAddress from "../../public/addressValidator";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
+import React, { useEffect, useState, useReducer, useRef } from "react"
+import TextField from "@material-ui/core/TextField"
+import { makeStyles } from "@material-ui/core/styles"
+import { FaUpload } from "react-icons/fa"
+import Paper from "@material-ui/core/Paper"
+import Tabs from "@material-ui/core/Tabs"
+import Tab from "@material-ui/core/Tab"
+import MenuItem from "@material-ui/core/MenuItem"
+import Button from "@material-ui/core/Button"
+import DateFnsUtils from "@date-io/date-fns"
+import Autocomplete from "@material-ui/lab/Autocomplete"
+import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers"
+import { DateTimePicker } from "@material-ui/pickers"
+import Fingerprint from "../../assets/img/fingerprint.png"
+import clsx from "clsx"
+import BarCode from "../../assets/img/Bar Code.png"
+import ErrorMessage from "../../components/ErrorMessage/errorMessage"
+import validateEmail from "../../public/emailValidator"
+import validateFirstName from "../../public/inputValidator"
+import validateLastName from "../../public/inputValidator"
+import validateEmergencyName from "../../public/inputValidator"
+import validateInsuranceVendor from "../../public/inputValidator"
+import validateNationName from "../../public/inputValidator"
+import validateNumber from "../../public/numberValidator"
+import validateNumbers from "../../public/numbersValidator"
+import validateNationalId from "../../public/numbersValidator"
+import validateAmount from "../../public/amountValidator"
+import validateInsuranceNo from "../../public/insuranceValidator"
+import validateFloat from "../../public/FloatValidator"
+import validateInput from "../../public/FloatValidator"
+import validateNumberFloat from "../../public/numberFloatValidator"
+import validateWeight from "../../public/numberFloatValidator"
+import validateCoPayment from "../../public/numberFloatValidator"
+import MuiPhoneNumber from "material-ui-phone-number"
+import validatePhone from "../../public/validatePhone"
+import CurrencyTextField from "@unicef/material-ui-currency-textfield"
+import validateHeight from "../../public/numberFloatValidator"
+import validateCountryCity from "../../public/countryCityValidator"
+import validateGender from "../../public/genderValidator"
+import validateRelation from "../../public/relationValidator"
+import validateAddress from "../../public/addressValidator"
+import useMediaQuery from "@material-ui/core/useMediaQuery"
 import {
   uploadsUrl,
   updatePatientUrl,
@@ -51,36 +51,37 @@ import {
   getVendorApproval,
   searchPatientsURL,
   getPatientById,
-} from "../../public/endpoins";
-import axios from "axios";
-import Notification from "../../components/Snackbar/Notification.js";
-import ButtonField from "../../components/common/Button";
-import cookie from "react-cookies";
-import Header from "../../components/Header/Header";
-import patientRegister from "../../assets/img/PatientRegistration.png";
-import Back_Arrow from "../../assets/img/Back_Arrow.png";
-import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormControl from "@material-ui/core/FormControl";
-import FormLabel from "@material-ui/core/FormLabel";
-import FormData from "form-data";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import AccountCircle from "@material-ui/icons/SearchOutlined";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import { CodeSharp } from "@material-ui/icons";
-import Loader from "react-loader-spinner";
+  audioURL,
+} from "../../public/endpoins"
+import axios from "axios"
+import Notification from "../../components/Snackbar/Notification.js"
+import ButtonField from "../../components/common/Button"
+import cookie from "react-cookies"
+import Header from "../../components/Header/Header"
+import patientRegister from "../../assets/img/PatientRegistration.png"
+import Back_Arrow from "../../assets/img/Back_Arrow.png"
+import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css"
+import Radio from "@material-ui/core/Radio"
+import RadioGroup from "@material-ui/core/RadioGroup"
+import FormControlLabel from "@material-ui/core/FormControlLabel"
+import FormControl from "@material-ui/core/FormControl"
+import FormLabel from "@material-ui/core/FormLabel"
+import FormData from "form-data"
+import Table from "@material-ui/core/Table"
+import TableHead from "@material-ui/core/TableHead"
+import TableRow from "@material-ui/core/TableRow"
+import TableBody from "@material-ui/core/TableBody"
+import TableCell from "@material-ui/core/TableCell"
+import AccountCircle from "@material-ui/icons/SearchOutlined"
+import InputAdornment from "@material-ui/core/InputAdornment"
+import { CodeSharp } from "@material-ui/icons"
+import Loader from "react-loader-spinner"
 // import validatePhone from '../../public/validatePhone'
 
-import QRCodeScannerComponent from "../../components/QRCodeScanner/QRCodeScanner";
+import QRCodeScannerComponent from "../../components/QRCodeScanner/QRCodeScanner"
 
-let countriesList = require("../../assets/countries.json");
-let matches;
+let countriesList = require("../../assets/countries.json")
+let matches
 const styles = {
   stylesForButton: {
     color: "white",
@@ -143,7 +144,7 @@ const styles = {
   input: {
     display: "none",
   },
-};
+}
 
 const useStylesForTabs = makeStyles((theme) => ({
   root: {
@@ -152,7 +153,7 @@ const useStylesForTabs = makeStyles((theme) => ({
   scroller: {
     flexGrow: "0",
   },
-}));
+}))
 
 const titles = [
   {
@@ -171,7 +172,7 @@ const titles = [
     key: "ms" || "Ms",
     value: "Ms",
   },
-];
+]
 
 const genderArray = [
   {
@@ -186,7 +187,7 @@ const genderArray = [
     key: "Others",
     value: "Others",
   },
-];
+]
 
 const relationArray = [
   {
@@ -213,7 +214,7 @@ const relationArray = [
     key: "other",
     value: "Other",
   },
-];
+]
 
 const coverageTermsArr = [
   {
@@ -224,7 +225,7 @@ const coverageTermsArr = [
     key: "fullPayment",
     value: "Full Payment",
   },
-];
+]
 
 const coveredFamilyArray = [
   {
@@ -243,7 +244,7 @@ const coveredFamilyArray = [
     key: "daughter",
     value: "Daughter",
   },
-];
+]
 
 const bloodGroups = [
   {
@@ -278,7 +279,7 @@ const bloodGroups = [
     key: "AB-",
     value: "AB-",
   },
-];
+]
 
 const useStyles = makeStyles((theme) => ({
   margin: {
@@ -352,11 +353,11 @@ const useStyles = makeStyles((theme) => ({
     // }
   },
   focusedLabel: {},
-}));
+}))
 
 function PatientRegistration(props) {
-  matches = useMediaQuery("(min-width:600px)");
-  const classes = useStyles();
+  matches = useMediaQuery("(min-width:600px)")
+  const classes = useStyles()
 
   const initialState = {
     _id: "",
@@ -401,16 +402,16 @@ function PatientRegistration(props) {
     coveredFamilyMembers: "",
     otherCoverageDetails: "",
     insurerId: "",
-  };
+  }
 
   function reducer(state, { field, value }) {
     return {
       ...state,
       [field]: value,
-    };
+    }
   }
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   const {
     profileNo,
@@ -454,125 +455,125 @@ function PatientRegistration(props) {
     coveredFamilyMembers,
     otherCoverageDetails,
     insurerId,
-  } = state;
+  } = state
 
   const onChangeCountry = (e) => {
     if (e.target.value) {
-      dispatch({ field: e.target.name, value: e.target.value });
-      let cities = Object.entries(countriesList[0]);
+      dispatch({ field: e.target.name, value: e.target.value })
+      let cities = Object.entries(countriesList[0])
 
       for (var x in cities) {
-        let arr = cities[x];
+        let arr = cities[x]
         if (arr[0] === e.target.value) {
-          console.log("cities", arr[1]);
-          setCities(arr[1].sort());
+          console.log("cities", arr[1])
+          setCities(arr[1].sort())
         }
       }
     } else {
-      dispatch({ field: e.target.name, value: e.target.value });
-      dispatch({ field: "city", value: "" });
-      setCities("");
+      dispatch({ field: e.target.name, value: e.target.value })
+      dispatch({ field: "city", value: "" })
+      setCities("")
     }
-  };
+  }
 
-  const classesForTabs = useStylesForTabs();
+  const classesForTabs = useStylesForTabs()
 
-  const [comingFor, setcomingFor] = useState("");
-  const [currentUser] = useState(cookie.load("current_user"));
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
-  const [successMsg, setsuccessMsg] = useState("");
-  const [openNotification, setOpenNotification] = useState(false);
-  const [countries, setCountries] = useState("");
-  const [cities, setCities] = useState("");
-  const [value, setValue] = React.useState(0);
-  const [slipUpload, setSlipUpload] = useState("");
-  const [imagePreview, setImagePreview] = useState("");
-  const [pdfView, setpdfView] = useState("");
-  const [patientId, setPatientId] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [itemFound, setItemFound] = useState("");
-  const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false);
-  const [searchActivated, setsearchActivated] = useState(false);
-  const [Insuranceform, setInsuranceForm] = useState(true);
-  const [MRN, setMRN] = useState("");
-  const [isPatientSubmitted, setIsPatientSubmitted] = useState(false);
-  const [enableForm, setenableForm] = useState(true);
-  const [enableNext, setenableNext] = useState(true);
-  const [coPaymentField, setCoPaymentField] = useState(false);
-  const [detailsForm, setDetailsForm] = useState(false);
-  const [emergencyForm, setEmergencyForm] = useState(false);
-  const [paymentForm, setPaymentForm] = useState(false);
-  const [insuranceForm, setinsuranceForm] = useState(false);
-  const [insuranceBoolean, setInsuranceBoolean] = useState(true);
-  const [covTer, setCovTer] = useState("");
-  const [timer, setTimer] = useState(null);
-  const [cityBoolean, setCityBoolean] = useState(false);
-  const [loadSearchedData, setLoadSearchedData] = useState(false);
-
-  const [QRCodeScanner, setQRCodeScanner] = useState(false);
+  const [comingFor, setcomingFor] = useState("")
+  const [currentUser] = useState(cookie.load("current_user"))
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false)
+  const [errorMsg, setErrorMsg] = useState("")
+  const [successMsg, setsuccessMsg] = useState("")
+  const [openNotification, setOpenNotification] = useState(false)
+  const [countries, setCountries] = useState("")
+  const [cities, setCities] = useState("")
+  const [value, setValue] = React.useState(0)
+  const [slipUpload, setSlipUpload] = useState("")
+  const [imagePreview, setImagePreview] = useState("")
+  const [pdfView, setpdfView] = useState("")
+  const [patientId, setPatientId] = useState("")
+  const [searchQuery, setSearchQuery] = useState("")
+  const [itemFound, setItemFound] = useState("")
+  const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false)
+  const [searchActivated, setsearchActivated] = useState(false)
+  const [Insuranceform, setInsuranceForm] = useState(true)
+  const [MRN, setMRN] = useState("")
+  const [isPatientSubmitted, setIsPatientSubmitted] = useState(false)
+  const [enableForm, setenableForm] = useState(true)
+  const [enableNext, setenableNext] = useState(true)
+  const [coPaymentField, setCoPaymentField] = useState(false)
+  const [detailsForm, setDetailsForm] = useState(false)
+  const [emergencyForm, setEmergencyForm] = useState(false)
+  const [paymentForm, setPaymentForm] = useState(false)
+  const [insuranceForm, setinsuranceForm] = useState(false)
+  const [insuranceBoolean, setInsuranceBoolean] = useState(true)
+  const [covTer, setCovTer] = useState("")
+  const [timer, setTimer] = useState(null)
+  const [cityBoolean, setCityBoolean] = useState(false)
+  const [loadSearchedData, setLoadSearchedData] = useState(false)
+  const [qRCodeForPrint, setQRCodeForPrint] = useState("")
+  const [QRCodeScanner, setQRCodeScanner] = useState(false)
 
   useEffect(() => {
     setcomingFor(
       props.history.location.state && props.history.location.state.comingFor
         ? props.history.location.state.comingFor
-        : "add"
-    );
-    setCountries(Object.keys(countriesList[0]));
+        : "add",
+    )
+    setCountries(Object.keys(countriesList[0]))
 
     const selectedRec =
-      props.history.location.state && props.history.location.state.selectedItem;
+      props.history.location.state && props.history.location.state.selectedItem
 
     if (selectedRec) {
-      setPatientId(selectedRec._id);
+      setPatientId(selectedRec._id)
 
       Object.entries(selectedRec).map(([key, val]) => {
         if (val && typeof val === "object") {
-          dispatch({ field: key, value: val._id });
+          dispatch({ field: key, value: val._id })
         } else {
           if (key === "dob") {
             dispatch({
               field: key,
               value: new Date(val).toISOString().substr(0, 10),
-            });
+            })
           } else {
-            dispatch({ field: key, value: val });
+            dispatch({ field: key, value: val })
           }
         }
-      });
+      })
 
       Object.entries(selectedRec).map(([key, val]) => {
         if (val && typeof val === "object") {
-          dispatch({ field: key, value: val._id });
+          dispatch({ field: key, value: val._id })
         } else {
           if (key === "country") {
-            let cities = Object.entries(countriesList[0]);
+            let cities = Object.entries(countriesList[0])
             for (var x in cities) {
-              let arr = cities[x];
+              let arr = cities[x]
               if (arr[0] === val) {
-                console.log("cities", arr[1]);
-                setCities(arr[1]);
+                console.log("cities", arr[1])
+                setCities(arr[1])
                 // dispatch({ field: key, value: val });
               }
-              dispatch({ field: key, value: val });
+              dispatch({ field: key, value: val })
             }
           } else {
-            dispatch({ field: key, value: val });
+            dispatch({ field: key, value: val })
           }
         }
-      });
+      })
     }
     if (
       props.history.location.state &&
       props.history.location.state.comingFor === "edit"
     ) {
       if (selectedRec.paymentMethod === "Insurance") {
-        setenableForm(false);
-        setInsuranceForm(false);
-        setenableNext(false);
+        setenableForm(false)
+        setInsuranceForm(false)
+        setenableNext(false)
       }
     }
-  }, []);
+  }, [])
 
   function validatePatientForm() {
     return (
@@ -632,7 +633,7 @@ function PatientRegistration(props) {
       // otherDetails &&
       // otherDetails.length > 0
       // validateInput(otherDetails) &&
-    );
+    )
   }
 
   function validateEmergencyForm() {
@@ -646,7 +647,7 @@ function PatientRegistration(props) {
       emergencyRelation &&
       emergencyRelation.length > 0 &&
       validateRelation(emergencyRelation)
-    );
+    )
   }
   function validateCashForm() {
     if (paymentMethod === "Cash") {
@@ -657,7 +658,7 @@ function PatientRegistration(props) {
         amountReceived &&
         amountReceived.toString().length > 0
         // validateAmount(amountReceived)
-      );
+      )
     }
   }
   function validateInsuranceForm() {
@@ -682,7 +683,7 @@ function PatientRegistration(props) {
         // otherCoverageDetails &&
         // otherCoverageDetails.length > 0
         // validateInput(otherCoverageDetails)
-      );
+      )
       // } else {
       //   return (
       //     receiverName &&
@@ -693,16 +694,16 @@ function PatientRegistration(props) {
   }
 
   const handleChangeDate = (value) => {
-    dispatch({ field: "dob", value: value.toISOString().substr(0, 10) });
-    calculate_age(value.toISOString().substr(0, 10));
-  };
+    dispatch({ field: "dob", value: value.toISOString().substr(0, 10) })
+    calculate_age(value.toISOString().substr(0, 10))
+  }
 
   const handleAdd = () => {
-    let formData = new FormData();
+    let formData = new FormData()
     if (slipUpload) {
-      formData.append("file", slipUpload, slipUpload.name);
+      formData.append("file", slipUpload, slipUpload.name)
     }
-    console.log(value, "value index");
+    console.log(value, "value index")
 
     if (
       validatePatientForm() &&
@@ -747,9 +748,9 @@ function PatientRegistration(props) {
         emergencyRelation,
         coveredFamilyMembers,
         otherCoverageDetails,
-      };
-      formData.append("data", JSON.stringify(params));
-      console.log("PARAMSS ", params);
+      }
+      formData.append("data", JSON.stringify(params))
+      console.log("PARAMSS ", params)
       axios
         .post(addPatientUrl, formData, {
           headers: {
@@ -760,66 +761,67 @@ function PatientRegistration(props) {
         })
         .then((res) => {
           if (res.data.success) {
-            console.log(res.data.data, "patients data");
+            console.log(res.data.data, "patients data")
             // console.log(res.data.data._id, "patient id");
-            setPatientId(res.data.data._id);
-            setMRN(res.data.data.profileNo);
-            setIsPatientSubmitted(true);
-            setOpenNotification(true);
+            setPatientId(res.data.data._id)
+            setMRN(res.data.data.profileNo)
+            setIsPatientSubmitted(true)
+            setOpenNotification(true)
+            setQRCodeForPrint(`${audioURL}${res.data.data.QR}`)
             setsuccessMsg(
-              "Patient details saved successfully, Generate IPR/EDR now"
-            );
+              "Patient details saved successfully, Generate IPR/EDR now",
+            )
           } else if (!res.data.success) {
-            setOpenNotification(true);
+            setOpenNotification(true)
           }
         })
         .catch((e) => {
-          console.log("error after adding patient details", e);
-          setOpenNotification(true);
-          setErrorMsg("Patient already exists");
-        });
+          console.log("error after adding patient details", e)
+          setOpenNotification(true)
+          setErrorMsg("Patient already exists")
+        })
     } else {
-      setOpenNotification(true);
+      setOpenNotification(true)
       setErrorMsg(
-        "Please Fill the the empty fields with valid data / Please add payment method"
-      );
+        "Please Fill the the empty fields with valid data / Please add payment method",
+      )
     }
-    setDetailsForm(true);
-    setEmergencyForm(true);
+    setDetailsForm(true)
+    setEmergencyForm(true)
     if (paymentMethod === "Cash") {
-      setPaymentForm(true);
+      setPaymentForm(true)
     } else if (paymentMethod === "Insurance") {
-      setinsuranceForm(true);
+      setinsuranceForm(true)
     }
 
     // setIsFormSubmitted(true)
-  };
+  }
 
   const vendorVerify = () => {
-    console.log("insuranceNo", insuranceNo);
+    console.log("insuranceNo", insuranceNo)
     axios
       .get(`${getVendorApproval}/${insuranceNo}`)
       .then((e) => {
         if (e.data.success) {
-          console.log(e.data);
-          setInsuranceBoolean(false);
+          console.log(e.data)
+          setInsuranceBoolean(false)
           dispatch({
             field: "coverageTerms",
             value: e.data.data.coverageDetail,
-          });
-          dispatch({ field: "insuranceVendor", value: e.data.data.vendor });
-          dispatch({ field: "insurerId", value: e.data.data.insurerId });
-          setCovTer(e.data.data.coverageDetail);
+          })
+          dispatch({ field: "insuranceVendor", value: e.data.data.vendor })
+          dispatch({ field: "insurerId", value: e.data.data.insurerId })
+          setCovTer(e.data.data.coverageDetail)
         } else if (!e.data.success) {
-          setOpenNotification(true);
-          setErrorMsg("Invalid insurance number/insurance number not verified");
+          setOpenNotification(true)
+          setErrorMsg("Invalid insurance number/insurance number not verified")
         }
       })
       .catch((error) => {
-        setOpenNotification(true);
-        setErrorMsg("Invalid insurance number/insurance number not verified");
-      });
-  };
+        setOpenNotification(true)
+        setErrorMsg("Invalid insurance number/insurance number not verified")
+      })
+  }
 
   const handleEdit = () => {
     // let cities = Object.entries(countriesList[0]);
@@ -831,11 +833,11 @@ function PatientRegistration(props) {
     //     }
 
     //   }
-    console.log("hello");
+    console.log("hello")
 
-    let formData = new FormData();
+    let formData = new FormData()
     if (slipUpload) {
-      formData.append("file", slipUpload, slipUpload.name);
+      formData.append("file", slipUpload, slipUpload.name)
     }
     if (
       validatePatientForm() &&
@@ -880,112 +882,112 @@ function PatientRegistration(props) {
         emergencyRelation,
         coveredFamilyMembers,
         otherCoverageDetails,
-      };
-      formData.append("data", JSON.stringify(params));
-      console.log("PARAMSS ", params);
+      }
+      formData.append("data", JSON.stringify(params))
+      console.log("PARAMSS ", params)
       axios
         .put(updatePatientUrl, formData)
         .then((res) => {
           if (res.data.success) {
-            setPatientId(res.data.data._id);
-            setMRN(res.data.data.profileNo);
-            setOpenNotification(true);
-            setMRN(res.data.data.profileNo);
-            console.log(res.data.data);
+            setPatientId(res.data.data._id)
+            setMRN(res.data.data.profileNo)
+            setOpenNotification(true)
+            setMRN(res.data.data.profileNo)
+            console.log(res.data.data)
             setsuccessMsg(
-              "Patient details updated successfully, Generate IPR/EDR now"
-            );
-            setIsPatientSubmitted(true);
+              "Patient details updated successfully, Generate IPR/EDR now",
+            )
+            setIsPatientSubmitted(true)
             if (!searchActivated) {
               props.history.push({
                 pathname: "success",
                 state: {
                   message: `Details of Patient with MRN: ${res.data.data.profileNo.toUpperCase()} Updated Successfully`,
                 },
-              });
+              })
             }
           } else if (!res.data.success) {
-            setOpenNotification(true);
-            setErrorMsg("Error");
+            setOpenNotification(true)
+            setErrorMsg("Error")
           }
         })
         .catch((e) => {
-          console.log("error after updating patient details", e);
-          setOpenNotification(true);
-          setErrorMsg("Patient with same MRN already exists");
-        });
+          console.log("error after updating patient details", e)
+          setOpenNotification(true)
+          setErrorMsg("Patient with same MRN already exists")
+        })
     } else {
-      setOpenNotification(true);
+      setOpenNotification(true)
       setErrorMsg(
-        "Please Fill the the empty fields with valid data / Please add payment method"
-      );
+        "Please Fill the the empty fields with valid data / Please add payment method",
+      )
     }
-    setDetailsForm(true);
-    setEmergencyForm(true);
+    setDetailsForm(true)
+    setEmergencyForm(true)
     if (paymentMethod === "Cash") {
-      setPaymentForm(true);
+      setPaymentForm(true)
     } else if (paymentMethod === "Insurance") {
-      setinsuranceForm(true);
+      setinsuranceForm(true)
     }
     // setIsFormSubmitted(true)
-  };
+  }
 
   const onSlipUpload = (event) => {
-    var file = event.target.files[0];
-    var fileType = file.name.slice(file.name.length - 3);
+    var file = event.target.files[0]
+    var fileType = file.name.slice(file.name.length - 3)
 
     // console.log("Selected file : ", file.name)
     // console.log("file type : ", fileType)
 
-    setSlipUpload(file);
-    var reader = new FileReader();
-    var url = reader.readAsDataURL(file);
+    setSlipUpload(file)
+    var reader = new FileReader()
+    var url = reader.readAsDataURL(file)
 
     reader.onloadend = function() {
       if (fileType === "pdf") {
-        setpdfView(file.name);
+        setpdfView(file.name)
       } else {
-        setImagePreview([reader.result]);
+        setImagePreview([reader.result])
       }
-    };
-  };
+    }
+  }
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+    setValue(newValue)
+  }
 
   const DetailsOnClick = () => {
     if (validatePatientForm()) {
-      setValue(value + 1);
+      setValue(value + 1)
     } else {
-      setErrorMsg("Please Check the form for errors");
-      setOpenNotification(true);
+      setErrorMsg("Please Check the form for errors")
+      setOpenNotification(true)
     }
-    setDetailsForm(true);
-  };
+    setDetailsForm(true)
+  }
 
   const onClick = () => {
-    setValue(value + 1);
-  };
+    setValue(value + 1)
+  }
 
   const EmergencyOnClick = () => {
     if (validateEmergencyForm()) {
-      setValue(value + 1);
+      setValue(value + 1)
     } else {
-      setErrorMsg("Please Check the form for errors");
-      setOpenNotification(true);
+      setErrorMsg("Please Check the form for errors")
+      setOpenNotification(true)
     }
-    setEmergencyForm(true);
-  };
+    setEmergencyForm(true)
+  }
 
   const onTabNavigation = () => {
     value === 1
       ? setValue(0)
       : value === 2
       ? setValue(1)
-      : props.history.goBack();
+      : props.history.goBack()
     // setValue(tabIndex);
-  };
+  }
 
   const handleGenerateEDR = () => {
     if (insurerId !== "") {
@@ -997,7 +999,7 @@ function PatientRegistration(props) {
         insurerId: insurerId,
         verified: !insuranceBoolean ? true : false,
         paymentMethod: paymentMethod,
-      };
+      }
     } else {
       params = {
         patientId,
@@ -1005,34 +1007,35 @@ function PatientRegistration(props) {
         status: "pending",
         functionalUnit: currentUser.functionalUnit._id,
         paymentMethod: paymentMethod,
-      };
+      }
     }
 
-    console.log("PARAMS ARE : ", params);
+    console.log("PARAMS ARE : ", params)
     axios
       .post(generateEDR, params, {})
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data, "response");
+          console.log(res.data.data, "response")
           props.history.push({
             pathname: "success",
             state: {
               message: `EDR: ${
                 res.data.data.requestNo
               } for patient MRN: ${MRN.toUpperCase()} generated successfully`,
+              qr: qRCodeForPrint,
             },
-          });
+          })
         } else if (!res.data.success) {
-          setOpenNotification(true);
-          setErrorMsg("EDR/ IPR already exists");
+          setOpenNotification(true)
+          setErrorMsg("EDR/ IPR already exists")
         }
       })
       .catch((e) => {
-        console.log("error after generating EDR request", e);
-        setOpenNotification(true);
-        setErrorMsg("Error while generating EDR request");
-      });
-  };
+        console.log("error after generating EDR request", e)
+        setOpenNotification(true)
+        setErrorMsg("Error while generating EDR request")
+      })
+  }
 
   const handleGenerateIPR = () => {
     if (insurerId !== "") {
@@ -1044,7 +1047,7 @@ function PatientRegistration(props) {
         insurerId: insurerId,
         verified: !insuranceBoolean ? true : false,
         paymentMethod: paymentMethod,
-      };
+      }
     } else {
       var params = {
         patientId,
@@ -1052,15 +1055,15 @@ function PatientRegistration(props) {
         status: "pending",
         functionalUnit: currentUser.functionalUnit._id,
         paymentMethod: paymentMethod,
-      };
+      }
     }
 
-    console.log("PARAMS ARE : ", params);
+    console.log("PARAMS ARE : ", params)
     axios
       .post(generateIPR, params, {})
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data, "response");
+          console.log(res.data.data, "response")
           props.history.push({
             pathname: "success",
             state: {
@@ -1068,18 +1071,18 @@ function PatientRegistration(props) {
                 res.data.data.requestNo
               } for patient MRN: ${MRN.toUpperCase()} generated successfully`,
             },
-          });
+          })
         } else if (!res.data.success) {
-          setOpenNotification(true);
-          setErrorMsg("EDR/ IPR already exists");
+          setOpenNotification(true)
+          setErrorMsg("EDR/ IPR already exists")
         }
       })
       .catch((e) => {
-        console.log("error after generating IPR request", e);
-        setOpenNotification(true);
-        setErrorMsg("Error while generating IPR request");
-      });
-  };
+        console.log("error after generating IPR request", e)
+        setOpenNotification(true)
+        setErrorMsg("Error while generating IPR request")
+      })
+  }
 
   const handleGenerateOPR = () => {
     if (currentUser.staffTypeId.type === "Lab Technician") {
@@ -1092,7 +1095,7 @@ function PatientRegistration(props) {
           functionalUnit: currentUser.functionalUnit._id,
           insurerId: insurerId,
           verified: !insuranceBoolean ? true : false,
-        };
+        }
       } else {
         var params = {
           patientId,
@@ -1100,7 +1103,7 @@ function PatientRegistration(props) {
           generatedFrom: "labRequest",
           status: "pending",
           functionalUnit: currentUser.functionalUnit._id,
-        };
+        }
       }
     }
 
@@ -1114,7 +1117,7 @@ function PatientRegistration(props) {
           functionalUnit: currentUser.functionalUnit._id,
           insurerId: insurerId,
           verified: !insuranceBoolean ? true : false,
-        };
+        }
       } else {
         var params = {
           patientId,
@@ -1122,7 +1125,7 @@ function PatientRegistration(props) {
           generatedFrom: "radiologyRequest",
           status: "pending",
           functionalUnit: currentUser.functionalUnit._id,
-        };
+        }
       }
     }
 
@@ -1136,7 +1139,7 @@ function PatientRegistration(props) {
           functionalUnit: currentUser.functionalUnit._id,
           insurerId: insurerId,
           verified: !insuranceBoolean ? true : false,
-        };
+        }
       } else {
         var params = {
           patientId,
@@ -1144,7 +1147,7 @@ function PatientRegistration(props) {
           generatedFrom: "pharmacyRequest",
           status: "pending",
           functionalUnit: currentUser.functionalUnit._id,
-        };
+        }
       }
     }
 
@@ -1153,7 +1156,7 @@ function PatientRegistration(props) {
       .post(generateOPR, params, {})
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data, "response");
+          console.log(res.data.data, "response")
           // props.history.goBack();
           props.history.push({
             pathname: "success",
@@ -1162,22 +1165,22 @@ function PatientRegistration(props) {
                 res.data.data.requestNo
               } patient MRN: ${MRN.toUpperCase()} has been generated successfully`,
             },
-          });
+          })
         } else if (!res.data.success) {
-          setOpenNotification(true);
+          setOpenNotification(true)
         }
       })
       .catch((e) => {
-        console.log("error after generating EDR request", e);
-        setOpenNotification(true);
-        setErrorMsg("Error while generating EDR request");
-      });
-  };
+        console.log("error after generating EDR request", e)
+        setOpenNotification(true)
+        setErrorMsg("Error while generating EDR request")
+      })
+  }
 
   const handleEditOPR = () => {
-    let formData = new FormData();
+    let formData = new FormData()
     if (slipUpload) {
-      formData.append("file", slipUpload, slipUpload.name);
+      formData.append("file", slipUpload, slipUpload.name)
     }
     if (
       validatePatientForm() &&
@@ -1222,73 +1225,73 @@ function PatientRegistration(props) {
         emergencyRelation,
         coveredFamilyMembers,
         otherCoverageDetails,
-      };
-      formData.append("data", JSON.stringify(params));
-      console.log("PARAMSS ", params);
+      }
+      formData.append("data", JSON.stringify(params))
+      console.log("PARAMSS ", params)
       axios
         .put(updatePatientUrl, formData)
         .then((res) => {
           if (res.data.success) {
-            setPatientId(res.data.data._id);
-            setMRN(res.data.data.profileNo);
-            setOpenNotification(true);
-            setsuccessMsg("Patient details updated successfully");
-            setIsPatientSubmitted(true);
+            setPatientId(res.data.data._id)
+            setMRN(res.data.data.profileNo)
+            setOpenNotification(true)
+            setsuccessMsg("Patient details updated successfully")
+            setIsPatientSubmitted(true)
             if (!searchActivated) {
-              props.history.goBack();
+              props.history.goBack()
             }
           } else if (!res.data.success) {
-            setOpenNotification(true);
-            setErrorMsg("Error");
+            setOpenNotification(true)
+            setErrorMsg("Error")
           }
         })
         .catch((e) => {
-          console.log("error after updating patient details", e);
-          setOpenNotification(true);
-          setErrorMsg("Error while editing the patient details");
-        });
+          console.log("error after updating patient details", e)
+          setOpenNotification(true)
+          setErrorMsg("Error while editing the patient details")
+        })
     } else {
-      setOpenNotification(true);
+      setOpenNotification(true)
       setErrorMsg(
-        "Please Fill the the empty fields with valid data / Please add payment method"
-      );
+        "Please Fill the the empty fields with valid data / Please add payment method",
+      )
     }
-    setDetailsForm(true);
-    setEmergencyForm(true);
+    setDetailsForm(true)
+    setEmergencyForm(true)
     if (paymentMethod === "Cash") {
-      setPaymentForm(true);
+      setPaymentForm(true)
     } else if (paymentMethod === "Insurance") {
-      setinsuranceForm(true);
+      setinsuranceForm(true)
     }
     // setIsFormSubmitted(true)
-  };
+  }
 
   const handleKeyDown = (e) => {
     if (e.keyCode === 13) {
-      triggerChange();
+      triggerChange()
     }
-  };
+  }
 
   const triggerChange = (a) => {
-    handleSearch(a);
-  };
+    handleSearch(a)
+  }
 
   const handlePauseSearch = (e) => {
-    setLoadSearchedData(true);
-    clearTimeout(timer);
+    setLoadSearchedData(true)
+    clearTimeout(timer)
 
-    const a = e.target.value.replace(/[^\w\s]/gi, "");
-    setSearchQuery(a);
+    const a = e.target.value.replace(/[^\w\s]/gi, "")
+    setSearchQuery(a)
 
     setTimer(
       setTimeout(() => {
-        triggerChange(a);
-      }, 600)
-    );
-  };
+        triggerChange(a)
+      }, 600),
+    )
+  }
 
   const handleSearch = (e) => {
-    console.log("input ", e);
+    console.log("input ", e)
 
     if (e.length >= 3) {
       axios
@@ -1296,185 +1299,185 @@ function PatientRegistration(props) {
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
-              console.log("patient data ", res.data.data);
-              setItemFoundSuccessfully(true);
-              setItemFound(res.data.data);
-              setLoadSearchedData(false);
+              console.log("patient data ", res.data.data)
+              setItemFoundSuccessfully(true)
+              setItemFound(res.data.data)
+              setLoadSearchedData(false)
             } else {
-              setItemFoundSuccessfully(false);
-              setItemFound("");
-              setLoadSearchedData(false);
+              setItemFoundSuccessfully(false)
+              setItemFound("")
+              setLoadSearchedData(false)
             }
           }
         })
         .catch((e) => {
-          console.log("error while searching patient", e);
-        });
+          console.log("error while searching patient", e)
+        })
     }
-  };
+  }
 
   function handleAddItem(item) {
-    console.log("selected banda", item);
+    console.log("selected banda", item)
 
     axios
       .get(getPatientById + "/" + item._id)
       .then((res) => {
         if (res.data.success) {
-          console.log("Data of selected banda ", res.data.data);
+          console.log("Data of selected banda ", res.data.data)
 
-          let i = res.data.data;
+          let i = res.data.data
 
           if (i.dob) {
-            let d = i.dob;
-            var dob;
-            let myDate = d.split("/");
+            let d = i.dob
+            var dob
+            let myDate = d.split("/")
             if (myDate.length > 1) {
-              console.log(myDate, "mydate");
-              dob = new Date(myDate[2], myDate[1] - 1, myDate[0]);
+              console.log(myDate, "mydate")
+              dob = new Date(myDate[2], myDate[1] - 1, myDate[0])
             } else {
-              dob = d;
+              dob = d
             }
           }
 
-          setPatientId(i._id);
-          dispatch({ field: "firstName", value: i.firstName });
-          dispatch({ field: "lastName", value: i.lastName });
-          dispatch({ field: "gender", value: i.gender });
-          dispatch({ field: "nationality", value: i.nationality });
-          dispatch({ field: "age", value: i.age });
-          dispatch({ field: "profileNo", value: i.profileNo });
-          dispatch({ field: "insuranceNo", value: i.insuranceNo });
-          dispatch({ field: "SIN", value: i.SIN });
-          dispatch({ field: "title", value: i.title });
-          dispatch({ field: "dob", value: dob });
-          dispatch({ field: "height", value: i.height });
-          dispatch({ field: "weight", value: i.weight });
-          dispatch({ field: "bloodGroup", value: i.bloodGroup });
-          dispatch({ field: "phoneNumber", value: i.phoneNumber });
-          dispatch({ field: "mobileNumber", value: i.mobileNumber });
-          dispatch({ field: "email", value: i.email });
-          dispatch({ field: "country", value: i.country });
+          setPatientId(i._id)
+          dispatch({ field: "firstName", value: i.firstName })
+          dispatch({ field: "lastName", value: i.lastName })
+          dispatch({ field: "gender", value: i.gender })
+          dispatch({ field: "nationality", value: i.nationality })
+          dispatch({ field: "age", value: i.age })
+          dispatch({ field: "profileNo", value: i.profileNo })
+          dispatch({ field: "insuranceNo", value: i.insuranceNo })
+          dispatch({ field: "SIN", value: i.SIN })
+          dispatch({ field: "title", value: i.title })
+          dispatch({ field: "dob", value: dob })
+          dispatch({ field: "height", value: i.height })
+          dispatch({ field: "weight", value: i.weight })
+          dispatch({ field: "bloodGroup", value: i.bloodGroup })
+          dispatch({ field: "phoneNumber", value: i.phoneNumber })
+          dispatch({ field: "mobileNumber", value: i.mobileNumber })
+          dispatch({ field: "email", value: i.email })
+          dispatch({ field: "country", value: i.country })
 
-          let cities = Object.entries(countriesList[0]);
+          let cities = Object.entries(countriesList[0])
           for (var x in cities) {
-            let arr = cities[x];
+            let arr = cities[x]
             if (arr[0] === i.country) {
-              console.log("cities", arr[1]);
-              setCities(arr[1]);
+              console.log("cities", arr[1])
+              setCities(arr[1])
             }
           }
 
-          dispatch({ field: "city", value: i.city });
-          dispatch({ field: "address", value: i.address });
-          dispatch({ field: "otherDetails", value: i.otherDetails });
+          dispatch({ field: "city", value: i.city })
+          dispatch({ field: "address", value: i.address })
+          dispatch({ field: "otherDetails", value: i.otherDetails })
           if (i.otherCity) {
-            dispatch({ field: "otherCity", value: i.otherCity });
-            setCityBoolean(true);
+            dispatch({ field: "otherCity", value: i.otherCity })
+            setCityBoolean(true)
           }
           dispatch({
             field: "emergencyContactNo",
             value: i.emergencyContactNo,
-          });
-          dispatch({ field: "emergencyName", value: i.emergencyName });
-          dispatch({ field: "emergencyRelation", value: i.emergencyRelation });
+          })
+          dispatch({ field: "emergencyName", value: i.emergencyName })
+          dispatch({ field: "emergencyRelation", value: i.emergencyRelation })
           dispatch({
             field: "coveredFamilyMembers",
             value: i.coveredFamilyMembers,
-          });
+          })
           dispatch({
             field: "otherCoverageDetails",
             value: i.otherCoverageDetails,
-          });
+          })
 
           dispatch({
             field: "amountReceived",
             value: i.amountReceived,
-          });
+          })
           if (i.amountReceived === null) {
-            dispatch({ field: "amountReceived", value: "" });
+            dispatch({ field: "amountReceived", value: "" })
           }
           if (i.amountReceived === 0) {
-            dispatch({ field: "amountReceived", value: "0.0000" });
+            dispatch({ field: "amountReceived", value: "0.0000" })
           }
-          dispatch({ field: "bankName", value: i.bankName });
-          dispatch({ field: "depositorName", value: i.depositorName });
+          dispatch({ field: "bankName", value: i.bankName })
+          dispatch({ field: "depositorName", value: i.depositorName })
 
-          dispatch({ field: "coverageDetails", value: i.coverageDetails });
-          dispatch({ field: "coverageTerms", value: i.coverageTerms });
-          dispatch({ field: "payment", value: i.payment });
-          dispatch({ field: "depositSlip", value: i.depositSlip });
-          dispatch({ field: "DateTime", value: i.DateTime });
-          dispatch({ field: "paymentMethod", value: i.paymentMethod });
-          dispatch({ field: "insuranceVendor", value: i.insuranceVendor });
-          dispatch({ field: "emergencyName", value: i.emergencyName });
+          dispatch({ field: "coverageDetails", value: i.coverageDetails })
+          dispatch({ field: "coverageTerms", value: i.coverageTerms })
+          dispatch({ field: "payment", value: i.payment })
+          dispatch({ field: "depositSlip", value: i.depositSlip })
+          dispatch({ field: "DateTime", value: i.DateTime })
+          dispatch({ field: "paymentMethod", value: i.paymentMethod })
+          dispatch({ field: "insuranceVendor", value: i.insuranceVendor })
+          dispatch({ field: "emergencyName", value: i.emergencyName })
           dispatch({
             field: "emergencyContactNo",
             value: i.emergencyContactNo,
-          });
-          dispatch({ field: "emergencyRelation", value: i.emergencyRelation });
+          })
+          dispatch({ field: "emergencyRelation", value: i.emergencyRelation })
 
-          setSearchQuery("");
-          setsearchActivated(true);
+          setSearchQuery("")
+          setsearchActivated(true)
           if (i.paymentMethod === "Insurance") {
-            setenableForm(false);
-            setInsuranceForm(false);
-            setenableNext(false);
+            setenableForm(false)
+            setInsuranceForm(false)
+            setenableNext(false)
           }
           if (i.paymentMethod === "Cash") {
-            setenableForm(true);
-            setenableNext(true);
+            setenableForm(true)
+            setenableNext(true)
           }
         }
       })
       .catch((e) => {
-        console.log("Error while searching patient", e);
-        setOpenNotification(true);
-        setErrorMsg("Error while fetching details of patient");
-      });
+        console.log("Error while searching patient", e)
+        setOpenNotification(true)
+        setErrorMsg("Error while fetching details of patient")
+      })
   }
 
   const onPhoneNumberChange = (value) => {
-    dispatch({ field: "phoneNumber", value: value });
-  };
+    dispatch({ field: "phoneNumber", value: value })
+  }
 
   const onEmergencyNumberChange = (value) => {
-    dispatch({ field: "emergencyContactNo", value: value });
-  };
+    dispatch({ field: "emergencyContactNo", value: value })
+  }
 
   const onMobileNumberChange = (value) => {
-    dispatch({ field: "mobileNumber", value: value });
-  };
+    dispatch({ field: "mobileNumber", value: value })
+  }
 
   const onChangeBloodGroup = (e) => {
     dispatch({
       field: e.target.name,
       value: e.target.value,
-    });
-  };
+    })
+  }
 
   const onBlurChangeValue = (e) => {
     dispatch({
       field: e.target.name,
       value: e.target.value.replace(/,/g, ""),
-    });
-  };
+    })
+  }
 
   const onChangeValue = (e) => {
     if (e.target.name === "city") {
       if (e.target.value === "Other") {
-        console.log("e.target.value", e.target.value);
-        setCityBoolean(true);
+        console.log("e.target.value", e.target.value)
+        setCityBoolean(true)
         dispatch({
           field: city,
           value: "Other",
-        });
+        })
 
         dispatch({
           field: otherCity,
           value: e.target.value,
-        });
+        })
       } else {
-        setCityBoolean(false);
+        setCityBoolean(false)
       }
     }
     // var pattern = /^[a-zA-Z' ]*$/
@@ -1497,10 +1500,10 @@ function PatientRegistration(props) {
     //   }
     // }
 
-    var heightWeightPattern = /^[0-9. ]*$/;
+    var heightWeightPattern = /^[0-9. ]*$/
     if (e.target.name === "height" || e.target.name === "weight") {
       if (heightWeightPattern.test(e.target.value) === false) {
-        return;
+        return
       }
     }
 
@@ -1508,7 +1511,7 @@ function PatientRegistration(props) {
       dispatch({
         field: e.target.name,
         value: e.target.value.replace(/[^\w@.\s]/gi, ""),
-      });
+      })
     } else if (
       e.target.name === "phoneNumber" ||
       e.target.name === "mobileNumber" ||
@@ -1517,12 +1520,12 @@ function PatientRegistration(props) {
       dispatch({
         field: e.target.name,
         value: e.target.value.replace(/[^\w+\s]/gi, ""),
-      });
+      })
     } else if (e.target.name === "dob") {
       dispatch({
         field: e.target.name,
         value: e.target.value,
-      });
+      })
     } else if (
       e.target.name === "firstName" ||
       e.target.name === "lastName" ||
@@ -1531,12 +1534,12 @@ function PatientRegistration(props) {
       e.target.name === "insuranceVendor"
     ) {
       if (/^[a-zA-Z' ]*$/.test(e.target.value) === false) {
-        return;
+        return
       } else {
         dispatch({
           field: e.target.name,
           value: e.target.value.replace(/[^\w'\s]/gi, ""),
-        });
+        })
       }
     } else if (e.target.name === "address") {
       // if (/^[#.0-9a-zA-Z\s,-]*$/.test(e.target.value) === false) {
@@ -1545,66 +1548,66 @@ function PatientRegistration(props) {
       dispatch({
         field: e.target.name,
         value: e.target.value,
-      });
+      })
       // }
     } else {
       dispatch({
         field: e.target.name,
         value: e.target.value.replace(/[^\w.'-\s]/gi, ""),
-      });
+      })
     }
 
     if (e.target.name === "coverageTerms" && e.target.value === "coPayment") {
-      setCoPaymentField(true);
-      console.log(e.target.name, e.target.value);
+      setCoPaymentField(true)
+      console.log(e.target.name, e.target.value)
     }
     if (e.target.name === "coverageTerms" && e.target.value === "fullPayment") {
-      dispatch({ field: "payment", value: "" });
-      setCoPaymentField(false);
-      console.log(e.target.name, e.target.value);
+      dispatch({ field: "payment", value: "" })
+      setCoPaymentField(false)
+      console.log(e.target.name, e.target.value)
     }
 
     if (e.target.name === "dob") {
-      calculate_age(e.target.value);
+      calculate_age(e.target.value)
     }
 
     if (e.target.value === "Cash") {
-      dispatch({ field: "bankName", value: "" });
-      setSlipUpload("");
-      setImagePreview("");
-      setpdfView("");
-      setInsuranceForm(true);
-      dispatch({ field: "insuranceNo", value: "" });
-      dispatch({ field: "insuranceVendor", value: "" });
-      dispatch({ field: "coverageDetails", value: "" });
-      dispatch({ field: "coverageTerms", value: "" });
-      dispatch({ field: "payment", value: "" });
-      dispatch({ field: "coveredFamilyMembers", value: "" });
-      dispatch({ field: "otherCoverageDetails", value: "" });
-      setenableForm(true);
-      setenableNext(true);
+      dispatch({ field: "bankName", value: "" })
+      setSlipUpload("")
+      setImagePreview("")
+      setpdfView("")
+      setInsuranceForm(true)
+      dispatch({ field: "insuranceNo", value: "" })
+      dispatch({ field: "insuranceVendor", value: "" })
+      dispatch({ field: "coverageDetails", value: "" })
+      dispatch({ field: "coverageTerms", value: "" })
+      dispatch({ field: "payment", value: "" })
+      dispatch({ field: "coveredFamilyMembers", value: "" })
+      dispatch({ field: "otherCoverageDetails", value: "" })
+      setenableForm(true)
+      setenableNext(true)
     } else if (e.target.value === "Insurance") {
-      dispatch({ field: "depositorName", value: "" });
-      dispatch({ field: "amountReceived", value: "" });
-      dispatch({ field: "bankName", value: "" });
-      setSlipUpload("");
-      setImagePreview("");
-      setpdfView("");
-      setInsuranceForm(false);
-      setenableForm(false);
-      setenableNext(false);
+      dispatch({ field: "depositorName", value: "" })
+      dispatch({ field: "amountReceived", value: "" })
+      dispatch({ field: "bankName", value: "" })
+      setSlipUpload("")
+      setImagePreview("")
+      setpdfView("")
+      setInsuranceForm(false)
+      setenableForm(false)
+      setenableNext(false)
     } else if (e.target.value === "WireTransfer") {
-      dispatch({ field: "amountReceived", value: "" });
-      setInsuranceForm(true);
-      dispatch({ field: "insuranceNo", value: "" });
-      dispatch({ field: "insuranceVendor", value: "" });
-      dispatch({ field: "coverageDetails", value: "" });
-      dispatch({ field: "coverageTerms", value: "" });
-      dispatch({ field: "payment", value: "" });
-      dispatch({ field: "coveredFamilyMembers", value: "" });
-      dispatch({ field: "otherCoverageDetails", value: "" });
+      dispatch({ field: "amountReceived", value: "" })
+      setInsuranceForm(true)
+      dispatch({ field: "insuranceNo", value: "" })
+      dispatch({ field: "insuranceVendor", value: "" })
+      dispatch({ field: "coverageDetails", value: "" })
+      dispatch({ field: "coverageTerms", value: "" })
+      dispatch({ field: "payment", value: "" })
+      dispatch({ field: "coveredFamilyMembers", value: "" })
+      dispatch({ field: "otherCoverageDetails", value: "" })
     }
-  };
+  }
 
   // const addZeroes = (num) => {
   //   // Cast as number
@@ -1625,38 +1628,38 @@ function PatientRegistration(props) {
   // }
 
   const calculate_age = (dob) => {
-    var today = new Date();
-    var birthDate = new Date(dob);
-    var age_now = today.getFullYear() - birthDate.getFullYear();
-    var m = today.getMonth() - birthDate.getMonth();
+    var today = new Date()
+    var birthDate = new Date(dob)
+    var age_now = today.getFullYear() - birthDate.getFullYear()
+    var m = today.getMonth() - birthDate.getMonth()
     if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      age_now--;
+      age_now--
     }
-    dispatch({ field: "age", value: age_now });
-  };
+    dispatch({ field: "age", value: age_now })
+  }
 
   if (openNotification) {
     setTimeout(() => {
-      setOpenNotification(false);
-      setErrorMsg("");
-      setsuccessMsg("");
-    }, 2000);
+      setOpenNotification(false)
+      setErrorMsg("")
+      setsuccessMsg("")
+    }, 2000)
   }
 
   function scanQRCode() {
-    setQRCodeScanner(true);
+    setQRCodeScanner(true)
   }
 
   function handleScanQR(data) {
-    setQRCodeScanner(false);
-    console.log("data after parsing", JSON.parse(data).profileNo);
+    setQRCodeScanner(false)
+    console.log("data after parsing", JSON.parse(data).profileNo)
 
     handlePauseSearch({
       target: {
         value: JSON.parse(data).profileNo,
         type: "text",
       },
-    });
+    })
   }
 
   if (QRCodeScanner) {
@@ -1668,7 +1671,7 @@ function PatientRegistration(props) {
           undefined
         )}
       </div>
-    );
+    )
   } else {
     return (
       <div
@@ -1928,7 +1931,7 @@ function PatientRegistration(props) {
                                         <TableCell>{i.gender}</TableCell>
                                         <TableCell>{i.age}</TableCell>
                                       </TableRow>
-                                    );
+                                    )
                                   })}
                                 </TableBody>
                               </Table>
@@ -2087,7 +2090,7 @@ function PatientRegistration(props) {
                         <MenuItem key={val.key} value={val.key}>
                           {val.value}
                         </MenuItem>
-                      );
+                      )
                     })}
                   </TextField>
                   {/* <ErrorMessage name={title} isFormSubmitted={detailsForm} /> */}
@@ -2193,7 +2196,7 @@ function PatientRegistration(props) {
                           {val.value.charAt(0).toUpperCase() +
                             val.value.slice(1)}
                         </MenuItem>
-                      );
+                      )
                     })}
                   </TextField>
                   <ErrorMessage
@@ -2265,7 +2268,7 @@ function PatientRegistration(props) {
                           <MenuItem key={val} value={val}>
                             {val}
                           </MenuItem>
-                        );
+                        )
                       })}
                   </TextField>
 
@@ -2427,7 +2430,7 @@ function PatientRegistration(props) {
                         <MenuItem key={val.key} value={val.key}>
                           {val.value}
                         </MenuItem>
-                      );
+                      )
                     })}
                   </TextField>
                   {/* <ErrorMessage
@@ -2536,7 +2539,7 @@ function PatientRegistration(props) {
                           <MenuItem key={val} value={val}>
                             {val}
                           </MenuItem>
-                        );
+                        )
                       })}
                   </TextField>
                   <ErrorMessage
@@ -2575,7 +2578,7 @@ function PatientRegistration(props) {
                           <MenuItem key={val} value={val}>
                             {val}
                           </MenuItem>
-                        );
+                        )
                       })}
                     <MenuItem value="Other">Other</MenuItem>
                   </TextField>
@@ -2891,7 +2894,7 @@ function PatientRegistration(props) {
                           <MenuItem key={val.key} value={val.key}>
                             {val.value}
                           </MenuItem>
-                        );
+                        )
                       })}
                     </TextField>
                     <ErrorMessage
@@ -3531,7 +3534,7 @@ function PatientRegistration(props) {
                             variant="contained"
                             color="default"
                           >
-                            Save 1
+                            Save
                           </Button>
                           <div
                             style={{
@@ -3825,7 +3828,7 @@ function PatientRegistration(props) {
                           <MenuItem key={val.key} value={val.key}>
                             {val.value}
                           </MenuItem>
-                        );
+                        )
                       })}
                     </TextField>
                     {/* <ErrorMessage
@@ -3900,7 +3903,7 @@ function PatientRegistration(props) {
                             <MenuItem key={val.key} value={val.key}>
                               {val.value}
                             </MenuItem>
-                          );
+                          )
                         })}
                       </TextField>
                       {/* <ErrorMessage
@@ -4027,7 +4030,7 @@ function PatientRegistration(props) {
                         variant="contained"
                         color="default"
                       >
-                        Save 2
+                        Save
                       </Button>
                       <div
                         style={{
@@ -4148,7 +4151,7 @@ function PatientRegistration(props) {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
-export default PatientRegistration;
+export default PatientRegistration

@@ -1,22 +1,21 @@
-import React, { useEffect, useState, useReducer } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Button from "@material-ui/core/Button";
-import tableStyles from "../../assets/jss/material-dashboard-react/components/tableStyle.js";
-import Header from "../../components/Header/Header";
-import business_Unit from "../../assets/img/Purchase Order.png";
-import Back_Arrow from "../../assets/img/Back_Arrow.png";
-import cookie from "react-cookies";
-import axios from "axios";
-import _ from "lodash";
-import { updateEdrIpr, notifyTriage } from "../../public/endpoins";
-import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
-import Notification from "../../components/Snackbar/Notification.js";
-import CustomTable from "../../components/Table/Table";
-import TextField from "@material-ui/core/TextField";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-
+import React, { useEffect, useState, useReducer } from "react"
+import { makeStyles } from "@material-ui/core/styles"
+import Tabs from "@material-ui/core/Tabs"
+import Tab from "@material-ui/core/Tab"
+import Button from "@material-ui/core/Button"
+import tableStyles from "../../assets/jss/material-dashboard-react/components/tableStyle.js"
+import Header from "../../components/Header/Header"
+import business_Unit from "../../assets/img/Purchase Order.png"
+import Back_Arrow from "../../assets/img/Back_Arrow.png"
+import cookie from "react-cookies"
+import axios from "axios"
+import _ from "lodash"
+import { updateEdrIpr, notifyTriage } from "../../public/endpoins"
+import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css"
+import Notification from "../../components/Snackbar/Notification.js"
+import CustomTable from "../../components/Table/Table"
+import TextField from "@material-ui/core/TextField"
+import useMediaQuery from "@material-ui/core/useMediaQuery"
 
 const tableHeadingForTriage = [
   "Request No.",
@@ -30,7 +29,7 @@ const tableHeadingForTriage = [
   "Cardiac",
   "Abdomen",
   "",
-];
+]
 const tableDataKeysForTriage = [
   "triageRequestNo",
   "date",
@@ -42,7 +41,7 @@ const tableDataKeysForTriage = [
   "respiratory",
   "cardiac",
   "abdomen",
-];
+]
 
 const tableHeadingForVitalSigns = [
   "Request No.",
@@ -57,7 +56,7 @@ const tableHeadingForVitalSigns = [
   "Pain Scale",
   "Pulse OX",
   "",
-];
+]
 const tableDataKeysForVitalSigns = [
   "triageRequestNo",
   "date",
@@ -70,7 +69,7 @@ const tableDataKeysForVitalSigns = [
   "FSBS",
   "painScale",
   "pulseOX",
-];
+]
 
 const styles = {
   stylesForButton: {
@@ -82,7 +81,7 @@ const styles = {
     height: "45px",
     outline: "none",
   },
-};
+}
 
 const useStylesForTabs = makeStyles((theme) => ({
   root: {
@@ -91,7 +90,7 @@ const useStylesForTabs = makeStyles((theme) => ({
   scroller: {
     flexGrow: "0",
   },
-}));
+}))
 
 const useStyles = makeStyles((theme) => ({
   margin: {
@@ -148,29 +147,29 @@ const useStyles = makeStyles((theme) => ({
       boxShadow: "none",
     },
   },
-}));
+}))
 
 function TriageAndAssessment(props) {
-  const matches = useMediaQuery("(min-width:600px)");
-  const classes = useStyles();
+  const matches = useMediaQuery("(min-width:600px)")
+  const classes = useStyles()
 
-  const initialState = {
+  var initialState = {
     triageAssessmentArray: "",
 
-    triageLevel: "N/A",
-    generalAppearance: "N/A",
-    headNeck: "N/A",
-    respiratory: "N/A",
-    cardiac: "N/A",
-    abdomen: "N/A",
-    neurological: "N/A",
+    triageLevel: [],
+    generalAppearance: [],
+    headNeck: [],
+    respiratory: [],
+    cardiac: [],
+    abdomen: [],
+    neurological: [],
 
-    generalAppearanceText: null,
-    headNeckText: null,
-    respiratoryText: null,
-    cardiacText: null,
-    abdomenText: null,
-    neurologicalText: null,
+    generalAppearanceText: "",
+    headNeckText: "",
+    respiratoryText: "",
+    cardiacText: "",
+    abdomenText: "",
+    neurologicalText: "",
 
     heartRate: "",
     bloodPressureSys: "",
@@ -180,18 +179,18 @@ function TriageAndAssessment(props) {
     FSBS: "",
     painScale: "",
     pulseOX: "",
-  };
+  }
 
   function reducer(state, { field, value }) {
     return {
       ...state,
       [field]: value,
-    };
+    }
   }
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState)
 
-  const {
+  var {
     triageAssessmentArray,
 
     triageLevel,
@@ -217,29 +216,38 @@ function TriageAndAssessment(props) {
     FSBS,
     painScale,
     pulseOX,
-  } = state;
+  } = state
 
-  const classesForTabs = useStylesForTabs();
+  const classesForTabs = useStylesForTabs()
 
-  const [value, setValue] = useState(0);
-  const [historyValue, sethistoryValue] = useState(0);
-  const [id, setId] = useState("");
-  const [currentUser, setCurrentUser] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
-  const [successMsg, setsuccessMsg] = useState("");
-  const [requestType, setrequestType] = useState("");
-  const [openNotification, setOpenNotification] = useState(false);
-  const [MRN, setMRN] = useState("");
-  const [patientId, setpatientId ] = useState('')
+  const [value, setValue] = useState(0)
+  const [historyValue, sethistoryValue] = useState(0)
+  const [id, setId] = useState("")
+  const [currentUser, setCurrentUser] = useState("")
+  const [errorMsg, setErrorMsg] = useState("")
+  const [successMsg, setsuccessMsg] = useState("")
+  const [requestType, setrequestType] = useState("")
+  const [openNotification, setOpenNotification] = useState(false)
+  const [MRN, setMRN] = useState("")
+  const [patientId, setpatientId] = useState("")
+
+  const [generalAppearanceBoolean, setGeneralAppearanceBoolean] = useState(
+    false,
+  )
+  const [headNeckBoolean, setHeadNeckBoolean] = useState(false)
+  const [neurologicalBoolean, setNeurologicalBoolean] = useState(false)
+  const [respiratoryBoolean, setRespiratoryBoolean] = useState(false)
+  const [cardiacBoolean, setCardiacBoolean] = useState(false)
+  const [abdomenBoolean, setAbdomenBoolean] = useState(false)
 
   useEffect(() => {
-    setCurrentUser(cookie.load("current_user"));
+    setCurrentUser(cookie.load("current_user"))
 
-    const selectedRec = props.history.location.state.selectedItem;
-    console.log("In triage : ", selectedRec.patientId._id);
-    setMRN(selectedRec.patientId.profileNo);
-    setId(selectedRec._id);
-    setrequestType(selectedRec.requestType);
+    const selectedRec = props.history.location.state.selectedItem
+    console.log("In triage : ", selectedRec.patientId._id)
+    setMRN(selectedRec.patientId.profileNo)
+    setId(selectedRec._id)
+    setrequestType(selectedRec.requestType)
     setpatientId(selectedRec.patientId._id)
 
     if (selectedRec.triageAssessment) {
@@ -247,108 +255,257 @@ function TriageAndAssessment(props) {
         (d) =>
           (d.doctorName = d.requester
             ? d.requester.firstName + " " + d.requester.lastName
-            : "")
-      );
+            : ""),
+      )
+
+      console.log("selectedRec.triageAssessment", selectedRec.triageAssessment)
+
+      let temp = []
+
+      for (let i = 0; i < selectedRec.triageAssessment.length; i++) {
+        let singleT = [...selectedRec.triageAssessment[i].triageLevel]
+
+        let t = ""
+        for (let j = 0; j < singleT.length; j++) {
+          if (singleT[j] !== "") {
+            if (j === singleT.length - 1) {
+              t = t + singleT[j]
+            } else {
+              t = t + singleT[j] + ", "
+            }
+          }
+        }
+
+        let singleGeneral = [
+          ...selectedRec.triageAssessment[i].generalAppearance,
+        ]
+
+        let ga = ""
+        for (let j = 0; j < singleGeneral.length; j++) {
+          if (singleGeneral[j] !== "") {
+            if (j === singleGeneral.length - 1) {
+              ga = ga + singleGeneral[j]
+            } else {
+              ga = ga + singleGeneral[j] + ", "
+            }
+          }
+        }
+
+        let singleHead = [...selectedRec.triageAssessment[i].headNeck]
+        let h = ""
+        for (let j = 0; j < singleHead.length; j++) {
+          if (singleHead[j] !== "") {
+            if (j === singleHead.length - 1) {
+              h = h + singleHead[j]
+            } else {
+              h = h + singleHead[j] + ", "
+            }
+          }
+        }
+
+        let singleResp = [...selectedRec.triageAssessment[i].respiratory]
+        let r = ""
+        for (let j = 0; j < singleResp.length; j++) {
+          if (singleResp[j] !== "") {
+            if (j === singleResp.length - 1) {
+              r = r + singleResp[j]
+            } else {
+              r = r + singleResp[j] + ", "
+            }
+          }
+        }
+
+        let singleAbdomen = [...selectedRec.triageAssessment[i].abdomen]
+        let a = ""
+        for (let j = 0; j < singleAbdomen.length; j++) {
+          if (singleAbdomen[j] !== "") {
+            if (j === singleAbdomen.length - 1) {
+              a = a + singleAbdomen[j]
+            } else {
+              a = a + singleAbdomen[j] + ", "
+            }
+          }
+        }
+
+        let singleNeurological = [
+          ...selectedRec.triageAssessment[i].neurological,
+        ]
+        let n = ""
+        for (let j = 0; j < singleNeurological.length; j++) {
+          if (singleNeurological[j] !== "") {
+            if (j === singleNeurological.length - 1) {
+              n = n + singleNeurological[j]
+            } else {
+              n = n + singleNeurological[j] + ", "
+            }
+          }
+        }
+
+        let singleCardiac = [...selectedRec.triageAssessment[i].cardiac]
+        let c = ""
+        for (let j = 0; j < singleCardiac.length; j++) {
+          if (singleCardiac[j] !== "") {
+            if (j === singleCardiac.length - 1) {
+              c = c + singleCardiac[j]
+            } else {
+              c = c + singleCardiac[j] + ", "
+            }
+          }
+        }
+
+        temp.push({
+          ...selectedRec.triageAssessment[i],
+          generalAppearance: ga,
+          triageLevel: t,
+          headNeck: h,
+          abdomen: a,
+          neurological: n,
+          respiratory: r,
+          cardiac: c,
+        })
+      }
+
+      console.log("temp", temp)
+
+      let obj = { ...selectedRec, triageAssessment: [...temp] }
+
       dispatch({
         field: "triageAssessmentArray",
-        value: _.sortBy(
-          selectedRec.triageAssessment.reverse(),
-          "date"
-        ).reverse(),
-      });
+        value: _.sortBy(obj.triageAssessment.reverse(), "date").reverse(),
+      })
     }
-  }, []);
+  }, [])
 
   const onCheckedValue = (e) => {
-    if (e.target.value === "generalAppearanceText") {
-      dispatch({ field: "generalAppearanceText", value: "" });
-    } else if (e.target.value === "respiratoryText") {
-      dispatch({ field: "respiratoryText", value: "" });
-    } else if (e.target.value === "neurologicalText") {
-      dispatch({ field: "neurologicalText", value: "" });
-    } else if (e.target.value === "headNeckText") {
-      dispatch({ field: "headNeckText", value: "" });
-    } else if (e.target.value === "abdomenText") {
-      dispatch({ field: "abdomenText", value: "" });
-    } else if (e.target.value === "cardiacText") {
-      dispatch({ field: "cardiacText", value: "" });
-    } else {
-      dispatch({ field: "generalAppearanceText", value: null });
-      dispatch({ field: "respiratoryText", value: null });
-      dispatch({ field: "neurologicalText", value: null });
-      dispatch({ field: "headNeckText", value: null });
-      dispatch({ field: "abdomenText", value: null });
-      dispatch({ field: "cardiacText", value: null });
-    }
-    dispatch({ field: e.target.name, value: e.target.value });
-  };
+    // console.log("ds", e.target.value)
+    // if (e.target.value === "generalAppearanceText") {
+    //   dispatch({ field: "generalAppearanceText", value: "" })
+    // } else if (e.target.value === "respiratoryText") {
+    //   dispatch({ field: "respiratoryText", value: "" })
+    // } else if (e.target.value === "neurologicalText") {
+    //   dispatch({ field: "neurologicalText", value: "" })
+    // } else if (e.target.value === "headNeckText") {
+    //   dispatch({ field: "headNeckText", value: "" })
+    // } else if (e.target.value === "abdomenText") {
+    //   dispatch({ field: "abdomenText", value: "" })
+    // } else if (e.target.value === "cardiacText") {
+    //   dispatch({ field: "cardiacText", value: "" })
+    // } else {
+    //   // dispatch({ field: "generalAppearanceText", value: null })
+    //   dispatch({ field: "respiratoryText", value: null })
+    //   dispatch({ field: "neurologicalText", value: null })
+    //   dispatch({ field: "headNeckText", value: null })
+    //   dispatch({ field: "abdomenText", value: null })
+    //   dispatch({ field: "cardiacText", value: null })
+    // }
+    // dispatch({ field: e.target.name, value: e.target.value })
+  }
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+    setValue(newValue)
+  }
 
   const handleHistoryTabChange = (event, newValue) => {
-    sethistoryValue(newValue);
-  };
+    sethistoryValue(newValue)
+  }
 
   const onNext = () => {
-    setValue(value + 1);
-  };
+    setValue(value + 1)
+  }
 
   const onSpecify = (e) => {
-    if (e.target.name === "generalAppearance") {
-      dispatch({ field: "generalAppearanceText", value: e.target.value });
-    } else if (e.target.name === "headNeck") {
-      dispatch({ field: "headNeckText", value: e.target.value });
-    } else if (e.target.name === "respiratory") {
-      dispatch({ field: "respiratoryText", value: e.target.value });
-    } else if (e.target.name === "abdomen") {
-      dispatch({ field: "abdomenText", value: e.target.value });
-    } else if (e.target.name === "neurological") {
-      dispatch({ field: "neurologicalText", value: e.target.value });
-    } else if (e.target.name === "cardiac") {
-      dispatch({ field: "cardiacText", value: e.target.value });
-    }
-    dispatch({ field: e.target.name, value: e.target.value });
-  };
+    // if (e.target.name === "generalAppearance") {
+    //   dispatch({ field: "generalAppearanceText", value: e.target.value })
+    // } else if (e.target.name === "headNeck") {
+    //   dispatch({ field: "headNeckText", value: e.target.value })
+    // } else if (e.target.name === "respiratory") {
+    //   dispatch({ field: "respiratoryText", value: e.target.value })
+    // } else if (e.target.name === "abdomen") {
+    //   dispatch({ field: "abdomenText", value: e.target.value })
+    // } else if (e.target.name === "neurological") {
+    //   dispatch({ field: "neurologicalText", value: e.target.value })
+    // } else if (e.target.name === "cardiac") {
+    //   dispatch({ field: "cardiacText", value: e.target.value })
+    // }
+    // dispatch({ field: e.target.name, value: e.target.value })
+  }
 
   const onTextChange = (e) => {
-    dispatch({ field: e.target.name, value: e.target.value });
-  };
+    dispatch({ field: e.target.name, value: e.target.value })
+  }
 
   const onPainScaleChange = (e) => {
     if (
       (e.target.name === "painScale" && e.target.value < 0) ||
       e.target.value > 10
     ) {
-      return;
+      return
     } else {
-      dispatch({ field: e.target.name, value: e.target.value });
+      dispatch({ field: e.target.name, value: e.target.value })
     }
-  };
+  }
 
   const handleSubmitAssessment = (e) => {
-    var now = new Date();
-    var start = new Date(now.getFullYear(), 0, 0);
+    var now = new Date()
+    var start = new Date(now.getFullYear(), 0, 0)
     var diff =
       now -
       start +
-      (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000;
-    var oneDay = 1000 * 60 * 60 * 24;
-    var day = Math.floor(diff / oneDay);
+      (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000
+    var oneDay = 1000 * 60 * 60 * 24
+    var day = Math.floor(diff / oneDay)
 
-    var dateNow = new Date();
+    var dateNow = new Date()
     var YYYY = dateNow
       .getFullYear()
       .toString()
-      .substr(-2);
-    var HH = dateNow.getHours();
-    var mm = dateNow.getMinutes();
-    let ss = dateNow.getSeconds();
+      .substr(-2)
+    var HH = dateNow.getHours()
+    var mm = dateNow.getMinutes()
+    let ss = dateNow.getSeconds()
 
-    const TAArequestNo = "TAA" + day + YYYY + HH + mm + ss;
+    const TAArequestNo = "TAA" + day + YYYY + HH + mm + ss
 
-    let triageAssessment = [];
+    let triageAssessment = []
+
+    if (generalAppearanceText !== "") {
+      console.log("generalAppearanceText", generalAppearanceText)
+      let w = generalAppearance.indexOf("")
+      w = generalAppearanceText
+      generalAppearance = [...generalAppearance, w]
+    }
+
+    if (headNeckText !== "") {
+      console.log("headNeckText", headNeckText)
+      let w = headNeck.indexOf("")
+      w = headNeckText
+      headNeck = [...headNeck, w]
+    }
+
+    if (respiratoryText !== "") {
+      console.log("respiratoryText", respiratoryText)
+      let w = respiratory.indexOf("")
+      w = respiratoryText
+      respiratory = [...respiratory, w]
+    }
+    if (cardiacText !== "") {
+      console.log("cardiacText", cardiacText)
+      var w = cardiac.indexOf("")
+      w = cardiacText
+      cardiac = [...cardiac, w]
+    }
+    if (abdomenText !== "") {
+      console.log("abdomenText", abdomenText)
+      var w = abdomen.indexOf("")
+      w = abdomenText
+      abdomen = [...abdomen, w]
+    }
+    if (neurologicalText !== "") {
+      console.log("neurologicalText", neurologicalText)
+      var w = neurological.indexOf("")
+      w = neurologicalText
+      neurological = [...neurological, w]
+    }
 
     triageAssessment = [
       ...triageAssessmentArray,
@@ -371,62 +528,264 @@ function TriageAndAssessment(props) {
         painScale: painScale === "" ? "N/A" : painScale,
         pulseOX: pulseOX === "" ? "N/A" : pulseOX,
       },
-    ];
-    console.log(e);
+    ]
+    console.log(e)
     const params = {
       _id: id,
       requestType,
       triageAssessment: triageAssessment,
-    };
-    console.log(params, "params");
+    }
+    console.log(params, "params")
     axios
       .put(updateEdrIpr, params)
       .then((res) => {
         if (res.data.success) {
-          console.log(
-            "Update Patient data patient assessment: ",
-            res.data.data
-          );
-          notifyForTriage(patientId);
+          console.log("Update Patient data patient assessment: ", res.data.data)
+          notifyForTriage(patientId)
           props.history.push({
             pathname: "success",
             state: {
               message: `Triage & Assessment No: ${TAArequestNo.toUpperCase()} for patient MRN: ${res.data.data.patientId.profileNo.toUpperCase()} added successfully`,
             },
             comingFor: "Triage",
-          });
+          })
         } else if (!res.data.success) {
-          setOpenNotification(true);
-          setErrorMsg("Error in Submitting Assessment");
+          setOpenNotification(true)
+          setErrorMsg("Error in Submitting Assessment")
         }
       })
       .catch((e) => {
-        console.log("error after submitting Assessment", e);
-        setOpenNotification(true);
-        setErrorMsg("Error while submitting Assessment");
-      });
-  };
+        console.log("error after submitting Assessment", e)
+        setOpenNotification(true)
+        setErrorMsg("Error while submitting Assessment")
+      })
+  }
 
   const notifyForTriage = (id) => {
     axios
       .get(notifyTriage + "/" + id)
       .then((res) => {
-        console.log(res);
+        console.log(res)
       })
       .catch((e) => {
-        console.log("error after notify", e);
-        setOpenNotification(true);
-        setErrorMsg(e);
-      });
-  };
+        console.log("error after notify", e)
+        setOpenNotification(true)
+        setErrorMsg(e)
+      })
+  }
 
   if (openNotification) {
     setTimeout(() => {
-      setOpenNotification(false);
-      setErrorMsg("");
-      setsuccessMsg("");
-    }, 2000);
+      setOpenNotification(false)
+      setErrorMsg("")
+      setsuccessMsg("")
+    }, 2000)
   }
+
+  const onChangeHandler = (e, index) => {
+    console.log("e.target.value", e.target.value)
+    var a = [...triageLevel]
+    if (a.includes(e.target.value)) {
+      for (var i = 0; i < a.length; i++) {
+        if (a[i] === e.target.value) {
+          a.splice(i, 1)
+          dispatch({ field: "triageLevel", value: a })
+        }
+      }
+    } else {
+      a = [...triageLevel, e.target.value]
+      dispatch({ field: "triageLevel", value: a })
+    }
+  }
+
+  const onOtherChange = (e) => {
+    console.log(e.target.value)
+
+    if (e.target.name === "headNeck") {
+      dispatch({ field: "headNeckText", value: e.target.value })
+    } else if (e.target.name === "generalAppearance") {
+      dispatch({ field: "generalAppearanceText", value: e.target.value })
+    } else if (e.target.name === "respiratory") {
+      dispatch({ field: "respiratoryText", value: e.target.value })
+    } else if (e.target.name === "cardiac") {
+      dispatch({ field: "cardiacText", value: e.target.value })
+    } else if (e.target.name === "abdomen") {
+      dispatch({ field: "abdomenText", value: e.target.value })
+    } else {
+      dispatch({ field: "neurologicalText", value: e.target.value })
+    }
+  }
+
+  const onGeneralAppearance = (e) => {
+    if (e.target.name === "generalAppearanceOther") {
+      setGeneralAppearanceBoolean(true)
+    }
+
+    if (generalAppearanceBoolean === true) {
+      setGeneralAppearanceBoolean(false)
+    }
+
+    var a = [...generalAppearance]
+    if (a.includes(e.target.value)) {
+      for (var i = 0; i < a.length; i++) {
+        if (a[i] === e.target.value) {
+          a.splice(i, 1)
+          dispatch({ field: "generalAppearance", value: a })
+        }
+      }
+    } else {
+      a = [...generalAppearance, e.target.value]
+      dispatch({ field: "generalAppearance", value: a })
+    }
+  }
+
+  const onHeadNeck = (e) => {
+    // if (e.target.value === "generalAppearance") {
+    //   console.log("Name")
+    // }
+
+    if (e.target.name === "headNeckOther") {
+      setHeadNeckBoolean(true)
+    }
+
+    if (headNeckBoolean === true) {
+      setHeadNeckBoolean(false)
+    }
+
+    console.log("e.target.value", e.target.value)
+    var a = [...headNeck]
+    if (a.includes(e.target.value)) {
+      for (var i = 0; i < a.length; i++) {
+        if (a[i] === e.target.value) {
+          a.splice(i, 1)
+          dispatch({ field: "headNeck", value: a })
+        }
+      }
+    } else {
+      a = [...headNeck, e.target.value]
+      dispatch({ field: "headNeck", value: a })
+    }
+  }
+
+  const onRespiratory = (e) => {
+    // if (e.target.value === "generalAppearance") {
+    //   console.log("Name")
+    // }
+
+    if (e.target.name === "respiratoryOther") {
+      setRespiratoryBoolean(true)
+    }
+
+    if (respiratoryBoolean === true) {
+      setRespiratoryBoolean(false)
+    }
+
+    console.log("e.target.value", e.target.value)
+    var a = [...respiratory]
+    if (a.includes(e.target.value)) {
+      for (var i = 0; i < a.length; i++) {
+        if (a[i] === e.target.value) {
+          a.splice(i, 1)
+          dispatch({ field: "respiratory", value: a })
+        }
+      }
+    } else {
+      a = [...respiratory, e.target.value]
+      dispatch({ field: "respiratory", value: a })
+    }
+  }
+
+  const onCardiac = (e) => {
+    // if (e.target.value === "generalAppearance") {
+    //   console.log("Name")
+    // }
+
+    if (e.target.name === "cardiacOther") {
+      setCardiacBoolean(true)
+    }
+
+    if (cardiacBoolean === true) {
+      setCardiacBoolean(false)
+    }
+
+    console.log("e.target.value", e.target.value)
+    var a = [...cardiac]
+    if (a.includes(e.target.value)) {
+      for (var i = 0; i < a.length; i++) {
+        if (a[i] === e.target.value) {
+          a.splice(i, 1)
+          dispatch({ field: "cardiac", value: a })
+        }
+      }
+    } else {
+      a = [...cardiac, e.target.value]
+      dispatch({ field: "cardiac", value: a })
+    }
+  }
+
+  const onAbdomen = (e) => {
+    // if (e.target.value === "generalAppearance") {
+    //   console.log("Name")
+    // }
+
+    if (e.target.name === "abdomenOther") {
+      setAbdomenBoolean(true)
+    }
+
+    if (abdomenBoolean === true) {
+      setAbdomenBoolean(false)
+    }
+
+    console.log("e.target.value", e.target.value)
+    var a = [...abdomen]
+    if (a.includes(e.target.value)) {
+      for (var i = 0; i < a.length; i++) {
+        if (a[i] === e.target.value) {
+          a.splice(i, 1)
+          dispatch({ field: "abdomen", value: a })
+        }
+      }
+    } else {
+      a = [...abdomen, e.target.value]
+      dispatch({ field: "abdomen", value: a })
+    }
+  }
+
+  const onNeurological = (e) => {
+    // if (e.target.value === "generalAppearance") {
+    //   console.log("Name")
+    // }
+
+    if (e.target.name === "neurologicalOther") {
+      setNeurologicalBoolean(true)
+    }
+
+    if (neurologicalBoolean === true) {
+      setNeurologicalBoolean(false)
+    }
+
+    console.log("e.target.value", e.target.value)
+    var a = [...neurological]
+    if (a.includes(e.target.value)) {
+      for (var i = 0; i < a.length; i++) {
+        if (a[i] === e.target.value) {
+          a.splice(i, 1)
+          dispatch({ field: "neurological", value: a })
+        }
+      }
+    } else {
+      a = [...neurological, e.target.value]
+      dispatch({ field: "neurological", value: a })
+    }
+  }
+
+  console.log("triageLevel", triageLevel)
+  console.log("generalAppearance", generalAppearance)
+  console.log("headNeck", headNeck)
+  console.log("respiratory", respiratory)
+  console.log("cardiac", cardiac)
+  console.log("abdomen", abdomen)
+  console.log("neurological", neurological)
 
   return (
     <div
@@ -441,14 +800,20 @@ function TriageAndAssessment(props) {
         overflowY: "scroll",
       }}
     >
-      <Header history={props.history}/>
+      <Header history={props.history} />
 
       <div className="cPadding">
         <div className="subheader" style={{ marginLeft: "-10px" }}>
           <div>
             <img src={business_Unit} />
             <div style={{ flex: 4, display: "flex", alignItems: "center" }}>
-              <h3 style={{ color: "white", fontWeight: "700", fontSize: matches ? " " : "15px " }}>
+              <h3
+                style={{
+                  color: "white",
+                  fontWeight: "700",
+                  fontSize: matches ? " " : "15px ",
+                }}
+              >
                 {"Triage & Assessment"}
               </h3>
             </div>
@@ -457,10 +822,10 @@ function TriageAndAssessment(props) {
 
         <div className={classesForTabs.root}>
           <Tabs
-           classes={{
-            root: classesForTabs.root,
-            scroller: classesForTabs.scroller,
-          }}
+            classes={{
+              root: classesForTabs.root,
+              scroller: classesForTabs.scroller,
+            }}
             value={value}
             onChange={handleChange}
             textColor="primary"
@@ -755,11 +1120,11 @@ function TriageAndAssessment(props) {
                       value={painScale}
                       // error={email === "" && detailsForm}
                       onKeyDown={(evt) => {
-                        (evt.key === "e" ||
+                        ;(evt.key === "e" ||
                           evt.key === "E" ||
                           evt.key === "-" ||
                           evt.key === "+") &&
-                          evt.preventDefault();
+                          evt.preventDefault()
                       }}
                       onChange={onPainScaleChange}
                       className="textInputStyle"
@@ -846,17 +1211,18 @@ function TriageAndAssessment(props) {
                 <form
                   className="form-inline row"
                   role="form"
-                  onChange={onCheckedValue}
-                  value={generalAppearance}
+                  // onChange={onCheckedValue}
+                  // value={generalAppearance}
                 >
                   <div className="form-group col-md-3">
                     <div class="radio">
                       <label class="radio-inline control-label">
                         <input
-                          type="radio"
+                          type="checkbox"
                           name="generalAppearance"
                           value="Good"
-                          checked={generalAppearance === "Good"}
+                          onChange={onGeneralAppearance}
+                          // checked={generalAppearance === "Good"}
                         />
                         &nbsp;&nbsp;Good
                       </label>
@@ -866,10 +1232,11 @@ function TriageAndAssessment(props) {
                     <div class="radio">
                       <label class="radio-inline control-label">
                         <input
-                          type="radio"
+                          type="checkbox"
                           name="generalAppearance"
                           value="Sick"
-                          checked={generalAppearance === "Sick"}
+                          onChange={onGeneralAppearance}
+                          // checked={generalAppearance === "Sick"}
                         />
                         &nbsp;&nbsp;Sick
                       </label>
@@ -879,10 +1246,11 @@ function TriageAndAssessment(props) {
                     <div class="radio">
                       <label class="radio-inline control-label">
                         <input
-                          type="radio"
+                          type="checkbox"
                           name="generalAppearance"
                           value="Pain"
-                          checked={generalAppearance === "Pain"}
+                          onChange={onGeneralAppearance}
+                          // checked={generalAppearance === "Pain"}
                         />
                         &nbsp;&nbsp;Pain
                       </label>
@@ -892,10 +1260,11 @@ function TriageAndAssessment(props) {
                     <div class="radio">
                       <label class="radio-inline control-label">
                         <input
-                          type="radio"
-                          name="generalAppearance"
-                          value="generalAppearanceText"
-                          checked={generalAppearanceText !== null}
+                          type="checkbox"
+                          name="generalAppearanceOther"
+                          value={generalAppearanceText}
+                          onChange={onGeneralAppearance}
+                          // checked={generalAppearanceText !== null}
                         />
                         &nbsp;&nbsp;Other
                       </label>
@@ -909,17 +1278,25 @@ function TriageAndAssessment(props) {
                                     value={generalAppearance}
                                 > */}
                 <div className="form-group col-md-12">
-                  <input
-                    style={{ outline: "none", backgroundColor: "#F7F5F5", width : matches ? "" : "114%" }}
-                    disabled={generalAppearanceText === null}
-                    type="text"
-                    placeholder="Specify"
-                    onChange={onSpecify}
-                    name="generalAppearance"
-                    value={generalAppearanceText}
-                    className="control-label textInputStyle"
-                    maxlength="500"
-                  />
+                  {generalAppearanceBoolean ? (
+                    <input
+                      style={{
+                        outline: "none",
+                        backgroundColor: "#F7F5F5",
+                        width: matches ? "" : "114%",
+                      }}
+                      // disabled={generalAppearanceText}
+                      type="text"
+                      placeholder="Specify"
+                      onChange={onOtherChange}
+                      name="generalAppearance"
+                      value={generalAppearanceText}
+                      className="control-label textInputStyle"
+                      maxlength="500"
+                    />
+                  ) : (
+                    undefined
+                  )}
                 </div>
                 {/* </form> */}
               </div>
@@ -933,17 +1310,18 @@ function TriageAndAssessment(props) {
                 <form
                   className="form-inline row"
                   role="form"
-                  onChange={onCheckedValue}
-                  value={headNeck}
+                  // onChange={onCheckedValue}
+                  // value={headNeck}
                 >
                   <div className="form-group col-md-3">
                     <div class="radio">
                       <label class="radio-inline control-label">
                         <input
-                          type="radio"
+                          type="checkbox"
                           name="headNeck"
                           value="Normal"
-                          checked={headNeck === "Normal"}
+                          onChange={onHeadNeck}
+                          // checked={headNeck === "Normal"}
                         />
                         &nbsp;&nbsp;Normal
                       </label>
@@ -953,10 +1331,11 @@ function TriageAndAssessment(props) {
                     <div class="radio">
                       <label class="radio-inline control-label">
                         <input
-                          type="radio"
+                          type="checkbox"
                           name="headNeck"
                           value="Line"
-                          checked={headNeck === "Line"}
+                          onChange={onHeadNeck}
+                          // checked={headNeck === "Line"}
                         />
                         &nbsp;&nbsp;Line
                       </label>
@@ -966,10 +1345,11 @@ function TriageAndAssessment(props) {
                     <div class="radio">
                       <label class="radio-inline control-label">
                         <input
-                          type="radio"
+                          type="checkbox"
                           name="headNeck"
                           value="Thyroid Enlargement"
-                          checked={headNeck === "Thyroid Enlargement"}
+                          onChange={onHeadNeck}
+                          // checked={headNeck === "Thyroid Enlargement"}
                         />
                         &nbsp;&nbsp;Thyroid Enlargement
                       </label>
@@ -979,10 +1359,11 @@ function TriageAndAssessment(props) {
                     <div class="radio">
                       <label class="radio-inline control-label">
                         <input
-                          type="radio"
-                          name="headNeck"
-                          value="headNeckText"
-                          checked={headNeckText !== null}
+                          type="checkbox"
+                          name="headNeckOther"
+                          value={headNeckText}
+                          onChange={onHeadNeck}
+                          // checked={headNeckText !== null}
                         />
                         &nbsp;&nbsp;Other
                       </label>
@@ -992,17 +1373,24 @@ function TriageAndAssessment(props) {
                 {/* <form className='form-inline row' role='form' onChange={onCheckedValue}
                                     value={headNeck}> */}
                 <div className="form-group col-md-12">
-                  <input
-                    style={{ outline: "none", backgroundColor: "#F7F5F5" , width : matches ? "" : "114%"}}
-                    disabled={headNeckText === null}
-                    type="text"
-                    onChange={onSpecify}
-                    placeholder="Specify"
-                    name="headNeck"
-                    value={headNeckText}
-                    className="control-label textInputStyle"
-                    maxlength="500"
-                  />
+                  {headNeckBoolean ? (
+                    <input
+                      style={{
+                        outline: "none",
+                        backgroundColor: "#F7F5F5",
+                        width: matches ? "" : "114%",
+                      }}
+                      type="text"
+                      onChange={onOtherChange}
+                      placeholder="Specify"
+                      name="headNeck"
+                      value={headNeckText}
+                      className="control-label textInputStyle"
+                      maxlength="500"
+                    />
+                  ) : (
+                    undefined
+                  )}
                 </div>
                 {/* </form> */}
               </div>
@@ -1016,17 +1404,18 @@ function TriageAndAssessment(props) {
                 <form
                   className="form-inline row"
                   role="form"
-                  onChange={onCheckedValue}
-                  value={respiratory}
+                  // onChange={onCheckedValue}
+                  // value={respiratory}
                 >
                   <div className="form-group col-md-3">
                     <div class="radio">
                       <label class="radio-inline control-label">
                         <input
-                          type="radio"
+                          type="checkbox"
                           name="respiratory"
                           value="GBAE"
-                          checked={respiratory === "GBAE"}
+                          onChange={onRespiratory}
+                          // checked={respiratory === "GBAE"}
                         />
                         &nbsp;&nbsp;GBAE
                       </label>
@@ -1036,10 +1425,11 @@ function TriageAndAssessment(props) {
                     <div class="radio">
                       <label class="radio-inline control-label">
                         <input
-                          type="radio"
+                          type="checkbox"
                           name="respiratory"
                           value="Wheezing"
-                          checked={respiratory === "Wheezing"}
+                          onChange={onRespiratory}
+                          // checked={respiratory === "Wheezing"}
                         />
                         &nbsp;&nbsp;Wheezing
                       </label>
@@ -1049,10 +1439,11 @@ function TriageAndAssessment(props) {
                     <div class="radio">
                       <label class="radio-inline control-label">
                         <input
-                          type="radio"
+                          type="checkbox"
                           name="respiratory"
                           value="Crackles"
-                          checked={respiratory === "Crackles"}
+                          onChange={onRespiratory}
+                          // checked={respiratory === "Crackles"}
                         />
                         &nbsp;&nbsp;Crackles
                       </label>
@@ -1062,10 +1453,11 @@ function TriageAndAssessment(props) {
                     <div class="radio">
                       <label class="radio-inline control-label">
                         <input
-                          type="radio"
+                          type="checkbox"
                           name="respiratory"
                           value="Crepitation"
-                          checked={respiratory === "Crepitation"}
+                          onChange={onRespiratory}
+                          // checked={respiratory === "Crepitation"}
                         />
                         &nbsp;&nbsp;Crepitation
                       </label>
@@ -1083,10 +1475,11 @@ function TriageAndAssessment(props) {
                       <div class="radio">
                         <label class="radio-inline control-label">
                           <input
-                            type="radio"
-                            name="respiratory"
-                            value="respiratoryText"
-                            checked={respiratoryText !== null}
+                            type="checkbox"
+                            name="respiratoryOther"
+                            value={respiratoryText}
+                            onChange={onRespiratory}
+                            // checked={respiratoryText !== null}
                           />
                           &nbsp;&nbsp;Other
                         </label>
@@ -1094,21 +1487,25 @@ function TriageAndAssessment(props) {
                     </div>
                   </form>
                   <div className="form-group col-md-11">
-                    <input
-                      style={{
-                        outline: "none",
-                        backgroundColor: "#F7F5F5",
-                        marginLeft: "-8px",
-                      }}
-                      disabled={respiratoryText === null}
-                      type="text"
-                      placeholder="Specify"
-                      onChange={onSpecify}
-                      name="respiratory"
-                      value={respiratoryText}
-                      className="control-label textInputStyle tri-Alt-4-tab"
-                      maxlength="500"
-                    />
+                    {respiratoryBoolean ? (
+                      <input
+                        style={{
+                          outline: "none",
+                          backgroundColor: "#F7F5F5",
+                          marginLeft: "-8px",
+                        }}
+                        // disabled={respiratoryText === null}
+                        type="text"
+                        placeholder="Specify"
+                        onChange={onOtherChange}
+                        name="respiratory"
+                        value={respiratoryText}
+                        className="control-label textInputStyle tri-Alt-4-tab"
+                        maxlength="500"
+                      />
+                    ) : (
+                      undefined
+                    )}
                   </div>
                 </div>
               </div>
@@ -1122,17 +1519,18 @@ function TriageAndAssessment(props) {
                 <form
                   className="form-inline row"
                   role="form"
-                  onChange={onCheckedValue}
-                  value={cardiac}
+                  // onChange={onCheckedValue}
+                  // value={cardiac}
                 >
                   <div className="form-group col-md-4 col-sm-4">
                     <div class="radio">
                       <label class="radio-inline control-label">
                         <input
-                          type="radio"
+                          type="checkbox"
                           name="cardiac"
                           value="Normal S1, S2"
-                          checked={cardiac === "Normal S1, S2"}
+                          onChange={onCardiac}
+                          // checked={cardiac === "Normal S1, S2"}
                         />
                         &nbsp;&nbsp;Normal S1, S2
                       </label>
@@ -1142,10 +1540,11 @@ function TriageAndAssessment(props) {
                     <div class="radio">
                       <label class="radio-inline control-label">
                         <input
-                          type="radio"
+                          type="checkbox"
                           name="cardiac"
                           value="No Murmurs"
-                          checked={cardiac === "No Murmurs"}
+                          onChange={onCardiac}
+                          // checked={cardiac === "No Murmurs"}
                         />
                         &nbsp;&nbsp;No Murmurs
                       </label>
@@ -1155,10 +1554,11 @@ function TriageAndAssessment(props) {
                     <div class="radio">
                       <label class="radio-inline control-label">
                         <input
-                          type="radio"
-                          name="cardiac"
-                          value="cardiacText"
-                          checked={cardiacText !== null}
+                          type="checkbox"
+                          name="cardiacOther"
+                          value={cardiacText}
+                          onChange={onCardiac}
+                          // checked={cardiacText !== null}
                         />
                         &nbsp;&nbsp;Other
                       </label>
@@ -1170,22 +1570,26 @@ function TriageAndAssessment(props) {
                                     value={cardiac}
                                 > */}
                 <div className="form-group col-md-12 ">
-                  <input
-                    style={{
-                      outline: "none",
-                      backgroundColor: "#F7F5F5",
-                      marginLeft: "-5px",
-                      width : matches ? "" : "114%"
-                    }}
-                    disabled={cardiacText === null}
-                    type="text"
-                    placeholder="Specify"
-                    onChange={onSpecify}
-                    name="cardiac"
-                    value={cardiacText}
-                    className="control-label textInputStyle"
-                    maxlength="500"
-                  />
+                  {cardiacBoolean ? (
+                    <input
+                      style={{
+                        outline: "none",
+                        backgroundColor: "#F7F5F5",
+                        marginLeft: "-5px",
+                        width: matches ? "" : "114%",
+                      }}
+                      // disabled={cardiacText === null}
+                      type="text"
+                      placeholder="Specify"
+                      onChange={onOtherChange}
+                      name="cardiac"
+                      value={cardiacText}
+                      className="control-label textInputStyle"
+                      maxlength="500"
+                    />
+                  ) : (
+                    undefined
+                  )}
                 </div>
                 {/* </form> */}
               </div>
@@ -1199,19 +1603,20 @@ function TriageAndAssessment(props) {
                 <form
                   className="form-inline row"
                   role="form"
-                  onChange={onCheckedValue}
-                  value={abdomen}
+                  // onChange={onCheckedValue}
+                  // value={abdomen}
                 >
                   <div className="form-group col-md-3">
                     <div class="radio">
                       <label class="radio-inline control-label">
                         <input
-                          type="radio"
+                          type="checkbox"
                           name="abdomen"
                           value="Soft Lax"
-                          checked={abdomen === "Soft Lax"}
+                          onChange={onAbdomen}
+                          // checked={abdomen === "Soft Lax"}
                         />
-                        &nbsp;&nbsp;Soft Lax
+                        &nbsp;&nbsp;Soft & Lax
                       </label>
                     </div>
                   </div>
@@ -1219,10 +1624,12 @@ function TriageAndAssessment(props) {
                     <div class="radio">
                       <label class="radio-inline control-label">
                         <input
-                          type="radio"
+                          type="checkbox"
                           name="abdomen"
                           value="No Tenderness"
-                          checked={abdomen === "No Tenderness"}
+                          onChange={onAbdomen}
+
+                          // checked={abdomen === "No Tenderness"}
                         />
                         &nbsp;&nbsp;No Tenderness
                       </label>
@@ -1232,10 +1639,12 @@ function TriageAndAssessment(props) {
                     <div class="radio">
                       <label class="radio-inline control-label">
                         <input
-                          type="radio"
+                          type="checkbox"
                           name="abdomen"
                           value="Murphy +ve"
-                          checked={abdomen === "Murphy +ve"}
+                          onChange={onAbdomen}
+
+                          // checked={abdomen === "Murphy +ve"}
                         />
                         &nbsp;&nbsp;Murphy +ve
                       </label>
@@ -1245,10 +1654,11 @@ function TriageAndAssessment(props) {
                     <div class="radio">
                       <label class="radio-inline control-label">
                         <input
-                          type="radio"
+                          type="checkbox"
                           name="abdomen"
                           value="Rebound +ve"
-                          checked={abdomen === "Rebound +ve"}
+                          onChange={onAbdomen}
+                          // checked={abdomen === "Rebound +ve"}
                         />
                         &nbsp;&nbsp;Rebound +ve
                       </label>
@@ -1266,10 +1676,12 @@ function TriageAndAssessment(props) {
                       <div class="radio">
                         <label class="radio-inline control-label">
                           <input
-                            type="radio"
-                            name="abdomen"
-                            value="abdomenText"
-                            checked={abdomenText !== null}
+                            type="checkbox"
+                            name="abdomenOther"
+                            value={abdomenText}
+                            onChange={onAbdomen}
+
+                            // checked={abdomenText !== null}
                           />
                           &nbsp;&nbsp;Other
                         </label>
@@ -1277,21 +1689,25 @@ function TriageAndAssessment(props) {
                     </div>
                   </form>
                   <div className="col-md-11">
-                    <input
-                      style={{
-                        outline: "none",
-                        backgroundColor: "#F7F5F5",
-                        marginLeft: "-10px",
-                      }}
-                      disabled={abdomenText === null}
-                      type="text"
-                      placeholder="Specify"
-                      onChange={onSpecify}
-                      name="abdomen"
-                      value={abdomenText}
-                      className=" textInputStyle tri-Alt-4-tab"
-                      maxlength="500"
-                    />
+                    {abdomenBoolean ? (
+                      <input
+                        style={{
+                          outline: "none",
+                          backgroundColor: "#F7F5F5",
+                          marginLeft: "-10px",
+                        }}
+                        // disabled={abdomenText === null}
+                        type="text"
+                        placeholder="Specify"
+                        onChange={onOtherChange}
+                        name="abdomen"
+                        value={abdomenText}
+                        className=" textInputStyle tri-Alt-4-tab"
+                        maxlength="500"
+                      />
+                    ) : (
+                      undefined
+                    )}
                   </div>
                 </div>
               </div>
@@ -1305,17 +1721,18 @@ function TriageAndAssessment(props) {
                 <form
                   className="form-inline row"
                   role="form"
-                  onChange={onCheckedValue}
-                  value={neurological}
+                  // onChange={onCheckedValue}
+                  // value={neurological}
                 >
                   <div className="form-group col-md-3">
                     <div class="radio">
                       <label class="radio-inline control-label">
                         <input
-                          type="radio"
+                          type="checkbox"
                           name="neurological"
                           value="Conscious"
-                          checked={neurological === "Conscious"}
+                          onChange={onNeurological}
+                          // checked={neurological === "Conscious"}
                         />
                         &nbsp;&nbsp;Conscious
                       </label>
@@ -1325,10 +1742,11 @@ function TriageAndAssessment(props) {
                     <div class="radio">
                       <label class="radio-inline control-label">
                         <input
-                          type="radio"
+                          type="checkbox"
                           name="neurological"
                           value="Oriented"
-                          checked={neurological === "Oriented"}
+                          onChange={onNeurological}
+                          // checked={neurological === "Oriented"}
                         />
                         &nbsp;&nbsp;Oriented
                       </label>
@@ -1338,10 +1756,12 @@ function TriageAndAssessment(props) {
                     <div class="radio">
                       <label class="radio-inline control-label">
                         <input
-                          type="radio"
+                          type="checkbox"
                           name="neurological"
                           value="Weakness"
-                          checked={neurological === "Weakness"}
+                          onChange={onNeurological}
+
+                          // checked={neurological === "Weakness"}
                         />
                         &nbsp;&nbsp;Weakness
                       </label>
@@ -1351,10 +1771,12 @@ function TriageAndAssessment(props) {
                     <div class="radio">
                       <label class="radio-inline control-label">
                         <input
-                          type="radio"
-                          name="neurological"
-                          value="neurologicalText"
-                          checked={neurologicalText !== null}
+                          type="checkbox"
+                          name="neurologicalOther"
+                          value={neurologicalText}
+                          onChange={onNeurological}
+
+                          // checked={neurologicalText !== null}
                         />
                         &nbsp;&nbsp;Other
                       </label>
@@ -1367,22 +1789,26 @@ function TriageAndAssessment(props) {
                                 > */}
 
                 <div className="form-group col-md-12">
-                  <input
-                    style={{
-                      outline: "none",
-                      backgroundColor: "#F7F5F5",
-                      marginLeft: "-5px",
-                      width : matches ? "" : "114%"
-                    }}
-                    disabled={neurologicalText === null}
-                    type="text"
-                    placeholder="Specify"
-                    onChange={onSpecify}
-                    name="neurological"
-                    value={neurologicalText}
-                    className="textInputStyle"
-                    maxlength="500"
-                  />
+                  {neurologicalBoolean ? (
+                    <input
+                      style={{
+                        outline: "none",
+                        backgroundColor: "#F7F5F5",
+                        marginLeft: "-5px",
+                        width: matches ? "" : "114%",
+                      }}
+                      // disabled={neurologicalText === null}
+                      type="text"
+                      placeholder="Specify"
+                      onChange={onOtherChange}
+                      name="neurological"
+                      value={neurologicalText}
+                      className="textInputStyle"
+                      maxlength="500"
+                    />
+                  ) : (
+                    undefined
+                  )}
                 </div>
                 {/* </form> */}
               </div>
@@ -1433,32 +1859,35 @@ function TriageAndAssessment(props) {
                   <strong>Triage Level</strong>
                 </label>
               </div>
-              <div onChange={onCheckedValue} value={triageLevel}>
+              <div value={triageLevel}>
                 <div className="row">
                   <div className="col-md-4">
                     <input
-                      type="radio"
+                      type="checkbox"
                       name="triageLevel"
                       value="Resuscitation"
-                      checked={triageLevel === "Resuscitation"}
+                      onChange={onChangeHandler}
+                      // checked={triageLevel}
                     />
                     <label for="male">&nbsp;&nbsp;1 - Resuscitation</label>
                   </div>
                   <div className="col-md-4">
                     <input
-                      type="radio"
+                      type="checkbox"
                       name="triageLevel"
                       value="Emergent"
-                      checked={triageLevel === "Emergent"}
+                      onChange={onChangeHandler}
+                      // checked={triageLevel === "Emergent"}
                     />
                     <label for="male">&nbsp;&nbsp;2 - Emergent</label>
                   </div>
                   <div className="col-md-4">
                     <input
-                      type="radio"
+                      type="checkbox"
                       name="triageLevel"
+                      onChange={onChangeHandler}
                       value="Urgent"
-                      checked={triageLevel === "Urgent"}
+                      // checked={triageLevel === "Urgent"}
                     />
                     <label for="male">&nbsp;&nbsp;3 - Urgent</label>
                   </div>
@@ -1466,19 +1895,21 @@ function TriageAndAssessment(props) {
                 <div className="row">
                   <div className="col-md-4">
                     <input
-                      type="radio"
+                      type="checkbox"
                       name="triageLevel"
                       value="LessUrgent"
-                      checked={triageLevel === "LessUrgent"}
+                      onChange={onChangeHandler}
+                      // checked={triageLevel === "LessUrgent"}
                     />
                     <label for="male">&nbsp;&nbsp;4 - Less Urgent</label>
                   </div>
                   <div className="col-md-4">
                     <input
-                      type="radio"
+                      type="checkbox"
                       name="triageLevel"
                       value="NonUrgent"
-                      checked={triageLevel === "NonUrgent"}
+                      onChange={onChangeHandler}
+                      // checked={triageLevel === "NonUrgent"}
                     />
                     <label for="male">&nbsp;&nbsp;5 - Non Urgent</label>
                   </div>
@@ -1530,6 +1961,6 @@ function TriageAndAssessment(props) {
         </div>
       </div>
     </div>
-  );
+  )
 }
-export default TriageAndAssessment;
+export default TriageAndAssessment
