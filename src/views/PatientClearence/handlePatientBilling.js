@@ -6,7 +6,7 @@ import Tab from "@material-ui/core/Tab";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import logoPatientInvoice from "../../assets/img/logoPatientSummaryInvoice.png";
-import PatientDetails from "../../components/PatientDetails/PatientDetailsRCM"
+import PatientDetails from "../../components/PatientDetails/PatientDetailsRCM";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
@@ -51,20 +51,22 @@ import MUIInputStyle from "../../assets/jss/material-dashboard-react/inputStyle.
 import MUIInputStyleForCurrency from "../../assets/jss/material-dashboard-react/inputStylesForCurrency";
 import view_all from "../../assets/img/Eye.png";
 
+import QRCodeScannerComponent from "../../components/QRCodeScanner/QRCodeScanner";
+
 const tableHeadingForBillSummary = [
   "Date/Time",
   "Service Type",
   "Service Name",
-  "Amount (JD)",
   "Quantity",
+  "Total Price(JD)",
   //   "Invoice",
 ];
 const tableDataKeysForBillSummary = [
   "date",
   ["serviceId", "type"],
   ["serviceId", "name"],
-  ["serviceId", "price"],
   "qty",
+  ["serviceId", "price"],
 ];
 
 const statusArray = [
@@ -187,14 +189,13 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   // root: {
-    
+
   //   "& .MuiFormLabel-root": {
   //     fontSize: "12px",
 
   //     paddingRight: "50px",
   //   },
   // },
- 
 }));
 
 const useStylesForInput = makeStyles((theme) => ({
@@ -254,14 +255,13 @@ const useStylesForInput = makeStyles((theme) => ({
   label: {
     "&$focusedLabel": {
       color: "red",
-      display: "none"
+      display: "none",
     },
     // "&$erroredLabel": {
     //   color: "orange"
     // }
   },
   focusedLabel: {},
-
 }));
 
 function AddEditPatientListing(props) {
@@ -293,6 +293,9 @@ function AddEditPatientListing(props) {
 
     requestType: "",
     requestId: "",
+
+    copaymentPercentage: "",
+    copaymentValue: 0,
 
     // billSummaryArray: "",
   };
@@ -326,6 +329,9 @@ function AddEditPatientListing(props) {
     medicationArray,
     requestType,
     requestId,
+
+    copaymentPercentage,
+    copaymentValue,
 
     // billSummaryArray,
   } = state;
@@ -368,7 +374,9 @@ function AddEditPatientListing(props) {
   const [patientProfileNo, setPatientProfileNo] = useState("");
   const [qr, setQr] = useState("");
   const [timer, setTimer] = useState(null);
-  const [loadSearchedData, setLoadSearchedData] = useState(false)
+  const [loadSearchedData, setLoadSearchedData] = useState(false);
+
+  const [QRCodeScanner, setQRCodeScanner] = useState(false);
 
   useEffect(() => {
     // setcomingFor(props.history.location.state.comingFor);
@@ -597,8 +605,13 @@ function AddEditPatientListing(props) {
 
     let endTotal = remainingAmount + totalForExternal + totalForInternal;
 
-    setGrandTotal(endTotal);
-
+    if (copaymentPercentage) {
+      let copaymentValue = (endTotal * copaymentPercentage) / 100;
+      setGrandTotal(endTotal - copaymentValue);
+      dispatch({ field: "copaymentValue", value: copaymentValue });
+    } else {
+      setGrandTotal(endTotal);
+    }
     if (endTotal < patientDetails.amountReceived) {
       setReturnedAmount(patientDetails.amountReceived - endTotal);
     } else {
@@ -651,19 +664,19 @@ function AddEditPatientListing(props) {
   };
 
   const triggerChange = (a) => {
-    handleSearch(a)
-  }
+    handleSearch(a);
+  };
 
   const handlePauseSearch = (e) => {
-    setLoadSearchedData(true)
-    clearTimeout(timer)
+    setLoadSearchedData(true);
+    clearTimeout(timer);
 
     const a = e.target.value.replace(/[^\w\s]/gi, "");
     setSearchQuery(a);
 
     setTimer(
       setTimeout(() => {
-        triggerChange(a)
+        triggerChange(a);
       }, 600)
     );
   };
@@ -681,14 +694,14 @@ function AddEditPatientListing(props) {
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
-              console.log('patient data ', res.data.data)
-              setItemFoundSuccessfully(true)
-              setItemFound(res.data.data)
-              setLoadSearchedData(false)
+              console.log("patient data ", res.data.data);
+              setItemFoundSuccessfully(true);
+              setItemFound(res.data.data);
+              setLoadSearchedData(false);
             } else {
-              setItemFoundSuccessfully(false)
-              setItemFound('')
-              setLoadSearchedData(false)
+              setItemFoundSuccessfully(false);
+              setItemFound("");
+              setLoadSearchedData(false);
             }
           }
         })
@@ -699,10 +712,11 @@ function AddEditPatientListing(props) {
   };
 
   function handleAddItem(i) {
+    console.log("selected banda", i);
+
     dispatch({ field: "medicationArray", value: "" });
     dispatch({ field: "diagnosisArray", value: "" });
 
-    console.log("selected banda", i);
     setQr(i.QR);
 
     setSelectedPatient(i);
@@ -717,7 +731,7 @@ function AddEditPatientListing(props) {
     dispatch({ field: "QR", value: i.QR });
 
     dispatch({ field: "profileNo", value: i.profileNo });
-    dispatch({ field: "insuranceNumber", value: i.insuranceNumber });
+    dispatch({ field: "insuranceNumber", value: i.insuranceNo });
     dispatch({ field: "insuranceVendor", value: i.insuranceVendor });
 
     setSearchQuery("");
@@ -883,54 +897,62 @@ function AddEditPatientListing(props) {
 
           let pharm = [];
           for (let i = 0; i < res.data.data.pharmacyRequest.length; i++) {
-            let amount = 0;
+            // let amount = 0;
             let singlePR = res.data.data.pharmacyRequest[i];
-            for (let j = 0; j < singlePR.item.length; j++) {
-              // console.log(singlePR.medicine[j].itemId.purchasePrice)
-              amount =
-                amount +
-                singlePR.item[j].itemId.issueUnitCost *
-                  singlePR.item[j].requestedQty;
+            if (singlePR.status === "Completed") {
+              for (let j = 0; j < singlePR.item.length; j++) {
+                // console.log(singlePR.medicine[j].itemId.purchasePrice)
+                let amount = 0;
 
-              totalAmount =
-                totalAmount +
-                singlePR.item[j].itemId.issueUnitCost *
-                  singlePR.item[j].requestedQty;
+                var singleItemBatch = singlePR.item[j].batchArray;
 
-              let obj = {
-                serviceId: {
-                  type: "Pharmacy Service",
-                  name: singlePR.item[j].itemId.name,
-                  price: singlePR.item[j].itemId.issueUnitCost,
-                },
-                date: res.data.data.pharmacyRequest[i].dateGenerated,
-                qty: singlePR.item[j].requestedQty,
-              };
-              pharm.push(obj);
+                console.log("single item batch", singleItemBatch);
+                // amount =
+                //   amount +
+                //   singlePR.item[j].itemId.issueUnitCost *
+                //     singlePR.item[j].requestedQty;
+
+                // totalAmount =
+                //   totalAmount +
+                //   singlePR.item[j].itemId.issueUnitCost *
+                //     singlePR.item[j].requestedQty;
+
+                for (let k = 0; k < singleItemBatch.length; k++) {
+                  amount =
+                    amount +
+                    singleItemBatch[k].price * singleItemBatch[k].quantity;
+
+                  totalAmount =
+                    totalAmount +
+                    singleItemBatch[k].price * singleItemBatch[k].quantity;
+                }
+
+                let obj = {
+                  serviceId: {
+                    type: "Pharmacy Service",
+                    name: singlePR.item[j].itemId.name,
+                    price: amount,
+                  },
+                  date: res.data.data.pharmacyRequest[i].dateGenerated,
+                  qty: singlePR.item[j].requestedQty,
+                };
+                pharm.push(obj);
+              }
             }
-            // let obj = {
-            //   serviceId: {
-            //       type:'Pharmacy Service',
-            //     name: "Pharmacy Service",
-            //     price: amount,
-            //   },
-            //   date: res.data.data.pharmacyRequest[i].dateGenerated,
-            // };
-            // pharm.push(obj);
           }
 
           let rad = [];
           for (let i = 0; i < res.data.data.radiologyRequest.length; i++) {
             let singlePR = res.data.data.radiologyRequest[i];
 
-            totalAmount = totalAmount + singlePR.serviceId.price;
+            totalAmount = totalAmount + singlePR.price;
 
             let obj = {
               serviceId: {
                 ...singlePR.serviceId,
                 type: "Radiology Service",
                 name: singlePR.serviceId.name,
-                price: singlePR.serviceId.price,
+                price: singlePR.price,
               },
               date: res.data.data.radiologyRequest[i].date,
               qty: 1,
@@ -941,15 +963,13 @@ function AddEditPatientListing(props) {
           let lab = [];
           for (let i = 0; i < res.data.data.labRequest.length; i++) {
             let singlePR = res.data.data.labRequest[i];
-
-            totalAmount = totalAmount + singlePR.serviceId.price;
-
+            totalAmount = totalAmount + singlePR.price;
             let obj = {
               serviceId: {
                 ...singlePR.serviceId,
                 type: "Laboratory Service",
                 name: singlePR.serviceId.name,
-                price: singlePR.serviceId.price,
+                price: singlePR.price,
               },
               date: res.data.data.labRequest[i].date,
               qty: 1,
@@ -959,29 +979,29 @@ function AddEditPatientListing(props) {
 
           let nurse = [];
           if (res.data.data.nurseService) {
-            //   for (let i = 0; i < res.data.data.nurseService.length; i++) {
-            //     let singlePR = res.data.data.nurseService[i];
-            //     totalAmount = totalAmount + singlePR.serviceId.price;
-            //     let obj = {
-            //       serviceId: {
-            //         ...singlePR.serviceId,
-            //         type: "Nurse Service",
-            //         name: singlePR.serviceId.name,
-            //         price: singlePR.serviceId.price,
-            //       },
-            //       date: res.data.data.nurseService[i].date,
-            //       qty: 1,
-            //     };
-            //     nurse.push(obj);
-            //   }
+            for (let i = 0; i < res.data.data.nurseService.length; i++) {
+              let singlePR = res.data.data.nurseService[i];
+              totalAmount = totalAmount + singlePR.price;
+              let obj = {
+                serviceId: {
+                  ...singlePR.serviceId,
+                  type: "Nurse Service",
+                  name: singlePR.serviceId.name,
+                  price: singlePR.price,
+                },
+                date: res.data.data.nurseService[i].date,
+                qty: 1,
+              };
+              nurse.push(obj);
+            }
           }
           setbillSummaryArray(
             [].concat(
               //   res.data.data.labRequest.reverse(),
               //   res.data.data.radiologyRequest.reverse(),
-              rad.reverse(),
               pharm.reverse(),
               lab.reverse(),
+              rad.reverse(),
               nurse.reverse()
             )
           );
@@ -1019,20 +1039,25 @@ function AddEditPatientListing(props) {
               res.data.data
             );
 
+            dispatch({
+              field: "copaymentPercentage",
+              value: res.data.data.patientId.payment,
+            });
+
             Object.entries(res.data.data).map(([key, val]) => {
               if (val && typeof val === "object") {
                 if (key === "residentNotes") {
                   if (val && val.length > 0) {
                     let data = [];
-                  val.map((d) => {
-                    d.code.map((singleCode) => {
-                      let found = data.find((i) => i === singleCode);
-                      if (!found) {
-                        data.push(singleCode);
-                      }
+                    val.map((d) => {
+                      d.code.map((singleCode) => {
+                        let found = data.find((i) => i === singleCode);
+                        if (!found) {
+                          data.push(singleCode);
+                        }
+                      });
                     });
-                  });
-                  console.log(data);
+                    console.log(data);
                     dispatch({
                       field: "diagnosisArray",
                       value: data,
@@ -1072,6 +1097,34 @@ function AddEditPatientListing(props) {
     alert("Printer not attached");
   };
 
+  function scanQRCode() {
+    setQRCodeScanner(true);
+  }
+
+  function handleScanQR(data) {
+    setQRCodeScanner(false);
+    console.log("data after parsing", JSON.parse(data).profileNo);
+
+    handlePauseSearch({
+      target: {
+        value: JSON.parse(data).profileNo,
+        type: "text",
+      },
+    });
+  }
+
+  if (QRCodeScanner) {
+    return (
+      <div>
+        {QRCodeScanner ? (
+          <QRCodeScannerComponent handleScanQR={handleScanQR} />
+        ) : (
+          undefined
+        )}
+      </div>
+    );
+  }
+
   return (
     <div
       style={{
@@ -1085,7 +1138,7 @@ function AddEditPatientListing(props) {
         overflowY: "scroll",
       }}
     >
-      <Header history={props.history}/>
+      <Header history={props.history} />
       <div className="cPadding">
         <div className="subheader">
           <div style={{ marginLeft: "-12px" }}>
@@ -1150,7 +1203,6 @@ function AddEditPatientListing(props) {
                 paddingLeft: "10px",
                 paddingRight: "10px",
               }}
-            
             >
               {comingFor === "add" ? (
                 <div>
@@ -1173,8 +1225,8 @@ function AddEditPatientListing(props) {
                           classes: {
                             root: classesInput.label,
                             focused: classesInput.focusedLabel,
-                            error: classesInput.erroredLabel
-                          }
+                            error: classesInput.erroredLabel,
+                          },
                         }}
                         InputProps={{
                           endAdornment: (
@@ -1182,7 +1234,6 @@ function AddEditPatientListing(props) {
                               <AccountCircle />
                             </InputAdornment>
                           ),
-                          
                         }}
                       />
                     </div>
@@ -1201,7 +1252,11 @@ function AddEditPatientListing(props) {
                           borderRadius: 5,
                         }}
                       >
-                        <img src={BarCode} style={{ width: 70, height: 60 }} />
+                        <img
+                          src={BarCode}
+                          onClick={scanQRCode}
+                          style={{ width: 70, height: 60, cursor: "pointer" }}
+                        />{" "}
                       </div>
                     </div>
 
@@ -1275,7 +1330,7 @@ function AddEditPatientListing(props) {
                                 </TableBody>
                               </Table>
                             ) : loadSearchedData ? (
-                              <div style={{ textAlign: 'center' }}>
+                              <div style={{ textAlign: "center" }}>
                                 <Loader
                                   type="TailSpin"
                                   color="#2c6ddd"
@@ -1316,16 +1371,14 @@ function AddEditPatientListing(props) {
                 undefined
               )}
             </div>
-   
-            <PatientDetails
-         patientDetails={patientDetails}
-         // showPatientDetails={showPatientDetails}
-         diagnosisArray={diagnosisArray}
-         medicationArray={medicationArray}
-       />
-     
 
-       
+            <PatientDetails
+              patientDetails={patientDetails}
+              // showPatientDetails={showPatientDetails}
+              diagnosisArray={diagnosisArray}
+              medicationArray={medicationArray}
+            />
+
             <div
               style={{
                 height: "10px",
@@ -1549,7 +1602,62 @@ function AddEditPatientListing(props) {
                 </div>
 
                 <div
-                  className="col-md-2"
+                  className="col-md-3"
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <TextField
+                    disabled={true}
+                    label="Copayment %"
+                    name={"copaymentPercentage"}
+                    value={copaymentPercentage}
+                    variant={"filled"}
+                    onChange={onChangeValue}
+                    className="textInputStyle"
+                    InputProps={{
+                      className: classes.input,
+                      classes: { input: classes.input },
+                    }}
+                  />
+                </div>
+
+                <div
+                  className="col-md-3"
+                  style={{
+                    ...styles.inputContainerForTextField,
+                    ...styles.textFieldPadding,
+                  }}
+                >
+                  <CurrencyTextField
+                    disabled
+                    decimalPlaces={4}
+                    style={{ backgroundColor: "white", borderRadius: 5 }}
+                    className="textInputStyle"
+                    id={"copaymentValue"}
+                    label="Copayment"
+                    name={"copaymentValue"}
+                    value={copaymentValue}
+                    onBlur={onChangeValue}
+                    variant="filled"
+                    textAlign="left"
+                    InputProps={{
+                      className: classesForInput.input,
+                      classes: { input: classesForInput.input },
+                    }}
+                    InputLabelProps={{
+                      className: classesForInput.label,
+                      classes: { label: classesForInput.label },
+                    }}
+                    currencySymbol="JD"
+                    outputFormat="number"
+                    onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
+                  />
+                </div>
+
+                <div
+                  className="col-md-3"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1581,9 +1689,11 @@ function AddEditPatientListing(props) {
                     onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
                   />
                 </div>
+              </div>
 
+              <div className="row" style={{ marginTop: "20px" }}>
                 <div
-                  className="col-md-3"
+                  className="col-md-4"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1618,7 +1728,7 @@ function AddEditPatientListing(props) {
                 </div>
 
                 <div
-                  className="col-md-2"
+                  className="col-md-4"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1653,7 +1763,7 @@ function AddEditPatientListing(props) {
                 </div>
 
                 <div
-                  className="col-md-2"
+                  className="col-md-4"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1698,7 +1808,6 @@ function AddEditPatientListing(props) {
                   paddingRight: "5px",
                 }}
               >
-                
                 <Button
                   style={{
                     color: "white",
@@ -1773,7 +1882,7 @@ function AddEditPatientListing(props) {
               </div>
 
               <div
-                class="row"
+                className="row"
                 style={{
                   display: "flex",
                   flex: 1,
@@ -1806,23 +1915,24 @@ function AddEditPatientListing(props) {
             <TableCell>Date/Time</TableCell>
             <TableCell align="right">Service Type</TableCell>
             <TableCell align="right">Service Name</TableCell>
-            <TableCell align="right">Amount (JD)</TableCell>
             <TableCell align="right">Quantity</TableCell>
+            <TableCell align="right">Total Price(JD)</TableCell>
           </TableRow>
         </TableHead>
         {patientId && billSummaryArray != false ? (
           <TableBody>
             {billSummaryArray.map((row) => (
-              <TableRow key={row.date}>
+              <TableRow>
                 <TableCell component="th" scope="row">
                   {formatDate(row.date)}
                 </TableCell>
                 <TableCell align="right">{row.serviceId.type}</TableCell>
                 <TableCell align="right">{row.serviceId.name}</TableCell>
-                <TableCell align="right">
-                  {`${row.serviceId.price.toFixed(4)} JD` }
-                </TableCell>
+
                 <TableCell align="right">{row.qty}</TableCell>
+                <TableCell align="right">
+                  {`${row.serviceId.price.toFixed(4)} JD`}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

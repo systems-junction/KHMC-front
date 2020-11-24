@@ -743,7 +743,7 @@ function AddEditPurchaseRequest(props) {
       }
     }
     setSearchQuery(e.target.value);
-    // if (e.target.value.length >= 3) {
+    if (e.target.value.length >= 3) {
     axios
       .get(getSearchedItemUrl + "/" + e.target.value)
       .then((res) => {
@@ -763,7 +763,7 @@ function AddEditPurchaseRequest(props) {
         // setOpenNotification(true);
         // setErrorMsg("Error while adding the purchase request");
       });
-    // }
+    }
   };
 
   const getCurrentQty = (id) => {
@@ -816,7 +816,7 @@ function AddEditPurchaseRequest(props) {
     return (
       itemCode.length > 0 &&
       description.length > 0 &&
-      name.length > 0 &&
+      // name.length > 0 &&
       reqQty.length > 0 &&
       reqQty !== "0" &&
       // currentQty.length > 0 &&
@@ -872,7 +872,8 @@ function AddEditPurchaseRequest(props) {
     if (validateItemsForm()) {
       if (reqQty > maximumLevel - currentQty) {
         setErrorMsg(
-          `You can not add qty which exceeds the maximum level ${maximumLevel}`
+          `You can not add qty more than ${maximumLevel -
+            currentQty} because it exceeds the maximum level in inventory`
         );
         setOpenNotification(true);
         return;
@@ -966,8 +967,8 @@ function AddEditPurchaseRequest(props) {
     if (validateItemsForm()) {
       if (reqQty > maximumLevel - currentQty) {
         setErrorMsg(
-          `You can not add qty which exceeds the maximum level ${maximumLevel}`
-        );
+          `You can not add qty more than ${maximumLevel -
+            currentQty} because it exceeds the maximum level in inventory`        );
         setOpenNotification(true);
         return;
       } else {

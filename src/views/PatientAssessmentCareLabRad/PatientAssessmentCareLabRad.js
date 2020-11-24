@@ -16,6 +16,7 @@ import {
   getSearchedpatient,
   notifyLab,
   notifyRad,
+  getExternalConsultantsNames,
 } from "../../public/endpoins";
 import cookie from "react-cookies";
 import Header from "../../components/Header/Header";
@@ -50,6 +51,8 @@ import ViewSingleRequest from "../../components/ViewRequest/ViewRequest";
 import Loader from "react-loader-spinner";
 import UpdateSingleRequest from "../ECR/updateRequest";
 
+import QRCodeScannerComponent from "../../components/QRCodeScanner/QRCodeScanner";
+
 import { connect } from "react-redux";
 import {
   funForReducer,
@@ -76,7 +79,7 @@ const tableHeadingForConsultation = [
 const tableDataKeysForConsultation = [
   "date",
   "description",
-  "specialist",
+  ["specialist", "fullName"],
   "doctorName",
   "status",
 ];
@@ -166,21 +169,6 @@ const tableDataKeysForNurse = [
 ];
 const actions = { view: true };
 const actions1 = { edit: true };
-
-const specialistArray = [
-  {
-    key: "Dr.Hammad",
-    value: "Dr.Hammad",
-  },
-  {
-    key: "Dr.Asad",
-    value: "Dr.Asad",
-  },
-  {
-    key: "Dr.Hameed",
-    value: "Dr.Hameed",
-  },
-];
 
 const specialityArray = [
   {
@@ -399,6 +387,8 @@ function LabRadRequest(props) {
     patientId: "",
     diagnosisArray: "",
     medicationArray: "",
+
+    price: "",
   };
 
   function reducer(state, { field, value }) {
@@ -453,6 +443,8 @@ function LabRadRequest(props) {
     patientId,
     diagnosisArray,
     medicationArray,
+
+    price,
   } = state;
 
   const onChangeValue = (e) => {
@@ -542,6 +534,9 @@ function LabRadRequest(props) {
   const [loadSearchedData, setLoadSearchedData] = useState(false);
   const [openUpdateItemDialog, setopenUpdateItemDialog] = useState(false);
   const [updateItem, setUpdateItem] = useState("");
+  const [externalConsultants, setExternalConsultations] = useState([]);
+
+  const [QRCodeScanner, setQRCodeScanner] = useState(false);
 
   const validateForm = () => {
     return (
@@ -576,6 +571,16 @@ function LabRadRequest(props) {
       openPatientDetailsDialog(true);
     }
 
+    axios
+      .get(getExternalConsultantsNames)
+      .then((res) => {
+        console.log("res.data[0].firstName", res.data.data);
+
+        setExternalConsultations(res.data.data);
+      })
+      .catch((error) => {
+        console.log("Error", error);
+      });
     axios.get(getIcd).then((res) => {
       console.log("res for icd", res);
       if (res.data.data) {
@@ -607,6 +612,7 @@ function LabRadRequest(props) {
     }
   }
 
+  console.log("specialist", specialist);
   const handleView = (obj) => {
     setSelectedOrder(obj);
     setIsOpen(true);
@@ -641,8 +647,15 @@ function LabRadRequest(props) {
       if (validateForm()) {
         let consultationNote = [];
 
+        let c = [...consultationNoteArray];
+        c.map((d) => {
+          if (d.specialist && typeof d.specialist === "object") {
+            d.specialist = d.specialist._id;
+          }
+        });
+
         consultationNote = [
-          ...consultationNoteArray,
+          ...c,
           {
             consultationNo: consultationNoteNo,
             description: description,
@@ -882,6 +895,7 @@ function LabRadRequest(props) {
     dispatch({ field: "labServiceCode", value: i.serviceNo });
     dispatch({ field: "labServiceName", value: i.name });
     dispatch({ field: "labServiceStatus", value: i.status });
+    dispatch({ field: "price", value: i.price });
 
     setSearchQuery("");
     setaddLabRequest(true);
@@ -933,6 +947,7 @@ function LabRadRequest(props) {
             comments: labComments,
             LRrequestNo: LRrequestNo,
             view: true,
+            price: price,
           },
         ],
       });
@@ -944,6 +959,7 @@ function LabRadRequest(props) {
     dispatch({ field: "labServiceStatus", value: "" });
     dispatch({ field: "labServiceCode", value: "" });
     dispatch({ field: "labComments", value: "" });
+    dispatch({ field: "price", value: "" });
 
     setaddLabRequest(false);
     setEnableSave(false);
@@ -963,6 +979,7 @@ function LabRadRequest(props) {
           status: labRequestArray[i].status,
           comments: labRequestArray[i].comments,
           LRrequestNo: labRequestArray[i].LRrequestNo,
+          price: labRequestArray[i].price,
         },
       ];
     }
@@ -1093,6 +1110,7 @@ function LabRadRequest(props) {
     dispatch({ field: "radioServiceCode", value: i.serviceNo });
     dispatch({ field: "radioServiceName", value: i.name });
     dispatch({ field: "radioServiceStatus", value: i.status });
+    dispatch({ field: "price", value: i.price });
 
     setSearchRadioQuery("");
     setaddRadioRequest(true);
@@ -1143,6 +1161,7 @@ function LabRadRequest(props) {
             comments: radioComments,
             RRrequestNo: RRrequestNo,
             view: true,
+            price: price,
           },
         ],
       });
@@ -1154,6 +1173,7 @@ function LabRadRequest(props) {
     dispatch({ field: "radioServiceName", value: "" });
     dispatch({ field: "radioServiceStatus", value: "" });
     dispatch({ field: "radioComments", value: "" });
+    dispatch({ field: "price", value: "" });
 
     setaddLabRequest(false);
     setEnableSave(false);
@@ -1173,6 +1193,7 @@ function LabRadRequest(props) {
           status: radiologyRequestArray[i].status,
           comments: radiologyRequestArray[i].comments,
           RRrequestNo: radiologyRequestArray[i].RRrequestNo,
+          price: radiologyRequestArray[i].price,
         },
       ];
     }
@@ -1305,6 +1326,7 @@ function LabRadRequest(props) {
     dispatch({ field: "nurseServiceCode", value: i.serviceNo });
     dispatch({ field: "nurseServiceName", value: i.name });
     dispatch({ field: "nurseServiceStatus", value: i.status });
+    dispatch({ field: "price", value: i.price });
 
     setSearchNurseQuery("");
     setaddNurseRequest(true);
@@ -1354,6 +1376,7 @@ function LabRadRequest(props) {
             status: nurseServiceStatus,
             comments: nurseComments,
             NSrequestNo: NSrequestNo,
+            price: price,
           },
         ],
       });
@@ -1364,6 +1387,7 @@ function LabRadRequest(props) {
     dispatch({ field: "nurseServiceName", value: "" });
     dispatch({ field: "nurseServiceStatus", value: "" });
     dispatch({ field: "nurseComments", value: "" });
+    dispatch({ field: "price", value: "" });
 
     setaddLabRequest(false);
     setEnableSave(false);
@@ -1383,6 +1407,7 @@ function LabRadRequest(props) {
           status: nurseRequestArray[i].status,
           NSrequestNo: nurseRequestArray[i].NSrequestNo,
           comments: nurseRequestArray[i].comments,
+          price: nurseRequestArray[i].price,
         },
       ];
     }
@@ -1624,6 +1649,26 @@ function LabRadRequest(props) {
                         ? d.requester.firstName + " " + d.requester.lastName
                         : "")
                   );
+
+                  // const mapped = val.map((e) => {
+                  //   e.specialist.firstName + " " + e.specialist.lastName
+                  // })
+                  // console.log("mapped", mapped)
+
+                  val.map((d) => {
+                    if (d.specialist && typeof d.specialist === "object") {
+                      d.specialist = {
+                        ...d.specialist,
+                        fullName:
+                          d.specialist.firstName + " " + d.specialist.lastName,
+                      };
+                    } else {
+                      d.specialist = "N/A";
+                    }
+                  });
+
+                  console.log("consultationNoteArray", val);
+
                   dispatch({
                     field: "consultationNoteArray",
                     value: val.reverse(),
@@ -1861,6 +1906,30 @@ function LabRadRequest(props) {
     setOpenNotification(true);
   };
 
+  function scanQRCode() {
+    setQRCodeScanner(true);
+  }
+
+  function handleScanQR(data) {
+    setQRCodeScanner(false);
+    console.log("data after parsing", JSON.parse(data).profileNo);
+
+    handlePauseSearch({
+      target: {
+        value: JSON.parse(data).profileNo,
+        type: "text",
+      },
+    });
+  }
+
+  if (QRCodeScanner) {
+    return (
+      <div>
+        <QRCodeScannerComponent handleScanQR={handleScanQR} />
+      </div>
+    );
+  }
+
   return (
     <div
       style={{
@@ -1920,7 +1989,10 @@ function LabRadRequest(props) {
             <Button
               // disabled={enableForm}
               onClick={enableForm ? showAlert : TriageAssessment}
-              style={{ ...styles.stylesForButton, fontSize: matches ? 12 : 8 }}
+              style={{
+                ...styles.stylesForButton,
+                fontSize: matches ? 12 : 8,
+              }}
               variant="contained"
               color="primary"
               Error={errorMsg}
@@ -1931,7 +2003,10 @@ function LabRadRequest(props) {
             <Button
               // disabled={enableForm}
               onClick={enableForm ? showAlertForPatientHistory : PatientHistory}
-              style={{ ...styles.stylesForButton, fontSize: matches ? 12 : 8 }}
+              style={{
+                ...styles.stylesForButton,
+                fontSize: matches ? 12 : 8,
+              }}
               variant="contained"
               color="primary"
               Error={errorMsg}
@@ -1999,7 +2074,11 @@ function LabRadRequest(props) {
                   height: 55,
                 }}
               >
-                <img src={BarCode} style={{ width: 70, height: 60 }} />
+                <img
+                  src={BarCode}
+                  onClick={scanQRCode}
+                  style={{ width: 70, height: 60, cursor: "pointer" }}
+                />{" "}
               </div>
             </div>
 
@@ -3109,11 +3188,14 @@ function LabRadRequest(props) {
                           <h4> Searching Service...</h4>
                         </span>
                       </div>
-                    ) : searchNurseQuery && !nurseItemFoundSuccessfull ? (
-                      <div style={{ textAlign: "center", padding: "10px" }}>
-                        <h4>No Service Found !</h4>
-                      </div>
                     ) : (
+                      //  :
+                      //  searchNurseQuery !== "" &&
+                      //   nurseItemFoundSuccessfull==="" ? (
+                      //   <div style={{ textAlign: "center", padding: "10px" }}>
+                      //     <h4>No Service Found !</h4>
+                      //   </div>
+                      // )
                       undefined
                     )}
                   </Paper>
@@ -3263,6 +3345,8 @@ function LabRadRequest(props) {
           ) : (
             undefined
           )}
+
+          {/* div for tabs */}
         </div>
 
         <Dialog
@@ -3631,10 +3715,10 @@ function LabRadRequest(props) {
                       <em>Specialist</em>
                     </MenuItem>
 
-                    {specialistArray.map((val) => {
+                    {externalConsultants.map((val) => {
                       return (
-                        <MenuItem key={val.key} value={val.key}>
-                          {val.value}
+                        <MenuItem key={val._id} value={val._id}>
+                          {val.name}
                         </MenuItem>
                       );
                     })}

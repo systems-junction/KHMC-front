@@ -11,6 +11,7 @@ import ControlRoomRoutes from "../subRoutes/controlRoom";
 import ReportsRoutes from "../subRoutes/ReportsRoutes";
 import WMSRoutes from "../subRoutes/wms";
 import RCMRoutes from "../subRoutes/rcmRoutes";
+import FINRoutes from "../subRoutes/finRoutes";
 import PatientListingRoutes from "./patientListing";
 import PurchaseRequest from "../views/PurchaseRequest/purchaseRequest";
 import AddEditPurchaseRequest from "../views/PurchaseRequest/addEditPurchaseRequest";
@@ -54,6 +55,22 @@ class HomeScreenRoutes extends React.PureComponent {
     return (
       <Switch>
         <Route exact path={"/home"} component={HomeScreen} />
+
+        <Route exact path={"/home/allwmsusers"} component={WMSAllUsers} />
+        <Route exact path={"/home/allrcmusers"} component={RCMAllUsers} />
+
+        <Route
+          exact
+          path={"/home/allrcmusers/others"}
+          component={RCMAllUsers}
+        />
+
+        <Route
+          exact
+          path={"/home/allwmsusers/singleuser"}
+          component={SingleUserHome}
+        />
+
         <Route exact path={"/home/dashboard"} component={dashboard} />
         <Route exact path={"/home/dcd"} component={DCD} />
         <Route
@@ -101,6 +118,7 @@ class HomeScreenRoutes extends React.PureComponent {
         />
         <Route path={"/home/wms"} component={WMSRoutes} />
         <Route path={"/home/rcm"} component={RCMRoutes} />
+        <Route path={"/home/fin"} component={FINRoutes} />
         <Route exact path={"/home/bureturn"} component={BuReturn} />
         <Route path={"/home/bureturn/add"} component={AddEditBuReturn} />
         <Route path={"/home/bureturn/edit"} component={AddEditBuReturn} />

@@ -44,10 +44,12 @@ import CurrencyTextField from "@unicef/material-ui-currency-textfield";
 import dateTimeFormat from "../../constants/dateTimeFormat";
 import dateFormat from "../../constants/dateFormat";
 
+import TableforAddedQtyFU from "../ReplenishmentRequestForFU/tableforAddedQtyFU";
+
 const statusArray = [
   // { key: "complete", value: "Complete" },
   { key: "Received", value: "Received" },
-  { key: "Partially Received", value: "Partially Received" },
+  // { key: "Partially Received", value: "Partially Received" },
 ];
 
 const styles = {
@@ -105,16 +107,16 @@ function ReceiveItems(props) {
     requiredQty: "",
     receivedQty: "",
     bonusQty: "0",
-    batchNumber: "12",
-    lotNo: "12",
-    unit: "kg",
+    batchNumber: "",
+    lotNo: "",
+    unit: "",
     discount: "0",
-    uniyDiscount: "10",
+    uniyDiscount: "",
     discountAmount: "0",
     tax: "",
     taxAmount: "",
     finalUnitPrice: "",
-    discountAmount2: "0",
+    discountAmount2: "",
     subTotal: "",
     totalPrice: "",
     invoice: "",
@@ -164,7 +166,7 @@ function ReceiveItems(props) {
     commentNote: "",
     secondStatus: "",
 
-    notes: "Some notes",
+    notes: "",
 
     replenishmentRequestStatus: "",
 
@@ -296,6 +298,8 @@ function ReceiveItems(props) {
 
   const [selectedItem, setSelectedItem] = useState("");
 
+  const [batchArray, setBatchArray] = useState([]);
+
   useEffect(() => {
     setCurrentUser(cookie.load("current_user"));
 
@@ -313,6 +317,7 @@ function ReceiveItems(props) {
 
     if (selectedRec) {
       setSelectedItem(selectedRec);
+      setBatchArray(selectedRec.batchArray);
     }
 
     if (selectedRec) {
@@ -330,10 +335,10 @@ function ReceiveItems(props) {
     return (
       receivedQty !== "" &&
       parseInt(receivedQty) > 0 &&
-      bonusQty.length > 0 &&
+      bonusQty !== "" &&
       // batchNumber.length > 0 &&
-      // lotNo.length > 0 &&
-      expiryDate !== "" &&
+      lotNo !== "" &&
+      // expiryDate !== "" &&
       // unit.length > 0 &&
       discount !== "" &&
       parseInt(discount) <= 100 &&
@@ -366,22 +371,29 @@ function ReceiveItems(props) {
         setErrorMsg("Invoice date can not be greater than received date");
         return;
       }
+
+      if (parseInt(receivedQty) !== parseInt(requestedQty)) {
+        setOpenNotification(true);
+        setErrorMsg("Received qty must be same as that of requested qty.");
+        return;
+      }
+
       let params = {
         itemId: selectedItem.itemId._id,
-        currentQty: currentQty,
-        requestedQty: requestedQty,
-        receivedQty,
+        currentQty,
+        requestedQty,
+        receivedQty: parseInt(receivedQty),
         bonusQty,
         batchNumber,
         lotNumber: lotNo,
         expiryDate,
         unit: selectedItem.itemId.issueUnit,
-        discount: discount,
+        discount,
         unitDiscount: selectedItem.itemId.issueUnit,
         discountAmount,
-        tax: selectedItem.itemId.issueUnitCost,
+        tax,
         taxAmount,
-        finalUnitPrice: selectedItem.itemId.issueUnitCost,
+        finalUnitPrice,
         subTotal,
         discountAmount2,
         totalPrice,
@@ -398,6 +410,7 @@ function ReceiveItems(props) {
         replenishmentRequestItemId: _id,
         qualityRate: parseInt(qualityRate),
 
+        batchArray: batchArray,
       };
 
       console.log("params", params);
@@ -480,22 +493,55 @@ function ReceiveItems(props) {
 
   function calculateTotal() {
     if (receivedQty && receivedQty !== "0") {
-      let taxValueAmountForSingleItem =
-        (selectedItem.itemId.tax * selectedItem.itemId.issueUnitCost) / 100;
+      // let taxValueAmountForSingleItem =
+      //   (selectedItem.itemId.tax * selectedItem.itemId.issueUnitCost) / 100;
 
-      let totalTax = receivedQty * taxValueAmountForSingleItem;
+      // let totalTax = receivedQty * taxValueAmountForSingleItem;
 
-      let subTotal = receivedQty * selectedItem.itemId.issueUnitCost + totalTax;
+      // let subTotal = receivedQty * selectedItem.itemId.issueUnitCost + totalTax;
+
+      // let discountedAmount = (discount * subTotal) / 100;
+      // let totalPrice = subTotal - discountedAmount;
+
+      // dispatch({ field: "subTotal", value: subTotal });
+      // dispatch({ field: "taxAmount", value: totalTax });
+      // dispatch({ field: "totalPrice", value: totalPrice });
+      // dispatch({ field: "discountAmount", value: discountedAmount });
+
+
+      let subTotal = 0;
+      for (let i = 0; i < batchArray.length; i++) {
+        subTotal =
+          subTotal + batchArray[i].price.toFixed(4) * batchArray[i].quantity;
+      }
 
       let discountedAmount = (discount * subTotal) / 100;
       let totalPrice = subTotal - discountedAmount;
 
       dispatch({ field: "subTotal", value: subTotal });
-      dispatch({ field: "taxAmount", value: totalTax });
       dispatch({ field: "totalPrice", value: totalPrice });
       dispatch({ field: "discountAmount", value: discountedAmount });
     }
   }
+
+
+  function handleDiscountCalculation() {
+    if (discount) {
+      let subTotal = 0;
+      for (let i = 0; i < batchArray.length; i++) {
+        subTotal =
+          subTotal + batchArray[i].price.toFixed(4) * batchArray[i].quantity;
+      }
+
+      let discountedAmount = (discount * subTotal) / 100;
+      let totalPrice = subTotal - discountedAmount;
+
+      dispatch({ field: "subTotal", value: subTotal });
+      dispatch({ field: "totalPrice", value: totalPrice });
+      dispatch({ field: "discountAmount", value: discountedAmount });
+    }
+  }
+
 
   return (
     <div
@@ -520,9 +566,29 @@ function ReceiveItems(props) {
         </div>
 
         <div style={{ flex: 4, display: "flex", flexDirection: "column" }}>
+          <div className="row" style={{ marginBottom: 15 }}>
+            {batchArray.length > 0 ? (
+              <>
+                <h5
+                  style={{
+                    color: "white",
+                    fontWeight: "bold",
+                    marginTop: 15,
+                    marginBottom: 15,
+                  }}
+                >
+                  Added Batches With Quantities
+                </h5>
+                <TableforAddedQtyFU returnBatchArray={batchArray} />
+              </>
+            ) : (
+              undefined
+            )}
+          </div>
+
           <div className="row">
             <div
-              className="col-md-6"
+              className="col-md-4"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -550,7 +616,7 @@ function ReceiveItems(props) {
             </div>
 
             <div
-              className="col-md-6"
+              className="col-md-4"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
@@ -574,6 +640,35 @@ function ReceiveItems(props) {
                   className: classesForInput.label,
                   classes: { label: classesForInput.label },
                 }}
+              />
+            </div>
+
+            <div
+              className="col-md-4"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                className="textInputStyle"
+                id="lotNo"
+                type={"number"}
+                variant="filled"
+                label="Lot No"
+                name={"lotNo"}
+                value={lotNo}
+                onChange={onChangeValue}
+                InputProps={{
+                  className: classesForInput.input,
+                  classes: { input: classesForInput.input },
+                }}
+                InputLabelProps={{
+                  className: classesForInput.label,
+                  classes: { label: classesForInput.label },
+                }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
               />
             </div>
           </div>
@@ -697,7 +792,7 @@ function ReceiveItems(props) {
             </div>
           </div>
 
-          <div className="row">
+          {/* <div className="row">
             <div
               className="col-md-4"
               style={{
@@ -726,36 +821,7 @@ function ReceiveItems(props) {
               />
             </div>
 
-            <div
-              className="col-md-4"
-              style={{
-                ...styles.inputContainerForTextField,
-                ...styles.textFieldPadding,
-              }}
-            >
-              <TextField
-                required
-                disabled={true}
-                className="textInputStyle"
-                id="lotNo"
-                type={"number"}
-                variant="filled"
-                label="Lot No"
-                name={"lotNo"}
-                value={lotNo}
-                onChange={onChangeValue}
-                InputProps={{
-                  className: classesForInput.input,
-                  classes: { input: classesForInput.input },
-                }}
-                InputLabelProps={{
-                  className: classesForInput.label,
-                  classes: { label: classesForInput.label },
-                }}
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              />
-            </div>
-
+      
             <div
               className="col-md-4"
               style={{
@@ -791,7 +857,7 @@ function ReceiveItems(props) {
                 />
               </MuiPickersUtilsProvider>
             </div>
-          </div>
+          </div> */}
 
           <div className="row">
             <div
@@ -831,7 +897,7 @@ function ReceiveItems(props) {
             >
               <TextField
                 required
-                // disabled
+                disabled={receivedQty ? false : true}
                 className="textInputStyle"
                 type={"number"}
                 id="discount"
@@ -849,6 +915,8 @@ function ReceiveItems(props) {
                   classes: { label: classesForInput.label },
                 }}
                 onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+                onBlur={() => handleDiscountCalculation()}
+
               />
             </div>
 
@@ -887,26 +955,6 @@ function ReceiveItems(props) {
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <TextField
-                required
-                className="textInputStyle"
-                id="discountAmount"
-                type={"number"}
-                variant="filled"
-                label="Discount Amount"
-                name={"discountAmount"}
-                value={discountAmount}
-                onChange={onChangeValue}
-                InputProps={{
-                  className: classesForInput.input,
-                  classes: { input: classesForInput.input },
-                }}
-                InputLabelProps={{
-                  className: classesForInput.label,
-                  classes: { label: classesForInput.label },
-                }}
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              /> */}
               <CurrencyTextField
                 decimalPlaces={4}
                 disabled
@@ -936,95 +984,14 @@ function ReceiveItems(props) {
           </div>
 
           <div className="row">
-            <div
-              className="col-md-6"
-              style={{
-                ...styles.inputContainerForTextField,
-                ...styles.textFieldPadding,
-              }}
-            >
-              <TextField
-                required
-                disabled
-                className="textInputStyle"
-                id="tax"
-                type={"number"}
-                variant="filled"
-                label="Tax %"
-                name={"tax"}
-                value={selectedItem && selectedItem.itemId.tax}
-                onChange={onChangeValue}
-                InputProps={{
-                  className: classesForInput.input,
-                  classes: { input: classesForInput.input },
-                }}
-                InputLabelProps={{
-                  className: classesForInput.label,
-                  classes: { label: classesForInput.label },
-                }}
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              />
-            </div>
-
-            <div
-              className="col-md-6"
-              style={{
-                ...styles.inputContainerForTextField,
-                ...styles.textFieldPadding,
-              }}
-            >
-              <TextField
-                required
-                disabled
-                className="textInputStyle"
-                id="taxAmount"
-                type={"number"}
-                variant="filled"
-                label="Tax Amount"
-                name={"taxAmount"}
-                value={taxAmount}
-                onChange={onChangeValue}
-                InputProps={{
-                  className: classesForInput.input,
-                  classes: { input: classesForInput.input },
-                }}
-                InputLabelProps={{
-                  className: classesForInput.label,
-                  classes: { label: classesForInput.label },
-                }}
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              />
-            </div>
-          </div>
-
-          <div className="row">
-            <div
+            {/* <div
               className="col-md-4"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <TextField
-                required
-                className="textInputStyle"
-                id="finalUnitPrice"
-                type={"number"}
-                variant="filled"
-                label="Final Unit Price"
-                name={"finalUnitPrice"}
-                value={finalUnitPrice}
-                onChange={onChangeValue}
-                InputProps={{
-                  className: classesForInput.input,
-                  classes: { input: classesForInput.input },
-                }}
-                InputLabelProps={{
-                  className: classesForInput.label,
-                  classes: { label: classesForInput.label },
-                }}
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              /> */}
+           
 
               <CurrencyTextField
                 decimalPlaces={4}
@@ -1051,35 +1018,15 @@ function ReceiveItems(props) {
                 outputFormat="number"
                 onKeyDown={(evt) => evt.key === "-" && evt.preventDefault()}
               />
-            </div>
+            </div> */}
 
             <div
-              className="col-md-4"
+              className="col-md-6"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <TextField
-                required
-                className="textInputStyle"
-                id="subTotal"
-                type={"number"}
-                variant="filled"
-                label="Sub Total"
-                name={"subTotal"}
-                value={subTotal}
-                onChange={onChangeValue}
-                InputProps={{
-                  className: classesForInput.input,
-                  classes: { input: classesForInput.input },
-                }}
-                InputLabelProps={{
-                  className: classesForInput.label,
-                  classes: { label: classesForInput.label },
-                }}
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              /> */}
               <CurrencyTextField
                 decimalPlaces={4}
                 disabled
@@ -1107,33 +1054,12 @@ function ReceiveItems(props) {
             </div>
 
             <div
-              className="col-md-4"
+              className="col-md-6"
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
               }}
             >
-              {/* <TextField
-                required
-                className="textInputStyle"
-                id="totalPrice"
-                type={"number"}
-                variant="filled"
-                label="Total Price"
-                name={"totalPrice"}
-                value={totalPrice}
-                onChange={onChangeValue}
-                InputProps={{
-                  className: classesForInput.input,
-                  classes: { input: classesForInput.input },
-                }}
-                InputLabelProps={{
-                  className: classesForInput.label,
-                  classes: { label: classesForInput.label },
-                }}
-                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
-              /> */}
-
               <CurrencyTextField
                 decimalPlaces={4}
                 disabled
@@ -1383,13 +1309,13 @@ function ReceiveItems(props) {
                 {statusArray.map((val) => {
                   return (
                     <MenuItem
-                      disabled={
-                        receivedQty &&
-                        ((val.key === "Received" &&
-                          receivedQty < requestedQty) ||
-                          (val.key === "Partially Recieved" &&
-                            receivedQty >= requestedQty))
-                      }
+                      // disabled={
+                      //   receivedQty &&
+                      //   ((val.key === "Received" &&
+                      //     receivedQty < requestedQty) ||
+                      //     (val.key === "Partially Recieved" &&
+                      //       receivedQty >= requestedQty))
+                      // }
                       key={val.key}
                       value={val.key}
                     >
@@ -1472,4 +1398,68 @@ export default ReceiveItems;
                   >
                     Upload Invoice
                   </Button> */
+}
+
+{
+  /* <div className="row">
+            <div
+              className="col-md-6"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                disabled
+                className="textInputStyle"
+                id="tax"
+                type={"number"}
+                variant="filled"
+                label="Tax %"
+                name={"tax"}
+                value={selectedItem && selectedItem.itemId.tax}
+                onChange={onChangeValue}
+                InputProps={{
+                  className: classesForInput.input,
+                  classes: { input: classesForInput.input },
+                }}
+                InputLabelProps={{
+                  className: classesForInput.label,
+                  classes: { label: classesForInput.label },
+                }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
+            </div>
+
+            <div
+              className="col-md-6"
+              style={{
+                ...styles.inputContainerForTextField,
+                ...styles.textFieldPadding,
+              }}
+            >
+              <TextField
+                required
+                disabled
+                className="textInputStyle"
+                id="taxAmount"
+                type={"number"}
+                variant="filled"
+                label="Tax Amount"
+                name={"taxAmount"}
+                value={taxAmount}
+                onChange={onChangeValue}
+                InputProps={{
+                  className: classesForInput.input,
+                  classes: { input: classesForInput.input },
+                }}
+                InputLabelProps={{
+                  className: classesForInput.label,
+                  classes: { label: classesForInput.label },
+                }}
+                onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
+              />
+            </div>
+          </div> */
 }

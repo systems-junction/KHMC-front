@@ -29,6 +29,8 @@ import TextField from "@material-ui/core/TextField";
 import cookie from "react-cookies";
 import _ from "lodash";
 
+import QRCodeScannerComponent from "../../components/QRCodeScanner/QRCodeScanner";
+
 const styles = {
   textFieldPadding: {
     paddingLeft: 5,
@@ -100,7 +102,7 @@ const useStylesForInput = makeStyles((theme) => ({
   label: {
     "&$focusedLabel": {
       color: "red",
-      display: "none"
+      display: "none",
     },
     // "&$erroredLabel": {
     //   color: "orange"
@@ -160,6 +162,8 @@ export default function PatientListing(props) {
     cookie.load("current_user").staffTypeId.type
   );
   const [PatientUrl, setPatientUrl] = useState("");
+
+  const [QRCodeScanner, setQRCodeScanner] = useState(false);
 
   useEffect(() => {
     if (staffType == "EDR Receptionist" || staffType == "IPR Receptionist") {
@@ -433,6 +437,34 @@ export default function PatientListing(props) {
     });
   }
 
+  function scanQRCode() {
+    setQRCodeScanner(true);
+  }
+
+  function handleScanQR(data) {
+    setQRCodeScanner(false);
+    console.log("data after parsing", JSON.parse(data).profileNo);
+
+    handlePatientSearch({
+      target: {
+        value: JSON.parse(data).profileNo,
+        type: "text",
+      },
+    });
+  }
+
+  if (QRCodeScanner) {
+    return (
+      <div>
+        {QRCodeScanner ? (
+          <QRCodeScannerComponent handleScanQR={handleScanQR} />
+        ) : (
+          undefined
+        )}
+      </div>
+    );
+  }
+
   return (
     <div
       style={{
@@ -446,9 +478,9 @@ export default function PatientListing(props) {
         overflowY: "scroll",
       }}
     >
-      <Header history={props.history}/>
-      <div className='cPadding'>
-        <div className='subheader' style={{ marginLeft: '-10px' }}>
+      <Header history={props.history} />
+      <div className="cPadding">
+        <div className="subheader" style={{ marginLeft: "-10px" }}>
           <div>
             {staffType == "EDR Receptionist" ||
             staffType == "IPR Receptionist" ? (
@@ -499,8 +531,8 @@ export default function PatientListing(props) {
                   classes: {
                     root: classes.label,
                     focused: classes.focusedLabel,
-                    error: classes.erroredLabel
-                  }
+                    error: classes.erroredLabel,
+                  },
                 }}
                 InputProps={{
                   endAdornment: (
@@ -531,7 +563,11 @@ export default function PatientListing(props) {
                   height: 55,
                 }}
               >
-                <img src={BarCode} style={{ width: 70, height: 60 }} />
+                <img
+                  src={BarCode}
+                  onClick={scanQRCode}
+                  style={{ width: 70, height: 60, cursor: "pointer" }}
+                />{" "}
               </div>
             </div>
 

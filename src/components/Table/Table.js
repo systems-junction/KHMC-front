@@ -438,7 +438,8 @@ export default function CustomTable(props) {
       val === "Sent for PAR" ||
       val === "Completed" ||
       val === "discharged" ||
-      val === "Discharged"
+      val === "Discharged" ||
+      val === "rejected"
     ) {
       return (
         <>
@@ -958,6 +959,22 @@ export default function CustomTable(props) {
                                   <i
                                     style={{ color: "grey" }}
                                     class="zmdi zmdi-print zmdi-hc-2x"
+                                  ></i>
+                                </span>
+                              </RcIf>
+
+                              <RcIf if={props.action.download}>
+                                <span
+                                  onClick={() =>
+                                    props.handleDownload(prop)
+                                      ? props.handleDownload(prop)
+                                      : {}
+                                  }
+                                  title="Active"
+                                >
+                                  <i
+                                    style={{ color: "grey" }}
+                                    class="zmdi zmdi-download zmdi-hc-2x"
                                   ></i>
                                 </span>
                               </RcIf>

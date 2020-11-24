@@ -200,6 +200,9 @@ import add_new from "../../assets/img/Plus.png";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
+
+import QRCodeScannerComponent from "../../components/QRCodeScanner/QRCodeScanner";
+
 import { id } from "date-fns/locale";
 
 const styles = {
@@ -271,7 +274,7 @@ const useStylesForInput = makeStyles((theme) => ({
   label: {
     "&$focusedLabel": {
       color: "red",
-      display: "none"
+      display: "none",
     },
     // "&$erroredLabel": {
     //   color: "orange"
@@ -388,6 +391,9 @@ export default function ReplenishmentRequest(props) {
   const [selectedOrder, setSelectedOrder] = useState("");
 
   const [isOpen, setIsOpen] = useState(false);
+
+  const [QRCodeScanner, setQRCodeScanner] = useState(false);
+
 
   const [actionsForTesting, setActions] = useState({
     edit: false,
@@ -843,6 +849,34 @@ export default function ReplenishmentRequest(props) {
     }
   };
 
+  function scanQRCode() {
+    setQRCodeScanner(true);
+  }
+
+  function handleScanQR(data) {
+    setQRCodeScanner(false);
+    console.log("data after parsing", JSON.parse(data).profileNo);
+
+    handlePatientSearch({
+      target: {
+        value: JSON.parse(data).profileNo,
+        type: "text",
+      },
+    });
+  }
+
+  if (QRCodeScanner) {
+    return (
+      <div>
+        {QRCodeScanner ? (
+          <QRCodeScannerComponent handleScanQR={handleScanQR} />
+        ) : (
+          undefined
+        )}
+      </div>
+    );
+  }
+
   if (
     (currentUser && currentUser.staffTypeId.type !== "Doctor/Physician") ||
     props.history.location.pathname === `/home/wms/fus/medicinalorder/view`
@@ -860,9 +894,9 @@ export default function ReplenishmentRequest(props) {
           overflowY: "scroll",
         }}
       >
-        <Header history={props.history}/>
-        <div className='cPadding'>
-          <div className='subheader' style={{ marginLeft: '-10px' }}>
+        <Header history={props.history} />
+        <div className="cPadding">
+          <div className="subheader" style={{ marginLeft: "-10px" }}>
             <div>
               <img src={business_Unit} />
               <h4>In-Patient</h4>
@@ -908,8 +942,8 @@ export default function ReplenishmentRequest(props) {
                   classes: {
                     root: classes.label,
                     focused: classes.focusedLabel,
-                    error: classes.erroredLabel
-                  }
+                    error: classes.erroredLabel,
+                  },
                 }}
                 InputProps={{
                   endAdornment: (
@@ -940,7 +974,11 @@ export default function ReplenishmentRequest(props) {
                   height: 55,
                 }}
               >
-                <img src={BarCode} style={{ width: 70, height: 60 }} />
+                <img
+                  src={BarCode}
+                  onClick={scanQRCode}
+                  style={{ width: 70, height: 60, cursor: "pointer" }}
+                />{" "}
               </div>
             </div>
 

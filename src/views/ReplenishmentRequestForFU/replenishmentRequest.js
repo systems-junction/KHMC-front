@@ -584,6 +584,14 @@ export default function ReplenishmentRequest(props) {
       setIsOpen(false);
       setOpenNotification(true);
       setErrorMsg("Item has already been received");
+    }
+
+   else if (selectedOrder.status !== "Delivery in Progress") {
+      setIsOpen(false);
+      setOpenNotification(true);
+      setErrorMsg(
+        "Order delivery has not been initiated yet from the warehouse"
+      );
     } else {
       let path = `receive/add`;
 
