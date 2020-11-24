@@ -2,6 +2,8 @@ import React from "react";
 import { Route, Switch, Router } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import NotFound from "../components/NotFound/NotFound";
+import PhotoEditor from "../components/PhotoEditor/PhotoEditor";
+import CareStreamMain from "../views/CareStream/CareStreamMain";
 import HomeScreen from "../views/Home/HomeScreen";
 import PatientFHIR from "../views/patientFHIR/patientFHIR";
 import ControlRoom from "../views/Home/ControlRoom";
@@ -19,6 +21,8 @@ import PurchaseOrders from "../views/PurchaseOrders/purchaseOrder";
 import AddEditPurchaseOrders from "../views/PurchaseOrders/addEditPurchaseOrders";
 import BuReturn from "../views/BuReturn/buReturn";
 import AddEditBuReturn from "../views/BuReturn/addEditBuReturn";
+import PrintCareStream from "../views/CareStream/Steps/PrintCareStream";
+
 import MaterialReceiving from "../views/MaterialReceiving/materialreceiving";
 import AddEditMaterialReceiving from "../views/MaterialReceiving/addEditMaterialReceiving";
 import BuStockInLog from "../views/BuStockInLog/buStockInLog";
@@ -39,15 +43,12 @@ import systemAdmin from "../views/UserManagement/systemAdmin/systemAdmin";
 import addEditSystemAdmin from "../views/UserManagement/systemAdmin/addEditSystemAdmin";
 import notificationCenter from "../views/Notifications/notifications";
 import dashboard from "../views/Dashboard/dashboard";
-import DCD from "../views/DHR/DCD/DashboardDCD";
-import ViewPhysicalExam from "../views/DHR/DCD/VIewPhysicalExam/VIewPhysicalExam";
-import ViewROS from "../views/DHR/DCD/ViewROS/ViewROS";
-import ViewPastMedHistory from "../views/DHR/DCD/ViewROS/ViewROS";
-import ViewActionAndPlan from "../views/DHR/DCD/ViewActionAndPlan/ViewActionAndPlan";
-import ViewCourseOfVisit from "../views/DHR/DCD/ViewCourseOfVisit/ViewCourseOfVisit";
-import ViewInvestigation from "../views/DHR/DCD/ViewInvestigation/ViewInvestigation";
-import ViewPatientDetails from "../views/DHR/DCD/VIewPatientDetails/ViewPatientDetails";
-import ViewTriageAndAssessment from "../views/DHR/DCD/ViewTriageAndAssessment/ViewTriageAndAssessment";
+
+import WMSAllUsers from "../views/Home/WMSAllUsers";
+import RCMAllUsers from "../views/Home/RCMAllUsers";
+import SingleUserHome from "../views/Home/singleUserHome";
+
+import webRTC from "../views/WebRTC/webRTC";
 
 const hist = createBrowserHistory();
 class HomeScreenRoutes extends React.PureComponent {
@@ -72,46 +73,17 @@ class HomeScreenRoutes extends React.PureComponent {
         />
 
         <Route exact path={"/home/dashboard"} component={dashboard} />
-        <Route exact path={"/home/dcd"} component={DCD} />
-        <Route
-          exact
-          path={"/home/viewphysicalexam"}
-          component={ViewPhysicalExam}
-        />
-        <Route exact path={"/home/viewros"} component={ViewROS} />
-        <Route
-          exact
-          path={"/home/viewpastmedicalhistory"}
-          component={ViewPastMedHistory}
-        />
-        <Route
-          exact
-          path={"/home/viewactionandplan"}
-          component={ViewActionAndPlan}
-        />
-        <Route
-          exact
-          path={"/home/viewcourseofvisit"}
-          component={ViewCourseOfVisit}
-        />
-        <Route
-          exact
-          path={"/home/viewinvestigation"}
-          component={ViewInvestigation}
-        />
-        <Route
-          exact
-          path={"/home/viewpatientdetails"}
-          component={ViewPatientDetails}
-        />
-        <Route
-          exact
-          path={"/home/viewtriageandassessment"}
-          component={ViewTriageAndAssessment}
-        />
+        <Route exact path={"/home/webRTC"} component={webRTC} />
+        <Route exact path={"/home/photoEditor"} component={PhotoEditor} />
         <Route exact path={"/home/patientFHIR"} component={PatientFHIR} />
         <Route path={"/home/controlroom"} component={ControlRoomRoutes} />
         <Route path={"/home/reports"} component={ReportsRoutes} />
+        <Route exact path={"/home/careStream"} component={CareStreamMain} />
+        <Route
+          path={"/home/careStream/printCareStream"}
+          component={PrintCareStream}
+        />
+
         <Route
           path={"/home/notificationCenter"}
           component={notificationCenter}

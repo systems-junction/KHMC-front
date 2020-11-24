@@ -1,31 +1,31 @@
-import React from "react";
+import React from "react"
 
-import TextField from "@material-ui/core/TextField";
+import TextField from "@material-ui/core/TextField"
 
-import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
+import Button from "@material-ui/core/Button"
+import Card from "@material-ui/core/Card"
 
 // import Notification from 'components/Snackbar/Notification.js';
 
-import AddAlert from "@material-ui/icons/AddAlert";
+import AddAlert from "@material-ui/icons/AddAlert"
+import KHMC_White from "../assets/img/KHMC Header LOGO.png"
 
-import { Redirect } from "react-router-dom";
-import axios from "axios";
-import cookie from "react-cookies";
-import { loginUrl } from "../public/endpoins";
+import Influence_white from "../assets/img/Influence Original.png"
+import { Redirect } from "react-router-dom"
+import axios from "axios"
+import cookie from "react-cookies"
+import { resetPassword, changePassword } from "../public/endpoins"
 
-import KHMC_White from "../assets/img/KHMC_White.png";
-import Header from "../components/Header/Header";
+import Header from "../components/Header/Header"
 
-import Influence_white from "../assets/img/Influence_white.png";
-import "../assets/jss/material-dashboard-react/components/TextInputStyle.css";
+import "../assets/jss/material-dashboard-react/components/TextInputStyle.css"
 
-class Login extends React.Component {
+class ForgetPassword extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
-      userName: "",
+      email: "",
       null_userName: false,
 
       password: "",
@@ -36,66 +36,53 @@ class Login extends React.Component {
       verifiedUser: false,
 
       msg: "",
-    };
-  }
-
-  handleInput(e, key) {
-    this.setState({ [key]: e.target.value });
-  }
-
-  handleLogin() {
-    if (this.state.userName === "" && this.state.password === "") {
-      this.setState({ null_userName: true, null_password: true });
-    } else if (this.state.userName === "") {
-      this.setState({ null_userName: true });
-    } else if (this.state.password === "") {
-      this.setState({ null_password: true });
-    } else {
-      var re = /\S+@\S+\.\S+/;
-
-      if (!re.test(this.state.userName)) {
-        this.setState({ tr: true, msg: "Enter the valid email address" });
-      } else {
-        const params = {
-          email: this.state.userName,
-          password: this.state.password,
-        };
-
-        axios
-          .post(loginUrl, params)
-          .then((res) => {
-            if (res.data.success) {
-              console.log(res.data);
-              cookie.save("token", res.data.data.token, { path: "/" });
-              cookie.save("current_user", res.data.data.user, { path: "/" });
-              this.setState({
-                verifiedUser: true,
-              });
-            }
-            // else if (!res.data.success) {
-            //   this.setState({ tr: true });
-            // }
-          })
-          .catch((e) => {
-            console.log("error is ", e);
-            this.setState({ tr: true, msg: "Login failed" });
-          });
-      }
     }
   }
 
+  handleInput(e, key) {
+    this.setState({ [key]: e.target.value })
+  }
+
+  handleResetPassword = () => {
+    const params = {
+      email: this.state.email,
+      content: `${changePassword}/passwordchange`,
+    }
+
+    axios
+      .post(resetPassword, params)
+      .then((res) => {
+        if (res.data.data.email) {
+          console.log("SUCCESS", res.data.data.email)
+          this.props.history.push({
+            pathname: "/emailsendstatus",
+            state: {
+              email: params.email,
+              content: params.content,
+            },
+          })
+        } else {
+          this.props.history.push("/")
+        }
+      })
+      .catch((e) => {
+        console.log("error is ", e)
+        this.setState({ tr: true, msg: "Login failed" })
+      })
+  }
+
   handleNameChange(name) {
-    this.setState({ name });
+    this.setState({ name })
   }
 
   render() {
     if (this.state.tr) {
       setTimeout(() => {
-        this.setState({ tr: false, msg: "" });
-      }, 2000);
+        this.setState({ tr: false, msg: "" })
+      }, 2000)
     }
     if (this.state.verifiedUser) {
-      return <Redirect to="/admin/dashboard" />;
+      return <Redirect to="/admin/dashboard" />
     }
 
     return (
@@ -110,8 +97,39 @@ class Login extends React.Component {
           backgroundColor: "#0154E8",
         }}
       >
-        <Header />
-
+        <div className="header">
+          <img
+            src={KHMC_White}
+            className="header1-style"
+            // style={{ maxWidth: "160px", height: "35px" }}
+            // onClick={() => {
+            //   return this.setState({ goBack: true });
+            // }}
+          />{" "}
+          {/* <h4
+            className='header1-style'
+            style={{ color: 'white', fontWeight: 'bold' }}
+            onClick={() => {
+              return this.setState({ goBack: true })
+            }}
+          >
+            KHMC Logo
+          </h4> */}
+          <img
+            src={Influence_white}
+            className="header2-style"
+            style={{
+              // maxWidth: "160px",
+              // height: "35px",
+              cursor: "pointer",
+              // boxShadow: this.state.hover ? '2px 2px 2px 2px #b2b0b0' : '',
+            }}
+            // onMouseEnter={() => this.setState({ hover: true })}
+            // onMouseLeave={() => this.setState({ hover: false })}
+            // onClick={() => this.setState({ open: !this.state.open })}
+          />
+        </div>
+        {/* <Header /> */}
         <div
           style={{
             // flex: 7,
@@ -167,22 +185,22 @@ class Login extends React.Component {
                   }}
                 >
                   <div
+                    className="row inputForLogin"
                     style={{
-                      marginTop: 30,
-
-                      minWidth: "70%",
+                      marginTop: 25,
+                      width: "55%",
                     }}
                   >
                     <input
                       type="email"
                       placeholder="Email"
                       name={"email"}
-                      value={this.state.userName}
-                      onChange={(e) => this.handleInput(e, "userName")}
+                      value={this.state.email}
+                      onChange={(e) => this.handleInput(e, "email")}
                       className="textInputStyle"
                       style={{
                         borderColor:
-                          !this.state.userName && this.state.null_userName
+                          !this.state.email && this.state.null_userName
                             ? "red"
                             : "white",
                       }}
@@ -200,13 +218,13 @@ class Login extends React.Component {
                 >
                   <Button
                     style={{
-                      width: "70%",
+                      width: "25%",
                       paddingTop: 13,
                       paddingBottom: 13,
                       backgroundColor: "#002164",
                       borderRadius: 10,
                     }}
-                    onClick={() => this.props.history.push("/emailsendstatus")}
+                    onClick={this.handleResetPassword}
                     variant="contained"
                     color="primary"
                   >
@@ -225,7 +243,7 @@ class Login extends React.Component {
                   textAlign: "center",
                 }}
                 onClick={() => {
-                  this.props.history.goBack();
+                  this.props.history.goBack()
                 }}
               >
                 Have an account? Login
@@ -234,8 +252,8 @@ class Login extends React.Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default Login;
+export default ForgetPassword
