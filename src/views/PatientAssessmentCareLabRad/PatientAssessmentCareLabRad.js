@@ -526,7 +526,9 @@ function LabRadRequest(props) {
   const [icdArr, setIcdArr] = useState([]);
   const [timer, setTimer] = useState(null);
   const [searchNurseQuery, setSearchNurseQuery] = useState("");
-  const [nurseItemFoundSuccessfull, setNurseItemFoundSuccessfully] = useState("");
+  const [nurseItemFoundSuccessfull, setNurseItemFoundSuccessfully] = useState(
+    ""
+  );
   const [nurseItemFound, setNurseItemFound] = useState("");
   const [addNurseRequest, setaddNurseRequest] = useState(false);
   const [loadSearchedData, setLoadSearchedData] = useState(false);
@@ -581,7 +583,9 @@ function LabRadRequest(props) {
       });
     axios.get(getIcd).then((res) => {
       console.log("res for icd", res);
-      setIcd(res.data.data);
+      if (res.data.data) {
+        setIcd(res.data.data);
+      }
     });
 
     seticdSection(Object.keys(icdCodesList[0]));
@@ -3163,8 +3167,7 @@ function LabRadRequest(props) {
                           })}
                         </TableBody>
                       </Table>
-                    ) :
-                     loadSearchedData ? (
+                    ) : loadSearchedData ? (
                       <div style={{ textAlign: "center" }}>
                         <Loader
                           type="TailSpin"
@@ -3185,15 +3188,14 @@ function LabRadRequest(props) {
                           <h4> Searching Service...</h4>
                         </span>
                       </div>
-                    )
-                    //  :
-                    //  searchNurseQuery !== "" &&
-                    //   nurseItemFoundSuccessfull==="" ? (
-                    //   <div style={{ textAlign: "center", padding: "10px" }}>
-                    //     <h4>No Service Found !</h4>
-                    //   </div>
-                    // ) 
-                    : (
+                    ) : (
+                      //  :
+                      //  searchNurseQuery !== "" &&
+                      //   nurseItemFoundSuccessfull==="" ? (
+                      //   <div style={{ textAlign: "center", padding: "10px" }}>
+                      //     <h4>No Service Found !</h4>
+                      //   </div>
+                      // )
                       undefined
                     )}
                   </Paper>
