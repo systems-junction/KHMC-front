@@ -30,7 +30,7 @@ import MenuTree from "../../../components/MenuTree/MenuTree";
 import Reports from "../../../assets/img/Reports.png";
 
 const admin = [
-  { img: Reports, text: "FU Reports" },
+  { img: Reports, text: "FuncU Reports" },
   { img: Reports, text: "Stock Levels", path: "fureports/stocklevels" },
   { img: Reports, text: "Items Balance", path: "fureports/itemsbalance" },
 
@@ -43,7 +43,7 @@ const admin = [
 ];
 
 const fuInventoryKeeper = [
-  { img: Reports, text: "FU Reports" },
+  { img: Reports, text: "FuncU Reports" },
   { img: Reports, text: "Stock Levels", path: "fureports/stocklevels" },
   { img: Reports, text: "Items Balance", path: "fureports/itemsbalance" },
   //   { img: Reports, text: "Items Balance", path: "fureports/itemsbalance" },
@@ -97,12 +97,13 @@ class HomeScreen extends React.Component {
           backgroundColor: "#2B62CC",
         }}
       >
-        <Header history={this.props.history}/>
+        <Header history={this.props.history} />
 
         <MenuTree
           history={this.props.history}
           options={
-            userType && userType.type === "admin"
+            userType &&
+            (userType.type === "admin" || userType.type === "super admin")
               ? admin
               : userType && userType.type === "FU Inventory Keeper"
               ? fuInventoryKeeper

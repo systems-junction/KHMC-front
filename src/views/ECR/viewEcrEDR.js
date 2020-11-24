@@ -1,154 +1,154 @@
-import React, { useEffect, useState, useReducer } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import InputLabel from '@material-ui/core/InputLabel'
-import Button from '@material-ui/core/Button'
-import tableStyles from '../../assets/jss/material-dashboard-react/components/tableStyle.js'
-import axios from 'axios'
-import { ToastsStore } from 'react-toasts'
-import TextField from '@material-ui/core/TextField'
+import React, { useEffect, useState, useReducer } from "react"
+import { makeStyles } from "@material-ui/core/styles"
+import InputLabel from "@material-ui/core/InputLabel"
+import Button from "@material-ui/core/Button"
+import tableStyles from "../../assets/jss/material-dashboard-react/components/tableStyle.js"
+import axios from "axios"
+import { ToastsStore } from "react-toasts"
+import TextField from "@material-ui/core/TextField"
 import {
   getSearchedLaboratoryService,
   getSearchedRadiologyService,
   updateEDR,
   getSingleEDRPatient,
-} from '../../public/endpoins'
-import cookie from 'react-cookies'
-import Header from '../../components/Header/Header'
-import business_Unit from '../../assets/img/EDR.png'
-import Back from '../../assets/img/Back_Arrow.png'
-import '../../assets/jss/material-dashboard-react/components/TextInputStyle.css'
-import Tabs from '@material-ui/core/Tabs'
-import Tab from '@material-ui/core/Tab'
-import CustomTable from '../../components/Table/Table'
-import plus_icon from '../../assets/img/Plus.png'
-import ViewSingleRequest from './viewRequestEcr'
-import InputLabelComponent from '../../components/InputLabel/inputLabel'
-import Paper from '@material-ui/core/Paper'
-import Table from '@material-ui/core/Table'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import Dialog from '@material-ui/core/Dialog'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import DialogContent from '@material-ui/core/DialogContent'
-import ErrorMessage from '../../components/ErrorMessage/errorMessage'
-import Notification from '../../components/Snackbar/Notification.js'
-import Loader from 'react-loader-spinner'
+} from "../../public/endpoins"
+import cookie from "react-cookies"
+import Header from "../../components/Header/Header"
+import business_Unit from "../../assets/img/EDR.png"
+import Back from "../../assets/img/Back_Arrow.png"
+import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css"
+import Tabs from "@material-ui/core/Tabs"
+import Tab from "@material-ui/core/Tab"
+import CustomTable from "../../components/Table/Table"
+import plus_icon from "../../assets/img/Plus.png"
+import ViewSingleRequest from "./viewRequestEcr"
+import InputLabelComponent from "../../components/InputLabel/inputLabel"
+import Paper from "@material-ui/core/Paper"
+import Table from "@material-ui/core/Table"
+import TableHead from "@material-ui/core/TableHead"
+import TableRow from "@material-ui/core/TableRow"
+import TableBody from "@material-ui/core/TableBody"
+import TableCell from "@material-ui/core/TableCell"
+import Dialog from "@material-ui/core/Dialog"
+import DialogTitle from "@material-ui/core/DialogTitle"
+import DialogContent from "@material-ui/core/DialogContent"
+import ErrorMessage from "../../components/ErrorMessage/errorMessage"
+import Notification from "../../components/Snackbar/Notification.js"
+import Loader from "react-loader-spinner"
 
 const tableHeadingForResident = [
-  'Date/Time',
-  'Description',
-  'Doctor Ref',
-  'Action',
+  "Date/Time",
+  "Description",
+  "Doctor Ref",
+  "Action",
 ]
 const tableDataKeysForResident = [
-  'date',
-  'description',
-  ['doctor', 'firstName'],
+  "date",
+  "description",
+  ["doctor", "firstName"],
 ]
 const tableHeadingForConsultation = [
-  'Consultation ID',
-  'Date/Time',
-  'Description',
-  'Doctor Ref',
-  'Action',
+  "Consultation ID",
+  "Date/Time",
+  "Description",
+  "Doctor Ref",
+  "Action",
 ]
 const tableDataKeysForConsultation = [
-  'consultationNo',
-  'date',
-  'description',
-  ['requester', 'firstName'],
+  "consultationNo",
+  "date",
+  "description",
+  ["requester", "firstName"],
 ]
 const tableHeadingForPharmacy = [
-  'Request ID',
-  'Date/Time',
-  'Requester',
-  'Status',
-  'Action',
+  "Request ID",
+  "Date/Time",
+  "Requester",
+  "Status",
+  "Action",
 ]
 const tableDataKeysForPharmacy = [
-  '_id',
-  'date',
-  ['requester', 'firstName'],
-  'status',
+  "_id",
+  "date",
+  ["requester", "firstName"],
+  "status",
 ]
 const tableHeadingForLabReq = [
-  'Request Id',
-  'Service Code',
-  'Service Name',
-  'Requester',
-  'Status',
-  'Action',
+  "Request Id",
+  "Service Code",
+  "Service Name",
+  "Requester",
+  "Status",
+  "Action",
 ]
 const tableDataKeysForLabReq = [
-  '_id',
-  'serviceCode',
-  'serviceName',
-  'requesterName',
-  'status',
+  "_id",
+  "serviceCode",
+  "serviceName",
+  "requesterName",
+  "status",
 ]
 const tableHeadingForRadiology = [
-  'Request Id',
-  'Service Code',
-  'Service Name',
-  'Requester',
-  'Status',
-  'Action',
+  "Request Id",
+  "Service Code",
+  "Service Name",
+  "Requester",
+  "Status",
+  "Action",
 ]
 const tableDataKeysForRadiology = [
-  '_id',
-  'serviceCode',
-  'serviceName',
-  'requesterName',
-  'status',
+  "_id",
+  "serviceCode",
+  "serviceName",
+  "requesterName",
+  "status",
 ]
 const actions = { view: true }
 const styles = {
   patientDetails: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 15,
-    padding: '20px',
+    padding: "20px",
   },
   inputContainerForTextField: {
     marginTop: 25,
   },
   inputContainerForDropDown: {
     marginTop: 25,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 10,
     paddingLeft: 10,
     paddingRight: 10,
     paddingTop: 2,
   },
   stylesForButton: {
-    color: 'white',
-    cursor: 'pointer',
+    color: "white",
+    cursor: "pointer",
     borderRadius: 15,
-    backgroundColor: '#2c6ddd',
-    height: '50px',
-    outline: 'none',
+    backgroundColor: "#2c6ddd",
+    height: "50px",
+    outline: "none",
   },
   buttonContainer: {
     marginTop: 25,
   },
   stylesForLabel: {
-    fontWeight: '400',
-    color: 'grey',
+    fontWeight: "400",
+    color: "grey",
     fontSize: 15,
   },
 
   styleForPatientDetails: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 }
 
 const useStylesForTabs = makeStyles({
   root: {
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   scroller: {
-    flexGrow: '0',
+    flexGrow: "0",
   },
 })
 
@@ -156,46 +156,46 @@ const useStyles = makeStyles(tableStyles)
 
 const useStylesForInput = makeStyles((theme) => ({
   underline: {
-    '&&&:before': {
-      borderBottom: 'none',
+    "&&&:before": {
+      borderBottom: "none",
     },
-    '&&:after': {
-      borderBottom: 'none',
+    "&&:after": {
+      borderBottom: "none",
     },
   },
   margin: {
     margin: theme.spacing(0),
   },
   input: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 6,
-    '&:after': {
-      borderBottomColor: 'black',
+    "&:after": {
+      borderBottomColor: "black",
     },
-    '&:hover': {
-      backgroundColor: 'white',
+    "&:hover": {
+      backgroundColor: "white",
     },
-    '&:disabled': {
-      color: 'gray',
+    "&:disabled": {
+      color: "gray",
     },
   },
   multilineColor: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 6,
-    '&:hover': {
-      backgroundColor: 'white',
+    "&:hover": {
+      backgroundColor: "white",
     },
-    '&:after': {
-      borderBottomColor: 'black',
+    "&:after": {
+      borderBottomColor: "black",
     },
   },
   root: {
-    '& .MuiTextField-root': {
-      backgroundColor: 'white',
+    "& .MuiTextField-root": {
+      backgroundColor: "white",
     },
-    '& .Mui-focused': {
-      backgroundColor: 'white',
-      color: 'black',
+    "& .Mui-focused": {
+      backgroundColor: "white",
+      color: "black",
     },
   },
 }))
@@ -205,31 +205,31 @@ function AddEditPurchaseRequest(props) {
   const classes = useStylesForInput()
 
   const initialState = {
-    labServiceId: '',
-    labServiceCode: '',
-    labRequestArray: '',
-    labServiceName: '',
-    labServiceStatus: '',
+    labServiceId: "",
+    labServiceCode: "",
+    labRequestArray: "",
+    labServiceName: "",
+    labServiceStatus: "",
 
-    radioServiceId: '',
-    radioServiceCode: '',
-    radioServiceName: '',
-    radiologyRequestArray: '',
-    radioServiceStatus: '',
+    radioServiceId: "",
+    radioServiceCode: "",
+    radioServiceName: "",
+    radiologyRequestArray: "",
+    radioServiceStatus: "",
 
-    consultationNoteArray: '',
-    consultationNo: '',
+    consultationNoteArray: "",
+    consultationNo: "",
     date: new Date(),
-    description: '',
-    consultationNotes: '',
-    requester: cookie.load('current_user').name,
+    description: "",
+    consultationNotes: "",
+    requester: cookie.load("current_user").name,
 
-    residentNoteArray: '',
-    rdescription: '',
-    note: '',
-    doctor: cookie.load('current_user').name,
+    residentNoteArray: "",
+    rdescription: "",
+    note: "",
+    doctor: cookie.load("current_user").name,
 
-    pharmacyRequestArray: '',
+    pharmacyRequestArray: "",
   }
 
   function reducer(state, { field, value }) {
@@ -259,12 +259,12 @@ function AddEditPurchaseRequest(props) {
     date = new Date(),
     description,
     consultationNotes,
-    requester = cookie.load('current_user').name,
+    requester = cookie.load("current_user").name,
 
     residentNoteArray,
     rdescription,
     note,
-    doctor = cookie.load('current_user').name,
+    doctor = cookie.load("current_user").name,
 
     pharmacyRequestArray,
   } = state
@@ -273,34 +273,34 @@ function AddEditPurchaseRequest(props) {
     dispatch({ field: e.target.name, value: e.target.value })
   }
 
-  const [currentUser, setCurrentUser] = useState('')
-  const [errorMsg, setErrorMsg] = useState('')
+  const [currentUser, setCurrentUser] = useState("")
+  const [errorMsg, setErrorMsg] = useState("")
   const [openNotification, setOpenNotification] = useState(false)
   const [value, setValue] = React.useState(0)
   const [openItemDialog, setOpenItemDialog] = useState(false)
   const [openAddConsultDialog, setOpenAddConsultDialog] = useState(false)
   const [openAddResidentDialog, setOpenAddResidentDialog] = useState(false)
-  const [item, setItem] = useState('')
-  const [selectedItem, setSelectedItem] = useState('')
-  const [selectedPatient, setSelectedPatient] = useState('')
-  const [requestNo, setrequestNo] = useState('')
-  const [labRequest, setlabRequest] = useState('')
-  const [pharmacyRequest, setpharmacyRequest] = useState('')
-  const [radiologyRequest, setradiologyRequest] = useState('')
-  const [searchQuery, setSearchQuery] = useState('')
-  const [itemFound, setItemFound] = useState('')
+  const [item, setItem] = useState("")
+  const [selectedItem, setSelectedItem] = useState("")
+  const [selectedPatient, setSelectedPatient] = useState("")
+  const [requestNo, setrequestNo] = useState("")
+  const [labRequest, setlabRequest] = useState("")
+  const [pharmacyRequest, setpharmacyRequest] = useState("")
+  const [radiologyRequest, setradiologyRequest] = useState("")
+  const [searchQuery, setSearchQuery] = useState("")
+  const [itemFound, setItemFound] = useState("")
   const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false)
-  const [selectedSearchedItem, setSelectedSearchedItem] = useState('')
-  const [selectedSearchedRadioItem, setSelectedSearchedRadioItem] = useState('')
+  const [selectedSearchedItem, setSelectedSearchedItem] = useState("")
+  const [selectedSearchedRadioItem, setSelectedSearchedRadioItem] = useState("")
   const [selectedLabArray, setSelectedLabArray] = useState([])
   const [selectedRadioArray, setSelectedRadioArray] = useState([])
   const [isFormSubmitted, setIsFormSubmitted] = useState(false)
-  const [id, setId] = useState('')
-  const [searchRadioQuery, setSearchRadioQuery] = useState('')
+  const [id, setId] = useState("")
+  const [searchRadioQuery, setSearchRadioQuery] = useState("")
   const [radioItemFoundSuccessfull, setRadioItemFoundSuccessfully] = useState(
-    ''
+    "",
   )
-  const [radioItemFound, setRadioItemFound] = useState('')
+  const [radioItemFound, setRadioItemFound] = useState("")
   const [addLabRequest, setaddLabRequest] = useState(false)
   const [addRadioRequest, setaddRadioRequest] = useState(false)
 
@@ -308,7 +308,7 @@ function AddEditPurchaseRequest(props) {
 
   const getEDRById = (id) => {
     axios
-      .get(getSingleEDRPatient + '/' + id)
+      .get(getSingleEDRPatient + "/" + id)
       .then((res) => {
         if (res.data.success) {
           if (res.data.data) {
@@ -317,33 +317,33 @@ function AddEditPurchaseRequest(props) {
             setIsLoading(false)
 
             Object.entries(res.data.data[0]).map(([key, val]) => {
-              if (val && typeof val === 'object') {
-                if (key === 'patientId') {
-                  dispatch({ field: 'patientId', value: val._id })
-                } else if (key === 'labRequest') {
-                  dispatch({ field: 'labRequestArray', value: val })
-                } else if (key === 'radiologyRequest') {
-                  dispatch({ field: 'radiologyRequestArray', value: val })
-                } else if (key === 'consultationNote') {
+              if (val && typeof val === "object") {
+                if (key === "patientId") {
+                  dispatch({ field: "patientId", value: val._id })
+                } else if (key === "labRequest") {
+                  dispatch({ field: "labRequestArray", value: val })
+                } else if (key === "radiologyRequest") {
+                  dispatch({ field: "radiologyRequestArray", value: val })
+                } else if (key === "consultationNote") {
                   Object.entries(val).map(([key1, val1]) => {
-                    if (key1 == 'requester') {
-                      dispatch({ field: 'requester', value: val1._id })
+                    if (key1 == "requester") {
+                      dispatch({ field: "requester", value: val1._id })
                     } else {
                       dispatch({ field: key1, value: val1 })
                     }
                   })
-                  dispatch({ field: 'consultationNoteArray', value: val })
-                } else if (key === 'residentNotes') {
+                  dispatch({ field: "consultationNoteArray", value: val })
+                } else if (key === "residentNotes") {
                   Object.entries(val).map(([key1, val1]) => {
-                    if (key1 == 'doctor') {
-                      dispatch({ field: 'doctor', value: val1._id })
+                    if (key1 == "doctor") {
+                      dispatch({ field: "doctor", value: val1._id })
                     } else {
                       dispatch({ field: key1, value: val1 })
                     }
                   })
-                  dispatch({ field: 'residentNoteArray', value: val })
-                } else if (key === 'pharmacyRequest') {
-                  dispatch({ field: 'pharmacyRequestArray', value: val })
+                  dispatch({ field: "residentNoteArray", value: val })
+                } else if (key === "pharmacyRequest") {
+                  dispatch({ field: "pharmacyRequestArray", value: val })
                 }
               } else {
                 dispatch({ field: key, value: val })
@@ -353,7 +353,7 @@ function AddEditPurchaseRequest(props) {
         }
       })
       .catch((e) => {
-        console.log('error while searching req', e)
+        console.log("error while searching req", e)
       })
   }
 
@@ -362,7 +362,7 @@ function AddEditPurchaseRequest(props) {
       setValue(2)
     }
 
-    setCurrentUser(cookie.load('current_user'))
+    setCurrentUser(cookie.load("current_user"))
 
     getEDRById(props.history.location.state.selectedItem._id)
 
@@ -447,17 +447,17 @@ function AddEditPurchaseRequest(props) {
   // }
 
   const handleChange = (event, newValue) => {
-    console.log('THIS IS HANDLE CHANGE', newValue)
+    console.log("THIS IS HANDLE CHANGE", newValue)
     setValue(newValue)
   }
 
   function viewItem(item) {
-    if (item !== '') {
+    if (item !== "") {
       setOpenItemDialog(true)
       setItem(item)
     } else {
       setOpenItemDialog(false)
-      setItem('')
+      setItem("")
     }
   }
 
@@ -501,20 +501,20 @@ function AddEditPurchaseRequest(props) {
         .put(updateEDR, params)
         .then((res) => {
           if (res.data.success) {
-            console.log('response while adding Consult Req', res.data.data)
+            console.log("response while adding Consult Req", res.data.data)
             // window.location.reload(false)
             getEDRById(props.history.location.state.selectedItem._id)
             setOpenAddConsultDialog(false)
-            ToastsStore.success('External consultation note  has been added')
+            ToastsStore.success("External consultation note  has been added")
           } else if (!res.data.success) {
             setOpenNotification(true)
-            setErrorMsg('Error while adding the Consultation request')
+            setErrorMsg("Error while adding the Consultation request")
           }
         })
         .catch((e) => {
-          console.log('error after adding Consultation request', e)
+          console.log("error after adding Consultation request", e)
           setOpenNotification(true)
-          setErrorMsg('Error after adding the Consultation request')
+          setErrorMsg("Error after adding the Consultation request")
         })
       //   }
     }
@@ -550,33 +550,33 @@ function AddEditPurchaseRequest(props) {
       .put(updateEDR, params)
       .then((res) => {
         if (res.data.success) {
-          console.log('response while adding Resident Req', res.data.data)
+          console.log("response while adding Resident Req", res.data.data)
           window.location.reload(false)
         } else if (!res.data.success) {
           setOpenNotification(true)
-          setErrorMsg('Error while adding the Resident request')
+          setErrorMsg("Error while adding the Resident request")
         }
       })
       .catch((e) => {
-        console.log('error after adding Resident request', e)
+        console.log("error after adding Resident request", e)
         setOpenNotification(true)
-        setErrorMsg('Error after adding the Resident request')
+        setErrorMsg("Error after adding the Resident request")
       })
     //   }
     // }
   }
 
   function setTabValue(val) {
-    console.log('val', val)
+    console.log("val", val)
   }
 
   const addNewRequest = () => {
     let path = `viewEDR/add`
-    console.log('selected Item', selectedItem)
+    console.log("selected Item", selectedItem)
     props.history.push({
       pathname: path,
       state: {
-        comingFor: 'add',
+        comingFor: "add",
         // k: ()=>setTabValue,
         selectedItem: selectedItem,
         pharmacyRequestArray: pharmacyRequestArray,
@@ -588,18 +588,18 @@ function AddEditPurchaseRequest(props) {
     setOpenAddConsultDialog(false)
     setOpenAddResidentDialog(false)
 
-    dispatch({ field: 'consultationNo', value: '' })
-    dispatch({ field: 'description', value: '' })
-    dispatch({ field: 'consultationNotes', value: '' })
-    dispatch({ field: 'rdescription', value: '' })
-    dispatch({ field: 'note', value: '' })
+    dispatch({ field: "consultationNo", value: "" })
+    dispatch({ field: "description", value: "" })
+    dispatch({ field: "consultationNotes", value: "" })
+    dispatch({ field: "rdescription", value: "" })
+    dispatch({ field: "note", value: "" })
   }
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value)
     if (e.target.value.length >= 3) {
       axios
-        .get(getSearchedLaboratoryService + '/' + e.target.value)
+        .get(getSearchedLaboratoryService + "/" + e.target.value)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
@@ -608,12 +608,12 @@ function AddEditPurchaseRequest(props) {
               setItemFound(res.data.data)
             } else {
               setItemFoundSuccessfully(false)
-              setItemFound('')
+              setItemFound("")
             }
           }
         })
         .catch((e) => {
-          console.log('error while searching req', e)
+          console.log("error while searching req", e)
         })
     }
   }
@@ -621,12 +621,12 @@ function AddEditPurchaseRequest(props) {
   function handleAddItem(i) {
     // console.log("selected item", i);
 
-    dispatch({ field: 'labServiceId', value: i._id })
-    dispatch({ field: 'labServiceCode', value: i.serviceNo })
-    dispatch({ field: 'labServiceName', value: i.name })
-    dispatch({ field: 'labServiceStatus', value: i.status })
+    dispatch({ field: "labServiceId", value: i._id })
+    dispatch({ field: "labServiceCode", value: i.serviceNo })
+    dispatch({ field: "labServiceName", value: i.name })
+    dispatch({ field: "labServiceStatus", value: i.status })
 
-    setSearchQuery('')
+    setSearchQuery("")
     setaddLabRequest(true)
   }
 
@@ -640,10 +640,10 @@ function AddEditPurchaseRequest(props) {
 
     if (found) {
       setOpenNotification(true)
-      setErrorMsg('This Service has already been added.')
+      setErrorMsg("This Service has already been added.")
     } else {
       dispatch({
-        field: 'labRequestArray',
+        field: "labRequestArray",
         value: [
           ...labRequestArray,
           {
@@ -659,10 +659,10 @@ function AddEditPurchaseRequest(props) {
       // }
     }
 
-    dispatch({ field: 'labServiceId', value: '' })
-    dispatch({ field: 'labServiceName', value: '' })
-    dispatch({ field: 'labServiceStatus', value: '' })
-    dispatch({ field: 'labServiceCode', value: '' })
+    dispatch({ field: "labServiceId", value: "" })
+    dispatch({ field: "labServiceName", value: "" })
+    dispatch({ field: "labServiceStatus", value: "" })
+    dispatch({ field: "labServiceCode", value: "" })
 
     setaddLabRequest(false)
   }
@@ -693,18 +693,18 @@ function AddEditPurchaseRequest(props) {
       .put(updateEDR, params)
       .then((res) => {
         if (res.data.success) {
-          console.log('response after adding Lab Request', res.data)
+          console.log("response after adding Lab Request", res.data)
           // window.location.reload(false)
           getEDRById(props.history.location.state.selectedItem._id)
-          ToastsStore.success('Lab request has been added')
+          ToastsStore.success("Lab request has been added")
         } else if (!res.data.success) {
           setOpenNotification(true)
         }
       })
       .catch((e) => {
-        console.log('error after adding Lab Request', e)
+        console.log("error after adding Lab Request", e)
         setOpenNotification(true)
-        setErrorMsg('Error while adding the Lab Request')
+        setErrorMsg("Error while adding the Lab Request")
       })
   }
 
@@ -712,7 +712,7 @@ function AddEditPurchaseRequest(props) {
     setSearchRadioQuery(e.target.value)
     if (e.target.value.length >= 3) {
       axios
-        .get(getSearchedRadiologyService + '/' + e.target.value)
+        .get(getSearchedRadiologyService + "/" + e.target.value)
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
@@ -721,12 +721,12 @@ function AddEditPurchaseRequest(props) {
               setRadioItemFound(res.data.data)
             } else {
               setRadioItemFoundSuccessfully(false)
-              setRadioItemFound('')
+              setRadioItemFound("")
             }
           }
         })
         .catch((e) => {
-          console.log('error while searching req', e)
+          console.log("error while searching req", e)
         })
     }
   }
@@ -734,12 +734,12 @@ function AddEditPurchaseRequest(props) {
   function handleAddRadioItem(i) {
     // console.log("selected item", i);
 
-    dispatch({ field: 'radioServiceId', value: i._id })
-    dispatch({ field: 'radioServiceCode', value: i.serviceNo })
-    dispatch({ field: 'radioServiceName', value: i.name })
-    dispatch({ field: 'radioServiceStatus', value: i.status })
+    dispatch({ field: "radioServiceId", value: i._id })
+    dispatch({ field: "radioServiceCode", value: i.serviceNo })
+    dispatch({ field: "radioServiceName", value: i.name })
+    dispatch({ field: "radioServiceStatus", value: i.status })
 
-    setSearchRadioQuery('')
+    setSearchRadioQuery("")
     setaddRadioRequest(true)
   }
 
@@ -753,10 +753,10 @@ function AddEditPurchaseRequest(props) {
 
     if (found) {
       setOpenNotification(true)
-      setErrorMsg('This Service has already been added.')
+      setErrorMsg("This Service has already been added.")
     } else {
       dispatch({
-        field: 'radiologyRequestArray',
+        field: "radiologyRequestArray",
         value: [
           ...radiologyRequestArray,
           {
@@ -772,10 +772,10 @@ function AddEditPurchaseRequest(props) {
       // }
     }
 
-    dispatch({ field: 'radioServiceId', value: '' })
-    dispatch({ field: 'radioServiceCode', value: '' })
-    dispatch({ field: 'radioServiceName', value: '' })
-    dispatch({ field: 'radioServiceStatus', value: '' })
+    dispatch({ field: "radioServiceId", value: "" })
+    dispatch({ field: "radioServiceCode", value: "" })
+    dispatch({ field: "radioServiceName", value: "" })
+    dispatch({ field: "radioServiceStatus", value: "" })
 
     setaddLabRequest(false)
   }
@@ -807,18 +807,18 @@ function AddEditPurchaseRequest(props) {
       .put(updateEDR, params)
       .then((res) => {
         if (res.data.success) {
-          console.log('response after adding Radio Request', res.data)
+          console.log("response after adding Radio Request", res.data)
           // window.location.reload(false)
           getEDRById(props.history.location.state.selectedItem._id)
-          ToastsStore.success('Radiology request has been added')
+          ToastsStore.success("Radiology request has been added")
         } else if (!res.data.success) {
           setOpenNotification(true)
         }
       })
       .catch((e) => {
-        console.log('error after adding Radio Request', e)
+        console.log("error after adding Radio Request", e)
         setOpenNotification(true)
-        setErrorMsg('Error while adding the Radiology Request')
+        setErrorMsg("Error while adding the Radiology Request")
       })
   }
 
@@ -835,28 +835,28 @@ function AddEditPurchaseRequest(props) {
   if (openNotification) {
     setTimeout(() => {
       setOpenNotification(false)
-      setErrorMsg('')
+      setErrorMsg("")
     }, 2000)
   }
 
   return (
     <div
       style={{
-        backgroundColor: '#60d69f',
-        position: 'fixed',
-        display: 'flex',
-        width: '100%',
-        height: '100%',
-        flexDirection: 'column',
+        backgroundColor: "#60d69f",
+        position: "fixed",
+        display: "flex",
+        width: "100%",
+        height: "100%",
+        flexDirection: "column",
         flex: 1,
-        overflowY: 'scroll',
+        overflowY: "scroll",
       }}
     >
-      <Header history={props.history}/>
+      <Header history={props.history} />
 
       {!isLoading ? (
-        <div className='cPadding'>
-          <div className='subheader'>
+        <div className="cPadding">
+          <div className="subheader">
             <div>
               <img src={business_Unit} />
               <h4>External Consultation Request</h4>
@@ -866,8 +866,8 @@ function AddEditPurchaseRequest(props) {
               <Button
                 onClick={TriageAssessment}
                 style={styles.stylesForButton}
-                variant='contained'
-                color='primary'
+                variant="contained"
+                color="primary"
               >
                 Triage And Assessment
               </Button>
@@ -875,32 +875,32 @@ function AddEditPurchaseRequest(props) {
           </div>
           <div
             style={{
-              height: '20px',
+              height: "20px",
             }}
           />
-          <div className='container' style={styles.patientDetails}>
-            <div className='row'>
-              <div className='col-md-12'>
-                <h4 style={{ color: 'blue', fontWeight: '600' }}>
+          <div className="container" style={styles.patientDetails}>
+            <div className="row">
+              <div className="col-md-12">
+                <h4 style={{ color: "blue", fontWeight: "600" }}>
                   Patient Details
                 </h4>
               </div>
             </div>
-            <div className='row'>
-              <div className='col-md-4 col-sm-4'>
+            <div className="row">
+              <div className="col-md-4 col-sm-4">
                 <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id='status-label'>
+                  <InputLabel style={styles.stylesForLabel} id="status-label">
                     Patient Name
                   </InputLabel>
 
                   <span style={styles.styleForPatientDetails}>
-                    {selectedPatient.firstName + ` ` + selectedPatient.lastName}{' '}
+                    {selectedPatient.firstName + ` ` + selectedPatient.lastName}{" "}
                   </span>
                 </div>
               </div>
-              <div className='col-md-4 col-sm-4'>
+              <div className="col-md-4 col-sm-4">
                 <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id='status-label'>
+                  <InputLabel style={styles.stylesForLabel} id="status-label">
                     Gender
                   </InputLabel>
 
@@ -909,9 +909,9 @@ function AddEditPurchaseRequest(props) {
                   </span>
                 </div>
               </div>
-              <div className='col-md-4 col-sm-4'>
+              <div className="col-md-4 col-sm-4">
                 <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id='status-label'>
+                  <InputLabel style={styles.stylesForLabel} id="status-label">
                     Age
                   </InputLabel>
 
@@ -922,10 +922,10 @@ function AddEditPurchaseRequest(props) {
               </div>
             </div>
 
-            <div className='row'>
-              <div className='col-md-4 col-sm-4'>
+            <div className="row">
+              <div className="col-md-4 col-sm-4">
                 <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id='status-label'>
+                  <InputLabel style={styles.stylesForLabel} id="status-label">
                     Patient MRN
                   </InputLabel>
 
@@ -935,22 +935,22 @@ function AddEditPurchaseRequest(props) {
                 </div>
               </div>
 
-              <div className='col-md-4 col-sm-4'>
+              <div className="col-md-4 col-sm-4">
                 <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id='status-label'>
+                  <InputLabel style={styles.stylesForLabel} id="status-label">
                     Insurance No
                   </InputLabel>
 
                   <span style={styles.styleForPatientDetails}>
                     {selectedPatient.insuranceId
                       ? selectedPatient.insuranceId
-                      : '--'}
+                      : "--"}
                   </span>
                 </div>
               </div>
-              <div className='col-md-4 col-sm-4'>
+              <div className="col-md-4 col-sm-4">
                 <div style={styles.inputContainerForTextField}>
-                  <InputLabel style={styles.stylesForLabel} id='status-label'>
+                  <InputLabel style={styles.stylesForLabel} id="status-label">
                     Request No
                   </InputLabel>
 
@@ -962,7 +962,7 @@ function AddEditPurchaseRequest(props) {
 
           <div
             style={{
-              height: '20px',
+              height: "20px",
             }}
           />
           <div className={classesForTabs.root}>
@@ -974,74 +974,74 @@ function AddEditPurchaseRequest(props) {
               value={value}
               onChange={handleChange}
               textColor="primary"
-              TabIndicatorProps={{style: {background:'#12387a'}}}
+              TabIndicatorProps={{ style: { background: "#12387a" } }}
               centered={false}
-              variant='scrollable'
+              variant="scrollable"
               fullWidth={true}
             >
               <Tab
                 style={{
-                  color: 'white',
+                  color: "white",
                   borderRadius: 15,
-                  outline: 'none',
-                  color: value === 0 ? "#12387a" : '#3B988C',
+                  outline: "none",
+                  color: value === 0 ? "#12387a" : "#3B988C",
                 }}
-                label='Resident Doctor Notes'
+                label="Resident Doctor Notes"
               />
               <Tab
                 style={{
-                  color: 'white',
+                  color: "white",
                   borderRadius: 15,
-                  outline: 'none',
-                  color: value === 1 ? "#12387a" : '#3B988C',
+                  outline: "none",
+                  color: value === 1 ? "#12387a" : "#3B988C",
                 }}
-                label='External Consultant Notes'
+                label="External Consultant Notes"
               />
               <Tab
                 style={{
-                  color: 'white',
+                  color: "white",
                   borderRadius: 15,
-                  outline: 'none',
-                  color: value === 2 ? "#12387a" : '#3B988C',
+                  outline: "none",
+                  color: value === 2 ? "#12387a" : "#3B988C",
                 }}
-                label='PHR'
+                label="PHR"
               />
               <Tab
                 style={{
-                  color: 'white',
+                  color: "white",
                   borderRadius: 15,
-                  outline: 'none',
-                  color: value === 3 ? "#12387a" : '#3B988C',
+                  outline: "none",
+                  color: value === 3 ? "#12387a" : "#3B988C",
                 }}
-                label='LR'
+                label="LR"
               />
               <Tab
                 style={{
-                  color: 'white',
+                  color: "white",
                   borderRadius: 15,
-                  outline: 'none',
-                  color: value === 4 ? "#12387a" : '#3B988C',
+                  outline: "none",
+                  color: value === 4 ? "#12387a" : "#3B988C",
                 }}
-                label='RR'
+                label="RR"
               />
               <Tab
                 style={{
-                  color: 'white',
+                  color: "white",
                   borderRadius: 15,
-                  outline: 'none',
-                  color: value === 5 ? "#12387a" : '#3B988C',
+                  outline: "none",
+                  color: value === 5 ? "#12387a" : "#3B988C",
                 }}
-                label='InPatient Request'
+                label="InPatient Request"
               />
             </Tabs>
           </div>
 
           {value === 0 ? (
             <div
-              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-              className='container'
+              style={{ flex: 4, display: "flex", flexDirection: "column" }}
+              className="container"
             >
-              <div className='row' style={{ marginTop: '20px' }}>
+              <div className="row" style={{ marginTop: "20px" }}>
                 {residentNoteArray !== 0 ? (
                   <CustomTable
                     tableData={residentNoteArray}
@@ -1049,7 +1049,7 @@ function AddEditPurchaseRequest(props) {
                     tableHeading={tableHeadingForResident}
                     handleView={viewItem}
                     action={actions}
-                    borderBottomColor={'#60d69f'}
+                    borderBottomColor={"#60d69f"}
                     borderBottomWidth={20}
                   />
                 ) : (
@@ -1057,12 +1057,12 @@ function AddEditPurchaseRequest(props) {
                 )}
               </div>
 
-              <div className='row' style={{ marginBottom: '25px' }}>
-                <div className='col-md-6 col-sm-6 col-6'>
+              <div className="row" style={{ marginBottom: "25px" }}>
+                <div className="col-md-6 col-sm-6 col-6">
                   <img
                     onClick={() => props.history.goBack()}
                     src={Back}
-                    style={{ width: 45, height: 35, cursor: 'pointer' }}
+                    style={{ width: 45, height: 35, cursor: "pointer" }}
                   />
                 </div>
                 {/* <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
@@ -1081,10 +1081,10 @@ function AddEditPurchaseRequest(props) {
             </div>
           ) : value === 1 ? (
             <div
-              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-              className='container'
+              style={{ flex: 4, display: "flex", flexDirection: "column" }}
+              className="container"
             >
-              <div className='row' style={{ marginTop: '20px' }}>
+              <div className="row" style={{ marginTop: "20px" }}>
                 {consultationNoteArray !== 0 ? (
                   <CustomTable
                     tableData={consultationNoteArray}
@@ -1092,7 +1092,7 @@ function AddEditPurchaseRequest(props) {
                     tableHeading={tableHeadingForConsultation}
                     handleView={viewItem}
                     action={actions}
-                    borderBottomColor={'#60d69f'}
+                    borderBottomColor={"#60d69f"}
                     borderBottomWidth={20}
                   />
                 ) : (
@@ -1100,24 +1100,24 @@ function AddEditPurchaseRequest(props) {
                 )}
               </div>
 
-              <div className='row' style={{ marginBottom: '25px' }}>
-                <div className='col-md-6 col-sm-6 col-6'>
+              <div className="row" style={{ marginBottom: "25px" }}>
+                <div className="col-md-6 col-sm-6 col-6">
                   <img
                     onClick={() => props.history.goBack()}
                     src={Back}
-                    style={{ width: 45, height: 35, cursor: 'pointer' }}
+                    style={{ width: 45, height: 35, cursor: "pointer" }}
                   />
                 </div>
-                <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
+                <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
                   <Button
                     onClick={() => setOpenAddConsultDialog(true)}
                     style={styles.stylesForButton}
-                    variant='contained'
-                    color='primary'
+                    variant="contained"
+                    color="primary"
                   >
-                    <img className='icon-style' src={plus_icon} />
+                    <img className="icon-style" src={plus_icon} />
                     &nbsp;&nbsp;
-                    <strong style={{ fontSize: '12px' }}>
+                    <strong style={{ fontSize: "12px" }}>
                       Add New Consultation
                     </strong>
                   </Button>
@@ -1126,10 +1126,10 @@ function AddEditPurchaseRequest(props) {
             </div>
           ) : value === 2 ? (
             <div
-              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-              className='container'
+              style={{ flex: 4, display: "flex", flexDirection: "column" }}
+              className="container"
             >
-              <div className='row' style={{ marginTop: '20px' }}>
+              <div className="row" style={{ marginTop: "20px" }}>
                 {pharmacyRequestArray !== 0 ? (
                   <CustomTable
                     tableData={pharmacyRequestArray}
@@ -1137,7 +1137,7 @@ function AddEditPurchaseRequest(props) {
                     tableHeading={tableHeadingForPharmacy}
                     handleView={viewItem}
                     action={actions}
-                    borderBottomColor={'#60d69f'}
+                    borderBottomColor={"#60d69f"}
                     borderBottomWidth={20}
                   />
                 ) : (
@@ -1145,24 +1145,24 @@ function AddEditPurchaseRequest(props) {
                 )}
               </div>
 
-              <div className='row' style={{ marginBottom: '25px' }}>
-                <div className='col-md-6 col-sm-6 col-6'>
+              <div className="row" style={{ marginBottom: "25px" }}>
+                <div className="col-md-6 col-sm-6 col-6">
                   <img
                     onClick={() => props.history.goBack()}
                     src={Back}
-                    style={{ width: 45, height: 35, cursor: 'pointer' }}
+                    style={{ width: 45, height: 35, cursor: "pointer" }}
                   />
                 </div>
-                <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
+                <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
                   <Button
                     onClick={addNewRequest}
                     style={styles.stylesForButton}
-                    variant='contained'
-                    color='primary'
+                    variant="contained"
+                    color="primary"
                   >
-                    <img className='icon-style' src={plus_icon} />
+                    <img className="icon-style" src={plus_icon} />
                     &nbsp;&nbsp;
-                    <strong style={{ fontSize: '12px' }}>
+                    <strong style={{ fontSize: "12px" }}>
                       Pharmacy Request
                     </strong>
                   </Button>
@@ -1171,12 +1171,12 @@ function AddEditPurchaseRequest(props) {
             </div>
           ) : value === 3 ? (
             <div
-              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              style={{ flex: 4, display: "flex", flexDirection: "column" }}
               className={`container ${classes.root}`}
             >
-              <div style={{ marginTop: '20px' }} className='row'>
+              <div style={{ marginTop: "20px" }} className="row">
                 <div
-                  className='col-md-12 col-sm-12 col-12'
+                  className="col-md-12 col-sm-12 col-12"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1184,13 +1184,13 @@ function AddEditPurchaseRequest(props) {
                 >
                   <TextField
                     required
-                    label='Service Name'
-                    name={'searchQuery'}
+                    label="Service Name"
+                    name={"searchQuery"}
                     value={searchQuery}
                     // error={searchQuery === '' && isFormSubmitted}
                     onChange={handleSearch}
-                    className='textInputStyle'
-                    variant='filled'
+                    className="textInputStyle"
+                    variant="filled"
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
@@ -1205,13 +1205,13 @@ function AddEditPurchaseRequest(props) {
                   <Paper>
                     {itemFoundSuccessfull ? (
                       itemFound && (
-                        <Table size='small'>
+                        <Table size="small">
                           <TableHead>
                             <TableRow>
                               <TableCell>Service Name</TableCell>
                               <TableCell>Service Number</TableCell>
                               <TableCell>Price</TableCell>
-                              <TableCell align='center'>Description</TableCell>
+                              <TableCell align="center">Description</TableCell>
                             </TableRow>
                           </TableHead>
 
@@ -1221,7 +1221,7 @@ function AddEditPurchaseRequest(props) {
                                 <TableRow
                                   key={i.serviceNo}
                                   onClick={() => handleAddItem(i)}
-                                  style={{ cursor: 'pointer' }}
+                                  style={{ cursor: "pointer" }}
                                 >
                                   <TableCell>{i.name}</TableCell>
                                   <TableCell>{i.serviceNo}</TableCell>
@@ -1235,8 +1235,8 @@ function AddEditPurchaseRequest(props) {
                       )
                     ) : (
                       <h4
-                        style={{ textAlign: 'center' }}
-                        onClick={() => setSearchQuery('')}
+                        style={{ textAlign: "center" }}
+                        onClick={() => setSearchQuery("")}
                       >
                         Service Not Found
                       </h4>
@@ -1247,9 +1247,9 @@ function AddEditPurchaseRequest(props) {
                 undefined
               )}
 
-              <div style={{ marginTop: '20px' }} className='row'>
+              <div style={{ marginTop: "20px" }} className="row">
                 <div
-                  className='col-md-10 col-sm-10 col-6'
+                  className="col-md-10 col-sm-10 col-6"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1258,30 +1258,30 @@ function AddEditPurchaseRequest(props) {
                   <TextField
                     required
                     disabled
-                    label='Selected Service'
-                    name={'labServiceName'}
+                    label="Selected Service"
+                    name={"labServiceName"}
                     value={labServiceName}
                     // error={labServiceName === '' && isFormSubmitted}
                     onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
+                    className="textInputStyle"
+                    variant="filled"
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
                     }}
                   />
                 </div>
-                <div className='col-md-2 col-sm-2 col-6'>
+                <div className="col-md-2 col-sm-2 col-6">
                   <Button
                     style={{
                       ...styles.stylesForButton,
-                      marginTop: '25px',
-                      backgroundColor: '#ad6bbf',
+                      marginTop: "25px",
+                      backgroundColor: "#ad6bbf",
                     }}
                     disabled={!addLabRequest}
                     onClick={addSelectedLabItem}
-                    variant='contained'
-                    color='primary'
+                    variant="contained"
+                    color="primary"
                     fullWidth
                   >
                     Add
@@ -1289,7 +1289,7 @@ function AddEditPurchaseRequest(props) {
                 </div>
               </div>
 
-              <div className='row' style={{ marginTop: '20px' }}>
+              <div className="row" style={{ marginTop: "20px" }}>
                 {labRequestArray !== 0 ? (
                   <CustomTable
                     tableData={labRequestArray}
@@ -1297,7 +1297,7 @@ function AddEditPurchaseRequest(props) {
                     tableHeading={tableHeadingForLabReq}
                     handleView={viewItem}
                     action={actions}
-                    borderBottomColor={'#60d69f'}
+                    borderBottomColor={"#60d69f"}
                     borderBottomWidth={20}
                   />
                 ) : (
@@ -1305,34 +1305,34 @@ function AddEditPurchaseRequest(props) {
                 )}
               </div>
 
-              <div className='row' style={{ marginBottom: '25px' }}>
-                <div className='col-md-6 col-sm-6 col-6'>
+              <div className="row" style={{ marginBottom: "25px" }}>
+                <div className="col-md-6 col-sm-6 col-6">
                   <img
                     onClick={() => props.history.goBack()}
                     src={Back}
-                    style={{ width: 45, height: 35, cursor: 'pointer' }}
+                    style={{ width: 45, height: 35, cursor: "pointer" }}
                   />
                 </div>
-                <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
+                <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
                   <Button
                     onClick={saveLabReq}
                     style={styles.stylesForButton}
-                    variant='contained'
-                    color='primary'
+                    variant="contained"
+                    color="primary"
                   >
-                    <strong style={{ fontSize: '12px' }}>Save</strong>
+                    <strong style={{ fontSize: "12px" }}>Save</strong>
                   </Button>
                 </div>
               </div>
             </div>
           ) : value === 4 ? (
             <div
-              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
+              style={{ flex: 4, display: "flex", flexDirection: "column" }}
               className={`container ${classes.root}`}
             >
-              <div style={{ marginTop: '20px' }} className='row'>
+              <div style={{ marginTop: "20px" }} className="row">
                 <div
-                  className='col-md-12 col-sm-12 col-12'
+                  className="col-md-12 col-sm-12 col-12"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1340,13 +1340,13 @@ function AddEditPurchaseRequest(props) {
                 >
                   <TextField
                     required
-                    label='Service Name'
-                    name={'searchRadioQuery'}
+                    label="Service Name"
+                    name={"searchRadioQuery"}
                     value={searchRadioQuery}
                     // error={searchRadioQuery === '' && isFormSubmitted}
                     onChange={handleRadioSearch}
-                    className='textInputStyle'
-                    variant='filled'
+                    className="textInputStyle"
+                    variant="filled"
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
@@ -1361,13 +1361,13 @@ function AddEditPurchaseRequest(props) {
                   <Paper>
                     {radioItemFoundSuccessfull ? (
                       radioItemFound && (
-                        <Table size='small'>
+                        <Table size="small">
                           <TableHead>
                             <TableRow>
                               <TableCell>Service Name</TableCell>
                               <TableCell>Service Number</TableCell>
                               <TableCell>Price</TableCell>
-                              <TableCell align='center'>Description</TableCell>
+                              <TableCell align="center">Description</TableCell>
                             </TableRow>
                           </TableHead>
 
@@ -1377,7 +1377,7 @@ function AddEditPurchaseRequest(props) {
                                 <TableRow
                                   key={i.serviceNo}
                                   onClick={() => handleAddRadioItem(i)}
-                                  style={{ cursor: 'pointer' }}
+                                  style={{ cursor: "pointer" }}
                                 >
                                   <TableCell>{i.name}</TableCell>
                                   <TableCell>{i.serviceNo}</TableCell>
@@ -1391,8 +1391,8 @@ function AddEditPurchaseRequest(props) {
                       )
                     ) : (
                       <h4
-                        style={{ textAlign: 'center' }}
-                        onClick={() => setSearchRadioQuery('')}
+                        style={{ textAlign: "center" }}
+                        onClick={() => setSearchRadioQuery("")}
                       >
                         Service Not Found
                       </h4>
@@ -1403,9 +1403,9 @@ function AddEditPurchaseRequest(props) {
                 undefined
               )}
 
-              <div style={{ marginTop: '20px' }} className='row'>
+              <div style={{ marginTop: "20px" }} className="row">
                 <div
-                  className='col-md-10 col-sm-10 col-6'
+                  className="col-md-10 col-sm-10 col-6"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -1414,30 +1414,30 @@ function AddEditPurchaseRequest(props) {
                   <TextField
                     required
                     disabled
-                    label='Selected Service'
-                    name={'radioServiceName'}
+                    label="Selected Service"
+                    name={"radioServiceName"}
                     value={radioServiceName}
-                    error={radioServiceName === '' && isFormSubmitted}
+                    error={radioServiceName === "" && isFormSubmitted}
                     onChange={onChangeValue}
-                    className='textInputStyle'
-                    variant='filled'
+                    className="textInputStyle"
+                    variant="filled"
                     InputProps={{
                       className: classes.input,
                       classes: { input: classes.input },
                     }}
                   />
                 </div>
-                <div className='col-md-2 col-sm-2 col-6'>
+                <div className="col-md-2 col-sm-2 col-6">
                   <Button
                     style={{
                       ...styles.stylesForButton,
-                      marginTop: '25px',
-                      backgroundColor: '#ad6bbf',
+                      marginTop: "25px",
+                      backgroundColor: "#ad6bbf",
                     }}
                     disabled={!addRadioRequest}
                     onClick={addSelectedRadioItem}
-                    variant='contained'
-                    color='primary'
+                    variant="contained"
+                    color="primary"
                     fullWidth
                   >
                     Add
@@ -1445,7 +1445,7 @@ function AddEditPurchaseRequest(props) {
                 </div>
               </div>
 
-              <div className='row' style={{ marginTop: '20px' }}>
+              <div className="row" style={{ marginTop: "20px" }}>
                 {radiologyRequestArray !== 0 ? (
                   <CustomTable
                     tableData={radiologyRequestArray}
@@ -1453,7 +1453,7 @@ function AddEditPurchaseRequest(props) {
                     tableHeading={tableHeadingForRadiology}
                     handleView={viewItem}
                     action={actions}
-                    borderBottomColor={'#60d69f'}
+                    borderBottomColor={"#60d69f"}
                     borderBottomWidth={20}
                   />
                 ) : (
@@ -1461,30 +1461,30 @@ function AddEditPurchaseRequest(props) {
                 )}
               </div>
 
-              <div className='row' style={{ marginBottom: '25px' }}>
-                <div className='col-md-6 col-sm-6 col-6'>
+              <div className="row" style={{ marginBottom: "25px" }}>
+                <div className="col-md-6 col-sm-6 col-6">
                   <img
                     onClick={() => props.history.goBack()}
                     src={Back}
-                    style={{ width: 45, height: 35, cursor: 'pointer' }}
+                    style={{ width: 45, height: 35, cursor: "pointer" }}
                   />
                 </div>
-                <div className='col-md-6 col-sm-6 col-6 d-flex justify-content-end'>
+                <div className="col-md-6 col-sm-6 col-6 d-flex justify-content-end">
                   <Button
                     onClick={saveRadioReq}
                     style={styles.stylesForButton}
-                    variant='contained'
-                    color='primary'
+                    variant="contained"
+                    color="primary"
                   >
-                    <strong style={{ fontSize: '12px' }}>Save</strong>
+                    <strong style={{ fontSize: "12px" }}>Save</strong>
                   </Button>
                 </div>
               </div>
             </div>
           ) : (
             <div
-              style={{ flex: 4, display: 'flex', flexDirection: 'column' }}
-              className='container'
+              style={{ flex: 4, display: "flex", flexDirection: "column" }}
+              className="container"
             ></div>
           )}
 
@@ -1499,19 +1499,19 @@ function AddEditPurchaseRequest(props) {
           )}
 
           <Dialog
-            aria-labelledby='form-dialog-title'
+            aria-labelledby="form-dialog-title"
             open={openAddConsultDialog}
-            maxWidth='xl'
+            maxWidth="xl"
             fullWidth={true}
           >
-            <DialogContent style={{ backgroundColor: '#31e2aa' }}>
-              <DialogTitle id='simple-dialog-title' style={{ color: 'white' }}>
+            <DialogContent style={{ backgroundColor: "#31e2aa" }}>
+              <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
                 Add Consultation Note
               </DialogTitle>
               <div className={`container-fluid  ${classes.root}`}>
-                <div className='row'>
+                <div className="row">
                   <div
-                    className='col-md-12 col-sm-12 col-12'
+                    className="col-md-12 col-sm-12 col-12"
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1519,13 +1519,13 @@ function AddEditPurchaseRequest(props) {
                   >
                     <TextField
                       required
-                      label='Description'
-                      name={'description'}
+                      label="Description"
+                      name={"description"}
                       value={description}
-                      error={description === '' && isFormSubmitted}
+                      error={description === "" && isFormSubmitted}
                       onChange={onChangeValue}
-                      className='textInputStyle'
-                      variant='filled'
+                      className="textInputStyle"
+                      variant="filled"
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
@@ -1534,9 +1534,9 @@ function AddEditPurchaseRequest(props) {
                   </div>
                 </div>
 
-                <div className='row'>
+                <div className="row">
                   <div
-                    className='col-md-12'
+                    className="col-md-12"
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1544,13 +1544,13 @@ function AddEditPurchaseRequest(props) {
                   >
                     <TextField
                       required
-                      label=' Consultation Note'
-                      name={'consultationNotes'}
+                      label=" Consultation Note"
+                      name={"consultationNotes"}
                       value={consultationNotes}
-                      error={consultationNotes === '' && isFormSubmitted}
+                      error={consultationNotes === "" && isFormSubmitted}
                       onChange={onChangeValue}
-                      className='textInputStyle'
-                      variant='filled'
+                      className="textInputStyle"
+                      variant="filled"
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
@@ -1559,9 +1559,9 @@ function AddEditPurchaseRequest(props) {
                   </div>
                 </div>
 
-                <div className='row'>
+                <div className="row">
                   <div
-                    className='col-md-6 col-sm-6 col-6'
+                    className="col-md-6 col-sm-6 col-6"
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1570,13 +1570,13 @@ function AddEditPurchaseRequest(props) {
                     <TextField
                       required
                       disabled
-                      label='Date'
-                      name={'date'}
+                      label="Date"
+                      name={"date"}
                       value={date}
                       // error={date === '' && isFormSubmitted}
                       onChange={onChangeValue}
-                      className='textInputStyle'
-                      variant='filled'
+                      className="textInputStyle"
+                      variant="filled"
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
@@ -1584,7 +1584,7 @@ function AddEditPurchaseRequest(props) {
                     />
                   </div>
                   <div
-                    className='col-md-6 col-sm-6 col-6'
+                    className="col-md-6 col-sm-6 col-6"
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
@@ -1593,13 +1593,13 @@ function AddEditPurchaseRequest(props) {
                     <TextField
                       required
                       disabled
-                      label='Requester'
-                      name={'requester'}
+                      label="Requester"
+                      name={"requester"}
                       value={requester}
-                      error={requester === '' && isFormSubmitted}
+                      error={requester === "" && isFormSubmitted}
                       onChange={onChangeValue}
-                      className='textInputStyle'
-                      variant='filled'
+                      className="textInputStyle"
+                      variant="filled"
                       InputProps={{
                         className: classes.input,
                         classes: { input: classes.input },
@@ -1609,13 +1609,13 @@ function AddEditPurchaseRequest(props) {
                 </div>
 
                 <div
-                  style={{ display: 'flex', justifyContent: 'space-between' }}
+                  style={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  <div style={{ marginTop: '2%', marginBottom: '2%' }}>
+                  <div style={{ marginTop: "2%", marginBottom: "2%" }}>
                     <Button
                       onClick={() => hideDialog()}
                       style={styles.stylesForButton}
-                      variant='contained'
+                      variant="contained"
                     >
                       <strong>Cancel</strong>
                     </Button>
@@ -1623,28 +1623,28 @@ function AddEditPurchaseRequest(props) {
 
                   <div
                     style={{
-                      display: 'flex',
-                      justifyContent: 'flex-end',
-                      marginTop: '2%',
-                      marginBottom: '2%',
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      marginTop: "2%",
+                      marginBottom: "2%",
                     }}
                   >
                     <Button
                       style={{
-                        color: 'white',
-                        cursor: 'pointer',
+                        color: "white",
+                        cursor: "pointer",
                         borderRadius: 15,
-                        backgroundColor: '#2c6ddd',
-                        width: '140px',
-                        height: '50px',
-                        outline: 'none',
+                        backgroundColor: "#2c6ddd",
+                        width: "140px",
+                        height: "50px",
+                        outline: "none",
                         paddingLeft: 30,
                         paddingRight: 30,
                       }}
                       disabled={!validateItemsForm()}
                       onClick={addConsultRequest}
-                      variant='contained'
-                      color='primary'
+                      variant="contained"
+                      color="primary"
                     >
                       Add Note
                     </Button>
@@ -1655,30 +1655,30 @@ function AddEditPurchaseRequest(props) {
           </Dialog>
 
           <Dialog
-            aria-labelledby='form-dialog-title'
+            aria-labelledby="form-dialog-title"
             open={openAddResidentDialog}
-            maxWidth='xl'
+            maxWidth="xl"
             fullWidth={true}
           >
-            <DialogContent style={{ backgroundColor: '#31e2aa' }}>
-              <DialogTitle id='simple-dialog-title' style={{ color: 'white' }}>
+            <DialogContent style={{ backgroundColor: "#31e2aa" }}>
+              <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
                 Add Resident Note
               </DialogTitle>
-              <div className='container-fluid'>
-                <div className='row'>
+              <div className="container-fluid">
+                <div className="row">
                   <div
-                    className='col-md-12 col-sm-12 col-12'
+                    className="col-md-12 col-sm-12 col-12"
                     style={styles.inputContainerForTextField}
                   >
                     <InputLabelComponent>Description*</InputLabelComponent>
                     <input
                       style={styles.inputField}
-                      type='text'
-                      placeholder='Enter Your description'
-                      name={'rdescription'}
+                      type="text"
+                      placeholder="Enter Your description"
+                      name={"rdescription"}
                       value={rdescription}
                       onChange={onChangeValue}
-                      className='textInputStyle'
+                      className="textInputStyle"
                     />
                     <ErrorMessage
                       name={rdescription}
@@ -1687,20 +1687,20 @@ function AddEditPurchaseRequest(props) {
                   </div>
                 </div>
 
-                <div className='row'>
+                <div className="row">
                   <div
-                    className='col-md-12'
+                    className="col-md-12"
                     style={styles.inputContainerForTextField}
                   >
                     <InputLabelComponent>Note*</InputLabelComponent>
                     <input
                       style={styles.inputField}
-                      type='text'
-                      placeholder='Add your note here...'
-                      name={'note'}
+                      type="text"
+                      placeholder="Add your note here..."
+                      name={"note"}
                       value={note}
                       onChange={onChangeValue}
-                      className='textInputStyle'
+                      className="textInputStyle"
                     />
                     <ErrorMessage
                       name={note}
@@ -1709,49 +1709,49 @@ function AddEditPurchaseRequest(props) {
                   </div>
                 </div>
 
-                <div className='row'>
+                <div className="row">
                   <div
-                    className='col-md-6 col-sm-6 col-6'
+                    className="col-md-6 col-sm-6 col-6"
                     style={styles.inputContainerForTextField}
                   >
                     <InputLabelComponent>Date*</InputLabelComponent>
                     <input
                       disabled
                       style={styles.inputField}
-                      type='text'
-                      placeholder='Date'
-                      name={'date'}
+                      type="text"
+                      placeholder="Date"
+                      name={"date"}
                       value={date}
                       onChange={onChangeValue}
-                      className='textInputStyle'
+                      className="textInputStyle"
                     />
                   </div>
                   <div
-                    className='col-md-6 col-sm-6 col-6'
+                    className="col-md-6 col-sm-6 col-6"
                     style={styles.inputContainerForTextField}
                   >
                     <InputLabelComponent>Doctor*</InputLabelComponent>
                     <input
                       disabled
                       style={styles.inputField}
-                      type='text'
-                      placeholder='Doctor'
-                      name={'doctor'}
+                      type="text"
+                      placeholder="Doctor"
+                      name={"doctor"}
                       value={doctor}
                       onChange={onChangeValue}
-                      className='textInputStyle'
+                      className="textInputStyle"
                     />
                   </div>
                 </div>
 
                 <div
-                  style={{ display: 'flex', justifyContent: 'space-between' }}
+                  style={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  <div style={{ marginTop: '2%', marginBottom: '2%' }}>
+                  <div style={{ marginTop: "2%", marginBottom: "2%" }}>
                     <Button
                       onClick={() => hideDialog()}
                       style={styles.stylesForButton}
-                      variant='contained'
+                      variant="contained"
                     >
                       <strong>Cancel</strong>
                     </Button>
@@ -1759,28 +1759,28 @@ function AddEditPurchaseRequest(props) {
 
                   <div
                     style={{
-                      display: 'flex',
-                      justifyContent: 'flex-end',
-                      marginTop: '2%',
-                      marginBottom: '2%',
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      marginTop: "2%",
+                      marginBottom: "2%",
                     }}
                   >
                     <Button
                       style={{
-                        color: 'white',
-                        cursor: 'pointer',
+                        color: "white",
+                        cursor: "pointer",
                         borderRadius: 15,
-                        backgroundColor: '#2c6ddd',
-                        width: '140px',
-                        height: '50px',
-                        outline: 'none',
+                        backgroundColor: "#2c6ddd",
+                        width: "140px",
+                        height: "50px",
+                        outline: "none",
                         paddingLeft: 30,
                         paddingRight: 30,
                       }}
                       // disabled={!validateItemsForm()}
                       onClick={addResidentRequest}
-                      variant='contained'
-                      color='primary'
+                      variant="contained"
+                      color="primary"
                     >
                       Add Note
                     </Button>
@@ -1793,8 +1793,8 @@ function AddEditPurchaseRequest(props) {
           <Notification msg={errorMsg} open={openNotification} />
         </div>
       ) : (
-        <div className='LoaderStyle'>
-          <Loader type='TailSpin' color='red' height={50} width={50} />
+        <div className="LoaderStyle">
+          <Loader type="TailSpin" color="red" height={50} width={50} />
         </div>
       )}
     </div>

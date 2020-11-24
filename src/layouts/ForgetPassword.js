@@ -1,28 +1,28 @@
-import React from "react";
+import React from "react"
 
-import TextField from "@material-ui/core/TextField";
+import TextField from "@material-ui/core/TextField"
 
-import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
+import Button from "@material-ui/core/Button"
+import Card from "@material-ui/core/Card"
 
 // import Notification from 'components/Snackbar/Notification.js';
 
-import AddAlert from "@material-ui/icons/AddAlert";
-import KHMC_White from "../assets/img/KHMC Header LOGO.png";
+import AddAlert from "@material-ui/icons/AddAlert"
+import KHMC_White from "../assets/img/KHMC Header LOGO.png"
 
-import Influence_white from "../assets/img/Influence Original.png";
-import { Redirect } from "react-router-dom";
-import axios from "axios";
-import cookie from "react-cookies";
-import { resetPassword, emailReset } from "../public/endpoins";
+import Influence_white from "../assets/img/Influence Original.png"
+import { Redirect } from "react-router-dom"
+import axios from "axios"
+import cookie from "react-cookies"
+import { resetPassword, changePassword } from "../public/endpoins"
 
-import Header from "../components/Header/Header";
+import Header from "../components/Header/Header"
 
-import "../assets/jss/material-dashboard-react/components/TextInputStyle.css";
+import "../assets/jss/material-dashboard-react/components/TextInputStyle.css"
 
 class ForgetPassword extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       email: "",
@@ -36,53 +36,53 @@ class ForgetPassword extends React.Component {
       verifiedUser: false,
 
       msg: "",
-    };
+    }
   }
 
   handleInput(e, key) {
-    this.setState({ [key]: e.target.value });
+    this.setState({ [key]: e.target.value })
   }
 
   handleResetPassword = () => {
     const params = {
       email: this.state.email,
-      content: `${emailReset}/passwordchange`,
-    };
+      content: `${changePassword}/passwordchange`,
+    }
 
     axios
       .post(resetPassword, params)
       .then((res) => {
         if (res.data.data.email) {
-          console.log("SUCCESS", res.data.data.email);
+          console.log("SUCCESS", res.data.data.email)
           this.props.history.push({
             pathname: "/emailsendstatus",
             state: {
               email: params.email,
               content: params.content,
             },
-          });
+          })
         } else {
-          this.props.history.push("/");
+          this.props.history.push("/")
         }
       })
       .catch((e) => {
-        console.log("error is ", e);
-        this.setState({ tr: true, msg: "Login failed" });
-      });
-  };
+        console.log("error is ", e)
+        this.setState({ tr: true, msg: "Login failed" })
+      })
+  }
 
   handleNameChange(name) {
-    this.setState({ name });
+    this.setState({ name })
   }
 
   render() {
     if (this.state.tr) {
       setTimeout(() => {
-        this.setState({ tr: false, msg: "" });
-      }, 2000);
+        this.setState({ tr: false, msg: "" })
+      }, 2000)
     }
     if (this.state.verifiedUser) {
-      return <Redirect to="/admin/dashboard" />;
+      return <Redirect to="/admin/dashboard" />
     }
 
     return (
@@ -243,7 +243,7 @@ class ForgetPassword extends React.Component {
                   textAlign: "center",
                 }}
                 onClick={() => {
-                  this.props.history.goBack();
+                  this.props.history.goBack()
                 }}
               >
                 Have an account? Login
@@ -252,8 +252,8 @@ class ForgetPassword extends React.Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default ForgetPassword;
+export default ForgetPassword

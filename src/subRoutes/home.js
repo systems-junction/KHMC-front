@@ -3,6 +3,7 @@ import { Route, Switch, Router } from "react-router-dom"
 import { createBrowserHistory } from "history"
 import NotFound from "../components/NotFound/NotFound"
 import PhotoEditor from "../components/PhotoEditor/PhotoEditor"
+import CareStreamMain from "../views/CareStream/CareStreamMain"
 import HomeScreen from "../views/Home/HomeScreen"
 import PatientFHIR from "../views/patientFHIR/patientFHIR"
 import ControlRoom from "../views/Home/ControlRoom"
@@ -20,6 +21,8 @@ import PurchaseOrders from "../views/PurchaseOrders/purchaseOrder"
 import AddEditPurchaseOrders from "../views/PurchaseOrders/addEditPurchaseOrders"
 import BuReturn from "../views/BuReturn/buReturn"
 import AddEditBuReturn from "../views/BuReturn/addEditBuReturn"
+import PrintCareStream from "../views/CareStream/Steps/PrintCareStream"
+
 import MaterialReceiving from "../views/MaterialReceiving/materialreceiving"
 import AddEditMaterialReceiving from "../views/MaterialReceiving/addEditMaterialReceiving"
 import BuStockInLog from "../views/BuStockInLog/buStockInLog"
@@ -39,10 +42,12 @@ import AddEditAccessLevel from "../views/UserManagement/accessLevel/addEditAcces
 import systemAdmin from "../views/UserManagement/systemAdmin/systemAdmin"
 import addEditSystemAdmin from "../views/UserManagement/systemAdmin/addEditSystemAdmin"
 import notificationCenter from "../views/Notifications/notifications"
-import CareStreamMain from "../views/CareStream/CareStreamMain"
-import PrintCareStream from "../views/CareStream/Steps/PrintCareStream"
-
 import dashboard from "../views/Dashboard/dashboard"
+
+import WMSAllUsers from "../views/Home/WMSAllUsers"
+import RCMAllUsers from "../views/Home/RCMAllUsers"
+import SingleUserHome from "../views/Home/singleUserHome"
+
 import webRTC from "../views/WebRTC/webRTC"
 
 const hist = createBrowserHistory()
@@ -51,6 +56,22 @@ class HomeScreenRoutes extends React.PureComponent {
     return (
       <Switch>
         <Route exact path={"/home"} component={HomeScreen} />
+
+        <Route exact path={"/home/allwmsusers"} component={WMSAllUsers} />
+        <Route exact path={"/home/allrcmusers"} component={RCMAllUsers} />
+
+        <Route
+          exact
+          path={"/home/allrcmusers/others"}
+          component={RCMAllUsers}
+        />
+
+        <Route
+          exact
+          path={"/home/allwmsusers/singleuser"}
+          component={SingleUserHome}
+        />
+
         <Route exact path={"/home/dashboard"} component={dashboard} />
         <Route exact path={"/home/webRTC"} component={webRTC} />
         <Route exact path={"/home/photoEditor"} component={PhotoEditor} />

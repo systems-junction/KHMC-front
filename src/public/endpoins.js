@@ -1,4 +1,4 @@
-const local = "http://192.168.8.100:4000/api"
+const local = "http://localhost:4000/api"
 const notificationsUrl = "http://localhost:4000"
 const stagingDigitalOcean = "https://dev.khmc-staging.online/api"
 const StagingDigitalOceanUploadsUrl = "https://dev.khmc-staging.online/"
@@ -10,9 +10,6 @@ export const socketUrl = "ws://localhost:4001"
 export const socketUrlForWebRTC = "ws://localhost:4002"
 
 export const audioURL = "http://localhost:4000"
-
-// please change emailReset string according to dev
-export const emailReset = "http://localhost:3000"
 // export const audioURL = "https://dev.khmc-staging.online";
 export const uploadsUrl = "http://localhost:4000/uploads/"
 // export const uploadsUrl = StagingDigitalOceanUploadsUrl
@@ -327,6 +324,7 @@ export const updateECRUrl = `${baseUrl}/ecr/updateecr`
 export const getECRUrl = `${baseUrl}/ecr/getecr`
 export const addECRUrl = `${baseUrl}/ecr/addecr`
 export const getAllExternalConsultantsUrl = `${baseUrl}/staff/getexternalconsultant`
+export const getExternalConsultantsNames = `${baseUrl}/staff/getexternalconsultantname`
 
 // PHR
 export const getPHREDRUrl = `${baseUrl}/edr/getphredr`
@@ -441,3 +439,19 @@ export const uploadChatFile = `${baseUrl}/chatroom/uploadchatfile`
 //Margin Levels
 export const createMargin = `${baseUrl}/margin/createmargin`
 export const getMargin = `${baseUrl}/margin/getmargin`
+
+// dashboard
+
+export const committeeMember = `${baseUrl}/reports/acmdashboard`
+export const purchasingOfficer = `${baseUrl}/reports/purchasingofficerdashboard`
+export const wareHouseInventoryKeeper = `${baseUrl}/reports/whikdashboard`
+export const functionalUnitInventoryKeeper = `${baseUrl}/reports/fuikdashboard`
+export const cashier = `${baseUrl}/reports/cashierdashboard`
+export const insuranceDepartment = `${baseUrl}/reports/icmdashboard`
+export const radiologyDepartment = `${baseUrl}/reports/rtdashboard`
+export const labTechnician = `${baseUrl}/reports/ltdashboard`
+export const pharmacist = `${baseUrl}/reports/pharmacistdashboard`
+export const registrationOfficer = `${baseUrl}/reports/rodashboard`
+export const registuredNurse = `${baseUrl}/reports/nursedashboard`
+export const consultant = `${baseUrl}/reports/consultantdashboard`
+export const doctor = `${baseUrl}/reports/doctordashboard`

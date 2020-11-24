@@ -16,6 +16,7 @@ import {
   getSearchedpatient,
   notifyLab,
   notifyRad,
+  getExternalConsultantsNames,
 } from "../../public/endpoins";
 import cookie from "react-cookies";
 import Header from "../../components/Header/Header";
@@ -50,6 +51,8 @@ import ViewSingleRequest from "../../components/ViewRequest/ViewRequest";
 import Loader from "react-loader-spinner";
 import UpdateSingleRequest from "../ECR/updateRequest";
 
+import QRCodeScannerComponent from "../../components/QRCodeScanner/QRCodeScanner";
+
 import { connect } from "react-redux";
 import {
   funForReducer,
@@ -76,7 +79,7 @@ const tableHeadingForConsultation = [
 const tableDataKeysForConsultation = [
   "date",
   "description",
-  "specialist",
+  ["specialist", "fullName"],
   "doctorName",
   "status",
 ];
@@ -166,21 +169,6 @@ const tableDataKeysForNurse = [
 ];
 const actions = { view: true };
 const actions1 = { edit: true };
-
-const specialistArray = [
-  {
-    key: "Dr.Hammad",
-    value: "Dr.Hammad",
-  },
-  {
-    key: "Dr.Asad",
-    value: "Dr.Asad",
-  },
-  {
-    key: "Dr.Hameed",
-    value: "Dr.Hameed",
-  },
-];
 
 const specialityArray = [
   {
@@ -538,14 +526,15 @@ function LabRadRequest(props) {
   const [icdArr, setIcdArr] = useState([]);
   const [timer, setTimer] = useState(null);
   const [searchNurseQuery, setSearchNurseQuery] = useState("");
-  const [nurseItemFoundSuccessfull, setNurseItemFoundSuccessfully] = useState(
-    ""
-  );
+  const [nurseItemFoundSuccessfull, setNurseItemFoundSuccessfully] = useState("");
   const [nurseItemFound, setNurseItemFound] = useState("");
   const [addNurseRequest, setaddNurseRequest] = useState(false);
   const [loadSearchedData, setLoadSearchedData] = useState(false);
   const [openUpdateItemDialog, setopenUpdateItemDialog] = useState(false);
   const [updateItem, setUpdateItem] = useState("");
+  const [externalConsultants, setExternalConsultations] = useState([]);
+
+  const [QRCodeScanner, setQRCodeScanner] = useState(false);
 
   const validateForm = () => {
     return (
@@ -580,6 +569,16 @@ function LabRadRequest(props) {
       openPatientDetailsDialog(true);
     }
 
+    axios
+      .get(getExternalConsultantsNames)
+      .then((res) => {
+        console.log("res.data[0].firstName", res.data.data);
+
+        setExternalConsultations(res.data.data);
+      })
+      .catch((error) => {
+        console.log("Error", error);
+      });
     axios.get(getIcd).then((res) => {
       console.log("res for icd", res);
       setIcd(res.data.data);
@@ -609,6 +608,7 @@ function LabRadRequest(props) {
     }
   }
 
+  console.log("specialist", specialist);
   const handleView = (obj) => {
     setSelectedOrder(obj);
     setIsOpen(true);
@@ -643,8 +643,15 @@ function LabRadRequest(props) {
       if (validateForm()) {
         let consultationNote = [];
 
+        let c = [...consultationNoteArray];
+        c.map((d) => {
+          if (d.specialist && typeof d.specialist === "object") {
+            d.specialist = d.specialist._id;
+          }
+        });
+
         consultationNote = [
-          ...consultationNoteArray,
+          ...c,
           {
             consultationNo: consultationNoteNo,
             description: description,
@@ -1638,6 +1645,26 @@ function LabRadRequest(props) {
                         ? d.requester.firstName + " " + d.requester.lastName
                         : "")
                   );
+
+                  // const mapped = val.map((e) => {
+                  //   e.specialist.firstName + " " + e.specialist.lastName
+                  // })
+                  // console.log("mapped", mapped)
+
+                  val.map((d) => {
+                    if (d.specialist && typeof d.specialist === "object") {
+                      d.specialist = {
+                        ...d.specialist,
+                        fullName:
+                          d.specialist.firstName + " " + d.specialist.lastName,
+                      };
+                    } else {
+                      d.specialist = "N/A";
+                    }
+                  });
+
+                  console.log("consultationNoteArray", val);
+
                   dispatch({
                     field: "consultationNoteArray",
                     value: val.reverse(),
@@ -1875,6 +1902,30 @@ function LabRadRequest(props) {
     setOpenNotification(true);
   };
 
+  function scanQRCode() {
+    setQRCodeScanner(true);
+  }
+
+  function handleScanQR(data) {
+    setQRCodeScanner(false);
+    console.log("data after parsing", JSON.parse(data).profileNo);
+
+    handlePauseSearch({
+      target: {
+        value: JSON.parse(data).profileNo,
+        type: "text",
+      },
+    });
+  }
+
+  if (QRCodeScanner) {
+    return (
+      <div>
+        <QRCodeScannerComponent handleScanQR={handleScanQR} />
+      </div>
+    );
+  }
+
   return (
     <div
       style={{
@@ -1934,7 +1985,10 @@ function LabRadRequest(props) {
             <Button
               // disabled={enableForm}
               onClick={enableForm ? showAlert : TriageAssessment}
-              style={{ ...styles.stylesForButton, fontSize: matches ? 12 : 8 }}
+              style={{
+                ...styles.stylesForButton,
+                fontSize: matches ? 12 : 8,
+              }}
               variant="contained"
               color="primary"
               Error={errorMsg}
@@ -1945,7 +1999,10 @@ function LabRadRequest(props) {
             <Button
               // disabled={enableForm}
               onClick={enableForm ? showAlertForPatientHistory : PatientHistory}
-              style={{ ...styles.stylesForButton, fontSize: matches ? 12 : 8 }}
+              style={{
+                ...styles.stylesForButton,
+                fontSize: matches ? 12 : 8,
+              }}
               variant="contained"
               color="primary"
               Error={errorMsg}
@@ -2013,7 +2070,11 @@ function LabRadRequest(props) {
                   height: 55,
                 }}
               >
-                <img src={BarCode} style={{ width: 70, height: 60 }} />
+                <img
+                  src={BarCode}
+                  onClick={scanQRCode}
+                  style={{ width: 70, height: 60, cursor: "pointer" }}
+                />{" "}
               </div>
             </div>
 
@@ -3102,7 +3163,8 @@ function LabRadRequest(props) {
                           })}
                         </TableBody>
                       </Table>
-                    ) : loadSearchedData ? (
+                    ) :
+                     loadSearchedData ? (
                       <div style={{ textAlign: "center" }}>
                         <Loader
                           type="TailSpin"
@@ -3123,11 +3185,15 @@ function LabRadRequest(props) {
                           <h4> Searching Service...</h4>
                         </span>
                       </div>
-                    ) : searchNurseQuery && !nurseItemFoundSuccessfull ? (
-                      <div style={{ textAlign: "center", padding: "10px" }}>
-                        <h4>No Service Found !</h4>
-                      </div>
-                    ) : (
+                    )
+                    //  :
+                    //  searchNurseQuery !== "" &&
+                    //   nurseItemFoundSuccessfull==="" ? (
+                    //   <div style={{ textAlign: "center", padding: "10px" }}>
+                    //     <h4>No Service Found !</h4>
+                    //   </div>
+                    // ) 
+                    : (
                       undefined
                     )}
                   </Paper>
@@ -3277,6 +3343,8 @@ function LabRadRequest(props) {
           ) : (
             undefined
           )}
+
+          {/* div for tabs */}
         </div>
 
         <Dialog
@@ -3645,10 +3713,10 @@ function LabRadRequest(props) {
                       <em>Specialist</em>
                     </MenuItem>
 
-                    {specialistArray.map((val) => {
+                    {externalConsultants.map((val) => {
                       return (
-                        <MenuItem key={val.key} value={val.key}>
-                          {val.value}
+                        <MenuItem key={val._id} value={val._id}>
+                          {val.name}
                         </MenuItem>
                       );
                     })}

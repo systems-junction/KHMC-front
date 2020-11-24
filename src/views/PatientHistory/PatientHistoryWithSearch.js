@@ -51,6 +51,8 @@ import {
   setPatientDetailsForReducer,
 } from "../../actions/Checking";
 
+import QRCodeScannerComponent from "../../components/QRCodeScanner/QRCodeScanner";
+
 let icdCodesList = require("../../assets/icdCodes.json");
 
 const tableHeadingForResident = [
@@ -357,20 +359,17 @@ const useStylesForInput = makeStyles((theme) => ({
 
       paddingRight: "50px",
     },
-    
   },
   label: {
     "&$focusedLabel": {
       color: "red",
-      display: "none"
+      display: "none",
     },
     // "&$erroredLabel": {
     //   color: "orange"
     // }
   },
   focusedLabel: {},
- 
-  
 }));
 
 function LabRadRequest(props) {
@@ -536,6 +535,8 @@ function LabRadRequest(props) {
   const [loadSearchedData, setLoadSearchedData] = useState(false);
   const [viewData, setViewData] = useState(false);
   const [loadEDRIPROPR, setLoadEDRIPROPR] = useState(false);
+
+  const [QRCodeScanner, setQRCodeScanner] = useState(false);
 
   const validateForm = () => {
     return (
@@ -1591,311 +1592,342 @@ function LabRadRequest(props) {
     setOpenNotification(true);
   };
 
-  return (
-    <div
-      style={{
-        backgroundColor: "rgb(19 213 159)",
-        position: "fixed",
-        display: "flex",
-        width: "100%",
-        height: "100%",
-        flexDirection: "column",
-        flex: 1,
-        overflowY: "scroll",
-      }}
-    >
-      <Header history={props.history} />
-      <div className="cPadding">
-        <div className="subheader" style={{ marginLeft: "-10px" }}>
-          <div>
-            <img src={Lab_RadIcon} />
-            <h4>Patient history</h4>
-          </div>
-        </div>
-        <div
-          className={`${"container-fluid"} ${classes.root}`}
-          style={{
-            marginTop: "25px",
-            paddingLeft: "10px",
-            paddingRight: "10px",
-          }}
-        >
-          <div className="row">
-            <div
-              className="col-md-10 col-sm-8 col-8"
-              style={styles.textFieldPadding}
-            >
-              <TextField
-                className="textInputStyle"
-                id="searchPatientQuery"
-                type="text"
-                variant="filled"
-                label="Search Patient by Name / MRN / National ID / Mobile Number"
-                name={"searchPatientQuery"}
-                value={searchPatientQuery}
-                onChange={handlePauseSearch}
-                onKeyDown={handleKeyDown}
-                InputLabelProps={{
-                  classes: {
-                    root: classes.label,
-                    focused: classes.focusedLabel,
-                    error: classes.erroredLabel
-                  }
-                }}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <AccountCircle />
-                    </InputAdornment>
-                  ),
-                  className: classes.input,
-                  classes: { input: classes.input },
-                  disableUnderline: true,
-                }}
-              />
-            </div>
+  function scanQRCode() {
+    setQRCodeScanner(true);
+  }
 
-            <div
-              className="col-md-1 col-sm-2 col-2"
-              style={{
-                ...styles.textFieldPadding,
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  backgroundColor: "white",
-                  borderRadius: 5,
-                  height: 55,
-                }}
-              >
-                <img src={BarCode} style={{ width: 70, height: 60 }} />
-              </div>
-            </div>
+  function handleScanQR(data) {
+    setQRCodeScanner(false);
+    console.log("data after parsing", JSON.parse(data).profileNo);
 
-            <div
-              className="col-md-1 col-sm-2 col-2"
-              style={{
-                ...styles.textFieldPadding,
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  backgroundColor: "white",
-                  borderRadius: 5,
-                  height: 55,
-                }}
-              >
-                <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
-              </div>
+    handlePauseSearch({
+      target: {
+        value: JSON.parse(data).profileNo,
+        type: "text",
+      },
+    });
+  }
+
+  if (QRCodeScanner) {
+    return (
+      <div>
+        {QRCodeScanner ? (
+          <QRCodeScannerComponent handleScanQR={handleScanQR} />
+        ) : (
+          undefined
+        )}
+      </div>
+    );
+  } else {
+    return (
+      <div
+        style={{
+          backgroundColor: "rgb(19 213 159)",
+          position: "fixed",
+          display: "flex",
+          width: "100%",
+          height: "100%",
+          flexDirection: "column",
+          flex: 1,
+          overflowY: "scroll",
+        }}
+      >
+        <Header history={props.history} />
+        <div className="cPadding">
+          <div className="subheader" style={{ marginLeft: "-10px" }}>
+            <div>
+              <img src={Lab_RadIcon} />
+              <h4>Patient history</h4>
             </div>
           </div>
+          <div
+            className={`${"container-fluid"} ${classes.root}`}
+            style={{
+              marginTop: "25px",
+              paddingLeft: "10px",
+              paddingRight: "10px",
+            }}
+          >
+            <div className="row">
+              <div
+                className="col-md-10 col-sm-8 col-8"
+                style={styles.textFieldPadding}
+              >
+                <TextField
+                  className="textInputStyle"
+                  id="searchPatientQuery"
+                  type="text"
+                  variant="filled"
+                  label="Search Patient by Name / MRN / National ID / Mobile Number"
+                  name={"searchPatientQuery"}
+                  value={searchPatientQuery}
+                  onChange={handlePauseSearch}
+                  onKeyDown={handleKeyDown}
+                  InputLabelProps={{
+                    classes: {
+                      root: classes.label,
+                      focused: classes.focusedLabel,
+                      error: classes.erroredLabel,
+                    },
+                  }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <AccountCircle />
+                      </InputAdornment>
+                    ),
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
 
-          <div className="row">
-            <div
-              className="col-md-10 col-sm-9 col-8"
-              style={styles.textFieldPadding}
-            >
-              {searchPatientQuery ? (
+              <div
+                className="col-md-1 col-sm-2 col-2"
+                style={{
+                  ...styles.textFieldPadding,
+                }}
+              >
                 <div
                   style={{
-                    zIndex: 3,
-                    position: "absolute",
-                    width: "99%",
-                    marginTop: 5,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "white",
+                    borderRadius: 5,
+                    height: 55,
                   }}
                 >
-                  <Paper style={{ maxHeight: 300, overflow: "auto" }}>
-                    {patientFoundSuccessfull && patientFound !== "" ? (
-                      <Table size="small">
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>MRN</TableCell>
-                            <TableCell>Patient Name</TableCell>
-                            <TableCell>Gender</TableCell>
-                            <TableCell>Age</TableCell>
-                          </TableRow>
-                        </TableHead>
-
-                        <TableBody>
-                          {patientFound.map((i) => {
-                            return (
-                              <TableRow
-                                key={i._id}
-                                onClick={() => handleAddPatient(i)}
-                                style={{ cursor: "pointer" }}
-                              >
-                                <TableCell>{i.profileNo}</TableCell>
-                                <TableCell>
-                                  {i.firstName + ` ` + i.lastName}
-                                </TableCell>
-                                <TableCell>{i.gender}</TableCell>
-                                <TableCell>{i.age}</TableCell>
-                              </TableRow>
-                            );
-                          })}
-                        </TableBody>
-                      </Table>
-                    ) : loadSearchedData ? (
-                      <div style={{ textAlign: "center" }}>
-                        <Loader
-                          type="TailSpin"
-                          color="#2c6ddd"
-                          height={25}
-                          width={25}
-                          style={{ display: "inline-block", padding: "10px" }}
-                        />
-                        <span
-                          style={{ display: "inline-block", padding: "10px" }}
-                        >
-                          <h4>Searching Patient...</h4>
-                        </span>
-                      </div>
-                    ) : searchPatientQuery && !patientFoundSuccessfull ? (
-                      <div style={{ textAlign: "center", padding: "10px" }}>
-                        <h4> No Patient Found !</h4>
-                      </div>
-                    ) : (
-                      undefined
-                    )}
-                  </Paper>
+                  <img
+                    src={BarCode}
+                    onClick={scanQRCode}
+                    style={{ width: 70, height: 60, cursor: "pointer" }}
+                  />{" "}
                 </div>
-              ) : (
-                undefined
-              )}
+              </div>
+
+              <div
+                className="col-md-1 col-sm-2 col-2"
+                style={{
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "white",
+                    borderRadius: 5,
+                    height: 55,
+                  }}
+                >
+                  <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
+                </div>
+              </div>
+            </div>
+
+            <div className="row">
+              <div
+                className="col-md-10 col-sm-9 col-8"
+                style={styles.textFieldPadding}
+              >
+                {searchPatientQuery ? (
+                  <div
+                    style={{
+                      zIndex: 3,
+                      position: "absolute",
+                      width: "99%",
+                      marginTop: 5,
+                    }}
+                  >
+                    <Paper style={{ maxHeight: 300, overflow: "auto" }}>
+                      {patientFoundSuccessfull && patientFound !== "" ? (
+                        <Table size="small">
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>MRN</TableCell>
+                              <TableCell>Patient Name</TableCell>
+                              <TableCell>Gender</TableCell>
+                              <TableCell>Age</TableCell>
+                            </TableRow>
+                          </TableHead>
+
+                          <TableBody>
+                            {patientFound.map((i) => {
+                              return (
+                                <TableRow
+                                  key={i._id}
+                                  onClick={() => handleAddPatient(i)}
+                                  style={{ cursor: "pointer" }}
+                                >
+                                  <TableCell>{i.profileNo}</TableCell>
+                                  <TableCell>
+                                    {i.firstName + ` ` + i.lastName}
+                                  </TableCell>
+                                  <TableCell>{i.gender}</TableCell>
+                                  <TableCell>{i.age}</TableCell>
+                                </TableRow>
+                              );
+                            })}
+                          </TableBody>
+                        </Table>
+                      ) : loadSearchedData ? (
+                        <div style={{ textAlign: "center" }}>
+                          <Loader
+                            type="TailSpin"
+                            color="#2c6ddd"
+                            height={25}
+                            width={25}
+                            style={{ display: "inline-block", padding: "10px" }}
+                          />
+                          <span
+                            style={{ display: "inline-block", padding: "10px" }}
+                          >
+                            <h4>Searching Patient...</h4>
+                          </span>
+                        </div>
+                      ) : searchPatientQuery && !patientFoundSuccessfull ? (
+                        <div style={{ textAlign: "center", padding: "10px" }}>
+                          <h4> No Patient Found !</h4>
+                        </div>
+                      ) : (
+                        undefined
+                      )}
+                    </Paper>
+                  </div>
+                ) : (
+                  undefined
+                )}
+              </div>
             </div>
           </div>
-        </div>
 
-        <PatientDetails
-          patientDetails={patientDetails}
-          // showPatientDetails={showPatientDetails}
-          diagnosisArray={diagnosisArray}
-          medicationArray={medicationArray}
-        />
+          <PatientDetails
+            patientDetails={patientDetails}
+            // showPatientDetails={showPatientDetails}
+            diagnosisArray={diagnosisArray}
+            medicationArray={medicationArray}
+          />
 
-        <div className={`${classes.root}`}>
-          <h5 style={{ fontWeight: "bold", color: "white", marginTop: 25 }}>
-            EDR / IPR / OPR
-          </h5>
-        </div>
+          <div className={`${classes.root}`}>
+            <h5 style={{ fontWeight: "bold", color: "white", marginTop: 25 }}>
+              EDR / IPR / OPR
+            </h5>
+          </div>
 
-        <div
-          style={{ flex: 4, display: "flex", flexDirection: "column" }}
-          className="container-fluid"
-        >
-          {loadEDRIPROPR ? (
-            <div style={{ textAlign: "center" }}>
-              <Loader
-                type="TailSpin"
-                color="#2c6ddd"
-                height={50}
-                width={50}
-                style={{ display: "inline-block", padding: "10px" }}
-              />
-            </div>
-          ) : (
-            <div className="row">
-              <CustomTable
-                tableData={EDRIPROPR}
-                tableDataKeys={tableDataKeysForEDRIPROPR}
-                tableHeading={tableHeadingForEDRIPROPR}
-                handleView={handlePatientHistoryView}
-                action={actions}
-                borderBottomColor={"#60d69f"}
-                borderBottomWidth={20}
-              />
-            </div>
-          )}
-        </div>
-        {viewData ? (
-          <div>
-            <div
-              style={{
-                height: "20px",
-              }}
-            />
-            <div className={classesForTabs.root}>
-              <Tabs
-                classes={{
-                  root: classesForTabs.root,
-                  scroller: classesForTabs.scroller,
+          <div
+            style={{ flex: 4, display: "flex", flexDirection: "column" }}
+            className="container-fluid"
+          >
+            {loadEDRIPROPR ? (
+              <div style={{ textAlign: "center" }}>
+                <Loader
+                  type="TailSpin"
+                  color="#2c6ddd"
+                  height={50}
+                  width={50}
+                  style={{ display: "inline-block", padding: "10px" }}
+                />
+              </div>
+            ) : (
+              <div className="row">
+                <CustomTable
+                  tableData={EDRIPROPR}
+                  tableDataKeys={tableDataKeysForEDRIPROPR}
+                  tableHeading={tableHeadingForEDRIPROPR}
+                  handleView={handlePatientHistoryView}
+                  action={actions}
+                  borderBottomColor={"#60d69f"}
+                  borderBottomWidth={20}
+                />
+              </div>
+            )}
+          </div>
+          {viewData ? (
+            <div>
+              <div
+                style={{
+                  height: "20px",
                 }}
-                value={value}
-                onChange={handleChange}
-                textColor="primary"
-                TabIndicatorProps={{ style: { background: "#12387a" } }}
-                centered={false}
-                variant="scrollable"
-                fullWidth={true}
-              >
-                <Tab
-                  style={{
-                    color: "white",
-                    borderRadius: 5,
-                    outline: "none",
-                    color: value === 0 ? "#12387a" : "#3B988C",
+              />
+              <div className={classesForTabs.root}>
+                <Tabs
+                  classes={{
+                    root: classesForTabs.root,
+                    scroller: classesForTabs.scroller,
                   }}
-                  label="Doctor/Physician Notes"
-                  disabled={enableForm}
-                />
-                <Tab
-                  style={{
-                    color: "white",
-                    borderRadius: 5,
-                    outline: "none",
-                    color: value === 1 ? "#12387a" : "#3B988C",
-                  }}
-                  label="Consultant/Specialist Notes"
-                  disabled={enableForm}
-                />
-                <Tab
-                  style={{
-                    color: "white",
-                    borderRadius: 5,
-                    outline: "none",
-                    color: value === 2 ? "#12387a" : "#3B988C",
-                  }}
-                  label="Pharm"
-                  disabled={enableForm}
-                />
-                <Tab
-                  style={{
-                    color: "white",
-                    borderRadius: 5,
-                    outline: "none",
-                    color: value === 3 ? "#12387a" : "#3B988C",
-                  }}
-                  label="Lab"
-                  disabled={enableForm}
-                />
-                <Tab
-                  style={{
-                    color: "white",
-                    borderRadius: 5,
-                    outline: "none",
-                    color: value === 4 ? "#12387a" : "#3B988C",
-                  }}
-                  label="Rad"
-                  disabled={enableForm}
-                />
-                <Tab
-                  style={{
-                    color: "white",
-                    borderRadius: 5,
-                    outline: "none",
-                    color: value === 5 ? "#12387a" : "#3B988C",
-                  }}
-                  label="Triage And Assessment"
-                  disabled={enableForm}
-                />
+                  value={value}
+                  onChange={handleChange}
+                  textColor="primary"
+                  TabIndicatorProps={{ style: { background: "#12387a" } }}
+                  centered={false}
+                  variant="scrollable"
+                  fullWidth={true}
+                >
+                  <Tab
+                    style={{
+                      color: "white",
+                      borderRadius: 5,
+                      outline: "none",
+                      color: value === 0 ? "#12387a" : "#3B988C",
+                    }}
+                    label="Doctor/Physician Notes"
+                    disabled={enableForm}
+                  />
+                  <Tab
+                    style={{
+                      color: "white",
+                      borderRadius: 5,
+                      outline: "none",
+                      color: value === 1 ? "#12387a" : "#3B988C",
+                    }}
+                    label="Consultant/Specialist Notes"
+                    disabled={enableForm}
+                  />
+                  <Tab
+                    style={{
+                      color: "white",
+                      borderRadius: 5,
+                      outline: "none",
+                      color: value === 2 ? "#12387a" : "#3B988C",
+                    }}
+                    label="Pharm"
+                    disabled={enableForm}
+                  />
+                  <Tab
+                    style={{
+                      color: "white",
+                      borderRadius: 5,
+                      outline: "none",
+                      color: value === 3 ? "#12387a" : "#3B988C",
+                    }}
+                    label="Lab"
+                    disabled={enableForm}
+                  />
+                  <Tab
+                    style={{
+                      color: "white",
+                      borderRadius: 5,
+                      outline: "none",
+                      color: value === 4 ? "#12387a" : "#3B988C",
+                    }}
+                    label="Rad"
+                    disabled={enableForm}
+                  />
+                  <Tab
+                    style={{
+                      color: "white",
+                      borderRadius: 5,
+                      outline: "none",
+                      color: value === 5 ? "#12387a" : "#3B988C",
+                    }}
+                    label="Triage And Assessment"
+                    disabled={enableForm}
+                  />
 
-                {/* <Tab
+                  {/* <Tab
                 style={{
                   color: 'white',
                   borderRadius: 5,
@@ -1905,720 +1937,728 @@ function LabRadRequest(props) {
                 label='Nurse Services'
                 disabled={enableForm}
               /> */}
-              </Tabs>
-            </div>
-            {value === 1 ? (
-              <div
-                style={{ flex: 4, display: "flex", flexDirection: "column" }}
-                className="container-fluid"
-              >
-                <div className="row" style={{ marginTop: "20px" }}>
-                  {consultationNoteArray !== 0 ? (
-                    <CustomTable
-                      tableData={consultationNoteArray}
-                      tableDataKeys={tableDataKeysForConsultation}
-                      tableHeading={tableHeadingForConsultation}
-                      handleView={viewItem}
-                      action={actions}
-                      borderBottomColor={"#60d69f"}
-                      borderBottomWidth={20}
-                    />
-                  ) : (
-                    undefined
-                  )}
-                </div>
+                </Tabs>
               </div>
-            ) : value === 0 ? (
-              <div
-                style={{ flex: 4, display: "flex", flexDirection: "column" }}
-                className=" container-fluid"
-              >
-                <div className="row" style={{ marginTop: "20px" }}>
-                  {residentNoteArray !== 0 ? (
-                    <CustomTable
-                      tableData={residentNoteArray}
-                      tableDataKeys={tableDataKeysForResident}
-                      tableHeading={tableHeadingForResident}
-                      handleView={viewItem}
-                      action={actions}
-                      borderBottomColor={"#60d69f"}
-                      borderBottomWidth={20}
-                    />
-                  ) : (
-                    undefined
-                  )}
-                </div>
-              </div>
-            ) : value === 2 ? (
-              <div
-                style={{ flex: 4, display: "flex", flexDirection: "column" }}
-                className="container-fluid"
-              >
-                <div className="row" style={{ marginTop: "20px" }}>
-                  {pharmacyRequestArray !== 0 ? (
-                    <CustomTable
-                      tableData={pharmacyRequestArray}
-                      tableDataKeys={tableDataKeysForPharmacy}
-                      tableHeading={tableHeadingForPharmacy}
-                      // handleView={viewItem}
-                      handleView={handleView}
-                      action={actions}
-                      borderBottomColor={"#60d69f"}
-                      borderBottomWidth={20}
-                    />
-                  ) : (
-                    undefined
-                  )}
-                </div>
-              </div>
-            ) : value === 3 ? (
-              <div
-                style={{
-                  flex: 4,
-                  display: "flex",
-                  flexDirection: "column",
-                  paddingLeft: "10px",
-                  paddingRight: "10px",
-                }}
-                className={`container-fluid `}
-              >
+              {value === 1 ? (
                 <div
-                  className="row"
+                  style={{ flex: 4, display: "flex", flexDirection: "column" }}
+                  className="container-fluid"
+                >
+                  <div className="row" style={{ marginTop: "20px" }}>
+                    {consultationNoteArray !== 0 ? (
+                      <CustomTable
+                        tableData={consultationNoteArray}
+                        tableDataKeys={tableDataKeysForConsultation}
+                        tableHeading={tableHeadingForConsultation}
+                        handleView={viewItem}
+                        action={actions}
+                        borderBottomColor={"#60d69f"}
+                        borderBottomWidth={20}
+                      />
+                    ) : (
+                      undefined
+                    )}
+                  </div>
+                </div>
+              ) : value === 0 ? (
+                <div
+                  style={{ flex: 4, display: "flex", flexDirection: "column" }}
+                  className=" container-fluid"
+                >
+                  <div className="row" style={{ marginTop: "20px" }}>
+                    {residentNoteArray !== 0 ? (
+                      <CustomTable
+                        tableData={residentNoteArray}
+                        tableDataKeys={tableDataKeysForResident}
+                        tableHeading={tableHeadingForResident}
+                        handleView={viewItem}
+                        action={actions}
+                        borderBottomColor={"#60d69f"}
+                        borderBottomWidth={20}
+                      />
+                    ) : (
+                      undefined
+                    )}
+                  </div>
+                </div>
+              ) : value === 2 ? (
+                <div
+                  style={{ flex: 4, display: "flex", flexDirection: "column" }}
+                  className="container-fluid"
+                >
+                  <div className="row" style={{ marginTop: "20px" }}>
+                    {pharmacyRequestArray !== 0 ? (
+                      <CustomTable
+                        tableData={pharmacyRequestArray}
+                        tableDataKeys={tableDataKeysForPharmacy}
+                        tableHeading={tableHeadingForPharmacy}
+                        // handleView={viewItem}
+                        handleView={handleView}
+                        action={actions}
+                        borderBottomColor={"#60d69f"}
+                        borderBottomWidth={20}
+                      />
+                    ) : (
+                      undefined
+                    )}
+                  </div>
+                </div>
+              ) : value === 3 ? (
+                <div
                   style={{
-                    marginTop: "20px",
-                    paddingLeft: "5px",
-                    paddingRight: "5px",
+                    flex: 4,
+                    display: "flex",
+                    flexDirection: "column",
+                    paddingLeft: "10px",
+                    paddingRight: "10px",
                   }}
+                  className={`container-fluid `}
                 >
-                  {labRequestArray !== 0 ? (
-                    <CustomTable
-                      tableData={labRequestArray}
-                      tableDataKeys={tableDataKeysForLabReq}
-                      tableHeading={tableHeadingForLabReq}
-                      handleView={viewLabRadReport}
-                      action={actions}
-                      borderBottomColor={"#60d69f"}
-                      borderBottomWidth={20}
-                    />
-                  ) : (
-                    undefined
-                  )}
-                </div>
-              </div>
-            ) : value === 4 ? (
-              <div
-                style={{
-                  flex: 4,
-                  display: "flex",
-                  flexDirection: "column",
-                  paddingLeft: "10px",
-                  paddingRight: "10px",
-                }}
-                className={`container-fluid `}
-              >
-                <div
-                  className="row"
-                  style={{
-                    marginTop: "20px",
-                    paddingLeft: "5px",
-                    paddingRight: "5px",
-                  }}
-                >
-                  {radiologyRequestArray !== 0 ? (
-                    <CustomTable
-                      tableData={radiologyRequestArray}
-                      tableDataKeys={tableDataKeysForRadiology}
-                      tableHeading={tableHeadingForRadiology}
-                      handleView={viewLabRadReport}
-                      action={actions}
-                      borderBottomColor={"#60d69f"}
-                      borderBottomWidth={20}
-                    />
-                  ) : (
-                    undefined
-                  )}
-                </div>
-              </div>
-            ) : value === 6 ? (
-              <div
-                style={{
-                  flex: 4,
-                  display: "flex",
-                  flexDirection: "column",
-                  paddingLeft: "10px",
-                  paddingRight: "10px",
-                }}
-                className={`container-fluid `}
-              >
-                <div
-                  className="row"
-                  style={{
-                    marginTop: "20px",
-                    paddingLeft: "5px",
-                    paddingRight: "5px",
-                  }}
-                >
-                  {nurseServiceArray !== 0 ? (
-                    <CustomTable
-                      tableData={nurseServiceArray}
-                      tableDataKeys={tableDataKeysForNurse}
-                      tableHeading={tableHeadingForNurse}
-                      handleView={viewItem}
-                      action={actions}
-                      borderBottomColor={"#60D69F"}
-                      borderBottomWidth={20}
-                    />
-                  ) : (
-                    undefined
-                  )}
-                </div>
-              </div>
-            ) : value === 5 ? (
-              <div
-                style={{
-                  flex: 4,
-                  display: "flex",
-                  flexDirection: "column",
-                  paddingLeft: "10px",
-                  paddingRight: "10px",
-                }}
-                className={`container-fluid `}
-              >
-                <div
-                  className="row"
-                  style={{
-                    marginTop: "20px",
-                    paddingLeft: "5px",
-                    paddingRight: "5px",
-                  }}
-                >
-                  {triageAssessmentArray !== 0 ? (
-                    <CustomTable
-                      tableData={triageAssessmentArray}
-                      tableDataKeys={tableDataKeysForTriage}
-                      tableHeading={tableDataHeadingForTriage}
-                      handleView={viewItem}
-                      action={actions}
-                      borderBottomColor={"#60D69F"}
-                      borderBottomWidth={20}
-                    />
-                  ) : (
-                    undefined
-                  )}
-                </div>
-              </div>
-            ) : (
-              undefined
-            )}
-
-            {openItemDialog ? (
-              <ViewSingleRequest
-                item={item}
-                openItemDialog={openItemDialog}
-                viewItem={viewItem}
-              />
-            ) : (
-              undefined
-            )}
-          </div>
-        ) : (
-          undefined
-        )}
-        <Dialog
-          aria-labelledby="form-dialog-title"
-          open={openAddResidentDialog}
-          maxWidth="xl"
-          fullWidth={true}
-        >
-          <DialogContent style={{ backgroundColor: "rgb(19 213 159)" }}>
-            <DialogTitle
-              id="simple-dialog-title"
-              style={{ color: "white", marginLeft: -9 }}
-            >
-              Add New Consultation
-            </DialogTitle>
-            <div className={`${"container-fluid"} ${classes.root}`}>
-              <div className="row">
-                <div
-                  className="col-md-12 col-sm-12 col-12"
-                  style={styles.inputContainerForTextField}
-                >
-                  <TextField
-                    required
-                    multiline
-                    type="text"
-                    error={rdescription === "" && isFormSubmitted}
-                    label="Description / Condition"
-                    name={"rdescription"}
-                    value={rdescription}
-                    onChange={onChangeValue}
-                    rows={4}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      className: classes.multilineColor,
-                      classes: {
-                        input: classes.multilineColor,
-                      },
-                    }}
-                    // inputProps={{ maxLength: 300 }}
-                  />
-                </div>
-              </div>
-
-              <div className="row">
-                <div
-                  className="col-md-12 col-sm-12 col-12"
-                  style={styles.inputContainerForTextField}
-                >
-                  <TextField
-                    required
-                    multiline
-                    type="text"
-                    error={note === "" && isFormSubmitted}
-                    label="Consultation Note"
-                    name={"note"}
-                    value={note}
-                    onChange={onChangeValue}
-                    rows={4}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      className: classes.multilineColor,
-                      classes: {
-                        input: classes.multilineColor,
-                      },
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className="row">
-                <div
-                  className="col-md-12 col-sm-12 col-12"
-                  style={styles.inputContainerForTextField}
-                ></div>
-                <span
-                  style={{ fontWeight: 600, color: "white", marginLeft: 15 }}
-                >
-                  ICD Diagnosis
-                </span>
-              </div>
-              <div className="row">
-                <div
-                  className="col-md-6 col-sm-6 col-6"
-                  style={styles.inputContainerForTextField}
-                >
-                  <TextField
-                    required
-                    select
-                    fullWidth
-                    id="status"
-                    name="section"
-                    value={section}
-                    error={section === "" && isFormSubmitted}
-                    onChange={(e) => onChangeSection(e)}
-                    label="Section"
-                    variant="filled"
-                    className="dropDownStyle"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                  >
-                    <MenuItem value="">
-                      <em>Section</em>
-                    </MenuItem>
-
-                    {icd &&
-                      icd.map((val) => {
-                        return (
-                          <MenuItem key={val} value={val}>
-                            {val}
-                          </MenuItem>
-                        );
-                      })}
-                  </TextField>
-                </div>
-                <div
-                  className="col-md-6 col-sm-6 col-6"
-                  style={styles.inputContainerForTextField}
-                >
-                  <TextField
-                    type="text"
-                    label="Code"
-                    onChange={handleCodeSearch}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <AccountCircle />
-                        </InputAdornment>
-                      ),
-                      className: classes.multilineColor,
-                      classes: {
-                        input: classes.multilineColor,
-                      },
-                    }}
-                    InputLabelProps={{
-                      className: classes.label,
-                      classes: { label: classes.label },
-                    }}
-                  />
-                </div>
-              </div>
-
-              {icdArr != null && icdArr.length != null && icdArr.length > 0 ? (
-                <div className="row" style={{ marginLeft: 0, marginRight: 0 }}>
                   <div
-                    className={`scrollable ${"col-md-12 col-sm-12 col-12"}`}
+                    className="row"
                     style={{
-                      ...styles.inputContainerForTextField,
-                      ...styles.patientDetails,
+                      marginTop: "20px",
+                      paddingLeft: "5px",
+                      paddingRight: "5px",
                     }}
                   >
-                    <ul>
-                      {icdArr.map((item) => (
-                        <li key={item}>
-                          <span
-                            className="addCode"
-                            onClick={(e) => addICDcodes(item, e)}
-                            style={{ marginRight: 20, marginTop: 5 }}
-                          />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
+                    {labRequestArray !== 0 ? (
+                      <CustomTable
+                        tableData={labRequestArray}
+                        tableDataKeys={tableDataKeysForLabReq}
+                        tableHeading={tableHeadingForLabReq}
+                        handleView={viewLabRadReport}
+                        action={actions}
+                        borderBottomColor={"#60d69f"}
+                        borderBottomWidth={20}
+                      />
+                    ) : (
+                      undefined
+                    )}
+                  </div>
+                </div>
+              ) : value === 4 ? (
+                <div
+                  style={{
+                    flex: 4,
+                    display: "flex",
+                    flexDirection: "column",
+                    paddingLeft: "10px",
+                    paddingRight: "10px",
+                  }}
+                  className={`container-fluid `}
+                >
+                  <div
+                    className="row"
+                    style={{
+                      marginTop: "20px",
+                      paddingLeft: "5px",
+                      paddingRight: "5px",
+                    }}
+                  >
+                    {radiologyRequestArray !== 0 ? (
+                      <CustomTable
+                        tableData={radiologyRequestArray}
+                        tableDataKeys={tableDataKeysForRadiology}
+                        tableHeading={tableHeadingForRadiology}
+                        handleView={viewLabRadReport}
+                        action={actions}
+                        borderBottomColor={"#60d69f"}
+                        borderBottomWidth={20}
+                      />
+                    ) : (
+                      undefined
+                    )}
+                  </div>
+                </div>
+              ) : value === 6 ? (
+                <div
+                  style={{
+                    flex: 4,
+                    display: "flex",
+                    flexDirection: "column",
+                    paddingLeft: "10px",
+                    paddingRight: "10px",
+                  }}
+                  className={`container-fluid `}
+                >
+                  <div
+                    className="row"
+                    style={{
+                      marginTop: "20px",
+                      paddingLeft: "5px",
+                      paddingRight: "5px",
+                    }}
+                  >
+                    {nurseServiceArray !== 0 ? (
+                      <CustomTable
+                        tableData={nurseServiceArray}
+                        tableDataKeys={tableDataKeysForNurse}
+                        tableHeading={tableHeadingForNurse}
+                        handleView={viewItem}
+                        action={actions}
+                        borderBottomColor={"#60D69F"}
+                        borderBottomWidth={20}
+                      />
+                    ) : (
+                      undefined
+                    )}
+                  </div>
+                </div>
+              ) : value === 5 ? (
+                <div
+                  style={{
+                    flex: 4,
+                    display: "flex",
+                    flexDirection: "column",
+                    paddingLeft: "10px",
+                    paddingRight: "10px",
+                  }}
+                  className={`container-fluid `}
+                >
+                  <div
+                    className="row"
+                    style={{
+                      marginTop: "20px",
+                      paddingLeft: "5px",
+                      paddingRight: "5px",
+                    }}
+                  >
+                    {triageAssessmentArray !== 0 ? (
+                      <CustomTable
+                        tableData={triageAssessmentArray}
+                        tableDataKeys={tableDataKeysForTriage}
+                        tableHeading={tableDataHeadingForTriage}
+                        handleView={viewItem}
+                        action={actions}
+                        borderBottomColor={"#60D69F"}
+                        borderBottomWidth={20}
+                      />
+                    ) : (
+                      undefined
+                    )}
                   </div>
                 </div>
               ) : (
                 undefined
               )}
 
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div style={{ marginTop: "2%", marginBottom: "2%" }}>
-                  <Button
-                    onClick={() => hideDialog()}
-                    style={{
-                      ...styles.stylesForButton,
-                      color: "gray",
-                      backgroundColor: "white",
-                    }}
-                    variant="contained"
-                  >
-                    <strong>Cancel</strong>
-                  </Button>
-                </div>
-
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    marginTop: "2%",
-                    marginBottom: "2%",
-                  }}
-                >
-                  <Button
-                    style={{
-                      color: "white",
-                      cursor: "pointer",
-                      borderRadius: 5,
-                      backgroundColor: "#2c6ddd",
-                      width: "140px",
-                      height: "50px",
-                      outline: "none",
-                      paddingLeft: 30,
-                      paddingRight: 30,
-                    }}
-                    disabled={!validateFormRR()}
-                    onClick={addResidentRequest}
-                    variant="contained"
-                    color="primary"
-                  >
-                    Submit
-                  </Button>
-                </div>
-              </div>
+              {openItemDialog ? (
+                <ViewSingleRequest
+                  item={item}
+                  openItemDialog={openItemDialog}
+                  viewItem={viewItem}
+                />
+              ) : (
+                undefined
+              )}
             </div>
-          </DialogContent>
-        </Dialog>
-
-        <Dialog
-          aria-labelledby="form-dialog-title"
-          open={openAddConsultDialog}
-          maxWidth="xl"
-          fullWidth={true}
-        >
-          <DialogContent style={{ backgroundColor: "#31e2aa" }}>
-            <DialogTitle
-              id="simple-dialog-title"
-              style={{ color: "white", marginLeft: -20 }}
-            >
-              Add Consultation Note
-            </DialogTitle>
-            <div className={`container-fluid ${classes.root}`}>
-              <div className="row">
-                <div
-                  className="col-md-12 col-sm-12 col-12"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    multiline
-                    rows={4}
-                    label="Comments/Notes"
-                    name={"doctorconsultationNotes"}
-                    value={doctorconsultationNotes}
-                    error={doctorconsultationNotes === "" && isFormSubmitted}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                    variant="filled"
-                    variant="filled"
-                    InputProps={{
-                      className: classes.multilineColor,
-                      classes: {
-                        input: classes.multilineColor,
-                      },
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className="row">
-                <div
-                  className="col-md-12 col-sm-12 col-12"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    multiline
-                    rows={4}
-                    label="Description"
-                    name={"description"}
-                    value={description}
-                    error={description === "" && isFormSubmitted}
-                    onChange={onChangeValue}
-                    className="textInputStyle"
-                    variant="filled"
-                    InputProps={{
-                      className: classes.multilineColor,
-                      classes: {
-                        input: classes.multilineColor,
-                      },
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className="row">
-                <div
-                  className="col-md-6"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    select
-                    fullWidth
-                    label="Speciality"
-                    name={"speciality"}
-                    value={speciality}
-                    error={speciality === "" && isFormSubmitted}
-                    onChange={onChangeValue}
-                    variant="filled"
-                    className="dropDownStyle"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                  >
-                    <MenuItem value="">
-                      <em>Speciality</em>
-                    </MenuItem>
-
-                    {specialityArray.map((val) => {
-                      return (
-                        <MenuItem key={val.key} value={val.key}>
-                          {val.value}
-                        </MenuItem>
-                      );
-                    })}
-                  </TextField>
-                </div>
-                <div
-                  className="col-md-6"
-                  style={{
-                    ...styles.inputContainerForTextField,
-                    ...styles.textFieldPadding,
-                  }}
-                >
-                  <TextField
-                    required
-                    select
-                    fullWidth
-                    label="Select Consultant/Specialist"
-                    name={"specialist"}
-                    value={specialist}
-                    error={specialist === "" && isFormSubmitted}
-                    onChange={onChangeValue}
-                    variant="filled"
-                    className="dropDownStyle"
-                    InputProps={{
-                      className: classes.input,
-                      classes: { input: classes.input },
-                      disableUnderline: true,
-                    }}
-                  >
-                    <MenuItem value="">
-                      <em>Specialist</em>
-                    </MenuItem>
-
-                    {specialistArray.map((val) => {
-                      return (
-                        <MenuItem key={val.key} value={val.key}>
-                          {val.value}
-                        </MenuItem>
-                      );
-                    })}
-                  </TextField>
-                </div>
-              </div>
-
-              <div
-                class="row"
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  paddingLeft: 5,
-                  paddingRight: 5,
-                }}
+          ) : (
+            undefined
+          )}
+          <Dialog
+            aria-labelledby="form-dialog-title"
+            open={openAddResidentDialog}
+            maxWidth="xl"
+            fullWidth={true}
+          >
+            <DialogContent style={{ backgroundColor: "rgb(19 213 159)" }}>
+              <DialogTitle
+                id="simple-dialog-title"
+                style={{ color: "white", marginLeft: -9 }}
               >
-                <div style={{ marginTop: "2%", marginBottom: "2%" }}>
-                  <Button
-                    onClick={() => hideDialog()}
-                    style={{
-                      ...styles.stylesForButton,
-                      backgroundColor: "white",
-                      color: "grey",
-                    }}
-                    variant="contained"
+                Add New Consultation
+              </DialogTitle>
+              <div className={`${"container-fluid"} ${classes.root}`}>
+                <div className="row">
+                  <div
+                    className="col-md-12 col-sm-12 col-12"
+                    style={styles.inputContainerForTextField}
                   >
-                    <strong>Cancel</strong>
-                  </Button>
+                    <TextField
+                      required
+                      multiline
+                      type="text"
+                      error={rdescription === "" && isFormSubmitted}
+                      label="Description / Condition"
+                      name={"rdescription"}
+                      value={rdescription}
+                      onChange={onChangeValue}
+                      rows={4}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.multilineColor,
+                        classes: {
+                          input: classes.multilineColor,
+                        },
+                      }}
+                      // inputProps={{ maxLength: 300 }}
+                    />
+                  </div>
+                </div>
+
+                <div className="row">
+                  <div
+                    className="col-md-12 col-sm-12 col-12"
+                    style={styles.inputContainerForTextField}
+                  >
+                    <TextField
+                      required
+                      multiline
+                      type="text"
+                      error={note === "" && isFormSubmitted}
+                      label="Consultation Note"
+                      name={"note"}
+                      value={note}
+                      onChange={onChangeValue}
+                      rows={4}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.multilineColor,
+                        classes: {
+                          input: classes.multilineColor,
+                        },
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div className="row">
+                  <div
+                    className="col-md-12 col-sm-12 col-12"
+                    style={styles.inputContainerForTextField}
+                  ></div>
+                  <span
+                    style={{ fontWeight: 600, color: "white", marginLeft: 15 }}
+                  >
+                    ICD Diagnosis
+                  </span>
+                </div>
+                <div className="row">
+                  <div
+                    className="col-md-6 col-sm-6 col-6"
+                    style={styles.inputContainerForTextField}
+                  >
+                    <TextField
+                      required
+                      select
+                      fullWidth
+                      id="status"
+                      name="section"
+                      value={section}
+                      error={section === "" && isFormSubmitted}
+                      onChange={(e) => onChangeSection(e)}
+                      label="Section"
+                      variant="filled"
+                      className="dropDownStyle"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                        disableUnderline: true,
+                      }}
+                    >
+                      <MenuItem value="">
+                        <em>Section</em>
+                      </MenuItem>
+
+                      {icd &&
+                        icd.map((val) => {
+                          return (
+                            <MenuItem key={val} value={val}>
+                              {val}
+                            </MenuItem>
+                          );
+                        })}
+                    </TextField>
+                  </div>
+                  <div
+                    className="col-md-6 col-sm-6 col-6"
+                    style={styles.inputContainerForTextField}
+                  >
+                    <TextField
+                      type="text"
+                      label="Code"
+                      onChange={handleCodeSearch}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <AccountCircle />
+                          </InputAdornment>
+                        ),
+                        className: classes.multilineColor,
+                        classes: {
+                          input: classes.multilineColor,
+                        },
+                      }}
+                      InputLabelProps={{
+                        className: classes.label,
+                        classes: { label: classes.label },
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {icdArr != null &&
+                icdArr.length != null &&
+                icdArr.length > 0 ? (
+                  <div
+                    className="row"
+                    style={{ marginLeft: 0, marginRight: 0 }}
+                  >
+                    <div
+                      className={`scrollable ${"col-md-12 col-sm-12 col-12"}`}
+                      style={{
+                        ...styles.inputContainerForTextField,
+                        ...styles.patientDetails,
+                      }}
+                    >
+                      <ul>
+                        {icdArr.map((item) => (
+                          <li key={item}>
+                            <span
+                              className="addCode"
+                              onClick={(e) => addICDcodes(item, e)}
+                              style={{ marginRight: 20, marginTop: 5 }}
+                            />
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                ) : (
+                  undefined
+                )}
+
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <div style={{ marginTop: "2%", marginBottom: "2%" }}>
+                    <Button
+                      onClick={() => hideDialog()}
+                      style={{
+                        ...styles.stylesForButton,
+                        color: "gray",
+                        backgroundColor: "white",
+                      }}
+                      variant="contained"
+                    >
+                      <strong>Cancel</strong>
+                    </Button>
+                  </div>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      marginTop: "2%",
+                      marginBottom: "2%",
+                    }}
+                  >
+                    <Button
+                      style={{
+                        color: "white",
+                        cursor: "pointer",
+                        borderRadius: 5,
+                        backgroundColor: "#2c6ddd",
+                        width: "140px",
+                        height: "50px",
+                        outline: "none",
+                        paddingLeft: 30,
+                        paddingRight: 30,
+                      }}
+                      disabled={!validateFormRR()}
+                      onClick={addResidentRequest}
+                      variant="contained"
+                      color="primary"
+                    >
+                      Submit
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+
+          <Dialog
+            aria-labelledby="form-dialog-title"
+            open={openAddConsultDialog}
+            maxWidth="xl"
+            fullWidth={true}
+          >
+            <DialogContent style={{ backgroundColor: "#31e2aa" }}>
+              <DialogTitle
+                id="simple-dialog-title"
+                style={{ color: "white", marginLeft: -20 }}
+              >
+                Add Consultation Note
+              </DialogTitle>
+              <div className={`container-fluid ${classes.root}`}>
+                <div className="row">
+                  <div
+                    className="col-md-12 col-sm-12 col-12"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      required
+                      multiline
+                      rows={4}
+                      label="Comments/Notes"
+                      name={"doctorconsultationNotes"}
+                      value={doctorconsultationNotes}
+                      error={doctorconsultationNotes === "" && isFormSubmitted}
+                      onChange={onChangeValue}
+                      className="textInputStyle"
+                      variant="filled"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.multilineColor,
+                        classes: {
+                          input: classes.multilineColor,
+                        },
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div className="row">
+                  <div
+                    className="col-md-12 col-sm-12 col-12"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      required
+                      multiline
+                      rows={4}
+                      label="Description"
+                      name={"description"}
+                      value={description}
+                      error={description === "" && isFormSubmitted}
+                      onChange={onChangeValue}
+                      className="textInputStyle"
+                      variant="filled"
+                      InputProps={{
+                        className: classes.multilineColor,
+                        classes: {
+                          input: classes.multilineColor,
+                        },
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div className="row">
+                  <div
+                    className="col-md-6"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      required
+                      select
+                      fullWidth
+                      label="Speciality"
+                      name={"speciality"}
+                      value={speciality}
+                      error={speciality === "" && isFormSubmitted}
+                      onChange={onChangeValue}
+                      variant="filled"
+                      className="dropDownStyle"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                        disableUnderline: true,
+                      }}
+                    >
+                      <MenuItem value="">
+                        <em>Speciality</em>
+                      </MenuItem>
+
+                      {specialityArray.map((val) => {
+                        return (
+                          <MenuItem key={val.key} value={val.key}>
+                            {val.value}
+                          </MenuItem>
+                        );
+                      })}
+                    </TextField>
+                  </div>
+                  <div
+                    className="col-md-6"
+                    style={{
+                      ...styles.inputContainerForTextField,
+                      ...styles.textFieldPadding,
+                    }}
+                  >
+                    <TextField
+                      required
+                      select
+                      fullWidth
+                      label="Select Consultant/Specialist"
+                      name={"specialist"}
+                      value={specialist}
+                      error={specialist === "" && isFormSubmitted}
+                      onChange={onChangeValue}
+                      variant="filled"
+                      className="dropDownStyle"
+                      InputProps={{
+                        className: classes.input,
+                        classes: { input: classes.input },
+                        disableUnderline: true,
+                      }}
+                    >
+                      <MenuItem value="">
+                        <em>Specialist</em>
+                      </MenuItem>
+
+                      {specialistArray.map((val) => {
+                        return (
+                          <MenuItem key={val.key} value={val.key}>
+                            {val.value}
+                          </MenuItem>
+                        );
+                      })}
+                    </TextField>
+                  </div>
                 </div>
 
                 <div
+                  class="row"
                   style={{
                     display: "flex",
-                    justifyContent: "flex-end",
-                    marginTop: "2%",
-                    marginBottom: "2%",
+                    justifyContent: "space-between",
+                    paddingLeft: 5,
+                    paddingRight: 5,
                   }}
                 >
-                  <Button
+                  <div style={{ marginTop: "2%", marginBottom: "2%" }}>
+                    <Button
+                      onClick={() => hideDialog()}
+                      style={{
+                        ...styles.stylesForButton,
+                        backgroundColor: "white",
+                        color: "grey",
+                      }}
+                      variant="contained"
+                    >
+                      <strong>Cancel</strong>
+                    </Button>
+                  </div>
+
+                  <div
                     style={{
-                      color: "white",
-                      cursor: "pointer",
-                      borderRadius: 5,
-                      backgroundColor: "#2c6ddd",
-                      width: "140px",
-                      height: "50px",
-                      outline: "none",
-                      paddingLeft: 30,
-                      paddingRight: 30,
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      marginTop: "2%",
+                      marginBottom: "2%",
                     }}
-                    disabled={!validateForm()}
-                    onClick={addConsultRequest}
-                    variant="contained"
-                    color="primary"
                   >
-                    Submit
-                  </Button>
+                    <Button
+                      style={{
+                        color: "white",
+                        cursor: "pointer",
+                        borderRadius: 5,
+                        backgroundColor: "#2c6ddd",
+                        width: "140px",
+                        height: "50px",
+                        outline: "none",
+                        paddingLeft: 30,
+                        paddingRight: 30,
+                      }}
+                      disabled={!validateForm()}
+                      onClick={addConsultRequest}
+                      variant="contained"
+                      color="primary"
+                    >
+                      Submit
+                    </Button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </DialogContent>
-        </Dialog>
+            </DialogContent>
+          </Dialog>
 
-        <Dialog
-          aria-labelledby="form-dialog-title"
-          open={isOpen}
-          maxWidth="xl"
-          fullWidth={true}
-          // fullScreen
-          onBackdropClick={() => {
-            setIsOpen(false);
-          }}
-        >
-          <DialogContent style={{ backgroundColor: "#31e2aa" }}>
-            <DialogTitle
-              id="simple-dialog-title"
-              style={{ color: "white", marginLeft: -9 }}
-            >
-              Added Items
-            </DialogTitle>
-            <div className="container-fluid">
-              <CustomTable
-                tableData={requestedItems}
-                tableHeading={
-                  currentUser.staffTypeId.type === "Doctor/Physician"
-                    ? tableHeadingForBUMemberForItems
-                    : currentUser.staffTypeId.type === "Registered Nurse" ||
-                      currentUser.staffTypeId.type === "BU Doctor"
-                    ? tableHeadingForBUMemberForItems
-                    : currentUser.staffTypeId.type === "FU Inventory Keeper"
-                    ? tableHeadingForFUMemberForItems
-                    : tableHeadingForFUMemberForItems
-                }
-                tableDataKeys={
-                  currentUser.staffTypeId.type === "Doctor/Physician"
-                    ? tableDataKeysForItemsForBUMember
-                    : currentUser.staffTypeId.type === "Registered Nurse" ||
-                      currentUser.staffTypeId.type === "BU Doctor"
-                    ? tableDataKeysForItemsForBUMember
-                    : currentUser.staffTypeId.type === "FU Inventory Keeper"
-                    ? tableDataKeysForFUMemberForItems
-                    : tableDataKeysForItemsForBUMember
-                }
-                borderBottomColor={"#60d69f"}
-                borderBottomWidth={20}
+          <Dialog
+            aria-labelledby="form-dialog-title"
+            open={isOpen}
+            maxWidth="xl"
+            fullWidth={true}
+            // fullScreen
+            onBackdropClick={() => {
+              setIsOpen(false);
+            }}
+          >
+            <DialogContent style={{ backgroundColor: "#31e2aa" }}>
+              <DialogTitle
+                id="simple-dialog-title"
+                style={{ color: "white", marginLeft: -9 }}
+              >
+                Added Items
+              </DialogTitle>
+              <div className="container-fluid">
+                <CustomTable
+                  tableData={requestedItems}
+                  tableHeading={
+                    currentUser.staffTypeId.type === "Doctor/Physician"
+                      ? tableHeadingForBUMemberForItems
+                      : currentUser.staffTypeId.type === "Registered Nurse" ||
+                        currentUser.staffTypeId.type === "BU Doctor"
+                      ? tableHeadingForBUMemberForItems
+                      : currentUser.staffTypeId.type === "FU Inventory Keeper"
+                      ? tableHeadingForFUMemberForItems
+                      : tableHeadingForFUMemberForItems
+                  }
+                  tableDataKeys={
+                    currentUser.staffTypeId.type === "Doctor/Physician"
+                      ? tableDataKeysForItemsForBUMember
+                      : currentUser.staffTypeId.type === "Registered Nurse" ||
+                        currentUser.staffTypeId.type === "BU Doctor"
+                      ? tableDataKeysForItemsForBUMember
+                      : currentUser.staffTypeId.type === "FU Inventory Keeper"
+                      ? tableDataKeysForFUMemberForItems
+                      : tableDataKeysForItemsForBUMember
+                  }
+                  borderBottomColor={"#60d69f"}
+                  borderBottomWidth={20}
+                />
+              </div>
+            </DialogContent>
+          </Dialog>
+
+          <div
+            className="container-fluid"
+            style={{ marginBottom: "25px", marginTop: "25px" }}
+          >
+            <div className="row">
+              <img
+                onClick={() => props.history.goBack()}
+                src={Back}
+                style={{ width: 45, height: 35, cursor: "pointer" }}
               />
             </div>
-          </DialogContent>
-        </Dialog>
-
-        <div
-          className="container-fluid"
-          style={{ marginBottom: "25px", marginTop: "25px" }}
-        >
-          <div className="row">
-            <img
-              onClick={() => props.history.goBack()}
-              src={Back}
-              style={{ width: 45, height: 35, cursor: "pointer" }}
-            />
           </div>
-        </div>
 
-        <Notification
-          msg={errorMsg}
-          open={openNotification}
-          success={successMsg}
-        />
+          <Notification
+            msg={errorMsg}
+            open={openNotification}
+            success={successMsg}
+          />
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 const mapStateToProps = ({ CheckingReducer }) => {
