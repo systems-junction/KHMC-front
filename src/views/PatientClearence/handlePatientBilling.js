@@ -51,6 +51,8 @@ import MUIInputStyle from "../../assets/jss/material-dashboard-react/inputStyle.
 import MUIInputStyleForCurrency from "../../assets/jss/material-dashboard-react/inputStylesForCurrency";
 import view_all from "../../assets/img/Eye.png";
 
+import QRCodeScannerComponent from "../../components/QRCodeScanner/QRCodeScanner";
+
 const tableHeadingForBillSummary = [
   "Date/Time",
   "Service Type",
@@ -373,6 +375,8 @@ function AddEditPatientListing(props) {
   const [qr, setQr] = useState("");
   const [timer, setTimer] = useState(null);
   const [loadSearchedData, setLoadSearchedData] = useState(false);
+
+  const [QRCodeScanner, setQRCodeScanner] = useState(false);
 
   useEffect(() => {
     // setcomingFor(props.history.location.state.comingFor);
@@ -1093,6 +1097,34 @@ function AddEditPatientListing(props) {
     alert("Printer not attached");
   };
 
+  function scanQRCode() {
+    setQRCodeScanner(true);
+  }
+
+  function handleScanQR(data) {
+    setQRCodeScanner(false);
+    console.log("data after parsing", JSON.parse(data).profileNo);
+
+    handlePauseSearch({
+      target: {
+        value: JSON.parse(data).profileNo,
+        type: "text",
+      },
+    });
+  }
+
+  if (QRCodeScanner) {
+    return (
+      <div>
+        {QRCodeScanner ? (
+          <QRCodeScannerComponent handleScanQR={handleScanQR} />
+        ) : (
+          undefined
+        )}
+      </div>
+    );
+  }
+
   return (
     <div
       style={{
@@ -1220,7 +1252,11 @@ function AddEditPatientListing(props) {
                           borderRadius: 5,
                         }}
                       >
-                        <img src={BarCode} style={{ width: 70, height: 60 }} />
+                        <img
+                          src={BarCode}
+                          onClick={scanQRCode}
+                          style={{ width: 70, height: 60, cursor: "pointer" }}
+                        />{" "}
                       </div>
                     </div>
 

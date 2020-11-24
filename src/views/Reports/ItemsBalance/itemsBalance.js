@@ -513,7 +513,7 @@ export default function PurchaseRequest(props) {
   const [openNotification, setOpenNotification] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState(new Date());
+  const [endDate, setEndDate] = useState();
   const [fuArray, setFunctionUnits] = useState([]);
   const [selectedFU, setFU] = useState("");
 
@@ -560,6 +560,12 @@ export default function PurchaseRequest(props) {
   function getPurchaseRequests() {
     if (!startDate) {
       setErrorMsg("Please select starting date first.");
+      setOpenNotification(true);
+      return;
+    }
+
+    if (!endDate) {
+      setErrorMsg("Please select end date first.");
       setOpenNotification(true);
       return;
     }
@@ -795,7 +801,7 @@ export default function PurchaseRequest(props) {
             >
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DatePicker
-                  disableFuture={true}
+                  // disableFuture={true}
                   inputVariant="filled"
                   onChange={setEndDate}
                   name={endDate}
@@ -806,7 +812,9 @@ export default function PurchaseRequest(props) {
                     className: classes.input,
                     classes: { input: classes.input },
                   }}
-                  value={endDate}
+                  // value={endDate}
+                  value={endDate ? endDate : null}
+
                 />
               </MuiPickersUtilsProvider>
             </div>
@@ -836,7 +844,9 @@ export default function PurchaseRequest(props) {
                     classes: { input: classes.input },
                   }}
                   disabled={
-                    currentUser && currentUser.staffTypeId.type === "admin"
+                    currentUser &&
+                    (currentUser.staffTypeId.type === "admin" ||
+                      currentUser.staffTypeId.type === "super admin")
                       ? false
                       : true
                   }

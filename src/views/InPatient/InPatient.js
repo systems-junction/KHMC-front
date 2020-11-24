@@ -24,6 +24,8 @@ import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 import socketIOClient from "socket.io-client";
 import cookie from "react-cookies";
 
+import QRCodeScannerComponent from "../../components/QRCodeScanner/QRCodeScanner";
+
 const tableHeading = ["MRN", "Request Number", "Date", "Status", "Action"];
 const tableDataKeys = ["profileNo", "requestNo", "date", "status"];
 
@@ -107,7 +109,7 @@ const useStylesForInput = makeStyles((theme) => ({
   label: {
     "&$focusedLabel": {
       color: "red",
-      display: "none"
+      display: "none",
     },
     // "&$erroredLabel": {
     //   color: "orange"
@@ -129,6 +131,7 @@ export default function EDR(props) {
   const [staffType, setStaffType] = useState(
     cookie.load("current_user").staffTypeId.type
   );
+  const [QRCodeScanner, setQRCodeScanner] = useState(false);
 
   if (openNotification) {
     setTimeout(() => {
@@ -262,6 +265,34 @@ export default function EDR(props) {
     }
   };
 
+  function scanQRCode() {
+    setQRCodeScanner(true);
+  }
+
+  function handleScanQR(data) {
+    setQRCodeScanner(false);
+    console.log("data after parsing", JSON.parse(data).profileNo);
+
+    handlePatientSearch({
+      target: {
+        value: JSON.parse(data).profileNo,
+        type: "text",
+      },
+    });
+  }
+
+  if (QRCodeScanner) {
+    return (
+      <div>
+        {QRCodeScanner ? (
+          <QRCodeScannerComponent handleScanQR={handleScanQR} />
+        ) : (
+          undefined
+        )}
+      </div>
+    );
+  }
+
   return (
     <div
       style={{
@@ -275,7 +306,7 @@ export default function EDR(props) {
         overflowY: "scroll",
       }}
     >
-      <Header history={props.history}/>
+      <Header history={props.history} />
 
       <div className="cPadding">
         <div className="subheader" style={{ marginLeft: "-10px" }}>
@@ -320,8 +351,8 @@ export default function EDR(props) {
                   classes: {
                     root: classes.label,
                     focused: classes.focusedLabel,
-                    error: classes.erroredLabel
-                  }
+                    error: classes.erroredLabel,
+                  },
                 }}
                 InputProps={{
                   endAdornment: (
@@ -352,7 +383,11 @@ export default function EDR(props) {
                   height: 55,
                 }}
               >
-                <img src={BarCode} style={{ width: 70, height: 60 }} />
+                <img
+                  src={BarCode}
+                  onClick={scanQRCode}
+                  style={{ width: 70, height: 60, cursor: "pointer" }}
+                />{" "}
               </div>
             </div>
 

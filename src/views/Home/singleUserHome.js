@@ -158,7 +158,7 @@ const superAdmin = [
   {
     img: RCM,
     text: "RCM",
-    path: `/home/allrcmusers`,
+    path: `/home/controlroom`,
   },
 ];
 
