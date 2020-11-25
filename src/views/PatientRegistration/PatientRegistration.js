@@ -191,25 +191,38 @@ const genderArray = [
 
 const relationArray = [
   {
-    key: "brother",
-    value: "Brother",
-  },
-  {
     key: "father",
     value: "Father",
   },
+
   {
     key: "mother",
     value: "Mother",
   },
+
   {
     key: "sister",
     value: "Sister",
   },
+
   {
-    key: "uncle",
-    value: "Uncle",
+    key: "brother",
+    value: "Brother",
   },
+
+  {
+    key: "son",
+    value: "Son",
+  },
+  {
+    key: "daughter",
+    value: "Daughter",
+  },
+
+  // {
+  //   key: "uncle",
+  //   value: "Uncle",
+  // },
   {
     key: "other",
     value: "Other",
@@ -893,6 +906,7 @@ function PatientRegistration(props) {
             setMRN(res.data.data.profileNo);
             setOpenNotification(true);
             setMRN(res.data.data.profileNo);
+            setQRCodeForPrint(`${audioURL}${res.data.data.QR}`);
             console.log(res.data.data);
             setsuccessMsg(
               "Patient details updated successfully, Generate IPR/EDR now"
@@ -1070,6 +1084,7 @@ function PatientRegistration(props) {
               message: `IPR: ${
                 res.data.data.requestNo
               } for patient MRN: ${MRN.toUpperCase()} generated successfully`,
+              qr: qRCodeForPrint,
             },
           });
         } else if (!res.data.success) {
@@ -1502,6 +1517,19 @@ function PatientRegistration(props) {
 
     var heightWeightPattern = /^[0-9. ]*$/;
     if (e.target.name === "height" || e.target.name === "weight") {
+      if (e.target.name === "height") {
+        if (
+          e.target.value.split(".")[1] &&
+          e.target.value.split(".")[1].length > 2
+        ) {
+          return;
+        }
+
+        if (!e.target.value.includes(".") && e.target.value.length > 3) {
+          return;
+        }
+      }
+
       if (heightWeightPattern.test(e.target.value) === false) {
         return;
       }
@@ -1652,14 +1680,22 @@ function PatientRegistration(props) {
 
   function handleScanQR(data) {
     setQRCodeScanner(false);
-    console.log("data after parsing", JSON.parse(data).profileNo);
 
-    handlePauseSearch({
-      target: {
-        value: JSON.parse(data).profileNo,
-        type: "text",
-      },
-    });
+    if (JSON.parse(data).profileNo) {
+      console.log("data after parsing", JSON.parse(data).profileNo);
+      handlePauseSearch({
+        target: {
+          value: JSON.parse(data).profileNo,
+          type: "text",
+        },
+      });
+    } else if (JSON.parse(data).insuranceCardNumber) {
+      console.log("data after parsing", JSON.parse(data).insuranceCardNumber);
+      dispatch({
+        field: "insuranceNo",
+        value: JSON.parse(data).insuranceCardNumber,
+      });
+    }
   }
 
   if (QRCodeScanner) {
@@ -2331,12 +2367,12 @@ function PatientRegistration(props) {
                     className="textInputStyle"
                     InputProps={{
                       startAdornment: (
-                        <InputAdornment position="start">ft</InputAdornment>
+                        <InputAdornment position="start">CM</InputAdornment>
                       ),
                       className: classes.input,
                       classes: { input: classes.input },
                     }}
-                    inputProps={{ maxLength: 4 }}
+                    inputProps={{ maxLength: 6, minLength: 3 }}
                     variant="filled"
                   />
                   {/* <TextField
@@ -3170,7 +3206,7 @@ function PatientRegistration(props) {
                   >
                     <TextField
                       required
-                      label="Depositor Name"
+                      label="Payor's Name"
                       name={"depositorName"}
                       value={depositorName}
                       error={depositorName === "" && paymentForm}
@@ -3681,7 +3717,7 @@ function PatientRegistration(props) {
                   >
                     <TextField
                       required
-                      label="Insurance Number"
+                      label="Insurance Card Number"
                       type="text"
                       name={"insuranceNo"}
                       value={insuranceNo}
@@ -3719,7 +3755,11 @@ function PatientRegistration(props) {
                         height: 55,
                       }}
                     >
-                      <img src={BarCode} style={{ width: 70, height: 60 }} />
+                      <img
+                        src={BarCode}
+                        style={{ width: 70, height: 60, cursor: "pointer" }}
+                        onClick={scanQRCode}
+                      />
                     </div>
                   </div>
 
