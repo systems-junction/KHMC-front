@@ -1,9 +1,11 @@
 /* eslint-disable react/jsx-indent */
-import React from "react";
-import { Route, Switch } from "react-router-dom";
-import NotFound from "../components/NotFound/NotFound";
-import patientHistory from "../views/PatientHistory/PatientHistoryWithSearch";
-import LabRadReport from "../components/ViewLabRadReport/ViewLabRadReport";
+import React from "react"
+import { Route, Switch } from "react-router-dom"
+import NotFound from "../components/NotFound/NotFound"
+import patientHistory from "../views/PatientHistory/PatientHistoryWithSearch"
+import ViewAllPatientPending from "../views/PatientHistory/ViewAllPatientPending"
+
+import LabRadReport from "../components/ViewLabRadReport/ViewLabRadReport"
 
 class PatientHistory extends React.PureComponent {
   render() {
@@ -17,14 +19,20 @@ class PatientHistory extends React.PureComponent {
 
         <Route
           exact
+          path={`${this.props.match.url}/active`}
+          component={ViewAllPatientPending}
+        />
+
+        <Route
+          exact
           path={`${this.props.match.url}/viewReport`}
           component={LabRadReport}
         />
 
         <Route path="*" component={NotFound} />
       </Switch>
-    );
+    )
   }
 }
 
-export default PatientHistory;
+export default PatientHistory
