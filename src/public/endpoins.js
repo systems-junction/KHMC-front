@@ -455,3 +455,6 @@ export const registrationOfficer = `${baseUrl}/reports/rodashboard`;
 export const registuredNurse = `${baseUrl}/reports/nursedashboard`;
 export const consultant = `${baseUrl}/reports/consultantdashboard`;
 export const doctor = `${baseUrl}/reports/doctordashboard`;
+
+// get Active Patients
+export const getActivePatients = `${baseUrl}/patient/getpatientactive`;
