@@ -145,10 +145,7 @@ class Header extends React.Component {
     }
 
     return (
-      <div
-        className="header M-bottom"
-        // style={{ marginBottom: this.matches ? "15%" : " 55%" }}
-      >
+      <div className="header " style={{ marginBottom: 150 }}>
         <img
           src={KHMC_White}
           className="header1-style mr-auto p-2"
