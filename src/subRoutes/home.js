@@ -22,6 +22,7 @@ import AddEditPurchaseOrders from "../views/PurchaseOrders/addEditPurchaseOrders
 import BuReturn from "../views/BuReturn/buReturn"
 import AddEditBuReturn from "../views/BuReturn/addEditBuReturn"
 import PrintCareStream from "../views/CareStream/Steps/PrintCareStream"
+import ViewAllPatientPending from "../views/PatientHistory/ViewAllPatientPending"
 
 import MaterialReceiving from "../views/MaterialReceiving/materialreceiving"
 import AddEditMaterialReceiving from "../views/MaterialReceiving/addEditMaterialReceiving"
@@ -113,6 +114,11 @@ class HomeScreenRoutes extends React.PureComponent {
           component={AddEditBuStockOutLog}
         />
         <Route exact path={"/home/typestaff"} component={StaffTypes} />
+        <Route
+          exact
+          path={"home/patientHistoryActive"}
+          component={ViewAllPatientPending}
+        />
         <Route path={"/home/typestaff/add"} component={AddEditStaffTypes} />
         <Route path={"/home/typestaff/edit"} component={AddEditStaffTypes} />
         <Route exact path={"/home/accesslevel"} component={AccessLevel} />

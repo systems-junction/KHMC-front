@@ -1,113 +1,113 @@
 // import React from 'react';
-import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
-import KHMC from "../../assets/img/KHMC Header LOGO.png";
-import "../../components/MenuTree/MenuPage.css";
-import MenuTree from "../../components/MenuTree/MenuTree";
-import PatientRegistration from "../../assets/img/PatientRegistration.png";
-import Snackbar from "../../components/Snackbar/Snackbar";
-import Notification from "../../components/Snackbar/Notification.js";
-import AddAlert from "@material-ui/icons/AddAlert";
-import { Redirect } from "react-router-dom";
-import axios from "axios";
-import cookie from "react-cookies";
-import Header from "../../components/Header/Header";
-import RCM from "../../assets/img/RCM.png";
-import WMS from "../../assets/img/WMS.png";
-import FIN from "../../assets/img/FIN.png";
-import Control_Room from "../../assets/img/Control_Room.png";
-import Reports from "../../assets/img/Reports.png";
-import BU from "../../assets/img/business_Unit.png";
-import FunctionalUnit from "../../assets/img/Functional Unit.png";
-import Staff from "../../assets/img/Staff.png";
-import PurchaseRequest from "../../assets/img/purchase request.png";
-import React, { useEffect } from "react";
-import "./MenuPage.css";
-import { render } from "react-dom";
-import Back from "../../assets/img/Back_Arrow.png";
-import KHMC_White from "../../assets/img/KHMC_White.png";
-import Influence_white from "../../assets/img/Influence_white.png";
-import ReturnItem from "../../assets/img/Return Item.png";
-import ReceiveItem from "../../assets/img/Receive Item.png";
-import ReceiveItems from "../ReplenishmentRequestForFU/handleReceiveItemForFUInventory";
-import claimsReview from "../../assets/img/ClaimsReview.png";
-import PreApproval from "../../assets/img/Pre-Approval.png";
-import IPR from "../../assets/img/IPR.png";
-import outPatient1 from "../../assets/img/Rad Out Patient.png";
-import outPatient2 from "../../assets/img/Lab Out-Patient.png";
-import outPatient3 from "../../assets/img/Pharmacist  Out-Patient.png";
-import DM from "../../assets/img/Discharge Medication.png";
-import CN from "../../assets/img/Consultation_Notes.png";
-import assessmentIcon from "../../assets/img/PatientAssessment.png";
-import patientCareIcon from "../../assets/img/PatientCare.png";
-import Lab_RadIcon from "../../assets/img/Lab-Rad Request.png";
-import wh_inventory from "../../assets/img/WH Inventory.png";
-import purchase_order from "../../assets/img/Purchase Order.png";
-import purchase_request from "../../assets/img/purchase request.png";
-import MaterialReceiving from "../../assets/img/Material Receiving.png";
-import AssessDiagIcon from "../../assets/img/Assessment & Diagnosis.png";
-import DischargeIcon from "../../assets/img/Doctor - Discharge.png";
-import HistoryIcon from "../../assets/img/Manual Request.png";
-import CRIcon from "../../assets/img/Consultation Request.png";
-import WMS_Back from "../../assets/img/WMS_Back.png";
-import OrderItems from "../../assets/img/Order Items.png";
-import Others from "../../assets/img/Others.png";
+import Button from "@material-ui/core/Button"
+import Card from "@material-ui/core/Card"
+import KHMC from "../../assets/img/KHMC Header LOGO.png"
+import "../../components/MenuTree/MenuPage.css"
+import MenuTree from "../../components/MenuTree/MenuTree"
+import PatientRegistration from "../../assets/img/PatientRegistration.png"
+import Snackbar from "../../components/Snackbar/Snackbar"
+import Notification from "../../components/Snackbar/Notification.js"
+import AddAlert from "@material-ui/icons/AddAlert"
+import { Redirect } from "react-router-dom"
+import axios from "axios"
+import cookie from "react-cookies"
+import Header from "../../components/Header/Header"
+import RCM from "../../assets/img/RCM.png"
+import WMS from "../../assets/img/WMS.png"
+import FIN from "../../assets/img/FIN.png"
+import Control_Room from "../../assets/img/Control_Room.png"
+import Reports from "../../assets/img/Reports.png"
+import BU from "../../assets/img/business_Unit.png"
+import FunctionalUnit from "../../assets/img/Functional Unit.png"
+import Staff from "../../assets/img/Staff.png"
+import PurchaseRequest from "../../assets/img/purchase request.png"
+import React, { useEffect } from "react"
+import "./MenuPage.css"
+import { render } from "react-dom"
+import Back from "../../assets/img/Back_Arrow.png"
+import KHMC_White from "../../assets/img/KHMC_White.png"
+import Influence_white from "../../assets/img/Influence_white.png"
+import ReturnItem from "../../assets/img/Return Item.png"
+import ReceiveItem from "../../assets/img/Receive Item.png"
+import ReceiveItems from "../ReplenishmentRequestForFU/handleReceiveItemForFUInventory"
+import claimsReview from "../../assets/img/ClaimsReview.png"
+import PreApproval from "../../assets/img/Pre-Approval.png"
+import IPR from "../../assets/img/IPR.png"
+import outPatient1 from "../../assets/img/Rad Out Patient.png"
+import outPatient2 from "../../assets/img/Lab Out-Patient.png"
+import outPatient3 from "../../assets/img/Pharmacist  Out-Patient.png"
+import DM from "../../assets/img/Discharge Medication.png"
+import CN from "../../assets/img/Consultation_Notes.png"
+import assessmentIcon from "../../assets/img/PatientAssessment.png"
+import patientCareIcon from "../../assets/img/PatientCare.png"
+import Lab_RadIcon from "../../assets/img/Lab-Rad Request.png"
+import wh_inventory from "../../assets/img/WH Inventory.png"
+import purchase_order from "../../assets/img/Purchase Order.png"
+import purchase_request from "../../assets/img/purchase request.png"
+import MaterialReceiving from "../../assets/img/Material Receiving.png"
+import AssessDiagIcon from "../../assets/img/Assessment & Diagnosis.png"
+import DischargeIcon from "../../assets/img/Doctor - Discharge.png"
+import HistoryIcon from "../../assets/img/Manual Request.png"
+import CRIcon from "../../assets/img/Consultation Request.png"
+import WMS_Back from "../../assets/img/WMS_Back.png"
+import OrderItems from "../../assets/img/Order Items.png"
+import Others from "../../assets/img/Others.png"
 
-import RepRequestStatus from "../../assets/img/Replenishment Requests Status.png";
+import RepRequestStatus from "../../assets/img/Replenishment Requests Status.png"
 // import FuncUFulfillment from "../../assets/img/FuncUFulfillment.png";
-import ManualRequest from "../../assets/img/Manual Request.png";
-import VendorReturns from "../../assets/img/Vendor Returns.png";
-import FuncUFulfillment from "../../assets/img/FuncU Fulfillment.png";
-import MedicationOrder from "../../assets/img/Medication Order.png";
-import ProfessionalOrder from "../../assets/img/Professional Order.png";
-import FuncUIK from "../../assets/img/FuncUIK.png";
+import ManualRequest from "../../assets/img/Manual Request.png"
+import VendorReturns from "../../assets/img/Vendor Returns.png"
+import FuncUFulfillment from "../../assets/img/FuncU Fulfillment.png"
+import MedicationOrder from "../../assets/img/Medication Order.png"
+import ProfessionalOrder from "../../assets/img/Professional Order.png"
+import FuncUIK from "../../assets/img/FuncUIK.png"
 
-import { connect } from "react-redux";
+import { connect } from "react-redux"
 import {
   funForReducer,
   setPatientDetailsForReducer,
-} from "../../actions/Checking";
+} from "../../actions/Checking"
 
-import PatientHistory from "../PatientHistory/PatientHistory";
+import PatientHistory from "../PatientHistory/PatientHistory"
 
-import GenericDashboad from "../../components/GenericDashboad/GenericDashboard";
-import ApprovalCommitteeMember from "../../assets/img/Approval Committee Member.png";
-import PurchaseOfficer from "../../assets/img/Purchase Officer.png";
-import WHIK from "../../assets/img/WHIK.png";
-import NewPurchaseRequests from "../../assets/img/New Purchase Requests.png";
-import ReplenishmentRequests from "../../assets/img/Replenishment Requests.png";
-import NewPurchaseOrders from "../../assets/img/New Purchase Orders.png";
-import NewOrders from "../../assets/img/New Orders.png";
-import ExpiredNearlyExpiredItems from "../../assets/img/Expired - Nearly Expired Items.png";
-import CashierIcon from "../../assets/img/Cashier.png";
-import NewDischargeDispositionRequests from "../../assets/img/New Discharge - Disposition Requests.png";
-import Notifications from "../../assets/img/Notifications.png";
-import InsuranceClaimsManager from "../../assets/img/Insurance Claims Manager.png";
-import RadiologyRequests from "../../assets/img/Radiology Requests.png";
-import LabRequest from "../../assets/img/Lab Request.png";
-import RadTechnician from "../../assets/img/Rad Technician.png";
-import LabTechnicianIcon from "../../assets/img/Lab Technician.png";
-import NewPharmaRequests from "../../assets/img/New Pharma Requests.png";
-import NewNonPharmaRequests from "../../assets/img/New Non-Pharma Requests.png";
-import PharmacistIcon from "../../assets/img/Pharmacist.png";
-import NewPatientsArriving from "../../assets/img/New Patients Arriving.png";
-import RegisteredNurse from "../../assets/img/Registered Nurse.png";
-import RegistrationOfficerIcon from "../../assets/img/Registration Officer.png";
-import ResidentDoctorIcon from "../../assets/img/ResidentDoctor.png";
+import GenericDashboad from "../../components/GenericDashboad/GenericDashboard"
+import ApprovalCommitteeMember from "../../assets/img/Approval Committee Member.png"
+import PurchaseOfficer from "../../assets/img/Purchase Officer.png"
+import WHIK from "../../assets/img/WHIK.png"
+import NewPurchaseRequests from "../../assets/img/New Purchase Requests.png"
+import ReplenishmentRequests from "../../assets/img/Replenishment Requests.png"
+import NewPurchaseOrders from "../../assets/img/New Purchase Orders.png"
+import NewOrders from "../../assets/img/New Orders.png"
+import ExpiredNearlyExpiredItems from "../../assets/img/Expired - Nearly Expired Items.png"
+import CashierIcon from "../../assets/img/Cashier.png"
+import NewDischargeDispositionRequests from "../../assets/img/New Discharge - Disposition Requests.png"
+import Notifications from "../../assets/img/Notifications.png"
+import InsuranceClaimsManager from "../../assets/img/Insurance Claims Manager.png"
+import RadiologyRequests from "../../assets/img/Radiology Requests.png"
+import LabRequest from "../../assets/img/Lab Request.png"
+import RadTechnician from "../../assets/img/Rad Technician.png"
+import LabTechnicianIcon from "../../assets/img/Lab Technician.png"
+import NewPharmaRequests from "../../assets/img/New Pharma Requests.png"
+import NewNonPharmaRequests from "../../assets/img/New Non-Pharma Requests.png"
+import PharmacistIcon from "../../assets/img/Pharmacist.png"
+import NewPatientsArriving from "../../assets/img/New Patients Arriving.png"
+import RegisteredNurse from "../../assets/img/Registered Nurse.png"
+import RegistrationOfficerIcon from "../../assets/img/Registration Officer.png"
+import ResidentDoctorIcon from "../../assets/img/ResidentDoctor.png"
 
-import CommitteeMember from "../UsersDashboards/CommitteeMember";
-import PurchasingOfficer from "../UsersDashboards/PurchasingOfficer";
-import WarehouseInventoryKeeper from "../UsersDashboards/WarehouseInventoryKeeper";
-import FunctionalUnitInventoryKeeper from "../UsersDashboards/FunctionalUnitInventoryKeeper";
-import Cashier from "../UsersDashboards/Cashier";
-import InsuranceDepartment from "../UsersDashboards/InsuranceDepartment";
-import RadiologyDepartment from "../UsersDashboards/RadiologyDepartment";
-import LabTechnician from "../UsersDashboards/LabTechnician";
-import Pharmacist from "../UsersDashboards/Pharmacist";
-import RegistrationOfficer from "../UsersDashboards/RegistrationOfficer";
-import Nurse from "../UsersDashboards/Nurse";
-import Consultant from "../UsersDashboards/Consultant";
-import Doctor from "../UsersDashboards/Doctor";
+import CommitteeMember from "../UsersDashboards/CommitteeMember"
+import PurchasingOfficer from "../UsersDashboards/PurchasingOfficer"
+import WarehouseInventoryKeeper from "../UsersDashboards/WarehouseInventoryKeeper"
+import FunctionalUnitInventoryKeeper from "../UsersDashboards/FunctionalUnitInventoryKeeper"
+import Cashier from "../UsersDashboards/Cashier"
+import InsuranceDepartment from "../UsersDashboards/InsuranceDepartment"
+import RadiologyDepartment from "../UsersDashboards/RadiologyDepartment"
+import LabTechnician from "../UsersDashboards/LabTechnician"
+import Pharmacist from "../UsersDashboards/Pharmacist"
+import RegistrationOfficer from "../UsersDashboards/RegistrationOfficer"
+import Nurse from "../UsersDashboards/Nurse"
+import Consultant from "../UsersDashboards/Consultant"
+import Doctor from "../UsersDashboards/Doctor"
 
 const admin = [
   { img: KHMC, path: "" },
@@ -128,7 +128,7 @@ const admin = [
     text: "Reports",
     path: `/home/reports`,
   },
-];
+]
 
 const superAdmin = [
   { img: KHMC, path: "" },
@@ -160,7 +160,7 @@ const superAdmin = [
     text: "RCM",
     path: `/home/allrcmusers`,
   },
-];
+]
 
 const residentDoctor = [
   { img: KHMC, path: "" },
@@ -174,7 +174,7 @@ const residentDoctor = [
     text: "WMS",
     path: "/home/wms",
   },
-];
+]
 
 const frontDesk = [
   { img: KHMC, path: "" },
@@ -185,10 +185,10 @@ const frontDesk = [
   },
   {
     img: PatientRegistration,
-    text: "Patient History",
+    text: "Patients",
     path: "/home/rcm/patientHistory",
   },
-];
+]
 
 const insuranceDepartment = [
   { img: KHMC, path: "" },
@@ -202,7 +202,7 @@ const insuranceDepartment = [
     text: "Claims Review",
     path: "/home/rcm/ic/ri",
   },
-];
+]
 
 const registeredNurse = [
   { img: KHMC, path: "" },
@@ -256,7 +256,7 @@ const registeredNurse = [
     text: "Order Receiving (Non-Medical)",
     path: `/home/wms/fus/professionalorder/receiveorder`,
   },
-];
+]
 
 const radiologyImagingDepartment = [
   { img: KHMC, path: "" },
@@ -271,7 +271,7 @@ const radiologyImagingDepartment = [
     text: "Out-Patient",
     path: "/home/rcm/sr/rr/opr",
   },
-];
+]
 
 const labTechnician = [
   { img: KHMC, path: "" },
@@ -286,7 +286,7 @@ const labTechnician = [
     text: "Out-Patient",
     path: "/home/rcm/sr/lr/opr",
   },
-];
+]
 
 const pharmacist = [
   { img: KHMC, path: "" },
@@ -307,7 +307,7 @@ const pharmacist = [
     text: "Discharge",
     path: "/home/rcm/sr/phr/dischargemedication/ipr",
   },
-];
+]
 
 const doctorPhysician = [
   { img: KHMC, path: "" },
@@ -355,7 +355,7 @@ const doctorPhysician = [
     text: "Order Items (Medical)",
     path: `/home/wms/fus/medicinalorder`,
   },
-];
+]
 
 const consultantSpecialist = [
   { img: KHMC, path: "" },
@@ -370,14 +370,14 @@ const consultantSpecialist = [
     text: "Order Items (Medical)",
     path: `/home/wms/fus/medicinalorder`,
   },
-];
+]
 
 const buHead = [
   { img: Control_Room, text: "Control Room", path: "" },
   { img: RCM, text: "RCM", path: "" },
   { img: BU, text: "BU Mgmt", path: "controlroom/bus" },
   { img: FunctionalUnit, text: "FU Mgmt", path: "controlroom/fus" },
-];
+]
 
 const committeeMember = [
   { img: KHMC, path: "" },
@@ -393,7 +393,7 @@ const committeeMember = [
     text: "Purchase Orders",
     path: "/home/wms/warehouse/po",
   },
-];
+]
 
 const accountsMember = [
   // { img: Control_Room, text: "Control Room", path: "" },
@@ -404,7 +404,7 @@ const accountsMember = [
     text: "Approve Receivings",
     path: "/home/wms/warehouse/receiverequests",
   },
-];
+]
 
 const warehouseMember = [
   { img: KHMC, path: "" },
@@ -426,7 +426,7 @@ const warehouseMember = [
   //   text: "Receive Items",
   //   path: `fus/receive`,
   // },
-];
+]
 
 const warehouseIncharge = [
   // { img: FunctionalUnit, text: "Functional Unit", path: "" },
@@ -449,7 +449,7 @@ const warehouseIncharge = [
   //   text: "Receive Items",
   //   path: `fus/receive`,
   // },
-];
+]
 
 const fuHead = [
   { img: FunctionalUnit, text: "Functional Unit", path: "" },
@@ -488,7 +488,7 @@ const fuHead = [
   //   text: "Receive Items",
   //   path: `fus/receive`,
   // },
-];
+]
 
 const buMember = [
   // { img: FunctionalUnit, text: "Functional Unit", path: "" },
@@ -511,7 +511,7 @@ const buMember = [
     text: "Receive Items",
     path: `/home/wms/fus/receive`,
   },
-];
+]
 
 const buNurse = [
   { img: FunctionalUnit, text: "Functional Unit", path: "" },
@@ -532,7 +532,7 @@ const buNurse = [
   //   text: "Receive Items",
   //   path: `fus/receive`,
   // },
-];
+]
 
 const fuReturnRequestApprovalMember = [
   { img: KHMC, path: "" },
@@ -542,7 +542,7 @@ const fuReturnRequestApprovalMember = [
     text: "Approve Returns",
     path: `/home/wms/fus/returnitems`,
   },
-];
+]
 
 // const fuMemberForBUManagement = [
 //   { img: Control_Room, text: "Control Room", path: "" },
@@ -629,7 +629,7 @@ const fuInventoryKeeper = [
   //   text: "Items Order",
   //   path: `/home/wms/fus/medicinalorder`,
   // },
-];
+]
 
 const fuIncharge = [
   { img: Control_Room, text: "Control Room" },
@@ -643,7 +643,7 @@ const fuIncharge = [
     text: "FU Mgmt",
     path: "controlroom/fus/replenishment",
   },
-];
+]
 
 const warehouseInventoryKeeper = [
   { img: KHMC, text: "", path: "" },
@@ -694,7 +694,7 @@ const warehouseInventoryKeeper = [
   //   text: "Purchase Order",
   //   path: "/home/wms/warehouse/po",
   // },
-];
+]
 
 const purchasingManager = [
   { img: KHMC, text: "", path: "" },
@@ -704,7 +704,7 @@ const purchasingManager = [
     text: "Purchase Orders",
     path: "/home/wms/warehouse/po",
   },
-];
+]
 
 const purchasingOfficer = [
   { img: KHMC, text: "", path: "" },
@@ -714,7 +714,7 @@ const purchasingOfficer = [
     text: "Vendor Return",
     path: "/home/wms/warehouse/externalreturn",
   },
-];
+]
 
 const cashier = [
   { img: KHMC, text: "", path: "" },
@@ -723,11 +723,11 @@ const cashier = [
     text: "Patient Clearance",
     path: "/home/rcm/patientclearence",
   },
-];
+]
 
 class HomeScreen extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       openApps: false,
@@ -741,7 +741,7 @@ class HomeScreen extends React.Component {
       notificationArray: [],
 
       headingIcon: "",
-    };
+    }
   }
 
   // setOptions() {
@@ -775,7 +775,7 @@ class HomeScreen extends React.Component {
     this.setState({
       currentUser: cookie.load("current_user"),
       userStaff: cookie.load("user_staff"),
-    });
+    })
   }
 
   componentDidMount() {
@@ -783,12 +783,12 @@ class HomeScreen extends React.Component {
     //   this.setOptions();
     // }
 
-    this.props.setPatientDetailsForReducer("");
+    this.props.setPatientDetailsForReducer("")
 
     if (this.state.openHome)
       setTimeout(() => {
-        document.getElementById("menu-open").checked = true;
-      }, 120);
+        document.getElementById("menu-open").checked = true
+      }, 120)
 
     if (this.state.currentUser.staffTypeId.type === "Committe Member") {
       this.setState({
@@ -798,7 +798,7 @@ class HomeScreen extends React.Component {
         ],
         headingIcon: ApprovalCommitteeMember,
         headingTitle: "Approval Committee Member",
-      });
+      })
     } else if (
       this.state.currentUser.staffTypeId.type === "Purchasing Officer"
     ) {
@@ -808,7 +808,7 @@ class HomeScreen extends React.Component {
         ],
         headingIcon: PurchaseOfficer,
         headingTitle: "Purchasing Officer",
-      });
+      })
     } else if (
       this.state.currentUser.staffTypeId.type === "Warehouse Inventory Keeper"
     ) {
@@ -819,7 +819,7 @@ class HomeScreen extends React.Component {
         ],
         headingIcon: WHIK,
         headingTitle: "WHIK",
-      });
+      })
     } else if (
       this.state.currentUser.staffTypeId.type === "FU Inventory Keeper"
     ) {
@@ -834,7 +834,7 @@ class HomeScreen extends React.Component {
         ],
         headingIcon: FuncUIK,
         headingTitle: "FuncUIK",
-      });
+      })
     } else if (this.state.currentUser.staffTypeId.type === "Cashier") {
       this.setState({
         notificationArray: [
@@ -845,7 +845,7 @@ class HomeScreen extends React.Component {
         ],
         headingIcon: CashierIcon,
         headingTitle: "Cashier",
-      });
+      })
     } else if (
       this.state.currentUser.staffTypeId.type === "Insurance Department"
     ) {
@@ -858,7 +858,7 @@ class HomeScreen extends React.Component {
         ],
         headingIcon: InsuranceClaimsManager,
         headingTitle: "Insurance Claims Manager",
-      });
+      })
     } else if (
       this.state.currentUser.staffTypeId.type === "Radiology/Imaging"
     ) {
@@ -875,7 +875,7 @@ class HomeScreen extends React.Component {
         ],
         headingIcon: RadTechnician,
         headingTitle: "Rad Technician",
-      });
+      })
     } else if (this.state.currentUser.staffTypeId.type === "Lab Technician") {
       this.setState({
         notificationArray: [
@@ -890,7 +890,7 @@ class HomeScreen extends React.Component {
         ],
         headingIcon: LabTechnicianIcon,
         headingTitle: "Lab Technician",
-      });
+      })
     } else if (this.state.currentUser.staffTypeId.type === "Pharmacist") {
       this.setState({
         notificationArray: [
@@ -905,7 +905,7 @@ class HomeScreen extends React.Component {
         ],
         headingIcon: PharmacistIcon,
         headingTitle: "Pharmacist",
-      });
+      })
     } else if (this.state.currentUser.staffTypeId.type === "Registered Nurse") {
       this.setState({
         notificationArray: [
@@ -916,7 +916,7 @@ class HomeScreen extends React.Component {
         ],
         headingIcon: RegisteredNurse,
         headingTitle: "Registered Nurse",
-      });
+      })
     } else if (
       this.state.currentUser.staffTypeId.type === "IPR Receptionist" ||
       this.state.currentUser.staffTypeId.type === "EDR Receptionist"
@@ -930,7 +930,7 @@ class HomeScreen extends React.Component {
         ],
         headingIcon: RegistrationOfficerIcon,
         headingTitle: "Registration Officer",
-      });
+      })
     } else if (
       this.state.currentUser.staffTypeId.type === "Doctor/Physician" ||
       this.state.currentUser.staffTypeId.type === "Consultant/Specialist"
@@ -947,17 +947,17 @@ class HomeScreen extends React.Component {
           this.state.currentUser.staffTypeId.type === "Consultant/Specialist"
             ? "Consultant"
             : "Doctor / Physician",
-      });
+      })
     }
   }
 
   openApps() {
-    this.setState({ openHome: true });
+    this.setState({ openHome: true })
   }
 
   render() {
-    const userType = this.state.currentUser.staffTypeId;
-    console.log("user type", userType);
+    const userType = this.state.currentUser.staffTypeId
+    console.log("user type", userType)
 
     if (this.state.openHome) {
       return (
@@ -1044,7 +1044,7 @@ class HomeScreen extends React.Component {
             }
           />
         </div>
-      );
+      )
     } else {
       return (
         <GenericDashboad
@@ -1085,16 +1085,16 @@ class HomeScreen extends React.Component {
             undefined
           )}
         </GenericDashboad>
-      );
+      )
     }
   }
 }
 
 const mapStateToProps = ({ CheckingReducer }) => {
-  const { count, patientDetails } = CheckingReducer;
-  return { count, patientDetails };
-};
+  const { count, patientDetails } = CheckingReducer
+  return { count, patientDetails }
+}
 export default connect(mapStateToProps, {
   funForReducer,
   setPatientDetailsForReducer,
-})(HomeScreen);
+})(HomeScreen)
