@@ -351,7 +351,7 @@ const useStyles = makeStyles((theme) => ({
       display: matches ? " " : "none",
     },
     "& .MuiFormLabel-root": {
-      fontSize: "12px",
+      fontSize: "11px",
 
       paddingRight: "45px",
     },
@@ -1900,7 +1900,11 @@ function PatientRegistration(props) {
                         <img
                           src={BarCode}
                           onClick={scanQRCode}
-                          style={{ width: 70, height: 60, cursor: "pointer" }}
+                          style={{
+                            width: matches ? 70 : 60,
+                            height: matches ? 60 : 55,
+                            cursor: "pointer",
+                          }}
                         />{" "}
                       </div>
                     </div>
@@ -2050,6 +2054,7 @@ function PatientRegistration(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
+                    marginTop: matches ? 10 : 20,
                   }}
                 >
                   <TextField
@@ -2136,6 +2141,7 @@ function PatientRegistration(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
+                    marginTop: matches ? 10 : 20,
                   }}
                 >
                   <TextField
@@ -2192,7 +2198,7 @@ function PatientRegistration(props) {
 
               <div className="row">
                 <div
-                  className="col-md-4 col-sm-4 col-4"
+                  className="col-md-4  col-6"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -2243,7 +2249,7 @@ function PatientRegistration(props) {
                 </div>
 
                 <div
-                  className="col-md-4 col-sm-4 col-4"
+                  className="col-md-4 col-6"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -2272,7 +2278,7 @@ function PatientRegistration(props) {
                 </div>
 
                 <div
-                  className="col-md-4 col-sm-4 col-4"
+                  className="col-md-4"
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
@@ -2316,7 +2322,7 @@ function PatientRegistration(props) {
                 </div>
               </div>
 
-              <div className="row">
+              <div className="row" style={{ marginTop: matches ? " " : 10 }}>
                 <div
                   className="col-md-3 col-sm-3 col-3"
                   style={{
@@ -2519,6 +2525,7 @@ function PatientRegistration(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
+                    marginTop: matches ? 10 : 20,
                   }}
                 >
                   <TextField
@@ -2771,6 +2778,7 @@ function PatientRegistration(props) {
                   justifyContent: "center",
                   paddingLeft: 6,
                   paddingRight: 6,
+                  marginTop: matches ? " " : 10,
                 }}
               >
                 <div
@@ -4030,6 +4038,7 @@ function PatientRegistration(props) {
                 //   flex: 1,
                 // }}
                 className="row"
+                style={{ marginTop: matches ? " " : 10 }}
               >
                 <div
                   style={{
