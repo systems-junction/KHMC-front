@@ -1836,9 +1836,9 @@ function AddEditPurchaseRequest(props) {
                         style={{
                           zIndex: 3,
                           position: "absolute",
-                          width: "96.6%",
+                          width: matches ? "96.6%" : "89%",
                           left: 22,
-                          marginTop: 5,
+                          marginTop: matches ? 5 : -92,
                           marginBottom: 10,
                         }}
                       >

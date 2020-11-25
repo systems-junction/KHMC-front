@@ -20,6 +20,7 @@ import BarCode from "../../../../assets/img/Bar Code.png";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import socketIOClient from "socket.io-client";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import QRCodeScannerComponent from "../../../../components/QRCodeScanner/QRCodeScanner";
 
@@ -87,7 +88,7 @@ const useStylesForInput = makeStyles((theme) => ({
       boxShadow: "none",
     },
     "& .MuiFormLabel-root": {
-      fontSize: "12px",
+      fontSize: "11px",
 
       paddingRight: "15px",
     },
@@ -107,6 +108,7 @@ const useStylesForInput = makeStyles((theme) => ({
 const actions = { view: true };
 
 export default function Ipr(props) {
+  const matches = useMediaQuery("(min-width:600px)");
   const classes = useStylesForInput();
 
   const [Ipr, setIpr] = useState("");
@@ -313,7 +315,11 @@ export default function Ipr(props) {
                 <img
                   src={BarCode}
                   onClick={scanQRCode}
-                  style={{ width: 70, height: 60, cursor: "pointer" }}
+                  style={{
+                    width: matches ? 70 : 60,
+                    height: matches ? 60 : 55,
+                    cursor: "pointer",
+                  }}
                 />{" "}
               </div>
             </div>
