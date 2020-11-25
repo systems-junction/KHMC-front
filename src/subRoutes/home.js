@@ -3,7 +3,7 @@ import { Route, Switch, Router } from "react-router-dom"
 import { createBrowserHistory } from "history"
 import NotFound from "../components/NotFound/NotFound"
 import PhotoEditor from "../components/PhotoEditor/PhotoEditor"
-import CareStreamMain from "../views/CareStream/CareStreamMain"
+// import CareStreamMain from "../views/CareStream/CareStreamMain"
 import HomeScreen from "../views/Home/HomeScreen"
 import PatientFHIR from "../views/patientFHIR/patientFHIR"
 import ControlRoom from "../views/Home/ControlRoom"
@@ -21,7 +21,7 @@ import PurchaseOrders from "../views/PurchaseOrders/purchaseOrder"
 import AddEditPurchaseOrders from "../views/PurchaseOrders/addEditPurchaseOrders"
 import BuReturn from "../views/BuReturn/buReturn"
 import AddEditBuReturn from "../views/BuReturn/addEditBuReturn"
-import PrintCareStream from "../views/CareStream/Steps/PrintCareStream"
+// import PrintCareStream from "../views/CareStream/Steps/PrintCareStream"
 import ViewAllPatientPending from "../views/PatientHistory/ViewAllPatientPending"
 
 import MaterialReceiving from "../views/MaterialReceiving/materialreceiving"
@@ -79,11 +79,11 @@ class HomeScreenRoutes extends React.PureComponent {
         <Route exact path={"/home/patientFHIR"} component={PatientFHIR} />
         <Route path={"/home/controlroom"} component={ControlRoomRoutes} />
         <Route path={"/home/reports"} component={ReportsRoutes} />
-        <Route exact path={"/home/careStream"} component={CareStreamMain} />
-        <Route
+        {/* <Route exact path={"/home/careStream"} component={CareStreamMain} /> */}
+        {/* <Route
           path={"/home/careStream/printCareStream"}
           component={PrintCareStream}
-        />
+        /> */}
 
         <Route
           path={"/home/notificationCenter"}

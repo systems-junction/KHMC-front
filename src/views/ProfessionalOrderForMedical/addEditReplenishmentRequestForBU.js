@@ -2318,7 +2318,15 @@ function AddEditPurchaseRequest(props) {
                   </div>
 
                   {searchQuery ? (
-                    <div style={{ zIndex: 3 }}>
+                    <div
+                      style={{
+                        zIndex: 3,
+                        position: "absolute",
+                        width: "92%",
+                        marginTop: matches ? 5 : -95,
+                        marginBottom: 10,
+                      }}
+                    >
                       <Paper style={{ ...stylesForPaper.paperStyle }}>
                         {itemFoundSuccessfull && itemFound !== "" ? (
                           <Table size="small">

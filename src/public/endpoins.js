@@ -5,14 +5,14 @@ const StagingDigitalOceanUploadsUrl = "https://dev.khmc-staging.online/"
 
 const baseUrl = local
 // const baseUrl = stagingDigitalOcean;
-// export const socketUrl = 'wss://dev.khmc-staging.online:4001'
+// export const socketUrl = "wss://dev.khmc-staging.online:4001";
 export const socketUrl = "ws://localhost:4001"
 export const socketUrlForWebRTC = "ws://localhost:4002"
 
 export const audioURL = "http://localhost:4000"
 // export const audioURL = "https://dev.khmc-staging.online";
 export const uploadsUrl = "http://localhost:4000/uploads/"
-// export const uploadsUrl = StagingDigitalOceanUploadsUrl
+// export const uploadsUrl = StagingDigitalOceanUploadsUrl;
 
 // auth endpoints
 export const loginUrl = `${baseUrl}/auth/login`

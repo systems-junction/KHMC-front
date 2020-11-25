@@ -1,49 +1,50 @@
 /* eslint-disable react/jsx-indent */
 /* eslint-disable array-callback-return */
-import React, { useEffect, useState, useReducer } from "react"
-import Select from "@material-ui/core/Select"
-import InputLabel from "@material-ui/core/InputLabel"
-import MenuItem from "@material-ui/core/MenuItem"
+import React, { useEffect, useState, useReducer } from "react";
+import Select from "@material-ui/core/Select";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
 // import { makeStyles } from '@material-ui/core/styles';
-import Button from "@material-ui/core/Button"
-import { ToastsStore } from "react-toasts"
+import Button from "@material-ui/core/Button";
+import { ToastsStore } from "react-toasts";
 
-import { Redirect } from "react-router-dom"
+import { Redirect } from "react-router-dom";
 
-import Header from "../Header/Header"
+import Header from "../Header/Header";
 
-import Back from "../../assets/img/Back.png"
-import Home from "../../assets/img/Home.png"
+import Back from "../../assets/img/Back.png";
+import Home from "../../assets/img/Home.png";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import ThankYou from "../../assets/img/ThankYou.png";
 
-import ThankYou from "../../assets/img/ThankYou.png"
-
-import { connect } from "react-redux"
+import { connect } from "react-redux";
 import {
   funForSaga,
   funForReducer,
   setPatientDetailsForReducer,
-} from "../../actions/Checking"
+} from "../../actions/Checking";
 
 function AddBusinessUnit(props) {
-  const [goToHome, setGoToHome] = useState(false)
-  const [goBackScreen, setGoBackScreen] = useState(false)
+  const matches = useMediaQuery("(min-width:600px)");
+  const [goToHome, setGoToHome] = useState(false);
+  const [goBackScreen, setGoBackScreen] = useState(false);
 
   useEffect(() => {
-    console.log(props.history.location.state.patientDetails)
+    console.log(props.history.location.state.patientDetails);
     if (
       props.history.location.state &&
       props.history.location.state.patientDetails
     ) {
       props.setPatientDetailsForReducer(
-        props.history.location.state.patientDetails,
-      )
+        props.history.location.state.patientDetails
+      );
     }
-  }, [])
+  }, []);
 
   if (goToHome) {
     // props.history.replace('', null);
-    props.setPatientDetailsForReducer("")
-    return <Redirect to="/home" />
+    props.setPatientDetailsForReducer("");
+    return <Redirect to="/home" />;
   }
 
   return (
@@ -70,7 +71,7 @@ function AddBusinessUnit(props) {
           alignItems: "center",
           flex: 4,
           display: "flex",
-          marginTop: -600,
+          marginTop: matches ? -600 : -655,
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "column",
@@ -138,14 +139,14 @@ function AddBusinessUnit(props) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 const mapStateToProps = ({ CheckingReducer }) => {
-  const { count, patientDetails } = CheckingReducer
-  return { count, patientDetails }
-}
+  const { count, patientDetails } = CheckingReducer;
+  return { count, patientDetails };
+};
 export default connect(mapStateToProps, {
   funForReducer,
   setPatientDetailsForReducer,
-})(AddBusinessUnit)
+})(AddBusinessUnit);

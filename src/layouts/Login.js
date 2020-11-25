@@ -23,7 +23,7 @@ import Splash from "./Splash";
 import "../assets/jss/material-dashboard-react/components/TextInputStyle.css";
 
 import Loader from "react-loader-spinner";
-import Header from "../components/Header/Header";
+import "../components/Header/Header.css";
 
 import { subscribeUser } from "../subscription";
 
@@ -100,12 +100,12 @@ class Login extends React.Component {
   }
 
   recordLogin(response) {
-    console.log("Handle login record ", response)
+    console.log("Handle login record ", response);
 
     const params = {
       token: response.token,
       userId: response.user._id,
-    }
+    };
     axios
       .post(recordLogin, params)
       .then((res) => {
@@ -148,7 +148,7 @@ class Login extends React.Component {
               cookie.save("current_user", res.data.data.user, { path: "/" });
               subscribeUser(res.data.data.user);
 
-              this.recordLogin(res.data.data)
+              this.recordLogin(res.data.data);
 
               // this.props.history.push('/home'+ '/'+res.data.data.user.staffTypeId.routeAccess);
 
@@ -227,11 +227,16 @@ class Login extends React.Component {
         <div className="header">
           <img
             src={KHMC_White}
-            className="header1-style"
-          // style={{ maxWidth: "160px", height: "35px" }}
-          // onClick={() => {
-          //   return this.setState({ goBack: true });
-          // }}
+            // className="header1-style"
+            style={{
+              maxWidth: 150,
+              height: 45,
+              height: this.matches ? 45 : 75,
+              marginTop: -18,
+            }}
+            // onClick={() => {
+            //   return this.setState({ goBack: true });
+            // }}
           />{" "}
           {/* <h4
             className='header1-style'
@@ -244,16 +249,16 @@ class Login extends React.Component {
           </h4> */}
           <img
             src={Influence_white}
-            className="header2-style"
+            // className="header2-style"
             style={{
-              // maxWidth: "160px",
-              // height: "35px",
+              maxWidth: "160px",
+              height: "35px",
               cursor: "pointer",
-              // boxShadow: this.state.hover ? '2px 2px 2px 2px #b2b0b0' : '',
+              boxShadow: this.state.hover ? "2px 2px 2px 2px #b2b0b0" : "",
             }}
-          // onMouseEnter={() => this.setState({ hover: true })}
-          // onMouseLeave={() => this.setState({ hover: false })}
-          // onClick={() => this.setState({ open: !this.state.open })}
+            // onMouseEnter={() => this.setState({ hover: true })}
+            // onMouseLeave={() => this.setState({ hover: false })}
+            // onClick={() => this.setState({ open: !this.state.open })}
           />
         </div>
         {/* <Header /> */}
@@ -397,23 +402,23 @@ class Login extends React.Component {
                         </Button>
                       </div>
                     ) : (
-                        <div
-                          className="row"
-                          style={{
-                            marginTop: 25,
-                            width: "100%",
-                            display: "flex",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <Loader
-                            type="TailSpin"
-                            color="white"
-                            height={50}
-                            width={50}
-                          />
-                        </div>
-                      )}
+                      <div
+                        className="row"
+                        style={{
+                          marginTop: 25,
+                          width: "100%",
+                          display: "flex",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Loader
+                          type="TailSpin"
+                          color="white"
+                          height={50}
+                          width={50}
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
