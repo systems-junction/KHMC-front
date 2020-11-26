@@ -188,7 +188,7 @@ class Header extends React.Component {
               right: 0,
               bottom: 0,
               position: "fixed",
-              zIndex: 5,
+              zIndex: 7,
             }}
           >
             <Fade in={this.state.open} timeout={1000}>
@@ -330,7 +330,7 @@ class Header extends React.Component {
         )}
 
         {this.state.currentUser ? (
-          <div style={{ position: "fixed", right: 35, bottom: 45, zIndex: 5 }}>
+          <div style={{ position: "fixed", right: 35, bottom: 45, zIndex: 7 }}>
             <Fab
               // color="primary"
               aria-label="add"

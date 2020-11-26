@@ -255,7 +255,7 @@ const useStyles = makeStyles((theme) => ({
   },
   root: {
     "& .MuiFormLabel-root": {
-      fontSize: "12px",
+      fontSize: "11px",
 
       paddingRight: "50px",
     },
@@ -1576,7 +1576,11 @@ function AddEditPurchaseRequest(props) {
                       <img
                         src={BarCode}
                         onClick={scanQRCode}
-                        style={{ width: 70, height: 60, cursor: "pointer" }}
+                        style={{
+                          width: matches ? 70 : 60,
+                          height: matches ? 60 : 55,
+                          cursor: "pointer",
+                        }}
                       />
                     </div>
                   </div>
@@ -2322,7 +2326,7 @@ function AddEditPurchaseRequest(props) {
                       style={{
                         zIndex: 3,
                         position: "absolute",
-                        width: "92%",
+                        width: matches ? "92%" : "88%",
                         marginTop: matches ? 5 : -95,
                         marginBottom: 10,
                       }}

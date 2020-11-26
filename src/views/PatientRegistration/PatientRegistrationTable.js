@@ -95,8 +95,8 @@ const useStylesForInput = makeStyles((theme) => ({
       boxShadow: "none",
     },
     "& .MuiFormLabel-root": {
-      fontSize: "11px",
-      paddingRight: "15px",
+      fontSize: "13px",
+      paddingRight: "50px",
     },
   },
   label: {
