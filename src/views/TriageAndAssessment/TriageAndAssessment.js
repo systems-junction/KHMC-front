@@ -774,7 +774,12 @@ function TriageAndAssessment(props) {
     if (e.target.value === "GCS") {
       if (checkForGCSValue()) {
         let a = [...neurological];
-        let b = a.filter((i) => !i.substr("GCS("));
+        let b = [];
+        for (let i = 0; i < a.length; i++) {
+          if (!a[i].includes(":")) {
+            b.push(a[i]);
+          }
+        }
         dispatch({ field: "neurological", value: b });
 
         return;
@@ -813,15 +818,15 @@ function TriageAndAssessment(props) {
     var a = [...neurological];
     let withValue = [];
     for (var i = 0; i < a.length; i++) {
-      if (a[i] === "GCS" || a[i].includes("(")) {
-        if (a[i].includes("(")) {
-          let val = "GCS" + "(" + gcsValue + ")";
+      if (a[i] === "GCS" || a[i].includes(":")) {
+        if (a[i].includes(":")) {
+          let val = "GCS" + ":" + gcsValue;
           a.splice(i, 1);
           console.log(gcsValue);
           a[i] = val;
           break;
         }
-        let val = a[i] + "(" + gcsValue + ")";
+        let val = a[i] + ":" + gcsValue;
         withValue.push(val);
         a[i] = val;
         break;
@@ -833,7 +838,11 @@ function TriageAndAssessment(props) {
 
   function checkForGCSValue() {
     for (let i = 0; i < neurological.length; i++) {
-      if (neurological[i].includes("GCS") || neurological[i].substr("GCS(")) {
+      if (
+        (neurological[i].includes("GCS") ||
+          neurological[0].split(":")[0] === "GCS") &&
+        neurological.length > 0
+      ) {
         return true;
       }
     }
@@ -842,7 +851,11 @@ function TriageAndAssessment(props) {
 
   function findGCSValue() {
     for (let i = 0; i < neurological.length; i++) {
-      if (neurological[i].includes("GCS") || neurological[i].substr("GCS(")) {
+      if (
+        (neurological[i].includes("GCS") ||
+          neurological[0].split(":")[0] === "GCS") &&
+        neurological.length > 0
+      ) {
         return neurological[i];
       }
     }
@@ -1863,7 +1876,7 @@ function TriageAndAssessment(props) {
                           checked={checkForGCSValue() ? true : false}
                         />
                         &nbsp;&nbsp;
-                        {checkForGCSValue() ? findGCSValue() : "GCS(0)"}
+                        {checkForGCSValue() ? findGCSValue() : "GCS:0"}
                       </label>
                     </div>
                   </div>

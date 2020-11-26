@@ -1,31 +1,20 @@
 import React from "react";
-
 import TextField from "@material-ui/core/TextField";
-
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
-
-// import Notification from 'components/Snackbar/Notification.js';
-
 import AddAlert from "@material-ui/icons/AddAlert";
-
 import { Redirect } from "react-router-dom";
 import axios from "axios";
 import cookie from "react-cookies";
 import { loginUrl, getStaffUrl, recordLogin } from "../public/endpoins";
-
 import KHMC_White from "../assets/img/KHMC Header LOGO.png";
-
 import Influence_white from "../assets/img/Influence Original - White.png";
-
 import Splash from "./Splash";
-
 import "../assets/jss/material-dashboard-react/components/TextInputStyle.css";
-
 import Loader from "react-loader-spinner";
 import "../components/Header/Header.css";
-
 import { subscribeUser } from "../subscription";
+import Notification from "../components/Snackbar/Notification";
 
 class Login extends React.Component {
   constructor(props) {
@@ -55,6 +44,10 @@ class Login extends React.Component {
       staffType: "",
       staff: "",
       staffUser: "",
+
+      errorMsg: "",
+      successMsg: "",
+      openNotification: false,
     };
   }
 
@@ -164,17 +157,22 @@ class Login extends React.Component {
               // window.caches
               //   .open("pwa-task-manager-cache")
               //   .then((cache) => cache.put("data.json", jsonResponse));
+            } else if (!res.data.success) {
+              this.setState({
+                openNotification: true,
+                errorMsg: "Login Failed",
+              });
             }
-            // else if (!res.data.success) {
-            //   this.setState({ tr: true });
-            // }
           })
           .catch((e) => {
-            console.log("error is ", e);
+            console.log("error while login ", e);
+
             this.setState({
               tr: true,
               msg: "Login failed",
               buttonPressed: false,
+              openNotification: true,
+              errorMsg: "Login failed",
             });
           });
       }
@@ -200,8 +198,13 @@ class Login extends React.Component {
   render() {
     if (this.state.tr) {
       setTimeout(() => {
-        this.setState({ tr: false, msg: "" });
-      }, 2000);
+        this.setState({
+          tr: false,
+          msg: "",
+          errorMsg: "",
+          openNotification: false,
+        });
+      }, 4000);
     }
     if (this.state.verifiedUser) {
       // return <Redirect to="/admin/dashboard" />;
@@ -440,6 +443,11 @@ class Login extends React.Component {
             </form>
           </div>
         </div>
+        <Notification
+          msg={this.state.errorMsg}
+          open={this.state.openNotification}
+          success={this.state.successMsg}
+        />
       </div>
     );
   }
