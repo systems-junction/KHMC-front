@@ -24,6 +24,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 import socketIOClient from "socket.io-client";
 import cookie from "react-cookies";
+import { useStyles1 } from "../../components/MuiCss/MuiCss";
 
 import QRCodeScannerComponent from "../../components/QRCodeScanner/QRCodeScanner";
 
@@ -124,6 +125,7 @@ const actions = { view: true };
 export default function EDR(props) {
   const matches = useMediaQuery("(min-width:600px)");
   const classes = useStylesForInput();
+  const classes1 = useStyles1();
 
   const [labInPatient, setlabInPatient] = useState("");
   const [radInPatient, setradInPatient] = useState("");
@@ -328,7 +330,7 @@ export default function EDR(props) {
           </div> */}
         </div>
         <div
-          className={`${"container-fluid"} ${classes.root}`}
+          className={`${"container-fluid"} ${classes.root} ${classes1.root}`}
           style={{
             marginTop: "25px",
             paddingLeft: "10px",

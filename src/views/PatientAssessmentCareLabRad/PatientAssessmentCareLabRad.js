@@ -52,6 +52,7 @@ import Loader from "react-loader-spinner";
 import UpdateSingleRequest from "../ECR/updateRequest";
 
 import QRCodeScannerComponent from "../../components/QRCodeScanner/QRCodeScanner";
+import { useStyles1 } from "../../components/MuiCss/MuiCss";
 
 import { connect } from "react-redux";
 import {
@@ -318,22 +319,22 @@ const useStylesForInput = makeStyles((theme) => ({
       backgroundColor: "white",
       color: "black",
     },
-    "& .MuiFormLabel-root": {
-      fontSize: "11px",
+    // "& .MuiFormLabel-root": {
+    //   fontSize: "11px",
 
-      paddingRight: "50px",
-    },
+    //   paddingRight: "50px",
+    // },
   },
-  label: {
-    "&$focusedLabel": {
-      color: "red",
-      display: "none",
-    },
-    // "&$erroredLabel": {
-    //   color: "orange"
-    // }
-  },
-  focusedLabel: {},
+  // label: {
+  //   "&$focusedLabel": {
+  //     color: "red",
+  //     display: "none",
+  //   },
+  //   // "&$erroredLabel": {
+  //   //   color: "orange"
+  //   // }
+  // },
+  // focusedLabel: {},
 }));
 
 function LabRadRequest(props) {
@@ -341,6 +342,7 @@ function LabRadRequest(props) {
 
   const classesForTabs = useStylesForTabs();
   const classes = useStylesForInput();
+  const classes1 = useStyles1();
 
   const initialState = {
     labServiceId: "",
@@ -2016,7 +2018,7 @@ function LabRadRequest(props) {
           </div>
         </div>
         <div
-          className={`${"container-fluid"} ${classes.root}`}
+          className={`${"container-fluid"} ${classes.root} ${classes1.root}`}
           style={{
             marginTop: "25px",
             paddingLeft: "10px",

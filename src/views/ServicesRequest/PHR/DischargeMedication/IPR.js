@@ -23,6 +23,7 @@ import socketIOClient from "socket.io-client";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import QRCodeScannerComponent from "../../../../components/QRCodeScanner/QRCodeScanner";
+import { useStyles1 } from "../../../../components/MuiCss/MuiCss";
 
 const tableHeading = ["MRN", "Request Number", "Date", "Status", "Action"];
 const tableDataKeys = [
@@ -87,22 +88,22 @@ const useStylesForInput = makeStyles((theme) => ({
       backgroundColor: "white",
       boxShadow: "none",
     },
-    "& .MuiFormLabel-root": {
-      fontSize: "11px",
+    // "& .MuiFormLabel-root": {
+    //   fontSize: "11px",
 
-      paddingRight: "15px",
-    },
+    //   paddingRight: "15px",
+    // },
   },
-  label: {
-    "&$focusedLabel": {
-      color: "red",
-      display: "none",
-    },
-    // "&$erroredLabel": {
-    //   color: "orange"
-    // }
-  },
-  focusedLabel: {},
+  // label: {
+  //   "&$focusedLabel": {
+  //     color: "red",
+  //     display: "none",
+  //   },
+  //   // "&$erroredLabel": {
+  //   //   color: "orange"
+  //   // }
+  // },
+  // focusedLabel: {},
 }));
 
 const actions = { view: true };
@@ -110,6 +111,7 @@ const actions = { view: true };
 export default function Ipr(props) {
   const matches = useMediaQuery("(min-width:600px)");
   const classes = useStylesForInput();
+  const classes1 = useStyles1();
 
   const [Ipr, setIpr] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
@@ -255,7 +257,7 @@ export default function Ipr(props) {
         </div>
 
         <div
-          className={`${"container-fluid"} ${classes.root}`}
+          className={`${"container-fluid"} ${classes.root} ${classes1.root} `}
           style={{
             marginTop: "25px",
             paddingLeft: "10px",

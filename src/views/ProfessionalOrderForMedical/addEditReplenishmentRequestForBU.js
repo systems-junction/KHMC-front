@@ -16,6 +16,7 @@ import axios from "axios";
 import Notification from "../../components/Snackbar/Notification.js";
 import DateFnsUtils from "@date-io/date-fns";
 import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import { useStyles1 } from "../../components/MuiCss/MuiCss";
 import {
   addReplenishmentRequestUrlBU,
   updateReplenishmentRequestUrlBU,
@@ -260,30 +261,30 @@ const useStyles = makeStyles((theme) => ({
       paddingRight: "50px",
     },
   },
-  label: {
-    "&$focusedLabel": {
-      color: "red",
-      display: "none",
-    },
-    // "&$erroredLabel": {
-    //   color: "orange"
-    // }
-  },
-  focusedLabel: {},
-
   // label: {
-  //   "&:focused": {
-  //     color: "black",
+  //   "&$focusedLabel": {
+  //     // display: "none",
   //   },
-  //   "&:after": {
-  //     color: "black",
-  //   },
+  //   // "&$erroredLabel": {
+  //   //   color: "orange"
+  //   // }
   // },
+  // focusedLabel: {},
+
+  // // label: {
+  // //   "&:focused": {
+  // //     color: "black",
+  // //   },
+  // //   "&:after": {
+  // //     color: "black",
+  // //   },
+  // // },
 }));
 
 function AddEditPurchaseRequest(props) {
   const matches = useMediaQuery("(min-width:600px)");
   const classes = useStyles();
+  const classes1 = useStyles1();
   const initialState = {
     _id: "",
     requestNo: "",
@@ -1523,7 +1524,7 @@ function AddEditPurchaseRequest(props) {
             {comingFor === "add" &&
             !props.history.location.state.comingFromRCM ? (
               <div>
-                <div className={`${"row"} ${classes.root}`}>
+                <div className={`${"row"} ${classes.root} ${classes1.root}`}>
                   {/* <span class="fa fa-search"></span> */}
                   <div
                     className="col-md-10 col-8"
@@ -1605,7 +1606,7 @@ function AddEditPurchaseRequest(props) {
                     style={{
                       zIndex: 3,
                       position: "absolute",
-                      width: "96.6%",
+                      width: matches ? "96.6%" : "90%",
                       left: 22,
                       marginTop: 5,
                     }}
