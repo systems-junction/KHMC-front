@@ -28,6 +28,7 @@ import Fingerprint from "../../../assets/img/fingerprint.png";
 import AccountCircle from "@material-ui/icons/SearchOutlined";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import BarCode from "../../../assets/img/Bar Code.png";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import {
   updateIPR,
   updateEdrIpr,
@@ -167,7 +168,7 @@ const useStylesForInput = makeStyles((theme) => ({
       color: "gray",
     },
     "& .MuiFormLabel-root": {
-      fontSize: "12px",
+      fontSize: "11px",
 
       paddingRight: "50px",
     },
@@ -185,6 +186,7 @@ const useStylesForInput = makeStyles((theme) => ({
 }));
 
 function DischargeRequest(props) {
+  const matches = useMediaQuery("(min-width:600px)");
   const classesForTabs = useStylesForTabs();
   const classes = useStylesForInput();
 
@@ -844,7 +846,7 @@ function DischargeRequest(props) {
                   <img
                     src={BarCode}
                     onClick={scanQRCode}
-                    style={{ width: 70, height: 60, cursor: "pointer" }}
+                    style={{ width: matches ? 70 : 60 , height: matches ? 60 : 55, cursor: "pointer" }}
                   />{" "}
                 </div>
               </div>

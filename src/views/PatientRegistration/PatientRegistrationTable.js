@@ -28,6 +28,7 @@ import ViewPatient from "./viewPatient";
 import TextField from "@material-ui/core/TextField";
 import cookie from "react-cookies";
 import _ from "lodash";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import QRCodeScannerComponent from "../../components/QRCodeScanner/QRCodeScanner";
 
@@ -94,9 +95,8 @@ const useStylesForInput = makeStyles((theme) => ({
       boxShadow: "none",
     },
     "& .MuiFormLabel-root": {
-      fontSize: "12px",
-
-      paddingRight: "15px",
+      fontSize: "13px",
+      paddingRight: "50px",
     },
   },
   label: {
@@ -147,6 +147,7 @@ const tableLabDataKeys = [
 const actions = { view: true };
 
 export default function PatientListing(props) {
+  const matches = useMediaQuery("(min-width:600px)");
   const classes = useStylesForInput();
 
   const [pharmOPR, setPharmOPR] = useState("");
@@ -566,7 +567,11 @@ export default function PatientListing(props) {
                 <img
                   src={BarCode}
                   onClick={scanQRCode}
-                  style={{ width: 70, height: 60, cursor: "pointer" }}
+                  style={{
+                    width: matches ? 70 : 60,
+                    height: matches ? 60 : 55,
+                    cursor: "pointer",
+                  }}
                 />{" "}
               </div>
             </div>
