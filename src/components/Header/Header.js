@@ -188,13 +188,9 @@ class Header extends React.Component {
               right: 0,
               bottom: 0,
               position: "fixed",
-<<<<<<< HEAD
-              zIndex: 7,
-=======
               zIndex: 10,
               height: 150,
               marginTop: 30,
->>>>>>> 9f949d9e0a279d783a272dbb9f1cf9ff6e3490b8
             }}
           >
             <Fade in={this.state.open} timeout={1000}>
