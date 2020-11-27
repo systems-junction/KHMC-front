@@ -40,6 +40,7 @@ import validateGender from "../../public/genderValidator";
 import validateRelation from "../../public/relationValidator";
 import validateAddress from "../../public/addressValidator";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useStyles1 } from "../../components/MuiCss/MuiCss";
 import {
   uploadsUrl,
   updatePatientUrl,
@@ -356,21 +357,22 @@ const useStyles = makeStyles((theme) => ({
       paddingRight: "45px",
     },
   },
-  label: {
-    "&$focusedLabel": {
-      color: "red",
-      display: "none",
-    },
-    // "&$erroredLabel": {
-    //   color: "orange"
-    // }
-  },
-  focusedLabel: {},
+  // label: {
+  //   "&$focusedLabel": {
+  //     color: "red",
+  //     display: "none",
+  //   },
+  //   // "&$erroredLabel": {
+  //   //   color: "orange"
+  //   // }
+  // },
+  // focusedLabel: {},
 }));
 
 function PatientRegistration(props) {
   matches = useMediaQuery("(min-width:600px)");
   const classes = useStyles();
+  const classes1 = useStyles1();
 
   const initialState = {
     _id: "",
@@ -1837,7 +1839,9 @@ function PatientRegistration(props) {
           {value === 0 ? (
             <div
               style={{ flex: 4, display: "flex", flexDirection: "column" }}
-              className={`${"container-fluid"} ${classes.root}`}
+              className={`${"container-fluid"} ${classes.root} ${
+                classes1.root
+              }`}
             >
               {comingFor === "add" ? (
                 <>

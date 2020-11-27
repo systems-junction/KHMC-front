@@ -40,6 +40,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import BarCode from "../../assets/img/Bar Code.png";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
+import { useStyles1 } from "../../components/MuiCss/MuiCss";
 
 import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 
@@ -137,7 +138,7 @@ const actionsForFUInventoryKeeper = {
 const actionsForApprovalMember = {
   edit: true,
   view: true,
-  print:true,
+  print: true,
 };
 
 const actionsForWareHouseMembers = {
@@ -146,6 +147,7 @@ const actionsForWareHouseMembers = {
 
 export default function ReplenishmentRequest(props) {
   const classesInput = useStylesForInput();
+  const classes1 = useStyles1();
 
   const [purchaseRequests, setPurchaseRequest] = useState("");
   const [vendors, setVendor] = useState("");
@@ -462,7 +464,7 @@ export default function ReplenishmentRequest(props) {
         overflowY: "scroll",
       }}
     >
-      <Header history={props.history}/>
+      <Header history={props.history} />
       <div className="cPadding">
         <div className="subheader">
           <div>
@@ -480,7 +482,7 @@ export default function ReplenishmentRequest(props) {
           )}
         </div>
         <div
-          className="row"
+          className={`${"row"}  ${classes1.root}   `}
           style={{ marginLeft: "0px", marginRight: "0px", marginTop: "20px" }}
         >
           <div

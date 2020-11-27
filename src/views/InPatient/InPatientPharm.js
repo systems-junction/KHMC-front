@@ -202,6 +202,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 
 import QRCodeScannerComponent from "../../components/QRCodeScanner/QRCodeScanner";
+import { useStyles1 } from "../../components/MuiCss/MuiCss";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import { id } from "date-fns/locale";
 
@@ -264,23 +266,23 @@ const useStylesForInput = makeStyles((theme) => ({
       color: "gray",
     },
   },
-  root: {
-    "& .MuiFormLabel-root": {
-      fontSize: "12px",
+  // root: {
+  //   "& .MuiFormLabel-root": {
+  //     fontSize: "12px",
 
-      paddingRight: "15px",
-    },
-  },
-  label: {
-    "&$focusedLabel": {
-      color: "red",
-      display: "none",
-    },
-    // "&$erroredLabel": {
-    //   color: "orange"
-    // }
-  },
-  focusedLabel: {},
+  //     paddingRight: "15px",
+  //   },
+  // },
+  // label: {
+  //   "&$focusedLabel": {
+  //     color: "red",
+  //     display: "none",
+  //   },
+  //   // "&$erroredLabel": {
+  //   //   color: "orange"
+  //   // }
+  // },
+  // focusedLabel: {},
 }));
 
 const tableHeadingForBUMember = [
@@ -373,6 +375,8 @@ const actionsForItemsForFUMember = { edit: true };
 export default function ReplenishmentRequest(props) {
   const classes = useStyles();
   const classesInput = useStylesForInput();
+  const classes1 = useStyles1();
+  const matches = useMediaQuery("(min-width:600px)");
 
   const [purchaseRequests, setPurchaseRequest] = useState("");
   const [vendors, setVendor] = useState("");
@@ -393,7 +397,6 @@ export default function ReplenishmentRequest(props) {
   const [isOpen, setIsOpen] = useState(false);
 
   const [QRCodeScanner, setQRCodeScanner] = useState(false);
-
 
   const [actionsForTesting, setActions] = useState({
     edit: false,
@@ -922,7 +925,7 @@ export default function ReplenishmentRequest(props) {
           </div>
 
           <div
-            className={`row ${classesInput.root}`}
+            className={`row ${classesInput.root} ${classes1.root}`}
             style={{ marginLeft: "0px", marginRight: "0px", marginTop: "20px" }}
           >
             <div
@@ -977,7 +980,11 @@ export default function ReplenishmentRequest(props) {
                 <img
                   src={BarCode}
                   onClick={scanQRCode}
-                  style={{ width: 70, height: 60, cursor: "pointer" }}
+                  style={{
+                    width: matches ? 70 : 60,
+                    height: matches ? 60 : 55,
+                    cursor: "pointer",
+                  }}
                 />{" "}
               </div>
             </div>
