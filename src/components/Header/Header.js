@@ -340,8 +340,8 @@ class Header extends React.Component {
               style={{
                 backgroundColor: "#ba02ed",
                 outline: "none",
-                width: 40,
-                height: 40,
+                width: 35,
+                height: 35,
               }}
             >
               {/* <AddIcon /> */}
