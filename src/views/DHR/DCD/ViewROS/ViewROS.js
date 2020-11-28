@@ -9,6 +9,9 @@ import PrintIcon from "../../../../assets/img/Print Icon.png";
 import BodyIcon from "../../../../assets/img/body.png";
 import SkinIcon from "../../../../assets/img/Skin_rashes.png";
 
+import KHMC_Black from "../../../../assets/img/KHMC_Black.png";
+import Influence_Black from "../../../../assets/img/Influence_Black.png";
+
 import Button from "@material-ui/core/Button";
 import DetailBlock from "../../../../components/DHR/DCD/ViewPhysicalExam/detailBlock";
 
@@ -44,22 +47,22 @@ const detailsBlockArray = [
     columnSize: 4,
     subArray: [
       {
-        subheading: "Sub heading",
+        subheading: "Sub heading1",
         description: "No Acute 1",
       },
 
       {
-        subheading: "Sub heading",
+        subheading: "Sub heading2",
         description: "No Acute 2",
       },
 
       {
-        subheading: "Sub heading",
+        subheading: "Sub headin3",
         description: "No Acute 3",
       },
 
       {
-        subheading: "Sub heading",
+        subheading: "Sub headin4",
         description: "No Acute 4",
       },
     ],
@@ -306,16 +309,28 @@ export default function ViewPhysicalExam(props) {
         display: "flex",
         flexDirection: "column",
         flex: 1,
-        position: "fixed",
-        width: "100%",
-        height: "100%",
+        // position: "fixed",
+        // width: "100%",
+        // height: "100%",
         // backgroundColor: "rgb(19 213 159)",
-        overflowY: "scroll",
+        // overflowY: "scroll",
         border: "1p",
       }}
     >
-      <Header history={props.history} />
-      <div className="cPadding">
+      <div
+        className="cPadding"
+        style={{
+          marginTop: 15,
+          marginBottom: 25,
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <img src={KHMC_Black} />
+        <img src={Influence_Black} />
+      </div>
+
+      <div className="cPadding" style={{ marginTop: 0 }}>
         <div className="subheader" style={{ marginBottom: 45 }}>
           <div className="col-md-6 col-6">
             <img src={props.icon} />
@@ -328,30 +343,33 @@ export default function ViewPhysicalExam(props) {
               {props.heading}
             </h4>
           </div>
-          <div className="col-md-6 col-6">
+          {/* <div className="col-md-6 col-6">
             <img
               style={{ width: 35, height: "inherit", marginRight: 10 }}
               src={DownloadIcon}
             />
             <img style={{ width: 35, height: "inherit" }} src={PrintIcon} />
-          </div>
+          </div> */}
         </div>
 
         <div
           style={{ flex: 4, display: "flex", flexDirection: "column" }}
           className={`${"container-fluid"} ${classes.root}`}
         >
-          {detailsBlockArray.map((arr) => {
-            return (
-              <DetailBlock
-                heading={arr.heading}
-                subArray={arr.subArray}
-                columnSize={arr.columnSize}
-              />
-            );
-          })}
+          {props.selectedSingleTriage &&
+            props.selectedSingleTriage.map((arr, index) => {
+              return (
+                <div key={index}>
+                  <DetailBlock
+                    heading={arr.heading}
+                    subArray={arr.subArray}
+                    columnSize={arr.columnSize}
+                  />
+                </div>
+              );
+            })}
 
-          <div>
+          {/* <div>
             <div
               style={{
                 display: "flex",
@@ -373,7 +391,7 @@ export default function ViewPhysicalExam(props) {
                 </Button>
               </>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

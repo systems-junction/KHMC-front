@@ -48,6 +48,7 @@ const tableDataKeysForTriage = [
   "date",
   "doctorName",
   "triageLevel",
+  // "status",
   // "generalAppearance",
   // "headNeck",
   // "neurological",
@@ -61,6 +62,7 @@ const tableHeadingForVitalSigns = [
   "Date/Time",
   "Doctor/Staff",
   "Triage Level",
+  // "Status",
   // "Heart Rate",
   // "BP (Systolic)",
   // "BP (Diastolic)",
@@ -76,6 +78,7 @@ const tableDataKeysForVitalSigns = [
   "date",
   "doctorName",
   "triageLevel",
+  // "status",
   // "heartRate",
   // "bloodPressureSys",
   // "bloodPressureDia",
@@ -291,93 +294,39 @@ function TriageAndAssessment(props) {
       for (let i = 0; i < selectedRec.triageAssessment.length; i++) {
         let singleT = [...selectedRec.triageAssessment[i].triageLevel];
 
-        let t = "";
-        for (let j = 0; j < singleT.length; j++) {
-          if (singleT[j] !== "") {
-            if (j === singleT.length - 1) {
-              t = t + singleT[j];
-            } else {
-              t = t + singleT[j] + ", ";
-            }
-          }
-        }
+        let t = singleT.toString();
+        // for (let j = 0; j < singleT.length; j++) {
+        //   if (singleT[j] !== "") {
+        //     if (j === singleT.length - 1) {
+        //       t = t + singleT[j];
+        //     } else {
+        //       t = t + singleT[j] + ", ";
+        //     }
+        //   }
+        // }
 
         let singleGeneral = [
           ...selectedRec.triageAssessment[i].generalAppearance,
         ];
 
-        let ga = "";
-        for (let j = 0; j < singleGeneral.length; j++) {
-          if (singleGeneral[j] !== "") {
-            if (j === singleGeneral.length - 1) {
-              ga = ga + singleGeneral[j];
-            } else {
-              ga = ga + singleGeneral[j] + ", ";
-            }
-          }
-        }
+        let ga = singleGeneral.toString();
 
         let singleHead = [...selectedRec.triageAssessment[i].headNeck];
-        let h = "";
-        for (let j = 0; j < singleHead.length; j++) {
-          if (singleHead[j] !== "") {
-            if (j === singleHead.length - 1) {
-              h = h + singleHead[j];
-            } else {
-              h = h + singleHead[j] + ", ";
-            }
-          }
-        }
+        let h = singleHead.toString();
 
         let singleResp = [...selectedRec.triageAssessment[i].respiratory];
-        let r = "";
-        for (let j = 0; j < singleResp.length; j++) {
-          if (singleResp[j] !== "") {
-            if (j === singleResp.length - 1) {
-              r = r + singleResp[j];
-            } else {
-              r = r + singleResp[j] + ", ";
-            }
-          }
-        }
+        let r = singleResp.toString();
 
         let singleAbdomen = [...selectedRec.triageAssessment[i].abdomen];
-        let a = "";
-        for (let j = 0; j < singleAbdomen.length; j++) {
-          if (singleAbdomen[j] !== "") {
-            if (j === singleAbdomen.length - 1) {
-              a = a + singleAbdomen[j];
-            } else {
-              a = a + singleAbdomen[j] + ", ";
-            }
-          }
-        }
+        let a = singleAbdomen.toString();
 
         let singleNeurological = [
           ...selectedRec.triageAssessment[i].neurological,
         ];
-        let n = "";
-        for (let j = 0; j < singleNeurological.length; j++) {
-          if (singleNeurological[j] !== "") {
-            if (j === singleNeurological.length - 1) {
-              n = n + singleNeurological[j];
-            } else {
-              n = n + singleNeurological[j] + ", ";
-            }
-          }
-        }
+        let n = singleNeurological.toString();
 
         let singleCardiac = [...selectedRec.triageAssessment[i].cardiac];
-        let c = "";
-        for (let j = 0; j < singleCardiac.length; j++) {
-          if (singleCardiac[j] !== "") {
-            if (j === singleCardiac.length - 1) {
-              c = c + singleCardiac[j];
-            } else {
-              c = c + singleCardiac[j] + ", ";
-            }
-          }
-        }
+        let c = singleCardiac.toString();
 
         temp.push({
           ...selectedRec.triageAssessment[i],
@@ -892,8 +841,6 @@ function TriageAndAssessment(props) {
   // console.log("abdomen", abdomen);
   // console.log("neurological", neurological);
 
-  console.log("triageAssessmentArray", triageAssessmentArray);
-
   function handleViewRecord(triageObj) {
     console.log(triageObj);
     // setSelectedTriage(triageObj);
@@ -902,6 +849,8 @@ function TriageAndAssessment(props) {
       pathname: "triageAssessment/view",
       state: {
         selectedTriage: triageObj,
+        requestType,
+        requestTypeId: id,
       },
       comingFor: "view",
     });
@@ -939,20 +888,25 @@ function TriageAndAssessment(props) {
             </div>
           </div>
 
-          <div style={{ marginRight: -10 }}>
-            <Button
-              // disabled={enableForm}
-              onClick={() => setOpenDialogForTriage(true)}
-              style={{
-                ...styles.stylesForButton,
-                fontSize: matches ? 12 : 8,
-              }}
-              variant="contained"
-              color="primary"
-            >
-              Add Triage & Assessment
-            </Button>
-          </div>
+          {currentUser &&
+          currentUser.staffTypeId.type === "Registered Nurse" ? (
+            <div style={{ marginRight: -10 }}>
+              <Button
+                // disabled={enableForm}
+                onClick={() => setOpenDialogForTriage(true)}
+                style={{
+                  ...styles.stylesForButton,
+                  fontSize: matches ? 12 : 8,
+                }}
+                variant="contained"
+                color="primary"
+              >
+                Add Triage & Assessment
+              </Button>
+            </div>
+          ) : (
+            undefined
+          )}
         </div>
 
         {/* {value === 0 ? ( */}

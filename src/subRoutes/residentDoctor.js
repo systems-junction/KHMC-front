@@ -20,6 +20,8 @@ import PatientHistoryAD from "../views/PatientHistory/PatientHistory";
 import viewReportCons from "../components/ViewLabRadReport/ViewLabRadReport";
 import triageAssessment from "../views/TriageAndAssessment/TriageAndAssessment";
 import triageAssessmentAssessDiagnosis from "../views/TriageAndAssessment/TriageAndAssessment";
+import ViewSingleTriage from "../views/TriageAndAssessment/ViewSingleTriage";
+
 import AssessmentDiagnosisPatientHistory from "../views/PatientHistory/PatientHistory";
 import triageAssessmentConRequest from "../views/TriageAndAssessment/TriageAndAssessment";
 import Discharge from "../views/ResidentDoctor/Discharge/DischargeRequest";
@@ -120,6 +122,12 @@ class WMSRoutes extends React.PureComponent {
           exact
           path={`${this.props.match.url}/assessmentdiagnosis/triageAssessment`}
           component={triageAssessmentAssessDiagnosis}
+        />
+
+        <Route
+          exact
+          path={`${this.props.match.url}/assessmentdiagnosis/triageAssessment/view`}
+          component={ViewSingleTriage}
         />
 
         <Route
