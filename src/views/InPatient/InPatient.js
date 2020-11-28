@@ -3,12 +3,13 @@ import Notification from "../../components/Snackbar/Notification.js";
 import CustomTable from "../../components/Table/Table";
 import axios from "axios";
 import _ from "lodash";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import
-{
-  getLRPatient,
-  getRRPatient,
-  // getMaterialReceivingUrl
-} from "../../public/endpoins";
+  {
+    getLRPatient,
+    getRRPatient,
+    // getMaterialReceivingUrl
+  } from "../../public/endpoins";
 import Loader from "react-loader-spinner";
 import Back from "../../assets/img/Back_Arrow.png";
 import Header from "../../components/Header/Header";
@@ -24,6 +25,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 import socketIOClient from "socket.io-client";
 import cookie from "react-cookies";
+import { useStyles1 } from "../../components/MuiCss/MuiCss";
 
 import QRCodeScannerComponent from "../../components/QRCodeScanner/QRCodeScanner";
 
@@ -102,7 +104,7 @@ const useStylesForInput = makeStyles( ( theme ) => ( {
       boxShadow: "none",
     },
     "& .MuiFormLabel-root": {
-      fontSize: "12px",
+      fontSize: "11px",
 
       paddingRight: "15px",
     },
@@ -123,7 +125,9 @@ const actions = { view: true };
 
 export default function EDR ( props )
 {
+  const matches = useMediaQuery( "(min-width:600px)" );
   const classes = useStylesForInput();
+  const classes1 = useStyles1();
 
   const [ labInPatient, setlabInPatient ] = useState( "" );
   const [ radInPatient, setradInPatient ] = useState( "" );

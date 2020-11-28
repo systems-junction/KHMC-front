@@ -184,15 +184,17 @@ class Header extends React.Component {
               float: "right",
               width: 300,
               marginRight: 10,
-              top: 35,
+              top: 40,
               right: 0,
               bottom: 0,
               position: "fixed",
-              zIndex: 5,
+              zIndex: 10,
+              height: 150,
+              marginTop: 30,
             }}
           >
             <Fade in={this.state.open} timeout={1000}>
-              <Card style={{ marginTop: 40 }}>
+              <Card style={{ marginTop: 0 }}>
                 <CardContent>
                   <Typography
                     // variant="h6"
@@ -330,16 +332,21 @@ class Header extends React.Component {
         )}
 
         {this.state.currentUser ? (
-          <div style={{ position: "fixed", right: 35, bottom: 45, zIndex: 5 }}>
+          <div style={{ position: "fixed", right: 35, bottom: 45, zIndex: 7 }}>
             <Fab
               // color="primary"
               aria-label="add"
               onClick={() => this.logoutUser()}
-              style={{ backgroundColor: "#ba02ed", outline: "none" }}
+              style={{
+                backgroundColor: "#ba02ed",
+                outline: "none",
+                width: 35,
+                height: 35,
+              }}
             >
               {/* <AddIcon /> */}
               <i
-                className="zmdi zmdi-power zmdi-hc-3x"
+                className="zmdi zmdi-power zmdi-hc-2x"
                 style={{ color: "white" }}
               ></i>
             </Fab>

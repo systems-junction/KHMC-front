@@ -18,6 +18,16 @@ const styles = {
   styleForCheckboxHeading: {
     fontSize: 13,
   },
+
+  stylesForButton: {
+    color: "white",
+    cursor: "pointer",
+    borderRadius: 5,
+    backgroundColor: "#2c6ddd",
+    width: "100px",
+    height: "40px",
+    outline: "none",
+  },
 };
 
 export default function AlertDialog(props) {
@@ -48,8 +58,6 @@ export default function AlertDialog(props) {
     }
   };
 
-  console.log(gcsTotal);
-
   function handleDone() {
     props.handleGCSDone(gcsTotal);
   }
@@ -76,10 +84,10 @@ export default function AlertDialog(props) {
           <div>
             <div>
               <h6 style={{ ...styles.styleForHeading }}>Best eye response</h6>
-              <p style={{ ...styles.styleForDesc }}>
+              <span style={{ ...styles.styleForDesc }}>
                 If local injury, edema, or otherwise unable to be assessed, mark
                 "Not testable (NT)".
-              </p>
+              </span>
 
               <div className="row">
                 <div className="col-md-4">
@@ -164,14 +172,16 @@ export default function AlertDialog(props) {
               </div>
             </div>
 
+            <hr width={"100%"} />
+
             <div>
               <h6 style={{ ...styles.styleForHeading }}>
                 Best verbal response
               </h6>
-              <p style={{ ...styles.styleForDesc }}>
+              <span style={{ ...styles.styleForDesc }}>
                 If intubated or otherwise unable to be assessed, mark "Not
                 testable (NT)" Oriented (+5).
-              </p>
+              </span>
 
               <div className="row">
                 <div className="col-md-4">
@@ -272,13 +282,15 @@ export default function AlertDialog(props) {
               </div>
             </div>
 
+            <hr width={"100%"} />
+
             <div>
               <h6 style={{ ...styles.styleForHeading }}>Best motor response</h6>
-              <p style={{ ...styles.styleForDesc }}>
+              <span style={{ ...styles.styleForDesc }}>
                 {" "}
                 If on sedation/paralysis or unable to be assessed, mark "Not
                 testable (NT)".
-              </p>
+              </span>
 
               <div className="row">
                 <div className="col-md-4">
@@ -395,14 +407,16 @@ export default function AlertDialog(props) {
               </div>
             </div>
 
+            <hr width={"100%"} />
+
             <div>
               <h6 style={{ ...styles.styleForHeading }}>
                 {" "}
                 Is this a COVID-19 patient?
               </h6>
-              <p style={{ ...styles.styleForDesc }}>
+              <span style={{ ...styles.styleForDesc }}>
                 For research purposes only; answer does NOT impact results.
-              </p>
+              </span>
 
               <div className="row">
                 <div className="col-md-3">
@@ -474,10 +488,19 @@ export default function AlertDialog(props) {
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={props.setVisibilityGCSModal} color="primary">
+          <Button
+            onClick={props.setVisibilityGCSModal}
+            color="primary"
+            style={{ ...styles.stylesForButton }}
+          >
             Cancel
           </Button>
-          <Button color="primary" autoFocus onClick={handleDone}>
+          <Button
+            color="primary"
+            autoFocus
+            onClick={handleDone}
+            style={{ ...styles.stylesForButton }}
+          >
             Done
           </Button>
         </DialogActions>

@@ -40,7 +40,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import BarCode from "../../assets/img/Bar Code.png";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
-
+import { useStyles1 } from "../../components/MuiCss/MuiCss";
 import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 
 import socketIOClient from "socket.io-client";
@@ -136,6 +136,7 @@ const actions = { edit: true, delete: false, print: true };
 export default function PurchaseRequest(props) {
   const [currentUser, setCurrentUser] = useState(cookie.load("current_user"));
   const classesInput = useStylesForInput();
+  const classes1 = useStyles1();
 
   const [purchaseRequests, setPurchaseRequest] = useState("");
   const [vendors, setVendor] = useState("");
@@ -357,7 +358,7 @@ export default function PurchaseRequest(props) {
         overflowY: "scroll",
       }}
     >
-      <Header history={props.history}/>
+      <Header history={props.history} />
 
       <div className="cPadding">
         <div className="subheader">
@@ -391,7 +392,7 @@ export default function PurchaseRequest(props) {
         </div>
 
         <div
-          className="row"
+          className={`${"row"} ${classes1.root}`}
           style={{ marginLeft: "0px", marginRight: "-5px", marginTop: "20px" }}
         >
           <div

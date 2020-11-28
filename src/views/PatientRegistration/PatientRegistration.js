@@ -40,6 +40,7 @@ import validateGender from "../../public/genderValidator";
 import validateRelation from "../../public/relationValidator";
 import validateAddress from "../../public/addressValidator";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useStyles1 } from "../../components/MuiCss/MuiCss";
 import {
   uploadsUrl,
   updatePatientUrl,
@@ -356,21 +357,22 @@ const useStyles = makeStyles((theme) => ({
       paddingRight: "45px",
     },
   },
-  label: {
-    "&$focusedLabel": {
-      color: "red",
-      display: "none",
-    },
-    // "&$erroredLabel": {
-    //   color: "orange"
-    // }
-  },
-  focusedLabel: {},
+  // label: {
+  //   "&$focusedLabel": {
+  //     color: "red",
+  //     display: "none",
+  //   },
+  //   // "&$erroredLabel": {
+  //   //   color: "orange"
+  //   // }
+  // },
+  // focusedLabel: {},
 }));
 
 function PatientRegistration(props) {
   matches = useMediaQuery("(min-width:600px)");
   const classes = useStyles();
+  const classes1 = useStyles1();
 
   const initialState = {
     _id: "",
@@ -1727,7 +1729,14 @@ function PatientRegistration(props) {
           <div className="subheader" style={{ marginLeft: "-10px" }}>
             <div>
               <img src={patientRegister} />
-              <div style={{ flex: 4, display: "flex", alignItems: "center" }}>
+              <div
+                style={{
+                  flex: 4,
+                  display: "flex",
+                  alignItems: "center",
+                  marginBottom: matches ? " " : 10,
+                }}
+              >
                 <h4 style={{ color: "white", fontWeight: "700" }}>
                   {comingFor === "add"
                     ? " Patient Registration"
@@ -1830,7 +1839,9 @@ function PatientRegistration(props) {
           {value === 0 ? (
             <div
               style={{ flex: 4, display: "flex", flexDirection: "column" }}
-              className={`${"container-fluid"} ${classes.root}`}
+              className={`${"container-fluid"} ${classes.root} ${
+                classes1.root
+              }`}
             >
               {comingFor === "add" ? (
                 <>
@@ -2260,7 +2271,7 @@ function PatientRegistration(props) {
                       // required
                       inputVariant="filled"
                       fullWidth={true}
-                      label="Date of birth"
+                      label="Date of Birth"
                       format="dd - MM - yyyy"
                       maxDate={new Date()}
                       // error={dob === '' && detailsForm}
@@ -3169,6 +3180,7 @@ function PatientRegistration(props) {
                     ...styles.textFieldPadding,
                     paddingRight: matches ? "0px" : "5px",
                     paddingLeft: matches ? "5px" : "0px",
+                    marginTop: matches ? 10 : 20,
                   }}
                 >
                   <TextField
@@ -3516,7 +3528,7 @@ function PatientRegistration(props) {
                     ...styles.textFieldPadding,
                     marginLeft: -3,
                   }}
-                  className="col-md-6"
+                  className="col-md-6 col-6"
                 >
                   <Button
                     style={styles.stylesForButton}
@@ -3532,8 +3544,8 @@ function PatientRegistration(props) {
                   style={{
                     display: "flex",
                     // flex: 1,
-                    justifyContent: matches ? "flex-end" : "flex-start",
                     marginTop: "10px",
+                    justifyContent: "flex-end",
                     marginBottom: "1%",
                     marginLeft: !matches ? -3 : 0,
                     ...styles.inputContainerForTextField,
@@ -3547,6 +3559,7 @@ function PatientRegistration(props) {
                       disabled={enableNext}
                       style={{
                         ...styles.stylesForButton,
+                        marginTop: matches ? 10 : -56,
                       }}
                       onClick={onClick}
                       variant="contained"
@@ -3816,6 +3829,7 @@ function PatientRegistration(props) {
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
+                      marginTop: matches ? 10 : 20,
                     }}
                   >
                     <div>
@@ -3889,6 +3903,7 @@ function PatientRegistration(props) {
                     style={{
                       ...styles.inputContainerForTextField,
                       ...styles.textFieldPadding,
+                      marginTop: matches ? 10 : 20,
                     }}
                   >
                     <div>

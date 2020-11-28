@@ -203,6 +203,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 
 import QRCodeScannerComponent from "../../components/QRCodeScanner/QRCodeScanner";
+import { useStyles1 } from "../../components/MuiCss/MuiCss";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import { id } from "date-fns/locale";
 
@@ -265,23 +267,23 @@ const useStylesForInput = makeStyles( ( theme ) => ( {
       color: "gray",
     },
   },
-  root: {
-    "& .MuiFormLabel-root": {
-      fontSize: "12px",
+  // root: {
+  //   "& .MuiFormLabel-root": {
+  //     fontSize: "12px",
 
-      paddingRight: "15px",
-    },
-  },
-  label: {
-    "&$focusedLabel": {
-      color: "red",
-      display: "none",
-    },
-    // "&$erroredLabel": {
-    //   color: "orange"
-    // }
-  },
-  focusedLabel: {},
+  //     paddingRight: "15px",
+  //   },
+  // },
+  // label: {
+  //   "&$focusedLabel": {
+  //     color: "red",
+  //     display: "none",
+  //   },
+  //   // "&$erroredLabel": {
+  //   //   color: "orange"
+  //   // }
+  // },
+  // focusedLabel: {},
 } ) );
 
 const tableHeadingForBUMember = [
@@ -375,6 +377,8 @@ export default function ReplenishmentRequest ( props )
 {
   const classes = useStyles();
   const classesInput = useStylesForInput();
+  const classes1 = useStyles1();
+  const matches = useMediaQuery( "(min-width:600px)" );
 
   const [ purchaseRequests, setPurchaseRequest ] = useState( "" );
   const [ vendors, setVendor ] = useState( "" );
@@ -395,7 +399,6 @@ export default function ReplenishmentRequest ( props )
   const [ isOpen, setIsOpen ] = useState( false );
 
   const [ QRCodeScanner, setQRCodeScanner ] = useState( false );
-
 
   const [ actionsForTesting, setActions ] = useState( {
     edit: false,

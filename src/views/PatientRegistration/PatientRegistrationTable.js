@@ -28,6 +28,8 @@ import ViewPatient from "./viewPatient";
 import TextField from "@material-ui/core/TextField";
 import cookie from "react-cookies";
 import _ from "lodash";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useStyles1 } from "../../components/MuiCss/MuiCss";
 
 import QRCodeScannerComponent from "../../components/QRCodeScanner/QRCodeScanner";
 
@@ -93,22 +95,17 @@ const useStylesForInput = makeStyles((theme) => ({
       backgroundColor: "white",
       boxShadow: "none",
     },
-    "& .MuiFormLabel-root": {
-      fontSize: "12px",
-
-      paddingRight: "15px",
-    },
   },
-  label: {
-    "&$focusedLabel": {
-      color: "red",
-      display: "none",
-    },
-    // "&$erroredLabel": {
-    //   color: "orange"
-    // }
-  },
-  focusedLabel: {},
+  // label: {
+  //   "&$focusedLabel": {
+  //     color: "red",
+  //     display: "none",
+  //   },
+  //   // "&$erroredLabel": {
+  //   //   color: "orange"
+  //   // }
+  // },
+  // focusedLabel: {},
 }));
 
 const tableHeading = [
@@ -147,7 +144,9 @@ const tableLabDataKeys = [
 const actions = { view: true };
 
 export default function PatientListing(props) {
+  const matches = useMediaQuery("(min-width:600px)");
   const classes = useStylesForInput();
+  const classes1 = useStyles1();
 
   const [pharmOPR, setPharmOPR] = useState("");
   const [radOPR, setRadOPR] = useState("");
@@ -511,7 +510,7 @@ export default function PatientListing(props) {
 
         <div
           style={{ flex: 4, display: "flex", flexDirection: "column" }}
-          className={`${"container-fluid"} ${classes.root}`}
+          className={`${"container-fluid"} ${classes.root} ${classes1.root}`}
         >
           <div className="row" style={{ marginTop: "20px" }}>
             <div
@@ -566,7 +565,11 @@ export default function PatientListing(props) {
                 <img
                   src={BarCode}
                   onClick={scanQRCode}
-                  style={{ width: 70, height: 60, cursor: "pointer" }}
+                  style={{
+                    width: matches ? 70 : 60,
+                    height: matches ? 60 : 55,
+                    cursor: "pointer",
+                  }}
                 />{" "}
               </div>
             </div>

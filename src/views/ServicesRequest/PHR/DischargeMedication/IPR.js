@@ -21,8 +21,10 @@ import BarCode from "../../../../assets/img/Bar Code.png";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import socketIOClient from "socket.io-client";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import QRCodeScannerComponent from "../../../../components/QRCodeScanner/QRCodeScanner";
+import { useStyles1 } from "../../../../components/MuiCss/MuiCss";
 
 const tableHeading = [ "MRN", "Request Number", "Date", "Status", "Action" ];
 const tableDataKeys = [
@@ -87,29 +89,31 @@ const useStylesForInput = makeStyles( ( theme ) => ( {
       backgroundColor: "white",
       boxShadow: "none",
     },
-    "& .MuiFormLabel-root": {
-      fontSize: "12px",
+    // "& .MuiFormLabel-root": {
+    //   fontSize: "11px",
 
-      paddingRight: "15px",
-    },
+    //   paddingRight: "15px",
+    // },
   },
-  label: {
-    "&$focusedLabel": {
-      color: "red",
-      display: "none",
-    },
-    // "&$erroredLabel": {
-    //   color: "orange"
-    // }
-  },
-  focusedLabel: {},
+  // label: {
+  //   "&$focusedLabel": {
+  //     color: "red",
+  //     display: "none",
+  //   },
+  //   // "&$erroredLabel": {
+  //   //   color: "orange"
+  //   // }
+  // },
+  // focusedLabel: {},
 } ) );
 
 const actions = { view: true };
 
 export default function Ipr ( props )
 {
+  const matches = useMediaQuery( "(min-width:600px)" );
   const classes = useStylesForInput();
+  const classes1 = useStyles1();
 
   const [ Ipr, setIpr ] = useState( "" );
   const [ errorMsg, setErrorMsg ] = useState( "" );
