@@ -3,6 +3,8 @@ import { Route, Switch } from "react-router-dom";
 import NotFound from "../components/NotFound/NotFound";
 import patientAssessment from "../views/PatientAssessmentCareLabRad/PatientAssessmentCareLabRad";
 import triageAssessment from "../views/TriageAndAssessment/TriageAndAssessment";
+import ViewSingleTriage from "../views/TriageAndAssessment/ViewSingleTriage";
+
 import SuccessScreen from "../components/SuccessScreen/SuccessScreen";
 import viewReport from "../components/ViewLabRadReport/ViewLabRadReport";
 import pviewReport from "../components/ViewLabRadReport/ViewLabRadReport";
@@ -18,8 +20,15 @@ class PatientAssessment extends React.PureComponent {
           component={patientAssessment}
         />
         <Route
+          exact
           path={`${this.props.match.url}/triageAssessment`}
           component={triageAssessment}
+        />
+
+        <Route
+          exact
+          path={`${this.props.match.url}/triageAssessment/view`}
+          component={ViewSingleTriage}
         />
 
         <Route

@@ -2,6 +2,7 @@ import React from "react";
 import "./Header.css";
 import KHMC_White from "../../assets/img/KHMC Header LOGO.png";
 import Influence_white from "../../assets/img/Influence Original - White.png";
+
 import { Redirect } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
