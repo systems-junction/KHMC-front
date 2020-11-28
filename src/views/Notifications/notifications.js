@@ -10,37 +10,43 @@ import { markNotification } from '../../public/endpoins'
 import axios from 'axios'
 import Notification from '../../components/Snackbar/Notification.js'
 
-export default function Notifications(props) 
+export default function Notifications ( props ) 
 {
-    const [errorMsg, setErrorMsg] = useState('')
-    const [successMsg, setsuccessMsg] = useState('')
-    const [openNotification, setOpenNotification] = useState(false)
-    const [notificationData, setnotificationData] = useState('')
+    const [ errorMsg, setErrorMsg ] = useState( '' )
+    const [ successMsg, setsuccessMsg ] = useState( '' )
+    const [ openNotification, setOpenNotification ] = useState( false )
+    const [ notificationData, setnotificationData ] = useState( '' )
 
-    useEffect(() => {
+    useEffect( () =>
+    {
 
-        if(props.history.location.state && props.history.location.state.notificationData)
+        if ( props.history.location.state && props.history.location.state.notificationData )
         {
-        setnotificationData(props.history.location.state.notificationData)
-        console.log("Data Passed", props.history.location.state.notificationData)
+            setnotificationData( props.history.location.state.notificationData )
+            console.log( "Data Passed", props.history.location.state.notificationData )
         }
-    }, [notificationData,props.history.location.state,props.history.location.state.notificationData])
+    }, [ notificationData, props.history.location.state, props.history.location.state.notificationData ] )
 
-    const getWhen = timestamp => {
-        let when = `${moment(timestamp).format('DD-MM-YYYY')} ${moment(timestamp).format('LTS')}`;
+    const getWhen = timestamp =>
+    {
+        let when = `${ moment( timestamp ).format( 'DD-MM-YYYY' ) } ${ moment( timestamp ).format( 'LTS' ) }`;
         return when;
-    }; 
+    };
 
-    const getContent = message => {
+    const getContent = message =>
+    {
         // console.log("Data Passed",message)
 
-        if (message.indexOf('\n') >= 0) {
-            let splitted = message.split('\n');
+        if ( message.indexOf( '\n' ) >= 0 )
+        {
+            let splitted = message.split( '\n' );
             let ret = '<ul>';
 
-            for (let i = 0; i <= splitted.length - 1; i++) {
-                if (splitted[i] !== '') {
-                    ret = ret + '<li>' + splitted[i] + '</li>';
+            for ( let i = 0; i <= splitted.length - 1; i++ )
+            {
+                if ( splitted[ i ] !== '' )
+                {
+                    ret = ret + '<li>' + splitted[ i ] + '</li>';
                 }
             }
 
@@ -51,50 +57,54 @@ export default function Notifications(props)
         }
 
         return {
-            __html: `<ul><li>${message}</li></ul>`
+            __html: `<ul><li>${ message }</li></ul>`
         };
     }; // Get the notification message
 
-    const handleViewNotification = (message,userId) => {
-        console.log("mesaageee", message)
+    const handleViewNotification = ( message, userId ) =>
+    {
+        console.log( "mesaageee", message )
 
         var id = message._id
 
         const params = {
             read: true,
         }
-        axios.get(markNotification + "/" + id + "/" + userId, params)
-            .then((res) => {
-                if (res.data.success) {
-                    console.log("Response data ",res.data.data)
-                    // setOpenNotification(true)
-                    // setsuccessMsg('Read Notification Successfully')
-                    props.history.push({
+        axios.get( markNotification + "/" + id + "/" + userId, params )
+            .then( ( res ) =>
+            {
+                if ( res.data.success )
+                {
+                    // console.log( "Response data ", res.data.data )
+                    props.history.push( {
                         pathname: message.route,
                         state: {
-                          
+                            comingFrom: 'notifications',
+                            SearchId: message.searchId
                         },
-                      });
+                    } );
                 }
-            })
-            .catch((e) => {
-                console.log('Cannot read Notification', e)
-                setOpenNotification(true)
-                setErrorMsg('Cannot read Notification')
-            })
+            } )
+            .catch( ( e ) =>
+            {
+                setOpenNotification( true )
+                setErrorMsg( 'Cannot Open Notification' )
+            } )
     }
 
-    if (openNotification) {
-        setTimeout(() => {
-            setOpenNotification(false)
-            setErrorMsg('')
-            setsuccessMsg('')
-        }, 2000)
+    if ( openNotification )
+    {
+        setTimeout( () =>
+        {
+            setOpenNotification( false )
+            setErrorMsg( '' )
+            setsuccessMsg( '' )
+        }, 2000 )
     }
 
     return (
         <div
-            style={{
+            style={ {
                 display: 'flex',
                 flexDirection: 'column',
                 flex: 1,
@@ -103,98 +113,103 @@ export default function Notifications(props)
                 height: '100%',
                 backgroundColor: 'rgb(19 213 159)',
                 overflowY: 'scroll',
-            }}
+            } }
         >
-            <Header history={props.history} />
+            <Header history={ props.history } />
 
             <div className='cPadding'>
                 <div className='subheader'>
                     <div>
-                        <img src={notificationIcon} />
+                        <img src={ notificationIcon } />
                         <h4>Notifications</h4>
                     </div>
                 </div>
 
-                {notificationData.length > 0 ?
-                    (<ul className="notification-info-panel">
-                        {notificationData.map((message, index) => {
+                { notificationData.length > 0 ?
+                    ( <ul className="notification-info-panel">
+                        {notificationData.map( ( message, index ) =>
+                        {
                             return (
-                                message.sendTo.map((checkRead, indexx) => {
-                                    if (checkRead.read === false && checkRead.userId._id === cookie.load("current_user")._id) {
+                                message.sendTo.map( ( checkRead, indexx ) =>
+                                {
+                                    if ( checkRead.read === false && checkRead.userId._id === cookie.load( "current_user" )._id )
+                                    {
                                         // console.log("Unread", index)
                                         return (
-                                            <li key={index}
+                                            <li key={ index }
                                                 className={
                                                     'notification-message unread'
                                                     // 'notification-message'
                                                 }
-                                                onClick={() => handleViewNotification(message,checkRead.userId._id)}
+                                                onClick={ () => handleViewNotification( message, checkRead.userId._id ) }
                                             >
                                                 <div className="timestamp d-flex">
-                                                    <span className="title mr-auto p-2">{message.title}<Badge className="notify-dot" color="error" variant="dot" /></span>
-                                                    <span className="time p-2">{getWhen(message.date)}</span>
+                                                    <span className="title mr-auto p-2">{ message.title }<Badge className="notify-dot" color="error" variant="dot" /></span>
+                                                    <span className="time p-2">{ getWhen( message.date ) }</span>
                                                 </div>
-                                                <hr style={{ marginTop: 0, marginBottom: '5px' }} />
-                                                <div className="content" dangerouslySetInnerHTML={getContent(message['message'])} />
+                                                <hr style={ { marginTop: 0, marginBottom: '5px' } } />
+                                                <div className="content" dangerouslySetInnerHTML={ getContent( message[ 'message' ] ) } />
                                             </li>
                                         )
                                     }
-                                    else if (checkRead.read === true && checkRead.userId._id === cookie.load("current_user")._id) {
+                                    else if ( checkRead.read === true && checkRead.userId._id === cookie.load( "current_user" )._id )
+                                    {
                                         // console.log("Read", index)
                                         return (
-                                            <li key={index}
+                                            <li key={ index }
                                                 className={
                                                     // 'notification-message unread' 
                                                     'notification-message'
                                                 }
-                                                // onClick={() => handleViewNotification(message)}
+                                                onClick={ () => handleViewNotification( message, checkRead.userId._id ) }
                                             >
                                                 <div className="timestamp d-flex">
-                                                    <span className="title mr-auto p-2">{message.title}</span>
-                                                    <span className="time p-2">{getWhen(message.date)}</span>
+                                                    <span className="title mr-auto p-2">{ message.title }</span>
+                                                    <span className="time p-2">{ getWhen( message.date ) }</span>
                                                 </div>
-                                                <hr style={{ marginTop: 0, marginBottom: '5px' }} />
-                                                <div className="content" dangerouslySetInnerHTML={getContent(message['message'])} />
+                                                <hr style={ { marginTop: 0, marginBottom: '5px' } } />
+                                                <div className="content" dangerouslySetInnerHTML={ getContent( message[ 'message' ] ) } />
                                             </li>
                                         )
                                     }
-                                    else {
+                                    else
+                                    {
                                         return (
                                             <div className="notification-info-panel">
                                                 <div className="notification-message no-notify">
                                                     <AlertTriangle
-                                                        color={'#000000'}
-                                                        size={28}
-                                                        style={{ marginTop: '1rem' }}
+                                                        color={ '#000000' }
+                                                        size={ 28 }
+                                                        style={ { marginTop: '1rem' } }
                                                     />
                                                     <hr />
-                                                    <h5 style={{ paddingBottom: '0.5rem' }}>No Notifications found!</h5>
+                                                    <h5 style={ { paddingBottom: '0.5rem' } }>No Notifications found!</h5>
                                                 </div>
                                             </div>
                                         )
                                     }
-                                })
+                                } )
                             )
-                        })}
+                        } ) }
                     </ul>
                     ) : (
                         <div className="notification-info-panel">
                             <div className="notification-message no-notify">
                                 <AlertTriangle
-                                    color={'#000000'}
-                                    size={28}
-                                    style={{ marginTop: '1rem' }}
+                                    color={ '#000000' }
+                                    size={ 28 }
+                                    style={ { marginTop: '1rem' } }
                                 />
                                 <hr />
-                                <h5 style={{ paddingBottom: '0.5rem' }}>No Notifications found!</h5>
+                                <h5 style={ { paddingBottom: '0.5rem' } }>No Notifications found!</h5>
                             </div>
                         </div>
                     )
                 }
                 <Notification
-                    msg={errorMsg}
-                    open={openNotification}
-                    success={successMsg}
+                    msg={ errorMsg }
+                    open={ openNotification }
+                    success={ successMsg }
                 />
             </div >
         </div >
