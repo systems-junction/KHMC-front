@@ -52,6 +52,7 @@ import Loader from "react-loader-spinner";
 import UpdateSingleRequest from "../ECR/updateRequest";
 
 import QRCodeScannerComponent from "../../components/QRCodeScanner/QRCodeScanner";
+import { useStyles1 } from "../../components/MuiCss/MuiCss";
 
 import { connect } from "react-redux";
 import {
@@ -318,22 +319,22 @@ const useStylesForInput = makeStyles((theme) => ({
       backgroundColor: "white",
       color: "black",
     },
-    "& .MuiFormLabel-root": {
-      fontSize: "11px",
+    // "& .MuiFormLabel-root": {
+    //   fontSize: "11px",
 
-      paddingRight: "50px",
-    },
+    //   paddingRight: "50px",
+    // },
   },
-  label: {
-    "&$focusedLabel": {
-      color: "red",
-      display: "none",
-    },
-    // "&$erroredLabel": {
-    //   color: "orange"
-    // }
-  },
-  focusedLabel: {},
+  // label: {
+  //   "&$focusedLabel": {
+  //     color: "red",
+  //     display: "none",
+  //   },
+  //   // "&$erroredLabel": {
+  //   //   color: "orange"
+  //   // }
+  // },
+  // focusedLabel: {},
 }));
 
 function LabRadRequest(props) {
@@ -341,6 +342,7 @@ function LabRadRequest(props) {
 
   const classesForTabs = useStylesForTabs();
   const classes = useStylesForInput();
+  const classes1 = useStyles1();
 
   const initialState = {
     labServiceId: "",
@@ -571,10 +573,22 @@ function LabRadRequest(props) {
       openPatientDetailsDialog(true);
     }
 
+    if (
+      props.history.location.state &&
+      props.history.location.state.comingFrom
+    ) {
+      if (
+        props.history.location.state.comingFrom === "notifications" &&
+        props.history.location.state.SearchId
+      ) {
+        handleAddPatient(props.history.location.state.SearchId);
+      }
+    }
+
     axios
       .get(getExternalConsultantsNames)
       .then((res) => {
-        console.log("res.data[0].firstName", res.data.data);
+        // console.log( "res.data[0].firstName", res.data.data );
 
         setExternalConsultations(res.data.data);
       })
@@ -589,8 +603,8 @@ function LabRadRequest(props) {
     });
 
     seticdSection(Object.keys(icdCodesList[0]));
-    console.log("props", props);
-    console.log("currentUser", currentUser);
+    // console.log( "props", props );
+    // console.log( "currentUser", currentUser );
     // getEDRById(props.history.location.state.selectedItem._id);
     // setId(props.history.location.state.selectedItem._id);
     // setSelectedItem(props.history.location.state.selectedItem);
@@ -612,7 +626,7 @@ function LabRadRequest(props) {
     }
   }
 
-  console.log("specialist", specialist);
+  // console.log( "specialist", specialist );
   const handleView = (obj) => {
     setSelectedOrder(obj);
     setIsOpen(true);
@@ -2015,182 +2029,183 @@ function LabRadRequest(props) {
             </Button>
           </div>
         </div>
-        <div
-          className={`${"container-fluid"} ${classes.root}`}
-          style={{
-            marginTop: "25px",
-            paddingLeft: "10px",
-            paddingRight: "10px",
-          }}
-        >
-          <div className="row">
-            <div
-              className="col-md-10 col-sm-8 col-8"
-              style={styles.textFieldPadding}
-            >
-              <TextField
-                className="textInputStyle"
-                id="searchPatientQuery"
-                type="text"
-                variant="filled"
-                label="Search Patient by Name / MRN / National ID / Mobile Number"
-                name={"searchPatientQuery"}
-                value={searchPatientQuery}
-                onChange={handlePauseSearch}
-                onKeyDown={handleKeyDown}
-                InputLabelProps={{
-                  classes: {
-                    root: classes.label,
-                    focused: classes.focusedLabel,
-                    error: classes.erroredLabel,
-                  },
-                }}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <AccountCircle />
-                    </InputAdornment>
-                  ),
-                  className: classes.input,
-                  classes: { input: classes.input },
-                  disableUnderline: true,
-                }}
-              />
-            </div>
 
-            <div
-              className="col-md-1 col-sm-2 col-2"
-              style={{
-                ...styles.textFieldPadding,
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  backgroundColor: "white",
-                  borderRadius: 5,
-                  height: 55,
-                }}
-              >
-                <img
-                  src={BarCode}
-                  onClick={scanQRCode}
-                  style={{
-                    width: matches ? 70 : 60,
-                    height: matches ? 60 : 55,
-                    cursor: "pointer",
-                  }}
-                />{" "}
-              </div>
-            </div>
-
-            <div
-              className="col-md-1 col-sm-2 col-2"
-              style={{
-                ...styles.textFieldPadding,
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  backgroundColor: "white",
-                  borderRadius: 5,
-                  height: 55,
-                }}
-              >
-                <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
-              </div>
-            </div>
-          </div>
-
-          <div className="row">
-            <div
-              className="col-md-10 col-sm-9 col-8"
-              style={styles.textFieldPadding}
-            >
-              {searchPatientQuery ? (
-                <div
-                  style={{
-                    zIndex: 3,
-                    position: "absolute",
-                    width: "99%",
-                    marginTop: 5,
-                  }}
-                >
-                  <Paper style={{ maxHeight: 300, overflow: "auto" }}>
-                    {patientFoundSuccessfull && patientFound !== "" ? (
-                      <Table size="small">
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>MRN</TableCell>
-                            <TableCell>Patient Name</TableCell>
-                            <TableCell>Gender</TableCell>
-                            <TableCell>Age</TableCell>
-                          </TableRow>
-                        </TableHead>
-
-                        <TableBody>
-                          {patientFound.map((i) => {
-                            return (
-                              <TableRow
-                                key={i._id}
-                                onClick={() => handleAddPatient(i)}
-                                style={{ cursor: "pointer" }}
-                              >
-                                <TableCell>{i.profileNo}</TableCell>
-                                <TableCell>
-                                  {i.firstName + ` ` + i.lastName}
-                                </TableCell>
-                                <TableCell>{i.gender}</TableCell>
-                                <TableCell>{i.age}</TableCell>
-                              </TableRow>
-                            );
-                          })}
-                        </TableBody>
-                      </Table>
-                    ) : loadSearchedData ? (
-                      <div style={{ textAlign: "center" }}>
-                        <Loader
-                          type="TailSpin"
-                          color="#2c6ddd"
-                          height={25}
-                          width={25}
-                          style={{ display: "inline-block", padding: "10px" }}
-                        />
-                        <span
-                          style={{ display: "inline-block", padding: "10px" }}
-                        >
-                          <h4>Searching Patient...</h4>
-                        </span>
-                      </div>
-                    ) : searchPatientQuery && !patientFoundSuccessfull ? (
-                      <div style={{ textAlign: "center", padding: "10px" }}>
-                        <h4> No Patient Found !</h4>
-                      </div>
-                    ) : (
-                      undefined
-                    )}
-                  </Paper>
-                </div>
-              ) : (
-                undefined
-              )}
-            </div>
-          </div>
-        </div>
-
-        <div className={`${classes.root}`}>
-          <h5
+        {props.history.location.state &&
+        props.history.location.state.comingFrom &&
+        props.history.location.state.comingFrom === "notifications" ? (
+          undefined
+        ) : (
+          <div
+            className={`${"container-fluid"} ${classes.root}`}
             style={{
-              fontWeight: "bold",
-              color: "white",
-              marginTop: 25,
+              marginTop: "25px",
+              paddingLeft: "10px",
+              paddingRight: "10px",
             }}
           >
+            <div className="row">
+              <div
+                className="col-md-10 col-sm-8 col-8"
+                style={styles.textFieldPadding}
+              >
+                <TextField
+                  className="textInputStyle"
+                  id="searchPatientQuery"
+                  type="text"
+                  variant="filled"
+                  label="Search Patient by Name / MRN / National ID / Mobile Number"
+                  name={"searchPatientQuery"}
+                  value={searchPatientQuery}
+                  onChange={handlePauseSearch}
+                  onKeyDown={handleKeyDown}
+                  InputLabelProps={{
+                    classes: {
+                      root: classes.label,
+                      focused: classes.focusedLabel,
+                      error: classes.erroredLabel,
+                    },
+                  }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <AccountCircle />
+                      </InputAdornment>
+                    ),
+                    className: classes.input,
+                    classes: { input: classes.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+
+              <div
+                className="col-md-1 col-sm-2 col-2"
+                style={{
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "white",
+                    borderRadius: 5,
+                    height: 55,
+                  }}
+                >
+                  <img
+                    src={BarCode}
+                    onClick={scanQRCode}
+                    style={{
+                      width: matches ? 70 : 60,
+                      height: matches ? 60 : 55,
+                      cursor: "pointer",
+                    }}
+                  />{" "}
+                </div>
+              </div>
+
+              <div
+                className="col-md-1 col-sm-2 col-2"
+                style={{
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "white",
+                    borderRadius: 5,
+                    height: 55,
+                  }}
+                >
+                  <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
+                </div>
+              </div>
+            </div>
+
+            <div className="row">
+              <div
+                className="col-md-10 col-sm-9 col-8"
+                style={styles.textFieldPadding}
+              >
+                {searchPatientQuery ? (
+                  <div
+                    style={{
+                      zIndex: 3,
+                      position: "absolute",
+                      width: "99%",
+                      marginTop: 5,
+                    }}
+                  >
+                    <Paper style={{ maxHeight: 300, overflow: "auto" }}>
+                      {patientFoundSuccessfull && patientFound !== "" ? (
+                        <Table size="small">
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>MRN</TableCell>
+                              <TableCell>Patient Name</TableCell>
+                              <TableCell>Gender</TableCell>
+                              <TableCell>Age</TableCell>
+                            </TableRow>
+                          </TableHead>
+
+                          <TableBody>
+                            {patientFound.map((i) => {
+                              return (
+                                <TableRow
+                                  key={i._id}
+                                  onClick={() => handleAddPatient(i)}
+                                  style={{ cursor: "pointer" }}
+                                >
+                                  <TableCell>{i.profileNo}</TableCell>
+                                  <TableCell>
+                                    {i.firstName + ` ` + i.lastName}
+                                  </TableCell>
+                                  <TableCell>{i.gender}</TableCell>
+                                  <TableCell>{i.age}</TableCell>
+                                </TableRow>
+                              );
+                            })}
+                          </TableBody>
+                        </Table>
+                      ) : loadSearchedData ? (
+                        <div style={{ textAlign: "center" }}>
+                          <Loader
+                            type="TailSpin"
+                            color="#2c6ddd"
+                            height={25}
+                            width={25}
+                            style={{ display: "inline-block", padding: "10px" }}
+                          />
+                          <span
+                            style={{ display: "inline-block", padding: "10px" }}
+                          >
+                            <h4>Searching Patient...</h4>
+                          </span>
+                        </div>
+                      ) : searchPatientQuery && !patientFoundSuccessfull ? (
+                        <div style={{ textAlign: "center", padding: "10px" }}>
+                          <h4> No Patient Found !</h4>
+                        </div>
+                      ) : (
+                        undefined
+                      )}
+                    </Paper>
+                  </div>
+                ) : (
+                  undefined
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className={`${classes.root}`}>
+          <h5 style={{ fontWeight: "bold", color: "white", marginTop: 25 }}>
             Patient Details
           </h5>
 

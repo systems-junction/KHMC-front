@@ -66,6 +66,7 @@ import stylesForPaper from "../../assets/jss/material-dashboard-react/components
 
 import dateTimeFormat from "../../constants/dateTimeFormat";
 import dateFormat from "../../constants/dateFormat";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 const reasonArray = [
   { key: "jit", value: "JIT" },
@@ -167,6 +168,7 @@ const styles = {
 const useStyles = makeStyles(tableStyles);
 
 function AddEditPurchaseRequest(props) {
+  const matches = useMediaQuery("(min-width:600px)");
   // const classes = useStyles();
   const classes = useStyleforinput();
   const initialState = {
@@ -1371,9 +1373,9 @@ function AddEditPurchaseRequest(props) {
                   style={{
                     zIndex: 3,
                     position: "absolute",
-                    width: "96.6%",
+                    width: matches ? "96.6%" : "89.2%",
                     left: 22,
-                    marginTop: 5,
+                    marginTop: matches ? 5 : -17,
                   }}
                 >
                   <Paper style={{ ...stylesForPaper.paperStyle }}>

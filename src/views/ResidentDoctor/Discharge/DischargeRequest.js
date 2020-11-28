@@ -28,6 +28,8 @@ import Fingerprint from "../../../assets/img/fingerprint.png";
 import AccountCircle from "@material-ui/icons/SearchOutlined";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import BarCode from "../../../assets/img/Bar Code.png";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useStyles1 } from "../../../components/MuiCss/MuiCss";
 import {
   updateIPR,
   updateEdrIpr,
@@ -166,27 +168,29 @@ const useStylesForInput = makeStyles((theme) => ({
       backgroundColor: "white",
       color: "gray",
     },
-    "& .MuiFormLabel-root": {
-      fontSize: "12px",
+    // "& .MuiFormLabel-root": {
+    //   fontSize: "11px",
 
-      paddingRight: "50px",
-    },
+    //   paddingRight: "50px",
+    // },
   },
-  label: {
-    "&$focusedLabel": {
-      color: "red",
-      display: "none",
-    },
-    // "&$erroredLabel": {
-    //   color: "orange"
-    // }
-  },
-  focusedLabel: {},
+  // label: {
+  //   "&$focusedLabel": {
+  //     color: "red",
+  //     display: "none",
+  //   },
+  //   // "&$erroredLabel": {
+  //   //   color: "orange"
+  //   // }
+  // },
+  // focusedLabel: {},
 }));
 
 function DischargeRequest(props) {
+  const matches = useMediaQuery("(min-width:600px)");
   const classesForTabs = useStylesForTabs();
   const classes = useStylesForInput();
+  const classes1 = useStyles1();
 
   const initialState = {
     dischargeMedArray: "",
@@ -783,7 +787,7 @@ function DischargeRequest(props) {
           </div>
 
           <div
-            className={`${"container-fluid"} ${classes.root}`}
+            className={`${"container-fluid"} ${classes.root} ${classes1.root}`}
             style={{
               marginTop: "25px",
               paddingLeft: "10px",
@@ -844,7 +848,11 @@ function DischargeRequest(props) {
                   <img
                     src={BarCode}
                     onClick={scanQRCode}
-                    style={{ width: 70, height: 60, cursor: "pointer" }}
+                    style={{
+                      width: matches ? 70 : 60,
+                      height: matches ? 60 : 55,
+                      cursor: "pointer",
+                    }}
                   />{" "}
                 </div>
               </div>

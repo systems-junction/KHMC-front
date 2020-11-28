@@ -85,6 +85,8 @@ import {
 } from "../../actions/Checking";
 
 import QRCodeScannerComponent from "../../components/QRCodeScanner/QRCodeScanner";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useStyles1 } from "../../components/MuiCss/MuiCss";
 
 const reasonArray = [
   { key: "jit", value: "JIT" },
@@ -252,35 +254,37 @@ const useStyles = makeStyles((theme) => ({
       color: "black",
     },
   },
-  root: {
-    "& .MuiFormLabel-root": {
-      fontSize: "12px",
+  // root: {
+  //   "& .MuiFormLabel-root": {
+  //     fontSize: "12px",
 
-      paddingRight: "50px",
-    },
-  },
-  label: {
-    "&$focusedLabel": {
-      color: "red",
-      display: "none",
-    },
-    // "&$erroredLabel": {
-    //   color: "orange"
-    // }
-  },
-  focusedLabel: {},
-  // label: {
-  //   "&:focused": {
-  //     color: "black",
-  //   },
-  //   "&:after": {
-  //     color: "black",
+  //     paddingRight: "50px",
   //   },
   // },
+  // label: {
+  //   "&$focusedLabel": {
+  //     color: "red",
+  //     display: "none",
+  //   },
+  //   // "&$erroredLabel": {
+  //   //   color: "orange"
+  //   // }
+  // },
+  // focusedLabel: {},
+  // // label: {
+  // //   "&:focused": {
+  // //     color: "black",
+  // //   },
+  // //   "&:after": {
+  // //     color: "black",
+  // //   },
+  // // },
 }));
 
 function AddEditPurchaseRequest(props) {
   const classes = useStyles();
+  const classes1 = useStyles1();
+  const matches = useMediaQuery("(min-width:600px)");
   const initialState = {
     _id: "",
     requestNo: "",
@@ -1508,7 +1512,7 @@ function AddEditPurchaseRequest(props) {
             !props.history.location.state.comingFromRCM ? (
               <div>
                 <div
-                  className={`${"row"} ${classes.root}`}
+                  className={`${"row"} ${classes.root} ${classes1.root}`}
                   style={{ marginLeft: -20, marginRight: -15 }}
                 >
                   {/* <span class="fa fa-search"></span> */}
@@ -1563,7 +1567,11 @@ function AddEditPurchaseRequest(props) {
                       <img
                         src={BarCode}
                         onClick={scanQRCode}
-                        style={{ width: 70, height: 60, cursor: "pointer" }}
+                        style={{
+                          width: matches ? 70 : 60,
+                          height: matches ? 60 : 55,
+                          cursor: "pointer",
+                        }}
                       />
                     </div>
                   </div>
