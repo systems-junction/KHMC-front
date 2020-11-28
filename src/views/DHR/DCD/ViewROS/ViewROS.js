@@ -41,80 +41,186 @@ const styles = {
 const detailsBlockArray = [
   {
     heading: "General Apperence",
+    columnSize: 4,
     subArray: [
       {
-        description: "No Acute",
+        subheading: "Sub heading",
+        description: "No Acute 1",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute 2",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute 3",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute 4",
       },
     ],
   },
   {
     heading: "Heent",
+    columnSize: 4,
     subArray: [
       {
-        description:
-          "A commonly used medicale term to describe jaundice presents in the eyes",
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
       },
     ],
   },
   {
     heading: "Neck",
+    columnSize: 4,
     subArray: [
       {
-        description:
-          "A commonly used medicale term to describe jaundice presents in the eyes",
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
       },
     ],
   },
   {
     heading: "Respiratory",
+    columnSize: 4,
     subArray: [
       {
-        description:
-          "Respiratory System is the network of organs that hepls you breath",
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
       },
     ],
   },
   {
     heading: "CVS",
+    columnSize: 4,
     subArray: [
       {
-        description:
-          "The rhythm with no pattern to the RR intervals and a rate of 60 beats/min.",
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
       },
     ],
   },
   {
     heading: "Abdomen",
+    columnSize: 4,
     subArray: [
       {
-        description:
-          "Tenderness is a feeling of concern, gentle affection, or warmth.",
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
       },
     ],
   },
   {
     heading: "Rectal ",
+    columnSize: 4,
     subArray: [
       {
-        description:
-          "This test is still being studied to see how it works to find colorectal cancer. ",
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
       },
     ],
   },
   {
     heading: "Back ",
+    columnSize: 4,
     subArray: [
       {
-        description:
-          "Pain that results from touching the region inside of the costovertebral angle.",
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
       },
     ],
   },
   {
     heading: "Skin",
+    columnSize: 4,
     subArray: [
       {
-        description: "Pain that results",
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
       },
     ],
   },
@@ -212,15 +318,14 @@ export default function ViewPhysicalExam(props) {
       <div className="cPadding">
         <div className="subheader" style={{ marginBottom: 45 }}>
           <div className="col-md-6 col-6">
-            <img src={ROSIcon} />
+            <img src={props.icon} />
             <h4
               style={{
                 color: "#000000",
-                fontSize: "40px",
                 fontWeight: "bolder",
               }}
             >
-              ROS
+              {props.heading}
             </h4>
           </div>
           <div className="col-md-6 col-6">
@@ -231,13 +336,18 @@ export default function ViewPhysicalExam(props) {
             <img style={{ width: 35, height: "inherit" }} src={PrintIcon} />
           </div>
         </div>
+
         <div
           style={{ flex: 4, display: "flex", flexDirection: "column" }}
           className={`${"container-fluid"} ${classes.root}`}
         >
           {detailsBlockArray.map((arr) => {
             return (
-              <DetailBlock heading={arr.heading} subArray={arr.subArray} />
+              <DetailBlock
+                heading={arr.heading}
+                subArray={arr.subArray}
+                columnSize={arr.columnSize}
+              />
             );
           })}
 

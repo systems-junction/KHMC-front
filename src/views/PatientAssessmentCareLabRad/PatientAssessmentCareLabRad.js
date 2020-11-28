@@ -2184,7 +2184,13 @@ function LabRadRequest(props) {
         </div>
 
         <div className={`${classes.root}`}>
-          <h5 style={{ fontWeight: "bold", color: "white", marginTop: 25 }}>
+          <h5
+            style={{
+              fontWeight: "bold",
+              color: "white",
+              marginTop: 25,
+            }}
+          >
             Patient Details
           </h5>
 

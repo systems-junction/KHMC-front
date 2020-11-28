@@ -1,62 +1,66 @@
-import React from "react"
-import { Route, Switch, Router } from "react-router-dom"
-import { createBrowserHistory } from "history"
-import NotFound from "../components/NotFound/NotFound"
-import PhotoEditor from "../components/PhotoEditor/PhotoEditor"
+import React from "react";
+import { Route, Switch, Router } from "react-router-dom";
+import { createBrowserHistory } from "history";
+import NotFound from "../components/NotFound/NotFound";
+import PhotoEditor from "../components/PhotoEditor/PhotoEditor";
 // import CareStreamMain from "../views/CareStream/CareStreamMain"
-import HomeScreen from "../views/Home/HomeScreen"
-import PatientFHIR from "../views/patientFHIR/patientFHIR"
-import ControlRoom from "../views/Home/ControlRoom"
-import WMS from "../views/Home/WMS"
-import BusinessUnitRoutes from "../subRoutes/business_unit"
-import ControlRoomRoutes from "../subRoutes/controlRoom"
-import ReportsRoutes from "../subRoutes/ReportsRoutes"
-import WMSRoutes from "../subRoutes/wms"
-import RCMRoutes from "../subRoutes/rcmRoutes"
-import FINRoutes from "../subRoutes/finRoutes"
-import PatientListingRoutes from "./patientListing"
-import PurchaseRequest from "../views/PurchaseRequest/purchaseRequest"
-import AddEditPurchaseRequest from "../views/PurchaseRequest/addEditPurchaseRequest"
-import PurchaseOrders from "../views/PurchaseOrders/purchaseOrder"
-import AddEditPurchaseOrders from "../views/PurchaseOrders/addEditPurchaseOrders"
-import BuReturn from "../views/BuReturn/buReturn"
-import AddEditBuReturn from "../views/BuReturn/addEditBuReturn"
+import HomeScreen from "../views/Home/HomeScreen";
+import PatientFHIR from "../views/patientFHIR/patientFHIR";
+import ControlRoom from "../views/Home/ControlRoom";
+import WMS from "../views/Home/WMS";
+import BusinessUnitRoutes from "../subRoutes/business_unit";
+import ControlRoomRoutes from "../subRoutes/controlRoom";
+import ReportsRoutes from "../subRoutes/ReportsRoutes";
+import WMSRoutes from "../subRoutes/wms";
+import RCMRoutes from "../subRoutes/rcmRoutes";
+import FINRoutes from "../subRoutes/finRoutes";
+import PatientListingRoutes from "./patientListing";
+import PurchaseRequest from "../views/PurchaseRequest/purchaseRequest";
+import AddEditPurchaseRequest from "../views/PurchaseRequest/addEditPurchaseRequest";
+import PurchaseOrders from "../views/PurchaseOrders/purchaseOrder";
+import AddEditPurchaseOrders from "../views/PurchaseOrders/addEditPurchaseOrders";
+import BuReturn from "../views/BuReturn/buReturn";
+import AddEditBuReturn from "../views/BuReturn/addEditBuReturn";
 // import PrintCareStream from "../views/CareStream/Steps/PrintCareStream"
-import ViewAllPatientPending from "../views/PatientHistory/ViewAllPatientPending"
+import ViewAllPatientPending from "../views/PatientHistory/ViewAllPatientPending";
 
-import MaterialReceiving from "../views/MaterialReceiving/materialreceiving"
-import AddEditMaterialReceiving from "../views/MaterialReceiving/addEditMaterialReceiving"
-import BuStockInLog from "../views/BuStockInLog/buStockInLog"
-import AddEditBuStockInLog from "../views/BuStockInLog/addEditBuStockInLog"
-import ReceiveItems from "../views/ReceiveItems/receiveItems"
-import AddEditReceiveItems from "../views/ReceiveItems/addEditReceiveItems"
-import WareHouseInventory from "../views/WareHouseInventory/wareHouseInventory"
-import AddEditWareHouseInventory from "../views/WareHouseInventory/addEditWareHouseInventory"
-import BuStockOutLog from "../views/BuStockOutLog/buStockOutLog"
-import AddEditBuStockOutLog from "../views/BuStockOutLog/addEditStockOutLog"
-import staff from "../views/UserManagement/staff/staff"
-import AddEditStaff from "../views/UserManagement/staff/addEditStaff"
-import StaffTypes from "../views/UserManagement/staffType/staffTypes"
-import AddEditStaffTypes from "../views/UserManagement/staffType/addEditStaffTypes"
-import AccessLevel from "../views/UserManagement/accessLevel/accessLevel"
-import AddEditAccessLevel from "../views/UserManagement/accessLevel/addEditAccessLevel"
-import systemAdmin from "../views/UserManagement/systemAdmin/systemAdmin"
-import addEditSystemAdmin from "../views/UserManagement/systemAdmin/addEditSystemAdmin"
-import notificationCenter from "../views/Notifications/notifications"
-import dashboard from "../views/Dashboard/dashboard"
+import MaterialReceiving from "../views/MaterialReceiving/materialreceiving";
+import AddEditMaterialReceiving from "../views/MaterialReceiving/addEditMaterialReceiving";
+import BuStockInLog from "../views/BuStockInLog/buStockInLog";
+import AddEditBuStockInLog from "../views/BuStockInLog/addEditBuStockInLog";
+import ReceiveItems from "../views/ReceiveItems/receiveItems";
+import AddEditReceiveItems from "../views/ReceiveItems/addEditReceiveItems";
+import WareHouseInventory from "../views/WareHouseInventory/wareHouseInventory";
+import AddEditWareHouseInventory from "../views/WareHouseInventory/addEditWareHouseInventory";
+import BuStockOutLog from "../views/BuStockOutLog/buStockOutLog";
+import AddEditBuStockOutLog from "../views/BuStockOutLog/addEditStockOutLog";
+import staff from "../views/UserManagement/staff/staff";
+import AddEditStaff from "../views/UserManagement/staff/addEditStaff";
+import StaffTypes from "../views/UserManagement/staffType/staffTypes";
+import AddEditStaffTypes from "../views/UserManagement/staffType/addEditStaffTypes";
+import AccessLevel from "../views/UserManagement/accessLevel/accessLevel";
+import AddEditAccessLevel from "../views/UserManagement/accessLevel/addEditAccessLevel";
+import systemAdmin from "../views/UserManagement/systemAdmin/systemAdmin";
+import addEditSystemAdmin from "../views/UserManagement/systemAdmin/addEditSystemAdmin";
+import notificationCenter from "../views/Notifications/notifications";
+import dashboard from "../views/Dashboard/dashboard";
 
-import WMSAllUsers from "../views/Home/WMSAllUsers"
-import RCMAllUsers from "../views/Home/RCMAllUsers"
-import SingleUserHome from "../views/Home/singleUserHome"
+import WMSAllUsers from "../views/Home/WMSAllUsers";
+import RCMAllUsers from "../views/Home/RCMAllUsers";
+import SingleUserHome from "../views/Home/singleUserHome";
 
-import webRTC from "../views/WebRTC/webRTC"
+import webRTC from "../views/WebRTC/webRTC";
 
-const hist = createBrowserHistory()
+import ViewROS from "../views/DHR/DCD/ViewROS/ViewROS.js";
+
+const hist = createBrowserHistory();
 class HomeScreenRoutes extends React.PureComponent {
   render() {
     return (
       <Switch>
         <Route exact path={"/home"} component={HomeScreen} />
+
+        <Route exact path={"/home/viewros"} component={ViewROS} />
 
         <Route exact path={"/home/allwmsusers"} component={WMSAllUsers} />
         <Route exact path={"/home/allrcmusers"} component={RCMAllUsers} />
@@ -134,7 +138,7 @@ class HomeScreenRoutes extends React.PureComponent {
         /> */}
         <Route path="*" component={NotFound} />
       </Switch>
-    )
+    );
   }
 }
-export default HomeScreenRoutes
+export default HomeScreenRoutes;
