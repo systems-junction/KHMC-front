@@ -33,6 +33,7 @@ import Back_Arrow from "../../assets/img/Back_Arrow.png";
 import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
 
 import ViewAll from "../../components/ViewAllBtn/viewAll";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 // import MUIInputStyles from "../../assets/jss/material-dashboard-react/inputStyle";
 
@@ -98,63 +99,62 @@ const MUIInputStyles = makeStyles((theme) => ({
     margin: theme.spacing(0),
   },
   input: {
-    backgroundColor: 'white',
-    boxShadow: 'none',
+    backgroundColor: "white",
+    boxShadow: "none",
     borderRadius: 5,
-    '&:after': {
-      borderBottomColor: 'black',
-      boxShadow: 'none',
+    "&:after": {
+      borderBottomColor: "black",
+      boxShadow: "none",
     },
-    '&:hover': {
-      backgroundColor: 'white',
-      boxShadow: 'none',
+    "&:hover": {
+      backgroundColor: "white",
+      boxShadow: "none",
     },
-    '&:focus': {
-      backgroundColor: 'white',
-      boxShadow: 'none',
+    "&:focus": {
+      backgroundColor: "white",
+      boxShadow: "none",
       borderRadius: 5,
     },
   },
   multilineColor: {
-    boxShadow: 'none',
-    backgroundColor: 'white',
+    boxShadow: "none",
+    backgroundColor: "white",
     borderRadius: 5,
-    '&:hover': {
-      backgroundColor: 'white',
-      boxShadow: 'none',
+    "&:hover": {
+      backgroundColor: "white",
+      boxShadow: "none",
     },
-    '&:after': {
-      borderBottomColor: 'black',
-      boxShadow: 'none',
+    "&:after": {
+      borderBottomColor: "black",
+      boxShadow: "none",
     },
-    '&:focus': {
-      boxShadow: 'none',
+    "&:focus": {
+      boxShadow: "none",
     },
   },
   root: {
-    '& .MuiTextField-root': {
-      backgroundColor: 'white',
+    "& .MuiTextField-root": {
+      backgroundColor: "white",
     },
-    '& .Mui-focused': {
-      backgroundColor: 'white',
-      color: 'black',
-      boxShadow: 'none',
+    "& .Mui-focused": {
+      backgroundColor: "white",
+      color: "black",
+      boxShadow: "none",
     },
-    '& .Mui-disabled': {
-      backgroundColor: 'white',
-      color: 'gray',
+    "& .Mui-disabled": {
+      backgroundColor: "white",
+      color: "gray",
     },
-    '&:focus': {
-      backgroundColor: 'white',
-      boxShadow: 'none',
+    "&:focus": {
+      backgroundColor: "white",
+      boxShadow: "none",
     },
   },
-}))
-
-
+}));
 
 function AddBusinessUnit(props) {
   const classes = MUIInputStyles();
+  const matches = useMediaQuery("(min-width:600px)");
 
   const initialState = {
     _id: "",
@@ -360,11 +360,11 @@ function AddBusinessUnit(props) {
         overflowY: "scroll",
       }}
     >
-      <Header history={props.history}/>
+      <Header history={props.history} />
 
       <div className={`cPadding `}>
         <div className="subheader">
-          <div style={{marginLeft: '-8px'}}>
+          <div style={{ marginLeft: "-8px" }}>
             <img src={business_Unit} />
             <h4>
               {comingFor === "add"
@@ -385,7 +385,7 @@ function AddBusinessUnit(props) {
         >
           {/* <h1>{comingFor === 'add' ? 'Add' : 'Edit'}</h1> */}
 
-          <div className={`row ${classes.root}`} style={{marginTop: '20px'}}>
+          <div className={`row ${classes.root}`} style={{ marginTop: "20px" }}>
             <div
               className="col-md-12"
               style={{
@@ -410,7 +410,7 @@ function AddBusinessUnit(props) {
             </div>
           </div>
 
-          <div className={`row ${classes.root}`}  style={{marginTop: '20px'}}>
+          <div className={`row ${classes.root}`} style={{ marginTop: "20px" }}>
             <div
               className="col-md-12"
               style={{
@@ -448,9 +448,8 @@ function AddBusinessUnit(props) {
                   })}
               </TextField>
             </div>
-            </div>
-            <div className={`row ${classes.root}`} style={{marginTop: '20px'}}>
-
+          </div>
+          <div className={`row ${classes.root}`} style={{ marginTop: "20px" }}>
             <div
               className="col-md-12"
               style={{
@@ -490,7 +489,7 @@ function AddBusinessUnit(props) {
             </div>
           </div>
 
-          <div className={`row ${classes.root}`}  style={{marginTop: '20px'}}>
+          <div className={`row ${classes.root}`} style={{ marginTop: "20px" }}>
             <div
               className="col-md-12"
               style={{
@@ -518,7 +517,7 @@ function AddBusinessUnit(props) {
             </div>
           </div>
 
-          <div className={`row ${classes.root}`} >
+          <div className={`row ${classes.root}`}>
             {/* <div className="col-md-12" style={styles.inputContainer}>
             <InputLabel id="status-label">Status</InputLabel>
             <Select
@@ -550,6 +549,7 @@ function AddBusinessUnit(props) {
                 flex: 1,
                 justifyContent: "center",
                 alignItems: "center",
+                marginLeft: 16,
               }}
             >
               <div
@@ -584,7 +584,6 @@ function AddBusinessUnit(props) {
                   variant={status === "active" ? "contained" : "outlined"}
                   color={status === "active" ? "primary" : "outlined"}
                   style={{ color: "white" }}
-                  
                 >
                   Active
                 </Button>
@@ -616,7 +615,7 @@ function AddBusinessUnit(props) {
                 style={{
                   ...styles.inputContainerForTextField,
                   ...styles.textFieldPadding,
-                  marginTop: '25px'
+                  marginTop: "25px",
                 }}
               >
                 <TextField
@@ -652,13 +651,16 @@ function AddBusinessUnit(props) {
                 flex: 1,
                 height: 50,
                 justifyContent: "center",
-                marginTop: "2%",
+                marginTop: matches ? "2%" : "6%",
                 marginBottom: "2%",
               }}
             >
               {comingFor === "add" ? (
                 <Button
-                  style={styles.stylesForPurchaseButton}
+                  style={{
+                    ...styles.stylesForPurchaseButton,
+                    width: matches ? "60%" : "100%",
+                  }}
                   disabled={!validateForm()}
                   onClick={handleAdd}
                   variant="contained"
@@ -670,7 +672,10 @@ function AddBusinessUnit(props) {
                 </Button>
               ) : (
                 <Button
-                  style={styles.stylesForPurchaseButton}
+                  style={{
+                    ...styles.stylesForPurchaseButton,
+                    width: matches ? "60%" : "100%",
+                  }}
                   disabled={!validateForm()}
                   onClick={handleEdit}
                   variant="contained"
