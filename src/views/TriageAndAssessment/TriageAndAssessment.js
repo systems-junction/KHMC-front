@@ -19,58 +19,74 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import GCSModal from "./GCSModal";
 
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+
+import ViewSingleTriage from "./ViewSingleTriage";
+
 const tableHeadingForTriage = [
   "Request No.",
   "Date/Time",
-  "Checked By",
+  "Doctor/Staff",
   "Triage Level",
-  "General Appearance",
-  "Head Neck",
-  "Neurological",
-  "Respiratory",
-  "Cardiac",
-  "Abdomen",
-  "",
+  // "General Appearance",
+  // "Head Neck",
+  // "Neurological",
+  // "Respiratory",
+  // "Cardiac",
+  // "Abdomen",
+  "Actions",
 ];
+
+const actionsForTriage = { view: true };
+
 const tableDataKeysForTriage = [
   "triageRequestNo",
   "date",
   "doctorName",
   "triageLevel",
-  "generalAppearance",
-  "headNeck",
-  "neurological",
-  "respiratory",
-  "cardiac",
-  "abdomen",
+  // "status",
+  // "generalAppearance",
+  // "headNeck",
+  // "neurological",
+  // "respiratory",
+  // "cardiac",
+  // "abdomen",
 ];
 
 const tableHeadingForVitalSigns = [
   "Request No.",
   "Date/Time",
-  "Checked By",
-  "Heart Rate",
-  "BP (Systolic)",
-  "BP (Diastolic)",
-  "Respiratory Rate",
-  "Temperature",
-  "FSBS",
-  "Pain Scale",
-  "Pulse OX",
-  "",
+  "Doctor/Staff",
+  "Triage Level",
+  // "Status",
+  // "Heart Rate",
+  // "BP (Systolic)",
+  // "BP (Diastolic)",
+  // "Respiratory Rate",
+  // "Temperature",
+  // "FSBS",
+  // "Pain Scale",
+  // "Pulse OX",
+  "Actions",
 ];
 const tableDataKeysForVitalSigns = [
   "triageRequestNo",
   "date",
   "doctorName",
-  "heartRate",
-  "bloodPressureSys",
-  "bloodPressureDia",
-  "respiratoryRate",
-  "temperature",
-  "FSBS",
-  "painScale",
-  "pulseOX",
+  "triageLevel",
+  // "status",
+  // "heartRate",
+  // "bloodPressureSys",
+  // "bloodPressureDia",
+  // "respiratoryRate",
+  // "temperature",
+  // "FSBS",
+  // "painScale",
+  // "pulseOX",
 ];
 
 const styles = {
@@ -244,6 +260,15 @@ function TriageAndAssessment(props) {
 
   const [openGCSModal, setVisibilityGCSModal] = useState(false);
 
+  const [openDialogForTriage, setOpenDialogForTriage] = useState(false);
+
+  const [selectedTriage, setSelectedTriage] = useState(false);
+
+  function hideTriageDialog() {
+    setOpenDialogForTriage(false);
+    setValue(0);
+  }
+
   useEffect(() => {
     setCurrentUser(cookie.load("current_user"));
 
@@ -269,93 +294,39 @@ function TriageAndAssessment(props) {
       for (let i = 0; i < selectedRec.triageAssessment.length; i++) {
         let singleT = [...selectedRec.triageAssessment[i].triageLevel];
 
-        let t = "";
-        for (let j = 0; j < singleT.length; j++) {
-          if (singleT[j] !== "") {
-            if (j === singleT.length - 1) {
-              t = t + singleT[j];
-            } else {
-              t = t + singleT[j] + ", ";
-            }
-          }
-        }
+        let t = singleT.toString();
+        // for (let j = 0; j < singleT.length; j++) {
+        //   if (singleT[j] !== "") {
+        //     if (j === singleT.length - 1) {
+        //       t = t + singleT[j];
+        //     } else {
+        //       t = t + singleT[j] + ", ";
+        //     }
+        //   }
+        // }
 
         let singleGeneral = [
           ...selectedRec.triageAssessment[i].generalAppearance,
         ];
 
-        let ga = "";
-        for (let j = 0; j < singleGeneral.length; j++) {
-          if (singleGeneral[j] !== "") {
-            if (j === singleGeneral.length - 1) {
-              ga = ga + singleGeneral[j];
-            } else {
-              ga = ga + singleGeneral[j] + ", ";
-            }
-          }
-        }
+        let ga = singleGeneral.toString();
 
         let singleHead = [...selectedRec.triageAssessment[i].headNeck];
-        let h = "";
-        for (let j = 0; j < singleHead.length; j++) {
-          if (singleHead[j] !== "") {
-            if (j === singleHead.length - 1) {
-              h = h + singleHead[j];
-            } else {
-              h = h + singleHead[j] + ", ";
-            }
-          }
-        }
+        let h = singleHead.toString();
 
         let singleResp = [...selectedRec.triageAssessment[i].respiratory];
-        let r = "";
-        for (let j = 0; j < singleResp.length; j++) {
-          if (singleResp[j] !== "") {
-            if (j === singleResp.length - 1) {
-              r = r + singleResp[j];
-            } else {
-              r = r + singleResp[j] + ", ";
-            }
-          }
-        }
+        let r = singleResp.toString();
 
         let singleAbdomen = [...selectedRec.triageAssessment[i].abdomen];
-        let a = "";
-        for (let j = 0; j < singleAbdomen.length; j++) {
-          if (singleAbdomen[j] !== "") {
-            if (j === singleAbdomen.length - 1) {
-              a = a + singleAbdomen[j];
-            } else {
-              a = a + singleAbdomen[j] + ", ";
-            }
-          }
-        }
+        let a = singleAbdomen.toString();
 
         let singleNeurological = [
           ...selectedRec.triageAssessment[i].neurological,
         ];
-        let n = "";
-        for (let j = 0; j < singleNeurological.length; j++) {
-          if (singleNeurological[j] !== "") {
-            if (j === singleNeurological.length - 1) {
-              n = n + singleNeurological[j];
-            } else {
-              n = n + singleNeurological[j] + ", ";
-            }
-          }
-        }
+        let n = singleNeurological.toString();
 
         let singleCardiac = [...selectedRec.triageAssessment[i].cardiac];
-        let c = "";
-        for (let j = 0; j < singleCardiac.length; j++) {
-          if (singleCardiac[j] !== "") {
-            if (j === singleCardiac.length - 1) {
-              c = c + singleCardiac[j];
-            } else {
-              c = c + singleCardiac[j] + ", ";
-            }
-          }
-        }
+        let c = singleCardiac.toString();
 
         temp.push({
           ...selectedRec.triageAssessment[i],
@@ -868,7 +839,22 @@ function TriageAndAssessment(props) {
   // console.log("respiratory", respiratory);
   // console.log("cardiac", cardiac);
   // console.log("abdomen", abdomen);
-  console.log("neurological", neurological);
+  // console.log("neurological", neurological);
+
+  function handleViewRecord(triageObj) {
+    console.log(triageObj);
+    // setSelectedTriage(triageObj);
+
+    props.history.push({
+      pathname: "triageAssessment/view",
+      state: {
+        selectedTriage: triageObj,
+        requestType,
+        requestTypeId: id,
+      },
+      comingFor: "view",
+    });
+  }
 
   return (
     <div
@@ -901,1164 +887,114 @@ function TriageAndAssessment(props) {
               </h3>
             </div>
           </div>
+
+          {currentUser &&
+          currentUser.staffTypeId.type === "Registered Nurse" ? (
+            <div style={{ marginRight: -10 }}>
+              <Button
+                // disabled={enableForm}
+                onClick={() => setOpenDialogForTriage(true)}
+                style={{
+                  ...styles.stylesForButton,
+                  fontSize: matches ? 12 : 8,
+                }}
+                variant="contained"
+                color="primary"
+              >
+                Add Triage & Assessment
+              </Button>
+            </div>
+          ) : (
+            undefined
+          )}
         </div>
 
-        <div className={classesForTabs.root}>
-          <Tabs
-            classes={{
-              root: classesForTabs.root,
-              scroller: classesForTabs.scroller,
-            }}
-            value={value}
-            onChange={handleChange}
-            textColor="primary"
-            variant="scrollable"
-            TabIndicatorProps={{ style: { background: "#12387a" } }}
-            centered
-          >
-            <Tab
-              style={{
-                color: "white",
-                borderRadius: 5,
-                outline: "none",
-                color: value === 0 ? "#12387a" : "#3B988C",
+        {/* {value === 0 ? ( */}
+        <>
+          <div className={classesForTabs.root}>
+            <Tabs
+              classes={{
+                root: classesForTabs.root,
+                scroller: classesForTabs.scroller,
               }}
-              label="RN Assessment"
-            />
-            <Tab
-              style={{
-                color: "white",
-                borderRadius: 5,
-                outline: "none",
-                color: value === 1 ? "#12387a" : "#3B988C",
-              }}
-              label="Vital Signs"
-            />
-            <Tab
-              style={{
-                color: "white",
-                borderRadius: 5,
-                outline: "none",
-                color: value === 2 ? "#12387a" : "#3B988C",
-              }}
-              label="Physical Examination"
-            />
-            <Tab
-              style={{
-                color: "white",
-                borderRadius: 5,
-                outline: "none",
-                color: value === 3 ? "#12387a" : "#3B988C",
-              }}
-              label="Triage Level"
-            />
-          </Tabs>
-        </div>
-
-        {value === 0 ? (
-          <>
-            <div className={classesForTabs.root}>
-              <Tabs
-                classes={{
-                  root: classesForTabs.root,
-                  scroller: classesForTabs.scroller,
-                }}
-                value={historyValue}
-                onChange={handleHistoryTabChange}
-                textColor="primary"
-                variant="scrollable"
-                TabIndicatorProps={{ style: { background: "#12387a" } }}
-                centered
-              >
-                <Tab
-                  style={{
-                    color: "white",
-                    borderRadius: 5,
-                    outline: "none",
-                    color: historyValue === 0 ? "#12387a" : "#3B988C",
-                  }}
-                  label="Vital Signs"
-                />
-                <Tab
-                  style={{
-                    color: "white",
-                    borderRadius: 5,
-                    outline: "none",
-                    color: historyValue === 1 ? "#12387a" : "#3B988C",
-                  }}
-                  label="Physical Examination & Triage"
-                />
-              </Tabs>
-            </div>
-
-            {historyValue === 0 ? (
-              <div
-                style={{ flex: 4, display: "flex", flexDirection: "column" }}
-                className="container-fluid"
-              >
-                <div className="row" style={{ marginTop: "20px" }}>
-                  {triageAssessmentArray !== 0 ? (
-                    <CustomTable
-                      tableData={triageAssessmentArray}
-                      tableDataKeys={tableDataKeysForVitalSigns}
-                      tableHeading={tableHeadingForVitalSigns}
-                      borderBottomColor={"#60d69f"}
-                      borderBottomWidth={20}
-                    />
-                  ) : (
-                    undefined
-                  )}
-                </div>
-              </div>
-            ) : historyValue === 1 ? (
-              <div
-                style={{ flex: 4, display: "flex", flexDirection: "column" }}
-                className="container-fluid"
-              >
-                <div className="row" style={{ marginTop: "20px" }}>
-                  {triageAssessmentArray !== 0 ? (
-                    <CustomTable
-                      tableData={triageAssessmentArray}
-                      tableDataKeys={tableDataKeysForTriage}
-                      tableHeading={tableHeadingForTriage}
-                      borderBottomColor={"#60d69f"}
-                      borderBottomWidth={20}
-                    />
-                  ) : (
-                    undefined
-                  )}
-                </div>
-              </div>
-            ) : (
-              undefined
-            )}
-          </>
-        ) : value === 1 ? (
-          <>
-            <div
-              style={{
-                flex: 4,
-                display: "flex",
-                flexDirection: "column",
-                marginTop: "25px",
-                marginBottom: "25px",
-                borderRadius: "5px",
-              }}
+              value={historyValue}
+              onChange={handleHistoryTabChange}
+              textColor="primary"
+              variant="scrollable"
+              TabIndicatorProps={{ style: { background: "#12387a" } }}
+              centered
             >
-              <div className={`container-fluid ${classes.root}`}>
-                <div className="row">
-                  <div
-                    className="form-group col-md-4 col-sm-4 col-12"
-                    style={{
-                      paddingLeft: 5,
-                      paddingRight: 5,
-                    }}
-                  >
-                    <TextField
-                      type="number"
-                      label="Enter Heart Rate (bpm)"
-                      name={"heartRate"}
-                      value={heartRate}
-                      // error={email === "" && detailsForm}
-                      onChange={onTextChange}
-                      className="textInputStyle"
-                      variant="filled"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                        disableUnderline: true,
-                      }}
-                    />
-                  </div>
-                  <div
-                    className="form-group col-md-4 col-sm-4 col-12"
-                    style={{
-                      paddingLeft: 5,
-                      paddingRight: 5,
-                    }}
-                  >
-                    <TextField
-                      type="number"
-                      label="Blood Pressure Systolic (mmHg)"
-                      name={"bloodPressureSys"}
-                      value={bloodPressureSys}
-                      // error={email === "" && detailsForm}
-                      onChange={onTextChange}
-                      className="textInputStyle"
-                      variant="filled"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                        disableUnderline: true,
-                      }}
-                    />
-                  </div>
-                  <div
-                    className="form-group col-md-4 col-sm-4 col-12"
-                    style={{
-                      paddingLeft: 5,
-                      paddingRight: 5,
-                    }}
-                  >
-                    <TextField
-                      type="number"
-                      label="Blood Pressure Diastolic (mmHg)"
-                      name={"bloodPressureDia"}
-                      value={bloodPressureDia}
-                      // error={email === "" && detailsForm}
-                      onChange={onTextChange}
-                      className="textInputStyle"
-                      variant="filled"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                        disableUnderline: true,
-                      }}
-                    />
-                  </div>
-                </div>
-                <div className="row">
-                  <div
-                    className="form-group col-md-4 col-sm-4 col-12"
-                    style={{
-                      paddingLeft: 5,
-                      paddingRight: 5,
-                    }}
-                  >
-                    <TextField
-                      type="number"
-                      label="Enter Respiratory Rate (/min)"
-                      name={"respiratoryRate"}
-                      value={respiratoryRate}
-                      // error={email === "" && detailsForm}
-                      onChange={onTextChange}
-                      className="textInputStyle"
-                      variant="filled"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                        disableUnderline: true,
-                      }}
-                    />
-                  </div>
-                  <div
-                    className="form-group col-md-4 col-sm-4 col-12"
-                    style={{
-                      paddingLeft: 5,
-                      paddingRight: 5,
-                    }}
-                  >
-                    <TextField
-                      type="number"
-                      label="Enter Temperature (°F)"
-                      name={"temperature"}
-                      value={temperature}
-                      // error={email === "" && detailsForm}
-                      onChange={onTextChange}
-                      className="textInputStyle"
-                      variant="filled"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                        disableUnderline: true,
-                      }}
-                    />
-                  </div>
-                  <div
-                    className="form-group col-md-4 col-sm-4 col-12"
-                    style={{
-                      paddingLeft: 5,
-                      paddingRight: 5,
-                    }}
-                  >
-                    <TextField
-                      type="number"
-                      label="Enter FSBS (mg/dL)"
-                      name={"FSBS"}
-                      value={FSBS}
-                      // error={email === "" && detailsForm}
-                      onChange={onTextChange}
-                      className="textInputStyle"
-                      variant="filled"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                        disableUnderline: true,
-                      }}
-                    />
-                  </div>
-                </div>
-                <div className="row">
-                  <div
-                    className="form-group col-md-6 col-sm-6 col-12"
-                    style={{
-                      paddingLeft: 5,
-                      paddingRight: 5,
-                    }}
-                  >
-                    <TextField
-                      type="number"
-                      label="Enter Pain Scale (0-10)"
-                      name={"painScale"}
-                      value={painScale}
-                      // error={email === "" && detailsForm}
-                      onKeyDown={(evt) => {
-                        (evt.key === "e" ||
-                          evt.key === "E" ||
-                          evt.key === "-" ||
-                          evt.key === "+") &&
-                          evt.preventDefault();
-                      }}
-                      onChange={onPainScaleChange}
-                      className="textInputStyle"
-                      variant="filled"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                        disableUnderline: true,
-                      }}
-                    />
-                  </div>
-                  <div
-                    className="form-group col-md-6 col-sm-6 col-12"
-                    style={{
-                      paddingLeft: 5,
-                      paddingRight: 5,
-                    }}
-                  >
-                    <TextField
-                      type="number"
-                      label="Enter Pulse OX (SpO2)"
-                      name={"pulseOX"}
-                      value={pulseOX}
-                      // error={email === "" && detailsForm}
-                      onChange={onTextChange}
-                      className="textInputStyle"
-                      variant="filled"
-                      InputProps={{
-                        className: classes.input,
-                        classes: { input: classes.input },
-                        disableUnderline: true,
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
-              <div
+              <Tab
                 style={{
-                  display: "flex",
-                  flex: 1,
-                  justifyContent: "flex-end",
-                  marginTop: "15px",
-                  marginBottom: "2%",
-                  paddingRight: "20px",
+                  color: "white",
+                  borderRadius: 5,
+                  outline: "none",
+                  color: historyValue === 0 ? "#12387a" : "#3B988C",
                 }}
-                className="container-fluid"
-              >
-                <div className="row">
-                  <Button
-                    style={styles.stylesForButton}
-                    //disabled={!validateFormType1()}
-                    onClick={onNext}
-                    variant="contained"
-                    color="primary"
-                  >
-                    Next
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </>
-        ) : value === 2 ? (
-          <>
-            <div
-              style={{
-                flex: 4,
-                display: "flex",
-                flexDirection: "column",
-                backgroundColor: "white",
-                marginTop: "25px",
-                marginBottom: "25px",
-                padding: "25px",
-                borderRadius: "5px",
-              }}
-            >
-              <div className="container-fluid">
-                <div className="row">
-                  <label style={{ paddingLeft: "15px" }}>
-                    <strong>General Appearance</strong>
-                  </label>
-                </div>
-                <form
-                  className="form-inline row"
-                  role="form"
-                  // onChange={onCheckedValue}
-                  // value={generalAppearance}
-                >
-                  <div className="form-group col-md-3">
-                    <div class="radio">
-                      <label class="radio-inline control-label">
-                        <input
-                          type="checkbox"
-                          name="generalAppearance"
-                          value="Good"
-                          onChange={onGeneralAppearance}
-                          // checked={generalAppearance === "Good"}
-                        />
-                        &nbsp;&nbsp;Good
-                      </label>
-                    </div>
-                  </div>
-                  <div className="form-group col-md-3">
-                    <div class="radio">
-                      <label class="radio-inline control-label">
-                        <input
-                          type="checkbox"
-                          name="generalAppearance"
-                          value="Sick"
-                          onChange={onGeneralAppearance}
-                          // checked={generalAppearance === "Sick"}
-                        />
-                        &nbsp;&nbsp;Sick
-                      </label>
-                    </div>
-                  </div>
-                  <div className="form-group col-md-3">
-                    <div class="radio">
-                      <label class="radio-inline control-label">
-                        <input
-                          type="checkbox"
-                          name="generalAppearance"
-                          value="Pain"
-                          onChange={onGeneralAppearance}
-                          // checked={generalAppearance === "Pain"}
-                        />
-                        &nbsp;&nbsp;Pain
-                      </label>
-                    </div>
-                  </div>
-                  <div className="form-group col-md-3">
-                    <div class="radio">
-                      <label class="radio-inline control-label">
-                        <input
-                          type="checkbox"
-                          name="generalAppearanceOther"
-                          value={generalAppearanceText}
-                          onChange={onGeneralAppearance}
-                          // checked={generalAppearanceText !== null}
-                        />
-                        &nbsp;&nbsp;Other
-                      </label>
-                    </div>
-                  </div>
-                </form>
-                {/* <form
-                                    className='form-inline row'
-                                    role='form'
-                                    onChange={onCheckedValue}
-                                    value={generalAppearance}
-                                > */}
-                <div className="form-group col-md-12">
-                  {generalAppearanceBoolean ? (
-                    <input
-                      style={{
-                        outline: "none",
-                        backgroundColor: "#F7F5F5",
-                        width: matches ? "" : "114%",
-                      }}
-                      // disabled={generalAppearanceText}
-                      type="text"
-                      placeholder="Specify"
-                      onChange={onOtherChange}
-                      name="generalAppearance"
-                      value={generalAppearanceText}
-                      className="control-label textInputStyle"
-                      maxlength="500"
-                    />
-                  ) : (
-                    undefined
-                  )}
-                </div>
-                {/* </form> */}
-              </div>
-              <br />
-              <div className="container-fluid">
-                <div className="row">
-                  <label style={{ paddingLeft: "15px" }}>
-                    <strong>Head and Neck</strong>
-                  </label>
-                </div>
-                <form
-                  className="form-inline row"
-                  role="form"
-                  // onChange={onCheckedValue}
-                  // value={headNeck}
-                >
-                  <div className="form-group col-md-3">
-                    <div class="radio">
-                      <label class="radio-inline control-label">
-                        <input
-                          type="checkbox"
-                          name="headNeck"
-                          value="Normal"
-                          onChange={onHeadNeck}
-                          // checked={headNeck === "Normal"}
-                        />
-                        &nbsp;&nbsp;Normal
-                      </label>
-                    </div>
-                  </div>
-                  <div className="form-group col-md-3">
-                    <div class="radio">
-                      <label class="radio-inline control-label">
-                        <input
-                          type="checkbox"
-                          name="headNeck"
-                          value="Lymphadenopathy"
-                          onChange={onHeadNeck}
-                          // checked={headNeck === "Line"}
-                        />
-                        &nbsp;&nbsp;Lymphadenopathy
-                      </label>
-                    </div>
-                  </div>
-                  <div className="form-group col-md-3">
-                    <div class="radio">
-                      <label class="radio-inline control-label">
-                        <input
-                          type="checkbox"
-                          name="headNeck"
-                          value="Thyroid Enlargement"
-                          onChange={onHeadNeck}
-                          // checked={headNeck === "Thyroid Enlargement"}
-                        />
-                        &nbsp;&nbsp;Thyroid Enlargement
-                      </label>
-                    </div>
-                  </div>
-                  <div className="form-group col-md-3">
-                    <div class="radio">
-                      <label class="radio-inline control-label">
-                        <input
-                          type="checkbox"
-                          name="headNeckOther"
-                          value={headNeckText}
-                          onChange={onHeadNeck}
-                          // checked={headNeckText !== null}
-                        />
-                        &nbsp;&nbsp;Other
-                      </label>
-                    </div>
-                  </div>
-                </form>
-                {/* <form className='form-inline row' role='form' onChange={onCheckedValue}
-                                    value={headNeck}> */}
-                <div className="form-group col-md-12">
-                  {headNeckBoolean ? (
-                    <input
-                      style={{
-                        outline: "none",
-                        backgroundColor: "#F7F5F5",
-                        width: matches ? "" : "114%",
-                      }}
-                      type="text"
-                      onChange={onOtherChange}
-                      placeholder="Specify"
-                      name="headNeck"
-                      value={headNeckText}
-                      className="control-label textInputStyle"
-                      maxlength="500"
-                    />
-                  ) : (
-                    undefined
-                  )}
-                </div>
-                {/* </form> */}
-              </div>
-              <br />
-              <div className="container-fluid">
-                <div className="row">
-                  <label style={{ paddingLeft: "15px" }}>
-                    <strong>Respiratory</strong>
-                  </label>
-                </div>
-                <form
-                  className="form-inline row"
-                  role="form"
-                  // onChange={onCheckedValue}
-                  // value={respiratory}
-                >
-                  <div className="form-group col-md-3">
-                    <div class="radio">
-                      <label class="radio-inline control-label">
-                        <input
-                          type="checkbox"
-                          name="respiratory"
-                          value="GBAE"
-                          onChange={onRespiratory}
-                          // checked={respiratory === "GBAE"}
-                        />
-                        &nbsp;&nbsp;GBAE
-                      </label>
-                    </div>
-                  </div>
-                  <div className="form-group col-md-3">
-                    <div class="radio">
-                      <label class="radio-inline control-label">
-                        <input
-                          type="checkbox"
-                          name="respiratory"
-                          value="Wheezing"
-                          onChange={onRespiratory}
-                          // checked={respiratory === "Wheezing"}
-                        />
-                        &nbsp;&nbsp;Wheezing
-                      </label>
-                    </div>
-                  </div>
-                  <div className="form-group col-md-3">
-                    <div class="radio">
-                      <label class="radio-inline control-label">
-                        <input
-                          type="checkbox"
-                          name="respiratory"
-                          value="Crepitus"
-                          onChange={onRespiratory}
-                          // checked={respiratory === "Crackles"}
-                        />
-                        &nbsp;&nbsp;Crepitus
-                      </label>
-                    </div>
-                  </div>
-                  <div className="form-group col-md-3">
-                    <div class="radio">
-                      <label class="radio-inline control-label">
-                        <input
-                          type="checkbox"
-                          name="respiratory"
-                          value="Crepitation"
-                          onChange={onRespiratory}
-                          // checked={respiratory === "Crepitation"}
-                        />
-                        &nbsp;&nbsp;Crepitation
-                      </label>
-                    </div>
-                  </div>
-                </form>
-                <div className="row">
-                  <form
-                    className="form-inline"
-                    role="form"
-                    onChange={onCheckedValue}
-                    value={respiratory}
-                  >
-                    <div className="form-group col-md-3">
-                      <div class="radio">
-                        <label class="radio-inline control-label">
-                          <input
-                            type="checkbox"
-                            name="respiratoryOther"
-                            value={respiratoryText}
-                            onChange={onRespiratory}
-                            // checked={respiratoryText !== null}
-                          />
-                          &nbsp;&nbsp;Other
-                        </label>
-                      </div>
-                    </div>
-                  </form>
-                  <div className="form-group col-md-11">
-                    {respiratoryBoolean ? (
-                      <input
-                        style={{
-                          outline: "none",
-                          backgroundColor: "#F7F5F5",
-                          marginLeft: "-8px",
-                        }}
-                        // disabled={respiratoryText === null}
-                        type="text"
-                        placeholder="Specify"
-                        onChange={onOtherChange}
-                        name="respiratory"
-                        value={respiratoryText}
-                        className="control-label textInputStyle tri-Alt-4-tab"
-                        maxlength="500"
-                      />
-                    ) : (
-                      undefined
-                    )}
-                  </div>
-                </div>
-              </div>
-              <br />
-              <div className="container-fluid">
-                <div className="row">
-                  <label style={{ paddingLeft: "15px" }}>
-                    <strong>Cardiac</strong>
-                  </label>
-                </div>
-                <form
-                  className="form-inline row"
-                  role="form"
-                  // onChange={onCheckedValue}
-                  // value={cardiac}
-                >
-                  <div className="form-group col-md-4 col-sm-4">
-                    <div class="radio">
-                      <label class="radio-inline control-label">
-                        <input
-                          type="checkbox"
-                          name="cardiac"
-                          value="Normal S1, S2"
-                          onChange={onCardiac}
-                          // checked={cardiac === "Normal S1, S2"}
-                        />
-                        &nbsp;&nbsp;Normal S1, S2
-                      </label>
-                    </div>
-                  </div>
-                  <div className="form-group col-md-4 col-sm-4">
-                    <div class="radio">
-                      <label class="radio-inline control-label">
-                        <input
-                          type="checkbox"
-                          name="cardiac"
-                          value="No Murmurs"
-                          onChange={onCardiac}
-                          // checked={cardiac === "No Murmurs"}
-                        />
-                        &nbsp;&nbsp;No Murmurs
-                      </label>
-                    </div>
-                  </div>
-                  <div className="form-group col-md-4 col-sm-4">
-                    <div class="radio">
-                      <label class="radio-inline control-label">
-                        <input
-                          type="checkbox"
-                          name="cardiacOther"
-                          value={cardiacText}
-                          onChange={onCardiac}
-                          // checked={cardiacText !== null}
-                        />
-                        &nbsp;&nbsp;Other
-                      </label>
-                    </div>
-                  </div>
-                </form>
-                {/* <form className='form-inline row' role='form'
-                                    onChange={onCheckedValue}
-                                    value={cardiac}
-                                > */}
-                <div className="form-group col-md-12 ">
-                  {cardiacBoolean ? (
-                    <input
-                      style={{
-                        outline: "none",
-                        backgroundColor: "#F7F5F5",
-                        marginLeft: "-5px",
-                        width: matches ? "" : "114%",
-                      }}
-                      // disabled={cardiacText === null}
-                      type="text"
-                      placeholder="Specify"
-                      onChange={onOtherChange}
-                      name="cardiac"
-                      value={cardiacText}
-                      className="control-label textInputStyle"
-                      maxlength="500"
-                    />
-                  ) : (
-                    undefined
-                  )}
-                </div>
-                {/* </form> */}
-              </div>
-              <br />
-              <div className="container-fluid">
-                <div className="row">
-                  <label style={{ paddingLeft: "15px" }}>
-                    <strong>Abdomen</strong>
-                  </label>
-                </div>
-                <form
-                  className="form-inline row"
-                  role="form"
-                  // onChange={onCheckedValue}
-                  // value={abdomen}
-                >
-                  <div className="form-group col-md-3">
-                    <div class="radio">
-                      <label class="radio-inline control-label">
-                        <input
-                          type="checkbox"
-                          name="abdomen"
-                          value="Soft Lax"
-                          onChange={onAbdomen}
-                          // checked={abdomen === "Soft Lax"}
-                        />
-                        &nbsp;&nbsp;Soft & Lax
-                      </label>
-                    </div>
-                  </div>
-                  <div className="form-group col-md-3">
-                    <div class="radio">
-                      <label class="radio-inline control-label">
-                        <input
-                          type="checkbox"
-                          name="abdomen"
-                          value="Non-tender"
-                          onChange={onAbdomen}
-
-                          // checked={abdomen === "No Tenderness"}
-                        />
-                        &nbsp;&nbsp;Non-tender
-                      </label>
-                    </div>
-                  </div>
-                  <div className="form-group col-md-3">
-                    <div class="radio">
-                      <label class="radio-inline control-label">
-                        <input
-                          type="checkbox"
-                          name="abdomen"
-                          value="Guarding"
-                          onChange={onAbdomen}
-
-                          // checked={abdomen === "Murphy +ve"}
-                        />
-                        &nbsp;&nbsp;Guarding
-                      </label>
-                    </div>
-                  </div>
-                  <div className="form-group col-md-3">
-                    <div class="radio">
-                      <label class="radio-inline control-label">
-                        <input
-                          type="checkbox"
-                          name="abdomen"
-                          value="Rebound"
-                          onChange={onAbdomen}
-                          // checked={abdomen === "Rebound +ve"}
-                        />
-                        &nbsp;&nbsp;Rebound
-                      </label>
-                    </div>
-                  </div>
-                </form>
-                <div class="row">
-                  <form
-                    className="form-inline"
-                    role="form"
-                    onChange={onCheckedValue}
-                    value={abdomen}
-                  >
-                    <div className="form-group col-md-3">
-                      <div class="radio">
-                        <label class="radio-inline control-label">
-                          <input
-                            type="checkbox"
-                            name="abdomenOther"
-                            value={abdomenText}
-                            onChange={onAbdomen}
-
-                            // checked={abdomenText !== null}
-                          />
-                          &nbsp;&nbsp;Other
-                        </label>
-                      </div>
-                    </div>
-                  </form>
-                  <div className="col-md-11">
-                    {abdomenBoolean ? (
-                      <input
-                        style={{
-                          outline: "none",
-                          backgroundColor: "#F7F5F5",
-                          marginLeft: "-10px",
-                        }}
-                        // disabled={abdomenText === null}
-                        type="text"
-                        placeholder="Specify"
-                        onChange={onOtherChange}
-                        name="abdomen"
-                        value={abdomenText}
-                        className=" textInputStyle tri-Alt-4-tab"
-                        maxlength="500"
-                      />
-                    ) : (
-                      undefined
-                    )}
-                  </div>
-                </div>
-              </div>
-              <br />
-              <div className="container-fluid">
-                <div className="row">
-                  <label style={{ paddingLeft: "15px" }}>
-                    <strong>Neurological</strong>
-                  </label>
-                </div>
-                <form
-                  className="form-inline row"
-                  role="form"
-                  // onChange={onCheckedValue}
-                  // value={neurological}
-                >
-                  <div className="form-group col-md-3">
-                    <div class="radio">
-                      <label class="radio-inline control-label">
-                        <input
-                          type="checkbox"
-                          name="neurological"
-                          value="Alert & Conscious"
-                          onChange={onNeurological}
-                          // checked={neurological === "Conscious"}
-                        />
-                        &nbsp;&nbsp;Alert & Conscious
-                      </label>
-                    </div>
-                  </div>
-                  <div className="form-group col-md-3">
-                    <div class="radio">
-                      <label class="radio-inline control-label">
-                        <input
-                          type="checkbox"
-                          name="neurological"
-                          value="Oriented"
-                          onChange={onNeurological}
-                          // checked={neurological === "Oriented"}
-                        />
-                        &nbsp;&nbsp;Oriented
-                      </label>
-                    </div>
-                  </div>
-                  <div className="form-group col-md-3">
-                    <div class="radio">
-                      <label class="radio-inline control-label">
-                        <input
-                          type="checkbox"
-                          name="neurological"
-                          value="Confused"
-                          onChange={onNeurological}
-                          // checked={neurological === "Oriented"}
-                        />
-                        &nbsp;&nbsp;Confused
-                      </label>
-                    </div>
-                  </div>
-                  <div className="form-group col-md-3">
-                    <div class="radio">
-                      <label class="radio-inline control-label">
-                        <input
-                          type="checkbox"
-                          name="neurological"
-                          value="Weakness"
-                          onChange={onNeurological}
-
-                          // checked={neurological === "Weakness"}
-                        />
-                        &nbsp;&nbsp;Weakness
-                      </label>
-                    </div>
-                  </div>
-
-                  <div className="form-group col-md-3">
-                    <div class="radio">
-                      <label class="radio-inline control-label">
-                        <input
-                          type="checkbox"
-                          name="neurological"
-                          value="GCS"
-                          onChange={onNeurological}
-                          checked={checkForGCSValue() ? true : false}
-                        />
-                        &nbsp;&nbsp;
-                        {checkForGCSValue() ? findGCSValue() : "GCS:0"}
-                      </label>
-                    </div>
-                  </div>
-
-                  <div className="form-group col-md-3">
-                    <div class="radio">
-                      <label class="radio-inline control-label">
-                        <input
-                          type="checkbox"
-                          name="neurologicalOther"
-                          value={neurologicalText}
-                          onChange={onNeurological}
-
-                          // checked={neurologicalText !== null}
-                        />
-                        &nbsp;&nbsp;Other
-                      </label>
-                    </div>
-                  </div>
-                </form>
-                {/* <form className='form-inline row' role='form'
-                                    onChange={onCheckedValue}
-                                    value={neurological}
-                                > */}
-
-                <div className="form-group col-md-12">
-                  {neurologicalBoolean ? (
-                    <input
-                      style={{
-                        outline: "none",
-                        backgroundColor: "#F7F5F5",
-                        marginLeft: "-5px",
-                        width: matches ? "" : "114%",
-                      }}
-                      // disabled={neurologicalText === null}
-                      type="text"
-                      placeholder="Specify"
-                      onChange={onOtherChange}
-                      name="neurological"
-                      value={neurologicalText}
-                      className="textInputStyle"
-                      maxlength="500"
-                    />
-                  ) : (
-                    undefined
-                  )}
-                </div>
-                {/* </form> */}
-              </div>
-            </div>
-            <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
-              <div
+                label="History"
+              />
+              {/* <Tab
                 style={{
-                  display: "flex",
-                  flex: 1,
-                  justifyContent: "flex-end",
-                  marginTop: "2%",
-                  marginBottom: "2%",
-                  paddingRight: "15px",
+                  color: "white",
+                  borderRadius: 5,
+                  outline: "none",
+                  color: historyValue === 1 ? "#12387a" : "#3B988C",
                 }}
-                className="container-fluid"
-              >
-                <div className="row">
-                  <Button
-                    style={styles.stylesForButton}
-                    //disabled={!validateFormType1()}
-                    onClick={onNext}
-                    variant="contained"
-                    color="primary"
-                  >
-                    Next
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </>
-        ) : value === 3 ? (
-          <>
+                label="Physical Examination & Triage"
+              /> */}
+            </Tabs>
+          </div>
+
+          {historyValue === 0 ? (
             <div
-              style={{
-                flex: 4,
-                display: "flex",
-                flexDirection: "column",
-                backgroundColor: "white",
-                marginTop: "25px",
-                marginBottom: "25px",
-                padding: "25px",
-                borderRadius: "5px",
-              }}
+              style={{ flex: 4, display: "flex", flexDirection: "column" }}
               className="container-fluid"
             >
-              <div className="row">
-                <label style={{ paddingLeft: "15px" }}>
-                  <strong>Triage Level</strong>
-                </label>
-              </div>
-              <div value={triageLevel}>
-                <div className="row">
-                  <div className="col-md-4">
-                    <input
-                      type="checkbox"
-                      name="triageLevel"
-                      value="Resuscitation"
-                      onChange={onChangeHandler}
-                      // checked={triageLevel}
-                    />
-                    <label for="male">&nbsp;&nbsp;1 - Resuscitation</label>
-                  </div>
-                  <div className="col-md-4">
-                    <input
-                      type="checkbox"
-                      name="triageLevel"
-                      value="Emergent"
-                      onChange={onChangeHandler}
-                      // checked={triageLevel === "Emergent"}
-                    />
-                    <label for="male">&nbsp;&nbsp;2 - Emergent</label>
-                  </div>
-                  <div className="col-md-4">
-                    <input
-                      type="checkbox"
-                      name="triageLevel"
-                      onChange={onChangeHandler}
-                      value="Urgent"
-                      // checked={triageLevel === "Urgent"}
-                    />
-                    <label for="male">&nbsp;&nbsp;3 - Urgent</label>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-md-4">
-                    <input
-                      type="checkbox"
-                      name="triageLevel"
-                      value="LessUrgent"
-                      onChange={onChangeHandler}
-                      // checked={triageLevel === "LessUrgent"}
-                    />
-                    <label for="male">&nbsp;&nbsp;4 - Less Urgent</label>
-                  </div>
-                  <div className="col-md-4">
-                    <input
-                      type="checkbox"
-                      name="triageLevel"
-                      value="NonUrgent"
-                      onChange={onChangeHandler}
-                      // checked={triageLevel === "NonUrgent"}
-                    />
-                    <label for="male">&nbsp;&nbsp;5 - Non Urgent</label>
-                  </div>
-                </div>
+              <div className="row" style={{ marginTop: "20px" }}>
+                {triageAssessmentArray !== 0 ? (
+                  <CustomTable
+                    tableData={triageAssessmentArray}
+                    tableDataKeys={tableDataKeysForVitalSigns}
+                    tableHeading={tableHeadingForVitalSigns}
+                    borderBottomColor={"#60d69f"}
+                    borderBottomWidth={20}
+                    action={actionsForTriage}
+                    handleView={handleViewRecord}
+                  />
+                ) : (
+                  undefined
+                )}
               </div>
             </div>
-            <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
-              <div
-                style={{
-                  display: "flex",
-                  flex: 1,
-                  justifyContent: "flex-end",
-                  marginTop: "2%",
-                  marginBottom: "2%",
-                  paddingRight: "15px",
-                }}
-                className="container-fluid"
-              >
-                <div className="row">
-                  <Button
-                    style={styles.stylesForButton}
-                    //disabled={!validateFormType1()}
-                    onClick={handleSubmitAssessment}
-                    variant="contained"
-                    color="primary"
-                  >
-                    Submit
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </>
-        ) : (
+          ) : (
+            // : historyValue === 1 ? (
+            //   <div
+            //     style={{ flex: 4, display: "flex", flexDirection: "column" }}
+            //     className="container-fluid"
+            //   >
+            //     <div className="row" style={{ marginTop: "20px" }}>
+            //       {triageAssessmentArray !== 0 ? (
+            //         <CustomTable
+            //           tableData={triageAssessmentArray}
+            //           tableDataKeys={tableDataKeysForTriage}
+            //           tableHeading={tableHeadingForTriage}
+            //           borderBottomColor={"#60d69f"}
+            //           borderBottomWidth={20}
+            //           action={actionsForTriage}
+            //         />
+            //       ) : (
+            //         undefined
+            //       )}
+            //     </div>
+            //   </div>
+            // )
+
+            undefined
+          )}
+        </>
+        {/* ) : (
           undefined
-        )}
+        )} */}
 
         <Notification
           msg={errorMsg}
@@ -2084,6 +1020,1116 @@ function TriageAndAssessment(props) {
       ) : (
         undefined
       )}
+
+      <Dialog
+        open={openDialogForTriage}
+        onBackdropClick={() => {}}
+        fullWidth={true}
+        maxWidth={"xl"}
+      >
+        <DialogTitle
+          id="alert-dialog-title"
+          style={{ color: "white", backgroundColor: "rgb(19 213 159)" }}
+        >
+          {"Add Triage & Assessment"}
+        </DialogTitle>
+
+        <DialogContent style={{ backgroundColor: "rgb(19 213 159)" }}>
+          <div className={classesForTabs.root}>
+            <Tabs
+              classes={{
+                root: classesForTabs.root,
+                scroller: classesForTabs.scroller,
+              }}
+              value={value}
+              onChange={handleChange}
+              textColor="primary"
+              variant="scrollable"
+              TabIndicatorProps={{ style: { background: "#12387a" } }}
+              centered
+            >
+              {/* <Tab
+                style={{
+                  color: "white",
+                  borderRadius: 5,
+                  outline: "none",
+                  color: value === 0 ? "#12387a" : "#3B988C",
+                }}
+                label="RN Assessment"
+              /> */}
+              <Tab
+                style={{
+                  color: "white",
+                  borderRadius: 5,
+                  outline: "none",
+                  color: value === 0 ? "#12387a" : "#3B988C",
+                }}
+                label="Vital Signs"
+              />
+              <Tab
+                style={{
+                  color: "white",
+                  borderRadius: 5,
+                  outline: "none",
+                  color: value === 1 ? "#12387a" : "#3B988C",
+                }}
+                label="Physical Examination"
+              />
+              <Tab
+                style={{
+                  color: "white",
+                  borderRadius: 5,
+                  outline: "none",
+                  color: value === 2 ? "#12387a" : "#3B988C",
+                }}
+                label="Triage Level"
+              />
+            </Tabs>
+          </div>
+          {value === 0 ? (
+            <>
+              <div
+                style={{
+                  flex: 4,
+                  display: "flex",
+                  flexDirection: "column",
+                  marginTop: "25px",
+                  marginBottom: "25px",
+                  borderRadius: "5px",
+                }}
+              >
+                <div className={`container-fluid ${classes.root}`}>
+                  <div className="row">
+                    <div
+                      className="form-group col-md-4 col-sm-4 col-12"
+                      style={{
+                        paddingLeft: 5,
+                        paddingRight: 5,
+                      }}
+                    >
+                      <TextField
+                        type="number"
+                        label="Enter Heart Rate (bpm)"
+                        name={"heartRate"}
+                        value={heartRate}
+                        // error={email === "" && detailsForm}
+                        onChange={onTextChange}
+                        className="textInputStyle"
+                        variant="filled"
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                          disableUnderline: true,
+                        }}
+                      />
+                    </div>
+                    <div
+                      className="form-group col-md-4 col-sm-4 col-12"
+                      style={{
+                        paddingLeft: 5,
+                        paddingRight: 5,
+                      }}
+                    >
+                      <TextField
+                        type="number"
+                        label="Blood Pressure Systolic (mmHg)"
+                        name={"bloodPressureSys"}
+                        value={bloodPressureSys}
+                        // error={email === "" && detailsForm}
+                        onChange={onTextChange}
+                        className="textInputStyle"
+                        variant="filled"
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                          disableUnderline: true,
+                        }}
+                      />
+                    </div>
+                    <div
+                      className="form-group col-md-4 col-sm-4 col-12"
+                      style={{
+                        paddingLeft: 5,
+                        paddingRight: 5,
+                      }}
+                    >
+                      <TextField
+                        type="number"
+                        label="Blood Pressure Diastolic (mmHg)"
+                        name={"bloodPressureDia"}
+                        value={bloodPressureDia}
+                        // error={email === "" && detailsForm}
+                        onChange={onTextChange}
+                        className="textInputStyle"
+                        variant="filled"
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                          disableUnderline: true,
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div
+                      className="form-group col-md-4 col-sm-4 col-12"
+                      style={{
+                        paddingLeft: 5,
+                        paddingRight: 5,
+                      }}
+                    >
+                      <TextField
+                        type="number"
+                        label="Enter Respiratory Rate (/min)"
+                        name={"respiratoryRate"}
+                        value={respiratoryRate}
+                        // error={email === "" && detailsForm}
+                        onChange={onTextChange}
+                        className="textInputStyle"
+                        variant="filled"
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                          disableUnderline: true,
+                        }}
+                      />
+                    </div>
+                    <div
+                      className="form-group col-md-4 col-sm-4 col-12"
+                      style={{
+                        paddingLeft: 5,
+                        paddingRight: 5,
+                      }}
+                    >
+                      <TextField
+                        type="number"
+                        label="Enter Temperature (°F)"
+                        name={"temperature"}
+                        value={temperature}
+                        // error={email === "" && detailsForm}
+                        onChange={onTextChange}
+                        className="textInputStyle"
+                        variant="filled"
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                          disableUnderline: true,
+                        }}
+                      />
+                    </div>
+                    <div
+                      className="form-group col-md-4 col-sm-4 col-12"
+                      style={{
+                        paddingLeft: 5,
+                        paddingRight: 5,
+                      }}
+                    >
+                      <TextField
+                        type="number"
+                        label="Enter FSBS (mg/dL)"
+                        name={"FSBS"}
+                        value={FSBS}
+                        // error={email === "" && detailsForm}
+                        onChange={onTextChange}
+                        className="textInputStyle"
+                        variant="filled"
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                          disableUnderline: true,
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div
+                      className="form-group col-md-6 col-sm-6 col-12"
+                      style={{
+                        paddingLeft: 5,
+                        paddingRight: 5,
+                      }}
+                    >
+                      <TextField
+                        type="number"
+                        label="Enter Pain Scale (0-10)"
+                        name={"painScale"}
+                        value={painScale}
+                        // error={email === "" && detailsForm}
+                        onKeyDown={(evt) => {
+                          (evt.key === "e" ||
+                            evt.key === "E" ||
+                            evt.key === "-" ||
+                            evt.key === "+") &&
+                            evt.preventDefault();
+                        }}
+                        onChange={onPainScaleChange}
+                        className="textInputStyle"
+                        variant="filled"
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                          disableUnderline: true,
+                        }}
+                      />
+                    </div>
+                    <div
+                      className="form-group col-md-6 col-sm-6 col-12"
+                      style={{
+                        paddingLeft: 5,
+                        paddingRight: 5,
+                      }}
+                    >
+                      <TextField
+                        type="number"
+                        label="Enter Pulse OX (SpO2)"
+                        name={"pulseOX"}
+                        value={pulseOX}
+                        // error={email === "" && detailsForm}
+                        onChange={onTextChange}
+                        className="textInputStyle"
+                        variant="filled"
+                        InputProps={{
+                          className: classes.input,
+                          classes: { input: classes.input },
+                          disableUnderline: true,
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                style={{ display: "flex", flex: 1, justifyContent: "center" }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    flex: 1,
+                    justifyContent: "flex-end",
+                    marginTop: "15px",
+                    marginBottom: "2%",
+                    paddingRight: "20px",
+                  }}
+                  className="container-fluid"
+                >
+                  <div className="row">
+                    <Button
+                      style={styles.stylesForButton}
+                      //disabled={!validateFormType1()}
+                      onClick={onNext}
+                      variant="contained"
+                      color="primary"
+                    >
+                      Next
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : value === 1 ? (
+            <>
+              <div
+                style={{
+                  flex: 4,
+                  display: "flex",
+                  flexDirection: "column",
+                  backgroundColor: "white",
+                  marginTop: "25px",
+                  marginBottom: "25px",
+                  padding: "25px",
+                  borderRadius: "5px",
+                }}
+              >
+                <div className="container-fluid">
+                  <div className="row">
+                    <label style={{ paddingLeft: "15px" }}>
+                      <strong>General Appearance</strong>
+                    </label>
+                  </div>
+                  <form
+                    className="form-inline row"
+                    role="form"
+                    // onChange={onCheckedValue}
+                    // value={generalAppearance}
+                  >
+                    <div className="form-group col-md-3">
+                      <div class="radio">
+                        <label class="radio-inline control-label">
+                          <input
+                            type="checkbox"
+                            name="generalAppearance"
+                            value="Good"
+                            onChange={onGeneralAppearance}
+                            // checked={generalAppearance === "Good"}
+                          />
+                          &nbsp;&nbsp;Good
+                        </label>
+                      </div>
+                    </div>
+                    <div className="form-group col-md-3">
+                      <div class="radio">
+                        <label class="radio-inline control-label">
+                          <input
+                            type="checkbox"
+                            name="generalAppearance"
+                            value="Sick"
+                            onChange={onGeneralAppearance}
+                            // checked={generalAppearance === "Sick"}
+                          />
+                          &nbsp;&nbsp;Sick
+                        </label>
+                      </div>
+                    </div>
+                    <div className="form-group col-md-3">
+                      <div class="radio">
+                        <label class="radio-inline control-label">
+                          <input
+                            type="checkbox"
+                            name="generalAppearance"
+                            value="Pain"
+                            onChange={onGeneralAppearance}
+                            // checked={generalAppearance === "Pain"}
+                          />
+                          &nbsp;&nbsp;Pain
+                        </label>
+                      </div>
+                    </div>
+                    <div className="form-group col-md-3">
+                      <div class="radio">
+                        <label class="radio-inline control-label">
+                          <input
+                            type="checkbox"
+                            name="generalAppearanceOther"
+                            value={generalAppearanceText}
+                            onChange={onGeneralAppearance}
+                            // checked={generalAppearanceText !== null}
+                          />
+                          &nbsp;&nbsp;Other
+                        </label>
+                      </div>
+                    </div>
+                  </form>
+                  {/* <form
+                                    className='form-inline row'
+                                    role='form'
+                                    onChange={onCheckedValue}
+                                    value={generalAppearance}
+                                > */}
+                  <div className="form-group col-md-12">
+                    {generalAppearanceBoolean ? (
+                      <input
+                        style={{
+                          outline: "none",
+                          backgroundColor: "#F7F5F5",
+                          width: matches ? "" : "114%",
+                        }}
+                        // disabled={generalAppearanceText}
+                        type="text"
+                        placeholder="Specify"
+                        onChange={onOtherChange}
+                        name="generalAppearance"
+                        value={generalAppearanceText}
+                        className="control-label textInputStyle"
+                        maxlength="500"
+                      />
+                    ) : (
+                      undefined
+                    )}
+                  </div>
+                  {/* </form> */}
+                </div>
+                <br />
+                <div className="container-fluid">
+                  <div className="row">
+                    <label style={{ paddingLeft: "15px" }}>
+                      <strong>Head and Neck</strong>
+                    </label>
+                  </div>
+                  <form
+                    className="form-inline row"
+                    role="form"
+                    // onChange={onCheckedValue}
+                    // value={headNeck}
+                  >
+                    <div className="form-group col-md-3">
+                      <div class="radio">
+                        <label class="radio-inline control-label">
+                          <input
+                            type="checkbox"
+                            name="headNeck"
+                            value="Normal"
+                            onChange={onHeadNeck}
+                            // checked={headNeck === "Normal"}
+                          />
+                          &nbsp;&nbsp;Normal
+                        </label>
+                      </div>
+                    </div>
+                    <div className="form-group col-md-3">
+                      <div class="radio">
+                        <label class="radio-inline control-label">
+                          <input
+                            type="checkbox"
+                            name="headNeck"
+                            value="Lymphadenopathy"
+                            onChange={onHeadNeck}
+                            // checked={headNeck === "Line"}
+                          />
+                          &nbsp;&nbsp;Lymphadenopathy
+                        </label>
+                      </div>
+                    </div>
+                    <div className="form-group col-md-3">
+                      <div class="radio">
+                        <label class="radio-inline control-label">
+                          <input
+                            type="checkbox"
+                            name="headNeck"
+                            value="Thyroid Enlargement"
+                            onChange={onHeadNeck}
+                            // checked={headNeck === "Thyroid Enlargement"}
+                          />
+                          &nbsp;&nbsp;Thyroid Enlargement
+                        </label>
+                      </div>
+                    </div>
+                    <div className="form-group col-md-3">
+                      <div class="radio">
+                        <label class="radio-inline control-label">
+                          <input
+                            type="checkbox"
+                            name="headNeckOther"
+                            value={headNeckText}
+                            onChange={onHeadNeck}
+                            // checked={headNeckText !== null}
+                          />
+                          &nbsp;&nbsp;Other
+                        </label>
+                      </div>
+                    </div>
+                  </form>
+                  {/* <form className='form-inline row' role='form' onChange={onCheckedValue}
+                                    value={headNeck}> */}
+                  <div className="form-group col-md-12">
+                    {headNeckBoolean ? (
+                      <input
+                        style={{
+                          outline: "none",
+                          backgroundColor: "#F7F5F5",
+                          width: matches ? "" : "114%",
+                        }}
+                        type="text"
+                        onChange={onOtherChange}
+                        placeholder="Specify"
+                        name="headNeck"
+                        value={headNeckText}
+                        className="control-label textInputStyle"
+                        maxlength="500"
+                      />
+                    ) : (
+                      undefined
+                    )}
+                  </div>
+                  {/* </form> */}
+                </div>
+                <br />
+                <div className="container-fluid">
+                  <div className="row">
+                    <label style={{ paddingLeft: "15px" }}>
+                      <strong>Respiratory</strong>
+                    </label>
+                  </div>
+                  <form
+                    className="form-inline row"
+                    role="form"
+                    // onChange={onCheckedValue}
+                    // value={respiratory}
+                  >
+                    <div className="form-group col-md-3">
+                      <div class="radio">
+                        <label class="radio-inline control-label">
+                          <input
+                            type="checkbox"
+                            name="respiratory"
+                            value="GBAE"
+                            onChange={onRespiratory}
+                            // checked={respiratory === "GBAE"}
+                          />
+                          &nbsp;&nbsp;GBAE
+                        </label>
+                      </div>
+                    </div>
+                    <div className="form-group col-md-3">
+                      <div class="radio">
+                        <label class="radio-inline control-label">
+                          <input
+                            type="checkbox"
+                            name="respiratory"
+                            value="Wheezing"
+                            onChange={onRespiratory}
+                            // checked={respiratory === "Wheezing"}
+                          />
+                          &nbsp;&nbsp;Wheezing
+                        </label>
+                      </div>
+                    </div>
+                    <div className="form-group col-md-3">
+                      <div class="radio">
+                        <label class="radio-inline control-label">
+                          <input
+                            type="checkbox"
+                            name="respiratory"
+                            value="Crepitus"
+                            onChange={onRespiratory}
+                            // checked={respiratory === "Crackles"}
+                          />
+                          &nbsp;&nbsp;Crepitus
+                        </label>
+                      </div>
+                    </div>
+                    <div className="form-group col-md-3">
+                      <div class="radio">
+                        <label class="radio-inline control-label">
+                          <input
+                            type="checkbox"
+                            name="respiratory"
+                            value="Crepitation"
+                            onChange={onRespiratory}
+                            // checked={respiratory === "Crepitation"}
+                          />
+                          &nbsp;&nbsp;Crepitation
+                        </label>
+                      </div>
+                    </div>
+                  </form>
+                  <div className="row">
+                    <form
+                      className="form-inline"
+                      role="form"
+                      onChange={onCheckedValue}
+                      value={respiratory}
+                    >
+                      <div className="form-group col-md-3">
+                        <div class="radio">
+                          <label class="radio-inline control-label">
+                            <input
+                              type="checkbox"
+                              name="respiratoryOther"
+                              value={respiratoryText}
+                              onChange={onRespiratory}
+                              // checked={respiratoryText !== null}
+                            />
+                            &nbsp;&nbsp;Other
+                          </label>
+                        </div>
+                      </div>
+                    </form>
+                    <div className="form-group col-md-11">
+                      {respiratoryBoolean ? (
+                        <input
+                          style={{
+                            outline: "none",
+                            backgroundColor: "#F7F5F5",
+                            marginLeft: "-8px",
+                          }}
+                          // disabled={respiratoryText === null}
+                          type="text"
+                          placeholder="Specify"
+                          onChange={onOtherChange}
+                          name="respiratory"
+                          value={respiratoryText}
+                          className="control-label textInputStyle tri-Alt-4-tab"
+                          maxlength="500"
+                        />
+                      ) : (
+                        undefined
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <br />
+                <div className="container-fluid">
+                  <div className="row">
+                    <label style={{ paddingLeft: "15px" }}>
+                      <strong>Cardiac</strong>
+                    </label>
+                  </div>
+                  <form
+                    className="form-inline row"
+                    role="form"
+                    // onChange={onCheckedValue}
+                    // value={cardiac}
+                  >
+                    <div className="form-group col-md-4 col-sm-4">
+                      <div class="radio">
+                        <label class="radio-inline control-label">
+                          <input
+                            type="checkbox"
+                            name="cardiac"
+                            value="Normal S1, S2"
+                            onChange={onCardiac}
+                            // checked={cardiac === "Normal S1, S2"}
+                          />
+                          &nbsp;&nbsp;Normal S1, S2
+                        </label>
+                      </div>
+                    </div>
+                    <div className="form-group col-md-4 col-sm-4">
+                      <div class="radio">
+                        <label class="radio-inline control-label">
+                          <input
+                            type="checkbox"
+                            name="cardiac"
+                            value="No Murmurs"
+                            onChange={onCardiac}
+                            // checked={cardiac === "No Murmurs"}
+                          />
+                          &nbsp;&nbsp;No Murmurs
+                        </label>
+                      </div>
+                    </div>
+                    <div className="form-group col-md-4 col-sm-4">
+                      <div class="radio">
+                        <label class="radio-inline control-label">
+                          <input
+                            type="checkbox"
+                            name="cardiacOther"
+                            value={cardiacText}
+                            onChange={onCardiac}
+                            // checked={cardiacText !== null}
+                          />
+                          &nbsp;&nbsp;Other
+                        </label>
+                      </div>
+                    </div>
+                  </form>
+                  {/* <form className='form-inline row' role='form'
+                                    onChange={onCheckedValue}
+                                    value={cardiac}
+                                > */}
+                  <div className="form-group col-md-12 ">
+                    {cardiacBoolean ? (
+                      <input
+                        style={{
+                          outline: "none",
+                          backgroundColor: "#F7F5F5",
+                          marginLeft: "-5px",
+                          width: matches ? "" : "114%",
+                        }}
+                        // disabled={cardiacText === null}
+                        type="text"
+                        placeholder="Specify"
+                        onChange={onOtherChange}
+                        name="cardiac"
+                        value={cardiacText}
+                        className="control-label textInputStyle"
+                        maxlength="500"
+                      />
+                    ) : (
+                      undefined
+                    )}
+                  </div>
+                  {/* </form> */}
+                </div>
+                <br />
+                <div className="container-fluid">
+                  <div className="row">
+                    <label style={{ paddingLeft: "15px" }}>
+                      <strong>Abdomen</strong>
+                    </label>
+                  </div>
+                  <form
+                    className="form-inline row"
+                    role="form"
+                    // onChange={onCheckedValue}
+                    // value={abdomen}
+                  >
+                    <div className="form-group col-md-3">
+                      <div class="radio">
+                        <label class="radio-inline control-label">
+                          <input
+                            type="checkbox"
+                            name="abdomen"
+                            value="Soft Lax"
+                            onChange={onAbdomen}
+                            // checked={abdomen === "Soft Lax"}
+                          />
+                          &nbsp;&nbsp;Soft & Lax
+                        </label>
+                      </div>
+                    </div>
+                    <div className="form-group col-md-3">
+                      <div class="radio">
+                        <label class="radio-inline control-label">
+                          <input
+                            type="checkbox"
+                            name="abdomen"
+                            value="Non-tender"
+                            onChange={onAbdomen}
+
+                            // checked={abdomen === "No Tenderness"}
+                          />
+                          &nbsp;&nbsp;Non-tender
+                        </label>
+                      </div>
+                    </div>
+                    <div className="form-group col-md-3">
+                      <div class="radio">
+                        <label class="radio-inline control-label">
+                          <input
+                            type="checkbox"
+                            name="abdomen"
+                            value="Guarding"
+                            onChange={onAbdomen}
+
+                            // checked={abdomen === "Murphy +ve"}
+                          />
+                          &nbsp;&nbsp;Guarding
+                        </label>
+                      </div>
+                    </div>
+                    <div className="form-group col-md-3">
+                      <div class="radio">
+                        <label class="radio-inline control-label">
+                          <input
+                            type="checkbox"
+                            name="abdomen"
+                            value="Rebound"
+                            onChange={onAbdomen}
+                            // checked={abdomen === "Rebound +ve"}
+                          />
+                          &nbsp;&nbsp;Rebound
+                        </label>
+                      </div>
+                    </div>
+                  </form>
+                  <div class="row">
+                    <form
+                      className="form-inline"
+                      role="form"
+                      onChange={onCheckedValue}
+                      value={abdomen}
+                    >
+                      <div className="form-group col-md-3">
+                        <div class="radio">
+                          <label class="radio-inline control-label">
+                            <input
+                              type="checkbox"
+                              name="abdomenOther"
+                              value={abdomenText}
+                              onChange={onAbdomen}
+
+                              // checked={abdomenText !== null}
+                            />
+                            &nbsp;&nbsp;Other
+                          </label>
+                        </div>
+                      </div>
+                    </form>
+                    <div className="col-md-11">
+                      {abdomenBoolean ? (
+                        <input
+                          style={{
+                            outline: "none",
+                            backgroundColor: "#F7F5F5",
+                            marginLeft: "-10px",
+                          }}
+                          // disabled={abdomenText === null}
+                          type="text"
+                          placeholder="Specify"
+                          onChange={onOtherChange}
+                          name="abdomen"
+                          value={abdomenText}
+                          className=" textInputStyle tri-Alt-4-tab"
+                          maxlength="500"
+                        />
+                      ) : (
+                        undefined
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <br />
+                <div className="container-fluid">
+                  <div className="row">
+                    <label style={{ paddingLeft: "15px" }}>
+                      <strong>Neurological</strong>
+                    </label>
+                  </div>
+                  <form
+                    className="form-inline row"
+                    role="form"
+                    // onChange={onCheckedValue}
+                    // value={neurological}
+                  >
+                    <div className="form-group col-md-3">
+                      <div class="radio">
+                        <label class="radio-inline control-label">
+                          <input
+                            type="checkbox"
+                            name="neurological"
+                            value="Alert & Conscious"
+                            onChange={onNeurological}
+                            // checked={neurological === "Conscious"}
+                          />
+                          &nbsp;&nbsp;Alert & Conscious
+                        </label>
+                      </div>
+                    </div>
+                    <div className="form-group col-md-3">
+                      <div class="radio">
+                        <label class="radio-inline control-label">
+                          <input
+                            type="checkbox"
+                            name="neurological"
+                            value="Oriented"
+                            onChange={onNeurological}
+                            // checked={neurological === "Oriented"}
+                          />
+                          &nbsp;&nbsp;Oriented
+                        </label>
+                      </div>
+                    </div>
+                    <div className="form-group col-md-3">
+                      <div class="radio">
+                        <label class="radio-inline control-label">
+                          <input
+                            type="checkbox"
+                            name="neurological"
+                            value="Confused"
+                            onChange={onNeurological}
+                            // checked={neurological === "Oriented"}
+                          />
+                          &nbsp;&nbsp;Confused
+                        </label>
+                      </div>
+                    </div>
+                    <div className="form-group col-md-3">
+                      <div class="radio">
+                        <label class="radio-inline control-label">
+                          <input
+                            type="checkbox"
+                            name="neurological"
+                            value="Weakness"
+                            onChange={onNeurological}
+
+                            // checked={neurological === "Weakness"}
+                          />
+                          &nbsp;&nbsp;Weakness
+                        </label>
+                      </div>
+                    </div>
+
+                    <div className="form-group col-md-3">
+                      <div class="radio">
+                        <label class="radio-inline control-label">
+                          <input
+                            type="checkbox"
+                            name="neurological"
+                            value="GCS"
+                            onChange={onNeurological}
+                            checked={checkForGCSValue() ? true : false}
+                          />
+                          &nbsp;&nbsp;
+                          {checkForGCSValue() ? findGCSValue() : "GCS:0"}
+                        </label>
+                      </div>
+                    </div>
+
+                    <div className="form-group col-md-3">
+                      <div class="radio">
+                        <label class="radio-inline control-label">
+                          <input
+                            type="checkbox"
+                            name="neurologicalOther"
+                            value={neurologicalText}
+                            onChange={onNeurological}
+
+                            // checked={neurologicalText !== null}
+                          />
+                          &nbsp;&nbsp;Other
+                        </label>
+                      </div>
+                    </div>
+                  </form>
+                  {/* <form className='form-inline row' role='form'
+                                    onChange={onCheckedValue}
+                                    value={neurological}
+                                > */}
+
+                  <div className="form-group col-md-12">
+                    {neurologicalBoolean ? (
+                      <input
+                        style={{
+                          outline: "none",
+                          backgroundColor: "#F7F5F5",
+                          marginLeft: "-5px",
+                          width: matches ? "" : "114%",
+                        }}
+                        // disabled={neurologicalText === null}
+                        type="text"
+                        placeholder="Specify"
+                        onChange={onOtherChange}
+                        name="neurological"
+                        value={neurologicalText}
+                        className="textInputStyle"
+                        maxlength="500"
+                      />
+                    ) : (
+                      undefined
+                    )}
+                  </div>
+                  {/* </form> */}
+                </div>
+              </div>
+              <div
+                style={{ display: "flex", flex: 1, justifyContent: "center" }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    flex: 1,
+                    justifyContent: "flex-end",
+                    marginTop: "2%",
+                    marginBottom: "2%",
+                    paddingRight: "15px",
+                  }}
+                  className="container-fluid"
+                >
+                  <div className="row">
+                    <Button
+                      style={styles.stylesForButton}
+                      //disabled={!validateFormType1()}
+                      onClick={onNext}
+                      variant="contained"
+                      color="primary"
+                    >
+                      Next
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : value === 2 ? (
+            <>
+              <div
+                style={{
+                  flex: 4,
+                  display: "flex",
+                  flexDirection: "column",
+                  backgroundColor: "white",
+                  marginTop: "25px",
+                  marginBottom: "25px",
+                  padding: "25px",
+                  borderRadius: "5px",
+                }}
+                className="container-fluid"
+              >
+                <div className="row">
+                  <label style={{ paddingLeft: "15px" }}>
+                    <strong>Triage Level</strong>
+                  </label>
+                </div>
+                <div value={triageLevel}>
+                  <div className="row">
+                    <div className="col-md-4">
+                      <input
+                        type="checkbox"
+                        name="triageLevel"
+                        value="Resuscitation"
+                        onChange={onChangeHandler}
+                        // checked={triageLevel}
+                      />
+                      <label for="male">&nbsp;&nbsp;1 - Resuscitation</label>
+                    </div>
+                    <div className="col-md-4">
+                      <input
+                        type="checkbox"
+                        name="triageLevel"
+                        value="Emergent"
+                        onChange={onChangeHandler}
+                        // checked={triageLevel === "Emergent"}
+                      />
+                      <label for="male">&nbsp;&nbsp;2 - Emergent</label>
+                    </div>
+                    <div className="col-md-4">
+                      <input
+                        type="checkbox"
+                        name="triageLevel"
+                        onChange={onChangeHandler}
+                        value="Urgent"
+                        // checked={triageLevel === "Urgent"}
+                      />
+                      <label for="male">&nbsp;&nbsp;3 - Urgent</label>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-md-4">
+                      <input
+                        type="checkbox"
+                        name="triageLevel"
+                        value="LessUrgent"
+                        onChange={onChangeHandler}
+                        // checked={triageLevel === "LessUrgent"}
+                      />
+                      <label for="male">&nbsp;&nbsp;4 - Less Urgent</label>
+                    </div>
+                    <div className="col-md-4">
+                      <input
+                        type="checkbox"
+                        name="triageLevel"
+                        value="NonUrgent"
+                        onChange={onChangeHandler}
+                        // checked={triageLevel === "NonUrgent"}
+                      />
+                      <label for="male">&nbsp;&nbsp;5 - Non Urgent</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                style={{ display: "flex", flex: 1, justifyContent: "center" }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    flex: 1,
+                    justifyContent: "flex-end",
+                    marginTop: "2%",
+                    marginBottom: "2%",
+                    paddingRight: "15px",
+                  }}
+                  className="container-fluid"
+                >
+                  <div className="row">
+                    <Button
+                      style={styles.stylesForButton}
+                      //disabled={!validateFormType1()}
+                      onClick={handleSubmitAssessment}
+                      variant="contained"
+                      color="primary"
+                    >
+                      Submit
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            undefined
+          )}
+        </DialogContent>
+
+        <DialogActions style={{ backgroundColor: "rgb(19 213 159)" }}>
+          <Button
+            onClick={hideTriageDialog}
+            color="primary"
+            style={{ ...styles.stylesForButton }}
+          >
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

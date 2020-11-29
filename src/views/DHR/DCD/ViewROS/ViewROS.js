@@ -9,6 +9,9 @@ import PrintIcon from "../../../../assets/img/Print Icon.png";
 import BodyIcon from "../../../../assets/img/body.png";
 import SkinIcon from "../../../../assets/img/Skin_rashes.png";
 
+import KHMC_Black from "../../../../assets/img/KHMC_Black.png";
+import Influence_Black from "../../../../assets/img/Influence_Black.png";
+
 import Button from "@material-ui/core/Button";
 import DetailBlock from "../../../../components/DHR/DCD/ViewPhysicalExam/detailBlock";
 
@@ -41,80 +44,186 @@ const styles = {
 const detailsBlockArray = [
   {
     heading: "General Apperence",
+    columnSize: 4,
     subArray: [
       {
-        description: "No Acute",
+        subheading: "Sub heading1",
+        description: "No Acute 1",
+      },
+
+      {
+        subheading: "Sub heading2",
+        description: "No Acute 2",
+      },
+
+      {
+        subheading: "Sub headin3",
+        description: "No Acute 3",
+      },
+
+      {
+        subheading: "Sub headin4",
+        description: "No Acute 4",
       },
     ],
   },
   {
     heading: "Heent",
+    columnSize: 4,
     subArray: [
       {
-        description:
-          "A commonly used medicale term to describe jaundice presents in the eyes",
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
       },
     ],
   },
   {
     heading: "Neck",
+    columnSize: 4,
     subArray: [
       {
-        description:
-          "A commonly used medicale term to describe jaundice presents in the eyes",
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
       },
     ],
   },
   {
     heading: "Respiratory",
+    columnSize: 4,
     subArray: [
       {
-        description:
-          "Respiratory System is the network of organs that hepls you breath",
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
       },
     ],
   },
   {
     heading: "CVS",
+    columnSize: 4,
     subArray: [
       {
-        description:
-          "The rhythm with no pattern to the RR intervals and a rate of 60 beats/min.",
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
       },
     ],
   },
   {
     heading: "Abdomen",
+    columnSize: 4,
     subArray: [
       {
-        description:
-          "Tenderness is a feeling of concern, gentle affection, or warmth.",
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
       },
     ],
   },
   {
     heading: "Rectal ",
+    columnSize: 4,
     subArray: [
       {
-        description:
-          "This test is still being studied to see how it works to find colorectal cancer. ",
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
       },
     ],
   },
   {
     heading: "Back ",
+    columnSize: 4,
     subArray: [
       {
-        description:
-          "Pain that results from touching the region inside of the costovertebral angle.",
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
       },
     ],
   },
   {
     heading: "Skin",
+    columnSize: 4,
     subArray: [
       {
-        description: "Pain that results",
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
+      },
+
+      {
+        subheading: "Sub heading",
+        description: "No Acute",
       },
     ],
   },
@@ -200,48 +309,67 @@ export default function ViewPhysicalExam(props) {
         display: "flex",
         flexDirection: "column",
         flex: 1,
-        position: "fixed",
-        width: "100%",
-        height: "100%",
+        // position: "fixed",
+        // width: "100%",
+        // height: "100%",
         // backgroundColor: "rgb(19 213 159)",
-        overflowY: "scroll",
+        // overflowY: "scroll",
         border: "1p",
       }}
     >
-      <Header history={props.history} />
-      <div className="cPadding">
+      <div
+        className="cPadding"
+        style={{
+          marginTop: 15,
+          marginBottom: 25,
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <img src={KHMC_Black} />
+        <img src={Influence_Black} />
+      </div>
+
+      <div className="cPadding" style={{ marginTop: 0 }}>
         <div className="subheader" style={{ marginBottom: 45 }}>
           <div className="col-md-6 col-6">
-            <img src={ROSIcon} />
+            <img src={props.icon} />
             <h4
               style={{
                 color: "#000000",
-                fontSize: "40px",
                 fontWeight: "bolder",
               }}
             >
-              ROS
+              {props.heading}
             </h4>
           </div>
-          <div className="col-md-6 col-6">
+          {/* <div className="col-md-6 col-6">
             <img
               style={{ width: 35, height: "inherit", marginRight: 10 }}
               src={DownloadIcon}
             />
             <img style={{ width: 35, height: "inherit" }} src={PrintIcon} />
-          </div>
+          </div> */}
         </div>
+
         <div
           style={{ flex: 4, display: "flex", flexDirection: "column" }}
           className={`${"container-fluid"} ${classes.root}`}
         >
-          {detailsBlockArray.map((arr) => {
-            return (
-              <DetailBlock heading={arr.heading} subArray={arr.subArray} />
-            );
-          })}
+          {props.selectedSingleTriage &&
+            props.selectedSingleTriage.map((arr, index) => {
+              return (
+                <div key={index}>
+                  <DetailBlock
+                    heading={arr.heading}
+                    subArray={arr.subArray}
+                    columnSize={arr.columnSize}
+                  />
+                </div>
+              );
+            })}
 
-          <div>
+          {/* <div>
             <div
               style={{
                 display: "flex",
@@ -263,7 +391,7 @@ export default function ViewPhysicalExam(props) {
                 </Button>
               </>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
