@@ -596,6 +596,7 @@ export default function ReplenishmentRequest(props) {
                     textAlign: "center",
                     width: "100%",
                     position: "absolute",
+                    fontSize: 20,
                   }}
                 >
                   Opps...No Data Found

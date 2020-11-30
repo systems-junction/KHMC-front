@@ -234,7 +234,7 @@ class Login extends React.Component {
             style={{
               maxWidth: 150,
               height: 45,
-              height: this.matches ? 45 : 75,
+              height: this.matches ? 45 : 60,
               marginTop: -18,
             }}
             // onClick={() => {

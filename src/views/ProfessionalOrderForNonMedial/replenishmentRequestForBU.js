@@ -179,7 +179,7 @@ const tableHeadingForFUMemberForItems = [
 
 const actions = { view: true, print: true };
 const actionsForBUMemeber = { edit: true, view: true };
-const actionsForBUMemeberForReceive = { edit: false, view: true, print:true };
+const actionsForBUMemeberForReceive = { edit: false, view: true, print: true };
 const actionsForBUMemeberForEdit = { edit: true, view: false, print: true };
 const actionsForBUNurse = { view: true, edit: true };
 const actionsForBUDoctor = { view: true };
@@ -711,7 +711,7 @@ export default function ReplenishmentRequest(props) {
           overflowY: "scroll",
         }}
       >
-        <Header history={props.history}/>
+        <Header history={props.history} />
         <div className="cPadding">
           <div className="subheader">
             <div>
@@ -719,9 +719,9 @@ export default function ReplenishmentRequest(props) {
 
               {props.history.location.pathname ===
               "/home/wms/fus/professionalorder/receiveorder" ? (
-                <h4>Ordered Items   (Non-Medical)</h4>
+                <h4>Ordered Items (Non-Medical)</h4>
               ) : (
-                <h4>Ordered Items   (Non-Medical)</h4>
+                <h4>Ordered Items (Non-Medical)</h4>
               )}
             </div>
 
@@ -883,11 +883,11 @@ export default function ReplenishmentRequest(props) {
                   </h3>
                 </div>
                 <div className="col-1" style={{ marginTop: 45 }}>
-                  <img
+                  {/* <img
                     onClick={() => props.history.goBack()}
                     src={Back_Arrow}
                     style={{ width: 45, height: 35, cursor: "pointer" }}
-                  />
+                  /> */}
                 </div>
               </div>
             ) : (
@@ -967,7 +967,7 @@ export default function ReplenishmentRequest(props) {
           // alignItems: "center",
         }}
       >
-        <Header history={props.history}/>
+        <Header history={props.history} />
 
         <div
           style={{

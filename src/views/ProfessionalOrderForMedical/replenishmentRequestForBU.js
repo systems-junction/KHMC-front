@@ -193,7 +193,7 @@ const tableHeadingForBUMemberForItems = [
   "Actions",
 ];
 
-const actions = { view: true, print:true };
+const actions = { view: true, print: true };
 const actionsForBUMemeber = { edit: true, view: true, print: true };
 const actionsForBUNurse = { view: true, print: true };
 
@@ -783,7 +783,7 @@ export default function ReplenishmentRequest(props) {
           overflowY: "scroll",
         }}
       >
-        <Header history={props.history}/>
+        <Header history={props.history} />
         <div className="cPadding">
           <div className="subheader">
             <div>
@@ -908,13 +908,14 @@ export default function ReplenishmentRequest(props) {
                       textAlign: "center",
                       width: "100%",
                       position: "absolute",
+                      fontSize: 20,
                     }}
                   >
                     Opps...No Data Found
                   </h3>
                 </div>
                 <div className="col-1" style={{ marginTop: 45 }}>
-                  <img
+                  {/* <img
                     onClick={() => props.history.goBack()}
                     src={Back_Arrow}
                     style={{
@@ -922,7 +923,7 @@ export default function ReplenishmentRequest(props) {
                       height: "auto",
                       cursor: "pointer",
                     }}
-                  />
+                  /> */}
                 </div>
               </div>
             ) : (
@@ -935,7 +936,7 @@ export default function ReplenishmentRequest(props) {
             <img
               onClick={() => props.history.goBack()}
               src={Back_Arrow}
-              style={{ width: 60, height: 40, cursor: "pointer" }}
+              style={{ width: 40, height: 30, cursor: "pointer" }}
             />
           </div>
 
