@@ -2036,7 +2036,7 @@ function LabRadRequest(props) {
           undefined
         ) : (
           <div
-            className={`${"container-fluid"} ${classes.root}`}
+            className={`${"container-fluid"} ${classes.root} ${classes1.root}`}
             style={{
               marginTop: "25px",
               paddingLeft: "10px",

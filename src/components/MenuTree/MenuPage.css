@@ -61,7 +61,11 @@
   }
   .menu-open:checked ~ .item-1::after {
     width: 2px;
-    height: 100px !important;
+    height: 60px !important;
+  }
+  .menu-open:checked ~ .item-4::after {
+    width: 2px;
+    height: 60px !important;
   }
 }
 

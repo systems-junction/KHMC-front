@@ -417,6 +417,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import "../../../assets/jss/material-dashboard-react/components/loaderStyle.css";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import {
   DateTimePicker,
   MuiPickersUtilsProvider,
@@ -506,6 +507,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PurchaseRequest(props) {
   const classes = useStyles();
+  const matches = useMediaQuery("(min-width:600px)");
 
   const [currentUser, setCurrentUser] = useState(cookie.load("current_user"));
   const [purchaseOrders, setPurchaseOrders] = useState("");
@@ -814,7 +816,6 @@ export default function PurchaseRequest(props) {
                   }}
                   // value={endDate}
                   value={endDate ? endDate : null}
-
                 />
               </MuiPickersUtilsProvider>
             </div>
@@ -876,7 +877,10 @@ export default function PurchaseRequest(props) {
             style={{ display: "flex", justifyContent: "space-evenly" }}
           >
             <Button
-              style={styles.stylesForPurchaseButton}
+              style={{
+                ...styles.stylesForPurchaseButton,
+                width: matches ? 160 : "100%",
+              }}
               // disabled={!validateForm()}
               onClick={getPurchaseRequests}
               variant="contained"
@@ -889,6 +893,8 @@ export default function PurchaseRequest(props) {
               style={{
                 ...styles.stylesForPurchaseButton,
                 backgroundColor: "#2c6ddd",
+                width: matches ? 160 : "100%",
+                marginTop: matches ? "" : 20,
               }}
               // disabled={!purchaseOrders}
               onClick={handlePrint}
@@ -941,7 +947,7 @@ export default function PurchaseRequest(props) {
           )}
         </div>
 
-        <div style={{ marginBottom: 20 }}>
+        <div style={{ marginBottom: 20, marginTop: 20 }}>
           <img
             onClick={() => props.history.goBack()}
             src={Back}
