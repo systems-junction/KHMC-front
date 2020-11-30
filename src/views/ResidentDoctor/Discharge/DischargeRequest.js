@@ -888,7 +888,7 @@ function DischargeRequest(props) {
                     style={{
                       zIndex: 3,
                       position: "absolute",
-                      width: "99%",
+                      width: matches ? "99%" : "145%",
                       marginTop: 5,
                     }}
                   >
