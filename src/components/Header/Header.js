@@ -146,11 +146,11 @@ class Header extends React.Component {
     }
 
     return (
-      <div className="header " style={{ marginBottom: 150 }}>
+      <div className="header" style={{ marginBottom: 150 }}>
         <img
           src={KHMC_White}
           className="header1-style mr-auto p-2"
-          style={{}}
+          // style={{ height: 65 }}
           onClick={() => {
             return this.setState({ goBack: true });
           }}
