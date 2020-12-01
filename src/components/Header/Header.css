@@ -5,6 +5,9 @@
   padding-top: 28px;
   display: flex;
   justify-content: space-between;
+  height: 530px;
+  /* position: relative; */
+  /* margin-bottom: 40px; */
 }
 .M-bottom {
   margin-bottom: 15%;
