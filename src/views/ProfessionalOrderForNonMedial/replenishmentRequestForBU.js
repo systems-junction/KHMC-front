@@ -887,11 +887,11 @@ export default function ReplenishmentRequest(props) {
                   </h3>
                 </div>
                 <div className="col-1" style={{ marginTop: 45 }}>
-                  <img
+                  {/* <img
                     onClick={() => props.history.goBack()}
                     src={Back_Arrow}
                     style={{ width: 45, height: 35, cursor: "pointer" }}
-                  />
+                  /> */}
                 </div>
               </div>
             ) : (

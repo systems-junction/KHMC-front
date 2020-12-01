@@ -64,14 +64,18 @@ let icdCodesList = require("../../assets/icdCodes.json");
 
 const tableHeadingForResident = [
   "Date / Time",
-  "Description / Condition",
+  // "Description / Condition",
   "Referring Doctor",
   "Action",
 ];
-const tableDataKeysForResident = ["date", "description", "doctorName"];
+const tableDataKeysForResident = [
+  "date",
+  //  "description",
+  "doctorName",
+];
 const tableHeadingForConsultation = [
   "Date / Time",
-  "Description / Condition",
+  // "Description / Condition",
   "Specialist",
   "Referring Doctor",
   "Status",
@@ -79,7 +83,7 @@ const tableHeadingForConsultation = [
 ];
 const tableDataKeysForConsultation = [
   "date",
-  "description",
+  // "description",
   ["specialist", "fullName"],
   "doctorName",
   "status",
@@ -2036,7 +2040,7 @@ function LabRadRequest(props) {
           undefined
         ) : (
           <div
-            className={`${"container-fluid"} ${classes.root}`}
+            className={`${"container-fluid"} ${classes.root} ${classes1.root}`}
             style={{
               marginTop: "25px",
               paddingLeft: "10px",
@@ -2137,7 +2141,7 @@ function LabRadRequest(props) {
                     style={{
                       zIndex: 3,
                       position: "absolute",
-                      width: "99%",
+                      width: matches ? "99%" : "145%",
                       marginTop: 5,
                     }}
                   >
@@ -3863,7 +3867,7 @@ function LabRadRequest(props) {
             <img
               onClick={() => props.history.goBack()}
               src={Back}
-              style={{ width: 45, height: 35, cursor: "pointer" }}
+              style={{ width: 40, height: 30, cursor: "pointer" }}
             />
           </div>
         </div>

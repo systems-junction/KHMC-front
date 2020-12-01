@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react";
 import {
   getPatientUrl,
   getPatientEdrUrl,
@@ -7,39 +7,39 @@ import {
   getOPRFromRadiologyUrl,
   getOPRFromPharmacyUrl,
   getActivePatients,
-} from "../../public/endpoins"
-import Notification from "../../components/Snackbar/Notification.js"
-import CustomTable from "../../components/Table/Table"
-import ButtonField from "../../components/common/Button"
-import { makeStyles } from "@material-ui/core/styles"
-import axios from "axios"
-import Loader from "react-loader-spinner"
-import Header from "../../components/Header/Header"
-import patientRegister from "../../assets/img/PatientRegistration.png"
-import Lab_OPR from "../../assets/img/Out Patient.png"
-import Rad_OPR from "../../assets/img/RR.png"
-import Pharmacy_OPR from "../../assets/img/PHR.png"
-import Back_Arrow from "../../assets/img/Back_Arrow.png"
-import Fingerprint from "../../assets/img/fingerprint.png"
-import AccountCircle from "@material-ui/icons/SearchOutlined"
-import InputAdornment from "@material-ui/core/InputAdornment"
-import BarCode from "../../assets/img/Bar Code.png"
-import "../../assets/jss/material-dashboard-react/components/loaderStyle.css"
+} from "../../public/endpoins";
+import Notification from "../../components/Snackbar/Notification.js";
+import CustomTable from "../../components/Table/Table";
+import ButtonField from "../../components/common/Button";
+import { makeStyles } from "@material-ui/core/styles";
+import axios from "axios";
+import Loader from "react-loader-spinner";
+import Header from "../../components/Header/Header";
+import patientRegister from "../../assets/img/PatientRegistration.png";
+import Lab_OPR from "../../assets/img/Out Patient.png";
+import Rad_OPR from "../../assets/img/RR.png";
+import Pharmacy_OPR from "../../assets/img/PHR.png";
+import Back_Arrow from "../../assets/img/Back_Arrow.png";
+import Fingerprint from "../../assets/img/fingerprint.png";
+import AccountCircle from "@material-ui/icons/SearchOutlined";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import BarCode from "../../assets/img/Bar Code.png";
+import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 // import ViewPatient from "./viewPatient"
-import TextField from "@material-ui/core/TextField"
-import cookie from "react-cookies"
-import _ from "lodash"
+import TextField from "@material-ui/core/TextField";
+import cookie from "react-cookies";
+import _ from "lodash";
 
-import QRCodeScannerComponent from "../../components/QRCodeScanner/QRCodeScanner"
-import { useStyles1 } from "../../components/MuiCss/MuiCss"
-import useMediaQuery from "@material-ui/core/useMediaQuery"
+import QRCodeScannerComponent from "../../components/QRCodeScanner/QRCodeScanner";
+import { useStyles1 } from "../../components/MuiCss/MuiCss";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 const styles = {
   textFieldPadding: {
     paddingLeft: 5,
     paddingRight: 5,
   },
-}
+};
 
 const useStylesForInput = makeStyles((theme) => ({
   margin: {
@@ -112,7 +112,7 @@ const useStylesForInput = makeStyles((theme) => ({
   //   // }
   // },
   // focusedLabel: {},
-}))
+}));
 
 const tableHeading = [
   "MRN",
@@ -123,7 +123,7 @@ const tableHeading = [
   "Email",
   "Status",
   "Active",
-]
+];
 const tableDataKeys = [
   ["patientId", "profileNo"],
   ["patientId", "fullName"],
@@ -132,65 +132,65 @@ const tableDataKeys = [
   ["patientId", "phoneNumber"],
   ["patientId", "email"],
   "status",
-]
+];
 
-const actions = { view: true }
+const actions = { view: true };
 
 export default function PatientListing(props) {
-  const classes = useStylesForInput()
-  const classes1 = useStyles1()
-  const matches = useMediaQuery("(min-width:600px)")
+  const classes = useStylesForInput();
+  const classes1 = useStyles1();
+  const matches = useMediaQuery("(min-width:600px)");
 
-  const [pharmOPR, setPharmOPR] = useState("")
-  const [radOPR, setRadOPR] = useState("")
-  const [labOPR, setLabOPR] = useState("")
-  const [patient, setPatient] = useState("")
-  const [itemModalVisible, setitemModalVisible] = useState(false)
-  const [errorMsg, setErrorMsg] = useState("")
-  const [openNotification, setOpenNotification] = useState(false)
-  const [item, setItem] = useState("")
-  const [searchPatientQuery, setSearchPatientQuery] = useState("")
-  const [allActivePatient, setAllActivePatient] = useState("")
+  const [pharmOPR, setPharmOPR] = useState("");
+  const [radOPR, setRadOPR] = useState("");
+  const [labOPR, setLabOPR] = useState("");
+  const [patient, setPatient] = useState("");
+  const [itemModalVisible, setitemModalVisible] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [openNotification, setOpenNotification] = useState(false);
+  const [item, setItem] = useState("");
+  const [searchPatientQuery, setSearchPatientQuery] = useState("");
+  const [allActivePatient, setAllActivePatient] = useState("");
 
   const [staffType, setStaffType] = useState(
-    cookie.load("current_user").staffTypeId.type,
-  )
-  const [PatientUrl, setPatientUrl] = useState("")
+    cookie.load("current_user").staffTypeId.type
+  );
+  const [PatientUrl, setPatientUrl] = useState("");
 
-  const [QRCodeScanner, setQRCodeScanner] = useState(false)
+  const [QRCodeScanner, setQRCodeScanner] = useState(false);
 
   useEffect(() => {
     if (staffType == "EDR Receptionist" || staffType == "IPR Receptionist") {
-      getPatientIPREDRData()
-      getActivePatientsHandle()
+      getPatientIPREDRData();
+      getActivePatientsHandle();
     } else if (staffType == "Lab Technician") {
-      getPatientLabOPRData()
-      getActivePatientsHandle()
+      getPatientLabOPRData();
+      getActivePatientsHandle();
     } else if (staffType == "Radiology/Imaging") {
-      getPatientRadOPRData()
-      getActivePatientsHandle()
+      getPatientRadOPRData();
+      getActivePatientsHandle();
     } else if (staffType == "Pharmacist") {
-      getPatientPharmOPRData()
-      getActivePatientsHandle()
+      getPatientPharmOPRData();
+      getActivePatientsHandle();
     }
-  }, [])
+  }, []);
 
-  console.log("allActivePatient", allActivePatient)
+  console.log("allActivePatient", allActivePatient);
   function getActivePatientsHandle() {
     axios
       .get(getActivePatients)
       .then((res) => {
         if (res.data.success) {
-          setAllActivePatient(res.data.data.reverse())
+          setAllActivePatient(res.data.data.reverse());
         } else if (!res.data.success) {
-          setErrorMsg(res.data.error)
-          setOpenNotification(true)
+          setErrorMsg(res.data.error);
+          setOpenNotification(true);
         }
-        return res
+        return res;
       })
       .catch((e) => {
-        console.log("error: ", e)
-      })
+        console.log("error: ", e);
+      });
   }
   function getPatientPharmOPRData() {
     axios
@@ -202,16 +202,16 @@ export default function PatientListing(props) {
           // res.data.data.map((d) => (d.date = d.pharmacyRequest.date))
           // res.data.data.map((d) => (d.createdAt = d.patientId.createdAt));
           // res.data.data.map((d) => (d.requestNo = d.pharmacyRequest._id))
-          setPharmOPR(res.data.data.reverse())
+          setPharmOPR(res.data.data.reverse());
         } else if (!res.data.success) {
-          setErrorMsg(res.data.error)
-          setOpenNotification(true)
+          setErrorMsg(res.data.error);
+          setOpenNotification(true);
         }
-        return res
+        return res;
       })
       .catch((e) => {
-        console.log("error: ", e)
-      })
+        console.log("error: ", e);
+      });
   }
 
   function getPatientRadOPRData() {
@@ -219,25 +219,25 @@ export default function PatientListing(props) {
       .get(getOPRFromRadiologyUrl)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data, "ecr1")
+          console.log(res.data.data, "ecr1");
           // res.data.data.map((d) => (d.createdAt = d.patientId.createdAt));
           // res.data.data.map((d) => (d.radiologyRequest = d.radiologyRequest[0]))
           // res.data.data.map((d) => (d.profileNo = d.patientId.profileNo))
           // res.data.data.map((d) => (d.date = d.pharmacyRequest.date))
           // res.data.data.map((d) => (d.status = d.pharmacyRequest.status))
           // res.data.data.map((d) => (d.requestNo = d.pharmacyRequest._id))
-          const sortedObjs = _.sortBy(res.data.data, "date").reverse()
+          const sortedObjs = _.sortBy(res.data.data, "date").reverse();
 
-          setRadOPR(sortedObjs)
+          setRadOPR(sortedObjs);
         } else if (!res.data.success) {
-          setErrorMsg(res.data.error)
-          setOpenNotification(true)
+          setErrorMsg(res.data.error);
+          setOpenNotification(true);
         }
-        return res
+        return res;
       })
       .catch((e) => {
-        console.log("error: ", e)
-      })
+        console.log("error: ", e);
+      });
   }
 
   function getPatientLabOPRData() {
@@ -247,112 +247,112 @@ export default function PatientListing(props) {
         if (res.data.success) {
           // res.data.data.map((d) => (d.createdAt = d.patientId.createdAt))
           // res.data.data.map((d) => (d.DateTime = formatDate(d.patientId.DateTime)))
-          const sortedObjs = _.sortBy(res.data.data, "date").reverse()
-          setLabOPR(sortedObjs)
-          console.log(res.data.data, "ecr1")
+          const sortedObjs = _.sortBy(res.data.data, "date").reverse();
+          setLabOPR(sortedObjs);
+          console.log(res.data.data, "ecr1");
         } else if (!res.data.success) {
-          setErrorMsg(res.data.error)
-          setOpenNotification(true)
+          setErrorMsg(res.data.error);
+          setOpenNotification(true);
         }
-        return res
+        return res;
       })
       .catch((e) => {
-        console.log("error: ", e)
-      })
+        console.log("error: ", e);
+      });
   }
 
   function getPatientIPREDRData() {
-    var PatientUrlValue = ""
-    console.log(staffType)
+    var PatientUrlValue = "";
+    console.log(staffType);
     if (staffType == "EDR Receptionist") {
-      PatientUrlValue = getPatientEdrUrl
+      PatientUrlValue = getPatientEdrUrl;
     }
     if (staffType == "IPR Receptionist") {
-      PatientUrlValue = getPatientIprUrl
+      PatientUrlValue = getPatientIprUrl;
     }
-    console.log(PatientUrlValue)
-    setPatientUrl(PatientUrlValue)
+    console.log(PatientUrlValue);
+    setPatientUrl(PatientUrlValue);
 
     axios
       .get(PatientUrlValue)
       .then((res) => {
         if (res.data.success) {
-          let patientResult = []
+          let patientResult = [];
           res.data.data.forEach((d, index) => {
             // (d) => (d.patientName = d.firstName + ' ' + d.lastName)
             d.patientId.patientName =
-              d.patientId.firstName + " " + d.patientId.lastName
-            patientResult.push(d.patientId)
-          })
+              d.patientId.firstName + " " + d.patientId.lastName;
+            patientResult.push(d.patientId);
+          });
 
-          setPatient(patientResult)
-          console.log(res.data.data, "get patient")
+          setPatient(patientResult);
+          console.log(res.data.data, "get patient");
         } else if (!res.data.success) {
-          setErrorMsg(res.data.error)
-          setOpenNotification(true)
+          setErrorMsg(res.data.error);
+          setOpenNotification(true);
         }
-        return res
+        return res;
       })
       .catch((e) => {
-        console.log("error: ", e)
-      })
+        console.log("error: ", e);
+      });
   }
 
   if (openNotification) {
     setTimeout(() => {
-      setOpenNotification(false)
-      setErrorMsg("")
-    }, 2000)
+      setOpenNotification(false);
+      setErrorMsg("");
+    }, 2000);
   }
 
-  var path
+  var path;
   if (staffType == "EDR Receptionist" || staffType == "IPR Receptionist") {
-    path = `patientListing/add`
+    path = `patientListing/add`;
   } else if (
     staffType == "Lab Technician" ||
     staffType == "Radiology/Imaging" ||
     staffType == "Pharmacist"
   ) {
-    path = `opr/add`
+    path = `opr/add`;
   }
 
   const addNewItem = () => {
     props.history.push({
       pathname: path,
       state: { comingFor: "add" },
-    })
-  }
+    });
+  };
 
   function handleEdit(rec) {
-    let path = `patientListing/edit`
+    let path = `patientListing/edit`;
     props.history.push({
       pathname: path,
       state: {
         comingFor: "edit",
         selectedItem: rec,
       },
-    })
+    });
   }
 
   const viewItem = (obj) => {
-    console.log("obj", obj)
-    let path = "/home/rcm/patientHistory"
+    console.log("obj", obj);
+    let path = "/home/rcm/patientHistory";
     if (obj !== "") {
       props.history.replace({
         pathname: path,
         state: {
           patientIDForActive: obj,
         },
-      })
+      });
     } else {
-      setErrorMsg("Error getting ID")
-      setOpenNotification(true)
+      setErrorMsg("Error getting ID");
+      setOpenNotification(true);
     }
-  }
+  };
 
   const handlePatientSearch = (e) => {
-    const a = e.target.value.replace(/[^\w\s]/gi, "")
-    setSearchPatientQuery(a)
+    const a = e.target.value.replace(/[^\w\s]/gi, "");
+    setSearchPatientQuery(a);
     if (staffType == "EDR Receptionist" || staffType == "IPR Receptionist") {
       if (a.length >= 3) {
         axios
@@ -360,26 +360,26 @@ export default function PatientListing(props) {
           .then((res) => {
             if (res.data.success) {
               if (res.data.data.length > 0) {
-                let patientResult = []
+                let patientResult = [];
                 res.data.data.forEach((d, index) => {
                   // (d) => (d.patientName = d.firstName + ' ' + d.lastName)
                   d.patientId.patientName =
-                    d.patientId.firstName + " " + d.patientId.lastName
-                  patientResult.push(d.patientId)
-                })
-                console.log(patientResult)
+                    d.patientId.firstName + " " + d.patientId.lastName;
+                  patientResult.push(d.patientId);
+                });
+                console.log(patientResult);
 
-                setPatient(patientResult)
+                setPatient(patientResult);
               } else {
-                setPatient(" ")
+                setPatient(" ");
               }
             }
           })
           .catch((e) => {
-            console.log("error after searching patient request", e)
-          })
+            console.log("error after searching patient request", e);
+          });
       } else if (a.length == 0) {
-        getPatientIPREDRData()
+        getPatientIPREDRData();
       }
     } else if (staffType == "Lab Technician") {
       if (a.length >= 3) {
@@ -388,19 +388,19 @@ export default function PatientListing(props) {
           .then((res) => {
             if (res.data.success) {
               if (res.data.data.length > 0) {
-                console.log(res.data.data)
-                var sortedObjs = _.sortBy(res.data.data, "date").reverse()
-                setLabOPR(sortedObjs)
+                console.log(res.data.data);
+                var sortedObjs = _.sortBy(res.data.data, "date").reverse();
+                setLabOPR(sortedObjs);
               } else {
-                setLabOPR(" ")
+                setLabOPR(" ");
               }
             }
           })
           .catch((e) => {
-            console.log("error after searching patient request", e)
-          })
+            console.log("error after searching patient request", e);
+          });
       } else if (a.length == 0) {
-        getPatientLabOPRData()
+        getPatientLabOPRData();
       }
     } else if (staffType == "Radiology/Imaging") {
       if (a.length >= 3) {
@@ -409,19 +409,19 @@ export default function PatientListing(props) {
           .then((res) => {
             if (res.data.success) {
               if (res.data.data.length > 0) {
-                console.log(res.data.data)
-                var sortedObjs = _.sortBy(res.data.data, "date").reverse()
-                setRadOPR(sortedObjs)
+                console.log(res.data.data);
+                var sortedObjs = _.sortBy(res.data.data, "date").reverse();
+                setRadOPR(sortedObjs);
               } else {
-                setRadOPR(" ")
+                setRadOPR(" ");
               }
             }
           })
           .catch((e) => {
-            console.log("error after searching patient request", e)
-          })
+            console.log("error after searching patient request", e);
+          });
       } else if (a.length == 0) {
-        getPatientRadOPRData()
+        getPatientRadOPRData();
       }
     } else if (staffType === "Pharmacist") {
       if (a.length >= 3) {
@@ -430,47 +430,47 @@ export default function PatientListing(props) {
           .then((res) => {
             if (res.data.success) {
               if (res.data.data.length > 0) {
-                console.log(res.data.data)
-                setPharmOPR(res.data.data.reverse())
+                console.log(res.data.data);
+                setPharmOPR(res.data.data.reverse());
               } else {
-                setPharmOPR(" ")
+                setPharmOPR(" ");
               }
             }
           })
           .catch((e) => {
-            console.log("error after searching patient request", e)
-          })
+            console.log("error after searching patient request", e);
+          });
       } else if (a.length == 0) {
-        getPatientPharmOPRData()
+        getPatientPharmOPRData();
       }
     }
-  }
+  };
 
   function handleView(rec) {
-    let path = `opr/viewOPR`
+    let path = `opr/viewOPR`;
     props.history.push({
       pathname: path,
       state: {
         selectedItem: rec,
         comingFor: "opr",
       },
-    })
+    });
   }
 
   function scanQRCode() {
-    setQRCodeScanner(true)
+    setQRCodeScanner(true);
   }
 
   function handleScanQR(data) {
-    setQRCodeScanner(false)
-    console.log("data after parsing", JSON.parse(data).profileNo)
+    setQRCodeScanner(false);
+    console.log("data after parsing", JSON.parse(data).profileNo);
 
     handlePatientSearch({
       target: {
         value: JSON.parse(data).profileNo,
         type: "text",
       },
-    })
+    });
   }
 
   if (QRCodeScanner) {
@@ -482,7 +482,7 @@ export default function PatientListing(props) {
           undefined
         )}
       </div>
-    )
+    );
   }
 
   return (
@@ -650,6 +650,7 @@ export default function PatientListing(props) {
                       textAlign: "center",
                       width: "100%",
                       position: "absolute",
+                      fontSize: 20,
                     }}
                   >
                     Opps...No Data Found
@@ -682,5 +683,5 @@ export default function PatientListing(props) {
         />
       ) : null} */}
     </div>
-  )
+  );
 }

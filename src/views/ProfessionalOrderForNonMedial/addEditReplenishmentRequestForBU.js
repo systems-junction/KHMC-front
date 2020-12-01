@@ -1599,7 +1599,7 @@ function AddEditPurchaseRequest(props) {
                     style={{
                       zIndex: 3,
                       position: "absolute",
-                      width: "96.6%",
+                      width: matches ? "96.6%" : "90%",
                       left: 22,
                       marginTop: 5,
                     }}
@@ -2110,7 +2110,7 @@ function AddEditPurchaseRequest(props) {
                   <img
                     onClick={() => props.history.goBack()}
                     src={Back_Arrow}
-                    style={{ width: 45, height: 35, cursor: "pointer" }}
+                    style={{ width: 40, height: 30, cursor: "pointer" }}
                   />
                 </div>
                 <div

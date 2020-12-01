@@ -31,6 +31,9 @@ import "../../../assets/jss/material-dashboard-react/components/TextInputStyle.c
 
 import ViewAllBtn from "../../../components/ViewAllBtn/viewAll";
 import FunctionalUnit from "../../FunctionalUnit/functionalUnit.jsx";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+
+// var matches = false;
 
 const styles = {
   stylesForButton: {
@@ -81,58 +84,58 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(0),
   },
   input: {
-    backgroundColor: 'white',
-    boxShadow: 'none',
+    backgroundColor: "white",
+    boxShadow: "none",
     borderRadius: 5,
-    '&:after': {
-      borderBottomColor: 'black',
-      boxShadow: 'none',
+    "&:after": {
+      borderBottomColor: "black",
+      boxShadow: "none",
     },
-    '&:hover': {
-      backgroundColor: 'white',
-      boxShadow: 'none',
+    "&:hover": {
+      backgroundColor: "white",
+      boxShadow: "none",
     },
-    '&:focus': {
-      backgroundColor: 'white',
-      boxShadow: 'none',
+    "&:focus": {
+      backgroundColor: "white",
+      boxShadow: "none",
       borderRadius: 5,
     },
   },
   multilineColor: {
-    boxShadow: 'none',
-    backgroundColor: 'white',
+    boxShadow: "none",
+    backgroundColor: "white",
     borderRadius: 5,
-    '&:hover': {
-      backgroundColor: 'white',
-      boxShadow: 'none',
+    "&:hover": {
+      backgroundColor: "white",
+      boxShadow: "none",
     },
-    '&:after': {
-      borderBottomColor: 'black',
-      boxShadow: 'none',
+    "&:after": {
+      borderBottomColor: "black",
+      boxShadow: "none",
     },
-    '&:focus': {
-      boxShadow: 'none',
+    "&:focus": {
+      boxShadow: "none",
     },
   },
   root: {
-    '& .MuiTextField-root': {
-      backgroundColor: 'white',
+    "& .MuiTextField-root": {
+      backgroundColor: "white",
     },
-    '& .Mui-focused': {
-      backgroundColor: 'white',
-      color: 'black',
-      boxShadow: 'none',
+    "& .Mui-focused": {
+      backgroundColor: "white",
+      color: "black",
+      boxShadow: "none",
     },
-    '& .Mui-disabled': {
-      backgroundColor: 'white',
-      color: 'gray',
+    "& .Mui-disabled": {
+      backgroundColor: "white",
+      color: "gray",
     },
-    '&:focus': {
-      backgroundColor: 'white',
-      boxShadow: 'none',
+    "&:focus": {
+      backgroundColor: "white",
+      boxShadow: "none",
     },
   },
-}))
+}));
 
 const statues = [
   {
@@ -162,6 +165,7 @@ const genderArray = [
 
 function AddEditStaff(props) {
   const classes = useStyles();
+  const matches = useMediaQuery("(min-width:600px)");
   const initialState = {
     _id: "",
     staffTypeId: "",
@@ -293,7 +297,6 @@ function AddEditStaff(props) {
         status,
       };
 
-
       if (functionalUnit) {
         params = { ...params, functionalUnit };
       }
@@ -317,8 +320,8 @@ function AddEditStaff(props) {
 
   const handleEdit = () => {
     setIsFormSubmitted(true);
-    console.log(functionalUnit)
-    
+    console.log(functionalUnit);
+
     if (validateForm()) {
       let params = {
         _id,
@@ -339,17 +342,15 @@ function AddEditStaff(props) {
 
       if (functionalUnit) {
         params = { ...params, functionalUnit };
+      } else {
+        params = { ...params, functionalUnit: null };
       }
 
-      else{
-        params = { ...params, functionalUnit:null };
-      }
-      
       axios
         .put(updateStaffTUrl, params)
         .then((res) => {
           if (res.data.success) {
-            console.log(res.data)
+            console.log(res.data);
             props.history.goBack();
           } else if (!res.data.success) {
             setOpenNotification(true);
@@ -387,7 +388,7 @@ function AddEditStaff(props) {
         overflowY: "scroll",
       }}
     >
-      <Header history={props.history}/>
+      <Header history={props.history} />
       <div className={`cPadding `}>
         <div className="subheader">
           <div>
@@ -406,10 +407,17 @@ function AddEditStaff(props) {
               <strong style={{ fontSize: "12px" }}>View All</strong>
             </Button>
           </div> */}
-         <ViewAllBtn history={props.history} />
+          <ViewAllBtn history={props.history} />
         </div>
-        <div className={`${'container-fluid'} `}>
-          <div className={`row ${classes.root}`} style={{marginTop: '15px', marginRight: '-20px', marginLeft: '-20px'}}>
+        <div className={`${"container-fluid"} `}>
+          <div
+            className={`row ${classes.root}`}
+            style={{
+              marginTop: "15px",
+              marginRight: "-20px",
+              marginLeft: "-20px",
+            }}
+          >
             <div
               className="col-md-6"
               style={{
@@ -441,6 +449,7 @@ function AddEditStaff(props) {
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
+                marginTop: matches ? 6 : 20,
               }}
             >
               <TextField
@@ -463,7 +472,14 @@ function AddEditStaff(props) {
             </div>
           </div>
 
-          <div className={`row ${classes.root}`} style={{marginTop: '20px', marginRight: '-20px', marginLeft: '-20px'}}>
+          <div
+            className={`row ${classes.root}`}
+            style={{
+              marginTop: "20px",
+              marginRight: "-20px",
+              marginLeft: "-20px",
+            }}
+          >
             <div
               className="col-md-4"
               style={{
@@ -493,6 +509,7 @@ function AddEditStaff(props) {
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
+                marginTop: matches ? 6 : 20,
               }}
             >
               <TextField
@@ -519,6 +536,7 @@ function AddEditStaff(props) {
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
+                marginTop: matches ? 6 : 20,
               }}
             >
               <TextField
@@ -552,7 +570,14 @@ function AddEditStaff(props) {
             </div>
           </div>
 
-          <div className={`row ${classes.root}`} style={{marginTop: '20px', marginRight: '-20px', marginLeft: '-20px'}}>
+          <div
+            className={`row ${classes.root}`}
+            style={{
+              marginTop: "20px",
+              marginRight: "-20px",
+              marginLeft: "-20px",
+            }}
+          >
             <div
               className="col-md-4"
               style={{
@@ -594,6 +619,7 @@ function AddEditStaff(props) {
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
+                marginTop: matches ? 6 : 20,
               }}
             >
               <TextField
@@ -630,6 +656,7 @@ function AddEditStaff(props) {
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
+                marginTop: matches ? 6 : 20,
               }}
             >
               <TextField
@@ -663,7 +690,14 @@ function AddEditStaff(props) {
             </div>
           </div>
 
-          <div className={`row ${classes.root}`} style={{marginTop: '20px', marginRight: '-20px', marginLeft: '-20px'}}>
+          <div
+            className={`row ${classes.root}`}
+            style={{
+              marginTop: "20px",
+              marginRight: "-20px",
+              marginLeft: "-20px",
+            }}
+          >
             <div
               className="col-md-4"
               style={{
@@ -696,6 +730,7 @@ function AddEditStaff(props) {
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
+                marginTop: matches ? 6 : 20,
               }}
             >
               <TextField
@@ -723,6 +758,7 @@ function AddEditStaff(props) {
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
+                marginTop: matches ? 6 : 20,
               }}
             >
               <TextField
@@ -746,7 +782,14 @@ function AddEditStaff(props) {
             </div>
           </div>
 
-          <div className={`row ${classes.root}`} style={{marginTop: '20px', marginRight: '-20px', marginLeft: '-20px'}}>
+          <div
+            className={`row ${classes.root}`}
+            style={{
+              marginTop: "20px",
+              marginRight: "-20px",
+              marginLeft: "-20px",
+            }}
+          >
             <div
               className="col-md-4"
               style={{
@@ -778,6 +821,7 @@ function AddEditStaff(props) {
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
+                marginTop: matches ? 6 : 20,
               }}
             >
               <TextField
@@ -805,6 +849,7 @@ function AddEditStaff(props) {
               style={{
                 ...styles.inputContainerForTextField,
                 ...styles.textFieldPadding,
+                marginTop: matches ? 6 : 20,
               }}
             >
               <TextField

@@ -584,9 +584,7 @@ export default function ReplenishmentRequest(props) {
       setIsOpen(false);
       setOpenNotification(true);
       setErrorMsg("Item has already been received");
-    }
-
-   else if (selectedOrder.status !== "Delivery in Progress") {
+    } else if (selectedOrder.status !== "Delivery in Progress") {
       setIsOpen(false);
       setOpenNotification(true);
       setErrorMsg(
@@ -829,7 +827,7 @@ export default function ReplenishmentRequest(props) {
           overflowY: "scroll",
         }}
       >
-        <Header history={props.history}/>
+        <Header history={props.history} />
         <div className="cPadding">
           <div className="subheader">
             {props.history.location.pathname === "/home/wms/fus/receive" ? (
@@ -999,13 +997,14 @@ export default function ReplenishmentRequest(props) {
                       textAlign: "center",
                       width: "100%",
                       position: "absolute",
+                      fontSize: 20,
                     }}
                   >
                     Opps...No Data Found
                   </h3>
                 </div>
                 <div className="col-1" style={{ marginTop: 45 }}>
-                  <img
+                  {/* <img
                     onClick={() => props.history.goBack()}
                     src={Back_Arrow}
                     style={{
@@ -1014,7 +1013,7 @@ export default function ReplenishmentRequest(props) {
                       height: "auto",
                       cursor: "pointer",
                     }}
-                  />
+                  /> */}
                 </div>
               </div>
             ) : (
@@ -1027,7 +1026,7 @@ export default function ReplenishmentRequest(props) {
             <img
               onClick={() => props.history.goBack()}
               src={Back_Arrow}
-              style={{ width: 45, height: 35, cursor: "pointer" }}
+              style={{ width: 40, height: 30, cursor: "pointer" }}
             />
           </div>
         </div>

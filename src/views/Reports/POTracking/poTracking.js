@@ -25,6 +25,7 @@ import {
   DatePicker,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 // import PrintTable from "./printOrder";
 
@@ -116,6 +117,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PurchaseRequest(props) {
   const classes = useStyles();
+  const matches = useMediaQuery("(min-width:600px)");
 
   const [currentUser, setCurrentUser] = useState(cookie.load("current_user"));
   const [purchaseOrders, setPurchaseOrders] = useState("");
@@ -269,7 +271,7 @@ export default function PurchaseRequest(props) {
         overflowY: "scroll",
       }}
     >
-      <Header history={props.history}/>
+      <Header history={props.history} />
       <div className="cPadding">
         <div className="subheader">
           <div>
@@ -376,7 +378,10 @@ export default function PurchaseRequest(props) {
             style={{ display: "flex", justifyContent: "space-evenly" }}
           >
             <Button
-              style={styles.stylesForPurchaseButton}
+              style={{
+                ...styles.stylesForPurchaseButton,
+                width: matches ? 160 : "100%",
+              }}
               // disabled={!validateForm()}
               onClick={getPurchaseRequests}
               variant="contained"
@@ -389,6 +394,8 @@ export default function PurchaseRequest(props) {
               style={{
                 ...styles.stylesForPurchaseButton,
                 backgroundColor: "#2c6ddd",
+                width: matches ? 160 : "100%",
+                marginTop: matches ? " " : 20,
               }}
               // disabled={!purchaseOrders}
               onClick={handlePrint}
@@ -427,7 +434,7 @@ export default function PurchaseRequest(props) {
           )}
         </div>
 
-        <div style={{ marginBottom: 20 }}>
+        <div style={{ marginBottom: 20, marginTop: matches ? " " : 20 }}>
           <img
             onClick={() => props.history.goBack()}
             src={Back}
