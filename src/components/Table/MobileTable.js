@@ -1,19 +1,9 @@
-/* eslint-disable no-nested-ternary */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable no-shadow */
 import React, { useEffect } from "react";
-import PropTypes from "prop-types";
+// import PropTypes from "props-types";
 // @material-ui/core components
 import { makeStyles, withStyles } from "@material-ui/core/styles";
-import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-// core components
+
 import styles from "../../assets/jss/material-dashboard-react/components/tableStyle";
 import TablePagination from "@material-ui/core/TablePagination";
 import RcIf from "rc-if";
@@ -22,31 +12,33 @@ import Active from "../../assets/img/Active.png";
 import In_Active from "../../assets/img/Inactive.png";
 import ReturnItem from "../../assets/img/Return Item Grey.png";
 import ReceiveItem from "../../assets/img/Receive Item Grey.png";
-import EditIcon from "../../assets/img/Edit.png";
+// import EditIcon from "../../assets/img/Edit.png";
 import cookie from "react-cookies";
 import Tooltip from "@material-ui/core/Tooltip";
 import capitilizeLetter from "../../public/capitilizeLetter";
 import formatDate from "../../utils/formatDate";
 import mapDateToKeys from "../../utils/mapDateToKeys";
 import Chip from "@material-ui/core/Chip";
-
-import { useTheme } from "@material-ui/core/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-
-import MobileTable from "./MobileTable";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
+import PrintIcon from "@material-ui/icons/Print";
+import GetAppIcon from "@material-ui/icons/GetApp";
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
+import CheckIcon from "@material-ui/icons/Check";
 
 const useStyles = makeStyles(styles);
 
 const stylesB = {
   stylesForActive: {
     verticalAlign: "center",
-    fontSize: "0.60rem",
+    fontSize: 5,
     color: "white",
     cursor: "pointer",
-    borderRadius: 5,
+    borderRadius: 2,
     background: "#2c6ddd",
-    width: "100px",
-    height: "40px",
+    // width: "50px",
+    // height: "20px",
     // outline: "none",
     // boxShadow: "none",
     // paddingBottom:"0.5rem",
@@ -55,64 +47,64 @@ const stylesB = {
   },
   stylesForInActive: {
     verticalAlign: "center",
-    fontSize: "0.60rem",
+    fontSize: 5,
     color: "white",
     cursor: "pointer",
-    borderRadius: 5,
+    borderRadius: 2,
     background: "#845DC2",
-    width: "100px",
-    height: "40px",
+    // width: "50px",
+    // height: "20px",
     // paddingBottom:"0.5rem",
     // outline: "none",
     // boxShadow: "none",
   },
   stylesForReceived: {
     verticalAlign: "center",
-    fontSize: "0.60rem",
+    fontSize: 5,
     color: "white",
     cursor: "pointer",
-    borderRadius: 5,
+    borderRadius: 2,
     background: "#845DC2",
-    width: "100px",
-    height: "40px",
+    // width: "50px",
+    // height: "20px",
     // paddingBottom:"0.5rem",
 
     // boxShadow: "none",
     // outline: "none",
   },
+
+  stylesForIcon: {
+    fontSize: 20,
+    backgroundColor: "#F1F1F1",
+    width: 24,
+    height: 24,
+    borderRadius: 24 / 2,
+    padding: 3,
+  },
+
+  styleForData: {
+    fontSize: 9,
+    fontWeight: "bold",
+  },
+
+  styleForDataHeading: {
+    color: "grey",
+    fontSize: 8,
+  },
 };
 
-const StyledTableRow = withStyles((theme) => ({
-  root: {
-    "&:nth-of-type(odd)": {
-      backgroundColor: "#f4f4f4",
-    },
+export default function ControlledAccordions(props) {
+  let i = 0;
 
-    "&:nth-of-type(even)": {
-      backgroundColor: "#FFFFFF",
-    },
-  },
-}))(TableRow);
-
-const useStylesForChip = makeStyles((theme) => ({
-  root: {
-    "& .MuiChip-root": {
-      backgroundColor: "red",
-      color: "white",
-      borderRadius: "10px",
-      height: "25px",
-    },
-  },
-}));
-
-export default function CustomTable(props) {
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up("sm"));
-
-  const { tableHeading, tableData, tableDataKeys, tableHeaderColor } = props;
+  const {
+    // tableHeading,
+    tableData,
+    // tableDataKeys,
+    tableHeaderColor,
+    action,
+  } = props;
 
   const classes = useStyles();
-  const classForChip = useStylesForChip();
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -122,15 +114,39 @@ export default function CustomTable(props) {
     cookie.load("current_user")
   );
 
+  const [tableHeading, setTableHeading] = React.useState([]);
+  const [tableDataKeys, setTableKeys] = React.useState([]);
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
   useEffect(() => {
     // props.tableData
+    let tempHeading = [...props.tableHeading];
+    let tempKeys = [...props.tableDataKeys];
+    if (tempHeading.includes("Status")) {
+      console.log(tempHeading);
+
+      let temp = tempHeading[1];
+      tempHeading[1] = "Status";
+      tempHeading[tempHeading.length - 2] = temp;
+
+      let tempK = tempKeys[1];
+      tempKeys[1] = tempKeys[tempKeys.length - 1];
+      tempKeys[tempKeys.length - 1] = tempK;
+    }
+
+    setTableHeading([...tempHeading]);
+    setTableKeys([...tempKeys]);
   }, []);
 
-  const replaceSlugToTitle = (val, key, indexValue) => {
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const replaceSlugToTitle = (val, key, heading, indexValue) => {
     if (key === "heartRate") {
       if (val < 60 || val > 100) {
         return <Chip label={val} />;
@@ -214,7 +230,7 @@ export default function CustomTable(props) {
               </Button>
             ) : val === "pending" ? (
               <Button
-                // onClick={() => props.handleView(prop)}
+                // onClick={() => props.handleView(props)}
                 style={{
                   ...stylesB.stylesForActive,
                   backgroundColor: "#e877a1",
@@ -655,18 +671,11 @@ export default function CustomTable(props) {
       );
     }
 
-    // console.log("sdsd",props.tableHeading[indexValue])
-
-    if (props.tableHeading[indexValue].includes("JD")) {
+    if (heading[indexValue].includes("JD")) {
       return parseFloat(val).toFixed(4) + " JD";
     }
 
     return capitilizeLetter(val);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
   };
 
   const formatDate = (date) => {
@@ -705,301 +714,323 @@ export default function CustomTable(props) {
     }
   };
 
-  function setRow(prop) {
-    if (prop._id === selectedRow._id) {
+  function setRow(props) {
+    if (props._id === selectedRow._id) {
       setSelectedRow("");
     } else {
-      setSelectedRow(prop);
+      setSelectedRow(props);
     }
   }
 
-  if (matches) {
+  function MapArrayToRow(p) {
+    const { arr, prop, heading, colSize } = p;
+
     return (
-      <div className={classes.tableResponsive}>
-        <Table id={props.id ? props.id : "table_component"}>
-          {tableHeading !== undefined ? (
-            <TableHead
-              className={classes[tableHeaderColor + "TableHeader"]}
-              style={{
-                backgroundColor: "#2873cf",
-              }}
-            >
-              <TableRow className={classes.tableHeadRow}>
-                {tableHeading.map((prop, index) => {
+      <div className="container-fluid">
+        <div className="row" style={{ marginBottom: 7, marginTop: 7 }}>
+          <>
+            {arr &&
+              arr.map((val, key) => {
+                if (mapDateToKeys(val)) {
                   return (
-                    <>
-                      <TableCell
-                        className={classes.tableHeadCell}
+                    <div
+                      key={val}
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        paddingLeft: 4,
+                        paddingRight: 0,
+                      }}
+                      className={
+                        colSize === 2 ? `col-${12 / 3}` : `col-${12 / 3}`
+                      }
+                    >
+                      <span style={{ ...stylesB.styleForDataHeading }}>
+                        {heading[key]}
+                      </span>
+                      <span
+                        key={key}
                         style={{
-                          color: "white",
-                          borderTopLeftRadius: index === 0 ? 5 : 0,
-                          borderTopRightRadius:
-                            index === tableHeading.length - 1 ? 5 : 0,
-                          textAlign:
-                            prop === "Actions" || prop === "Action"
-                              ? "center"
-                              : "",
+                          ...stylesB.styleForData,
                         }}
-                        key={prop}
                       >
-                        {prop}
-                      </TableCell>
-                    </>
+                        {Array.isArray(val)
+                          ? prop[val[0]]
+                            ? formatDate(prop[val[0]][val[1]])
+                            : prop[val[0]][val[1]]
+                          : formatDate(prop[val])}
+                      </span>
+                    </div>
                   );
-                })}
-              </TableRow>
-            </TableHead>
-          ) : null}
+                } else {
+                  if (true) {
+                    return (
+                      <div
+                        key={val}
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          paddingLeft: 4,
+                          paddingRight: 0,
+                          alignItems:
+                            heading[key] === "Status"
+                              ? "flex-end"
+                              : "flex-start",
+                        }}
+                        className={
+                          colSize === 2 ? `col-${12 / 3}` : `col-${12 / 3}`
+                        }
+                      >
+                        <span style={{ ...stylesB.styleForDataHeading }}>
+                          {heading[key] === "Status" ? "" : heading[key]}
+                        </span>
 
-          <TableBody>
-            {tableData &&
-              tableData
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((prop, index) => {
-                  return (
-                    <>
-                      <StyledTableRow key={index}>
-                        {tableDataKeys
-                          ? tableDataKeys.map((val, key) => {
-                              if (mapDateToKeys(val)) {
-                                return (
-                                  <TableCell
-                                    className={classes.tableCell}
-                                    key={key}
-                                    style={{
-                                      // textAlign: 'center',
-                                      borderWidth: 0,
-                                      maxWidth: 400,
-                                    }}
-                                  >
-                                    {Array.isArray(val)
-                                      ? prop[val[0]]
-                                        ? formatDate(prop[val[0]][val[1]])
-                                        : prop[val[0]][val[1]]
-                                      : formatDate(prop[val])}
-                                  </TableCell>
-                                );
-                              } else {
-                                return (
-                                  <TableCell
-                                    className={`${classes.tableCell} ${classForChip.root}`}
-                                    key={key}
-                                    onClick={() => handleClick(prop, val)}
-                                    style={{
-                                      maxWidth: 400,
-                                      // textAlign: 'center',
-                                      cursor: props.handleModelMaterialReceiving
-                                        ? "pointer"
-                                        : "",
-                                      // borderTopLeftRadius: key === 0 ? 5 : 0,
-                                      // borderBottomLeftRadius: key === 0 ? 5 : 0,
+                        <span
+                          key={key}
+                          onClick={() => handleClick(prop, val)}
+                          style={{
+                            ...stylesB.styleForData,
+                            wordWrap: "break-word",
+                          }}
+                        >
+                          {Array.isArray(val)
+                            ? prop[val[0]]
+                              ? replaceSlugToTitle(
+                                  prop[val[0]][val[1]],
+                                  val,
+                                  heading,
+                                  key
+                                )
+                              : null
+                            : val.toLowerCase() === "timestamp"
+                            ? new Intl.DateTimeFormat(
+                                "en-US",
+                                dateOptions
+                              ).format(Date.parse(prop[val]))
+                            : replaceSlugToTitle(prop[val], val, heading, key)}
+                        </span>
+                      </div>
+                    );
+                  }
+                }
+              })}
 
-                                      borderBottomLeftRadius:
-                                        props.tableData.length - 1 === index &&
-                                        key === 0
-                                          ? 5
-                                          : 0,
-                                      borderWidth: 0,
-                                    }}
-                                  >
-                                    {Array.isArray(val)
-                                      ? prop[val[0]]
-                                        ? // ? capitilizeLetter(prop[val[0]][val[1]])
-                                          replaceSlugToTitle(
-                                            prop[val[0]][val[1]],
-                                            val,
-                                            key
-                                          )
-                                        : null
-                                      : val.toLowerCase() === "timestamp"
-                                      ? new Intl.DateTimeFormat(
-                                          "en-US",
-                                          dateOptions
-                                        ).format(Date.parse(prop[val]))
-                                      : // : `${replaceSlugToTitle(prop[val])}`}
-                                        replaceSlugToTitle(prop[val], val, key)}
-                                  </TableCell>
-                                );
-                              }
-                            })
-                          : null}
+            {colSize === 2 ? (
+              <div
+                className="col-4"
+                style={{
+                  paddingLeft: 0,
+                  paddingRight: 0,
+                }}
+              >
+                {props.action !== "" ? (
+                  props.action ? (
+                    <div
+                      style={{
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "space-evenly",
+                        alignItems: "center",
+                      }}
+                    >
+                      <RcIf if={props.action.edit}>
+                        <span onClick={() => props.handleEdit(prop)}>
+                          <EditIcon
+                            color="action"
+                            style={{ ...stylesB.stylesForIcon }}
+                          />
+                        </span>
+                      </RcIf>
 
-                        {props.action !== "" ? (
-                          <TableCell
+                      <RcIf if={props.action.delete}>
+                        <span onClick={() => props.handleDelete(prop)}>
+                          <DeleteIcon
+                            color="action"
+                            style={{ ...stylesB.stylesForIcon }}
+                          />
+                        </span>
+                      </RcIf>
+
+                      <RcIf if={props.action.add}>
+                        <span onClick={() => props.handleAdd(prop)}>
+                          <AddCircleOutlineIcon
+                            color="action"
+                            style={{ ...stylesB.stylesForIcon }}
+                          />
+                        </span>
+                      </RcIf>
+
+                      <RcIf if={props.action.view}>
+                        <span onClick={() => props.handleView(prop)}>
+                          <VisibilityIcon
+                            color="action"
+                            style={{ ...stylesB.stylesForIcon }}
+                          />
+                        </span>
+                      </RcIf>
+
+                      <RcIf if={props.action.receiveItem}>
+                        <Tooltip title="Receive Item">
+                          <img
+                            src={ReceiveItem}
+                            onClick={() => props.receiveItem(prop)}
                             style={{
-                              cursor: "pointer",
-                              // borderTopRightRadius: 15,
-                              borderBottomRightRadius:
-                                props.tableData.length - 1 === index ? 5 : 0,
-                              borderWidth: 0,
+                              maxWidth: 30,
+                              height: 23,
+                              borderRadius: 30,
                             }}
-                            className={classes.tableCell}
-                          >
-                            {props.action ? (
-                              <div
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "space-evenly",
-                                }}
-                              >
-                                <RcIf if={props.action.edit}>
-                                  <span onClick={() => props.handleEdit(prop)}>
-                                    <i
-                                      style={{ color: "grey" }}
-                                      className="zmdi zmdi-edit zmdi-hc-2x"
-                                    />
-                                  </span>
-                                </RcIf>
-                                <RcIf if={props.action.delete}>
-                                  <span
-                                    onClick={() => props.handleDelete(prop)}
-                                  >
-                                    <i
-                                      style={{
-                                        color: "grey",
-                                      }}
-                                      className=" ml-10 zmdi zmdi-delete zmdi-hc-2x"
-                                    />
-                                  </span>
-                                </RcIf>
+                          />
+                        </Tooltip>
+                      </RcIf>
 
-                                <RcIf if={props.action.add}>
-                                  <span onClick={() => props.handleAdd(prop)}>
-                                    <i
-                                      style={{ color: "grey" }}
-                                      className=" ml-10 zmdi zmdi-plus-circle zmdi-hc-2x"
-                                    />
-                                  </span>
-                                </RcIf>
+                      <RcIf if={props.action.returnRequest}>
+                        <Tooltip title="FU Return">
+                          <img
+                            src={ReturnItem}
+                            onClick={() => props.addReturnRequest(prop)}
+                            style={{
+                              maxWidth: 30,
+                              height: 23,
+                              borderRadius: 30,
+                            }}
+                          />
+                        </Tooltip>
+                      </RcIf>
 
-                                <RcIf if={props.action.view}>
-                                  <span onClick={() => props.handleView(prop)}>
-                                    <i
-                                      style={{ color: "grey" }}
-                                      className=" ml-10 zmdi zmdi-eye zmdi-hc-2x"
-                                    />
-                                  </span>
-                                </RcIf>
+                      <RcIf
+                        if={props.action.active && props.status === "in_active"}
+                      >
+                        <span
+                          onClick={() => props.handleStatus(prop._id)}
+                          title="Active"
+                        >
+                          <CheckIcon
+                            color="action"
+                            style={{ ...stylesB.stylesForIcon }}
+                          />
+                        </span>
+                      </RcIf>
 
-                                <RcIf if={props.action.receiveItem}>
-                                  <Tooltip title="Receive Item">
-                                    <img
-                                      src={ReceiveItem}
-                                      onClick={() => props.receiveItem(prop)}
-                                      style={{
-                                        maxWidth: 60,
-                                        height: 43,
-                                        borderRadius: 30,
-                                      }}
-                                    />
-                                  </Tooltip>
-                                </RcIf>
+                      <RcIf if={props.action.print}>
+                        <span
+                          onClick={() =>
+                            props.handlePrint(prop)
+                              ? props.handlePrint(prop)
+                              : {}
+                          }
+                          title="Active"
+                        >
+                          <PrintIcon
+                            color="action"
+                            style={{ ...stylesB.stylesForIcon }}
+                          />
+                        </span>
+                      </RcIf>
 
-                                <RcIf if={props.action.returnRequest}>
-                                  <Tooltip title="FU Return">
-                                    <img
-                                      src={ReturnItem}
-                                      onClick={() =>
-                                        props.addReturnRequest(prop)
-                                      }
-                                      style={{
-                                        maxWidth: 60,
-                                        height: 45,
-                                        borderRadius: 30,
-                                      }}
-                                    />
-                                  </Tooltip>
-                                </RcIf>
-
-                                <RcIf
-                                  if={
-                                    props.action.active &&
-                                    prop.status === "in_active"
-                                  }
-                                >
-                                  <span
-                                    onClick={() => props.handleStatus(prop._id)}
-                                    title="Active"
-                                  >
-                                    <i className=" ml-10 zmdi zmdi-check zmdi-hc-2x" />
-                                  </span>
-                                </RcIf>
-
-                                <RcIf if={props.action.print}>
-                                  <span
-                                    onClick={() =>
-                                      props.handlePrint(prop)
-                                        ? props.handlePrint(prop)
-                                        : {}
-                                    }
-                                    title="Active"
-                                  >
-                                    <i
-                                      style={{ color: "grey" }}
-                                      class="zmdi zmdi-print zmdi-hc-2x"
-                                    ></i>
-                                  </span>
-                                </RcIf>
-
-                                <RcIf if={props.action.download}>
-                                  <span
-                                    onClick={() =>
-                                      props.handleDownload(prop)
-                                        ? props.handleDownload(prop)
-                                        : {}
-                                    }
-                                    title="Active"
-                                  >
-                                    <i
-                                      style={{ color: "grey" }}
-                                      class="zmdi zmdi-download zmdi-hc-2x"
-                                    ></i>
-                                  </span>
-                                </RcIf>
-                              </div>
-                            ) : (
-                              undefined
-                            )}
-                          </TableCell>
-                        ) : (
-                          ""
-                        )}
-                      </StyledTableRow>
-                    </>
-                  );
-                })}
-          </TableBody>
-        </Table>
-        <TablePagination
-          rowsPerPageOptions={[10, 20]}
-          component="div"
-          count={props.tableData && props.tableData.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-        />
+                      <RcIf if={props.action.download}>
+                        <span
+                          onClick={() =>
+                            props.handleDownload(prop)
+                              ? props.handleDownload(prop)
+                              : {}
+                          }
+                          title="Active"
+                        >
+                          <GetAppIcon
+                            color="action"
+                            style={{ ...stylesB.stylesForIcon }}
+                          />
+                        </span>
+                      </RcIf>
+                    </div>
+                  ) : (
+                    undefined
+                  )
+                ) : (
+                  ""
+                )}
+              </div>
+            ) : (
+              undefined
+            )}
+          </>
+        </div>
       </div>
     );
-  } else {
-    return <MobileTable {...props} />;
   }
+
+  return (
+    <div>
+      {tableData &&
+        tableHeading.length > 0 &&
+        tableDataKeys.length > 0 &&
+        tableData
+          .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+          .map((prop, index) => {
+            i = 0;
+            return (
+              <>
+                <div className="container-fluid">
+                  <div
+                    className="row"
+                    key={index}
+                    style={{
+                      backgroundColor: "white",
+                      padding: 3,
+                      marginTop: 8,
+                      borderRadius: 2,
+                    }}
+                  >
+                    <div
+                      className="col-12"
+                      style={{ paddingLeft: 0, paddingRight: 0 }}
+                    >
+                      {tableDataKeys
+                        ? tableDataKeys.map((val, key) => {
+                            if (i < tableDataKeys.length) {
+                              let arr = [];
+                              let heading = [];
+                              let colSize = 0;
+                              if (i === 0) {
+                                arr = tableDataKeys.slice(i, 2 + i);
+                                heading.push(tableHeading[i]);
+                                heading.push(tableHeading[i + 1]);
+                                // heading.push(tableHeading[i + 2]);
+                                i = i + 2;
+                                colSize = 2;
+                              } else {
+                                arr = tableDataKeys.slice(i, 3 + i);
+                                heading.push(tableHeading[i]);
+                                heading.push(tableHeading[i + 1]);
+                                heading.push(tableHeading[i + 2]);
+                                i = i + 3;
+                                colSize = 3;
+                              }
+                              return MapArrayToRow({
+                                arr: arr,
+                                prop: prop,
+                                heading: heading,
+                                colSize,
+                              });
+                            }
+                          })
+                        : null}
+                    </div>
+                  </div>
+                </div>
+              </>
+            );
+          })}
+
+      <TablePagination
+        rowsPerPageOptions={[10, 20]}
+        component="div"
+        count={props.tableData && props.tableData.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onChangePage={handleChangePage}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
+      />
+    </div>
+  );
 }
-
-CustomTable.defaultProps = {
-  tableHeaderColor: "gray",
-};
-
-CustomTable.propTypes = {
-  tableHeaderColor: PropTypes.oneOf([
-    "warning",
-    "primary",
-    "danger",
-    "success",
-    "info",
-    "rose",
-    "gray",
-  ]),
-  // tableHead: PropTypes.arrayOf(PropTypes.string),
-  // tableData: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string))
-};

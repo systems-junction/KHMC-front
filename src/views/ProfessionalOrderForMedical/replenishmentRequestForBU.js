@@ -49,7 +49,10 @@ import Dialog from "@material-ui/core/Dialog";
 
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
-import { id } from "date-fns/locale";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 
 import LogoPatientSummaryInvoice from "../../assets/img/logoPatientSummaryInvoice.png";
 import { jsPDF } from "jspdf";
@@ -943,18 +946,38 @@ export default function ReplenishmentRequest(props) {
           <Dialog
             aria-labelledby="form-dialog-title"
             open={isOpen}
-            maxWidth="xl"
-            fullWidth={true}
-            // fullScreen
+            // maxWidth="xl"
+            // fullWidth={true}
+            fullScreen
             onBackdropClick={() => {
               setIsOpen(false);
             }}
           >
+            <AppBar
+              style={{ position: "relative", backgroundColor: "#31e2aa" }}
+            >
+              <Toolbar>
+                <IconButton
+                  edge="start"
+                  color="inherit"
+                  onClick={() => {
+                    setIsOpen(false);
+                  }}
+                  aria-label="close"
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Toolbar>
+            </AppBar>
+
             <DialogContent style={{ backgroundColor: "#31e2aa" }}>
-              <DialogTitle id="simple-dialog-title" style={{ color: "white" }}>
-                Added Items
-              </DialogTitle>
-              <div className="container-fluid">
+              <>
+                <h5
+                  id="simple-dialog-title"
+                  style={{ color: "white", fontWeight: "bold" }}
+                >
+                  Added Items
+                </h5>
                 <CustomTable
                   tableData={requestedItems}
                   tableHeading={
@@ -993,7 +1016,7 @@ export default function ReplenishmentRequest(props) {
                   borderBottomColor={"#60d69f"}
                   borderBottomWidth={20}
                 />
-              </div>
+              </>
             </DialogContent>
           </Dialog>
         </div>
