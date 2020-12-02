@@ -1,4 +1,4 @@
-const local = "http://192.168.18.27:4000/api";
+const local = "http://localhost:4000/api";
 const notificationsUrl = "http://localhost:4000";
 const stagingDigitalOcean = "https://dev.khmc-staging.online/api";
 const StagingDigitalOceanUploadsUrl = "https://dev.khmc-staging.online/";
