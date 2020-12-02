@@ -181,10 +181,10 @@ export default function PurchaseRequest(props) {
   useEffect(() => {
     const socket = socketIOClient(socketUrl);
     socket.emit("connection");
-    socket.on("get_data", (data) => {
-      setPurchaseRequest(data.reverse());
-      console.log("res after adding through socket", data);
-    });
+    // socket.on("get_data", (data) => {
+    //   setPurchaseRequest(data.reverse());
+    //   console.log("res after adding through socket", data);
+    // });
 
     getPurchaseRequests();
 

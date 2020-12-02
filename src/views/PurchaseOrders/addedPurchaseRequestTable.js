@@ -277,6 +277,8 @@ export default function PurchaseRequest(props) {
     props.handleAddPR(selectedPurchaseRequests);
   }
 
+  console.log("inside table data", props.tableData);
+
   return (
     <div
       style={{
@@ -286,145 +288,157 @@ export default function PurchaseRequest(props) {
       }}
     >
       <div>
-        <Table>
-          {tableHeading !== undefined ? (
-            <TableHead
-              className={classes["TableHeader"]}
-              style={{
-                backgroundColor: "#2873cf",
-              }}
-            >
-              <TableRow>
-                {props.tableHeading &&
-                  props.tableHeading.map((prop, index) => {
-                    return (
-                      <>
-                        <TableCell
-                          className={classes.tableHeadCell}
-                          style={{
-                            color: "white",
-                            fontWeight: "700",
-                            // textAlign: "center",
-                            borderTopLeftRadius: index === 0 ? 5 : 0,
-                            borderTopRightRadius:
-                              index === props.tableHeading.length - 1 ? 5 : 0,
-                          }}
-                          key={prop}
-                        >
-                          {prop}
-                        </TableCell>
-                      </>
-                    );
-                  })}
-              </TableRow>
-            </TableHead>
-          ) : null}
-
-          <TableBody style={{ marginTop: 20 }}>
-            {props.tableData &&
-              props.tableData.map((prop, index) => {
-                return (
-                  <>
-                    <StyledTableRow
-                      key={index}
-                      className={classes.tableBodyRow}
-                      style={{
-                        cursor: "pointer",
-                      }}
-                    >
-                      {props.tableDataKeys
-                        ? props.tableDataKeys.map((val, key) => {
-                            // console.log(key);
-                            if (val === "date") {
-                              return (
-                                <TableCell
-                                  className={classes.tableCell}
-                                  key={key}
-                                  style={
-                                    {
-                                      // textAlign: "center",
-                                    }
-                                  }
-                                >
-                                  {formatDate(prop[val])}
-                                </TableCell>
-                              );
-                            } else if (val === "vendorId") {
-                              return (
-                                <TableCell
-                                  className={classes.tableCell}
-                                  key={key}
-                                  style={
-                                    {
-                                      // textAlign: "center",
-                                    }
-                                  }
-                                >
-                                  {typeof prop[val] === "string"
-                                    ? props.vendors.map((v) => {
-                                        if (v._id === prop[val]) {
-                                          return v.englishName;
-                                        }
-                                      })
-                                    : prop[val].englishName}
-
-                                  {/* {prop[val]} */}
-                                </TableCell>
-                              );
-                            } else {
-                              return (
-                                <TableCell
-                                  className={classes.tableCell}
-                                  key={key}
-                                  // onClick={() => handleClick(prop, val)}
-                                  style={{
-                                    // textAlign: "center",
-                                    cursor: props.handleModelMaterialReceiving
-                                      ? "pointer"
-                                      : "",
-                                  }}
-                                >
-                                  {Array.isArray(val)
-                                    ? prop[val[0]]
-                                      ? prop[val[0]][val[1]]
-                                      : null
-                                    : val.toLowerCase() === "timestamp"
-                                    ? new Intl.DateTimeFormat(
-                                        "en-US",
-                                        dateOptions
-                                      ).format(Date.parse(prop[val]))
-                                    : // : `${replaceSlugToTitle(prop[val])}`}
-                                      replaceSlugToTitle(prop[val])}
-                                </TableCell>
-                              );
-                            }
-                          })
-                        : null}
-                      <TableCell
-                        style={{
-                          cursor: "pointer",
-                        }}
-                        key={index}
-                        className={classes.tableCell}
-                        colSpan="2"
-                      >
-                        <span onClick={() => props.viewItem(prop)}>
-                          <i
-                            style={{
-                              color: "grey",
-                              fontSize: "30px",
-                            }}
-                            className=" ml-10 zmdi zmdi-eye zmdi-hc-3x"
-                          />
-                        </span>
-                      </TableCell>
-                    </StyledTableRow>
-                  </>
-                );
-              })}
-          </TableBody>
-        </Table>
+        <CustomTable
+          tableData={props.tableData}
+          tableDataKeys={props.tableDataKeys}
+          tableHeading={props.tableHeading}
+          action={{ view: true }}
+          borderBottomColor={"#60d69f"}
+          borderBottomWidth={20}
+          handleView={props.viewItem}
+        />
       </div>
     </div>
   );
 }
+
+//  <Table>
+//    {tableHeading !== undefined ? (
+//      <TableHead
+//        className={classes["TableHeader"]}
+//        style={{
+//          backgroundColor: "#2873cf",
+//        }}
+//      >
+//        <TableRow>
+//          {props.tableHeading &&
+//            props.tableHeading.map((prop, index) => {
+//              return (
+//                <>
+//                  <TableCell
+//                    className={classes.tableHeadCell}
+//                    style={{
+//                      color: "white",
+//                      fontWeight: "700",
+//                      // textAlign: "center",
+//                      borderTopLeftRadius: index === 0 ? 5 : 0,
+//                      borderTopRightRadius:
+//                        index === props.tableHeading.length - 1 ? 5 : 0,
+//                    }}
+//                    key={prop}
+//                  >
+//                    {prop}
+//                  </TableCell>
+//                </>
+//              );
+//            })}
+//        </TableRow>
+//      </TableHead>
+//    ) : null}
+
+//    <TableBody style={{ marginTop: 20 }}>
+//      {props.tableData &&
+//        props.tableData.map((prop, index) => {
+//          return (
+//            <>
+//              <StyledTableRow
+//                key={index}
+//                className={classes.tableBodyRow}
+//                style={{
+//                  cursor: "pointer",
+//                }}
+//              >
+//                {props.tableDataKeys
+//                  ? props.tableDataKeys.map((val, key) => {
+//                      // console.log(key);
+//                      if (val === "date") {
+//                        return (
+//                          <TableCell
+//                            className={classes.tableCell}
+//                            key={key}
+//                            style={
+//                              {
+//                                // textAlign: "center",
+//                              }
+//                            }
+//                          >
+//                            {formatDate(prop[val])}
+//                          </TableCell>
+//                        );
+//                      }
+//                       else if (val === "vendorId") {
+//                        return (
+//                          <TableCell
+//                            className={classes.tableCell}
+//                            key={key}
+//                            style={
+//                              {
+//                                // textAlign: "center",
+//                              }
+//                            }
+//                          >
+//                            {typeof prop[val] === "string"
+//                              ? props.vendors.map((v) => {
+//                                  if (v._id === prop[val]) {
+//                                    return v.englishName;
+//                                  }
+//                                })
+//                              : prop[val].englishName}
+
+//                            {/* {prop[val]} */}
+//                          </TableCell>
+//                        );
+//                      }
+//                      else {
+//                        return (
+//                          <TableCell
+//                            className={classes.tableCell}
+//                            key={key}
+//                            // onClick={() => handleClick(prop, val)}
+//                            style={{
+//                              // textAlign: "center",
+//                              cursor: props.handleModelMaterialReceiving
+//                                ? "pointer"
+//                                : "",
+//                            }}
+//                          >
+//                            {Array.isArray(val)
+//                              ? prop[val[0]]
+//                                ? prop[val[0]][val[1]]
+//                                : null
+//                              : val.toLowerCase() === "timestamp"
+//                              ? new Intl.DateTimeFormat(
+//                                  "en-US",
+//                                  dateOptions
+//                                ).format(Date.parse(prop[val]))
+//                              : // : `${replaceSlugToTitle(prop[val])}`}
+//                                replaceSlugToTitle(prop[val])}
+//                          </TableCell>
+//                        );
+//                      }
+//                    })
+//                  : null}
+//                <TableCell
+//                  style={{
+//                    cursor: "pointer",
+//                  }}
+//                  key={index}
+//                  className={classes.tableCell}
+//                  colSpan="2"
+//                >
+//                  <span onClick={() => props.viewItem(prop)}>
+//                    <i
+//                      style={{
+//                        color: "grey",
+//                        fontSize: "30px",
+//                      }}
+//                      className=" ml-10 zmdi zmdi-eye zmdi-hc-3x"
+//                    />
+//                  </span>
+//                </TableCell>
+//              </StyledTableRow>
+//            </>
+//          );
+//        })}
+//    </TableBody>
+//  </Table>;

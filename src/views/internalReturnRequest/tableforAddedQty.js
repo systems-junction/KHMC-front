@@ -13,6 +13,8 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 
+import CustomTable from "../../components/Table/Table";
+
 const styles = {
   inputContainerForTextField: {
     marginTop: 25,
@@ -53,39 +55,33 @@ const styles = {
 const useStyles = makeStyles(styles);
 
 const tableHeadingForFUMember = [
-  "No.",
   "Batch Number",
   "Received Qty",
   "Returned Qty",
-  "Price",
+  "Price(JD)",
   "Actions",
 ];
 
 const tableHeadingForWarehouseMember = [
-  "No.",
   "Batch Number",
   "Received Qty",
   "Returned Qty",
-  "Price",
+  "Price(JD)",
 ];
 
 const tableHeadingForOthers = [
-  "No.",
   "Trade Name",
   "Item Code",
   "Requested Qty",
   "Functional Unit  Cost(JD)",
 ];
 
-const actions = { edit: true, view: false, delete: true };
-const actionsForBUNurse = { receiveItem: true };
-const actionsForBUDoctor = { view: true };
-
-const actionsForItemsForReceiver = {
-  // edit: true,
-  receiveItems: true,
-};
-const actionsForItemsForOther = { edit: true };
+const tableDataKeysForFUMember = [
+  "batchNumber",
+  "receivedQtyPerBatch",
+  "returnedQtyPerBatch",
+  "price",
+];
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
@@ -113,120 +109,147 @@ export default function DenseTable(props) {
   }
 
   return (
-    <Table aria-label="a dense table" size="small">
-      <TableHead>
-        <TableRow>
-          {currentUser.staffTypeId.type === "FU Inventory Keeper" &&
-            props.comingFor !== "view" &&
-            tableHeadingForFUMember.map((h, index) => {
-              return (
-                <TableCell
-                key={index}
-                  align="center"
-                  style={{
-                    ...styles.stylesForTableHeadCell,
-                    borderTopLeftRadius: index === 0 ? 5 : 0,
-                    borderTopRightRadius:
-                      index === tableHeadingForFUMember.length - 1 ? 5 : 0,
-                  }}
-                >
-                  {h}
-                </TableCell>
-              );
-            })}
-
-          {((currentUser.staffTypeId.type ===
-            "FU Internal Request Return Approval Member" &&
-            props.comingFor !== "view") ||
-            ((currentUser.staffTypeId.type === "FU Inventory Keeper" ||
-              currentUser.staffTypeId.type ===
-                "FU Internal Request Return Approval Member") &&
-              props.comingFor === "view")) &&
-            tableHeadingForWarehouseMember.map((h, index) => {
-              return (
-                <TableCell
-                key={index}
-                  align="center"
-                  style={{
-                    ...styles.stylesForTableHeadCell,
-                    borderTopLeftRadius: index === 0 ? 5 : 0,
-                    borderTopRightRadius:
-                      index === tableHeadingForWarehouseMember.length - 1
-                        ? 5
-                        : 0,
-                  }}
-                >
-                  {h}
-                </TableCell>
-              );
-            })}
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {props.returnBatchArray.map((row, index) => (
-          <StyledTableRow key={index} style={{}}>
-            <TableCell
-              align="center"
-              style={{
-                // fontSize: "0.9rem",
-                borderBottomLeftRadius:
-                  props.returnBatchArray.length - 1 === index ? 5 : 0,
-
-                borderBottomColor:
-                  props.returnBatchArray.length - 1 === index
-                    ? "#60d69f"
-                    : undefined,
-                borderWidth:
-                  props.returnBatchArray.length - 1 === index ? 0 : 1,
-              }}
-            >
-              {index + 1}
-            </TableCell>
-
-            <TableCell align="center">{row.batchNumber}</TableCell>
-            <TableCell align="center">{row.receivedQtyPerBatch}</TableCell>
-            <TableCell align="center">{row.returnedQtyPerBatch}</TableCell>
-            <TableCell align="center">
-              {parseFloat(row.price).toFixed(4)} JD
-            </TableCell>
-
-            {currentUser.staffTypeId.type === "FU Inventory Keeper" &&
-            props.comingFor !== "view" ? (
-              <TableCell
-                align="center"
-                style={{
-                  display: "flex",
-                  justifyContent: "space-evenly",
-                  borderBottomColor:
-                    props.returnBatchArray.length - 1 === index
-                      ? "#60d69f"
-                      : undefined,
-
-                  borderBottomRightRadius:
-                    index === props.returnBatchArray.length - 1 ? 5 : 0,
-                  borderWidth:
-                    props.returnBatchArray.length - 1 === index ? 0 : 1,
-                }}
-              >
-                <i
-                  style={{
-                    color: "grey",
-                  }}
-                  onClick={() => handleDelete(row)}
-                  className=" ml-10 zmdi zmdi-delete zmdi-hc-2x"
-                />{" "}
-                <i
-                  onClick={() => handleEdit(row)}
-                  style={{ color: "grey" }}
-                  className="zmdi zmdi-edit zmdi-hc-2x"
-                />
-              </TableCell>
-            ) : (
-              undefined
-            )}
-          </StyledTableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <>
+      <CustomTable
+        tableData={props.returnBatchArray}
+        tableDataKeys={tableDataKeysForFUMember}
+        tableHeading={
+          currentUser.staffTypeId.type === "FU Inventory Keeper" &&
+          props.comingFor !== "view"
+            ? tableHeadingForFUMember
+            : (currentUser.staffTypeId.type ===
+                "FU Internal Request Return Approval Member" &&
+                props.comingFor !== "view") ||
+              ((currentUser.staffTypeId.type === "FU Inventory Keeper" ||
+                currentUser.staffTypeId.type ===
+                  "FU Internal Request Return Approval Member") &&
+                props.comingFor === "view")
+            ? tableHeadingForWarehouseMember
+            : ""
+        }
+        action={
+          currentUser.staffTypeId.type === "FU Inventory Keeper" &&
+          props.comingFor !== "view"
+            ? { edit: true, delete: true }
+            : ""
+        }
+        borderBottomColor={"#60d69f"}
+        borderBottomWidth={20}
+        handleDelete={handleDelete}
+        handleEdit={handleEdit}
+      />
+    </>
   );
 }
+
+//  <Table aria-label="a dense table" size="small">
+//    <TableHead>
+//      <TableRow>
+//        {currentUser.staffTypeId.type === "FU Inventory Keeper" &&
+//          props.comingFor !== "view" &&
+//          tableHeadingForFUMember.map((h, index) => {
+//            return (
+//              <TableCell
+//                key={index}
+//                align="center"
+//                style={{
+//                  ...styles.stylesForTableHeadCell,
+//                  borderTopLeftRadius: index === 0 ? 5 : 0,
+//                  borderTopRightRadius:
+//                    index === tableHeadingForFUMember.length - 1 ? 5 : 0,
+//                }}
+//              >
+//                {h}
+//              </TableCell>
+//            );
+//          })}
+
+//        {((currentUser.staffTypeId.type ===
+//          "FU Internal Request Return Approval Member" &&
+//          props.comingFor !== "view") ||
+//          ((currentUser.staffTypeId.type === "FU Inventory Keeper" ||
+//            currentUser.staffTypeId.type ===
+//              "FU Internal Request Return Approval Member") &&
+//            props.comingFor === "view")) &&
+//          tableHeadingForWarehouseMember.map((h, index) => {
+//            return (
+//              <TableCell
+//                key={index}
+//                align="center"
+//                style={{
+//                  ...styles.stylesForTableHeadCell,
+//                  borderTopLeftRadius: index === 0 ? 5 : 0,
+//                  borderTopRightRadius:
+//                    index === tableHeadingForWarehouseMember.length - 1 ? 5 : 0,
+//                }}
+//              >
+//                {h}
+//              </TableCell>
+//            );
+//          })}
+//      </TableRow>
+//    </TableHead>
+//    <TableBody>
+//      {props.returnBatchArray.map((row, index) => (
+//        <StyledTableRow key={index} style={{}}>
+//          <TableCell
+//            align="center"
+//            style={{
+//              // fontSize: "0.9rem",
+//              borderBottomLeftRadius:
+//                props.returnBatchArray.length - 1 === index ? 5 : 0,
+
+//              borderBottomColor:
+//                props.returnBatchArray.length - 1 === index
+//                  ? "#60d69f"
+//                  : undefined,
+//              borderWidth: props.returnBatchArray.length - 1 === index ? 0 : 1,
+//            }}
+//          >
+//            {index + 1}
+//          </TableCell>
+
+//          <TableCell align="center">{row.batchNumber}</TableCell>
+//          <TableCell align="center">{row.receivedQtyPerBatch}</TableCell>
+//          <TableCell align="center">{row.returnedQtyPerBatch}</TableCell>
+//          <TableCell align="center">
+//            {parseFloat(row.price).toFixed(4)} JD
+//          </TableCell>
+
+//          {currentUser.staffTypeId.type === "FU Inventory Keeper" &&
+//          props.comingFor !== "view" ? (
+//            <TableCell
+//              align="center"
+//              style={{
+//                display: "flex",
+//                justifyContent: "space-evenly",
+//                borderBottomColor:
+//                  props.returnBatchArray.length - 1 === index
+//                    ? "#60d69f"
+//                    : undefined,
+
+//                borderBottomRightRadius:
+//                  index === props.returnBatchArray.length - 1 ? 5 : 0,
+//                borderWidth: props.returnBatchArray.length - 1 === index ? 0 : 1,
+//              }}
+//            >
+//              <i
+//                style={{
+//                  color: "grey",
+//                }}
+//                onClick={() => handleDelete(row)}
+//                className=" ml-10 zmdi zmdi-delete zmdi-hc-2x"
+//              />{" "}
+//              <i
+//                onClick={() => handleEdit(row)}
+//                style={{ color: "grey" }}
+//                className="zmdi zmdi-edit zmdi-hc-2x"
+//              />
+//            </TableCell>
+//          ) : (
+//            undefined
+//          )}
+//        </StyledTableRow>
+//      ))}
+//    </TableBody>
+//  </Table>;
