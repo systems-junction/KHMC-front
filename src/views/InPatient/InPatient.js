@@ -127,8 +127,8 @@ export default function EDR(props) {
   const classes = useStylesForInput();
   const classes1 = useStyles1();
 
-  const [labInPatient, setlabInPatient] = useState("");
-  const [radInPatient, setradInPatient] = useState("");
+  const [labInPatient, setlabInPatient] = useState([]);
+  const [radInPatient, setradInPatient] = useState([]);
   const [errorMsg, setErrorMsg] = useState("");
   const [openNotification, setOpenNotification] = useState(false);
   const [searchPatientQuery, setSearchPatientQuery] = useState("");
@@ -178,7 +178,7 @@ export default function EDR(props) {
       .get(getRRPatient)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data, "data");
+          console.log(res.data.data, "getRRPatient");
           // res.data.data[0].map((d) => (d.patientId = d.iprId.patientId))
           res.data.data.map((d) => (d.profileNo = d.patientData.profileNo));
           // res.data.data[0].map((d) => (d.requestNo = d.iprId.requestNo))
@@ -283,7 +283,7 @@ export default function EDR(props) {
                 const sortedObjs = _.sortBy(res.data.data, "date").reverse();
                 setradInPatient(sortedObjs);
               } else {
-                setradInPatient(" ");
+                setradInPatient([]);
               }
             }
           })
@@ -423,7 +423,11 @@ export default function EDR(props) {
                   <img
                     src={BarCode}
                     onClick={scanQRCode}
-                    style={{ width: 70, height: 60, cursor: "pointer" }}
+                    style={{
+                      width: matches ? 70 : 60,
+                      height: matches ? 60 : 55,
+                      cursor: "pointer",
+                    }}
                   />{" "}
                 </div>
               </div>
@@ -461,7 +465,7 @@ export default function EDR(props) {
           {staffType === "Lab Technician" ||
           staffType === "Radiology/Imaging" ? (
             <div>
-              {labInPatient !== " " || radInPatient !== " " ? (
+              {labInPatient.length > 0 || radInPatient.length > 0 ? (
                 <div>
                   <div>
                     <CustomTable
@@ -499,12 +503,13 @@ export default function EDR(props) {
                         textAlign: "center",
                         width: "100%",
                         position: "absolute",
+                        fontSize: 20,
                       }}
                     >
                       Opps...No Data Found
                     </h3>
                   </div>
-                  <div className="col-1" style={{ marginTop: 45 }}>
+                  <div className="row" style={{ marginTop: 45 }}>
                     <img
                       onClick={() => props.history.goBack()}
                       src={Back}

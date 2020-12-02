@@ -18,6 +18,7 @@ import TextField from "@material-ui/core/TextField";
 import "../../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 
 import QRCodeScannerComponent from "../../../components/QRCodeScanner/QRCodeScanner";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 const tableHeading = [
   "Request No",
@@ -106,6 +107,7 @@ const actions = { edit: true };
 
 export default function Reimbursement(props) {
   const classes = useStyles();
+  const matches = useMediaQuery("(min-width:600px)");
 
   const [insurance, setinsurance] = useState("");
   const [itemModalVisible, setitemModalVisible] = useState(false);
@@ -315,7 +317,11 @@ export default function Reimbursement(props) {
                 <img
                   src={BarCode}
                   onClick={scanQRCode}
-                  style={{ width: 70, height: 60, cursor: "pointer" }}
+                  style={{
+                    width: matches ? 70 : 60,
+                    height: matches ? 60 : 55,
+                    cursor: "pointer",
+                  }}
                 />{" "}
               </div>
             </div>
@@ -382,19 +388,20 @@ export default function Reimbursement(props) {
                       textAlign: "center",
                       width: "100%",
                       position: "absolute",
+                      fontSize: 20,
                     }}
                   >
                     Opps...No Data Found
                   </h3>
                 </div>
               </div>
-              <div className="col-1" style={{ marginTop: 45 }}>
+              <div className="col-12" style={{ marginTop: 45 }}>
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back_Arrow}
                   style={{
-                    maxWidth: "60%",
-                    height: "auto",
+                    maxWidth: "40px",
+                    height: "30px",
                     cursor: "pointer",
                     marginLeft: "-10px",
                   }}
