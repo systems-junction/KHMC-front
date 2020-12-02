@@ -1856,6 +1856,7 @@ function PatientRegistration(props) {
                       className="col-md-10 col-sm-9 col-8"
                       style={{
                         ...styles.textFieldPadding,
+                        paddingLeft: 3,
                       }}
                     >
                       <TextField

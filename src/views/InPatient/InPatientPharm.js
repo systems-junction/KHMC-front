@@ -172,8 +172,7 @@ import Paper from "@material-ui/core/Paper";
 import CustomTable from "../../components/Table/Table";
 import ConfirmationModal from "../../components/Modal/confirmationModal";
 import axios from "axios";
-import
-{
+import {
   getRepRequestUrlBUForPharmaceutical,
   deleteReplenishmentRequestUrl,
   getFunctionalUnitFromHeadIdUrl,
@@ -205,6 +204,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import QRCodeScannerComponent from "../../components/QRCodeScanner/QRCodeScanner";
 import { useStyles1 } from "../../components/MuiCss/MuiCss";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+// import useStyles1 from "../../components/MuiCss/MuiCss";
 
 import { id } from "date-fns/locale";
 
@@ -247,13 +247,13 @@ const styles = {
     outline: "none",
   },
   textFieldPadding: {
-    paddingLeft: 0,
+    paddingLeft: 2,
     paddingRight: 5,
   },
 };
-const useStyles = makeStyles( styles );
+const useStyles = makeStyles(styles);
 
-const useStylesForInput = makeStyles( ( theme ) => ( {
+const useStylesForInput = makeStyles((theme) => ({
   input: {
     backgroundColor: "white",
     borderRadius: 5,
@@ -284,7 +284,7 @@ const useStylesForInput = makeStyles( ( theme ) => ( {
   //   // }
   // },
   // focusedLabel: {},
-} ) );
+}));
 
 const tableHeadingForBUMember = [
   "Order Type",
@@ -333,15 +333,15 @@ const tableDataKeysForBUMember = [
 // ];
 
 const tableDataKeysForItemsForBUMember = [
-  [ "itemId", "name" ],
-  [ "itemId", "medClass" ],
+  ["itemId", "name"],
+  ["itemId", "medClass"],
   "requestedQty",
   "status",
 ];
 
 const tableDataKeysForFUMemberForItems = [
-  [ "itemId", "name" ],
-  [ "itemId", "medClass" ],
+  ["itemId", "name"],
+  ["itemId", "medClass"],
   "requestedQty",
   "secondStatus",
 ];
@@ -373,114 +373,99 @@ const actionsForItemsForReceiver = {
 const actionsForItemsForOther = { view: true };
 const actionsForItemsForFUMember = { edit: true };
 
-export default function ReplenishmentRequest ( props )
-{
+export default function ReplenishmentRequest(props) {
   const classes = useStyles();
   const classesInput = useStylesForInput();
   const classes1 = useStyles1();
-  const matches = useMediaQuery( "(min-width:600px)" );
+  const matches = useMediaQuery("(min-width:600px)");
 
-  const [ purchaseRequests, setPurchaseRequest ] = useState( "" );
-  const [ vendors, setVendor ] = useState( "" );
-  const [ statues, setStatus ] = useState( "" );
-  const [ items, setItems ] = useState( "" );
-  const [ deleteItem, setdeleteItem ] = useState( "" );
-  const [ modalVisible, setModalVisible ] = useState( false );
-  const [ errorMsg, setErrorMsg ] = useState( "" );
-  const [ openNotification, setOpenNotification ] = useState( false );
+  const [purchaseRequests, setPurchaseRequest] = useState("");
+  const [vendors, setVendor] = useState("");
+  const [statues, setStatus] = useState("");
+  const [items, setItems] = useState("");
+  const [deleteItem, setdeleteItem] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [openNotification, setOpenNotification] = useState(false);
 
-  const [ currentUser, setCurrentUser ] = useState( cookie.load( "current_user" ) );
-  const [ buObj, setBUObj ] = useState( "" );
-  const [ receiveRequests, setReceiveRequests ] = useState( "" );
+  const [currentUser, setCurrentUser] = useState(cookie.load("current_user"));
+  const [buObj, setBUObj] = useState("");
+  const [receiveRequests, setReceiveRequests] = useState("");
 
-  const [ requestedItems, setRequestedItems ] = useState( "" );
-  const [ selectedOrder, setSelectedOrder ] = useState( "" );
+  const [requestedItems, setRequestedItems] = useState("");
+  const [selectedOrder, setSelectedOrder] = useState("");
 
-  const [ isOpen, setIsOpen ] = useState( false );
+  const [isOpen, setIsOpen] = useState(false);
 
-  const [ QRCodeScanner, setQRCodeScanner ] = useState( false );
+  const [QRCodeScanner, setQRCodeScanner] = useState(false);
 
-  const [ actionsForTesting, setActions ] = useState( {
+  const [actionsForTesting, setActions] = useState({
     edit: false,
     delete: false,
     view: false,
-  } );
-  const [ searchPatientQuery, setSearchPatientQuery ] = useState( "" );
+  });
+  const [searchPatientQuery, setSearchPatientQuery] = useState("");
 
-  if ( openNotification )
-  {
-    setTimeout( () =>
-    {
-      setOpenNotification( false );
-      setErrorMsg( "" );
-    }, 2000 );
+  if (openNotification) {
+    setTimeout(() => {
+      setOpenNotification(false);
+      setErrorMsg("");
+    }, 2000);
   }
 
-  function getPurchaseRequests ()
-  {
+  function getPurchaseRequests() {
     axios
-      .get( getRepRequestUrlBUForPharmaceutical )
-      .then( ( res ) =>
-      {
-        if ( res.data.success )
-        {
+      .get(getRepRequestUrlBUForPharmaceutical)
+      .then((res) => {
+        if (res.data.success) {
           // console.log(res.data.data);
           let repRequest = res.data.data;
           // repRequest = res.data.data.filter(
           //   (order) => order.fuId._id === props.match.params.fuName
           // );
 
-          if ( currentUser.staffTypeId.type === "Doctor/Physician" )
-          {
+          if (currentUser.staffTypeId.type === "Doctor/Physician") {
             // let repRequest = res.data.data;
             let temp = [];
-            for ( let i = 0; i < repRequest.length; i++ )
-            {
-              if ( repRequest[ i ].buId.buHead === currentUser.staffId )
-              {
-                temp.push( repRequest[ i ] );
+            for (let i = 0; i < repRequest.length; i++) {
+              if (repRequest[i].buId.buHead === currentUser.staffId) {
+                temp.push(repRequest[i]);
               }
             }
-            console.log( "rep array after filter", temp );
-            setPurchaseRequest( temp.reverse() );
-          } else
-          {
-            if ( currentUser.staffTypeId.type === "Pharmacist" )
-            {
+            console.log("rep array after filter", temp);
+            setPurchaseRequest(temp.reverse());
+          } else {
+            if (currentUser.staffTypeId.type === "Pharmacist") {
               // let repRequest = res.data.data;
               let temp = [];
-              for ( let i = 0; i < repRequest.length; i++ )
-              {
+              for (let i = 0; i < repRequest.length; i++) {
                 // if (
                 //   repRequest[i].status === "pending" ||
                 //   repRequest[i].status === "in_progress"
                 //    || repRequest[i].status === "Received"
                 // )
                 {
-                  temp.push( repRequest[ i ] );
+                  temp.push(repRequest[i]);
                 }
               }
               // console.log("rep array after filter", temp);
-              setPurchaseRequest( temp.reverse() );
-            } else if ( currentUser.staffTypeId.type === "FU Incharge" )
-            {
+              setPurchaseRequest(temp.reverse());
+            } else if (currentUser.staffTypeId.type === "FU Incharge") {
               // let repRequest = res.data.data;
               let temp = [];
-              for ( let i = 0; i < repRequest.length; i++ )
-              {
+              for (let i = 0; i < repRequest.length; i++) {
                 // if (
                 //   repRequest[i].status === "Delivery in Progress" ||
                 //   repRequest[i].status === "in_progress"
                 // )
 
                 {
-                  temp.push( repRequest[ i ] );
+                  temp.push(repRequest[i]);
                 }
               }
               // console.log("rep array after filter", temp);
-              setPurchaseRequest( temp.reverse() );
-            } else if ( currentUser.staffTypeId.type === "Registered Nurse" )
-            {
+              setPurchaseRequest(temp.reverse());
+            } else if (currentUser.staffTypeId.type === "Registered Nurse") {
               // let repRequest = res.data.data;
               // let temp = [];
               // for (let i = 0; i < repRequest.length; i++) {
@@ -493,115 +478,96 @@ export default function ReplenishmentRequest ( props )
               //   }
               // }
               // console.log("rep array after filter", temp);
-              console.log( repRequest );
-              setPurchaseRequest( repRequest.reverse() );
-            } else if ( currentUser.staffTypeId.type === "BU Inventory Keeper" )
-            {
+              console.log(repRequest);
+              setPurchaseRequest(repRequest.reverse());
+            } else if (currentUser.staffTypeId.type === "BU Inventory Keeper") {
               // let repRequest = res.data.data;
               let temp = [];
-              for ( let i = 0; i < repRequest.length; i++ )
-              {
+              for (let i = 0; i < repRequest.length; i++) {
                 // if (
                 //   repRequest[i].status === "complete" ||
                 //   repRequest[i].status === "pending_administration"
                 // )
                 {
-                  temp.push( repRequest[ i ] );
+                  temp.push(repRequest[i]);
                 }
               }
               // console.log("rep array after filter", temp);
-              setPurchaseRequest( temp.reverse() );
-            } else
-            {
-              setPurchaseRequest( repRequest.reverse() );
+              setPurchaseRequest(temp.reverse());
+            } else {
+              setPurchaseRequest(repRequest.reverse());
             }
           }
           //   setVendor(res.data.data.vendor);
           //   setStatus(res.data.data.status);
           //   setItems(res.data.data.items);
-        } else if ( !res.data.success )
-        {
-          setErrorMsg( res.data.error );
-          setOpenNotification( true );
+        } else if (!res.data.success) {
+          setErrorMsg(res.data.error);
+          setOpenNotification(true);
         }
         return res;
-      } )
-      .catch( ( e ) =>
-      {
-        console.log( "error: ", e );
-      } );
+      })
+      .catch((e) => {
+        console.log("error: ", e);
+      });
   }
 
-  function getBUFromHeadId ()
-  {
+  function getBUFromHeadId() {
     axios
-      .get( getBusinessUnitUrlWithHead + "/" + currentUser.staffId )
-      .then( ( res ) =>
-      {
-        if ( res.data.success )
-        {
-          console.log( "BU Obj", res.data.data[ 0 ] );
-          setBUObj( res.data.data[ 0 ] );
-        } else if ( !res.data.success )
-        {
-          setErrorMsg( res.data.error );
-          setOpenNotification( true );
+      .get(getBusinessUnitUrlWithHead + "/" + currentUser.staffId)
+      .then((res) => {
+        if (res.data.success) {
+          console.log("BU Obj", res.data.data[0]);
+          setBUObj(res.data.data[0]);
+        } else if (!res.data.success) {
+          setErrorMsg(res.data.error);
+          setOpenNotification(true);
         }
         return res;
-      } )
-      .catch( ( e ) =>
-      {
-        console.log( "error: ", e );
-      } );
+      })
+      .catch((e) => {
+        console.log("error: ", e);
+      });
   }
 
-  function getReceiveRequestsForBU ()
-  {
+  function getReceiveRequestsForBU() {
     axios
-      .get( getReceiveRequestBUUrl )
-      .then( ( res ) =>
-      {
-        if ( res.data.success )
-        {
-          console.log( "receive requests", res.data.data.receiveItems );
-          setReceiveRequests( res.data.data.receiveItems );
-        } else if ( !res.data.success )
-        {
-          setErrorMsg( res.data.error );
-          setOpenNotification( true );
+      .get(getReceiveRequestBUUrl)
+      .then((res) => {
+        if (res.data.success) {
+          console.log("receive requests", res.data.data.receiveItems);
+          setReceiveRequests(res.data.data.receiveItems);
+        } else if (!res.data.success) {
+          setErrorMsg(res.data.error);
+          setOpenNotification(true);
         }
         return res;
-      } )
-      .catch( ( e ) =>
-      {
-        console.log( "error: ", e );
-      } );
+      })
+      .catch((e) => {
+        console.log("error: ", e);
+      });
   }
 
-  function setOptions ()
-  {
-    let userStaff = cookie.load( "user_staff" );
+  function setOptions() {
+    let userStaff = cookie.load("user_staff");
     let routeAccess = userStaff.routeAccess;
 
-    for ( let i = 0; i < routeAccess.length; i++ )
-    {
-      let routeObj = routeAccess[ i ];
-      let splitedModulesArray = routeObj.route.split( "/" );
+    for (let i = 0; i < routeAccess.length; i++) {
+      let routeObj = routeAccess[i];
+      let splitedModulesArray = routeObj.route.split("/");
 
-      for ( let j = 0; j < splitedModulesArray.length; j++ )
-      {
-        if ( splitedModulesArray[ j ] === "Medication Orders" )
-        {
-          console.log( splitedModulesArray[ j ], routeAccess[ i ].permission );
-          const permissions = routeAccess[ i ].permission;
+      for (let j = 0; j < splitedModulesArray.length; j++) {
+        if (splitedModulesArray[j] === "Medication Orders") {
+          console.log(splitedModulesArray[j], routeAccess[i].permission);
+          const permissions = routeAccess[i].permission;
           const obj = {
             edit: permissions.edit === true ? true : false,
             view: permissions.read === true ? true : false,
             write: permissions.write === true ? true : false,
             delete: permissions.del === true ? true : false,
           };
-          console.log( obj );
-          setActions( obj );
+          console.log(obj);
+          setActions(obj);
         }
       }
     }
@@ -609,37 +575,35 @@ export default function ReplenishmentRequest ( props )
     // this.setState({ options: [...options] });
   }
 
-  useEffect( () =>
-  {
+  useEffect(() => {
     // setOptions();
 
-    if ( currentUser.staffTypeId.type === "Doctor/Physician" )
-    {
+    if (currentUser.staffTypeId.type === "Doctor/Physician") {
       getBUFromHeadId();
     }
 
-    if ( props.history.location.state && props.history.location.state.comingFrom )
-    {
-      if ( props.history.location.state.comingFrom === "notifications" && props.history.location.state.SearchId )
-      {
-        handlePatientSearch( props.history.location.state.SearchId.profileNo )
+    if (
+      props.history.location.state &&
+      props.history.location.state.comingFrom
+    ) {
+      if (
+        props.history.location.state.comingFrom === "notifications" &&
+        props.history.location.state.SearchId
+      ) {
+        handlePatientSearch(props.history.location.state.SearchId.profileNo);
       }
-    }
-    else
-    {
+    } else {
       getPurchaseRequests();
       getReceiveRequestsForBU();
     }
+  }, []);
 
-  }, [] );
-
-  const addNewItem = () =>
-  {
+  const addNewItem = () => {
     let path = `medicinalorder/add`;
-    props.history.push( {
+    props.history.push({
       pathname: path,
       state: { comingFor: "add", vendors, statues, items, buObj },
-    } );
+    });
   };
 
   if (
@@ -647,8 +611,7 @@ export default function ReplenishmentRequest ( props )
     currentUser.staffTypeId.type === "Doctor/Physician" &&
     buObj !== "" &&
     props.history.location.pathname !== `/home/wms/fus/medicinalorder/view`
-  )
-  {
+  ) {
     let path = `/home/wms/fus/medicinalorder/add`;
     // let selectedPatientForPharma = props.history.location.state.selectedPatient ?
     // props.history.location.state.selectedPatient : ""
@@ -663,26 +626,23 @@ export default function ReplenishmentRequest ( props )
     if (
       props.history.location.state &&
       props.history.location.state.selectedPatient
-    )
-    {
+    ) {
       sendingObj = {
         ...obj,
         selectedPatientForPharma: props.history.location.state.selectedPatient,
       };
-    } else
-    {
+    } else {
       sendingObj = { ...obj };
     }
-    props.history.replace( {
+    props.history.replace({
       pathname: path,
       state: { ...sendingObj },
-    } );
+    });
   }
 
-  function handleEdit ( rec )
-  {
+  function handleEdit(rec) {
     let path = `/home/wms/fus/medicinalorder/edit`;
-    props.history.push( {
+    props.history.push({
       pathname: path,
       state: {
         comingFor: "edit",
@@ -692,45 +652,38 @@ export default function ReplenishmentRequest ( props )
         items,
         buObj,
       },
-    } );
+    });
   }
 
-  function handleDelete ( id )
-  {
-    setModalVisible( true );
-    setdeleteItem( id );
+  function handleDelete(id) {
+    setModalVisible(true);
+    setdeleteItem(id);
   }
 
-  function deleteVendor ()
-  {
+  function deleteVendor() {
     const params = {
       _id: deleteItem,
     };
 
     axios
-      .delete( deleteReceiveItemsUrl + "/" + params._id )
-      .then( ( res ) =>
-      {
-        if ( res.data.success )
-        {
-          setdeleteItem( "" );
-          setModalVisible( false );
-          window.location.reload( false );
-        } else if ( !res.data.success )
-        {
-          setErrorMsg( res.data.error );
-          setOpenNotification( true );
+      .delete(deleteReceiveItemsUrl + "/" + params._id)
+      .then((res) => {
+        if (res.data.success) {
+          setdeleteItem("");
+          setModalVisible(false);
+          window.location.reload(false);
+        } else if (!res.data.success) {
+          setErrorMsg(res.data.error);
+          setOpenNotification(true);
         }
         return res;
-      } )
-      .catch( ( e ) =>
-      {
-        console.log( "error while deletion ", e );
-      } );
+      })
+      .catch((e) => {
+        console.log("error while deletion ", e);
+      });
   }
 
-  const handleView = ( obj ) =>
-  {
+  const handleView = (obj) => {
     let path = `/home/wms/fus/medicinalorder/edit`;
     // props.history.push({
     //   pathname: path,
@@ -758,45 +711,38 @@ export default function ReplenishmentRequest ( props )
 
     // else {
 
-    if ( currentUser.staffTypeId.type === "Registered Nurse" )
-    {
+    if (currentUser.staffTypeId.type === "Registered Nurse") {
       let repRequest = obj.item;
       let temp = [];
-      for ( let i = 0; i < repRequest.length; i++ )
-      {
+      for (let i = 0; i < repRequest.length; i++) {
         if (
-          repRequest[ i ].status === "Delivery in Progress" ||
-          repRequest[ i ].status === "pending_administration" ||
-          repRequest[ i ].status === "Received" ||
-          repRequest[ i ].status === "Partially Received"
-        )
-        {
-          temp.push( repRequest[ i ] );
+          repRequest[i].status === "Delivery in Progress" ||
+          repRequest[i].status === "pending_administration" ||
+          repRequest[i].status === "Received" ||
+          repRequest[i].status === "Partially Received"
+        ) {
+          temp.push(repRequest[i]);
         }
       }
-      console.log( "rep array after filter", temp );
+      console.log("rep array after filter", temp);
 
-      if ( temp.length === 0 )
-      {
-        setOpenNotification( true );
-        setErrorMsg( "Order is still pending from the pharmacy/sub store." );
-      } else
-      {
-        setSelectedOrder( obj );
-        setIsOpen( true );
-        setRequestedItems( temp );
+      if (temp.length === 0) {
+        setOpenNotification(true);
+        setErrorMsg("Order is still pending from the pharmacy/sub store.");
+      } else {
+        setSelectedOrder(obj);
+        setIsOpen(true);
+        setRequestedItems(temp);
       }
-    } else
-    {
-      setSelectedOrder( obj );
-      setIsOpen( true );
-      setRequestedItems( obj.item );
+    } else {
+      setSelectedOrder(obj);
+      setIsOpen(true);
+      setRequestedItems(obj.item);
     }
     // }
   };
 
-  function handleReceive ( rec )
-  {
+  function handleReceive(rec) {
     let obj = {
       ...rec,
       buId: selectedOrder.buId,
@@ -804,29 +750,25 @@ export default function ReplenishmentRequest ( props )
       replenishmentRequestId: selectedOrder._id,
     };
 
-    console.log( "rec", obj );
+    console.log("rec", obj);
 
     let found = false;
-    for ( let i = 0; i < receiveRequests.length; i++ )
-    {
-      if ( receiveRequests[ i ].replenishmentRequestItemId === rec._id )
-      {
-        console.log( "found" );
+    for (let i = 0; i < receiveRequests.length; i++) {
+      if (receiveRequests[i].replenishmentRequestItemId === rec._id) {
+        console.log("found");
         found = true;
         break;
       }
     }
-    if ( found )
-    {
-      setSelectedOrder( "" );
-      setIsOpen( false );
-      setRequestedItems( "" );
-      setOpenNotification( true );
-      setErrorMsg( "Item has already been received" );
-    } else
-    {
+    if (found) {
+      setSelectedOrder("");
+      setIsOpen(false);
+      setRequestedItems("");
+      setOpenNotification(true);
+      setErrorMsg("Item has already been received");
+    } else {
       let path = `/home/wms/fus/medicinalorder/receive`;
-      props.history.push( {
+      props.history.push({
         pathname: path,
         state: {
           comingFor: "add",
@@ -836,23 +778,21 @@ export default function ReplenishmentRequest ( props )
           // purchaseOrders,
           // materialReceivingId: props.materialReceivingId,
         },
-      } );
+      });
     }
   }
 
-  function handleEditRequestedItem ( rec )
-  {
-    if ( rec.secondStatus === "Cannot be fulfilled" )
-    {
-      setErrorMsg( "Request cannot be entertained for now" );
-      setOpenNotification( true );
-      setIsOpen( false );
+  function handleEditRequestedItem(rec) {
+    if (rec.secondStatus === "Cannot be fulfilled") {
+      setErrorMsg("Request cannot be entertained for now");
+      setOpenNotification(true);
+      setIsOpen(false);
       return;
     }
     // let path = `/home/wms/fus/medicinalorder/requesteditem/edit`;
     let path = `ipr/changeStatus`;
 
-    let requestedItem = requestedItems.find( ( item ) => item._id === rec._id );
+    let requestedItem = requestedItems.find((item) => item._id === rec._id);
 
     let obj = {
       _id: selectedOrder._id,
@@ -885,9 +825,9 @@ export default function ReplenishmentRequest ( props )
       comments: requestedItem.comments,
     };
 
-    console.log( "sending obj", obj );
+    console.log("sending obj", obj);
 
-    props.history.push( {
+    props.history.push({
       pathname: path,
       state: {
         comingFor: "edit",
@@ -897,94 +837,84 @@ export default function ReplenishmentRequest ( props )
         items,
         buObj,
       },
-    } );
+    });
   }
 
-  const handlePatientSearch = ( e ) =>
-  {
+  const handlePatientSearch = (e) => {
     let a;
 
-    if ( props.history.location.state && props.history.location.state.comingFrom )
-    {
-      if ( props.history.location.state.comingFrom === "notifications" && props.history.location.state.SearchId )
-      {
-        a = e
+    if (
+      props.history.location.state &&
+      props.history.location.state.comingFrom
+    ) {
+      if (
+        props.history.location.state.comingFrom === "notifications" &&
+        props.history.location.state.SearchId
+      ) {
+        a = e;
       }
-    }
-    else
-    {
-      a = e.target.value.replace( /[^\w\s]/gi, "" );
+    } else {
+      a = e.target.value.replace(/[^\w\s]/gi, "");
     }
 
-    setSearchPatientQuery( a );
-    if ( a.length >= 3 )
-    {
+    setSearchPatientQuery(a);
+    if (a.length >= 3) {
       axios
-        .get( getRepRequestUrlBUForPharmaceutical + "/" + a )
-        .then( ( res ) =>
-        {
-          if ( res.data.success )
-          {
-            if ( res.data.data.length > 0 )
-            {
-              console.log( res.data.data );
-              setPurchaseRequest( res.data.data.reverse() );
-            } else
-            {
-              setPurchaseRequest( [] );
+        .get(getRepRequestUrlBUForPharmaceutical + "/" + a)
+        .then((res) => {
+          if (res.data.success) {
+            if (res.data.data.length > 0) {
+              console.log(res.data.data);
+              setPurchaseRequest(res.data.data.reverse());
+            } else {
+              setPurchaseRequest([]);
             }
           }
-        } )
-        .catch( ( e ) =>
-        {
-          console.log( "error after searching patient request", e );
-        } );
-    } else if ( a.length == 0 )
-    {
-      console.log( "less" );
+        })
+        .catch((e) => {
+          console.log("error after searching patient request", e);
+        });
+    } else if (a.length == 0) {
+      console.log("less");
       getPurchaseRequests();
     }
   };
 
-  function scanQRCode ()
-  {
-    setQRCodeScanner( true );
+  function scanQRCode() {
+    setQRCodeScanner(true);
   }
 
-  function handleScanQR ( data )
-  {
-    setQRCodeScanner( false );
-    console.log( "data after parsing", JSON.parse( data ).profileNo );
+  function handleScanQR(data) {
+    setQRCodeScanner(false);
+    console.log("data after parsing", JSON.parse(data).profileNo);
 
-    handlePatientSearch( {
+    handlePatientSearch({
       target: {
-        value: JSON.parse( data ).profileNo,
+        value: JSON.parse(data).profileNo,
         type: "text",
       },
-    } );
+    });
   }
 
-  if ( QRCodeScanner )
-  {
+  if (QRCodeScanner) {
     return (
       <div>
         {QRCodeScanner ? (
-          <QRCodeScannerComponent handleScanQR={ handleScanQR } />
+          <QRCodeScannerComponent handleScanQR={handleScanQR} />
         ) : (
-            undefined
-          ) }
+          undefined
+        )}
       </div>
     );
   }
 
   if (
-    ( currentUser && currentUser.staffTypeId.type !== "Doctor/Physician" ) ||
+    (currentUser && currentUser.staffTypeId.type !== "Doctor/Physician") ||
     props.history.location.pathname === `/home/wms/fus/medicinalorder/view`
-  )
-  {
+  ) {
     return (
       <div
-        style={ {
+        style={{
           display: "flex",
           flexDirection: "column",
           flex: 1,
@@ -993,13 +923,13 @@ export default function ReplenishmentRequest ( props )
           height: "100%",
           backgroundColor: "rgb(19 213 159)",
           overflowY: "scroll",
-        } }
+        }}
       >
-        <Header history={ props.history } />
+        <Header history={props.history} />
         <div className="cPadding">
-          <div className="subheader" style={ { marginLeft: "-10px" } }>
+          <div className="subheader" style={{ marginLeft: "-10px" }}>
             <div>
-              <img src={ business_Unit } />
+              <img src={business_Unit} />
               <h4>In-Patient</h4>
             </div>
 
@@ -1022,232 +952,236 @@ export default function ReplenishmentRequest ( props )
             )} */}
           </div>
 
-          { props.history.location.state && props.history.location.state.comingFrom &&
-            props.history.location.state.comingFrom === "notifications" ? (
-              undefined
-            ) : (
+          {props.history.location.state &&
+          props.history.location.state.comingFrom &&
+          props.history.location.state.comingFrom === "notifications" ? (
+            undefined
+          ) : (
+            <div
+              className={`row ${classesInput.root} ${classes1.root}`}
+              style={{
+                marginLeft: "0px",
+                marginRight: "0px",
+                marginTop: "20px",
+              }}
+            >
               <div
-                className={ `row ${ classesInput.root }` }
-                style={ { marginLeft: "0px", marginRight: "0px", marginTop: "20px" } }
+                className="col-md-10 col-sm-9 col-8"
+                style={styles.textFieldPadding}
+              >
+                <TextField
+                  className="textInputStyle"
+                  id="searchPatientQuery"
+                  type="text"
+                  variant="filled"
+                  label="Search By MRN / Order No"
+                  name={"searchPatientQuery"}
+                  value={searchPatientQuery}
+                  onChange={handlePatientSearch}
+                  InputLabelProps={{
+                    classes: {
+                      root: classes.label,
+                      focused: classes.focusedLabel,
+                      error: classes.erroredLabel,
+                    },
+                  }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <AccountCircle />
+                      </InputAdornment>
+                    ),
+                    className: classesInput.input,
+                    classes: { input: classesInput.input },
+                    disableUnderline: true,
+                  }}
+                />
+              </div>
+
+              <div
+                className="col-md-1 col-sm-2 col-2"
+                style={{
+                  ...styles.textFieldPadding,
+                }}
               >
                 <div
-                  className="col-md-10 col-sm-9 col-8"
-                  style={ styles.textFieldPadding }
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "white",
+                    borderRadius: 5,
+                    height: 55,
+                  }}
                 >
-                  <TextField
-                    className="textInputStyle"
-                    id="searchPatientQuery"
-                    type="text"
-                    variant="filled"
-                    label="Search By MRN / Order No"
-                    name={ "searchPatientQuery" }
-                    value={ searchPatientQuery }
-                    onChange={ handlePatientSearch }
-                    InputLabelProps={ {
-                      classes: {
-                        root: classes.label,
-                        focused: classes.focusedLabel,
-                        error: classes.erroredLabel,
-                      },
-                    } }
-                    InputProps={ {
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <AccountCircle />
-                        </InputAdornment>
-                      ),
-                      className: classesInput.input,
-                      classes: { input: classesInput.input },
-                      disableUnderline: true,
-                    } }
-                  />
-                </div>
-
-                <div
-                  className="col-md-1 col-sm-2 col-2"
-                  style={ {
-                    ...styles.textFieldPadding,
-                  } }
-                >
-                  <div
-                    style={ {
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      backgroundColor: "white",
-                      borderRadius: 5,
-                      height: 55,
-                    } }
-                  >
-                    <img
-                      src={ BarCode }
-                      onClick={ scanQRCode }
-                      style={ { width: 70, height: 60, cursor: "pointer" } }
-                    />{ " " }
-                  </div>
-                </div>
-
-                <div
-                  className="col-md-1 col-sm-1 col-2"
-                  style={ {
-                    ...styles.textFieldPadding,
-                  } }
-                >
-                  <div
-                    style={ {
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      backgroundColor: "white",
-                      borderRadius: 5,
-                      height: 55,
-                    } }
-                  >
-                    <img src={ Fingerprint } style={ { maxWidth: 43, height: 43 } } />
-                  </div>
+                  <img
+                    src={BarCode}
+                    onClick={scanQRCode}
+                    style={{ width: 70, height: 60, cursor: "pointer" }}
+                  />{" "}
                 </div>
               </div>
-            ) }
+
+              <div
+                className="col-md-1 col-sm-1 col-2"
+                style={{
+                  ...styles.textFieldPadding,
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "white",
+                    borderRadius: 5,
+                    height: 55,
+                  }}
+                >
+                  <img src={Fingerprint} style={{ maxWidth: 43, height: 43 }} />
+                </div>
+              </div>
+            </div>
+          )}
 
           <div
-            style={ {
+            style={{
               flex: 4,
               display: "flex",
               flexDirection: "column",
-            } }
+            }}
           >
-            { purchaseRequests && purchaseRequests.length > 0 ? (
+            {purchaseRequests && purchaseRequests.length > 0 ? (
               <div>
                 <div>
                   <CustomTable
-                    tableData={ purchaseRequests }
+                    tableData={purchaseRequests}
                     action={
                       currentUser.staffTypeId.type === "Registered Nurse"
                         ? actionsForBUNurse
                         : currentUser.staffTypeId.type === "BU Doctor"
-                          ? actionsForBUDoctor
-                          : currentUser.staffTypeId.type === "Doctor/Physician"
-                            ? actionsForBUMemeber
-                            : actions
+                        ? actionsForBUDoctor
+                        : currentUser.staffTypeId.type === "Doctor/Physician"
+                        ? actionsForBUMemeber
+                        : actions
                     }
-                    tableDataKeys={ tableDataKeysForBUMember }
-                    tableHeading={ tableHeadingForBUMember }
+                    tableDataKeys={tableDataKeysForBUMember}
+                    tableHeading={tableHeadingForBUMember}
                     // action={actionsForTesting}
-                    handleEdit={ handleEdit }
-                    handleDelete={ handleDelete }
-                    receiveItem={ handleReceive }
-                    handleView={ handleView }
-                    borderBottomColor={ "#60d69f" }
-                    borderBottomWidth={ 20 }
+                    handleEdit={handleEdit}
+                    handleDelete={handleDelete}
+                    receiveItem={handleReceive}
+                    handleView={handleView}
+                    borderBottomColor={"#60d69f"}
+                    borderBottomWidth={20}
                   />
                 </div>
 
                 <ConfirmationModal
-                  modalVisible={ modalVisible }
+                  modalVisible={modalVisible}
                   msg="Are you sure want to delete the record?"
-                  hideconfirmationModal={ () => setModalVisible( false ) }
-                  onConfirmDelete={ () => deleteVendor() }
-                  setdeleteItem={ () => setdeleteItem( "" ) }
+                  hideconfirmationModal={() => setModalVisible(false)}
+                  onConfirmDelete={() => deleteVendor()}
+                  setdeleteItem={() => setdeleteItem("")}
                 />
 
-                <Notification msg={ errorMsg } open={ openNotification } />
+                <Notification msg={errorMsg} open={openNotification} />
               </div>
             ) : purchaseRequests && purchaseRequests.length == 0 ? (
-              <div className="row " style={ { marginTop: "25px" } }>
+              <div className="row " style={{ marginTop: "25px" }}>
                 <div className="col-11">
                   <h3
-                    style={ {
+                    style={{
                       color: "white",
                       textAlign: "center",
                       width: "100%",
                       position: "absolute",
-                    } }
+                    }}
                   >
                     Opps...No Data Found
                   </h3>
                 </div>
-                <div className="col-1" style={ { marginTop: 45 } }>
+                <div className="col-1" style={{ marginTop: 45 }}>
                   <img
-                    onClick={ () => props.history.goBack() }
-                    src={ Back_Arrow }
-                    style={ {
+                    onClick={() => props.history.goBack()}
+                    src={Back_Arrow}
+                    style={{
                       maxWidth: "60%",
                       height: "auto",
                       cursor: "pointer",
-                    } }
+                    }}
                   />
                 </div>
               </div>
             ) : (
-                  <div className="LoaderStyle">
-                    <Loader type="TailSpin" color="red" height={ 50 } width={ 50 } />
-                  </div>
-                ) }
+              <div className="LoaderStyle">
+                <Loader type="TailSpin" color="red" height={50} width={50} />
+              </div>
+            )}
           </div>
-          <div style={ { marginBottom: 20 } }>
+          <div style={{ marginBottom: 20 }}>
             <img
-              onClick={ () => props.history.goBack() }
-              src={ Back_Arrow }
-              style={ { width: 45, height: 35, cursor: "pointer" } }
+              onClick={() => props.history.goBack()}
+              src={Back_Arrow}
+              style={{ width: 45, height: 35, cursor: "pointer" }}
             />
           </div>
 
           <Dialog
             aria-labelledby="form-dialog-title"
-            open={ isOpen }
+            open={isOpen}
             maxWidth="xl"
-            fullWidth={ true }
+            fullWidth={true}
             // fullScreen
-            onBackdropClick={ () =>
-            {
-              setIsOpen( false );
-            } }
+            onBackdropClick={() => {
+              setIsOpen(false);
+            }}
           >
-            <DialogContent style={ { backgroundColor: "rgb(19 213 159)" } }>
+            <DialogContent style={{ backgroundColor: "rgb(19 213 159)" }}>
               <DialogTitle
                 id="simple-dialog-title"
-                style={ { color: "white", marginLeft: "-6px" } }
+                style={{ color: "white", marginLeft: "-6px" }}
               >
                 Added Items
               </DialogTitle>
               <div className="container-fluid">
                 <CustomTable
-                  tableData={ requestedItems }
+                  tableData={requestedItems}
                   tableHeading={
                     currentUser.staffTypeId.type === "Doctor/Physician"
                       ? tableHeadingForBUMemberForItems
                       : currentUser.staffTypeId.type === "Registered Nurse" ||
                         currentUser.staffTypeId.type === "BU Doctor"
-                        ? tableHeadingForBUMemberForItems
-                        : currentUser.staffTypeId.type === "Pharmacist"
-                          ? tableHeadingForFUMemberForItems
-                          : tableHeadingForFUMemberForItems
+                      ? tableHeadingForBUMemberForItems
+                      : currentUser.staffTypeId.type === "Pharmacist"
+                      ? tableHeadingForFUMemberForItems
+                      : tableHeadingForFUMemberForItems
                   }
                   tableDataKeys={
                     currentUser.staffTypeId.type === "Doctor/Physician"
                       ? tableDataKeysForItemsForBUMember
                       : currentUser.staffTypeId.type === "Registered Nurse" ||
                         currentUser.staffTypeId.type === "BU Doctor"
-                        ? tableDataKeysForItemsForBUMember
-                        : currentUser.staffTypeId.type === "Pharmacist"
-                          ? tableDataKeysForFUMemberForItems
-                          : tableDataKeysForItemsForBUMember
+                      ? tableDataKeysForItemsForBUMember
+                      : currentUser.staffTypeId.type === "Pharmacist"
+                      ? tableDataKeysForFUMemberForItems
+                      : tableDataKeysForItemsForBUMember
                   }
                   action={
                     currentUser.staffTypeId.type === "Registered Nurse"
                       ? actionsForItemsForReceiver
                       : currentUser.staffTypeId.type === "BU Doctor"
-                        ? actionsForItemsForOther
-                        : currentUser.staffTypeId.type === "Pharmacist"
-                          ? actionsForItemsForFUMember
-                          : actionsForItemsForOther
+                      ? actionsForItemsForOther
+                      : currentUser.staffTypeId.type === "Pharmacist"
+                      ? actionsForItemsForFUMember
+                      : actionsForItemsForOther
                   }
-                  handleEdit={ handleEditRequestedItem }
-                  handleDelete={ handleDelete }
-                  receiveItem={ handleReceive }
-                  handleView={ handleEditRequestedItem }
-                  borderBottomColor={ "#60d69f" }
-                  borderBottomWidth={ 20 }
+                  handleEdit={handleEditRequestedItem}
+                  handleDelete={handleDelete}
+                  receiveItem={handleReceive}
+                  handleView={handleEditRequestedItem}
+                  borderBottomColor={"#60d69f"}
+                  borderBottomWidth={20}
                 />
               </div>
             </DialogContent>
@@ -1255,11 +1189,10 @@ export default function ReplenishmentRequest ( props )
         </div>
       </div>
     );
-  } else
-  {
+  } else {
     return (
       <div
-        style={ {
+        style={{
           display: "flex",
           flexDirection: "column",
           flex: 1,
@@ -1270,10 +1203,10 @@ export default function ReplenishmentRequest ( props )
           overflowY: "scroll",
           alignItems: "center",
           justifyContent: "center",
-        } }
+        }}
       >
         <div className="LoaderStyle">
-          <Loader type="TailSpin" color="red" height={ 50 } width={ 50 } />
+          <Loader type="TailSpin" color="red" height={50} width={50} />
         </div>
       </div>
     );

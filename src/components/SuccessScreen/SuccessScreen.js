@@ -84,7 +84,7 @@ function AddBusinessUnit(props) {
         <h4
           style={{
             color: "white",
-            fontSize: 24,
+            fontSize: matches ? 24 : 20,
             maxWidth: "83%",
             textAlign: "center",
           }}

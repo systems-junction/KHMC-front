@@ -515,7 +515,7 @@ export default function PatientListing(props) {
           <div className="row" style={{ marginTop: "20px" }}>
             <div
               className="col-md-10 col-sm-9 col-8"
-              style={styles.textFieldPadding}
+              style={{ ...styles.textFieldPadding, paddingLeft: 2 }}
             >
               <TextField
                 className="textInputStyle"
@@ -625,7 +625,7 @@ export default function PatientListing(props) {
                     <img
                       onClick={() => props.history.goBack()}
                       src={Back_Arrow}
-                      style={{ width: 45, height: 35, cursor: "pointer" }}
+                      style={{ width: 40, height: 30, cursor: "pointer" }}
                     />
                   </div>
                 </div>

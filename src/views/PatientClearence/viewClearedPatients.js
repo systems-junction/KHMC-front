@@ -271,7 +271,7 @@ export default function ReplenishmentRequest(props) {
         overflowY: "scroll",
       }}
     >
-      <Header history={props.history}/>
+      <Header history={props.history} />
       <div className="cPadding">
         <div className="subheader">
           <div>
@@ -323,7 +323,7 @@ export default function ReplenishmentRequest(props) {
           <img
             onClick={() => props.history.goBack()}
             src={Back_Arrow}
-            style={{ width: 60, height: 40, cursor: "pointer" }}
+            style={{ width: 40, height: 30, cursor: "pointer" }}
           />
         </div>
       </div>

@@ -18,6 +18,7 @@ import "../../../assets/jss/material-dashboard-react/components/loaderStyle.css"
 import socketIOClient from "socket.io-client";
 
 import QRCodeScannerComponent from "../../../components/QRCodeScanner/QRCodeScanner";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 const tableHeading = [
   "MRN",
@@ -109,6 +110,7 @@ const actions = { view: true };
 
 export default function PreApprovalScreen(props) {
   const classes = useStyles();
+  const matches = useMediaQuery("(min-width:600px)");
 
   const [preApproval, setpreApproval] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
@@ -357,7 +359,11 @@ export default function PreApprovalScreen(props) {
                 <img
                   src={BarCode}
                   onClick={scanQRCode}
-                  style={{ width: 70, height: 60, cursor: "pointer" }}
+                  style={{
+                    width: matches ? 70 : 60,
+                    height: matches ? 60 : 55,
+                    cursor: "pointer",
+                  }}
                 />{" "}
               </div>
             </div>
@@ -426,16 +432,21 @@ export default function PreApprovalScreen(props) {
                     textAlign: "center",
                     width: "100%",
                     position: "absolute",
+                    fontSize: 20,
                   }}
                 >
                   Opps...No Data Found
                 </h3>
               </div>
-              <div className="col-1" style={{ marginTop: 45 }}>
+              <div className="col-12" style={{ marginTop: 45 }}>
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back}
-                  style={{ maxWidth: "60%", height: "auto", cursor: "pointer" }}
+                  style={{
+                    maxWidth: "40px",
+                    height: "30px",
+                    cursor: "pointer",
+                  }}
                 />
               </div>
             </div>

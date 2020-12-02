@@ -526,6 +526,7 @@ export default function ReplenishmentRequest(props) {
                     textAlign: "center",
                     width: "100%",
                     position: "absolute",
+                    fontSize: 20,
                   }}
                 >
                   Opps...No Data Found
@@ -549,7 +550,7 @@ export default function ReplenishmentRequest(props) {
           <img
             onClick={() => props.history.goBack()}
             src={Back_Arrow}
-            style={{ width: 60, height: 40, cursor: "pointer" }}
+            style={{ width: 40, height: 30, cursor: "pointer" }}
           />
         </div>
 

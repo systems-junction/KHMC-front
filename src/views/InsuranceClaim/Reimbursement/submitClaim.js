@@ -367,7 +367,7 @@ function AddEditPatientListing(props) {
   const [searchQuery, setSearchQuery] = useState("");
   const [itemFound, setItemFound] = useState("");
   const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false);
-  const [billSummaryArray, setbillSummaryArray] = useState(false);
+  const [billSummaryArray, setbillSummaryArray] = useState([]);
   const [ClaimId, setClaimId] = useState(false);
   const [currentUser, setCurrentUser] = useState("");
   const [productData, setproductData] = useState([]);
@@ -1316,7 +1316,11 @@ function AddEditPatientListing(props) {
                         <img
                           src={BarCode}
                           onClick={scanQRCode}
-                          style={{ width: 70, height: 60, cursor: "pointer" }}
+                          style={{
+                            width: matches ? 70 : 60,
+                            height: matches ? 60 : 55,
+                            cursor: "pointer",
+                          }}
                         />{" "}
                       </div>
                     </div>
@@ -1742,7 +1746,10 @@ function AddEditPatientListing(props) {
             }}
             className="container-fluid"
           >
-            <div className="row" style={{ marginTop: "20px" }}>
+            <div
+              className="row"
+              style={{ marginTop: "20px", overflowX: "scroll" }}
+            >
               {billSummaryArray !== 0 ? (
                 // <CustomTable
                 //   // id="my-table"

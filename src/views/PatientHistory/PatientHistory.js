@@ -53,14 +53,18 @@ let icdCodesList = require("../../assets/icdCodes.json");
 
 const tableHeadingForResident = [
   "Date / Time",
-  "Description / Condition",
+  // "Description / Condition",
   "Referring Doctor",
   "Action",
 ];
-const tableDataKeysForResident = ["date", "description", "doctorName"];
+const tableDataKeysForResident = [
+  "date",
+  //  "description",
+  "doctorName",
+];
 const tableHeadingForConsultation = [
   "Date / Time",
-  "Description / Condition",
+  // "Description / Condition",
   "Specialist",
   "Referring Doctor",
   "Status",
@@ -68,7 +72,7 @@ const tableHeadingForConsultation = [
 ];
 const tableDataKeysForConsultation = [
   "date",
-  "description",
+  // "description",
   "specialist",
   "doctorName",
   "status",
