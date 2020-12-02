@@ -351,12 +351,12 @@ export default function ControlledAccordions(props) {
               // style={stylesB.stylesForActive}
               style={{
                 // verticalAlign: "center",
-                fontSize: "0.6rem",
+                fontSize: 5,
                 color: "white",
                 cursor: "pointer",
-                borderRadius: 5,
+                borderRadius: 2,
                 background: "#2c6ddd",
-                height: "40px",
+                // height: "40px",
               }}
               variant="contained"
               color="primary"
@@ -942,6 +942,27 @@ export default function ControlledAccordions(props) {
                           />
                         </span>
                       </RcIf>
+
+                      {props.checkAvailability &&
+                      props.checkAvailability(prop) ? (
+                        <RcIf if={props.action.addNewPR}>
+                          <span onClick={() => props.handleAddNewPR(prop)}>
+                            <i
+                              style={{ color: "grey" }}
+                              className=" ml-10 zmdi zmdi-plus-circle zmdi-hc-2x"
+                            />
+                          </span>
+                        </RcIf>
+                      ) : (
+                        <RcIf if={props.action.removeAddedPR}>
+                          <span onClick={() => props.handleRemovePR(prop)}>
+                            <i
+                              style={{ color: "grey" }}
+                              className=" ml-10 zmdi zmdi-check zmdi-hc-2x"
+                            />
+                          </span>
+                        </RcIf>
+                      )}
                     </div>
                   ) : (
                     undefined

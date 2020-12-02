@@ -112,7 +112,7 @@ export default function PurchaseRequest(props) {
       .get(getPurchaseRequestUrl)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data);
+          console.log("prs", res.data.data);
           if (props.comingFor === "add") {
             setPurchaseRequest(res.data.data.purchaseRequest.reverse());
             // setFilteredRequests(res.data.data.purchaseRequest.reverse());
@@ -124,12 +124,14 @@ export default function PurchaseRequest(props) {
                 return (
                   pr.vendorId._id === props.selectedVendor &&
                   pr.committeeStatus === "approved" &&
-                  pr.generated === "Manual"
+                  pr.generated === "Manual" &&
+                  pr.availability === true
                 );
               });
 
             console.log("temp", temp);
-            setFilteredRequests(temp.reverse());
+            let withAddedPRs = [...temp, ...props.addedPRs];
+            setFilteredRequests(withAddedPRs.reverse());
           }
           setVendor(res.data.data.vendor);
           setStatus(res.data.data.status);
@@ -144,6 +146,8 @@ export default function PurchaseRequest(props) {
         console.log("error: ", e);
       });
   }
+
+  console.log(props, "sdsds");
 
   useEffect(() => {
     if (props.comingFor === "add") {
@@ -346,125 +350,18 @@ export default function PurchaseRequest(props) {
       <div>
         <div>
           {filteredRequests.length > 0 && props.selectedVendor ? (
-            <Table>
-              {tableHeading !== undefined ? (
-                <TableHead
-                  className={classes["TableHeader"]}
-                  style={{
-                    backgroundColor: "#2873cf",
-                  }}
-                >
-                  <TableRow>
-                    {tableHeading.map((prop, index) => {
-                      return (
-                        <>
-                          <TableCell
-                            className={classes.tableHeadCell}
-                            style={{
-                              color: "white",
-                              fontWeight: "700",
-                              // textAlign: "center",
-                              borderTopLeftRadius: index === 0 ? 10 : 0,
-                              borderTopRightRadius:
-                                index === tableHeading.length - 1 ? 10 : 0,
-                            }}
-                            key={prop}
-                          >
-                            {prop}
-                          </TableCell>
-                        </>
-                      );
-                    })}
-                  </TableRow>
-                </TableHead>
-              ) : null}
-
-              <TableBody>
-                {filteredRequests &&
-                  filteredRequests.map((prop, index) => {
-                    return (
-                      <>
-                        <TableRow
-                          key={index}
-                          className={classes.tableBodyRow}
-                          style={{
-                            backgroundColor: "white",
-                          }}
-                        >
-                          {tableDataKeys
-                            ? tableDataKeys.map((val, key) => {
-                                // console.log(key);
-                                if (val === "date") {
-                                  return (
-                                    <TableCell
-                                      className={classes.tableCell}
-                                      key={key}
-                                      style={
-                                        {
-                                          // textAlign: "center",
-                                        }
-                                      }
-                                    >
-                                      {formatDate(prop[val])}
-                                    </TableCell>
-                                  );
-                                } else {
-                                  return (
-                                    <TableCell
-                                      className={classes.tableCell}
-                                      key={key}
-                                      // onClick={() => handleClick(prop, val)}
-                                      style={
-                                        {
-                                          // textAlign: "center",
-                                        }
-                                      }
-                                    >
-                                      {Array.isArray(val)
-                                        ? prop[val[0]]
-                                          ? prop[val[0]][val[1]]
-                                          : null
-                                        : val.toLowerCase() === "timestamp"
-                                        ? new Intl.DateTimeFormat(
-                                            "en-US",
-                                            dateOptions
-                                          ).format(Date.parse(prop[val]))
-                                        : // : `${replaceSlugToTitle(prop[val])}`}
-                                          replaceSlugToTitle(prop[val])}
-                                    </TableCell>
-                                  );
-                                }
-                              })
-                            : null}
-                          <TableCell
-                            style={{
-                              cursor: "pointer",
-                            }}
-                            className={classes.tableCell}
-                            colSpan="2"
-                          >
-                            {checkAvailability(prop) ? (
-                              <span onClick={() => handleAdd(prop)}>
-                                <i
-                                  style={{ color: "blue" }}
-                                  className=" ml-10 zmdi zmdi-plus-circle zmdi-hc-3x"
-                                />
-                              </span>
-                            ) : (
-                              <span onClick={() => handleRemove(prop)}>
-                                <i
-                                  style={{ color: "blue" }}
-                                  className=" ml-10 zmdi zmdi-check zmdi-hc-3x"
-                                />
-                              </span>
-                            )}
-                          </TableCell>
-                        </TableRow>
-                      </>
-                    );
-                  })}
-              </TableBody>
-            </Table>
+            <CustomTable
+              tableData={filteredRequests}
+              tableDataKeys={tableDataKeys}
+              tableHeading={tableHeading}
+              action={{ addNewPR: true, removeAddedPR: true }}
+              borderBottomColor={"#60d69f"}
+              borderBottomWidth={20}
+              handleView={props.viewItem}
+              checkAvailability={checkAvailability}
+              handleAddNewPR={handleAdd}
+              handleRemovePR={handleRemove}
+            />
           ) : props.selectedVendor && filteredRequests.length === 0 ? (
             <h5
               style={{
@@ -510,3 +407,117 @@ export default function PurchaseRequest(props) {
     </div>
   );
 }
+
+// <Table>
+//           {tableHeading !== undefined ? (
+//             <TableHead
+//               className={classes["TableHeader"]}
+//               style={{
+//                 backgroundColor: "#2873cf",
+//               }}
+//             >
+//               <TableRow>
+//                 {tableHeading.map((prop, index) => {
+//                   return (
+//                     <>
+//                       <TableCell
+//                         className={classes.tableHeadCell}
+//                         style={{
+//                           color: "white",
+//                           fontWeight: "700",
+//                           // textAlign: "center",
+//                           borderTopLeftRadius: index === 0 ? 10 : 0,
+//                           borderTopRightRadius:
+//                             index === tableHeading.length - 1 ? 10 : 0,
+//                         }}
+//                         key={prop}
+//                       >
+//                         {prop}
+//                       </TableCell>
+//                     </>
+//                   );
+//                 })}
+//               </TableRow>
+//             </TableHead>
+//           ) : null}
+
+//           <TableBody>
+//             {filteredRequests &&
+//               filteredRequests.map((prop, index) => {
+//                 return (
+//                   <>
+//                     <TableRow
+//                       key={index}
+//                       className={classes.tableBodyRow}
+//                       style={{
+//                         backgroundColor: "white",
+//                       }}
+//                     >
+//                       {tableDataKeys
+//                         ? tableDataKeys.map((val, key) => {
+//                             // console.log(key);
+//                             if (val === "date") {
+//                               return (
+//                                 <TableCell
+//                                   className={classes.tableCell}
+//                                   key={key}
+//                                   style={
+//                                     {
+//                                       // textAlign: "center",
+//                                     }
+//                                   }
+//                                 >
+//                                   {formatDate(prop[val])}
+//                                 </TableCell>
+//                               );
+//                             } else {
+//                               return (
+//                                 <TableCell
+//                                   className={classes.tableCell}
+//                                   key={key}
+//                                 >
+//                                   {Array.isArray(val)
+//                                     ? prop[val[0]]
+//                                       ? prop[val[0]][val[1]]
+//                                       : null
+//                                     : val.toLowerCase() === "timestamp"
+//                                     ? new Intl.DateTimeFormat(
+//                                         "en-US",
+//                                         dateOptions
+//                                       ).format(Date.parse(prop[val]))
+//                                     : // : `${replaceSlugToTitle(prop[val])}`}
+//                                       replaceSlugToTitle(prop[val])}
+//                                 </TableCell>
+//                               );
+//                             }
+//                           })
+//                         : null}
+//                       <TableCell
+//                         style={{
+//                           cursor: "pointer",
+//                         }}
+//                         className={classes.tableCell}
+//                         colSpan="2"
+//                       >
+//                         {checkAvailability(prop) ? (
+//                           <span onClick={() => handleAdd(prop)}>
+//                             <i
+//                               style={{ color: "blue" }}
+//                               className=" ml-10 zmdi zmdi-plus-circle zmdi-hc-3x"
+//                             />
+//                           </span>
+//                         ) : (
+//                           <span onClick={() => handleRemove(prop)}>
+//                             <i
+//                               style={{ color: "blue" }}
+//                               className=" ml-10 zmdi zmdi-check zmdi-hc-3x"
+//                             />
+//                           </span>
+//                         )}
+//                       </TableCell>
+//                     </TableRow>
+//                   </>
+//                 );
+//               })}
+//           </TableBody>
+//         </Table>

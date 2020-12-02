@@ -726,26 +726,28 @@ export default function CustomTable(props) {
             >
               <TableRow className={classes.tableHeadRow}>
                 {tableHeading.map((prop, index) => {
-                  return (
-                    <>
-                      <TableCell
-                        className={classes.tableHeadCell}
-                        style={{
-                          color: "white",
-                          borderTopLeftRadius: index === 0 ? 5 : 0,
-                          borderTopRightRadius:
-                            index === tableHeading.length - 1 ? 5 : 0,
-                          textAlign:
-                            prop === "Actions" || prop === "Action"
-                              ? "center"
-                              : "",
-                        }}
-                        key={prop}
-                      >
-                        {prop}
-                      </TableCell>
-                    </>
-                  );
+                  if (prop) {
+                    return (
+                      <>
+                        <TableCell
+                          className={classes.tableHeadCell}
+                          style={{
+                            color: "white",
+                            borderTopLeftRadius: index === 0 ? 5 : 0,
+                            borderTopRightRadius:
+                              index === tableHeading.length - 1 ? 5 : 0,
+                            textAlign:
+                              prop === "Actions" || prop === "Action"
+                                ? "center"
+                                : "",
+                          }}
+                          key={prop}
+                        >
+                          {prop}
+                        </TableCell>
+                      </>
+                    );
+                  }
                 })}
               </TableRow>
             </TableHead>
@@ -956,6 +958,31 @@ export default function CustomTable(props) {
                                     ></i>
                                   </span>
                                 </RcIf>
+
+                                {props.checkAvailability &&
+                                props.checkAvailability(prop) ? (
+                                  <RcIf if={props.action.addNewPR}>
+                                    <span
+                                      onClick={() => props.handleAddNewPR(prop)}
+                                    >
+                                      <i
+                                        style={{ color: "grey" }}
+                                        className=" ml-10 zmdi zmdi-plus-circle zmdi-hc-2x"
+                                      />
+                                    </span>
+                                  </RcIf>
+                                ) : (
+                                  <RcIf if={props.action.removeAddedPR}>
+                                    <span
+                                      onClick={() => props.handleRemovePR(prop)}
+                                    >
+                                      <i
+                                        style={{ color: "grey" }}
+                                        className=" ml-10 zmdi zmdi-check zmdi-hc-2x"
+                                      />
+                                    </span>
+                                  </RcIf>
+                                )}
                               </div>
                             ) : (
                               undefined

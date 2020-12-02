@@ -117,7 +117,6 @@ const useStylesForInput = makeStyles((theme) => ({
     },
   },
   root: {
-    
     "& .MuiFormLabel-root": {
       fontSize: "12px",
 
@@ -185,10 +184,10 @@ export default function PurchaseRequest(props) {
   useEffect(() => {
     const socket = socketIOClient(socketUrl);
     socket.emit("connection");
-    socket.on("get_data", (data) => {
-      setMaterialReceivings(data.reverse());
-      console.log("res after adding through socket", data);
-    });
+    // socket.on("get_data", (data) => {
+    //   setMaterialReceivings(data.reverse());
+    //   console.log("res after adding through socket", data);
+    // });
 
     getPurchaseRequests();
 
@@ -411,7 +410,7 @@ export default function PurchaseRequest(props) {
         overflowY: "scroll",
       }}
     >
-      <Header history={props.history}/>
+      <Header history={props.history} />
 
       <div className="cPadding">
         <div className="subheader">

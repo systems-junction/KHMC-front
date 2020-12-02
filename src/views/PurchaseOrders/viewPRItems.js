@@ -32,6 +32,11 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
@@ -83,7 +88,7 @@ const stylesB = {
 const useStyles = makeStyles(styles);
 
 const tableHeading = ["Item Code", "Item Name", "Requested Qty", "Action"];
-const tableDataKeys = [ "itemCode", "name", "reqQty"];
+const tableDataKeys = ["itemCode", "name", "reqQty"];
 
 const actions = { add: true };
 
@@ -252,127 +257,151 @@ export default function PurchaseRequest(props) {
   return (
     <Dialog
       onClose={() => props.viewItem("")}
-      fullWidth={true}
-      maxWidth={"lg"}
-      //   fullScreen={true}
+      // fullWidth={true}
+      // maxWidth={"lg"}
+      fullScreen={true}
       aria-labelledby="simple-dialog-title"
       open={props.openItemDialog}
     >
-      <DialogContent style={{ backgroundColor: "#60d69f" }}>
-        <div>
-          <h5 style={{ color: "white", fontWeight: "bold" }}>Added Items</h5>
-        </div>
-
-        <Table>
-          <TableHead
-            className={classes["TableHeader"]}
-            style={{
-              backgroundColor: "#2873cf",
+      <AppBar style={{ position: "relative", backgroundColor: "#31e2aa" }}>
+        <Toolbar>
+          <IconButton
+            edge="start"
+            color="inherit"
+            onClick={() => {
+              props.viewItem("");
             }}
+            aria-label="close"
           >
-            <TableRow>
-              {tableHeading &&
-                tableHeading.map((prop, index) => {
-                  return (
-                    <>
-                      <TableCell
-                        className={classes.tableHeadCell}
-                        style={{
-                          color: "white",
-                          fontWeight: "700",
-                          // textAlign: "center",
-                          borderTopLeftRadius: index === 0 ? 5 : 0,
-                          borderTopRightRadius:
-                            index === tableHeading.length - 1 ? 5 : 0,
-                        }}
-                        key={prop}
-                      >
-                        {prop}
-                      </TableCell>
-                    </>
-                  );
-                })}
-            </TableRow>
-          </TableHead>
+            <CloseIcon />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
 
-          <TableBody>
-            {props.items &&
-              props.items.map((prop, index) => {
-                return (
-                  <TableRow
-                    key={index}
-                    className={classes.tableBodyRow}
-                    style={{
-                      backgroundColor: "white",
-                      cursor: "pointer",
-                    }}
-                  >
-                    {tableDataKeys
-                      ? tableDataKeys.map((val, key) => {
-                          return (
-                            <TableCell
-                              className={classes.tableCell}
-                              key={key}
-                              onClick={() => handleClick(prop, val)}
-                              style={{
-                                // textAlign: "center",
-                                cursor: props.handleModelMaterialReceiving
-                                  ? "pointer"
-                                  : "",
-                              }}
-                            >
-                              {Array.isArray(val)
-                                ? prop[val[0]]
-                                  ? prop[val[0]][val[1]]
-                                  : null
-                                : val.toLowerCase() === "timestamp"
-                                ? new Intl.DateTimeFormat(
-                                    "en-US",
-                                    dateOptions
-                                  ).format(Date.parse(prop[val]))
-                                : replaceSlugToTitle(prop[val])}
-                            </TableCell>
-                          );
-                        })
-                      : null}
-                    {/* <TableCell
-                          className={classes.tableHeadCell}
-                          style={{
-                            color: "white",
-                            fontWeight: "700",
-                            textAlign: "center",
-                            borderTopLeftRadius: index === 0 ? 5 : 0,
-                            borderTopRightRadius:
-                              index === tableHeading.length - 1 ? 5 : 0,
-                          }}
-                          key={prop}
-                        >
-                          {prop}
-                        </TableCell> */}
+      <DialogContent style={{ backgroundColor: "#60d69f" }}>
+        <>
+          <h5 style={{ color: "white", fontWeight: "bold" }}>Added Items</h5>
 
-                    <TableCell
-                      style={{
-                        cursor: "pointer",
-                      }}
-                      className={classes.tableCell}
-                      colSpan="2"
-                    >
-                      <span onClick={() => props.viewSingleItem(prop)}>
-                        <i
-                          style={{
-                            color: "grey",
-                            fontSize: "30px",
-                          }}
-                          className=" ml-10 zmdi zmdi-eye zmdi-hc-3x"
-                        />
-                      </span>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
+          <CustomTable
+            tableData={props.items}
+            tableHeading={tableHeading}
+            tableDataKeys={tableDataKeys}
+            action={{ view: true }}
+            handleView={props.viewSingleItem}
+            borderBottomColor={"#60d69f"}
+            borderBottomWidth={20}
+          />
+        </>
       </DialogContent>
     </Dialog>
   );
 }
+
+//  <Table>
+//    <TableHead
+//      className={classes["TableHeader"]}
+//      style={{
+//        backgroundColor: "#2873cf",
+//      }}
+//    >
+//      <TableRow>
+//        {tableHeading &&
+//          tableHeading.map((prop, index) => {
+//            return (
+//              <>
+//                <TableCell
+//                  className={classes.tableHeadCell}
+//                  style={{
+//                    color: "white",
+//                    fontWeight: "700",
+//                    // textAlign: "center",
+//                    borderTopLeftRadius: index === 0 ? 5 : 0,
+//                    borderTopRightRadius:
+//                      index === tableHeading.length - 1 ? 5 : 0,
+//                  }}
+//                  key={prop}
+//                >
+//                  {prop}
+//                </TableCell>
+//              </>
+//            );
+//          })}
+//      </TableRow>
+//    </TableHead>
+
+//    <TableBody>
+//      {props.items &&
+//        props.items.map((prop, index) => {
+//          return (
+//            <TableRow
+//              key={index}
+//              className={classes.tableBodyRow}
+//              style={{
+//                backgroundColor: "white",
+//                cursor: "pointer",
+//              }}
+//            >
+//              {tableDataKeys
+//                ? tableDataKeys.map((val, key) => {
+//                    return (
+//                      <TableCell
+//                        className={classes.tableCell}
+//                        key={key}
+//                        onClick={() => handleClick(prop, val)}
+//                        style={{
+//                          // textAlign: "center",
+//                          cursor: props.handleModelMaterialReceiving
+//                            ? "pointer"
+//                            : "",
+//                        }}
+//                      >
+//                        {Array.isArray(val)
+//                          ? prop[val[0]]
+//                            ? prop[val[0]][val[1]]
+//                            : null
+//                          : val.toLowerCase() === "timestamp"
+//                          ? new Intl.DateTimeFormat("en-US", dateOptions).format(
+//                              Date.parse(prop[val])
+//                            )
+//                          : replaceSlugToTitle(prop[val])}
+//                      </TableCell>
+//                    );
+//                  })
+//                : null}
+//              {/* <TableCell
+//                           className={classes.tableHeadCell}
+//                           style={{
+//                             color: "white",
+//                             fontWeight: "700",
+//                             textAlign: "center",
+//                             borderTopLeftRadius: index === 0 ? 5 : 0,
+//                             borderTopRightRadius:
+//                               index === tableHeading.length - 1 ? 5 : 0,
+//                           }}
+//                           key={prop}
+//                         >
+//                           {prop}
+//                         </TableCell> */}
+
+//              <TableCell
+//                style={{
+//                  cursor: "pointer",
+//                }}
+//                className={classes.tableCell}
+//                colSpan="2"
+//              >
+//                <span onClick={() => props.viewSingleItem(prop)}>
+//                  <i
+//                    style={{
+//                      color: "grey",
+//                      fontSize: "30px",
+//                    }}
+//                    className=" ml-10 zmdi zmdi-eye zmdi-hc-3x"
+//                  />
+//                </span>
+//              </TableCell>
+//            </TableRow>
+//          );
+//        })}
+//    </TableBody>
+//  </Table>;

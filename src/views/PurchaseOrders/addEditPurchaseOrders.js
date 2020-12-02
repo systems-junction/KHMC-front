@@ -75,7 +75,8 @@ const tableHeadingForPR = [
 const tableDataKeysForPR = [
   "requestNo",
   "generated",
-  "vendorId",
+  // "vendorId",
+  ["vendorId", "englishName"],
   "committeeStatus",
 ];
 
@@ -325,7 +326,7 @@ function AddEditPurchaseRequest(props) {
 
     const selectedRec = props.history.location.state.selectedItem;
 
-    console.log(props.history.location.state)
+    console.log(props.history.location.state);
 
     if (selectedRec) {
       Object.entries(selectedRec).map(([key, val]) => {
@@ -415,7 +416,9 @@ function AddEditPurchaseRequest(props) {
     if (validateForm()) {
       if (status === "pending_receipt" && committeeStatus === "approved") {
         setOpenNotification(true);
-        setErrorMsg("PO can not be updated once it has been approved by committee.");
+        setErrorMsg(
+          "PO can not be updated once it has been approved by committee."
+        );
         return;
       }
 
@@ -630,7 +633,7 @@ function AddEditPurchaseRequest(props) {
         overflowY: "scroll",
       }}
     >
-      <Header history={props.history}/>
+      <Header history={props.history} />
       <div className={"cPadding"}>
         <div className="subheader">
           <div>
@@ -1164,13 +1167,15 @@ function AddEditPurchaseRequest(props) {
           </div>
 
           {purchaseRequest.length !== 0 ? (
-            <div style={{ marginLeft: -10, marginRight: -10 , overflowX: "scroll"}}>
+            <div
+              style={{ marginLeft: -10, marginRight: -10, overflowX: "scroll" }}
+            >
               <h5
                 style={{ color: "white", fontWeight: "700", marginLeft: "5px" }}
               >
                 Added Purchase Requests
               </h5>
-              <div style={{ marginTop: 20 }}>
+              <div style={{ marginTop: 0 }}>
                 <AddedPurchaseRequestTable
                   tableData={purchaseRequest}
                   vendors={vendors}
@@ -1183,22 +1188,6 @@ function AddEditPurchaseRequest(props) {
                 />
               </div>
             </div>
-          ) : (
-            undefined
-          )}
-
-          {openItemDialog ? (
-            // <ViewItem
-            //   item={item}
-            //   openItemDialog={openItemDialog}
-            //   viewItem={viewItem}
-            // />
-            <ViewPRItems
-              items={item}
-              openItemDialog={openItemDialog}
-              viewItem={viewItem}
-              viewSingleItem={viewSingleItem}
-            />
           ) : (
             undefined
           )}
@@ -1224,6 +1213,17 @@ function AddEditPurchaseRequest(props) {
           </div>
         </div>
       </div>
+
+      {openItemDialog ? (
+        <ViewPRItems
+          items={item}
+          openItemDialog={openItemDialog}
+          viewItem={viewItem}
+          viewSingleItem={viewSingleItem}
+        />
+      ) : (
+        undefined
+      )}
     </div>
   );
 }
