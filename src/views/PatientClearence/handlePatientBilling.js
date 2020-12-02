@@ -234,6 +234,9 @@ const useStylesForInput = makeStyles((theme) => ({
     "& .MuiTextField-root": {
       backgroundColor: "white",
     },
+    "& .MuiFilledInput-root": {
+      backgroundColor: "#ffffff",
+    },
     "& .Mui-focused": {
       backgroundColor: "white",
       color: "black",
@@ -1255,7 +1258,11 @@ function AddEditPatientListing(props) {
                         <img
                           src={BarCode}
                           onClick={scanQRCode}
-                          style={{ width: 70, height: 60, cursor: "pointer" }}
+                          style={{
+                            width: matches ? 70 : 60,
+                            height: matches ? 60 : 55,
+                            cursor: "pointer",
+                          }}
                         />{" "}
                       </div>
                     </div>
@@ -1294,7 +1301,7 @@ function AddEditPatientListing(props) {
                           style={{
                             zIndex: 3,
                             position: "absolute",
-                            width: "99%",
+                            width: matches ? "99%" : "116%",
                             marginTop: "5px",
                           }}
                         >
@@ -1476,6 +1483,7 @@ function AddEditPatientListing(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
+                    marginTop: matches ? 6 : 20,
                   }}
                 >
                   <CurrencyTextField
@@ -1533,6 +1541,7 @@ function AddEditPatientListing(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
+                    marginTop: matches ? 6 : 20,
                   }}
                 >
                   <CurrencyTextField
@@ -1606,6 +1615,7 @@ function AddEditPatientListing(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
+                    marginTop: matches ? 6 : 20,
                   }}
                 >
                   <TextField
@@ -1628,6 +1638,7 @@ function AddEditPatientListing(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
+                    marginTop: matches ? 6 : 20,
                   }}
                 >
                   <CurrencyTextField
@@ -1661,6 +1672,7 @@ function AddEditPatientListing(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
+                    marginTop: matches ? 6 : 20,
                   }}
                 >
                   <CurrencyTextField
@@ -1732,6 +1744,7 @@ function AddEditPatientListing(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
+                    marginTop: matches ? 6 : 20,
                   }}
                 >
                   <CurrencyTextField
@@ -1767,6 +1780,7 @@ function AddEditPatientListing(props) {
                   style={{
                     ...styles.inputContainerForTextField,
                     ...styles.textFieldPadding,
+                    marginTop: matches ? 6 : 20,
                   }}
                 >
                   <CurrencyTextField
@@ -1894,7 +1908,7 @@ function AddEditPatientListing(props) {
                 <img
                   onClick={() => props.history.goBack()}
                   src={Back_Arrow}
-                  style={{ width: 45, height: 35, cursor: "pointer" }}
+                  style={{ width: 40, height: 30, cursor: "pointer" }}
                 />
               </div>
             </div>
