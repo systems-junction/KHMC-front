@@ -205,6 +205,10 @@ import QRCodeScannerComponent from "../../components/QRCodeScanner/QRCodeScanner
 import { useStyles1 } from "../../components/MuiCss/MuiCss";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 // import useStyles1 from "../../components/MuiCss/MuiCss";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 
 import { id } from "date-fns/locale";
 
@@ -930,7 +934,7 @@ export default function ReplenishmentRequest(props) {
           <div className="subheader" style={{ marginLeft: "-10px" }}>
             <div>
               <img src={business_Unit} />
-              <h4>In-Patient</h4>
+              <h4>In-Patient </h4>
             </div>
 
             {/* {currentUser &&
@@ -1130,13 +1134,29 @@ export default function ReplenishmentRequest(props) {
           <Dialog
             aria-labelledby="form-dialog-title"
             open={isOpen}
-            maxWidth="xl"
-            fullWidth={true}
-            // fullScreen
+            // maxWidth="xl"
+            // fullWidth={true}
+            fullScreen
             onBackdropClick={() => {
               setIsOpen(false);
             }}
           >
+            <AppBar
+              style={{ position: "relative", backgroundColor: "#31e2aa" }}
+            >
+              <Toolbar>
+                <IconButton
+                  edge="start"
+                  color="inherit"
+                  onClick={() => {
+                    setIsOpen(false);
+                  }}
+                  aria-label="close"
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Toolbar>
+            </AppBar>
             <DialogContent style={{ backgroundColor: "rgb(19 213 159)" }}>
               <DialogTitle
                 id="simple-dialog-title"

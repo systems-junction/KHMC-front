@@ -13,11 +13,13 @@ import ViewEDR from "../views/ECR/viewEcrEDR";
 import ViewIPR from "../views/ECR/viewEcrIPR";
 import AddIPR from "../views/ECR/addIPR";
 import AddEDR from "../views/ECR/addEDR";
+
 // import TriageAndAssessmentEDR from '../views/ECR/TriageAndAssessmentEDR'
 // import TriageAndAssessmentIPR from '../views/ECR/TriageAndAssessmentIPR'
 import TriageAndAssessment from "../views/TriageAndAssessment/TriageAndAssessment";
 import ViewConsultationNotes from "../views/ECR/viewConsultationNotes";
 import SuccessScreen from "../components/SuccessScreen/SuccessScreen";
+import ViewSingleTriage from "../views/TriageAndAssessment/ViewSingleTriage";
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const [currentUser, setCurrentUser] = React.useState(
@@ -81,15 +83,23 @@ class WMSRoutes extends React.PureComponent {
           component={TriageAndAssessmentIPR}
         /> */}
         <Route
-          path={`${this.props.match.url}/cn/TriageAndAssessment`} //for consultation Triage & Assesment
+          exact
+          path={`${this.props.match.url}/cn/triageAndAssessment`} //for consultation Triage & Assesment
           component={TriageAndAssessment}
         />
         <Route
+          exact
+          path={`${this.props.match.url}/cn/triageAssessment/view`}
+          component={ViewSingleTriage}
+        />
+        <Route
+          exact
           path={`${this.props.match.url}/cn/patienthistory`} //for consultation Triage & Assesment
           component={PatientHistory}
         />
 
         <Route
+          exact
           path={`${this.props.match.url}/cn/viewConsultationNotes`} //for consultation Triage & Assesment
           component={ViewConsultationNotes}
         />
@@ -108,8 +118,12 @@ class WMSRoutes extends React.PureComponent {
           path={`${this.props.match.url}/edr/viewEDR/add`}
           component={AddEDR}
         />
-        <Route path={`${this.props.match.url}/notfound`} component={NotFound} />
-        <Route path="*" component={NotFound} />
+        <Route
+          exact
+          path={`${this.props.match.url}/notfound`}
+          component={NotFound}
+        />
+        <Route exact path="*" component={NotFound} />
       </Switch>
     );
   }

@@ -6,6 +6,7 @@ import triageAssessment from "../views/TriageAndAssessment/TriageAndAssessment";
 import viewLabRadReport from "../components/ViewLabRadReport/ViewLabRadReport";
 import SuccessScreen from "../components/SuccessScreen/SuccessScreen";
 import PatientHistory from "../views/PatientHistory/PatientHistory";
+import ViewSingleTriage from "../views/TriageAndAssessment/ViewSingleTriage";
 
 class LabRadRequest extends React.PureComponent {
   render() {
@@ -17,14 +18,20 @@ class LabRadRequest extends React.PureComponent {
           component={labRadRequest}
         />
         <Route
+          exact
           path={`${this.props.match.url}/triageAssessment`}
           component={triageAssessment}
         />
         <Route
+          exact
+          path={`${this.props.match.url}/triageAssessment/view`}
+          component={ViewSingleTriage}
+        />
+
+        <Route
           path={`${this.props.match.url}/viewReport`}
           component={viewLabRadReport}
         />
-        
 
         <Route
           path={`${this.props.match.url}/patienthistory`}
