@@ -55,8 +55,6 @@ export const getpatientHistory = `${baseUrl}/patient/getpatienthistory`;
 export const getPatientEdrUrl = `${baseUrl}/edr/getedrpatient`;
 export const getPatientIprUrl = `${baseUrl}/ipr/getiprpatient`;
 
-export const changeTriageStatus = `${baseUrl}/patient/triageStatus`;
-
 export const searchpatient = `${baseUrl}/patient/searchpatient`;
 export const updateEdrIpr = `${baseUrl}/patient/updateEdrIpr`;
 export const updateEdrIprItem = `${baseUrl}/patient/updateEdrIprItem`;
@@ -457,4 +455,10 @@ export const registrationOfficer = `${baseUrl}/reports/rodashboard`;
 export const registuredNurse = `${baseUrl}/reports/nursedashboard`;
 export const consultant = `${baseUrl}/reports/consultantdashboard`;
 export const doctor = `${baseUrl}/reports/doctordashboard`;
+
+//active patient
+
 export const getActivePatients = `${baseUrl}/patient/getpatientactive`;
+
+//triage
+export const changeTriageStatus = `${baseUrl}/patient/triageStatus`;

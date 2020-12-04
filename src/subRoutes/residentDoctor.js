@@ -89,6 +89,11 @@ class WMSRoutes extends React.PureComponent {
           path={`${this.props.match.url}/labradrequest/triageAssessment`}
           component={triageAssessment}
         />
+        <Route
+          exact
+          path={`${this.props.match.url}/labradrequest/triageAssessment/view`}
+          component={ViewSingleTriage}
+        />
 
         <Route
           exact
@@ -127,6 +132,26 @@ class WMSRoutes extends React.PureComponent {
         <Route
           exact
           path={`${this.props.match.url}/assessmentdiagnosis/triageAssessment/view`}
+          component={ViewSingleTriage}
+        />
+        <Route
+          exact
+          path={`${this.props.match.url}/consultationrequest/triageAssessment/view`}
+          component={ViewSingleTriage}
+        />
+        {/* <Route
+          exact
+          path={`${this.props.match.url}/patientAssessment/triageAssessment/view`}
+          component={ViewSingleTriage}
+        /> */}
+        {/* <Route
+          exact
+          path={`${this.props.match.url}/patientCare/triageAssessment/view`}
+          component={ViewSingleTriage}
+        /> */}
+        <Route
+          exact
+          path={`${this.props.match.url}/LabRadRequest/triageAssessment/view`}
           component={ViewSingleTriage}
         />
 

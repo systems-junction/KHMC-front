@@ -18,6 +18,7 @@ import LabRadRequest from "./labRadRequest";
 import EDR from "./EDR";
 import IPR from "./iprRoutes";
 import PatientClearenceRoutes from "./patientClearenceRoutes";
+import ViewSingleTriage from "../views/TriageAndAssessment/ViewSingleTriage";
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const [currentUser, setCurrentUser] = React.useState(

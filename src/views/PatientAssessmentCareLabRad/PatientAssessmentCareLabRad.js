@@ -5,6 +5,10 @@ import tableStyles from "../../assets/jss/material-dashboard-react/components/ta
 import axios from "axios";
 import TextField from "@material-ui/core/TextField";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 import {
   getSearchedLaboratoryService,
   getSearchedRadiologyService,
@@ -605,6 +609,8 @@ function LabRadRequest(props) {
       console.log("res for icd", res);
       if (res.data.data) {
         setIcd(res.data.data);
+      } else if (res.data.data === undefined) {
+        setErrorMsg("Error occured while getting ICD");
       }
     });
 
@@ -1779,9 +1785,10 @@ function LabRadRequest(props) {
     }
     console.log("code after", code);
   };
-
+  console.log("props of triage ", props.location);
   const TriageAssessment = () => {
     var triagePath;
+
     if (currentUser.staffTypeId.type === "Doctor/Physician") {
       if (props.location.pathname === "/home/rcm/rd/assessmentdiagnosis") {
         triagePath = "assessmentdiagnosis/triageAssessment";
@@ -3644,13 +3651,27 @@ function LabRadRequest(props) {
         <Dialog
           aria-labelledby="form-dialog-title"
           open={isOpen}
-          maxWidth="xl"
-          fullWidth={true}
-          // fullScreen
+          // maxWidth="xl"
+          // fullWidth={true}
+          fullScreen
           onBackdropClick={() => {
             setIsOpen(false);
           }}
         >
+          <AppBar style={{ position: "relative", backgroundColor: "#31e2aa" }}>
+            <Toolbar>
+              <IconButton
+                edge="start"
+                color="inherit"
+                onClick={() => {
+                  setIsOpen(false);
+                }}
+                aria-label="close"
+              >
+                <CloseIcon />
+              </IconButton>
+            </Toolbar>
+          </AppBar>
           <DialogContent style={{ backgroundColor: "#31e2aa" }}>
             <DialogTitle
               id="simple-dialog-title"
@@ -3658,7 +3679,7 @@ function LabRadRequest(props) {
             >
               Added Items
             </DialogTitle>
-            <div className="container-fluid">
+            <>
               <CustomTable
                 tableData={requestedItems}
                 tableHeading={
@@ -3684,7 +3705,7 @@ function LabRadRequest(props) {
                 borderBottomColor={"#60d69f"}
                 borderBottomWidth={20}
               />
-            </div>
+            </>
           </DialogContent>
         </Dialog>
 
