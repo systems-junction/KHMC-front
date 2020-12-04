@@ -80,6 +80,8 @@ const stylesB = {
     height: 24,
     borderRadius: 24 / 2,
     padding: 3,
+    marginLeft: 2,
+    marginRight: 2,
   },
 
   styleForData: {
@@ -762,55 +764,51 @@ export default function ControlledAccordions(props) {
                     </div>
                   );
                 } else {
-                  if (true) {
-                    return (
-                      <div
-                        key={val}
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          paddingLeft: 4,
-                          paddingRight: 0,
-                          alignItems:
-                            heading[key] === "Status"
-                              ? "flex-end"
-                              : "flex-start",
-                        }}
-                        className={
-                          colSize === 2 ? `col-${12 / 3}` : `col-${12 / 3}`
-                        }
-                      >
-                        <span style={{ ...stylesB.styleForDataHeading }}>
-                          {heading[key] === "Status" ? "" : heading[key]}
-                        </span>
+                  return (
+                    <div
+                      key={val}
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        paddingLeft: 4,
+                        paddingRight: 0,
+                        alignItems:
+                          heading[key] === "Status" ? "flex-end" : "flex-start",
+                        wordBreak: "break-word",
+                      }}
+                      className={
+                        colSize === 2 ? `col-${12 / 3}` : `col-${12 / 3}`
+                      }
+                    >
+                      <span style={{ ...stylesB.styleForDataHeading }}>
+                        {heading[key] === "Status" ? "" : heading[key]}
+                      </span>
 
-                        <span
-                          key={key}
-                          onClick={() => handleClick(prop, val)}
-                          style={{
-                            ...stylesB.styleForData,
-                            wordWrap: "break-word",
-                          }}
-                        >
-                          {Array.isArray(val)
-                            ? prop[val[0]]
-                              ? replaceSlugToTitle(
-                                  prop[val[0]][val[1]],
-                                  val,
-                                  heading,
-                                  key
-                                )
-                              : null
-                            : val.toLowerCase() === "timestamp"
-                            ? new Intl.DateTimeFormat(
-                                "en-US",
-                                dateOptions
-                              ).format(Date.parse(prop[val]))
-                            : replaceSlugToTitle(prop[val], val, heading, key)}
-                        </span>
-                      </div>
-                    );
-                  }
+                      <span
+                        key={key}
+                        onClick={() => handleClick(prop, val)}
+                        style={{
+                          ...stylesB.styleForData,
+                        }}
+                      >
+                        {Array.isArray(val)
+                          ? prop[val[0]]
+                            ? replaceSlugToTitle(
+                                prop[val[0]][val[1]],
+                                val,
+                                heading,
+                                key
+                              )
+                            : null
+                          : val.toLowerCase() === "timestamp"
+                          ? new Intl.DateTimeFormat(
+                              "en-US",
+                              dateOptions
+                            ).format(Date.parse(prop[val]))
+                          : replaceSlugToTitle(prop[val], val, heading, key)}
+                      </span>
+                    </div>
+                  );
                 }
               })}
 
@@ -828,7 +826,7 @@ export default function ControlledAccordions(props) {
                       style={{
                         width: "100%",
                         display: "flex",
-                        justifyContent: "space-evenly",
+                        justifyContent: "flex-end",
                         alignItems: "center",
                       }}
                     >

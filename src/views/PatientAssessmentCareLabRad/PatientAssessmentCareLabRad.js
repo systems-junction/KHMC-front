@@ -161,7 +161,7 @@ const tableHeadingForBUMemberForItems = [
   "Type",
   "Requested Qty",
   "Status",
-  "",
+  // "",
 ];
 const tableHeadingForNurse = [
   "Request Id",
@@ -3673,12 +3673,12 @@ function LabRadRequest(props) {
             </Toolbar>
           </AppBar>
           <DialogContent style={{ backgroundColor: "#31e2aa" }}>
-            <DialogTitle
+            <h6
               id="simple-dialog-title"
-              style={{ color: "white", marginLeft: -9 }}
+              style={{ color: "white", fontWeight:'bold' }}
             >
               Added Items
-            </DialogTitle>
+            </h6>
             <>
               <CustomTable
                 tableData={requestedItems}
@@ -3704,6 +3704,7 @@ function LabRadRequest(props) {
                 }
                 borderBottomColor={"#60d69f"}
                 borderBottomWidth={20}
+                action={""}
               />
             </>
           </DialogContent>
