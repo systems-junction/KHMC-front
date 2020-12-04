@@ -1955,7 +1955,7 @@ function PatientRegistration(props) {
                           style={{
                             zIndex: 3,
                             position: "absolute",
-                            width: "99%",
+                            width: matches ? "99%" : "116%",
                           }}
                         >
                           <Paper style={{ maxHeight: 300, overflow: "auto" }}>

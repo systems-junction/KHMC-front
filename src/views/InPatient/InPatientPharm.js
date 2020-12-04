@@ -1021,7 +1021,11 @@ export default function ReplenishmentRequest(props) {
                   <img
                     src={BarCode}
                     onClick={scanQRCode}
-                    style={{ width: 70, height: 60, cursor: "pointer" }}
+                    style={{
+                      width: matches ? 70 : 60,
+                      height: matches ? 60 : 55,
+                      cursor: "pointer",
+                    }}
                   />{" "}
                 </div>
               </div>
