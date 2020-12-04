@@ -64,7 +64,7 @@ import Fingerprint from "../../assets/img/fingerprint.png";
 
 import TableForAddedItems from "./tableforAddedItems";
 
-import PatientDetails from "./patientDetailsDialog";
+import PatientDetails from "../../components/PatientDetails/PatientDetailsRCM";
 
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
@@ -1670,16 +1670,18 @@ function AddEditPurchaseRequest(props) {
             )}
           </div>
 
-          {patientDetails && patientDetailsDialog ? (
-            <PatientDetails
-              patientDetails={patientDetails}
-              diagnosisArray={diagnosisArray}
-              pharmacyRequest={pharmacyRequest}
-              showPatientDetails={showPatientDetails}
-            />
-          ) : (
-            undefined
-          )}
+          <div className="row">
+            {patientDetails && patientDetailsDialog ? (
+              <PatientDetails
+                patientDetails={patientDetails}
+                diagnosisArray={diagnosisArray}
+                pharmacyRequest={pharmacyRequest}
+                showPatientDetails={showPatientDetails}
+              />
+            ) : (
+              undefined
+            )}
+          </div>
 
           {fuArray && fuArray !== "" ? (
             <div style={{ flex: 4, display: "flex", flexDirection: "column" }}>
