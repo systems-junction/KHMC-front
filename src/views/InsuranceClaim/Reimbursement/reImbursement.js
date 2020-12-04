@@ -247,13 +247,21 @@ export default function Reimbursement(props) {
           <div style={{ marginRight: "-10px" }}>
             <Button
               onClick={submitClaim}
-              style={styles.stylesForButton}
+              style={{ ...styles.stylesForButton, width: matches ? 160 : 130 }}
               variant="contained"
               color="primary"
             >
-              <img src={plus_icon} />
+              <img
+                style={{
+                  width: matches ? " " : 10,
+                  height: matches ? " " : 10,
+                }}
+                src={plus_icon}
+              />
               &nbsp;&nbsp;
-              <strong>Submit Claim</strong>
+              <strong style={{ fontSize: matches ? " " : 10 }}>
+                Submit Claim
+              </strong>
             </Button>
           </div>
         </div>

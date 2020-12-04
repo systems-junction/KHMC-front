@@ -1600,13 +1600,13 @@ function AddEditPatientListing(props) {
               flex: 4,
               display: "flex",
               flexDirection: "column",
-              overflowX: "scroll",
+              // overflowX: "scroll",
             }}
             className="container-fluid"
           >
             <div
               className="row"
-              style={{ marginTop: "20px", overflowX: "scroll" }}
+              style={{ marginTop: "20px", overflowX: matches ? " " : "scroll" }}
             >
               {billSummaryArray !== 0 ? (
                 // <CustomTable
