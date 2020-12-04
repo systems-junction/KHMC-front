@@ -10,7 +10,7 @@ export default function detailBlock(props) {
           return (
             <div
               className={`col-md-${12 / props.columnSize}`}
-              style={{ marginTop: 5 }}
+              style={{ marginTop: 5, wordBreak: "break-word" }}
               key={index}
             >
               <span style={{ color: "#939393", fontSize: 14 }}>
