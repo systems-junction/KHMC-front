@@ -1711,6 +1711,7 @@ function LabRadRequest(props) {
             </div>
           </div> */}
         </div>
+
         <PatientDetails
           patientDetails={patientDetails}
           // showPatientDetails={showPatientDetails}

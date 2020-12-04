@@ -1379,12 +1379,16 @@ function AddEditPatientListing(props) {
               )}
             </div>
 
-            <PatientDetails
-              patientDetails={patientDetails}
-              // showPatientDetails={showPatientDetails}
-              diagnosisArray={diagnosisArray}
-              medicationArray={medicationArray}
-            />
+            {patientDetails ? (
+              <PatientDetails
+                patientDetails={patientDetails}
+                // showPatientDetails={showPatientDetails}
+                diagnosisArray={diagnosisArray}
+                medicationArray={medicationArray}
+              />
+            ) : (
+              undefined
+            )}
 
             <div
               style={{

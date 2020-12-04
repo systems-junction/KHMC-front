@@ -139,7 +139,7 @@ export default function ControlledAccordions(props) {
 
     setTableHeading([...tempHeading]);
     setTableKeys([...tempKeys]);
-  }, []);
+  }, [props.tableData]);
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
@@ -544,7 +544,6 @@ export default function ControlledAccordions(props) {
               style={{
                 ...stylesB.stylesForActive,
                 backgroundColor: "#2c6ddd",
-                width: "150px",
               }}
               variant="contained"
               color="primary"
@@ -596,7 +595,7 @@ export default function ControlledAccordions(props) {
             </Button>
           ) : val === "Analysis In Progress" ? (
             <Button
-              style={{ ...stylesB.stylesForActive, width: "150px" }}
+              style={{ ...stylesB.stylesForActive }}
               variant="contained"
               color="primary"
             >
