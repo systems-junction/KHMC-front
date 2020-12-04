@@ -9,8 +9,21 @@
   /* position: relative; */
   /* margin-bottom: 40px; */
 }
+.for-mobile-icon {
+  position: fixed;
+  right: 35px;
+  bottom: 45px;
+  z-index: 7;
+}
+
 .M-bottom {
   margin-bottom: 15%;
+}
+.for-mobile-icon {
+  position: "fixed";
+  right: 35;
+  bottom: 45;
+  z-index: 7;
 }
 .header1-style {
   max-width: 27%;
@@ -129,6 +142,13 @@
   }
   .M-bottom {
     margin-bottom: 65%;
+  }
+  .for-mobile-icon {
+    right: 19px !important;
+    position: fixed;
+    /* right: 15; */
+    bottom: 10px;
+    z-index: 7;
   }
 }
 
