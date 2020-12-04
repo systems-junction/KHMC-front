@@ -1932,7 +1932,7 @@ function AddEditPurchaseRequest(props) {
                     )}
                   </div>
 
-                  <div className="row">
+                  <div className={`${"row"} ${classes.root} ${classes1.root}`}>
                     <div
                       className="col-md-3"
                       style={{
@@ -2075,7 +2075,7 @@ function AddEditPurchaseRequest(props) {
                   </div>
 
                   {/* <div> */}
-                  <div className="row">
+                  <div className={`${"row"} ${classes.root} ${classes1.root}`}>
                     <div
                       className="col-md-3"
                       style={{
