@@ -20,6 +20,7 @@ import socketIOClient from "socket.io-client";
 import axios from "axios";
 import AddIcon from "@material-ui/icons/Add";
 import IdleTimer from "react-idle-timer";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 class Header extends React.Component {
   constructor(props) {
@@ -28,6 +29,7 @@ class Header extends React.Component {
     this.handleOnAction = this.handleOnAction.bind(this);
     this.handleOnActive = this.handleOnActive.bind(this);
     this.handleOnIdle = this.handleOnIdle.bind(this);
+    // this.matches = useMediaQuery("(min-width:600px)");
 
     this.state = {
       goBack: false,
@@ -333,7 +335,15 @@ class Header extends React.Component {
         )}
 
         {this.state.currentUser ? (
-          <div style={{ position: "fixed", right: 35, bottom: 45, zIndex: 7 }}>
+          <div
+            // style={{
+            //   position: "fixed",
+            //   right: 15,
+            //   bottom: 45,
+            //   zIndex: 7,
+            // }}
+            className="for-mobile-icon"
+          >
             <Fab
               // color="primary"
               aria-label="add"
