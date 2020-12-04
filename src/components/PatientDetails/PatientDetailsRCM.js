@@ -373,9 +373,10 @@ const styles = {
   headerHeading: {
     display: "flex",
     // justifyContent: "center",
-    alignItems: "center",
-    verticalAlign: "center",
+    // alignItems: "center",
+    // verticalAlign: "center",
     paddingTop: 9,
+    paddingLeft: 0,
   },
   headerHeadingText: {
     fontWeight: "700",
@@ -571,14 +572,14 @@ function AddEditPurchaseRequest(props) {
                   </span>
                 </div>
 
-                <div className={"col-3"} style={{}}>
+                <div className={"col-3"} style={{ paddingLeft: 0 }}>
                   {patientDetails.drugAllergy &&
                     patientDetails.drugAllergy.map((drug) => {
                       return <h6 style={styles.textStyles}>{drug}</h6>;
                     })}
                 </div>
 
-                <div className={"col-3"} style={{}}>
+                <div className={"col-3"} style={{ paddingLeft: 0 }}>
                   {props.pharmacyRequest &&
                     props.pharmacyRequest.map((d, index) => {
                       return (
@@ -597,7 +598,7 @@ function AddEditPurchaseRequest(props) {
                     })}
                 </div>
 
-                <div className={"col-3"} style={{}}>
+                <div className={"col-3"} style={{ paddingLeft: 0 }}>
                   {props.diagnosisArray &&
                     props.diagnosisArray.map((d, index) => {
                       return (
