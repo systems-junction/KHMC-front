@@ -105,9 +105,11 @@ const useStylesForChip = makeStyles((theme) => ({
   },
 }));
 
+let matches = true;
+
 export default function CustomTable(props) {
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up("sm"));
+  matches = useMediaQuery(theme.breakpoints.up("sm"));
 
   const { tableHeading, tableData, tableDataKeys, tableHeaderColor } = props;
 
@@ -115,12 +117,16 @@ export default function CustomTable(props) {
   const classForChip = useStylesForChip();
 
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(
+    !props.doNotPagination ? 10 : props.tableData.length
+  );
   const [selectedRow, setSelectedRow] = React.useState("");
   const [hovered, setHovered] = React.useState("");
   const [currentUser, setCurrentUser] = React.useState(
     cookie.load("current_user")
   );
+
+  const [doNotPagination, setAllowedPagination] = React.useState(true);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -128,6 +134,13 @@ export default function CustomTable(props) {
 
   useEffect(() => {
     // props.tableData
+    if (!props.doNotPagination) {
+      // doNotPagination = true;
+      setAllowedPagination(true);
+    } else {
+      // doNotPagination = false;
+      setAllowedPagination(false);
+    }
   }, []);
 
   const replaceSlugToTitle = (val, key, indexValue) => {
@@ -713,7 +726,326 @@ export default function CustomTable(props) {
     }
   }
 
-  if (matches) {
+  console.log(matches);
+
+  if (!props.matchNotRequired) {
+    if (matches) {
+      return (
+        <div className={classes.tableResponsive}>
+          <Table id={props.id ? props.id : "table_component"}>
+            {tableHeading !== undefined ? (
+              <TableHead
+                className={classes[tableHeaderColor + "TableHeader"]}
+                style={{
+                  backgroundColor: "#2873cf",
+                }}
+              >
+                <TableRow className={classes.tableHeadRow}>
+                  {tableHeading.map((prop, index) => {
+                    if (prop !== "") {
+                      return (
+                        <>
+                          <TableCell
+                            className={classes.tableHeadCell}
+                            style={{
+                              color: "white",
+                              borderTopLeftRadius: index === 0 ? 5 : 0,
+                              borderTopRightRadius:
+                                index === tableHeading.length - 1 ? 5 : 0,
+                              textAlign:
+                                prop === "Actions" || prop === "Action"
+                                  ? "center"
+                                  : "",
+                            }}
+                            key={prop}
+                          >
+                            {prop}
+                          </TableCell>
+                        </>
+                      );
+                    }
+                  })}
+                </TableRow>
+              </TableHead>
+            ) : null}
+
+            <TableBody>
+              {tableData &&
+                tableData
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((prop, index) => {
+                    return (
+                      <>
+                        <StyledTableRow key={index}>
+                          {tableDataKeys
+                            ? tableDataKeys.map((val, key) => {
+                                if (mapDateToKeys(val)) {
+                                  return (
+                                    <TableCell
+                                      className={classes.tableCell}
+                                      key={key}
+                                      style={{
+                                        // textAlign: 'center',
+                                        borderWidth: 0,
+                                        maxWidth: 400,
+                                      }}
+                                    >
+                                      {Array.isArray(val)
+                                        ? prop[val[0]]
+                                          ? formatDate(prop[val[0]][val[1]])
+                                          : prop[val[0]][val[1]]
+                                        : formatDate(prop[val])}
+                                    </TableCell>
+                                  );
+                                } else {
+                                  return (
+                                    <TableCell
+                                      className={`${classes.tableCell} ${classForChip.root}`}
+                                      key={key}
+                                      onClick={() => handleClick(prop, val)}
+                                      style={{
+                                        maxWidth: 400,
+                                        // textAlign: 'center',
+                                        cursor: props.handleModelMaterialReceiving
+                                          ? "pointer"
+                                          : "",
+                                        // borderTopLeftRadius: key === 0 ? 5 : 0,
+                                        // borderBottomLeftRadius: key === 0 ? 5 : 0,
+
+                                        borderBottomLeftRadius:
+                                          props.tableData.length - 1 ===
+                                            index && key === 0
+                                            ? 5
+                                            : 0,
+                                        borderWidth: 0,
+                                      }}
+                                    >
+                                      {Array.isArray(val)
+                                        ? prop[val[0]]
+                                          ? // ? capitilizeLetter(prop[val[0]][val[1]])
+                                            replaceSlugToTitle(
+                                              prop[val[0]][val[1]],
+                                              val,
+                                              key
+                                            )
+                                          : null
+                                        : val.toLowerCase() === "timestamp"
+                                        ? new Intl.DateTimeFormat(
+                                            "en-US",
+                                            dateOptions
+                                          ).format(Date.parse(prop[val]))
+                                        : // : `${replaceSlugToTitle(prop[val])}`}
+                                          replaceSlugToTitle(
+                                            prop[val],
+                                            val,
+                                            key
+                                          )}
+                                    </TableCell>
+                                  );
+                                }
+                              })
+                            : null}
+
+                          {props.action !== "" ? (
+                            <TableCell
+                              style={{
+                                cursor: "pointer",
+                                // borderTopRightRadius: 15,
+                                borderBottomRightRadius:
+                                  props.tableData.length - 1 === index ? 5 : 0,
+                                borderWidth: 0,
+                              }}
+                              className={classes.tableCell}
+                            >
+                              {props.action ? (
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    justifyContent: "space-evenly",
+                                  }}
+                                >
+                                  <RcIf if={props.action.edit}>
+                                    <span
+                                      onClick={() => props.handleEdit(prop)}
+                                    >
+                                      <i
+                                        style={{ color: "grey" }}
+                                        className="zmdi zmdi-edit zmdi-hc-2x"
+                                      />
+                                    </span>
+                                  </RcIf>
+                                  <RcIf if={props.action.delete}>
+                                    <span
+                                      onClick={() => props.handleDelete(prop)}
+                                    >
+                                      <i
+                                        style={{
+                                          color: "grey",
+                                        }}
+                                        className=" ml-10 zmdi zmdi-delete zmdi-hc-2x"
+                                      />
+                                    </span>
+                                  </RcIf>
+
+                                  <RcIf if={props.action.add}>
+                                    <span onClick={() => props.handleAdd(prop)}>
+                                      <i
+                                        style={{ color: "grey" }}
+                                        className=" ml-10 zmdi zmdi-plus-circle zmdi-hc-2x"
+                                      />
+                                    </span>
+                                  </RcIf>
+
+                                  <RcIf if={props.action.view}>
+                                    <span
+                                      onClick={() => props.handleView(prop)}
+                                    >
+                                      <i
+                                        style={{ color: "grey" }}
+                                        className=" ml-10 zmdi zmdi-eye zmdi-hc-2x"
+                                      />
+                                    </span>
+                                  </RcIf>
+
+                                  <RcIf if={props.action.receiveItem}>
+                                    <Tooltip title="Receive Item">
+                                      <img
+                                        src={ReceiveItem}
+                                        onClick={() => props.receiveItem(prop)}
+                                        style={{
+                                          maxWidth: 60,
+                                          height: 43,
+                                          borderRadius: 30,
+                                        }}
+                                      />
+                                    </Tooltip>
+                                  </RcIf>
+
+                                  <RcIf if={props.action.returnRequest}>
+                                    <Tooltip title="FU Return">
+                                      <img
+                                        src={ReturnItem}
+                                        onClick={() =>
+                                          props.addReturnRequest(prop)
+                                        }
+                                        style={{
+                                          maxWidth: 60,
+                                          height: 45,
+                                          borderRadius: 30,
+                                        }}
+                                      />
+                                    </Tooltip>
+                                  </RcIf>
+
+                                  <RcIf
+                                    if={
+                                      props.action.active &&
+                                      prop.status === "in_active"
+                                    }
+                                  >
+                                    <span
+                                      onClick={() =>
+                                        props.handleStatus(prop._id)
+                                      }
+                                      title="Active"
+                                    >
+                                      <i className=" ml-10 zmdi zmdi-check zmdi-hc-2x" />
+                                    </span>
+                                  </RcIf>
+
+                                  <RcIf if={props.action.print}>
+                                    <span
+                                      onClick={() =>
+                                        props.handlePrint(prop)
+                                          ? props.handlePrint(prop)
+                                          : {}
+                                      }
+                                      title="Active"
+                                    >
+                                      <i
+                                        style={{ color: "grey" }}
+                                        class="zmdi zmdi-print zmdi-hc-2x"
+                                      ></i>
+                                    </span>
+                                  </RcIf>
+
+                                  <RcIf if={props.action.download}>
+                                    <span
+                                      onClick={() =>
+                                        props.handleDownload(prop)
+                                          ? props.handleDownload(prop)
+                                          : {}
+                                      }
+                                      title="Active"
+                                    >
+                                      <i
+                                        style={{ color: "grey" }}
+                                        class="zmdi zmdi-download zmdi-hc-2x"
+                                      ></i>
+                                    </span>
+                                  </RcIf>
+
+                                  {props.checkAvailability &&
+                                  props.checkAvailability(prop) ? (
+                                    <RcIf if={props.action.addNewPR}>
+                                      <span
+                                        onClick={() =>
+                                          props.handleAddNewPR(prop)
+                                        }
+                                      >
+                                        <i
+                                          style={{ color: "grey" }}
+                                          className=" ml-10 zmdi zmdi-plus-circle zmdi-hc-2x"
+                                        />
+                                      </span>
+                                    </RcIf>
+                                  ) : (
+                                    <RcIf if={props.action.removeAddedPR}>
+                                      <span
+                                        onClick={() =>
+                                          props.handleRemovePR(prop)
+                                        }
+                                      >
+                                        <i
+                                          style={{ color: "grey" }}
+                                          className=" ml-10 zmdi zmdi-check zmdi-hc-2x"
+                                        />
+                                      </span>
+                                    </RcIf>
+                                  )}
+                                </div>
+                              ) : (
+                                undefined
+                              )}
+                            </TableCell>
+                          ) : (
+                            ""
+                          )}
+                        </StyledTableRow>
+                      </>
+                    );
+                  })}
+            </TableBody>
+          </Table>
+          {doNotPagination ? (
+            <TablePagination
+              rowsPerPageOptions={[10, 20]}
+              component="div"
+              count={props.tableData && props.tableData.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onChangePage={handleChangePage}
+              onChangeRowsPerPage={handleChangeRowsPerPage}
+            />
+          ) : (
+            undefined
+          )}
+        </div>
+      );
+    } else {
+      return <MobileTable {...props} />;
+    }
+  } else {
     return (
       <div className={classes.tableResponsive}>
         <Table id={props.id ? props.id : "table_component"}>
@@ -997,19 +1329,21 @@ export default function CustomTable(props) {
                 })}
           </TableBody>
         </Table>
-        <TablePagination
-          rowsPerPageOptions={[10, 20]}
-          component="div"
-          count={props.tableData && props.tableData.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-        />
+        {doNotPagination ? (
+          <TablePagination
+            rowsPerPageOptions={[10, 20]}
+            component="div"
+            count={props.tableData && props.tableData.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+          />
+        ) : (
+          undefined
+        )}
       </div>
     );
-  } else {
-    return <MobileTable {...props} />;
   }
 }
 
