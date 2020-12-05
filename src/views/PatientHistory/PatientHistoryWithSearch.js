@@ -57,6 +57,11 @@ import QRCodeScannerComponent from "../../components/QRCodeScanner/QRCodeScanner
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useStyles1 } from "../../components/MuiCss/MuiCss";
 
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+
 let icdCodesList = require("../../assets/icdCodes.json");
 
 const tableHeadingForResident = [
@@ -65,9 +70,11 @@ const tableHeadingForResident = [
   "Referring Doctor",
   "Action",
 ];
-const tableDataKeysForResident = ["date", 
-// "description",
- "doctorName"];
+const tableDataKeysForResident = [
+  "date",
+  // "description",
+  "doctorName",
+];
 const tableHeadingForConsultation = [
   "Date / Time",
   // "Description / Condition",
@@ -79,7 +86,7 @@ const tableHeadingForConsultation = [
 const tableDataKeysForConsultation = [
   "date",
   // "description",
-  "specialist",
+  ["specialist", "firstName"],
   "doctorName",
   "status",
 ];
@@ -1662,9 +1669,9 @@ function LabRadRequest(props) {
           <div className="subheader" style={{ marginLeft: "-10px" }}>
             <div>
               <img src={Lab_RadIcon} />
-              <h4>Patient history</h4>
+              <h4>Patient History</h4>
             </div>
-            <div>
+            <div style={{ marginRight: -10 }}>
               <Button
                 onClick={() =>
                   props.history.push("/home/rcm/patientHistory/active")
@@ -1848,12 +1855,16 @@ function LabRadRequest(props) {
             </div>
           </div>
 
-          <PatientDetails
-            patientDetails={patientDetails}
-            // showPatientDetails={showPatientDetails}
-            diagnosisArray={diagnosisArray}
-            medicationArray={medicationArray}
-          />
+          {patientDetails ? (
+            <PatientDetails
+              patientDetails={patientDetails}
+              // showPatientDetails={showPatientDetails}
+              diagnosisArray={diagnosisArray}
+              medicationArray={medicationArray}
+            />
+          ) : (
+            undefined
+          )}
 
           <div className={`${classes.root}`}>
             <h5 style={{ fontWeight: "bold", color: "white", marginTop: 25 }}>
@@ -2635,23 +2646,35 @@ function LabRadRequest(props) {
           </Dialog>
 
           <Dialog
-            aria-labelledby="form-dialog-title"
             open={isOpen}
-            maxWidth="xl"
-            fullWidth={true}
-            // fullScreen
-            onBackdropClick={() => {
+            // maxWidth="xl"
+            // fullWidth={true}
+            fullScreen
+            onClose={() => {
               setIsOpen(false);
             }}
           >
+            <AppBar style={{ backgroundColor: "#31e2aa" }}>
+              <Toolbar>
+                <IconButton
+                  // edge="start"
+                  color="inherit"
+                  onClick={() => {
+                    setIsOpen(false);
+                  }}
+                  aria-label="close"
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Toolbar>
+            </AppBar>
             <DialogContent style={{ backgroundColor: "#31e2aa" }}>
-              <DialogTitle
-                id="simple-dialog-title"
-                style={{ color: "white", marginLeft: -9 }}
-              >
-                Added Items
-              </DialogTitle>
-              <div className="container-fluid">
+              <>
+                <h6
+                  style={{ color: "white", fontWeight: "bold", marginTop: 25 }}
+                >
+                  Added Items
+                </h6>
                 <CustomTable
                   tableData={requestedItems}
                   tableHeading={
@@ -2676,8 +2699,9 @@ function LabRadRequest(props) {
                   }
                   borderBottomColor={"#60d69f"}
                   borderBottomWidth={20}
+                  action={""}
                 />
-              </div>
+              </>
             </DialogContent>
           </Dialog>
 

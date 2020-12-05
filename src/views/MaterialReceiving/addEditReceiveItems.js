@@ -326,7 +326,7 @@ function ReceiveItems(props) {
         itemId: selectedItem.itemId._id,
         currentQty: selectedItem.currQty,
         requestedQty: selectedItem.reqQty,
-        receivedQty :  parseInt(receivedQty),
+        receivedQty: parseInt(receivedQty),
         bonusQty,
         batchNumber,
         lotNumber: lotNo,

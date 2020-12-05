@@ -1026,6 +1026,7 @@ function TriageAndAssessment(props) {
         onBackdropClick={() => {}}
         fullWidth={true}
         maxWidth={"xl"}
+        fullScreen={true}
       >
         <DialogTitle
           id="alert-dialog-title"

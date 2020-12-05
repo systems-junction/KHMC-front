@@ -726,7 +726,7 @@ export default function CustomTable(props) {
             >
               <TableRow className={classes.tableHeadRow}>
                 {tableHeading.map((prop, index) => {
-                  if (prop) {
+                  if (prop !== "") {
                     return (
                       <>
                         <TableCell
