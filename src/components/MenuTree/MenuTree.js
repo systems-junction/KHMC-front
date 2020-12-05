@@ -95,7 +95,7 @@ class MenuTree extends React.Component {
             )}
           </label>
 
-          <a className="menu-item item-1">
+          <a className="menu-item item-1 item">
             {this.props.options[1] ? (
               <div
                 className="containerStyle"
@@ -115,7 +115,7 @@ class MenuTree extends React.Component {
             )}
           </a>
 
-          <a className="menu-item item-2">
+          <a className="menu-item item-2 item">
             {this.props.options[2] ? (
               <div
                 className="containerStyle"
@@ -135,7 +135,7 @@ class MenuTree extends React.Component {
             )}
           </a>
 
-          <a className="menu-item item-3">
+          <a className="menu-item item-3 item">
             {this.props.options[3] ? (
               <div
                 className="containerStyle"
@@ -155,7 +155,7 @@ class MenuTree extends React.Component {
             )}
           </a>
 
-          <a className="menu-item item-4">
+          <a className="menu-item item-4 item">
             {this.props.options[4] ? (
               <div
                 className="containerStyle"
@@ -175,7 +175,7 @@ class MenuTree extends React.Component {
             )}
           </a>
 
-          <a className="menu-item item-5">
+          <a className="menu-item item-5 item">
             {this.props.options[5] ? (
               <div
                 className="containerStyle"
@@ -195,7 +195,7 @@ class MenuTree extends React.Component {
             )}
           </a>
 
-          <a className="menu-item item-6">
+          <a className="menu-item item-6 item">
             {this.props.options[6] ? (
               <div
                 className="containerStyle"
@@ -215,7 +215,7 @@ class MenuTree extends React.Component {
             )}
           </a>
 
-          <a className="menu-item item-7">
+          <a className="menu-item item-7 item">
             {this.props.options[7] ? (
               <div
                 className="containerStyle"
