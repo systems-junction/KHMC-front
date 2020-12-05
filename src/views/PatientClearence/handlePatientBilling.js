@@ -1,15 +1,15 @@
-import React, { useEffect, useState, useReducer } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { FaUpload } from "react-icons/fa";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import logoPatientInvoice from "../../assets/img/logoPatientSummaryInvoice.png";
-import PatientDetails from "../../components/PatientDetails/PatientDetailsRCM";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import jsPDF from "jspdf";
-import "jspdf-autotable";
+import React, { useEffect, useState, useReducer } from "react"
+import { makeStyles } from "@material-ui/core/styles"
+import { FaUpload } from "react-icons/fa"
+import Tabs from "@material-ui/core/Tabs"
+import Tab from "@material-ui/core/Tab"
+import Button from "@material-ui/core/Button"
+import TextField from "@material-ui/core/TextField"
+import logoPatientInvoice from "../../assets/img/logoPatientSummaryInvoice.png"
+import PatientDetails from "../../components/PatientDetails/PatientDetailsRCM"
+import useMediaQuery from "@material-ui/core/useMediaQuery"
+import jsPDF from "jspdf"
+import "jspdf-autotable"
 import {
   updateClaim,
   getSearchedpatient,
@@ -22,36 +22,36 @@ import {
   getPatientClearanceURL,
   updatePatientClearanceURL,
   getSearchDischargedPatient,
-} from "../../public/endpoins";
-import axios from "axios";
-import Notification from "../../components/Snackbar/Notification.js";
-import cookie from "react-cookies";
-import Header from "../../components/Header/Header";
-import Back_Arrow from "../../assets/img/Back_Arrow.png";
-import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css";
-import FormData from "form-data";
-import claimsReview from "../../assets/img/ClaimsReview.png";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import InputLabel from "@material-ui/core/InputLabel";
-import Paper from "@material-ui/core/Paper";
-import CustomTable from "../../components/Table/Table";
-import MenuItem from "@material-ui/core/MenuItem";
-import Loader from "react-loader-spinner";
-import AccountCircle from "@material-ui/icons/SearchOutlined";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import BarCode from "../../assets/img/Bar Code.png";
-import Fingerprint from "../../assets/img/fingerprint.png";
-import stylesForPaper from "../../assets/jss/material-dashboard-react/components/paper.js";
-import CurrencyTextField from "@unicef/material-ui-currency-textfield";
-import MUIInputStyle from "../../assets/jss/material-dashboard-react/inputStyle.js";
-import MUIInputStyleForCurrency from "../../assets/jss/material-dashboard-react/inputStylesForCurrency";
-import view_all from "../../assets/img/Eye.png";
+} from "../../public/endpoins"
+import axios from "axios"
+import Notification from "../../components/Snackbar/Notification.js"
+import cookie from "react-cookies"
+import Header from "../../components/Header/Header"
+import Back_Arrow from "../../assets/img/Back_Arrow.png"
+import "../../assets/jss/material-dashboard-react/components/TextInputStyle.css"
+import FormData from "form-data"
+import claimsReview from "../../assets/img/ClaimsReview.png"
+import Table from "@material-ui/core/Table"
+import TableHead from "@material-ui/core/TableHead"
+import TableRow from "@material-ui/core/TableRow"
+import TableBody from "@material-ui/core/TableBody"
+import TableCell from "@material-ui/core/TableCell"
+import InputLabel from "@material-ui/core/InputLabel"
+import Paper from "@material-ui/core/Paper"
+import CustomTable from "../../components/Table/Table"
+import MenuItem from "@material-ui/core/MenuItem"
+import Loader from "react-loader-spinner"
+import AccountCircle from "@material-ui/icons/SearchOutlined"
+import InputAdornment from "@material-ui/core/InputAdornment"
+import BarCode from "../../assets/img/Bar Code.png"
+import Fingerprint from "../../assets/img/fingerprint.png"
+import stylesForPaper from "../../assets/jss/material-dashboard-react/components/paper.js"
+import CurrencyTextField from "@unicef/material-ui-currency-textfield"
+import MUIInputStyle from "../../assets/jss/material-dashboard-react/inputStyle.js"
+import MUIInputStyleForCurrency from "../../assets/jss/material-dashboard-react/inputStylesForCurrency"
+import view_all from "../../assets/img/Eye.png"
 
-import QRCodeScannerComponent from "../../components/QRCodeScanner/QRCodeScanner";
+import QRCodeScannerComponent from "../../components/QRCodeScanner/QRCodeScanner"
 
 const tableHeadingForBillSummary = [
   "Date/Time",
@@ -60,23 +60,23 @@ const tableHeadingForBillSummary = [
   "Quantity",
   "Total Price(JD)",
   //   "Invoice",
-];
+]
 const tableDataKeysForBillSummary = [
   "date",
   ["serviceId", "type"],
   ["serviceId", "name"],
   "qty",
   ["serviceId", "price"],
-];
+]
 
 const statusArray = [
   { key: "Analysis In Progress", value: "Analysis In Progress" },
   { key: "Approved", value: "Approved" },
   { key: "Partial Approved", value: "Partial Approved" },
   { key: "Rejected", value: "Rejected" },
-];
+]
 
-const actions = { print: false };
+const actions = { print: false }
 
 const styles = {
   stylesForButton: {
@@ -148,13 +148,13 @@ const styles = {
     paddingLeft: 5,
     paddingRight: 5,
   },
-};
+}
 
 const useStylesForTabs = makeStyles({
   root: {
     flexGrow: 1,
   },
-});
+})
 
 const useStyles = makeStyles((theme) => ({
   underline: {
@@ -196,7 +196,7 @@ const useStyles = makeStyles((theme) => ({
   //     paddingRight: "50px",
   //   },
   // },
-}));
+}))
 
 const useStylesForInput = makeStyles((theme) => ({
   margin: {
@@ -265,14 +265,14 @@ const useStylesForInput = makeStyles((theme) => ({
     // }
   },
   focusedLabel: {},
-}));
+}))
 
 function AddEditPatientListing(props) {
-  const matches = useMediaQuery("(min-width:600px)");
-  const classes = MUIInputStyle();
-  const classesInput = useStylesForInput();
+  const matches = useMediaQuery("(min-width:600px)")
+  const classes = MUIInputStyle()
+  const classesInput = useStylesForInput()
   // const classes = useStyles()
-  const classesForInput = MUIInputStyleForCurrency();
+  const classesForInput = MUIInputStyleForCurrency()
 
   const initialState = {
     profileNo: "-----",
@@ -301,16 +301,16 @@ function AddEditPatientListing(props) {
     copaymentValue: 0,
 
     // billSummaryArray: "",
-  };
+  }
 
   function reducer(state, { field, value }) {
     return {
       ...state,
       [field]: value,
-    };
+    }
   }
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   const {
     profileNo = "-----",
@@ -337,53 +337,53 @@ function AddEditPatientListing(props) {
     copaymentValue,
 
     // billSummaryArray,
-  } = state;
+  } = state
 
-  const classesForTabs = useStylesForTabs();
+  const classesForTabs = useStylesForTabs()
 
-  const [comingFor, setcomingFor] = useState("add");
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
-  const [successMsg, setsuccessMsg] = useState("");
-  const [openNotification, setOpenNotification] = useState(false);
+  const [comingFor, setcomingFor] = useState("add")
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false)
+  const [errorMsg, setErrorMsg] = useState("")
+  const [successMsg, setsuccessMsg] = useState("")
+  const [openNotification, setOpenNotification] = useState(false)
   // const [isDisabled, setDisabled] = useState(false)
-  const [value, setValue] = React.useState(0);
-  const [DocumentUpload, setDocumentUpload] = useState("");
-  const [imagePreview, setImagePreview] = useState("");
-  const [pdfView, setpdfView] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [itemFound, setItemFound] = useState("");
-  const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false);
-  const [billSummaryArray, setbillSummaryArray] = useState(false);
-  const [ClaimId, setClaimId] = useState(false);
-  const [currentUser, setCurrentUser] = useState("");
+  const [value, setValue] = React.useState(0)
+  const [DocumentUpload, setDocumentUpload] = useState("")
+  const [imagePreview, setImagePreview] = useState("")
+  const [pdfView, setpdfView] = useState("")
+  const [searchQuery, setSearchQuery] = useState("")
+  const [itemFound, setItemFound] = useState("")
+  const [itemFoundSuccessfull, setItemFoundSuccessfully] = useState(false)
+  const [billSummaryArray, setbillSummaryArray] = useState(false)
+  const [ClaimId, setClaimId] = useState(false)
+  const [currentUser, setCurrentUser] = useState("")
 
-  const [patientDetails, setPatientDetails] = useState("");
-  const [selectedPatient, setSelectedPatient] = useState("");
+  const [patientDetails, setPatientDetails] = useState("")
+  const [selectedPatient, setSelectedPatient] = useState("")
 
-  const [totalBillingAmount, setTotalBillingAmount] = useState("");
-  const [remainingAmount, setRemainingAmount] = useState("");
-  const [grandTotal, setGrandTotal] = useState("");
+  const [totalBillingAmount, setTotalBillingAmount] = useState("")
+  const [remainingAmount, setRemainingAmount] = useState("")
+  const [grandTotal, setGrandTotal] = useState("")
 
-  const [externalRequests, setExternalRequests] = useState("");
-  const [externalRequestsFee, setExternalRequestsFee] = useState(0);
+  const [externalRequests, setExternalRequests] = useState("")
+  const [externalRequestsFee, setExternalRequestsFee] = useState(0)
 
-  const [returnedAmount, setReturnedAmount] = useState(0);
+  const [returnedAmount, setReturnedAmount] = useState(0)
 
-  const [internalRequests, setInternalRequests] = useState("");
-  const [internalRequestsFee, setInternalRequestsFee] = useState(0);
-  const [requestNo, setRequestNo] = useState("");
-  const [visitDate, setVisitDate] = useState("");
-  const [patientProfileNo, setPatientProfileNo] = useState("");
-  const [qr, setQr] = useState("");
-  const [timer, setTimer] = useState(null);
-  const [loadSearchedData, setLoadSearchedData] = useState(false);
+  const [internalRequests, setInternalRequests] = useState("")
+  const [internalRequestsFee, setInternalRequestsFee] = useState(0)
+  const [requestNo, setRequestNo] = useState("")
+  const [visitDate, setVisitDate] = useState("")
+  const [patientProfileNo, setPatientProfileNo] = useState("")
+  const [qr, setQr] = useState("")
+  const [timer, setTimer] = useState(null)
+  const [loadSearchedData, setLoadSearchedData] = useState(false)
 
-  const [QRCodeScanner, setQRCodeScanner] = useState(false);
+  const [QRCodeScanner, setQRCodeScanner] = useState(false)
 
   useEffect(() => {
     // setcomingFor(props.history.location.state.comingFor);
-    setCurrentUser(cookie.load("current_user"));
+    setCurrentUser(cookie.load("current_user"))
     // const selectedRec = props.history.location.state.selectedItem
     //   ? props.history.location.state.selectedItem
     //   : "";
@@ -393,14 +393,14 @@ function AddEditPatientListing(props) {
       props.history.location.state &&
       props.history.location.state.selectedItem
     ) {
-      const selectedRec = props.history.location.state.selectedItem;
-      setcomingFor(selectedRec.comingFor);
+      const selectedRec = props.history.location.state.selectedItem
+      setcomingFor(selectedRec.comingFor)
       // getPatientByInfo(selectedRec.patientId._id);
       // setPatientDetails(selectedRec.patientId)
-      handleAddItem(selectedRec.patientId);
-      setInternalRequestsFee(selectedRec.residentFee);
-      setExternalRequestsFee(selectedRec.consultantFee);
-      setGrandTotal(selectedRec.total);
+      handleAddItem(selectedRec.patientId)
+      setInternalRequestsFee(selectedRec.residentFee)
+      setExternalRequestsFee(selectedRec.consultantFee)
+      setGrandTotal(selectedRec.total)
     }
 
     // if (selectedRec) {
@@ -425,7 +425,7 @@ function AddEditPatientListing(props) {
     //     }
     //   });
     // }
-  }, []);
+  }, [])
 
   // function validatePatientForm() {
   //   return (
@@ -469,15 +469,15 @@ function AddEditPatientListing(props) {
 
   const handleAdd = () => {
     if (!patientDetails) {
-      setOpenNotification(true);
-      setErrorMsg("Please add the patient first");
-      return;
+      setOpenNotification(true)
+      setErrorMsg("Please add the patient first")
+      return
     }
 
     if (!grandTotal) {
-      setOpenNotification(true);
-      setErrorMsg("Please calculate the billing amount first");
-      return;
+      setOpenNotification(true)
+      setErrorMsg("Please calculate the billing amount first")
+      return
     }
 
     const params = {
@@ -488,53 +488,53 @@ function AddEditPatientListing(props) {
       subTotal: remainingAmount,
       total: grandTotal,
       returnedAmount,
-    };
-
-    let obj = { ...params };
-    if (requestType === "EDR") {
-      obj = { ...params, edrId: requestId };
-    } else if (requestType === "IPR") {
-      obj = { ...params, iprId: requestId };
     }
 
-    console.log(params);
+    let obj = { ...params }
+    if (requestType === "EDR") {
+      obj = { ...params, edrId: requestId }
+    } else if (requestType === "IPR") {
+      obj = { ...params, iprId: requestId }
+    }
+
+    console.log(params)
 
     axios
       .post(addPatientClearanceURL, obj)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data, "patients data");
+          console.log(res.data.data, "patients data")
           props.history.push({
             pathname: "patientclearence/success",
             state: {
               message: `Patient with MRN: ${profileNo.toUpperCase()} has been cleared successfully`,
             },
-          });
+          })
         } else if (!res.data.success) {
-          setOpenNotification(true);
-          setErrorMsg("Error submitting Claim details");
+          setOpenNotification(true)
+          setErrorMsg("Error submitting Claim details")
         }
       })
       .catch((e) => {
-        console.log("error after adding Claim details", e);
-        setOpenNotification(true);
-        setErrorMsg("Error while adding the Claim details");
-      });
+        console.log("error after adding Claim details", e)
+        setOpenNotification(true)
+        setErrorMsg("Error while adding the Claim details")
+      })
     //}
-    setIsFormSubmitted(true);
-  };
+    setIsFormSubmitted(true)
+  }
 
   const handleEdit = () => {
     if (!patientDetails) {
-      setOpenNotification(true);
-      setErrorMsg("Please add the patient first");
-      return;
+      setOpenNotification(true)
+      setErrorMsg("Please add the patient first")
+      return
     }
 
     if (!grandTotal) {
-      setOpenNotification(true);
-      setErrorMsg("Please calculate the billing amount first");
-      return;
+      setOpenNotification(true)
+      setErrorMsg("Please calculate the billing amount first")
+      return
     }
 
     const params = {
@@ -546,99 +546,99 @@ function AddEditPatientListing(props) {
       subTotal: remainingAmount,
       total: grandTotal,
       returnedAmount,
-    };
-
-    let obj = { ...params };
-    if (requestType === "EDR") {
-      obj = { ...params, edrId: requestId };
-    } else if (requestType === "IPR") {
-      obj = { ...params, iprId: requestId };
     }
 
-    console.log(params);
+    let obj = { ...params }
+    if (requestType === "EDR") {
+      obj = { ...params, edrId: requestId }
+    } else if (requestType === "IPR") {
+      obj = { ...params, iprId: requestId }
+    }
+
+    console.log(params)
 
     axios
       .put(updatePatientClearanceURL, obj)
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.data, "patients data");
+          console.log(res.data.data, "patients data")
           props.history.push({
             pathname: "success",
             state: {
               message: `Patient with MRN: ${profileNo} has been updated successfully`,
             },
-          });
+          })
         } else if (!res.data.success) {
-          setOpenNotification(true);
-          setErrorMsg("Error submitting Claim details");
+          setOpenNotification(true)
+          setErrorMsg("Error submitting Claim details")
         }
       })
       .catch((e) => {
-        console.log("error after adding Claim details", e);
-        setOpenNotification(true);
-        setErrorMsg("Error while adding the Claim details");
-      });
+        console.log("error after adding Claim details", e)
+        setOpenNotification(true)
+        setErrorMsg("Error while adding the Claim details")
+      })
     //}
-    setIsFormSubmitted(true);
-  };
+    setIsFormSubmitted(true)
+  }
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+    setValue(newValue)
+  }
 
   const onClick = () => {
-    setValue(value + 1);
-  };
+    setValue(value + 1)
+  }
 
   const onChangeValue = (e) => {
     dispatch({
       field: e.target.name,
       value: e.target.value.replace(/[^\w\s]/gi, ""),
-    });
-  };
+    })
+  }
 
   const onCalculateTotal = () => {
     if (!patientDetails) {
-      setOpenNotification(true);
-      setErrorMsg("Please add patient discharge request first");
-      return;
+      setOpenNotification(true)
+      setErrorMsg("Please add patient discharge request first")
+      return
     }
-    let totalForExternal = externalRequests * externalRequestsFee;
-    let totalForInternal = internalRequests * internalRequestsFee;
+    let totalForExternal = externalRequests * externalRequestsFee
+    let totalForInternal = internalRequests * internalRequestsFee
 
-    let endTotal = remainingAmount + totalForExternal + totalForInternal;
+    let endTotal = remainingAmount + totalForExternal + totalForInternal
 
     if (copaymentPercentage) {
-      let copaymentValue = (endTotal * copaymentPercentage) / 100;
-      setGrandTotal(endTotal - copaymentValue);
-      dispatch({ field: "copaymentValue", value: copaymentValue });
+      let copaymentValue = (endTotal * copaymentPercentage) / 100
+      setGrandTotal(endTotal - copaymentValue)
+      dispatch({ field: "copaymentValue", value: copaymentValue })
     } else {
-      setGrandTotal(endTotal);
+      setGrandTotal(endTotal)
     }
     if (endTotal < patientDetails.amountReceived) {
-      setReturnedAmount(patientDetails.amountReceived - endTotal);
+      setReturnedAmount(patientDetails.amountReceived - endTotal)
     } else {
-      setReturnedAmount(0);
+      setReturnedAmount(0)
     }
-  };
+  }
 
   if (openNotification) {
     setTimeout(() => {
-      setOpenNotification(false);
-      setErrorMsg("");
-      setsuccessMsg("");
-    }, 2000);
+      setOpenNotification(false)
+      setErrorMsg("")
+      setsuccessMsg("")
+    }, 2000)
   }
 
   const formatDate = (date) => {
-    const d = new Date(date);
+    const d = new Date(date)
 
-    let minutes = "";
+    let minutes = ""
 
     if (d.getHours().toString().length === 1) {
-      minutes = "0" + d.getHours();
+      minutes = "0" + d.getHours()
     } else {
-      minutes = d.getHours();
+      minutes = d.getHours()
     }
 
     return (
@@ -657,32 +657,32 @@ function AddEditPatientListing(props) {
       minutes +
       ":" +
       ("00" + d.getMinutes()).slice(-2)
-    );
-  };
+    )
+  }
 
   const handleKeyDown = (e) => {
     if (e.keyCode === 13) {
-      triggerChange();
+      triggerChange()
     }
-  };
+  }
 
   const triggerChange = (a) => {
-    handleSearch(a);
-  };
+    handleSearch(a)
+  }
 
   const handlePauseSearch = (e) => {
-    setLoadSearchedData(true);
-    clearTimeout(timer);
+    setLoadSearchedData(true)
+    clearTimeout(timer)
 
-    const a = e.target.value.replace(/[^\w\s]/gi, "");
-    setSearchQuery(a);
+    const a = e.target.value.replace(/[^\w\s]/gi, "")
+    setSearchQuery(a)
 
     setTimer(
       setTimeout(() => {
-        triggerChange(a);
-      }, 600)
-    );
-  };
+        triggerChange(a)
+      }, 600),
+    )
+  }
 
   const handleSearch = (e) => {
     if (e.length >= 3) {
@@ -692,120 +692,125 @@ function AddEditPatientListing(props) {
             "/" +
             currentUser.functionalUnit._id +
             "/" +
-            e
+            e,
         )
         .then((res) => {
           if (res.data.success) {
             if (res.data.data.length > 0) {
-              console.log("patient data ", res.data.data);
-              setItemFoundSuccessfully(true);
-              setItemFound(res.data.data);
-              setLoadSearchedData(false);
+              console.log("patient data ", res.data.data)
+              setItemFoundSuccessfully(true)
+              setItemFound(res.data.data)
+              setLoadSearchedData(false)
             } else {
-              setItemFoundSuccessfully(false);
-              setItemFound("");
-              setLoadSearchedData(false);
+              setItemFoundSuccessfully(false)
+              setItemFound("")
+              setLoadSearchedData(false)
             }
           }
         })
         .catch((e) => {
-          console.log("error while searching patient", e);
-        });
+          console.log("error while searching patient", e)
+        })
     }
-  };
-
-  function handleAddItem(i) {
-    console.log("selected banda", i);
-
-    dispatch({ field: "medicationArray", value: "" });
-    dispatch({ field: "diagnosisArray", value: "" });
-
-    setQr(i.QR);
-
-    setSelectedPatient(i);
-    setPatientDetails(i);
-
-    dispatch({ field: "patientId", value: i._id });
-    dispatch({ field: "firstName", value: i.firstName });
-    dispatch({ field: "lastName", value: i.lastName });
-    dispatch({ field: "gender", value: i.gender });
-    dispatch({ field: "age", value: i.age });
-    dispatch({ field: "weight", value: i.weight });
-    dispatch({ field: "QR", value: i.QR });
-
-    dispatch({ field: "profileNo", value: i.profileNo });
-    dispatch({ field: "insuranceNumber", value: i.insuranceNo });
-    dispatch({ field: "insuranceVendor", value: i.insuranceVendor });
-
-    setSearchQuery("");
-    getBillSummary(i._id, i.amountReceived);
-    getPatientByInfo(i._id);
   }
 
-  const onDischargeInvoice = () => {
+  function handleAddItem(i) {
+    console.log("selected banda", i)
+
+    dispatch({ field: "medicationArray", value: "" })
+    dispatch({ field: "diagnosisArray", value: "" })
+
+    setQr(i.QR)
+
+    setSelectedPatient(i)
+    setPatientDetails(i)
+
+    dispatch({ field: "patientId", value: i._id })
+    dispatch({ field: "firstName", value: i.firstName })
+    dispatch({ field: "lastName", value: i.lastName })
+    dispatch({ field: "gender", value: i.gender })
+    dispatch({ field: "age", value: i.age })
+    dispatch({ field: "weight", value: i.weight })
+    dispatch({ field: "QR", value: i.QR })
+
+    dispatch({ field: "profileNo", value: i.profileNo })
+    dispatch({ field: "insuranceNumber", value: i.insuranceNo })
+    dispatch({ field: "insuranceVendor", value: i.insuranceVendor })
+
+    setSearchQuery("")
+    getBillSummary(i._id, i.amountReceived)
+    getPatientByInfo(i._id)
+  }
+
+  const onDischargeInvoice = async () => {
+    console.log("grandTotal", grandTotal)
+    console.log("billSummaryArray.length", billSummaryArray.length)
+    console.log("qr", qr)
+    console.log("QR", QR)
+
     if (grandTotal === "") {
-      setOpenNotification(true);
-      setErrorMsg("Please calculate total amount before creating invoice");
+      setOpenNotification(true)
+      setErrorMsg("Please calculate total amount before creating invoice")
     } else if (billSummaryArray.length === 0) {
-      setOpenNotification(true);
-      setErrorMsg("No service is used, So invoice cannot be generated");
+      setOpenNotification(true)
+      setErrorMsg("No service is used, So invoice cannot be generated")
     } else {
-      var now = new Date();
-      var start = new Date(now.getFullYear(), 0, 0);
+      var now = new Date()
+      var start = new Date(now.getFullYear(), 0, 0)
       var diff =
         now -
         start +
-        (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000;
-      var oneDay = 1000 * 60 * 60 * 24;
-      var day = Math.floor(diff / oneDay);
-      var dateNow = new Date();
+        (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000
+      var oneDay = 1000 * 60 * 60 * 24
+      var day = Math.floor(diff / oneDay)
+      var dateNow = new Date()
       var YYYY = dateNow
         .getFullYear()
         .toString()
-        .substr(-2);
-      var HH = dateNow.getHours();
-      var mm = dateNow.getMinutes();
-      let ss = dateNow.getSeconds();
-      const invoiceNo = "IN" + day + YYYY + HH + mm + ss;
+        .substr(-2)
+      var HH = dateNow.getHours()
+      var mm = dateNow.getMinutes()
+      let ss = dateNow.getSeconds()
+      const invoiceNo = "IN" + day + YYYY + HH + mm + ss
 
-      var doc = new jsPDF();
+      var doc = new jsPDF()
 
-      var logo = new Image();
-      logo.src = logoPatientInvoice;
+      var logo = new Image()
+      logo.src = logoPatientInvoice
 
       // header
-      doc.setFontSize(15);
-      doc.addImage(logo, "PNG", 10, 10, 55, 30);
-      doc.text(60, 15, "Al-Khalidi Hospital & Medical Center");
-      doc.text(77, 20, "Detailed ER Invoice");
-      doc.line(80, 22.5, 120, 22.5);
-      doc.text(93, 28, "CASH");
-      doc.line(80, 30, 120, 30);
-      doc.setFontSize(12);
-      doc.text(170, 14, "Amman Jordan");
+      doc.setFontSize(15)
+      doc.addImage(logo, "PNG", 10, 10, 55, 30)
+      doc.text(60, 15, "Al-Khalidi Hospital & Medical Center")
+      doc.text(77, 20, "Detailed ER Invoice")
+      doc.line(80, 22.5, 120, 22.5)
+      doc.text(93, 28, "CASH")
+      doc.line(80, 30, 120, 30)
+      doc.setFontSize(12)
+      doc.text(170, 14, "Amman Jordan")
 
       // background coloring
-      doc.setFillColor(255, 255, 200);
-      doc.rect(10, 45, 190, 20, "F");
+      doc.setFillColor(255, 255, 200)
+      doc.rect(10, 45, 190, 20, "F")
 
       // information of patient
-      doc.setFontSize(10);
-      doc.setFont("times", "bold");
-      doc.text(12, 50, "Patient Name:");
-      doc.text(12, 55, "Visit Date:");
-      doc.text(12, 60, "Patient MRN:");
-      doc.text(120, 50, "Invoice No:");
-      doc.text(120, 55, "Invoice Date");
-      doc.text(120, 60, "Visit No:");
+      doc.setFontSize(10)
+      doc.setFont("times", "bold")
+      doc.text(12, 50, "Patient Name:")
+      doc.text(12, 55, "Visit Date:")
+      doc.text(12, 60, "Patient MRN:")
+      doc.text(120, 50, "Invoice No:")
+      doc.text(120, 55, "Invoice Date")
+      doc.text(120, 60, "Visit No:")
 
       // dynamic data info patient
-      doc.setFont("times", "normal");
-      doc.text(47, 50, `${firstName + ` ` + lastName}`);
-      doc.text(47, 55, `${visitDate.substr(0, 10)}`);
-      doc.text(47, 60, `${patientProfileNo}`);
-      doc.text(155, 50, `${invoiceNo}`);
-      doc.text(155, 55, `${dateNow.toISOString().substr(0, 10)} ${HH}:${mm}`);
-      doc.text(155, 60, `${requestNo}`);
+      doc.setFont("times", "normal")
+      doc.text(47, 50, `${firstName + ` ` + lastName}`)
+      doc.text(47, 55, `${visitDate.substr(0, 10)}`)
+      doc.text(47, 60, `${patientProfileNo}`)
+      doc.text(155, 50, `${invoiceNo}`)
+      doc.text(155, 55, `${dateNow.toISOString().substr(0, 10)} ${HH}:${mm}`)
+      doc.text(155, 60, `${requestNo}`)
 
       // heading 1
 
@@ -819,7 +824,7 @@ function AddEditPatientListing(props) {
         tableWidth: "auto",
         headStyles: { fillColor: [44, 109, 221] },
         html: "#my-table",
-      });
+      })
 
       // heading 2
 
@@ -829,29 +834,29 @@ function AddEditPatientListing(props) {
       // table 2
 
       // footer
-      doc.setFontSize(12);
-      doc.setFont("times", "bold");
-      doc.text(120, 230, "Consultant Fee");
-      doc.text(190, 230, "JD");
-      doc.text(120, 235, "Doctor Fee");
-      doc.text(190, 235, "JD");
-      doc.text(120, 240, "Deposited Amount");
-      doc.text(190, 240, "JD");
-      doc.text(120, 245, "Total Services Bill");
-      doc.text(190, 245, "JD");
+      doc.setFontSize(12)
+      doc.setFont("times", "bold")
+      doc.text(120, 230, "Consultant Fee")
+      doc.text(190, 230, "JD")
+      doc.text(120, 235, "Doctor Fee")
+      doc.text(190, 235, "JD")
+      doc.text(120, 240, "Deposited Amount")
+      doc.text(190, 240, "JD")
+      doc.text(120, 245, "Total Services Bill")
+      doc.text(190, 245, "JD")
 
-      doc.text(120, 250, "Sub Total");
-      doc.text(190, 250, "JD");
-      doc.text(120, 255, "Total");
-      doc.text(190, 255, "JD");
+      doc.text(120, 250, "Sub Total")
+      doc.text(190, 250, "JD")
+      doc.text(120, 255, "Total")
+      doc.text(190, 255, "JD")
 
-      doc.text(10, 250, "Signature & Stamp");
-      doc.line(10, 255, 60, 255);
+      doc.text(10, 250, "Signature & Stamp")
+      doc.line(10, 255, 60, 255)
 
       // dynamic text
-      doc.setFont("times", "normal");
-      doc.text(169, 230, `${externalRequestsFee.toFixed(4)}`);
-      doc.text(169, 235, `${internalRequestsFee.toFixed(4)}`);
+      doc.setFont("times", "normal")
+      doc.text(169, 230, `${externalRequestsFee.toFixed(4)}`)
+      doc.text(169, 235, `${internalRequestsFee.toFixed(4)}`)
       doc.text(
         169,
         240,
@@ -859,36 +864,52 @@ function AddEditPatientListing(props) {
           patientDetails.amountReceived
             ? patientDetails.amountReceived.toFixed(4)
             : "0.0000"
-        }`
-      );
-      doc.text(169, 245, `${totalBillingAmount.toFixed(4)}`);
-      doc.text(169, 250, `${remainingAmount.toFixed(4)}`);
-      doc.text(169, 255, `${grandTotal.toFixed(4)}`);
+        }`,
+      )
+      doc.text(169, 245, `${totalBillingAmount.toFixed(4)}`)
+      doc.text(169, 250, `${remainingAmount.toFixed(4)}`)
+      doc.text(169, 255, `${grandTotal.toFixed(4)}`)
 
       // bar code
-      doc.line(0, 260, 210, 260);
+      doc.line(0, 260, 210, 260)
       if (QR) {
-        var img = new Image();
-        img.src = `${audioURL}${QR}`;
-        doc.addImage(img, "PNG", 172.9, 266, 25, 25);
+        const a = await checkImage(`${audioURL}${QR}`)
+        console.log(a)
+        if (a.status === "ok") {
+          const b = new Image()
+          b.src = a.path
+          doc.addImage(b, "PNG", 172.9, 266, 25, 25)
+        }
       }
 
-      doc.save(`Invoice ${invoiceNo}.pdf`);
+      doc.save(`Invoice ${invoiceNo}.pdf`)
     }
-  };
+  }
+
+  const checkImage = (path) => {
+    return new Promise((resolve) => {
+      var img = new Image()
+      img.onload = () => resolve({ path, status: "ok" })
+      img.onerror = () => resolve({ path, status: "error" })
+
+      img.src = path
+
+      return img
+    })
+  }
 
   function getBillSummary(i, payment) {
     axios
       .get(getedripr + "/" + i)
       .then((res) => {
         if (res.data.success) {
-          console.log("response for search", res.data.data);
+          console.log("response for search", res.data.data)
 
-          setRequestNo(res.data.data.requestNo);
-          setInternalRequests(res.data.data.residentNotes.length);
-          setExternalRequests(res.data.data.consultationNote.length);
-          setVisitDate(res.data.data.createdAt);
-          setPatientProfileNo(res.data.data.patientId.profileNo);
+          setRequestNo(res.data.data.requestNo)
+          setInternalRequests(res.data.data.residentNotes.length)
+          setExternalRequests(res.data.data.consultationNote.length)
+          setVisitDate(res.data.data.createdAt)
+          setPatientProfileNo(res.data.data.patientId.profileNo)
 
           //   dispatch({
           //     field: "treatmentDetail",
@@ -896,20 +917,20 @@ function AddEditPatientListing(props) {
           //   });
           //   dispatch({ field: "document", value: res.data.rc.document });
 
-          let totalAmount = 0;
+          let totalAmount = 0
 
-          let pharm = [];
+          let pharm = []
           for (let i = 0; i < res.data.data.pharmacyRequest.length; i++) {
             // let amount = 0;
-            let singlePR = res.data.data.pharmacyRequest[i];
+            let singlePR = res.data.data.pharmacyRequest[i]
             if (singlePR.status === "Completed") {
               for (let j = 0; j < singlePR.item.length; j++) {
                 // console.log(singlePR.medicine[j].itemId.purchasePrice)
-                let amount = 0;
+                let amount = 0
 
-                var singleItemBatch = singlePR.item[j].batchArray;
+                var singleItemBatch = singlePR.item[j].batchArray
 
-                console.log("single item batch", singleItemBatch);
+                console.log("single item batch", singleItemBatch)
                 // amount =
                 //   amount +
                 //   singlePR.item[j].itemId.issueUnitCost *
@@ -923,11 +944,11 @@ function AddEditPatientListing(props) {
                 for (let k = 0; k < singleItemBatch.length; k++) {
                   amount =
                     amount +
-                    singleItemBatch[k].price * singleItemBatch[k].quantity;
+                    singleItemBatch[k].price * singleItemBatch[k].quantity
 
                   totalAmount =
                     totalAmount +
-                    singleItemBatch[k].price * singleItemBatch[k].quantity;
+                    singleItemBatch[k].price * singleItemBatch[k].quantity
                 }
 
                 let obj = {
@@ -938,17 +959,17 @@ function AddEditPatientListing(props) {
                   },
                   date: res.data.data.pharmacyRequest[i].dateGenerated,
                   qty: singlePR.item[j].requestedQty,
-                };
-                pharm.push(obj);
+                }
+                pharm.push(obj)
               }
             }
           }
 
-          let rad = [];
+          let rad = []
           for (let i = 0; i < res.data.data.radiologyRequest.length; i++) {
-            let singlePR = res.data.data.radiologyRequest[i];
+            let singlePR = res.data.data.radiologyRequest[i]
 
-            totalAmount = totalAmount + singlePR.price;
+            totalAmount = totalAmount + singlePR.price
 
             let obj = {
               serviceId: {
@@ -959,14 +980,14 @@ function AddEditPatientListing(props) {
               },
               date: res.data.data.radiologyRequest[i].date,
               qty: 1,
-            };
-            rad.push(obj);
+            }
+            rad.push(obj)
           }
 
-          let lab = [];
+          let lab = []
           for (let i = 0; i < res.data.data.labRequest.length; i++) {
-            let singlePR = res.data.data.labRequest[i];
-            totalAmount = totalAmount + singlePR.price;
+            let singlePR = res.data.data.labRequest[i]
+            totalAmount = totalAmount + singlePR.price
             let obj = {
               serviceId: {
                 ...singlePR.serviceId,
@@ -976,15 +997,15 @@ function AddEditPatientListing(props) {
               },
               date: res.data.data.labRequest[i].date,
               qty: 1,
-            };
-            lab.push(obj);
+            }
+            lab.push(obj)
           }
 
-          let nurse = [];
+          let nurse = []
           if (res.data.data.nurseService) {
             for (let i = 0; i < res.data.data.nurseService.length; i++) {
-              let singlePR = res.data.data.nurseService[i];
-              totalAmount = totalAmount + singlePR.price;
+              let singlePR = res.data.data.nurseService[i]
+              totalAmount = totalAmount + singlePR.price
               let obj = {
                 serviceId: {
                   ...singlePR.serviceId,
@@ -994,8 +1015,8 @@ function AddEditPatientListing(props) {
                 },
                 date: res.data.data.nurseService[i].date,
                 qty: 1,
-              };
-              nurse.push(obj);
+              }
+              nurse.push(obj)
             }
           }
           setbillSummaryArray(
@@ -1005,30 +1026,30 @@ function AddEditPatientListing(props) {
               pharm.reverse(),
               lab.reverse(),
               rad.reverse(),
-              nurse.reverse()
-            )
-          );
+              nurse.reverse(),
+            ),
+          )
 
-          setTotalBillingAmount(totalAmount);
-          console.log(payment);
+          setTotalBillingAmount(totalAmount)
+          console.log(payment)
           if (payment) {
             if (totalAmount - parseInt(payment) > 0) {
-              setRemainingAmount(totalAmount - parseInt(payment));
+              setRemainingAmount(totalAmount - parseInt(payment))
             } else {
-              setRemainingAmount(totalAmount);
+              setRemainingAmount(totalAmount)
             }
           } else {
-            setRemainingAmount(totalAmount);
+            setRemainingAmount(totalAmount)
           }
         } else if (!res.data.success) {
-          setErrorMsg(res.data.error);
-          setOpenNotification(true);
+          setErrorMsg(res.data.error)
+          setOpenNotification(true)
         }
-        return res;
+        return res
       })
       .catch((e) => {
-        console.log("error: ", e);
-      });
+        console.log("error: ", e)
+      })
   }
 
   const getPatientByInfo = (id) => {
@@ -1037,83 +1058,80 @@ function AddEditPatientListing(props) {
       .then((res) => {
         if (res.data.success) {
           if (res.data.data) {
-            console.log(
-              "Response after getting EDR/IPR data : ",
-              res.data.data
-            );
+            console.log("Response after getting EDR/IPR data : ", res.data.data)
 
             dispatch({
               field: "copaymentPercentage",
               value: res.data.data.patientId.payment,
-            });
+            })
 
             Object.entries(res.data.data).map(([key, val]) => {
               if (val && typeof val === "object") {
                 if (key === "residentNotes") {
                   if (val && val.length > 0) {
-                    let data = [];
+                    let data = []
                     val.map((d) => {
                       d.code.map((singleCode) => {
-                        let found = data.find((i) => i === singleCode);
+                        let found = data.find((i) => i === singleCode)
                         if (!found) {
-                          data.push(singleCode);
+                          data.push(singleCode)
                         }
-                      });
-                    });
-                    console.log(data);
+                      })
+                    })
+                    console.log(data)
                     dispatch({
                       field: "diagnosisArray",
                       value: data,
-                    });
+                    })
                   }
                 } else if (key === "pharmacyRequest") {
-                  let data = [];
+                  let data = []
                   val.map((d) => {
                     d.item.map((item) => {
-                      let found = data.find((i) => i === item.itemId.name);
+                      let found = data.find((i) => i === item.itemId.name)
                       if (!found) {
-                        data.push(item.itemId.name);
+                        data.push(item.itemId.name)
                       }
-                    });
-                  });
-                  dispatch({ field: "medicationArray", value: data });
+                    })
+                  })
+                  dispatch({ field: "medicationArray", value: data })
                 }
               } else if (key === "_id") {
-                dispatch({ field: "requestId", value: val });
+                dispatch({ field: "requestId", value: val })
               } else {
-                dispatch({ field: key, value: val });
+                dispatch({ field: key, value: val })
               }
-            });
+            })
           }
         } else {
-          setOpenNotification(true);
-          setErrorMsg("EDR/IPR not generated for patient");
+          setOpenNotification(true)
+          setErrorMsg("EDR/IPR not generated for patient")
         }
       })
       .catch((e) => {
-        setOpenNotification(true);
-        setErrorMsg(e);
-      });
-  };
+        setOpenNotification(true)
+        setErrorMsg(e)
+      })
+  }
 
   const handleInvoicePrint = () => {
-    alert("Printer not attached");
-  };
+    alert("Printer not attached")
+  }
 
   function scanQRCode() {
-    setQRCodeScanner(true);
+    setQRCodeScanner(true)
   }
 
   function handleScanQR(data) {
-    setQRCodeScanner(false);
-    console.log("data after parsing", JSON.parse(data).profileNo);
+    setQRCodeScanner(false)
+    console.log("data after parsing", JSON.parse(data).profileNo)
 
     handlePauseSearch({
       target: {
         value: JSON.parse(data).profileNo,
         type: "text",
       },
-    });
+    })
   }
 
   if (QRCodeScanner) {
@@ -1125,7 +1143,7 @@ function AddEditPatientListing(props) {
           undefined
         )}
       </div>
-    );
+    )
   }
 
   return (
@@ -1332,7 +1350,7 @@ function AddEditPatientListing(props) {
                                         <TableCell>{i.gender}</TableCell>
                                         <TableCell>{i.age}</TableCell>
                                       </TableRow>
-                                    );
+                                    )
                                   })}
                                 </TableBody>
                               </Table>
@@ -1959,9 +1977,9 @@ function AddEditPatientListing(props) {
         )}
       </Table>
     </div>
-  );
+  )
 }
-export default AddEditPatientListing;
+export default AddEditPatientListing
 
 {
   /* <div className={`container-fluid ${classes.root}`}>
