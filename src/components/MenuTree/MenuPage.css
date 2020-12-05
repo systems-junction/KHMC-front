@@ -396,11 +396,11 @@
   .menu-open:checked ~ .item-3 {
     -webkit-transform: translate(175.9466px, 24.47586px) !important;
     /* transform: translate(128.9466px, 24.47586px) !important; */
-    transform: translate(121.9466px, 38.47586px) !important;
+    transform: translate(121.9466px, 36.47586px) !important;
   }
   .item-3::after {
     transition: all 0.5s ease !important;
-    transform: rotate(107deg) !important;
+    transform: rotate(100deg) !important;
     transform-origin: 0% 0% !important;
   }
 
