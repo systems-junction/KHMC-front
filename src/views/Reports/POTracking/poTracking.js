@@ -416,15 +416,30 @@ export default function PurchaseRequest(props) {
           }}
         >
           {purchaseOrders && purchaseOrders.length > 0 ? (
-            <CustomTable
-              tableData={purchaseOrders}
-              tableDataKeys={tableDataKeys}
-              tableHeading={tableHeading}
-              action={""}
-              borderBottomColor={"#60d69f"}
-              borderBottomWidth={20}
-              id={"po_tracking"}
-            />
+            <>
+              <CustomTable
+                tableData={purchaseOrders}
+                tableDataKeys={tableDataKeys}
+                tableHeading={tableHeading}
+                action={""}
+                borderBottomColor={"#60d69f"}
+                borderBottomWidth={20}
+              />
+
+              <div style={{ display: "none" }}>
+                <CustomTable
+                  tableData={purchaseOrders}
+                  tableDataKeys={tableDataKeys}
+                  tableHeading={tableHeading}
+                  action={""}
+                  borderBottomColor={"#60d69f"}
+                  borderBottomWidth={20}
+                  id={"po_tracking"}
+                  doNotPagination={true}
+                  matchNotRequired={true}
+                />
+              </div>
+            </>
           ) : isLoading ? (
             <div className="LoaderStyle">
               <Loader type="TailSpin" color="red" height={50} width={50} />
