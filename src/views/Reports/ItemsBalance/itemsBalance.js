@@ -932,16 +932,32 @@ export default function PurchaseRequest(props) {
               </h4>
             </div>
           ) : purchaseOrders && purchaseOrders.length > 0 ? (
-            <CustomTable
-              tableData={purchaseOrders}
-              tableDataKeys={tableDataKeys}
-              tableHeading={tableHeading}
-              action={""}
-              borderBottomColor={"#60d69f"}
-              borderBottomWidth={20}
-              id={"itemsBalanceFU"}
-              allowPagination={true}
-            />
+            <>
+              <div style={{}}>
+                <CustomTable
+                  tableData={purchaseOrders}
+                  tableDataKeys={tableDataKeys}
+                  tableHeading={tableHeading}
+                  action={""}
+                  borderBottomColor={"#60d69f"}
+                  borderBottomWidth={20}
+                  // id={"itemsBalanceFU"}
+                />
+              </div>
+              <div style={{ display: "none" }}>
+                <CustomTable
+                  tableData={purchaseOrders}
+                  tableDataKeys={tableDataKeys}
+                  tableHeading={tableHeading}
+                  action={""}
+                  borderBottomColor={"#60d69f"}
+                  borderBottomWidth={20}
+                  id={"itemsBalanceFU"}
+                  doNotPagination={true}
+                  matchNotRequired={true}
+                />
+              </div>
+            </>
           ) : (
             undefined
           )}

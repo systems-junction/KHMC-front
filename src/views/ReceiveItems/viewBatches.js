@@ -15,6 +15,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import "../../assets/jss/material-dashboard-react/components/loaderStyle.css";
 
 import { audioURL } from "../../public/endpoins";
+import ReceiveItems from "../MaterialReceiving/addEditReceiveItems.js";
+import business_Unit from "../../assets/img/Receive Item.png";
 
 const tableHeading = [
   "Batch No",
@@ -28,26 +30,40 @@ const tableDataKeys = ["batchNumber", "expiryDate", "price", "quantity"];
 const actions = { download: true };
 
 export default function PurchaseRequest(props) {
-  const [purchaseRequests, setPurchaseRequest] = useState("");
   const [deleteItem, setdeleteItem] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [openNotification, setOpenNotification] = useState(false);
 
   const [selectedBatchQRLink, setSelectedBatchQRLink] = useState("");
+  const [batchNo, setSelectedBatchNo] = useState("");
 
   function handleDownload(obj) {
     setSelectedBatchQRLink(`${audioURL}${obj.qrCode}`);
-    console.log("handle view called", obj);
+    setSelectedBatchNo(obj.batchNumber);
   }
 
   useEffect(() => {
     if (selectedBatchQRLink) {
-      console.log(selectedBatchQRLink);
-      document.getElementById("linkForBatch").click();
+      downloadEmployeeData();
+      // document.getElementById("linkForBatch").click();
       setSelectedBatchQRLink("");
+      setSelectedBatchNo("");
     }
   }, [selectedBatchQRLink]);
+
+  const downloadEmployeeData = () => {
+    fetch(selectedBatchQRLink).then((response) => {
+      response.blob().then((blob) => {
+        let url = window.URL.createObjectURL(blob);
+        let a = document.createElement("a");
+        a.href = url;
+        a.download = `${batchNo}.png`;
+        a.click();
+      });
+      //window.location.href = response.url;
+    });
+  };
 
   return (
     <Dialog
@@ -84,18 +100,6 @@ export default function PurchaseRequest(props) {
             </h5>
           )}
         </div>
-
-        <>
-          <a
-            style={{ display: "none" }}
-            id="linkForBatch"
-            target="popup"
-            href={selectedBatchQRLink}
-            download
-          >
-            Download Image
-          </a>
-        </>
       </DialogContent>
     </Dialog>
   );

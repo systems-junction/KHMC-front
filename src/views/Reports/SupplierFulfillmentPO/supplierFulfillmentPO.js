@@ -388,15 +388,29 @@ export default function PurchaseRequest(props) {
               </h4>
             </div>
           ) : purchaseOrders && purchaseOrders.length > 0 ? (
-            <CustomTable
-              tableData={purchaseOrders}
-              tableDataKeys={tableDataKeys}
-              tableHeading={tableHeading}
-              action={""}
-              borderBottomColor={"#60d69f"}
-              borderBottomWidth={20}
-              id={"supplierFulfillmentPOs"}
-            />
+            <>
+              <CustomTable
+                tableData={purchaseOrders}
+                tableDataKeys={tableDataKeys}
+                tableHeading={tableHeading}
+                action={""}
+                borderBottomColor={"#60d69f"}
+                borderBottomWidth={20}
+              />
+              <div style={{ display: "none" }}>
+                <CustomTable
+                  tableData={purchaseOrders}
+                  tableDataKeys={tableDataKeys}
+                  tableHeading={tableHeading}
+                  action={""}
+                  borderBottomColor={"#60d69f"}
+                  borderBottomWidth={20}
+                  id={"supplierFulfillmentPOs"}
+                  doNotPagination={true}
+                  matchNotRequired={true}
+                />
+              </div>
+            </>
           ) : (
             undefined
           )}
