@@ -1,33 +1,12 @@
-// import React from 'react';
-
-import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
-
-import Snackbar from "../../../components/Snackbar/Snackbar";
-import Notification from "../../../components/Snackbar/Notification.js";
-
-import AddAlert from "@material-ui/icons/AddAlert";
-
 import { Redirect } from "react-router-dom";
-import axios from "axios";
 import cookie from "react-cookies";
-
 import Header from "../../../components/Header/Header";
-
 import React, { useEffect } from "react";
 import "../MenuPage.css";
-import { render } from "react-dom";
-
 import Back from "../../../assets/img/Back_Arrow.png";
-
-import KHMC_White from "../../../assets/img/KHMC_White.png";
-
-import Influence_white from "../../../assets/img/Influence_white.png";
-import ReturnItem from "../../../assets/img/Return Item.png";
-
 import MenuTree from "../../../components/MenuTree/MenuTree";
-
 import Reports from "../../../assets/img/Reports.png";
+import Others from "../../../assets/img/Others.png";
 
 const admin = [
   { img: Reports, text: "Warehouse Reports", path: "" },
@@ -44,18 +23,51 @@ const admin = [
     text: "Supplier Fulfillment POs",
     path: "warehousereports/supplierfullfillment",
   },
+
+  {
+    img: Reports,
+    text: "Expired Items",
+    path: "warehousereports/expireditems",
+  },
+
+  {
+    img: Reports,
+    text: "Nearly Expired Items",
+    path: "warehousereports/nearlyexpireditems",
+  },
+
+  // {
+  //   img: Reports,
+  //   text: "Disposed Items",
+  //   path: "warehousereports/disposed",
+  // },
+  {
+    img: Others,
+    text: "Others",
+    path: "warehousereports/others",
+  },
 ];
 
-// const warehouseInventoryKeeper = [
-//   { img: Reports, text: "Warehouse Reports", path: "" },
-//   { img: Reports, text: "PO Tracking", path: "warehousereports/potracking" },
-//   { img: Reports, text: "Stock Levels", path: "warehousereports/stocklevels" },
-//   {
-//     img: Reports,
-//     text: "Items Balance",
-//     path: "warehousereports/itemsbalance",
-//   },
-// ];
+const adminForOthers = [
+  { img: Reports, text: "Warehouse Reports", path: "" },
+
+  {
+    img: Reports,
+    text: "Consumption Balance",
+    path: "others/consumptionbalance",
+  },
+  {
+    img: Reports,
+    text: "Slow Moving Items",
+    path: "others/slowmovingitems",
+  },
+
+  {
+    img: Reports,
+    text: "Warehouse Transfer",
+    path: "others/whtransfer",
+  },
+];
 
 class HomeScreen extends React.Component {
   constructor(props) {
@@ -66,6 +78,8 @@ class HomeScreen extends React.Component {
       goBack: false,
 
       currentUser: "",
+
+      openOther: false,
     };
   }
 
@@ -105,18 +119,34 @@ class HomeScreen extends React.Component {
           backgroundColor: "#2B62CC",
         }}
       >
-        <Header history={this.props.history}/>
+        <Header history={this.props.history} />
 
-        <MenuTree
-          history={this.props.history}
-          options={
-            userType && (userType.type === "admin" || userType.type === "super admin") 
-              ? admin
-              : userType && userType.type === "Warehouse Inventory Keeper"
-              ? admin
-              : ""
-          }
-        />
+        {this.props.history.location.pathname ===
+        "/home/reports/warehousereports" ? (
+          <MenuTree
+            history={this.props.history}
+            options={
+              userType &&
+              (userType.type === "admin" || userType.type === "super admin")
+                ? admin
+                : userType && userType.type === "Warehouse Inventory Keeper"
+                ? admin
+                : ""
+            }
+          />
+        ) : (
+          <MenuTree
+            history={this.props.history}
+            options={
+              userType &&
+              (userType.type === "admin" || userType.type === "super admin")
+                ? adminForOthers
+                : userType && userType.type === "Warehouse Inventory Keeper"
+                ? adminForOthers
+                : ""
+            }
+          />
+        )}
         {/* </div> */}
 
         <div

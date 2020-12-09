@@ -28,25 +28,97 @@ import ReturnItem from "../../../assets/img/Return Item.png";
 import MenuTree from "../../../components/MenuTree/MenuTree";
 
 import Reports from "../../../assets/img/Reports.png";
+import Others from "../../../assets/img/Others.png";
 
 const admin = [
   { img: Reports, text: "FuncU Reports" },
   { img: Reports, text: "Stock Levels", path: "fureports/stocklevels" },
   { img: Reports, text: "Items Balance", path: "fureports/itemsbalance" },
+  {
+    img: Reports,
+    text: "Expired Items",
+    path: "fureports/expireditems",
+  },
 
-  //   { img: WMS, text: "WMS", path: "controlroom/wms" },
-  //   { img: FIN, text: "FIN" },
-  //   { img: BU, text: "BusU Mgmt", path: "controlroom/bus" },
-  //   { img: FunctionalUnit, text: "FuncU Mgmt", path: "controlroom/fus" },
-  //   { img: Staff, text: "Staff", path: "controlroom/staff" },
-  //   { text: "", path: "", path: "" },
+  {
+    img: Reports,
+    text: "Nearly Expired Items",
+    path: "fureports/nearlyexpireditems",
+  },
+
+  {
+    img: Reports,
+    text: "Disposed Items",
+    path: "fureports/disposed",
+  },
+
+  // {
+  //   img: Reports,
+  //   text: "Consumption Balance",
+  //   path: "fureports/consumptionbalance",
+  // },
+
+  // {
+  //   img: Others,
+  //   text: "Others",
+  //   path: "fureports/others",
+  // },
+
+  {
+    img: Reports,
+    text: "Slow Moving Items",
+    path: "fureports/slowmovingitems",
+  },
 ];
 
 const fuInventoryKeeper = [
   { img: Reports, text: "FuncU Reports" },
   { img: Reports, text: "Stock Levels", path: "fureports/stocklevels" },
   { img: Reports, text: "Items Balance", path: "fureports/itemsbalance" },
-  //   { img: Reports, text: "Items Balance", path: "fureports/itemsbalance" },
+  {
+    img: Reports,
+    text: "Expired Items",
+    path: "fureports/expireditems",
+  },
+
+  {
+    img: Reports,
+    text: "Nearly Expired Items",
+    path: "fureports/nearlyexpireditems",
+  },
+
+  {
+    img: Reports,
+    text: "Disposed Items",
+    path: "fureports/disposed",
+  },
+
+  // {
+  //   img: Reports,
+  //   text: "Consumption Balance",
+  //   path: "fureports/consumptionbalance",
+  // },
+
+  // {
+  //   img: Others,
+  //   text: "Others",
+  //   path: "fureports/others",
+  // },
+
+  {
+    img: Reports,
+    text: "Slow Moving Items",
+    path: "fureports/slowmovingitems",
+  },
+];
+
+const adminForOthers = [
+  { img: Reports, text: "FuncU Reports" },
+  {
+    img: Reports,
+    text: "Slow Moving Items",
+    path: "others/slowmovingitems",
+  },
 ];
 
 class HomeScreen extends React.Component {
@@ -99,17 +171,31 @@ class HomeScreen extends React.Component {
       >
         <Header history={this.props.history} />
 
-        <MenuTree
-          history={this.props.history}
-          options={
-            userType &&
-            (userType.type === "admin" || userType.type === "super admin")
-              ? admin
-              : userType && userType.type === "FU Inventory Keeper"
-              ? fuInventoryKeeper
-              : ""
-          }
-        />
+        {this.props.history.location.pathname === "/home/reports/fureports" ? (
+          <MenuTree
+            history={this.props.history}
+            options={
+              userType &&
+              (userType.type === "admin" || userType.type === "super admin")
+                ? admin
+                : userType && userType.type === "FU Inventory Keeper"
+                ? fuInventoryKeeper
+                : ""
+            }
+          />
+        ) : (
+          <MenuTree
+            history={this.props.history}
+            options={
+              userType &&
+              (userType.type === "admin" || userType.type === "super admin")
+                ? adminForOthers
+                : userType && userType.type === "FU Inventory Keeper"
+                ? adminForOthers
+                : ""
+            }
+          />
+        )}
         {/* </div> */}
 
         <div

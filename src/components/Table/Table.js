@@ -749,9 +749,6 @@ export default function CustomTable(props) {
                             className={classes.tableHeadCell}
                             style={{
                               color: "white",
-                              borderTopLeftRadius: index === 0 ? 5 : 0,
-                              borderTopRightRadius:
-                                index === tableHeading.length - 1 ? 5 : 0,
                               textAlign:
                                 prop === "Actions" || prop === "Action"
                                   ? "center"
@@ -785,7 +782,6 @@ export default function CustomTable(props) {
                                       className={classes.tableCell}
                                       key={key}
                                       style={{
-                                        // textAlign: 'center',
                                         borderWidth: 0,
                                         maxWidth: 400,
                                       }}
@@ -805,18 +801,9 @@ export default function CustomTable(props) {
                                       onClick={() => handleClick(prop, val)}
                                       style={{
                                         maxWidth: 400,
-                                        // textAlign: 'center',
                                         cursor: props.handleModelMaterialReceiving
                                           ? "pointer"
                                           : "",
-                                        // borderTopLeftRadius: key === 0 ? 5 : 0,
-                                        // borderBottomLeftRadius: key === 0 ? 5 : 0,
-
-                                        borderBottomLeftRadius:
-                                          props.tableData.length - 1 ===
-                                            index && key === 0
-                                            ? 5
-                                            : 0,
                                         borderWidth: 0,
                                       }}
                                     >
@@ -850,9 +837,6 @@ export default function CustomTable(props) {
                             <TableCell
                               style={{
                                 cursor: "pointer",
-                                // borderTopRightRadius: 15,
-                                borderBottomRightRadius:
-                                  props.tableData.length - 1 === index ? 5 : 0,
                                 borderWidth: 0,
                               }}
                               className={classes.tableCell}
