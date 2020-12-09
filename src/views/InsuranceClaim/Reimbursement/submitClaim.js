@@ -284,9 +284,6 @@ function EnhancedTableHead(props) {
               color: "white",
               fontWeight: "700",
               textAlign: "center",
-              borderTopLeftRadius: index === 0 ? 5 : 0,
-              borderTopRightRadius:
-                index === tableHeadingForBillSummary.length - 1 ? 5 : 0,
             }}
           >
             {headCell}
@@ -895,7 +892,7 @@ function AddEditPatientListing(props) {
       });
   }
 
-  const handleInvoicePrint = (item) => {
+  const handleInvoicePrint = async (item) => {
     console.log("item", item);
 
     var now = new Date();
@@ -995,13 +992,35 @@ function AddEditPatientListing(props) {
     doc.setFont("times", "normal");
     doc.text(5, 288, `Prepared by: ${currentUser.name}`);
 
+    // if (QR) {
+    //   var img = new Image();
+    //   img.src = `${audioURL + QR}`;
+    //   doc.addImage(img, "PNG", 172.9, 266, 25, 25);
+    // }
+
     if (QR) {
-      var img = new Image();
-      img.src = `${audioURL + QR}`;
-      doc.addImage(img, "PNG", 172.9, 266, 25, 25);
+      const a = await checkImage(`${audioURL}${QR}`);
+      console.log(a);
+      if (a.status === "ok") {
+        const b = new Image();
+        b.src = a.path;
+        doc.addImage(b, "PNG", 172.9, 266, 25, 25);
+      }
     }
 
     doc.save(`Invoice ${invoiceNo}.pdf`);
+  };
+
+  const checkImage = (path) => {
+    return new Promise((resolve) => {
+      var img = new Image();
+      img.onload = () => resolve({ path, status: "ok" });
+      img.onerror = () => resolve({ path, status: "error" });
+
+      img.src = path;
+
+      return img;
+    });
   };
 
   const onInpatientInvoiceSummary = () => {
@@ -1674,8 +1693,6 @@ function AddEditPatientListing(props) {
                             <TableCell
                               style={{
                                 cursor: "pointer",
-                                borderBottomRightRadius:
-                                  billSummaryArray.length - 1 === index ? 5 : 0,
                                 borderWidth: 0,
                               }}
                               className={classes1.tableCell}
