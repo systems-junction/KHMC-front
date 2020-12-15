@@ -1,44 +1,46 @@
-import React, { useEffect, useState } from "react"
-import useMediaQuery from "@material-ui/core/useMediaQuery"
-import Dialer from "../../components/Dial/dialer"
-import TwoValue from "../../components/Dial/TwoValue"
-import OneValue from "../../components/Dial/OneValue"
-import axios from "axios"
-import { consultant } from "../../public/endpoins"
-import cookies from "react-cookies"
+import React, { useEffect, useState } from "react";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import Dialer from "../../components/Dial/dialer";
+import TwoValue from "../../components/Dial/TwoValue";
+import OneValue from "../../components/Dial/OneValue";
+import axios from "axios";
+import { consultant } from "../../public/endpoins";
+import cookies from "react-cookies";
 
 export default function CommitteeMemberDashboard() {
-  const matches = useMediaQuery("(min-width:600px)")
-  const [completed, setCompleted] = useState("")
+  const matches = useMediaQuery("(min-width:600px)");
+  const [completed, setCompleted] = useState("");
+  const [tat, setCompletedTat] = useState("");
 
   // colors
-  const [completedColor, setCompletedColor] = useState("")
+  const [completedColor, setCompletedColor] = useState("");
 
   const [currentUser, setCurrentUser] = useState(
-    cookies.load("current_user")._id,
-  )
+    cookies.load("current_user")._id
+  );
 
   useEffect(() => {
     axios
       .get(`${consultant}/${currentUser}`)
       .then((res) => {
-        console.log(res.data)
+        console.log(res.data);
         if (res.data.success) {
           if (res.data.completed >= 0 && res.data.completed <= 39) {
-            setCompletedColor("#60D69F")
+            setCompletedColor("#60D69F");
           } else if (res.data.completed >= 40 && res.data.completed <= 79) {
-            setCompletedColor("#FFBC28")
+            setCompletedColor("#FFBC28");
           } else if (res.data.completed >= 80 && res.data.completed <= 100) {
-            setCompletedColor("#FF0000")
+            setCompletedColor("#FF0000");
           }
 
-          setCompleted(res.data.completed)
+          setCompleted(res.data.completed);
+          setCompletedTat(res.data.tat);
         }
       })
       .catch((error) => {
-        console.log(error)
-      })
-  }, [])
+        console.log(error);
+      });
+  }, []);
 
   return (
     <div className="container-fluid" style={{ marginBottom: 10 }}>
@@ -53,12 +55,12 @@ export default function CommitteeMemberDashboard() {
               value={completed}
               color={completedColor}
               subHeading={"TAT"}
-              childHeading={"Request received to Processed"}
-              time={"70"}
+              childHeading={"Receipt of Request to Completion"}
+              time={tat ? tat : "00"}
             />
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
