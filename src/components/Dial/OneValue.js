@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react";
 
 const styles = {
   stylesForLabelValue: {
@@ -12,31 +12,31 @@ const styles = {
     fontWeight: "bold",
     opacity: "70%",
   },
-}
+};
 
 function Dialer(props) {
-  const [scaleOnXside, setScaleOnXside] = useState([])
-  const [options, setOptions] = useState("")
+  const [scaleOnXside, setScaleOnXside] = useState([]);
+  const [options, setOptions] = useState("");
 
   useEffect(() => {
-    let temp = []
+    let temp = [];
     for (let i = 6; i > 0; i--) {
-      let date = new Date()
+      let date = new Date();
 
-      var hours = date.getHours() - i
-      var minutes = date.getMinutes()
-      var ampm = hours >= 12 ? "pm" : "am"
-      hours = hours % 12
-      hours = hours ? hours : 12 // the hour '0' should be '12'
+      var hours = date.getHours() - i;
+      var minutes = date.getMinutes();
+      var ampm = hours >= 12 ? "pm" : "am";
+      hours = hours % 12;
+      hours = hours ? hours : 12; // the hour '0' should be '12'
       // minutes = minutes < 10 ? "0" + minutes : minutes;
-      minutes = "00"
-      var strTime = hours + ":" + minutes + " " + ampm
-      temp.push(hours)
-      console.log(strTime)
+      minutes = "00";
+      var strTime = hours + ":" + minutes + " " + ampm;
+      temp.push(hours);
+      console.log(strTime);
     }
 
-    setOptions(options)
-  }, [])
+    setOptions(options);
+  }, []);
 
   return (
     <div
@@ -83,7 +83,12 @@ function Dialer(props) {
       >
         <span
           style={{
-            color: props.colorTime,
+            color:
+              props.time <= 40
+                ? "#60d69f"
+                : props.time <= 80
+                ? "#ffbc28"
+                : "#f24028",
             fontSize: 50,
             fontWeight: "900",
             position: "absolute",
@@ -94,7 +99,7 @@ function Dialer(props) {
         </span>
       </div>
     </div>
-  )
+  );
 }
 
-export default Dialer
+export default Dialer;

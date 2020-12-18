@@ -10,6 +10,7 @@ export default function CommitteeMemberDashboard() {
   const [purchaseOrders, setPurchaseOrders] = useState("");
   const [externalReturnColor, setExternalReturnColor] = useState("");
   const [purchaseOrdersColor, setPurchaseOrdersColor] = useState("");
+  const [purchaseOrdersTAT, setPurchaseOrdersTAT] = useState("");
 
   useEffect(() => {
     axios
@@ -61,6 +62,7 @@ export default function CommitteeMemberDashboard() {
           console.log("purchaseOrder", res.data.purchaseOrder);
           setExternalReturn(res.data.externalReturn);
           setPurchaseOrders(res.data.purchaseOrder);
+          setPurchaseOrdersTAT(res.data.purchaseOrderTat);
         }
       })
       .catch((error) => {
@@ -81,8 +83,8 @@ export default function CommitteeMemberDashboard() {
               value={externalReturn.pending}
               color={externalReturnColor}
               subHeading={"TAT"}
-              childHeading={"Request received to Processed"}
-              time={"70"}
+              childHeading={"Return Request Received to Processed"}
+              time={externalReturn.tat ? externalReturn.tat : "00"}
             />
           </div>
         </div>
@@ -97,8 +99,8 @@ export default function CommitteeMemberDashboard() {
               value={purchaseOrders}
               color={purchaseOrdersColor}
               subHeading={"TAT"}
-              childHeading={"Request received to Processed"}
-              time={"70"}
+              childHeading={"Purchase Request to Purchase Order Approval"}
+              time={purchaseOrdersTAT ? purchaseOrdersTAT : "00"}
             />
           </div>
         </div>

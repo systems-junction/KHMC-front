@@ -10,7 +10,6 @@ import "react-circular-progressbar/dist/styles.css";
 // Radial separators
 import RadialSeparators from "./RadialSeperators";
 
-
 const styles = {
   stylesForLabelValue: {
     position: "absolute",
@@ -52,11 +51,11 @@ function Dialer(props) {
   return (
     <div
       style={{
-        width: '100%',
+        width: "100%",
         // height: '100%',
         backgroundColor: "white",
         borderRadius: 5,
-        height: 270
+        height: 270,
       }}
     >
       <div
@@ -72,7 +71,7 @@ function Dialer(props) {
             fontSize: 14,
             fontWeight: "700",
             opacity: "70%",
-            textAlign:'center'
+            textAlign: "center",
           }}
         >
           {props.mainHeading}
@@ -281,7 +280,12 @@ function Dialer(props) {
           >
             <span
               style={{
-                color: "#60D69F",
+                color:
+                  props.time <= 40
+                    ? "#60D69F"
+                    : props.time <= 80
+                    ? "#ffbc28"
+                    : "#F24028",
                 fontSize: 40,
                 fontWeight: "900",
                 position: "absolute",
@@ -303,10 +307,6 @@ function Dialer(props) {
           </div>
         </div>
       </div>
-
-  
-
-
     </div>
   );
 }

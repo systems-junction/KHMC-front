@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from "react"
-import useMediaQuery from "@material-ui/core/useMediaQuery"
+import React, { useEffect, useState } from "react";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
-import DashboardComponent from "../../components/DashboardComponent/dashboardComponent"
+import DashboardComponent from "../../components/DashboardComponent/dashboardComponent";
 
-import Dialer from "../../components/Dial/dialer"
-import TwoValue from "../../components/Dial/TwoValue"
-import axios from "axios"
-import { committeeMember } from "../../public/endpoins"
+import Dialer from "../../components/Dial/dialer";
+import TwoValue from "../../components/Dial/TwoValue";
+import axios from "axios";
+import { committeeMember } from "../../public/endpoins";
 export default function CommitteeMemberDashboard() {
-  const matches = useMediaQuery("(min-width:600px)")
+  const matches = useMediaQuery("(min-width:600px)");
 
-  const [purchaseRequests, setPurchaseRequests] = useState({})
-  const [purchaseOrders, setpurchaseOrders] = useState({})
-  const [requestColor, setRequestColor] = useState("")
-  const [orderColor, setOrderColor] = useState("")
+  const [purchaseRequests, setPurchaseRequests] = useState({});
+  const [purchaseOrders, setpurchaseOrders] = useState({});
+  const [requestColor, setRequestColor] = useState("");
+  const [orderColor, setOrderColor] = useState("");
 
   useEffect(() => {
     axios
       .get(committeeMember)
       .then((res) => {
-        console.log(res.data)
+        console.log(res.data);
         if (res.data.success) {
           if (
             (res.data.purchaseRequest.prPending ||
@@ -33,7 +33,7 @@ export default function CommitteeMemberDashboard() {
               res.data.purchaseRequest.prModified ||
               res.data.purchaseRequest.prOnHold <= 39)
           ) {
-            setRequestColor("#60D69F")
+            setRequestColor("#60D69F");
           } else if (
             (res.data.purchaseRequest.prPending ||
               res.data.purchaseRequest.prApproved ||
@@ -46,7 +46,7 @@ export default function CommitteeMemberDashboard() {
               res.data.purchaseRequest.prModified ||
               res.data.purchaseRequest.prOnHold <= 79)
           ) {
-            setRequestColor("#FFBC28")
+            setRequestColor("#FFBC28");
           } else if (
             (res.data.purchaseRequest.prPending ||
               res.data.purchaseRequest.prApproved ||
@@ -59,7 +59,7 @@ export default function CommitteeMemberDashboard() {
               res.data.purchaseRequest.prModified ||
               res.data.purchaseRequest.prOnHold <= 100)
           ) {
-            setRequestColor("#FF0000")
+            setRequestColor("#FF0000");
           }
           if (
             (res.data.purchaseOrder.poPending ||
@@ -73,7 +73,7 @@ export default function CommitteeMemberDashboard() {
               res.data.purchaseOrder.poModified ||
               res.data.purchaseOrder.poOnHold <= 39)
           ) {
-            setOrderColor("#60D69F")
+            setOrderColor("#60D69F");
           } else if (
             (res.data.purchaseOrder.poPending ||
               res.data.purchaseOrder.poApproved ||
@@ -86,7 +86,7 @@ export default function CommitteeMemberDashboard() {
               res.data.purchaseOrder.poModified ||
               res.data.purchaseOrder.poOnHold <= 79)
           ) {
-            setOrderColor("#FFBC28")
+            setOrderColor("#FFBC28");
           } else if (
             (res.data.purchaseOrder.poPending ||
               res.data.purchaseOrder.poApproved ||
@@ -99,16 +99,16 @@ export default function CommitteeMemberDashboard() {
               res.data.purchaseOrder.poModified ||
               res.data.purchaseOrder.poOnHold <= 100)
           ) {
-            setOrderColor("#FF0000")
+            setOrderColor("#FF0000");
           }
-          setPurchaseRequests(res.data.purchaseRequest)
-          setpurchaseOrders(res.data.purchaseOrder)
+          setPurchaseRequests(res.data.purchaseRequest);
+          setpurchaseOrders(res.data.purchaseOrder);
         }
       })
       .catch((error) => {
-        console.log(error)
-      })
-  }, [])
+        console.log(error);
+      });
+  }, []);
 
   return (
     <div className="container-fluid" style={{ marginBottom: 10 }}>
@@ -124,7 +124,9 @@ export default function CommitteeMemberDashboard() {
               color={requestColor}
               subHeading={"TAT"}
               childHeading={"Request received to Processed"}
-              time={"70"}
+              time={
+                purchaseRequests.finalTat ? purchaseRequests.finalTat : "00"
+              }
             />
           </div>
         </div>
@@ -179,7 +181,7 @@ export default function CommitteeMemberDashboard() {
               color={orderColor}
               subHeading={"TAT"}
               childHeading={"Request received to Processed"}
-              time={"70"}
+              time={purchaseOrders.finalTat ? purchaseOrders.finalTat : "00"}
             />
           </div>
         </div>
@@ -222,5 +224,5 @@ export default function CommitteeMemberDashboard() {
         </div>
       </div>
     </div>
-  )
+  );
 }

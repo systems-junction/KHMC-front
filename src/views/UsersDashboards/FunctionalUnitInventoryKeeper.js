@@ -1,28 +1,37 @@
-import React, { useEffect, useState } from "react"
-import useMediaQuery from "@material-ui/core/useMediaQuery"
-import Dialer from "../../components/Dial/dialer"
-import TwoValue from "../../components/Dial/TwoValue"
-import axios from "axios"
-import { functionalUnitInventoryKeeper } from "../../public/endpoins"
+import React, { useEffect, useState } from "react";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import Dialer from "../../components/Dial/dialer";
+import TwoValue from "../../components/Dial/TwoValue";
+import axios from "axios";
+import { functionalUnitInventoryKeeper } from "../../public/endpoins";
+
+import cookies from "react-cookies";
 export default function CommitteeMemberDashboard() {
-  const matches = useMediaQuery("(min-width:600px)")
-  const [fulfillmentPending, setFulfillmentPending] = useState({})
-  const [orderPending, setOrderPending] = useState({})
-  const [jitRrVerificationPending, setJitRrVerificationPending] = useState("")
+  const matches = useMediaQuery("(min-width:600px)");
+  const [fulfillmentPending, setFulfillmentPending] = useState({});
+
+  const [currentUser, setCurrentUser] = useState(cookies.load("current_user"));
+
+  const [orderPending, setOrderPending] = useState({});
+  const [jitRrVerificationPending, setJitRrVerificationPending] = useState("");
 
   // colors
-  const [fulfillmentPendingColor, setFulfillmentPendingColor] = useState("")
-  const [orderPendingColor, setOrderPendingColor] = useState("")
+  const [fulfillmentPendingColor, setFulfillmentPendingColor] = useState("");
+  const [orderPendingColor, setOrderPendingColor] = useState("");
   const [
     jitRrVerificationPendingColor,
     setJitRrVerificationPendingColor,
-  ] = useState("")
+  ] = useState("");
+
+  const [tatForJit, setTatForJit] = useState("");
+
+  console.log(currentUser);
 
   useEffect(() => {
     axios
-      .get(functionalUnitInventoryKeeper)
+      .get(functionalUnitInventoryKeeper + "/" + currentUser.functionalUnit._id)
       .then((res) => {
-        console.log(res.data)
+        console.log(res.data);
         if (res.data.success) {
           if (
             (res.data.fulfillmentPending.pharma ||
@@ -32,7 +41,7 @@ export default function CommitteeMemberDashboard() {
               res.data.fulfillmentPending.nonPharma ||
               res.data.fulfillmentPending.nonMedical <= 39)
           ) {
-            setFulfillmentPendingColor("#60D69F")
+            setFulfillmentPendingColor("#60D69F");
           } else if (
             (res.data.fulfillmentPending.pharma ||
               res.data.fulfillmentPending.nonPharma ||
@@ -41,7 +50,7 @@ export default function CommitteeMemberDashboard() {
               res.data.fulfillmentPending.nonPharma ||
               res.data.fulfillmentPending.nonMedical <= 70)
           ) {
-            setFulfillmentPendingColor("#FFBC28")
+            setFulfillmentPendingColor("#FFBC28");
           } else if (
             (res.data.fulfillmentPending.pharma ||
               res.data.fulfillmentPending.nonPharma ||
@@ -50,7 +59,7 @@ export default function CommitteeMemberDashboard() {
               res.data.fulfillmentPending.nonPharma ||
               res.data.fulfillmentPending.nonMedical <= 100)
           ) {
-            setFulfillmentPendingColor("#FF0000")
+            setFulfillmentPendingColor("#FF0000");
           }
           if (
             (res.data.orderPending.pharma ||
@@ -60,7 +69,7 @@ export default function CommitteeMemberDashboard() {
               res.data.orderPending.nonPharma ||
               res.data.orderPending.nonMedical <= 39)
           ) {
-            setOrderPendingColor("#60D69F")
+            setOrderPendingColor("#60D69F");
           } else if (
             (res.data.orderPending.pharma ||
               res.data.orderPending.nonPharma ||
@@ -69,7 +78,7 @@ export default function CommitteeMemberDashboard() {
               res.data.orderPending.nonPharma ||
               res.data.orderPending.nonMedical <= 70)
           ) {
-            setOrderPendingColor("#FFBC28")
+            setOrderPendingColor("#FFBC28");
           } else if (
             (res.data.orderPending.pharma ||
               res.data.orderPending.nonPharma ||
@@ -78,34 +87,35 @@ export default function CommitteeMemberDashboard() {
               res.data.orderPending.nonPharma ||
               res.data.orderPending.nonMedical <= 100)
           ) {
-            setOrderPendingColor("#FF0000")
+            setOrderPendingColor("#FF0000");
           }
 
           if (
             res.data.jitRrVerificationPending >= 0 &&
             res.data.jitRrVerificationPending <= 39
           ) {
-            setJitRrVerificationPendingColor("#60D69F")
+            setJitRrVerificationPendingColor("#60D69F");
           } else if (
             res.data.jitRrVerificationPending >= 40 &&
             res.data.jitRrVerificationPending <= 79
           ) {
-            setJitRrVerificationPendingColor("#FFBC28")
+            setJitRrVerificationPendingColor("#FFBC28");
           } else if (
             res.data.jitRrVerificationPending >= 80 &&
             res.data.jitRrVerificationPending <= 100
           ) {
-            setJitRrVerificationPendingColor("#FF0000")
+            setJitRrVerificationPendingColor("#FF0000");
           }
-          setFulfillmentPending(res.data.fulfillmentPending)
-          setOrderPending(res.data.orderPending)
-          setJitRrVerificationPending(res.data.jitRrVerificationPending)
+          setFulfillmentPending(res.data.fulfillmentPending);
+          setOrderPending(res.data.orderPending);
+          setJitRrVerificationPending(res.data.jitRrVerificationPending);
+          setTatForJit(res.data.tatForJit);
         }
       })
       .catch((error) => {
-        console.log(error)
-      })
-  }, [])
+        console.log(error);
+      });
+  }, []);
 
   return (
     <div className="container-fluid" style={{ marginBottom: 10 }}>
@@ -120,8 +130,12 @@ export default function CommitteeMemberDashboard() {
               value={orderPending.pharma}
               color={orderPendingColor}
               subHeading={"TAT"}
-              childHeading={"Request received to Processed"}
-              time={"70"}
+              childHeading={"Order Received to Delivered"}
+              time={
+                orderPending.finalTatForPharma
+                  ? orderPending.finalTatForPharma
+                  : "00"
+              }
             />
           </div>
         </div>
@@ -136,8 +150,12 @@ export default function CommitteeMemberDashboard() {
               value={orderPending.nonPharma}
               color={orderPendingColor}
               subHeading={"TAT"}
-              childHeading={"Request received to Processed"}
-              time={"70"}
+              childHeading={"Order Received to Delivered"}
+              time={
+                orderPending.finalTatForNonPharma
+                  ? orderPending.finalTatForNonPharma
+                  : "00"
+              }
             />
           </div>
         </div>
@@ -152,8 +170,12 @@ export default function CommitteeMemberDashboard() {
               value={orderPending.nonMedical}
               color={orderPendingColor}
               subHeading={"TAT"}
-              childHeading={"Request received to Processed"}
-              time={"70"}
+              childHeading={"Order Received to Delivered"}
+              time={
+                orderPending.finalTatForNonMed
+                  ? orderPending.finalTatForNonMed
+                  : "00"
+              }
             />
           </div>
         </div>
@@ -170,8 +192,12 @@ export default function CommitteeMemberDashboard() {
               value={fulfillmentPending.pharma}
               color={fulfillmentPendingColor}
               subHeading={"TAT"}
-              childHeading={"Request received to Processed"}
-              time={"70"}
+              childHeading={"Pharma Request for Fulfillment"}
+              time={
+                fulfillmentPending.finalTatForPharma
+                  ? fulfillmentPending.finalTatForPharma
+                  : "00"
+              }
             />
           </div>
         </div>
@@ -188,8 +214,12 @@ export default function CommitteeMemberDashboard() {
               value={fulfillmentPending.nonPharma}
               color={fulfillmentPendingColor}
               subHeading={"TAT"}
-              childHeading={"Request received to Processed"}
-              time={"70"}
+              childHeading={"Non-Pharma(Medical) Request for Fulfillment"}
+              time={
+                fulfillmentPending.finalTatForNonPharma
+                  ? fulfillmentPending.finalTatForNonPharma
+                  : "00"
+              }
             />
           </div>
         </div>
@@ -204,8 +234,12 @@ export default function CommitteeMemberDashboard() {
               value={fulfillmentPending.nonMedical}
               color={fulfillmentPendingColor}
               subHeading={"TAT"}
-              childHeading={"Request received to Processed"}
-              time={"70"}
+              childHeading={"Non-Medical Request for Fulfillment"}
+              time={
+                fulfillmentPending.finalTatForNonMed
+                  ? fulfillmentPending.finalTatForNonMed
+                  : "00"
+              }
             />
           </div>
         </div>
@@ -219,15 +253,15 @@ export default function CommitteeMemberDashboard() {
           <div>
             <Dialer
               mainHeading={"JIT Request for Fulfillment Pending"}
-              value={120}
+              value={jitRrVerificationPending}
               color={jitRrVerificationPendingColor}
               subHeading={"TAT"}
-              childHeading={"Request received to Processed"}
-              time={"70"}
+              childHeading={"JIT Request for Fulfillment"}
+              time={tatForJit ? tatForJit : "00"}
             />
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

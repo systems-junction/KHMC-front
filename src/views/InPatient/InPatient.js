@@ -324,6 +324,9 @@ export default function EDR(props) {
     );
   }
 
+  console.log("radInPatient", radInPatient);
+  console.log("labInPatient", labInPatient);
+
   return (
     <div
       style={{
@@ -469,7 +472,13 @@ export default function EDR(props) {
                 <div>
                   <div>
                     <CustomTable
-                      tableData={labInPatient ? labInPatient : radInPatient}
+                      tableData={
+                        labInPatient.length > 0
+                          ? labInPatient
+                          : radInPatient.length > 0
+                          ? radInPatient
+                          : []
+                      }
                       tableDataKeys={tableDataKeys}
                       tableHeading={tableHeading}
                       action={actions}
