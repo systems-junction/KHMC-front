@@ -1,50 +1,53 @@
-import React, { useEffect, useState } from "react"
-import useMediaQuery from "@material-ui/core/useMediaQuery"
-import Dialer from "../../components/Dial/dialer"
-import OneValue from "../../components/Dial/OneValue"
-import axios from "axios"
-import { cashier } from "../../public/endpoins"
+import React, { useEffect, useState } from "react";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import Dialer from "../../components/Dial/dialer";
+import OneValue from "../../components/Dial/OneValue";
+import axios from "axios";
+import { cashier } from "../../public/endpoins";
 export default function CommitteeMemberDashboard() {
-  const matches = useMediaQuery("(min-width:600px)")
-  const [dischargePending, setDischargePending] = useState("")
-  const [payment, setPayment] = useState("")
-  const [dischargePendingColor, setDischargePendingColor] = useState("")
-  const [paymentColor, setPaymentColor] = useState("")
+  const matches = useMediaQuery("(min-width:600px)");
+  const [dischargePending, setDischargePending] = useState("");
+  const [payment, setPayment] = useState("");
+  const [dischargePendingColor, setDischargePendingColor] = useState("");
+  const [paymentColor, setPaymentColor] = useState("");
+  const [tat, setTatForDischarge] = useState("");
 
   useEffect(() => {
     axios
       .get(cashier)
       .then((res) => {
-        console.log(res.data)
+        console.log(res.data);
         if (res.data.success) {
           if (
             res.data.dischargePending >= 0 &&
             res.data.dischargePending <= 39
           ) {
-            setDischargePendingColor("#60D69F")
+            setDischargePendingColor("#60D69F");
           } else if (
             res.data.dischargePending >= 40 &&
             res.data.dischargePending <= 79
           ) {
-            setDischargePendingColor("#FFBC28")
+            setDischargePendingColor("#FFBC28");
           } else if (res.data.dischargePending >= 80) {
-            setDischargePendingColor("#FF0000")
+            setDischargePendingColor("#FF0000");
           }
           if (res.data.payment >= 0 && res.data.payment <= 39) {
-            setPaymentColor("#60D69F")
+            setPaymentColor("#60D69F");
           } else if (res.data.payment >= 40 && res.data.payment <= 79) {
-            setPaymentColor("#FFBC28")
+            setPaymentColor("#FFBC28");
           } else if (res.data.payment >= 80 && res.data.payment <= 100) {
-            setPaymentColor("#FF0000")
+            setPaymentColor("#FF0000");
           }
-          setDischargePending(res.data.dischargePending)
-          setPayment(res.data.payment)
+          setDischargePending(res.data.dischargePending);
+          setPayment(res.data.payment);
+
+          setTatForDischarge(res.data.tat);
         }
       })
       .catch((error) => {
-        console.log(error)
-      })
-  }, [])
+        console.log(error);
+      });
+  }, []);
 
   return (
     <div className="container-fluid" style={{ marginBottom: 10 }}>
@@ -59,8 +62,8 @@ export default function CommitteeMemberDashboard() {
               value={dischargePending}
               color={dischargePendingColor}
               subHeading={"TAT"}
-              childHeading={"Request received to Processed"}
-              time={"70"}
+              childHeading={"Receipt of Request to Completion"}
+              time={tat ? tat : "00"}
             />
           </div>
         </div>
@@ -84,5 +87,5 @@ export default function CommitteeMemberDashboard() {
         </div>
       </div>
     </div>
-  )
+  );
 }

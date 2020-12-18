@@ -14,6 +14,10 @@ export default function CommitteeMemberDashboard() {
   const [prVerificationPending, setPrVerificationPending] = useState("");
   const [jitPrVerificationPending, setJitPrVerificationPending] = useState("");
 
+  const [finalTatForPr, setFinalTatForPr] = useState("");
+  const [finalTatForJitPr, setFinalTatForJitPr] = useState("");
+  const [finalTatpo, setfinalTatpo] = useState("");
+
   // colors
   const [
     replenishmentRequestPendingColor,
@@ -115,6 +119,10 @@ export default function CommitteeMemberDashboard() {
           setPoCompletionPending(res.data.poCompletionPending);
           setPrVerificationPending(res.data.prVerificationPending);
           setJitPrVerificationPending(res.data.jitPrVerificationPending);
+
+          setFinalTatForPr(res.data.finalTatForPr);
+          setFinalTatForJitPr(res.data.finalTatForJitPr);
+          setfinalTatpo(res.data.finalTatpo);
         }
       })
       .catch((error) => {
@@ -136,7 +144,11 @@ export default function CommitteeMemberDashboard() {
               color={replenishmentRequestPendingColor}
               subHeading={"TAT"}
               childHeading={"Request received to Processed"}
-              time={"70"}
+              time={
+                replenishmentRequestPending.finalTatForPharma
+                  ? replenishmentRequestPending.finalTatForPharma
+                  : "00"
+              }
             />
           </div>
         </div>
@@ -152,7 +164,11 @@ export default function CommitteeMemberDashboard() {
               color={replenishmentRequestPendingColor}
               subHeading={"TAT"}
               childHeading={"Request received to Processed"}
-              time={"70"}
+              time={
+                replenishmentRequestPending.finalTatForNonPharma
+                  ? replenishmentRequestPending.finalTatForNonPharma
+                  : "00"
+              }
             />
           </div>
         </div>
@@ -168,7 +184,11 @@ export default function CommitteeMemberDashboard() {
               color={replenishmentRequestPendingColor}
               subHeading={"TAT"}
               childHeading={"Request received to Processed"}
-              time={"70"}
+              time={
+                replenishmentRequestPending.finalTatForNonMed
+                  ? replenishmentRequestPending.finalTatForNonMed
+                  : "00"
+              }
             />
           </div>
         </div>
@@ -187,8 +207,8 @@ export default function CommitteeMemberDashboard() {
               value={prVerificationPending}
               color={prVerificationPendingColor}
               subHeading={"TAT"}
-              childHeading={"Request received to Processed"}
-              time={"70"}
+              childHeading={"Generation to Verification"}
+              time={finalTatForPr ? finalTatForPr : "00"}
             />
           </div>
         </div>
@@ -203,8 +223,8 @@ export default function CommitteeMemberDashboard() {
               value={poCompletionPending}
               color={poCompletionPendingColor}
               subHeading={"TAT"}
-              childHeading={"Request received to Processed"}
-              time={"70"}
+              childHeading={"Generation to Verification"}
+              time={finalTatpo ? finalTatpo : "00"}
             />
           </div>
         </div>
@@ -221,8 +241,8 @@ export default function CommitteeMemberDashboard() {
               value={jitPrVerificationPending}
               color={jitPrVerificationPendingColor}
               subHeading={"TAT"}
-              childHeading={"Request received to Processed"}
-              time={"70"}
+              childHeading={"Generation to Verification"}
+              time={finalTatForJitPr ? finalTatForJitPr : "00"}
             />
           </div>
         </div>

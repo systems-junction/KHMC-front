@@ -1,115 +1,132 @@
-import React, { useEffect, useState } from "react"
-import useMediaQuery from "@material-ui/core/useMediaQuery"
-import Dialer from "../../components/Dial/dialer"
-import OneValue from "../../components/Dial/OneValue"
-import axios from "axios"
-import cookies from "react-cookies"
-import { doctor } from "../../public/endpoins"
+import React, { useEffect, useState } from "react";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import Dialer from "../../components/Dial/dialer";
+import OneValue from "../../components/Dial/OneValue";
+import axios from "axios";
+import cookies from "react-cookies";
+import { doctor } from "../../public/endpoins";
 export default function CommitteeMemberDashboard() {
-  const matches = useMediaQuery("(min-width:600px)")
-  const [pendingConsultations, setPendingConsultations] = useState("")
-  const [pendingLab, setPendingLab] = useState("")
-  const [pendingPharmacy, setPendingPharmacy] = useState("")
-  const [countPendingDiagnosis, setCountPendingDiagnosis] = useState("")
-  const [patientPerHour, setPatientPerHour] = useState("")
-  const [radConsult, setRadConsult] = useState("")
+  const matches = useMediaQuery("(min-width:600px)");
+  const [pendingConsultations, setPendingConsultations] = useState("");
+  const [pendingLab, setPendingLab] = useState("");
+  const [pendingPharmacy, setPendingPharmacy] = useState("");
+  const [countPendingDiagnosis, setCountPendingDiagnosis] = useState("");
+  const [patientPerHour, setPatientPerHour] = useState("");
+  const [radConsult, setRadConsult] = useState("");
 
-  const [pendingConsultationsColor, setPendingConsultationsColor] = useState("")
-  const [pendingLabColor, setPendingLabColor] = useState("")
-  const [pendingPharmacyColor, setPendingPharmacyColor] = useState("")
+  const [tatReqToCompForCon, setTatReqToCompForCon] = useState("");
+  const [tatLabReqToComp, setTatLabReqToComp] = useState("");
+  const [tatMedOrderCom, setTatMedOrderCom] = useState("");
+  const [tatRad, setTatRad] = useState("");
+  const [tatTriage, setTatTriage] = useState("");
+  const [tatPerHour, setTatPerHour] = useState("");
+
+  const [pendingConsultationsColor, setPendingConsultationsColor] = useState(
+    ""
+  );
+  const [pendingLabColor, setPendingLabColor] = useState("");
+  const [pendingPharmacyColor, setPendingPharmacyColor] = useState("");
   const [countPendingDiagnosisColor, setCountPendingDiagnosisColor] = useState(
-    "",
-  )
-  const [patientPerHourColor, setPatientPerHourColor] = useState("")
-  const [radConsultColor, setRadConsultColor] = useState("")
+    ""
+  );
+  const [patientPerHourColor, setPatientPerHourColor] = useState("");
+  const [radConsultColor, setRadConsultColor] = useState("");
   const [currentUser, setCurrentUser] = useState(
-    cookies.load("current_user")._id,
-  )
+    cookies.load("current_user").staffId
+  );
 
   useEffect(() => {
-    console.log("currentUser", currentUser)
+    console.log("currentUser", currentUser);
     axios
       .get(`${doctor}/${currentUser}`)
       .then((res) => {
-        console.log(res.data)
+        console.log(res.data);
         if (res.data.success) {
           if (
             res.data.pendingConsultations >= 0 &&
             res.data.pendingConsultations <= 39
           ) {
-            setPendingConsultationsColor("#60D69F")
+            setPendingConsultationsColor("#60D69F");
           } else if (
             res.data.pendingConsultations >= 40 &&
             res.data.pendingConsultations <= 79
           ) {
-            setPendingConsultationsColor("#FFBC28")
+            setPendingConsultationsColor("#FFBC28");
           } else if (res.data.pendingConsultations >= 80) {
-            setPendingConsultationsColor("#FF0000")
+            setPendingConsultationsColor("#FF0000");
           }
 
           if (res.data.pendingLab >= 0 && res.data.pendingLab <= 39) {
-            setPendingLabColor("#60D69F")
+            setPendingLabColor("#60D69F");
           } else if (res.data.pendingLab >= 40 && res.data.pendingLab <= 79) {
-            setPendingLabColor("#FFBC28")
+            setPendingLabColor("#FFBC28");
           } else if (res.data.pendingLab >= 80) {
-            setPendingLabColor("#FF0000")
+            setPendingLabColor("#FF0000");
           }
 
           if (res.data.pendingPharmacy >= 0 && res.data.pendingPharmacy <= 39) {
-            setPendingPharmacyColor("#60D69F")
+            setPendingPharmacyColor("#60D69F");
           } else if (
             res.data.pendingPharmacy >= 40 &&
             res.data.pendingPharmacy <= 79
           ) {
-            setPendingPharmacyColor("#FFBC28")
+            setPendingPharmacyColor("#FFBC28");
           } else if (res.data.pendingPharmacy >= 80) {
-            setPendingPharmacyColor("#FF0000")
+            setPendingPharmacyColor("#FF0000");
           }
 
           if (
             res.data.countPendingDiagnosis >= 0 &&
             res.data.countPendingDiagnosis <= 39
           ) {
-            setCountPendingDiagnosisColor("#60D69F")
+            setCountPendingDiagnosisColor("#60D69F");
           } else if (
             res.data.countPendingDiagnosis >= 40 &&
             res.data.countPendingDiagnosis <= 79
           ) {
-            setCountPendingDiagnosisColor("#FFBC28")
+            setCountPendingDiagnosisColor("#FFBC28");
           } else if (res.data.countPendingDiagnosis >= 80) {
-            setCountPendingDiagnosisColor("#FF0000")
+            setCountPendingDiagnosisColor("#FF0000");
           }
 
           if (res.data.patientPerHour >= 0 && res.data.patientPerHour <= 39) {
-            setPatientPerHourColor("#60D69F")
+            setPatientPerHourColor("#60D69F");
           } else if (
             res.data.patientPerHour >= 40 &&
             res.data.patientPerHour <= 79
           ) {
-            setPatientPerHourColor("#FFBC28")
+            setPatientPerHourColor("#FFBC28");
           } else if (res.data.patientPerHour >= 80) {
-            setPatientPerHourColor("#FF0000")
+            setPatientPerHourColor("#FF0000");
           }
           if (res.data.radConsult >= 0 && res.data.radConsult <= 39) {
-            setRadConsultColor("#60D69F")
+            setRadConsultColor("#60D69F");
           } else if (res.data.radConsult >= 40 && res.data.radConsult <= 79) {
-            setRadConsultColor("#FFBC28")
+            setRadConsultColor("#FFBC28");
           } else if (res.data.radConsult >= 80) {
-            setRadConsultColor("#FF0000")
+            setRadConsultColor("#FF0000");
           }
 
-          setPendingConsultations(res.data.pendingConsultations)
-          setPendingLab(res.data.pendingLab)
-          setPendingPharmacy(res.data.pendingPharmacy)
-          setCountPendingDiagnosis(res.data.countPendingDiagnosis)
-          setPatientPerHour(res.data.patientPerHour)
-          setRadConsult(res.data.radConsult)
+          setPendingConsultations(res.data.pendingConsultations);
+          setPendingLab(res.data.pendingLab);
+          setPendingPharmacy(res.data.pendingPharmacy);
+          setCountPendingDiagnosis(res.data.countPendingDiagnosis);
+          setPatientPerHour(res.data.patientPerHour);
+          setRadConsult(res.data.radConsult);
+          setTatReqToCompForCon(res.data.tatReqToCompForCon);
+          setTatLabReqToComp(res.data.tatLabReqToComp);
+          setTatMedOrderCom(res.data.tatMedOrderCom);
+          setTatPerHour(res.data.tatPerHour);
+          setTatRad(res.data.tatRad);
+          setTatTriage(res.data.tatTriage);
         }
       })
       .catch((error) => {
-        console.log(error)
-      })
-  }, [])
+        console.log(error);
+      });
+  }, []);
+
+  console.log("current user", currentUser);
 
   return (
     <div className="container-fluid" style={{ marginBottom: 10 }}>
@@ -124,8 +141,8 @@ export default function CommitteeMemberDashboard() {
               value={countPendingDiagnosis}
               color={countPendingDiagnosisColor}
               subHeading={"TAT"}
-              childHeading={"Request received to Processed"}
-              time={"70"}
+              childHeading={"Assessment/Triage to Diagnosis"}
+              time={tatTriage ? tatTriage : "00"}
             />
           </div>
         </div>
@@ -140,8 +157,8 @@ export default function CommitteeMemberDashboard() {
               value={pendingConsultations}
               color={pendingConsultationsColor}
               subHeading={"TAT"}
-              childHeading={"Request received to Processed"}
-              time={"70"}
+              childHeading={"Consultation Order to Completion"}
+              time={tatReqToCompForCon ? tatReqToCompForCon : "00"}
             />
           </div>
         </div>
@@ -156,8 +173,8 @@ export default function CommitteeMemberDashboard() {
               value={pendingLab}
               color={pendingLabColor}
               subHeading={"TAT"}
-              childHeading={"Request received to Processed"}
-              time={"70"}
+              childHeading={"Order to Results"}
+              time={tatLabReqToComp ? tatLabReqToComp : "00"}
             />
           </div>
         </div>
@@ -174,8 +191,8 @@ export default function CommitteeMemberDashboard() {
               value={radConsult}
               color={radConsultColor}
               subHeading={"TAT"}
-              childHeading={"Request received to Processed"}
-              time={"70"}
+              childHeading={"Order to Consultation Notes"}
+              time={tatRad ? tatRad : "00"}
             />
           </div>
         </div>
@@ -190,8 +207,8 @@ export default function CommitteeMemberDashboard() {
               value={pendingPharmacy}
               color={pendingPharmacyColor}
               subHeading={"TAT"}
-              childHeading={"Request received to Processed"}
-              time={"70"}
+              childHeading={"Orders Request to Delivery"}
+              time={tatMedOrderCom ? tatMedOrderCom : "00"}
             />
           </div>
         </div>
@@ -206,12 +223,12 @@ export default function CommitteeMemberDashboard() {
               value={patientPerHour}
               color={patientPerHourColor}
               subHeading={"TAT"}
-              childHeading={"Request received to Processed"}
-              time={"70"}
+              childHeading={"Per Patient"}
+              time={tatPerHour ? tatPerHour : "00"}
             />
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

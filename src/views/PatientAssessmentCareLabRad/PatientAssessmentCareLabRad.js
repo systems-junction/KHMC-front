@@ -969,7 +969,8 @@ function LabRadRequest(props) {
             serviceName: labServiceName,
             requester: currentUser.staffId,
             requesterName: requester,
-            status: labServiceStatus,
+            // status: labServiceStatus,
+            status: "pending",
             comments: labComments,
             LRrequestNo: LRrequestNo,
             view: true,
@@ -1183,7 +1184,8 @@ function LabRadRequest(props) {
             requesterName: requester,
             serviceName: radioServiceName,
             requester: currentUser.staffId,
-            status: radioServiceStatus,
+            // status: radioServiceStatus,
+            status: "pending",
             comments: radioComments,
             RRrequestNo: RRrequestNo,
             view: true,
@@ -3675,7 +3677,7 @@ function LabRadRequest(props) {
           <DialogContent style={{ backgroundColor: "#31e2aa" }}>
             <h6
               id="simple-dialog-title"
-              style={{ color: "white", fontWeight:'bold' }}
+              style={{ color: "white", fontWeight: "bold" }}
             >
               Added Items
             </h6>

@@ -15,6 +15,7 @@ export default function CommitteeMemberDashboard() {
     ""
   );
   const [parColor, setParColor] = useState("");
+  const [tatForBilling, setTatForBilling] = useState("");
 
   useEffect(() => {
     axios
@@ -69,6 +70,7 @@ export default function CommitteeMemberDashboard() {
 
           setPar(res.data.par);
           setInsuranceBillsPending(res.data.insuranceBillsPending);
+          setTatForBilling(res.data.tat);
         }
       })
       .catch((error) => {
@@ -89,8 +91,8 @@ export default function CommitteeMemberDashboard() {
               value={insuranceBillsPending}
               color={insuranceBillsPendingColor}
               subHeading={"TAT"}
-              childHeading={"Request received to Processed"}
-              time={"70"}
+              childHeading={"Request to Processed"}
+              time={tatForBilling ? tatForBilling : "00"}
             />
           </div>
         </div>

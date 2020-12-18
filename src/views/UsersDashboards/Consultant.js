@@ -16,7 +16,7 @@ export default function CommitteeMemberDashboard() {
   const [completedColor, setCompletedColor] = useState("");
 
   const [currentUser, setCurrentUser] = useState(
-    cookies.load("current_user")._id
+    cookies.load("current_user").staffId
   );
 
   useEffect(() => {
@@ -25,15 +25,15 @@ export default function CommitteeMemberDashboard() {
       .then((res) => {
         console.log(res.data);
         if (res.data.success) {
-          if (res.data.completed >= 0 && res.data.completed <= 39) {
+          if (res.data.pending >= 0 && res.data.pending <= 39) {
             setCompletedColor("#60D69F");
-          } else if (res.data.completed >= 40 && res.data.completed <= 79) {
+          } else if (res.data.pending >= 40 && res.data.pending <= 79) {
             setCompletedColor("#FFBC28");
-          } else if (res.data.completed >= 80 && res.data.completed <= 100) {
+          } else if (res.data.pending >= 80 && res.data.pending <= 100) {
             setCompletedColor("#FF0000");
           }
 
-          setCompleted(res.data.completed);
+          setCompleted(res.data.pending);
           setCompletedTat(res.data.tat);
         }
       })
