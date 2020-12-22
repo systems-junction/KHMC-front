@@ -5,13 +5,17 @@ const StagingDigitalOceanUploadsUrl = "https://dev.khmc-staging.online/";
 
 const baseUrl = local;
 // const baseUrl = stagingDigitalOcean;
+// const baseUrl = "http://167.71.39.213/api";;
 // export const socketUrl = "wss://dev.khmc-staging.online:4001";
+// export const socketUrl = "ws://167.71.39.213";
 export const socketUrl = "ws://localhost:4001";
 export const socketUrlForWebRTC = "ws://localhost:4002";
 
 export const audioURL = "http://localhost:4000";
+// export const audioURL = "http://167.71.39.213";
 // export const audioURL = "https://dev.khmc-staging.online";
 export const uploadsUrl = "http://localhost:4000/uploads/";
+// export const uploadsUrl = "http://167.71.39.213/uploads/";
 // export const uploadsUrl = StagingDigitalOceanUploadsUrl;
 
 // auth endpoints
