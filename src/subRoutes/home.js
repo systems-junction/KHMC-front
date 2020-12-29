@@ -53,12 +53,16 @@ import webRTC from "../views/WebRTC/webRTC";
 
 import ViewROS from "../views/DHR/DCD/ViewROS/ViewROS.js";
 
+import Chat from "../views/Chat/Chat";
+
 const hist = createBrowserHistory();
 class HomeScreenRoutes extends React.PureComponent {
   render() {
     return (
       <Switch>
         <Route exact path={"/home"} component={HomeScreen} />
+
+        <Route exact path={"/home/chat"} component={Chat} />
 
         <Route exact path={"/home/viewros"} component={ViewROS} />
 
