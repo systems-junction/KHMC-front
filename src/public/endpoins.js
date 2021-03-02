@@ -3,8 +3,8 @@ const notificationsUrl = "http://localhost:4000";
 const stagingDigitalOcean = "https://dev.khmc-staging.online/api";
 const StagingDigitalOceanUploadsUrl = "https://dev.khmc-staging.online/";
 
-const baseUrl = local;
-// const baseUrl = stagingDigitalOcean;
+// const baseUrl = local;
+const baseUrl = stagingDigitalOcean;
 export const socketUrl = "wss://dev.khmc-staging.online:4001";
 // export const socketUrl = "ws:///192.168.18.28:4001";
 // export const socketUrlForWebRTC = "ws:///192.168.18.28:4002";
