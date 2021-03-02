@@ -329,7 +329,7 @@ export default function PurchaseRequest(props) {
         overflowY: "scroll",
       }}
     >
-      <Header history={props.history}/>
+      <Header history={props.history} />
 
       <div className="cPadding">
         <div className="subheader">
