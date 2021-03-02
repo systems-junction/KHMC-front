@@ -562,7 +562,9 @@ function TriageAndAssessment(props) {
 
   const onChangeHandler = (e, index) => {
     console.log("e.target.value", e.target.value);
-    var a = [...triageLevel];
+    // var a = [...triageLevel];
+    var a = [];
+
     if (a.includes(e.target.value)) {
       for (var i = 0; i < a.length; i++) {
         if (a[i] === e.target.value) {
@@ -571,7 +573,8 @@ function TriageAndAssessment(props) {
         }
       }
     } else {
-      a = [...triageLevel, e.target.value];
+      // a = [...triageLevel, e.target.value];
+      a = [e.target.value];
       dispatch({ field: "triageLevel", value: a });
     }
   };
@@ -2028,7 +2031,7 @@ function TriageAndAssessment(props) {
               >
                 <div className="row">
                   <label style={{ paddingLeft: "15px" }}>
-                    <strong>Triage Level</strong>
+                    <strong>Triage Levelass</strong>
                   </label>
                 </div>
                 <div value={triageLevel}>
@@ -2039,7 +2042,9 @@ function TriageAndAssessment(props) {
                         name="triageLevel"
                         value="Resuscitation"
                         onChange={onChangeHandler}
-                        // checked={triageLevel}
+                        checked={
+                          triageLevel.includes("Resuscitation") ? true : false
+                        }
                       />
                       <label for="male">&nbsp;&nbsp;1 - Resuscitation</label>
                     </div>
@@ -2049,7 +2054,9 @@ function TriageAndAssessment(props) {
                         name="triageLevel"
                         value="Emergent"
                         onChange={onChangeHandler}
-                        // checked={triageLevel === "Emergent"}
+                        checked={
+                          triageLevel.includes("Emergent") ? true : false
+                        }
                       />
                       <label for="male">&nbsp;&nbsp;2 - Emergent</label>
                     </div>
@@ -2059,7 +2066,7 @@ function TriageAndAssessment(props) {
                         name="triageLevel"
                         onChange={onChangeHandler}
                         value="Urgent"
-                        // checked={triageLevel === "Urgent"}
+                        checked={triageLevel.includes("Urgent") ? true : false}
                       />
                       <label for="male">&nbsp;&nbsp;3 - Urgent</label>
                     </div>
@@ -2071,7 +2078,9 @@ function TriageAndAssessment(props) {
                         name="triageLevel"
                         value="LessUrgent"
                         onChange={onChangeHandler}
-                        // checked={triageLevel === "LessUrgent"}
+                        checked={
+                          triageLevel.includes("LessUrgent") ? true : false
+                        }
                       />
                       <label for="male">&nbsp;&nbsp;4 - Less Urgent</label>
                     </div>
@@ -2081,7 +2090,9 @@ function TriageAndAssessment(props) {
                         name="triageLevel"
                         value="NonUrgent"
                         onChange={onChangeHandler}
-                        // checked={triageLevel === "NonUrgent"}
+                        checked={
+                          triageLevel.includes("NonUrgent") ? true : false
+                        }
                       />
                       <label for="male">&nbsp;&nbsp;5 - Non Urgent</label>
                     </div>
