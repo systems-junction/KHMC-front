@@ -1121,12 +1121,19 @@ function AddEditPurchaseRequest(props) {
   }
 
   const addSelectedItem = () => {
+    if (currentQty === 0) {
+      setOpenNotification(true);
+      setErrorMsg("You can only add those items whose stock is already present in your FuncU");
+      return;
+    }
+
     setDialogOpen(false);
     setItemAdded(true);
     if (validateItemsForm()) {
       setDialogOpen(false);
       setItemAdded(true);
     }
+
     if (!validateItemsForm()) {
       setOpenNotification(true);
       setErrorMsg("Please fill the fields properly");
@@ -1323,7 +1330,7 @@ function AddEditPurchaseRequest(props) {
         overflowY: "scroll",
       }}
     >
-      <Header history={props.history}/>
+      <Header history={props.history} />
       <div className="cPadding">
         <div className="subheader">
           <div style={{ marginLeft: "-6px" }}>
@@ -2244,17 +2251,18 @@ function AddEditPurchaseRequest(props) {
           )}
 
           {requestedItemsArray && (
-            <div className="row"  style={{
-             overflowX: "scroll"
-             
-            }} > 
+            <div
+              className="row"
+              style={{
+                overflowX: "scroll",
+              }}
+            >
               <h5
                 style={{
                   color: "white",
                   marginTop: 15,
                   marginBottom: 15,
                   fontWeight: "700",
-                 
                 }}
               >
                 Items Ordered

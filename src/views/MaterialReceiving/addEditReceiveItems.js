@@ -268,8 +268,8 @@ function ReceiveItems(props) {
 
   function validateForm() {
     return (
-      receivedQty !== 0 &&
-      parseInt(receivedQty) !== 0 &&
+      // receivedQty !== 0 &&
+      // parseInt(receivedQty) !== 0 &&
       bonusQty.length > 0 &&
       // batchNumber.length > 0 &&
       lotNo !== "" &&
