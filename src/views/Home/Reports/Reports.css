@@ -1,0 +1,4 @@
+#my-panel:hover * {
+  background-color: rgb(41, 98, 204);
+  color: white;
+}

@@ -63,7 +63,8 @@ import ProfessionalOrder from "../../assets/img/Professional Order.png";
 import FuncUIK from "../../assets/img/FuncUIK.png";
 
 import { connect } from "react-redux";
-import {
+import
+{
   funForReducer,
   setPatientDetailsForReducer,
 } from "../../actions/Checking";
@@ -127,6 +128,11 @@ const admin = [
     img: Reports,
     text: "Reports",
     path: `/home/reports`,
+  },
+  {
+    img: Reports,
+    text: "Block Chain",
+    path: `/home/blockChainReports`,
   },
 ];
 
@@ -725,9 +731,11 @@ const cashier = [
   },
 ];
 
-class HomeScreen extends React.Component {
-  constructor(props) {
-    super(props);
+class HomeScreen extends React.Component
+{
+  constructor ( props )
+  {
+    super( props );
 
     this.state = {
       openApps: false,
@@ -771,58 +779,65 @@ class HomeScreen extends React.Component {
   //   this.setState({ options: [admin[0], ...options] })
   // }
 
-  componentWillMount() {
-    this.setState({
-      currentUser: cookie.load("current_user"),
-      userStaff: cookie.load("user_staff"),
-    });
+  componentWillMount ()
+  {
+    this.setState( {
+      currentUser: cookie.load( "current_user" ),
+      userStaff: cookie.load( "user_staff" ),
+    } );
   }
 
-  componentDidMount() {
+  componentDidMount ()
+  {
     // if (this.state.userStaff !== "" && this.state.userStaff !== "undefined") {
     //   this.setOptions();
     // }
 
-    this.props.setPatientDetailsForReducer("");
+    this.props.setPatientDetailsForReducer( "" );
 
-    if (this.state.openHome)
-      setTimeout(() => {
-        document.getElementById("menu-open").checked = true;
-      }, 120);
+    if ( this.state.openHome )
+      setTimeout( () =>
+      {
+        document.getElementById( "menu-open" ).checked = true;
+      }, 120 );
 
-    if (this.state.currentUser.staffTypeId.type === "Committe Member") {
-      this.setState({
+    if ( this.state.currentUser.staffTypeId.type === "Committe Member" )
+    {
+      this.setState( {
         notificationArray: [
           { icon: NewPurchaseRequests, title: "New Purchase Requests" },
           { icon: NewPurchaseOrders, title: "New Purchase Order" },
         ],
         headingIcon: ApprovalCommitteeMember,
         headingTitle: "Approval Committee Member",
-      });
+      } );
     } else if (
       this.state.currentUser.staffTypeId.type === "Purchasing Officer"
-    ) {
-      this.setState({
+    )
+    {
+      this.setState( {
         notificationArray: [
           { icon: NewPurchaseRequests, title: "New Return Requests" },
         ],
         headingIcon: PurchaseOfficer,
         headingTitle: "Purchasing Officer",
-      });
+      } );
     } else if (
       this.state.currentUser.staffTypeId.type === "Purchasing Manager"
-    ) {
-      this.setState({
+    )
+    {
+      this.setState( {
         notificationArray: [
           { icon: NewPurchaseRequests, title: "New Return Requests" },
         ],
         headingIcon: PurchaseOfficer,
         headingTitle: "Purchasing Manager",
-      });
+      } );
     } else if (
       this.state.currentUser.staffTypeId.type === "Warehouse Inventory Keeper"
-    ) {
-      this.setState({
+    )
+    {
+      this.setState( {
         notificationArray: [
           {
             icon: ReplenishmentRequests,
@@ -832,11 +847,12 @@ class HomeScreen extends React.Component {
         ],
         headingIcon: WHIK,
         headingTitle: "WHIK",
-      });
+      } );
     } else if (
       this.state.currentUser.staffTypeId.type === "FU Inventory Keeper"
-    ) {
-      this.setState({
+    )
+    {
+      this.setState( {
         notificationArray: [
           {
             icon: ReplenishmentRequests,
@@ -850,9 +866,10 @@ class HomeScreen extends React.Component {
         ],
         headingIcon: FuncUIK,
         headingTitle: "FuncUIK",
-      });
-    } else if (this.state.currentUser.staffTypeId.type === "Cashier") {
-      this.setState({
+      } );
+    } else if ( this.state.currentUser.staffTypeId.type === "Cashier" )
+    {
+      this.setState( {
         notificationArray: [
           {
             icon: NewDischargeDispositionRequests,
@@ -861,11 +878,12 @@ class HomeScreen extends React.Component {
         ],
         headingIcon: CashierIcon,
         headingTitle: "Cashier",
-      });
+      } );
     } else if (
       this.state.currentUser.staffTypeId.type === "Insurance Department"
-    ) {
-      this.setState({
+    )
+    {
+      this.setState( {
         notificationArray: [
           {
             icon: Notifications,
@@ -874,11 +892,12 @@ class HomeScreen extends React.Component {
         ],
         headingIcon: InsuranceClaimsManager,
         headingTitle: "Insurance Claims Manager",
-      });
+      } );
     } else if (
       this.state.currentUser.staffTypeId.type === "Radiology/Imaging"
-    ) {
-      this.setState({
+    )
+    {
+      this.setState( {
         notificationArray: [
           {
             icon: Notifications,
@@ -891,9 +910,10 @@ class HomeScreen extends React.Component {
         ],
         headingIcon: RadTechnician,
         headingTitle: "Rad Technician",
-      });
-    } else if (this.state.currentUser.staffTypeId.type === "Lab Technician") {
-      this.setState({
+      } );
+    } else if ( this.state.currentUser.staffTypeId.type === "Lab Technician" )
+    {
+      this.setState( {
         notificationArray: [
           {
             icon: Notifications,
@@ -906,9 +926,10 @@ class HomeScreen extends React.Component {
         ],
         headingIcon: LabTechnicianIcon,
         headingTitle: "Lab Technician",
-      });
-    } else if (this.state.currentUser.staffTypeId.type === "Pharmacist") {
-      this.setState({
+      } );
+    } else if ( this.state.currentUser.staffTypeId.type === "Pharmacist" )
+    {
+      this.setState( {
         notificationArray: [
           {
             icon: NewPharmaRequests,
@@ -921,9 +942,10 @@ class HomeScreen extends React.Component {
         ],
         headingIcon: PharmacistIcon,
         headingTitle: "Pharmacist",
-      });
-    } else if (this.state.currentUser.staffTypeId.type === "Registered Nurse") {
-      this.setState({
+      } );
+    } else if ( this.state.currentUser.staffTypeId.type === "Registered Nurse" )
+    {
+      this.setState( {
         notificationArray: [
           {
             icon: NewPatientsArriving,
@@ -932,12 +954,13 @@ class HomeScreen extends React.Component {
         ],
         headingIcon: RegisteredNurse,
         headingTitle: "Registered Nurse",
-      });
+      } );
     } else if (
       this.state.currentUser.staffTypeId.type === "IPR Receptionist" ||
       this.state.currentUser.staffTypeId.type === "EDR Receptionist"
-    ) {
-      this.setState({
+    )
+    {
+      this.setState( {
         notificationArray: [
           {
             icon: NewPatientsArriving,
@@ -946,12 +969,13 @@ class HomeScreen extends React.Component {
         ],
         headingIcon: RegistrationOfficerIcon,
         headingTitle: "Registration Officer",
-      });
+      } );
     } else if (
       this.state.currentUser.staffTypeId.type === "Doctor/Physician" ||
       this.state.currentUser.staffTypeId.type === "Consultant/Specialist"
-    ) {
-      this.setState({
+    )
+    {
+      this.setState( {
         notificationArray: [
           {
             icon: Notifications,
@@ -963,22 +987,25 @@ class HomeScreen extends React.Component {
           this.state.currentUser.staffTypeId.type === "Consultant/Specialist"
             ? "Consultant"
             : "Doctor / Physician",
-      });
+      } );
     }
   }
 
-  openApps() {
-    this.setState({ openHome: true });
+  openApps ()
+  {
+    this.setState( { openHome: true } );
   }
 
-  render() {
+  render ()
+  {
     const userType = this.state.currentUser.staffTypeId;
-    console.log("user type", userType);
+    console.log( "user type", userType );
 
-    if (this.state.openHome) {
+    if ( this.state.openHome )
+    {
       return (
         <div
-          style={{
+          style={ {
             display: "flex",
             flexDirection: "column",
             flex: 1,
@@ -991,89 +1018,90 @@ class HomeScreen extends React.Component {
               "linear-gradient(25deg, rgba(101,228,193,1) 0%, rgba(58,219,175,1) 33%, rgba(15,206,147,1) 66%, rgba(6,142,103,1) 100%)",
             // backgroundImage: `url("${WMS_Back}")`,
             backgroundSize: "100%",
-          }}
+          } }
         >
-          <Header history={this.props.history} />
+          <Header history={ this.props.history } />
 
           <MenuTree
-            history={this.props.history}
+            history={ this.props.history }
             options={
               userType && userType.type === "BU Head"
                 ? buHead
                 : userType && userType.type === "Committe Member"
-                ? committeeMember
-                : userType && userType.type === "Accounts Member"
-                ? accountsMember
-                : userType && userType.type === "Purchasing Officer"
-                ? purchasingOfficer
-                : userType && userType.type === "Purchasing Manager"
-                ? purchasingManager
-                : userType && userType.type === "Warehouse Member"
-                ? warehouseMember
-                : userType && userType.type === "FU Member"
-                ? fuHead
-                : userType && userType.type === "Warehouse Incharge"
-                ? warehouseIncharge
-                : userType && userType.type === "Warehouse Inventory Keeper"
-                ? warehouseInventoryKeeper
-                : userType && userType.type === "FU Inventory Keeper"
-                ? fuInventoryKeeper
-                : userType &&
-                  userType.type === "FU Internal Request Return Approval Member"
-                ? fuReturnRequestApprovalMember
-                : userType && userType.type === "FU Incharge"
-                ? fuIncharge
-                : userType && userType.type === "BU Nurse"
-                ? buNurse
-                : (userType && userType.type === "BU Member") ||
-                  (userType && userType.type === "BU Inventory Keeper") ||
-                  (userType && userType.type === "BU Doctor")
-                ? buMember
-                : userType && userType.type === "Warehouse Incharge"
-                ? warehouseIncharge
-                : userType && userType.type === "FU Inventory Keeper"
-                ? fuInventoryKeeper
-                : userType && userType.type === "Resident Doctor"
-                ? residentDoctor
-                : (userType && userType.type === "IPR Receptionist") ||
-                  (userType && userType.type === "EDR Receptionist")
-                ? frontDesk
-                : userType && userType.type === "Insurance Department"
-                ? insuranceDepartment
-                : userType && userType.type === "Registered Nurse"
-                ? registeredNurse
-                : userType && userType.type === "Radiology/Imaging"
-                ? radiologyImagingDepartment
-                : userType && userType.type === "Lab Technician"
-                ? labTechnician
-                : userType && userType.type === "Pharmacist"
-                ? pharmacist
-                : userType && userType.type === "Doctor/Physician"
-                ? doctorPhysician
-                : userType && userType.type === "Consultant/Specialist"
-                ? consultantSpecialist
-                : userType && userType.type === "Cashier"
-                ? cashier
-                : userType && userType.type === "super admin"
-                ? superAdmin
-                : admin
+                  ? committeeMember
+                  : userType && userType.type === "Accounts Member"
+                    ? accountsMember
+                    : userType && userType.type === "Purchasing Officer"
+                      ? purchasingOfficer
+                      : userType && userType.type === "Purchasing Manager"
+                        ? purchasingManager
+                        : userType && userType.type === "Warehouse Member"
+                          ? warehouseMember
+                          : userType && userType.type === "FU Member"
+                            ? fuHead
+                            : userType && userType.type === "Warehouse Incharge"
+                              ? warehouseIncharge
+                              : userType && userType.type === "Warehouse Inventory Keeper"
+                                ? warehouseInventoryKeeper
+                                : userType && userType.type === "FU Inventory Keeper"
+                                  ? fuInventoryKeeper
+                                  : userType &&
+                                    userType.type === "FU Internal Request Return Approval Member"
+                                    ? fuReturnRequestApprovalMember
+                                    : userType && userType.type === "FU Incharge"
+                                      ? fuIncharge
+                                      : userType && userType.type === "BU Nurse"
+                                        ? buNurse
+                                        : ( userType && userType.type === "BU Member" ) ||
+                                          ( userType && userType.type === "BU Inventory Keeper" ) ||
+                                          ( userType && userType.type === "BU Doctor" )
+                                          ? buMember
+                                          : userType && userType.type === "Warehouse Incharge"
+                                            ? warehouseIncharge
+                                            : userType && userType.type === "FU Inventory Keeper"
+                                              ? fuInventoryKeeper
+                                              : userType && userType.type === "Resident Doctor"
+                                                ? residentDoctor
+                                                : ( userType && userType.type === "IPR Receptionist" ) ||
+                                                  ( userType && userType.type === "EDR Receptionist" )
+                                                  ? frontDesk
+                                                  : userType && userType.type === "Insurance Department"
+                                                    ? insuranceDepartment
+                                                    : userType && userType.type === "Registered Nurse"
+                                                      ? registeredNurse
+                                                      : userType && userType.type === "Radiology/Imaging"
+                                                        ? radiologyImagingDepartment
+                                                        : userType && userType.type === "Lab Technician"
+                                                          ? labTechnician
+                                                          : userType && userType.type === "Pharmacist"
+                                                            ? pharmacist
+                                                            : userType && userType.type === "Doctor/Physician"
+                                                              ? doctorPhysician
+                                                              : userType && userType.type === "Consultant/Specialist"
+                                                                ? consultantSpecialist
+                                                                : userType && userType.type === "Cashier"
+                                                                  ? cashier
+                                                                  : userType && userType.type === "super admin"
+                                                                    ? superAdmin
+                                                                    : admin
             }
           />
         </div>
       );
-    } else {
+    } else
+    {
       return (
         <GenericDashboad
-          notificationArray={this.state.notificationArray}
-          headingIcon={this.state.headingIcon}
-          headingTitle={this.state.headingTitle}
-          openApps={this.openApps.bind(this)}
-          history={this.props.history}
+          notificationArray={ this.state.notificationArray }
+          headingIcon={ this.state.headingIcon }
+          headingTitle={ this.state.headingTitle }
+          openApps={ this.openApps.bind( this ) }
+          history={ this.props.history }
         >
           {userType && userType.type === "Committe Member" ? (
             <CommitteeMember />
-          ) : (userType && userType.type === "Purchasing Officer") ||
-            (userType && userType.type === "Purchasing Manager") ? (
+          ) : ( userType && userType.type === "Purchasing Officer" ) ||
+            ( userType && userType.type === "Purchasing Manager" ) ? (
             <PurchasingOfficer />
           ) : userType && userType.type === "Warehouse Inventory Keeper" ? (
             <WarehouseInventoryKeeper />
@@ -1089,8 +1117,8 @@ class HomeScreen extends React.Component {
             <LabTechnician />
           ) : userType && userType.type === "Pharmacist" ? (
             <Pharmacist />
-          ) : (userType && userType.type === "IPR Receptionist") ||
-            (userType && userType.type === "EDR Receptionist") ? (
+          ) : ( userType && userType.type === "IPR Receptionist" ) ||
+            ( userType && userType.type === "EDR Receptionist" ) ? (
             <RegistrationOfficer />
           ) : userType && userType.type === "Registered Nurse" ? (
             <Nurse />
@@ -1100,18 +1128,19 @@ class HomeScreen extends React.Component {
             <Doctor />
           ) : (
             undefined
-          )}
+          ) }
         </GenericDashboad>
       );
     }
   }
 }
 
-const mapStateToProps = ({ CheckingReducer }) => {
+const mapStateToProps = ( { CheckingReducer } ) =>
+{
   const { count, patientDetails } = CheckingReducer;
   return { count, patientDetails };
 };
-export default connect(mapStateToProps, {
+export default connect( mapStateToProps, {
   funForReducer,
   setPatientDetailsForReducer,
-})(HomeScreen);
+} )( HomeScreen );

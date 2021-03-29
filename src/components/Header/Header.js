@@ -11,24 +11,27 @@ import Fade from "@material-ui/core/Fade";
 import cookie from "react-cookies";
 import Fab from "@material-ui/core/Fab";
 import NotifyMe from "./NotificationTray";
-import {
-  socketUrl,
-  getNotifications,
-  recordLogout,
-} from "../../public/endpoins";
+import
+  {
+    socketUrl,
+    getNotifications,
+    recordLogout,
+  } from "../../public/endpoins";
 import socketIOClient from "socket.io-client";
 import axios from "axios";
 import AddIcon from "@material-ui/icons/Add";
 import IdleTimer from "react-idle-timer";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
-class Header extends React.Component {
-  constructor(props) {
-    super(props);
+class Header extends React.Component
+{
+  constructor ( props )
+  {
+    super( props );
     this.idleTimer = null;
-    this.handleOnAction = this.handleOnAction.bind(this);
-    this.handleOnActive = this.handleOnActive.bind(this);
-    this.handleOnIdle = this.handleOnIdle.bind(this);
+    this.handleOnAction = this.handleOnAction.bind( this );
+    this.handleOnActive = this.handleOnActive.bind( this );
+    this.handleOnIdle = this.handleOnIdle.bind( this );
     // this.matches = useMediaQuery("(min-width:600px)");
 
     this.state = {
@@ -40,150 +43,176 @@ class Header extends React.Component {
     };
   }
 
-  handleOnAction(event) {
+  handleOnAction ( event )
+  {
     // console.log('user did something', event)
   }
 
-  handleOnActive(event) {
-    console.log("User is active now but the session has expired.");
+  handleOnActive ( event )
+  {
+    console.log( "User is active now but the session has expired." );
     // console.log('time remaining', new Date(this.idleTimer.getRemainingTime()))
   }
 
-  handleOnIdle(event) {
-    console.log("user is idle");
-    console.log("last active", new Date(this.idleTimer.getLastActiveTime()));
+  handleOnIdle ( event )
+  {
+    console.log( "user is idle" );
+    console.log( "last active", new Date( this.idleTimer.getLastActiveTime() ) );
     this.logoutUser();
   }
 
-  componentDidMount() {
-    const loggedUser = cookie.load("current_user");
-    this.setState({ currentUser: loggedUser });
+  componentDidMount ()
+  {
+    const loggedUser = cookie.load( "current_user" );
+    this.setState( { currentUser: loggedUser } );
 
     axios
-      .get(getNotifications + "/" + loggedUser._id)
-      .then((res) => {
-        if (res.data.success) {
+      .get( getNotifications + "/" + loggedUser._id )
+      .then( ( res ) =>
+      {
+        if ( res.data.success )
+        {
           // console.log("Load Notifications", res.data.data)
 
           let notifyData = [];
-          for (let i = 0; i < res.data.data.length; i++) {
-            var checkId = res.data.data[i].sendTo;
-            for (let j = 0; j < checkId.length; j++) {
-              if (checkId[j].userId._id === loggedUser._id) {
-                notifyData.push(res.data.data[i]);
+          for ( let i = 0; i < res.data.data.length; i++ )
+          {
+            var checkId = res.data.data[ i ].sendTo;
+            for ( let j = 0; j < checkId.length; j++ )
+            {
+              if ( checkId[ j ].userId._id === loggedUser._id )
+              {
+                notifyData.push( res.data.data[ i ] );
               }
             }
           }
           // console.log("After checking User's Notifications", notifyData)
-          this.setState({ data: notifyData });
+          this.setState( { data: notifyData } );
         }
-      })
-      .catch((e) => {
-        console.log("Cannot get Notifications", e);
-      });
+      } )
+      .catch( ( e ) =>
+      {
+        console.log( "Cannot get Notifications", e );
+      } );
 
-    const socket = socketIOClient(socketUrl);
+    const socket = socketIOClient( socketUrl );
 
-    socket.on("get_data", (data) => {
-      console.log("response coming through socket", data);
+    socket.on( "get_data", ( data ) =>
+    {
+      console.log( "response coming through socket", data );
 
-      for (let i = 0; i < data.length; i++) {
-        var checkId = data[i].sendTo;
-        if (data[i].sendTo) {
-          for (let j = 0; j < checkId.length; j++) {
-            if (checkId[j].userId._id === loggedUser._id) {
-              var newData = [].concat(data[i], this.state.data);
-              this.setState({ data: newData });
+      for ( let i = 0; i < data.length; i++ )
+      {
+        var checkId = data[ i ].sendTo;
+        if ( data[ i ].sendTo )
+        {
+          for ( let j = 0; j < checkId.length; j++ )
+          {
+            if ( checkId[ j ].userId._id === loggedUser._id )
+            {
+              var newData = [].concat( data[ i ], this.state.data );
+              this.setState( { data: newData } );
             }
           }
         }
       }
-    });
+    } );
   }
 
-  handleClickOpen() {
-    this.setState({ dialogue: true, open: !this.state.open });
+  handleClickOpen ()
+  {
+    this.setState( { dialogue: true, open: !this.state.open } );
   }
 
-  handleClose() {
-    this.setState({ dialogue: false });
+  handleClose ()
+  {
+    this.setState( { dialogue: false } );
   }
 
-  recordLogout() {
-    const loggedUser = cookie.load("current_user");
-    const token = cookie.load("token");
+  recordLogout ()
+  {
+    const loggedUser = cookie.load( "current_user" );
+    const token = cookie.load( "token" );
 
     const params = {
       token: token,
       userId: loggedUser._id,
     };
     axios
-      .post(recordLogout, params)
-      .then((res) => {
-        if (res.data.success) {
-          console.log("response after recording the logout", res.data);
+      .post( recordLogout, params )
+      .then( ( res ) =>
+      {
+        if ( res.data.success )
+        {
+          console.log( "response after recording the logout", res.data );
         }
-      })
-      .catch((e) => {
-        console.log("error is ", e);
-      });
+      } )
+      .catch( ( e ) =>
+      {
+        console.log( "error is ", e );
+      } );
   }
 
-  logoutUser() {
+  logoutUser ()
+  {
     this.recordLogout();
-    cookie.remove("token", { path: "/" });
-    cookie.remove("current_user", { path: "/" });
-    cookie.remove("user_staff", { path: "/" });
+    cookie.remove( "token", { path: "/" } );
+    cookie.remove( "current_user", { path: "/" } );
+    cookie.remove( "user_staff", { path: "/" } );
     window.location.reload();
   }
 
-  render() {
+  render ()
+  {
     const { history } = this.props;
 
-    if (this.state.goBack) {
+    if ( this.state.goBack )
+    {
       var currentLocation = window.location.pathname;
-      if (currentLocation !== "/home") {
-        return <Redirect to={"/home"} />;
+      if ( currentLocation !== "/home" )
+      {
+        return <Redirect to={ "/home" } />;
       }
     }
 
     return (
-      <div className="header" style={{ marginBottom: 150 }}>
+      <div className="header" style={ { marginBottom: 150 } }>
         <img
-          src={KHMC_White}
+          src={ KHMC_White }
           className="header1-style mr-auto p-2"
           // style={{ height: 65 }}
-          onClick={() => {
-            return this.setState({ goBack: true });
-          }}
+          onClick={ () =>
+          {
+            return this.setState( { goBack: true } );
+          } }
         />
         <NotifyMe
-          data={this.state.data}
-          onNotificationIconClick={() =>
-            history.push({
+          data={ this.state.data }
+          onNotificationIconClick={ () =>
+            history.push( {
               pathname: "/home/notificationCenter",
               state: {
                 notificationData: this.state.data,
               },
-            })
+            } )
           }
           storageKey="notific_key"
           notific_key="timestamp"
-          sortedByKey={false}
-          showDate={true}
+          sortedByKey={ false }
+          showDate={ true }
           color="white"
         />
         <img
-          src={Influence_white}
+          src={ Influence_white }
           className="header2-style"
           // onMouseEnter={() => this.setState({ hover: true })}
           // onMouseLeave={() => this.setState({ hover: false })}
-          onClick={() => this.setState({ open: !this.state.open })}
+          onClick={ () => this.setState( { open: !this.state.open } ) }
         />
 
         {this.state.open ? (
           <div
-            style={{
+            style={ {
               float: "right",
               width: 300,
               marginRight: 10,
@@ -194,38 +223,38 @@ class Header extends React.Component {
               zIndex: 10,
               height: 150,
               marginTop: 30,
-            }}
+            } }
           >
-            <Fade in={this.state.open} timeout={1000}>
-              <Card style={{ marginTop: 0 }}>
+            <Fade in={ this.state.open } timeout={ 1000 }>
+              <Card style={ { marginTop: 0 } }>
                 <CardContent>
                   <Typography
                     // variant="h6"
                     color="textPrimary"
                     gutterBottom
-                    style={{ display: "flex", justifyContent: "space-between" }}
+                    style={ { display: "flex", justifyContent: "space-between" } }
                   >
-                    {this.state.currentUser && this.state.currentUser.name}
+                    { this.state.currentUser && this.state.currentUser.name }
                   </Typography>
 
                   <Typography
                     variant="body2"
                     color="textSecondary"
-                    style={{ display: "flex", justifyContent: "space-between" }}
+                    style={ { display: "flex", justifyContent: "space-between" } }
                   >
-                    {this.state.currentUser &&
-                      this.state.currentUser.staffTypeId.type}
+                    { this.state.currentUser &&
+                      this.state.currentUser.staffTypeId.type }
                   </Typography>
 
                   <Typography
                     color="textSecondary"
-                    style={{
+                    style={ {
                       display: "flex",
                       justifyContent: "space-between",
                       fontSize: 13,
-                    }}
+                    } }
                   >
-                    {this.state.currentUser && this.state.currentUser.email}
+                    { this.state.currentUser && this.state.currentUser.email }
                   </Typography>
 
                   {/* {this.state.open ? (
@@ -332,7 +361,7 @@ class Header extends React.Component {
           </div>
         ) : (
           undefined
-        )}
+        ) }
 
         {this.state.currentUser ? (
           <div
@@ -347,39 +376,40 @@ class Header extends React.Component {
             <Fab
               // color="primary"
               aria-label="add"
-              onClick={() => this.logoutUser()}
-              style={{
+              onClick={ () => this.logoutUser() }
+              style={ {
                 backgroundColor: "#ba02ed",
                 outline: "none",
                 width: 35,
                 height: 35,
-              }}
+              } }
             >
-              {/* <AddIcon /> */}
+              {/* <AddIcon /> */ }
               <i
                 className="zmdi zmdi-power zmdi-hc-2x"
-                style={{ color: "white" }}
+                style={ { color: "white" } }
               ></i>
             </Fab>
           </div>
         ) : (
           undefined
-        )}
+        ) }
 
         {this.state.currentUser ? (
           <IdleTimer
-            ref={(ref) => {
+            ref={ ( ref ) =>
+            {
               this.idleTimer = ref;
-            }}
-            timeout={1000 * 60 * 10}
-            onActive={this.handleOnActive}
-            onIdle={this.handleOnIdle}
-            onAction={this.handleOnAction}
-            debounce={250}
+            } }
+            timeout={ 1000 * 60 * 10 }
+            onActive={ this.handleOnActive }
+            onIdle={ this.handleOnIdle }
+            onAction={ this.handleOnAction }
+            debounce={ 250 }
           />
         ) : (
           undefined
-        )}
+        ) }
       </div>
     );
   }
