@@ -15,7 +15,6 @@ import {
   Tab,
   TextField,
   InputAdornment,
-  makeStyles,
 } from "@material-ui/core";
 
 const dropdownStyles = {
@@ -35,7 +34,7 @@ const Blockchain = (props) => {
     getChangedTabIndex,
   } = props;
   const { tableData, tableHeading, tableDataKeys, actions } = tableModel;
-  const { id: tabsId, value, tabs } = tabsModel;
+  const { id: tabsId, value, innerValue, tabs, innerTabs } = tabsModel;
   const { id, label, items, selectedValue } = dropdownModel;
   const classes = useStylesForInput();
   // const [errorMsg, setErrorMsg] = useState("");
@@ -155,147 +154,28 @@ const Blockchain = (props) => {
   };
 
   const handleTabsChange = (event, newValueIndex) => {
-    setTabsModel({
-      ...tabsModel,
-      value: newValueIndex,
-    });
-    getChangedTabIndex(newValueIndex);
-    // setTableModel({
-    //   tableData: ,
-    //   tableHeading: ,
-    //   tableDataKeys: tableDataKeys,
-    // });
-    console.log("new value: ", newValueIndex);
-    console.log("tableModel: ", tableModel);
-    // if (newValue === 0) {
-    //   setTableModel({
-    //     tableData: [
-    //       {
-    //         name: "name1",
-    //         mrn: "mrn1",
-    //         phone: "phone1",
-    //         patientName: "patientName1",
-    //         email: "email1",
-    //         address: "address1",
-    //         registrationDateTime: "registrationDateTime1",
-    //         id: "id1",
-    //         transactionId: "transactionId1",
-    //       },
-    //       {
-    //         name: "name2",
-    //         mrn: "mrn2",
-    //         phone: "phone2",
-    //         patientName: "patientName2",
-    //         email: "email2",
-    //         address: "address2",
-    //         registrationDateTime: "registrationDateTime2",
-    //         id: "id2",
-    //         transactionId: "transactionId2",
-    //       },
-    //       {
-    //         name: "name3",
-    //         mrn: "mrn3",
-    //         phone: "phone3",
-    //         patientName: "patientName3",
-    //         email: "email3",
-    //         address: "address3",
-    //         registrationDateTime: "registrationDateTime3",
-    //         id: "id3",
-    //         transactionId: "transactionId3",
-    //       },
-    //     ],
-    //     tableHeading: [
-    //       "Name",
-    //       "MRN",
-    //       "Phone",
-    //       "Email",
-    //       "Address",
-    //       "Registration Date/Time",
-    //       "ID (Record ID)",
-    //       "Transaction ID",
-    //       "Action",
-    //     ],
-    //     tableDataKeys: [
-    //       "name",
-    //       "mrn",
-    //       "phone",
-    //       "email",
-    //       "address",
-    //       "registrationDateTime",
-    //       "id",
-    //       "transactionId",
-    //     ],
-    //   });
-    //   setActions({ view: true });
-    // } else if (newValue === 1) {
-    //   setTableModel({
-    //     tableData: [
-    //       {
-    //         mrn: "mrn1",
-    //         depositor: "Depositor1",
-    //         amount: "Amount1",
-    //         dateTime: "DateTime1",
-    //       },
-    //       {
-    //         mrn: "mrn2",
-    //         depositor: "Depositor2",
-    //         amount: "Amount2",
-    //         dateTime: "DateTime2",
-    //       },
-    //       {
-    //         mrn: "mrn3",
-    //         depositor: "Depositor3",
-    //         amount: "Amount3",
-    //         dateTime: "DateTime3",
-    //       },
-    //     ],
-    //     tableHeading: ["MRN", "Depositor", "Amount", "Date/Time", " "],
-    //     tableDataKeys: ["mrn", "depositor", "amount", "dateTime"],
-    //   });
-    //   setActions({ view: false });
-    // } else if (newValue === 2) {
-    //   setTableModel({
-    //     tableData: [
-    //       {
-    //         mrn: "mrn1",
-    //         patientName: "patientName1",
-    //         insured: "Insured1",
-    //         unInsured: "UnInsured1",
-    //         coverageDetails: "CoverageDetails1",
-    //       },
-    //       {
-    //         mrn: "mrn2",
-    //         patientName: "patientName2",
-    //         insured: "Insured2",
-    //         unInsured: "UnInsured2",
-    //         coverageDetails: "CoverageDetails2",
-    //       },
-    //       {
-    //         mrn: "mrn3",
-    //         patientName: "patientName3",
-    //         insured: "Insured3",
-    //         unInsured: "UnInsured3",
-    //         coverageDetails: "CoverageDetails3",
-    //       },
-    //     ],
-    //     tableHeading: [
-    //       "MRN",
-    //       "Patient Name",
-    //       "Insured",
-    //       "Un-Insured",
-    //       "Coverage Details",
-    //       " ",
-    //     ],
-    //     tableDataKeys: [
-    //       "mrn",
-    //       "patientName",
-    //       "insured",
-    //       "unInsured",
-    //       "coverageDetails",
-    //     ],
-    //   });
-    //   setActions({ view: false });
-    // }
+    console.log("newValueIndex: ", newValueIndex);
+    setTabsModel(
+      newValueIndex,
+      {
+        ...tabsModel,
+        value: newValueIndex,
+      },
+      true
+    );
+    getChangedTabIndex(newValueIndex, true);
+  };
+
+  const handleInnerTabsChange = (event, newInnerValueIndex) => {
+    setTabsModel(
+      newInnerValueIndex,
+      {
+        ...tabsModel,
+        innerValue: newInnerValueIndex,
+      },
+      false
+    );
+    getChangedTabIndex(newInnerValueIndex, false);
   };
 
   return (
@@ -326,7 +206,7 @@ const Blockchain = (props) => {
                 select
                 fullWidth
                 id={id}
-                name={"Nasal congestion"}
+                name={label}
                 value={selectedValue}
                 label={label}
                 variant="filled"
@@ -360,6 +240,7 @@ const Blockchain = (props) => {
       </div>
 
       <div className={classesForTabs.root}>
+        {value}
         <Tabs
           id={tabsId}
           classes={{
@@ -390,6 +271,41 @@ const Blockchain = (props) => {
               />
             ))}
         </Tabs>
+      </div>
+
+      <div className={classesForTabs.root}>
+        {innerValue}
+        {(innerTabs && innerValue !== null && innerTabs.length && (
+          <Tabs
+            id={"inner" + tabsId}
+            classes={{
+              root: classesForTabs.root,
+              scroller: classesForTabs.scroller,
+            }}
+            value={innerValue}
+            onChange={handleInnerTabsChange}
+            textColor="primary"
+            TabIndicatorProps={{
+              style: { background: "#12387a" },
+            }}
+            centered={false}
+            variant="scrollable"
+            fullWidth={true}
+          >
+            {innerTabs.map((tab) => (
+              <Tab
+                style={{
+                  color: "white",
+                  borderRadius: 15,
+                  outline: "none",
+                  color: value === 4 ? "#12387a" : "#3B988C",
+                }}
+                label={tab}
+              />
+            ))}
+          </Tabs>
+        )) ||
+          undefined}
       </div>
 
       <div
