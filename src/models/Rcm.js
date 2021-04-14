@@ -1,4 +1,5 @@
 const rcmDropdownItems = [
+  "Patients Registration",
   "patients Assessment",
   "Patient Diagnosis",
   "RD Assessment & Diagnosis",
@@ -8,138 +9,139 @@ const rcmDropdownItems = [
   "Orders",
 ];
 
-const tabs = ["Basic Info", "Payment Info", "Insurance Info"];
+const tabs = [ "Basic Info", "Payment Info", "Insurance Info" ];
 
 const tableData = [
   {
-    "Basic Info": [
-      {
-        name: "name1",
-        mrn: "mrn1",
-        phone: "phone1",
-        patientName: "patientName1",
-        email: "email1",
-        address: "address1",
-        registrationDateTime: "registrationDateTime1",
-        id: "id1",
-        transactionId: "transactionId1",
+    "Basic Info": {
+      data: [
+        {
+          name: "Miles",
+          mrn: "MRNRID103211307",
+          phoneNumber: "+962-6965852",
+          patientName: "Oscar",
+          email: "jonson@gmail.com",
+          address: "House No. 87 A1 Block New City Jordan",
+          registrationDateTime: "08 - 03 - 2021 04:18",
+          id: "115553",
+        },
+        {
+          name: "Emma",
+          mrn: "MRNRID103211308",
+          phoneNumber: "+962-6965885",
+          patientName: "Edward",
+          email: "miles@gmail.com",
+          address: "House No. 45 C1 Block New City Jordan",
+          registrationDateTime: "08 - 03 - 2021 04:18",
+          id: "211522",
+        },
+        {
+          name: "Watson",
+          mrn: "MRNRID103211309",
+          phoneNumber: "+962-6965855",
+          patientName: "William ",
+          email: "Emma@gmail.com",
+          address: "House No. 57 B1 Block New City Jordan",
+          registrationDateTime: "08 - 03 - 2021 04:18",
+          id: "211550",
+        },
+      ],
+      heading: [
+        "Name",
+        "MRN",
+        "Phone",
+        "Email",
+        "Address",
+        "Registration Date/Time",
+        "ID (Record ID)",
+        "Action",
+      ],
+      tableDataKeys: [
+        "name",
+        "mrn",
+        "phone",
+        "email",
+        "address",
+        "registrationDateTime",
+        "id",
+      ],
+      actions: {
+        view: true,
       },
-      {
-        name: "name2",
-        mrn: "mrn2",
-        phone: "phone2",
-        patientName: "patientName2",
-        email: "email2",
-        address: "address2",
-        registrationDateTime: "registrationDateTime2",
-        id: "id2",
-        transactionId: "transactionId2",
-      },
-      {
-        name: "name3",
-        mrn: "mrn3",
-        phone: "phone3",
-        patientName: "patientName3",
-        email: "email3",
-        address: "address3",
-        registrationDateTime: "registrationDateTime3",
-        id: "id3",
-        transactionId: "transactionId3",
-      },
-    ],
-    heading: [
-      "Name",
-      "MRN",
-      "Phone",
-      "Email",
-      "Address",
-      "Registration Date/Time",
-      "ID (Record ID)",
-      "Transaction ID",
-      "Action",
-    ],
-    tableDataKeys: [
-      "name",
-      "mrn",
-      "phone",
-      "email",
-      "address",
-      "registrationDateTime",
-      "id",
-      "transactionId",
-    ],
-    actions: {
-      view: true,
     },
   },
   {
-    "Payment Info": [
-      {
-        mrn: "mrn1",
-        depositor: "Depositor1",
-        amount: "Amount1",
-        dateTime: "DateTime1",
+    "Payment Info": {
+      data: [
+        {
+          mrn: "MRNRID103211309",
+          depositor: "Sammy",
+          amount: "$ 500",
+          dateTime: "08 - 04 - 2021 04:22",
+        },
+        {
+          mrn: "MRNRID103211310",
+          depositor: "Watson",
+          amount: "$ 4000",
+          dateTime: "08 - 04 - 2021 04:25",
+        },
+        {
+          mrn: "MRNRID103211312",
+          depositor: "Emma",
+          amount: "$ 1400",
+          dateTime: "08 - 04 - 2021 04:28",
+        },
+      ],
+      heading: [ "MRN", "Depositor", "Amount", "Date/Time", " " ],
+      tableDataKeys: [ "mrn", "depositor", "amount", "dateTime" ],
+      actions: {
+        view: false,
       },
-      {
-        mrn: "mrn2",
-        depositor: "Depositor2",
-        amount: "Amount2",
-        dateTime: "DateTime2",
-      },
-      {
-        mrn: "mrn3",
-        depositor: "Depositor3",
-        amount: "Amount3",
-        dateTime: "DateTime3",
-      },
-    ],
-    heading: ["MRN", "Depositor", "Amount", "Date/Time", " "],
-    tableDataKeys: ["mrn", "depositor", "amount", "dateTime"],
-    actions: {
-      view: false,
     },
   },
   {
-    "Insurance Info": [
-      {
-        mrn: "mrn1",
-        patientName: "patientName1",
-        insured: "Insured1",
-        unInsured: "UnInsured1",
-        coverageDetails: "CoverageDetails1",
+    "Insurance Info": {
+      data: [
+        {
+          mrn: "MRNRID103211313",
+          patientName: "Miles",
+          insured: "true",
+          unInsured: "false",
+          coverageDetails: "Need to fix",
+        },
+        {
+          mrn: "MRNRID103211314",
+          patientName: "Williamson",
+          insured: "true",
+          unInsured: "true",
+          coverageDetails: "Need to eliminate",
+        },
+        {
+          mrn: "MRNRID103211315",
+          patientName: "Emma",
+          insured: "true",
+          unInsured: "false",
+          coverageDetails: "Change needed",
+        },
+      ],
+      heading: [
+        "MRN",
+        "Patient Name",
+        "Insured",
+        "Un-Insured",
+        "Coverage Details",
+        " ",
+      ],
+      tableDataKeys: [
+        "mrn",
+        "patientName",
+        "insured",
+        "unInsured",
+        "coverageDetails",
+      ],
+      actions: {
+        view: false,
       },
-      {
-        mrn: "mrn2",
-        patientName: "patientName2",
-        insured: "Insured2",
-        unInsured: "UnInsured2",
-        coverageDetails: "CoverageDetails2",
-      },
-      {
-        mrn: "mrn3",
-        patientName: "patientName3",
-        insured: "Insured3",
-        unInsured: "UnInsured3",
-        coverageDetails: "CoverageDetails3",
-      },
-    ],
-    heading: [
-      "MRN",
-      "Patient Name",
-      "Insured",
-      "Un-Insured",
-      "Coverage Details",
-      " ",
-    ],
-    tableDataKeys: [
-      "mrn",
-      "patientName",
-      "insured",
-      "unInsured",
-      "coverageDetails",
-    ],
-    actions: {
-      view: false,
     },
   },
 ];
@@ -152,7 +154,6 @@ const tableHeading = [
   "Address",
   "Registration Date/Time",
   "ID (Record ID)",
-  "Transaction ID",
   "Action",
 ];
 
@@ -164,13 +165,10 @@ const tableDataKeys = [
   "address",
   "registrationDateTime",
   "id",
-  "transactionId",
 ];
 
 export default {
   rcmDropdownItems,
   tabs,
   tableData,
-  tableHeading,
-  tableDataKeys,
 };

@@ -9,7 +9,8 @@ import cookie from "react-cookies";
 import DialogComponent from "./Dialog";
 import "../../../index.css";
 import { useStylesForInput, useStylesForTabs } from "./style";
-import {
+import
+{
   MenuItem,
   Tabs,
   Tab,
@@ -24,36 +25,40 @@ const dropdownStyles = {
   },
 };
 
-const Blockchain = (props) => {
+const Blockchain = ( props ) =>
+{
   const {
     dropdownModel,
     setDropdownModel,
     tabsModel,
     setTabsModel,
     tableModel,
-    getChangedTabIndex,
+    handleViewData,
   } = props;
   const { tableData, tableHeading, tableDataKeys, actions } = tableModel;
+  console.log( "tabsModel: ", tabsModel );
   const { id: tabsId, value, innerValue, tabs, innerTabs } = tabsModel;
   const { id, label, items, selectedValue } = dropdownModel;
   const classes = useStylesForInput();
   // const [errorMsg, setErrorMsg] = useState("");
-  const [openNotification, setOpenNotification] = useState(false);
-  const [searchPatientQuery, setSearchPatientQuery] = useState("");
-  const [QRCodeScanner, setQRCodeScanner] = useState(false);
+  const [ openNotification, setOpenNotification ] = useState( false );
+  const [ searchPatientQuery, setSearchPatientQuery ] = useState( "" );
+  const [ QRCodeScanner, setQRCodeScanner ] = useState( false );
   // const [actions, setActions] = useState({
   //   view: true,
   // });
-  const [showDialog, setShowDialog] = useState(false);
-  const [dialogContent, setDialogContent] = useState([]);
+  const [ showDialog, setShowDialog ] = useState( false );
+  const [ dialogContent, setDialogContent ] = useState( [] );
   const classesForTabs = useStylesForTabs();
 
-  useEffect(() => {
+  useEffect( () =>
+  {
     // getPatientData()
     // return () => socket.disconnect();
-  }, []);
+  }, [] );
 
-  function getPatientData() {
+  function getPatientData ()
+  {
     // axios
     //   .get("getPendingEDRs")
     //   .then((res) => {
@@ -87,26 +92,32 @@ const Blockchain = (props) => {
     //     console.log("error: ", e);
     //   });
   }
-  console.log("current user", cookie.load("current_user"));
-  console.log(tableData);
+  console.log( "current user", cookie.load( "current_user" ) );
+  console.log( tableData );
 
-  function handleView(rec) {
+  function handleView ( rec )
+  {
     let arr = [];
-    tableDataKeys.forEach((k, i) => {
-      if (i !== tableHeading.length - 1) {
-        let value = rec[k];
-        arr.push({
-          title: [tableHeading[i]],
+    tableDataKeys.forEach( ( k, i ) =>
+    {
+      if ( i !== tableHeading.length - 1 )
+      {
+        console.log( "***rec[k]: ", rec[ k ] );
+        console.log( "***handleViewData[ k ]: ", handleViewData );
+        let value = rec[ k ];
+        arr.push( {
+          title: [ tableHeading[ i ] ],
           value: value,
-        });
+        } );
       }
-    });
-    console.log("arr: ", arr);
-    setDialogContent(arr);
-    setShowDialog(true);
+    } );
+    console.log( "arr: ", arr );
+    setDialogContent( arr );
+    setShowDialog( true );
   }
 
-  const handlePatientSearch = (e) => {
+  const handlePatientSearch = ( e ) =>
+  {
     // const a = e.target.value.replace(/[^\w\s]/gi, "");
     // setSearchPatientQuery(a);
     // if (a.length >= 3) {
@@ -153,8 +164,10 @@ const Blockchain = (props) => {
     // }
   };
 
-  const handleTabsChange = (event, newValueIndex) => {
-    console.log("newValueIndex: ", newValueIndex);
+  const handleTabsChange = ( event, newValueIndex ) =>
+  {
+    console.log( "**newValueIndex: ", newValueIndex );
+    console.log( "**tabsModel: ", tabsModel );
     setTabsModel(
       newValueIndex,
       {
@@ -163,10 +176,10 @@ const Blockchain = (props) => {
       },
       true
     );
-    getChangedTabIndex(newValueIndex, true);
   };
 
-  const handleInnerTabsChange = (event, newInnerValueIndex) => {
+  const handleInnerTabsChange = ( event, newInnerValueIndex ) =>
+  {
     setTabsModel(
       newInnerValueIndex,
       {
@@ -175,12 +188,11 @@ const Blockchain = (props) => {
       },
       false
     );
-    getChangedTabIndex(newInnerValueIndex, false);
   };
 
   return (
     <div
-      style={{
+      style={ {
         display: "flex",
         flexDirection: "column",
         flex: 1,
@@ -189,15 +201,15 @@ const Blockchain = (props) => {
         height: "100%",
         backgroundColor: "rgb(19 213 159)",
         overflowY: "scroll",
-      }}
+      } }
     >
-      <Header history={props.history} />
+      <Header history={ props.history } />
       {showDialog && dialogContent && (
         <DialogComponent
-          contents={dialogContent}
-          handleDialog={setShowDialog}
+          contents={ dialogContent }
+          handleDialog={ setShowDialog }
         />
-      )}
+      ) }
       <div className="cPadding">
         <div className="container-fluid">
           <div className="row">
@@ -205,127 +217,125 @@ const Blockchain = (props) => {
               <TextField
                 select
                 fullWidth
-                id={id}
-                name={label}
-                value={selectedValue}
-                label={label}
+                id={ id }
+                name={ label }
+                value={ selectedValue }
+                label={ label }
                 variant="filled"
                 className="dropDownStyle"
-                onChange={(e) =>
-                  setDropdownModel({
+                onChange={ ( e ) =>
+                  setDropdownModel( {
                     ...dropdownModel,
                     selectedValue: e.target.value,
-                  })
+                  } )
                 }
-                InputProps={{
+                InputProps={ {
                   className: classes.input,
                   classes: {
                     input: classes.input,
                   },
                   disableUnderline: true,
-                }}
+                } }
               >
-                {/* { val.dropdownOptions.map( ( item ) => ( */}
-                {items.length &&
-                  items.map((item) => (
-                    <MenuItem key={"safcid"} value={item}>
-                      {item}
+                {/* { val.dropdownOptions.map( ( item ) => ( */ }
+                { items.length &&
+                  items.map( ( item ) => (
+                    <MenuItem key={ "safcid" } value={ item }>
+                      {item }
                     </MenuItem>
-                  ))}
-                {/* ) ) } */}
+                  ) ) }
+                {/* ) ) } */ }
               </TextField>
             </div>
           </div>
         </div>
       </div>
 
-      <div className={classesForTabs.root}>
-        {value}
+      <div className={ classesForTabs.root }>
         <Tabs
-          id={tabsId}
-          classes={{
+          id={ tabsId }
+          classes={ {
             root: classesForTabs.root,
             scroller: classesForTabs.scroller,
-          }}
-          value={value}
-          onChange={handleTabsChange}
+          } }
+          value={ value }
+          onChange={ handleTabsChange }
           textColor="primary"
-          TabIndicatorProps={{
+          TabIndicatorProps={ {
             style: { background: "#12387a" },
-          }}
-          centered={false}
+          } }
+          centered={ false }
           variant="scrollable"
-          fullWidth={true}
+          fullWidth={ true }
         >
-          {tabs &&
+          { tabs &&
             tabs.length &&
-            tabs.map((tab) => (
+            tabs.map( ( tab, i ) => (
               <Tab
-                style={{
+                style={ {
                   color: "white",
                   borderRadius: 15,
                   outline: "none",
-                  color: value === 4 ? "#12387a" : "#3B988C",
-                }}
-                label={tab}
+                  color: value === i ? "#12387a" : "#3B988C",
+                } }
+                label={ tab }
               />
-            ))}
+            ) ) }
         </Tabs>
       </div>
 
-      <div className={classesForTabs.root}>
-        {innerValue}
-        {(innerTabs && innerValue !== null && innerTabs.length && (
+      <div className={ classesForTabs.root }>
+        { ( innerTabs && innerValue !== null && innerTabs.length && (
           <Tabs
-            id={"inner" + tabsId}
-            classes={{
+            id={ "inner" + tabsId }
+            classes={ {
               root: classesForTabs.root,
               scroller: classesForTabs.scroller,
-            }}
-            value={innerValue}
-            onChange={handleInnerTabsChange}
+            } }
+            value={ innerValue }
+            onChange={ handleInnerTabsChange }
             textColor="primary"
-            TabIndicatorProps={{
+            TabIndicatorProps={ {
               style: { background: "#12387a" },
-            }}
-            centered={false}
+            } }
+            centered={ false }
             variant="scrollable"
-            fullWidth={true}
+            fullWidth={ true }
           >
-            {innerTabs.map((tab) => (
+            {innerTabs.map( ( tab, i ) => (
               <Tab
-                style={{
+                style={ {
                   color: "white",
                   borderRadius: 15,
                   outline: "none",
-                  color: value === 4 ? "#12387a" : "#3B988C",
-                }}
-                label={tab}
+                  color: innerValue === i ? "#12387a" : "#3B988C",
+                } }
+                label={ tab }
               />
-            ))}
+            ) ) }
           </Tabs>
-        )) ||
-          undefined}
+        ) ) ||
+          undefined }
       </div>
 
       <div
-        className={`${"container-fluid"} ${classes.root}`}
-        style={{
+        className={ `${ "container-fluid" } ${ classes.root }` }
+        style={ {
           marginTop: "25px",
           paddingLeft: "10px",
           paddingRight: "10px",
-        }}
+        } }
       >
         <div
           className="row"
-          style={{
+          style={ {
             marginLeft: 27,
             marginRight: 27,
-          }}
+          } }
         >
           <div
             className="col-md-12 col-sm-12 col-12"
-            style={dropdownStyles.textFieldPadding}
+            style={ dropdownStyles.textFieldPadding }
           >
             <TextField
               className="textInputStyle"
@@ -333,17 +343,17 @@ const Blockchain = (props) => {
               type="text"
               variant="filled"
               label="Search Patient by Name / MRN / National ID / Mobile Number"
-              name={"searchPatientQuery"}
-              value={searchPatientQuery}
-              onChange={handlePatientSearch}
-              InputLabelProps={{
+              name={ "searchPatientQuery" }
+              value={ searchPatientQuery }
+              onChange={ handlePatientSearch }
+              InputLabelProps={ {
                 classes: {
                   root: classes.label,
                   focused: classes.focusedLabel,
                   error: classes.erroredLabel,
                 },
-              }}
-              InputProps={{
+              } }
+              InputProps={ {
                 endAdornment: (
                   <InputAdornment position="end">
                     <AccountCircle />
@@ -352,81 +362,81 @@ const Blockchain = (props) => {
                 className: classes.input,
                 classes: { input: classes.input },
                 disableUnderline: true,
-              }}
+              } }
             />
           </div>
         </div>
       </div>
 
       <div
-        style={{
+        style={ {
           flex: 4,
           display: "flex",
           flexDirection: "column",
           marginLeft: 40,
           marginRight: 40,
-        }}
+        } }
       >
         <div>
-          {tableData !== " " ? (
+          { tableData !== " " ? (
             <div>
               <div>
-                {actions && (
+                { actions && (
                   <CustomTable
-                    tableData={tableData}
-                    tableDataKeys={tableDataKeys}
-                    tableHeading={tableHeading}
-                    action={actions}
-                    handleView={handleView}
-                    borderBottomColor={"#60d69f"}
-                    borderBottomWidth={20}
+                    tableData={ tableData }
+                    tableDataKeys={ tableDataKeys }
+                    tableHeading={ tableHeading }
+                    action={ actions }
+                    handleView={ handleView }
+                    borderBottomColor={ "#60d69f" }
+                    borderBottomWidth={ 20 }
                   />
-                )}
+                ) }
               </div>
               <div
-                style={{
+                style={ {
                   marginTop: 20,
                   marginBottom: 20,
-                }}
+                } }
               >
                 <img
-                  onClick={() => window.history.back()}
-                  src={Back}
-                  style={{
+                  onClick={ () => window.history.back() }
+                  src={ Back }
+                  style={ {
                     width: 45,
                     height: 35,
                     cursor: "pointer",
-                  }}
+                  } }
                 />
               </div>
             </div>
           ) : (
-            <div className="row " style={{ marginTop: "25px" }}>
+            <div className="row " style={ { marginTop: "25px" } }>
               <div className="col-11">
                 <h3
-                  style={{
+                  style={ {
                     color: "white",
                     textAlign: "center",
                     width: "100%",
                     position: "absolute",
-                  }}
+                  } }
                 >
                   Opps...No Data Found
                 </h3>
               </div>
-              <div className="col-1" style={{ marginTop: 45 }}>
+              <div className="col-1" style={ { marginTop: 45 } }>
                 <img
-                  onClick={() => window.history.back()}
-                  src={Back}
-                  style={{
+                  onClick={ () => window.history.back() }
+                  src={ Back }
+                  style={ {
                     maxWidth: "60%",
                     height: "auto",
                     cursor: "pointer",
-                  }}
+                  } }
                 />
               </div>
             </div>
-          )}
+          ) }
         </div>
       </div>
     </div>
