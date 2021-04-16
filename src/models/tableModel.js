@@ -3,13 +3,13 @@ export const generateTableModel = (
   tableHeading,
   tableDataKeys,
   toggleActionObjView,
-  selected
-) => ({
+  selected = true
+) => ( {
   tableData: tableData,
   tableHeading: tableHeading,
   tableDataKeys: tableDataKeys,
   actions: toggleActionObjView,
   selected: selected,
-});
+} );
 
 export default generateTableModel;

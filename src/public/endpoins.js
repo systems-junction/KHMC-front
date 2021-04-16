@@ -489,4 +489,4 @@ export const getActivePatients = `${ baseUrl }/patient/getpatientactive`;
 export const changeTriageStatus = `${ baseUrl }/patient/triageStatus`;
 
 // patients info
-export const getPatientsInfo = "http://167.99.248.234:8000/api/getHistoryPatient?info=PatientInfo";
+export const getPatientsInfo = `${ BlockChainBaseUrl }`;

@@ -9,66 +9,954 @@ const rcmDropdownItems = [
   "Orders",
 ];
 
-const tabs = [ "Basic Info", "Payment Info", "Insurance Info" ];
+const tabsData = [
+  {
+    name: "Patients Registration", tabs: [ "Basic Info", "Payment Info", "Insurance Info" ], allTabData:
+      [
+        {
+          data: [
+            {
+              name: "Miles",
+              mrn: "MRNRID103211307",
+              phoneNumber: "+962-6965852",
+              patientName: "Oscar",
+              email: "jonson@gmail.com",
+              address: "House No. 87 A1 Block New City Jordan",
+              registrationDateTime: "08 - 03 - 2021 04:18",
+              id: "115553",
+            },
+            {
+              name: "Emma",
+              mrn: "MRNRID103211308",
+              phoneNumber: "+962-6965885",
+              patientName: "Edward",
+              email: "miles@gmail.com",
+              address: "House No. 45 C1 Block New City Jordan",
+              registrationDateTime: "08 - 03 - 2021 04:18",
+              id: "211522",
+            },
+            {
+              name: "Watson",
+              mrn: "MRNRID103211309",
+              phoneNumber: "+962-6965855",
+              patientName: "William ",
+              email: "Emma@gmail.com",
+              address: "House No. 57 B1 Block New City Jordan",
+              registrationDateTime: "08 - 03 - 2021 04:18",
+              id: "211550",
+            },
+          ],
+          heading: [
+            "Name",
+            "MRN",
+            "Phone",
+            "Email",
+            "Address",
+            "Registration Date/Time",
+            "ID (Record ID)",
+            "Action",
+          ],
+          tableDataKeys: [
+            "name",
+            "mrn",
+            "phone",
+            "email",
+            "address",
+            "registrationDateTime",
+            "id",
+          ],
+          actions: {
+            view: true,
+          },
+        },
+        {
+          data: [
+            {
+              mrn: "MRNRID103211309",
+              depositor: "Sammy",
+              amount: "$ 500",
+              dateTime: "08 - 04 - 2021 04:22",
+            },
+            {
+              mrn: "MRNRID103211310",
+              depositor: "Watson",
+              amount: "$ 4000",
+              dateTime: "08 - 04 - 2021 04:25",
+            },
+            {
+              mrn: "MRNRID103211312",
+              depositor: "Emma",
+              amount: "$ 1400",
+              dateTime: "08 - 04 - 2021 04:28",
+            },
+          ],
+          heading: [ "MRN", "Depositor", "Amount", "Date/Time", " " ],
+          tableDataKeys: [ "mrn", "depositor", "amount", "dateTime" ],
+          actions: {
+            view: false,
+          },
+        },
+        {
+          data: [
+            {
+              mrn: "MRNRID103211313",
+              patientName: "Miles",
+              insured: "true",
+              unInsured: "false",
+              coverageDetails: "Need to fix",
+            },
+            {
+              mrn: "MRNRID103211314",
+              patientName: "Williamson",
+              insured: "true",
+              unInsured: "true",
+              coverageDetails: "Need to eliminate",
+            },
+            {
+              mrn: "MRNRID103211315",
+              patientName: "Emma",
+              insured: "true",
+              unInsured: "false",
+              coverageDetails: "Change needed",
+            },
+          ],
+          heading: [
+            "MRN",
+            "Patient Name",
+            "Insured",
+            "Un-Insured",
+            "Coverage Details",
+            " ",
+          ],
+          tableDataKeys: [
+            "mrn",
+            "patientName",
+            "insured",
+            "unInsured",
+            "coverageDetails",
+          ],
+          actions: {
+            view: false,
+          },
+        }
+      ],
+    endpointURL: "/getHistoryPatient?info=PatientInfo"
+  },
+  {
+    name: "patients Assessment", tabs: [ "Vital Signs", "Physical Examination", "Triage" ],
+    allTabData: [
+      {
+        data: [
+          { transactionID: "", recordID: "", dateTime: "", details: "", performedBy: "" }
+        ],
+        heading: [
+          "Transaction ID",
+          "Record ID",
+          "Date/Time",
+          "Details",
+          "Performed By"
+        ],
+        tableDataKeys: [
+          "transactionID",
+          "recordID",
+          "dateTime",
+          "details",
+          "performedBy"
+        ],
+        actions: {
+          view: false,
+        },
+      },
+      {
+        data: [
+          { transactionID: "", recordID: "", dateTime: "", details: "", performedBy: "" }
+        ],
+        heading: [
+          "Transaction ID",
+          "Record ID",
+          "Date/Time",
+          "Details",
+          "Performed By"
+        ],
+        tableDataKeys: [
+          "transactionID",
+          "recordID",
+          "dateTime",
+          "details",
+          "performedBy"
+        ],
+        actions: {
+          view: false,
+        },
+      },
+      {
+        data: [
+          { transactionID: "", recordID: "", dateTime: "", details: "", performedBy: "" }
+        ],
+        heading: [
+          "Transaction ID",
+          "Record ID",
+          "Date/Time",
+          "Details",
+          "Performed By"
+        ],
+        tableDataKeys: [
+          "transactionID",
+          "recordID",
+          "dateTime",
+          "details",
+          "performedBy"
+        ],
+        actions: {
+          view: false,
+        },
+      },
+    ], endpointURL: "/getHistoryEDR?info=EDR"
+  },
+  {
+    name: "Patient Diagnosis", tabs: [ "RD notes", "Medication", "Lab", "Radiology", "Consultation" ], allTabData: [
+      {
+        data: [
+          {
+            transactionID: "",
+            rDNoteID: "",
+            dateTime: "",
+            iCDCPTCodes: "",
+            mrn: "",
+            patientName: "",
+            rDName: "",
+            notes: ""
+          }
+        ],
+        heading: [
+          "Transaction ID",
+          "RD Note ID",
+          "Date / Time",
+          "ICD / CPT Codes",
+          "MRN",
+          "Patient Name",
+          "RD Name",
+          "Notes"
+        ],
+        tableDataKeys: [
+          "transactionID",
+          "rDNoteID",
+          "dateTime",
+          "iCDCPTCodes",
+          "mrn",
+          "patientName",
+          "rDName",
+          "notes"
+        ],
+        actions: {
+          view: false,
+        },
+      },
+      {
+        data: [
+          {
+            transactionID: "",
+            orderID: "",
+            dateTime: "",
+            itemsDescription: "",
+            mrn: "",
+            patientName: "",
+            orderedBy: "",
+          }
+        ],
+        heading: [
+          "Transaction ID",
+          "Order ID",
+          "Date / Time",
+          "Items/Description",
+          "MRN",
+          "Patient Name",
+          "Ordered By"
+        ],
+        tableDataKeys: [
+          "transactionID",
+          "orderID",
+          "dateTime",
+          "itemsDescription",
+          "mrn",
+          "patientName",
+          "orderedBy"
+        ],
+        actions: {
+          view: false,
+        },
+      },
+      {
+        data: [
+          {
+            transactionID: "",
+            orderID: "",
+            dateTime: "",
+            itemsDescription: "",
+            mrn: "",
+            patientName: "",
+            orderedBy: "",
+          }
+        ],
+        heading: [
+          "Transaction ID",
+          "Order ID",
+          "Date / Time",
+          "Items/Description",
+          "MRN",
+          "Patient Name",
+          "Ordered By"
+        ],
+        tableDataKeys: [
+          "transactionID",
+          "orderID",
+          "dateTime",
+          "itemsDescription",
+          "mrn",
+          "patientName",
+          "orderedBy"
+        ],
+        actions: {
+          view: false,
+        },
+      },
+      {
+        data: [
+          {
+            transactionID: "",
+            orderID: "",
+            dateTime: "",
+            serviceDescription: "",
+            mrn: "",
+            patientName: "",
+            orderedBy: "",
+          }
+        ],
+        heading: [
+          "Transaction ID",
+          "Order ID",
+          "Date / Time",
+          "Service/Description",
+          "MRN",
+          "Patient Name",
+          "Ordered By",
+        ],
+        tableDataKeys: [
+          "transactionID",
+          "orderID",
+          "dateTime",
+          "serviceDescription",
+          "mrn",
+          "patientName",
+          "orderedBy"
+        ],
+        actions: {
+          view: false,
+        },
+      },
+      {
+        data: [
+          {
+            transactionID: "",
+            orderID: "",
+            dateTime: "",
+            requestedBy: "",
+            mrn: "",
+            patientName: "",
+            consultant: ""
+          }
+        ],
+        heading: [
+          "Transaction ID",
+          "Request ID",
+          "Date / Time",
+          "Requested By",
+          "MRN",
+          "Patient Name",
+          "Consultant",
+        ],
+        tableDataKeys: [
+          "transactionID",
+          "requestID",
+          "dateTime",
+          "requestedBy",
+          "mrn",
+          "patientName",
+          "consultant"
+        ],
+        actions: {
+          view: false,
+        },
+      },
+    ], endpointURL: "/getHistoryEDR?info=EDR"
+  },
+  {
+    name: "RD Assessment & Diagnosis", tabs: [ "RD notes", "Medication", "Lab", "Radiology", "Consultation", "Discharge" ], allTabData: [
+      {
+        data: [
+          {
+            transactionID: "",
+            rDNoteID: "",
+            dateTime: "",
+            iCDCPTCodes: "",
+            mrn: "",
+            patientName: "",
+            rDName: "",
+            notes: ""
+          }
+        ],
+        heading: [
+          "Transaction ID",
+          "RD Note ID",
+          "Date / Time",
+          "ICD / CPT Codes",
+          "MRN",
+          "Patient Name",
+          "RD Name",
+          "Notes"
+        ],
+        tableDataKeys: [
+          "transactionID",
+          "rDNoteID",
+          "dateTime",
+          "iCDCPTCodes",
+          "mrn",
+          "patientName",
+          "rDName",
+          "notes"
+        ],
+        actions: {
+          view: false,
+        },
+      },
+      {
+        data: [
+          {
+            transactionID: "",
+            orderID: "",
+            dateTime: "",
+            itemsDescription: "",
+            mrn: "",
+            patientName: "",
+            orderedBy: "",
+          }
+        ],
+        heading: [
+          "Transaction ID",
+          "Order ID",
+          "Date / Time",
+          "Items/Description",
+          "MRN",
+          "Patient Name",
+          "Ordered By"
+        ],
+        tableDataKeys: [
+          "transactionID",
+          "orderID",
+          "dateTime",
+          "itemsDescription",
+          "mrn",
+          "patientName",
+          "orderedBy"
+        ],
+        actions: {
+          view: false,
+        },
+      },
+      {
+        data: [
+          {
+            transactionID: "",
+            orderID: "",
+            dateTime: "",
+            itemsDescription: "",
+            mrn: "",
+            patientName: "",
+            orderedBy: "",
+          }
+        ],
+        heading: [
+          "Transaction ID",
+          "Order ID",
+          "Date / Time",
+          "Items/Description",
+          "MRN",
+          "Patient Name",
+          "Ordered By"
+        ],
+        tableDataKeys: [
+          "transactionID",
+          "orderID",
+          "dateTime",
+          "itemsDescription",
+          "mrn",
+          "patientName",
+          "orderedBy"
+        ],
+        actions: {
+          view: false,
+        },
+      },
+      {
+        data: [
+          {
+            transactionID: "",
+            orderID: "",
+            dateTime: "",
+            serviceDescription: "",
+            mrn: "",
+            patientName: "",
+            orderedBy: "",
+          }
+        ],
+        heading: [
+          "Transaction ID",
+          "Order ID",
+          "Date / Time",
+          "Service/Description",
+          "MRN",
+          "Patient Name",
+          "Ordered By",
+        ],
+        tableDataKeys: [
+          "transactionID",
+          "orderID",
+          "dateTime",
+          "serviceDescription",
+          "mrn",
+          "patientName",
+          "orderedBy"
+        ],
+        actions: {
+          view: false,
+        },
+      },
+      {
+        data: [
+          {
+            transactionID: "",
+            orderID: "",
+            dateTime: "",
+            requestedBy: "",
+            mrn: "",
+            patientName: "",
+            consultant: ""
+          }
+        ],
+        heading: [
+          "Transaction ID",
+          "Request ID",
+          "Date / Time",
+          "Requested By",
+          "MRN",
+          "Patient Name",
+          "Consultant",
+        ],
+        tableDataKeys: [
+          "transactionID",
+          "requestID",
+          "dateTime",
+          "requestedBy",
+          "mrn",
+          "patientName",
+          "consultant"
+        ],
+        actions: {
+          view: false,
+        },
+      },
+      {
+        data: [
+          {
+            notesSummary: "",
+            dischargeMedication: "",
+            dateTime: "",
+            gerneratedBy: "",
+            transactionID: "",
+          }
+        ],
+        heading: [
+          "Notes / Summary",
+          "Discharge Medication",
+          "Date / Time",
+          "Gernerated by",
+          "Transaction ID"
+        ],
+        tableDataKeys: [
+          "notesSummary",
+          "dischargeMedication",
+          "dateTime",
+          "gerneratedBy",
+          "transactionID"
+        ],
+        actions: {
+          view: false,
+        },
+      }
+    ], endpointURL: "/getHistoryEDR?info=EDR"
+  },
+  {
+    name: "Insurance Claims", tabs: [ "Pre-approval", "Claims" ], allTabData: [
+      {
+        data: [
+          {
+            requestID: "",
+            dateTime: "",
+            patientInfo: "",
+            vendor: "",
+            requestInfo: "",
+            transactionID: ""
+          }
+        ],
+        heading: [
+          "Request ID",
+          "Date / Time",
+          "Patient Info",
+          "Vendor",
+          "Request Info",
+          "Transaction ID"
+        ],
+        tableDataKeys: [
+          "requestID",
+          "dateTime",
+          "patientInfo",
+          "vendor",
+          "requestInfo",
+          "transactionID"
+        ],
+        actions: {
+          view: false,
+        },
+      },
+      {
+        data: [
+          {
+            requestID: "",
+            dateTime: "",
+            patientInfo: "",
+            vendor: "",
+            claimInfo: "",
+            transactionID: ""
+          }
+        ],
+        heading: [
+          "Request ID",
+          "Date / Time",
+          "Patient Info",
+          "Vendor",
+          "Claim Info",
+          "Transaction ID"
+        ],
+        tableDataKeys: [
+          "requestID",
+          "dateTime",
+          "patientInfo",
+          "vendor",
+          "claimInfo",
+          "transactionID"
+        ],
+        actions: {
+          view: false,
+        },
+      }
+    ], endpointURL: "/getHistoryEDR?info=EDR"
+  },
+  {
+    name: "EC Assessment & Diagnosis", tabs: [ "EC notes", "Medication", "Lab", "Radiology" ], allTabData: [
+      {
+        data: [
+          {
+            dateTime: "",
+            requestId: "",
+            patientInfo: "",
+            requester: "",
+            performedBy: "",
+            consultationNotes: "",
+            transactionID: ""
+          }
+        ],
+        heading: [
+          "Date / Time",
+          "Request Id",
+          "Patient Info",
+          "Requester",
+          "Performed by",
+          "Consultation Notes",
+          "Transaction ID"
+        ],
+        tableDataKeys: [
+          "dateTime",
+          "requestId",
+          "patientInfo",
+          "requester",
+          "performedBy",
+          "consultationNotes",
+          "transactionID"
+        ],
+        actions: {
+          view: false,
+        },
+      },
+      {
+        data: [
+          {
+            transactionID: "",
+            orderID: "",
+            dateTime: "",
+            itemsDescription: "",
+            mrn: "",
+            patientName: "",
+            orderedBy: "",
+          }
+        ],
+        heading: [
+          "Transaction ID",
+          "Order ID",
+          "Date / Time",
+          "Items/Description",
+          "MRN",
+          "Patient Name",
+          "Ordered By"
+        ],
+        tableDataKeys: [
+          "transactionID",
+          "orderID",
+          "dateTime",
+          "itemsDescription",
+          "mrn",
+          "patientName",
+          "orderedBy"
+        ],
+        actions: {
+          view: false,
+        },
+      },
+      {
+        data: [
+          {
+            transactionID: "",
+            orderID: "",
+            dateTime: "",
+            itemsDescription: "",
+            mrn: "",
+            patientName: "",
+            orderedBy: "",
+          }
+        ],
+        heading: [
+          "Transaction ID",
+          "Order ID",
+          "Date / Time",
+          "Items/Description",
+          "MRN",
+          "Patient Name",
+          "Ordered By"
+        ],
+        tableDataKeys: [
+          "transactionID",
+          "orderID",
+          "dateTime",
+          "itemsDescription",
+          "mrn",
+          "patientName",
+          "orderedBy"
+        ],
+        actions: {
+          view: false,
+        },
+      },
+      {
+        data: [
+          {
+            transactionID: "",
+            orderID: "",
+            dateTime: "",
+            serviceDescription: "",
+            mrn: "",
+            patientName: "",
+            orderedBy: "",
+          }
+        ],
+        heading: [
+          "Transaction ID",
+          "Order ID",
+          "Date / Time",
+          "Service/Description",
+          "MRN",
+          "Patient Name",
+          "Ordered By",
+        ],
+        tableDataKeys: [
+          "transactionID",
+          "orderID",
+          "dateTime",
+          "serviceDescription",
+          "mrn",
+          "patientName",
+          "orderedBy"
+        ],
+        actions: {
+          view: false,
+        },
+      },
+    ], endpointURL: "/getHistoryEDR?info=EDR"
+  },
+  {
+    name: "Patient Discharge", tabs: [ "Notes/Summary", "Discharge Medication", "Date/Time", "Generated by", "Discharge Request Id", "Transaction ID" ], allTabData: [
+      {
+        data: [
+
+        ],
+        heading: [],
+        tableDataKeys: [],
+        actions: {
+          view: false,
+        },
+      },
+      {
+        data: [
+          {
+            iCTCode: "",
+            khmcCode: "",
+            itemInfo: "",
+            orderedBy: "",
+            patientInfo: "",
+            transactionID: ""
+          }
+        ],
+        heading: [
+          "ICT Code",
+          "KHMC Code",
+          "Item Info",
+          "Ordered by",
+          "Patient info",
+          "Transaction ID"
+        ],
+        tableDataKeys: [
+          "iCTCode",
+          "khmcCode",
+          "itemInfo",
+          "orderedBy",
+          "patientInfo",
+          "transactionID"
+        ],
+        actions: {
+          view: false,
+        },
+      },
+      {
+        data: [
+
+        ],
+        heading: [],
+        tableDataKeys: [],
+        actions: {
+          view: false,
+        },
+      },
+      {
+        data: [
+
+        ],
+        heading: [],
+        tableDataKeys: [],
+        actions: {
+          view: false,
+        },
+      },
+      {
+        data: [
+
+        ],
+        heading: [],
+        tableDataKeys: [],
+        actions: {
+          view: false,
+        },
+      },
+      {
+        data: [
+
+        ],
+        heading: [],
+        tableDataKeys: [],
+        actions: {
+          view: false,
+        },
+      },
+    ], endpointURL: "/getHistoryEDR?info=EDR"
+  },
+  {
+    name: "Orders", tabs: [ "medical", "non-medical" ], allTabData: [
+      {
+        data: [
+          {
+            iCTCode: "",
+            khmcCode: "",
+            itemInfo: "",
+            orderedBy: "",
+            patientInfo: "",
+            transactionID: ""
+          }
+        ],
+        heading: [
+          "ICT Code",
+          "KHMC Code",
+          "Item Info",
+          "Ordered by",
+          "Patient Info",
+          "Transaction ID"
+        ],
+        tableDataKeys: [
+          "iCTCode",
+          "khmcCode",
+          "itemInfo",
+          "orderedBy",
+          "patientInfo",
+          "transactionID"
+        ],
+        actions: {
+          view: false,
+        },
+      },
+      {
+        data: [
+          {
+            iCTCode: "",
+            khmcCode: "",
+            itemInfo: "",
+            orderedBy: "",
+            patientInfo: "",
+            transactionID: ""
+          }
+        ],
+        heading: [
+          "ICT Code",
+          "KHMC Code",
+          "Item Info",
+          "Ordered by",
+          "Patient Info",
+          "Transaction ID"
+        ],
+        tableDataKeys: [
+          "iCTCode",
+          "khmcCode",
+          "itemInfo",
+          "orderedBy",
+          "patientInfo",
+          "transactionID"
+        ],
+        actions: {
+          view: false,
+        },
+      }
+    ], endpointURL: "/getHistoryEDR?info=EDR"
+  }
+];
 
 const tableData = [
   {
-    "Basic Info": {
-      data: [
-        {
-          name: "Miles",
-          mrn: "MRNRID103211307",
-          phoneNumber: "+962-6965852",
-          patientName: "Oscar",
-          email: "jonson@gmail.com",
-          address: "House No. 87 A1 Block New City Jordan",
-          registrationDateTime: "08 - 03 - 2021 04:18",
-          id: "115553",
-        },
-        {
-          name: "Emma",
-          mrn: "MRNRID103211308",
-          phoneNumber: "+962-6965885",
-          patientName: "Edward",
-          email: "miles@gmail.com",
-          address: "House No. 45 C1 Block New City Jordan",
-          registrationDateTime: "08 - 03 - 2021 04:18",
-          id: "211522",
-        },
-        {
-          name: "Watson",
-          mrn: "MRNRID103211309",
-          phoneNumber: "+962-6965855",
-          patientName: "William ",
-          email: "Emma@gmail.com",
-          address: "House No. 57 B1 Block New City Jordan",
-          registrationDateTime: "08 - 03 - 2021 04:18",
-          id: "211550",
-        },
-      ],
-      heading: [
-        "Name",
-        "MRN",
-        "Phone",
-        "Email",
-        "Address",
-        "Registration Date/Time",
-        "ID (Record ID)",
-        "Action",
-      ],
-      tableDataKeys: [
-        "name",
-        "mrn",
-        "phone",
-        "email",
-        "address",
-        "registrationDateTime",
-        "id",
-      ],
-      actions: {
-        view: true,
-      },
-    },
+
   },
   {
     "Payment Info": {
@@ -146,29 +1034,8 @@ const tableData = [
   },
 ];
 
-const tableHeading = [
-  "Name",
-  "MRN",
-  "Phone",
-  "Email",
-  "Address",
-  "Registration Date/Time",
-  "ID (Record ID)",
-  "Action",
-];
-
-const tableDataKeys = [
-  "name",
-  "mrn",
-  "phone",
-  "email",
-  "address",
-  "registrationDateTime",
-  "id",
-];
-
 export default {
   rcmDropdownItems,
-  tabs,
+  tabsData,
   tableData,
 };

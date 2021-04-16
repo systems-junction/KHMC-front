@@ -36,7 +36,10 @@ const Blockchain = ( props ) =>
     handleViewData,
   } = props;
   const { tableData, tableHeading, tableDataKeys, actions } = tableModel;
-  console.log( "tabsModel: ", tabsModel );
+  console.log( "*&tableData: ", tableData );
+  console.log( "*&tableHeading: ", tableHeading );
+  console.log( "*&tableDataKeys: ", tableDataKeys );
+  console.log( "*&tabsModel: ", tabsModel );
   const { id: tabsId, value, innerValue, tabs, innerTabs } = tabsModel;
   const { id, label, items, selectedValue } = dropdownModel;
   const classes = useStylesForInput();
@@ -166,7 +169,7 @@ const Blockchain = ( props ) =>
 
   const handleTabsChange = ( event, newValueIndex ) =>
   {
-    console.log( "**newValueIndex: ", newValueIndex );
+    console.log( "*&newValueIndex: ", newValueIndex );
     console.log( "**tabsModel: ", tabsModel );
     setTabsModel(
       newValueIndex,
@@ -381,7 +384,7 @@ const Blockchain = ( props ) =>
           { tableData !== " " ? (
             <div>
               <div>
-                { actions && (
+                { actions && tableData && tableData.length && (
                   <CustomTable
                     tableData={ tableData }
                     tableDataKeys={ tableDataKeys }

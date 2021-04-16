@@ -13,17 +13,16 @@ export default function RCM ( props )
 {
   const {
     rcmDropdownItems,
-    tabs,
-    tableData,
+    tabsData,
   } = dropdownItems;
-  console.log( '*tabs: ', tabs )
   const [ ddModel, setDDModel ] = useState(
     dropdownModel( "rcmDropdownId", "RCM", rcmDropdownItems, rcmDropdownItems[ 0 ] )
   );
   const [ tabsModel, setTabsModel ] = useState(
-    generateTabsModel( "rcmTabsId", 0, tabs )
+    generateTabsModel( "rcmTabsId", 0, tabsData[ 0 ].tabs )
   );
-  const [ gridData, setGridData ] = useState( tableData );
+  const defaultTabs = tabsData[ 0 ].tabs;
+  const [ gridData, setGridData ] = useState( tabsData );
   const [ tableModel, setTableModel ] = useState( {} );
   const [ selectedTab, setSelectedTab ] = useState( 0 );
   const [ currentMainTabSelected, setCurrentMainSelected ] = useState();
@@ -33,84 +32,52 @@ export default function RCM ( props )
   {
     let tableModel;
     // To toggle selected tab value if main tab is selected
-    const mappedTableData = mainTabSelected && gridData.map( ( t, i ) =>
-      t[ tabs[ selectedTabIndex ] ]
-        ? {
-          [ tabs[ selectedTabIndex ] ]: {
-            ...t[ tabs[ selectedTabIndex ] ],
-            selected: true,
-          },
-        }
-        : { [ tabs[ i ] ]: { ...t[ tabs[ i ] ], selected: false } }
-    );
-    // To set new mapped data if main tab is selected
-    mainTabSelected && setGridData( mappedTableData );
-    const filteredSelectedTabTableData = mainTabSelected && mappedTableData
-      .map( ( d ) => d[ tabs[ selectedTabIndex ] ] && d[ tabs[ selectedTabIndex ] ] )
-      .filter( ( d ) => d && d.selected && d );
-    mainTabSelected && setCurrentMainSelected( filteredSelectedTabTableData );
-    // To get current Main tab selected
-    const filteredData = mainTabSelected ? filteredSelectedTabTableData : currentMainTabSelected;
-    // For main tab data filteration
-    tableModel = toGetFilteredDataTabelModel( filteredData, model, data, mainTabSelected, selectedTabIndex );
+    console.log( "ddModel.selectedValue: ", ddModel.selectedValue );
+    console.log( '*&selectedTabIndex: ', selectedTabIndex );
+    const selectedDropdownOptionIndex = rcmDropdownItems.indexOf( ddModel.selectedValue );
+    const filteredHeading = tabsData[ selectedDropdownOptionIndex ].allTabData[ selectedTabIndex ].heading;
+    const filteredTableDataKeys = tabsData[ selectedDropdownOptionIndex ].allTabData[ selectedTabIndex ].tableDataKeys;
+    const filteredActions = tabsData[ selectedDropdownOptionIndex ].allTabData[ selectedTabIndex ].actions;
+    console.log( 'Filtered Content: ', filteredHeading, filteredTableDataKeys, filteredActions );
+    tableModel = getTableData( data, filteredHeading, filteredTableDataKeys, filteredActions );
+    console.log( "tableModel: ", tableModel );
     setTableModel( tableModel );
   };
 
-  const toGetFilteredDataTabelModel = ( filteredData, model, data, mainTabSelected, selectedTabIndex ) =>
+  const getTableData = ( data, heading, tableDataKeys, actions ) =>
   {
-    let tableModel;
-    if ( !filteredData.some( ( d ) => d.innerTabs ) )
-    {
-      tableModel = getTabData( filteredData, model, data, mainTabSelected, selectedTabIndex );
-    }
-    return tableModel;
-  }
-
-  const getTabData = ( filteredData, model, data, mainTabSelected, selectedTabIndex ) =>
-  {
-    const { heading, actions, tableDataKeys } = filteredData[ 0 ];
-    toSetTabsModel( model, mainTabSelected, [], null );
-    return getTableData( data, heading, tableDataKeys, actions, true );
-  };
-
-  const getTableData = ( data, heading, tableDataKeys, actions, selected ) =>
-  {
-    return generateTableModel( data, heading, tableDataKeys, actions, selected );
+    return generateTableModel( data, heading, tableDataKeys, actions );
   };
 
   const handleTabsModel = ( index, model, mainTabSelected ) =>
   {
-    // toSetTabsModel( model, mainTabSelected, innerTabs );
+    setTabsModel( model );
     handleTableData( index, model, tableFilteredData, mainTabSelected );
   };
 
-  const toSetTabsModel = ( model, mainTabSelected, innerTabs, innerValue ) =>
-  {
-    const modifiedModel = {
-      ...model,
-      innerTabs: innerTabs,
-      innerValue: innerValue,
-      mainTabSelected: mainTabSelected,
-    };
-    setTabsModel( modifiedModel );
-  }
-
   useEffect( () =>
   {
+    const selectedDropdownOptionIndex = rcmDropdownItems.indexOf( ddModel.selectedValue );
+    console.log( "ddModel: ", ddModel );
+    console.log( "selectedDropdownOptionIndex: ", selectedDropdownOptionIndex );
+    console.log( "useEffect endpointURL: ", tabsData[ selectedDropdownOptionIndex ].endpointURL );
     const handleData = async () =>
     {
-      console.log( 'in useEffect' )
-      const filteredData = await getPatientsInfoData();
-      console.log( "**filteredData: ", filteredData );
+      const filteredTabs = tabsData[ selectedDropdownOptionIndex ].tabs;
+      console.log( "filteredTabs: ", filteredTabs );
+      setTabsModel( { ...tabsModel, tabs: filteredTabs, value: 0 } );
+      console.log( "tabsData[ selectedDropdownOptionIndex ]: ", tabsData[ selectedDropdownOptionIndex ].name );
+      const filteredData = await getPatientsInfoData( tabsData[ selectedDropdownOptionIndex ].endpointURL, tabsData[ selectedDropdownOptionIndex ].name );
+      console.log( "filteredData: ", filteredData );
       setTableFilteredData( filteredData );
-      handleTableData( selectedTab, tabsModel, filteredData );
+      handleTableData( 0, tabsModel, filteredData );
     }
     handleData();
-  }, [ selectedTab ] );
+  }, [ ddModel ] )
 
   return (
     <div>
-      { tableModel && Object.entries( tableModel ).length && (
+      { ( tableModel && Object.entries( tableModel ).length && (
         <Blockchain
           dropdownModel={ ddModel }
           setDropdownModel={ setDDModel }
@@ -120,7 +87,7 @@ export default function RCM ( props )
           tableModel={ tableModel }
           handleViewData={ tableFilteredData }
         />
-      ) }
+      ) ) || undefined }
     </div>
   );
 }
