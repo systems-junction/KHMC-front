@@ -1,6 +1,6 @@
 const rcmDropdownItems = [
   "Patients Registration",
-  "patients Assessment",
+  "Patients Assessment",
   "Patient Diagnosis",
   "RD Assessment & Diagnosis",
   "Insurance Claims",
@@ -54,7 +54,7 @@ const tabsData = [
             "Address",
             "Registration Date/Time",
             "ID (Record ID)",
-            "Action",
+            " ",
           ],
           tableDataKeys: [
             "name",
@@ -66,7 +66,7 @@ const tabsData = [
             "id",
           ],
           actions: {
-            view: true,
+            view: false,
           },
         },
         {
@@ -143,7 +143,7 @@ const tabsData = [
     endpointURL: "/getHistoryPatient?info=PatientInfo"
   },
   {
-    name: "patients Assessment", tabs: [ "Vital Signs", "Physical Examination", "Triage" ],
+    name: "Patients Assessment", tabs: [ "Vital Signs", "Physical Examination", "Triage" ],
     allTabData: [
       {
         data: [
@@ -154,7 +154,8 @@ const tabsData = [
           "Record ID",
           "Date/Time",
           "Details",
-          "Performed By"
+          "Performed By",
+          "Action"
         ],
         tableDataKeys: [
           "transactionID",
@@ -164,7 +165,7 @@ const tabsData = [
           "performedBy"
         ],
         actions: {
-          view: false,
+          view: true,
         },
       },
       {
@@ -176,7 +177,8 @@ const tabsData = [
           "Record ID",
           "Date/Time",
           "Details",
-          "Performed By"
+          "Performed By",
+          "Action",
         ],
         tableDataKeys: [
           "transactionID",
@@ -186,7 +188,7 @@ const tabsData = [
           "performedBy"
         ],
         actions: {
-          view: false,
+          view: true,
         },
       },
       {
@@ -198,7 +200,8 @@ const tabsData = [
           "Record ID",
           "Date/Time",
           "Details",
-          "Performed By"
+          "Performed By",
+          "Action"
         ],
         tableDataKeys: [
           "transactionID",
@@ -208,7 +211,7 @@ const tabsData = [
           "performedBy"
         ],
         actions: {
-          view: false,
+          view: true,
         },
       },
     ], endpointURL: "/getHistoryEDR?info=EDR"
@@ -236,7 +239,8 @@ const tabsData = [
           "MRN",
           "Patient Name",
           "RD Name",
-          "Notes"
+          "Notes",
+          "Action"
         ],
         tableDataKeys: [
           "transactionID",
@@ -249,7 +253,7 @@ const tabsData = [
           "notes"
         ],
         actions: {
-          view: false,
+          view: true,
         },
       },
       {
@@ -271,7 +275,8 @@ const tabsData = [
           "Items/Description",
           "MRN",
           "Patient Name",
-          "Ordered By"
+          "Ordered By",
+          "Action"
         ],
         tableDataKeys: [
           "transactionID",
@@ -283,7 +288,7 @@ const tabsData = [
           "orderedBy"
         ],
         actions: {
-          view: false,
+          view: true,
         },
       },
       {
@@ -305,7 +310,8 @@ const tabsData = [
           "Items/Description",
           "MRN",
           "Patient Name",
-          "Ordered By"
+          "Ordered By",
+          "Action"
         ],
         tableDataKeys: [
           "transactionID",
@@ -317,7 +323,7 @@ const tabsData = [
           "orderedBy"
         ],
         actions: {
-          view: false,
+          view: true,
         },
       },
       {
@@ -340,6 +346,7 @@ const tabsData = [
           "MRN",
           "Patient Name",
           "Ordered By",
+          "Action"
         ],
         tableDataKeys: [
           "transactionID",
@@ -351,7 +358,7 @@ const tabsData = [
           "orderedBy"
         ],
         actions: {
-          view: false,
+          view: true,
         },
       },
       {
@@ -374,6 +381,7 @@ const tabsData = [
           "MRN",
           "Patient Name",
           "Consultant",
+          "Action"
         ],
         tableDataKeys: [
           "transactionID",
@@ -385,7 +393,7 @@ const tabsData = [
           "consultant"
         ],
         actions: {
-          view: false,
+          view: true,
         },
       },
     ], endpointURL: "/getHistoryEDR?info=EDR"
@@ -413,7 +421,8 @@ const tabsData = [
           "MRN",
           "Patient Name",
           "RD Name",
-          "Notes"
+          "Notes",
+          "Action"
         ],
         tableDataKeys: [
           "transactionID",
@@ -426,7 +435,7 @@ const tabsData = [
           "notes"
         ],
         actions: {
-          view: false,
+          view: true,
         },
       },
       {
@@ -448,7 +457,8 @@ const tabsData = [
           "Items/Description",
           "MRN",
           "Patient Name",
-          "Ordered By"
+          "Ordered By",
+          "Action"
         ],
         tableDataKeys: [
           "transactionID",
@@ -460,7 +470,7 @@ const tabsData = [
           "orderedBy"
         ],
         actions: {
-          view: false,
+          view: true,
         },
       },
       {
@@ -482,7 +492,8 @@ const tabsData = [
           "Items/Description",
           "MRN",
           "Patient Name",
-          "Ordered By"
+          "Ordered By",
+          "Action"
         ],
         tableDataKeys: [
           "transactionID",
@@ -494,7 +505,7 @@ const tabsData = [
           "orderedBy"
         ],
         actions: {
-          view: false,
+          view: true,
         },
       },
       {
@@ -517,6 +528,7 @@ const tabsData = [
           "MRN",
           "Patient Name",
           "Ordered By",
+          "Action"
         ],
         tableDataKeys: [
           "transactionID",
@@ -528,7 +540,7 @@ const tabsData = [
           "orderedBy"
         ],
         actions: {
-          view: false,
+          view: true,
         },
       },
       {
@@ -551,6 +563,7 @@ const tabsData = [
           "MRN",
           "Patient Name",
           "Consultant",
+          "Action"
         ],
         tableDataKeys: [
           "transactionID",
@@ -562,7 +575,7 @@ const tabsData = [
           "consultant"
         ],
         actions: {
-          view: false,
+          view: true,
         },
       },
       {
@@ -571,7 +584,7 @@ const tabsData = [
             notesSummary: "",
             dischargeMedication: "",
             dateTime: "",
-            gerneratedBy: "",
+            generatedBy: "",
             transactionID: "",
           }
         ],
@@ -580,17 +593,18 @@ const tabsData = [
           "Discharge Medication",
           "Date / Time",
           "Gernerated by",
-          "Transaction ID"
+          "Transaction ID",
+          "Action"
         ],
         tableDataKeys: [
           "notesSummary",
           "dischargeMedication",
           "dateTime",
-          "gerneratedBy",
+          "generatedBy",
           "transactionID"
         ],
         actions: {
-          view: false,
+          view: true,
         },
       }
     ], endpointURL: "/getHistoryEDR?info=EDR"
@@ -614,7 +628,8 @@ const tabsData = [
           "Patient Info",
           "Vendor",
           "Request Info",
-          "Transaction ID"
+          "Transaction ID",
+          "Action"
         ],
         tableDataKeys: [
           "requestID",
@@ -625,7 +640,7 @@ const tabsData = [
           "transactionID"
         ],
         actions: {
-          view: false,
+          view: true,
         },
       },
       {
@@ -645,7 +660,8 @@ const tabsData = [
           "Patient Info",
           "Vendor",
           "Claim Info",
-          "Transaction ID"
+          "Transaction ID",
+          "Action"
         ],
         tableDataKeys: [
           "requestID",
@@ -656,7 +672,7 @@ const tabsData = [
           "transactionID"
         ],
         actions: {
-          view: false,
+          view: true,
         },
       }
     ], endpointURL: "/getHistoryEDR?info=EDR"
@@ -682,7 +698,8 @@ const tabsData = [
           "Requester",
           "Performed by",
           "Consultation Notes",
-          "Transaction ID"
+          "Transaction ID",
+          "Action"
         ],
         tableDataKeys: [
           "dateTime",
@@ -694,7 +711,7 @@ const tabsData = [
           "transactionID"
         ],
         actions: {
-          view: false,
+          view: true,
         },
       },
       {
@@ -716,7 +733,8 @@ const tabsData = [
           "Items/Description",
           "MRN",
           "Patient Name",
-          "Ordered By"
+          "Ordered By",
+          "Action"
         ],
         tableDataKeys: [
           "transactionID",
@@ -728,7 +746,7 @@ const tabsData = [
           "orderedBy"
         ],
         actions: {
-          view: false,
+          view: true,
         },
       },
       {
@@ -750,7 +768,8 @@ const tabsData = [
           "Items/Description",
           "MRN",
           "Patient Name",
-          "Ordered By"
+          "Ordered By",
+          "Action"
         ],
         tableDataKeys: [
           "transactionID",
@@ -762,7 +781,7 @@ const tabsData = [
           "orderedBy"
         ],
         actions: {
-          view: false,
+          view: true,
         },
       },
       {
@@ -785,6 +804,7 @@ const tabsData = [
           "MRN",
           "Patient Name",
           "Ordered By",
+          "Action"
         ],
         tableDataKeys: [
           "transactionID",
@@ -796,7 +816,7 @@ const tabsData = [
           "orderedBy"
         ],
         actions: {
-          view: false,
+          view: true,
         },
       },
     ], endpointURL: "/getHistoryEDR?info=EDR"
@@ -830,7 +850,8 @@ const tabsData = [
           "Item Info",
           "Ordered by",
           "Patient info",
-          "Transaction ID"
+          "Transaction ID",
+          "Action"
         ],
         tableDataKeys: [
           "iCTCode",
@@ -841,7 +862,7 @@ const tabsData = [
           "transactionID"
         ],
         actions: {
-          view: false,
+          view: true,
         },
       },
       {
@@ -905,7 +926,8 @@ const tabsData = [
           "Item Info",
           "Ordered by",
           "Patient Info",
-          "Transaction ID"
+          "Transaction ID",
+          "Action"
         ],
         tableDataKeys: [
           "iCTCode",
@@ -916,7 +938,7 @@ const tabsData = [
           "transactionID"
         ],
         actions: {
-          view: false,
+          view: true,
         },
       },
       {
@@ -936,7 +958,8 @@ const tabsData = [
           "Item Info",
           "Ordered by",
           "Patient Info",
-          "Transaction ID"
+          "Transaction ID",
+          "Action"
         ],
         tableDataKeys: [
           "iCTCode",
@@ -947,7 +970,7 @@ const tabsData = [
           "transactionID"
         ],
         actions: {
-          view: false,
+          view: true,
         },
       }
     ], endpointURL: "/getHistoryEDR?info=EDR"

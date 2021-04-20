@@ -7,13 +7,14 @@ import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import { useStyles, useCardStyles } from "./style";
 import "./Reports.css";
 
-const BlockChainReports = (props) => {
+const BlockChainReports = ( props ) =>
+{
   const classes = useStyles();
   const cardClasses = useCardStyles();
-  console.log("BlockChainReports called.");
+  console.log( "BlockChainReports called." );
   return (
     <div
-      style={{
+      style={ {
         display: "flex",
         flexDirection: "column",
         flex: 1,
@@ -22,31 +23,31 @@ const BlockChainReports = (props) => {
         height: "100%",
         backgroundColor: "#13D59F",
         overflowY: "scroll",
-      }}
+      } }
     >
-      <Header history={props.history} />
+      <Header history={ props.history } />
       <div className="cPadding">
         <div className="subheader">
-          <div>
-            <h4>Reports</h4>
+          <div >
+            <h4 style={ { marginBottom: -40 } }>Reports</h4>
           </div>
         </div>
-        <div className="container-fluid" style={{ marginTop: -120 }}>
+        <div className="container-fluid" style={ { marginTop: -100 } }>
           <div>
             <div className="vh-100 d-flex align-items-center justify-content-center">
               <div className="align-items-center">
-                {blockChainReports &&
+                { blockChainReports &&
                   blockChainReports.length &&
-                  blockChainReports.map(({ title, route }) => (
+                  blockChainReports.map( ( { title, route } ) => (
                     <div
-                      key={title}
+                      key={ title }
                       className="col-md-12 col-sm-12 col-xm-12 col-12"
                       id="my-panel"
-                      onClick={() => props.history.push(route)}
+                      onClick={ () => props.history.push( route ) }
                     >
                       <Card
-                        className={`${cardClasses.root} `}
-                        style={{ padding: 35, borderRadius: 20, marginTop: 30 }}
+                        className={ `${ cardClasses.root } ` }
+                        style={ { padding: 35, borderRadius: 20, marginTop: 30 } }
                         role="button"
                       >
                         <div className="row">
@@ -56,7 +57,7 @@ const BlockChainReports = (props) => {
                               variant="h5"
                               component="h2"
                             >
-                              {title}
+                              { title }
                             </Typography>
                           </div>
                           <div className="col-md-6 col-sm-8 col-xs-6">
@@ -67,7 +68,7 @@ const BlockChainReports = (props) => {
                         </div>
                       </Card>
                     </div>
-                  ))}
+                  ) ) }
               </div>
             </div>
           </div>

@@ -43,112 +43,136 @@ const toMapData = ( data, url, name ) =>
         } ) );
         return filteredData;
     }
-    if ( url === "/getHistoryEDR?info=EDR" && name === "patients Assessment" )
+    if ( url === "/getHistoryEDR?info=EDR" && name === "Patients Assessment" )
     {
-        filteredData = data.map( ( d ) => ( { transactionID: d.TxId, recordID: "b", dateTime: d.date, details: "d", performedBy: "e" } ) );
+        filteredData = data.map( ( d ) => ( { transactionID: d.TxId, recordID: d.Value.patientId, dateTime: d.Timestamp, details: d.Value.ConsultationNote[ 0 ].description, performedBy: d.Value.generatedBy } ) );
         return filteredData;
     }
     if ( url === "/getHistoryEDR?info=EDR" && name === "Patient Diagnosis" )
     {
         filteredData = data.map( ( d ) => ( {
-            transactionID: "1",
-            rDNoteID: "2",
-            orderID: "45",
-            requestID: "50",
-            dateTime: d.date,
-            iCDCPTCodes: "4",
-            itemsDescription: "55",
-            serviceDescription: "54",
-            requestedBy: "59",
-            consultant: "51",
-            mrn: "5",
-            patientName: "p2",
-            rDName: "7",
-            orderedBy: "22",
-            notes: "8"
+            transactionID: d.TxId,
+            rDNoteID: d.Value.ResidentNotes[ 0 ].residentNoteNo,
+            orderID: d.Value.DischargeRequest.DischargeMedication.Medicine[ 0 ].itemId,
+            requestID: d.Value.PharmacyRequest[ 0 ].ReplenishmentRequestBuID,
+            dateTime: d.Timestamp,
+            iCDCPTCodes: d.Value.ResidentNotes[ 0 ].code,
+            itemsDescription: d.Value.ConsultationNote[ 0 ].description,
+            serviceDescription: d.Value.ResidentNotes[ 0 ].description,
+            requestedBy: d.Value.DischargeRequest.DischargeMedication.Medicine[ 0 ].requestedQty,
+            consultant: "N/A",
+            mrn: "N/A",
+            patientName: d.Value.RadiologyRequest[ 0 ].requesterName,
+            rDName: d.Value.RadiologyRequest[ 0 ].serviceName,
+            orderedBy: d.Value.RadiologyRequest[ 0 ].requesterName,
+            notes: d.Value.ConsultationNote[ 0 ].doctorNotes
         } ) );
         return filteredData;
     }
     if ( url === "/getHistoryEDR?info=EDR" && name === "RD Assessment & Diagnosis" )
     {
         filteredData = data.map( ( d ) => ( {
-            transactionID: "11",
-            rDNoteID: "22",
-            orderID: "11",
-            itemsDescription: "05",
-            dateTime: d.date,
-            requestID: "14",
-            orderedBy: "22",
-            serviceDescription: "54",
-            iCDCPTCodes: "44",
-            dischargeMedication: "09",
-            requestedBy: "59",
-            mrn: "55",
-            consultant: "51",
-            patientName: "66",
-            notesSummary: "59",
-            generatedBy: "44",
-            rDName: "77",
-            notes: "88"
+            transactionID: d.TxId,
+            rDNoteID: d.Value.ResidentNotes[ 0 ].residentNoteNo,
+            orderID: d.Value.DischargeRequest.DischargeMedication.Medicine[ 0 ].itemId,
+            itemsDescription: d.Value.ConsultationNote[ 0 ].description,
+            dateTime: d.Timestamp,
+            requestID: d.Value.PharmacyRequest[ 0 ].ReplenishmentRequestBuID,
+            orderedBy: d.Value.RadiologyRequest[ 0 ].requesterName,
+            serviceDescription: d.Value.ResidentNotes[ 0 ].description,
+            iCDCPTCodes: d.Value.ResidentNotes[ 0 ].code,
+            dischargeMedication: d.Value.DischargeRequest.DischargeMedication.Medicine[ 0 ].medicineName,
+            requestedBy: d.Value.DischargeRequest.DischargeMedication.Medicine[ 0 ].requestedQty,
+            mrn: "N/A",
+            consultant: "N/A",
+            patientName: d.Value.RadiologyRequest[ 0 ].requesterName,
+            notesSummary: d.Value.DischargeRequest.DischargeSummary.otherNotes,
+            generatedBy: d.Value.generatedBy,
+            rDName: d.Value.RadiologyRequest[ 0 ].serviceName,
+            notes: d.Value.ConsultationNote[ 0 ].doctorNotes
         } ) );
         return filteredData;
     }
     if ( url === "/getHistoryEDR?info=EDR" && name === "Insurance Claims" )
     {
         filteredData = data.map( ( d ) => ( {
-            requestID: "a",
-            dateTime: d.date,
-            itemsDescription: "",
-            patientInfo: "c",
-            vendor: "d",
-            requestInfo: "e",
-            claimInfo: "5l",
-            transactionID: "f"
+            requestID: d.Value.PharmacyRequest[ 0 ].ReplenishmentRequestBuID,
+            dateTime: d.Timestamp,
+            itemsDescription: d.Value.ConsultationNote[ 0 ].description,
+            patientInfo: "N/A",
+            vendor: "N/A",
+            requestInfo: "N/A",
+            claimInfo: d.Value.claimed,
+            transactionID: d.TxId
         } ) );
         return filteredData;
     }
     if ( url === "/getHistoryEDR?info=EDR" && name === "EC Assessment & Diagnosis" )
     {
         filteredData = data.map( ( d ) => ( {
-            dateTime: d.date,
-            requestId: "475",
-            itemsDescription: "05",
-            mrn: "99",
-            patientInfo: "36",
-            orderID: "11",
-            patientName: "kk",
-            orderedBy: "98",
-            requester: "32",
-            performedBy: "333",
-            consultationNotes: "30",
-            serviceDescription: "s5",
-            transactionID: "021"
+            dateTime: d.Timestamp,
+            requestId: d.Value.PharmacyRequest[ 0 ].ReplenishmentRequestBuID,
+            itemsDescription: d.Value.ConsultationNote[ 0 ].description,
+            mrn: "N/A",
+            patientInfo: "N/A",
+            orderID: d.Value.DischargeRequest.DischargeMedication.Medicine[ 0 ].itemId,
+            patientName: d.Value.RadiologyRequest[ 0 ].requesterName,
+            orderedBy: d.Value.RadiologyRequest[ 0 ].requesterName,
+            requester: d.Value.ConsultationNote[ 0 ].requester,
+            performedBy: d.Value.generatedBy,
+            consultationNotes: d.Value.ConsultationNote[ 0 ].consultationNotes,
+            serviceDescription: d.Value.ResidentNotes[ 0 ].description,
+            transactionID: d.TxId
         } ) );
         return filteredData;
     }
     if ( url === "/getHistoryEDR?info=EDR" && name === "Patient Discharge" )
     {
         filteredData = data.map( ( d ) => ( {
-            iCTCode: "1",
-            khmcCode: "2",
-            itemInfo: "3",
-            orderedBy: "4",
-            patientInfo: "5",
-            transactionID: "6"
+            iCTCode: "N/A",
+            khmcCode: "N/A",
+            itemInfo: "N/A",
+            orderedBy: d.Value.RadiologyRequest[ 0 ].requesterName,
+            patientInfo: "N/A",
+            transactionID: d.TxId
         } ) );
         return filteredData;
     }
     if ( url === "/getHistoryEDR?info=EDR" && name === "Orders" )
     {
         filteredData = data.map( ( d ) => ( {
-            iCTCode: "o1",
-            khmcCode: "o2",
-            itemInfo: "o3",
-            orderedBy: "o4",
-            patientInfo: "o5",
-            transactionID: "o6"
+            iCTCode: "N/A",
+            khmcCode: "N/A",
+            itemInfo: "N/A",
+            orderedBy: d.Value.RadiologyRequest[ 0 ].requesterName,
+            patientInfo: "N/A",
+            transactionID: d.TxId
         } ) );
         return filteredData;
     }
     return [];
-};
+}
+
+// handleOtherRequest( "/getHistoryPatient?info=PatientInfo", name, "SIN" )
+const handleOtherRequest = async ( url, name, key ) =>
+{
+    const res = await toHandleOtherRequests( "/getHistoryPatient?info=PatientInfo", name );
+    console.log( 'res: ', res );
+    const value = res.map( d => d.Value[ key ] )[ 0 ];
+    console.log( "value: ", value );
+    return value;
+}
+
+const toHandleOtherRequests = ( url, name ) =>
+{
+    return new Promise( ( resolve, reject ) =>
+    {
+        fetch( getPatientsInfo + url )
+            .then( ( response ) => response.json() )
+            .then( ( res ) =>
+            {
+                resolve( res );
+            } )
+            .catch( ( error ) => reject( error ) );
+    } );
+}

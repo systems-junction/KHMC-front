@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from "react";
-import Blockchain from "./Blockchain";
+import Blockchain from "../Blockchain";
 import Loader from "react-loader-spinner";
 import
 {
-  rcmDropdownItems as dropdownItems,
+  adminDropdownItems as dropdownItems,
   dropdownModel,
   generateTableModel,
   generateTabsModel,
-} from "../../../models";
-import { getPatientsInfoData } from './NetworkCall'
+} from "../../../../models";
+import { getData } from './NetworkCall'
 
-export default function RCM ( props )
+export default function WMS ( props )
 {
   const {
-    rcmDropdownItems,
-    tabsData,
+    adminDropdownItems,
+    adminTabsData: tabsData,
   } = dropdownItems;
   const [ ddModel, setDDModel ] = useState(
-    dropdownModel( "rcmDropdownId", "RCM", rcmDropdownItems, rcmDropdownItems[ 0 ] )
+    dropdownModel( "adminDropdownId", "Admin", adminDropdownItems, adminDropdownItems[ 0 ] )
   );
   const [ tabsModel, setTabsModel ] = useState(
-    generateTabsModel( "rcmTabsId", 0, tabsData[ 0 ].tabs )
+    generateTabsModel( "adminTabsId", 0, tabsData[ 0 ].tabs )
   );
   const defaultTabs = tabsData[ 0 ].tabs;
   const [ gridData, setGridData ] = useState( tabsData );
@@ -33,11 +33,12 @@ export default function RCM ( props )
   {
     let tableModel;
     // To toggle selected tab value if main tab is selected
-    const selectedDropdownOptionIndex = rcmDropdownItems.indexOf( ddModel.selectedValue );
+    const selectedDropdownOptionIndex = adminDropdownItems.indexOf( ddModel.selectedValue );
     const filteredHeading = tabsData[ selectedDropdownOptionIndex ].allTabData[ selectedTabIndex ].heading;
     const filteredTableDataKeys = tabsData[ selectedDropdownOptionIndex ].allTabData[ selectedTabIndex ].tableDataKeys;
     const filteredActions = tabsData[ selectedDropdownOptionIndex ].allTabData[ selectedTabIndex ].actions;
     tableModel = getTableData( data, filteredHeading, filteredTableDataKeys, filteredActions );
+    console.log( "tableModel: ", tableModel );
     setTableModel( tableModel );
   };
 
@@ -54,17 +55,19 @@ export default function RCM ( props )
 
   useEffect( () =>
   {
-    const selectedDropdownOptionIndex = rcmDropdownItems.indexOf( ddModel.selectedValue );
+    const selectedDropdownOptionIndex = adminDropdownItems.indexOf( ddModel.selectedValue );
     const handleData = async () =>
     {
       const filteredTabs = tabsData[ selectedDropdownOptionIndex ].tabs;
       setTabsModel( { ...tabsModel, tabs: filteredTabs, value: 0 } );
-      const filteredData = await getPatientsInfoData( tabsData[ selectedDropdownOptionIndex ].endpointURL, tabsData[ selectedDropdownOptionIndex ].name );
+      const filteredData = await getData( tabsData[ selectedDropdownOptionIndex ].endpointURL, tabsData[ selectedDropdownOptionIndex ].name );
+      console.log( "filteredData: ", filteredData );
       setTableFilteredData( filteredData );
       handleTableData( 0, tabsModel, filteredData );
     }
     handleData();
   }, [ ddModel ] )
+  console.log( 'tableModel: ', tableModel )
 
   return (
     <div
@@ -86,6 +89,7 @@ export default function RCM ( props )
           setTabsModel={ ( index, model, mainTabSelected ) =>
             handleTabsModel( index, model, mainTabSelected ) }
           tableModel={ tableModel }
+          handleViewData={ tableFilteredData }
         />
       ) ) ||
         <div
@@ -105,7 +109,10 @@ export default function RCM ( props )
             height={ 50 }
             width={ 50 }
           />
-        </div> }
+        </div>
+      }
+
+
     </div>
   );
 }

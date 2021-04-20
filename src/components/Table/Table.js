@@ -35,7 +35,7 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import MobileTable from "./MobileTable";
 
-const useStyles = makeStyles(styles);
+const useStyles = makeStyles( styles );
 
 const stylesB = {
   stylesForActive: {
@@ -82,7 +82,7 @@ const stylesB = {
   },
 };
 
-const StyledTableRow = withStyles((theme) => ({
+const StyledTableRow = withStyles( ( theme ) => ( {
   root: {
     "&:nth-of-type(odd)": {
       backgroundColor: "#f4f4f4",
@@ -92,9 +92,9 @@ const StyledTableRow = withStyles((theme) => ({
       backgroundColor: "#FFFFFF",
     },
   },
-}))(TableRow);
+} ) )( TableRow );
 
-const useStylesForChip = makeStyles((theme) => ({
+const useStylesForChip = makeStyles( ( theme ) => ( {
   root: {
     "& .MuiChip-root": {
       backgroundColor: "red",
@@ -103,102 +103,126 @@ const useStylesForChip = makeStyles((theme) => ({
       height: "25px",
     },
   },
-}));
+} ) );
 
 let matches = true;
 
-export default function CustomTable(props) {
+export default function CustomTable ( props )
+{
   const theme = useTheme();
-  matches = useMediaQuery(theme.breakpoints.up("sm"));
+  matches = useMediaQuery( theme.breakpoints.up( "sm" ) );
 
   const { tableHeading, tableData, tableDataKeys, tableHeaderColor } = props;
 
   const classes = useStyles();
   const classForChip = useStylesForChip();
 
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(
+  const [ page, setPage ] = React.useState( 0 );
+  const [ rowsPerPage, setRowsPerPage ] = React.useState(
     !props.doNotPagination ? 10 : props.tableData.length
   );
-  const [selectedRow, setSelectedRow] = React.useState("");
-  const [hovered, setHovered] = React.useState("");
-  const [currentUser, setCurrentUser] = React.useState(
-    cookie.load("current_user")
+  const [ selectedRow, setSelectedRow ] = React.useState( "" );
+  const [ hovered, setHovered ] = React.useState( "" );
+  const [ currentUser, setCurrentUser ] = React.useState(
+    cookie.load( "current_user" )
   );
 
-  const [doNotPagination, setAllowedPagination] = React.useState(true);
+  const [ doNotPagination, setAllowedPagination ] = React.useState( true );
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+  const handleChangePage = ( event, newPage ) =>
+  {
+    setPage( newPage );
   };
 
-  useEffect(() => {
+  useEffect( () =>
+  {
     // props.tableData
-    if (!props.doNotPagination) {
+    if ( !props.doNotPagination )
+    {
       // doNotPagination = true;
-      setAllowedPagination(true);
-    } else {
+      setAllowedPagination( true );
+    } else
+    {
       // doNotPagination = false;
-      setAllowedPagination(false);
+      setAllowedPagination( false );
     }
-  }, []);
+  }, [] );
 
-  const replaceSlugToTitle = (val, key, indexValue) => {
-    if (key === "heartRate") {
-      if (val < 60 || val > 100) {
-        return <Chip label={val} />;
+  const replaceSlugToTitle = ( val, key, indexValue ) =>
+  {
+    if ( key === "heartRate" )
+    {
+      if ( val < 60 || val > 100 )
+      {
+        return <Chip label={ val } />;
       }
     }
-    if (key === "bloodPressureSys") {
-      if (val > 120 || val < 90) {
-        return <Chip label={val} />;
+    if ( key === "bloodPressureSys" )
+    {
+      if ( val > 120 || val < 90 )
+      {
+        return <Chip label={ val } />;
       }
     }
-    if (key === "bloodPressureDia") {
-      if (val < 60 || val > 80) {
-        return <Chip label={val} />;
+    if ( key === "bloodPressureDia" )
+    {
+      if ( val < 60 || val > 80 )
+      {
+        return <Chip label={ val } />;
       }
     }
-    if (key === "respiratoryRate") {
-      if (val < 12 || val > 25) {
-        return <Chip label={val} />;
+    if ( key === "respiratoryRate" )
+    {
+      if ( val < 12 || val > 25 )
+      {
+        return <Chip label={ val } />;
       }
     }
-    if (key === "temperature") {
-      if (val < 97 || val > 99) {
-        return <Chip label={val} />;
+    if ( key === "temperature" )
+    {
+      if ( val < 97 || val > 99 )
+      {
+        return <Chip label={ val } />;
       }
     }
-    if (key === "FSBS") {
-      if (val < 80 || val > 130) {
-        return <Chip label={val} />;
+    if ( key === "FSBS" )
+    {
+      if ( val < 80 || val > 130 )
+      {
+        return <Chip label={ val } />;
       }
     }
-    if (key === "painScale") {
-      if (val >= 8) {
-        return <Chip label={val} />;
+    if ( key === "painScale" )
+    {
+      if ( val >= 8 )
+      {
+        return <Chip label={ val } />;
       }
     }
-    if (key === "pulseOX") {
-      if (val < 80 || val > 100) {
-        return <Chip label={val} />;
+    if ( key === "pulseOX" )
+    {
+      if ( val < 80 || val > 100 )
+      {
+        return <Chip label={ val } />;
       }
     }
 
-    if (val === "in_active") {
+    if ( val === "in_active" )
+    {
       return (
         <Button
-          style={stylesB.stylesForInActive}
+          style={ stylesB.stylesForInActive }
           variant="contained"
           color="primary"
         >
           <strong>In active</strong>
         </Button>
       );
-    } else if (val === "active") {
+    } else if ( val === "active" )
+    {
       return (
         <Button
-          style={stylesB.stylesForActive}
+          style={ stylesB.stylesForActive }
           variant="contained"
           color="primary"
         >
@@ -212,14 +236,16 @@ export default function CustomTable(props) {
       val === "po_created" ||
       val === "Can be fulfilled" ||
       val === "hold"
-    ) {
+    )
+    {
       // if (currentUser && currentUser.staffTypeId.type === 'Committe Member') {
-      if (currentUser) {
+      if ( currentUser )
+      {
         return (
           <>
             {val === "to_do" ? (
               <Button
-                style={stylesB.stylesForActive}
+                style={ stylesB.stylesForActive }
                 variant="contained"
                 color="primary"
               >
@@ -228,10 +254,10 @@ export default function CustomTable(props) {
             ) : val === "pending" ? (
               <Button
                 // onClick={() => props.handleView(prop)}
-                style={{
+                style={ {
                   ...stylesB.stylesForActive,
                   backgroundColor: "#e877a1",
-                }}
+                } }
                 variant="contained"
                 color="primary"
               >
@@ -239,7 +265,7 @@ export default function CustomTable(props) {
               </Button>
             ) : val === "po_created" ? (
               <Button
-                style={stylesB.stylesForActive}
+                style={ stylesB.stylesForActive }
                 variant="contained"
                 color="primary"
               >
@@ -247,7 +273,7 @@ export default function CustomTable(props) {
               </Button>
             ) : val === "hold" ? (
               <Button
-                style={stylesB.stylesForActive}
+                style={ stylesB.stylesForActive }
                 variant="contained"
                 color="primary"
               >
@@ -255,10 +281,10 @@ export default function CustomTable(props) {
               </Button>
             ) : val === "Can be fulfilled" ? (
               <Button
-                style={{
+                style={ {
                   ...stylesB.stylesForActive,
                   backgroundColor: "#845dc2",
-                }}
+                } }
                 variant="contained"
                 color="primary"
               >
@@ -266,15 +292,16 @@ export default function CustomTable(props) {
               </Button>
             ) : (
               ""
-            )}
+            ) }
           </>
         );
-      } else {
+      } else
+      {
         return (
           <>
             {val === "to_do" ? (
               <Button
-                style={stylesB.stylesForActive}
+                style={ stylesB.stylesForActive }
                 variant="contained"
                 color="primary"
               >
@@ -282,10 +309,10 @@ export default function CustomTable(props) {
               </Button>
             ) : val === "pending" ? (
               <Button
-                style={{
+                style={ {
                   ...stylesB.stylesForActive,
                   backgroundColor: "#e877a1",
-                }}
+                } }
                 variant="contained"
                 color="primary"
               >
@@ -293,7 +320,7 @@ export default function CustomTable(props) {
               </Button>
             ) : val === "po_created" ? (
               <Button
-                style={stylesB.stylesForActive}
+                style={ stylesB.stylesForActive }
                 variant="contained"
                 color="primary"
               >
@@ -301,7 +328,7 @@ export default function CustomTable(props) {
               </Button>
             ) : val === "Can be fulfilled" ? (
               <Button
-                style={stylesB.stylesForActive}
+                style={ stylesB.stylesForActive }
                 variant="contained"
                 color="primary"
               >
@@ -309,7 +336,7 @@ export default function CustomTable(props) {
               </Button>
             ) : (
               ""
-            )}
+            ) }
           </>
         );
       }
@@ -324,12 +351,13 @@ export default function CustomTable(props) {
       val === "Partial Fulfillment Initiated" ||
       val === "pending_administration" ||
       val === "pending_receipt"
-    ) {
+    )
+    {
       return (
         <>
           {val === "in_progress" ? (
             <Button
-              style={{ ...stylesB.stylesForActive, backgroundColor: "#e877a1" }}
+              style={ { ...stylesB.stylesForActive, backgroundColor: "#e877a1" } }
               variant="contained"
               color="primary"
             >
@@ -337,7 +365,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "items_in_transit" ? (
             <Button
-              style={stylesB.stylesForReceived}
+              style={ stylesB.stylesForReceived }
               variant="contained"
               color="primary"
             >
@@ -346,7 +374,7 @@ export default function CustomTable(props) {
           ) : val === "pending_approval_from_accounts" ? (
             <Button
               // style={stylesB.stylesForActive}
-              style={{
+              style={ {
                 // verticalAlign: "center",
                 fontSize: "0.6rem",
                 color: "white",
@@ -354,7 +382,7 @@ export default function CustomTable(props) {
                 borderRadius: 5,
                 background: "#2c6ddd",
                 height: "40px",
-              }}
+              } }
               variant="contained"
               color="primary"
             >
@@ -362,7 +390,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "pending_approval" ? (
             <Button
-              style={stylesB.stylesForActive}
+              style={ stylesB.stylesForActive }
               variant="contained"
               color="primary"
             >
@@ -370,7 +398,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "Delivery in Progress" ? (
             <Button
-              style={stylesB.stylesForActive}
+              style={ stylesB.stylesForActive }
               variant="contained"
               color="primary"
             >
@@ -378,7 +406,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "Partial Delivery in Progress" ? (
             <Button
-              style={stylesB.stylesForActive}
+              style={ stylesB.stylesForActive }
               variant="contained"
               color="primary"
             >
@@ -386,7 +414,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "Fulfillment Initiated" ? (
             <Button
-              style={stylesB.stylesForActive}
+              style={ stylesB.stylesForActive }
               variant="contained"
               color="primary"
             >
@@ -394,9 +422,9 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "Partial Fulfillment Initiated" ? (
             <Button
-              style={{
+              style={ {
                 ...stylesB.stylesForActive,
-              }}
+              } }
               variant="contained"
               color="primary"
             >
@@ -404,7 +432,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "pending_receipt" ? (
             <Button
-              style={stylesB.stylesForActive}
+              style={ stylesB.stylesForActive }
               variant="contained"
               color="primary"
             >
@@ -412,7 +440,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "pending_administration" ? (
             <Button
-              style={stylesB.stylesForActive}
+              style={ stylesB.stylesForActive }
               variant="contained"
               color="primary"
             >
@@ -420,13 +448,13 @@ export default function CustomTable(props) {
             </Button>
           ) : (
             <Button
-              style={stylesB.stylesForActive}
+              style={ stylesB.stylesForActive }
               variant="contained"
               color="primary"
             >
               <strong>Po Sent</strong>
             </Button>
-          )}
+          ) }
         </>
       );
     } else if (
@@ -461,12 +489,13 @@ export default function CustomTable(props) {
       val === "discharged" ||
       val === "Discharged" ||
       val === "rejected"
-    ) {
+    )
+    {
       return (
         <>
           {val === "complete" || val === "Complete" ? (
             <Button
-              style={{ ...stylesB.stylesForActive, backgroundColor: "#ba55d3" }}
+              style={ { ...stylesB.stylesForActive, backgroundColor: "#ba55d3" } }
               variant="contained"
               color="primary"
             >
@@ -474,7 +503,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "Partially Completed" ? (
             <Button
-              style={{ ...stylesB.stylesForActive, width: "120px" }}
+              style={ { ...stylesB.stylesForActive, width: "120px" } }
               variant="contained"
               color="primary"
             >
@@ -482,7 +511,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "Sent for PAR" ? (
             <Button
-              style={{ ...stylesB.stylesForActive, width: "120px" }}
+              style={ { ...stylesB.stylesForActive, width: "120px" } }
               variant="contained"
               color="primary"
             >
@@ -490,7 +519,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "closed" ? (
             <Button
-              style={{ ...stylesB.stylesForActive, backgroundColor: "#2c6ddd" }}
+              style={ { ...stylesB.stylesForActive, backgroundColor: "#2c6ddd" } }
               variant="contained"
               color="primary"
             >
@@ -498,7 +527,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "pending" ? (
             <Button
-              style={{ ...stylesB.stylesForActive, backgroundColor: "#e877a1" }}
+              style={ { ...stylesB.stylesForActive, backgroundColor: "#e877a1" } }
               variant="contained"
               color="primary"
             >
@@ -506,7 +535,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "modify" ? (
             <Button
-              style={{ ...stylesB.stylesForActive, backgroundColor: "#e877a1" }}
+              style={ { ...stylesB.stylesForActive, backgroundColor: "#e877a1" } }
               variant="contained"
               color="primary"
             >
@@ -514,7 +543,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "delivered " ? (
             <Button
-              style={{ ...stylesB.stylesForActive, backgroundColor: "#2c6ddd" }}
+              style={ { ...stylesB.stylesForActive, backgroundColor: "#2c6ddd" } }
               variant="contained"
               color="primary"
             >
@@ -522,7 +551,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "completed" || val === "Completed" ? (
             <Button
-              style={{ ...stylesB.stylesForActive, backgroundColor: "#ba55d3" }}
+              style={ { ...stylesB.stylesForActive, backgroundColor: "#ba55d3" } }
               variant="contained"
               color="primary"
             >
@@ -530,7 +559,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "approved" || val === "Approved" ? (
             <Button
-              style={{ ...stylesB.stylesForActive, backgroundColor: "#ba55d3" }}
+              style={ { ...stylesB.stylesForActive, backgroundColor: "#ba55d3" } }
               variant="contained"
               color="primary"
             >
@@ -538,11 +567,11 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "partial approved" || val === "Partial Approved" ? (
             <Button
-              style={{
+              style={ {
                 ...stylesB.stylesForActive,
                 backgroundColor: "#2c6ddd",
                 width: "150px",
-              }}
+              } }
               variant="contained"
               color="primary"
             >
@@ -550,10 +579,10 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "partially completed" ? (
             <Button
-              style={{
+              style={ {
                 ...stylesB.stylesForActive,
                 backgroundColor: " #2c6ddd",
-              }}
+              } }
               variant="contained"
               color="primary"
             >
@@ -561,7 +590,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "response in progress" ? (
             <Button
-              style={{ ...stylesB.stylesForActive, backgroundColor: "#e877a1" }}
+              style={ { ...stylesB.stylesForActive, backgroundColor: "#e877a1" } }
               variant="contained"
               color="primary"
             >
@@ -569,7 +598,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "reject" || val === "rejected" ? (
             <Button
-              style={{ ...stylesB.stylesForActive, backgroundColor: "#2c6ddd" }}
+              style={ { ...stylesB.stylesForActive, backgroundColor: "#2c6ddd" } }
               variant="contained"
               color="primary"
             >
@@ -577,7 +606,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "received" ? (
             <Button
-              style={stylesB.stylesForActive}
+              style={ stylesB.stylesForActive }
               variant="contained"
               color="primary"
             >
@@ -585,7 +614,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "rejected" ? (
             <Button
-              style={stylesB.stylesForActive}
+              style={ stylesB.stylesForActive }
               variant="contained"
               color="primary"
             >
@@ -593,7 +622,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "Analysis In Progress" ? (
             <Button
-              style={{ ...stylesB.stylesForActive, width: "150px" }}
+              style={ { ...stylesB.stylesForActive, width: "150px" } }
               variant="contained"
               color="primary"
             >
@@ -601,7 +630,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "receive" ? (
             <Button
-              style={stylesB.stylesForActive}
+              style={ stylesB.stylesForActive }
               variant="contained"
               color="primary"
             >
@@ -609,7 +638,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "Partially Received" ? (
             <Button
-              style={stylesB.stylesForActive}
+              style={ stylesB.stylesForActive }
               variant="contained"
               color="primary"
             >
@@ -617,7 +646,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "approve" ? (
             <Button
-              style={stylesB.stylesForActive}
+              style={ stylesB.stylesForActive }
               variant="contained"
               color="primary"
             >
@@ -625,7 +654,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "Cannot be fulfilled" ? (
             <Button
-              style={{ ...stylesB.stylesForActive, backgroundColor: "#e877a1" }}
+              style={ { ...stylesB.stylesForActive, backgroundColor: "#e877a1" } }
               variant="contained"
               color="primary"
             >
@@ -633,7 +662,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "Returned" ? (
             <Button
-              style={stylesB.stylesForActive}
+              style={ stylesB.stylesForActive }
               variant="contained"
               color="primary"
             >
@@ -641,7 +670,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "Received" ? (
             <Button
-              style={stylesB.stylesForActive}
+              style={ stylesB.stylesForActive }
               variant="contained"
               color="primary"
             >
@@ -649,7 +678,7 @@ export default function CustomTable(props) {
             </Button>
           ) : val === "Discharged" || val === "discharged" ? (
             <Button
-              style={{ ...stylesB.stylesForActive, backgroundColor: "#ba55d3" }}
+              style={ { ...stylesB.stylesForActive, backgroundColor: "#ba55d3" } }
               variant="contained"
               color="primary"
             >
@@ -657,39 +686,44 @@ export default function CustomTable(props) {
             </Button>
           ) : (
             <Button
-              style={stylesB.stylesForActive}
+              style={ stylesB.stylesForActive }
               variant="contained"
               color="primary"
             >
               <strong>Item Returned</strong>
             </Button>
-          )}
+          ) }
         </>
       );
     }
 
     // console.log("sdsd",props.tableHeading[indexValue])
 
-    if (props.tableHeading[indexValue].includes("JD")) {
-      return parseFloat(val).toFixed(4) + " JD";
+    if ( props.tableHeading[ indexValue ].includes( "JD" ) )
+    {
+      return parseFloat( val ).toFixed( 4 ) + " JD";
     }
 
-    return capitilizeLetter(val);
+    return capitilizeLetter( val );
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+  const handleChangeRowsPerPage = ( event ) =>
+  {
+    setRowsPerPage( parseInt( event.target.value, 10 ) );
+    setPage( 0 );
   };
 
-  const formatDate = (date) => {
-    const d = new Date(date);
+  const formatDate = ( date ) =>
+  {
+    const d = new Date( date );
 
     let minutes = "";
 
-    if (d.getHours().toString().length === 1) {
+    if ( d.getHours().toString().length === 1 )
+    {
       minutes = "0" + d.getHours();
-    } else {
+    } else
+    {
       minutes = d.getHours();
     }
 
@@ -698,9 +732,9 @@ export default function CustomTable(props) {
       d
         .getDate()
         .toString()
-        .padStart(2, "0") +
+        .padStart( 2, "0" ) +
       " - " +
-      (d.getMonth() + 1).toString().padStart(2, "0") +
+      ( d.getMonth() + 1 ).toString().padStart( 2, "0" ) +
       " - " +
       // (d.getMonth() + 1) +
       d.getFullYear() +
@@ -708,215 +742,228 @@ export default function CustomTable(props) {
       // d.toLocaleTimeString()
       minutes +
       ":" +
-      ("00" + d.getMinutes()).slice(-2)
+      ( "00" + d.getMinutes() ).slice( -2 )
     );
   };
 
-  const handleClick = (prop, val) => {
-    if (props.handleModelMaterialReceiving) {
-      props.handleModelMaterialReceiving(prop, val);
+  const handleClick = ( prop, val ) =>
+  {
+    if ( props.handleModelMaterialReceiving )
+    {
+      props.handleModelMaterialReceiving( prop, val );
     }
   };
 
-  function setRow(prop) {
-    if (prop._id === selectedRow._id) {
-      setSelectedRow("");
-    } else {
-      setSelectedRow(prop);
+  function setRow ( prop )
+  {
+    if ( prop._id === selectedRow._id )
+    {
+      setSelectedRow( "" );
+    } else
+    {
+      setSelectedRow( prop );
     }
   }
 
-  console.log(matches);
+  console.log( matches );
 
-  if (!props.matchNotRequired) {
-    if (matches) {
+  if ( !props.matchNotRequired )
+  {
+    if ( matches )
+    {
       return (
-        <div className={classes.tableResponsive}>
-          <Table id={props.id ? props.id : "table_component"}>
-            {tableHeading !== undefined ? (
+        <div className={ classes.tableResponsive }>
+          <Table id={ props.id ? props.id : "table_component" }>
+            { tableHeading !== undefined ? (
               <TableHead
-                className={classes[tableHeaderColor + "TableHeader"]}
-                style={{
+                className={ classes[ tableHeaderColor + "TableHeader" ] }
+                style={ {
                   backgroundColor: "#2873cf",
-                }}
+                } }
               >
-                <TableRow className={classes.tableHeadRow}>
-                  {tableHeading.map((prop, index) => {
-                    if (prop !== "") {
+                <TableRow className={ classes.tableHeadRow }>
+                  { tableHeading.map( ( prop, index ) =>
+                  {
+                    if ( prop !== "" )
+                    {
                       return (
                         <>
                           <TableCell
-                            className={classes.tableHeadCell}
-                            style={{
+                            className={ classes.tableHeadCell }
+                            style={ {
                               color: "white",
                               textAlign:
                                 prop === "Actions" || prop === "Action"
                                   ? "center"
                                   : "",
-                            }}
-                            key={prop}
+                            } }
+                            key={ prop }
                           >
-                            {prop}
+                            { prop }
                           </TableCell>
                         </>
                       );
                     }
-                  })}
+                  } ) }
                 </TableRow>
               </TableHead>
-            ) : null}
+            ) : null }
 
             <TableBody>
-              {tableData &&
+              { tableData &&
                 tableData
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((prop, index) => {
+                  .slice( page * rowsPerPage, page * rowsPerPage + rowsPerPage )
+                  .map( ( prop, index ) =>
+                  {
                     return (
                       <>
-                        <StyledTableRow key={index}>
-                          {tableDataKeys
-                            ? tableDataKeys.map((val, key) => {
-                                if (mapDateToKeys(val)) {
-                                  return (
-                                    <TableCell
-                                      className={classes.tableCell}
-                                      key={key}
-                                      style={{
-                                        borderWidth: 0,
-                                        maxWidth: 400,
-                                      }}
-                                    >
-                                      {Array.isArray(val)
-                                        ? prop[val[0]]
-                                          ? formatDate(prop[val[0]][val[1]])
-                                          : prop[val[0]][val[1]]
-                                        : formatDate(prop[val])}
-                                    </TableCell>
-                                  );
-                                } else {
-                                  return (
-                                    <TableCell
-                                      className={`${classes.tableCell} ${classForChip.root}`}
-                                      key={key}
-                                      onClick={() => handleClick(prop, val)}
-                                      style={{
-                                        maxWidth: 400,
-                                        cursor: props.handleModelMaterialReceiving
-                                          ? "pointer"
-                                          : "",
-                                        borderWidth: 0,
-                                      }}
-                                    >
-                                      {Array.isArray(val)
-                                        ? prop[val[0]]
-                                          ? // ? capitilizeLetter(prop[val[0]][val[1]])
-                                            replaceSlugToTitle(
-                                              prop[val[0]][val[1]],
-                                              val,
-                                              key
-                                            )
-                                          : null
-                                        : val.toLowerCase() === "timestamp"
+                        <StyledTableRow key={ index }>
+                          { tableDataKeys
+                            ? tableDataKeys.map( ( val, key ) =>
+                            {
+                              if ( mapDateToKeys( val ) )
+                              {
+                                return (
+                                  <TableCell
+                                    className={ classes.tableCell }
+                                    key={ key }
+                                    style={ {
+                                      borderWidth: 0,
+                                      maxWidth: 400,
+                                    } }
+                                  >
+                                    {Array.isArray( val )
+                                      ? prop[ val[ 0 ] ]
+                                        ? formatDate( prop[ val[ 0 ] ][ val[ 1 ] ] )
+                                        : prop[ val[ 0 ] ][ val[ 1 ] ]
+                                      : formatDate( prop[ val ] ) }
+                                  </TableCell>
+                                );
+                              } else
+                              {
+                                return (
+                                  <TableCell
+                                    className={ `${ classes.tableCell } ${ classForChip.root }` }
+                                    key={ key }
+                                    onClick={ () => handleClick( prop, val ) }
+                                    style={ {
+                                      maxWidth: 400,
+                                      cursor: props.handleModelMaterialReceiving
+                                        ? "pointer"
+                                        : "",
+                                      borderWidth: 0,
+                                    } }
+                                  >
+                                    {Array.isArray( val )
+                                      ? prop[ val[ 0 ] ]
+                                        ? // ? capitilizeLetter(prop[val[0]][val[1]])
+                                        replaceSlugToTitle(
+                                          prop[ val[ 0 ] ][ val[ 1 ] ],
+                                          val,
+                                          key
+                                        )
+                                        : null
+                                      : val.toLowerCase() === "timestamp"
                                         ? new Intl.DateTimeFormat(
-                                            "en-US",
-                                            dateOptions
-                                          ).format(Date.parse(prop[val]))
+                                          "en-US",
+                                          dateOptions
+                                        ).format( Date.parse( prop[ val ] ) )
                                         : // : `${replaceSlugToTitle(prop[val])}`}
-                                          replaceSlugToTitle(
-                                            prop[val],
-                                            val,
-                                            key
-                                          )}
-                                    </TableCell>
-                                  );
-                                }
-                              })
-                            : null}
+                                        replaceSlugToTitle(
+                                          prop[ val ],
+                                          val,
+                                          key
+                                        ) }
+                                  </TableCell>
+                                );
+                              }
+                            } )
+                            : null }
 
-                          {props.action !== "" ? (
+                          { props.action !== "" ? (
                             <TableCell
-                              style={{
+                              style={ {
                                 cursor: "pointer",
                                 borderWidth: 0,
-                              }}
-                              className={classes.tableCell}
+                              } }
+                              className={ classes.tableCell }
                             >
                               {props.action ? (
                                 <div
-                                  style={{
+                                  style={ {
                                     display: "flex",
                                     justifyContent: "space-evenly",
-                                  }}
+                                  } }
                                 >
-                                  <RcIf if={props.action.edit}>
+                                  <RcIf if={ props.action.edit }>
                                     <span
-                                      onClick={() => props.handleEdit(prop)}
+                                      onClick={ () => props.handleEdit( prop ) }
                                     >
                                       <i
-                                        style={{ color: "grey" }}
+                                        style={ { color: "grey" } }
                                         className="zmdi zmdi-edit zmdi-hc-2x"
                                       />
                                     </span>
                                   </RcIf>
-                                  <RcIf if={props.action.delete}>
+                                  <RcIf if={ props.action.delete }>
                                     <span
-                                      onClick={() => props.handleDelete(prop)}
+                                      onClick={ () => props.handleDelete( prop ) }
                                     >
                                       <i
-                                        style={{
+                                        style={ {
                                           color: "grey",
-                                        }}
+                                        } }
                                         className=" ml-10 zmdi zmdi-delete zmdi-hc-2x"
                                       />
                                     </span>
                                   </RcIf>
 
-                                  <RcIf if={props.action.add}>
-                                    <span onClick={() => props.handleAdd(prop)}>
+                                  <RcIf if={ props.action.add }>
+                                    <span onClick={ () => props.handleAdd( prop ) }>
                                       <i
-                                        style={{ color: "grey" }}
+                                        style={ { color: "grey" } }
                                         className=" ml-10 zmdi zmdi-plus-circle zmdi-hc-2x"
                                       />
                                     </span>
                                   </RcIf>
 
-                                  <RcIf if={props.action.view}>
+                                  <RcIf if={ props.action.view }>
                                     <span
-                                      onClick={() => props.handleView(prop)}
+                                      onClick={ () => props.handleView( prop, index ) }
                                     >
                                       <i
-                                        style={{ color: "grey" }}
+                                        style={ { color: "grey" } }
                                         className=" ml-10 zmdi zmdi-eye zmdi-hc-2x"
                                       />
                                     </span>
                                   </RcIf>
 
-                                  <RcIf if={props.action.receiveItem}>
+                                  <RcIf if={ props.action.receiveItem }>
                                     <Tooltip title="Receive Item">
                                       <img
-                                        src={ReceiveItem}
-                                        onClick={() => props.receiveItem(prop)}
-                                        style={{
+                                        src={ ReceiveItem }
+                                        onClick={ () => props.receiveItem( prop ) }
+                                        style={ {
                                           maxWidth: 60,
                                           height: 43,
                                           borderRadius: 30,
-                                        }}
+                                        } }
                                       />
                                     </Tooltip>
                                   </RcIf>
 
-                                  <RcIf if={props.action.returnRequest}>
+                                  <RcIf if={ props.action.returnRequest }>
                                     <Tooltip title="FU Return">
                                       <img
-                                        src={ReturnItem}
-                                        onClick={() =>
-                                          props.addReturnRequest(prop)
+                                        src={ ReturnItem }
+                                        onClick={ () =>
+                                          props.addReturnRequest( prop )
                                         }
-                                        style={{
+                                        style={ {
                                           maxWidth: 60,
                                           height: 45,
                                           borderRadius: 30,
-                                        }}
+                                        } }
                                       />
                                     </Tooltip>
                                   </RcIf>
@@ -928,8 +975,8 @@ export default function CustomTable(props) {
                                     }
                                   >
                                     <span
-                                      onClick={() =>
-                                        props.handleStatus(prop._id)
+                                      onClick={ () =>
+                                        props.handleStatus( prop._id )
                                       }
                                       title="Active"
                                     >
@@ -937,117 +984,121 @@ export default function CustomTable(props) {
                                     </span>
                                   </RcIf>
 
-                                  <RcIf if={props.action.print}>
+                                  <RcIf if={ props.action.print }>
                                     <span
-                                      onClick={() =>
-                                        props.handlePrint(prop)
-                                          ? props.handlePrint(prop)
+                                      onClick={ () =>
+                                        props.handlePrint( prop )
+                                          ? props.handlePrint( prop )
                                           : {}
                                       }
                                       title="Active"
                                     >
                                       <i
-                                        style={{ color: "grey" }}
+                                        style={ { color: "grey" } }
                                         class="zmdi zmdi-print zmdi-hc-2x"
                                       ></i>
                                     </span>
                                   </RcIf>
 
-                                  <RcIf if={props.action.download}>
+                                  <RcIf if={ props.action.download }>
                                     <span
-                                      onClick={() =>
-                                        props.handleDownload(prop)
-                                          ? props.handleDownload(prop)
+                                      onClick={ () =>
+                                        props.handleDownload( prop )
+                                          ? props.handleDownload( prop )
                                           : {}
                                       }
                                       title="Active"
                                     >
                                       <i
-                                        style={{ color: "grey" }}
+                                        style={ { color: "grey" } }
                                         class="zmdi zmdi-download zmdi-hc-2x"
                                       ></i>
                                     </span>
                                   </RcIf>
 
                                   {props.checkAvailability &&
-                                  props.checkAvailability(prop) ? (
-                                    <RcIf if={props.action.addNewPR}>
+                                    props.checkAvailability( prop ) ? (
+                                    <RcIf if={ props.action.addNewPR }>
                                       <span
-                                        onClick={() =>
-                                          props.handleAddNewPR(prop)
+                                        onClick={ () =>
+                                          props.handleAddNewPR( prop )
                                         }
                                       >
                                         <i
-                                          style={{ color: "grey" }}
+                                          style={ { color: "grey" } }
                                           className=" ml-10 zmdi zmdi-plus-circle zmdi-hc-2x"
                                         />
                                       </span>
                                     </RcIf>
                                   ) : (
-                                    <RcIf if={props.action.removeAddedPR}>
+                                    <RcIf if={ props.action.removeAddedPR }>
                                       <span
-                                        onClick={() =>
-                                          props.handleRemovePR(prop)
+                                        onClick={ () =>
+                                          props.handleRemovePR( prop )
                                         }
                                       >
                                         <i
-                                          style={{ color: "grey" }}
+                                          style={ { color: "grey" } }
                                           className=" ml-10 zmdi zmdi-check zmdi-hc-2x"
                                         />
                                       </span>
                                     </RcIf>
-                                  )}
+                                  ) }
                                 </div>
                               ) : (
                                 undefined
-                              )}
+                              ) }
                             </TableCell>
                           ) : (
                             ""
-                          )}
+                          ) }
                         </StyledTableRow>
                       </>
                     );
-                  })}
+                  } ) }
             </TableBody>
           </Table>
           {doNotPagination ? (
             <TablePagination
-              rowsPerPageOptions={[10, 20]}
+              rowsPerPageOptions={ [ 10, 20 ] }
               component="div"
-              count={props.tableData && props.tableData.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onChangePage={handleChangePage}
-              onChangeRowsPerPage={handleChangeRowsPerPage}
+              count={ props.tableData && props.tableData.length }
+              rowsPerPage={ rowsPerPage }
+              page={ page }
+              onChangePage={ handleChangePage }
+              onChangeRowsPerPage={ handleChangeRowsPerPage }
             />
           ) : (
             undefined
-          )}
+          ) }
         </div>
       );
-    } else {
-      return <MobileTable {...props} />;
+    } else
+    {
+      return <MobileTable { ...props } />;
     }
-  } else {
+  } else
+  {
     return (
-      <div className={classes.tableResponsive}>
-        <Table id={props.id ? props.id : "table_component"}>
-          {tableHeading !== undefined ? (
+      <div className={ classes.tableResponsive }>
+        <Table id={ props.id ? props.id : "table_component" }>
+          { tableHeading !== undefined ? (
             <TableHead
-              className={classes[tableHeaderColor + "TableHeader"]}
-              style={{
+              className={ classes[ tableHeaderColor + "TableHeader" ] }
+              style={ {
                 backgroundColor: "#2873cf",
-              }}
+              } }
             >
-              <TableRow className={classes.tableHeadRow}>
-                {tableHeading.map((prop, index) => {
-                  if (prop !== "") {
+              <TableRow className={ classes.tableHeadRow }>
+                { tableHeading.map( ( prop, index ) =>
+                {
+                  if ( prop !== "" )
+                  {
                     return (
                       <>
                         <TableCell
-                          className={classes.tableHeadCell}
-                          style={{
+                          className={ classes.tableHeadCell }
+                          style={ {
                             color: "white",
                             borderTopLeftRadius: index === 0 ? 5 : 0,
                             borderTopRightRadius:
@@ -1056,175 +1107,179 @@ export default function CustomTable(props) {
                               prop === "Actions" || prop === "Action"
                                 ? "center"
                                 : "",
-                          }}
-                          key={prop}
+                          } }
+                          key={ prop }
                         >
-                          {prop}
+                          { prop }
                         </TableCell>
                       </>
                     );
                   }
-                })}
+                } ) }
               </TableRow>
             </TableHead>
-          ) : null}
+          ) : null }
 
           <TableBody>
-            {tableData &&
+            { tableData &&
               tableData
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((prop, index) => {
+                .slice( page * rowsPerPage, page * rowsPerPage + rowsPerPage )
+                .map( ( prop, index ) =>
+                {
                   return (
                     <>
-                      <StyledTableRow key={index}>
-                        {tableDataKeys
-                          ? tableDataKeys.map((val, key) => {
-                              if (mapDateToKeys(val)) {
-                                return (
-                                  <TableCell
-                                    className={classes.tableCell}
-                                    key={key}
-                                    style={{
-                                      // textAlign: 'center',
-                                      borderWidth: 0,
-                                      maxWidth: 400,
-                                    }}
-                                  >
-                                    {Array.isArray(val)
-                                      ? prop[val[0]]
-                                        ? formatDate(prop[val[0]][val[1]])
-                                        : prop[val[0]][val[1]]
-                                      : formatDate(prop[val])}
-                                  </TableCell>
-                                );
-                              } else {
-                                return (
-                                  <TableCell
-                                    className={`${classes.tableCell} ${classForChip.root}`}
-                                    key={key}
-                                    onClick={() => handleClick(prop, val)}
-                                    style={{
-                                      maxWidth: 400,
-                                      // textAlign: 'center',
-                                      cursor: props.handleModelMaterialReceiving
-                                        ? "pointer"
-                                        : "",
-                                      // borderTopLeftRadius: key === 0 ? 5 : 0,
-                                      // borderBottomLeftRadius: key === 0 ? 5 : 0,
+                      <StyledTableRow key={ index }>
+                        { tableDataKeys
+                          ? tableDataKeys.map( ( val, key ) =>
+                          {
+                            if ( mapDateToKeys( val ) )
+                            {
+                              return (
+                                <TableCell
+                                  className={ classes.tableCell }
+                                  key={ key }
+                                  style={ {
+                                    // textAlign: 'center',
+                                    borderWidth: 0,
+                                    maxWidth: 400,
+                                  } }
+                                >
+                                  {Array.isArray( val )
+                                    ? prop[ val[ 0 ] ]
+                                      ? formatDate( prop[ val[ 0 ] ][ val[ 1 ] ] )
+                                      : prop[ val[ 0 ] ][ val[ 1 ] ]
+                                    : formatDate( prop[ val ] ) }
+                                </TableCell>
+                              );
+                            } else
+                            {
+                              return (
+                                <TableCell
+                                  className={ `${ classes.tableCell } ${ classForChip.root }` }
+                                  key={ key }
+                                  onClick={ () => handleClick( prop, val ) }
+                                  style={ {
+                                    maxWidth: 400,
+                                    // textAlign: 'center',
+                                    cursor: props.handleModelMaterialReceiving
+                                      ? "pointer"
+                                      : "",
+                                    // borderTopLeftRadius: key === 0 ? 5 : 0,
+                                    // borderBottomLeftRadius: key === 0 ? 5 : 0,
 
-                                      borderBottomLeftRadius:
-                                        props.tableData.length - 1 === index &&
+                                    borderBottomLeftRadius:
+                                      props.tableData.length - 1 === index &&
                                         key === 0
-                                          ? 5
-                                          : 0,
-                                      borderWidth: 0,
-                                    }}
-                                  >
-                                    {Array.isArray(val)
-                                      ? prop[val[0]]
-                                        ? // ? capitilizeLetter(prop[val[0]][val[1]])
-                                          replaceSlugToTitle(
-                                            prop[val[0]][val[1]],
-                                            val,
-                                            key
-                                          )
-                                        : null
-                                      : val.toLowerCase() === "timestamp"
+                                        ? 5
+                                        : 0,
+                                    borderWidth: 0,
+                                  } }
+                                >
+                                  {Array.isArray( val )
+                                    ? prop[ val[ 0 ] ]
+                                      ? // ? capitilizeLetter(prop[val[0]][val[1]])
+                                      replaceSlugToTitle(
+                                        prop[ val[ 0 ] ][ val[ 1 ] ],
+                                        val,
+                                        key
+                                      )
+                                      : null
+                                    : val.toLowerCase() === "timestamp"
                                       ? new Intl.DateTimeFormat(
-                                          "en-US",
-                                          dateOptions
-                                        ).format(Date.parse(prop[val]))
+                                        "en-US",
+                                        dateOptions
+                                      ).format( Date.parse( prop[ val ] ) )
                                       : // : `${replaceSlugToTitle(prop[val])}`}
-                                        replaceSlugToTitle(prop[val], val, key)}
-                                  </TableCell>
-                                );
-                              }
-                            })
-                          : null}
+                                      replaceSlugToTitle( prop[ val ], val, key ) }
+                                </TableCell>
+                              );
+                            }
+                          } )
+                          : null }
 
-                        {props.action !== "" ? (
+                        { props.action !== "" ? (
                           <TableCell
-                            style={{
+                            style={ {
                               cursor: "pointer",
                               // borderTopRightRadius: 15,
                               borderBottomRightRadius:
                                 props.tableData.length - 1 === index ? 5 : 0,
                               borderWidth: 0,
-                            }}
-                            className={classes.tableCell}
+                            } }
+                            className={ classes.tableCell }
                           >
                             {props.action ? (
                               <div
-                                style={{
+                                style={ {
                                   display: "flex",
                                   justifyContent: "space-evenly",
-                                }}
+                                } }
                               >
-                                <RcIf if={props.action.edit}>
-                                  <span onClick={() => props.handleEdit(prop)}>
+                                <RcIf if={ props.action.edit }>
+                                  <span onClick={ () => props.handleEdit( prop ) }>
                                     <i
-                                      style={{ color: "grey" }}
+                                      style={ { color: "grey" } }
                                       className="zmdi zmdi-edit zmdi-hc-2x"
                                     />
                                   </span>
                                 </RcIf>
-                                <RcIf if={props.action.delete}>
+                                <RcIf if={ props.action.delete }>
                                   <span
-                                    onClick={() => props.handleDelete(prop)}
+                                    onClick={ () => props.handleDelete( prop ) }
                                   >
                                     <i
-                                      style={{
+                                      style={ {
                                         color: "grey",
-                                      }}
+                                      } }
                                       className=" ml-10 zmdi zmdi-delete zmdi-hc-2x"
                                     />
                                   </span>
                                 </RcIf>
 
-                                <RcIf if={props.action.add}>
-                                  <span onClick={() => props.handleAdd(prop)}>
+                                <RcIf if={ props.action.add }>
+                                  <span onClick={ () => props.handleAdd( prop ) }>
                                     <i
-                                      style={{ color: "grey" }}
+                                      style={ { color: "grey" } }
                                       className=" ml-10 zmdi zmdi-plus-circle zmdi-hc-2x"
                                     />
                                   </span>
                                 </RcIf>
 
-                                <RcIf if={props.action.view}>
-                                  <span onClick={() => props.handleView(prop)}>
+                                <RcIf if={ props.action.view }>
+                                  <span onClick={ () => props.handleView( prop, index ) }>
                                     <i
-                                      style={{ color: "grey" }}
+                                      style={ { color: "grey" } }
                                       className=" ml-10 zmdi zmdi-eye zmdi-hc-2x"
                                     />
                                   </span>
                                 </RcIf>
 
-                                <RcIf if={props.action.receiveItem}>
+                                <RcIf if={ props.action.receiveItem }>
                                   <Tooltip title="Receive Item">
                                     <img
-                                      src={ReceiveItem}
-                                      onClick={() => props.receiveItem(prop)}
-                                      style={{
+                                      src={ ReceiveItem }
+                                      onClick={ () => props.receiveItem( prop ) }
+                                      style={ {
                                         maxWidth: 60,
                                         height: 43,
                                         borderRadius: 30,
-                                      }}
+                                      } }
                                     />
                                   </Tooltip>
                                 </RcIf>
 
-                                <RcIf if={props.action.returnRequest}>
+                                <RcIf if={ props.action.returnRequest }>
                                   <Tooltip title="FU Return">
                                     <img
-                                      src={ReturnItem}
-                                      onClick={() =>
-                                        props.addReturnRequest(prop)
+                                      src={ ReturnItem }
+                                      onClick={ () =>
+                                        props.addReturnRequest( prop )
                                       }
-                                      style={{
+                                      style={ {
                                         maxWidth: 60,
                                         height: 45,
                                         borderRadius: 30,
-                                      }}
+                                      } }
                                     />
                                   </Tooltip>
                                 </RcIf>
@@ -1236,96 +1291,96 @@ export default function CustomTable(props) {
                                   }
                                 >
                                   <span
-                                    onClick={() => props.handleStatus(prop._id)}
+                                    onClick={ () => props.handleStatus( prop._id ) }
                                     title="Active"
                                   >
                                     <i className=" ml-10 zmdi zmdi-check zmdi-hc-2x" />
                                   </span>
                                 </RcIf>
 
-                                <RcIf if={props.action.print}>
+                                <RcIf if={ props.action.print }>
                                   <span
-                                    onClick={() =>
-                                      props.handlePrint(prop)
-                                        ? props.handlePrint(prop)
+                                    onClick={ () =>
+                                      props.handlePrint( prop )
+                                        ? props.handlePrint( prop )
                                         : {}
                                     }
                                     title="Active"
                                   >
                                     <i
-                                      style={{ color: "grey" }}
+                                      style={ { color: "grey" } }
                                       class="zmdi zmdi-print zmdi-hc-2x"
                                     ></i>
                                   </span>
                                 </RcIf>
 
-                                <RcIf if={props.action.download}>
+                                <RcIf if={ props.action.download }>
                                   <span
-                                    onClick={() =>
-                                      props.handleDownload(prop)
-                                        ? props.handleDownload(prop)
+                                    onClick={ () =>
+                                      props.handleDownload( prop )
+                                        ? props.handleDownload( prop )
                                         : {}
                                     }
                                     title="Active"
                                   >
                                     <i
-                                      style={{ color: "grey" }}
+                                      style={ { color: "grey" } }
                                       class="zmdi zmdi-download zmdi-hc-2x"
                                     ></i>
                                   </span>
                                 </RcIf>
 
                                 {props.checkAvailability &&
-                                props.checkAvailability(prop) ? (
-                                  <RcIf if={props.action.addNewPR}>
+                                  props.checkAvailability( prop ) ? (
+                                  <RcIf if={ props.action.addNewPR }>
                                     <span
-                                      onClick={() => props.handleAddNewPR(prop)}
+                                      onClick={ () => props.handleAddNewPR( prop ) }
                                     >
                                       <i
-                                        style={{ color: "grey" }}
+                                        style={ { color: "grey" } }
                                         className=" ml-10 zmdi zmdi-plus-circle zmdi-hc-2x"
                                       />
                                     </span>
                                   </RcIf>
                                 ) : (
-                                  <RcIf if={props.action.removeAddedPR}>
+                                  <RcIf if={ props.action.removeAddedPR }>
                                     <span
-                                      onClick={() => props.handleRemovePR(prop)}
+                                      onClick={ () => props.handleRemovePR( prop ) }
                                     >
                                       <i
-                                        style={{ color: "grey" }}
+                                        style={ { color: "grey" } }
                                         className=" ml-10 zmdi zmdi-check zmdi-hc-2x"
                                       />
                                     </span>
                                   </RcIf>
-                                )}
+                                ) }
                               </div>
                             ) : (
                               undefined
-                            )}
+                            ) }
                           </TableCell>
                         ) : (
                           ""
-                        )}
+                        ) }
                       </StyledTableRow>
                     </>
                   );
-                })}
+                } ) }
           </TableBody>
         </Table>
         {doNotPagination ? (
           <TablePagination
-            rowsPerPageOptions={[10, 20]}
+            rowsPerPageOptions={ [ 10, 20 ] }
             component="div"
-            count={props.tableData && props.tableData.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onChangePage={handleChangePage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
+            count={ props.tableData && props.tableData.length }
+            rowsPerPage={ rowsPerPage }
+            page={ page }
+            onChangePage={ handleChangePage }
+            onChangeRowsPerPage={ handleChangeRowsPerPage }
           />
         ) : (
           undefined
-        )}
+        ) }
       </div>
     );
   }
@@ -1336,7 +1391,7 @@ CustomTable.defaultProps = {
 };
 
 CustomTable.propTypes = {
-  tableHeaderColor: PropTypes.oneOf([
+  tableHeaderColor: PropTypes.oneOf( [
     "warning",
     "primary",
     "danger",
@@ -1344,7 +1399,7 @@ CustomTable.propTypes = {
     "info",
     "rose",
     "gray",
-  ]),
+  ] ),
   // tableHead: PropTypes.arrayOf(PropTypes.string),
   // tableData: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string))
 };

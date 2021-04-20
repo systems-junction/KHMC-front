@@ -33,10 +33,10 @@ const Blockchain = ( props ) =>
     tabsModel,
     setTabsModel,
     tableModel,
-    handleViewData,
   } = props;
   const { tableData, tableHeading, tableDataKeys, actions } = tableModel;
-  console.log( "*&tableData: ", tableData );
+  const [ filteredHeading, setFilteredHeading ] = useState( tableHeading.filter( d => d !== "Transaction ID" ) );
+  const [ actualData ] = useState( tableData );
   console.log( "*&tableHeading: ", tableHeading );
   console.log( "*&tableDataKeys: ", tableDataKeys );
   console.log( "*&tabsModel: ", tabsModel );
@@ -98,16 +98,15 @@ const Blockchain = ( props ) =>
   console.log( "current user", cookie.load( "current_user" ) );
   console.log( tableData );
 
-  function handleView ( rec )
+  function handleView ( rec, index )
   {
     let arr = [];
     tableDataKeys.forEach( ( k, i ) =>
     {
       if ( i !== tableHeading.length - 1 )
       {
-        console.log( "***rec[k]: ", rec[ k ] );
-        console.log( "***handleViewData[ k ]: ", handleViewData );
-        let value = rec[ k ];
+        console.log( "***rec[k]: ", rec, rec[ k ], tableData[ index ] );
+        let value = tableData[ index ][ k ];
         arr.push( {
           title: [ tableHeading[ i ] ],
           value: value,
@@ -121,6 +120,7 @@ const Blockchain = ( props ) =>
 
   const handlePatientSearch = ( e ) =>
   {
+
     // const a = e.target.value.replace(/[^\w\s]/gi, "");
     // setSearchPatientQuery(a);
     // if (a.length >= 3) {
@@ -192,6 +192,35 @@ const Blockchain = ( props ) =>
       false
     );
   };
+
+  const handleTableDataSplition = ( data ) =>
+  {
+    console.log( "main test: ", tableHeading.filter( d => d !== "Transaction ID" ) );
+    const copyData = JSON.parse( JSON.stringify( data ) );
+    let newData = [];
+    copyData.forEach( d =>
+    {
+      console.log( 'data.keys: ', _.keys( d ) );
+      const objKeys = _.keys( d );
+      let object = {};
+      console.log( 'object initialized' )
+      objKeys.forEach( ( key, i ) =>
+      {
+        if ( key !== "transactionID" )
+        {
+          console.log( '*&*previous object: ', object );
+          object = { ...object, [ key ]: d[ key ] }
+          console.log( '*&*current object: ', object );
+        }
+        if ( ( objKeys.length - 1 ) === i )
+        {
+          newData.push( object );
+        }
+      } )
+    } );
+    console.log( "newData: ", newData );
+    return newData;
+  }
 
   return (
     <div
@@ -345,7 +374,7 @@ const Blockchain = ( props ) =>
               id="searchPatientQuery"
               type="text"
               variant="filled"
-              label="Search Patient by Name / MRN / National ID / Mobile Number"
+              label="Search here"
               name={ "searchPatientQuery" }
               value={ searchPatientQuery }
               onChange={ handlePatientSearch }
@@ -386,7 +415,7 @@ const Blockchain = ( props ) =>
               <div>
                 { actions && tableData && tableData.length && (
                   <CustomTable
-                    tableData={ tableData }
+                    tableData={ handleTableDataSplition( tableData ) }
                     tableDataKeys={ tableDataKeys }
                     tableHeading={ tableHeading }
                     action={ actions }
