@@ -27,7 +27,7 @@ const toMapData = ( data, url, name ) =>
     {
         filteredData = data.map( ( d ) => ( {
             transactionId: d.TxId,
-            dateTime: handleTimestamp( d.Timestamp ),
+            dateTime: moment( d.Timestamp ).format( 'MM-DD-YY' ),
             name: d.Value.firstName + " " + d.Value.lastName,
             mrn: d.Value.SIN,
             phoneNumber: d.Value.phoneNumber,
@@ -56,7 +56,7 @@ const toMapData = ( data, url, name ) =>
             rDNoteID: d.Value.ResidentNotes[ 0 ].residentNoteNo,
             orderID: d.Value.DischargeRequest.DischargeMedication.Medicine[ 0 ].itemId,
             requestID: d.Value.PharmacyRequest[ 0 ].ReplenishmentRequestBuID,
-            dateTime: handleTimestamp( d.Timestamp ),
+            dateTime: moment( d.Timestamp ).format( 'MM-DD-YY' ),
             iCDCPTCodes: d.Value.ResidentNotes[ 0 ].code,
             itemsDescription: d.Value.ConsultationNote[ 0 ].description,
             serviceDescription: d.Value.ResidentNotes[ 0 ].description,
@@ -77,7 +77,7 @@ const toMapData = ( data, url, name ) =>
             rDNoteID: d.Value.ResidentNotes[ 0 ].residentNoteNo,
             orderID: d.Value.DischargeRequest.DischargeMedication.Medicine[ 0 ].itemId,
             itemsDescription: d.Value.ConsultationNote[ 0 ].description,
-            dateTime: handleTimestamp( d.Timestamp ),
+            dateTime: moment( d.Timestamp ).format( 'MM-DD-YY' ),
             requestID: d.Value.PharmacyRequest[ 0 ].ReplenishmentRequestBuID,
             orderedBy: d.Value.RadiologyRequest[ 0 ].requesterName,
             serviceDescription: d.Value.ResidentNotes[ 0 ].description,
@@ -98,7 +98,7 @@ const toMapData = ( data, url, name ) =>
     {
         filteredData = data.map( ( d ) => ( {
             requestID: d.Value.PharmacyRequest[ 0 ].ReplenishmentRequestBuID,
-            dateTime: handleTimestamp( d.Timestamp ),
+            dateTime: moment( d.Timestamp ).format( 'MM-DD-YY' ),
             itemsDescription: d.Value.ConsultationNote[ 0 ].description,
             patientInfo: "N/A",
             vendor: "N/A",
@@ -111,7 +111,7 @@ const toMapData = ( data, url, name ) =>
     if ( url === "/getHistoryEDR?info=EDR" && name === "EC Assessment & Diagnosis" )
     {
         filteredData = data.map( ( d ) => ( {
-            dateTime: handleTimestamp( d.Timestamp ),
+            dateTime: moment( d.Timestamp ).format( 'MM-DD-YY' ),
             requestId: d.Value.PharmacyRequest[ 0 ].ReplenishmentRequestBuID,
             itemsDescription: d.Value.ConsultationNote[ 0 ].description,
             mrn: "N/A",
@@ -176,10 +176,4 @@ const toHandleOtherRequests = ( url, name ) =>
             } )
             .catch( ( error ) => reject( error ) );
     } );
-}
-
-const handleTimestamp = ( timestamp ) =>
-{
-    const date = moment( timestamp ).format( 'MM-DD-YY' );
-    return date;
 }

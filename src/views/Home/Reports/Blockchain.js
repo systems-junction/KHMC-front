@@ -33,7 +33,6 @@ const Blockchain = ( props ) =>
     tabsModel,
     setTabsModel,
     tableModel,
-    handleSearch
   } = props;
   const { tableData, tableHeading, tableDataKeys, actions } = tableModel;
   const [ filteredHeading, setFilteredHeading ] = useState( tableHeading.filter( d => d !== "Transaction ID" ) );
@@ -205,6 +204,7 @@ const Blockchain = ( props ) =>
         }
       } )
     } );
+    console.log( "newData: ", newData )
     return newData;
   }
 
@@ -242,7 +242,7 @@ const Blockchain = ( props ) =>
                 variant="filled"
                 className="dropDownStyle"
                 onChange={ ( e ) =>
-                  handleSearch( {
+                  setDropdownModel( {
                     ...dropdownModel,
                     selectedValue: e.target.value,
                   } )
