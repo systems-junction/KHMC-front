@@ -33,13 +33,11 @@ const Blockchain = ( props ) =>
     tabsModel,
     setTabsModel,
     tableModel,
+    handleSearch
   } = props;
   const { tableData, tableHeading, tableDataKeys, actions } = tableModel;
   const [ filteredHeading, setFilteredHeading ] = useState( tableHeading.filter( d => d !== "Transaction ID" ) );
   const [ actualData ] = useState( tableData );
-  console.log( "*&tableHeading: ", tableHeading );
-  console.log( "*&tableDataKeys: ", tableDataKeys );
-  console.log( "*&tabsModel: ", tabsModel );
   const { id: tabsId, value, innerValue, tabs, innerTabs } = tabsModel;
   const { id, label, items, selectedValue } = dropdownModel;
   const classes = useStylesForInput();
@@ -95,8 +93,6 @@ const Blockchain = ( props ) =>
     //     console.log("error: ", e);
     //   });
   }
-  console.log( "current user", cookie.load( "current_user" ) );
-  console.log( tableData );
 
   function handleView ( rec, index )
   {
@@ -105,7 +101,6 @@ const Blockchain = ( props ) =>
     {
       if ( i !== tableHeading.length - 1 )
       {
-        console.log( "***rec[k]: ", rec, rec[ k ], tableData[ index ] );
         let value = tableData[ index ][ k ];
         arr.push( {
           title: [ tableHeading[ i ] ],
@@ -113,7 +108,6 @@ const Blockchain = ( props ) =>
         } );
       }
     } );
-    console.log( "arr: ", arr );
     setDialogContent( arr );
     setShowDialog( true );
   }
@@ -169,8 +163,6 @@ const Blockchain = ( props ) =>
 
   const handleTabsChange = ( event, newValueIndex ) =>
   {
-    console.log( "*&newValueIndex: ", newValueIndex );
-    console.log( "**tabsModel: ", tabsModel );
     setTabsModel(
       newValueIndex,
       {
@@ -195,22 +187,17 @@ const Blockchain = ( props ) =>
 
   const handleTableDataSplition = ( data ) =>
   {
-    console.log( "main test: ", tableHeading.filter( d => d !== "Transaction ID" ) );
     const copyData = JSON.parse( JSON.stringify( data ) );
     let newData = [];
     copyData.forEach( d =>
     {
-      console.log( 'data.keys: ', _.keys( d ) );
       const objKeys = _.keys( d );
       let object = {};
-      console.log( 'object initialized' )
       objKeys.forEach( ( key, i ) =>
       {
         if ( key !== "transactionID" )
         {
-          console.log( '*&*previous object: ', object );
           object = { ...object, [ key ]: d[ key ] }
-          console.log( '*&*current object: ', object );
         }
         if ( ( objKeys.length - 1 ) === i )
         {
@@ -218,7 +205,6 @@ const Blockchain = ( props ) =>
         }
       } )
     } );
-    console.log( "newData: ", newData );
     return newData;
   }
 
@@ -256,7 +242,7 @@ const Blockchain = ( props ) =>
                 variant="filled"
                 className="dropDownStyle"
                 onChange={ ( e ) =>
-                  setDropdownModel( {
+                  handleSearch( {
                     ...dropdownModel,
                     selectedValue: e.target.value,
                   } )

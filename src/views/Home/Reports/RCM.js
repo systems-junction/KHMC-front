@@ -66,6 +66,11 @@ export default function RCM ( props )
     handleData();
   }, [ ddModel ] )
 
+  const handleSearch = () =>
+  {
+
+  }
+
   return (
     <div
       style={ {
@@ -82,6 +87,7 @@ export default function RCM ( props )
         <Blockchain
           dropdownModel={ ddModel }
           setDropdownModel={ setDDModel }
+          handleSearch={ handleSearch }
           tabsModel={ tabsModel }
           setTabsModel={ ( index, model, mainTabSelected ) =>
             handleTabsModel( index, model, mainTabSelected ) }

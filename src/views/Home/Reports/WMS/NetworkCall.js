@@ -1,4 +1,5 @@
 import _ from "lodash";
+import moment from 'moment';
 import { getPatientsInfo } from "../../../../public/endpoins";
 
 export const getData = ( url, name ) =>
@@ -28,7 +29,7 @@ const toMapData = ( data, url, name ) =>
     {
         filteredData = data.map( ( d ) => ( {
             transactionId: d.TxId,
-            dateTime: d.Timestamp,
+            dateTime: handleTimestamp( d.Timestamp ),
             name: d.Value.firstName + " " + d.Value.lastName,
             mrn: d.Value.SIN,
             phoneNumber: d.Value.phoneNumber,
@@ -49,7 +50,7 @@ const toMapData = ( data, url, name ) =>
     {
         filteredData = data.map( ( d ) => ( {
             requestId: d.Value.PharmacyRequest[ 0 ].ReplenishmentRequestBuID,
-            dateTime: d.Timestamp,
+            dateTime: handleTimestamp( d.Timestamp ),
             itemsInfo: "N/A",
             details: d.Value.ConsultationNote[ 0 ].description,
             generatedBy: d.Value.generatedBy,
@@ -62,7 +63,7 @@ const toMapData = ( data, url, name ) =>
     {
         filteredData = data.map( ( d ) => ( {
             requestId: d.Value.PharmacyRequest[ 0 ].ReplenishmentRequestBuID,
-            dateTime: d.Timestamp,
+            dateTime: handleTimestamp( d.Timestamp ),
             itemsInfo: "N/A",
             details: d.Value.ConsultationNote[ 0 ].description,
             generatedBy: d.Value.generatedBy,
@@ -79,7 +80,7 @@ const toMapData = ( data, url, name ) =>
     {
         filteredData = data.map( ( d ) => ( {
             orderId: d.Value.DischargeRequest.DischargeMedication.Medicine[ 0 ].itemId,
-            dateTime: d.Timestamp,
+            dateTime: handleTimestamp( d.Timestamp ),
             itemsInfo: "N/A",
             generatedBy: d.Value.generatedBy,
             reason: d.Value.TriageAssessment[ 0 ].reason,
@@ -94,7 +95,7 @@ const toMapData = ( data, url, name ) =>
         filteredData = data.map( ( d ) => ( {
             requestId: d.Value.PharmacyRequest[ 0 ].ReplenishmentRequestBuID,
             orderId: d.Value.DischargeRequest.DischargeMedication.Medicine[ 0 ].itemId,
-            dateTime: d.Timestamp,
+            dateTime: handleTimestamp( d.Timestamp ),
             itemsInfo: "N/A",
             receivedBy: "N/A",
             vendor: "N/A",
@@ -110,7 +111,7 @@ const toMapData = ( data, url, name ) =>
         filteredData = data.map( ( d ) => ( {
             requestID: d.Value.PharmacyRequest[ 0 ].ReplenishmentRequestBuID,
             orderID: d.Value.DischargeRequest.DischargeMedication.Medicine[ 0 ].itemId,
-            dateTime: d.Timestamp,
+            dateTime: handleTimestamp( d.Timestamp ),
             itemsInfo: "N/A",
             receivedBy: "N/A",
             returnedBy: "N/A",
@@ -123,3 +124,9 @@ const toMapData = ( data, url, name ) =>
 
     return [];
 };
+
+const handleTimestamp = ( timestamp ) =>
+{
+    const date = moment( timestamp ).format( 'MM-DD-YY' );
+    return date;
+}

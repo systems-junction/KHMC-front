@@ -1,4 +1,5 @@
 import _ from "lodash";
+import moment from 'moment';
 import { getAdmin } from "../../../../public/endpoins";
 
 export const getData = ( url, name ) =>
@@ -25,7 +26,7 @@ const toMapData = ( data, url, name ) =>
     {
         filteredData = data.map( ( d ) => ( {
             createdBy: "N/A",
-            dateTime: d.Timestamp,
+            dateTime: handleTimestamp( d.Timestamp ),
             roleName: d.Value.Type,
             roleAssign: d.Value.designation,
             memberName: d.Value.firstName + " " + d.Value.lastName,
@@ -37,7 +38,7 @@ const toMapData = ( data, url, name ) =>
     {
         filteredData = data.map( ( d ) => ( {
             createdBy: "N/A",
-            dateTime: d.Timestamp,
+            dateTime: handleTimestamp( d.Timestamp ),
             memberName: d.Value.firstName + " " + d.Value.lastName,
             description: "N/A",
             transactionID: d.TxId,
@@ -51,7 +52,7 @@ const toMapData = ( data, url, name ) =>
     {
         filteredData = data.map( ( d ) => ( {
             createdBy: "N/A",
-            dateTime: d.Timestamp,
+            dateTime: handleTimestamp( d.Timestamp ),
             itemName: d.Value.name,
             icdCode: d.Value.itemCode,
             khmcCode: "N/A",
@@ -65,7 +66,7 @@ const toMapData = ( data, url, name ) =>
         filteredData = data.map( ( d ) => (
             {
                 createdBy: "N/A",
-                dateTime: d.Timestamp,
+                dateTime: handleTimestamp( d.Timestamp ),
                 vendorName: d.Value.tradeName,
                 transactionID: d.TxId,
             }
@@ -75,3 +76,9 @@ const toMapData = ( data, url, name ) =>
 
     return [];
 };
+
+const handleTimestamp = ( timestamp ) =>
+{
+    const date = moment( timestamp ).format( 'MM-DD-YY' );
+    return date;
+}

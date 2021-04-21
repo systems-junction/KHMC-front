@@ -1,6 +1,7 @@
 import axios from "axios";
 import _ from "lodash";
 import { getPatientsInfo, loginUrl } from "../../../public/endpoins";
+import moment from 'moment';
 
 export const getPatientsInfoData = ( url, name ) =>
 {
@@ -179,15 +180,6 @@ const toHandleOtherRequests = ( url, name ) =>
 
 const handleTimestamp = ( timestamp ) =>
 {
-    const date = new Date( timestamp * 1000 );
-    console.log( "date: ", date );
-    const datevalues =
-        ( date.getFullYear(),
-            date.getMonth() + 1,
-            date.getDate(),
-            date.getHours(),
-            date.getMinutes(),
-            date.getSeconds() )
-    console.log( "datevalues: ", datevalues );
-    return datevalues;
+    const date = moment( timestamp ).format( 'MM-DD-YY' );
+    return date;
 }
