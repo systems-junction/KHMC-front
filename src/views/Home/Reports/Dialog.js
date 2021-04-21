@@ -52,19 +52,19 @@ export const DialogComponent = ({ contents, handleDialog }) => {
           {contents &&
             contents.length &&
             contents.map(({ title, value }) => (
-              <div style={{ marginBottom: 30 }}>
+              <div style={{ marginBottom: 10 }}>
                 <Typography variant="h6" gutterBottom>
                   <div className="container-fluid">
                     <div className="row">
                       <div
                         className="col-md-12 col-sm-12"
-                        style={{ color: "#2873CF" }}
+                        style={{ color: "#2873CF", fontSize: 14 }}
                       >
                         {title}
                       </div>
                       <div
                         className="col-md-12 col-sm-12"
-                        style={{ color: "#666666" }}
+                        style={{ color: "#666666", fontSize: 14 }}
                       >
                         {value}
                       </div>
