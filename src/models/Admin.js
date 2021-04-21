@@ -35,7 +35,6 @@ const adminTabsData = [
                         "Date / Time",
                         "Role Name",
                         "Transaction ID",
-                        " ",
                         "Action",
                     ],
                     tableDataKeys: [
@@ -78,7 +77,6 @@ const adminTabsData = [
                         "Member Name",
                         "Role Assign",
                         "Transaction ID",
-                        " ",
                         "Action",
                     ],
                     tableDataKeys: [
@@ -128,7 +126,6 @@ const adminTabsData = [
                     "Member Name",
                     "Description",
                     "Transaction ID",
-                    " ",
                     "Action",
                 ],
                 tableDataKeys: [
@@ -164,7 +161,6 @@ const adminTabsData = [
                     "ICD Code",
                     "KHMC Code",
                     "Transaction ID",
-                    " ",
                     "Action",
                 ],
                 tableDataKeys: [
@@ -197,7 +193,6 @@ const adminTabsData = [
                     "Date / Time",
                     "Vendor name",
                     "Transaction ID",
-                    " ",
                     "Action",
                 ],
                 tableDataKeys: [
@@ -210,39 +205,6 @@ const adminTabsData = [
                     view: true,
                 },
             },
-            // {
-            //     data: [
-            //         {
-            //             orderId: "",
-            //             dateTime: "",
-            //             itemsInfo: "",
-            //             receivedBy: "",
-            //             vendor: "",
-            //             transactionID: "",
-            //         }
-            //     ],
-            //     heading: [
-            //         "Order Id",
-            //         "Date / Time",
-            //         "Items Info",
-            //         "Recieved by",
-            //         "Vendor",
-            //         "Transaction ID",
-            //         " ",
-            //         "Action",
-            //     ],
-            //     tableDataKeys: [
-            //         "orderId",
-            //         "dateTime",
-            //         "itemsInfo",
-            //         "receivedBy",
-            //         "vendor",
-            //         "transactionID",
-            //     ],
-            //     actions: {
-            //         view: true,
-            //     },
-            // },
         ], endpointURL: "/getHistoryItem?info=ItemInfo"
     },
 ];

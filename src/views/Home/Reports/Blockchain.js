@@ -416,8 +416,8 @@ const Blockchain = ( props ) =>
                 { actions && tableData && tableData.length && (
                   <CustomTable
                     tableData={ handleTableDataSplition( tableData ) }
-                    tableDataKeys={ tableDataKeys }
-                    tableHeading={ tableHeading }
+                    tableDataKeys={ tableDataKeys.filter( d => d !== "transactionID" ) }
+                    tableHeading={ tableHeading.filter( d => d !== "Transaction ID" ) }
                     action={ actions }
                     handleView={ handleView }
                     borderBottomColor={ "#60d69f" }

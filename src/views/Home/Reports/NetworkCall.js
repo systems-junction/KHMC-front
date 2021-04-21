@@ -26,7 +26,7 @@ const toMapData = ( data, url, name ) =>
     {
         filteredData = data.map( ( d ) => ( {
             transactionId: d.TxId,
-            dateTime: d.Timestamp,
+            dateTime: handleTimestamp( d.Timestamp ),
             name: d.Value.firstName + " " + d.Value.lastName,
             mrn: d.Value.SIN,
             phoneNumber: d.Value.phoneNumber,
@@ -45,7 +45,7 @@ const toMapData = ( data, url, name ) =>
     }
     if ( url === "/getHistoryEDR?info=EDR" && name === "Patients Assessment" )
     {
-        filteredData = data.map( ( d ) => ( { transactionID: d.TxId, recordID: d.Value.patientId, dateTime: d.Timestamp, details: d.Value.ConsultationNote[ 0 ].description, performedBy: d.Value.generatedBy } ) );
+        filteredData = data.map( ( d ) => ( { recordID: d.Value.patientId, dateTime: d.Timestamp, details: d.Value.ConsultationNote[ 0 ].description, performedBy: d.Value.generatedBy, transactionID: d.TxId } ) );
         return filteredData;
     }
     if ( url === "/getHistoryEDR?info=EDR" && name === "Patient Diagnosis" )
@@ -55,7 +55,7 @@ const toMapData = ( data, url, name ) =>
             rDNoteID: d.Value.ResidentNotes[ 0 ].residentNoteNo,
             orderID: d.Value.DischargeRequest.DischargeMedication.Medicine[ 0 ].itemId,
             requestID: d.Value.PharmacyRequest[ 0 ].ReplenishmentRequestBuID,
-            dateTime: d.Timestamp,
+            dateTime: handleTimestamp( d.Timestamp ),
             iCDCPTCodes: d.Value.ResidentNotes[ 0 ].code,
             itemsDescription: d.Value.ConsultationNote[ 0 ].description,
             serviceDescription: d.Value.ResidentNotes[ 0 ].description,
@@ -76,7 +76,7 @@ const toMapData = ( data, url, name ) =>
             rDNoteID: d.Value.ResidentNotes[ 0 ].residentNoteNo,
             orderID: d.Value.DischargeRequest.DischargeMedication.Medicine[ 0 ].itemId,
             itemsDescription: d.Value.ConsultationNote[ 0 ].description,
-            dateTime: d.Timestamp,
+            dateTime: handleTimestamp( d.Timestamp ),
             requestID: d.Value.PharmacyRequest[ 0 ].ReplenishmentRequestBuID,
             orderedBy: d.Value.RadiologyRequest[ 0 ].requesterName,
             serviceDescription: d.Value.ResidentNotes[ 0 ].description,
@@ -97,7 +97,7 @@ const toMapData = ( data, url, name ) =>
     {
         filteredData = data.map( ( d ) => ( {
             requestID: d.Value.PharmacyRequest[ 0 ].ReplenishmentRequestBuID,
-            dateTime: d.Timestamp,
+            dateTime: handleTimestamp( d.Timestamp ),
             itemsDescription: d.Value.ConsultationNote[ 0 ].description,
             patientInfo: "N/A",
             vendor: "N/A",
@@ -110,7 +110,7 @@ const toMapData = ( data, url, name ) =>
     if ( url === "/getHistoryEDR?info=EDR" && name === "EC Assessment & Diagnosis" )
     {
         filteredData = data.map( ( d ) => ( {
-            dateTime: d.Timestamp,
+            dateTime: handleTimestamp( d.Timestamp ),
             requestId: d.Value.PharmacyRequest[ 0 ].ReplenishmentRequestBuID,
             itemsDescription: d.Value.ConsultationNote[ 0 ].description,
             mrn: "N/A",
@@ -175,4 +175,19 @@ const toHandleOtherRequests = ( url, name ) =>
             } )
             .catch( ( error ) => reject( error ) );
     } );
+}
+
+const handleTimestamp = ( timestamp ) =>
+{
+    const date = new Date( timestamp * 1000 );
+    console.log( "date: ", date );
+    const datevalues =
+        ( date.getFullYear(),
+            date.getMonth() + 1,
+            date.getDate(),
+            date.getHours(),
+            date.getMinutes(),
+            date.getSeconds() )
+    console.log( "datevalues: ", datevalues );
+    return datevalues;
 }
