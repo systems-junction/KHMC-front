@@ -13,7 +13,7 @@ import KHMC_Black from "../../../../assets/img/KHMC_Black.png";
 import Influence_Black from "../../../../assets/img/Influence_Black.png";
 
 import Button from "@material-ui/core/Button";
-// import DetailBlock from "../../../../components/DHR/DCD/ViewPhysicalExam/detailBlock";
+import DetailBlock from "../../../../components/DHR/DCD/ViewPhysicalExam/detailBlock";
 
 import _ from "lodash";
 
